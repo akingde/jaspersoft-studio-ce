@@ -19,198 +19,22 @@
  */
 package com.jaspersoft.studio.components.table.part.editpolicy;
 
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.PrecisionRectangle;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.LayerConstants;
-import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.components.table.model.column.MCell;
-import com.jaspersoft.studio.components.table.model.column.MColumn;
-import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle;
-import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.components.table.part.TableCellEditPart;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.AContainerMoveEditPolicy;
 
 /*
  * The Class BandMoveEditPolicy.
  * 
  * @author Chicu Veaceslav
  */
-public class TableCellMoveEditPolicy extends SelectionEditPolicy {
+public class TableCellMoveEditPolicy extends AContainerMoveEditPolicy {
 
-	/** The feedback. */
-	private IFigure feedback;
-
-	/** The handle. */
-	private IFigure handle;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.EditPolicy#activate()
-	 */
-	@Override
-	public void activate() {
-		super.activate();
-		// setHandle(new CellResizeHandle((GraphicalEditPart) getHost()));
-		setHandle(new CellResizeHandle((GraphicalEditPart) getHost(),
-				PositionConstants.SOUTH));
-		getLayer(LayerConstants.HANDLE_LAYER).add(getHandle());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.EditPolicy#deactivate()
-	 */
-	@Override
-	public void deactivate() {
-		if (getHandle() != null) {
-			getLayer(LayerConstants.HANDLE_LAYER).remove(getHandle());
-			setHandle(null);
-		}
-		if (feedback != null) {
-			removeFeedback(feedback);
-			feedback = null;
-		}
-		super.deactivate();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.EditPolicy#understandsRequest(Request)
-	 */
-	@Override
-	public boolean understandsRequest(Request request) {
-		if (REQ_RESIZE.equals(request.getType()))
-			return true;
-		if (REQ_MOVE.equals(request.getType()))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Erase change bounds feedback.
-	 * 
-	 * @param request
-	 *            the request
-	 */
-	protected void eraseChangeBoundsFeedback(ChangeBoundsRequest request) {
-		if (feedback != null) {
-			removeFeedback(feedback);
-		}
-		feedback = null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.EditPolicy#eraseSourceFeedback(Request)
-	 */
-	@Override
-	public void eraseSourceFeedback(Request request) {
-		if (REQ_RESIZE.equals(request.getType()))
-			eraseChangeBoundsFeedback((ChangeBoundsRequest) request);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.EditPolicy#getCommand(Request)
-	 */
-	@Override
-	public Command getCommand(Request request) {
-		if (REQ_RESIZE.equals(request.getType()))
-			return getResizeCommand((ChangeBoundsRequest) request);
-		return null;
-	}
-
-	/**
-	 * Gets the resize command.
-	 * 
-	 * @param request
-	 *            the request
-	 * @return the resize command
-	 */
 	protected Command getResizeCommand(ChangeBoundsRequest request) {
-		if (request.getResizeDirection() == PositionConstants.SOUTH
-				|| request.getResizeDirection() == PositionConstants.SOUTH_EAST
-				|| request.getResizeDirection() == PositionConstants.EAST) {
-			MColumn model = (MColumn) getHost().getModel();
-			StandardBaseColumn jrdesign = (StandardBaseColumn) model.getValue();
-			Dimension sizeDelta = request.getSizeDelta();
-			PrecisionRectangle deltaRect = new PrecisionRectangle(
-					new Rectangle(0, 0, sizeDelta.width, sizeDelta.height));
-			getHostFigure().translateToRelative(deltaRect);
-			CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
-
-			if (request.getSizeDelta().width != 0) {
-				int width = jrdesign.getWidth() + deltaRect.width;
-				if (width < 0)
-					width = 0;
-
-				SetValueCommand setCommand = new SetValueCommand();
-				setCommand.setTarget(model);
-				setCommand.setPropertyId(StandardBaseColumn.PROPERTY_WIDTH);
-				setCommand.setPropertyValue(width);
-				c.add(setCommand);
-			}
-			if (request.getSizeDelta().height != 0 && model instanceof MCell) {
-				MCell mc = (MCell) model;
-				int height = (Integer) mc
-						.getPropertyValue(DesignCell.PROPERTY_HEIGHT)
-						+ deltaRect.height;
-				if (height < 0)
-					height = 0;
-
-				SetValueCommand setCommand = new SetValueCommand();
-				setCommand.setTarget(model);
-				setCommand.setPropertyId(DesignCell.PROPERTY_HEIGHT);
-				setCommand.setPropertyValue(height);
-				c.add(setCommand);
-			}
-			return c;
-		}
-		return null;
-	}
-
-	/**
-	 * Sets the handle.
-	 * 
-	 * @param handle
-	 *            the new handle
-	 */
-	private void setHandle(IFigure handle) {
-		this.handle = handle;
-	}
-
-	/**
-	 * Gets the handle.
-	 * 
-	 * @return the handle
-	 */
-	private IFigure getHandle() {
-		return handle;
-	}
-
-	@Override
-	protected void hideSelection() {
-
-	}
-
-	@Override
-	protected void showSelection() {
-
+		return CreateResize.createResizeCommand(request,
+				(TableCellEditPart) getHost());
 	}
 
 }

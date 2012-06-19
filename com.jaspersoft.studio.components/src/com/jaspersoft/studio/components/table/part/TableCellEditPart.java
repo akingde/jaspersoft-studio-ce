@@ -19,24 +19,36 @@
  */
 package com.jaspersoft.studio.components.table.part;
 
+import java.util.List;
+
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.components.table.figure.CellFigure;
 import com.jaspersoft.studio.components.table.model.MTable;
+import com.jaspersoft.studio.components.table.model.cell.command.CreateElementCommand;
+import com.jaspersoft.studio.components.table.model.cell.command.OrphanElementCommand;
 import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.part.editpolicy.TableCellMoveEditPolicy;
 import com.jaspersoft.studio.components.table.part.editpolicy.TableCellResizableEditPolicy;
@@ -48,8 +60,10 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -60,7 +74,8 @@ import com.jaspersoft.studio.model.MGraphicElement;
  * @author Chicu Veaceslav, Giulio Toffoli
  * 
  */
-public class TableCellEditPart extends FigureEditPart implements IContainerPart {
+public class TableCellEditPart extends FigureEditPart implements
+		IContainerPart, IContainer {
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
 		return getParent().getAdapter(key);
@@ -76,38 +91,120 @@ public class TableCellEditPart extends FigureEditPart implements IContainerPart 
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 
+			private RectangleFigure targetFeedback;
+
+			protected void eraseLayoutTargetFeedback(Request request) {
+				super.eraseLayoutTargetFeedback(request);
+				if (targetFeedback != null) {
+					removeFeedback(targetFeedback);
+					targetFeedback = null;
+				}
+			}
+
+			protected IFigure getLayoutTargetFeedback(Request request) {
+				if (request.getType().equals(RequestConstants.REQ_ADD)
+						&& request instanceof ChangeBoundsRequest) {
+					ChangeBoundsRequest cbr = (ChangeBoundsRequest) request;
+					List<EditPart> lst = cbr.getEditParts();
+					for (EditPart ep : lst) {
+						if (((ANode) ep.getModel()).getParent() == getModel())
+							return null;
+						if (ep instanceof TableCellEditPart)
+							return null;
+					}
+				}
+				if (targetFeedback == null) {
+					targetFeedback = new RectangleFigure();
+					targetFeedback.setFill(false);
+
+					IFigure hostFigure = getHostFigure();
+					Rectangle bounds = hostFigure.getBounds();
+					if (hostFigure instanceof HandleBounds)
+						bounds = ((HandleBounds) hostFigure).getHandleBounds();
+					Rectangle rect = new PrecisionRectangle(bounds);
+					getHostFigure().translateToAbsolute(rect);
+					getFeedbackLayer().translateToRelative(rect);
+
+					targetFeedback.setBounds(rect.shrink(4, 4));
+					targetFeedback.setBorder(new LineBorder(
+							ColorConstants.lightBlue, 3));
+					addFeedback(targetFeedback);
+				}
+				return targetFeedback;
+			}
+
+			protected void showLayoutTargetFeedback(Request request) {
+				super.showLayoutTargetFeedback(request);
+				getLayoutTargetFeedback(request);
+			}
+
+			protected Command getCreateCommand(ANode parent, Object obj,
+					Rectangle constraint) {
+				if (parent instanceof MPage)
+					parent = getModel();
+				Rectangle b = getModel().getBounds();
+				int x = constraint.x - b.x - ReportPageFigure.PAGE_BORDER.left;
+				int y = constraint.y - b.y - ReportPageFigure.PAGE_BORDER.top;
+				constraint = new Rectangle(x, y, constraint.width,
+						constraint.height);
+
+				return super.getCreateCommand(parent, obj, constraint);
+			}
+
 			@Override
 			protected Command createAddCommand(EditPart child, Object constraint) {
-				SetPageConstraintCommand cmd = new SetPageConstraintCommand();
-				MGraphicElement model = (MGraphicElement) child.getModel();
-				Rectangle r = model.getBounds();
 				Rectangle rect = (Rectangle) constraint;
+				if (child.getModel() instanceof MGraphicElement) {
+					MGraphicElement cmodel = (MGraphicElement) child.getModel();
+					MCell cparent = (MCell) cmodel.getParent();
+					if (cparent == getModel()) {
+						SetPageConstraintCommand cmd = new SetPageConstraintCommand();
+						MGraphicElement model = (MGraphicElement) child
+								.getModel();
+						Rectangle r = model.getBounds();
 
-				JRDesignElement jde = (JRDesignElement) model.getValue();
-				rect.setLocation(r.x + rect.x - jde.getX() + 1, r.y + rect.y
-						- jde.getY() + 1);
-				cmd.setContext((ANode) getHost().getModel(),
-						(ANode) child.getModel(), rect);
+						JRDesignElement jde = (JRDesignElement) model
+								.getValue();
+						int x = r.x + rect.x - jde.getX() + 1;
+						int y = r.y + rect.y - jde.getY() + 1;
+						rect.setLocation(x, y);
+						cmd.setContext(getModel(), (ANode) child.getModel(),
+								rect);
 
-				return cmd;
+						return cmd;
+					} else {
+						CompoundCommand c = new CompoundCommand();
+
+						c.add(new OrphanElementCommand(cparent, cmodel));
+						c.add(new CreateElementCommand(getModel(), cmodel,
+								rect, -1));
+						return c;
+					}
+				}
+				return null;
 			}
 
 		});
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
-				new TableCellMoveEditPolicy() {
+				new TableCellResizableEditPolicy() {
 					@Override
 					protected void showSelection() {
+						super.showSelection();
 						updateRulers();
 					}
+
 				});
+	}
+
+	public EditPolicy getEditPolicy() {
+		return new TableCellMoveEditPolicy();
 	}
 
 	@Override
 	public Command getCommand(Request request) {
-		if (request.getType().equals(REQ_ORPHAN))
-			request.getType();
-		if (request.getType().equals(REQ_ORPHAN_CHILDREN))
-			request.getType();
+		if (request.getType().equals(REQ_MOVE)
+				&& ((ChangeBoundsRequest) request).getMoveDelta().x == 0)
+			return null;
 		return super.getCommand(request);
 	}
 
@@ -117,9 +214,16 @@ public class TableCellEditPart extends FigureEditPart implements IContainerPart 
 	}
 
 	@Override
+	public MCell getModel() {
+		return (MCell) super.getModel();
+	}
+
+	@Override
 	protected void setupFigure(IFigure rect) {
-		MCell model = (MCell) getModel();
-		if (model instanceof IGraphicElement && model.getValue() != null) {
+		updateContainerSize();
+		MCell model = getModel();
+		rect.setToolTip(new Label(model.getToolTip()));
+		if (model.getValue() != null) {
 			Rectangle bounds = ((IGraphicElement) model).getBounds();
 			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
 			int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
@@ -130,49 +234,64 @@ public class TableCellEditPart extends FigureEditPart implements IContainerPart 
 					(StandardBaseColumn) model.getValue(), getDrawVisitor());
 			updateRulers();
 		}
-	}
-
-	public EditPolicy getEditPolicy() {
-		return new TableCellResizableEditPolicy();
+		if (getSelected() == 1)
+			updateRulers();
+		else {
+			List<?> selected = getViewer().getSelectedEditParts();
+			if (selected.isEmpty())
+				updateRulers();
+			else
+				for (Object obj : selected) {
+					if (obj instanceof FigureEditPart) {
+						FigureEditPart figEditPart = (FigureEditPart) obj;
+						if (figEditPart.getModel().getParent() == getModel())
+							figEditPart.updateRulers();
+					}
+				}
+		}
 	}
 
 	public Object getConstraintFor(ChangeBoundsRequest request,
 			GraphicalEditPart child) {
-		if (request.getResizeDirection() == PositionConstants.SOUTH
-				|| request.getResizeDirection() == PositionConstants.NORTH
-				|| request.getResizeDirection() == PositionConstants.EAST
-				|| request.getResizeDirection() == PositionConstants.WEST)
-			System.out
-					.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection()); //$NON-NLS-1$ //$NON-NLS-2$
 		return new Rectangle(0, 0, request.getSizeDelta().width,
 				request.getSizeDelta().height);
 	}
 
+	public static final int X_OFFSET = 10;
+	public static final int Y_OFFSET = 10;
+
 	@Override
 	public void updateRulers() {
-		MCell mcell = (MCell) getModel();
+		Dimension d = getContaierSize();
+		EditPartViewer v = getViewer();
+		if (d != null) {
+			v.setProperty(ReportRuler.PROPERTY_HEND, d.width);
+			v.setProperty(ReportRuler.PROPERTY_VEND, d.height);
+		}
+		v.setProperty(ReportRuler.PROPERTY_HOFFSET, X_OFFSET);
+		v.setProperty(ReportRuler.PROPERTY_VOFFSET, Y_OFFSET);
 
-		// get mtable
-		// get max size (table and tablemanager.size)
-		MTable table = mcell.getTable();
+		v.setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN, new Point(X_OFFSET,
+				Y_OFFSET));
+	}
+
+	private Dimension containerSize;
+
+	public Dimension getContaierSize() {
+		return containerSize;
+	}
+
+	private void updateContainerSize() {
+		MTable table = getModel().getTable();
 		if (table != null) {
 			Dimension d = table.getTableManager().getSize();
-			int tx = 10;
-			int ty = 10;
-
-			int dh = Math.max(d.height, (Integer) table
+			d.height = Math.max(d.height, (Integer) table
 					.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT));
-			int dw = Math.max(d.width, (Integer) table
+			d.width = Math.max(d.width, (Integer) table
 					.getPropertyValue(JRDesignElement.PROPERTY_WIDTH));
-
-			getViewer().setProperty(ReportRuler.PROPERTY_HOFFSET, tx);
-			getViewer().setProperty(ReportRuler.PROPERTY_VOFFSET, ty);
-			getViewer().setProperty(ReportRuler.PROPERTY_HEND, dw);
-			getViewer().setProperty(ReportRuler.PROPERTY_VEND, dh);
-
-			getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
-					new Point(tx, ty));
-		}
+			containerSize = d;
+		} else
+			containerSize = null;
 	}
 
 }

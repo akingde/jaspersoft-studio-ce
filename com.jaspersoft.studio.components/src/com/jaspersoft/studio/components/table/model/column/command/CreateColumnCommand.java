@@ -27,18 +27,19 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.model.ANode;
+
 /*
  * link nodes & together.
  * 
@@ -52,37 +53,28 @@ public class CreateColumnCommand extends Command {
 	protected JasperDesign jrDesign;
 	private int index;
 
-	public static StandardTable getTable(ANode destNode) {
-		if (destNode.getValue() instanceof JRDesignComponentElement) {
-			JRDesignComponentElement tbl = (JRDesignComponentElement) destNode.getValue();
-			if (tbl.getComponent() instanceof StandardTable) {
-				return (StandardTable) tbl.getComponent();
-			}
-		}
-		return null;
-	}
-
 	public CreateColumnCommand(AMCollection destNode, MColumn srcNode, int index) {
 		this((ANode) destNode, srcNode, index);
 	}
 
-	public CreateColumnCommand(MTableGroupHeader destNode, MColumn srcNode, int index) {
+	public CreateColumnCommand(MTableGroupHeader destNode, MColumn srcNode,
+			int index) {
 		this((ANode) destNode.getParent(), srcNode, index);
 	}
 
-	public CreateColumnCommand(MTableGroupFooter destNode, MColumn srcNode, int index) {
+	public CreateColumnCommand(MTableGroupFooter destNode, MColumn srcNode,
+			int index) {
 		this((ANode) destNode.getParent(), srcNode, index);
 	}
 
 	public CreateColumnCommand(MColumn destNode, MColumn srcNode, int index) {
 		this(destNode.getMTable(), srcNode, index);
 		this.index = jrTable.getColumns().indexOf(destNode.getValue()) + 1;
-		this.jrDesign = destNode.getJasperDesign();
 	}
 
 	protected CreateColumnCommand(ANode destNode, MColumn srcNode, int index) {
 		super();
-		this.jrTable = getTable(destNode);
+		this.jrTable = TableManager.getTable(destNode);
 		this.index = index;
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		this.jrDesign = destNode.getJasperDesign();
@@ -104,41 +96,49 @@ public class CreateColumnCommand extends Command {
 			jrTable.addColumn(jrColumn);
 	}
 
-	public StandardBaseColumn createColumn(JasperDesign jrDesign, StandardTable jrTable) {
-		return CreateColumnCommand.addColumn(jrDesign, jrTable, true, true, true, true, true, true);
+	public StandardBaseColumn createColumn(JasperDesign jrDesign,
+			StandardTable jrTable) {
+		return CreateColumnCommand.addColumn(jrDesign, jrTable, true, true,
+				true, true, true, true);
 	}
 
-	public static StandardColumn addColumn(JasperDesign jrDesign, StandardTable jrTable, boolean isTHead,
-			boolean isTFoot, boolean isCHead, boolean isCFoot, boolean isGHead, boolean isGFoot) {
+	public static StandardColumn addColumn(JasperDesign jrDesign,
+			StandardTable jrTable, boolean isTHead, boolean isTFoot,
+			boolean isCHead, boolean isCFoot, boolean isGHead, boolean isGFoot) {
 		StandardColumn col = new StandardColumn();
 		col.setWidth(40);
 
 		if (isTHead) {
 			DesignCell cell = new DesignCell();
-			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.TABLE_HEADER, null));
+			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
+					TableUtil.TABLE_HEADER, null));
 			col.setTableHeader(cell);
 		}
 
 		if (isTFoot) {
 			DesignCell cell = new DesignCell();
-			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.TABLE_FOOTER, null));
+			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
+					TableUtil.TABLE_FOOTER, null));
 			col.setTableFooter(cell);
 		}
 
 		if (isCHead) {
 			DesignCell cell = new DesignCell();
-			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_HEADER, null));
+			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
+					TableUtil.COLUMN_HEADER, null));
 			col.setColumnHeader(cell);
 		}
 
 		if (isCFoot) {
 			DesignCell cell = new DesignCell();
-			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_FOOTER, null));
+			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
+					TableUtil.COLUMN_FOOTER, null));
 			col.setColumnFooter(cell);
 		}
 
 		DesignCell cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_DETAIL, null));
+		cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
+				TableUtil.COLUMN_DETAIL, null));
 		col.setDetailCell(cell);
 
 		List<?> groupsList = TableUtil.getGroupList(jrTable, jrDesign);
@@ -147,12 +147,14 @@ public class CreateColumnCommand extends Command {
 				JRDesignGroup jrGroup = (JRDesignGroup) it.next();
 				if (isGHead) {
 					cell = new DesignCell();
-					cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_GROUP_HEADER, jrGroup.getName()));
+					cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
+							TableUtil.COLUMN_GROUP_HEADER, jrGroup.getName()));
 					col.setGroupHeader(jrGroup.getName(), cell);
 				}
 				if (isGFoot) {
 					cell = new DesignCell();
-					cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_GROUP_FOOTER, jrGroup.getName()));
+					cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
+							TableUtil.COLUMN_GROUP_FOOTER, jrGroup.getName()));
 					col.setGroupFooter(jrGroup.getName(), cell);
 				}
 			}

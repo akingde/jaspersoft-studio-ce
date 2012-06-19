@@ -147,7 +147,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	 */
 	@Override
 	public String getToolTip() {
-		return getIconDescriptor().getToolTip();
+		return getIconDescriptor().getToolTip() + ": " + getDisplayText();
 	}
 
 	private static IPropertyDescriptor[] descriptors;

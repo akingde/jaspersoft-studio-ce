@@ -61,8 +61,14 @@ public class MColumnGroup extends MColumn {
 	/** The descriptors. */
 	protected static IPropertyDescriptor[] descriptors;
 
-	public MColumnGroup(ANode parent, StandardColumnGroup jrDataset, String name, int index) {
+	public MColumnGroup(ANode parent, StandardColumnGroup jrDataset,
+			String name, int index) {
 		super(parent, jrDataset, name, index);
+	}
+
+	@Override
+	public StandardColumnGroup getValue() {
+		return (StandardColumnGroup) super.getValue();
 	}
 
 	@Override
@@ -72,25 +78,30 @@ public class MColumnGroup extends MColumn {
 
 	@Override
 	public String getToolTip() {
-		return getIconDescriptor().getToolTip();
+		return getIconDescriptor().getToolTip() + ": " + getDisplayText();
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		AMCollection section = getSection();
 		if (section != null) {
-			if (evt.getPropertyName().equals(StandardColumnGroup.PROPERTY_COLUMNS)) {
-				if (evt.getSource() instanceof StandardColumnGroup && evt.getSource() == getValue()) {
+			if (evt.getPropertyName().equals(
+					StandardColumnGroup.PROPERTY_COLUMNS)) {
+				if (evt.getSource() instanceof StandardColumnGroup
+						&& evt.getSource() == getValue()) {
 					if (evt.getOldValue() == null && evt.getNewValue() != null) {
 						int newIndex = -1;
 						if (evt instanceof CollectionElementAddedEvent) {
-							newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+							newIndex = ((CollectionElementAddedEvent) evt)
+									.getAddedIndex();
 						}
-						StandardBaseColumn bc = (StandardBaseColumn) evt.getNewValue();
+						StandardBaseColumn bc = (StandardBaseColumn) evt
+								.getNewValue();
 						if (section != null) {
 							section.createColumn(this, bc, 122, newIndex);
 						}
-					} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+					} else if (evt.getOldValue() != null
+							&& evt.getNewValue() == null) {
 						// delete
 						for (INode n : getChildren()) {
 							if (n.getValue() == evt.getOldValue()) {

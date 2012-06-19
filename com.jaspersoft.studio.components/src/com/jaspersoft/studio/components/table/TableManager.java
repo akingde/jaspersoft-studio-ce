@@ -40,7 +40,9 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.components.table.model.MTable;
+import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
+import com.jaspersoft.studio.model.ANode;
 
 public class TableManager {
 	private StandardTable table;
@@ -86,7 +88,8 @@ public class TableManager {
 		Map<Cell, java.awt.Rectangle> cellBounds = tableUtil.getCellBounds();
 		for (Cell cell : cellBounds.keySet()) {
 			Rectangle r = getAWT2SWTRectangle(cellBounds.get(cell));
-			if (r.x <= location.x && r.x + r.width >= location.x && r.y <= location.y && r.y + r.height >= location.y)
+			if (r.x <= location.x && r.x + r.width >= location.x
+					&& r.y <= location.y && r.y + r.height >= location.y)
 				return cell;
 		}
 		return null;
@@ -103,7 +106,8 @@ public class TableManager {
 	}
 
 	public static List<BaseColumn> getAllColumns(MTable mTable) {
-		JRDesignComponentElement tbl = (JRDesignComponentElement) mTable.getValue();
+		JRDesignComponentElement tbl = (JRDesignComponentElement) mTable
+				.getValue();
 		if (tbl.getComponent() instanceof StandardTable) {
 			StandardTable table = (StandardTable) tbl.getComponent();
 			return TableUtil.getAllColumns(table.getColumns());
@@ -133,7 +137,8 @@ public class TableManager {
 
 	private boolean setColumnGroupWidth(StandardColumnGroup cell, int delta) {
 		List<BaseColumn> columns = cell.getColumns();
-		for (ListIterator<BaseColumn> it = columns.listIterator(columns.size()); it.hasPrevious();) {
+		for (ListIterator<BaseColumn> it = columns.listIterator(columns.size()); it
+				.hasPrevious();) {
 			StandardBaseColumn bc = (StandardBaseColumn) it.previous();
 			boolean c = false;
 			if (delta < 0 && Math.abs(delta) > bc.getWidth()) {
@@ -150,7 +155,8 @@ public class TableManager {
 		return false;
 	}
 
-	private boolean setColumnWidth(List<BaseColumn> col, StandardBaseColumn cell, int delta) {
+	private boolean setColumnWidth(List<BaseColumn> col,
+			StandardBaseColumn cell, int delta) {
 		for (BaseColumn bc : col) {
 			if (bc instanceof StandardColumnGroup) {
 				StandardColumnGroup scg = (StandardColumnGroup) bc;
@@ -166,29 +172,48 @@ public class TableManager {
 		return false;
 	}
 
-	public void setHeight(DesignCell cell, int height, StandardBaseColumn col, int type, String grName) {
+	public void setHeight(DesignCell cell, int height, StandardBaseColumn col,
+			int type, String grName) {
 		if (height >= 0) {
 			int delta = height - cell.getHeight();
 			setColumnHeight(table.getColumns(), delta, type, grName, col);
 		}
 	}
 
-	private int setColumnHeight(List<BaseColumn> columns, int delta, int type, String grName, StandardBaseColumn col) {
+	private int setColumnHeight(List<BaseColumn> columns, int delta, int type,
+			String grName, StandardBaseColumn col) {
 		int dif = 0;
 		for (BaseColumn bc : columns) {
 			if (bc instanceof StandardColumn)
-				dif = TableColumnSize.setCellHeightDelta(bc, type, grName, delta);
+				dif = TableColumnSize.setCellHeightDelta(bc, type, grName,
+						delta);
 			else if (bc instanceof StandardColumnGroup) {
 				if (col == bc) {
 					TableColumnSize.setCellHeightDelta(bc, type, grName, delta);
 				} else {
-					dif = setColumnHeight(((StandardColumnGroup) bc).getColumns(), delta, type, grName, col);
+					dif = setColumnHeight(
+							((StandardColumnGroup) bc).getColumns(), delta,
+							type, grName, col);
 					if (delta < 0 && dif != 0)
-						dif = TableColumnSize.setCellHeightDelta(bc, type, grName, dif);
+						dif = TableColumnSize.setCellHeightDelta(bc, type,
+								grName, dif);
 				}
 			}
 		}
 		return dif;
+	}
+
+	public static StandardTable getTable(ANode destNode) {
+		if (destNode instanceof MColumn)
+			destNode = ((MColumn) destNode).getMTable();
+		if (destNode.getValue() instanceof JRDesignComponentElement) {
+			JRDesignComponentElement tbl = (JRDesignComponentElement) destNode
+					.getValue();
+			if (tbl.getComponent() instanceof StandardTable) {
+				return (StandardTable) tbl.getComponent();
+			}
+		}
+		return null;
 	}
 
 }

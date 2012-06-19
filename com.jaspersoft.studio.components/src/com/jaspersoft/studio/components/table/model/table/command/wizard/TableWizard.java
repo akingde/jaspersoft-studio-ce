@@ -35,6 +35,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.IWizardPage;
 
+import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
@@ -126,7 +127,7 @@ public class TableWizard extends JSSWizard {
 
 	public MTable getTable() {
 		List<Object> lst = step3.getFields();
-		StandardTable tbl = CreateColumnCommand.getTable(table);
+		StandardTable tbl = TableManager.getTable(table);
 		JasperDesign jd = getConfig().getJasperDesign();
 		if (tbl != null && lst != null)
 			for (Object f : lst) {

@@ -42,13 +42,14 @@ public class CreateElementGroupCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateElementGroupCommand(MCell destNode, MElementGroup srcNode, int index) {
+	public CreateElementGroupCommand(MCell destNode, MElementGroup srcNode,
+			int index) {
 		super();
 		this.jrElement = (JRDesignElementGroup) srcNode.getValue();
 		this.jrCell = destNode.getCell();
@@ -84,12 +85,7 @@ public class CreateElementGroupCommand extends Command {
 			else
 				jrCell.addElementGroup(jrElement);
 		}
-		// if (firstTime) {
-		// SelectionHelper.setSelection(jrElement, false);
-		// firstTime = false;
-		// }
 	}
- 
 
 	/*
 	 * (non-Javadoc)

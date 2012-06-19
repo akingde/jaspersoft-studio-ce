@@ -28,6 +28,7 @@ import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
+
 /*
  * The Class ReorderParameterCommand.
  */
@@ -43,24 +44,26 @@ public class ReorderColumnGroupCommand extends Command {
 	 * Instantiates a new reorder parameter command.
 	 * 
 	 * @param child
-	 *          the child
+	 *            the child
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
-	public ReorderColumnGroupCommand(MColumn child, MColumnGroup parent, int newIndex) {
+	public ReorderColumnGroupCommand(MColumn child, MColumnGroup parent,
+			int newIndex) {
 		super(Messages.ReorderColumnGroupCommand_reorder_column_group);
 		this.newIndex = newIndex;
 		this.jrGroup = (StandardColumnGroup) parent.getValue();
 		this.jrColumn = (StandardBaseColumn) child.getValue();
 	}
 
-	public ReorderColumnGroupCommand(MColumn child, MColumnGroupCell parent, int newIndex) {
+	public ReorderColumnGroupCommand(MColumn child, MColumnGroupCell parent,
+			int newIndex) {
 		super(Messages.ReorderColumnGroupCommand_reorder_column_group);
 		this.newIndex = newIndex;
 		this.jrGroup = (StandardColumnGroup) parent.getValue();
-		this.jrColumn = (StandardBaseColumn) child.getValue();
+		this.jrColumn = child.getValue();
 	}
 
 	/*

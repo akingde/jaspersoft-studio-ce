@@ -70,7 +70,7 @@ public class MColumnGroupCell extends MCell {
 
 	@Override
 	public String getToolTip() {
-		return getIconDescriptor().getToolTip();
+		return getIconDescriptor().getToolTip() + ": " + getDisplayText();
 	}
 
 	@Override

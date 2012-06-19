@@ -39,7 +39,8 @@ public class CreateElementCommand extends Command {
 
 	private int index = -1;
 
-	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Rectangle position, int index) {
+	public CreateElementCommand(MCell destNode, MGraphicElement srcNode,
+			Rectangle position, int index) {
 		super();
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		this.jrCell = (JRDesignCellContents) destNode.getValue();
@@ -52,17 +53,16 @@ public class CreateElementCommand extends Command {
 	 * Creates the object.
 	 */
 	protected void createObject() {
-		if (jrElement == null) {
+		if (jrElement == null)
 			jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
 
-			if (jrElement != null)
-				setElementBounds();
-		}
+		setElementBounds();
 	}
 
 	protected void setElementBounds() {
 		if (location == null)
-			location = new Rectangle(0, 0, srcNode.getDefaultWidth(), srcNode.getDefaultHeight());
+			location = new Rectangle(0, 0, srcNode.getDefaultWidth(),
+					srcNode.getDefaultHeight());
 		if (location.width < 0)
 			location.width = srcNode.getDefaultWidth();
 		if (location.height < 0)

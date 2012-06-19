@@ -181,14 +181,13 @@ public class CrosstabWizard extends JSSWizard {
 						m.add(createRowGroups(jdc, f));
 					step4.setFields(m);
 				}
-				setupColumns();
+//				setupColumns();
 				setupRows();
 			} else
 				page = step4;
 		}
 		if (page == step4) {
 			if (ds != null) {
-
 				if (mesures == null
 						|| !mesures.getDsname().equals(ds.getName())) {
 					List<Object> m = new ArrayList<Object>();

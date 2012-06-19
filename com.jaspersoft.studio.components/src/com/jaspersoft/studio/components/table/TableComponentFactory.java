@@ -376,6 +376,8 @@ public class TableComponentFactory implements IComponentFactory {
 			return new TableFigure();
 		if (node instanceof MCell)
 			return new CellFigure();
+		// if (node instanceof MColumn && !(node instanceof MCell))
+		// return new CellFigure();
 		return null;
 	}
 
@@ -624,13 +626,17 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public ExpressionContext getElementExpressionContext(Object jrObject) {
-		if(jrObject instanceof MTable && 
-				((MTable)jrObject).getValue() instanceof JRDesignComponentElement){
-			MTable mtable=(MTable)jrObject;
-			StandardTable table=(StandardTable) ((JRDesignComponentElement)mtable.getValue()).getComponent();
-			JRDesignDataset designDS = ModelUtils.getDesignDatasetForDatasetRun(
-					mtable.getJasperConfiguration().getJasperDesign(), table.getDatasetRun());
-			return new ExpressionContext(designDS,mtable.getJasperConfiguration());
+		if (jrObject instanceof MTable
+				&& ((MTable) jrObject).getValue() instanceof JRDesignComponentElement) {
+			MTable mtable = (MTable) jrObject;
+			StandardTable table = (StandardTable) ((JRDesignComponentElement) mtable
+					.getValue()).getComponent();
+			JRDesignDataset designDS = ModelUtils
+					.getDesignDatasetForDatasetRun(mtable
+							.getJasperConfiguration().getJasperDesign(), table
+							.getDatasetRun());
+			return new ExpressionContext(designDS,
+					mtable.getJasperConfiguration());
 		}
 		return null;
 	}

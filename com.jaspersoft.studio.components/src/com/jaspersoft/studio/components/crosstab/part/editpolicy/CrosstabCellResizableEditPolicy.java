@@ -19,26 +19,37 @@
  */
 package com.jaspersoft.studio.components.crosstab.part.editpolicy;
 
+import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Handle;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
-import org.eclipse.gef.handles.AbstractHandle;
 import org.eclipse.gef.handles.MoveHandle;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.editor.gef.figures.borders.Line1Border;
-import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementFeedbackFigure;
+import com.jaspersoft.studio.components.crosstab.part.CrosstabCellEditPart;
+import com.jaspersoft.studio.components.table.part.TableCellEditPart;
+import com.jaspersoft.studio.editor.gef.parts.handles.CellMoveHandle;
+import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle2;
+import com.jaspersoft.studio.editor.gef.util.GEFUtil;
+import com.jaspersoft.studio.editor.java2d.J2DGraphics;
+
 /*
  * The Class BandResizableEditPolicy.
  */
@@ -52,27 +63,36 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 		setDragAllowed(false);
 	}
 
+	@Override
+	public CrosstabCellEditPart getHost() {
+		return (CrosstabCellEditPart) super.getHost();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.ResizableEditPolicy#createSelectionHandles()
+	 * @see
+	 * org.eclipse.gef.editpolicies.ResizableEditPolicy#createSelectionHandles()
 	 */
 	@Override
-	protected List<AbstractHandle> createSelectionHandles() {
-		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
+	protected List<Handle> createSelectionHandles() {
+		List<Handle> list = new ArrayList<Handle>();
 
-		MoveHandle hand = new MoveHandle((GraphicalEditPart) getHost());
-		hand.setBorder(new Line1Border(ColorConstants.darkBlue, 4));
+		GraphicalEditPart geditPart = getHost();
+		list.add(new CellResizeHandle2(geditPart, PositionConstants.SOUTH));
+		list.add(new CellResizeHandle2(geditPart, PositionConstants.NORTH));
+		list.add(new CellResizeHandle2(geditPart, PositionConstants.EAST));
+		list.add(new CellResizeHandle2(geditPart, PositionConstants.WEST));
 
+		MoveHandle hand = new CellMoveHandle(geditPart);
 		list.add(hand);
-		
-//		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
-//		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
-//		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.NORTH));
-//		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.EAST));
-//		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.WEST));
-//
+
 		return list;
+	}
+
+	@Override
+	protected Command getResizeCommand(ChangeBoundsRequest request) {
+		return CreateResize.createResizeCommand(request, getHost());
 	}
 
 	/*
@@ -80,60 +100,136 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 	 * 
 	 * @param request the request
 	 */
-	@Override
 	protected void showChangeBoundsFeedback(ChangeBoundsRequest request) {
-		IFigure feedback = getDragSourceFeedbackFigure();
+		Point moveDelta = request.getMoveDelta().getCopy();
+		Dimension sizeDelta = request.getSizeDelta().getCopy();
+		moveDelta.y = 0;
+		getFeedbackLayer().translateToParent(moveDelta);
+		int delta = moveDelta.x;
+		if (request.getType().equals(REQ_MOVE)) {
+			request.setMoveDelta(new Point(delta, 0));
+			if (delta == 0)
+				return;
+		}
+		if (request.getType().equals(REQ_RESIZE) && sizeDelta.width == 0
+				&& sizeDelta.height == 0)
+			return;
+		PrecisionRectangle rdelta = new PrecisionRectangle(moveDelta, sizeDelta);
 
-		PrecisionRectangle rect = new PrecisionRectangle(getInitialFeedbackBounds().getCopy());
-		getHostFigure().translateToAbsolute(rect);
-		rect.translate(request.getMoveDelta());
-		rect.resize(request.getSizeDelta());
-
-		// Calculate changes for the figure...
-		String s = ""; //$NON-NLS-1$
-		int scale = 0;
-		if (getHost() instanceof FigureEditPart
-				&& ((FigureEditPart) getHost()).getModelNode().getValue() instanceof JRDesignCellContents) {
-			JRDesignCellContents jrElement = (JRDesignCellContents) ((FigureEditPart) getHost()).getModelNode().getValue();
-			Rectangle oldBounds = new Rectangle(0, 0, jrElement.getWidth(), jrElement.getHeight());
-
-			PrecisionRectangle rect2 = new PrecisionRectangle(new Rectangle(request.getMoveDelta().x,
-					request.getMoveDelta().y, request.getSizeDelta().width, request.getSizeDelta().height));
-			getHostFigure().translateToRelative(rect2);
-
-			// oldBounds.translate(rect2.x, rect2.y);
-			oldBounds.resize(rect2.width, rect2.height);
-
-			s += oldBounds.width + ", " + oldBounds.height; //$NON-NLS-1$
-			if (oldBounds.width != 0)
-				scale = rect.width / oldBounds.width - 1;
-			else if (oldBounds.height != 0)
-				scale = rect.height / oldBounds.height - 1;
+		FeedbackFigure feedback = (FeedbackFigure) getDragSourceFeedbackFigure();
+		IFigure hfig = getHostFigure();
+		feedback.setRequest(request);
+		if (request.getType().equals(REQ_MOVE)) {
+			// double zoom = GEFUtil.getZoom(getHost());
+			// movePlace.calcMovePlace((int) Math.floor(moveDelta.x / zoom),
+			// hfig
+			// .getBounds().getCopy());
+			// if (movePlace.x1 != movePlace.xRef)
+			// feedback.setInsertLine(movePlace.x1, movePlace.y1, movePlace.y2);
 		}
 
+		Rectangle rect = new PrecisionRectangle(getInitialFeedbackBounds()
+				.getCopy());
+		Dimension contaierSize = getHost().getContaierSize();
+
+		if (request.getType().equals(REQ_RESIZE)
+				&& request.getResizeDirection() == PositionConstants.SOUTH) {
+			rect.x = TableCellEditPart.X_OFFSET;
+			rect.width = contaierSize.width;
+		} else if (request.getType().equals(REQ_RESIZE)
+				&& request.getResizeDirection() == PositionConstants.NORTH) {
+			rect.x = TableCellEditPart.X_OFFSET;
+			rdelta.y = -rdelta.height;
+			rect.width = contaierSize.width;
+		} else if (request.getType().equals(REQ_MOVE)) {
+			rect.y = 0;
+			rect.height = contaierSize.height + TableCellEditPart.Y_OFFSET * 2;
+		} else {
+			rect.y = TableCellEditPart.Y_OFFSET;
+			rect.height = contaierSize.height + 1;
+		}
+		hfig.translateToAbsolute(rect);
+		rect.translate(rdelta.x, rdelta.y);
+		rect.resize(rdelta.width, rdelta.height);
 		feedback.translateToRelative(rect);
-
-		((ElementFeedbackFigure) feedback).setText(s);
-
-		feedback.setBounds(rect.resize(-scale, -scale));
+		feedback.setBounds(rect);
+		feedback.validate();
 	}
 
-	/**
-	 * Creates the figure used for feedback.
-	 * 
-	 * @return the new feedback figure
-	 */
-	@Override
 	protected IFigure createDragSourceFeedbackFigure() {
-		// Use a ghost rectangle for feedback
-		RectangleFigure r = new ElementFeedbackFigure();
-
-		// FigureUtilities.makeGhostShape(r);
-		r.setLineStyle(Graphics.LINE_DOT);
-		r.setForegroundColor(ColorConstants.black);
-		r.setBounds(getInitialFeedbackBounds().resize(-1, -1));// new Rectangle(ifb.x, ifb.y, ifb.width -100, ifb.height));
+		RectangleFigure r = new FeedbackFigure();
+		r.setOpaque(false);
+		r.setAlpha(50);
+		r.setBackgroundColor(ColorConstants.gray);
+		r.setFill(false);
+		r.setBorder(new LineBorder(ColorConstants.gray, 1));
 		addFeedback(r);
 		return r;
 	}
 
+	private final class FeedbackFigure extends RectangleFigure {
+		private ChangeBoundsRequest request;
+
+		public void setRequest(ChangeBoundsRequest request) {
+			this.request = request;
+		}
+
+		private int x1, y1, y2;
+
+		public void setInsertLine(int x1, int y1, int y2) {
+			this.x1 = x1;
+			this.y1 = y1;
+			this.y2 = y2;
+		}
+
+		@Override
+		public void paintFigure(Graphics g) {
+			PrecisionRectangle b = new PrecisionRectangle(getBounds().getCopy());
+			if (request.getType().equals(REQ_RESIZE)) {
+				super.paintFigure(g);
+				Graphics2D gr = ((J2DGraphics) g).getGraphics2D();
+				gr.fillRect(b.x, b.y, b.width, b.height);
+				AlphaComposite ac = AlphaComposite.getInstance(
+						AlphaComposite.SRC_OVER, 1f);
+				gr.setComposite(ac);
+
+				gr.fillOval(b.x + (b.width) / 2 - 3, b.y - 3, 7, 7);
+				gr.fillOval(b.x + (b.width) / 2 - 3, b.y + b.height - 4, 7, 7);
+
+				gr.drawLine(b.x + (b.width) / 2, b.y, b.x + (b.width) / 2, b.y
+						+ b.height - 2);
+			} else if (request.getType().equals(REQ_MOVE)) {
+				double zoom = GEFUtil.getZoom(b, getHostFigure());
+
+				Graphics2D gr = ((J2DGraphics) g).getGraphics2D();
+				gr.setColor(Color.gray);
+				AlphaComposite ac = AlphaComposite.getInstance(
+						AlphaComposite.SRC_OVER, 0.1f);
+				gr.setComposite(ac);
+
+				int h = TableCellEditPart.Y_OFFSET;
+				b.y = b.y + (int) Math.floor(h * zoom) - h - 3;
+				int height = b.height - (int) Math.floor(h * zoom);
+
+				gr.fillRect(b.x, b.y, b.width, height - b.y);
+
+				// draw handle representation
+				ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f);
+				gr.setComposite(ac);
+				gr.fillRect(b.x, b.y, b.width, h);
+				gr.fillRect(b.x, height + 3, b.width, h);
+
+				// move placer feedback
+				gr.setStroke(new BasicStroke(2.0f));
+				ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
+				gr.setComposite(ac);
+				gr.setColor(Color.red);
+
+				PrecisionRectangle r = new PrecisionRectangle(x1, y1, x1, y2);
+				getHostFigure().translateToAbsolute(r);
+				getFeedbackLayer().translateToParent(r);
+				gr.drawLine(r.x, r.y, r.width, r.height);
+			}
+		}
+	}
 }

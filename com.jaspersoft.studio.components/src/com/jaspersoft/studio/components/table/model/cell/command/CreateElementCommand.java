@@ -45,13 +45,14 @@ public class CreateElementCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Rectangle position, int index) {
+	public CreateElementCommand(MCell destNode, MGraphicElement srcNode,
+			Rectangle position, int index) {
 		super();
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		this.jrCell = destNode.getCell();
@@ -70,18 +71,22 @@ public class CreateElementCommand extends Command {
 
 			if (jrElement != null) {
 				if (location == null)
-					location = new Rectangle(0, 0, Math.min(srcNode.getDefaultWidth(), jrColumn.getWidth() - location.x),
-							Math.min(srcNode.getDefaultHeight(), jrCell.getHeight() - location.y));
+					location = new Rectangle(0, 0, Math.min(
+							srcNode.getDefaultWidth(), jrColumn.getWidth()
+									- location.x), Math.min(
+							srcNode.getDefaultHeight(), jrCell.getHeight()
+									- location.y));
 				if (location.width < 0)
 					location.width = srcNode.getDefaultWidth();
 				if (location.height < 0)
 					location.height = srcNode.getDefaultHeight();
-				jrElement.setX(location.x);
-				jrElement.setY(location.y);
-				jrElement.setWidth(location.width);
-				jrElement.setHeight(location.height);
+
 			}
 		}
+		jrElement.setX(location.x);
+		jrElement.setY(location.y);
+		jrElement.setWidth(location.width);
+		jrElement.setHeight(location.height);
 	}
 
 	/*

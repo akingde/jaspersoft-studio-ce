@@ -19,193 +19,22 @@
  */
 package com.jaspersoft.studio.components.crosstab.part.editpolicy;
 
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
-
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.PrecisionRectangle;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.LayerConstants;
-import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
-import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle;
-import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.components.crosstab.part.CrosstabCellEditPart;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.AContainerMoveEditPolicy;
 
 /*
  * The Class BandMoveEditPolicy.
  * 
  * @author Chicu Veaceslav
  */
-public class CrosstabCellMoveEditPolicy extends SelectionEditPolicy {
+public class CrosstabCellMoveEditPolicy extends AContainerMoveEditPolicy {
 
-	/** The feedback. */
-	private IFigure feedback;
-
-	/** The handle. */
-	private IFigure handle;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.EditPolicy#activate()
-	 */
-	@Override
-	public void activate() {
-		super.activate();
-		// setHandle(new CellResizeHandle((GraphicalEditPart) getHost()));
-		setHandle(new CellResizeHandle((GraphicalEditPart) getHost(),
-				PositionConstants.SOUTH));
-		getLayer(LayerConstants.HANDLE_LAYER).add(getHandle());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.EditPolicy#deactivate()
-	 */
-	@Override
-	public void deactivate() {
-		if (getHandle() != null) {
-			getLayer(LayerConstants.HANDLE_LAYER).remove(getHandle());
-			setHandle(null);
-		}
-		if (feedback != null) {
-			removeFeedback(feedback);
-			feedback = null;
-		}
-		super.deactivate();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.EditPolicy#understandsRequest(Request)
-	 */
-	@Override
-	public boolean understandsRequest(Request request) {
-		if (REQ_RESIZE.equals(request.getType()))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Erase change bounds feedback.
-	 * 
-	 * @param request
-	 *            the request
-	 */
-	protected void eraseChangeBoundsFeedback(ChangeBoundsRequest request) {
-		if (feedback != null) {
-			removeFeedback(feedback);
-		}
-		feedback = null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.EditPolicy#eraseSourceFeedback(Request)
-	 */
-	@Override
-	public void eraseSourceFeedback(Request request) {
-		if (REQ_RESIZE.equals(request.getType()))
-			eraseChangeBoundsFeedback((ChangeBoundsRequest) request);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.EditPolicy#getCommand(Request)
-	 */
-	@Override
-	public Command getCommand(Request request) {
-		if (REQ_RESIZE.equals(request.getType()))
-			return getResizeCommand((ChangeBoundsRequest) request);
-		return null;
-	}
-
-	/**
-	 * Gets the resize command.
-	 * 
-	 * @param request
-	 *            the request
-	 * @return the resize command
-	 */
 	protected Command getResizeCommand(ChangeBoundsRequest request) {
-		if (request.getResizeDirection() == PositionConstants.SOUTH
-				|| request.getResizeDirection() == PositionConstants.SOUTH_EAST
-				|| request.getResizeDirection() == PositionConstants.EAST) {
-			MCell mBand = (MCell) getHost().getModel();
-
-			Dimension sizeDelta = request.getSizeDelta();
-			PrecisionRectangle deltaRect = new PrecisionRectangle(
-					new Rectangle(0, 0, sizeDelta.width, sizeDelta.height));
-			getHostFigure().translateToRelative(deltaRect);
-
-			JRDesignCellContents jrdesign = (JRDesignCellContents) mBand
-					.getValue();
-			int height = jrdesign.getHeight() + deltaRect.height;
-			if (height < 0)
-				height = 0;
-
-			int width = jrdesign.getWidth() + deltaRect.width;
-			if (width < 0)
-				width = 0;
-
-			CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
-
-			if (sizeDelta.width != 0) {
-				SetValueCommand setCommand = new SetValueCommand();
-				setCommand.setTarget(mBand);
-				setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_WIDTH);
-				setCommand.setPropertyValue(width);
-				c.add(setCommand);
-			}
-			if (sizeDelta.height != 0) {
-				SetValueCommand setCommand = new SetValueCommand();
-				setCommand.setTarget(mBand);
-				setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_HEIGHT);
-				setCommand.setPropertyValue(height);
-				c.add(setCommand);
-			}
-			return c;
-		}
-		return null;
-	}
-
-	/**
-	 * Sets the handle.
-	 * 
-	 * @param handle
-	 *            the new handle
-	 */
-	private void setHandle(IFigure handle) {
-		this.handle = handle;
-	}
-
-	/**
-	 * Gets the handle.
-	 * 
-	 * @return the handle
-	 */
-	private IFigure getHandle() {
-		return handle;
-	}
-
-	@Override
-	protected void hideSelection() {
-	}
-
-	@Override
-	protected void showSelection() {
+		return CreateResize.createResizeCommand(request,
+				(CrosstabCellEditPart) getHost());
 	}
 
 }

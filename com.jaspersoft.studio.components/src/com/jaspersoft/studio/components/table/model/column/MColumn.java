@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.components.table.model.column;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -91,6 +92,11 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		this.name = name;
 	}
 
+	@Override
+	public StandardBaseColumn getValue() {
+		return (StandardBaseColumn) super.getValue();
+	}
+
 	private String name;
 
 	@Override
@@ -133,7 +139,12 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	 */
 	@Override
 	public String getToolTip() {
-		return getIconDescriptor().getToolTip();
+		String tt = "";
+		List<ANode> nodes = getAMCollection();
+		for (int i = nodes.size() - 1; i >= 0; i--)
+			tt += nodes.get(i).getDisplayText() + "\n";
+		tt += "\t"+getIconDescriptor().getToolTip() + ": " + getDisplayText();
+		return tt;
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -234,7 +245,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	}
 
 	public MTable getMTable() {
-		INode node = getParent();
+		ANode node = getParent();
 		while (node != null) {
 			if (node instanceof MTable) {
 				return (MTable) node;
@@ -242,6 +253,18 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 			node = node.getParent();
 		}
 		return null;
+	}
+
+	public List<ANode> getAMCollection() {
+		List<ANode> list = new ArrayList<ANode>();
+		ANode node = getParent();
+		while (node != null) {
+			list.add(node);
+			if (node instanceof AMCollection)
+				return list;
+			node = node.getParent();
+		}
+		return list;
 	}
 
 	@Override

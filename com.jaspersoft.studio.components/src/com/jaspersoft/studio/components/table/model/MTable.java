@@ -87,19 +87,18 @@ public class MTable extends MGraphicElement implements IContainer,
 	}
 
 	/**
-	 * Instantiates a new m chart.
 	 * 
 	 * @param parent
 	 *            the parent
-	 * @param jrCrosstab
+	 * @param jrTable
 	 *            the jr chart
 	 * @param newIndex
 	 *            the new index
 	 */
-	public MTable(ANode parent, JRDesignComponentElement jrCrosstab,
-			int newIndex, TableManager ctManager) {
+	public MTable(ANode parent, JRDesignComponentElement jrTable, int newIndex,
+			TableManager ctManager) {
 		super(parent, newIndex);
-		setValue(jrCrosstab);
+		setValue(jrTable);
 		this.ctManager = ctManager;
 	}
 

@@ -24,9 +24,11 @@ import net.sf.jasperreports.components.table.StandardTable;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+
 /*
  * The Class ReorderParameterCommand.
  */
@@ -42,18 +44,18 @@ public class ReorderColumnCommand extends Command {
 	 * Instantiates a new reorder parameter command.
 	 * 
 	 * @param child
-	 *          the child
+	 *            the child
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public ReorderColumnCommand(MColumn child, MTable parent, int newIndex) {
 		super(Messages.ReorderColumnCommand_reorder_columns);
 
 		this.newIndex = newIndex;
-		this.jrTable = CreateColumnCommand.getTable(parent);
-		this.jrColumn = (StandardBaseColumn) child.getValue();
+		this.jrTable = TableManager.getTable(parent);
+		this.jrColumn = child.getValue();
 	}
 
 	/*

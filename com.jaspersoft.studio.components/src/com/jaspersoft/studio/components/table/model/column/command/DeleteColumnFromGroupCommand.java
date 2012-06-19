@@ -25,6 +25,7 @@ import net.sf.jasperreports.components.table.StandardTable;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
@@ -47,14 +48,14 @@ public class DeleteColumnFromGroupCommand extends Command {
 		super();
 		this.jrGroup = (StandardColumnGroup) destNode.getValue();
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
-		this.jrTable = CreateColumnCommand.getTable(destNode.getMTable());
+		this.jrTable = TableManager.getTable(destNode.getMTable());
 	}
 
 	public DeleteColumnFromGroupCommand(MColumnGroupCell destNode, MColumn srcNode) {
 		super();
 		this.jrGroup = (StandardColumnGroup) destNode.getValue();
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
-		this.jrTable = CreateColumnCommand.getTable(destNode.getMTable());
+		this.jrTable = TableManager.getTable(destNode.getMTable());
 	}
 
 	/*

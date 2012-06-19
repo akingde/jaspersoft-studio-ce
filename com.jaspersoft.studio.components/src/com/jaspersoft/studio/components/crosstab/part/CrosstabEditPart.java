@@ -22,11 +22,11 @@ package com.jaspersoft.studio.components.crosstab.part;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MPage;
 
@@ -41,16 +41,7 @@ public class CrosstabEditPart extends EditableFigureEditPart {
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
-				new SelectionEditPolicy() {
-					@Override
-					protected void showSelection() {
-						updateRulers();
-					}
-
-					@Override
-					protected void hideSelection() {
-					}
-				});
+				new FigureSelectionEditPolicy());
 	}
 
 	@Override
