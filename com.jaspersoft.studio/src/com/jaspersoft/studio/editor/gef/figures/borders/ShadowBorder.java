@@ -1,31 +1,28 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.figures.borders;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -38,6 +35,7 @@ import org.eclipse.gef.handles.HandleBounds;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.util.RoundGradientPaint;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
+
 /*
  * The Class ShadowBorder.
  */
@@ -119,16 +117,20 @@ public class ShadowBorder extends AbstractBorder {
 
 		// TOP LEFT ______________________________________________
 		r = new Rectangle2D.Double(x, y, 10, 10);
-		RoundGradientPaint rgp = new RoundGradientPaint(x + 9.8f, y + 9.8f, new Color(0, 0, 0, 60), new Point2D.Float(0,
-				6.8f), new Color(0, 0, 0, 0));
+		float[] dist = { 0f, 0.95f };
+		Color[] colors = { new Color(0, 0, 0, 60), new Color(0, 0, 0, 0) };
+		RadialGradientPaint radgp = new RadialGradientPaint(new Point2D.Float(x + 10, x + 10), 10f, dist, colors);
+		// RoundGradientPaint rgp = new RoundGradientPaint(x + 10, y + 10, new Color(0, 0, 0, 60), new Point2D.Float(0,
+		// 9.8f),
+		// new Color(0, 0, 0, 0));
 
-		g.setPaint(rgp);
+		g.setPaint(radgp);
 		g.fill(r);
 
 		// TOP RIGHT ______________________________________________
 		r = new Rectangle2D.Double(x + width - 10, y, 10, 10);
-		rgp = new RoundGradientPaint(r.getX() + 0.5, r.getY() + 9.5f, new Color(0, 0, 0, 60), new Point2D.Float(0, 6.5f),
-				new Color(0, 0, 0, 0));
+		RoundGradientPaint rgp = new RoundGradientPaint(r.getX() + 0.5, r.getY() + 9.5f, new Color(0, 0, 0, 60),
+				new Point2D.Float(0, 6.5f), new Color(0, 0, 0, 0));
 
 		g.setPaint(rgp);
 		g.fill(r);

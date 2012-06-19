@@ -335,10 +335,11 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	}
 
 	protected JDReportOutlineView getOutlineView() {
-		if (outlinePage == null) {
-			TreeViewer viewer = new TreeViewer();
-			outlinePage = new JDReportOutlineView(this, viewer);
-		}
+		// if (outlinePage == null) {
+		TreeViewer viewer = new TreeViewer();
+		outlinePage = new JDReportOutlineView(this, viewer);
+		outlinePage.setContents(getModel());
+		// }
 		return outlinePage;
 	}
 

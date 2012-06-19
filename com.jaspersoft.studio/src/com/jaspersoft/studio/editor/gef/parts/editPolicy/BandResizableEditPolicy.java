@@ -71,7 +71,7 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 			setFeedbackText(oldBounds.height + (bWidth != null ? "," + oldBounds.width : "") + " px");
 		}
 		super.showChangeBoundsFeedback(request);
-		
+
 	}
 
 	/**
@@ -92,13 +92,13 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
 
 		MoveHandle hand = new MoveHandle((GraphicalEditPart) getHost());
-		hand.setBorder(new Line1Border(ColorConstants.darkBlue, 4));
+		hand.setBorder(new Line1Border(ColorConstants.gray, 5));
 
 		list.add(hand);
-		
-//		BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
-//		buttonPadHandle.setBorder(null); 
-//		list.add(buttonPadHandle);
+
+		// BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
+		// buttonPadHandle.setBorder(null);
+		// list.add(buttonPadHandle);
 		// NonResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(), list);
 		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
 		// // if (hasNorth)

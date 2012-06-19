@@ -75,7 +75,6 @@ public class ComponentFigure extends RectangleFigure {
 		Graphics2D graphics2d = ((J2DGraphics) graphics).getGraphics2D();
 
 		Rectangle b = (this instanceof HandleBounds) ? ((HandleBounds) this).getHandleBounds() : this.getBounds();
-		// Graphics2D newGraphics = (Graphics2D) graphics2d.create(b.x, b.y, b.width, b.height);
 		try {
 			graphics2d.translate(b.x, b.y);
 

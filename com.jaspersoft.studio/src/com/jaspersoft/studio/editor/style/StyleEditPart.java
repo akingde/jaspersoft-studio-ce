@@ -106,7 +106,7 @@ public class StyleEditPart extends FigureEditPart {
 		return rf;
 	}
 
-	protected void setPrefsBorder(IFigure rect) {
+	public void setPrefsBorder(IFigure rect) {
 		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
 				DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null); //$NON-NLS-1$
 

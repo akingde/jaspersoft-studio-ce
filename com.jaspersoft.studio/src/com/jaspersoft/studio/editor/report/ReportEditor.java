@@ -113,120 +113,121 @@ public class ReportEditor extends AbstractVisualEditor {
 	}
 
 	protected JDReportOutlineView getOutlineView() {
-		if (outlinePage == null) {
-			TreeViewer viewer = new TreeViewer();
-			outlinePage = new JDReportOutlineView(this, viewer) {
-				protected void initActions(ActionRegistry registry, IActionBars bars) {
-					String id = DeleteGroupReportAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+		// if (outlinePage == null) {
+		TreeViewer viewer = new TreeViewer();
+		outlinePage = new JDReportOutlineView(this, viewer) {
+			protected void initActions(ActionRegistry registry, IActionBars bars) {
+				String id = DeleteGroupReportAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = CreateFieldAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = CreateFieldAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = CreateSortFieldAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = CreateSortFieldAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = CreateVariableAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = CreateVariableAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = CreateScriptletAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = CreateScriptletAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = CreateParameterAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = CreateParameterAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = CreateGroupAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = CreateGroupAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = CreateDatasetAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = CreateDatasetAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = CreateStyleAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = CreateStyleAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = CreateConditionalStyleAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = CreateConditionalStyleAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = CreateStyleTemplateAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = CreateStyleTemplateAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = CreateBandAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = CreateBandAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = PageFormatAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
+				id = PageFormatAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
-					id = DatasetAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
-				}
-			};
-		}
+				id = DatasetAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
+			}
+		};
+		// }
 		return outlinePage;
 	}
 
 	protected void createEditorActions(ActionRegistry registry) {
 		IAction action = new CreateFieldAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateFieldAction.ID);
+		List<String> selectionActions = getSelectionActions();
+		selectionActions.add(CreateFieldAction.ID);
 
 		action = new CreateSortFieldAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateSortFieldAction.ID);
+		selectionActions.add(CreateSortFieldAction.ID);
 
 		action = new CreateVariableAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateVariableAction.ID);
+		selectionActions.add(CreateVariableAction.ID);
 
 		action = new CreateScriptletAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateScriptletAction.ID);
+		selectionActions.add(CreateScriptletAction.ID);
 
 		action = new CreateParameterAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateParameterAction.ID);
+		selectionActions.add(CreateParameterAction.ID);
 
 		action = new CreateGroupAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateGroupAction.ID);
+		selectionActions.add(CreateGroupAction.ID);
 
 		action = new CreateDatasetAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateDatasetAction.ID);
+		selectionActions.add(CreateDatasetAction.ID);
 
 		action = new CreateStyleAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateStyleAction.ID);
+		selectionActions.add(CreateStyleAction.ID);
 
 		action = new CreateConditionalStyleAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateConditionalStyleAction.ID);
+		selectionActions.add(CreateConditionalStyleAction.ID);
 
 		action = new CreateStyleTemplateAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateStyleTemplateAction.ID);
+		selectionActions.add(CreateStyleTemplateAction.ID);
 
 		action = new CreateBandAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateBandAction.ID);
+		selectionActions.add(CreateBandAction.ID);
 
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<Action> lst = m.getActions(this);
 		for (Action act : lst) {
 			action = act;
 			registry.registerAction(action);
-			getSelectionActions().add(act.getId());
+			selectionActions.add(act.getId());
 		}
 
 		action = new DeleteGroupReportAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(DeleteGroupReportAction.ID);
+		selectionActions.add(DeleteGroupReportAction.ID);
 
 		action = new PageFormatAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
+		selectionActions.add(action.getId());
 
 		action = new DatasetAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
+		selectionActions.add(action.getId());
 	}
 }

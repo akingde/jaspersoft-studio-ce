@@ -183,9 +183,10 @@ public class BandMoveEditPolicy extends SelectionEditPolicy {
 
 			feedback = new BandMoveFeedbackFigure();
 			feedback.setOpaque(false);
-			Rectangle bounds = ((GraphicalEditPart) getHost()).getFigure().getBounds().getCopy();
+			IFigure hfigure = getHostFigure();
+			Rectangle bounds = hfigure.getBounds().getCopy();
 
-			((GraphicalEditPart) getHost()).getFigure().translateToAbsolute(bounds);
+			hfigure.translateToAbsolute(bounds);
 			bounds.height = 20;
 
 			// We need to translate the bounds of the band figure to the bounds of
@@ -262,10 +263,10 @@ public class BandMoveEditPolicy extends SelectionEditPolicy {
 
 			((BandMoveFeedbackFigure) feedbackFigure).setBandHeight(b.getHeight() + moveDelta.y);
 			// Convert the delta size to scene size...
-			rect = new PrecisionRectangle(new Rectangle(0, 0, moveDelta.x, moveDelta.y));
-			getHostFigure().translateToAbsolute(rect);
-			moveDelta.x = rect.width;
-			moveDelta.y = rect.height;
+			// rect = new PrecisionRectangle(new Rectangle(0, 0, moveDelta.x, moveDelta.y));
+			// getHostFigure().translateToAbsolute(rect);
+			// moveDelta.x = rect.width;
+			// moveDelta.y = rect.height;
 
 			// request.setMoveDelta(moveDelta);
 

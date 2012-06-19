@@ -188,7 +188,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-	private Command getCreateCommand(ANode parent, Object obj, Rectangle constraint) {
+	protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint) {
 		if (obj instanceof ANode) {
 			ANode aNode = (ANode) obj;
 			if (aNode instanceof MGraphicElement) {

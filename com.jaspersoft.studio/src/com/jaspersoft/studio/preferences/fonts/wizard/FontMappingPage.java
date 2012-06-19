@@ -56,6 +56,7 @@ import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.utils.Misc;
 
 public class FontMappingPage extends WizardPage {
 	public class TableLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -65,16 +66,18 @@ public class FontMappingPage extends WizardPage {
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			String[] el = (String[]) element;
-			switch (columnIndex) {
-			case 0:
-				return el[0];
-			case 1:
-				return el[1];
-
-			default:
-				return (element != null ? element.toString() : "");
+			if (element instanceof List) {
+				List<String> el = (List<String>) element;
+				switch (columnIndex) {
+				case 0:
+					return el.get(0);
+				case 1:
+					return el.get(1);
+				default:
+					return (element != null ? element.toString() : "");
+				}
 			}
+			return Misc.nvl(element, "");
 		}
 
 		public void dispose() {
@@ -93,10 +96,9 @@ public class FontMappingPage extends WizardPage {
 	@Override
 	public void dispose() {
 		Map<String, String> map = new HashMap<String, String>();
-		List<String[]> inlist = (List<String[]>) tableViewer.getInput();
-		for (String[] str : inlist) {
-			map.put(str[0], str[1]);
-		}
+		List<List<String>> inlist = (List<List<String>>) tableViewer.getInput();
+		for (List<String> str : inlist)
+			map.put(str.get(0), str.get(1));
 		fontFamily.setExportFonts(map);
 		super.dispose();
 	}
@@ -144,7 +146,10 @@ public class FontMappingPage extends WizardPage {
 		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				return new String[] { "", "" };
+				List<String> lst = new ArrayList<String>(2);
+				lst.add("html");
+				lst.add("< Font Name >");
+				return lst;
 			}
 
 		});
@@ -197,11 +202,11 @@ public class FontMappingPage extends WizardPage {
 			}
 
 			public Object getValue(Object element, String property) {
-				String[] data = (String[]) element;
+				List<String> data = (List<String>) element;
 				if ("EXPORTER".equals(property)) //$NON-NLS-1$
-					return data[0];
+					return data.get(0);
 				if ("MAPPING".equals(property)) //$NON-NLS-1$
-					return data[1];
+					return data.get(0);
 
 				return ""; //$NON-NLS-1$
 			}
@@ -210,18 +215,18 @@ public class FontMappingPage extends WizardPage {
 				TableItem tableItem = (TableItem) element;
 				setErrorMessage(null);
 				setMessage(getDescription());
-				String[] data = (String[]) tableItem.getData();
+				List<String> data = (List<String>) tableItem.getData();
 				if ("EXPORTER".equals(property)) { //$NON-NLS-1$
 					// check duplicatesS
-					List<String[]> inlist = (List<String[]>) tableViewer.getInput();
-					for (String[] s : inlist) {
-						if (s[0].equals(value))
+					List<List<String>> inlist = (List<List<String>>) tableViewer.getInput();
+					for (List<String> s : inlist) {
+						if (s.get(0).equals(value))
 							return;
 					}
 
-					data[0] = (String) value;
+					data.add(0, (String) value);
 				} else if ("MAPPING".equals(property)) { //$NON-NLS-1$
-					data[1] = (String) value;
+					data.add(1, (String) value);
 				}
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
@@ -234,12 +239,16 @@ public class FontMappingPage extends WizardPage {
 	}
 
 	private void fillTable(Table table) {
-		List<String[]> lst = new ArrayList<String[]>();
+		List<List<String>> lst = new ArrayList<List<String>>();
 
 		Map<String, String> map = fontFamily.getExportFonts();
 		if (map != null) {
-			for (String key : map.keySet())
-				lst.add(new String[] { key, map.get(key) });
+			for (String key : map.keySet()) {
+				List<String> l = new ArrayList<String>(2);
+				l.add(key);
+				l.add(map.get(key));
+				lst.add(l);
+			}
 		}
 		tableViewer.setInput(lst);
 	}

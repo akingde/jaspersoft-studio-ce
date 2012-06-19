@@ -326,8 +326,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	 * @return the property sheet page
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		if (propertySheetPage == null)
-			propertySheetPage = new TabbedPropertySheetPage(ReportContainer.this, true);
+		// if (propertySheetPage == null)
+		propertySheetPage = new TabbedPropertySheetPage(ReportContainer.this, true);
 
 		return propertySheetPage;
 	}

@@ -35,7 +35,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.SnapToGrid;
-import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -45,6 +44,7 @@ import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.CornerBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.ElementLineBorder;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -54,7 +54,7 @@ import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 /*
  * The Class FigureEditPart.
  */
-public class FigureEditPart extends AJDEditPart implements PropertyChangeListener {
+public class FigureEditPart extends AJDEditPart implements PropertyChangeListener, IRulerUpdatable {
 
 	protected DrawVisitor drawVisitor;
 
@@ -112,16 +112,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
-		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new SelectionEditPolicy() {
-			@Override
-			protected void showSelection() {
-				updateRulers();
-			}
-
-			@Override
-			protected void hideSelection() {
-			}
-		});
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FigureSelectionEditPolicy());
 	}
 
 	/*
@@ -137,7 +128,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		rect.repaint();
 	}
 
-	protected void setPrefsBorder(IFigure rect) {
+	public void setPrefsBorder(IFigure rect) {
 		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
 				DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null); //$NON-NLS-1$
 

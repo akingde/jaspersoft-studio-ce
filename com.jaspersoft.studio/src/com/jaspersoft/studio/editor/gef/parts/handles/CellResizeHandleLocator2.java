@@ -22,15 +22,23 @@ package com.jaspersoft.studio.editor.gef.parts.handles;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RelativeLocator;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.HandleBounds;
 
-public class CellResizeHandleLocator extends RelativeLocator {
+import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
+import com.jaspersoft.studio.editor.gef.util.GEFUtil;
+
+/*
+ * The Class BandHandleLocator.
+ */
+public class CellResizeHandleLocator2 extends RelativeLocator {
 	private double relativeY;
 	private double relativeX;
 	private int direction;
+	private GraphicalEditPart editPart;
 
 	/**
 	 * Constructs a RelativeLocator with the given reference figure and relative location. The location is a constant from
@@ -42,8 +50,9 @@ public class CellResizeHandleLocator extends RelativeLocator {
 	 *          one of NORTH, NORTH_EAST, etc.
 	 * @since 2.0
 	 */
-	public CellResizeHandleLocator(GraphicalEditPart editPart, int location) {
+	public CellResizeHandleLocator2(GraphicalEditPart editPart, int location) {
 		setReferenceFigure(editPart.getFigure());
+		this.editPart = editPart;
 		switch (location & PositionConstants.NORTH_SOUTH) {
 		case PositionConstants.NORTH:
 			relativeY = 0;
@@ -76,33 +85,42 @@ public class CellResizeHandleLocator extends RelativeLocator {
 		target.translateToRelative(targetBounds);
 		targetBounds.resize(1, 1);
 
-		int w = 2;
-		int h = 2;
+		double xzoom = GEFUtil.getZoom(editPart);
+
+		Dimension targetSize = target.getPreferredSize();
+		Dimension d = targetSize;
+		if (editPart instanceof IContainerPart) {
+			d = ((IContainerPart) editPart).getContaierSize();
+			d = d.getCopy().setHeight(d.height + 18).scale(xzoom);
+		}
+
+		int w = 4;
+		int h = 4;
 		switch (direction & PositionConstants.NORTH_SOUTH) {
 		case PositionConstants.NORTH:
-			w = targetBounds.width;
-			targetBounds.y += (int) (targetBounds.height * relativeY - ((h / 2))) + 1;
+			w = d.width + 1;
+			targetBounds.y += (int) (targetBounds.height * relativeY - ((targetSize.height)));// + 1;
+			targetBounds.x = (int) Math.floor(10 * xzoom);
 			break;
 		case PositionConstants.SOUTH:
-			w = targetBounds.width;
-			targetBounds.y += (int) (targetBounds.height * relativeY - (h / 2)) - 1;
-			targetBounds.x += -1;
+			w = d.width + 1;
+			targetBounds.y += (int) (targetBounds.height * relativeY - ((targetSize.height))) - 1;// + 1) / 2)) + 1;
+			targetBounds.x = (int) Math.floor(10 * xzoom);
 			break;
 		}
 		switch (direction & PositionConstants.EAST_WEST) {
 		case PositionConstants.WEST:
-			h = targetBounds.height;
-			targetBounds.y += (int) relativeY - 1;
-			targetBounds.x += (int) (targetBounds.width * relativeX - (w / 2)) - 1;
+			h = d.height - (int) Math.floor(10 * xzoom);
+			targetBounds.y = (int) Math.floor(7 * xzoom);// += (int) relativeY - 1;
+			targetBounds.x += (int) (targetBounds.width * relativeX - (targetSize.width));// + 1;// + 1;
 			break;
 		case PositionConstants.EAST:
-			h = targetBounds.height;
-			targetBounds.y += (int) relativeY - 1;
-			targetBounds.x += (int) (targetBounds.width * relativeX - (w / 2) - 1);
+			h = d.height - (int) Math.floor(10 * xzoom);
+			targetBounds.y = (int) Math.floor(7 * xzoom);// += (int) relativeY - 1;
+			targetBounds.x += (int) (targetBounds.width * relativeX - (targetSize.width)) - 1;// / 2);// + 1;
 			break;
 		}
-
-		targetBounds.setSize(w, h);
+		targetBounds.setSize(w + 1, h + 1);
 		target.setBounds(targetBounds);
 	}
 }

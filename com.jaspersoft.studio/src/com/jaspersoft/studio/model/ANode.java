@@ -304,7 +304,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 						JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
 						ReportFactory.createElementsForBand(n, jrFrame.getChildren());
 					}
-					
+
 				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
 					// delete
 					for (INode n : getChildren()) {
@@ -432,6 +432,18 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 		if (parent != null)
 			return parent.getJasperConfiguration();
 		return null;
+	}
+
+	public int findParent(ANode n) {
+		int depth = 0;
+		ANode node = this;
+		while (node != null) {
+			if (node == n)
+				return depth;
+			node = node.getParent();
+			depth++;
+		}
+		return -1;
 	}
 
 	public int findElement(Object obj) {
