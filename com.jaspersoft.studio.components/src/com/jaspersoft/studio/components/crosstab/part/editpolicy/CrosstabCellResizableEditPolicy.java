@@ -84,7 +84,7 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 		list.add(new CellResizeHandle2(geditPart, PositionConstants.EAST));
 		list.add(new CellResizeHandle2(geditPart, PositionConstants.WEST));
 
-		MoveHandle hand = new CellMoveHandle(geditPart);
+		MoveHandle hand = new CellMoveHandle(geditPart, true, true);
 		list.add(hand);
 
 		return list;

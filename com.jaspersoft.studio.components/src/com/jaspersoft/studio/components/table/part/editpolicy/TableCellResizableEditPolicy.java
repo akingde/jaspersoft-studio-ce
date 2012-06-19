@@ -83,7 +83,7 @@ public class TableCellResizableEditPolicy extends ResizableEditPolicy {
 		list.add(new CellResizeHandle2(geditPart, PositionConstants.EAST));
 		list.add(new CellResizeHandle2(geditPart, PositionConstants.WEST));
 
-		MoveHandle hand = new CellMoveHandle(geditPart);
+		MoveHandle hand = new CellMoveHandle(geditPart, true, false, -3);
 		list.add(hand);
 
 		return list;
@@ -293,8 +293,8 @@ public class TableCellResizableEditPolicy extends ResizableEditPolicy {
 
 				PrecisionRectangle r = new PrecisionRectangle(x1, y1, x1, y2);
 				getHostFigure().translateToAbsolute(r);
-				getFeedbackLayer().translateToParent(r);
-				gr.drawLine(r.x, r.y, r.width, r.height);
+				getFeedbackLayer().translateToRelative(r);
+				gr.drawLine(r.x, r.y, r.x, r.height);
 			}
 		}
 	}

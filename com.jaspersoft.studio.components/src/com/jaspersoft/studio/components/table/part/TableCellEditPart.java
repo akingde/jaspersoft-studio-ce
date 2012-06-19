@@ -230,6 +230,9 @@ public class TableCellEditPart extends FigureEditPart implements
 
 			CellFigure f = (CellFigure) rect;
 			f.setLocation(new Point(x, y));
+
+//			rect.setBounds(rect.getBounds().resize(-5, -3));
+
 			f.setJRElement(model.getCell(),
 					(StandardBaseColumn) model.getValue(), getDrawVisitor());
 			updateRulers();

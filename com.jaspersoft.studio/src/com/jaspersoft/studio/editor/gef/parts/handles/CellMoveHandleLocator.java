@@ -30,14 +30,17 @@ public class CellMoveHandleLocator extends MoveHandleLocator {
 			double zoom = zm.getZoom();
 
 			b.y = (int) Math.floor(CellMoveHandle.Y_OFFSET * zoom) - CellMoveHandle.Y_OFFSET - 3;
+			b.x = (int) Math.floor(CellMoveHandle.Y_OFFSET * zoom) - CellMoveHandle.Y_OFFSET - 3;
 
 			b.height = d.height;
+			b.width = d.width;
 
 			Rectangle copy = new PrecisionRectangle(b.getCopy());
 
 			getReference().translateToAbsolute(copy);
 			target.translateToRelative(copy);
 			b.height = CellMoveHandle.Y_OFFSET * 2 + 6 + copy.height;
+			b.width = CellMoveHandle.Y_OFFSET * 2 + 6 + copy.width;
 
 			target.setBounds(b);
 		}
