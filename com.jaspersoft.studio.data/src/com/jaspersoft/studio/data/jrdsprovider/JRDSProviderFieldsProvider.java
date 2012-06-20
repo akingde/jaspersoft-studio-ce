@@ -37,11 +37,14 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 
 	private JRDataSourceProvider jrdsp;
 
+	public void setProvider(JRDataSourceProvider jrdsp) {
+		this.jrdsp = jrdsp;
+	}
+
 	public boolean supportsGetFieldsOperation() {
-		return true;
-//		if (jrdsp != null)
-//			return jrdsp.supportsGetFieldsOperation();
-//		return false;
+		if (jrdsp != null)
+			return jrdsp.supportsGetFieldsOperation();
+		return false;
 	}
 
 	public List<JRDesignField> getFields(DataAdapterService con,

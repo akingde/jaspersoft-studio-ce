@@ -46,10 +46,12 @@ import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.components.table.figure.CellFigure;
+import com.jaspersoft.studio.components.table.figure.EmptyCellFigure;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.cell.command.CreateElementCommand;
 import com.jaspersoft.studio.components.table.model.cell.command.OrphanElementCommand;
 import com.jaspersoft.studio.components.table.model.column.MCell;
+import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.part.editpolicy.TableCellMoveEditPolicy;
 import com.jaspersoft.studio.components.table.part.editpolicy.TableCellResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
@@ -156,29 +158,31 @@ public class TableCellEditPart extends FigureEditPart implements
 				Rectangle rect = (Rectangle) constraint;
 				if (child.getModel() instanceof MGraphicElement) {
 					MGraphicElement cmodel = (MGraphicElement) child.getModel();
-					MCell cparent = (MCell) cmodel.getParent();
-					if (cparent == getModel()) {
-						SetPageConstraintCommand cmd = new SetPageConstraintCommand();
-						MGraphicElement model = (MGraphicElement) child
-								.getModel();
-						Rectangle r = model.getBounds();
+					if (cmodel.getParent() instanceof MCell) {
+						MCell cparent = (MCell) cmodel.getParent();
+						if (cparent == getModel()) {
+							SetPageConstraintCommand cmd = new SetPageConstraintCommand();
+							MGraphicElement model = (MGraphicElement) child
+									.getModel();
+							Rectangle r = model.getBounds();
 
-						JRDesignElement jde = (JRDesignElement) model
-								.getValue();
-						int x = r.x + rect.x - jde.getX() + 1;
-						int y = r.y + rect.y - jde.getY() + 1;
-						rect.setLocation(x, y);
-						cmd.setContext(getModel(), (ANode) child.getModel(),
-								rect);
+							JRDesignElement jde = (JRDesignElement) model
+									.getValue();
+							int x = r.x + rect.x - jde.getX() + 1;
+							int y = r.y + rect.y - jde.getY() + 1;
+							rect.setLocation(x, y);
+							cmd.setContext(getModel(),
+									(ANode) child.getModel(), rect);
 
-						return cmd;
-					} else {
-						CompoundCommand c = new CompoundCommand();
+							return cmd;
+						} else {
+							CompoundCommand c = new CompoundCommand();
 
-						c.add(new OrphanElementCommand(cparent, cmodel));
-						c.add(new CreateElementCommand(getModel(), cmodel,
-								rect, -1));
-						return c;
+							c.add(new OrphanElementCommand(cparent, cmodel));
+							c.add(new CreateElementCommand((MCell) getModel(),
+									cmodel, rect, -1));
+							return c;
+						}
 					}
 				}
 				return null;
@@ -214,27 +218,31 @@ public class TableCellEditPart extends FigureEditPart implements
 	}
 
 	@Override
-	public MCell getModel() {
-		return (MCell) super.getModel();
+	public MColumn getModel() {
+		return (MColumn) super.getModel();
 	}
 
 	@Override
 	protected void setupFigure(IFigure rect) {
 		updateContainerSize();
-		MCell model = getModel();
+		ANode model = getModel();
 		rect.setToolTip(new Label(model.getToolTip()));
 		if (model.getValue() != null) {
 			Rectangle bounds = ((IGraphicElement) model).getBounds();
 			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
 			int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
+			rect.setLocation(new Point(x, y));
+			if (model instanceof MCell) {
+				CellFigure f = (CellFigure) rect;
+				// rect.setBounds(rect.getBounds().resize(-5, -3));
 
-			CellFigure f = (CellFigure) rect;
-			f.setLocation(new Point(x, y));
-
-//			rect.setBounds(rect.getBounds().resize(-5, -3));
-
-			f.setJRElement(model.getCell(),
-					(StandardBaseColumn) model.getValue(), getDrawVisitor());
+				f.setJRElement(((MCell) model).getCell(),
+						(StandardBaseColumn) model.getValue(), getDrawVisitor());
+			} else {
+				((EmptyCellFigure) rect).setJRElement(
+						(StandardBaseColumn) model.getValue(),
+						getDrawVisitor(), 100);
+			}
 			updateRulers();
 		}
 		if (getSelected() == 1)
@@ -285,7 +293,7 @@ public class TableCellEditPart extends FigureEditPart implements
 	}
 
 	private void updateContainerSize() {
-		MTable table = getModel().getTable();
+		MTable table = getModel().getMTable();
 		if (table != null) {
 			Dimension d = table.getTableManager().getSize();
 			d.height = Math.max(d.height, (Integer) table

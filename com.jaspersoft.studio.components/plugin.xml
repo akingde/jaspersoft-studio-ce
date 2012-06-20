@@ -438,11 +438,20 @@
             </input>
          </propertySection>
          <propertySection
+               afterSection="com.jaspersoft.studio.components.table.properties.TableColumnSection"
                class="com.jaspersoft.studio.components.table.properties.TableCellSection"
                id="com.jaspersoft.studio.components.table.properties.TableCellSection"
                tab="com.jaspersoft.studio.components.cell">
             <input
                   type="com.jaspersoft.studio.components.table.model.column.MCell">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.table.properties.TableColumnSection"
+               id="com.jaspersoft.studio.components.table.properties.TableColumnSection"
+               tab="com.jaspersoft.studio.components.cell">
+            <input
+                  type="com.jaspersoft.studio.components.table.model.column.MColumn">
             </input>
          </propertySection>
          <propertySection

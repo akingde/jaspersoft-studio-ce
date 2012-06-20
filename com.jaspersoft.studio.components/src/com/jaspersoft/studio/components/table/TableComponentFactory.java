@@ -51,6 +51,7 @@ import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.components.table.editor.TableEditor;
 import com.jaspersoft.studio.components.table.figure.CellFigure;
+import com.jaspersoft.studio.components.table.figure.EmptyCellFigure;
 import com.jaspersoft.studio.components.table.figure.TableFigure;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
@@ -376,8 +377,9 @@ public class TableComponentFactory implements IComponentFactory {
 			return new TableFigure();
 		if (node instanceof MCell)
 			return new CellFigure();
-		// if (node instanceof MColumn && !(node instanceof MCell))
-		// return new CellFigure();
+
+		if (node instanceof MColumn && !(node instanceof MCell))
+			return new EmptyCellFigure();
 		return null;
 	}
 
@@ -589,6 +591,8 @@ public class TableComponentFactory implements IComponentFactory {
 		if (model instanceof MTable)
 			return new TableEditPart();
 		if (model instanceof MCell)
+			return new TableCellEditPart();
+		else if (model instanceof MColumn)
 			return new TableCellEditPart();
 		return null;
 	}

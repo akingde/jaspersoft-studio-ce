@@ -80,9 +80,10 @@ public final class JettyUtil {
 	public static String getURL(IFile file, String uuid) {
 		String ctxName = file.getProject().getName();
 
-		return String.format("http://localhost:%d/%s/servlets/report?%s=%s&%s=%s", port, ctxName,
-				ReportServlet.REQUEST_PARAMETER_REPORT_URI, file.getProjectRelativePath().toString(),
-				SReportServlet.PRM_JSSContext, uuid);
+//		return String.format("http://localhost:%d/%s/servlets/report?%s=%s&%s=%s", port, ctxName,
+//				ReportServlet.REQUEST_PARAMETER_REPORT_URI, file.getProjectRelativePath().toString(),
+//				SReportServlet.PRM_JSSContext, uuid);
+		return null;
 	}
 
 	private static List<Handler> createContext(IProject project) {
@@ -110,7 +111,7 @@ public final class JettyUtil {
 		context.addServlet(reportServletHolder, "/servlets/report");
 
 		context.addServlet(new ServletHolder(ImageServlet.class), "/servlets/image");
-		context.addServlet(new ServletHolder(ResourceServlet.class), ResourceServlet.DEFAULT_PATH);
+//		context.addServlet(new ServletHolder(ResourceServlet.class), ResourceServlet.DEFAULT_PATH);
 
 		handlers.add(context);
 		return handlers;

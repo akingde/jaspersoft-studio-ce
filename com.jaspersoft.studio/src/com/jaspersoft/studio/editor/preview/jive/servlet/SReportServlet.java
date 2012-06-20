@@ -56,38 +56,38 @@ public class SReportServlet extends ReportServlet {
 
 			JasperPrint jasperPrint = (JasperPrint) webReportContext
 					.getParameterValue(WebReportContext.REPORT_CONTEXT_PARAMETER_JASPER_PRINT);
-			String run = request.getParameter(REQUEST_PARAMETER_RUN_REPORT);
-			if (jasperPrint == null || Boolean.valueOf(run)) {
-				String reportUri = request.getParameter(REQUEST_PARAMETER_REPORT_URI);
-
-				// webReportContext.setParameterValue(JRParameter.REPORT_FILE_RESOLVER, getFileResolver());
-				// JRResourcesUtil.setThreadFileResolver(getFileResolver());
-
-				Boolean isIgnorePagination = Boolean.valueOf(request.getParameter(REQUEST_PARAMETER_IGNORE_PAGINATION));
-				if (isIgnorePagination != null) {
-					webReportContext.setParameterValue(JRParameter.IS_IGNORE_PAGINATION, isIgnorePagination);
-				}
-
-				JasperReport jasperReport = (JasperReport) cprm.get(PRM_JASPERREPORT);
-				if (jasperReport == null) {
-					// String jrxml = request.getParameter(REQUEST_PARAMETER_REPORT_JRXML);
-					// if (jrxml != null && jrxml.trim().length() > 0) {
-					// jrxml = jrxml.trim();
-					// jasperReport = JasperCompileManager.compileReport(JRXmlLoader.load(RepositoryUtil.getInputStream(jrxml)));
-					// } else if (reportUri != null && reportUri.trim().length() > 0) {
-					// reportUri = reportUri.trim();
-					//
-					// jasperReport = RepositoryUtil.getReport(reportUri);
-					// }
-					//
-					// if (jasperReport == null) {
-					// throw new JRException("Report not found at : " + reportUri);
-					// }
-				}
-				jasperPrint = JasperFillManager.fillReport(jasperReport, webReportContext.getParameterValues());
-
-				webReportContext.setParameterValue(WebReportContext.REPORT_CONTEXT_PARAMETER_JASPER_PRINT, jasperPrint);
-			}
+//			String run = request.getParameter(REQUEST_PARAMETER_RUN_REPORT);
+//			if (jasperPrint == null || Boolean.valueOf(run)) {
+//				String reportUri = request.getParameter(REQUEST_PARAMETER_REPORT_URI);
+//
+//				// webReportContext.setParameterValue(JRParameter.REPORT_FILE_RESOLVER, getFileResolver());
+//				// JRResourcesUtil.setThreadFileResolver(getFileResolver());
+//
+//				Boolean isIgnorePagination = Boolean.valueOf(request.getParameter(REQUEST_PARAMETER_IGNORE_PAGINATION));
+//				if (isIgnorePagination != null) {
+//					webReportContext.setParameterValue(JRParameter.IS_IGNORE_PAGINATION, isIgnorePagination);
+//				}
+//
+//				JasperReport jasperReport = (JasperReport) cprm.get(PRM_JASPERREPORT);
+//				if (jasperReport == null) {
+//					// String jrxml = request.getParameter(REQUEST_PARAMETER_REPORT_JRXML);
+//					// if (jrxml != null && jrxml.trim().length() > 0) {
+//					// jrxml = jrxml.trim();
+//					// jasperReport = JasperCompileManager.compileReport(JRXmlLoader.load(RepositoryUtil.getInputStream(jrxml)));
+//					// } else if (reportUri != null && reportUri.trim().length() > 0) {
+//					// reportUri = reportUri.trim();
+//					//
+//					// jasperReport = RepositoryUtil.getReport(reportUri);
+//					// }
+//					//
+//					// if (jasperReport == null) {
+//					// throw new JRException("Report not found at : " + reportUri);
+//					// }
+//				}
+//				jasperPrint = JasperFillManager.fillReport(jasperReport, webReportContext.getParameterValues());
+//
+//				webReportContext.setParameterValue(WebReportContext.REPORT_CONTEXT_PARAMETER_JASPER_PRINT, jasperPrint);
+//			}
 			Context.unsetContext(jsskey);
 		} else
 			super.runReport(request, webReportContext);

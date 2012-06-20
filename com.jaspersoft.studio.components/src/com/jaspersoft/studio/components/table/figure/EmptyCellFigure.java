@@ -19,46 +19,42 @@
  */
 package com.jaspersoft.studio.components.table.figure;
 
-import net.sf.jasperreports.components.table.DesignCell;
+import java.awt.Graphics2D;
+
 import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.handles.HandleBounds;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 public class EmptyCellFigure extends FrameFigure {
-	private DesignCell cell;
 	private StandardBaseColumn column;
 
 	public EmptyCellFigure() {
 		super();
+		setBackgroundColor(ColorConstants.red);
 		setBorder(new LineBorder(1));
 	}
 
-	public void setJRElement(DesignCell cell, StandardBaseColumn column,
-			DrawVisitor drawVisitor) {
-		this.cell = cell;
+	public void setJRElement(StandardBaseColumn column,
+			DrawVisitor drawVisitor, int height) {
 		this.column = column;
+		this.height = height;
 		super.setJRElement(null, drawVisitor);
 		setSize(getElementWidth() + 3, getElementHeight() + 3);
 	}
 
-	@Override
-	protected JRLineBox getLineBox() {
-		JRLineBox box = null;
-		box = cell.getLineBox();
-		if (box == null && cell.getStyle() != null)
-			box = cell.getStyle().getLineBox();
-
-		return box;
-	}
+	private int height;
 
 	@Override
 	protected int getElementHeight() {
-		return cell.getHeight();
+		return height;
 	}
 
 	@Override
@@ -67,7 +63,22 @@ public class EmptyCellFigure extends FrameFigure {
 	}
 
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		
+	public void paint(Graphics graphics) {
+		Graphics2D graphics2d = ((J2DGraphics) graphics).getGraphics2D();
+
+		Rectangle b = (this instanceof HandleBounds) ? ((HandleBounds) this)
+				.getHandleBounds() : this.getBounds();
+		try {
+			graphics2d.translate(b.x, b.y);
+
+			graphics2d.fillRect(b.x, b.y, b.width, b.height);
+		} catch (Exception e) {
+			// when a font is missing exception is thrown by DrawVisitor
+			// FIXME: maybe draw something, else?
+			e.printStackTrace();
+		} finally {
+			graphics2d.translate(-b.x, -b.y);
+		}
+		paintBorder(graphics);
 	}
 }

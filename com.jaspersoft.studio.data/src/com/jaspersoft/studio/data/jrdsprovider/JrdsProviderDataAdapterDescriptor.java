@@ -25,6 +25,7 @@ import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapter;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterImpl;
+import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterService;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -76,15 +77,23 @@ public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
 	}
 
 	private void getFieldProvider() {
-		if (fprovider == null)
+		if (fprovider == null) {
 			fprovider = new JRDSProviderFieldsProvider();
+			DataSourceProviderDataAdapterService ds = new DataSourceProviderDataAdapterService(
+					dsProviderDataAdapter);
+			try {
+				((JRDSProviderFieldsProvider) fprovider).setProvider(ds
+						.getProvider());
+			} catch (JRException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
 	 */
 	@Override
 	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
 		if (size == 16) {
 			return Activator.getImage("icons/bean-green.png");
 		}

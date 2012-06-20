@@ -30,6 +30,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -44,6 +45,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -52,7 +54,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
 public class MColumn extends APropertyNode implements IPastable, IContainer,
-		IContainerEditPart {
+		IGraphicElement, IContainerEditPart {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -143,7 +145,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		List<ANode> nodes = getAMCollection();
 		for (int i = nodes.size() - 1; i >= 0; i--)
 			tt += nodes.get(i).getDisplayText() + "\n";
-		tt += "\t"+getIconDescriptor().getToolTip() + ": " + getDisplayText();
+		tt += "\t" + getIconDescriptor().getToolTip() + ": " + getDisplayText();
 		return tt;
 	}
 
@@ -307,6 +309,38 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 			n = n.getParent();
 		}
 		return null;
+	}
+
+	public Rectangle getBounds() {
+		int w = 0;
+		int h = 0;
+		Rectangle rCellBounds = new Rectangle();
+		Rectangle rect = null;
+		StandardBaseColumn c = null;
+		if (getValue() != null) {
+			c = (StandardBaseColumn) getValue();
+
+			w = c.getWidth();
+		}
+
+		MTable mc = getMTable();
+		if (mc != null) {
+			if (c != null){
+//				rCellBounds = mc.getTableManager().getBounds(w, cell, c);
+			}
+			Rectangle b = mc.getBounds();
+			return new Rectangle(b.x + rCellBounds.x, b.y + rCellBounds.y, w, h);
+		}
+
+		return rect;
+	}
+
+	public int getDefaultWidth() {
+		return 0;
+	}
+
+	public int getDefaultHeight() {
+		return 0;
 	}
 
 }
