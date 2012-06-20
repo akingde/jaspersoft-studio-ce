@@ -36,7 +36,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.editor.preview.view.control.JRErrorHandler;
 import com.jaspersoft.studio.plugin.IEditorContributor;
+import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRDSProviderFieldsProvider implements IFieldsProvider {
@@ -61,7 +63,8 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 			JasperReport jr = null;
 			try {
 				JasperReportCompiler compiler = new JasperReportCompiler();
-				// compiler.setErrorHandler(new JRErrorHandler(c));
+				compiler.setErrorHandler(new JRErrorHandler(Console
+						.showConsole("")));
 				IFile file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
 				compiler.setProject(file.getProject());
 

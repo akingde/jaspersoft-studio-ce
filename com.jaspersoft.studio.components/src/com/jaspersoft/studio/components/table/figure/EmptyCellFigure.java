@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.components.table.figure;
 
-import java.awt.Graphics2D;
-
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
@@ -31,14 +29,14 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 public class EmptyCellFigure extends FrameFigure {
 	private StandardBaseColumn column;
 
 	public EmptyCellFigure() {
 		super();
-		setBackgroundColor(ColorConstants.red);
+		setOpaque(true);
+		setBackgroundColor(ColorConstants.lightGray);
 		setBorder(new LineBorder(1));
 	}
 
@@ -64,21 +62,12 @@ public class EmptyCellFigure extends FrameFigure {
 
 	@Override
 	public void paint(Graphics graphics) {
-		Graphics2D graphics2d = ((J2DGraphics) graphics).getGraphics2D();
-
 		Rectangle b = (this instanceof HandleBounds) ? ((HandleBounds) this)
 				.getHandleBounds() : this.getBounds();
-		try {
-			graphics2d.translate(b.x, b.y);
 
-			graphics2d.fillRect(b.x, b.y, b.width, b.height);
-		} catch (Exception e) {
-			// when a font is missing exception is thrown by DrawVisitor
-			// FIXME: maybe draw something, else?
-			e.printStackTrace();
-		} finally {
-			graphics2d.translate(-b.x, -b.y);
-		}
+		graphics.setBackgroundColor(getBackgroundColor());
+		graphics.fillRectangle(b.x, b.y, b.width, b.height);
+
 		paintBorder(graphics);
 	}
 }

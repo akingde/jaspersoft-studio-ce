@@ -325,8 +325,9 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 
 		MTable mc = getMTable();
 		if (mc != null) {
-			if (c != null){
-//				rCellBounds = mc.getTableManager().getBounds(w, cell, c);
+			if (c != null) {
+				rCellBounds = new Rectangle(250, 250, 100, 60);// mc.getTableManager().getBounds(w,
+																// cell, c);
 			}
 			Rectangle b = mc.getBounds();
 			return new Rectangle(b.x + rCellBounds.x, b.y + rCellBounds.y, w, h);
