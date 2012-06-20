@@ -24,13 +24,19 @@ import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterService;
+import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRDSProviderFieldsProvider implements IFieldsProvider {
@@ -52,7 +58,20 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 			throws JRException, UnsupportedOperationException {
 		jrdsp = ((DataSourceProviderDataAdapterService) con).getProvider();
 		if (jrdsp != null) {
-			JRField[] aray = jrdsp.getFields(null);
+			JasperReport jr = null;
+			try {
+				JasperReportCompiler compiler = new JasperReportCompiler();
+				// compiler.setErrorHandler(new JRErrorHandler(c));
+				IFile file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+				compiler.setProject(file.getProject());
+
+				jr = compiler.compileReport(jConfig, jConfig.getJasperDesign());
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			JRField[] aray = jrdsp.getFields(jr);
 			if (aray != null) {
 				List<JRDesignField> fields = new ArrayList<JRDesignField>();
 				for (JRField f : aray)
@@ -62,5 +81,4 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 		}
 		return new ArrayList<JRDesignField>();
 	}
-
 }
