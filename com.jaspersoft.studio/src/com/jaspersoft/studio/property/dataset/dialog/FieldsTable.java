@@ -89,6 +89,7 @@ public class FieldsTable {
 		gd.widthHint = 100;
 		wtable.setLayoutData(gd);
 		wtable.setHeaderVisible(true);
+		wtable.setLinesVisible(true);
 
 		TableColumn[] col = new TableColumn[3];
 		col[0] = new TableColumn(wtable, SWT.NONE);

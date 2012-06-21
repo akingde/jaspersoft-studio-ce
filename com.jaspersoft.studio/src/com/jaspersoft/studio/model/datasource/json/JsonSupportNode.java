@@ -1,26 +1,21 @@
-package com.jaspersoft.studio.model.datasource.xml;
+package com.jaspersoft.studio.model.datasource.json;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.utils.ResourceManager;
 
-/**
- * ANode representing an XML document node.
- * 
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
- */
-public class XMLNode extends ANode {
+public class JsonSupportNode extends ANode {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	private String nodeName;
-	private String xpathExpression;
+	private String nodeText;
+	private String expression;
 
 	public ImageDescriptor getImagePath() {
 		return ResourceManager.getPluginImageDescriptor(
@@ -28,35 +23,38 @@ public class XMLNode extends ANode {
 	}
 
 	public String getDisplayText() {
-		return this.nodeName;
+		return this.nodeText;
 	}
 
-	public String getName(){
-		return this.nodeName;
+	public Image getImage(){
+		return ResourceManager.getImage(getImagePath());
 	}
 	
-	public void setName(String nodeName){
-		this.nodeName=nodeName;
+	public String getNodeText() {
+		return nodeText;
+	}
+
+	public void setNodeText(String nodeText) {
+		this.nodeText = nodeText;
+	}
+
+	public String getExpression(){
+		return this.expression;
 	}
 	
-	public String getXPathExpression(){
-		return this.xpathExpression;
-	}
-	
-	public void setXPathExpression(String xpathExp){
-		this.xpathExpression=xpathExp;
+	public void setExpression(String expression){
+		this.expression=expression;
 	}
 
 	@Override
 	public Object getAdapter(Class adapter) {
 		if(adapter==JRDesignField.class || adapter==JRField.class){
 			JRDesignField field=new JRDesignField();
-			field.setName(nodeName);
-			field.setDescription(xpathExpression);
+			field.setName(nodeText);
+			field.setDescription(expression);
 			field.setValueClass(String.class);
 			return field;
 		}
 		return super.getAdapter(adapter);
 	}
-	
 }
