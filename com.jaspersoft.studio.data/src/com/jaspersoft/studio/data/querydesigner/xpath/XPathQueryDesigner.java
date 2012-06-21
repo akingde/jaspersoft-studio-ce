@@ -2,13 +2,11 @@ package com.jaspersoft.studio.data.querydesigner.xpath;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
-import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -50,7 +48,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.xml.XMLAttributeNode;
 import com.jaspersoft.studio.model.datasource.xml.XMLNode;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtils;
 
 /**
@@ -256,17 +253,6 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 		});
 	}
 
-	/*
-	 * Creates a new JRField and adds it the fields table.
-	 */
-	private void createField(XMLNode node) {
-		List<JRDesignField> currentFields = this.container.getCurrentFields();
-		JRDesignField field = (JRDesignField)node.getAdapter(JRDesignField.class);
-		field.setName(ModelUtils.getNameForField(currentFields, field.getName()));
-		currentFields.add(field);
-		this.container.setFields(currentFields);
-	}
-	
 	/*
 	 * (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.designer.TreeBasedQueryDesigner#refreshTreeViewerContent(com.jaspersoft.studio.data.DataAdapterDescriptor)

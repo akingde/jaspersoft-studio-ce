@@ -11,14 +11,31 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.part.PluginTransfer;
 import org.eclipse.ui.progress.WorkbenchJob;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.tree.NodeBoldStyledLabelProvider;
 import com.jaspersoft.studio.data.designer.tree.TreeBasedQueryDesigner;
+import com.jaspersoft.studio.dnd.NodeDragListener;
+import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
 
@@ -35,14 +52,30 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 	private JsonDataManager jsonDataManager;
 	private DecorateTreeViewerJob decorateJob;
 	private NodeBoldStyledLabelProvider<JsonSupportNode> treeLabelProvider;
+	private JsonLineStyler lineStyler;
 
 	public JsonQueryDesigner() {
 		super();
-		jsonDataManager=new JsonDataManager();
+		this.jsonDataManager=new JsonDataManager();
+		this.lineStyler=new JsonLineStyler();
 		this.decorateJob=new DecorateTreeViewerJob();
 		this.treeLabelProvider=new NodeBoldStyledLabelProvider<JsonSupportNode>();
 	}
 
+	@Override
+	public Control createControl(Composite parent) {
+		Control createdControl = super.createControl(parent);
+		queryTextArea.addLineStyleListener(lineStyler);
+		return createdControl;
+	}
+
+	@Override
+	protected void createTreeViewer(Composite parent) {
+		super.createTreeViewer(parent);
+		addDragSupport();
+		createContextualMenu();
+	}
+	
 	@Override
 	protected IBaseLabelProvider getTreeLabelProvider() {
 		return this.treeLabelProvider;
@@ -128,6 +161,135 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 			}
 		}
 	}
+	
+	
+	/*
+	 * Adds drag support to the Json tree viewer. 
+	 */
+	private void addDragSupport() {
+		int ops = DND.DROP_COPY | DND.DROP_MOVE;
+		Transfer[] transfers = new Transfer[] { NodeTransfer.getInstance(),
+				PluginTransfer.getInstance() };
+		treeViewer.addDragSupport(ops, transfers, new NodeDragListener(
+				treeViewer) {
+			@Override
+			public void dragStart(DragSourceEvent event) {
+				TreeSelection s = (TreeSelection) treeViewer.getSelection();
+				if(s.getFirstElement() instanceof JsonSupportNode){
+					JsonSupportNode jsonNode=(JsonSupportNode) s.getFirstElement();
+					jsonNode.setExpression(
+							jsonDataManager.getQueryExpression(queryTextArea.getText(), jsonNode));
+					event.doit = !s.isEmpty();
+				}
+				else{
+					event.doit=false;
+				}
+			}
+
+			@Override
+			public void dragFinished(DragSourceEvent event) {
+				if (!event.doit)
+					return;
+			}
+		});
+	}
+	
+	/*
+	 * Creates the contextual menu for the tree representing the Json document. 
+	 */
+	private void createContextualMenu() {
+		Menu contextMenu=new Menu(treeViewer.getTree());
+		final MenuItem setRecordNodeItem=new MenuItem(contextMenu, SWT.PUSH);
+		setRecordNodeItem.setText("Set record node (generate query)");
+		setRecordNodeItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Object sel = ((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
+				if(sel instanceof JsonSupportNode){
+					String queryExpression=jsonDataManager.getQueryExpression(null,(JsonSupportNode) sel);
+					queryTextArea.setText(queryExpression);
+				}
+			}
+		});
+		new MenuItem(contextMenu, SWT.SEPARATOR);
+		final MenuItem addNodeAsFieldItem1=new MenuItem(contextMenu, SWT.PUSH);
+		addNodeAsFieldItem1.setText("Add node as field");
+		addNodeAsFieldItem1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Object sel = ((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
+				if(sel instanceof JsonSupportNode){
+					String queryExpression = jsonDataManager.getQueryExpression(
+							queryTextArea.getText(), (JsonSupportNode) sel);
+					((JsonSupportNode)sel).setExpression(queryExpression);
+					createField((JsonSupportNode)sel);
+				}
+			}
+		});
+		final MenuItem addNodeAsFieldItem2=new MenuItem(contextMenu, SWT.PUSH);
+		addNodeAsFieldItem2.setText("Add as field (absolute path)");
+		addNodeAsFieldItem2.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Object sel = ((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
+				if(sel instanceof JsonSupportNode){
+					String queryExpression = jsonDataManager.getQueryExpression(
+							null, (JsonSupportNode) sel);
+					((JsonSupportNode)sel).setExpression(queryExpression);
+					createField((JsonSupportNode)sel);
+				}
+			}
+		});
+		new MenuItem(contextMenu, SWT.SEPARATOR);
+		final MenuItem expandAllItem=new MenuItem(contextMenu, SWT.PUSH);
+		expandAllItem.setText("Expand all");
+		expandAllItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				treeViewer.expandAll();
+			}
+		});
+		final MenuItem collapseAllItem=new MenuItem(contextMenu, SWT.PUSH);
+		collapseAllItem.setText("Collapse all");
+		collapseAllItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				treeViewer.collapseAll();
+			}
+		});
+		final MenuItem resetRefreshDocItem=new MenuItem(contextMenu, SWT.PUSH);
+		resetRefreshDocItem.setText("Reset/Refresh document");
+		resetRefreshDocItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				refreshTreeViewerContent(container.getDataAdapter());
+			}
+		});
+		treeViewer.getTree().setMenu(contextMenu);
+		
+		contextMenu.addMenuListener(new MenuListener() {
+			@Override
+			public void menuShown(MenuEvent e) {
+				Object selEl = ((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
+				if(selEl instanceof JsonSupportNode){
+					addNodeAsFieldItem1.setEnabled(true);
+					addNodeAsFieldItem2.setEnabled(true);
+					setRecordNodeItem.setEnabled(true);
+				}
+				else{
+					setRecordNodeItem.setEnabled(false);
+					addNodeAsFieldItem1.setEnabled(false);
+					addNodeAsFieldItem2.setEnabled(false);
+				}
+			}
+			
+			@Override
+			public void menuHidden(MenuEvent e) {
+				
+			}
+		});
+	}
+
 	
 	/*
 	 * Content provider for the tree visualizing the json information.

@@ -1,6 +1,9 @@
 package com.jaspersoft.studio.data.designer.tree;
 
+import java.util.List;
+
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -19,6 +22,8 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.AQueryDesigner;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * A generic abstract query designer that allows to represent
@@ -155,6 +160,19 @@ public abstract class TreeBasedQueryDesigner extends AQueryDesigner {
 	 * 		dataAdapter the data adapter with information on the data to be visualized
 	 */
 	protected abstract void refreshTreeViewerContent(DataAdapterDescriptor dataAdapter);
+	
+	/**
+	 * Creates a new JRField and adds it the fields table.
+	 * 
+	 * @param the node to be converted/created as {@link JRDesignField}
+	 */
+	public void createField(ANode node) {
+		List<JRDesignField> currentFields = this.container.getCurrentFields();
+		JRDesignField field = (JRDesignField)node.getAdapter(JRDesignField.class);
+		field.setName(ModelUtils.getNameForField(currentFields, field.getName()));
+		currentFields.add(field);
+		this.container.setFields(currentFields);
+	}
 
 	@Override
 	public void setQuery(JasperDesign jDesign, JRDataset jDataset) {

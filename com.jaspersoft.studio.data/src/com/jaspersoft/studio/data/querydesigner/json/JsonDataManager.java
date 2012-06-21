@@ -174,4 +174,24 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode>{
 		}
 		return jsonNodesMap;
 	}
+	
+	public String getQueryExpression(String existingQuery, JsonSupportNode selectedNode){
+		String absoluteQuery=getAbsoluteQueryExpression(selectedNode);
+		if(existingQuery!=null && absoluteQuery.startsWith(existingQuery)){
+			// consider also an additional . selector
+			return absoluteQuery.substring(existingQuery.length()+1);
+		}
+		return absoluteQuery;
+	}
+	
+	private String getAbsoluteQueryExpression(JsonSupportNode selectedNode){
+		StringBuffer queryBuff=new StringBuffer();
+		queryBuff.insert(0, selectedNode.getNodeText());
+		JsonSupportNode tmpNode=selectedNode;
+		while(tmpNode.getParent()!=null && !(tmpNode.getParent() instanceof MRoot)){
+			tmpNode=(JsonSupportNode) tmpNode.getParent();
+			queryBuff.insert(0, tmpNode.getNodeText()+".");
+		}
+		return queryBuff.toString();
+	}
 }
