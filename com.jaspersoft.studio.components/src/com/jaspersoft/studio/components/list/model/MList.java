@@ -39,6 +39,7 @@ import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.PrintOrderEnum;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -250,6 +251,14 @@ public class MList extends MGraphicElement implements IPastable,
 			}
 		} else
 			super.setPropertyValue(id, value);
+	}
+
+	public Dimension getContainerSize() {
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		StandardListComponent jrList = (StandardListComponent) jrElement
+				.getComponent();
+		return new Dimension(jrList.getContents().getWidth(), jrList
+				.getContents().getHeight());
 	}
 
 	/*

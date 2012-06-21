@@ -17,19 +17,19 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.components.table.part;
+package com.jaspersoft.studio.components.list.part;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Dimension;
 
-import com.jaspersoft.studio.components.table.model.MTable;
-import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
+import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
+import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public class TablePageEditPart extends PageEditPart {
+public class ListPageEditPart extends PageEditPart {
 
 	@Override
 	protected APageFigure newPageFigure() {
@@ -49,9 +49,9 @@ public class TablePageEditPart extends PageEditPart {
 	}
 
 	private void updateContainerSize() {
-		MTable table = (MTable) ModelUtils.getFirstChild(getPage());
+		MList table = (MList) ModelUtils.getFirstChild(getPage());
 		if (table != null) {
-			Dimension d = table.getTableManager().getSize();
+			Dimension d = table.getContainerSize();
 			d.height = Math.max(d.height, (Integer) table
 					.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT));
 			d.width = Math.max(d.width, (Integer) table

@@ -90,6 +90,7 @@ import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.DeleteRo
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.ReorderRowGroupCommand;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabCellEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabEditPart;
+import com.jaspersoft.studio.components.crosstab.part.CrosstabPageEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
@@ -100,6 +101,7 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.util.ModelUtil;
@@ -107,6 +109,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CrosstabComponentFactory implements IComponentFactory {
@@ -485,6 +488,14 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public EditPart createEditPart(EditPart context, Object model) {
+		if (model instanceof MRoot) {
+			ANode n = ModelUtils.getFirstChild((MRoot) model);
+			if (n != null && n instanceof MPage) {
+				n = ModelUtils.getFirstChild(n);
+				if (n != null && n instanceof MCrosstab)
+					return new CrosstabPageEditPart();
+			}
+		}
 		if (model instanceof MCrosstab)
 			return new CrosstabEditPart();
 		if (model instanceof MCell)

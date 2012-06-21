@@ -93,6 +93,7 @@ import com.jaspersoft.studio.components.table.model.columngroup.command.ReorderC
 import com.jaspersoft.studio.components.table.model.table.command.CreateTableCommand;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.components.table.part.TableEditPart;
+import com.jaspersoft.studio.components.table.part.TablePageEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
@@ -104,6 +105,7 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.model.util.ReportFactory;
@@ -588,6 +590,14 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public EditPart createEditPart(EditPart context, Object model) {
+		if (model instanceof MRoot) {
+			ANode n = ModelUtils.getFirstChild((MRoot) model);
+			if (n != null && n instanceof MPage) {
+				n = ModelUtils.getFirstChild(n);
+				if (n != null && n instanceof MTable)
+					return new TablePageEditPart();
+			}
+		}
 		if (model instanceof MTable)
 			return new TableEditPart();
 		if (model instanceof MCell)

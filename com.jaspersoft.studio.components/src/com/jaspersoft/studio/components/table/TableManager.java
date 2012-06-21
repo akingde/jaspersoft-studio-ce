@@ -115,6 +115,16 @@ public class TableManager {
 		return new ArrayList<BaseColumn>(0);
 	}
 
+	public Rectangle getBounds(int width, StandardBaseColumn col, int type) {
+		Rectangle b = new Rectangle(250, 250, col.getWidth(), 100);
+		// getAWT2SWTRectangle(tableUtil.getCellBounds().get(cell));
+		if (b != null)
+			return b;
+		int w = col != null ? col.getWidth() : 0;
+		int h = 100;
+		return new Rectangle(0, 0, w, h);
+	}
+
 	public Rectangle getBounds(int width, Cell cell, StandardBaseColumn col) {
 		Rectangle b = getAWT2SWTRectangle(tableUtil.getCellBounds().get(cell));
 		if (b != null)

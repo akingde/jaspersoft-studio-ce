@@ -22,6 +22,7 @@ package com.jaspersoft.studio.components.crosstab.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -65,6 +66,7 @@ public class CrosstabEditor extends AbstractVisualEditor {
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
+		getGraphicalViewer().getControl().setBackground(ColorConstants.button);
 
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		MainDesignerRootEditPart rootEditPart = new MainDesignerRootEditPart();

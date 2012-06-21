@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -41,6 +42,7 @@ import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.util.TableColumnNumerator;
+import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
@@ -92,7 +94,14 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		super(parent, index);
 		setValue(column);
 		this.name = name;
+		List<ANode> n = getAMCollection();
+		if (n != null && !n.isEmpty()) {
+			AMCollection aNode = (AMCollection) n.get(n.size() - 1);
+			type = TableColumnSize.getType(aNode.getClass());
+		}
 	}
+
+	private int type = TableUtil.TABLE_HEADER;
 
 	@Override
 	public StandardBaseColumn getValue() {
@@ -202,7 +211,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
-		StandardBaseColumn jrElement = (StandardBaseColumn) getValue();
+		StandardBaseColumn jrElement = getValue();
 		if (id.equals(StandardBaseColumn.PROPERTY_WIDTH))
 			return jrElement.getWidth();
 		if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION))
@@ -220,7 +229,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	 * .lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
-		StandardBaseColumn jrElement = (StandardBaseColumn) getValue();
+		StandardBaseColumn jrElement = getValue();
 
 		if (id.equals(StandardBaseColumn.PROPERTY_WIDTH)) {
 			if ((Integer) value >= 0 && canSet) {
@@ -257,14 +266,18 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		return null;
 	}
 
+	private List<ANode> list;
+
 	public List<ANode> getAMCollection() {
-		List<ANode> list = new ArrayList<ANode>();
-		ANode node = getParent();
-		while (node != null) {
-			list.add(node);
-			if (node instanceof AMCollection)
-				return list;
-			node = node.getParent();
+		if (list == null) {
+			list = new ArrayList<ANode>();
+			ANode node = getParent();
+			while (node != null) {
+				list.add(node);
+				if (node instanceof AMCollection)
+					return list;
+				node = node.getParent();
+			}
 		}
 		return list;
 	}
@@ -318,21 +331,17 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		Rectangle rect = null;
 		StandardBaseColumn c = null;
 		if (getValue() != null) {
-			c = (StandardBaseColumn) getValue();
+			c = getValue();
 
 			w = c.getWidth();
 		}
-
 		MTable mc = getMTable();
 		if (mc != null) {
-			if (c != null) {
-				rCellBounds = new Rectangle(250, 250, 100, 60);// mc.getTableManager().getBounds(w,
-																// cell, c);
-			}
+			if (c != null)
+				rCellBounds = mc.getTableManager().getBounds(w, c, type);
 			Rectangle b = mc.getBounds();
 			return new Rectangle(b.x + rCellBounds.x, b.y + rCellBounds.y, w, h);
 		}
-
 		return rect;
 	}
 

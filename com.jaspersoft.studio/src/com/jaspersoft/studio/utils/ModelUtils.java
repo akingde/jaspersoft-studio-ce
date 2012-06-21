@@ -95,6 +95,13 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class ModelUtils {
 
+	public static ANode getFirstChild(ANode parent) {
+		List<INode> children = parent.getChildren();
+		if (children != null && !children.isEmpty())
+			return (ANode) children.get(0);
+		return null;
+	}
+
 	public static JasperDesign copyJasperDesign(JasperDesign jrd) throws JRException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		JRSaver.saveObject(jrd, out);
@@ -1160,44 +1167,46 @@ public class ModelUtils {
 
 		return null;
 	}
-	
+
 	/**
-	 * Creates a valid name for a JRField element. 
+	 * Creates a valid name for a JRField element.
 	 * <p>
-	 * It searches the existing fields in order to check 
-	 * for field name validity. If no other field is found
-	 * with the same name, then the <code>namePrefix</code> itself is used.
-	 *  
-	 * @param fields list of already existing fields
-	 * @param namePrefix name prefix for new field name
+	 * It searches the existing fields in order to check for field name validity. If no other field is found with the same
+	 * name, then the <code>namePrefix</code> itself is used.
+	 * 
+	 * @param fields
+	 *          list of already existing fields
+	 * @param namePrefix
+	 *          name prefix for new field name
 	 * @return a valid name for the JRField
 	 */
-	public static String getNameForField(List<JRDesignField> fields, String namePrefix){
-			boolean match = false;
-			String tmp = namePrefix;
-			for (int i = 0; i < 100000; i++) {
-				if(i!=0) tmp=ModelUtils.getNameFormat(namePrefix, i);
-				for (JRField f : fields) {
-					match = f.getName().equals(tmp);
-					if (match)
-						break;
-				}
-				if (!match)
+	public static String getNameForField(List<JRDesignField> fields, String namePrefix) {
+		boolean match = false;
+		String tmp = namePrefix;
+		for (int i = 0; i < 100000; i++) {
+			if (i != 0)
+				tmp = ModelUtils.getNameFormat(namePrefix, i);
+			for (JRField f : fields) {
+				match = f.getName().equals(tmp);
+				if (match)
 					break;
 			}
-			return tmp;
+			if (!match)
+				break;
+		}
+		return tmp;
 	}
-	
-	
+
 	/**
-	 * Copies all the properties contained in the source map to the destination one.
-	 * <br>
+	 * Copies all the properties contained in the source map to the destination one. <br>
 	 * It also removes the properties that do not exist in the source map.
 	 * 
-	 * @param sourceMap the source map containing the properties to be copied
-	 * @param destMap the destination properties map
+	 * @param sourceMap
+	 *          the source map containing the properties to be copied
+	 * @param destMap
+	 *          the destination properties map
 	 */
-	public static void replacePropertiesMap(JRPropertiesMap sourceMap, JRPropertiesMap destMap){
+	public static void replacePropertiesMap(JRPropertiesMap sourceMap, JRPropertiesMap destMap) {
 		// Copy/Replace properties
 		String[] propertyNames = sourceMap.getPropertyNames();
 		if (propertyNames != null && propertyNames.length > 0) {

@@ -41,7 +41,7 @@ import com.jaspersoft.studio.components.table.model.MTableHeader;
 
 public class TableColumnSize {
 
-	public static int getType(Class<AMCollection> c) {
+	public static int getType(Class<? extends AMCollection> c) {
 		if (c.isAssignableFrom(MTableHeader.class))
 			return TableUtil.TABLE_HEADER;
 		if (c.isAssignableFrom(MTableFooter.class))
@@ -59,10 +59,13 @@ public class TableColumnSize {
 		return -1;
 	}
 
-	public static int getInitGroupHeight(StandardTable jrTable, StandardColumnGroup jrGroup, int type, String grName) {
+	public static int getInitGroupHeight(StandardTable jrTable,
+			StandardColumnGroup jrGroup, int type, String grName) {
 		int maxh = 0;
 		if (jrGroup.getColumns().isEmpty()) {
-			maxh = getInitTableHeight(jrTable, type, grName) - getGroupHeigh2Top(jrTable.getColumns(), jrGroup, type, grName);
+			maxh = getInitTableHeight(jrTable, type, grName)
+					- getGroupHeigh2Top(jrTable.getColumns(), jrGroup, type,
+							grName);
 		} else
 			for (BaseColumn bc : jrGroup.getColumns()) {
 				maxh = Math.max(maxh, getColumnHeight(bc, type, grName));
@@ -70,13 +73,16 @@ public class TableColumnSize {
 		return maxh <= 0 ? 40 : maxh;
 	}
 
-	private static int getGroupHeigh2Top(List<BaseColumn> cols, StandardColumnGroup scg, int type, String grName) {
+	private static int getGroupHeigh2Top(List<BaseColumn> cols,
+			StandardColumnGroup scg, int type, String grName) {
 		for (BaseColumn bc : cols) {
 			if (bc == scg) {
 				return Math.max(0, getCellHeight(bc, type, grName));
 			}
 			if (bc instanceof StandardColumnGroup) {
-				int hg = getGroupHeigh2Top(((StandardColumnGroup) bc).getColumns(), scg, type, grName);
+				int hg = getGroupHeigh2Top(
+						((StandardColumnGroup) bc).getColumns(), scg, type,
+						grName);
 				if (hg >= 0) {
 					return Math.max(0, getCellHeight(bc, type, grName)) + hg;
 				}
@@ -85,14 +91,16 @@ public class TableColumnSize {
 		return -1;
 	}
 
-	public static int setGroupWidth2Top(List<BaseColumn> cols, StandardColumnGroup scg, int delta) {
+	public static int setGroupWidth2Top(List<BaseColumn> cols,
+			StandardColumnGroup scg, int delta) {
 		for (BaseColumn bc : cols) {
 			if (bc == scg) {
 				((StandardBaseColumn) bc).setWidth(bc.getWidth() + delta);
 				return 0;
 			}
 			if (bc instanceof StandardColumnGroup) {
-				int hg = setGroupWidth2Top(((StandardColumnGroup) bc).getColumns(), scg, delta);
+				int hg = setGroupWidth2Top(
+						((StandardColumnGroup) bc).getColumns(), scg, delta);
 				if (hg == 0) {
 					((StandardBaseColumn) bc).setWidth(bc.getWidth() + delta);
 					return 0;
@@ -102,7 +110,8 @@ public class TableColumnSize {
 		return -1;
 	}
 
-	public static int getInitTableHeight(StandardTable jrTable, int type, String grName) {
+	public static int getInitTableHeight(StandardTable jrTable, int type,
+			String grName) {
 		int maxh = -1;
 		for (BaseColumn bc : jrTable.getColumns()) {
 			maxh = Math.max(maxh, getColumnHeight(bc, type, grName));
@@ -161,7 +170,8 @@ public class TableColumnSize {
 		return -1;
 	}
 
-	public static int setCellHeightDelta(BaseColumn bc, int type, String grName, int delta) {
+	public static int setCellHeightDelta(BaseColumn bc, int type,
+			String grName, int delta) {
 		int dif = 0;
 		Cell cell = TableUtil.getCell(bc, type, grName);
 		if (cell != null) {

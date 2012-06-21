@@ -1,29 +1,23 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.figures;
-
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.Graphics;
@@ -33,21 +27,21 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
+
 /*
  * The Class PageFigure.
  * 
  * @author Chicu Veaceslav
  */
-public class PageFigure extends FreeformLayeredPane implements HandleBounds {
+public abstract class APageFigure extends FreeformLayeredPane implements HandleBounds {
 
 	/** The view margins. */
-	private boolean viewMargins = true;
+	protected boolean viewMargins = true;
 
 	/** The Constant PAGE_BORDER. */
 	public static final Insets PAGE_BORDER = new Insets(10, 10, 10, 10);
 
 	/** The jr design. */
-	private JasperDesign jrDesign = null;
 
 	private GridLayer grid = new GridLayer();
 
@@ -59,8 +53,7 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 	 * @param viewMargins
 	 *          the view margins
 	 */
-	public PageFigure(JasperDesign jd, boolean viewMargins) {
-		this.jrDesign = jd;
+	public APageFigure(boolean viewMargins) {
 		this.viewMargins = viewMargins;
 	}
 
@@ -81,8 +74,7 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 	 */
 	@Override
 	public void paintFigure(Graphics g) {
-
-		if (jrDesign != null && viewMargins) {
+		if (viewMargins) {
 			Rectangle clientArea = getClientArea();
 			clientArea.x -= dx;
 			clientArea.y -= dy;
@@ -114,8 +106,8 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 			getBorder().paint(this, g, NO_INSETS);
 	}
 
-	int dx = 0;
-	int dy = 0;
+	protected int dx = 0;
+	protected int dy = 0;
 
 	@Override
 	protected void primTranslate(int dx, int dy) {
@@ -126,7 +118,7 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 
 	Point origin = new Point();
 
-	private void paintGrid(Graphics g, Rectangle clip) {
+	protected void paintGrid(Graphics g, Rectangle clip) {
 		if (grid.isVisible()) {
 			grid.setBounds(clip);
 			grid.paint(g);

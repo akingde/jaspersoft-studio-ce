@@ -26,6 +26,7 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
@@ -52,7 +53,10 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
-import com.jaspersoft.studio.editor.gef.figures.PageFigure;
+import com.jaspersoft.studio.editor.gef.figures.APageFigure;
+import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
+import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
+import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.model.ANode;
@@ -123,14 +127,14 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		super.deactivate();
 	}
 
-	private void setPrefsBorder(IFigure rect) {
-		// String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
-		//				DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE, "shadow", null); //$NON-NLS-1$
+	protected void setPrefsBorder(IFigure rect) {
+		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
+				DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE, "shadow", null); //$NON-NLS-1$
 
-		//		if (pref.equals("shadow")) //$NON-NLS-1$
-		// rect.setBorder(new ShadowBorder());
-		// else
-		// rect.setBorder(new SimpleShadowBorder());
+		if (pref.equals("shadow")) //$NON-NLS-1$
+			rect.setBorder(new ShadowBorder());
+		else
+			rect.setBorder(new SimpleShadowBorder());
 	}
 
 	/**
@@ -143,7 +147,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 */
 	protected void refreshGridLayer() {
 		boolean visible = false;
-		GridLayer grid = ((PageFigure) getFigure()).getGrid();
+		GridLayer grid = ((APageFigure) getFigure()).getGrid();
 		Boolean val = (Boolean) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_VISIBLE);
 		if (val != null)
 			visible = val.booleanValue();
@@ -216,16 +220,47 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
 	 */
 	protected IFigure createFigure() {
-		JasperDesign jd = getJasperDesign();
-		PageFigure figure = new PageFigure(jd, true);
+		APageFigure figure = newPageFigure();
 		setPrefsBorder(figure);
-		setupPageFigure(jd, figure);
+		setupPageFigure(figure);
 		// get current display...
 		figure.setOpaque(false);
 		figure.setBackgroundColor(ColorConstants.white);
 		figure.setLayoutManager(new XYLayout());
-
+		updateRullers();
 		return figure;
+	}
+
+	protected APageFigure newPageFigure() {
+		return new ContainerPageFigure(true);
+	}
+
+	/**
+	 * Setup page figure.
+	 * 
+	 * @param jd
+	 *          the jasper design
+	 * @param figure2
+	 *          the figure2
+	 */
+	protected void setupPageFigure(APageFigure figure2) {
+		JasperDesign jd = getJasperDesign();
+		int w = 2000;// jd.getPageWidth() + 20;
+		int h = 5000;// designHeight + 10;
+
+		figure2.setSize(w, h);
+
+		getViewer().setProperty("RULER_HOFFSET", APageFigure.PAGE_BORDER.left); //$NON-NLS-1$
+		getViewer().setProperty("RULER_VOFFSET", APageFigure.PAGE_BORDER.top); //$NON-NLS-1$
+		getViewer().setProperty("RULER_HEND", jd.getPageWidth()); //$NON-NLS-1$
+		getViewer().setProperty("RULER_VEND", jd.getPageHeight() - APageFigure.PAGE_BORDER.top); //$NON-NLS-1$
+
+		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
+				new Point(APageFigure.PAGE_BORDER.left, APageFigure.PAGE_BORDER.top));
+	}
+
+	public void updateRullers() {
+
 	}
 
 	/*
@@ -237,7 +272,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 			protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
 				Rectangle r = (Rectangle) constraint;
-				r.setLocation(r.x - PageFigure.PAGE_BORDER.left, r.y - PageFigure.PAGE_BORDER.top);
+				r.setLocation(r.x - APageFigure.PAGE_BORDER.left, r.y - APageFigure.PAGE_BORDER.top);
 
 				SetPageConstraintCommand cmd = new SetPageConstraintCommand();
 				cmd.setContext((ANode) getHost().getModel(), (ANode) child.getModel(), (Rectangle) constraint);
@@ -300,14 +335,12 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	protected void addChildVisual(EditPart childEditPart, int index) {
 		if (childEditPart instanceof IContainerPart) {
 			IFigure layer = getLayer(MainDesignerRootEditPart.SECTIONS_LAYER);
-			if (layer != null) {
+			if (layer != null)
 				layer.add(((AbstractGraphicalEditPart) childEditPart).getFigure());
-			}
 		} else if (childEditPart instanceof FigureEditPart) {
 			IFigure layer = getLayer(MainDesignerRootEditPart.ELEMENTS_LAYER);
-			if (layer != null) {
+			if (layer != null)
 				layer.add(((FigureEditPart) childEditPart).getFigure());
-			}
 		}
 		super.addChildVisual(childEditPart, index);
 	}
@@ -318,10 +351,9 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#refreshVisuals()
 	 */
 	public void refreshVisuals() {
-		JasperDesign jasperDesign = getJasperDesign();
-		PageFigure figure2 = (PageFigure) getFigure();
+		APageFigure figure2 = (APageFigure) getFigure();
 
-		setupPageFigure(jasperDesign, figure2);
+		setupPageFigure(figure2);
 		for (Object i : getChildren()) {
 			if (i instanceof EditPart)
 				((EditPart) i).refresh();
@@ -333,40 +365,14 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		figure2.repaint();
 	}
 
-	/**
-	 * Setup page figure.
-	 * 
-	 * @param jd
-	 *          the jasper design
-	 * @param figure2
-	 *          the figure2
-	 */
-	private void setupPageFigure(JasperDesign jd, PageFigure figure2) {
-		int w = 2000;// jd.getPageWidth() + 20;
-		int h = 5000;// designHeight + 10;
-
-		figure2.setSize(w, h);
-
-		getViewer().setProperty("RULER_HOFFSET", PageFigure.PAGE_BORDER.left); //$NON-NLS-1$
-		getViewer().setProperty("RULER_VOFFSET", PageFigure.PAGE_BORDER.top); //$NON-NLS-1$
-		getViewer().setProperty("RULER_HEND", jd.getPageWidth()); //$NON-NLS-1$
-		getViewer().setProperty("RULER_VEND", jd.getPageHeight() - PageFigure.PAGE_BORDER.top); //$NON-NLS-1$
-
-		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
-				new Point(PageFigure.PAGE_BORDER.left, PageFigure.PAGE_BORDER.top));
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent arg0) {
-		Object source = arg0.getSource();
-		// if (source instanceof IContainerEditPart) {
 		refreshChildren();
 		refreshVisuals();
-		// }
 	}
 
 }

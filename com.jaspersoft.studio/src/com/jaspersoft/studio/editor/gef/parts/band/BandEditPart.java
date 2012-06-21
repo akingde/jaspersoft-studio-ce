@@ -258,7 +258,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	public void updateRulers() {
 		EditPart ep = getParent();
 		if (ep instanceof ReportPageEditPart)
-			((ReportPageEditPart) ep).updateRullers(null);
+			((ReportPageEditPart) ep).updateRullers();
 	}
 
 	/*

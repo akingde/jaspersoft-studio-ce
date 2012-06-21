@@ -38,6 +38,7 @@ import com.jaspersoft.studio.components.list.figure.ListFigure;
 import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.components.list.model.command.CreateListCommand;
 import com.jaspersoft.studio.components.list.part.ListEditPart;
+import com.jaspersoft.studio.components.list.part.ListPageEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
@@ -47,6 +48,7 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.IComponentFactory;
@@ -146,6 +148,14 @@ public class ListComponentFactory implements IComponentFactory {
 	}
 
 	public EditPart createEditPart(EditPart context, Object model) {
+		if (model instanceof MRoot) {
+			ANode n = ModelUtils.getFirstChild((MRoot) model);
+			if (n != null && n instanceof MPage) {
+				n = ModelUtils.getFirstChild(n);
+				if (n != null && n instanceof MList)
+					return new ListPageEditPart();
+			}
+		}
 		if (model instanceof MList)
 			return new ListEditPart();
 		return null;
@@ -167,14 +177,17 @@ public class ListComponentFactory implements IComponentFactory {
 	}
 
 	public ExpressionContext getElementExpressionContext(Object jrObject) {
-		if(jrObject instanceof MList &&
-				((MList)jrObject).getValue() instanceof JRDesignComponentElement){
-			MList mlist = (MList)jrObject;
-			 StandardListComponent listComponent = 
-					 (StandardListComponent) mlist.getValue().getComponent();
-			JRDesignDataset designDS = ModelUtils.getDesignDatasetForDatasetRun(
-					mlist.getJasperConfiguration().getJasperDesign(), listComponent.getDatasetRun());
-			return new ExpressionContext(designDS,mlist.getJasperConfiguration());
+		if (jrObject instanceof MList
+				&& ((MList) jrObject).getValue() instanceof JRDesignComponentElement) {
+			MList mlist = (MList) jrObject;
+			StandardListComponent listComponent = (StandardListComponent) mlist
+					.getValue().getComponent();
+			JRDesignDataset designDS = ModelUtils
+					.getDesignDatasetForDatasetRun(mlist
+							.getJasperConfiguration().getJasperDesign(),
+							listComponent.getDatasetRun());
+			return new ExpressionContext(designDS,
+					mlist.getJasperConfiguration());
 		}
 
 		return null;
