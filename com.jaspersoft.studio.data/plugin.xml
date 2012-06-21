@@ -58,7 +58,10 @@
             QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.xpath.XPathQueryDesigner"
             language="xpath2">      	
       </queryDesigner>     
-     
+      <queryDesigner
+            QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.json.JsonQueryDesigner"
+            language="json">      	
+      </queryDesigner>      
    </extension>
    <extension
          point="com.jaspersoft.studio.mappingTool">

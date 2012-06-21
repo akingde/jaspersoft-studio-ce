@@ -222,7 +222,7 @@ public class JsonDataAdapterComposite extends ADataAdapterComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				textSelectExpression.setEnabled(false);
-				useConnection = false;
+				useConnection = true;
 			}
 		});
 
@@ -231,7 +231,7 @@ public class JsonDataAdapterComposite extends ADataAdapterComposite {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						textSelectExpression.setEnabled(true);
-						useConnection = true;
+						useConnection = false;
 					}
 				});
 
@@ -347,14 +347,14 @@ public class JsonDataAdapterComposite extends ADataAdapterComposite {
 
 		if (xmlDataAdapter.isUseConnection()) {
 			useConnection = true;
-			btnRadioButtonCreateDataAdapter.setSelection(true);
-			textSelectExpression.setEnabled(true);
-			btnRadioButtonUseXpath.setSelection(false);
-		} else {
-			useConnection = false;
-			btnRadioButtonUseXpath.setSelection(true);
 			btnRadioButtonCreateDataAdapter.setSelection(false);
 			textSelectExpression.setEnabled(false);
+			btnRadioButtonUseXpath.setSelection(true);
+		} else {
+			useConnection = false;
+			btnRadioButtonUseXpath.setSelection(false);
+			btnRadioButtonCreateDataAdapter.setSelection(true);
+			textSelectExpression.setEnabled(true);
 		}
 
 		locale = xmlDataAdapter.getLocale();

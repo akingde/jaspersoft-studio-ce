@@ -16,6 +16,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.jaspersoft.studio.data.designer.tree.ISelectableNodes;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.xml.XMLAttributeNode;
@@ -28,7 +29,7 @@ import com.jaspersoft.studio.utils.UIUtils;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class XMLDocumentManager {
+public class XMLDocumentManager implements ISelectableNodes<XMLNode>{
 
 	private Document xmlDocument;
 	private JRXPathExecuter xPathExecuter;
@@ -208,6 +209,21 @@ public class XMLDocumentManager {
 			// Do not care about error in node selection
 		}
 		return nodes;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.querydesigner.ISelectableNodes#getSelectableNodes(java.lang.String)
+	 */
+	public List<XMLNode> getSelectableNodes(String query){
+		List<Node> nodes = selectNodeList(query);
+		List<XMLNode> selected=new ArrayList<XMLNode>();
+		for(XMLNode n : getDocumentNodesMap().keySet()){
+			if(nodes.contains(getDocumentNodesMap().get(n))){
+				selected.add(n);
+			}
+		}
+		return selected;
 	}
 	
 }
