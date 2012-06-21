@@ -77,8 +77,17 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 			JRField[] aray = jrdsp.getFields(jr);
 			if (aray != null) {
 				List<JRDesignField> fields = new ArrayList<JRDesignField>();
-				for (JRField f : aray)
-					fields.add((JRDesignField) f);
+				for (JRField f : aray) {
+					if (f instanceof JRDesignField)
+						fields.add((JRDesignField) f);
+					else {
+						JRDesignField jdf = new JRDesignField();
+						jdf.setName(f.getName());
+						jdf.setValueClassName(f.getValueClassName());
+						jdf.setDescription(jdf.getDescription());
+						fields.add((JRDesignField) f);
+					}
+				}
 				return fields;
 			}
 		}
