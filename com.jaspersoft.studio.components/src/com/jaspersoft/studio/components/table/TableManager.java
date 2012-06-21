@@ -20,18 +20,22 @@
 package com.jaspersoft.studio.components.table;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.ColumnGroup;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -43,16 +47,111 @@ import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.Misc;
 
 public class TableManager {
 	private StandardTable table;
 	private TableUtil tableUtil;
+	private Map<BaseColumn, Integer> xcolumn = new HashMap<BaseColumn, Integer>();
+	private Map<Integer, Map<String, Map<BaseColumn, Point>>> yhcolumn = new HashMap<Integer, Map<String, Map<BaseColumn, Point>>>();
+
+	public int getColumnX(BaseColumn bc) {
+		return xcolumn.get(bc);
+	}
+
+	public Point getYhcolumn(int type, String grName, BaseColumn bc) {
+		return yhcolumn.get(type).get(Misc.nvl(grName, "")).get(bc);
+	}
 
 	public TableManager(JRDesignComponentElement tbl, JasperDesign jasperDesign) {
 		this.table = (StandardTable) tbl.getComponent();
 		this.tableUtil = new TableUtil(table, jasperDesign);
+
+		initMaps();
+
 		tableUtil.init(table);
 		setSize();
+	}
+
+	public void initMaps() {
+		initXColumn(0, table.getColumns());
+
+		int y = 0;
+		y += initYHColumn(y, table.getColumns(), TableUtil.TABLE_HEADER, "");
+		y += initYHColumn(y, table.getColumns(), TableUtil.COLUMN_HEADER, "");
+
+		List<?> groupsList = tableUtil.getGroupList();
+		if (groupsList != null)
+			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
+				JRGroup jrGroup = (JRGroup) it.next();
+				y += initYHColumn(y, table.getColumns(),
+						TableUtil.COLUMN_GROUP_HEADER, jrGroup.getName());
+			}
+
+		y += initYHColumn(y, table.getColumns(), TableUtil.COLUMN_DETAIL, "");
+
+		if (groupsList != null)
+			for (ListIterator<?> it = groupsList
+					.listIterator(groupsList.size()); it.hasPrevious();) {
+				JRGroup jrGroup = (JRGroup) it.previous();
+				y += initYHColumn(y, table.getColumns(),
+						TableUtil.COLUMN_GROUP_FOOTER, jrGroup.getName());
+			}
+
+		y += initYHColumn(y, table.getColumns(), TableUtil.COLUMN_GROUP_FOOTER,
+				"");
+
+		y += initYHColumn(y, table.getColumns(), TableUtil.COLUMN_FOOTER, "");
+		y += initYHColumn(y, table.getColumns(), TableUtil.TABLE_FOOTER, "");
+	}
+
+	private int initYHColumn(int y, List<BaseColumn> cols, int type,
+			String grName) {
+		int h = 0;
+		for (BaseColumn bc : cols) {
+			int hc = 0;
+			Cell c = TableUtil.getCell(bc, type, grName);
+			if (c != null)
+				hc = c.getHeight();
+			if (bc instanceof ColumnGroup)
+				hc += initYHColumn(y, ((ColumnGroup) bc).getColumns(), type,
+						grName);
+			h = Math.max(h, hc);
+		}
+		Map<String, Map<BaseColumn, Point>> m = new HashMap<String, Map<BaseColumn, Point>>();
+		Map<BaseColumn, Point> map = new HashMap<BaseColumn, Point>();
+		m.put(grName, map);
+		yhcolumn.put(type, m);
+
+		for (BaseColumn bc : cols) {
+			DesignCell c = (DesignCell) TableUtil.getCell(bc, type, grName);
+			if (bc instanceof ColumnGroup) {
+				int ch = 0;
+				if (c != null)
+					ch = c.getHeight();
+				int sch = initYHColumn(y, ((ColumnGroup) bc).getColumns(),
+						type, grName);
+				if (sch > 0)
+					ch = h - sch;
+				map.put(bc, new Point(y, ch));
+				if (c != null)
+					c.setHeight(ch);
+			} else {
+				map.put(bc, new Point(y, h));
+				if (c != null)
+					c.setHeight(h);
+			}
+		}
+		return h;
+	}
+
+	private void initXColumn(int x, List<BaseColumn> cols) {
+		for (BaseColumn bc : cols) {
+			xcolumn.put(bc, x);
+			if (bc instanceof ColumnGroup)
+				initXColumn(x, ((ColumnGroup) bc).getColumns());
+			x += bc.getWidth();
+		}
 	}
 
 	public void refresh() {
@@ -115,14 +214,12 @@ public class TableManager {
 		return new ArrayList<BaseColumn>(0);
 	}
 
-	public Rectangle getBounds(int width, StandardBaseColumn col, int type) {
-		Rectangle b = new Rectangle(250, 250, col.getWidth(), 100);
-		// getAWT2SWTRectangle(tableUtil.getCellBounds().get(cell));
-		if (b != null)
-			return b;
-		int w = col != null ? col.getWidth() : 0;
-		int h = 100;
-		return new Rectangle(0, 0, w, h);
+	public Rectangle getBounds(int width, StandardBaseColumn col, int type,
+			String grName) {
+		int x = getColumnX(col);
+		Point p = getYhcolumn(type, grName, col);
+
+		return new Rectangle(x, p.x, col.getWidth(), p.y);
 	}
 
 	public Rectangle getBounds(int width, Cell cell, StandardBaseColumn col) {
@@ -185,7 +282,11 @@ public class TableManager {
 	public void setHeight(DesignCell cell, int height, StandardBaseColumn col,
 			int type, String grName) {
 		if (height >= 0) {
-			int delta = height - cell.getHeight();
+			int delta = 0;
+			if (cell == null)
+				delta = height - getYhcolumn(type, grName, col).y;
+			else
+				delta = height - cell.getHeight();
 			setColumnHeight(table.getColumns(), delta, type, grName, col);
 		}
 	}
@@ -224,6 +325,11 @@ public class TableManager {
 			}
 		}
 		return null;
+	}
+
+	public void update() {
+		initMaps();
+		refresh();
 	}
 
 }

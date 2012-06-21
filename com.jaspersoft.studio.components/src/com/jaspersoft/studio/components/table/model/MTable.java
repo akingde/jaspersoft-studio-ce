@@ -23,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.WhenNoDataTypeTableEnum;
 import net.sf.jasperreports.engine.JRConstants;
@@ -33,6 +34,8 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
+import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -289,7 +292,12 @@ public class MTable extends MGraphicElement implements IContainer,
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (getTableManager() != null)
+		if (evt instanceof CollectionElementAddedEvent
+				|| evt instanceof CollectionElementRemovedEvent
+				|| evt.getOldValue() instanceof DesignCell
+				|| evt.getNewValue() instanceof DesignCell)
+			getTableManager().update();
+		else if (getTableManager() != null)
 			getTableManager().refresh();
 		super.propertyChange(evt);
 	}

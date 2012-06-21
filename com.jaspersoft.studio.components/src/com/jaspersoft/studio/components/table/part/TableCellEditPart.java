@@ -239,9 +239,10 @@ public class TableCellEditPart extends FigureEditPart implements
 				f.setJRElement(((MCell) model).getCell(),
 						(StandardBaseColumn) model.getValue(), getDrawVisitor());
 			} else {
+				rect.setSize(bounds.width, bounds.height);
 				((EmptyCellFigure) rect).setJRElement(
 						(StandardBaseColumn) model.getValue(),
-						getDrawVisitor(), 100);
+						getDrawVisitor(), bounds.height);
 			}
 			updateRulers();
 		}

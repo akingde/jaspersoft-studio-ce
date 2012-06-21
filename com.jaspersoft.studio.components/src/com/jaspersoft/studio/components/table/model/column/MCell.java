@@ -255,12 +255,13 @@ public class MCell extends MColumn implements IGraphicElement,
 							TableColumnSize.getType(classType), grName);
 
 					// cell.setHeight(height);
-					mtable.getTableManager().refresh();
+					mtable.getTableManager().update();
 
-					// getPropertyChangeSupport().firePropertyChange(
-					// new PropertyChangeEvent(this, DesignCell.PROPERTY_HEIGHT,
-					// null, value));
+					getPropertyChangeSupport().firePropertyChange(
+							new PropertyChangeEvent(this,
+									DesignCell.PROPERTY_HEIGHT, null, value));
 				}
+				return;
 			}
 		}
 		super.setPropertyValue(id, value);

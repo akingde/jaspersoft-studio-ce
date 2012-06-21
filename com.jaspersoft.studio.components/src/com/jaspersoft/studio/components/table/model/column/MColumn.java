@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.JRConstants;
@@ -41,6 +42,8 @@ import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
+import com.jaspersoft.studio.components.table.model.MTableGroupFooter;
+import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.components.table.util.TableColumnNumerator;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.model.ANode;
@@ -98,9 +101,16 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		if (n != null && !n.isEmpty()) {
 			AMCollection aNode = (AMCollection) n.get(n.size() - 1);
 			type = TableColumnSize.getType(aNode.getClass());
+			if (aNode instanceof MTableGroupHeader)
+				grName = ((MTableGroupHeader) aNode).getJrDesignGroup()
+						.getName();
+			if (aNode instanceof MTableGroupFooter)
+				grName = ((MTableGroupFooter) aNode).getJrDesignGroup()
+						.getName();
 		}
 	}
 
+	private String grName;
 	private int type = TableUtil.TABLE_HEADER;
 
 	@Override
@@ -216,6 +226,9 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 			return jrElement.getWidth();
 		if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getPrintWhenExpression());
+		if (id.equals(DesignCell.PROPERTY_HEIGHT))
+			return getMTable().getTableManager().getYhcolumn(type, grName,
+					jrElement).y;
 		return null;
 	}
 
@@ -234,17 +247,45 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		if (id.equals(StandardBaseColumn.PROPERTY_WIDTH)) {
 			if ((Integer) value >= 0 && canSet) {
 				canSet = false;
-				MTable cross = getMTable();
+				MTable table = getMTable();
 
-				cross.getTableManager().setWidth(jrElement, (Integer) value);
-
-				cross.getTableManager().refresh();
+				table.getTableManager().setWidth(jrElement, (Integer) value);
+				table.getTableManager().update();
+				// table.getTableManager().refresh();
 				getPropertyChangeSupport()
 						.firePropertyChange(
 								new PropertyChangeEvent(this,
 										StandardBaseColumn.PROPERTY_WIDTH,
 										null, value));
+
 				canSet = true;
+			}
+		} else if (id.equals(DesignCell.PROPERTY_HEIGHT)) {
+			MTable mtable = getMTable();
+			Integer height = (Integer) value;
+			AMCollection section = getSection();
+			if (section != null && height.intValue() >= 0) {
+
+				@SuppressWarnings("unchecked")
+				Class<AMCollection> classType = (Class<AMCollection>) section
+						.getClass();
+				String grName = null;
+				if (section instanceof MTableGroupHeader)
+					grName = ((MTableGroupHeader) section).getJrDesignGroup()
+							.getName();
+				if (section instanceof MTableGroupFooter)
+					grName = ((MTableGroupFooter) section).getJrDesignGroup()
+							.getName();
+
+				mtable.getTableManager().setHeight(null, height, jrElement,
+						TableColumnSize.getType(classType), grName);
+
+				// cell.setHeight(height);
+				mtable.getTableManager().update();
+
+				getPropertyChangeSupport().firePropertyChange(
+						new PropertyChangeEvent(this,
+								DesignCell.PROPERTY_HEIGHT, null, value));
 			}
 		} else if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION))
 			jrElement.setPrintWhenExpression(ExprUtil.setValues(
@@ -326,8 +367,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 
 	public Rectangle getBounds() {
 		int w = 0;
-		int h = 0;
-		Rectangle rCellBounds = new Rectangle();
+		Rectangle rc = new Rectangle();
 		Rectangle rect = null;
 		StandardBaseColumn c = null;
 		if (getValue() != null) {
@@ -338,9 +378,9 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		MTable mc = getMTable();
 		if (mc != null) {
 			if (c != null)
-				rCellBounds = mc.getTableManager().getBounds(w, c, type);
+				rc = mc.getTableManager().getBounds(w, c, type, grName);
 			Rectangle b = mc.getBounds();
-			return new Rectangle(b.x + rCellBounds.x, b.y + rCellBounds.y, w, h);
+			return new Rectangle(b.x + rc.x, b.y + rc.y, w, rc.height);
 		}
 		return rect;
 	}

@@ -44,7 +44,7 @@ public class EmptyCellFigure extends FrameFigure {
 	public EmptyCellFigure() {
 		super();
 		setOpaque(true);
-		setAlpha(10);
+		setAlpha(50);
 		setBackgroundColor(ColorConstants.white);
 		setBorder(null);
 		createTexture();

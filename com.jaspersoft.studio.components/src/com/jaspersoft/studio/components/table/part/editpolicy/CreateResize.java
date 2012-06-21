@@ -13,7 +13,6 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
-import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.model.ANode;
@@ -76,8 +75,8 @@ public class CreateResize {
 				c.add(setCommand);
 			}
 		}
-		if (request.getSizeDelta().height != 0 && model instanceof MCell) {
-			MCell mc = (MCell) model;
+		if (request.getSizeDelta().height != 0 && model instanceof MColumn) {
+			MColumn mc = (MColumn) model;
 			int h = deltaRect.height;
 			if (request.getResizeDirection() == PositionConstants.NORTH)
 				h = -h;
@@ -92,8 +91,9 @@ public class CreateResize {
 			setCommand.setPropertyValue(height);
 			c.add(setCommand);
 
-			if (request.getResizeDirection() == PositionConstants.NORTH) {
-				mc = (MCell) oldmodel;
+			if (request.getResizeDirection() == PositionConstants.NORTH
+					&& oldmodel instanceof MColumn) {
+				mc = (MColumn) oldmodel;
 				h = deltaRect.height;
 				height = (Integer) mc
 						.getPropertyValue(DesignCell.PROPERTY_HEIGHT) + h;
