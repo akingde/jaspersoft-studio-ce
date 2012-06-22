@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio Designer
 Bundle-SymbolicName: com.jaspersoft.studio;singleton:=true
-Bundle-Version: 1.1.1
+Bundle-Version: 1.1.2
 Bundle-Activator: com.jaspersoft.studio.JaspersoftStudioPlugin
 Bundle-Vendor: Jaspersoft Corporation
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-NativeCode: 
  libnative/Linux/i386/libj2d-gtk-linux-i386-2.0.0.so ; osname=Linux ; processor=x86; processor=i386 ,
  libnative/Linux/64bit/libj2d-gtk-linux-i386-2.0.0.so ; osname=Linux ; processor=x86_64 ; processor=amd64 ,
@@ -16,8 +16,8 @@ Bundle-NativeCode:
 Require-Bundle: org.eclipse.ui.cheatsheets;visibility:=reexport,
  org.eclipse.core.filesystem;visibility:=reexport,
  org.eclipse.gef;bundle-version="3.5.0";visibility:=reexport,
- net.sf.jasperreports;visibility:=reexport,
- com.jaspersoft.studio.properties;bundle-version="1.1.0";visibility:=reexport,
+ net.sf.jasperreports;bundle-version="4.6.1";visibility:=reexport,
+ com.jaspersoft.studio.properties;bundle-version="1.1.2";visibility:=reexport,
  org.eclipse.help.ui;bundle-version="3.4.1";visibility:=reexport,
  org.eclipse.ui.console,
  org.mortbay.jetty.server;bundle-version="6.1.15";resolution:=optional,
