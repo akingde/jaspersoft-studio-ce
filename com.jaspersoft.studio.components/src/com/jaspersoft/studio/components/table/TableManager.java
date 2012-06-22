@@ -107,35 +107,31 @@ public class TableManager {
 
 	private int initYHColumn(int y, List<BaseColumn> cols, int type,
 			String grName) {
-		int h = 0;
-		for (BaseColumn bc : cols) {
-			int hc = 0;
-			Cell c = TableUtil.getCell(bc, type, grName);
-			if (c != null)
-				hc = c.getHeight();
-			if (bc instanceof ColumnGroup)
-				hc += initYHColumn(y, ((ColumnGroup) bc).getColumns(), type,
-						grName);
-			h = Math.max(h, hc);
-		}
-		Map<String, Map<BaseColumn, Point>> m = new HashMap<String, Map<BaseColumn, Point>>();
-		Map<BaseColumn, Point> map = new HashMap<BaseColumn, Point>();
-		m.put(grName, map);
-		yhcolumn.put(type, m);
+		int h = getHeight(cols, type, grName);
 
+		Map<BaseColumn, Point> map = getMap(type, grName);
 		for (BaseColumn bc : cols) {
 			DesignCell c = (DesignCell) TableUtil.getCell(bc, type, grName);
 			if (bc instanceof ColumnGroup) {
 				int ch = 0;
 				if (c != null)
 					ch = c.getHeight();
-				int sch = initYHColumn(y, ((ColumnGroup) bc).getColumns(),
-						type, grName);
+				int sch = getHeight(((ColumnGroup) bc).getColumns(), type,
+						grName);
 				if (sch > 0)
 					ch = h - sch;
-				map.put(bc, new Point(y, ch));
+				int tmpy = y;
+				if (isBottomOfTable(type))
+					tmpy = y + h - ch;
+				map.put(bc, new Point(tmpy, ch));
 				if (c != null)
 					c.setHeight(ch);
+				if (isBottomOfTable(type))
+					initYHColumn(y, ((ColumnGroup) bc).getColumns(), type,
+							grName);
+				else
+					initYHColumn(y + ch, ((ColumnGroup) bc).getColumns(), type,
+							grName);
 			} else {
 				map.put(bc, new Point(y, h));
 				if (c != null)
@@ -143,6 +139,40 @@ public class TableManager {
 			}
 		}
 		return h;
+	}
+
+	public boolean isBottomOfTable(int type) {
+		return type == TableUtil.COLUMN_FOOTER
+				|| type == TableUtil.TABLE_FOOTER
+				|| type == TableUtil.COLUMN_GROUP_FOOTER;
+	}
+
+	private int getHeight(List<BaseColumn> cols, int type, String grName) {
+		int h = 0;
+		for (BaseColumn bc : cols) {
+			int hc = 0;
+			Cell c = TableUtil.getCell(bc, type, grName);
+			if (c != null)
+				hc = c.getHeight();
+			if (bc instanceof ColumnGroup)
+				hc += getHeight(((ColumnGroup) bc).getColumns(), type, grName);
+			h = Math.max(h, hc);
+		}
+		return h;
+	}
+
+	public Map<BaseColumn, Point> getMap(int type, String grName) {
+		Map<String, Map<BaseColumn, Point>> m = yhcolumn.get(type);
+		if (m == null) {
+			m = new HashMap<String, Map<BaseColumn, Point>>();
+			yhcolumn.put(type, m);
+		}
+		Map<BaseColumn, Point> map = m.get(grName);
+		if (map == null) {
+			map = new HashMap<BaseColumn, Point>();
+			m.put(grName, map);
+		}
+		return map;
 	}
 
 	private void initXColumn(int x, List<BaseColumn> cols) {
@@ -218,7 +248,8 @@ public class TableManager {
 			String grName) {
 		int x = getColumnX(col);
 		Point p = getYhcolumn(type, grName, col);
-
+		if (p == null)
+			p = new Point(0, 100);
 		return new Rectangle(x, p.x, col.getWidth(), p.y);
 	}
 

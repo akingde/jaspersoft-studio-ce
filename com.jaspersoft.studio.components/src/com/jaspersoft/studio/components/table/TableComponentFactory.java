@@ -172,7 +172,6 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public static void refreshTable(MTable mt) {
-
 		mt.removeChildren();
 		createTable(mt);
 	}

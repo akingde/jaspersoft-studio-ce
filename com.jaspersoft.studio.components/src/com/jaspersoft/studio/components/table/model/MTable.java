@@ -166,8 +166,7 @@ public class MTable extends MGraphicElement implements IContainer,
 
 	@Override
 	public Object getPropertyValue(Object id) {
-		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		StandardTable jrTable = (StandardTable) jrElement.getComponent();
+		StandardTable jrTable = getStandardTable();
 
 		if (id.equals(StandardTable.PROPERTY_DATASET_RUN)) {
 			if (mDatasetRun == null) {
@@ -187,8 +186,7 @@ public class MTable extends MGraphicElement implements IContainer,
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		StandardTable jrTable = (StandardTable) jrElement.getComponent();
+		StandardTable jrTable = getStandardTable();
 
 		if (id.equals(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE))
 			jrTable.setWhenNoDataType((WhenNoDataTypeTableEnum) whennodataD
@@ -202,6 +200,12 @@ public class MTable extends MGraphicElement implements IContainer,
 				jrTable.setDatasetRun(null);
 		}
 		super.setPropertyValue(id, value);
+	}
+
+	public StandardTable getStandardTable() {
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		StandardTable jrTable = (StandardTable) jrElement.getComponent();
+		return jrTable;
 	}
 
 	/*

@@ -79,6 +79,7 @@ import com.jaspersoft.studio.components.crosstab.model.nodata.action.CreateCross
 import com.jaspersoft.studio.components.crosstab.model.nodata.command.CreateCrosstabWhenNoDataCommand;
 import com.jaspersoft.studio.components.crosstab.model.nodata.command.DeleteCrosstabWhenNoDataCommand;
 import com.jaspersoft.studio.components.crosstab.model.parameter.MCrosstabParameters;
+import com.jaspersoft.studio.components.crosstab.model.parameter.action.CreateCrosstabParameterAction;
 import com.jaspersoft.studio.components.crosstab.model.parameter.command.CreateParameterCommand;
 import com.jaspersoft.studio.components.crosstab.model.parameter.command.DeleteParameterCommand;
 import com.jaspersoft.studio.components.crosstab.model.parameter.command.ReorderParameterCommand;
@@ -484,6 +485,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		lst.add(CreateRowGroupAction.ID);
 		lst.add(CreateCrosstabHeaderAction.ID);
 		lst.add(CreateCrosstabWhenNoDataAction.ID);
+		lst.add(CreateCrosstabParameterAction.ID);
 		return lst;
 	}
 

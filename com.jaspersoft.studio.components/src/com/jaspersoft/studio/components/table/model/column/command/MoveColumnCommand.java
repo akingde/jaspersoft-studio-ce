@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.components.table.model.column.command;
 
+import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
@@ -10,6 +11,7 @@ import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.model.ANode;
 
 public class MoveColumnCommand extends Command {
@@ -40,11 +42,16 @@ public class MoveColumnCommand extends Command {
 			oldIndex = psrcColGroup.getColumns().indexOf(srcColumn);
 		}
 		ANode destparent = dest.getParent();
-		if (destparent instanceof AMCollection)
-			newIndex = jrTable.getColumns().indexOf(destColumn);
-		else if (destparent.getValue() instanceof StandardColumnGroup) {
-			pdestColGroup = (StandardColumnGroup) destparent.getValue();
-			newIndex = pdestColGroup.getColumns().indexOf(destColumn);
+		if (destparent != null) {
+			if (destparent instanceof AMCollection)
+				newIndex = jrTable.getColumns().indexOf(destColumn);
+			else if (destparent.getValue() instanceof StandardColumnGroup) {
+				pdestColGroup = (StandardColumnGroup) destparent.getValue();
+				newIndex = pdestColGroup.getColumns().indexOf(destColumn);
+			}
+		} else {
+			if (dest instanceof MColumnGroup)
+				pdestColGroup = (StandardColumnGroup) dest.getValue();
 		}
 	}
 
@@ -63,9 +70,10 @@ public class MoveColumnCommand extends Command {
 	}
 
 	private void delColumn(StandardColumnGroup colGroup, StandardBaseColumn col) {
-		if (colGroup != null)
+		if (colGroup != null) {
 			colGroup.removeColumn(col);
-		else
+			updateColumnWidth(colGroup);
+		} else
 			jrTable.removeColumn(col);
 	}
 
@@ -76,11 +84,19 @@ public class MoveColumnCommand extends Command {
 				colGroup.addColumn(index, col);
 			else
 				colGroup.addColumn(col);
+			updateColumnWidth(colGroup);
 		} else {
 			if (index >= 0 && index < jrTable.getColumns().size())
 				jrTable.addColumn(index, col);
 			else
 				jrTable.addColumn(col);
 		}
+	}
+
+	private void updateColumnWidth(StandardColumnGroup group) {
+		int w = 0;
+		for (BaseColumn c : group.getColumns())
+			w += c.getWidth();
+		group.setWidth(w);
 	}
 }
