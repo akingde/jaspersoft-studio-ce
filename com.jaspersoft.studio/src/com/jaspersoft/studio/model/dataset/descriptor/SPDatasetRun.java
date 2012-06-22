@@ -30,11 +30,11 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -50,7 +50,7 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class SPDatasetRun extends ASPropertyWidget {
-	private CCombo dsetCombo;
+	private Combo dsetCombo;
 
 	private Button params;
 	private Button paramMap;
@@ -65,7 +65,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 
 	@Override
 	protected void createComponent(Composite parent) {
-		dsetCombo = section.getWidgetFactory().createCCombo(parent, SWT.FLAT | SWT.READ_ONLY);
+		dsetCombo = section.getWidgetFactory().createCombo(parent, SWT.FLAT | SWT.READ_ONLY);
 		dsetCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

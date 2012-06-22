@@ -23,13 +23,13 @@ import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -44,7 +44,7 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 
 public class InputControlSection extends ASection {
-	private CCombo ctype;
+	private Combo ctype;
 	private Button bmand;
 	private Button bread;
 	private Button bvisible;
@@ -72,7 +72,7 @@ public class InputControlSection extends ASection {
 
 		AbstractSection.createLabel(parent, getWidgetFactory(), "Type", 120);
 
-		ctype = getWidgetFactory().createCCombo(parent,
+		ctype = getWidgetFactory().createCombo(parent,
 				SWT.BORDER | SWT.READ_ONLY);
 		ctype.setItems(new String[] { "Boolean", "Single Value",
 				"Single Select List of Values",

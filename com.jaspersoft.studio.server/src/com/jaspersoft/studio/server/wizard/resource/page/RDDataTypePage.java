@@ -22,10 +22,10 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -60,7 +60,7 @@ public class RDDataTypePage extends AResourcePage {
 
 		UIUtils.createLabel(composite, "Data Type");
 
-		CCombo ttype = new CCombo(composite, SWT.BORDER | SWT.READ_ONLY);
+		Combo ttype = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setItems(new String[] { "Text", "Number", "Date", "Date/time" });
 
 		UIUtils.createLabel(composite, "Pattern");

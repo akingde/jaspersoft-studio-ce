@@ -32,12 +32,12 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -57,8 +57,8 @@ public class DSTimeSeries extends ADSComponent {
 	private ExpressionWidget valueWidget;
 	private ExpressionWidget timePeriod;
 	private ExpressionWidget labelWidget;
-	private CCombo seriesCombo;
-	private CCombo timePeriodCombo;
+	private Combo seriesCombo;
+	private Combo timePeriodCombo;
 
 	public DSTimeSeries(Composite composite, DatasetSeriesWidget dsWidget) {
 		super(composite, dsWidget);
@@ -129,7 +129,7 @@ public class DSTimeSeries extends ADSComponent {
 		Label lbl = new Label(yCompo, SWT.NONE);
 		lbl.setText("Series");
 
-		seriesCombo = new CCombo(yCompo, SWT.READ_ONLY | SWT.BORDER);
+		seriesCombo = new Combo(yCompo, SWT.READ_ONLY | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = 300;
 		seriesCombo.setLayoutData(gd);
@@ -201,7 +201,7 @@ public class DSTimeSeries extends ADSComponent {
 		Label lbl = new Label(yCompo, SWT.NONE);
 		lbl.setText("TimePeriod");
 
-		timePeriodCombo = new CCombo(yCompo, SWT.SINGLE | SWT.READ_ONLY
+		timePeriodCombo = new Combo(yCompo, SWT.SINGLE | SWT.READ_ONLY
 				| SWT.BORDER);
 		timePeriodCombo.setItems(EnumHelper.getEnumNames(
 				TimePeriodEnum.values(), NullEnum.NULL));

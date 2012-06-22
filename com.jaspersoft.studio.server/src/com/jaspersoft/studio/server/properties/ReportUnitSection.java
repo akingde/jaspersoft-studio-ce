@@ -22,9 +22,9 @@ package com.jaspersoft.studio.server.properties;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -35,7 +35,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 public class ReportUnitSection extends ASection {
 	private Button ispromp;
 
-	private CCombo cictype;
+	private Combo cictype;
 	private Text jspic;
 	private Text jspview;
 
@@ -45,7 +45,7 @@ public class ReportUnitSection extends ASection {
 		AbstractSection.createLabel(parent, getWidgetFactory(),
 				"Controls Layout", 120);
 
-		cictype = getWidgetFactory().createCCombo(parent, SWT.BORDER);
+		cictype = getWidgetFactory().createCombo(parent, SWT.BORDER);
 		cictype.setItems(new String[] { "Popup screen", "Separate page",
 				"Top of page", "In page" });
 

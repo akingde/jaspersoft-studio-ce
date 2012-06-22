@@ -22,10 +22,10 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
@@ -94,7 +94,7 @@ public class RDReportUnitPage extends AResourcePage {
 
 		UIUtils.createLabel(composite, "Controls Layout");
 
-		CCombo cictype = new CCombo(composite, SWT.BORDER);
+		Combo cictype = new Combo(composite, SWT.BORDER);
 		cictype.setItems(new String[] { "Popup screen", "Separate page",
 				"Top of page", "In page" });
 

@@ -25,7 +25,6 @@ import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,6 +32,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -52,7 +52,7 @@ public class FontFamilyPage extends WizardPage {
 	private SimpleFontFamily fontFamily;
 	private Text dsname;
 	private Button embedepdf;
-	private CCombo pdfenc;
+	private Combo pdfenc;
 	private Text bold;
 	private Text italic;
 	private Text bolditalic;
@@ -145,7 +145,7 @@ public class FontFamilyPage extends WizardPage {
 		label.setLayoutData(gd);
 
 		new Label(gr, SWT.NONE).setText("PDF Encoding");
-		pdfenc = new CCombo(gr, SWT.SINGLE | SWT.BORDER);
+		pdfenc = new Combo(gr, SWT.SINGLE | SWT.BORDER);
 		pdfenc.setItems(ModelUtils.getPDFEncodings());
 		pdfenc.addSelectionListener(new SelectionListener() {
 

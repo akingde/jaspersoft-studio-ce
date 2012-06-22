@@ -22,9 +22,9 @@ package com.jaspersoft.studio.server.properties;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -40,7 +40,7 @@ public class DataTypeSection extends ASection {
 	private Button bmin;
 	private Button bmax;
 
-	private CCombo ttype;
+	private Combo ttype;
 
 	public DataTypeSection() {
 		super();
@@ -51,7 +51,7 @@ public class DataTypeSection extends ASection {
 		AbstractSection.createLabel(parent, getWidgetFactory(), "Data Type",
 				120);
 
-		ttype = getWidgetFactory().createCCombo(parent,
+		ttype = getWidgetFactory().createCombo(parent,
 				SWT.BORDER | SWT.READ_ONLY);
 		ttype.setItems(new String[] { "Text", "Number", "Date", "Date/time" });
 

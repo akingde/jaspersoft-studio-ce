@@ -23,9 +23,9 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -63,7 +63,7 @@ public class RDQueryPage extends AResourcePage {
 
 		UIUtils.createLabel(composite, "Language");
 
-		CCombo clang = new CCombo(composite, SWT.BORDER);
+		Combo clang = new Combo(composite, SWT.BORDER);
 		clang.setItems(ModelUtils.getQueryLanguages());
 
 		UIUtils.createLabel(composite, "Query");

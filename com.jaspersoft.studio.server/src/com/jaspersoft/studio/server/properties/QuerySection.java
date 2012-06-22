@@ -22,8 +22,8 @@ package com.jaspersoft.studio.server.properties;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -33,7 +33,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class QuerySection extends ASection {
-	private CCombo clang;
+	private Combo clang;
 	private Text tsql;
 
 	@Override
@@ -42,7 +42,7 @@ public class QuerySection extends ASection {
 		AbstractSection
 				.createLabel(parent, getWidgetFactory(), "Language", 120);
 
-		clang = getWidgetFactory().createCCombo(parent, SWT.BORDER);
+		clang = getWidgetFactory().createCombo(parent, SWT.BORDER);
 		clang.setItems(ModelUtils.getQueryLanguages());
 
 		AbstractSection.createLabel(parent, getWidgetFactory(), "Query", 120);
