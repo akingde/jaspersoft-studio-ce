@@ -80,7 +80,7 @@ public class CSVFieldsProvider implements IFieldsProvider {
 		return null;
 	}
 
-	public boolean supportsGetFieldsOperation() {
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		return true;
 	}
 

@@ -80,8 +80,8 @@ public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor implemen
             fieldsProvider = new MongoDbFieldsProvider();
     }
 
-    public boolean supportsGetFieldsOperation() {
+    public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
         getFieldProvider();
-        return fieldsProvider.supportsGetFieldsOperation();
+        return fieldsProvider.supportsGetFieldsOperation(jConfig);
     }
 }

@@ -97,6 +97,8 @@ public class SetConstraintCommand extends Command {
 			// check position,
 			// if top-left corner outside the bottom bar bands, move to bottom band
 			// if bottom-left corner outside the top bar, move to top band
+			System.out.println("PB:" + parentBounds);
+			System.out.println("NB:" + newBounds);
 			int y = jrElement.getY() + newBounds.y - parentBounds.y;
 			if (cBand == null && pBand == null)
 				y = setBand(y);

@@ -373,7 +373,7 @@ public abstract class DataQueryAdapters {
 	protected void doGetFields(IProgressMonitor monitor) {
 		final String lang = newdataset.getQuery().getLanguage();
 		final DataAdapterDescriptor da = dscombo.getSelected();
-		if (da != null && da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation()) {
+		if (da != null && da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation(jConfig)) {
 			qStatus.showInfo("");
 			final String query = newdataset.getQuery().getText();
 

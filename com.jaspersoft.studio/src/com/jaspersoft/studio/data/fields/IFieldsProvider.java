@@ -30,7 +30,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public interface IFieldsProvider {
 
-	public boolean supportsGetFieldsOperation();
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig);
 
 	/**
 	 * Returns the fields that are available from a query of a specific language The provider can use the passed in report

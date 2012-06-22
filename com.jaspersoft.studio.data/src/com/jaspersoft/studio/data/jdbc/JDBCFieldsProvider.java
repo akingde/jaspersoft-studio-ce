@@ -47,7 +47,7 @@ import com.jaspersoft.studio.utils.parameter.SimpleValueParameter;
 
 public class JDBCFieldsProvider implements IFieldsProvider {
 
-	public boolean supportsGetFieldsOperation() {
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		return true;
 	}
 

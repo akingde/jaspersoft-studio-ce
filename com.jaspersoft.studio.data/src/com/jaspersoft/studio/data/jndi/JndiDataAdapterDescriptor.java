@@ -83,8 +83,8 @@ public class JndiDataAdapterDescriptor extends DataAdapterDescriptor implements
 			fprovider = new JDBCFieldsProvider();
 	}
 
-	public boolean supportsGetFieldsOperation() {
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		getFieldProvider();
-		return fprovider.supportsGetFieldsOperation();
+		return fprovider.supportsGetFieldsOperation(jConfig);
 	}
 }

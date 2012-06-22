@@ -113,8 +113,12 @@ public class TableCellEditPart extends FigureEditPart implements
 							return null;
 						if (ep instanceof TableCellEditPart)
 							return null;
+						if (!(ep.getModel() instanceof MCell))
+							return null;
 					}
 				}
+				if (!(getModel() instanceof MCell))
+					return null;
 				if (targetFeedback == null) {
 					targetFeedback = new RectangleFigure();
 					targetFeedback.setFill(false);
@@ -183,6 +187,10 @@ public class TableCellEditPart extends FigureEditPart implements
 									cmodel, rect, -1));
 							return c;
 						}
+					} else {
+						System.out.println("C:" + constraint);
+						return super.createChangeConstraintCommand(child,
+								constraint);
 					}
 				}
 				return null;

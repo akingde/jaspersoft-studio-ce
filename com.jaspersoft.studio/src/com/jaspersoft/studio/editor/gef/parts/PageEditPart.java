@@ -32,7 +32,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -42,17 +41,14 @@ import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
-import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
@@ -269,31 +265,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
-			protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
-				Rectangle r = (Rectangle) constraint;
-				r.setLocation(r.x - APageFigure.PAGE_BORDER.left, r.y - APageFigure.PAGE_BORDER.top);
-
-				SetPageConstraintCommand cmd = new SetPageConstraintCommand();
-				cmd.setContext((ANode) getHost().getModel(), (ANode) child.getModel(), (Rectangle) constraint);
-
-				return cmd;
-			}
-
-			@Override
-			public Command getCommand(Request request) {
-				if (request instanceof ChangeBoundsRequest) {
-					if (request.getType() == REQ_MOVE || request.getType() == REQ_MOVE_CHILDREN) {
-						for (Object obj : ((ChangeBoundsRequest) request).getEditParts()) {
-							if (obj instanceof EditableFigureEditPart)
-								return null;
-						}
-					}
-				}
-				return super.getCommand(request);
-			}
-
-		});
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy());
 		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy()); //$NON-NLS-1$
 	}
 

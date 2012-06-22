@@ -23,7 +23,7 @@ import com.jaspersoft.studio.utils.parameter.ParameterUtil;
  * 
  */
 public class HiveFieldsProvider implements IFieldsProvider {
-    public boolean supportsGetFieldsOperation() {
+    public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
         return true;
     }
 

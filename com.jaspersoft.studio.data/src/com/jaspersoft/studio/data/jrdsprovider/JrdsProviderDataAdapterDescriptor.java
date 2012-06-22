@@ -67,20 +67,20 @@ public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JasperReportsConfiguration jConfig, JRDataset jDataset)
 			throws JRException, UnsupportedOperationException {
-		getFieldProvider();
+		getFieldProvider(jConfig);
 		return fprovider.getFields(con, jConfig, jDataset);
 	}
 
-	public boolean supportsGetFieldsOperation() {
-		getFieldProvider();
-		return fprovider.supportsGetFieldsOperation();
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
+		getFieldProvider(jConfig);
+		return fprovider.supportsGetFieldsOperation(jConfig);
 	}
 
-	private void getFieldProvider() {
+	private void getFieldProvider(JasperReportsConfiguration jConfig) {
 		if (fprovider == null) {
 			fprovider = new JRDSProviderFieldsProvider();
 			DataSourceProviderDataAdapterService ds = new DataSourceProviderDataAdapterService(
-					dsProviderDataAdapter);
+					jConfig, dsProviderDataAdapter);
 			try {
 				((JRDSProviderFieldsProvider) fprovider).setProvider(ds
 						.getProvider());

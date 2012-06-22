@@ -82,8 +82,8 @@ public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements
 			fieldsProvider = new HiveFieldsProvider();
 	}
 
-	public boolean supportsGetFieldsOperation() {
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		getFieldProvider();
-		return fieldsProvider.supportsGetFieldsOperation();
+		return fieldsProvider.supportsGetFieldsOperation(jConfig);
 	}
 }

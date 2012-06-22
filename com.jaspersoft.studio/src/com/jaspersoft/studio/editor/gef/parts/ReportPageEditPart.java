@@ -29,13 +29,10 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.SnapToGrid;
-import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -91,16 +88,6 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 
 		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
 				new Point(tx, ReportPageFigure.PAGE_BORDER.top + jd.getTopMargin()));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
-	 */
-	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy());
-		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy()); //$NON-NLS-1$
 	}
 
 	/*

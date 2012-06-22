@@ -79,9 +79,9 @@ public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements
 		return fprovider.getFields(con, jConfig, reportDataset);
 	}
 
-	public boolean supportsGetFieldsOperation() {
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		getFieldProvider();
-		return fprovider.supportsGetFieldsOperation();
+		return fprovider.supportsGetFieldsOperation(jConfig);
 	}
 
 	private void getFieldProvider() {

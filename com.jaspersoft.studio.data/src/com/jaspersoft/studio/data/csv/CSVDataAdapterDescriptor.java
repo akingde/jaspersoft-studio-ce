@@ -65,9 +65,9 @@ public class CSVDataAdapterDescriptor extends DataAdapterDescriptor implements
 		return fprovider.getFields(con, jConfig, jDataset);
 	}
 
-	public boolean supportsGetFieldsOperation() {
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		getFieldProvider();
-		return fprovider.supportsGetFieldsOperation();
+		return fprovider.supportsGetFieldsOperation(jConfig);
 	}
 
 	private void getFieldProvider() {
