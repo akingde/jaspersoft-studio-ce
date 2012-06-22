@@ -50,7 +50,7 @@ import com.jaspersoft.studio.messages.Messages;
 public class DataPreviewTable implements DatasetReaderListener{
 
 	// Costants
-	private static final int FILLER_THREAD_SLEEPTIME = 5;
+	private static final int FILLER_THREAD_SLEEPTIME = 30;
 	private static final int RECORDS_NUM_ALL = -1;
 	private static final int RECORDS_NUM_1000 = 1000;
 	private static final int RECORDS_NUM_500 = 500;
@@ -117,8 +117,8 @@ public class DataPreviewTable implements DatasetReaderListener{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				cancelDataPreview();
-				refreshPreviewBtn.setEnabled(true);
 				cancelPreviewBtn.setEnabled(false);
+				refreshPreviewBtn.setEnabled(true);
 			}
 		});
 		cancelPreviewBtn.setEnabled(false);
@@ -224,20 +224,20 @@ public class DataPreviewTable implements DatasetReaderListener{
 	 */
 	private void cancelDataPreview(){
 		// Clean up
+		invalidate();
 		if(refreshPrevieDataJob!=null){
 			refreshPrevieDataJob.cancel();
-			if(dataReader.isRunning()){
-				invalidate();
-				dataReader.stop();
-			}
-			// Remove all table items if any
-			wtable.removeAll();
-			tviewer.setInput(null);
 		}
+		if(dataReader.isRunning()){
+			dataReader.stop();
+		}
+		// Remove all table items if any
+		wtable.removeAll();
+		tviewer.setInput(null);
+		readItems=0;
 		infoMsg.setText(Messages.DataPreviewTable_Ready);
 		((GridData)progressBar.getLayoutData()).exclude=true;
 		progressBar.setVisible(false);
-		infoComposite.layout();
 	}
 
 	/*
@@ -334,10 +334,13 @@ public class DataPreviewTable implements DatasetReaderListener{
 					tableFiller.done();
 					tableFiller=null;
 				}
+				flushPreviewItems();
 				progressBar.setVisible(false);
 				cancelPreviewBtn.setEnabled(false);
 				((GridData)progressBar.getLayoutData()).exclude=true;
-				infoMsg.setText(MessageFormat.format(Messages.DataPreviewTable_ReadyReadData, new Object[]{readItems}));
+				if(isValidStatus()){
+					infoMsg.setText(MessageFormat.format(Messages.DataPreviewTable_ReadyReadData, new Object[]{readItems}));
+				}
 				refreshPreviewBtn.setEnabled(true);
 				infoComposite.layout();
 				readItems=0;
@@ -389,22 +392,8 @@ public class DataPreviewTable implements DatasetReaderListener{
 
 		@Override
 		public void run() {
-			Object[] tmpItems = new Object[0];
 			while (!done) {
-				synchronized (previewItems) {
-					tmpItems = previewItems.toArray();
-					previewItems.clear();
-				}
-				final Object[] items = tmpItems;
-				Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						if (!wtable.isDisposed() && statusOK) {
-							wtable.setRedraw(false);
-							tviewer.add(items);
-							wtable.setRedraw(true);
-						}
-					}
-				});
+				flushPreviewItems();
 				try {
 					sleep(FILLER_THREAD_SLEEPTIME);
 				} catch (InterruptedException e) {
@@ -412,6 +401,26 @@ public class DataPreviewTable implements DatasetReaderListener{
 				}
 			}
 		}
+	}
+	
+	/*
+	 * Flush buffered items.
+	 */
+	private void flushPreviewItems(){
+		Object[] tmpItems = new Object[0];
+		synchronized (previewItems) {
+			tmpItems = previewItems.toArray();
+			previewItems.clear();
+		}
+		final Object[] items = tmpItems;
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				if (!wtable.isDisposed() && statusOK) {
+					tviewer.add(items);
+				}
+			}
+		});
+
 	}
 	
 }
