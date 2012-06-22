@@ -61,7 +61,11 @@ public class SPQuery extends SPText {
 	}
 
 	protected void handleTextChanged(final AbstractSection section, final Object property, String text) {
-		JRDesignQuery query = (JRDesignQuery) mquery.getValue().clone();
+		JRDesignQuery query = null;
+		if (mquery.getValue() != null)
+			query = (JRDesignQuery) mquery.getValue().clone();
+		else
+			query = new JRDesignQuery();
 		query.setText(text);
 		section.changePropertyOn(property, new MQuery(query, mdataset), mdataset);
 	}
