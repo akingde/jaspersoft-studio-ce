@@ -38,12 +38,15 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
+import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
+import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
 import com.jaspersoft.studio.components.table.util.TableColumnNumerator;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.model.ANode;
@@ -108,6 +111,44 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 				grName = ((MTableGroupFooter) aNode).getJrDesignGroup()
 						.getName();
 		}
+	}
+
+	public MColumn getNorth() {
+		ANode mparent = getParent();
+		if (TableManager.isBottomOfTable(type)) {
+			if (this instanceof MColumnGroup
+					|| this instanceof MColumnGroupCell)
+				return (MColumn) getChildren().get(0);
+
+			MTable mtable = getMTable();
+			List<ANode> amCollection = getAMCollection();
+			int index = mtable.getChildren().indexOf(
+					amCollection.get(amCollection.size() - 1));
+			AMCollection newmc = (AMCollection) mtable.getChildren().get(
+					index - 1);
+			return (MColumn) newmc.getChildren().get(0);
+		} else if (mparent instanceof MColumnGroup
+				|| mparent instanceof MColumnGroupCell)
+			return (MColumn) mparent;
+
+		MTable mtable = getMTable();
+		int index = mtable.getChildren().indexOf(mparent);
+		if (index > 0) {
+			AMCollection newmc = (AMCollection) mtable.getChildren().get(
+					index - 1);
+			return getBottomColumn(newmc.getChildren());
+		} else
+			return null;
+	}
+
+	private MColumn getBottomColumn(List<INode> newmc) {
+		for (INode col : newmc) {
+			if (col instanceof MColumnGroup || col instanceof MColumnGroupCell)
+				col = getBottomColumn(col.getChildren());
+			if (col instanceof MColumn)
+				return (MColumn) col;
+		}
+		return null;
 	}
 
 	private String grName;

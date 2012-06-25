@@ -55,6 +55,8 @@ public class TableManager {
 	private Map<BaseColumn, Integer> xcolumn = new HashMap<BaseColumn, Integer>();
 	private Map<Integer, Map<String, Map<BaseColumn, Point>>> yhcolumn = new HashMap<Integer, Map<String, Map<BaseColumn, Point>>>();
 
+	private List<Row> rows = new ArrayList<Row>();
+
 	public int getColumnX(BaseColumn bc) {
 		return xcolumn.get(bc);
 	}
@@ -141,7 +143,7 @@ public class TableManager {
 		return h;
 	}
 
-	public boolean isBottomOfTable(int type) {
+	public static boolean isBottomOfTable(int type) {
 		return type == TableUtil.COLUMN_FOOTER
 				|| type == TableUtil.TABLE_FOOTER
 				|| type == TableUtil.COLUMN_GROUP_FOOTER;

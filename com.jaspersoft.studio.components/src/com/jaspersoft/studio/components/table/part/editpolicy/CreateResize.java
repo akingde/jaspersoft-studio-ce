@@ -33,14 +33,8 @@ public class CreateResize {
 				return null;
 		}
 		if (request.getResizeDirection() == PositionConstants.NORTH) {
-			MTable mtable = (MTable) mparent.getParent();
-			int index = mtable.getChildren().indexOf(mparent);
-			if (index > 0) {
-				AMCollection newmc = (AMCollection) mtable.getChildren().get(
-						index - 1);
-				model = (MColumn) newmc.getChildren().get(
-						mparent.getChildren().indexOf(model));
-			} else
+			model = model.getNorth();
+			if (model == null)
 				return null;
 		}
 		StandardBaseColumn jrdesign = model.getValue();
