@@ -34,11 +34,27 @@ public class SQLLineStyler implements LineStyleListener {
 	
 	public SQLLineStyler(){
 		initializeColors();
-		sqlScanner=new SQLScanner();
+		sqlScanner=getSQLBasedScanner();
 		blockComments=new ArrayList<int[]>();
 	}
 
-	private void initializeColors() {
+	/**
+	 * Returns a simple scanner for the SQL-based language.
+	 * <p>
+	 * 
+	 * SQL-like languages implementors should override this
+	 * method.
+	 * 
+	 * @return the simple fuzzy scanner for the SQL language
+	 */
+	protected SQLScanner getSQLBasedScanner() {
+		return new SQLScanner();
+	}
+
+	/**
+	 * Initialize the colors map.
+	 */
+	protected void initializeColors() {
 		colorsMap=new HashMap<SQLTokensType, Color>(SQLTokensType.getColoredTokensNum());
 		colorsMap.put(SQLTokensType.STANDARD_TEXT, ResourceManager.getColor(0, 0, 0));
 		colorsMap.put(SQLTokensType.KEYWORD, ResourceManager.getColor(126, 12, 88));

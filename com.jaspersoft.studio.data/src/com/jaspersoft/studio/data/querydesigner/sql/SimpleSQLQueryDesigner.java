@@ -20,7 +20,7 @@ public class SimpleSQLQueryDesigner extends QueryDesigner {
 	
 	public SimpleSQLQueryDesigner() {
 		super();
-		sqlLineStyler = new SQLLineStyler();
+		sqlLineStyler=getSQLBasedLineStyler();
 	}
 
 	@Override
@@ -34,6 +34,13 @@ public class SimpleSQLQueryDesigner extends QueryDesigner {
 			}
 		});
 		return control;
+	}
+	
+	/**
+	 * @return the SQL line styler
+	 */
+	protected SQLLineStyler getSQLBasedLineStyler(){
+		return new SQLLineStyler();
 	}
 	
 }

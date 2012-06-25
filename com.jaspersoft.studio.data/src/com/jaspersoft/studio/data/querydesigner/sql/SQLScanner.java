@@ -9,7 +9,7 @@ import java.util.List;
  * <p>
  * Clients can easily extends this class and provide similar simple support to
  * other SQL-based language. Usually, they will only need to rewrite the methods
- * {@link #initSQLKeywords()} and {@link #initSQLSymbolsAndOperators()} to provide
+ * {@link #getSQLKeywords()} and {@link #getSQLSymbols()} to provide
  * they stuff additionally or instead of the current specified one.
  * <p>
  * NOTE: Re-used code and idea from JavaViewer SWT Example. 
@@ -21,7 +21,7 @@ public class SQLScanner {
     public static final int EOF_CHAR=-1;
     public static final int EOL_CHAR=10;
 	private static List<String> sqlKeywords;
-	private static List<String> sqlOperatorsAndSymbols;
+	private static List<String> sqlSymbols;
 	
     private StringBuffer fBuffer = new StringBuffer();
     private String fDoc;
@@ -30,8 +30,6 @@ public class SQLScanner {
     private int fStartToken;
     
     public SQLScanner(){
-    	initSQLKeywords();
-    	initSQLSymbolsAndOperators();
     }
     
 	/**
@@ -163,7 +161,7 @@ public class SQLScanner {
 				unread(c);
 				return SQLTokensType.NUMBER;
 			default:
-				if (sqlOperatorsAndSymbols.contains(Character.toString((char)c))){
+				if (getSQLSymbols().contains(Character.toString((char)c))){
 					return SQLTokensType.SYMBOL;
 				}
 				if (Character.isWhitespace((char) c)) {
@@ -181,7 +179,7 @@ public class SQLScanner {
 					} while (Character.isJavaIdentifierPart((char) c));
 					unread(c);
 					
-					if(sqlKeywords.contains(fBuffer.toString().toLowerCase())){
+					if(getSQLKeywords().contains(fBuffer.toString().toLowerCase())){
 						return SQLTokensType.KEYWORD;
 					}
 					return SQLTokensType.STANDARD_TEXT;
@@ -219,8 +217,10 @@ public class SQLScanner {
 
 	/**
 	 * Initializes, if needed, the SQL keywords used by the scanner instance.
+	 * 
+	 * @return the list of SQL keywords
 	 */
-	protected void initSQLKeywords(){
+	protected List<String> getSQLKeywords(){
 		if(sqlKeywords==null){
 			sqlKeywords=Arrays.asList(		
 					new String[]{
@@ -264,20 +264,24 @@ public class SQLScanner {
 							"when", "where", "while", "with", "work", "writetext", "xml"
 				});
 		}
+		return sqlKeywords;
 	}
 	
 	/**
-	 * Initializes, if needed, the SQL symbols and operators used by the scanner instance.
+	 * Initializes, if needed, the SQL symbols used by the scanner instance.
+	 * 
+	 * @return the list of SQL symbols
 	 */
-	protected void initSQLSymbolsAndOperators(){
-		if(sqlOperatorsAndSymbols==null){
-			sqlOperatorsAndSymbols=Arrays.asList(
+	protected List<String> getSQLSymbols(){
+		if(sqlSymbols==null){
+			sqlSymbols=Arrays.asList(
 					new String[]{
 						";", "=", "+", "-", "/",
 						"*", "&", "|", "^", "(", ")", "[", "]", ",", ".", ":", "!",
 						"~", "<", ">", "%", "{", "}", "?", "#", "@"	
 			});
 		}
+		return sqlSymbols;
 	}
 	
 }

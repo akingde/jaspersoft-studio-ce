@@ -47,12 +47,20 @@
             language="sql">
       </queryDesigner>
       <queryDesigner
-            QueryDesignerClass="com.jaspersoft.studio.data.designer.QueryDesigner"
+            QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.hql.HQLQueryDesigner"
             language="hql">
       </queryDesigner>
       <queryDesigner
+            QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.ejbql.EJBQLQueryDesigner"
+            language="ejbql">
+      </queryDesigner>
+      <queryDesigner
+            QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.plsql.PLSQLQueryDesigner"
+            language="plsql">
+      </queryDesigner>
+      <queryDesigner
             QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.xpath.XPathQueryDesigner"
-            language="xPath">      	
+            language="xPath">
       </queryDesigner>
       <queryDesigner
             QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.xpath.XPathQueryDesigner"
