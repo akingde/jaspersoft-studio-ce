@@ -25,6 +25,7 @@ import java.util.List;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
@@ -37,6 +38,8 @@ import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
+import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.model.ANode;
 
@@ -48,6 +51,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateColumnCommand extends Command {
 
 	private StandardBaseColumn jrColumn;
+	private StandardColumnGroup pColGroup;
 
 	protected StandardTable jrTable;
 	protected JasperDesign jrDesign;
@@ -68,7 +72,7 @@ public class CreateColumnCommand extends Command {
 	}
 
 	public CreateColumnCommand(MColumn destNode, MColumn srcNode, int index) {
-		this(destNode.getMTable(), srcNode, index);
+		this((ANode) destNode, srcNode, index);
 		this.index = jrTable.getColumns().indexOf(destNode.getValue()) + 1;
 	}
 
@@ -78,6 +82,9 @@ public class CreateColumnCommand extends Command {
 		this.index = index;
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		this.jrDesign = destNode.getJasperDesign();
+		if (destNode instanceof MColumnGroup
+				|| destNode instanceof MColumnGroupCell)
+			pColGroup = (StandardColumnGroup) destNode.getValue();
 	}
 
 	/*
@@ -87,13 +94,19 @@ public class CreateColumnCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		if (jrColumn == null) {
+		if (jrColumn == null)
 			jrColumn = createColumn(jrDesign, jrTable);
+		if (pColGroup != null) {
+			if (index >= 0 && index < pColGroup.getColumns().size())
+				pColGroup.addColumn(index, jrColumn);
+			else
+				pColGroup.addColumn(jrColumn);
+		} else {
+			if (index >= 0 && index < jrTable.getColumns().size())
+				jrTable.addColumn(index, jrColumn);
+			else
+				jrTable.addColumn(jrColumn);
 		}
-		if (index >= 0 && index < jrTable.getColumns().size())
-			jrTable.addColumn(index, jrColumn);
-		else
-			jrTable.addColumn(jrColumn);
 	}
 
 	public StandardBaseColumn createColumn(JasperDesign jrDesign,
@@ -179,7 +192,12 @@ public class CreateColumnCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		index = jrTable.getColumns().indexOf(jrColumn);
-		jrTable.removeColumn(jrColumn);
+		if (pColGroup != null) {
+			index = pColGroup.getColumns().indexOf(jrColumn);
+			pColGroup.removeColumn(jrColumn);
+		} else {
+			index = jrTable.getColumns().indexOf(jrColumn);
+			jrTable.removeColumn(jrColumn);
+		}
 	}
 }

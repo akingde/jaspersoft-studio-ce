@@ -55,8 +55,6 @@ public class TableManager {
 	private Map<BaseColumn, Integer> xcolumn = new HashMap<BaseColumn, Integer>();
 	private Map<Integer, Map<String, Map<BaseColumn, Point>>> yhcolumn = new HashMap<Integer, Map<String, Map<BaseColumn, Point>>>();
 
-	private List<Row> rows = new ArrayList<Row>();
-
 	public int getColumnX(BaseColumn bc) {
 		return xcolumn.get(bc);
 	}
@@ -100,28 +98,33 @@ public class TableManager {
 						TableUtil.COLUMN_GROUP_FOOTER, jrGroup.getName());
 			}
 
-		y += initYHColumn(y, table.getColumns(), TableUtil.COLUMN_GROUP_FOOTER,
-				"");
-
 		y += initYHColumn(y, table.getColumns(), TableUtil.COLUMN_FOOTER, "");
 		y += initYHColumn(y, table.getColumns(), TableUtil.TABLE_FOOTER, "");
 	}
 
 	private int initYHColumn(int y, List<BaseColumn> cols, int type,
 			String grName) {
-		int h = getHeight(cols, type, grName);
+		List<Integer> rows = new ArrayList<Integer>();
+		int h = getHeight(cols, type, grName, rows, 0);
+//		System.out.println("Rows " + type + " :" + rows);
+		getRowY(y, cols, type, grName, rows, 0);
+		return h;
+	}
 
+	private void getRowY(int y, List<BaseColumn> cols, int type, String grName,
+			List<Integer> rows, int depth) {
 		Map<BaseColumn, Point> map = getMap(type, grName);
 		for (BaseColumn bc : cols) {
 			DesignCell c = (DesignCell) TableUtil.getCell(bc, type, grName);
+			Integer h = rows.get(depth);
+//			System.out.println("H:" + h);
 			if (bc instanceof ColumnGroup) {
-				int ch = 0;
+				int ch = h;
 				if (c != null)
 					ch = c.getHeight();
-				int sch = getHeight(((ColumnGroup) bc).getColumns(), type,
-						grName);
-				if (sch > 0)
-					ch = h - sch;
+				int childh = rows.get(depth + 1);
+				if (childh != 0)
+					ch = h - childh;
 				int tmpy = y;
 				if (isBottomOfTable(type))
 					tmpy = y + h - ch;
@@ -129,27 +132,21 @@ public class TableManager {
 				if (c != null)
 					c.setHeight(ch);
 				if (isBottomOfTable(type))
-					initYHColumn(y, ((ColumnGroup) bc).getColumns(), type,
-							grName);
+					getRowY(y, ((ColumnGroup) bc).getColumns(), type, grName,
+							rows, depth + 1);
 				else
-					initYHColumn(y + ch, ((ColumnGroup) bc).getColumns(), type,
-							grName);
+					getRowY(y + ch, ((ColumnGroup) bc).getColumns(), type,
+							grName, rows, depth + 1);
 			} else {
 				map.put(bc, new Point(y, h));
 				if (c != null)
 					c.setHeight(h);
 			}
 		}
-		return h;
 	}
 
-	public static boolean isBottomOfTable(int type) {
-		return type == TableUtil.COLUMN_FOOTER
-				|| type == TableUtil.TABLE_FOOTER
-				|| type == TableUtil.COLUMN_GROUP_FOOTER;
-	}
-
-	private int getHeight(List<BaseColumn> cols, int type, String grName) {
+	private int getHeight(List<BaseColumn> cols, int type, String grName,
+			List<Integer> rows, int depth) {
 		int h = 0;
 		for (BaseColumn bc : cols) {
 			int hc = 0;
@@ -157,9 +154,17 @@ public class TableManager {
 			if (c != null)
 				hc = c.getHeight();
 			if (bc instanceof ColumnGroup)
-				hc += getHeight(((ColumnGroup) bc).getColumns(), type, grName);
+				hc += getHeight(((ColumnGroup) bc).getColumns(), type, grName,
+						rows, depth + 1);
 			h = Math.max(h, hc);
 		}
+		if (rows.size() > depth) {
+			Integer oldh = 0;
+			if (rows.size() > depth)
+				oldh = rows.get(depth);
+			rows.add(depth, Math.max(h, oldh));
+		} else
+			rows.add(h);
 		return h;
 	}
 
@@ -365,4 +370,9 @@ public class TableManager {
 		refresh();
 	}
 
+	public static boolean isBottomOfTable(int type) {
+		return type == TableUtil.COLUMN_FOOTER
+				|| type == TableUtil.TABLE_FOOTER
+				|| type == TableUtil.COLUMN_GROUP_FOOTER;
+	}
 }
