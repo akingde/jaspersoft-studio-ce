@@ -29,6 +29,7 @@ package com.jaspersoft.jrx.query;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
@@ -41,6 +42,9 @@ import java.util.TimeZone;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRDataset;
@@ -56,6 +60,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.tools.codec.Base64Encoder;
+import org.xml.sax.SAXException;
 
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
@@ -255,7 +260,35 @@ public class JRXPathQueryExecuter extends JRAbstractQueryExecuter {
 				wr.flush();
 			}
 
-			return JRXmlUtils.parse(conn.getInputStream());
+			try {
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				dbf.setValidating(false);
+				dbf.setIgnoringComments(true); 
+				dbf.setFeature("http://xml.org/sax/features/namespaces", false);
+				dbf.setFeature("http://xml.org/sax/features/validation", false);
+				dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+				dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+
+			
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				 
+					return db.parse(conn.getInputStream());
+			}
+			catch (SAXException e)
+			{
+				throw new JRException("Failed to parse the xml document", e);
+			}
+			catch (IOException e)
+			{
+				throw new JRException("Failed to parse the xml document", e);
+			}
+			catch (ParserConfigurationException e)
+			{
+				throw new JRException("Failed to create a document builder factory", e);
+			}
+			
+			
+//			return JRXmlUtils.parse(conn.getInputStream());
 		} else {
 			throw new JRException("URL protocol not supported");
 		}
