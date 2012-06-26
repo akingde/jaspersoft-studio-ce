@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -146,6 +147,19 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		if (frame != null)
 			return frame.getLineBox().getLeftPadding();
 		return 0;
+	}
+
+	@Override
+	public JRDesignFrame getValue() {
+		return (JRDesignFrame) super.getValue();
+	}
+
+	@Override
+	public Dimension getSize() {
+		JRDesignFrame jrDesignFrame = getValue();
+		int h = jrDesignFrame.getHeight();
+		int w = jrDesignFrame.getWidth();
+		return new Dimension(w, h);
 	}
 
 }

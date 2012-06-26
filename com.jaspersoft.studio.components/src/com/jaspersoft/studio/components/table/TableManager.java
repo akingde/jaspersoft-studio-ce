@@ -106,7 +106,7 @@ public class TableManager {
 			String grName) {
 		List<Integer> rows = new ArrayList<Integer>();
 		int h = getHeight(cols, type, grName, rows, 0);
-//		System.out.println("Rows " + type + " :" + rows);
+		// System.out.println("Rows " + type + " :" + rows);
 		getRowY(y, cols, type, grName, rows, 0);
 		return h;
 	}
@@ -117,7 +117,7 @@ public class TableManager {
 		for (BaseColumn bc : cols) {
 			DesignCell c = (DesignCell) TableUtil.getCell(bc, type, grName);
 			Integer h = rows.get(depth);
-//			System.out.println("H:" + h);
+			// System.out.println("H:" + h);
 			if (bc instanceof ColumnGroup) {
 				int ch = h;
 				if (c != null)
@@ -368,6 +368,10 @@ public class TableManager {
 	public void update() {
 		initMaps();
 		refresh();
+	}
+
+	public int getRowHeight(MColumn col) {
+		return 100;
 	}
 
 	public static boolean isBottomOfTable(int type) {

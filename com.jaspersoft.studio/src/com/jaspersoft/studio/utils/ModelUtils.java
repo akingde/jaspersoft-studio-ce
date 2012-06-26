@@ -75,6 +75,7 @@ import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -568,25 +569,27 @@ public class ModelUtils {
 	}
 
 	public static int getBandHeight(JRBand band) {
-		int h = 0;
-		h = getContainerHeight(band.getChildren(), h);
-		return h;
+		return getContainerSize(band.getChildren(), new Dimension(0, 0)).height;
 	}
 
-	public static int getContainerHeight(List<?> list, int h) {
+	public static Dimension getContainerSize(List<?> list, Dimension d) {
 		for (Object obj : list) {
 			if (obj instanceof JRDesignElement) {
 				JRDesignElement de = (JRDesignElement) obj;
-				h = Math.max(de.getY() + de.getHeight(), h);
+				d.height = Math.max(de.getY() + de.getHeight(), d.height);
+				d.width = Math.max(de.getX() + de.getWidth(), d.width);
 			} else if (obj instanceof JRFrame) {
 				JRFrame de = (JRFrame) obj;
-				h = Math.max(de.getY() + de.getHeight(), h);
+				d.height = Math.max(de.getY() + de.getHeight(), d.height);
+				d.width = Math.max(de.getX() + de.getWidth(), d.width);
 			} else if (obj instanceof JRElementGroup) {
 				JRElementGroup de = (JRElementGroup) obj;
-				h = Math.max(getContainerHeight(de.getChildren(), 0), h);
+				Dimension td = getContainerSize(de.getChildren(), new Dimension(0, 0));
+				d.height = Math.max(td.height, d.height);
+				d.width = Math.max(td.width, d.width);
 			}
 		}
-		return h;
+		return d;
 	}
 
 	public static List<JRDesignElement> getAllGElements(JasperDesign jd) {

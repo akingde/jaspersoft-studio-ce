@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -392,5 +393,10 @@ public class MCell extends MColumn implements IGraphicElement,
 		if (node instanceof MTable)
 			return (MTable) node;
 		return null;
+	}
+
+	@Override
+	public Dimension getSize() {
+		return new Dimension(getValue().getWidth(), getCell().getHeight());
 	}
 }

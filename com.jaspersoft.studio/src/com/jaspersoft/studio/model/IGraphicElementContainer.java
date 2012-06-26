@@ -42,8 +42,12 @@
  */
 package com.jaspersoft.studio.model;
 
+import org.eclipse.draw2d.geometry.Dimension;
+
 public interface IGraphicElementContainer {
 	public int getTopPadding();
 
 	public int getLeftPadding();
+	
+	public Dimension getSize();
 }

@@ -34,6 +34,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ModeEnum;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
@@ -110,6 +111,11 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		super(parent, index);
 		setValue(jfRield);
 		setName(name);
+	}
+
+	@Override
+	public JRDesignCellContents getValue() {
+		return (JRDesignCellContents) super.getValue();
 	}
 
 	private String name;
@@ -250,7 +256,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
-		JRDesignCellContents jrElement = (JRDesignCellContents) getValue();
+		JRDesignCellContents jrElement = getValue();
 		if (jrElement != null) {
 			if (id.equals(JRBaseStyle.PROPERTY_MODE))
 				return opaqueD.getEnumValue(jrElement.getModeValue());
@@ -411,5 +417,11 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		if (node instanceof MCrosstab)
 			return (MCrosstab) node;
 		return null;
+	}
+
+	@Override
+	public Dimension getSize() {
+		JRDesignCellContents v = getValue();
+		return new Dimension(v.getWidth(), v.getHeight());
 	}
 }

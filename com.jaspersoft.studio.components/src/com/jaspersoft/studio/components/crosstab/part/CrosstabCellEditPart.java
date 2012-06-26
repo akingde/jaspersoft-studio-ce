@@ -21,6 +21,8 @@ package com.jaspersoft.studio.components.crosstab.part;
 
 import java.util.List;
 
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
@@ -63,6 +65,7 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
+import com.jaspersoft.studio.property.SetValueCommand;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -83,6 +86,32 @@ public class CrosstabCellEditPart extends FigureEditPart implements
 	@Override
 	public MCell getModel() {
 		return (MCell) super.getModel();
+	}
+
+	@Override
+	public void performRequest(Request req) {
+		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
+			MCell model = getModel();
+			Dimension d = new Dimension(100, 100);
+
+			CompoundCommand c = new CompoundCommand("Resize to container");
+
+			SetValueCommand cmd = new SetValueCommand();
+
+			cmd.setTarget(model);
+			cmd.setPropertyId(DesignCell.PROPERTY_HEIGHT);
+			cmd.setPropertyValue(d.height);
+			c.add(cmd);
+
+			cmd = new SetValueCommand();
+			cmd.setTarget(model);
+			cmd.setPropertyId(StandardColumn.PROPERTY_WIDTH);
+			cmd.setPropertyValue(d.width);
+			c.add(cmd);
+
+			getViewer().getEditDomain().getCommandStack().execute(c);
+		}
+		super.performRequest(req);
 	}
 
 	/*

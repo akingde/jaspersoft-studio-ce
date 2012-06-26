@@ -49,6 +49,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
@@ -65,7 +66,7 @@ import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MList extends MGraphicElement implements IPastable,
 		IPastableGraphic, IContainer, IContainerEditPart, IGroupElement,
-		ICopyable {
+		IGraphicElementContainer, ICopyable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -187,7 +188,7 @@ public class MList extends MGraphicElement implements IPastable,
 
 	@Override
 	public Object getPropertyValue(Object id) {
-		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		JRDesignComponentElement jrElement = getValue();
 		StandardListComponent jrList = (StandardListComponent) jrElement
 				.getComponent();
 
@@ -220,7 +221,7 @@ public class MList extends MGraphicElement implements IPastable,
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		JRDesignComponentElement jrElement = getValue();
 		StandardListComponent jrList = (StandardListComponent) jrElement
 				.getComponent();
 		// JRDesignDatasetRun jrDataSetRun = (JRDesignDatasetRun)
@@ -410,5 +411,21 @@ public class MList extends MGraphicElement implements IPastable,
 		// newEvent = new PropertyChangeEvent(this, evt.getPropertyName(),
 		// evt.getOldValue(), evt.getNewValue());
 		getPropertyChangeSupport().firePropertyChange(evt);
+	}
+
+	@Override
+	public int getTopPadding() {
+		return 0;
+	}
+
+	@Override
+	public int getLeftPadding() {
+		return 0;
+	}
+
+	@Override
+	public Dimension getSize() {
+		JRDesignComponentElement v = getValue();
+		return new Dimension(v.getWidth(), v.getHeight());
 	}
 }
