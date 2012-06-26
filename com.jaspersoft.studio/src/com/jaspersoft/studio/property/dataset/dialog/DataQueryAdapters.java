@@ -335,7 +335,7 @@ public abstract class DataQueryAdapters {
 	}
 
 	public abstract void setFields(List<JRDesignField> fields);
-	
+
 	public abstract List<JRDesignField> getCurrentFields();
 
 	public abstract void setParameters(List<JRDesignParameter> params);
@@ -371,21 +371,14 @@ public abstract class DataQueryAdapters {
 	}
 
 	protected void doGetFields(IProgressMonitor monitor) {
-		final String lang = newdataset.getQuery().getLanguage();
 		final DataAdapterDescriptor da = dscombo.getSelected();
 		if (da != null && da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation(jConfig)) {
 			qStatus.showInfo("");
-			final String query = newdataset.getQuery().getText();
 
 			monitor.beginTask(Messages.DataQueryAdapters_jobname, -1);
 
 			ClassLoader oldClassloader = Thread.currentThread().getContextClassLoader();
 			Thread.currentThread().setContextClassLoader(jConfig.getClassLoader());
-
-			JRDesignQuery jdq = new JRDesignQuery();
-			jdq.setLanguage(lang);
-			jdq.setText(query);
-			newdataset.setQuery(jdq);
 
 			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
 			try {
