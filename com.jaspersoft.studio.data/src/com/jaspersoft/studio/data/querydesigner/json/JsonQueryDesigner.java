@@ -7,7 +7,6 @@ import net.sf.jasperreports.data.json.JsonDataAdapter;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -101,58 +100,51 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 			if(da!=null && da.getDataAdapter() instanceof JsonDataAdapter){
 				treeViewer.setInput(JsonTreeCustomStatus.LOADING_JSON);
 				
-				Job j=new Job("Loading Json resource..."){
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						try {
-							JsonQueryDesigner.this.run(true, true, new IRunnableWithProgress() {
-								
-								@Override
-								public void run(IProgressMonitor monitor) throws InvocationTargetException,
-										InterruptedException {
-									monitor.beginTask("Loading Json resource...", -1);
-									String fileName = ((JsonDataAdapter)da.getDataAdapter()).getFileName();
-									try {
-										jsonDataManager.loadJsonDataFile(fileName);
-										Display.getDefault().asyncExec(new Runnable() {
-											@Override
-											public void run() {
-												treeViewer.setInput(jsonDataManager.getJsonSupportModel());
-												treeViewer.expandToLevel(2);
-												decorateTreeUsingQueryText();
-												isRefreshing=false;
-											}
-										});
-									} catch (Exception e){
-										JsonQueryDesigner.this.container.getQueryStatus().showError(e);
-										Display.getDefault().asyncExec(new Runnable() {
-											@Override
-											public void run() {
-												treeViewer.getTree().removeAll();
-												treeViewer.setInput(JsonTreeCustomStatus.ERROR_LOADING_JSON);
-												isRefreshing=false;
-											}
-										});
-									} finally {
-										monitor.done();
+				try {
+					JsonQueryDesigner.this.run(true, true, new IRunnableWithProgress() {
+						
+						@Override
+						public void run(IProgressMonitor monitor) throws InvocationTargetException,
+								InterruptedException {
+							monitor.beginTask("Loading Json resource...", -1);
+							String fileName = ((JsonDataAdapter)da.getDataAdapter()).getFileName();
+							try {
+								jsonDataManager.loadJsonDataFile(fileName);
+								Display.getDefault().asyncExec(new Runnable() {
+									@Override
+									public void run() {
+										treeViewer.setInput(jsonDataManager.getJsonSupportModel());
+										treeViewer.expandToLevel(2);
+										decorateTreeUsingQueryText();
+										isRefreshing=false;
 									}
-								}
-							});
-						} catch (Exception ex) {
-							JsonQueryDesigner.this.container.getQueryStatus().showError(ex);
-							Display.getDefault().asyncExec(new Runnable() {
-								@Override
-								public void run() {
-									treeViewer.getTree().removeAll();
-									treeViewer.setInput(JsonTreeCustomStatus.ERROR_LOADING_JSON);
-									isRefreshing=false;
-								}
-							});
+								});
+							} catch (Exception e){
+								JsonQueryDesigner.this.container.getQueryStatus().showError(e);
+								Display.getDefault().asyncExec(new Runnable() {
+									@Override
+									public void run() {
+										treeViewer.getTree().removeAll();
+										treeViewer.setInput(JsonTreeCustomStatus.ERROR_LOADING_JSON);
+										isRefreshing=false;
+									}
+								});
+							} finally {
+								monitor.done();
+							}
 						}
-						return Status.OK_STATUS;
-					}
-				};
-				j.schedule();
+					});
+				} catch (Exception ex) {
+					JsonQueryDesigner.this.container.getQueryStatus().showError(ex);
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							treeViewer.getTree().removeAll();
+							treeViewer.setInput(JsonTreeCustomStatus.ERROR_LOADING_JSON);
+							isRefreshing=false;
+						}
+					});
+				}
 			}
 			else{
 				treeViewer.getTree().removeAll();

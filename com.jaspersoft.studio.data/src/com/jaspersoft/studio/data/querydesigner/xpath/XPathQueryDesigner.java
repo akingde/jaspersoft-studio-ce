@@ -11,7 +11,6 @@ import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -69,14 +68,14 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 		this.decorateJob=new DecorateTreeViewerJob();
 		this.treeLabelProvider=new NodeBoldStyledLabelProvider<XMLNode>();
 	}
-	
+
 	@Override
 	protected void createTitleBar(Composite parent) {
 		Label titleLabel=new Label(parent,SWT.WRAP);
 		titleLabel.setText(Messages.XPathQueryDesigner_InfoTitle);
 		titleLabel.setLayoutData(new GridData(SWT.FILL,SWT.TOP,true,false));
 	}
-
+	
 	@Override
 	protected void decorateTreeUsingQueryText() {
 		if(documentManager.isDocumentSet()){
@@ -263,72 +262,61 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 			this.container.getQueryStatus().showInfo(""); //$NON-NLS-1$
 			if(da!=null && da.getDataAdapter() instanceof XmlDataAdapter) {
 				treeViewer.setInput(XMLTreeCustomStatus.LOADING_XML);
-			
-				Job j=new Job(Messages.XPathQueryDesigner_JobTitle){
-	
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						try {
-							XPathQueryDesigner.this.run(true, true, new IRunnableWithProgress() {
-								
-								@Override
-								public void run(IProgressMonitor monitor) throws InvocationTargetException,
-										InterruptedException {
-									
-									monitor.beginTask(Messages.XPathQueryDesigner_TaskTitle, -1);
-									
-									String fileName = ((XmlDataAdapter)da.getDataAdapter()).getFileName();
-									try {
-										Document doc=null;
-										if(da.getDataAdapter() instanceof RemoteXmlDataAdapter){
-											doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(fileName);
-										}
-										else {
-											File in = new File(fileName);
-											doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
-										}
-										documentManager.setDocument(doc);
-										Display.getDefault().asyncExec(new Runnable() {
-											@Override
-											public void run() {
-												treeViewer.setInput(documentManager.getXMLDocumentModel());
-												treeViewer.expandToLevel(2);
-												decorateTreeUsingQueryText();
-												isRefreshing=false;
-											}
-										});
-									} catch (Exception e) {
-										XPathQueryDesigner.this.container.getQueryStatus().showError(e);
-										Display.getDefault().asyncExec(new Runnable() {
-											@Override
-											public void run() {
-												treeViewer.getTree().removeAll();
-												treeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
-												isRefreshing=false;
-											}
-										});
-									} finally {
-										monitor.done();
+				try {
+					XPathQueryDesigner.this.run(true, true, new IRunnableWithProgress() {
+						
+						@Override
+						public void run(IProgressMonitor monitor) throws InvocationTargetException,
+								InterruptedException {
+							
+							monitor.beginTask(Messages.XPathQueryDesigner_TaskTitle, -1);
+							
+							String fileName = ((XmlDataAdapter)da.getDataAdapter()).getFileName();
+							try {
+								Document doc=null;
+								if(da.getDataAdapter() instanceof RemoteXmlDataAdapter){
+									doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(fileName);
+								}
+								else {
+									File in = new File(fileName);
+									doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
+								}
+								documentManager.setDocument(doc);
+								Display.getDefault().asyncExec(new Runnable() {
+									@Override
+									public void run() {
+										treeViewer.setInput(documentManager.getXMLDocumentModel());
+										treeViewer.expandToLevel(2);
+										decorateTreeUsingQueryText();
+										isRefreshing=false;
 									}
-								}
-							});
-						} catch (Exception ex) {
-							XPathQueryDesigner.this.container.getQueryStatus().showError(ex);
-							Display.getDefault().asyncExec(new Runnable() {
-								@Override
-								public void run() {
-									treeViewer.getTree().removeAll();
-									treeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
-									isRefreshing=false;
-								}
-							});
-						}					
-						return Status.OK_STATUS;
-					}
-					
-				};
-				j.schedule();
-				
+								});
+							} catch (Exception e) {
+								XPathQueryDesigner.this.container.getQueryStatus().showError(e);
+								Display.getDefault().asyncExec(new Runnable() {
+									@Override
+									public void run() {
+										treeViewer.getTree().removeAll();
+										treeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
+										isRefreshing=false;
+									}
+								});
+							} finally {
+								monitor.done();
+							}
+						}
+					});
+				} catch (Exception ex) {
+					XPathQueryDesigner.this.container.getQueryStatus().showError(ex);
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							treeViewer.getTree().removeAll();
+							treeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
+							isRefreshing=false;
+						}
+					});
+				}					
 			}
 			else{
 				treeViewer.getTree().removeAll();
