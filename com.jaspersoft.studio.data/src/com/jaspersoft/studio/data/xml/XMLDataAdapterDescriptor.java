@@ -93,7 +93,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JasperReportsConfiguration jConfig, JRDataset jDataset)
 			throws JRException, UnsupportedOperationException {
-		Throwable t=null;
+		Throwable err=null;
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
 		try {
 			String fileName = xmlDataAdapter.getFileName();
@@ -101,15 +101,15 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 			Document doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);	
 			fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset));
 		} catch (SAXException e) {
-			t=e;
+			err=e;
 		} catch (IOException e) {
-			t=e;
+			err=e;
 		} catch (ParserConfigurationException e) {
-			t=e;
+			err=e;
 		} 
 
-		if(t!=null){
-			UIUtils.showError(t);
+		if(err!=null){
+			throw new JRException(err);
 		}
 		return fields;
 	}

@@ -8,8 +8,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -22,6 +24,9 @@ import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -37,6 +42,7 @@ import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 
 /**
  * Json query designer that provides a basic syntax highlighting support,
@@ -52,6 +58,8 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 	private DecorateTreeViewerJob decorateJob;
 	private NodeBoldStyledLabelProvider<JsonSupportNode> treeLabelProvider;
 	private JsonLineStyler lineStyler;
+	private Composite toolbarComposite;
+
 
 	public JsonQueryDesigner() {
 		super();
@@ -62,6 +70,38 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 	}
 
 	@Override
+	public Control createToolbar(Composite parent) {
+		if(showAdditionalInfo()){
+			toolbarComposite = new Composite(parent, SWT.RIGHT_TO_LEFT);
+			toolbarComposite.setBackgroundMode(SWT.INHERIT_FORCE);
+			GridLayout layout = new GridLayout(1, false);
+			layout.marginHeight = 0;
+			layout.marginWidth = 0;
+			toolbarComposite.setLayout(layout);
+	
+			Button btn = new Button(toolbarComposite, SWT.PUSH);
+			btn.setText("Read Fields");
+			btn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
+			btn.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					container.doGetFields();
+				}
+	
+			});
+			return toolbarComposite;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	@Override
+	public Control getToolbarControl() {
+		return this.toolbarComposite;
+	}
+	
+	@Override
 	public Control createControl(Composite parent) {
 		Control createdControl = super.createControl(parent);
 		queryTextArea.addLineStyleListener(lineStyler);
@@ -71,8 +111,11 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 	@Override
 	protected void createTreeViewer(Composite parent) {
 		super.createTreeViewer(parent);
-		addDragSupport();
-		createContextualMenu();
+		if(showAdditionalInfo()){
+			addDragSupport();
+			createContextualMenu();
+		}
+		addDoubleClickSupport();
 	}
 	
 	@Override
@@ -91,6 +134,28 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 			decorateJob.cancel();
 			decorateJob.schedule(JOB_DELAY);
 		}
+	}
+	
+	private boolean showAdditionalInfo() {
+		return container.getContainerType()==DataQueryAdapters.CONTAINER_WITH_INFO_TABLES;
+	}
+	
+	/*
+	 * Adds support for generating the query expression,
+	 * using the current selected node as input.
+	 */
+	private void addDoubleClickSupport() {
+		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				TreeSelection s = (TreeSelection) treeViewer.getSelection();
+				if(s.getFirstElement() instanceof JsonSupportNode){
+					JsonSupportNode jsonNode=(JsonSupportNode) s.getFirstElement();
+					String queryExpression=jsonDataManager.getQueryExpression(null,jsonNode);
+					queryTextArea.setText(queryExpression);
+				}
+			}
+		});
 	}
 
 	@Override

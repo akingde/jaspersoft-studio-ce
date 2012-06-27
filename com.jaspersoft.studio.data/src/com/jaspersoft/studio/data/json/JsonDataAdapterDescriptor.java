@@ -19,27 +19,42 @@
  */
 package com.jaspersoft.studio.data.json;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
 import net.sf.jasperreports.data.json.JsonDataAdapterImpl;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.codehaus.jackson.JsonProcessingException;
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.data.querydesigner.json.JsonDataManager;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class JsonDataAdapterDescriptor extends DataAdapterDescriptor {
-	private JsonDataAdapterImpl beanDataAdapter = new JsonDataAdapterImpl();
+public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider {
+	private JsonDataAdapterImpl jsonDataAdapter = new JsonDataAdapterImpl();
 
 	@Override
 	public JsonDataAdapter getDataAdapter() {
-		return beanDataAdapter;
+		return jsonDataAdapter;
 	}
 
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.beanDataAdapter = (JsonDataAdapterImpl) dataAdapter;
+		this.jsonDataAdapter = (JsonDataAdapterImpl) dataAdapter;
 	}
 
 	@Override
@@ -58,5 +73,44 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor {
 			return Activator.getImage("icons/json.png");
 		}
 		return null;
+	}
+
+	@Override
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
+		return true;
+	}
+
+	@Override
+	public List<JRDesignField> getFields(DataAdapterService con,
+			JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
+		List<JRDesignField> fields=new ArrayList<JRDesignField>();
+		Throwable err=null;
+		try {
+			JsonDataManager m=new JsonDataManager();
+			m.loadJsonDataFile(jsonDataAdapter.getFileName());
+			List<JsonSupportNode> selectableNodes = m.getSelectableNodes(jDataset.getQuery().getText());
+			if(!selectableNodes.isEmpty()){
+				// Basic idea: consider the first element node as template
+				JsonSupportNode jsonSupportNode = selectableNodes.get(0);
+				for(INode node : jsonSupportNode.getChildren()){
+					String name = ((JsonSupportNode)node).getNodeText();
+					JRDesignField f=new JRDesignField();
+					f.setName(ModelUtils.getNameForField(fields, name));
+					f.setDescription(name);
+					f.setValueClass(String.class);
+					fields.add(f);
+				}
+			}
+		} catch (JsonProcessingException e) {
+			err=e;
+		} catch (IOException e) {
+			err=e;
+		} 
+		if(err!=null){
+			throw new JRException(err);
+		}
+		
+		return fields;
 	}
 }

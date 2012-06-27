@@ -26,7 +26,7 @@ import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class JsonDataManager implements ISelectableNodes<JsonSupportNode>{
+public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	private ObjectMapper mapper;
 	private JsonNode jsonRoot;
 	private MRoot jsonSupportModel;
@@ -151,11 +151,17 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode>{
 		JsonQueryHelper jsonQueryHelper = new JsonQueryHelper(mapper);
 		try {
 			JsonNode jsonData = jsonQueryHelper.getJsonData(jsonRoot, query);
-			Iterator<JsonNode> elements = jsonData.getElements();
 			List<JsonNode> elementsList=new ArrayList<JsonNode>();
-			while(elements.hasNext()){
-				elementsList.add(elements.next());
+			if(jsonData.isArray()){
+				Iterator<JsonNode> elements = jsonData.getElements();
+				while(elements.hasNext()){
+					elementsList.add(elements.next());
+				}	
 			}
+			else if(jsonData.isObject()){
+				elementsList.add(jsonData);				
+			}
+			
 			for(JsonSupportNode sn : getJsonNodesMap().keySet()){
 				if(elementsList.contains(getJsonNodesMap().get(sn))){
 					selectedList.add(sn);
@@ -179,7 +185,8 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode>{
 		String absoluteQuery=getAbsoluteQueryExpression(selectedNode);
 		if(existingQuery!=null && absoluteQuery.startsWith(existingQuery)){
 			// consider also an additional . selector
-			return absoluteQuery.substring(existingQuery.length()+1);
+			int qLength = existingQuery.length();
+			return absoluteQuery.substring(qLength+Math.min(qLength, 1));
 		}
 		return absoluteQuery;
 	}
