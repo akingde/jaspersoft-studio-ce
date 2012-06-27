@@ -129,6 +129,11 @@ public class WizardDataSourcePage extends JSSWizardPage implements IFieldSetter 
 			@Override
 			public void setParameters(List<JRDesignParameter> params) {
 			}
+
+			@Override
+			public int getContainerType() {
+				return CONTAINER_WITH_NO_TABLES;
+			}
 		};
 
 		CTabFolder ctf = dataquery.createTop(composite, this);

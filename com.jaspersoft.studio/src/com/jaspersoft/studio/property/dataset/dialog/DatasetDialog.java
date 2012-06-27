@@ -128,6 +128,12 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			public void setParameters(List<JRDesignParameter> params) {
 
 			}
+
+			@Override
+			public int getContainerType() {
+				return CONTAINER_WITH_INFO_TABLES;
+			}
+			
 		};
 
 		dataquery.createToolbar(body);

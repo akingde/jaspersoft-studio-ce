@@ -19,17 +19,40 @@
  */
 package com.jaspersoft.studio.data.xml;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuterFactory;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
 
 import org.eclipse.swt.graphics.Image;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class XMLDataAdapterDescriptor extends DataAdapterDescriptor 
+public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider
 {
 	private XmlDataAdapter xmlDataAdapter = new XmlDataAdapterImpl();
 	
@@ -59,5 +82,80 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor
 			return  Activator.getImage("icons/blue-document-code.png");
 		}
 		return null;
+	}
+
+	@Override
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
+		return true;
+	}
+
+	@Override
+	public List<JRDesignField> getFields(DataAdapterService con,
+			JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
+		Throwable t=null;
+		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
+		try {
+			String fileName = xmlDataAdapter.getFileName();
+			File in = new File(fileName);
+			Document doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);	
+			fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset));
+		} catch (SAXException e) {
+			t=e;
+		} catch (IOException e) {
+			t=e;
+		} catch (ParserConfigurationException e) {
+			t=e;
+		} 
+
+		if(t!=null){
+			UIUtils.showError(t);
+		}
+		return fields;
+	}
+	
+	/**
+	 * Returns the list of fields provided by an XML document and the related query.
+	 * 
+	 * @param doc the W3C XML document
+	 * @param jConfig the JasperReports configuration instance
+	 * @param jDataset the current dataset
+	 * @return the list of fields
+	 * @throws JRException
+	 */
+	protected List<JRDesignField> getFieldsFromDocument(Document doc,JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException{
+		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
+		JRXPathExecuterFactory xPathExecuterFactory = JRXPathExecuterUtils.getXPathExecuterFactory(jConfig);
+		JRXPathExecuter xPathExecuter = xPathExecuterFactory.getXPathExecuter();
+		NodeList nodes=xPathExecuter.selectNodeList(doc, jDataset.getQuery().getText());
+		Node foundNode=null;
+		if(nodes.getLength()>0){
+			for(int i=0;i<nodes.getLength();i++){
+				if(nodes.item(i).getNodeType()==Node.ELEMENT_NODE){
+					// Basic idea: consider the first element node as template
+					foundNode=nodes.item(i);
+					break;
+				}
+			}
+		}
+		
+		if(foundNode!=null){
+			NodeList childNodes = foundNode.getChildNodes();
+			for(int i=0;i<childNodes.getLength();i++){
+				Node item = childNodes.item(i);
+				JRDesignField f=new JRDesignField();
+				f.setName(ModelUtils.getNameForField(fields, item.getNodeName()));
+				f.setValueClass(String.class);
+				if(item.getNodeType()==Node.ATTRIBUTE_NODE){
+					f.setDescription("@"+item.getNodeName());					
+					fields.add(f);
+				}
+				else if(item.getNodeType()==Node.ELEMENT_NODE){
+					f.setDescription(item.getNodeName());					
+					fields.add(f);
+				}
+			}
+		}
+		return fields;
 	}
 }
