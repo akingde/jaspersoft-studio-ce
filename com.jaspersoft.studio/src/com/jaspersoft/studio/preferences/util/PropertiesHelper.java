@@ -159,7 +159,7 @@ public class PropertiesHelper {
 
 	public Character getCharacter(String key) {
 		String val = getString(key);
-		if (val == null && val != "")
+		if (val == null || val.isEmpty())
 			return null;
 		return new Character(val.charAt(0));
 	}

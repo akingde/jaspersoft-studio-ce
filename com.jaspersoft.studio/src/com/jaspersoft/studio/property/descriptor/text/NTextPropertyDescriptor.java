@@ -59,7 +59,7 @@ public class NTextPropertyDescriptor extends JSSTextPropertyDescriptor {
 				if (doGetValue.equals("")) //$NON-NLS-1$
 					doGetValue = null;
 				else
-					doGetValue.trim();
+					doGetValue = doGetValue.trim();
 				return doGetValue;
 			}
 

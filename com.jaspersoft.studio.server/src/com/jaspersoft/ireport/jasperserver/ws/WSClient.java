@@ -172,8 +172,7 @@ public class WSClient {
         } catch (Exception ex) {
             ex.printStackTrace();
             throw ex;
-        } finally {
-        }  
+        }
     }
     
     
@@ -194,7 +193,6 @@ public class WSClient {
         } catch (Exception ex) {
             ex.printStackTrace();
             throw ex;
-        } finally {
         }    
     }
     
@@ -450,10 +448,7 @@ public class WSClient {
         } catch (Exception ex) {
             ex.printStackTrace();
             throw ex;
-        } finally {
-        	
-        }  
-        
+        }        
     }
     
     
@@ -568,10 +563,7 @@ public class WSClient {
         } catch (Exception ex) {
             //ex.printStackTrace();
             throw ex;
-        }  finally {
-        	
-        }
-        
+        }         
     }
 
     public void move(ResourceDescriptor resource, String destinationFolderURI) throws Exception {
