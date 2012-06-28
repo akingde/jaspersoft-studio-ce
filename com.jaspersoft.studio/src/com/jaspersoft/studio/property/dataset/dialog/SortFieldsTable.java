@@ -122,7 +122,7 @@ public class SortFieldsTable {
 		Composite bGroup = new Composite(composite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-		bGroup.setBackground(parent.getBackground());
+		bGroup.setBackground(background);
 
 		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 

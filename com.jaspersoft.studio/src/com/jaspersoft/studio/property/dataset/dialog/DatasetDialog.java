@@ -172,7 +172,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	}
 
 	private void createBottom(Composite parent, FormToolkit toolkit) {
-		CTabFolder tabFolder = new CTabFolder(parent, SWT.BOTTOM);
+		CTabFolder tabFolder = new CTabFolder(parent, SWT.BOTTOM | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.heightHint = 250;
 		tabFolder.setLayoutData(gd);
@@ -190,7 +190,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		CTabItem dataPreviewtab = new CTabItem(tabFolder, SWT.NONE);
 		dataPreviewtab.setText(Messages.DatasetDialog_DataPreviewTab);
 		
-		dataPreviewTable = new DataPreviewTable(tabFolder,this);
+		dataPreviewTable = new DataPreviewTable(tabFolder,this, background);
 		
 		dataPreviewtab.setControl(dataPreviewTable.getControl());
 	}

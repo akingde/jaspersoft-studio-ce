@@ -25,6 +25,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -67,6 +68,7 @@ public class DataPreviewTable implements DatasetReaderListener{
 	private ProgressBar progressBar;
 	private Label infoMsg;
 	private Composite infoComposite;
+	private Color background;
 	
 	// Additional support fields
 	private IDataPreviewInfoProvider previewInfoProvider;
@@ -77,9 +79,10 @@ public class DataPreviewTable implements DatasetReaderListener{
 	private TableFillerThread tableFiller;
 	private int readItems=0;
 	
-	public DataPreviewTable(Composite parent, IDataPreviewInfoProvider previewInfoProvider){
+	public DataPreviewTable(Composite parent, IDataPreviewInfoProvider previewInfoProvider, Color background){
 		this.previewInfoProvider=previewInfoProvider;
 		this.previewItems=new ArrayList<DataPreviewTable.DataPreviewBean>(RECORDS_NUM_100);
+		this.background=background;
 		createControl(parent);
 	}
 
@@ -88,6 +91,7 @@ public class DataPreviewTable implements DatasetReaderListener{
 	 */
 	private void createControl(Composite parent) {
 		composite=new Composite(parent, SWT.NONE);
+		composite.setBackground(background);
 		composite.setLayout(new GridLayout(4,false));
 		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
@@ -133,10 +137,12 @@ public class DataPreviewTable implements DatasetReaderListener{
 		GridLayout infoCmpGL = new GridLayout(2,false);
 		infoCmpGL.marginHeight=0;
 		infoCmpGL.marginWidth=0;
+		infoComposite.setBackground(background);
 		infoComposite.setLayout(infoCmpGL);
 		infoComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		
 		infoMsg = new Label(infoComposite, SWT.NONE);
+		infoMsg.setBackground(background);
 		infoMsg.setText(Messages.DataPreviewTable_Ready);
 		infoMsg.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false));
 		

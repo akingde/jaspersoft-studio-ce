@@ -133,7 +133,7 @@ public abstract class DataQueryAdapters {
 	}
 
 	public CTabFolder createTop(Composite parent, IFieldSetter fsetter) {
-		tabFolder = new CTabFolder(parent, SWT.TOP);
+		tabFolder = new CTabFolder(parent, SWT.TOP | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 150;
 		tabFolder.setLayoutData(gd);
