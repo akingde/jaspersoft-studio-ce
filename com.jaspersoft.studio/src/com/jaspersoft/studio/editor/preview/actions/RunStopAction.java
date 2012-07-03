@@ -107,11 +107,11 @@ public class RunStopAction extends Action implements IMenuCreator {
 		m1.addSelectionListener(listener);
 		m1.setData("run.key", MODERUN_LOCAL);
 
-		m1 = new MenuItem(listMenu, SWT.RADIO);
-		m1.setText("Run Interactive Report (Jive)");
-		m1.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/start_task.gif"));
-		m1.addSelectionListener(listener);
-		m1.setData("run.key", MODERUN_JIVE);
+//		m1 = new MenuItem(listMenu, SWT.RADIO);
+//		m1.setText("Run Interactive Report (Jive)");
+//		m1.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/start_task.gif"));
+//		m1.addSelectionListener(listener);
+//		m1.setData("run.key", MODERUN_JIVE);
 
 		return listMenu;
 	}
