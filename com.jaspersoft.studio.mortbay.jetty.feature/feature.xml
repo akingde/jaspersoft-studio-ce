@@ -688,7 +688,7 @@ Public License instead of this License.  But first, please read
    <requires>
       <import plugin="org.mortbay.jetty.server" version="6.1.15" match="greaterOrEqual"/>
       <import plugin="org.mortbay.jetty.util" version="6.1.15" match="greaterOrEqual"/>
-      <import plugin="com.jaspersoft.studio" version="1.1.2" match="greaterOrEqual"/>
+      <import plugin="com.jaspersoft.studio"/>
    </requires>
 
    <plugin
