@@ -728,6 +728,7 @@ Public License instead of this License.  But first, please read
       <plugin id="com.jaspersoft.studio.data.hive"/>
       <plugin id="com.jaspersoft.studio.data.mongodb"/>
       <plugin id="com.jaspersoft.studio.doc"/>
+      <plugin id="com.jaspersoft.studio.eclipse.jetty" fragment="true"/>
       <plugin id="com.jaspersoft.studio.editor.jrexpressions"/>
       <plugin id="com.jaspersoft.studio.editor.jrexpressions.ui"/>
       <plugin id="com.jaspersoft.studio.html"/>
@@ -890,8 +891,6 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.xtext.util"/>
       <plugin id="org.eclipse.xtext.xbase"/>
       <plugin id="org.eclipse.xtext.xbase.lib"/>
-      <plugin id="org.mortbay.jetty.server"/>
-      <plugin id="org.mortbay.jetty.util"/>
    </plugins>
 
    <features>
