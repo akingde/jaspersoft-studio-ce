@@ -723,7 +723,7 @@ Public License instead of this License.  But first, please read
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.ui.views" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.4.0" match="greaterOrEqual"/>
-      <import plugin="net.sf.jasperreports" version="4.6.1" match="greaterOrEqual"/>
+      <import plugin="net.sf.jasperreports"/>
    </requires>
 
    <plugin
