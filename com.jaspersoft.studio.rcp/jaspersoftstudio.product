@@ -734,32 +734,24 @@ Public License instead of this License.  But first, please read
       <plugin id="com.jaspersoft.studio.properties"/>
       <plugin id="com.jaspersoft.studio.rcp"/>
       <plugin id="com.jaspersoft.studio.server"/>
-      <plugin id="de.itemis.xtext.antlr"/>
       <plugin id="de.itemis.xtext.utils.jface"/>
+      <plugin id="javax.el"/>
       <plugin id="javax.inject"/>
       <plugin id="javax.servlet"/>
       <plugin id="javax.servlet.jsp"/>
       <plugin id="javax.xml"/>
       <plugin id="net.sf.jasperreports"/>
       <plugin id="net.sf.jasperreports.doc"/>
-      <plugin id="org.antlr.generator"/>
       <plugin id="org.antlr.runtime"/>
       <plugin id="org.apache.ant"/>
       <plugin id="org.apache.commons.cli"/>
-      <plugin id="org.apache.commons.el"/>
       <plugin id="org.apache.commons.lang"/>
       <plugin id="org.apache.commons.logging"/>
-      <plugin id="org.apache.jasper"/>
+      <plugin id="org.apache.jasper.glassfish"/>
       <plugin id="org.apache.log4j"/>
       <plugin id="org.apache.lucene"/>
       <plugin id="org.apache.lucene.analysis"/>
       <plugin id="org.apache.lucene.core"/>
-      <plugin id="org.apache.lucene.highlighter"/>
-      <plugin id="org.apache.lucene.memory"/>
-      <plugin id="org.apache.lucene.misc"/>
-      <plugin id="org.apache.lucene.queries"/>
-      <plugin id="org.apache.lucene.snowball"/>
-      <plugin id="org.apache.lucene.spellchecker"/>
       <plugin id="org.apache.xerces"/>
       <plugin id="org.apache.xml.resolver"/>
       <plugin id="org.apache.xml.serializer"/>
@@ -797,6 +789,7 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.emf.ecore"/>
       <plugin id="org.eclipse.emf.ecore.change"/>
       <plugin id="org.eclipse.emf.ecore.edit"/>
+      <plugin id="org.eclipse.emf.ecore.editor"/>
       <plugin id="org.eclipse.emf.ecore.xmi"/>
       <plugin id="org.eclipse.emf.edit"/>
       <plugin id="org.eclipse.emf.edit.ui"/>
@@ -809,10 +802,7 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.equinox.app"/>
       <plugin id="org.eclipse.equinox.common"/>
       <plugin id="org.eclipse.equinox.http.jetty"/>
-      <plugin id="org.eclipse.equinox.http.registry"/>
       <plugin id="org.eclipse.equinox.http.servlet"/>
-      <plugin id="org.eclipse.equinox.jsp.jasper"/>
-      <plugin id="org.eclipse.equinox.jsp.jasper.registry"/>
       <plugin id="org.eclipse.equinox.p2.core"/>
       <plugin id="org.eclipse.equinox.p2.engine"/>
       <plugin id="org.eclipse.equinox.p2.metadata"/>
@@ -826,10 +816,9 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.equinox.security.win32.x86_64" fragment="true"/>
       <plugin id="org.eclipse.gef"/>
       <plugin id="org.eclipse.help"/>
-      <plugin id="org.eclipse.help.appserver"/>
       <plugin id="org.eclipse.help.base"/>
       <plugin id="org.eclipse.help.ui"/>
-      <plugin id="org.eclipse.help.webapp"/>
+      <plugin id="org.eclipse.jdt.annotation"/>
       <plugin id="org.eclipse.jdt.compiler.apt" fragment="true"/>
       <plugin id="org.eclipse.jdt.compiler.tool" fragment="true"/>
       <plugin id="org.eclipse.jdt.core"/>
@@ -840,6 +829,13 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.jdt.launching.macosx"/>
       <plugin id="org.eclipse.jdt.launching.ui.macosx"/>
       <plugin id="org.eclipse.jdt.ui"/>
+      <plugin id="org.eclipse.jetty.continuation"/>
+      <plugin id="org.eclipse.jetty.http"/>
+      <plugin id="org.eclipse.jetty.io"/>
+      <plugin id="org.eclipse.jetty.security"/>
+      <plugin id="org.eclipse.jetty.server"/>
+      <plugin id="org.eclipse.jetty.servlet"/>
+      <plugin id="org.eclipse.jetty.util"/>
       <plugin id="org.eclipse.jface"/>
       <plugin id="org.eclipse.jface.databinding"/>
       <plugin id="org.eclipse.jface.text"/>
@@ -849,7 +845,6 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.osgi.services"/>
       <plugin id="org.eclipse.search"/>
       <plugin id="org.eclipse.swt"/>
-      <plugin id="org.eclipse.swt.carbon.macosx" fragment="true"/>
       <plugin id="org.eclipse.swt.cocoa.macosx" fragment="true"/>
       <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true"/>
       <plugin id="org.eclipse.swt.gtk.linux.x86" fragment="true"/>
@@ -861,7 +856,6 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.text"/>
       <plugin id="org.eclipse.ui"/>
       <plugin id="org.eclipse.ui.browser"/>
-      <plugin id="org.eclipse.ui.carbon" fragment="true"/>
       <plugin id="org.eclipse.ui.cheatsheets"/>
       <plugin id="org.eclipse.ui.cocoa" fragment="true"/>
       <plugin id="org.eclipse.ui.console"/>
@@ -878,15 +872,17 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
       <plugin id="org.eclipse.xpand"/>
       <plugin id="org.eclipse.xtend"/>
+      <plugin id="org.eclipse.xtend.lib"/>
       <plugin id="org.eclipse.xtend.typesystem.emf"/>
-      <plugin id="org.eclipse.xtend2.lib"/>
       <plugin id="org.eclipse.xtext"/>
       <plugin id="org.eclipse.xtext.builder"/>
       <plugin id="org.eclipse.xtext.common.types"/>
+      <plugin id="org.eclipse.xtext.common.types.edit"/>
       <plugin id="org.eclipse.xtext.common.types.ui"/>
       <plugin id="org.eclipse.xtext.ecore"/>
       <plugin id="org.eclipse.xtext.generator"/>
       <plugin id="org.eclipse.xtext.logging" fragment="true"/>
+      <plugin id="org.eclipse.xtext.smap"/>
       <plugin id="org.eclipse.xtext.ui"/>
       <plugin id="org.eclipse.xtext.ui.codetemplates"/>
       <plugin id="org.eclipse.xtext.ui.codetemplates.ui"/>
