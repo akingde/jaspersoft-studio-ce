@@ -1,20 +1,16 @@
-# INFORMATION on com.jaspersoft.studio/developerinfo folder content
-This folder is meant to contain all the necessary stuff to prepare an up-and-running
-development environment where to build Jaspersoft Studio source code.
-Here is a set of basic step you can take to have a fully working IDE.
+################## Basic information to start developing on Jaspersoft Studio and build sources from scratch ##################
 
-1) 	Download an Eclipse Indigo (3.7.2) for RCP & RAP Developers.
-2)	Install SVN plugin Subclipse.
-3) 	Use the indigodevelopmentconfig.p2f file to have all the required features installed.
-	You can do it by using the menu File->Import->Install->Install Software Items from File.
-	Select the "indigodevelopmentconfig.p2f" file and follow the steps.
-	This will install the following features:
-	- Eclipse Platform SDK 3.7.2
-	- Eclipse SDK 3.7.2
-	- GEF SDK 3.7.2
-	- Xtext SDK 2.2.1
-	- Xtext JFace Integration 1.0.0
-4)	Next step after the restart is to import the needed SVN projects.
-	To do this just select the menu File->Import->Team->Team Project Set and use the
-	specified "jss_teamprojectset.psf" file.
-5)	After import, just build and start coding!
+This information are meant for people that want to be able to build Jaspersoft Studio from sources,
+investigate and solve bugs, contribute their own code or improve the existing one.
+To do this there are several options:
+	1. 	Use the target platform available in project website. Right now the platform is based on 
+		Eclipse Juno 3.8 release. This mainly because the RCP version of JSS in built on top of it.
+		So you need only to download the target platform and use it inside your Eclipse installation.
+		After that you can download the sources from the repositories.
+		
+	2.	Use the Eclipse Indigo 3.7.2 release. If you prefer to use this version you should check the
+		information contained in the subfolder indigo_37.
+	
+	3.	Use the Eclipse Juno 3.8 release. If you prefer to use this version you should check the
+		information contained in the subfolder juno_38.
+ 
