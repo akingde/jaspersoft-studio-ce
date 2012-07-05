@@ -37,6 +37,7 @@ import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -63,6 +64,7 @@ import com.jaspersoft.studio.components.table.model.MTableFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.components.table.model.MTableHeader;
+import com.jaspersoft.studio.components.table.model.cell.command.CreateE4ObjectCommand;
 import com.jaspersoft.studio.components.table.model.cell.command.CreateElementCommand;
 import com.jaspersoft.studio.components.table.model.cell.command.CreateElementGroupCommand;
 import com.jaspersoft.studio.components.table.model.cell.command.DeleteElementCommand;
@@ -87,6 +89,7 @@ import com.jaspersoft.studio.components.table.model.column.command.ReorderColumn
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
 import com.jaspersoft.studio.components.table.model.columngroup.action.CreateColumnGroupAction;
+import com.jaspersoft.studio.components.table.model.columngroup.action.UnGroupColumnsAction;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupFromGroupCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.command.ReorderColumnGroupCommand;
@@ -107,8 +110,12 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
@@ -117,7 +124,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class TableComponentFactory implements IComponentFactory {
 
-	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
+	public ANode createNode(final ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignComponentElement) {
 			JRDesignComponentElement tbl = (JRDesignComponentElement) jrObject;
 			if (tbl.getComponent() instanceof StandardTable) {
@@ -152,11 +159,56 @@ public class TableComponentFactory implements IComponentFactory {
 							JasperDesign.PROPERTY_DATASETS, dlistener);
 
 					listenDatasets(jd, listener);
+
+					final StandardTable st = TableManager.getTable(mt);
+					DSListener dslistner = new DSListener(parent, jd, st);
+					setDataset(parent, jd, st, dslistner);
+
+					st.getEventSupport().addPropertyChangeListener(dslistner);
 				}
 				return mt;
 			}
 		}
 		return null;
+	}
+
+	class DSListener implements PropertyChangeListener {
+		private ANode parent;
+		private JasperDesign jd;
+		private StandardTable st;
+
+		public DSListener(ANode parent, JasperDesign jd, StandardTable st) {
+			this.parent = parent;
+			this.jd = jd;
+			this.st = st;
+		}
+
+		public void propertyChange(PropertyChangeEvent evt) {
+			setDataset(parent, jd, st, this);
+		}
+	};
+
+	public void setDataset(ANode parent, final JasperDesign jd,
+			StandardTable st, DSListener dslistner) {
+		for (INode n : parent.getChildren())
+			if (n instanceof MDataset)
+				parent.removeChild((ANode) n);
+		JRDesignDatasetRun dr = (JRDesignDatasetRun) st.getDatasetRun();
+		if (dr != null) {
+			dr.getEventSupport().removePropertyChangeListener(dslistner);
+			String dbname = dr.getDatasetName();
+			JRDesignDataset dataset;
+			if (dbname != null)
+				dataset = (JRDesignDataset) jd.getDatasetMap().get(dbname);
+			else
+				dataset = (JRDesignDataset) jd.getMainDataset();
+			if (dataset != null) {
+				MDataset nDataset = new MDataset(parent, dataset, 0);
+				ReportFactory.createDataset(nDataset, dataset, false);
+			}
+
+			dr.getEventSupport().addPropertyChangeListener(dslistner);
+		}
 	}
 
 	private static void listenDatasets(final JasperDesign jd,
@@ -397,6 +449,45 @@ public class TableComponentFactory implements IComponentFactory {
 
 	public Command getCreateCommand(ANode parent, ANode child,
 			Rectangle location, int newIndex) {
+		if (child instanceof MField
+				&& (child.getValue() != null && parent instanceof MCell))
+			return new CreateE4ObjectCommand(child, (MCell) parent, location,
+					newIndex);
+		if (child instanceof MParameterSystem
+				&& (child.getValue() != null && parent instanceof MCell))
+			return new CreateE4ObjectCommand(child, (MCell) parent, location,
+					newIndex);
+		if (child instanceof MVariableSystem
+				&& (child.getValue() != null && parent instanceof MCell))
+			return new CreateE4ObjectCommand(child, (MCell) parent, location,
+					newIndex);
+		// } else {
+		// if (child instanceof MStyle) {
+		// if (parent instanceof MGraphicElement
+		// && child.getValue() != null
+		// && !(parent instanceof IContainer)) {
+		// SetValueCommand cmd = new SetValueCommand();
+		// cmd.setTarget((IPropertySource) parent);
+		// cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
+		// JRStyle style = (JRStyle) child.getValue();
+		// cmd.setPropertyValue(style.getName());
+		// return cmd;
+		// }
+		// if (parent instanceof MReport && location != null) {
+		// MGraphicElement element = ModelUtils.getElement4Point(
+		// parent, new Point(location.x, location.y));
+		// if (element != null) {
+		// SetValueCommand cmd = new SetValueCommand();
+		// cmd.setTarget(element);
+		// cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
+		// JRStyle style = (JRStyle) child.getValue();
+		// cmd.setPropertyValue(style.getName());
+		// return cmd;
+		// }
+		// }
+		// }
+		// }
+
 		if (child instanceof MCell) {
 			if (parent instanceof MColumnGroup && !(parent instanceof MCell))
 				return new CreateColumnCellCommand(
@@ -584,6 +675,7 @@ public class TableComponentFactory implements IComponentFactory {
 		List<String> lst = new ArrayList<String>();
 		lst.add(CreateColumnAction.ID);
 		lst.add(CreateColumnGroupAction.ID);
+		lst.add(UnGroupColumnsAction.ID);
 		lst.add(CreateColumnCellAction.ID);
 		return lst;
 	}
@@ -592,9 +684,10 @@ public class TableComponentFactory implements IComponentFactory {
 		if (model instanceof MRoot) {
 			ANode n = ModelUtils.getFirstChild((MRoot) model);
 			if (n != null && n instanceof MPage) {
-				n = ModelUtils.getFirstChild(n);
-				if (n != null && n instanceof MTable)
-					return new TablePageEditPart();
+				for (INode child : n.getChildren()) {
+					if (child instanceof MTable)
+						return new TablePageEditPart();
+				}
 			}
 		}
 		if (model instanceof MTable)

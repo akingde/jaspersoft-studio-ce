@@ -28,6 +28,7 @@ import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -51,8 +52,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateColumnCommand extends Command {
 
 	private StandardBaseColumn jrColumn;
-	private StandardColumnGroup pColGroup;
-
+	protected StandardColumnGroup pColGroup;
 	protected StandardTable jrTable;
 	protected JasperDesign jrDesign;
 	private int index;

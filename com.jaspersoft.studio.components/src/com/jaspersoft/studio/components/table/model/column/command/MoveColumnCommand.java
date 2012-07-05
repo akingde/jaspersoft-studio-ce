@@ -1,12 +1,20 @@
 package com.jaspersoft.studio.components.table.model.column.command;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.components.table.ColumnCell;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
@@ -15,24 +23,32 @@ import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.model.ANode;
 
 public class MoveColumnCommand extends Command {
-
+	private JasperDesign jDesign;
 	private int oldIndex, newIndex = -1;
 
-	private StandardBaseColumn destColumn;
+	// private StandardBaseColumn destColumn;
 	private StandardBaseColumn srcColumn;
 
 	private StandardColumnGroup pdestColGroup;
 	private StandardColumnGroup psrcColGroup;
 
+	private List<Integer> deltas;
+
 	private StandardTable jrTable;
 	private TableManager tbManager;
+	private boolean resize = true;
 
-	public MoveColumnCommand(MColumn src, MColumn dest) {
+	public MoveColumnCommand(MColumn src, MColumn dest, boolean resize) {
+		this(src, dest);
+		this.resize = resize;
+	}
+
+	public MoveColumnCommand(MColumn src, ANode dest) {
 		super(Messages.ReorderColumnCommand_reorder_columns);
+		jDesign = src.getJasperDesign();
 		tbManager = src.getMTable().getTableManager();
-		this.jrTable = TableManager.getTable(src);
-		this.srcColumn = src.getValue();
-		this.destColumn = dest.getValue();
+		jrTable = TableManager.getTable(src);
+		srcColumn = src.getValue();
 
 		ANode srcparent = src.getParent();
 		if (srcparent instanceof AMCollection)
@@ -41,32 +57,55 @@ public class MoveColumnCommand extends Command {
 			psrcColGroup = (StandardColumnGroup) srcparent.getValue();
 			oldIndex = psrcColGroup.getColumns().indexOf(srcColumn);
 		}
+		if (dest == null)
+			return;
 		ANode destparent = dest.getParent();
 		if (destparent != null) {
 			if (destparent instanceof AMCollection)
-				newIndex = jrTable.getColumns().indexOf(destColumn);
+				newIndex = jrTable.getColumns().indexOf(dest.getValue());
 			else if (destparent.getValue() instanceof StandardColumnGroup) {
 				pdestColGroup = (StandardColumnGroup) destparent.getValue();
-				newIndex = pdestColGroup.getColumns().indexOf(destColumn);
+				newIndex = pdestColGroup.getColumns().indexOf(dest.getValue());
 			}
-		} else {
-			if (dest instanceof MColumnGroup)
-				pdestColGroup = (StandardColumnGroup) dest.getValue();
-		}
+		} else if (dest instanceof MColumnGroup)
+			pdestColGroup = (StandardColumnGroup) dest.getValue();
 	}
 
 	@Override
 	public void execute() {
+		if (resize && pdestColGroup != null && deltas == null)
+			getDeltas(tbManager);
+
 		delColumn(psrcColGroup, srcColumn);
 		addColumn(pdestColGroup, newIndex, srcColumn);
+		if (resize) {
+			tbManager.initMaps();
+			if (pdestColGroup != null) {
+				tbManager.setRowsHeight(deltas);
+				setMinusDelta();
+				tbManager.setColumnHeight(srcColumn, deltas);
+			}
+		}
 		tbManager.refresh();
 	}
 
 	@Override
 	public void undo() {
+		if (resize)
+			tbManager.initMaps();
 		delColumn(pdestColGroup, srcColumn);
 		addColumn(psrcColGroup, oldIndex, srcColumn);
+		if (resize && pdestColGroup != null) {
+			tbManager.setRowsHeight(deltas);
+			setMinusDelta();
+			tbManager.setColumnHeight(srcColumn, deltas);
+		}
 		tbManager.refresh();
+	}
+
+	private void setMinusDelta() {
+		for (int i = 0; i < deltas.size(); i++)
+			deltas.set(i, -deltas.get(i));
 	}
 
 	private void delColumn(StandardColumnGroup colGroup, StandardBaseColumn col) {
@@ -99,4 +138,31 @@ public class MoveColumnCommand extends Command {
 			w += c.getWidth();
 		group.setWidth(w);
 	}
+
+	private void getDeltas(TableManager tb) {
+		deltas = new ArrayList<Integer>();
+		addDelta(tb, TableUtil.TABLE_HEADER, "");
+		addDelta(tb, TableUtil.COLUMN_HEADER, "");
+		addDelta(tb, TableUtil.COLUMN_DETAIL, "");
+		addDelta(tb, TableUtil.COLUMN_FOOTER, "");
+		addDelta(tb, TableUtil.TABLE_FOOTER, "");
+		List<?> groupsList = TableUtil.getGroupList(jrTable, jDesign);
+		if (groupsList != null)
+			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
+				JRDesignGroup jrGroup = (JRDesignGroup) it.next();
+				addDelta(tb, TableUtil.COLUMN_GROUP_HEADER, jrGroup.getName());
+				addDelta(tb, TableUtil.COLUMN_GROUP_FOOTER, jrGroup.getName());
+			}
+	}
+
+	public void addDelta(TableManager tb, int type, String grName) {
+		int srch = tb.getRowHeight(new ColumnCell(type, grName, srcColumn));
+		int dsth = tb.getRowHeight(new ColumnCell(type, grName, pdestColGroup));
+		if (type != TableUtil.COLUMN_DETAIL)
+			dsth -= tb.getYhcolumn(type, grName, pdestColGroup).height;
+		else
+			dsth = srch;
+		deltas.add(srch - dsth);
+	}
+
 }

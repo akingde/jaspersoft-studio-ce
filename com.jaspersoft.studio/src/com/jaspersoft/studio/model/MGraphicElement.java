@@ -167,6 +167,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		setValue(jrLine);
 	}
 
+	@Override
+	public JRDesignElement getValue() {
+		return (JRDesignElement) super.getValue();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

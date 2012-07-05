@@ -29,6 +29,7 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -60,6 +61,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 
 public class MColumn extends APropertyNode implements IPastable, IContainer,
 		IGraphicElement, IContainerEditPart {
@@ -85,6 +87,12 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		super();
 	}
 
+	private JRDesignGroup jrGroup;
+
+	public JRDesignGroup getJrGroup() {
+		return jrGroup;
+	}
+
 	/**
 	 * Instantiates a new m field.
 	 * 
@@ -104,12 +112,14 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		if (n != null && !n.isEmpty()) {
 			AMCollection aNode = (AMCollection) n.get(n.size() - 1);
 			type = TableColumnSize.getType(aNode.getClass());
-			if (aNode instanceof MTableGroupHeader)
-				grName = ((MTableGroupHeader) aNode).getJrDesignGroup()
-						.getName();
-			if (aNode instanceof MTableGroupFooter)
-				grName = ((MTableGroupFooter) aNode).getJrDesignGroup()
-						.getName();
+			if (aNode instanceof MTableGroupHeader) {
+				jrGroup = ((MTableGroupHeader) aNode).getJrDesignGroup();
+				grName = jrGroup.getName();
+			}
+			if (aNode instanceof MTableGroupFooter) {
+				jrGroup = ((MTableGroupFooter) aNode).getJrDesignGroup();
+				grName = jrGroup.getName();
+			}
 		}
 	}
 
@@ -153,6 +163,14 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 
 	private String grName;
 	private int type = TableUtil.TABLE_HEADER;
+
+	public int getType() {
+		return type;
+	}
+
+	public String getGrName() {
+		return Misc.nvl(grName);
+	}
 
 	@Override
 	public StandardBaseColumn getValue() {
@@ -269,7 +287,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 			return ExprUtil.getExpression(jrElement.getPrintWhenExpression());
 		if (id.equals(DesignCell.PROPERTY_HEIGHT))
 			return getMTable().getTableManager().getYhcolumn(type, grName,
-					jrElement).y;
+					jrElement).height;
 		return null;
 	}
 
@@ -407,23 +425,14 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	}
 
 	public Rectangle getBounds() {
-		int w = 0;
-		Rectangle rc = new Rectangle();
-		Rectangle rect = null;
-		StandardBaseColumn c = null;
-		if (getValue() != null) {
-			c = getValue();
-
-			w = c.getWidth();
-		}
+		StandardBaseColumn c = getValue();
 		MTable mc = getMTable();
-		if (mc != null) {
-			if (c != null)
-				rc = mc.getTableManager().getBounds(w, c, type, grName);
-			Rectangle b = mc.getBounds();
-			return new Rectangle(b.x + rc.x, b.y + rc.y, w, rc.height);
+		if (mc != null && c != null) {
+			Rectangle b = mc.getTableManager().getBounds(c, type, grName);
+			System.out.println(b);
+			return b;
 		}
-		return rect;
+		return null;
 	}
 
 	public int getDefaultWidth() {

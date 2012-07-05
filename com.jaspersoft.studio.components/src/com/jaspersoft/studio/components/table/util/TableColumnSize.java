@@ -121,7 +121,8 @@ public class TableColumnSize {
 
 	public static int getColumnHeight(BaseColumn bc, int type, String grName) {
 		int height = -1;
-		height = getCellHeight(bc, type, grName);
+		if (!(bc instanceof StandardColumnGroup && type == TableUtil.COLUMN_DETAIL))
+			height = getCellHeight(bc, type, grName);
 
 		if (bc instanceof StandardColumnGroup) {
 			int maxh = -1;
@@ -185,5 +186,5 @@ public class TableColumnSize {
 		}
 		return dif;
 	}
- 
+
 }

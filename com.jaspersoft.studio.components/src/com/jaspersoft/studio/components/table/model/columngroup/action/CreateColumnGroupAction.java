@@ -32,6 +32,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.column.command.FixCellHeightsCommand;
 import com.jaspersoft.studio.components.table.model.column.command.MoveColumnCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupCommand;
@@ -104,7 +105,9 @@ public class CreateColumnGroupAction extends ACreateAction {
 		c.add(createGroup(index, mparent, mcolgr));
 
 		for (MColumn src : columns)
-			c.add(new MoveColumnCommand(src, mcolgr));
+			c.add(new MoveColumnCommand(src, mcolgr, false));
+
+		c.add(new FixCellHeightsCommand(fmc));
 		return c;
 	}
 
@@ -116,6 +119,7 @@ public class CreateColumnGroupAction extends ACreateAction {
 		if (mparent instanceof AMCollection)
 			cmd = new CreateColumnGroupCommand((AMCollection) mparent, mcolgr,
 					index);
+		cmd.setResize(false);
 		return cmd;
 	}
 }

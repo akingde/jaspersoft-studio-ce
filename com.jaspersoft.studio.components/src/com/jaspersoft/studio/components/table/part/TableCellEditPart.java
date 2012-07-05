@@ -21,8 +21,6 @@ package com.jaspersoft.studio.components.table.part;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.list.DesignListContents;
-import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
@@ -48,9 +46,8 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.ui.views.properties.IPropertySource;
 
-import com.jaspersoft.studio.components.list.model.MList;
+import com.jaspersoft.studio.components.table.ColumnCell;
 import com.jaspersoft.studio.components.table.figure.CellFigure;
 import com.jaspersoft.studio.components.table.figure.EmptyCellFigure;
 import com.jaspersoft.studio.components.table.model.MTable;
@@ -94,7 +91,12 @@ public class TableCellEditPart extends FigureEditPart implements
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			MColumn model = getModel();
-			Dimension d = new Dimension(100, 100);
+
+			ColumnCell cc = new ColumnCell(model.getType(), model.getGrName(),
+					model.getValue());
+
+			Dimension d = model.getMTable().getTableManager()
+					.getCellPackSize(cc);
 
 			CompoundCommand c = new CompoundCommand("Resize to container");
 

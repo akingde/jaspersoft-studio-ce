@@ -137,7 +137,8 @@ public class MTable extends MGraphicElement implements IContainer,
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(
-				StandardTable.PROPERTY_DATASET_RUN, Messages.MTable_dataset_run);
+				StandardTable.PROPERTY_DATASET_RUN,
+				Messages.MTable_dataset_run, false);
 		datasetRunD.setDescription(Messages.MTable_dataset_run_description);
 		datasetRunD.setCategory(Messages.MTable_table_properties_category);
 		desc.add(datasetRunD);
@@ -169,14 +170,16 @@ public class MTable extends MGraphicElement implements IContainer,
 		StandardTable jrTable = getStandardTable();
 
 		if (id.equals(StandardTable.PROPERTY_DATASET_RUN)) {
-			if (mDatasetRun == null) {
-				JRDatasetRun j = jrTable.getDatasetRun();
-				if (j == null)
-					j = new JRDesignDatasetRun();
+			JRDatasetRun j = jrTable.getDatasetRun();
+			if (j == null)
+				j = new JRDesignDatasetRun();
+			if (mDatasetRun != null)
+				mDatasetRun.setValue(j);
+			else {
 				mDatasetRun = new MDatasetRun(j, getJasperDesign());
+				setChildListener(mDatasetRun);
 			}
 			return mDatasetRun;
-
 		}
 		if (id.equals(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE))
 			return whennodataD.getEnumValue(jrTable.getWhenNoDataType());

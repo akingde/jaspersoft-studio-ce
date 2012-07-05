@@ -24,10 +24,10 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.eclipse.draw2d.geometry.Dimension;
 
 import com.jaspersoft.studio.components.table.model.MTable;
-import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
+import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
-import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.model.INode;
 
 public class TablePageEditPart extends PageEditPart {
 
@@ -49,7 +49,13 @@ public class TablePageEditPart extends PageEditPart {
 	}
 
 	private void updateContainerSize() {
-		MTable table = (MTable) ModelUtils.getFirstChild(getPage());
+		MTable table = null;
+		for (INode n : getPage().getChildren()) {
+			if (n instanceof MTable) {
+				table = (MTable) n;
+				break;
+			}
+		}
 		if (table != null) {
 			Dimension d = table.getTableManager().getSize();
 			d.height = Math.max(d.height, (Integer) table
@@ -58,6 +64,6 @@ public class TablePageEditPart extends PageEditPart {
 					.getPropertyValue(JRDesignElement.PROPERTY_WIDTH));
 			containerSize = d;
 		} else
-			containerSize = null;
+			containerSize = new Dimension(4000, 4000);
 	}
 }

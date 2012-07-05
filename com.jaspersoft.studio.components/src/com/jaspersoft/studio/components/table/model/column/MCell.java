@@ -238,7 +238,7 @@ public class MCell extends MColumn implements IGraphicElement,
 				MTable mtable = getMTable();
 				Integer height = (Integer) value;
 				AMCollection section = getSection();
-				if (section != null && height.intValue() >= 0) {
+				if (height != null && section != null && height.intValue() >= 0) {
 
 					@SuppressWarnings("unchecked")
 					Class<AMCollection> classType = (Class<AMCollection>) section

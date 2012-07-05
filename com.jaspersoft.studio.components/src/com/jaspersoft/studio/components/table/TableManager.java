@@ -20,7 +20,6 @@
 package com.jaspersoft.studio.components.table;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -28,15 +27,15 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
-import net.sf.jasperreports.components.table.ColumnGroup;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
-import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Dimension;
@@ -48,24 +47,30 @@ import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class TableManager {
 	private StandardTable table;
 	private TableUtil tableUtil;
-	private Map<BaseColumn, Integer> xcolumn = new HashMap<BaseColumn, Integer>();
-	private Map<Integer, Map<String, Map<BaseColumn, Point>>> yhcolumn = new HashMap<Integer, Map<String, Map<BaseColumn, Point>>>();
+	private MatrixHelper mh = new MatrixHelper();
+	private JasperDesign jDesign;
 
-	public int getColumnX(BaseColumn bc) {
-		return xcolumn.get(bc);
+	public MatrixHelper getMatrixHelper() {
+		return mh;
 	}
 
-	public Point getYhcolumn(int type, String grName, BaseColumn bc) {
-		return yhcolumn.get(type).get(Misc.nvl(grName, "")).get(bc);
+	public Rectangle getYhcolumn(int type, String grName, BaseColumn bc) {
+		return mh.getYHColumn(bc, type, Misc.nvl(grName));
 	}
 
 	public TableManager(JRDesignComponentElement tbl, JasperDesign jasperDesign) {
-		this.table = (StandardTable) tbl.getComponent();
-		this.tableUtil = new TableUtil(table, jasperDesign);
+		this((StandardTable) tbl.getComponent(), jasperDesign);
+	}
+
+	public TableManager(StandardTable table, JasperDesign jDesign) {
+		this.table = table;
+		this.jDesign = jDesign;
+		this.tableUtil = new TableUtil(table, jDesign);
 
 		initMaps();
 
@@ -74,121 +79,9 @@ public class TableManager {
 	}
 
 	public void initMaps() {
-		initXColumn(0, table.getColumns());
-
-		int y = 0;
-		y += initYHColumn(y, table.getColumns(), TableUtil.TABLE_HEADER, "");
-		y += initYHColumn(y, table.getColumns(), TableUtil.COLUMN_HEADER, "");
-
-		List<?> groupsList = tableUtil.getGroupList();
-		if (groupsList != null)
-			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
-				JRGroup jrGroup = (JRGroup) it.next();
-				y += initYHColumn(y, table.getColumns(),
-						TableUtil.COLUMN_GROUP_HEADER, jrGroup.getName());
-			}
-
-		y += initYHColumn(y, table.getColumns(), TableUtil.COLUMN_DETAIL, "");
-
-		if (groupsList != null)
-			for (ListIterator<?> it = groupsList
-					.listIterator(groupsList.size()); it.hasPrevious();) {
-				JRGroup jrGroup = (JRGroup) it.previous();
-				y += initYHColumn(y, table.getColumns(),
-						TableUtil.COLUMN_GROUP_FOOTER, jrGroup.getName());
-			}
-
-		y += initYHColumn(y, table.getColumns(), TableUtil.COLUMN_FOOTER, "");
-		y += initYHColumn(y, table.getColumns(), TableUtil.TABLE_FOOTER, "");
-	}
-
-	private int initYHColumn(int y, List<BaseColumn> cols, int type,
-			String grName) {
-		List<Integer> rows = new ArrayList<Integer>();
-		int h = getHeight(cols, type, grName, rows, 0);
-		// System.out.println("Rows " + type + " :" + rows);
-		getRowY(y, cols, type, grName, rows, 0);
-		return h;
-	}
-
-	private void getRowY(int y, List<BaseColumn> cols, int type, String grName,
-			List<Integer> rows, int depth) {
-		Map<BaseColumn, Point> map = getMap(type, grName);
-		for (BaseColumn bc : cols) {
-			DesignCell c = (DesignCell) TableUtil.getCell(bc, type, grName);
-			Integer h = rows.get(depth);
-			// System.out.println("H:" + h);
-			if (bc instanceof ColumnGroup) {
-				int ch = h;
-				if (c != null)
-					ch = c.getHeight();
-				int childh = rows.get(depth + 1);
-				if (childh != 0)
-					ch = h - childh;
-				int tmpy = y;
-				if (isBottomOfTable(type))
-					tmpy = y + h - ch;
-				map.put(bc, new Point(tmpy, ch));
-				if (c != null)
-					c.setHeight(ch);
-				if (isBottomOfTable(type))
-					getRowY(y, ((ColumnGroup) bc).getColumns(), type, grName,
-							rows, depth + 1);
-				else
-					getRowY(y + ch, ((ColumnGroup) bc).getColumns(), type,
-							grName, rows, depth + 1);
-			} else {
-				map.put(bc, new Point(y, h));
-				if (c != null)
-					c.setHeight(h);
-			}
-		}
-	}
-
-	private int getHeight(List<BaseColumn> cols, int type, String grName,
-			List<Integer> rows, int depth) {
-		int h = 0;
-		for (BaseColumn bc : cols) {
-			int hc = 0;
-			Cell c = TableUtil.getCell(bc, type, grName);
-			if (c != null)
-				hc = c.getHeight();
-			if (bc instanceof ColumnGroup)
-				hc += getHeight(((ColumnGroup) bc).getColumns(), type, grName,
-						rows, depth + 1);
-			h = Math.max(h, hc);
-		}
-		if (rows.size() > depth) {
-			Integer oldh = 0;
-			if (rows.size() > depth)
-				oldh = rows.get(depth);
-			rows.add(depth, Math.max(h, oldh));
-		} else
-			rows.add(h);
-		return h;
-	}
-
-	public Map<BaseColumn, Point> getMap(int type, String grName) {
-		Map<String, Map<BaseColumn, Point>> m = yhcolumn.get(type);
-		if (m == null) {
-			m = new HashMap<String, Map<BaseColumn, Point>>();
-			yhcolumn.put(type, m);
-		}
-		Map<BaseColumn, Point> map = m.get(grName);
-		if (map == null) {
-			map = new HashMap<BaseColumn, Point>();
-			m.put(grName, map);
-		}
-		return map;
-	}
-
-	private void initXColumn(int x, List<BaseColumn> cols) {
-		for (BaseColumn bc : cols) {
-			xcolumn.put(bc, x);
-			if (bc instanceof ColumnGroup)
-				initXColumn(x, ((ColumnGroup) bc).getColumns());
-			x += bc.getWidth();
-		}
+		mh = new MatrixHelper();
+		mh.fillMatrix(table, tableUtil);
+		mh.print();
 	}
 
 	public void refresh() {
@@ -251,13 +144,11 @@ public class TableManager {
 		return new ArrayList<BaseColumn>(0);
 	}
 
-	public Rectangle getBounds(int width, StandardBaseColumn col, int type,
-			String grName) {
-		int x = getColumnX(col);
-		Point p = getYhcolumn(type, grName, col);
+	public Rectangle getBounds(StandardBaseColumn col, int type, String grName) {
+		Rectangle p = mh.getYHColumn(col, type, grName);
 		if (p == null)
-			p = new Point(0, 100);
-		return new Rectangle(x, p.x, col.getWidth(), p.y);
+			p = new Rectangle(0, 100, col.getWidth(), 0);
+		return p;
 	}
 
 	public Rectangle getBounds(int width, Cell cell, StandardBaseColumn col) {
@@ -317,20 +208,21 @@ public class TableManager {
 		return false;
 	}
 
-	public void setHeight(DesignCell cell, int height, StandardBaseColumn col,
+	public void setHeight(DesignCell cell, int height, BaseColumn col,
 			int type, String grName) {
 		if (height >= 0) {
 			int delta = 0;
 			if (cell == null)
-				delta = height - getYhcolumn(type, grName, col).y;
+				delta = height - getYhcolumn(type, grName, col).height;
 			else
 				delta = height - cell.getHeight();
-			setColumnHeight(table.getColumns(), delta, type, grName, col);
+			if (delta != 0)
+				setRowHeight(table.getColumns(), delta, type, grName, col);
 		}
 	}
 
-	private int setColumnHeight(List<BaseColumn> columns, int delta, int type,
-			String grName, StandardBaseColumn col) {
+	private int setRowHeight(List<BaseColumn> columns, int delta, int type,
+			String grName, BaseColumn col) {
 		int dif = 0;
 		for (BaseColumn bc : columns) {
 			if (bc instanceof StandardColumn)
@@ -340,9 +232,8 @@ public class TableManager {
 				if (col == bc) {
 					TableColumnSize.setCellHeightDelta(bc, type, grName, delta);
 				} else {
-					dif = setColumnHeight(
-							((StandardColumnGroup) bc).getColumns(), delta,
-							type, grName, col);
+					dif = setRowHeight(((StandardColumnGroup) bc).getColumns(),
+							delta, type, grName, col);
 					if (delta < 0 && dif != 0)
 						dif = TableColumnSize.setCellHeightDelta(bc, type,
 								grName, dif);
@@ -350,6 +241,65 @@ public class TableManager {
 			}
 		}
 		return dif;
+	}
+
+	public void setRowsHeight(List<Integer> d) {
+		int i = 0;
+		List<?> groupsList = TableUtil.getGroupList(table, jDesign);
+		setRowHeight(table.getColumns(), TableUtil.TABLE_HEADER, "", d.get(i++));
+		setRowHeight(table.getColumns(), TableUtil.COLUMN_HEADER, "",
+				d.get(i++));
+		setRowHeight(table.getColumns(), TableUtil.COLUMN_DETAIL, "",
+				d.get(i++));
+		setRowHeight(table.getColumns(), TableUtil.COLUMN_FOOTER, "",
+				d.get(i++));
+		setRowHeight(table.getColumns(), TableUtil.TABLE_FOOTER, "", d.get(i++));
+		if (groupsList != null)
+			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
+				JRDesignGroup jrGroup = (JRDesignGroup) it.next();
+				setRowHeight(table.getColumns(), TableUtil.COLUMN_GROUP_HEADER,
+						jrGroup.getName(), d.get(i++));
+				setRowHeight(table.getColumns(), TableUtil.COLUMN_GROUP_FOOTER,
+						jrGroup.getName(), d.get(i++));
+			}
+	}
+
+	public void setRowHeight(List<BaseColumn> cols, int type, String grName,
+			int h) {
+		for (BaseColumn bc : cols) {
+			ColumnCell cc = mh.getColumnCell(new ColumnCell(type, grName, bc));
+			Guide g = mh.getRowGuide(cc);
+			List<ColumnCell> cells = isBottomOfTable(type) ? g.getPrev() : g
+					.getNext();
+			for (ColumnCell c : cells) {
+				setRowHeight(cols, h, type, grName, c.column);
+				return;
+			}
+		}
+	}
+
+	public void setColumnHeight(BaseColumn bc, List<Integer> deltas) {
+		int i = 0;
+		setCellHeight(bc, TableUtil.TABLE_HEADER, "", deltas.get(i++));
+		setCellHeight(bc, TableUtil.COLUMN_HEADER, "", deltas.get(i++));
+		setCellHeight(bc, TableUtil.COLUMN_DETAIL, "", deltas.get(i++));
+		setCellHeight(bc, TableUtil.COLUMN_FOOTER, "", deltas.get(i++));
+		setCellHeight(bc, TableUtil.TABLE_FOOTER, "", deltas.get(i++));
+		List<?> groupsList = TableUtil.getGroupList(table, jDesign);
+		if (groupsList != null)
+			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
+				JRDesignGroup jrGroup = (JRDesignGroup) it.next();
+				setCellHeight(bc, TableUtil.COLUMN_GROUP_HEADER,
+						jrGroup.getName(), deltas.get(i++));
+				setCellHeight(bc, TableUtil.COLUMN_GROUP_FOOTER,
+						jrGroup.getName(), deltas.get(i++));
+			}
+	}
+
+	public void setCellHeight(BaseColumn bc, int type, String grName, int delta) {
+		DesignCell c = (DesignCell) TableUtil.getCell(bc, type, grName);
+		if (c != null)
+			c.setHeight(c.getHeight() + delta);
 	}
 
 	public static StandardTable getTable(ANode destNode) {
@@ -365,6 +315,40 @@ public class TableManager {
 		return null;
 	}
 
+	public Dimension getCellPackSize(ColumnCell cc) {
+		cc = mh.getColumnCell(cc);
+		Guide g = cc.getEast();
+		int w = -g.getY();
+		for (ColumnCell c : g.getPrev()) {
+			Cell cell = TableUtil.getCell(c.column, c.type, c.grName);
+			if (cell != null) {
+				List<JRChild> cells = cell.getChildren();
+				if (!cells.isEmpty()) {
+					int width = ModelUtils.getContainerSize(cells,
+							new Dimension(0, 0)).width;
+
+					w = Math.max(w, width - c.column.getWidth());
+				}
+			}
+		}
+		g = cc.getSouth();
+		int h = -g.getY();
+		for (ColumnCell c : g.getPrev()) {
+			Cell cell = TableUtil.getCell(c.column, c.type, c.grName);
+			if (cell != null) {
+				List<JRChild> cells = cell.getChildren();
+				if (!cells.isEmpty()) {
+					int height = ModelUtils.getContainerSize(cells,
+							new Dimension(0, 0)).height;
+
+					h = Math.max(h, height - cell.getHeight());
+				}
+			}
+		}
+		Rectangle b = cc.getBounds();
+		return new Dimension(b.width + w, b.height + h);
+	}
+
 	public void update() {
 		initMaps();
 		refresh();
@@ -372,6 +356,10 @@ public class TableManager {
 
 	public int getRowHeight(MColumn col) {
 		return 100;
+	}
+
+	public int getRowHeight(ColumnCell ccel) {
+		return mh.getRowHeight(mh.getColumnCell(ccel));
 	}
 
 	public static boolean isBottomOfTable(int type) {

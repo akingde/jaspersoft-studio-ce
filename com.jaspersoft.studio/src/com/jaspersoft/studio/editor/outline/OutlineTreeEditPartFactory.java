@@ -214,7 +214,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new DeleteVariableCommand((MVariables) parent, (MVariable) child);
 		} else if (child instanceof MScriptlet) {
 			return new DeleteScriptletCommand((MScriptlets) parent, (MScriptlet) child);
-		} else if (child instanceof MDataset) {
+		} else if (child instanceof MDataset && parent instanceof MReport) {
 			return new DeleteDatasetCommand((MReport) parent, (MDataset) child);
 		} else if (child instanceof MBand && child.getValue() != null) {
 			if (child instanceof MBandGroupHeader)
@@ -373,7 +373,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof MFields)
 				return new CreateFieldCommand((MFields) parent, (MField) child, newIndex);
 			else if (child.getValue() != null
-					&& (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport)) {
+					&& (parent instanceof MGraphicElement || parent instanceof MReport || parent instanceof MBand)) {
 				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
 		} else if (child instanceof MParameterSystem) {
@@ -385,7 +385,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				}
 			}
 			if (child.getValue() != null
-					&& (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport)) {
+					&& (parent instanceof MGraphicElement || parent instanceof MReport || parent instanceof MBand)) {
 				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
 		} else if (child instanceof MVariableSystem) {
@@ -395,7 +395,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					return new CreateVariableCommand((MVariables) parent, (MVariable) child, newIndex);
 			}
 			if (child.getValue() != null
-					&& (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport)) {
+					&& (parent instanceof MGraphicElement || parent instanceof MReport || parent instanceof MBand)) {
 				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
 		} else {

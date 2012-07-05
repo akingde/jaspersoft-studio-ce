@@ -31,15 +31,15 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class CreateElementCommand extends Command {
-	private MGraphicElement srcNode;
-	private JRDesignElement jrElement;
+	protected MGraphicElement srcNode;
+	protected JRDesignElement jrElement;
 	private StandardBaseColumn jrColumn;
 
 	private DesignCell jrCell;
 
 	private Rectangle location;
 
-	private int index = -1;
+	protected int index = -1;
 
 	/**
 	 * Instantiates a new creates the element command.
@@ -54,7 +54,8 @@ public class CreateElementCommand extends Command {
 	public CreateElementCommand(MCell destNode, MGraphicElement srcNode,
 			Rectangle position, int index) {
 		super();
-		this.jrElement = (JRDesignElement) srcNode.getValue();
+		if (srcNode != null)
+			this.jrElement = (JRDesignElement) srcNode.getValue();
 		this.jrCell = destNode.getCell();
 		this.index = index;
 		this.location = position;
@@ -68,21 +69,21 @@ public class CreateElementCommand extends Command {
 	protected void createObject() {
 		if (jrElement == null) {
 			jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
-
-			if (jrElement != null) {
-				if (location == null)
-					location = new Rectangle(0, 0, Math.min(
-							srcNode.getDefaultWidth(), jrColumn.getWidth()
-									- location.x), Math.min(
-							srcNode.getDefaultHeight(), jrCell.getHeight()
-									- location.y));
-				if (location.width < 0)
-					location.width = srcNode.getDefaultWidth();
-				if (location.height < 0)
-					location.height = srcNode.getDefaultHeight();
-
-			}
 		}
+		if (jrElement != null) {
+			if (location == null)
+				location = new Rectangle(0, 0, Math.min(
+						srcNode.getDefaultWidth(), jrColumn.getWidth()
+								- location.x), Math.min(
+						srcNode.getDefaultHeight(), jrCell.getHeight()
+								- location.y));
+			if (location.width < 0)
+				location.width = srcNode.getDefaultWidth();
+			if (location.height < 0)
+				location.height = srcNode.getDefaultHeight();
+
+		}
+
 		jrElement.setX(location.x);
 		jrElement.setY(location.y);
 		jrElement.setWidth(location.width);

@@ -59,6 +59,11 @@ public class SPDatasetRun extends ASPropertyWidget {
 
 	private DatasetRunWidgetRadio dsRunWidget;
 
+	public SPDatasetRun(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, boolean alldatasets) {
+		this(parent, section, pDescriptor);
+		this.alldatasets = alldatasets;
+	}
+
 	public SPDatasetRun(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -156,6 +161,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 		});
 	}
 
+	private boolean alldatasets = true;
 	private APropertyNode pnode;
 
 	@Override
@@ -175,7 +181,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 		if (dataset == null)
 			dataset = jasperDesign.getMainDataset();
 
-		String[] items = ModelUtils.getDataSets(jasperDesign, true);
+		String[] items = ModelUtils.getDataSets(jasperDesign, alldatasets);
 		int dsindex = 0;
 		if (datasetRun != null) {
 			for (int i = 0; i < items.length; i++) {

@@ -797,6 +797,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    org.eclipse.ui.dialogs,
    com.jaspersoft.studio.utils.jasper,
    org.eclipse.swt.widgets",
+ com.jaspersoft.studio.wizards.obj2text,
  com.lowagie.text;uses:="com.lowagie.text.pdf.draw,com.lowagie.text.pdf",
  com.lowagie.text.pdf;
   uses:="com.lowagie.text.pdf.internal,

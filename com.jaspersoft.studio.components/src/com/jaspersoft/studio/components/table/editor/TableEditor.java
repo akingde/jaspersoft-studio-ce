@@ -35,6 +35,7 @@ import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnCellAction;
 import com.jaspersoft.studio.components.table.model.columngroup.action.CreateColumnGroupAction;
+import com.jaspersoft.studio.components.table.model.columngroup.action.UnGroupColumnsAction;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
@@ -115,6 +116,10 @@ public class TableEditor extends AbstractVisualEditor {
 		action = new CreateColumnGroupAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateColumnGroupAction.ID);
+
+		action = new UnGroupColumnsAction(this);
+		registry.registerAction(action);
+		selectionActions.add(UnGroupColumnsAction.ID);
 
 		action = new CreateColumnCellAction(this);
 		registry.registerAction(action);

@@ -143,7 +143,9 @@ public class MDatasetRun extends APropertyNode {
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
-		JRDesignDatasetRun jrElement = (JRDesignDatasetRun) getValue();
+		JRDesignDatasetRun jrElement = getValue();
+		if (jrElement == null)
+			return null;
 
 		if (id.equals(JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getParametersMapExpression());
@@ -177,7 +179,7 @@ public class MDatasetRun extends APropertyNode {
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignDatasetRun jrElement = (JRDesignDatasetRun) getValue();
+		JRDesignDatasetRun jrElement = getValue();
 		if (id.equals(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION)) {
 			jrElement.getEventSupport().removePropertyChangeListener(this);
 			jrElement.setDataSourceExpression(null);
