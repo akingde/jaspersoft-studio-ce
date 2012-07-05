@@ -37,7 +37,6 @@ import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -296,31 +295,6 @@ public class MCell extends MColumn implements IGraphicElement,
 	@Override
 	public Color getForeground() {
 		return ColorConstants.black;
-	}
-
-	public Rectangle getBounds() {
-		int w = 0;
-		int h = 0;
-		Rectangle rCellBounds = new Rectangle();
-		Rectangle rect = null;
-		StandardBaseColumn c = null;
-		if (getValue() != null) {
-			c = (StandardBaseColumn) getValue();
-
-			w = c.getWidth();
-			if (cell != null)
-				h = cell.getHeight();
-		}
-
-		MTable mc = getMTable();
-		if (mc != null) {
-			if (c != null)
-				rCellBounds = mc.getTableManager().getBounds(w, cell, c);
-			Rectangle b = mc.getBounds();
-			return new Rectangle(b.x + rCellBounds.x, b.y + rCellBounds.y, w, h);
-		}
-
-		return rect;
 	}
 
 	@Override

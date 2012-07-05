@@ -124,8 +124,7 @@ public class MatrixHelper {
 						table.getColumns(), TableUtil.COLUMN_GROUP_HEADER,
 						jrGroup.getName());
 			}
-		north = south;
-		south = fillRowDetail(north, addNextRow(north), table.getColumns());
+		south = fillRowDetail(south, addNextRow(south), table.getColumns());
 
 		int offset = hGuides.indexOf(south);
 

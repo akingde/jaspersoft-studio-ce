@@ -25,19 +25,27 @@ public class FixCellHeightsCommand extends Command {
 	}
 
 	private Map<DesignCell, Integer> hmap;
+	private Map<StandardColumnGroup, Integer> wmap;
 
 	@Override
 	public void execute() {
 		tbManager.initMaps();
 		if (hmap == null)
 			hmap = new HashMap<DesignCell, Integer>();
+		hmap.clear();
+		if (wmap == null)
+			wmap = new HashMap<StandardColumnGroup, Integer>();
+		wmap.clear();
 		MatrixHelper mh = tbManager.getMatrixHelper();
 		Map<ColumnCell, Rectangle> map = mh.getCells();
 		for (ColumnCell cc : map.keySet()) {
 			Rectangle b = cc.getBounds();
 			if (cc.column instanceof StandardColumnGroup) {
-				if (b.width != cc.column.getWidth())
+				if (b.width != cc.column.getWidth()) {
+					wmap.put((StandardColumnGroup) cc.column,
+							cc.column.getWidth());
 					((StandardColumnGroup) cc.column).setWidth(b.width);
+				}
 				continue;
 			}
 			Cell dc = TableUtil.getCell(cc.column, cc.type, cc.grName);
@@ -57,9 +65,10 @@ public class FixCellHeightsCommand extends Command {
 
 	@Override
 	public void undo() {
-		for (DesignCell dc : hmap.keySet()) {
+		for (DesignCell dc : hmap.keySet())
 			dc.setHeight(hmap.get(dc));
-		}
+		for (StandardColumnGroup bc : wmap.keySet())
+			bc.setWidth(wmap.get(bc));
 		tbManager.initMaps();
 		tbManager.refresh();
 	}

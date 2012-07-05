@@ -427,11 +427,8 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	public Rectangle getBounds() {
 		StandardBaseColumn c = getValue();
 		MTable mc = getMTable();
-		if (mc != null && c != null) {
-			Rectangle b = mc.getTableManager().getBounds(c, type, grName);
-			System.out.println(b);
-			return b;
-		}
+		if (mc != null && c != null)
+			return mc.getTableManager().getBounds(c, type, grName);
 		return null;
 	}
 
