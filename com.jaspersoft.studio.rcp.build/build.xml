@@ -90,7 +90,7 @@
 
 		<!-- Decompressing the archive created by the Eclipse build -->
 		<unzip src="${basedir}/${zipfile.win32.x86}.zip" dest="${zipdir.win32.x86}" />
-		<!-- Replacing the exe launcher (it is a modified version of the original laucher (Eclipse 3.6.2)
+		<!-- Replacing the exe launcher (it is a modified version of the original laucher (Eclipse 3.8)
 		     improved with Jaspersoft Studio icons -->
 		<copy file="${basedir}/resources/Jaspersoft Studio.exe" tofile="${zipdir.win32.x86}/jaspersoftstudio/Jaspersoft Studio.exe" overwrite="true" />
 		<copy file="${basedir}/resources/jaspersoftstudio.ico" tofile="${zipdir.win32.x86}/jaspersoftstudio/jaspersoftstudio.ico" overwrite="true" />
