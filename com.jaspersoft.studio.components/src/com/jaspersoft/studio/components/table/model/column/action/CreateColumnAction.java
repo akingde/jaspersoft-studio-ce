@@ -19,14 +19,14 @@
  */
 package com.jaspersoft.studio.components.table.model.column.action;
 
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
+
 /*
  * The Class CreateGroupAction.
  */
@@ -39,7 +39,7 @@ public class CreateColumnAction extends ACreateAction {
 	 * Constructs a <code>CreateAction</code> using the specified part.
 	 * 
 	 * @param part
-	 *          The part for this action
+	 *            The part for this action
 	 */
 	public CreateColumnAction(IWorkbenchPart part) {
 		super(part);
@@ -55,9 +55,10 @@ public class CreateColumnAction extends ACreateAction {
 		setText(Messages.CreateColumnAction_create_column);
 		setToolTipText(Messages.CreateColumnAction_create_column_tool_tip);
 		setId(CreateColumnAction.ID);
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
-		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED));
+		setImageDescriptor(Activator
+				.getImageDescriptor("icons/table-insert-column.png"));
+		setDisabledImageDescriptor(Activator
+				.getImageDescriptor("icons/table-insert-column.png"));
 		setEnabled(false);
 	}
 

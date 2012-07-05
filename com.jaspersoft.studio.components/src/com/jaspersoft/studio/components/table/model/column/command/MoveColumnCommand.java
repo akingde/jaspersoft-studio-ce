@@ -26,7 +26,6 @@ public class MoveColumnCommand extends Command {
 	private JasperDesign jDesign;
 	private int oldIndex, newIndex = -1;
 
-	// private StandardBaseColumn destColumn;
 	private StandardBaseColumn srcColumn;
 
 	private StandardColumnGroup pdestColGroup;

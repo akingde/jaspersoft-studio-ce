@@ -25,10 +25,9 @@ import java.util.List;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
@@ -68,12 +67,10 @@ public class CreateColumnGroupAction extends ACreateAction {
 		setText(Messages.CreateColumnAction_create_column_group);
 		setToolTipText(Messages.CreateColumnAction_create_column_group_tool_tip);
 		setId(CreateColumnGroupAction.ID);
-		ISharedImages sharedImages = PlatformUI.getWorkbench()
-				.getSharedImages();
-		setImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
-		setDisabledImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED));
+		setImageDescriptor(Activator
+				.getImageDescriptor("icons/table-join-row.png"));
+		setDisabledImageDescriptor(Activator
+				.getImageDescriptor("icons/table-join-row.png"));
 		setEnabled(false);
 	}
 

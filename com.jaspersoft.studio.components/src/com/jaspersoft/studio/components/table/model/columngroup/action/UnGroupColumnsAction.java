@@ -5,10 +5,9 @@ import java.util.List;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnCommand;
@@ -45,12 +44,10 @@ public class UnGroupColumnsAction extends SelectionAction {
 		setText("Ungroup Columns");
 		setToolTipText("Ungroup columns");
 		setId(UnGroupColumnsAction.ID);
-		ISharedImages sharedImages = PlatformUI.getWorkbench()
-				.getSharedImages();
-		setImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
-		setDisabledImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
+		setImageDescriptor(Activator
+				.getImageDescriptor("icons/table-split-row.png"));
+		setDisabledImageDescriptor(Activator
+				.getImageDescriptor("icons/table-split-row.png"));
 		setEnabled(false);
 	}
 
