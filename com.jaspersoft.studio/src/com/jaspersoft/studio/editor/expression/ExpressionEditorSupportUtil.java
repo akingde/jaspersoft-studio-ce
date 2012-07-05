@@ -15,6 +15,7 @@ import org.eclipse.ui.IEditorPart;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
@@ -147,6 +148,30 @@ public class ExpressionEditorSupportUtil {
 		List<String> libraryClasses = FunctionsLibraryUtil.getLibraryClasses();
 		for(String clazzName : libraryClasses){
 			jd.removeImport("static " + clazzName + ".*");
+		}
+	}
+	
+	/**
+	 * Update the functions library information for the specified jasper design.
+	 * <p>
+	 * 
+	 * If allowed the static imports related to the functions library are added
+	 * to the jasper design, otherwise they are removed.
+	 * 
+	 * @param jasperDesign the jasper design to modify
+	 * 
+	 * @see ExpressionEditorPreferencePage#P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS 
+	 */
+	public static void updateFunctionsLibraryImports(JasperDesign jasperDesign) {
+		Assert.isNotNull(jasperDesign);
+		// Add the imports needed for the functions library, if needed
+		boolean useImports = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(
+				ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS);
+		if(useImports){
+			ExpressionEditorSupportUtil.addFunctionsLibraryImports(jasperDesign);
+		}
+		else{
+			ExpressionEditorSupportUtil.removeFunctionsLibraryImports(jasperDesign);
 		}
 	}
 	
