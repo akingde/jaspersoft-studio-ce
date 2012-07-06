@@ -19,14 +19,21 @@
  */
 package com.jaspersoft.studio.components.table.model.cell.command;
 
+import java.util.Map;
+
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.model.column.MCell;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
@@ -34,7 +41,7 @@ public class CreateElementCommand extends Command {
 	protected MGraphicElement srcNode;
 	protected JRDesignElement jrElement;
 	private StandardBaseColumn jrColumn;
-
+	private JRDesignComponentElement jTable;
 	private DesignCell jrCell;
 
 	private Rectangle location;
@@ -61,6 +68,7 @@ public class CreateElementCommand extends Command {
 		this.location = position;
 		this.srcNode = srcNode;
 		this.jrColumn = (StandardBaseColumn) destNode.getValue();
+		jTable = (JRDesignComponentElement) destNode.getMTable().getValue();
 	}
 
 	/**
@@ -90,6 +98,8 @@ public class CreateElementCommand extends Command {
 		jrElement.setHeight(location.height);
 	}
 
+	private Map<JRElement, Rectangle> map;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -108,6 +118,10 @@ public class CreateElementCommand extends Command {
 			SelectionHelper.setSelection(jrElement, false);
 			firstTime = false;
 		}
+		LayoutManager.getLayout(jTable);
+		ILayout layout = LayoutManager.getLayout(jTable);
+		map = layout.layout(jrCell.getElements(),
+				new Dimension(jrColumn.getWidth(), jrCell.getHeight()));
 	}
 
 	private boolean firstTime = true;
@@ -131,6 +145,14 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		for (JRElement el : map.keySet()) {
+			JRDesignElement del = (JRDesignElement) el;
+			Rectangle r = map.get(el);
+			del.setX(r.x);
+			del.setY(r.y);
+			del.setWidth(r.width);
+			del.setHeight(r.height);
+		}
 		jrCell.removeElement(jrElement);
 	}
 

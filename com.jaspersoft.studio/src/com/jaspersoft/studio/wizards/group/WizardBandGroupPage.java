@@ -40,6 +40,7 @@ package com.jaspersoft.studio.wizards.group;
 
 import java.util.ArrayList;
 
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
@@ -82,7 +83,7 @@ import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionE
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public class WizardBandGroupPage extends WizardPage implements IExpressionContextSetter{
+public class WizardBandGroupPage extends WizardPage implements IExpressionContextSetter {
 	private MGroup group;
 	private JasperDesign jrDesign;
 	private Text grName;
@@ -266,7 +267,7 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 						jrExpression.setText("$V{" + ((JRDesignVariable) obj).getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
 					}
 
-					String mexp = (String) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
+					JRExpression mexp = (JRExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
 
 					group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, mexp);
 					dsExpr.setText(jrExpression.getText());
@@ -284,6 +285,6 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {
-		this.expContext=expContext;
+		this.expContext = expContext;
 	}
 }

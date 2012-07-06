@@ -110,7 +110,7 @@ public class MoveColumnCommand extends Command {
 	private void delColumn(StandardColumnGroup colGroup, StandardBaseColumn col) {
 		if (colGroup != null) {
 			colGroup.removeColumn(col);
-			updateColumnWidth(colGroup);
+			updateColumnWidth();
 		} else
 			jrTable.removeColumn(col);
 	}
@@ -122,7 +122,7 @@ public class MoveColumnCommand extends Command {
 				colGroup.addColumn(index, col);
 			else
 				colGroup.addColumn(col);
-			updateColumnWidth(colGroup);
+			updateColumnWidth();
 		} else {
 			if (index >= 0 && index < jrTable.getColumns().size())
 				jrTable.addColumn(index, col);
@@ -131,11 +131,23 @@ public class MoveColumnCommand extends Command {
 		}
 	}
 
-	private void updateColumnWidth(StandardColumnGroup group) {
+	private void updateColumnWidth() {
+		for (BaseColumn bc : jrTable.getColumns())
+			if (bc instanceof StandardColumnGroup)
+				fixWidth((StandardColumnGroup) bc);
+	}
+
+	private int fixWidth(StandardColumnGroup group) {
 		int w = 0;
-		for (BaseColumn c : group.getColumns())
-			w += c.getWidth();
-		group.setWidth(w);
+		for (BaseColumn bc : group.getColumns()) {
+			if (bc instanceof StandardColumnGroup) {
+				int gw = fixWidth((StandardColumnGroup) bc);
+				if (gw != bc.getWidth())
+					((StandardColumnGroup) bc).setWidth(gw);
+			}
+			w += bc.getWidth();
+		}
+		return w;
 	}
 
 	private void getDeltas(TableManager tb) {

@@ -81,7 +81,7 @@ public class TableManager {
 	public void initMaps() {
 		mh = new MatrixHelper();
 		mh.fillMatrix(table, tableUtil);
-		// mh.print();
+//		 mh.print();
 	}
 
 	public void refresh() {
