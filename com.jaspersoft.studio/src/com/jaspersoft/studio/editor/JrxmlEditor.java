@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
@@ -338,10 +339,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		// It's better to put the check here instead on the JRExpressionEditor dialog close.
 		// This allow for example to "fix" the report, depending on the preference setting,
 		// also when simply saving the JRXML file without having edited an expression.
-		if(getJasperDesign()!=null){
+		if (getJasperDesign() != null) {
 			ExpressionEditorSupportUtil.updateFunctionsLibraryImports(getJasperDesign());
 		}
-		
+
 		IFile resource = ((IFileEditorInput) getEditorInput()).getFile();
 		try {
 			resource.setCharset("UTF-8", monitor);
@@ -401,13 +402,22 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (path != null) {
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			if (file != null) {
-				IFileEditorInput modelFile = new FileEditorInput(file);
-				setInputWithNotify(modelFile);
-				xmlEditor.setInput(modelFile);
-				setPartName(file.getName());
-				IProgressMonitor progressMonitor = getActiveEditor().getEditorSite().getActionBars().getStatusLineManager()
+				IProgressMonitor monitor = getActiveEditor().getEditorSite().getActionBars().getStatusLineManager()
 						.getProgressMonitor();
-				doSave(progressMonitor);
+
+				try {
+					file.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
+					IFileEditorInput modelFile = new FileEditorInput(file);
+					setInputWithNotify(modelFile);
+					xmlEditor.setInput(modelFile);
+					setPartName(file.getName());
+
+					doSave(monitor);
+				} catch (CoreException e) {
+					UIUtils.showError(e);
+				} catch (UnsupportedEncodingException e) {
+					UIUtils.showError(e);
+				}
 			}
 		}
 	}

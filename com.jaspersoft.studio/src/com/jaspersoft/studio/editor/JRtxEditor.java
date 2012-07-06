@@ -25,6 +25,7 @@ import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
@@ -174,13 +175,21 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 		if (path != null) {
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			if (file != null) {
-				IFileEditorInput modelFile = new FileEditorInput(file);
-				setInputWithNotify(modelFile);
-				xmlEditor.setInput(modelFile);
-				setPartName(file.getName());
-				IProgressMonitor progressMonitor = getActiveEditor().getEditorSite().getActionBars().getStatusLineManager()
+				IProgressMonitor monitor = getActiveEditor().getEditorSite().getActionBars().getStatusLineManager()
 						.getProgressMonitor();
-				doSave(progressMonitor);
+				try {
+					file.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
+					IFileEditorInput modelFile = new FileEditorInput(file);
+					setInputWithNotify(modelFile);
+					xmlEditor.setInput(modelFile);
+					setPartName(file.getName());
+
+					doSave(monitor);
+				} catch (CoreException e) {
+					UIUtils.showError(e);
+				} catch (UnsupportedEncodingException e) {
+					UIUtils.showError(e);
+				}
 			}
 		}
 	}
