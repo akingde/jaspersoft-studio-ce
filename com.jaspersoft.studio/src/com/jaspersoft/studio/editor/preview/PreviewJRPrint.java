@@ -179,6 +179,7 @@ public class PreviewJRPrint extends ABasicEditor {
 				public void switchView(Statistics stats, String key) {
 					APreview aPreview = pmap.get(key);
 					if (aPreview instanceof IJRPrintable) {
+						console = getConsole();
 						try {
 							((IJRPrintable) aPreview).setJRPRint(stats, jasperPrint);
 							console.setStatistics(stats);

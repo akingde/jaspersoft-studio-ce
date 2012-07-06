@@ -120,6 +120,7 @@ public class CreateElementCommand extends Command {
 		}
 		LayoutManager.getLayout(jTable);
 		ILayout layout = LayoutManager.getLayout(jTable);
+
 		map = layout.layout(jrCell.getElements(),
 				new Dimension(jrColumn.getWidth(), jrCell.getHeight()));
 	}
