@@ -15,7 +15,6 @@ import com.jaspersoft.ireport.jasperserver.ws.scheduler.JobMailNotification;
 import com.jaspersoft.ireport.jasperserver.ws.scheduler.JobParameter;
 import com.jaspersoft.ireport.jasperserver.ws.scheduler.JobRepositoryDestination;
 import com.jaspersoft.ireport.jasperserver.ws.scheduler.JobSimpleTrigger;
-import com.jaspersoft.ireport.jasperserver.ws.scheduler.JobSummary;
 import com.jaspersoft.ireport.jasperserver.ws.scheduler.ResultSendType;
 
 /**

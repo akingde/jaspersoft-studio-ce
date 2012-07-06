@@ -23,7 +23,6 @@
  */
 package com.jaspersoft.ireport.jasperserver.ws;
 
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 
 /**
  *

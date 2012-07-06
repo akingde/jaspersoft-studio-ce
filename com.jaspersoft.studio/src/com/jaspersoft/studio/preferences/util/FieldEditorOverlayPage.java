@@ -23,7 +23,6 @@ package com.jaspersoft.studio.preferences.util;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;

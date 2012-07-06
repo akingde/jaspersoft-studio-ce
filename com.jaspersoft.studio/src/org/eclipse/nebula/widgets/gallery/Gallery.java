@@ -61,63 +61,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.TypedListener;
-/*
- * <p>
- * SWT Widget that displays an image gallery<br/>
- * see http://www.eclipse.org/nebula/widgets/gallery/gallery.php<br/>
- * This widget requires jdk-1.4+
- * </p>
- * <p>
- * Style <code>VIRTUAL</code> is used to create a <code>Gallery</code> whose
- * <code>GalleryItem</code>s are to be populated by the client on an on-demand
- * basis instead of up-front. This can provide significant performance
- * improvements for galleries that are very large or for which
- * <code>GalleryItem</code> population is expensive (for example, retrieving
- * values from an external source).
- * </p>
- * <p>
- * Here is an example of using a <code>Gallery</code> with style
- * <code>VIRTUAL</code>: <code><pre>
- * final Gallery gallery = new Gallery(parent, SWT.VIRTUAL | V_SCROLL | SWT.BORDER);
- * gallery.setGroupRenderer(new DefaultGalleryGroupRenderer());
- * gallery.setItemRenderer(new DefaultGalleryItemRenderer());
- * gallery.setItemCount(1000000);
- * gallery.addListener(SWT.SetData, new Listener() {
- * 	public void handleEvent(Event event) {
- * 		GalleryItem item = (GalleryItem) event.item;
- * 		int index = gallery.indexOf(item);
- * 		item.setText(&quot;Item &quot; + index);
- * 		System.out.println(item.getText());
- * 	}
- * });
- * </pre></code>
- * </p>
- * <p>
- * <dl>
- * <dt><b>Styles:</b></dt>
- * <dd>SINGLE, MULTI, VIRTUAL, V_SCROLL, H_SCROLL</dd>
- * </dl>
- * </p>
- * <p>
- * Note: Only one of the styles SINGLE and MULTI may be specified.
- * </p>
- * <p>
- * Note: Only one of the styles V_SCROLL and H_SCROLL may be specified.
- * </p>
- * <p>
- * <dl>
- * <dt><b>Events:</b></dt>
- * <dd>Selection, DefaultSelection, SetData, PaintItem</dd>
- * </dl>
- * </p>
- * <p>
- * NOTE: THIS WIDGET AND ITS API ARE STILL UNDER DEVELOPMENT.
- * </p>
- * 
- * @author Nicolas Richeton (nicolas.richeton@gmail.com)
- * @contributor Peter Centgraf (bugs 212071, 212073)
- * @contributor Robert Handschmann (bug 215817)
- */
 
 public class Gallery extends Canvas {
 

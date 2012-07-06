@@ -19,11 +19,11 @@
  */
 package com.jaspersoft.studio.data.customjrds;
 
-import org.eclipse.swt.graphics.Image;
-
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.ds.DataSourceDataAdapter;
 import net.sf.jasperreports.data.ds.DataSourceDataAdapterImpl;
+
+import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;

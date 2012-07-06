@@ -24,8 +24,6 @@ import org.eclipse.nebula.animation.AnimationRunner;
 import org.eclipse.nebula.animation.effects.SetColorEffect;
 import org.eclipse.nebula.animation.effects.SetColorEffect.IColoredObject;
 import org.eclipse.nebula.animation.movement.ExpoOut;
-import org.eclipse.nebula.widgets.gallery.Gallery;
-import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;

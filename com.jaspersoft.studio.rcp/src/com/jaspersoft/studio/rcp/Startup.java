@@ -27,6 +27,7 @@ import java.util.Arrays;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -70,6 +71,14 @@ public class Startup implements IStartup {
 				System.arraycopy(ids, 0, newIds, 0, ids.length);
 				newIds[newIds.length - 1] = JavaCore.NATURE_ID;
 				description.setNatureIds(newIds);
+
+				project.setDescription(description, monitor);
+
+				ICommand java = description.newCommand();
+				java.setBuilderName(JavaCore.BUILDER_ID);
+
+				description.setBuildSpec(new ICommand[] { java });
+
 				project.setDescription(description, monitor);
 
 				IJavaProject javaproj = JavaCore.create(project);

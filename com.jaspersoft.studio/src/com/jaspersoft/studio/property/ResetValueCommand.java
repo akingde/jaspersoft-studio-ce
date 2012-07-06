@@ -47,11 +47,6 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
 
 import com.jaspersoft.studio.messages.Messages;
-/*/*
- * A Command used to restore the default value of a property.
- * 
- * @author Pratik Shah
- */
 
 public class ResetValueCommand extends Command {
 

@@ -19,9 +19,9 @@
  */
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
-import com.jaspersoft.studio.components.barcode.messages.Messages;
-
 import net.sf.jasperreports.components.barcode4j.BarcodeComponent;
+
+import com.jaspersoft.studio.components.barcode.messages.Messages;
 
 public class Orientation {
 	public static String[] getItems() {

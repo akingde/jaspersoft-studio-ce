@@ -36,19 +36,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Item;
-/*
- * <p>
- * Abstract class which provides low-level support for a grid-based group.
- * renderer.
- * </p>
- * <p>
- * NOTE: THIS WIDGET AND ITS API ARE STILL UNDER DEVELOPMENT.
- * </p>
- * 
- * @author Nicolas Richeton (nicolas.richeton@gmail.com)
- * @contributor Richard Michalsky (bug 197959)
- * @contributor Robert Handschmann (bug 215817)
- */
 
 public abstract class AbstractGridGroupRenderer extends
 		AbstractGalleryGroupRenderer {

@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.property.section.widgets;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;

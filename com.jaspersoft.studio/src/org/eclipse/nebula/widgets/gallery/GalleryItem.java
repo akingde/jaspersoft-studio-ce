@@ -36,22 +36,6 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Item;
-/*
- * <p>
- * Instances of this class represent a selectable user interface object that
- * represents an item in a gallery.
- * </p>
- * 
- * <p>
- * NOTE: THIS WIDGET AND ITS API ARE STILL UNDER DEVELOPMENT.
- * </p>
- * 
- * @see Gallery
- * 
- * @author Nicolas Richeton (nicolas.richeton@gmail.com)
- * @contributor Peter Centgraf (bugs 212071, 212073)
- * 
- */
 
 public class GalleryItem extends Item {
 

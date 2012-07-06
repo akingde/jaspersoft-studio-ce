@@ -5,11 +5,6 @@
 
 package com.jaspersoft.ireport.jasperserver.ws.examples;
 
-import com.jaspersoft.ireport.jasperserver.ws.FileContent;
-import com.jaspersoft.ireport.jasperserver.ws.JServer;
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -17,6 +12,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import com.jaspersoft.ireport.jasperserver.ws.FileContent;
+import com.jaspersoft.ireport.jasperserver.ws.JServer;
+import com.jaspersoft.ireport.jasperserver.ws.WSClient;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 
 /**
  *

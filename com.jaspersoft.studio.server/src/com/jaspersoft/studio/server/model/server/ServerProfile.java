@@ -19,9 +19,9 @@
  */
 package com.jaspersoft.studio.server.model.server;
 
-import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
-
 import net.sf.jasperreports.repo.Resource;
+
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 
 public class ServerProfile implements Resource, Cloneable {
 	private String name;

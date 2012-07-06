@@ -5,11 +5,12 @@
 
 package com.jaspersoft.ireport.jasperserver.ws.examples;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.jaspersoft.ireport.jasperserver.ws.JServer;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import java.io.File;
-import java.io.IOException;
 
 /**
  *

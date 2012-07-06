@@ -27,7 +27,6 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPPattern;
-import com.jaspersoft.studio.property.section.widgets.SPText;
 
 public class PatternPropertyDescriptor extends NTextPropertyDescriptor {
 

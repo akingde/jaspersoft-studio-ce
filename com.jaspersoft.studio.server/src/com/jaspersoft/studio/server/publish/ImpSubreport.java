@@ -21,11 +21,11 @@ package com.jaspersoft.studio.server.publish;
 
 import java.io.File;
 
-import org.eclipse.core.resources.IFile;
-
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
+
+import org.eclipse.core.resources.IFile;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.model.MJrxml;

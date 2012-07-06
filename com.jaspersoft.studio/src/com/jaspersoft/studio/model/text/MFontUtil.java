@@ -23,11 +23,11 @@
  */
 package com.jaspersoft.studio.model.text;
 
-import com.jaspersoft.studio.model.APropertyNode;
-
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignFont;
+
+import com.jaspersoft.studio.model.APropertyNode;
 
 public class MFontUtil {
 	public static MFont getMFont(MFont mfont, JRFont jrfont, JRStyle style, APropertyNode node) {

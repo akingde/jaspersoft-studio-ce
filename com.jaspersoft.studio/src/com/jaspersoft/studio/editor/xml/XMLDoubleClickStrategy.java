@@ -42,7 +42,10 @@
  */
 package com.jaspersoft.studio.editor.xml;
 
-import org.eclipse.jface.text.*;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextDoubleClickStrategy;
+import org.eclipse.jface.text.ITextViewer;
 /*/*
  * The Class XMLDoubleClickStrategy.
  */

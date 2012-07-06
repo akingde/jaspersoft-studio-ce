@@ -23,12 +23,12 @@ package com.jaspersoft.studio.swt.widgets;
 import java.util.Arrays;
 import java.util.TimeZone;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.List;
 
 public class WTimeZoneList extends Composite {
 	

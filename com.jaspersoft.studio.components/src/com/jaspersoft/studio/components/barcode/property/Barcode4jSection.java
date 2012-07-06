@@ -2,10 +2,7 @@ package com.jaspersoft.studio.components.barcode.property;
 
 import net.sf.jasperreports.components.barcode4j.BarcodeComponent;
 
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
