@@ -74,7 +74,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 		dsetCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				boolean en = dsetCombo.getSelectionIndex() > 0;
+				boolean en = !dsetCombo.getText().equals(ModelUtils.MAIN_DATASET);
 				setDatasetEnabled(en);
 				changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_DATASET_NAME, en ? dsetCombo.getText()
 						: "");
@@ -193,7 +193,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 		}
 		dsetCombo.setItems(items);
 		dsetCombo.select(dsindex);
-		setDatasetEnabled(dsindex != 0);
+		setDatasetEnabled(!dsetCombo.getText().equals(ModelUtils.MAIN_DATASET));
 		dsRunWidget.setData(datasetRun);
 
 	}

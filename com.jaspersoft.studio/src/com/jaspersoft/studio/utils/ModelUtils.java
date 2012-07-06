@@ -96,6 +96,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class ModelUtils {
 
+	public static final String MAIN_DATASET = "[Main Dataset]";
+
 	public static ANode getFirstChild(ANode parent) {
 		List<INode> children = parent.getChildren();
 		if (children != null && !children.isEmpty())
@@ -128,7 +130,7 @@ public class ModelUtils {
 		for (int i = 0; i < datasetsList.size(); i++) {
 			String name = ((JRDataset) datasetsList.get(i)).getName();
 			if (datasetsList.get(i) == jd.getMainDataset())
-				name = "[Main Dataset]";
+				name = MAIN_DATASET;
 			res[i] = name;
 		}
 		return res;
