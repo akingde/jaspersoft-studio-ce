@@ -72,7 +72,7 @@ public class CSVFieldsProvider implements IFieldsProvider {
 			for (String key : map.keySet()) {
 				JRDesignField field = new JRDesignField();
 				field.setName(key);
-				field.setValueClass(Object.class);
+				field.setValueClass(String.class);
 				columns.add(field);
 			}
 			return columns;
