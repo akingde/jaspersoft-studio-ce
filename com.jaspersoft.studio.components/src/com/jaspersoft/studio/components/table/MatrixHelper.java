@@ -38,7 +38,8 @@ public class MatrixHelper {
 	}
 
 	public Rectangle getYHColumn(BaseColumn bc, int type, String grName) {
-		return map.get(new ColumnCell(type, Misc.nvl(grName), bc));
+		Rectangle r = map.get(new ColumnCell(type, Misc.nvl(grName), bc));
+		return r.getCopy();
 	}
 
 	public ColumnCell getColumnCell(ColumnCell colcel) {

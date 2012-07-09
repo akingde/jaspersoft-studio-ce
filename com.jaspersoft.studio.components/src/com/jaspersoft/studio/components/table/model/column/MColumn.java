@@ -219,7 +219,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	 */
 	@Override
 	public String getToolTip() {
-		String tt = "";
+		String tt = getValue().getUUID().toString()+"\n";
 		List<ANode> nodes = getAMCollection();
 		for (int i = nodes.size() - 1; i >= 0; i--)
 			tt += nodes.get(i).getDisplayText() + "\n";

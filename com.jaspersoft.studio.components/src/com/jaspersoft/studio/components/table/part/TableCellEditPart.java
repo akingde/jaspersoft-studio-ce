@@ -223,7 +223,6 @@ public class TableCellEditPart extends FigureEditPart implements
 							return c;
 						}
 					} else {
-						System.out.println("C:" + constraint);
 						return super.createChangeConstraintCommand(child,
 								constraint);
 					}
@@ -271,23 +270,25 @@ public class TableCellEditPart extends FigureEditPart implements
 		ANode model = getModel();
 		rect.setToolTip(new Label(model.getToolTip()));
 		if (model.getValue() != null) {
+			StandardBaseColumn col = (StandardBaseColumn) model.getValue();
+
 			Rectangle bounds = ((IGraphicElement) model).getBounds();
 			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
 			int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
+
 			rect.setLocation(new Point(x, y));
+
 			if (model instanceof MCell) {
 				CellFigure f = (CellFigure) rect;
 				// rect.setBounds(rect.getBounds().resize(-5, -3));
-
-				f.setJRElement(((MCell) model).getCell(),
-						(StandardBaseColumn) model.getValue(), getDrawVisitor());
+				f.setJRElement(((MCell) model).getCell(), col, getDrawVisitor());
 			} else {
 				rect.setSize(bounds.width, bounds.height);
-				((EmptyCellFigure) rect).setJRElement(
-						(StandardBaseColumn) model.getValue(),
-						getDrawVisitor(), bounds.height);
+				((EmptyCellFigure) rect).setJRElement(col, getDrawVisitor(),
+						bounds.height);
 			}
 			updateRulers();
+
 		}
 		if (getSelected() == 1)
 			updateRulers();

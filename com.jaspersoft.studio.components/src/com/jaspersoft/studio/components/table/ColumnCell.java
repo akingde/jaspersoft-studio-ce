@@ -57,6 +57,10 @@ public class ColumnCell {
 	}
 
 	public Rectangle getBounds() {
+		if (column.getUUID().toString()
+				.equals("9b743599-cb50-4f1b-94a2-ffa640f223c1"))
+			System.out.println("EW:" + east.getY() +":"+ west.getY() );
+		
 		int w = east.getY() - west.getY();
 		if (south.getY() < north.getY()) {
 			Guide tmp = north;
