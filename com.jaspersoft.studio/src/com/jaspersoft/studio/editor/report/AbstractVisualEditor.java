@@ -51,6 +51,8 @@ import org.eclipse.gef.ui.actions.ToggleRulerVisibilityAction;
 import org.eclipse.gef.ui.actions.ToggleSnapToGeometryAction;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
+import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
+import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
@@ -106,6 +108,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable,
 		IGraphicalEditor {
 	private Image partImage = JaspersoftStudioPlugin.getImage(MReport.getIconDescriptor().getIcon16());
+	private FlyoutPreferences palettePreferences;
 	private JasperReportsConfiguration jrContext;
 
 	public Image getPartImage() {
@@ -362,6 +365,19 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	protected void initializeGraphicalViewer() {
 		super.initializeGraphicalViewer();
 		initializeEditor();
+	}
+	
+	@Override
+	protected FlyoutPreferences getPalettePreferences() {
+		// We cache the palette preferences for the open editor
+		// Default implementation returns a new FlyoutPreferences object
+		// every time the getPalettePreferences method is invoked.
+		if(palettePreferences==null){
+			palettePreferences=super.getPalettePreferences();
+			// Palette always opened
+			palettePreferences.setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);
+		}
+		return palettePreferences;
 	}
 
 	protected void initializeEditor() {
