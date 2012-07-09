@@ -275,7 +275,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 				AbstractVisualEditor ave = editors.get(1);
 				removeEditorPage(null, ave);
 			}
-
+			setActiveEditor(editors.get(0));
 		}
 		for (AbstractVisualEditor ave : editors) {
 			ave.setModel(this.model);

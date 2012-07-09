@@ -170,7 +170,7 @@ public class MList extends MGraphicElement implements IPastable,
 
 		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(
 				PREFIX + StandardListComponent.PROPERTY_DATASET_RUN,
-				Messages.MList_dataset_run); //$NON-NLS-1$
+				Messages.MList_dataset_run, false); //$NON-NLS-1$
 		datasetRunD.setDescription(Messages.MList_dataset_run_description);
 		datasetRunD.setCategory(Messages.MList_list_properties_category);
 		desc.add(datasetRunD);
@@ -188,9 +188,7 @@ public class MList extends MGraphicElement implements IPastable,
 
 	@Override
 	public Object getPropertyValue(Object id) {
-		JRDesignComponentElement jrElement = getValue();
-		StandardListComponent jrList = (StandardListComponent) jrElement
-				.getComponent();
+		StandardListComponent jrList = getList();
 
 		if (id.equals(StandardListComponent.PROPERTY_IGNORE_WIDTH))
 			return jrList.getIgnoreWidth();
@@ -221,11 +219,7 @@ public class MList extends MGraphicElement implements IPastable,
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignComponentElement jrElement = getValue();
-		StandardListComponent jrList = (StandardListComponent) jrElement
-				.getComponent();
-		// JRDesignDatasetRun jrDataSetRun = (JRDesignDatasetRun)
-		// jrList.getDatasetRun();
+		StandardListComponent jrList = getList();
 
 		if (id.equals(StandardListComponent.PROPERTY_IGNORE_WIDTH))
 			jrList.setIgnoreWidth((Boolean) value);
@@ -427,5 +421,12 @@ public class MList extends MGraphicElement implements IPastable,
 	public Dimension getSize() {
 		JRDesignComponentElement v = getValue();
 		return new Dimension(v.getWidth(), v.getHeight());
+	}
+
+	public StandardListComponent getList() {
+		JRDesignComponentElement jrElement = getValue();
+		StandardListComponent jrList = (StandardListComponent) jrElement
+				.getComponent();
+		return jrList;
 	}
 }

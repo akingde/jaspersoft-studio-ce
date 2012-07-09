@@ -30,8 +30,8 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class CreateElementCommand extends Command {
-	private MGraphicElement srcNode;
-	private JRDesignElement jrElement;
+	protected MGraphicElement srcNode;
+	protected JRDesignElement jrElement;
 
 	private JRDesignCellContents jrCell;
 
@@ -42,7 +42,8 @@ public class CreateElementCommand extends Command {
 	public CreateElementCommand(MCell destNode, MGraphicElement srcNode,
 			Rectangle position, int index) {
 		super();
-		this.jrElement = (JRDesignElement) srcNode.getValue();
+		if (srcNode != null)
+			this.jrElement = (JRDesignElement) srcNode.getValue();
 		this.jrCell = (JRDesignCellContents) destNode.getValue();
 		this.index = index;
 		this.location = position;

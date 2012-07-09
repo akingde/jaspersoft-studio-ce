@@ -38,8 +38,8 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  */
 public class CreateElementCommand extends Command {
 
-	private MGraphicElement srcNode;
-	private JRDesignElement jrElement;
+	protected MGraphicElement srcNode;
+	protected JRDesignElement jrElement;
 
 	private StandardListComponent listcomponent;
 

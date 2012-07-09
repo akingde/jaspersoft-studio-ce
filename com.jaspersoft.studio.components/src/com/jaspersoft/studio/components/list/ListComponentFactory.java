@@ -19,12 +19,16 @@
  */
 package com.jaspersoft.studio.components.list;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -33,6 +37,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
+import com.jaspersoft.studio.components.list.commands.element.CreateListElement4ObjectCommand;
 import com.jaspersoft.studio.components.list.editor.ListEditor;
 import com.jaspersoft.studio.components.list.figure.ListFigure;
 import com.jaspersoft.studio.components.list.model.MList;
@@ -43,6 +48,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -50,7 +56,11 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
@@ -69,10 +79,58 @@ public class ListComponentFactory implements IComponentFactory {
 			if (mlist.getParent() instanceof MPage) {
 				ReportFactory.createElementsForBand(mlist, list.getContents()
 						.getChildren());
+
+				final JasperDesign jd = mlist.getJasperDesign();
+				StandardListComponent st = mlist.getList();
+
+				DSListener dslistner = new DSListener(parent, jd, st);
+				setDataset(parent, jd, st, dslistner);
+
+				st.getEventSupport().addPropertyChangeListener(dslistner);
 			}
 			return mlist;
 		}
 		return null;
+	}
+
+	class DSListener implements PropertyChangeListener {
+		private ANode parent;
+		private JasperDesign jd;
+		private StandardListComponent st;
+
+		public DSListener(ANode parent, JasperDesign jd,
+				StandardListComponent st) {
+			this.parent = parent;
+			this.jd = jd;
+			this.st = st;
+		}
+
+		public void propertyChange(PropertyChangeEvent evt) {
+			setDataset(parent, jd, st, this);
+		}
+	};
+
+	public void setDataset(ANode parent, final JasperDesign jd,
+			StandardListComponent st, DSListener dslistner) {
+		for (INode n : parent.getChildren())
+			if (n instanceof MDataset)
+				parent.removeChild((ANode) n);
+		JRDesignDatasetRun dr = (JRDesignDatasetRun) st.getDatasetRun();
+		if (dr != null) {
+			dr.getEventSupport().removePropertyChangeListener(dslistner);
+			String dbname = dr.getDatasetName();
+			JRDesignDataset dataset;
+			if (dbname != null)
+				dataset = (JRDesignDataset) jd.getDatasetMap().get(dbname);
+			else
+				dataset = (JRDesignDataset) jd.getMainDataset();
+			if (dataset != null) {
+				MDataset nDataset = new MDataset(parent, dataset, 0);
+				ReportFactory.createDataset(nDataset, dataset, false);
+			}
+
+			dr.getEventSupport().addPropertyChangeListener(dslistner);
+		}
 	}
 
 	public IFigure createFigure(ANode node) {
@@ -103,6 +161,27 @@ public class ListComponentFactory implements IComponentFactory {
 
 	public Command getCreateCommand(ANode parent, ANode child,
 			Rectangle location, int newIndex) {
+		if (parent instanceof MPage) {
+			for (INode c : parent.getChildren()) {
+				if (c instanceof MList) {
+					parent = (MList) c;
+					break;
+				}
+			}
+		}
+		if (child instanceof MField
+				&& (child.getValue() != null && parent instanceof MList))
+			return new CreateListElement4ObjectCommand(child, (MList) parent,
+					location, newIndex);
+		if (child instanceof MParameterSystem
+				&& (child.getValue() != null && parent instanceof MList))
+			return new CreateListElement4ObjectCommand(child, (MList) parent,
+					location, newIndex);
+		if (child instanceof MVariableSystem
+				&& (child.getValue() != null && parent instanceof MList))
+			return new CreateListElement4ObjectCommand(child, (MList) parent,
+					location, newIndex);
+
 		if (child instanceof MList) {
 			if (parent instanceof MElementGroup)
 				return new CreateListCommand((MElementGroup) parent,
@@ -151,9 +230,10 @@ public class ListComponentFactory implements IComponentFactory {
 		if (model instanceof MRoot) {
 			ANode n = ModelUtils.getFirstChild((MRoot) model);
 			if (n != null && n instanceof MPage) {
-				n = ModelUtils.getFirstChild(n);
-				if (n != null && n instanceof MList)
-					return new ListPageEditPart();
+				for (INode child : n.getChildren()) {
+					if (child instanceof MList)
+						return new ListPageEditPart();
+				}
 			}
 		}
 		if (model instanceof MList)

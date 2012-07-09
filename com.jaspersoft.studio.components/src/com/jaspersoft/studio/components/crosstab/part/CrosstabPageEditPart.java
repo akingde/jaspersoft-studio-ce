@@ -27,7 +27,7 @@ import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
-import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.model.INode;
 
 public class CrosstabPageEditPart extends PageEditPart {
 
@@ -49,7 +49,13 @@ public class CrosstabPageEditPart extends PageEditPart {
 	}
 
 	private void updateContainerSize() {
-		MCrosstab table = (MCrosstab) ModelUtils.getFirstChild(getPage());
+		MCrosstab table = null;
+		for (INode n : getPage().getChildren()) {
+			if (n instanceof MCrosstab) {
+				table = (MCrosstab) n;
+				break;
+			}
+		}
 		if (table != null) {
 			Dimension d = table.getCrosstabManager().getSize();
 			d.height = Math.max(d.height, (Integer) table

@@ -27,7 +27,7 @@ import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
-import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.model.INode;
 
 public class ListPageEditPart extends PageEditPart {
 
@@ -49,7 +49,13 @@ public class ListPageEditPart extends PageEditPart {
 	}
 
 	private void updateContainerSize() {
-		MList table = (MList) ModelUtils.getFirstChild(getPage());
+		MList table = null;
+		for (INode n : getPage().getChildren()) {
+			if (n instanceof MList) {
+				table = (MList) n;
+				break;
+			}
+		}
 		if (table != null) {
 			Dimension d = table.getContainerSize();
 			d.height = Math.max(d.height, (Integer) table

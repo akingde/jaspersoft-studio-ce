@@ -115,6 +115,11 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		this.ctManager = ctManager;
 	}
 
+	@Override
+	public JRDesignCrosstab getValue() {
+		return (JRDesignCrosstab) super.getValue();
+	}
+
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
