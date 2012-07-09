@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.components.list.part;
 
+import java.util.Collection;
+
 import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -79,8 +81,19 @@ public class ListEditPart extends EditableFigureEditPart {
 				} else if (request.getNewObject() instanceof MGraphicElement) {
 					return OutlineTreeEditPartFactory.getCreateCommand(
 							(ANode) getHost().getModel(),
-							(MGraphicElement) request.getNewObject(),
+							(ANode) request.getNewObject(),
 							constraint.getCopy(), -1);
+				} else if (request.getNewObject() instanceof Collection<?>) {
+					CompoundCommand cmd = new CompoundCommand();
+					Collection<?> c = (Collection<?>) request.getNewObject();
+					for (Object obj : c) {
+						if (obj instanceof ANode)
+							cmd.add(OutlineTreeEditPartFactory
+									.getCreateCommand((ANode) getHost()
+											.getModel(), (ANode) obj,
+											constraint.getCopy(), -1));
+					}
+					return cmd;
 				}
 				return null;
 			}

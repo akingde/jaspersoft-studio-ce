@@ -124,7 +124,9 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
 	public String getDisplayText() {
-		return ((JRDesignDataset) getValue()).getName();
+		if (getValue() != null)
+			return ((JRDesignDataset) getValue()).getName();
+		return "";
 	}
 
 	/*

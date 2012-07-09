@@ -61,10 +61,11 @@ public class CreateElementCommand extends Command {
 			Rectangle position, int index) {
 		super();
 		this.srcNode = srcNode;
-		this.jrElement = (JRDesignElement) srcNode.getValue();
+		if (srcNode != null)
+			jrElement = (JRDesignElement) srcNode.getValue();
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) destNode
 				.getValue();
-		this.listcomponent = (StandardListComponent) jrElement.getComponent();
+		listcomponent = (StandardListComponent) jrElement.getComponent();
 		this.index = index;
 		this.location = position;
 	}
@@ -75,10 +76,9 @@ public class CreateElementCommand extends Command {
 	protected void createObject() {
 		if (jrElement == null) {
 			jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
-
-			if (jrElement != null)
-				setElementBounds();
 		}
+		if (jrElement != null)
+			setElementBounds();
 	}
 
 	protected void setElementBounds() {

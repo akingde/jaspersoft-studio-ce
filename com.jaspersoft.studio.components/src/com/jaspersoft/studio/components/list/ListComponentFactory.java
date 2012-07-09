@@ -169,6 +169,7 @@ public class ListComponentFactory implements IComponentFactory {
 				}
 			}
 		}
+
 		if (child instanceof MField
 				&& (child.getValue() != null && parent instanceof MList))
 			return new CreateListElement4ObjectCommand(child, (MList) parent,
