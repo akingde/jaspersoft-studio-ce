@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -108,9 +109,30 @@ public class DataPreviewTable implements DatasetReaderListener{
 		refreshPreviewBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				refreshDataPreview();
-				refreshPreviewBtn.setEnabled(false);
-				cancelPreviewBtn.setEnabled(true);
+				if(canRefreshDataPreview()){
+					refreshDataPreview();
+					refreshPreviewBtn.setEnabled(false);
+					cancelPreviewBtn.setEnabled(true);
+				}
+			}
+
+			private boolean canRefreshDataPreview() {
+				// No data preview when no fields are selected.
+				if(previewInfoProvider.getFieldsForPreview()==null ||
+						previewInfoProvider.getFieldsForPreview().isEmpty()) {
+					MessageDialog.openError(
+							composite.getShell(), Messages.DataPreviewTable_ErrorTitle, 
+							Messages.DataPreviewTable_ErrorMsgNoFields);
+					return false;
+				}
+				// No data preview when no data adapter is selected
+				if(previewInfoProvider.getDataAdapterDescriptor()==null){
+					MessageDialog.openError(
+							composite.getShell(), Messages.DataPreviewTable_ErrorTitle, 
+							Messages.DataPreviewTable_ErrorMsgNoDataAdapter);
+					return false;
+				}
+				return true;
 			}
 		});
 		
