@@ -44,7 +44,7 @@ public class TFContainer extends Composite {
 		layout.verticalSpacing = 0;
 		setLayout(layout);
 
-		toolBar = new ToolBar(this, SWT.HORIZONTAL | SWT.FLAT | SWT.WRAP | SWT.BORDER | SWT.RIGHT);
+		toolBar = new ToolBar(this, SWT.HORIZONTAL | SWT.FLAT | SWT.WRAP | SWT.RIGHT);
 
 		content = new Composite(this, SWT.NONE);
 		stackLayout = new StackLayout();
@@ -83,7 +83,9 @@ public class TFContainer extends Composite {
 		int index = tfitems.indexOf(item);
 		toolBar.getItem(index).dispose();
 		tfitems.remove(item);
+		toolBar.pack(true);
 		toolBar.update();
+		getParent().layout(true);
 		if (index == selection)
 			setSelection(--index);
 	}
