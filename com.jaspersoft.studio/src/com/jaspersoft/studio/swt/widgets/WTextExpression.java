@@ -59,7 +59,7 @@ import com.jaspersoft.studio.utils.Misc;
  * @author mrabbi
  * 
  */
-public class WTextExpression extends Composite implements IExpressionContextSetter{
+public class WTextExpression extends Composite implements IExpressionContextSetter {
 
 	/** No label specified */
 	public static final int LABEL_NONE = 0x0000;
@@ -184,13 +184,16 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		textExpression.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				String text = textExpression.getText();
-				if (text.isEmpty()) {
-					setExpression(null);
-				} else {
-					setExpression(new JRDesignExpression(text));
+				if (!isRefreshing) {
+					String text = textExpression.getText();
+					oldpos = textExpression.getCaretPosition();
+					if (text.isEmpty()) {
+						setExpression(null);
+					} else {
+						setExpression(new JRDesignExpression(text));
+					}
+					fireModifyEvent(e);
 				}
-				fireModifyEvent(e);
 			}
 		});
 
@@ -217,6 +220,9 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		});
 	}
 
+	private int oldpos = 0;
+	private boolean isRefreshing = false;
+
 	/**
 	 * Sets the expression for the widget.
 	 * 
@@ -224,18 +230,23 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	 *          the expression to set
 	 */
 	public void setExpression(JRDesignExpression exp) {
+		isRefreshing = true;
 		this.expression = exp;
 
 		// PAY ATTENTION: Checks are needed in order to avoid notification
 		// loop due to the modifyEvent raised after a setText call.
 		if (exp != null && !exp.getText().equals(textExpression.getText())) {
-			this.textExpression.setText(exp.getText());
-			this.textExpression.setToolTipText(exp.getText());
-		} else if (exp == null && !textExpression.getText().isEmpty()) {
-			this.textExpression.setText(""); //$NON-NLS-1$
-			this.textExpression.setToolTipText(""); //$NON-NLS-1$
-		}
+			textExpression.setFocus();
+			textExpression.setText(exp.getText());
+			textExpression.setToolTipText(exp.getText());
+			if (exp.getText().length() >= oldpos)
+				textExpression.setSelection(oldpos, oldpos);
 
+		} else if (exp == null && !textExpression.getText().isEmpty()) {
+			textExpression.setText(""); //$NON-NLS-1$
+			textExpression.setToolTipText(""); //$NON-NLS-1$
+		}
+		isRefreshing = false;
 	}
 
 	@Override
@@ -280,9 +291,9 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {
-		this.expContext=expContext;
+		this.expContext = expContext;
 	}
-	
+
 	public void fireModifyEvent(ModifyEvent event) {
 		for (ModifyListener ml : listeners)
 			ml.modifyText(event);

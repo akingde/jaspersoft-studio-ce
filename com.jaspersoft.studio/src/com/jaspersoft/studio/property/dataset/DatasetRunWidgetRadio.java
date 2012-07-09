@@ -172,10 +172,19 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 
 		@Override
 		public void modifyText(ModifyEvent e) {
-			if (otherCon.isEnabled())
-				setConnection(otherExpr.getExpression().getText());
-			else
-				setDatasource(dsRunExpr.getExpression().getText());
+			if (otherExpr.isEnabled()) {
+				JRDesignExpression exp = otherExpr.getExpression();
+				if (exp != null)
+					setConnection(exp.getText());
+				else
+					setConnection(null);
+			} else {
+				JRDesignExpression exp = dsRunExpr.getExpression();
+				if (exp != null)
+					setDatasource(exp.getText());
+				else
+					setDatasource(null);
+			}
 		}
 	};
 
