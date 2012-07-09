@@ -91,7 +91,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 			protected void setDatasource(String exTxt) {
 				if (datasetrun != null) {
 					JRDesignExpression jde = (JRDesignExpression) datasetrun.getDataSourceExpression();
-					if (jde == null)
+//					if (jde == null)
 						jde = new JRDesignExpression();
 					jde.setValueClass(JRDataSource.class);
 					jde.setText(exTxt);
@@ -103,7 +103,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 			protected void setConnection(String exTxt) {
 				if (datasetrun != null) {
 					JRDesignExpression jde = (JRDesignExpression) datasetrun.getConnectionExpression();
-					if (jde == null)
+//					if (jde == null)
 						jde = new JRDesignExpression();
 					jde.setValueClass(Connection.class);
 					jde.setText(exTxt);

@@ -26,6 +26,8 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -39,7 +41,7 @@ import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
-public class DatasetRunWidgetRadio implements IExpressionContextSetter{
+public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 	protected JRDesignDatasetRun datasetrun;
 
 	public DatasetRunWidgetRadio(Composite parent) {
@@ -161,15 +163,28 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter{
 				else if (emptyCon.getSelection())
 					setDatasource("new net.sf.jasperreports.engine.JREmptyDataSource()");//$NON-NLS-1$
 			}
-
 		};
+
 		addListeners();
 	}
+
+	private ModifyListener mlistener = new ModifyListener() {
+
+		@Override
+		public void modifyText(ModifyEvent e) {
+			if (otherCon.isEnabled())
+				setConnection(otherExpr.getExpression().getText());
+			else
+				setDatasource(dsRunExpr.getExpression().getText());
+		}
+	};
 
 	protected void removeListeners() {
 		sameCon.removeListener(SWT.Selection, listener);
 		otherCon.removeListener(SWT.Selection, listener);
+		otherExpr.removeModifyListener(mlistener);
 		jrdCon.removeListener(SWT.Selection, listener);
+		dsRunExpr.removeModifyListener(mlistener);
 		emptyCon.removeListener(SWT.Selection, listener);
 		noCon.removeListener(SWT.Selection, listener);
 	}
@@ -177,7 +192,9 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter{
 	protected void addListeners() {
 		sameCon.addListener(SWT.Selection, listener);
 		otherCon.addListener(SWT.Selection, listener);
+		otherExpr.addModifyListener(mlistener);
 		jrdCon.addListener(SWT.Selection, listener);
+		dsRunExpr.addModifyListener(mlistener);
 		emptyCon.addListener(SWT.Selection, listener);
 		noCon.addListener(SWT.Selection, listener);
 	}
