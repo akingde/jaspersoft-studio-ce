@@ -69,14 +69,18 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 			} else if (datasetrun.getConnectionExpression() != null
 					&& datasetrun.getConnectionExpression().getText().equals("$P{REPORT_CONNECTION}")) {
 				sameCon.setSelection(true);
+				otherExpr.setEnabled(true);
+				otherExpr.setExpression((JRDesignExpression) datasetrun.getConnectionExpression());
 			} else if (datasetrun.getConnectionExpression() != null) {
 				otherExpr.setEnabled(true);
 				otherExpr.setExpression((JRDesignExpression) datasetrun.getConnectionExpression());
 				otherCon.setSelection(true);
 			} else if (datasetrun.getDataSourceExpression() != null
 					&& datasetrun.getDataSourceExpression().getText()
-							.equals("new net.sf.jasperreports.engine.JREmptyDataSource()")) {
+							.startsWith("new net.sf.jasperreports.engine.JREmptyDataSource(")) {
 				emptyCon.setSelection(true);
+				dsRunExpr.setEnabled(true);
+				dsRunExpr.setExpression((JRDesignExpression) datasetrun.getDataSourceExpression());
 			} else if (datasetrun.getDataSourceExpression() != null) {
 				dsRunExpr.setEnabled(true);
 				dsRunExpr.setExpression((JRDesignExpression) datasetrun.getDataSourceExpression());
@@ -116,6 +120,12 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		gd.horizontalSpan = 3;
 		noCon.setLayoutData(gd);
 
+		sameCon = new Button(composite, SWT.RADIO);
+		sameCon.setText(Messages.WizardConnectionPage_mainreport_text);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		sameCon.setLayoutData(gd);
+
 		otherCon = new Button(composite, SWT.RADIO);
 		otherCon.setText(Messages.WizardConnectionPage_connection_text);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -125,6 +135,12 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		otherExpr = new WTextExpression(composite, SWT.NONE);
 		otherExpr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		emptyCon = new Button(composite, SWT.RADIO);
+		emptyCon.setText(Messages.WizardConnectionPage_empty_connection_text);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		emptyCon.setLayoutData(gd);
+
 		jrdCon = new Button(composite, SWT.RADIO);
 		jrdCon.setText(Messages.WizardConnectionPage_datasource_text);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -133,18 +149,6 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 
 		dsRunExpr = new WTextExpression(composite, SWT.NONE);
 		dsRunExpr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		sameCon = new Button(composite, SWT.RADIO);
-		sameCon.setText(Messages.WizardConnectionPage_mainreport_text);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		sameCon.setLayoutData(gd);
-
-		emptyCon = new Button(composite, SWT.RADIO);
-		emptyCon.setText(Messages.WizardConnectionPage_empty_connection_text);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		emptyCon.setLayoutData(gd);
 
 		listener = new Listener() {
 			int time = -1;
