@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.server.wizard.resource.page;
 
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
+import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -117,7 +118,7 @@ public abstract class AResourcePage extends WizardPage {
 		bindingContext.bindValue(SWTObservables.observeText(tid, SWT.Modify),
 				PojoObservables.observeValue(rd, "name"),
 				new UpdateValueStrategy()
-						.setAfterConvertValidator(new EmptyStringValidator()),
+						.setAfterConvertValidator(new IDStringValidator()),
 				null);
 
 		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
@@ -132,6 +133,7 @@ public abstract class AResourcePage extends WizardPage {
 		if (rd.getIsNew())
 			rd.setLabel(rd.getName());
 		bindingContext.updateTargets();
+		bindingContext.updateModels();
 	}
 
 }

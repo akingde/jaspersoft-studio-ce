@@ -147,8 +147,9 @@ public class RDReportUnitPage extends AResourcePage {
 		}
 
 		public int getLayoutControl() {
-			int lc = rd
+			Integer v = rd
 					.getResourcePropertyValueAsInteger(ResourceDescriptor.PROP_RU_CONTROLS_LAYOUT);
+			int lc = v == null ? -1 : v;
 			for (int i = 0; i < layouts.length; i++)
 				if (layouts[i] == lc)
 					return i;
@@ -182,8 +183,9 @@ public class RDReportUnitPage extends AResourcePage {
 		}
 
 		public boolean isAllowPrompt() {
-			return rd
+			Boolean b = rd
 					.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS);
+			return b != null && b;
 		}
 	}
 
