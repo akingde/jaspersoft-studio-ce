@@ -41,6 +41,6 @@ public class HorizontalRowLayout implements ILayout {
 
 	@Override
 	public String getIcon() {
-		return "icons/layout-h.png";
+		return "icons/layout-3.png";
 	}
 }

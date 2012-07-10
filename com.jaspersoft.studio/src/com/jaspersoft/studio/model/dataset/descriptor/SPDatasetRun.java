@@ -91,8 +91,8 @@ public class SPDatasetRun extends ASPropertyWidget {
 			protected void setDatasource(String exTxt) {
 				if (datasetrun != null) {
 					JRDesignExpression jde = (JRDesignExpression) datasetrun.getDataSourceExpression();
-//					if (jde == null)
-						jde = new JRDesignExpression();
+					// if (jde == null)
+					jde = new JRDesignExpression();
 					jde.setValueClass(JRDataSource.class);
 					jde.setText(exTxt);
 					changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, jde);
@@ -103,10 +103,10 @@ public class SPDatasetRun extends ASPropertyWidget {
 			protected void setConnection(String exTxt) {
 				if (datasetrun != null) {
 					JRDesignExpression jde = (JRDesignExpression) datasetrun.getConnectionExpression();
-//					if (jde == null)
-						jde = new JRDesignExpression();
+					// if (jde == null)
+					jde = new JRDesignExpression();
 					jde.setValueClass(Connection.class);
-					jde.setText(exTxt);
+					jde.setText(exTxt); 
 					changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, jde);
 				}
 			}

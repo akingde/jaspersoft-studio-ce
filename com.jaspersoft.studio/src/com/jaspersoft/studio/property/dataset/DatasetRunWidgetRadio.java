@@ -51,6 +51,7 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 	public void setData(JRDesignDatasetRun datasetrun) {
 		this.datasetrun = datasetrun;
 		removeListeners();
+
 		if (datasetrun != null) {
 			dsRunExpr.setEnabled(false);
 			otherExpr.setEnabled(false);

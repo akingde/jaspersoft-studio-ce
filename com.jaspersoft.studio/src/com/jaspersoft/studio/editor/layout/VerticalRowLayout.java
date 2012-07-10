@@ -42,6 +42,6 @@ public class VerticalRowLayout implements ILayout {
 
 	@Override
 	public String getIcon() {
-		return "icons/layout-3.png";
+		return "icons/layout-h.png";
 	}
 }

@@ -30,8 +30,7 @@ public class LayoutManager {
 		return new HorizontalRowLayout();
 	}
 
-	private static final Class<?>[] layouts = new Class<?>[] { FreeLayout.class, HorizontalRowLayout.class,
-			VerticalRowLayout.class };
+	private static final Class<?>[] layouts = new Class<?>[] { HorizontalRowLayout.class, VerticalRowLayout.class };
 
 	public static void addActions(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
 		for (Class<?> id : layouts) {
