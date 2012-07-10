@@ -29,4 +29,19 @@ public class VerticalRowLayout implements ILayout {
 		}
 		return map;
 	}
+
+	@Override
+	public String getName() {
+		return "Vertical Layout";
+	}
+
+	@Override
+	public String getToolTip() {
+		return "Vertical Layout";
+	}
+
+	@Override
+	public String getIcon() {
+		return "icons/layout-3.png";
+	}
 }

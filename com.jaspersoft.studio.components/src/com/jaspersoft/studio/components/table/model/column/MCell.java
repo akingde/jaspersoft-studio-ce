@@ -49,6 +49,7 @@ import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
+import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
@@ -62,7 +63,8 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescrip
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
 public class MCell extends MColumn implements IGraphicElement,
-		IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable {
+		IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable,
+		IGroupElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/**
@@ -372,5 +374,10 @@ public class MCell extends MColumn implements IGraphicElement,
 	@Override
 	public Dimension getSize() {
 		return new Dimension(getValue().getWidth(), getCell().getHeight());
+	}
+
+	@Override
+	public JRElementGroup getJRElementGroup() {
+		return getCell();
 	}
 }

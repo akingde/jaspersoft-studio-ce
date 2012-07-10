@@ -35,12 +35,14 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
+import com.jaspersoft.studio.editor.action.layout.LayoutAction;
 import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
 import com.jaspersoft.studio.editor.action.order.BringForwardAction;
 import com.jaspersoft.studio.editor.action.order.BringToBackAction;
 import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
 import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
@@ -303,12 +305,19 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.add(submenu);
 		// ------------------------------
 
+		submenu = new MenuManager("Layout In Container", JaspersoftStudioPlugin.getImageDescriptor("icons/layout-6.png"), //$NON-NLS-1$
+				LayoutAction.ID);
+
+		LayoutManager.addMenu(submenu, getActionRegistry());
+
+		menu.add(submenu);
+
 		action = getActionRegistry().getAction(ShowPropertyViewAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 
 		action = getActionRegistry().getAction(PageFormatAction.ID);
-		if (action !=null && action.isEnabled())
+		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 
 		action = getActionRegistry().getAction(DatasetAction.ID);

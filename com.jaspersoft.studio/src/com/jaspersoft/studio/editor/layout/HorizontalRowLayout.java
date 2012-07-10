@@ -28,4 +28,19 @@ public class HorizontalRowLayout implements ILayout {
 		}
 		return map;
 	}
+
+	@Override
+	public String getName() {
+		return "Horizontal Layout";
+	}
+
+	@Override
+	public String getToolTip() {
+		return "Horizontal Layout";
+	}
+
+	@Override
+	public String getIcon() {
+		return "icons/layout-h.png";
+	}
 }

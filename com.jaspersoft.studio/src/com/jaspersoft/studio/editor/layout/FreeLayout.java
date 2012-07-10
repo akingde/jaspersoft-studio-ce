@@ -15,4 +15,19 @@ public class FreeLayout implements ILayout {
 		return new HashMap<JRElement, Rectangle>();
 	}
 
+	@Override
+	public String getName() {
+		return "Free Layout";
+	}
+
+	@Override
+	public String getToolTip() {
+		return "Free Layout";
+	}
+
+	@Override
+	public String getIcon() {
+		return "icons/layout.png";
+	}
+
 }

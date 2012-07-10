@@ -91,6 +91,7 @@ import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerComposite;
 import com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
@@ -366,14 +367,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		super.initializeGraphicalViewer();
 		initializeEditor();
 	}
-	
+
 	@Override
 	protected FlyoutPreferences getPalettePreferences() {
 		// We cache the palette preferences for the open editor
 		// Default implementation returns a new FlyoutPreferences object
 		// every time the getPalettePreferences method is invoked.
-		if(palettePreferences==null){
-			palettePreferences=super.getPalettePreferences();
+		if (palettePreferences == null) {
+			palettePreferences = super.getPalettePreferences();
 			// Palette always opened
 			palettePreferences.setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);
 		}
@@ -587,6 +588,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
+		LayoutManager.addActions(registry, this, selectionActions);
 		// ------------------
 
 		action = new ShowPropertyViewAction(this);

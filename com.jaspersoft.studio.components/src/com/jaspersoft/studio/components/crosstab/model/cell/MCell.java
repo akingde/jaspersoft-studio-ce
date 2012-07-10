@@ -28,6 +28,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -50,6 +51,7 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
+import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
@@ -68,7 +70,7 @@ import com.jaspersoft.studio.utils.Colors;
 
 public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		IPastableGraphic, IContainer, IContainerEditPart, ILineBox,
-		IGraphicElementContainer {
+		IGroupElement, IGraphicElementContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -294,7 +296,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	 * .lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignCellContents jrElement = (JRDesignCellContents) getValue();
+		JRDesignCellContents jrElement = getValue();
 		if (jrElement != null) {
 			if (id.equals(JRBaseStyle.PROPERTY_MODE))
 				jrElement.setMode((ModeEnum) opaqueD.getEnumValue(value));
@@ -423,5 +425,10 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	public Dimension getSize() {
 		JRDesignCellContents v = getValue();
 		return new Dimension(v.getWidth(), v.getHeight());
+	}
+
+	@Override
+	public JRElementGroup getJRElementGroup() {
+		return getValue();
 	}
 }
