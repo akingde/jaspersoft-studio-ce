@@ -860,6 +860,14 @@
                   type="com.jaspersoft.studio.model.image.MImage">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.graphic.LayoutSection"
+               id="com.jaspersoft.studio.property.section.graphic.LayoutSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.IContainerLayout">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension

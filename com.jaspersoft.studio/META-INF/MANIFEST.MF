@@ -261,6 +261,8 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    com.jaspersoft.studio.model,
    org.eclipse.gef.editpolicies,
    org.eclipse.gef",
+ com.jaspersoft.studio.editor.outline.page,
+ com.jaspersoft.studio.editor.outline.part,
  com.jaspersoft.studio.editor.palette;
   uses:="com.jaspersoft.studio.model.util,
    org.eclipse.jface.resource,

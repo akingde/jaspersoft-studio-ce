@@ -2,7 +2,7 @@ package com.jaspersoft.studio.editor.layout;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.action.IAction;
@@ -12,12 +12,13 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.editor.action.layout.LayoutAction;
 
 public class LayoutManager {
-	public static ILayout getLayout(JRDesignElement element) {
-		String prop = element.getPropertiesMap().getProperty(ILayout.KEY);
-		if (prop != null) {
-			return instLayout(prop);
+	public static ILayout getLayout(JRPropertiesHolder[] elements) {
+		for (JRPropertiesHolder pholder : elements) {
+			String prop = pholder.getPropertiesMap().getProperty(ILayout.KEY);
+			if (prop != null)
+				return instLayout(prop);
 		}
-		return new HorizontalRowLayout();
+		return new FreeLayout();
 	}
 
 	public static ILayout instLayout(String prop) {
@@ -27,10 +28,11 @@ public class LayoutManager {
 		} catch (IllegalAccessException e) {
 		} catch (ClassNotFoundException e) {
 		}
-		return new HorizontalRowLayout();
+		return new FreeLayout();
 	}
 
 	private static final Class<?>[] layouts = new Class<?>[] { HorizontalRowLayout.class, VerticalRowLayout.class };
+	private static ILayout[] LAYOUTNAMES;
 
 	public static void addActions(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
 		for (Class<?> id : layouts) {
@@ -46,5 +48,11 @@ public class LayoutManager {
 			if (action.isEnabled())
 				submenu.add(action);
 		}
+	}
+
+	public static ILayout[] getAllLayouts() {
+		if (LAYOUTNAMES == null)
+			LAYOUTNAMES = new ILayout[] { new FreeLayout(), new HorizontalRowLayout(), new VerticalRowLayout() };
+		return LAYOUTNAMES;
 	}
 }

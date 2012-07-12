@@ -45,6 +45,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -118,7 +119,15 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		}
 		super.setParent(parent, newIndex);
 	}
-
+	public INode getBand() {
+		INode node = this;
+		while (!(node instanceof MBand) && !(node instanceof MRoot)) {
+			if (node == null || node.getParent() == null)
+				return this;
+			node = node.getParent();
+		}
+		return node;
+	}
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -450,7 +459,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, null);
 	}
 
-	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
+	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 	private RWComboBoxPropertyDescriptor styleD;
 	private RComboBoxPropertyDescriptor groupChangesD;
 	private static JSSEnumPropertyDescriptor positionTypeD;

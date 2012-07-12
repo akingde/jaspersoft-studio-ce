@@ -28,6 +28,7 @@ import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -54,17 +55,20 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class MColumn extends APropertyNode implements IPastable, IContainer,
-		IGraphicElement, IContainerEditPart {
+		IContainerLayout, IGraphicElement, IContainerEditPart {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -219,7 +223,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	 */
 	@Override
 	public String getToolTip() {
-		String tt = getValue().getUUID().toString()+"\n";
+		String tt = getValue().getUUID().toString() + "\n";
 		List<ANode> nodes = getAMCollection();
 		for (int i = nodes.size() - 1; i >= 0; i--)
 			tt += nodes.get(i).getDisplayText() + "\n";
@@ -268,6 +272,13 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 				Messages.MColumn_column_width);
 		desc.add(wD);
 
+		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(
+				MGraphicElement.PROPERTY_MAP,
+				com.jaspersoft.studio.messages.Messages.common_properties);
+		propertiesMapD
+				.setDescription(com.jaspersoft.studio.messages.Messages.common_properties);
+		desc.add(propertiesMapD);
+
 		printWhenExprD.setCategory(Messages.MColumn_column_properties_category);
 		wD.setCategory(Messages.MColumn_column_properties_category);
 	}
@@ -288,6 +299,11 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		if (id.equals(DesignCell.PROPERTY_HEIGHT))
 			return getMTable().getTableManager().getYhcolumn(type, grName,
 					jrElement).height;
+		if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+			// to avoid duplication I remove it first
+			JRPropertiesMap pmap = jrElement.getPropertiesMap();
+			return pmap;
+		}
 		return null;
 	}
 
@@ -349,6 +365,19 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		} else if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION))
 			jrElement.setPrintWhenExpression(ExprUtil.setValues(
 					jrElement.getPrintWhenExpression(), value, null));
+		else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+			JRPropertiesMap v = (JRPropertiesMap) value;
+			String[] names = jrElement.getPropertiesMap().getPropertyNames();
+			for (int i = 0; i < names.length; i++) {
+				jrElement.getPropertiesMap().removeProperty(names[i]);
+			}
+			names = v.getPropertyNames();
+			for (int i = 0; i < names.length; i++)
+				jrElement.getPropertiesMap().setProperty(names[i],
+						v.getProperty(names[i]));
+			this.getPropertyChangeSupport().firePropertyChange(
+					MGraphicElement.PROPERTY_MAP, false, true);
+		}
 	}
 
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {

@@ -32,7 +32,7 @@ import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPReadCombo extends ASPropertyWidget {
-	private Combo combo;
+	protected Combo combo;
 
 	public SPReadCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -52,8 +52,7 @@ public class SPReadCombo extends ASPropertyWidget {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				int index = combo.getSelectionIndex();
-				section.changeProperty(pDescriptor.getId(), index);
+				handlePropertyChange();
 			}
 		});
 		combo.setToolTipText(pDescriptor.getDescription());
@@ -64,6 +63,11 @@ public class SPReadCombo extends ASPropertyWidget {
 		if (b != null)
 			index = ((Number) b).intValue();
 		combo.select(index);
+	}
+
+	protected void handlePropertyChange() {
+		int index = combo.getSelectionIndex();
+		section.changeProperty(pDescriptor.getId(), index);
 	}
 
 }

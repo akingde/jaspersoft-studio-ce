@@ -373,7 +373,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof MFields)
 				return new CreateFieldCommand((MFields) parent, (MField) child, newIndex);
 			else if (child.getValue() != null
-					&& (parent instanceof MGraphicElement || parent instanceof MReport || parent instanceof MBand)) {
+					&& (parent instanceof MGraphicElement || parent instanceof MReport || parent instanceof MBand || parent instanceof MFrame)) {
 				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
 		} else if (child instanceof MParameterSystem) {
@@ -385,7 +385,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				}
 			}
 			if (child.getValue() != null
-					&& (parent instanceof MGraphicElement || parent instanceof MReport || parent instanceof MBand)) {
+					&& (parent instanceof MGraphicElement || parent instanceof MReport || parent instanceof MBand || parent instanceof MFrame)) {
 				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
 		} else if (child instanceof MVariableSystem) {
@@ -395,7 +395,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					return new CreateVariableCommand((MVariables) parent, (MVariable) child, newIndex);
 			}
 			if (child.getValue() != null
-					&& (parent instanceof MGraphicElement || parent instanceof MReport || parent instanceof MBand)) {
+					&& (parent instanceof MGraphicElement || parent instanceof MReport || parent instanceof MBand || parent instanceof MFrame)) {
 				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
 		} else {
@@ -448,7 +448,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof MBand)
 				return new CreateSubreportCommand((MBand) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MFrame)
-				return new CreateSubreportCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+				return new CreateSubreportCommand((MFrame) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateSubreportCommand(parent, (MGraphicElement) child, location, newIndex);
 
@@ -461,7 +461,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof MBand)
 				return new CreateImageCommand((MBand) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MFrame)
-				return new CreateImageCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+				return new CreateImageCommand((MFrame) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateImageCommand(parent, (MGraphicElement) child, location, newIndex);
 
@@ -474,7 +474,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof MBand)
 				return new CreateElementCommand((MBand) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MFrame)
-				return new CreateElementCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+				return new CreateElementCommand((MFrame) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
 

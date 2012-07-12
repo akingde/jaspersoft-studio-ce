@@ -29,6 +29,7 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
@@ -54,6 +55,7 @@ import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
@@ -207,6 +209,11 @@ public class MCell extends MColumn implements IGraphicElement,
 				}
 				return lineBox;
 			}
+			if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+				// to avoid duplication I remove it first
+				JRPropertiesMap pmap = cell.getPropertiesMap();
+				return pmap;
+			}
 		}
 		return super.getPropertyValue(id);
 	}
@@ -264,6 +271,18 @@ public class MCell extends MColumn implements IGraphicElement,
 									DesignCell.PROPERTY_HEIGHT, null, value));
 				}
 				return;
+			} else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+				JRPropertiesMap v = (JRPropertiesMap) value;
+				String[] names = cell.getPropertiesMap().getPropertyNames();
+				for (int i = 0; i < names.length; i++) {
+					cell.getPropertiesMap().removeProperty(names[i]);
+				}
+				names = v.getPropertyNames();
+				for (int i = 0; i < names.length; i++)
+					cell.getPropertiesMap().setProperty(names[i],
+							v.getProperty(names[i]));
+				this.getPropertyChangeSupport().firePropertyChange(
+						MGraphicElement.PROPERTY_MAP, false, true);
 			}
 		}
 		super.setPropertyValue(id, value);

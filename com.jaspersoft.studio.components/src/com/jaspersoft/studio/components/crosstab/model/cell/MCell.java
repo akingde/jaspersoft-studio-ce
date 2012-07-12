@@ -49,6 +49,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -69,8 +70,8 @@ import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
 public class MCell extends APropertyNode implements IGraphicElement, IPastable,
-		IPastableGraphic, IContainer, IContainerEditPart, ILineBox,
-		IGroupElement, IGraphicElementContainer {
+		IContainerLayout, IPastableGraphic, IContainer, IContainerEditPart,
+		ILineBox, IGroupElement, IGraphicElementContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

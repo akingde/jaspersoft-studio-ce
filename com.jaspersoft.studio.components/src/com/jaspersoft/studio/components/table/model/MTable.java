@@ -46,6 +46,7 @@ import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
@@ -55,7 +56,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MTable extends MGraphicElement implements IContainer,
-		IContainerEditPart, IGroupElement {
+		IContainerEditPart, IGroupElement, IContainerLayout {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

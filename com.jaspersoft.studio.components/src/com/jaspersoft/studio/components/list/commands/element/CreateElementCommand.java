@@ -120,6 +120,13 @@ public class CreateElementCommand extends Command {
 				dlist.addElement(jrElement);
 			else
 				dlist.addElement(index, jrElement);
+
+			// JRPropertiesHolder[] pholders = new JRPropertiesHolder[] { dlist
+			// };
+			//
+			// ILayout layout = LayoutManager.getLayout(pholders);
+			// map = layout.layout(dlist.getElements(),
+			// new Dimension(jrElement.getWidth(), jrElement.getHeight()));
 		}
 		if (firstTime) {
 			SelectionHelper.setSelection(jrElement, false);
@@ -127,6 +134,7 @@ public class CreateElementCommand extends Command {
 		}
 	}
 
+	// private Map<JRElement, Rectangle> map;
 	private boolean firstTime = true;
 
 	/*
@@ -148,6 +156,14 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		// for (JRElement el : map.keySet()) {
+		// JRDesignElement del = (JRDesignElement) el;
+		// Rectangle r = map.get(el);
+		// del.setX(r.x);
+		// del.setY(r.y);
+		// del.setWidth(r.width);
+		// del.setHeight(r.height);
+		// }
 		DesignListContents dlist = (DesignListContents) listcomponent
 				.getContents();
 		dlist.removeElement(jrElement);

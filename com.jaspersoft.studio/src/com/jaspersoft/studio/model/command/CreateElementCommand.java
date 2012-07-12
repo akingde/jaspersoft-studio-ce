@@ -20,20 +20,27 @@
 package com.jaspersoft.studio.model.command;
 
 import java.util.List;
+import java.util.Map;
 
+import net.sf.jasperreports.engine.JRCommonElement;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -101,6 +108,12 @@ public class CreateElementCommand extends Command {
 	 */
 	public CreateElementCommand(MFrame destNode, MGraphicElement srcNode, int index) {
 		super();
+		setContext(destNode, srcNode, index);
+	}
+
+	public CreateElementCommand(MFrame destNode, MGraphicElement srcNode, Rectangle position, int index) {
+		super();
+		this.location = position;
 		setContext(destNode, srcNode, index);
 	}
 
@@ -263,10 +276,17 @@ public class CreateElementCommand extends Command {
 				else
 					((JRDesignElementGroup) jrGroup).addElement(index, jrElement);
 			} else if (jrGroup instanceof JRDesignFrame) {
+				JRDesignFrame jFrame = (JRDesignFrame) jrGroup;
 				if (index < 0 || index > jrGroup.getChildren().size())
-					((JRDesignFrame) jrGroup).addElement(jrElement);
+					jFrame.addElement(jrElement);
 				else
-					((JRDesignFrame) jrGroup).addElement(index, jrElement);
+					jFrame.addElement(index, jrElement);
+			}
+			if (jrGroup instanceof JRPropertiesHolder && jrGroup instanceof JRCommonElement) {
+				JRPropertiesHolder pholder = (JRPropertiesHolder) jrGroup;
+				map = com.jaspersoft.studio.model.command.CreateElementCommand.layoutContainer(
+						new JRPropertiesHolder[] { pholder }, jrGroup.getElements(),
+						new Dimension(((JRCommonElement) jrGroup).getWidth(), ((JRCommonElement) jrGroup).getHeight()));
 			}
 		}
 		if (firstTime) {
@@ -275,6 +295,7 @@ public class CreateElementCommand extends Command {
 		}
 	}
 
+	private Map<JRElement, Rectangle> map;
 	private boolean firstTime = true;
 
 	/*
@@ -296,12 +317,31 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		undoElementsSize(map);
 		if (commands != null)
 			commands.undo();
 		if (jrGroup instanceof JRDesignElementGroup)
 			((JRDesignElementGroup) jrGroup).removeElement(jrElement);
 		else if (jrGroup instanceof JRDesignFrame)
 			((JRDesignFrame) jrGroup).removeElement(jrElement);
+	}
+
+	public static Map<JRElement, Rectangle> layoutContainer(JRPropertiesHolder[] pholders, JRElement[] elements,
+			Dimension d) {
+		ILayout layout = LayoutManager.getLayout(pholders);
+		return layout.layout(elements, d);
+	}
+
+	public static void undoElementsSize(Map<JRElement, Rectangle> emap) {
+		if (emap != null)
+			for (JRElement el : emap.keySet()) {
+				JRDesignElement del = (JRDesignElement) el;
+				Rectangle r = emap.get(el);
+				del.setX(r.x);
+				del.setY(r.y);
+				del.setWidth(r.width);
+				del.setHeight(r.height);
+			}
 	}
 
 	/**

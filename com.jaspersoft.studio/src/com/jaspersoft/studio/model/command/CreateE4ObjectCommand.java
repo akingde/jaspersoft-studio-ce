@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.type.ResetTypeEnum;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
@@ -50,7 +51,11 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 	protected void createObject() {
 		try {
 			Tag tag = Tag.getExpression(child);
-			ANode n = fixPosition(parent, child, location);
+			ANode n = null;
+			if (parent instanceof MFrame) {
+				n = (ANode) ((MFrame) parent).getBand();
+			} else
+				n = fixPosition(parent, child, location);
 			if (n instanceof MBand) {
 				JRDesignBand b = (JRDesignBand) n.getValue();
 				BandTypeEnum btype = b.getOrigin().getBandTypeValue();
@@ -72,12 +77,16 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 						|| btype.equals(BandTypeEnum.LAST_PAGE_FOOTER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.PAGE, null, jasperDesign);
 					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
-
 				} else {
 					srcNode = Tag.createStaticText(tag.name);
 				}
-				setContext(n, srcNode, index);
+			} else {
+				srcNode = Tag.createStaticText(tag.name);
 			}
+			if (parent instanceof MFrame)
+				setContext(parent, srcNode, index);
+			else
+				setContext(n, srcNode, index);
 
 			super.createObject();
 		} catch (Exception e) {

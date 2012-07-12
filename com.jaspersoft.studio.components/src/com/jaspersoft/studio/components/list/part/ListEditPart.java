@@ -29,12 +29,10 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.ui.views.properties.IPropertySource;
 
@@ -44,10 +42,12 @@ import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
+import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -61,11 +61,7 @@ public class ListEditPart extends EditableFigureEditPart {
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
-			@Override
-			protected Dimension getMinimumSizeFor(GraphicalEditPart child) {
-				return new Dimension(1, 1);
-			}
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 
 			@Override
 			protected Command getCreateCommand(CreateRequest request) {
@@ -100,24 +96,37 @@ public class ListEditPart extends EditableFigureEditPart {
 
 			@Override
 			protected Command createAddCommand(EditPart child, Object constraint) {
-				SetPageConstraintCommand cmd = new SetPageConstraintCommand();
-				MGraphicElement model = (MGraphicElement) child.getModel();
-				Rectangle r = model.getBounds();
 				Rectangle rect = (Rectangle) constraint;
+				if (child.getModel() instanceof MGraphicElement) {
+					MGraphicElement cmodel = (MGraphicElement) child.getModel();
+					if (cmodel.getParent() instanceof MList) {
+						MList cparent = (MList) cmodel.getParent();
+						if (cparent == getModel()) {
+							Rectangle r = cmodel.getBounds();
+							SetPageConstraintCommand cmd = new SetPageConstraintCommand();
+							JRDesignElement jde = (JRDesignElement) cmodel
+									.getValue();
+							int x = r.x + rect.x - jde.getX() + 2;
+							int y = r.y + rect.y - jde.getY() + 2;
+							rect.setLocation(x, y);
+							cmd.setContext((ANode) getHost().getModel(),
+									(ANode) child.getModel(), rect);
 
-				JRDesignElement jde = (JRDesignElement) model.getValue();
-				rect.setLocation(r.x + rect.x - jde.getX() + 2, r.y + rect.y
-						- jde.getY() + 2);
-				cmd.setContext((ANode) getHost().getModel(),
-						(ANode) child.getModel(), rect);
+							return cmd;
+						}
+					} else {
+						CompoundCommand c = new CompoundCommand();
 
-				return cmd;
-			}
-
-			@Override
-			protected Command createChangeConstraintCommand(EditPart child,
-					Object constraint) {
-				// TODO Auto-generated method stub
+						c.add(OutlineTreeEditPartFactory.getOrphanCommand(
+								cmodel.getParent(), cmodel));
+						c.add(new CreateElementCommand((MList) getModel(),
+								cmodel, rect, -1));
+						return c;
+					}
+				} else {
+					return super.createChangeConstraintCommand(child,
+							constraint);
+				}
 				return null;
 			}
 

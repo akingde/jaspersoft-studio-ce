@@ -34,7 +34,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
  * The Class MFrame.
  */
 public class MFrame extends MGraphicElementLineBox implements IPastable, IPastableGraphic, IContainer,
-		IContainerEditPart, IGraphicElementContainer {
+		IContainerLayout, IContainerEditPart, IGraphicElementContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

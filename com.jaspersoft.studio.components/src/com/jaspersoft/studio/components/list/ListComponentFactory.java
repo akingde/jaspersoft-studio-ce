@@ -202,12 +202,15 @@ public class ListComponentFactory implements IComponentFactory {
 						location, newIndex);
 			}
 		}
-		if (child instanceof MGraphicElement && child.getValue() != null)
-			if (parent instanceof MList)
-				return new com.jaspersoft.studio.components.list.commands.element.CreateElementCommand(
-						(MList) parent, (MGraphicElement) child, location,
-						newIndex);
+		if (child instanceof MGraphicElement && child.getValue() != null
+				&& parent instanceof MList)
+			return new com.jaspersoft.studio.components.list.commands.element.CreateElementCommand(
+					(MList) parent, (MGraphicElement) child, location, newIndex);
 
+		return null;
+	}
+
+	public Command getOrphanCommand(ANode parent, ANode child) {
 		return null;
 	}
 
@@ -239,10 +242,6 @@ public class ListComponentFactory implements IComponentFactory {
 		}
 		if (model instanceof MList)
 			return new ListEditPart();
-		return null;
-	}
-
-	public Command getOrphanCommand(ANode parent, ANode child) {
 		return null;
 	}
 

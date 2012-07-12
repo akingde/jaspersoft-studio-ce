@@ -19,9 +19,30 @@
  */
 package com.jaspersoft.studio.editor.gef.parts;
 
+import net.sf.jasperreports.engine.design.JRDesignElement;
+
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
+
+import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
+import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.MFrame;
+import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
+import com.jaspersoft.studio.model.command.CreateElementCommand;
 
 public class FrameFigureEditPart extends FigureEditPart implements IContainer {
+	@Override
+	public MFrame getModel() {
+		return (MFrame) super.getModel();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -31,57 +52,52 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
-		// installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
-		// installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
-		// @Override
-		// protected Dimension getMinimumSizeFor(GraphicalEditPart child) {
-		// return new Dimension(1, 1);
-		// }
-		//
-		// @Override
-		// protected Command getOrphanChildrenCommand(Request request) {
-		// // TODO Auto-generated method stub
-		// return super.getOrphanChildrenCommand(request);
-		// }
-		//
-		// @Override
-		// protected Command getCreateCommand(CreateRequest request) {
-		// Rectangle constraint = (Rectangle) getConstraintFor(request);
-		//
-		// if (request.getNewObject() instanceof CreateElementAction) {
-		// CreateElementAction action = (CreateElementAction) request.getNewObject();
-		// action.dropInto(getHost().getModel(), constraint.getCopy(), -1);
-		// action.run();
-		// return action.getCommand();
-		// } else if (request.getNewObject() instanceof MGraphicElement) {
-		// return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(),
-		// (MGraphicElement) request.getNewObject(), constraint.getCopy(), -1);
-		// }
-		// return null;
-		// }
-		//
-		// @Override
-		// protected Command createAddCommand(EditPart child, Object constraint) {
-		// SetPageConstraintCommand cmd = new SetPageConstraintCommand();
-		// MGraphicElement model = (MGraphicElement) child.getModel();
-		// Rectangle r = model.getBounds();
-		// Rectangle rect = (Rectangle) constraint;
-		//
-		// JRDesignElement jde = (JRDesignElement) model.getValue();
-		// rect.setLocation(r.x + rect.x - jde.getX() + 2, r.y + rect.y - jde.getY() + 2);
-		// cmd.setContext((ANode) getHost().getModel(), (ANode) child.getModel(), rect);
-		//
-		// return cmd;
-		// }
-		//
-		// @Override
-		// protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
-		// // TODO Auto-generated method stub
-		// return null;
-		// }
-		//
-		// });
-		// installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FigureSelectionEditPolicy());
-	}
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 
+			@Override
+			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint) {
+				if (parent instanceof MPage)
+					parent = getModel();
+				Rectangle b = getModel().getBounds();
+				int x = constraint.x - b.x - ReportPageFigure.PAGE_BORDER.left;
+				int y = constraint.y - b.y - ReportPageFigure.PAGE_BORDER.top;
+				constraint = new Rectangle(x, y, constraint.width, constraint.height);
+				return super.getCreateCommand(parent, obj, constraint);
+			}
+
+			@Override
+			protected Command createAddCommand(EditPart child, Object constraint) {
+				Rectangle rect = (Rectangle) constraint;
+				if (child.getModel() instanceof MGraphicElement) {
+					MGraphicElement cmodel = (MGraphicElement) child.getModel();
+					if (cmodel.getParent() instanceof MFrame) {
+						MFrame cparent = (MFrame) cmodel.getParent();
+						if (cparent == getModel()) {
+							SetPageConstraintCommand cmd = new SetPageConstraintCommand();
+							MGraphicElement model = (MGraphicElement) child.getModel();
+							Rectangle r = model.getBounds();
+
+							JRDesignElement jde = (JRDesignElement) model.getValue();
+							int x = r.x + rect.x - jde.getX() + 1;
+							int y = r.y + rect.y - jde.getY() + 1;
+							rect.setLocation(x, y);
+							cmd.setContext(getModel(), (ANode) child.getModel(), rect);
+
+							return cmd;
+						}
+					} else {
+						CompoundCommand c = new CompoundCommand();
+
+						c.add(OutlineTreeEditPartFactory.getOrphanCommand(cmodel.getParent(), cmodel));
+						c.add(new CreateElementCommand((MFrame) getModel(), cmodel, rect, -1));
+						return c;
+					}
+				} else {
+					return super.createChangeConstraintCommand(child, constraint);
+				}
+				return null;
+			}
+
+		});
+	}
 }

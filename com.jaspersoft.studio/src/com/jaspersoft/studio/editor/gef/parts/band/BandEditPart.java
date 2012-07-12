@@ -38,6 +38,8 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -51,8 +53,12 @@ import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandMoveEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -165,21 +171,27 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 				updateRulers();
 			}
 		});
-		// installEditPolicy(EditPolicy.CONTAINER_ROLE, new BandContainerEditPolicy());
-		// installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
-		//
-		// @Override
-		// protected Command getCreateCommand(CreateRequest request) {
-		// // TODO Auto-generated method stub
-		// return null;
-		// }
-		//
-		// @Override
-		// protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
-		// // TODO Auto-generated method stub
-		// return null;
-		// }
-		// });
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
+
+			@Override
+			protected Command createAddCommand(EditPart child, Object constraint) {
+				Rectangle rect = ((Rectangle) constraint).getCopy();
+				rect = rect.getTranslated(-ReportPageFigure.PAGE_BORDER.left, -ReportPageFigure.PAGE_BORDER.right);
+				if (child.getModel() instanceof MGraphicElement) {
+					MGraphicElement cmodel = (MGraphicElement) child.getModel();
+					if (cmodel.getParent() instanceof MBand && cmodel.getParent() == getModel()) {
+						return super.createChangeConstraintCommand(child, rect);
+					} else {
+						CompoundCommand c = new CompoundCommand();
+
+						c.add(OutlineTreeEditPartFactory.getOrphanCommand(cmodel.getParent(), cmodel));
+						c.add(new CreateElementCommand((MBand) getModel(), cmodel, rect, -1));
+						return c;
+					}
+				}
+				return null;
+			}
+		});
 	}
 
 	public EditPolicy getEditPolicy() {

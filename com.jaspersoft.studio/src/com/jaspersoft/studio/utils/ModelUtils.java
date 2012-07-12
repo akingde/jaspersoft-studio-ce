@@ -435,7 +435,9 @@ public class ModelUtils {
 				}
 			}
 		}
-		return (MBand) res;
+		if (res instanceof MBand)
+			return (MBand) res;
+		return null;
 	}
 
 	public static MGraphicElement getElement4Point(ANode parent, Point point) {
