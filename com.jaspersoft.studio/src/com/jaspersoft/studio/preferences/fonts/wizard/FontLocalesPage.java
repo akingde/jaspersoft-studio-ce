@@ -152,8 +152,4 @@ public class FontLocalesPage extends WizardPage {
 		tableViewer.setInput(lst);
 	}
 
-	@Override
-	public boolean canFlipToNextPage() {
-		return isPageComplete();
-	}
 }

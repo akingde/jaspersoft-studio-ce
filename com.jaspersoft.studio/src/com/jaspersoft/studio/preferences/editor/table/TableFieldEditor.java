@@ -541,7 +541,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 			selectionChanged();
 			table.showItem(tableItem);
 			table.showSelection();
-			table.showColumn(table.getColumn(1));
+			table.showColumn(table.getColumn(0));
 		}
 	}
 
