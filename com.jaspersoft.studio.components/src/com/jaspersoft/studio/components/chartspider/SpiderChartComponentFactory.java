@@ -106,13 +106,13 @@ public class SpiderChartComponentFactory implements IComponentFactory {
 		if (child instanceof MSpiderChart) {
 			if (parent instanceof MElementGroup)
 				return new CreateSpiderChartCommand((MElementGroup) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
 				return new CreateSpiderChartCommand((MBand) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateSpiderChartCommand((MFrame) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateSpiderChartCommand(parent,
 						(MGraphicElement) child, location, newIndex);

@@ -436,13 +436,13 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		if (child instanceof MCrosstab) {
 			if (parent instanceof MElementGroup)
 				return new CreateCrosstabCommand((MElementGroup) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
 				return new CreateCrosstabCommand((MBand) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateCrosstabCommand((MFrame) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateCrosstabCommand(parent,
 						(MGraphicElement) child, location, newIndex);

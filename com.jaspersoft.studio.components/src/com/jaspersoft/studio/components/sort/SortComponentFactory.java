@@ -81,13 +81,13 @@ public class SortComponentFactory implements IComponentFactory {
 		if (child instanceof MSort) {
 			if (parent instanceof MElementGroup)
 				return new CreateSortCommand((MElementGroup) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
 				return new CreateSortCommand((MBand) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateSortCommand((MFrame) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateSortCommand(parent, (MGraphicElement) child,
 						location, newIndex);

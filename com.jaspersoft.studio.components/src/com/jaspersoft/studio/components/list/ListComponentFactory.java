@@ -186,13 +186,13 @@ public class ListComponentFactory implements IComponentFactory {
 		if (child instanceof MList) {
 			if (parent instanceof MElementGroup)
 				return new CreateListCommand((MElementGroup) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
 				return new CreateListCommand((MBand) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateListCommand((MFrame) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateListCommand(parent, (MGraphicElement) child,
 						location, newIndex);

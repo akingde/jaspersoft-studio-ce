@@ -164,13 +164,13 @@ public class BarcodeComponentFactory implements IComponentFactory {
 		if (child instanceof MBarcode) {
 			if (parent instanceof MElementGroup)
 				return new CreateBarcodeCommand((MElementGroup) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
 				return new CreateBarcodeCommand((MBand) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateBarcodeCommand((MFrame) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateBarcodeCommand(parent,
 						(MGraphicElement) child, location, newIndex);

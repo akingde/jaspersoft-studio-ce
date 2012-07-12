@@ -208,13 +208,13 @@ public class ChartComponentFactory implements IComponentFactory {
 		if (child instanceof MChart) {
 			if (parent instanceof MElementGroup)
 				return new CreateChartCommand((MElementGroup) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
 				return new CreateChartCommand((MBand) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateChartCommand((MFrame) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateChartCommand(parent, (MGraphicElement) child,
 						location, newIndex);
@@ -366,8 +366,10 @@ public class ChartComponentFactory implements IComponentFactory {
 	}
 
 	public ExpressionContext getElementExpressionContext(Object jrObject) {
-		// MChart.getValue() does not returns a valid instance of JRDesignComponentElement.
-		// No design component element associated -> no need to look for a dataset information associated.
+		// MChart.getValue() does not returns a valid instance of
+		// JRDesignComponentElement.
+		// No design component element associated -> no need to look for a
+		// dataset information associated.
 		return null;
 	}
 }

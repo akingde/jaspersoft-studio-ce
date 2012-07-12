@@ -81,13 +81,13 @@ public class MapComponentFactory implements IComponentFactory {
 		if (child instanceof MMap) {
 			if (parent instanceof MElementGroup)
 				return new CreateMapCommand((MElementGroup) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
 				return new CreateMapCommand((MBand) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateMapCommand((MFrame) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateMapCommand(parent, (MGraphicElement) child,
 						location, newIndex);

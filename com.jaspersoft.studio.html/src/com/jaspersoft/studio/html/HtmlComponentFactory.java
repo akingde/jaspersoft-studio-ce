@@ -83,13 +83,13 @@ public class HtmlComponentFactory implements IComponentFactory {
 		if (child instanceof MHtml) {
 			if (parent instanceof MElementGroup)
 				return new CreateHtmlCommand((MElementGroup) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
 				return new CreateHtmlCommand((MBand) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateHtmlCommand((MFrame) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateHtmlCommand(parent, (MGraphicElement) child,
 						location, newIndex);
@@ -135,7 +135,7 @@ public class HtmlComponentFactory implements IComponentFactory {
 
 	public ExpressionContext getElementExpressionContext(Object jrObject) {
 		// The HTML design component element has no direct
-		// dataset information associated. 
+		// dataset information associated.
 		// Therefore this situation must be handled somehow by
 		// the caller method(s).
 		return null;
