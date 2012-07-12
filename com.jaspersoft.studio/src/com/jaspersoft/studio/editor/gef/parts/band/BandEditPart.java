@@ -117,11 +117,14 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
-			SetValueCommand cmd = new SetValueCommand();
-			cmd.setTarget((IPropertySource) getModel());
-			cmd.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
-			cmd.setPropertyValue(ModelUtils.getBandHeight(getBand()));
-			getViewer().getEditDomain().getCommandStack().execute(cmd);
+			int bandHeight = ModelUtils.getBandHeight(getBand());
+			if (bandHeight > 0) {
+				SetValueCommand cmd = new SetValueCommand();
+				cmd.setTarget((IPropertySource) getModel());
+				cmd.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
+				cmd.setPropertyValue(bandHeight);
+				getViewer().getEditDomain().getCommandStack().execute(cmd);
+			}
 		}
 		super.performRequest(req);
 	}

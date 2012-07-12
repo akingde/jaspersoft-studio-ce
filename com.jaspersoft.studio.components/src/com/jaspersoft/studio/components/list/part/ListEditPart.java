@@ -144,36 +144,38 @@ public class ListEditPart extends EditableFigureEditPart {
 						.getValue().getComponent();
 				Dimension d = ModelUtils.getContainerSize(jrList.getContents()
 						.getChildren(), new Dimension(0, 0));
+				if (d.height > 0 && d.width > 0) {
+					CompoundCommand c = new CompoundCommand(
+							"Resize to container");
 
-				CompoundCommand c = new CompoundCommand("Resize to container");
+					SetValueCommand cmd = new SetValueCommand();
+					cmd.setTarget((IPropertySource) model);
+					cmd.setPropertyId(JRDesignElement.PROPERTY_HEIGHT);
+					cmd.setPropertyValue(d.height);
+					c.add(cmd);
 
-				SetValueCommand cmd = new SetValueCommand();
-				cmd.setTarget((IPropertySource) model);
-				cmd.setPropertyId(JRDesignElement.PROPERTY_HEIGHT);
-				cmd.setPropertyValue(d.height);
-				c.add(cmd);
+					cmd = new SetValueCommand();
+					cmd.setTarget((IPropertySource) model);
+					cmd.setPropertyId(MList.PREFIX
+							+ DesignListContents.PROPERTY_HEIGHT);
+					cmd.setPropertyValue(d.height);
+					c.add(cmd);
 
-				cmd = new SetValueCommand();
-				cmd.setTarget((IPropertySource) model);
-				cmd.setPropertyId(MList.PREFIX
-						+ DesignListContents.PROPERTY_HEIGHT);
-				cmd.setPropertyValue(d.height);
-				c.add(cmd);
+					cmd = new SetValueCommand();
+					cmd.setTarget((IPropertySource) model);
+					cmd.setPropertyId(JRDesignElement.PROPERTY_WIDTH);
+					cmd.setPropertyValue(d.width);
+					c.add(cmd);
 
-				cmd = new SetValueCommand();
-				cmd.setTarget((IPropertySource) model);
-				cmd.setPropertyId(JRDesignElement.PROPERTY_WIDTH);
-				cmd.setPropertyValue(d.width);
-				c.add(cmd);
+					cmd = new SetValueCommand();
+					cmd.setTarget((IPropertySource) model);
+					cmd.setPropertyId(MList.PREFIX
+							+ DesignListContents.PROPERTY_WIDTH);
+					cmd.setPropertyValue(d.width);
+					c.add(cmd);
 
-				cmd = new SetValueCommand();
-				cmd.setTarget((IPropertySource) model);
-				cmd.setPropertyId(MList.PREFIX
-						+ DesignListContents.PROPERTY_WIDTH);
-				cmd.setPropertyValue(d.width);
-				c.add(cmd);
-
-				getViewer().getEditDomain().getCommandStack().execute(c);
+					getViewer().getEditDomain().getCommandStack().execute(c);
+				}
 			}
 		}
 		super.performRequest(req);

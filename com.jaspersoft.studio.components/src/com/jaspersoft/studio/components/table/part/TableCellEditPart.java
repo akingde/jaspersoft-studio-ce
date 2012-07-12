@@ -97,23 +97,24 @@ public class TableCellEditPart extends FigureEditPart implements
 
 			Dimension d = model.getMTable().getTableManager()
 					.getCellPackSize(cc);
+			if (d.height > 0 && d.width > 0) {
+				CompoundCommand c = new CompoundCommand("Resize to container");
 
-			CompoundCommand c = new CompoundCommand("Resize to container");
+				SetValueCommand cmd = new SetValueCommand();
 
-			SetValueCommand cmd = new SetValueCommand();
+				cmd.setTarget(model);
+				cmd.setPropertyId(DesignCell.PROPERTY_HEIGHT);
+				cmd.setPropertyValue(d.height);
+				c.add(cmd);
 
-			cmd.setTarget(model);
-			cmd.setPropertyId(DesignCell.PROPERTY_HEIGHT);
-			cmd.setPropertyValue(d.height);
-			c.add(cmd);
+				cmd = new SetValueCommand();
+				cmd.setTarget(model);
+				cmd.setPropertyId(StandardColumn.PROPERTY_WIDTH);
+				cmd.setPropertyValue(d.width);
+				c.add(cmd);
 
-			cmd = new SetValueCommand();
-			cmd.setTarget(model);
-			cmd.setPropertyId(StandardColumn.PROPERTY_WIDTH);
-			cmd.setPropertyValue(d.width);
-			c.add(cmd);
-
-			getViewer().getEditDomain().getCommandStack().execute(c);
+				getViewer().getEditDomain().getCommandStack().execute(c);
+			}
 		}
 		super.performRequest(req);
 	}
