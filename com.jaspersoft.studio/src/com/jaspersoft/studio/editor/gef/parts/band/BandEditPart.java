@@ -55,6 +55,7 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandResizableEditPolicy
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
@@ -172,6 +173,12 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 			}
 		});
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
+			@Override
+			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint) {
+				Rectangle rect = ((Rectangle) constraint).getCopy();
+				rect = rect.getTranslated(-ReportPageFigure.PAGE_BORDER.left, -ReportPageFigure.PAGE_BORDER.right);
+				return super.getCreateCommand(parent, obj, rect);
+			}
 
 			@Override
 			protected Command createAddCommand(EditPart child, Object constraint) {

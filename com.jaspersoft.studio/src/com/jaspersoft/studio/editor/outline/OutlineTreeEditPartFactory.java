@@ -426,27 +426,27 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 
 		if (child instanceof MPageXofY) {
 			if (parent instanceof MElementGroup)
-				return new CreatePageXofYCommand((MElementGroup) parent, (MPageXofY) child, newIndex);
+				return new CreatePageXofYCommand((MElementGroup) parent, (MPageXofY) child, location, newIndex);
 			if (parent instanceof MBand)
-				return new CreatePageXofYCommand((MBand) parent, (MPageXofY) child, newIndex);
+				return new CreatePageXofYCommand((MBand) parent, (MPageXofY) child, location, newIndex);
 			if (parent instanceof MFrame)
-				return new CreatePageXofYCommand((MFrame) parent, (MPageXofY) child, newIndex);
+				return new CreatePageXofYCommand((MFrame) parent, (MPageXofY) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreatePageXofYCommand(parent, (MPageXofY) child, location, newIndex);
 		} else if (child instanceof MPercentage) {
 			if (parent instanceof MElementGroup)
-				return new CreatePercentageCommand((MElementGroup) parent, (MPercentage) child, newIndex);
+				return new CreatePercentageCommand((MElementGroup) parent, (MPercentage) child, location, newIndex);
 			if (parent instanceof MBand)
-				return new CreatePercentageCommand((MBand) parent, (MPercentage) child, newIndex);
+				return new CreatePercentageCommand((MBand) parent, (MPercentage) child, location, newIndex);
 			if (parent instanceof MFrame)
-				return new CreatePercentageCommand((MFrame) parent, (MPercentage) child, newIndex);
+				return new CreatePercentageCommand((MFrame) parent, (MPercentage) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreatePercentageCommand(parent, (MPercentage) child, location, newIndex);
 		} else if (child instanceof MSubreport) {
 			if (parent instanceof MElementGroup)
-				return new CreateSubreportCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+				return new CreateSubreportCommand((MElementGroup) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
-				return new CreateSubreportCommand((MBand) parent, (MGraphicElement) child, newIndex);
+				return new CreateSubreportCommand((MBand) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateSubreportCommand((MFrame) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
@@ -457,9 +457,9 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			}
 		} else if (child instanceof MImage) {
 			if (parent instanceof MElementGroup)
-				return new CreateImageCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+				return new CreateImageCommand((MElementGroup) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
-				return new CreateImageCommand((MBand) parent, (MGraphicElement) child, newIndex);
+				return new CreateImageCommand((MBand) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateImageCommand((MFrame) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
@@ -470,9 +470,9 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			}
 		} else if (child instanceof MGraphicElement) {
 			if (parent instanceof MElementGroup)
-				return new CreateElementCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+				return new CreateElementCommand((MElementGroup) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
-				return new CreateElementCommand((MBand) parent, (MGraphicElement) child, newIndex);
+				return new CreateElementCommand((MBand) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateElementCommand((MFrame) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
