@@ -19,15 +19,23 @@
  */
 package com.jaspersoft.studio.components.list.commands.element;
 
+import java.util.Map;
+
 import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.list.model.MList;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
@@ -40,7 +48,7 @@ public class CreateElementCommand extends Command {
 
 	protected MGraphicElement srcNode;
 	protected JRDesignElement jrElement;
-
+	private JasperDesign jDesign;
 	private StandardListComponent listcomponent;
 
 	private Rectangle location;
@@ -63,11 +71,11 @@ public class CreateElementCommand extends Command {
 		this.srcNode = srcNode;
 		if (srcNode != null)
 			jrElement = (JRDesignElement) srcNode.getValue();
-		JRDesignComponentElement jrElement = (JRDesignComponentElement) destNode
-				.getValue();
-		listcomponent = (StandardListComponent) jrElement.getComponent();
+		jrElement2 = (JRDesignComponentElement) destNode.getValue();
+		listcomponent = (StandardListComponent) jrElement2.getComponent();
 		this.index = index;
 		this.location = position;
+		jDesign = srcNode.getJasperDesign();
 	}
 
 	/**
@@ -121,12 +129,12 @@ public class CreateElementCommand extends Command {
 			else
 				dlist.addElement(index, jrElement);
 
-			// JRPropertiesHolder[] pholders = new JRPropertiesHolder[] { dlist
-			// };
-			//
-			// ILayout layout = LayoutManager.getLayout(pholders);
-			// map = layout.layout(dlist.getElements(),
-			// new Dimension(jrElement.getWidth(), jrElement.getHeight()));
+			JRPropertiesHolder[] pholders = new JRPropertiesHolder[] { jrElement2 };
+
+			ILayout layout = LayoutManager.getLayout(pholders, jDesign,
+					jrElement2.getUUID().toString());
+			map = layout.layout(dlist.getElements(),
+					new Dimension(jrElement.getWidth(), jrElement.getHeight()));
 		}
 		if (firstTime) {
 			SelectionHelper.setSelection(jrElement, false);
@@ -134,8 +142,9 @@ public class CreateElementCommand extends Command {
 		}
 	}
 
-	// private Map<JRElement, Rectangle> map;
+	private Map<JRElement, Rectangle> map;
 	private boolean firstTime = true;
+	private JRDesignComponentElement jrElement2;
 
 	/*
 	 * (non-Javadoc)
@@ -156,14 +165,14 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		// for (JRElement el : map.keySet()) {
-		// JRDesignElement del = (JRDesignElement) el;
-		// Rectangle r = map.get(el);
-		// del.setX(r.x);
-		// del.setY(r.y);
-		// del.setWidth(r.width);
-		// del.setHeight(r.height);
-		// }
+		for (JRElement el : map.keySet()) {
+			JRDesignElement del = (JRDesignElement) el;
+			Rectangle r = map.get(el);
+			del.setX(r.x);
+			del.setY(r.y);
+			del.setWidth(r.width);
+			del.setHeight(r.height);
+		}
 		DesignListContents dlist = (DesignListContents) listcomponent
 				.getContents();
 		dlist.removeElement(jrElement);

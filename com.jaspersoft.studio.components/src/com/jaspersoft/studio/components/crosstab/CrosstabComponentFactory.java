@@ -50,6 +50,7 @@ import org.eclipse.ui.part.WorkbenchPart;
 import com.jaspersoft.studio.components.crosstab.editor.CrosstabEditor;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.CrosstabFigure;
+import com.jaspersoft.studio.components.crosstab.figure.EmptyCellFigure;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
@@ -348,14 +349,6 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		}
 	}
 
-	public IFigure createFigure(ANode node) {
-		if (node instanceof MCrosstab)
-			return new CrosstabFigure();
-		if (node instanceof MCell)
-			return new CellFigure();
-		return null;
-	}
-
 	public List<?> getChildren4Element(Object jrObject) {
 		if (jrObject instanceof JRCrosstab) {
 			// JRCrosstab ct = (JRCrosstab) jrObject;
@@ -564,6 +557,17 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		return lst;
 	}
 
+	public IFigure createFigure(ANode node) {
+		if (node instanceof MCrosstab)
+			return new CrosstabFigure();
+		if (node instanceof MCrosstabHeader
+				|| node instanceof MCrosstabWhenNoData)
+			return new EmptyCellFigure();
+		if (node instanceof MCell)
+			return new CellFigure();
+		return null;
+	}
+
 	public EditPart createEditPart(EditPart context, Object model) {
 		if (model instanceof MRoot) {
 			ANode n = ModelUtils.getFirstChild((MRoot) model);
@@ -577,6 +581,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		if (model instanceof MCrosstab)
 			return new CrosstabEditPart();
 		if (model instanceof MCell)
+			return new CrosstabCellEditPart();
+		if (model instanceof MCrosstabHeader)
+			return new CrosstabCellEditPart();
+		if (model instanceof MCrosstabWhenNoData)
 			return new CrosstabCellEditPart();
 		return null;
 	}

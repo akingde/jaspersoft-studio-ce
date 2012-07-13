@@ -243,11 +243,18 @@ public class CrosstabCellEditPart extends FigureEditPart implements
 			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
 			int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
 
-			CellFigure f = (CellFigure) rect;
-			f.setLocation(new Point(x, y));
-			f.setJRElement((JRDesignCellContents) model.getValue(),
-					getDrawVisitor());
+			rect.setLocation(new Point(x, y));
+
+			if (model instanceof MCell) {
+				CellFigure f = (CellFigure) rect;
+				f.setJRElement((JRDesignCellContents) model.getValue(),
+						getDrawVisitor());
+			} else {
+				rect.setSize(bounds.width, bounds.height);
+			}
 			updateRulers();
+		} else {
+			System.out.println("EMPTy");
 		}
 		if (getSelected() == 1)
 			updateRulers();

@@ -119,6 +119,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		}
 		super.setParent(parent, newIndex);
 	}
+
 	public INode getBand() {
 		INode node = this;
 		while (!(node instanceof MBand) && !(node instanceof MRoot)) {
@@ -128,6 +129,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		}
 		return node;
 	}
+
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -528,8 +530,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 		if (id.equals(PROPERTY_MAP)) {
 			// to avoid duplication I remove it first
-			JRPropertiesMap pmap = jrElement.getPropertiesMap();
-			return pmap;
+			return jrElement.getPropertiesMap().cloneProperties();
 		}
 
 		return null;

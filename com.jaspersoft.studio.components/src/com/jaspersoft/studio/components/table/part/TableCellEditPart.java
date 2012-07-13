@@ -281,7 +281,6 @@ public class TableCellEditPart extends FigureEditPart implements
 
 			if (model instanceof MCell) {
 				CellFigure f = (CellFigure) rect;
-				// rect.setBounds(rect.getBounds().resize(-5, -3));
 				f.setJRElement(((MCell) model).getCell(), col, getDrawVisitor());
 			} else {
 				rect.setSize(bounds.width, bounds.height);

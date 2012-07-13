@@ -3,6 +3,7 @@ package com.jaspersoft.studio.editor.layout;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.action.IAction;
@@ -12,9 +13,14 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.editor.action.layout.LayoutAction;
 
 public class LayoutManager {
-	public static ILayout getLayout(JRPropertiesHolder[] elements) {
+	public static ILayout getLayout(JRPropertiesHolder[] elements, JasperDesign jDesign, String uuid) {
 		for (JRPropertiesHolder pholder : elements) {
 			String prop = pholder.getPropertiesMap().getProperty(ILayout.KEY);
+			if (prop != null)
+				return instLayout(prop);
+		}
+		if (uuid != null) {
+			String prop = jDesign.getPropertiesMap().getProperty(ILayout.KEY + "." + uuid);
 			if (prop != null)
 				return instLayout(prop);
 		}

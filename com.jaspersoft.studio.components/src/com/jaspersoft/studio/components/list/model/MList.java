@@ -48,6 +48,7 @@ import com.jaspersoft.studio.components.list.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -65,8 +66,8 @@ import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MList extends MGraphicElement implements IPastable,
-		IPastableGraphic, IContainer, IContainerEditPart, IGroupElement,
-		IGraphicElementContainer, ICopyable {
+		IPastableGraphic, IContainerLayout, IContainer, IContainerEditPart,
+		IGroupElement, IGraphicElementContainer, ICopyable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

@@ -66,6 +66,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
@@ -304,6 +305,11 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		ignorePaginationD.setDescription(Messages.MReport_ignore_pagination_description);
 		desc.add(ignorePaginationD);
 
+		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
+				Messages.common_properties);
+		propertiesMapD.setDescription(Messages.common_properties);
+		desc.add(propertiesMapD);
+
 		titleNewPageD.setCategory(Messages.MReport_pagination);
 		ignorePaginationD.setCategory(Messages.MReport_pagination);
 		summaryNewPageD.setCategory(Messages.MReport_pagination);
@@ -402,7 +408,10 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			return new Boolean(jrDesign.isFloatColumnFooter());
 		if (id.equals(JasperDesign.PROPERTY_IGNORE_PAGINATION))
 			return new Boolean(jrDesign.isIgnorePagination());
-
+		if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+			// to avoid duplication I remove it first
+			return (JRPropertiesMap) jrDesign.getPropertiesMap().cloneProperties();
+		}
 		return null;
 	}
 
@@ -474,6 +483,16 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			jrDesign.setFloatColumnFooter(((Boolean) value).booleanValue());
 		else if (id.equals(JasperDesign.PROPERTY_IGNORE_PAGINATION))
 			jrDesign.setIgnorePagination(((Boolean) value).booleanValue());
+		else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+			JRPropertiesMap v = (JRPropertiesMap) value;
+			String[] names = jrDesign.getPropertiesMap().getPropertyNames();
+			for (int i = 0; i < names.length; i++)
+				jrDesign.getPropertiesMap().removeProperty(names[i]);
+			names = v.getPropertyNames();
+			for (int i = 0; i < names.length; i++)
+				jrDesign.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
+			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
+		}
 	}
 
 	/*

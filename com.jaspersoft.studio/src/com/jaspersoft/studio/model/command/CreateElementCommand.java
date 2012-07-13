@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.JRCommonElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
@@ -153,6 +154,8 @@ public class CreateElementCommand extends Command {
 			setContext(fixPosition(destNode, srcNode, position), srcNode, index);
 	}
 
+	private Object destValue;
+
 	/**
 	 * Sets the context.
 	 * 
@@ -172,6 +175,7 @@ public class CreateElementCommand extends Command {
 			this.jrGroup = ((IGroupElement) destNode).getJRElementGroup();
 		else
 			this.jrGroup = (JRElementGroup) destNode.getValue();
+		destValue = destNode.getValue();
 		this.destNode = destNode;
 		this.index = index;
 	}
@@ -282,11 +286,15 @@ public class CreateElementCommand extends Command {
 				else
 					jFrame.addElement(index, jrElement);
 			}
-			if (jrGroup instanceof JRPropertiesHolder && jrGroup instanceof JRCommonElement) {
-				JRPropertiesHolder pholder = (JRPropertiesHolder) jrGroup;
+			if (destValue instanceof JRPropertiesHolder && destValue instanceof JRCommonElement) {
+				String uuid = null;
+				if (destValue instanceof JRBaseElement)
+					uuid = ((JRBaseElement) destValue).getUUID().toString();
+				JRPropertiesHolder pholder = (JRPropertiesHolder) destValue;
 				map = com.jaspersoft.studio.model.command.CreateElementCommand.layoutContainer(
 						new JRPropertiesHolder[] { pholder }, jrGroup.getElements(),
-						new Dimension(((JRCommonElement) jrGroup).getWidth(), ((JRCommonElement) jrGroup).getHeight()));
+						new Dimension(((JRCommonElement) destValue).getWidth(), ((JRCommonElement) destValue).getHeight()),
+						jasperDesign, uuid);
 			}
 		}
 		if (firstTime) {
@@ -327,8 +335,8 @@ public class CreateElementCommand extends Command {
 	}
 
 	public static Map<JRElement, Rectangle> layoutContainer(JRPropertiesHolder[] pholders, JRElement[] elements,
-			Dimension d) {
-		ILayout layout = LayoutManager.getLayout(pholders);
+			Dimension d, JasperDesign jDesign, String uuid) {
+		ILayout layout = LayoutManager.getLayout(pholders, jDesign, uuid);
 		return layout.layout(elements, d);
 	}
 

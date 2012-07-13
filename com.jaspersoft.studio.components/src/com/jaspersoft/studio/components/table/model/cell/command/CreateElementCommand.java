@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -42,7 +43,7 @@ public class CreateElementCommand extends Command {
 	protected JRDesignElement jrElement;
 	private StandardBaseColumn jrColumn;
 	private JRDesignComponentElement jTable;
-
+	private JasperDesign jDesign;
 	private DesignCell jrCell;
 
 	private Rectangle location;
@@ -71,6 +72,7 @@ public class CreateElementCommand extends Command {
 		this.jrColumn = (StandardBaseColumn) destNode.getValue();
 		MTable mTable = destNode.getMTable();
 		jTable = (JRDesignComponentElement) mTable.getValue();
+		jDesign = destNode.getJasperDesign();
 	}
 
 	/**
@@ -124,7 +126,8 @@ public class CreateElementCommand extends Command {
 		map = com.jaspersoft.studio.model.command.CreateElementCommand
 				.layoutContainer(new JRPropertiesHolder[] { jrCell, jrColumn,
 						jTable }, jrCell.getElements(),
-						new Dimension(jrColumn.getWidth(), jrCell.getHeight()));
+						new Dimension(jrColumn.getWidth(), jrCell.getHeight()),
+						jDesign, null);
 	}
 
 	private boolean firstTime = true;
