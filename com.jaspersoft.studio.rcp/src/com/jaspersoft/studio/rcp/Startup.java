@@ -104,18 +104,21 @@ public class Startup implements IStartup {
 			monitor.done();
 		}
 
-		Job job = new Job("Check New Version") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+		String devmode = System.getProperty("devmode");
+		if(devmode==null || !devmode.equals("true")){
+			Job job = new Job("Check New Version") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
 
-				Heartbeat.run();
-				return Status.OK_STATUS;
-			}
+					Heartbeat.run();
+					return Status.OK_STATUS;
+				}
 
-		};
-		job.setSystem(true);
-		job.schedule();
-
+			};
+			job.setSystem(true);
+			job.schedule();
+		}
+		
 	}
 
 }
