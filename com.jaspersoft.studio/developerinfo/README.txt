@@ -3,8 +3,10 @@
 This information are meant for people that want to be able to build Jaspersoft Studio from sources,
 investigate and solve bugs, contribute their own code or improve the existing one.
 To do this there are several options:
-	1. 	Use the target platform available in project website. Right now the platform is based on 
-		Eclipse Juno 3.8 release. This mainly because the RCP version of JSS in built on top of it.
+	1. 	Use the target platform available in project website at the following URL:
+		https://sourceforge.net/projects/jasperstudio/files/DevelopersInfo/
+		Right now the platform is based on Eclipse Juno 3.8 release. 
+		This mainly because the RCP version of JSS in built on top of it.
 		So you need only to download the target platform and use it inside your Eclipse installation.
 		After that you can download the sources from the repositories.
 		
