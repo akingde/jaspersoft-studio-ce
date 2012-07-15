@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.model;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -160,6 +161,11 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		int h = jrDesignFrame.getHeight();
 		int w = jrDesignFrame.getWidth();
 		return new Dimension(w, h);
+	}
+
+	@Override
+	public JRPropertiesHolder[] getPropertyHolder() {
+		return new JRPropertiesHolder[] { getValue() };
 	}
 
 }

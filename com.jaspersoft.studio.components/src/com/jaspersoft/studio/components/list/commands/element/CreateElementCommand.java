@@ -36,6 +36,7 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
@@ -54,6 +55,7 @@ public class CreateElementCommand extends Command {
 	private Rectangle location;
 
 	private int index;
+	private JRPropertiesHolder[] pholder;
 
 	/**
 	 * Instantiates a new creates the element command.
@@ -76,6 +78,7 @@ public class CreateElementCommand extends Command {
 		this.index = index;
 		this.location = position;
 		jDesign = srcNode.getJasperDesign();
+		pholder = ((IContainerLayout) destNode).getPropertyHolder();
 	}
 
 	/**
@@ -129,9 +132,7 @@ public class CreateElementCommand extends Command {
 			else
 				dlist.addElement(index, jrElement);
 
-			JRPropertiesHolder[] pholders = new JRPropertiesHolder[] { jrElement2 };
-
-			ILayout layout = LayoutManager.getLayout(pholders, jDesign,
+			ILayout layout = LayoutManager.getLayout(pholder, jDesign,
 					jrElement2.getUUID().toString());
 			map = layout.layout(dlist.getElements(),
 					new Dimension(jrElement.getWidth(), jrElement.getHeight()));

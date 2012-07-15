@@ -15,16 +15,19 @@ public class HorizontalRowLayout implements ILayout {
 		int x = 0;
 		int y = 0;
 		int w = (int) Math.floor((float) c.width / elements.length);
+		int rest = c.width - w * elements.length;
 		int h = c.height;
 		for (JRElement el : elements) {
 			JRDesignElement del = (JRDesignElement) el;
 			map.put(el, new Rectangle(el.getX(), el.getY(), el.getWidth(), el.getHeight()));
 			del.setX(x);
 			del.setY(y);
-			del.setWidth(w);
+			del.setWidth(w + rest);
 			del.setHeight(h);
 			// if last grab free pixels
 			x += w;
+			if (rest > 0)
+				rest = 0;
 		}
 		return map;
 	}

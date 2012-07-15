@@ -24,6 +24,8 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -41,15 +43,18 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
@@ -59,7 +64,7 @@ import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
  * @author Chicu Veaceslav
  */
 public class MBand extends APropertyNode implements IGraphicElement, IPastable, IPastableGraphic, IContainer,
-		IContainerEditPart {
+		IContainerLayout, IContainerEditPart {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private static final Integer CONST_HEIGHT = new Integer(50);
 	/** The icon descriptor. */
@@ -226,6 +231,11 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		printWhenExpD.setDescription(Messages.MBand_print_when_expression_description);
 		desc.add(printWhenExpD);
 
+		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
+				Messages.common_properties);
+		propertiesMapD.setDescription(Messages.common_properties);
+		desc.add(propertiesMapD);
+
 		defaultsMap.put(JRDesignBand.PROPERTY_HEIGHT, CONST_HEIGHT);
 		defaultsMap.put(JRDesignBand.PROPERTY_SPLIT_TYPE, null);
 		defaultsMap.put(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, null);
@@ -246,6 +256,10 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
 				return ExprUtil.getExpression(jrband.getPrintWhenExpression());
 			}
+			if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+				// to avoid duplication I remove it first
+				return jrband.getPropertiesMap().cloneProperties();
+			}
 		}
 		return null;
 	}
@@ -264,6 +278,17 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 				jrband.setSplitType((SplitTypeEnum) splitStyleD.getEnumValue(value));
 			else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION))
 				jrband.setPrintWhenExpression(ExprUtil.setValues(jrband.getPrintWhenExpression(), value, null));
+			else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+				JRPropertiesMap v = (JRPropertiesMap) value;
+				String[] names = jrband.getPropertiesMap().getPropertyNames();
+				for (int i = 0; i < names.length; i++) {
+					jrband.getPropertiesMap().removeProperty(names[i]);
+				}
+				names = v.getPropertyNames();
+				for (int i = 0; i < names.length; i++)
+					jrband.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
+				this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
+			}
 		}
 	}
 
@@ -334,4 +359,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 
 	private static int BAND_GAP = 0;
 	private static JSSEnumPropertyDescriptor splitStyleD;
+
+	@Override
+	public JRPropertiesHolder[] getPropertyHolder() {
+		return new JRPropertiesHolder[] { getValue() };
+	}
 }

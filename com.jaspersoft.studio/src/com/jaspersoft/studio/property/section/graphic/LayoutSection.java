@@ -1,16 +1,24 @@
 package com.jaspersoft.studio.property.section.graphic;
 
+import net.sf.jasperreports.engine.JRCommonElement;
+import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.base.JRBaseElement;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IGraphicElementContainer;
+import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
@@ -43,10 +51,12 @@ public class LayoutSection extends AbstractSection {
 
 		widgets.put(pd.getId(), new SPReadCombo(parent, this, pd) {
 			protected void handlePropertyChange() {
-				int index = combo.getSelectionIndex();
+				int ind = combo.getSelectionIndex();
+				if (ind == index)
+					return;
 				if (pnode.getValue() instanceof JRPropertiesHolder) {
 					JRPropertiesMap pmap = (JRPropertiesMap) pnode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-					pmap.setProperty(ILayout.KEY, layouts[index].getClass().getName());
+					pmap.setProperty(ILayout.KEY, layouts[ind].getClass().getName());
 					section.changeProperty(MGraphicElement.PROPERTY_MAP, pmap);
 				} else if (pnode.getValue() instanceof JRBaseElement) {
 					String uuid = ((JRBaseElement) pnode.getValue()).getUUID().toString();
@@ -54,18 +64,38 @@ public class LayoutSection extends AbstractSection {
 					if (n != null && n instanceof MReport) {
 						MReport mrep = (MReport) n;
 						JRPropertiesMap pmap = (JRPropertiesMap) mrep.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-						pmap.setProperty(ILayout.KEY + "." + uuid, layouts[index].getClass().getName());
+						pmap.setProperty(ILayout.KEY + "." + uuid, layouts[ind].getClass().getName());
 						section.changePropertyOn(MGraphicElement.PROPERTY_MAP, pmap, mrep);
 					}
+				}
+				CommandStack cs = getEditDomain().getCommandStack();
+				Object destValue = pnode.getValue();
+				if (pnode instanceof IGroupElement)
+					destValue = ((IGroupElement) pnode).getJRElementGroup();
+				if (destValue instanceof JRElementGroup) {
+					Dimension d = new Dimension(0, 0);
+					if (pnode instanceof IGraphicElementContainer)
+						d = ((IGraphicElementContainer) pnode).getSize();
+					if (destValue instanceof JRCommonElement) {
+						JRCommonElement jce = (JRCommonElement) destValue;
+						d.setSize(jce.getWidth(), jce.getHeight());
+					}
+					if (destValue instanceof JRDesignBand) {
+						JasperDesign jDesign = pnode.getJasperDesign();
+						int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
+						d.setSize(w, ((JRDesignBand) destValue).getHeight());
+					}
+					cs.execute(new LayoutCommand((JRElementGroup) destValue, layouts[ind], d));
 				}
 			}
 
 			private APropertyNode pnode;
+			private int index = 0;
 
 			@Override
 			public void setData(APropertyNode pnode, Object b) {
 				this.pnode = pnode;
-				int index = 0;
+				index = 0;
 				Object obj = pnode.getValue();
 				if (obj != null && obj instanceof JRPropertiesHolder) {
 					index = getIndex((JRPropertiesHolder) obj, null);

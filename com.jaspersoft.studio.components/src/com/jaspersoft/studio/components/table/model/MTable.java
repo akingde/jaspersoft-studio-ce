@@ -29,6 +29,7 @@ import net.sf.jasperreports.components.table.WhenNoDataTypeTableEnum;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
@@ -308,5 +309,10 @@ public class MTable extends MGraphicElement implements IContainer,
 		else if (getTableManager() != null)
 			getTableManager().refresh();
 		super.propertyChange(evt);
+	}
+
+	@Override
+	public JRPropertiesHolder[] getPropertyHolder() {
+		return new JRPropertiesHolder[] { getValue() };
 	}
 }

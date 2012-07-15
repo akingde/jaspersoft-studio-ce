@@ -19,13 +19,9 @@
  */
 package com.jaspersoft.studio.components.table.model.cell.command;
 
-import java.util.Map;
-
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -33,8 +29,11 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
-import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MCell;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutCommand;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
@@ -42,13 +41,13 @@ public class CreateElementCommand extends Command {
 	protected MGraphicElement srcNode;
 	protected JRDesignElement jrElement;
 	private StandardBaseColumn jrColumn;
-	private JRDesignComponentElement jTable;
 	private JasperDesign jDesign;
 	private DesignCell jrCell;
 
 	private Rectangle location;
 
 	protected int index = -1;
+	private JRPropertiesHolder[] pholder;
 
 	/**
 	 * Instantiates a new creates the element command.
@@ -70,9 +69,8 @@ public class CreateElementCommand extends Command {
 		this.location = position;
 		this.srcNode = srcNode;
 		this.jrColumn = (StandardBaseColumn) destNode.getValue();
-		MTable mTable = destNode.getMTable();
-		jTable = (JRDesignComponentElement) mTable.getValue();
 		jDesign = destNode.getJasperDesign();
+		pholder = ((IContainerLayout) destNode).getPropertyHolder();
 	}
 
 	/**
@@ -102,8 +100,6 @@ public class CreateElementCommand extends Command {
 		jrElement.setHeight(location.height);
 	}
 
-	private Map<JRElement, Rectangle> map;
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -123,13 +119,15 @@ public class CreateElementCommand extends Command {
 			firstTime = false;
 		}
 
-		map = com.jaspersoft.studio.model.command.CreateElementCommand
-				.layoutContainer(new JRPropertiesHolder[] { jrCell, jrColumn,
-						jTable }, jrCell.getElements(),
-						new Dimension(jrColumn.getWidth(), jrCell.getHeight()),
-						jDesign, null);
+		Dimension d = new Dimension(jrColumn.getWidth(), jrCell.getHeight());
+		if (lCmd == null) {
+			ILayout layout = LayoutManager.getLayout(pholder, jDesign, null);
+			lCmd = new LayoutCommand(jrCell, layout, d);
+		}
+		lCmd.execute();
 	}
 
+	private LayoutCommand lCmd;
 	private boolean firstTime = true;
 
 	/*
@@ -151,8 +149,7 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		com.jaspersoft.studio.model.command.CreateElementCommand
-				.undoElementsSize(map);
+		lCmd.undo();
 		jrCell.removeElement(jrElement);
 	}
 

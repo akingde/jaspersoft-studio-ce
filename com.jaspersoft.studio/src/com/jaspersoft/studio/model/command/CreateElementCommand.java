@@ -20,10 +20,8 @@
 package com.jaspersoft.studio.model.command;
 
 import java.util.List;
-import java.util.Map;
 
 import net.sf.jasperreports.engine.JRCommonElement;
-import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.base.JRBaseElement;
@@ -41,8 +39,11 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainerLayout;
+import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
@@ -155,6 +156,7 @@ public class CreateElementCommand extends Command {
 	}
 
 	private Object destValue;
+	private JRPropertiesHolder[] pholder;
 
 	/**
 	 * Sets the context.
@@ -172,13 +174,19 @@ public class CreateElementCommand extends Command {
 		this.jasperDesign = destNode.getJasperDesign();
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		if (destNode instanceof IGroupElement)
-			this.jrGroup = ((IGroupElement) destNode).getJRElementGroup();
+			jrGroup = ((IGroupElement) destNode).getJRElementGroup();
 		else
-			this.jrGroup = (JRElementGroup) destNode.getValue();
+			jrGroup = (JRElementGroup) destNode.getValue();
 		destValue = destNode.getValue();
 		this.destNode = destNode;
 		this.index = index;
+		if (destNode instanceof IGraphicElementContainer)
+			d = ((IGraphicElementContainer) destNode).getSize();
+		if (destNode instanceof IContainerLayout)
+			pholder = ((IContainerLayout) destNode).getPropertyHolder();
 	}
+
+	private Dimension d;
 
 	/**
 	 * Fix position.
@@ -272,7 +280,6 @@ public class CreateElementCommand extends Command {
 	@Override
 	public void execute() {
 		createObject();
-		executeCommands();
 		if (jrElement != null) {
 			if (jrGroup instanceof JRDesignElementGroup) {
 				if (index < 0 || index > jrGroup.getChildren().size())
@@ -286,24 +293,33 @@ public class CreateElementCommand extends Command {
 				else
 					jFrame.addElement(index, jrElement);
 			}
-			if (destValue instanceof JRPropertiesHolder && destValue instanceof JRCommonElement) {
+			if (destValue instanceof JRPropertiesHolder) {
 				String uuid = null;
 				if (destValue instanceof JRBaseElement)
 					uuid = ((JRBaseElement) destValue).getUUID().toString();
-				JRPropertiesHolder pholder = (JRPropertiesHolder) destValue;
-				map = com.jaspersoft.studio.model.command.CreateElementCommand.layoutContainer(
-						new JRPropertiesHolder[] { pholder }, jrGroup.getElements(),
-						new Dimension(((JRCommonElement) destValue).getWidth(), ((JRCommonElement) destValue).getHeight()),
-						jasperDesign, uuid);
+				if (destValue instanceof JRCommonElement) {
+					JRCommonElement jce = (JRCommonElement) destValue;
+					d.setSize(jce.getWidth(), jce.getHeight());
+				}
+				if (destValue instanceof JRDesignBand) {
+					int w = jasperDesign.getPageWidth() - jasperDesign.getLeftMargin() - jasperDesign.getRightMargin();
+					d = new Dimension(w, ((JRDesignBand) destValue).getHeight());
+				}
+				if (lCmd == null) {
+					ILayout layout = LayoutManager.getLayout(pholder, jasperDesign, uuid);
+					lCmd = new LayoutCommand(jrGroup, layout, d);
+					addCommand(lCmd);
+				}
 			}
 		}
 		if (firstTime) {
 			SelectionHelper.setSelection(jrElement, false);
 			firstTime = false;
 		}
+		executeCommands();
 	}
 
-	private Map<JRElement, Rectangle> map;
+	private LayoutCommand lCmd;
 	private boolean firstTime = true;
 
 	/*
@@ -325,31 +341,12 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		undoElementsSize(map);
 		if (commands != null)
 			commands.undo();
 		if (jrGroup instanceof JRDesignElementGroup)
 			((JRDesignElementGroup) jrGroup).removeElement(jrElement);
 		else if (jrGroup instanceof JRDesignFrame)
 			((JRDesignFrame) jrGroup).removeElement(jrElement);
-	}
-
-	public static Map<JRElement, Rectangle> layoutContainer(JRPropertiesHolder[] pholders, JRElement[] elements,
-			Dimension d, JasperDesign jDesign, String uuid) {
-		ILayout layout = LayoutManager.getLayout(pholders, jDesign, uuid);
-		return layout.layout(elements, d);
-	}
-
-	public static void undoElementsSize(Map<JRElement, Rectangle> emap) {
-		if (emap != null)
-			for (JRElement el : emap.keySet()) {
-				JRDesignElement del = (JRDesignElement) el;
-				Rectangle r = emap.get(el);
-				del.setX(r.x);
-				del.setY(r.y);
-				del.setWidth(r.width);
-				del.setHeight(r.height);
-			}
 	}
 
 	/**

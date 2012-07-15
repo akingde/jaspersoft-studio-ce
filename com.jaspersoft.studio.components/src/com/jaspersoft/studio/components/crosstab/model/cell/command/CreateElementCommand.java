@@ -20,24 +20,32 @@
 package com.jaspersoft.studio.components.crosstab.model.cell.command;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutCommand;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class CreateElementCommand extends Command {
 	protected MGraphicElement srcNode;
 	protected JRDesignElement jrElement;
-
+	private JasperDesign jDesign;
 	private JRDesignCellContents jrCell;
 
 	private Rectangle location;
 
 	private int index = -1;
+	private JRPropertiesHolder[] pholder;
 
 	public CreateElementCommand(MCell destNode, MGraphicElement srcNode,
 			Rectangle position, int index) {
@@ -48,6 +56,8 @@ public class CreateElementCommand extends Command {
 		this.index = index;
 		this.location = position;
 		this.srcNode = srcNode;
+		jDesign = destNode.getJasperDesign();
+		pholder = ((IContainerLayout) destNode).getPropertyHolder();
 	}
 
 	/**
@@ -93,8 +103,15 @@ public class CreateElementCommand extends Command {
 			SelectionHelper.setSelection(jrElement, false);
 			firstTime = false;
 		}
+		Dimension d = new Dimension(jrCell.getWidth(), jrCell.getHeight());
+		if (lCmd == null) {
+			ILayout layout = LayoutManager.getLayout(pholder, jDesign, null);
+			lCmd = new LayoutCommand(jrCell, layout, d);
+		}
+		lCmd.execute();
 	}
 
+	private LayoutCommand lCmd;
 	private boolean firstTime = true;
 
 	/*
@@ -116,6 +133,7 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		lCmd.undo();
 		jrCell.removeElement(jrElement);
 	}
 

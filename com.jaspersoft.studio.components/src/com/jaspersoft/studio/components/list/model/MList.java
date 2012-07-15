@@ -28,6 +28,7 @@ import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
@@ -429,5 +430,10 @@ public class MList extends MGraphicElement implements IPastable,
 		StandardListComponent jrList = (StandardListComponent) jrElement
 				.getComponent();
 		return jrList;
+	}
+
+	@Override
+	public JRPropertiesHolder[] getPropertyHolder() {
+		return new JRPropertiesHolder[] { getValue() };
 	}
 }

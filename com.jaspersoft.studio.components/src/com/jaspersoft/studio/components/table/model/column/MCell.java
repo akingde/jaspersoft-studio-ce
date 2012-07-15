@@ -29,6 +29,7 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -398,5 +399,11 @@ public class MCell extends MColumn implements IGraphicElement,
 	@Override
 	public JRElementGroup getJRElementGroup() {
 		return getCell();
+	}
+
+	@Override
+	public JRPropertiesHolder[] getPropertyHolder() {
+		return new JRPropertiesHolder[] { cell, getValue(),
+				getMTable().getValue() };
 	}
 }

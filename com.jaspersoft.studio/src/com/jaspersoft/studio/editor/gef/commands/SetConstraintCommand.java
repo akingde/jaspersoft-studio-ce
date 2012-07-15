@@ -22,17 +22,28 @@ package com.jaspersoft.studio.editor.gef.commands;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRCommonElement;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutCommand;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.IGraphicElementContainer;
+import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
@@ -65,6 +76,10 @@ public class SetConstraintCommand extends Command {
 
 	/** The c band. */
 	private JRDesignBand cBand;
+	private Object destValue;
+	protected JRElementGroup jrGroup;
+	private Dimension d;
+	private JRPropertiesHolder[] pholder;
 
 	/**
 	 * Sets the context.
@@ -82,6 +97,16 @@ public class SetConstraintCommand extends Command {
 			jrElement = (JRDesignElement) child.getValue();
 			newBounds = constraint;
 			parentBounds = ((IGraphicElement) child).getBounds();
+			parent = child.getParent();
+			destValue = parent.getValue();
+			if (parent instanceof IGroupElement)
+				jrGroup = ((IGroupElement) parent).getJRElementGroup();
+			else if (parent.getValue() instanceof JRElementGroup)
+				jrGroup = (JRElementGroup) parent.getValue();
+			if (parent instanceof IGraphicElementContainer)
+				d = ((IGraphicElementContainer) parent).getSize();
+			if (parent instanceof IContainerLayout)
+				pholder = ((IContainerLayout) parent).getPropertyHolder();
 		}
 	}
 
@@ -106,9 +131,29 @@ public class SetConstraintCommand extends Command {
 			jrElement.setHeight(newBounds.height);
 
 			adjustBand();
+
+			if (destValue instanceof JRPropertiesHolder && jrGroup != null) {
+				String uuid = null;
+				if (destValue instanceof JRBaseElement)
+					uuid = ((JRBaseElement) destValue).getUUID().toString();
+				if (destValue instanceof JRCommonElement) {
+					JRCommonElement jce = (JRCommonElement) destValue;
+					d.setSize(jce.getWidth(), jce.getHeight());
+				}
+				if (destValue instanceof JRDesignBand) {
+					int w = jrDesign.getPageWidth() - jrDesign.getLeftMargin() - jrDesign.getRightMargin();
+					d = new Dimension(w, ((JRDesignBand) destValue).getHeight());
+				}
+				if (lCmd == null) {
+					ILayout layout = LayoutManager.getLayout(pholder, jrDesign, uuid);
+					lCmd = new LayoutCommand(jrGroup, layout, d);
+				}
+				lCmd.execute();
+			}
 		}
 	}
 
+	private LayoutCommand lCmd;
 	private int oldBandHeight = -1;
 
 	private void adjustBand() {
@@ -243,6 +288,7 @@ public class SetConstraintCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		lCmd.undo();
 		if (jrElement != null) {
 			if (pBand != null && cBand != null)
 				pBand.removeElement(jrElement);

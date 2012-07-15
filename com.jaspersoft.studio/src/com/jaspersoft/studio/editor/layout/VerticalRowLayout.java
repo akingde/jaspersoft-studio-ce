@@ -16,16 +16,18 @@ public class VerticalRowLayout implements ILayout {
 		int y = 0;
 		int w = c.width;
 		int h = (int) Math.floor((float) c.height / elements.length);
-
+		int rest = c.height - h * elements.length;
 		for (JRElement el : elements) {
 			JRDesignElement del = (JRDesignElement) el;
 			map.put(el, new Rectangle(el.getX(), el.getY(), el.getWidth(), el.getHeight()));
 			del.setX(x);
 			del.setY(y);
 			del.setWidth(w);
-			del.setHeight(h);
+			del.setHeight(h + rest);
 			// if last grab free pixels
 			y += h;
+			if (rest > 0)
+				rest = 0;
 		}
 		return map;
 	}

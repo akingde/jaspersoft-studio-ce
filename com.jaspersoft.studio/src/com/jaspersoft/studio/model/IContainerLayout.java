@@ -1,5 +1,7 @@
 package com.jaspersoft.studio.model;
 
-public interface IContainerLayout {
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 
+public interface IContainerLayout {
+	public JRPropertiesHolder[] getPropertyHolder();
 }

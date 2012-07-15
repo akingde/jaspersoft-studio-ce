@@ -1,44 +1,51 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.command;
 
+import net.sf.jasperreports.engine.JRCommonElement;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.base.JRBaseElement;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutCommand;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.MGraphicElement;
+
 /*
  * link nodes & together.
  * 
  * @author Chicu Veaceslav
  */
 public class DeleteElementCommand extends Command {
-
+	private JasperDesign jDesign;
 	/** The jr group. */
 	private JRElementGroup jrGroup;
 
@@ -47,6 +54,7 @@ public class DeleteElementCommand extends Command {
 
 	/** The element position. */
 	private int elementPosition = 0;
+	private JRPropertiesHolder[] pholder;
 
 	/**
 	 * Instantiates a new delete element command.
@@ -58,8 +66,12 @@ public class DeleteElementCommand extends Command {
 	 */
 	public DeleteElementCommand(ANode destNode, MGraphicElement srcNode) {
 		super();
-		this.jrElement = (JRDesignElement) srcNode.getValue();
-		this.jrGroup = jrElement.getElementGroup();
+		jrElement = (JRDesignElement) srcNode.getValue();
+		jrGroup = jrElement.getElementGroup();
+		jDesign = srcNode.getJasperDesign();
+		ANode parent = srcNode.getParent();
+		if (parent instanceof IContainerLayout)
+			pholder = ((IContainerLayout) parent).getPropertyHolder();
 	}
 
 	/*
@@ -75,7 +87,28 @@ public class DeleteElementCommand extends Command {
 		} else if (jrGroup instanceof JRDesignFrame) {
 			((JRDesignFrame) jrGroup).removeElement(jrElement);
 		}
+		if (jrGroup instanceof JRPropertiesHolder) {
+			String uuid = null;
+			if (jrGroup instanceof JRBaseElement)
+				uuid = ((JRBaseElement) jrGroup).getUUID().toString();
+			Dimension d = new Dimension(0, 0);
+			if (jrGroup instanceof JRCommonElement) {
+				JRCommonElement jce = (JRCommonElement) jrGroup;
+				d.setSize(jce.getWidth(), jce.getHeight());
+			}
+			if (jrGroup instanceof JRDesignBand) {
+				int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
+				d.setSize(w, ((JRDesignBand) jrGroup).getHeight());
+			}
+			if (lCmd == null) {
+				ILayout layout = LayoutManager.getLayout(pholder, jDesign, uuid);
+				lCmd = new LayoutCommand(jrGroup, layout, d);
+				lCmd.execute();
+			}
+		}
 	}
+
+	private LayoutCommand lCmd;
 
 	/*
 	 * (non-Javadoc)
@@ -96,6 +129,7 @@ public class DeleteElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		lCmd.undo();
 		if (jrGroup instanceof JRDesignElementGroup) {
 			if (elementPosition > ((JRDesignElementGroup) jrGroup).getChildren().size())
 				((JRDesignElementGroup) jrGroup).addElement(jrElement);
