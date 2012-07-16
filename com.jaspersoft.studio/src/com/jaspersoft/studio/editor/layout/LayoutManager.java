@@ -1,10 +1,16 @@
 package com.jaspersoft.studio.editor.layout;
 
 import java.util.List;
+import java.util.Map;
 
+import net.sf.jasperreports.engine.JRCommonElement;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
@@ -19,7 +25,7 @@ public class LayoutManager {
 			if (prop != null)
 				return instLayout(prop);
 		}
-		if (uuid != null) {
+		if (uuid != null && jDesign != null) {
 			String prop = jDesign.getPropertiesMap().getProperty(ILayout.KEY + "." + uuid);
 			if (prop != null)
 				return instLayout(prop);
@@ -60,5 +66,18 @@ public class LayoutManager {
 		if (LAYOUTNAMES == null)
 			LAYOUTNAMES = new ILayout[] { new FreeLayout(), new HorizontalRowLayout(), new VerticalRowLayout() };
 		return LAYOUTNAMES;
+	}
+
+	public static Map<JRElement, Rectangle> layout(Map<JRElement, Rectangle> map, JRElement el) {
+		if (el instanceof JRElementGroup && el instanceof JRPropertiesHolder) {
+			Dimension d = null;
+			if (el instanceof JRCommonElement) {
+				JRCommonElement jce = (JRCommonElement) el;
+				d = new Dimension(jce.getWidth(), jce.getHeight());
+			}
+			ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { el }, null, null);
+			layout.layout(((JRElementGroup) el).getElements(), d);
+		}
+		return map;
 	}
 }

@@ -28,6 +28,7 @@ public class VerticalRowLayout implements ILayout {
 			y += h;
 			if (rest > 0)
 				rest = 0;
+			LayoutManager.layout(map, el);
 		}
 		return map;
 	}

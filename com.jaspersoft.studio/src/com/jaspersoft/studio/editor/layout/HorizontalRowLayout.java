@@ -28,6 +28,7 @@ public class HorizontalRowLayout implements ILayout {
 			x += w;
 			if (rest > 0)
 				rest = 0;
+			LayoutManager.layout(map, el);
 		}
 		return map;
 	}
