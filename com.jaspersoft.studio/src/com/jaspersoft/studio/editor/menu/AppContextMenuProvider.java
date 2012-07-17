@@ -312,6 +312,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 
 		menu.add(submenu);
 
+		JaspersoftStudioPlugin.getDecoratorManager().buildContextMenu(getActionRegistry(), getViewer(), menu);
+
 		action = getActionRegistry().getAction(ShowPropertyViewAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);

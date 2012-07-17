@@ -20,6 +20,8 @@
 package com.jaspersoft.studio.editor.gef.figures;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElement;
@@ -30,6 +32,7 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
+import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 /*
@@ -92,6 +95,7 @@ public class ComponentFigure extends RectangleFigure {
 			graphics2d.translate(-b.x, -b.y);
 		}
 		paintBorder(graphics);
+		paintDecorators(graphics);
 	}
 
 	/**
@@ -114,5 +118,25 @@ public class ComponentFigure extends RectangleFigure {
 	 */
 	public JRElement getJrElement() {
 		return jrElement;
+	}
+
+	private void paintDecorators(Graphics graphics) {
+		if (decorators == null)
+			return;
+		for (IDecorator d : decorators)
+			d.paint(graphics, this);
+	}
+
+	private List<IDecorator> decorators;
+
+	public void addDecorator(IDecorator decorator) {
+		if (decorators == null)
+			decorators = new ArrayList<IDecorator>();
+		decorators.add(decorator);
+	}
+
+	public void removeDecorator(IDecorator decorator) {
+		if (decorators != null)
+			decorators.remove(decorator);
 	}
 }

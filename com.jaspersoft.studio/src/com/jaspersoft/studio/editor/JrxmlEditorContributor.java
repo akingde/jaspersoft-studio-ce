@@ -47,6 +47,7 @@ import org.eclipse.ui.editors.text.TextEditorActionContributor;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
@@ -133,6 +134,10 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 				IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SnapToGridAction.ID, Messages.common_snap_to_grid, IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SizeGridAction.ID, Messages.JrxmlEditorContributor_grid_size));
+
+		List<RetargetAction> ractions = JaspersoftStudioPlugin.getDecoratorManager().buildMenuActions();
+		for (RetargetAction r : ractions)
+			addRetargetAction(r);
 	}
 
 	/**
@@ -338,6 +343,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		viewMenu.add(getAction(SnapToGridAction.ID));
 		viewMenu.add(getAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY));
 		viewMenu.add(getAction(SizeGridAction.ID));
+
+		JaspersoftStudioPlugin.getDecoratorManager().contribute2Menu(getActionRegistry(), viewMenu);
 
 		manager.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
 	}

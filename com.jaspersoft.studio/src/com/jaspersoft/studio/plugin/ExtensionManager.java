@@ -53,7 +53,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class ExtensionManager {
 	public void init() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "components"); //$NON-NLS-1$ //$NON-NLS-2$
+				JaspersoftStudioPlugin.PLUGIN_ID, "components"); //$NON-NLS-1$ 
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -65,7 +65,8 @@ public class ExtensionManager {
 		}
 
 		// List all the extensions that provide a DataAdapterFactory
-		config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "dataAdapters"); //$NON-NLS-1$ //$NON-NLS-2$
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID,
+				"dataAdapters"); //$NON-NLS-1$  
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -76,7 +77,8 @@ public class ExtensionManager {
 			}
 		}
 
-		config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "editorLifecycle"); //$NON-NLS-1$ //$NON-NLS-2$
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID,
+				"editorLifecycle"); //$NON-NLS-1$  
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -93,7 +95,7 @@ public class ExtensionManager {
 	public List<IRepositoryViewProvider> getRepositoryProviders() {
 		List<IRepositoryViewProvider> paletteGroup = new ArrayList<IRepositoryViewProvider>();
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "repositoryview"); //$NON-NLS-1$ //$NON-NLS-2$
+				JaspersoftStudioPlugin.PLUGIN_ID, "repositoryview"); //$NON-NLS-1$  
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -105,7 +107,7 @@ public class ExtensionManager {
 		}
 		return paletteGroup;
 	}
-	
+
 	/**
 	 * Returns the support factory for the expression editor.
 	 * 
@@ -114,37 +116,44 @@ public class ExtensionManager {
 	 * 
 	 * @return the contributed support factory, null <code>otherwise</code>
 	 */
-	public IExpressionEditorSupportFactory getExpressionEditorSupportFactory(){
+	public IExpressionEditorSupportFactory getExpressionEditorSupportFactory() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "expressionEditorSupport"); //$NON-NLS-1$ //$NON-NLS-2$
-		IExpressionEditorSupportFactory defaultFactory=null;
-		boolean defaultFound=false;
-		boolean overrideFound=true;
-		for(IConfigurationElement el : config){
-			if(!defaultFound && "false".equals(el.getAttribute("override"))){
+				JaspersoftStudioPlugin.PLUGIN_ID, "expressionEditorSupport"); //$NON-NLS-1$ 
+		IExpressionEditorSupportFactory defaultFactory = null;
+		boolean defaultFound = false;
+		boolean overrideFound = true;
+		for (IConfigurationElement el : config) {
+			if (!defaultFound && "false".equals(el.getAttribute("override"))) {
 				Object defaultSupportClazz;
 				try {
 					defaultSupportClazz = el.createExecutableExtension("class");
-					if(defaultSupportClazz instanceof IExpressionEditorSupportFactory){
-						defaultFactory=(IExpressionEditorSupportFactory) defaultSupportClazz;
+					if (defaultSupportClazz instanceof IExpressionEditorSupportFactory) {
+						defaultFactory = (IExpressionEditorSupportFactory) defaultSupportClazz;
 					}
 				} catch (CoreException e) {
-					JaspersoftStudioPlugin.getInstance().getLog().log(
-							new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID, "An error occurred while trying to create the new class.", e));
+					JaspersoftStudioPlugin
+							.getInstance()
+							.getLog()
+							.log(
+									new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+											"An error occurred while trying to create the new class.", e));
 				}
-			}
-			else {
-				if(!overrideFound && "true".equals(el.getAttribute("override"))){
-					overrideFound=true;
+			} else {
+				if (!overrideFound && "true".equals(el.getAttribute("override"))) {
+					overrideFound = true;
 					Object overrideClazz;
 					try {
 						overrideClazz = el.createExecutableExtension("class");
-						if(overrideClazz instanceof IExpressionEditorSupportFactory){
+						if (overrideClazz instanceof IExpressionEditorSupportFactory) {
 							return (IExpressionEditorSupportFactory) overrideClazz;
 						}
 					} catch (CoreException e) {
-						JaspersoftStudioPlugin.getInstance().getLog().log(
-								new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID, "An error occurred while trying to create the new class.", e));
+						JaspersoftStudioPlugin
+								.getInstance()
+								.getLog()
+								.log(
+										new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+												"An error occurred while trying to create the new class.", e));
 					}
 				}
 			}
@@ -156,7 +165,7 @@ public class ExtensionManager {
 	public List<PaletteGroup> getPaletteGroups() {
 		List<PaletteGroup> paletteGroup = new ArrayList<PaletteGroup>();
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "palette"); //$NON-NLS-1$ //$NON-NLS-2$
+				JaspersoftStudioPlugin.PLUGIN_ID, "palette"); //$NON-NLS-1$ 
 		for (IConfigurationElement e : config) {
 			PaletteGroup p = new PaletteGroup();
 			p.setId(e.getAttribute("id")); //$NON-NLS-1$
@@ -318,12 +327,13 @@ public class ExtensionManager {
 		return list;
 	}
 
-	public ExpressionContext getExpressionContext4Element(Object jrObject){
-		for(IComponentFactory f:nodeFactory){
+	public ExpressionContext getExpressionContext4Element(Object jrObject) {
+		for (IComponentFactory f : nodeFactory) {
 			ExpressionContext exprContext = f.getElementExpressionContext(jrObject);
-			if(exprContext!=null) return exprContext;
+			if (exprContext != null)
+				return exprContext;
 		}
 		return null;
 	}
-	
+
 }

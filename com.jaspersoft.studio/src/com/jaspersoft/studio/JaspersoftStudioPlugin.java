@@ -29,6 +29,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -41,7 +42,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  */
 public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID="com.jaspersoft.studio"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.jaspersoft.studio"; //$NON-NLS-1$
 	public static final String COMPONENTS_ID = "com.jaspersoft.studio.components"; //$NON-NLS-1$
 
 	// The shared instance.
@@ -154,16 +155,28 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 		return extensionManager;
 	}
 
+	private static DecoratorManager decoratorManager;
+
+	public static DecoratorManager getDecoratorManager() {
+		if (decoratorManager == null) {
+			decoratorManager = new DecoratorManager();
+			decoratorManager.init();
+		}
+		return decoratorManager;
+	}
+
 	/**
 	 * Get the full path name for a resource located inside the plug-in.
 	 * 
-	 * @param path the path of the internal resource 
+	 * @param path
+	 *          the path of the internal resource
 	 * @return the string corresponding to the full path
-	 * @throws IOException if a problem occurs during conversion
+	 * @throws IOException
+	 *           if a problem occurs during conversion
 	 */
-	public String getFileLocation(String path) throws IOException{
+	public String getFileLocation(String path) throws IOException {
 		Assert.isNotNull(path);
 		return FileLocator.toFileURL(getBundle().getEntry(path)).getPath();
 	}
-	
+
 }

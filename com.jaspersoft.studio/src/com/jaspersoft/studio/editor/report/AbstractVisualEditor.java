@@ -301,6 +301,11 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		graphicalViewer.setContextMenu(new AppContextMenuProvider(graphicalViewer, getActionRegistry()));
 
 		graphicalViewer.setProperty("JRCONTEXT", jrContext);
+
+		LayoutManager.addActions(getActionRegistry(), this, getSelectionActions());
+
+		JaspersoftStudioPlugin.getDecoratorManager().registerActions(getActionRegistry(), getSelectionActions(),
+				getGraphicalViewer(), this);
 	}
 
 	/*
@@ -588,7 +593,6 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		LayoutManager.addActions(registry, this, selectionActions);
 		// ------------------
 
 		action = new ShowPropertyViewAction(this);

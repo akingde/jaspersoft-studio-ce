@@ -100,7 +100,8 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		IFigure rect = FigureFactory.createFigure(model);
 		setPrefsBorder(rect);
 		setupFigure(rect);
-
+		if (rect instanceof ComponentFigure)
+			JaspersoftStudioPlugin.getDecoratorManager().setupFigure((ComponentFigure) rect, model.getJasperConfiguration());
 		return rect;
 	}
 
