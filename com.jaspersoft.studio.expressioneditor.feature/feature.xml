@@ -681,13 +681,7 @@ Public License instead of this License.  But first, please read
 &lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;.
    </license>
 
-   <url>
-      <discovery label="Xtext Releases Update Site" url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
-      <discovery label="Itemis JFace Xtext Integration Update Site" url="http://updates.yakindu.com/indigo/milestones/"/>
-   </url>
-
    <requires>
-      <import feature="de.itemis.xtext.utils.jface" version="1.0.0.201205141449" match="perfect"/>
       <import feature="org.eclipse.xtext.ui" version="2.2.1" match="greaterOrEqual"/>
    </requires>
 
@@ -703,6 +697,13 @@ Public License instead of this License.  But first, please read
          download-size="0"
          install-size="0"
          version="1.1.2"
+         unpack="false"/>
+
+   <plugin
+         id="de.itemis.xtext.utils.jface"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.201205141449"
          unpack="false"/>
 
 </feature>
