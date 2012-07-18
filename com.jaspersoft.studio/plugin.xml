@@ -27,6 +27,7 @@
 <plugin>
    <extension-point id="components" name="Components" schema="schema/components.exsd"/>
    <extension-point id="decorators" name="Decorators" schema="schema/decorator.exsd"/>
+   <extension-point id="postsetvalue" name="PostSetValue" schema="schema/postsetvalue.exsd"/>
    <extension-point id="dataAdapters" name="Data Adapters" schema="schema/dataAdapters.exsd"/>
    <extension-point id="queryDesigner" name="Query Designer" schema="schema/queryDesigner.exsd"/> 
    <extension-point id="mappingTool" name="Mapping Tool" schema="schema/mappingTool.exsd"/>
@@ -951,5 +952,14 @@
        <decorator
              ClassFactory="com.jaspersoft.studio.editor.gef.decorator.pdf.PDF508ElementDecorator">
        </decorator>
+    </extension>
+    <extension
+          point="com.jaspersoft.studio.postsetvalue">
+       <postsetvalue
+             ClassFactory="com.jaspersoft.studio.model.band.PostSetSizeBand">
+       </postsetvalue>
+       <postsetvalue
+             ClassFactory="com.jaspersoft.studio.model.frame.PostSetSizeFrame">
+       </postsetvalue>
     </extension>
 </plugin>

@@ -33,8 +33,8 @@ import com.jaspersoft.studio.components.chart.model.command.EditChartCommand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
-import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.frame.MFrame;
 
 public class ChartWizardAction extends SelectionAction {
 	public static final String ID = "charteditaction"; //$NON-NLS-1$

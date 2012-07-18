@@ -38,9 +38,9 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
-import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
+import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.model.textfield.MPercentage;
 import com.jaspersoft.studio.model.textfield.command.wizard.PercentageWizard;
 import com.jaspersoft.studio.utils.UIUtils;

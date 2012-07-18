@@ -31,6 +31,7 @@ import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
 import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.property.PostSetValueManager;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
@@ -163,6 +164,16 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 			decoratorManager.init();
 		}
 		return decoratorManager;
+	}
+
+	private static PostSetValueManager postSetValueManager;
+
+	public static PostSetValueManager getPostSetValueManager() {
+		if (postSetValueManager == null) {
+			postSetValueManager = new PostSetValueManager();
+			postSetValueManager.init();
+		}
+		return postSetValueManager;
 	}
 
 	/**

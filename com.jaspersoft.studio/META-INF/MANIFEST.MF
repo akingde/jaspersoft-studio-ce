@@ -417,6 +417,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    net.sf.jasperreports.engine.design,
    org.eclipse.jface.resource,
    com.jaspersoft.studio.model",
+ com.jaspersoft.studio.model.frame,
  com.jaspersoft.studio.model.parameter;
   uses:="com.jaspersoft.studio.model.util,
    net.sf.jasperreports.engine.design,

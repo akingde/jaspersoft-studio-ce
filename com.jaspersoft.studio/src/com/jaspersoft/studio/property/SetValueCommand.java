@@ -20,10 +20,12 @@
 package com.jaspersoft.studio.property;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 
@@ -74,17 +76,6 @@ public class SetValueCommand extends Command {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
-	@Override
-	public void execute() {
-		undoValue = getTarget().getPropertyValue(propertyName);
-		getTarget().setPropertyValue(propertyName, propertyValue);
-	}
-
 	/**
 	 * Gets the target.
 	 * 
@@ -106,16 +97,6 @@ public class SetValueCommand extends Command {
 	public void setTarget(IPropertySource aTarget) {
 		target = aTarget;
 		targetValue = ((ANode) aTarget).getValue();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
-	@Override
-	public void redo() {
-		execute();
 	}
 
 	/**
@@ -141,10 +122,32 @@ public class SetValueCommand extends Command {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see org.eclipse.gef.commands.Command#execute()
+	 */
+	@Override
+	public void execute() {
+		undoValue = getTarget().getPropertyValue(propertyName);
+		getTarget().setPropertyValue(propertyName, propertyValue);
+
+		if (commands == null)
+			commands = JaspersoftStudioPlugin.getPostSetValueManager().postSetValue(target, propertyName, propertyValue);
+		if (commands != null)
+			for (Command c : commands)
+				c.execute();
+	}
+
+	private List<Command> commands;
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
 	public void undo() {
+		if (commands != null)
+			for (Command c : commands)
+				c.undo();
 		if (resetOnUndo)
 			getTarget().resetPropertyValue(propertyName);
 		else

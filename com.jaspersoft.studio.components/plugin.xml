@@ -569,5 +569,14 @@
             id="com.jaspersoft.studio.components.WEBCOMPONENTS">
       </group>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.postsetvalue">
+      <postsetvalue
+            ClassFactory="com.jaspersoft.studio.components.table.model.cell.command.PostSetSizeCell">
+      </postsetvalue>
+      <postsetvalue
+            ClassFactory="com.jaspersoft.studio.components.crosstab.model.cell.command.PostSetSizeCell">
+      </postsetvalue>
+   </extension>
 
 </plugin>

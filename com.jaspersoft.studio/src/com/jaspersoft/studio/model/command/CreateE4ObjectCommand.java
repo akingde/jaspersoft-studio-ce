@@ -29,10 +29,10 @@ import net.sf.jasperreports.engine.type.ResetTypeEnum;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
+import com.jaspersoft.studio.model.frame.MFrame;
 
 public class CreateE4ObjectCommand extends CreateElementCommand {
 	protected ANode child;

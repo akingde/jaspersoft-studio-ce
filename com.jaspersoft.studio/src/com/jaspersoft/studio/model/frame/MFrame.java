@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.model;
+package com.jaspersoft.studio.model.frame;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
@@ -28,6 +28,14 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IContainerLayout;
+import com.jaspersoft.studio.model.IGraphicElementContainer;
+import com.jaspersoft.studio.model.IPastable;
+import com.jaspersoft.studio.model.IPastableGraphic;
+import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 

@@ -28,8 +28,8 @@ import com.jaspersoft.studio.components.chartspider.model.command.EditSpiderChar
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
-import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.frame.MFrame;
 
 public class SpiderChartEditPart extends FigureEditPart {
 

@@ -76,7 +76,6 @@ public class SetConstraintCommand extends Command {
 
 	/** The c band. */
 	private JRDesignBand cBand;
-	private Object destValue;
 	protected JRElementGroup jrGroup;
 	private Dimension d;
 	private JRPropertiesHolder[] pholder;
@@ -97,16 +96,14 @@ public class SetConstraintCommand extends Command {
 			jrElement = (JRDesignElement) child.getValue();
 			newBounds = constraint;
 			parentBounds = ((IGraphicElement) child).getBounds();
-			parent = child.getParent();
-			destValue = parent.getValue();
-			if (parent instanceof IGroupElement)
-				jrGroup = ((IGroupElement) parent).getJRElementGroup();
-			else if (parent.getValue() instanceof JRElementGroup)
-				jrGroup = (JRElementGroup) parent.getValue();
-			if (parent instanceof IGraphicElementContainer)
-				d = ((IGraphicElementContainer) parent).getSize();
-			if (parent instanceof IContainerLayout)
-				pholder = ((IContainerLayout) parent).getPropertyHolder();
+			if (child instanceof IGroupElement)
+				jrGroup = ((IGroupElement) child).getJRElementGroup();
+			else if (child.getValue() instanceof JRElementGroup)
+				jrGroup = (JRElementGroup) child.getValue();
+			if (child instanceof IGraphicElementContainer)
+				d = ((IGraphicElementContainer) child).getSize();
+			if (child instanceof IContainerLayout)
+				pholder = ((IContainerLayout) child).getPropertyHolder();
 		}
 	}
 
@@ -132,17 +129,13 @@ public class SetConstraintCommand extends Command {
 
 			adjustBand();
 
-			if (destValue instanceof JRPropertiesHolder && jrGroup != null) {
+			if (jrElement instanceof JRPropertiesHolder && jrGroup != null) {
 				String uuid = null;
-				if (destValue instanceof JRBaseElement)
-					uuid = ((JRBaseElement) destValue).getUUID().toString();
-				if (destValue instanceof JRCommonElement) {
-					JRCommonElement jce = (JRCommonElement) destValue;
+				if (jrElement instanceof JRBaseElement)
+					uuid = ((JRBaseElement) jrElement).getUUID().toString();
+				if (jrElement instanceof JRCommonElement) {
+					JRCommonElement jce = (JRCommonElement) jrElement;
 					d.setSize(jce.getWidth(), jce.getHeight());
-				}
-				if (destValue instanceof JRDesignBand) {
-					int w = jrDesign.getPageWidth() - jrDesign.getLeftMargin() - jrDesign.getRightMargin();
-					d = new Dimension(w, ((JRDesignBand) destValue).getHeight());
 				}
 				if (lCmd == null) {
 					ILayout layout = LayoutManager.getLayout(pholder, jrDesign, uuid);
@@ -288,7 +281,8 @@ public class SetConstraintCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		lCmd.undo();
+		if (lCmd != null)
+			lCmd.undo();
 		if (jrElement != null) {
 			if (pBand != null && cBand != null)
 				pBand.removeElement(jrElement);
