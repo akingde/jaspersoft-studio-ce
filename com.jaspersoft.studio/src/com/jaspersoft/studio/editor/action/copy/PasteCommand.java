@@ -80,7 +80,7 @@ public class PasteCommand extends Command {
 				Object value = node.getValue();
 				if (value instanceof JRCloneable) {
 					ANode n = node.getClass().newInstance();
-
+					Rectangle rect = null;
 					n.setValue(((JRCloneable) value).clone());
 					if (node.isCut() && node.getParent() != null) {
 						Command cmdd = OutlineTreeEditPartFactory.getDeleteCommand((ANode) node.getParent(), node);
@@ -93,9 +93,11 @@ public class PasteCommand extends Command {
 							de.setX(de.getX() + 5);
 							de.setY(de.getY() + 5);
 						}
+						rect = mge.getBounds();
+						rect.setLocation(de.getX(), de.getY());
 					}
 					// create command
-					Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, (Rectangle) null, -1);
+					Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, rect, -1);
 					if (cmdc != null)
 						cmd.add(cmdc);
 
