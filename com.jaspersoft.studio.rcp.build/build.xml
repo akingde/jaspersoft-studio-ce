@@ -11,9 +11,8 @@
 	<!-- ================================= 
           target: buildAndPackageConsole
          ================================= -->
-    <target name="buildAndPackageConsole" description="Invoke the main building task and then all packaging-tasks. Should be used when launching outside IDE"  depends="readProductManifest">
+    <target name="buildAndPackageConsole" description="Invoke the main building task and then all packaging-tasks. Should be used when launching outside IDE">
     	<echo message="Executing 'buildAndPackageConsole' task"/>
-		<property file="jss.properties"/>
     	<antcall>
     		<target name="main"/>
     		<target name="linux-x86-installer"/>
@@ -28,10 +27,9 @@
 	<!-- ================================= 
           target: buildAndPackageIDE
          ================================= -->
-    <target name="buildAndPackageIDE" description="Invoke the main building task and then all packaging-tasks. Should be used when launching inside IDE" depends="readProductManifest">
+    <target name="buildAndPackageIDE" description="Invoke the main building task and then all packaging-tasks. Should be used when launching inside IDE">
     	<echo message="Executing 'buildAndPackageIDE' task"/>
     	<property name="idelaunch" value="true" />
-		<property file="jss.properties"/>
     	<antcall>
     		<target name="main"/>
     		<target name="linux-x86-installer"/>
@@ -47,7 +45,8 @@
 	<!-- ================================= 
           target: main
          ================================= -->
-	<target name="main" description="Product creation (packaging as zip files)">
+	<target name="main" description="Product creation (packaging as zip files)" depends="readProductManifest">
+		<property file="jss.properties"/>
 		<echo message="Executing 'main' task"/>
 		<echo message="Delta pack location: ${deltapack}" />
 		<!-- Check that we have a deltapack -->
