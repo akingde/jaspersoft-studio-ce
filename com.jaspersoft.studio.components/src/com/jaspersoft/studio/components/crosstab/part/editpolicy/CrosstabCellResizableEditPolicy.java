@@ -20,8 +20,6 @@
 package com.jaspersoft.studio.components.crosstab.part.editpolicy;
 
 import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +41,10 @@ import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.MoveHandle;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.components.crosstab.part.CrosstabCellEditPart;
+import com.jaspersoft.studio.components.crosstab.part.ACrosstabCellEditPart;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.editor.gef.parts.handles.CellMoveHandle;
 import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle2;
-import com.jaspersoft.studio.editor.gef.util.GEFUtil;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 /*
@@ -64,8 +61,8 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 	}
 
 	@Override
-	public CrosstabCellEditPart getHost() {
-		return (CrosstabCellEditPart) super.getHost();
+	public ACrosstabCellEditPart getHost() {
+		return (ACrosstabCellEditPart) super.getHost();
 	}
 
 	/*
@@ -119,14 +116,6 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 		FeedbackFigure feedback = (FeedbackFigure) getDragSourceFeedbackFigure();
 		IFigure hfig = getHostFigure();
 		feedback.setRequest(request);
-		if (request.getType().equals(REQ_MOVE)) {
-			// double zoom = GEFUtil.getZoom(getHost());
-			// movePlace.calcMovePlace((int) Math.floor(moveDelta.x / zoom),
-			// hfig
-			// .getBounds().getCopy());
-			// if (movePlace.x1 != movePlace.xRef)
-			// feedback.setInsertLine(movePlace.x1, movePlace.y1, movePlace.y2);
-		}
 
 		Rectangle rect = new PrecisionRectangle(getInitialFeedbackBounds()
 				.getCopy());
@@ -174,14 +163,6 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 			this.request = request;
 		}
 
-		private int x1, y1, y2;
-
-		public void setInsertLine(int x1, int y1, int y2) {
-			this.x1 = x1;
-			this.y1 = y1;
-			this.y2 = y2;
-		}
-
 		@Override
 		public void paintFigure(Graphics g) {
 			PrecisionRectangle b = new PrecisionRectangle(getBounds().getCopy());
@@ -198,37 +179,6 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 
 				gr.drawLine(b.x + (b.width) / 2, b.y, b.x + (b.width) / 2, b.y
 						+ b.height - 2);
-			} else if (request.getType().equals(REQ_MOVE)) {
-				double zoom = GEFUtil.getZoom(b, getHostFigure());
-
-				Graphics2D gr = ((J2DGraphics) g).getGraphics2D();
-				gr.setColor(Color.gray);
-				AlphaComposite ac = AlphaComposite.getInstance(
-						AlphaComposite.SRC_OVER, 0.1f);
-				gr.setComposite(ac);
-
-				int h = TableCellEditPart.Y_OFFSET;
-				b.y = b.y + (int) Math.floor(h * zoom) - h - 3;
-				int height = b.height - (int) Math.floor(h * zoom);
-
-				gr.fillRect(b.x, b.y, b.width, height - b.y);
-
-				// draw handle representation
-				ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f);
-				gr.setComposite(ac);
-				gr.fillRect(b.x, b.y, b.width, h);
-				gr.fillRect(b.x, height + 3, b.width, h);
-
-				// move placer feedback
-				gr.setStroke(new BasicStroke(2.0f));
-				ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
-				gr.setComposite(ac);
-				gr.setColor(Color.red);
-
-				PrecisionRectangle r = new PrecisionRectangle(x1, y1, x1, y2);
-				getHostFigure().translateToAbsolute(r);
-				getFeedbackLayer().translateToParent(r);
-				gr.drawLine(r.x, r.y, r.width, r.height);
 			}
 		}
 	}

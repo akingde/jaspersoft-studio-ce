@@ -37,10 +37,8 @@ import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
@@ -51,17 +49,13 @@ import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.components.crosstab.model.cell.command.CreateElementCommand;
 import com.jaspersoft.studio.components.crosstab.model.cell.command.OrphanElementCommand;
-import com.jaspersoft.studio.components.crosstab.part.editpolicy.CrosstabCellMoveEditPolicy;
 import com.jaspersoft.studio.components.crosstab.part.editpolicy.CrosstabCellResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
-import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
-import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
@@ -76,12 +70,7 @@ import com.jaspersoft.studio.property.SetValueCommand;
  * @author Chicu Veaceslav, Giulio Toffoli
  * 
  */
-public class CrosstabCellEditPart extends FigureEditPart implements
-		IContainerPart, IContainer {
-	@Override
-	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
-		return getParent().getAdapter(key);
-	}
+public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 
 	@Override
 	public MCell getModel() {
@@ -229,10 +218,6 @@ public class CrosstabCellEditPart extends FigureEditPart implements
 				});
 	}
 
-	public EditPolicy getEditPolicy() {
-		return new CrosstabCellMoveEditPolicy();
-	}
-
 	@Override
 	protected void setupFigure(IFigure rect) {
 		updateContainerSize();
@@ -274,60 +259,8 @@ public class CrosstabCellEditPart extends FigureEditPart implements
 	}
 
 	@Override
-	public boolean isSelectable() {
-		return true;
-	}
-
-	public Object getConstraintFor(ChangeBoundsRequest request,
-			GraphicalEditPart child) {
-		return new Rectangle(0, 0, request.getSizeDelta().width,
-				request.getSizeDelta().height);
-	}
-
-	public static final int X_OFFSET = 10;
-	public static final int Y_OFFSET = 10;
-
-	@Override
-	public void updateRulers() {
-		MCell mcell = (MCell) getModel();
-		// get mtable
-		// get max size (table and tablemanager.size)
-		MCrosstab table = mcell.getCrosstab();
-		if (table != null) {
-			Dimension d = table.getCrosstabManager().getSize();
-
-			int dh = Math.max(d.height, (Integer) table
-					.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT));
-			int dw = Math.max(d.width, (Integer) table
-					.getPropertyValue(JRDesignElement.PROPERTY_WIDTH));
-
-			getViewer().setProperty(ReportRuler.PROPERTY_HOFFSET, X_OFFSET);
-			getViewer().setProperty(ReportRuler.PROPERTY_VOFFSET, Y_OFFSET);
-			getViewer().setProperty(ReportRuler.PROPERTY_HEND, dw);
-			getViewer().setProperty(ReportRuler.PROPERTY_VEND, dh);
-
-			getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
-					new Point(X_OFFSET, Y_OFFSET));
-		}
-	}
-
-	private Dimension containerSize;
-
-	public Dimension getContaierSize() {
-		return containerSize;
-	}
-
-	private void updateContainerSize() {
-		MCrosstab table = getModel().getCrosstab();
-		if (table != null) {
-			Dimension d = table.getCrosstabManager().getSize();
-			d.height = Math.max(d.height, (Integer) table
-					.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT));
-			d.width = Math.max(d.width, (Integer) table
-					.getPropertyValue(JRDesignElement.PROPERTY_WIDTH));
-			containerSize = d;
-		} else
-			containerSize = null;
+	protected MCrosstab getCrosstab() {
+		return getModel().getCrosstab();
 	}
 
 }

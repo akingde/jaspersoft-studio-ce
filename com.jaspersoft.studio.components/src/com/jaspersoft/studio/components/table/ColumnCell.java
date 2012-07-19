@@ -2,6 +2,7 @@ package com.jaspersoft.studio.components.table;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.util.TableUtil;
 
@@ -11,12 +12,17 @@ public class ColumnCell {
 	public int type;
 	public String grName;
 	public BaseColumn column;
+	public DesignCell cell;
 
 	public ColumnCell(int type, String grName, BaseColumn column) {
 		super();
 		this.type = type;
 		this.grName = grName;
 		this.column = column;
+	}
+
+	public void setCell(DesignCell cell) {
+		this.cell = cell;
 	}
 
 	private Guide north;

@@ -99,7 +99,9 @@ import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.DeleteRo
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.ReorderRowGroupCommand;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabCellEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabEditPart;
+import com.jaspersoft.studio.components.crosstab.part.CrosstabHeaderEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabPageEditPart;
+import com.jaspersoft.studio.components.crosstab.part.CrosstabWhenNoDataEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
@@ -583,9 +585,9 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		if (model instanceof MCell)
 			return new CrosstabCellEditPart();
 		if (model instanceof MCrosstabHeader)
-			return new CrosstabCellEditPart();
+			return new CrosstabHeaderEditPart();
 		if (model instanceof MCrosstabWhenNoData)
-			return new CrosstabCellEditPart();
+			return new CrosstabWhenNoDataEditPart();
 		return null;
 	}
 

@@ -7,19 +7,21 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
-import com.jaspersoft.studio.components.crosstab.part.CrosstabCellEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 public class CreateResize {
 	public static Command createResizeCommand(ChangeBoundsRequest request,
-			CrosstabCellEditPart editPart) {
-		MCell model = editPart.getModel();
+			GraphicalEditPart editPart) {
+		if (!(editPart.getModel() instanceof MCell))
+			return null;
+		MCell model = (MCell) editPart.getModel();
 		Dimension sizeDelta = request.getSizeDelta();
 		ANode mparent = model.getParent();
 		// if (request.getResizeDirection() == PositionConstants.WEST) {

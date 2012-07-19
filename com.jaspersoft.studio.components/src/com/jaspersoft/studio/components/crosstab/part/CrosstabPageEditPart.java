@@ -19,6 +19,9 @@
  */
 package com.jaspersoft.studio.components.crosstab.part;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Dimension;
@@ -27,7 +30,9 @@ import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
+import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 
 public class CrosstabPageEditPart extends PageEditPart {
 
@@ -65,5 +70,19 @@ public class CrosstabPageEditPart extends PageEditPart {
 			containerSize = d;
 		} else
 			containerSize = null;
+	}
+
+	protected List<Object> getModelChildren() {
+		final List<Object> list = new ArrayList<Object>();
+		new ModelVisitor(getPage()) {
+
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof IGraphicElement)
+					list.add(n);
+				return true;
+			}
+		};
+		return list;
 	}
 }

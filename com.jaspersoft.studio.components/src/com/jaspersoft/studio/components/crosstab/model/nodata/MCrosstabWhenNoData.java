@@ -20,17 +20,24 @@
 package com.jaspersoft.studio.components.crosstab.model.nodata;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
-public class MCrosstabWhenNoData extends ANode {
+public class MCrosstabWhenNoData extends ANode implements IGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -44,6 +51,17 @@ public class MCrosstabWhenNoData extends ANode {
 		if (iconDescriptor == null)
 			iconDescriptor = new CrosstabNodeIconDescriptor("cell"); //$NON-NLS-1$
 		return iconDescriptor;
+	}
+
+	public MCrosstab getCrosstab() {
+		INode node = this;
+		while (node != null && node.getParent() != null
+				&& !(node instanceof MCrosstab) && !(node instanceof MRoot)) {
+			node = node.getParent();
+		}
+		if (node instanceof MCrosstab)
+			return (MCrosstab) node;
+		return null;
 	}
 
 	/**
@@ -98,6 +116,26 @@ public class MCrosstabWhenNoData extends ANode {
 	@Override
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		return new Rectangle(0, 0, 100, 100);
+	}
+
+	@Override
+	public int getDefaultWidth() {
+		return 100;
+	}
+
+	@Override
+	public int getDefaultHeight() {
+		return 100;
+	}
+
+	@Override
+	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
+		return null;
 	}
 
 }

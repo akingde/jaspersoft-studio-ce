@@ -20,17 +20,24 @@
 package com.jaspersoft.studio.components.crosstab.model.header;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
-public class MCrosstabHeader extends ANode {
+public class MCrosstabHeader extends ANode implements IGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -46,6 +53,17 @@ public class MCrosstabHeader extends ANode {
 		return iconDescriptor;
 	}
 
+	public MCrosstab getCrosstab() {
+		INode node = this;
+		while (node != null && node.getParent() != null
+				&& !(node instanceof MCrosstab) && !(node instanceof MRoot)) {
+			node = node.getParent();
+		}
+		if (node instanceof MCrosstab)
+			return (MCrosstab) node;
+		return null;
+	}
+
 	/**
 	 * Instantiates a new m field.
 	 */
@@ -57,11 +75,11 @@ public class MCrosstabHeader extends ANode {
 	 * Instantiates a new m field.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jfRield
-	 *          the jf rield
+	 *            the jf rield
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MCrosstabHeader(ANode parent, int index) {
 		super(parent, index);
@@ -98,6 +116,26 @@ public class MCrosstabHeader extends ANode {
 	@Override
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		return new Rectangle(0, 0, 100, 100);
+	}
+
+	@Override
+	public int getDefaultWidth() {
+		return 100;
+	}
+
+	@Override
+	public int getDefaultHeight() {
+		return 100;
+	}
+
+	@Override
+	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
+		return null;
 	}
 
 }

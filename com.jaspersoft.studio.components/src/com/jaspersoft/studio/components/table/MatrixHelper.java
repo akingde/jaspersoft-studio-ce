@@ -9,6 +9,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
@@ -194,8 +195,7 @@ public class MatrixHelper {
 				ColumnCell cell = createCell(bc, TableUtil.COLUMN_DETAIL, "");
 				north.addSouth(cell);
 				south.addNorth(cell);
-				south.setY(north,
-						TableUtil.getCell(bc, TableUtil.COLUMN_DETAIL, ""));
+				south.setY(north, cell.cell);
 			}
 		}
 		return south;
@@ -205,17 +205,16 @@ public class MatrixHelper {
 			int type, String grName) {
 		for (BaseColumn bc : cols) {
 			ColumnCell cell = createCell(bc, type, grName);
-			Cell c = TableUtil.getCell(bc, type, grName);
 			north.addSouth(cell);
 			if (bc instanceof StandardColumnGroup) {
 				Guide gn = addNext(north, hGuides);
 				gn.addNorth(cell);
-				gn.setY(north, c);
+				gn.setY(north, cell.cell);
 				fillRowTop(gn, south, ((StandardColumnGroup) bc).getColumns(),
 						type, grName);
 			} else {
 				south.addNorth(cell);
-				south.setY(north, c);
+				south.setY(north, cell.cell);
 			}
 		}
 		return south;
@@ -283,6 +282,8 @@ public class MatrixHelper {
 
 	public ColumnCell createCell(BaseColumn bc, int type, String grName) {
 		ColumnCell cc = new ColumnCell(type, grName, bc);
+		Cell c = TableUtil.getCell(bc, type, grName);
+		cc.setCell((DesignCell) c);
 		map.put(cc, null);
 		return cc;
 	}

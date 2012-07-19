@@ -149,6 +149,7 @@ public class CreateElementCommand extends Command {
 	public CreateElementCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super();
 		this.location = position;
+		this.jrElement = (JRDesignElement) srcNode.getValue();
 		if (destNode instanceof IGroupElement)
 			setContext(destNode, srcNode, index);
 		else
@@ -200,15 +201,23 @@ public class CreateElementCommand extends Command {
 	 * @return the a node
 	 */
 	protected ANode fixPosition(ANode destNode, ANode srcNode, Rectangle position) {
-		if (position == null)
-			position = new Rectangle(0, 0, 70, 30);
+		if (position == null) {
+			if (jrElement != null)
+				position = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
+			else
+				position = new Rectangle(0, 0, 70, 30);
+		}
 		// calculate position, fix position relative to parent
 		MBand band = ModelUtils.getBand4Point(destNode, new Point(position.x, position.y));
 		// set proposed bounds
 		int x = position.x - band.getBounds().x;
 		int y = position.y - band.getBounds().y;
-		if (location == null)
-			location = new Rectangle(0, 0, 50, 30);
+		if (location == null) {
+			if (jrElement != null)
+				location = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
+			else
+				location = new Rectangle(0, 0, 50, 30);
+		}
 		this.location.setLocation(x, y);
 		return band;
 	}

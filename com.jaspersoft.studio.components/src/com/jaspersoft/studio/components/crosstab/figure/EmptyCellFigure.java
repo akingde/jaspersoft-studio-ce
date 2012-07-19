@@ -30,6 +30,7 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
@@ -39,7 +40,6 @@ import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 public class EmptyCellFigure extends FrameFigure {
 	private static final Color COLOR1 = new Color(224, 224, 224);
 	private static final Color COLOR2 = new Color(255, 255, 255);
-	private JRDesignCellContents cell;
 
 	public EmptyCellFigure() {
 		super();
@@ -50,21 +50,23 @@ public class EmptyCellFigure extends FrameFigure {
 		createTexture();
 	}
 
+	private Dimension d;
+
 	public void setJRElement(JRDesignCellContents column,
-			DrawVisitor drawVisitor, int height) {
-		this.cell = column;
+			DrawVisitor drawVisitor, Dimension d) {
+		this.d = d;
 		super.setJRElement(null, drawVisitor);
 		setSize(getElementWidth() + 3, getElementHeight() + 3);
 	}
 
 	@Override
 	protected int getElementHeight() {
-		return cell.getHeight();
+		return d.height;
 	}
 
 	@Override
 	protected int getElementWidth() {
-		return cell.getWidth();
+		return d.width;
 	}
 
 	@Override
