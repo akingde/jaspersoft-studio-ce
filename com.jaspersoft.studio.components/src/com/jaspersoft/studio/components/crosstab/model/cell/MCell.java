@@ -43,6 +43,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.components.crosstab.CrosstabCell;
 import com.jaspersoft.studio.components.crosstab.CrosstabManager;
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
@@ -409,7 +410,8 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		MCrosstab mc = getMCrosstab();
 		if (mc != null) {
 			if (c != null)
-				rCellBounds = mc.getCrosstabManager().getBounds(c);
+				rCellBounds = mc.getCrosstabManager().getBounds(
+						new CrosstabCell(c));
 			Rectangle b = mc.getBounds();
 			return new Rectangle(b.x + rCellBounds.x, b.y + rCellBounds.y, w, h);
 		}

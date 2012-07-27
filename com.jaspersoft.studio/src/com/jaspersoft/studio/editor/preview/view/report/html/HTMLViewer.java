@@ -127,4 +127,14 @@ public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
 		browser.setUrl(url);
 	}
 
+	@Override
+	public void pageGenerated(JasperPrint arg0, int arg1) {
+
+	}
+
+	@Override
+	public void pageUpdated(JasperPrint arg0, int arg1) {
+
+	}
+
 }

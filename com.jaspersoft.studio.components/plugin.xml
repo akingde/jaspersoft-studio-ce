@@ -478,6 +478,50 @@
                   type="com.jaspersoft.studio.components.crosstab.model.cell.MCell">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.crosstab.property.CrosstabRowGroupSection"
+               id="com.jaspersoft.studio.components.crosstab.property.CrosstabRowGroupSection"
+               tab="com.jaspersoft.studio.components.cell">
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.crosstab.property.CrosstabColumnGroupSection"
+               id="com.jaspersoft.studio.components.crosstab.property.CrosstabColumnGroupSection"
+               tab="com.jaspersoft.studio.components.cell">
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroup">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.crosstab.property.CrosstabGroupSection"
+               id="com.jaspersoft.studio.components.crosstab.property.CrosstabGroupSection"
+               tab="com.jaspersoft.studio.components.cell">
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.MCrosstabGroup">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.crosstab.property.CrosstabGroupSection"
+               class="com.jaspersoft.studio.components.crosstab.property.CrosstabBucketSection"
+               id="com.jaspersoft.studio.components.crosstab.property.CrosstabBucketSection"
+               tab="com.jaspersoft.studio.components.cell">
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.MBucket">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.MCrosstabGroup">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.crosstab.property.CrosstabMeasureSection"
+               id="com.jaspersoft.studio.components.crosstab.property.CrosstabMeasureSection"
+               tab="com.jaspersoft.studio.components.cell">
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.measure.MMeasure">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension

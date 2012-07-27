@@ -86,7 +86,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				}
 				in = JrxmlEditor.getXML(input, file.getCharset(true), in, null);
 				getJrContext(file);
-				setJasperDesign(jrContext, JRXmlLoader.load(in));
+				jrContext.setJasperDesign(JRXmlLoader.load(in));
+				setJasperDesign(jrContext);
 			} catch (Exception e) {
 				throw new PartInitException(e.getMessage(), e);
 			} finally {
@@ -242,16 +243,16 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return reportControler;
 	}
 
-	public void setJasperDesign(JasperReportsConfiguration jConfig, JasperDesign jasperDesign) {
-		getReportControler().setJasperDesign(jConfig, jasperDesign);
+	public void setJasperDesign(JasperReportsConfiguration jConfig) {
+		getReportControler().setJrContext(jConfig);
 		setupDataAdapter();
-		if (isDirty())
+		if (isDirty() || getJasperPrint() == null)
 			runReport(dataAdapterDesc);
 		isDirty = false;
 	}
 
 	private void setupDataAdapter() {
-		JasperDesign jd = getReportControler().getjDesign();
+		JasperDesign jd = getReportControler().getJrContext().getJasperDesign();
 		PreviewTopToolBarManager pt = (PreviewTopToolBarManager) topToolBarManager1;
 		if (pt != null && jd != null) {
 			String strda = jd.getProperty(MReport.DEFAULT_DATAADAPTER);

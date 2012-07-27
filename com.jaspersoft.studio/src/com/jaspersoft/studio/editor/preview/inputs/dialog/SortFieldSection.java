@@ -76,71 +76,72 @@ public class SortFieldSection {
 	}
 
 	public Control createSortField(Composite tabFolder) {
-		for (JRParameter p : prompts)
-			if (p.getName().equals("SORT_FIELDS")) {//$NON-NLS-1$
+		if (prompts != null)
+			for (JRParameter p : prompts)
+				if (p.getName().equals("SORT_FIELDS")) {//$NON-NLS-1$
 
-				Composite composite = new Composite(tabFolder, SWT.NONE);
-				composite.setLayout(new GridLayout(4, false));
-				composite.setBackground(tabFolder.getBackground());
-				composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+					Composite composite = new Composite(tabFolder, SWT.NONE);
+					composite.setLayout(new GridLayout(4, false));
+					composite.setBackground(tabFolder.getBackground());
+					composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-				leftTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
-				leftTable.setBackground(tabFolder.getBackground());
-				GridData gd = new GridData(GridData.FILL_VERTICAL);
-				gd.widthHint = 150;
-				leftTable.setLayoutData(gd);
-				leftTable.setHeaderVisible(true);
+					leftTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
+					leftTable.setBackground(tabFolder.getBackground());
+					GridData gd = new GridData(GridData.FILL_VERTICAL);
+					gd.widthHint = 150;
+					leftTable.setLayoutData(gd);
+					leftTable.setHeaderVisible(true);
 
-				TableColumn[] col = new TableColumn[1];
-				col[0] = new TableColumn(leftTable, SWT.NONE);
-				col[0].setText(Messages.common_report_objects);
-				col[0].pack();
+					TableColumn[] col = new TableColumn[1];
+					col[0] = new TableColumn(leftTable, SWT.NONE);
+					col[0].setText(Messages.common_report_objects);
+					col[0].pack();
 
-				TableLayout tlayout = new TableLayout();
-				tlayout.addColumnData(new ColumnWeightData(100, false));
-				leftTable.setLayout(tlayout);
+					TableLayout tlayout = new TableLayout();
+					tlayout.addColumnData(new ColumnWeightData(100, false));
+					leftTable.setLayout(tlayout);
 
-				leftTView = new TableViewer(leftTable);
-				leftTView.setContentProvider(new ListContentProvider());
-				leftTView.setLabelProvider(new TLabelProvider());
+					leftTView = new TableViewer(leftTable);
+					leftTView.setContentProvider(new ListContentProvider());
+					leftTView.setLabelProvider(new TLabelProvider());
 
-				Composite bGroup = new Composite(composite, SWT.NONE);
-				bGroup.setBackground(tabFolder.getBackground());
-				bGroup.setLayout(new GridLayout(1, false));
-				bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+					Composite bGroup = new Composite(composite, SWT.NONE);
+					bGroup.setBackground(tabFolder.getBackground());
+					bGroup.setLayout(new GridLayout(1, false));
+					bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-				// -----------------------------------
-				rightTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
-				rightTable.setBackground(tabFolder.getBackground());
-				rightTable.setLayoutData(new GridData(GridData.FILL_BOTH));
-				rightTable.setHeaderVisible(true);
+					// -----------------------------------
+					rightTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
+					rightTable.setBackground(tabFolder.getBackground());
+					rightTable.setLayoutData(new GridData(GridData.FILL_BOTH));
+					rightTable.setHeaderVisible(true);
 
-				col = new TableColumn[2];
-				col[0] = new TableColumn(rightTable, SWT.NONE);
-				col[0].setText(Messages.SortFieldSection_sort_field);
-				col[0].pack();
+					col = new TableColumn[2];
+					col[0] = new TableColumn(rightTable, SWT.NONE);
+					col[0].setText(Messages.SortFieldSection_sort_field);
+					col[0].pack();
 
-				col[0] = new TableColumn(rightTable, SWT.NONE);
-				col[0].setText(Messages.SortFieldSection_sort_order);
-				col[0].pack();
+					col[0] = new TableColumn(rightTable, SWT.NONE);
+					col[0].setText(Messages.SortFieldSection_sort_order);
+					col[0].pack();
 
-				tlayout = new TableLayout();
-				tlayout.addColumnData(new ColumnWeightData(65, true));
-				tlayout.addColumnData(new ColumnWeightData(35, true));
-				rightTable.setLayout(tlayout);
+					tlayout = new TableLayout();
+					tlayout.addColumnData(new ColumnWeightData(65, true));
+					tlayout.addColumnData(new ColumnWeightData(35, true));
+					rightTable.setLayout(tlayout);
 
-				rightTView = new TableViewer(rightTable);
-				rightTView.setContentProvider(new ListContentProvider());
-				rightTView.setLabelProvider(new TLabelProvider());
+					rightTView = new TableViewer(rightTable);
+					rightTView.setContentProvider(new ListContentProvider());
+					rightTView.setLabelProvider(new TLabelProvider());
 
-				attachCellEditors(rightTView, rightTable);
+					attachCellEditors(rightTView, rightTable);
 
-				createOrderButtons(tabFolder, composite);
+					createOrderButtons(tabFolder, composite);
 
-				new MoveT2TButtons().createButtons(bGroup, leftTView, rightTView);
+					new MoveT2TButtons().createButtons(bGroup, leftTView, rightTView);
 
-				return composite;
-			}
+					return composite;
+				}
 		return null;
 	}
 
@@ -215,39 +216,39 @@ public class SortFieldSection {
 
 	@SuppressWarnings("unchecked")
 	public void fillTable(Composite tabFolder, JasperDesign jDesign, List<JRParameter> prompts, Map<String, Object> params) {
-
 		this.prompts = prompts;
+		if (prompts != null) {
+			createSortField(tabFolder);
+			inFields = new ArrayList<JRSortField>();
+			List<JRField> flist = jDesign.getFieldsList();
+			for (JRField f : flist) {
+				inFields.add(new JRDesignSortField(f.getName(), SortFieldTypeEnum.FIELD, SortOrderEnum.ASCENDING));
+			}
+			List<JRVariable> vlist = jDesign.getVariablesList();
+			for (JRVariable f : vlist) {
+				inFields.add(new JRDesignSortField(f.getName(), SortFieldTypeEnum.VARIABLE, SortOrderEnum.ASCENDING));
+			}
+			leftTView.setInput(inFields);
 
-		createSortField(tabFolder);
-		inFields = new ArrayList<JRSortField>();
-		List<JRField> flist = jDesign.getFieldsList();
-		for (JRField f : flist) {
-			inFields.add(new JRDesignSortField(f.getName(), SortFieldTypeEnum.FIELD, SortOrderEnum.ASCENDING));
+			Object obj = params.get("SORT_FIELDS");//$NON-NLS-1$
+			if (obj == null || !(obj instanceof List)) {
+				outFields = new ArrayList<JRSortField>();
+
+				params.put("SORT_FIELDS", outFields);//$NON-NLS-1$
+			} else
+				outFields = (List<JRSortField>) obj;
+
+			// check if fields exists in the report
+			List<JRSortField> dlist = new ArrayList<JRSortField>();
+			for (JRSortField f : outFields) {
+				if (f.getType().equals(SortFieldTypeEnum.FIELD) && jDesign.getFieldsMap().get(f.getName()) == null)
+					dlist.add(f);
+				if (f.getType().equals(SortFieldTypeEnum.VARIABLE) && jDesign.getVariablesMap().get(f.getName()) == null)
+					dlist.add(f);
+			}
+			outFields.removeAll(dlist);
+
+			rightTView.setInput(outFields);
 		}
-		List<JRVariable> vlist = jDesign.getVariablesList();
-		for (JRVariable f : vlist) {
-			inFields.add(new JRDesignSortField(f.getName(), SortFieldTypeEnum.VARIABLE, SortOrderEnum.ASCENDING));
-		}
-		leftTView.setInput(inFields);
-
-		Object obj = params.get("SORT_FIELDS");//$NON-NLS-1$
-		if (obj == null || !(obj instanceof List)) {
-			outFields = new ArrayList<JRSortField>();
-
-			params.put("SORT_FIELDS", outFields);//$NON-NLS-1$
-		} else
-			outFields = (List<JRSortField>) obj;
-
-		// check if fields exists in the report
-		List<JRSortField> dlist = new ArrayList<JRSortField>();
-		for (JRSortField f : outFields) {
-			if (f.getType().equals(SortFieldTypeEnum.FIELD) && jDesign.getFieldsMap().get(f.getName()) == null)
-				dlist.add(f);
-			if (f.getType().equals(SortFieldTypeEnum.VARIABLE) && jDesign.getVariablesMap().get(f.getName()) == null)
-				dlist.add(f);
-		}
-		outFields.removeAll(dlist);
-
-		rightTView.setInput(outFields);
 	}
 }

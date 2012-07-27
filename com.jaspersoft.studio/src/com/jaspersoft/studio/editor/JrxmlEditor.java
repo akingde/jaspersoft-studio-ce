@@ -742,7 +742,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Model2xml.
 	 */
 	private void model2preview() {
-		previewEditor.setJasperDesign(jrContext, getJasperDesign());
+		previewEditor.setJasperDesign(jrContext);
 	}
 
 	/**

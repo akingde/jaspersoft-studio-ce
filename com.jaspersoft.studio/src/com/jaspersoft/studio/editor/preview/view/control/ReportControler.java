@@ -34,6 +34,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
+import net.sf.jasperreports.engine.fill.FillListener;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
 
 import org.eclipse.core.resources.IFile;
@@ -67,6 +68,7 @@ import com.jaspersoft.studio.editor.preview.jive.servlet.SReportServlet;
 import com.jaspersoft.studio.editor.preview.stats.RecordCountScriptletFactory;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
@@ -106,7 +108,6 @@ public class ReportControler {
 
 	private List<JRParameter> prompts;
 	private Map<String, Object> jasperParameters;
-	private JasperDesign jDesign;
 	private PropertiesHelper ph;
 	private LinkedHashMap<String, APreview> viewmap;
 	private PreviewContainer pcontainer;
@@ -117,21 +118,24 @@ public class ReportControler {
 		this.jrContext = jrContext;
 	}
 
-	public void setJasperDesign(JasperReportsConfiguration jrContext, JasperDesign jDesign) {
+	public JasperReportsConfiguration getJrContext() {
+		return jrContext;
+	}
+
+	public void setJrContext(JasperReportsConfiguration jrContext) {
 		this.jrContext = jrContext;
-		this.jDesign = jDesign;
-		this.prompts = jDesign.getParametersList();
-		setParameters(jDesign);
+		prompts = jrContext.getJasperDesign().getParametersList();
+		setParameters();
 		if (viewmap != null)
 			fillForms();
 	}
 
-	private void setParameters(JasperDesign jDesign) {
+	private void setParameters() {
 		if (jasperParameters == null)
 			jasperParameters = new HashMap<String, Object>();
 		else {
 			Map<String, Object> map = new HashMap<String, Object>();
-			List<JRParameter> prm = jDesign.getParametersList();
+			List<JRParameter> prm = jrContext.getJasperDesign().getParametersList();
 			for (JRParameter p : prm) {
 				Object obj = jasperParameters.get(p.getName());
 				if (obj != null && obj.getClass().equals(p.getValueClass()))
@@ -142,10 +146,6 @@ public class ReportControler {
 		jrContext.setJRParameters(jasperParameters);
 	}
 
-	public JasperDesign getjDesign() {
-		return jDesign;
-	}
-
 	public LinkedHashMap<String, APreview> createControls(Composite composite, PropertiesHelper ph) {
 		this.ph = ph;
 		viewmap = new LinkedHashMap<String, APreview>();
@@ -153,7 +153,7 @@ public class ReportControler {
 		viewmap.put(FORM_REPORT_PARAMETERS, new VReportParameters(composite, ph));
 		viewmap.put(FORM_SORTING, new VSorting(composite, ph));
 
-		if (jDesign != null)
+		if (jrContext != null && jrContext.getJasperDesign() != null)
 			fillForms();
 		return viewmap;
 	}
@@ -166,7 +166,7 @@ public class ReportControler {
 		prmRepInput.createInputControls(prompts, jasperParameters);
 
 		VSorting vs = (VSorting) viewmap.get(FORM_SORTING);
-		vs.setJasperReports(jDesign, prompts, jasperParameters);
+		vs.setJasperReports(jrContext.getJasperDesign(), prompts, jasperParameters);
 	}
 
 	private Console c;
@@ -177,6 +177,7 @@ public class ReportControler {
 		c.clearConsole();
 		if (pcontainer.getMode().equals(RunStopAction.MODERUN_LOCAL))
 			pcontainer.setJasperPrint(null, null);
+		jasperParameters.clear();
 		fillError = null;
 		stats = new Statistics();
 		stats.startCount(ST_REPORTEXECUTIONTIME);
@@ -206,7 +207,8 @@ public class ReportControler {
 
 	private void runJob(final PreviewContainer pcontainer) {
 		fillError = null;
-		Job job = new Job(Messages.PreviewEditor_preview_a + ": " + jDesign.getName() + Messages.PreviewEditor_preview_b) { //$NON-NLS-1$ 
+		Job job = new Job(Messages.PreviewEditor_preview_a
+				+ ": " + jrContext.getJasperDesign().getName() + Messages.PreviewEditor_preview_b) { //$NON-NLS-1$ 
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
@@ -219,7 +221,7 @@ public class ReportControler {
 
 					setupFileRezolver(monitor, file);
 
-					JasperDesign jd = ModelUtils.copyJasperDesign(jDesign);
+					JasperDesign jd = ModelUtils.copyJasperDesign(jrContext.getJasperDesign());
 
 					setupProperties(jd);
 
@@ -229,14 +231,11 @@ public class ReportControler {
 						if (!prmInput.checkFieldsFilled())
 							return Status.CANCEL_STATUS;
 
+						setupDataAdapter(pcontainer);
 						if (pcontainer.getMode().equals(RunStopAction.MODERUN_JIVE)) {
-							setupDataAdapter(pcontainer);
 							runJive(pcontainer, file, jasperReport);
 						} else {
 							setupVirtualizer(jd, ph);
-
-							setupDataAdapter(pcontainer);
-
 							c.addMessage("Filling Report");
 
 							setupRecordCounters();
@@ -327,16 +326,52 @@ public class ReportControler {
 				SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
 		try {
 			sm.beginTask(Messages.PreviewEditor_fill_report, IProgressMonitor.UNKNOWN);
+			fh.addFillListener((IJRPrintable) pcontainer.getDefaultViewer());
+			fh.addFillListener(new FillListener() {
+				private boolean refresh = false;
 
+				@Override
+				public void pageUpdated(JasperPrint arg0, int page) {
+				}
+
+				@Override
+				public void pageGenerated(JasperPrint arg0, final int page) {
+					if (page == 0)
+						pcontainer.setJasperPrint(stats, arg0);
+					if (refresh)
+						return;
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							refresh = true;
+							stats.endCount(ST_FILLINGTIME);
+							stats.setValue(ST_PAGECOUNT, page);
+							if (scfactory != null)
+								stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
+							stats.endCount(ST_REPORTEXECUTIONTIME);
+							c.setStatistics(stats);
+							refresh = false;
+						}
+					});
+				}
+			});
 			fh.addListener(new AsynchronousFilllListener() {
 
-				public void reportFinished(JasperPrint jPrint) {
-					stats.endCount(ST_FILLINGTIME);
-					stats.setValue(ST_PAGECOUNT, jPrint.getPages().size());
-					if (scfactory != null)
-						stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
-					stats.endCount(ST_REPORTEXECUTIONTIME);
-					pcontainer.setJasperPrint(stats, jPrint);
+				public void reportFinished(final JasperPrint jPrint) {
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							stats.endCount(ST_FILLINGTIME);
+							stats.setValue(ST_PAGECOUNT, jPrint.getPages().size());
+							if (scfactory != null)
+								stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
+							stats.endCount(ST_REPORTEXECUTIONTIME);
+							pcontainer.setJasperPrint(stats, jPrint);
+							finished = false;
+						}
+					});
 				}
 
 				public void reportFillError(Throwable t) {
@@ -349,7 +384,8 @@ public class ReportControler {
 			});
 			stats.startCount(ST_FILLINGTIME);
 			fh.startFill();
-			while (true && pcontainer.getJasperPrint() == null && fillError == null) {
+			finished = true;
+			while (finished && fillError == null) {
 				if (sm.isCanceled()) {
 					fh.cancellFill();
 					return Status.CANCEL_STATUS;
@@ -359,13 +395,13 @@ public class ReportControler {
 			}
 			if (fillError != null)
 				throw new JRException(fillError);
-
 		} finally {
 			sm.done();
 		}
 		return Status.OK_STATUS;
 	}
 
+	private boolean finished = true;
 	private Throwable fillError = null;
 
 	private VParameters prmInput;

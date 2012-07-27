@@ -472,6 +472,7 @@ public class Messages extends NLS {
 	public static String G2DExporterPreferencePage_2;
 	public static String G2DExporterPreferencePage_3;
 	public static String G2DExporterPreferencePage_4;
+	public static String HeadingAction_heading;
 	public static String HTMLExporterPreferencePage_14;
 	public static String HTMLExporterPreferencePage_15;
 	public static String HTMLExporterPreferencePage_16;
@@ -942,6 +943,19 @@ public class Messages extends NLS {
 	public static String PatternPage_format_pattern;
 	public static String PatternPage_number;
 	public static String PatternPage_scientific;
+	public static String PdfAction_End;
+	public static String PdfAction_Full;
+	public static String PdfAction_None;
+	public static String PdfAction_Start;
+	public static String PDF508ElementDecorator_Menu_Heading;
+	public static String PDF508ElementDecorator_Menu_Heading1;
+	public static String PDF508ElementDecorator_Menu_Heading2;
+	public static String PDF508ElementDecorator_Menu_Heading3;
+	public static String PDF508ElementDecorator_Menu_PDF508Tags;
+	public static String PDF508ElementDecorator_Menu_Table;
+	public static String PDF508ElementDecorator_Menu_TableDetails;
+	public static String PDF508ElementDecorator_Menu_TableHeader;
+	public static String PDF508ElementDecorator_Menu_TableRow;
 	public static String PDFExporterPreferencePage_24;
 	public static String PDFExporterPreferencePage_25;
 	public static String PDFExporterPreferencePage_26;

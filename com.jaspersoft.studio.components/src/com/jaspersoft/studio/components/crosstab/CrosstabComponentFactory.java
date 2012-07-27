@@ -450,9 +450,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		if (parent instanceof MCrosstab && child instanceof MGraphicElement) {
 			MCrosstab mt = (MCrosstab) parent;
 			final JRDesignCellContents cell = mt.getCrosstabManager().getCell(
-					new Point(location.x, location.y));
+					new Point(location.x, location.y)).cell;
 			if (cell != null) {
-				Rectangle r = mt.getCrosstabManager().getCellBounds(cell);
+				Rectangle r = mt.getCrosstabManager().getCellBounds(
+						new CrosstabCell(cell));
 				location = location.setLocation(location.x - r.x, location.y
 						- r.y);
 

@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.components.crosstab.model.header;
 
+import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -28,6 +29,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 
+import com.jaspersoft.studio.components.crosstab.CrosstabCell;
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
@@ -118,9 +120,12 @@ public class MCrosstabHeader extends ANode implements IGraphicElement {
 		return getIconDescriptor().getToolTip();
 	}
 
+	private static final CrosstabCell cell = new CrosstabCell(
+			JRCrosstabOrigin.TYPE_HEADER_CELL);
+
 	@Override
 	public Rectangle getBounds() {
-		return new Rectangle(0, 0, 100, 100);
+		return getCrosstab().getCrosstabManager().getBounds(cell);
 	}
 
 	@Override

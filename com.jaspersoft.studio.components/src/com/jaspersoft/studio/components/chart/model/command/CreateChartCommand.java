@@ -135,16 +135,16 @@ public class CreateChartCommand extends CreateElementCommand {
 					jrElement = newchart;
 				else
 					jrElement = (JRDesignElement) srcNode.getValue();
-			}
-			if (jrElement != null)
-				setElementBounds();
 
-			if (((JRDesignChart) jrElement).getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS) {
-				CreateChartAxesCommand cmd = new CreateChartAxesCommand(
-						(JRDesignChart) jrElement, null, -1, jasperDesign);
-				addCommand(cmd);
-			}
+				if (jrElement != null)
+					setElementBounds();
 
+				if (((JRDesignChart) jrElement).getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS) {
+					CreateChartAxesCommand cmd = new CreateChartAxesCommand(
+							(JRDesignChart) jrElement, null, -1, jasperDesign);
+					addCommand(cmd);
+				}
+			}
 		}
 	}
 

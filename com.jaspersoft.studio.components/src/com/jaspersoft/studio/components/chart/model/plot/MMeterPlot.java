@@ -312,12 +312,6 @@ public class MMeterPlot extends MChartPlot {
 			}
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
 			jrElement.setUnits((String) value);
-		else if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
-			jrElement.setUnits((String) value);
-		else if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
-			jrElement.setUnits((String) value);
-		else if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
-			jrElement.setUnits((String) value);
 
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "."
 				+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION))

@@ -31,7 +31,6 @@ import net.sf.jasperreports.crosstabs.type.CrosstabColumnPositionEnum;
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabComponentFactory;
@@ -44,7 +43,7 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -73,13 +72,14 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 	 * Instantiates a new m field.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jfRield
-	 *          the jf rield
+	 *            the jf rield
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
-	public MColumnGroup(ANode parent, JRCrosstabColumnGroup jfRield, int newIndex) {
+	public MColumnGroup(ANode parent, JRCrosstabColumnGroup jfRield,
+			int newIndex) {
 		super(parent, jfRield, newIndex);
 	}
 
@@ -104,6 +104,7 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor columnPositionD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -116,7 +117,8 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -125,19 +127,23 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor columnPositionD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabColumnGroup.PROPERTY_POSITION, Messages.MColumnGroup_column_position, EnumHelper.getEnumNames(
-						CrosstabColumnPositionEnum.values(), NullEnum.NOTNULL));
-		columnPositionD.setDescription(Messages.MColumnGroup_column_position_description);
+		columnPositionD = new JSSEnumPropertyDescriptor(
+				JRDesignCrosstabColumnGroup.PROPERTY_POSITION,
+				Messages.MColumnGroup_column_position,
+				CrosstabColumnPositionEnum.class, NullEnum.NOTNULL);
+		columnPositionD
+				.setDescription(Messages.MColumnGroup_column_position_description);
 		desc.add(columnPositionD);
 
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT,
+		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(
+				JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT,
 				Messages.common_height);
 		heightD.setDescription(Messages.MColumnGroup_height_description);
 		desc.add(heightD);
@@ -147,13 +153,15 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignCrosstabColumnGroup jrField = (JRDesignCrosstabColumnGroup) getValue();
 		if (id.equals(JRDesignCrosstabColumnGroup.PROPERTY_POSITION))
-			return EnumHelper.getValue(jrField.getPositionValue(), 0, false);
+			return columnPositionD.getEnumValue(jrField.getPositionValue());
 		if (id.equals(JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT))
 			return jrField.getHeight();
 		return super.getPropertyValue(id);
@@ -162,32 +170,39 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCrosstabColumnGroup jrField = (JRDesignCrosstabColumnGroup) getValue();
 		if (id.equals(JRDesignCrosstabColumnGroup.PROPERTY_POSITION))
-			jrField.setPosition((CrosstabColumnPositionEnum) EnumHelper.getSetValue(CrosstabColumnPositionEnum.values(),
-					value, 0, false));
+			jrField.setPosition((CrosstabColumnPositionEnum) columnPositionD
+					.getEnumValue(value));
 		else if (id.equals(JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT)) {
 			jrField.setHeight((Integer) value);
 			MCrosstab cross = getMCrosstab();
 			cross.getCrosstabManager().refresh();
 			getPropertyChangeSupport().firePropertyChange(
-					new PropertyChangeEvent(this, JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT, null, value));
+					new PropertyChangeEvent(this,
+							JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT, null,
+							value));
 		} else
 			super.setPropertyValue(id, value);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
+		if (evt.getPropertyName().equals(
+				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
 			this.removeChildren();
-			CrosstabComponentFactory.createColumnGroupCells(this, (JRCrosstabColumnGroup) getValue());
+			CrosstabComponentFactory.createColumnGroupCells(this,
+					(JRCrosstabColumnGroup) getValue());
 			MCrosstab mCrosstab = getMCrosstab();
 			CrosstabComponentFactory.deleteCellNodes(mCrosstab);
-			CrosstabComponentFactory.createCellNodes((JRDesignCrosstab) mCrosstab.getValue(), mCrosstab);
+			CrosstabComponentFactory.createCellNodes(
+					(JRDesignCrosstab) mCrosstab.getValue(), mCrosstab);
 		}
 		super.propertyChange(evt);
 	}

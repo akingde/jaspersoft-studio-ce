@@ -75,10 +75,11 @@ public class VParameters extends APreview {
 		for (Control c : composite.getChildren()) {
 			c.dispose();
 		}
-		for (JRParameter p : prompts)
-			if (p.isForPrompting() && !p.isSystemDefined()) {
-				createInput(composite, (JRDesignParameter) p, params);
-			}
+		if (prompts != null)
+			for (JRParameter p : prompts)
+				if (p.isForPrompting() && !p.isSystemDefined()) {
+					createInput(composite, (JRDesignParameter) p, params);
+				}
 
 		scompo.setMinSize(composite.getSize());
 		composite.pack();
@@ -89,13 +90,14 @@ public class VParameters extends APreview {
 
 	public boolean checkFieldsFilled() {
 		int count = 0;
-		for (JRParameter p : prompts)
-			if (p.isForPrompting() && !p.isSystemDefined() && haveWidget4Type(p)) {
-				count++;
-				if (params.containsKey(p.getName())) {
-					return true;
+		if (prompts != null)
+			for (JRParameter p : prompts)
+				if (p.isForPrompting() && !p.isSystemDefined() && haveWidget4Type(p)) {
+					count++;
+					if (params.containsKey(p.getName())) {
+						return true;
+					}
 				}
-			}
 		if (count > 0)
 			return false;
 		return true;

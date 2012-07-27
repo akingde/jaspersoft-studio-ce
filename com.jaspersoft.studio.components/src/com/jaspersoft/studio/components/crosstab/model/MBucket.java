@@ -29,16 +29,15 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MBucket extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -88,6 +87,7 @@ public class MBucket extends APropertyNode {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor orderD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -115,10 +115,9 @@ public class MBucket extends APropertyNode {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
-		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(
+		orderD = new JSSEnumPropertyDescriptor(
 				JRDesignCrosstabBucket.PROPERTY_ORDER, Messages.common_order,
-				EnumHelper.getEnumNames(SortOrderEnum.values(),
-						NullEnum.NOTNULL));
+				SortOrderEnum.class, NullEnum.NOTNULL);
 		orderD.setDescription(Messages.MBucket_order_description);
 		desc.add(orderD);
 
@@ -142,7 +141,7 @@ public class MBucket extends APropertyNode {
 		exprD.setDescription(Messages.MBucket_expression_description);
 		desc.add(exprD);
 
-		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(
+		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(
 				JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS, "Value Class Name");
 		classD.setDescription("Bucket value class name");
 		desc.add(classD);
@@ -161,7 +160,7 @@ public class MBucket extends APropertyNode {
 	public Object getPropertyValue(Object id) {
 		JRDesignCrosstabBucket jrField = (JRDesignCrosstabBucket) getValue();
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER))
-			return EnumHelper.getValue(jrField.getOrderValue(), 1, false);
+			return orderD.getEnumValue(jrField.getOrderValue());
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION))
 			return ExprUtil.getExpression(jrField.getComparatorExpression());
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION))
@@ -184,8 +183,7 @@ public class MBucket extends APropertyNode {
 		JRDesignCrosstabBucket jrField = (JRDesignCrosstabBucket) getValue();
 
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER))
-			jrField.setOrder((SortOrderEnum) EnumHelper.getSetValue(
-					SortOrderEnum.values(), value, 1, false));
+			jrField.setOrder((SortOrderEnum) orderD.getEnumValue(value));
 		else if (id
 				.equals(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION))
 			jrField.setComparatorExpression(ExprUtil.setValues(

@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.components.crosstab.model.nodata;
 
+import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -28,16 +29,16 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 
+import com.jaspersoft.studio.components.crosstab.CrosstabCell;
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
-public class MCrosstabWhenNoData extends ANode implements IGraphicElement {
+public class MCrosstabWhenNoData extends ANode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -118,22 +119,21 @@ public class MCrosstabWhenNoData extends ANode implements IGraphicElement {
 		return getIconDescriptor().getToolTip();
 	}
 
-	@Override
+	private static final CrosstabCell cell = new CrosstabCell(
+			JRCrosstabOrigin.TYPE_WHEN_NO_DATA_CELL);
+
 	public Rectangle getBounds() {
-		return new Rectangle(0, 0, 100, 100);
+		return getCrosstab().getCrosstabManager().getBounds(cell);
 	}
 
-	@Override
 	public int getDefaultWidth() {
 		return 100;
 	}
 
-	@Override
 	public int getDefaultHeight() {
 		return 100;
 	}
 
-	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		return null;
 	}

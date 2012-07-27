@@ -28,7 +28,6 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRConstants;
 
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
@@ -39,11 +38,12 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public abstract class MCrosstabGroup extends APropertyNode implements
 		IPropertySource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	/**
 	 * Instantiates a new m field.
 	 */
@@ -104,10 +104,10 @@ public abstract class MCrosstabGroup extends APropertyNode implements
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
-		ComboBoxPropertyDescriptor totalPositionD = new ComboBoxPropertyDescriptor(
+		totalPositionD = new JSSEnumPropertyDescriptor(
 				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION,
-				Messages.common_total_position, EnumHelper.getEnumNames(
-						CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL));
+				Messages.common_total_position,
+				CrosstabTotalPositionEnum.class, NullEnum.NOTNULL);
 		totalPositionD
 				.setDescription(Messages.MCrosstabGroup_total_position_description);
 		desc.add(totalPositionD);
@@ -125,6 +125,7 @@ public abstract class MCrosstabGroup extends APropertyNode implements
 	}
 
 	private MBucket mBucket;
+	private static JSSEnumPropertyDescriptor totalPositionD;
 
 	/*
 	 * (non-Javadoc)
@@ -138,8 +139,7 @@ public abstract class MCrosstabGroup extends APropertyNode implements
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_NAME))
 			return jrField.getName();
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION))
-			return EnumHelper.getValue(jrField.getTotalPositionValue(), 0,
-					false);
+			return totalPositionD.getEnumValue(jrField.getTotalPositionValue());
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_BUCKET)) {
 			if (mBucket == null) {
 				mBucket = new MBucket(jrField.getBucket());
@@ -163,9 +163,8 @@ public abstract class MCrosstabGroup extends APropertyNode implements
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_NAME))
 			jrField.setName((String) value);
 		else if (id.equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
-			jrField.setTotalPosition((CrosstabTotalPositionEnum) EnumHelper
-					.getSetValue(CrosstabTotalPositionEnum.values(), value, 0,
-							false));
+			jrField.setTotalPosition((CrosstabTotalPositionEnum) totalPositionD
+					.getEnumValue(value));
 			MCrosstab cross = getMCrosstab();
 			cross.getCrosstabManager().refresh();
 			getPropertyChangeSupport().firePropertyChange(

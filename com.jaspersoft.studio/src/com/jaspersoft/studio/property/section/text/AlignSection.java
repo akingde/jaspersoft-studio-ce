@@ -40,10 +40,11 @@ public class AlignSection extends AbstractSection {
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage); 
+		super.createControls(parent, tabbedPropertySheetPage);
+
 		parent.setLayout(new GridLayout(4, false));
 
-		getWidgetFactory().createCLabel(parent, Messages.AlignSection_common_align, SWT.RIGHT); //$NON-NLS-2$
+		getWidgetFactory().createCLabel(parent, Messages.AlignSection_common_align, SWT.RIGHT);
 
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, false);
 

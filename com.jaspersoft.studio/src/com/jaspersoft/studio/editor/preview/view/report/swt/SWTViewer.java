@@ -28,6 +28,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
@@ -83,6 +84,42 @@ public class SWTViewer extends APreview implements IJRPrintable {
 			rptviewer.gotoFirstPage();
 		}
 		this.jrprint = jrprint;
+	}
+
+	private boolean refresh = false;
+
+	@Override
+	public void pageGenerated(final JasperPrint arg0, int page) {
+		if (refresh)
+			return;
+		refresh = true;
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				int ind = rptviewer.getPageIndex();
+				rptviewer.setDocument(arg0);
+				rptviewer.setPageIndex(ind);
+				jrprint = arg0;
+				refresh = false;
+			}
+		});
+
+	}
+
+	@Override
+	public void pageUpdated(final JasperPrint arg0, final int page) {
+		if (rptviewer.getPageIndex() == page) {
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					rptviewer.setDocument(arg0);
+					rptviewer.setPageIndex(page);
+					jrprint = arg0;
+				}
+			});
+		}
 	}
 
 }

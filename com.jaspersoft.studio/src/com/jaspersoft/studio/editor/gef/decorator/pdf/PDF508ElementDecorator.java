@@ -1,6 +1,7 @@
 package com.jaspersoft.studio.editor.gef.decorator.pdf;
 
 import java.util.List;
+import java.util.Vector;
 
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
@@ -11,9 +12,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.RetargetAction;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.action.layout.LayoutAction;
-import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
+import com.jaspersoft.studio.editor.action.pdf.*;
 import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.messages.Messages;
@@ -21,31 +20,193 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class PDF508ElementDecorator implements IElementDecorator {
 
+			
 	@Override
 	public void setupFigure(ComponentFigure fig, JasperReportsConfiguration jConfig) {
 		// TODO Auto-generated method stub
 
 	}
-
+	
+	private void registerHeading(ActionRegistry registry, IWorkbenchPart part){
+	  IAction action = new PdfActionHeading1(part, Position.Full);
+		registry.registerAction(action);
+	  action = new PdfActionHeading1(part, Position.Start);
+		registry.registerAction(action);
+		
+	  action = new PdfActionHeading1(part, Position.End);
+		registry.registerAction(action);
+	  action = new PdfActionHeading1(part, Position.None);
+		registry.registerAction(action);
+	  action = new PdfActionHeading2(part, Position.Full);
+		registry.registerAction(action);
+	  action = new PdfActionHeading2(part, Position.Start);
+		registry.registerAction(action);
+	  action = new PdfActionHeading2(part, Position.End);
+		registry.registerAction(action);
+	  action = new PdfActionHeading2(part, Position.None);
+		registry.registerAction(action);
+	  action = new PdfActionHeading3(part, Position.Full);
+		registry.registerAction(action);
+	  action = new PdfActionHeading3(part, Position.Start);
+		registry.registerAction(action);
+	  action = new PdfActionHeading3(part, Position.End);
+		registry.registerAction(action);
+	  action = new PdfActionHeading3(part, Position.None);
+		registry.registerAction(action);
+	}
+	
+	private void registerTable(ActionRegistry registry, IWorkbenchPart part){
+		IAction action = new PdfActionTable(part, Position.Full);
+		registry.registerAction(action);
+	  action = new PdfActionTable(part, Position.Start);
+		registry.registerAction(action);
+	  action = new PdfActionTable(part, Position.End);
+		registry.registerAction(action);
+	  action = new PdfActionTable(part, Position.None);
+		registry.registerAction(action);
+	}
+	
+	private void registerTableRow(ActionRegistry registry, IWorkbenchPart part){
+		IAction action = new PdfActionTableRow(part, Position.Full);
+		registry.registerAction(action);
+	  action = new PdfActionTableRow(part, Position.Start);
+		registry.registerAction(action);
+	  action = new PdfActionTableRow(part, Position.End);
+		registry.registerAction(action);
+	  action = new PdfActionTableRow(part, Position.None);
+		registry.registerAction(action);
+	}
+	
+	
+	private void registerTableDetail(ActionRegistry registry, IWorkbenchPart part){
+		IAction action = new PdfActionTableDetail(part, Position.Full);
+		registry.registerAction(action);
+	  action = new PdfActionTableDetail(part, Position.Start);
+		registry.registerAction(action);
+	  action = new PdfActionTableDetail(part, Position.End);
+		registry.registerAction(action);
+	  action = new PdfActionTableDetail(part, Position.None);
+		registry.registerAction(action);
+	}
+	
+	private void registerTableHeader(ActionRegistry registry, IWorkbenchPart part){
+		IAction action = new PdfActionTableHeader(part, Position.Full);
+		registry.registerAction(action);
+	  action = new PdfActionTableHeader(part, Position.Start);
+		registry.registerAction(action);
+	  action = new PdfActionTableHeader(part, Position.End);
+		registry.registerAction(action);
+	  action = new PdfActionTableHeader(part, Position.None);
+		registry.registerAction(action);
+	}
+	
+	
 	@Override
 	public void registerActions(ActionRegistry registry, List<String> selectionActions, GraphicalViewer gviewer,
 			IWorkbenchPart part) {
 		gviewer.setProperty(ShowPDFTagsAction.ID, true);
 		IAction action = new ShowPDFTagsAction(gviewer);
 		registry.registerAction(action);
-
+		registerHeading(registry, part);
+		registerTable(registry, part);
+		registerTableRow(registry, part);
+		registerTableHeader(registry, part);
+		registerTableDetail(registry, part);
 		// TODO add pdf actions here
 	}
 
 	@Override
 	public void buildContextMenu(ActionRegistry registry, EditPartViewer viewer, IMenuManager menu) {
-		MenuManager submenu = new MenuManager("PDF Fonts", JaspersoftStudioPlugin.getImageDescriptor("icons/layout-6.png"), //$NON-NLS-1$ //$NON-NLS-2$
-				LayoutAction.ID);
-
-		IAction action = registry.getAction(Size2BorderAction.ID_SIZE_HEIGHT);
-		if (action.isEnabled())
-			submenu.add(action);
-
+		MenuManager submenu = new MenuManager(Messages.PDF508ElementDecorator_Menu_PDF508Tags);		
+		MenuManager submenuHeading = new MenuManager(Messages.PDF508ElementDecorator_Menu_Heading);
+		MenuManager submenuHeading1 = new MenuManager(Messages.PDF508ElementDecorator_Menu_Heading1);
+		MenuManager submenuHeading2 = new MenuManager(Messages.PDF508ElementDecorator_Menu_Heading2);
+		MenuManager submenuHeading3 = new MenuManager(Messages.PDF508ElementDecorator_Menu_Heading3);
+		MenuManager submenuTable = new MenuManager(Messages.PDF508ElementDecorator_Menu_Table);
+		MenuManager submenuTableRow = new MenuManager(Messages.PDF508ElementDecorator_Menu_TableRow);
+		MenuManager submenuTableHeader = new MenuManager(Messages.PDF508ElementDecorator_Menu_TableHeader);
+		MenuManager submenuTableDetails = new MenuManager(Messages.PDF508ElementDecorator_Menu_TableDetails);
+		
+		submenuHeading.add(submenuHeading1);
+		submenuHeading.add(submenuHeading2);
+		submenuHeading.add(submenuHeading3);
+		submenu.add(submenuHeading);
+		submenu.add(submenuTable);
+		submenu.add(submenuTableRow);
+		submenu.add(submenuTableHeader);
+		submenu.add(submenuTableDetails);
+		
+		IAction action;
+		//Adding actions for Heading 1
+		action = registry.getAction(PdfActionHeading1.ID_Heading1_Full);
+		submenuHeading1.add(action);
+		action = registry.getAction(PdfActionHeading1.ID_Heading1_Start);
+		submenuHeading1.add(action);
+		action = registry.getAction(PdfActionHeading1.ID_Heading1_End);
+		submenuHeading1.add(action);
+		action = registry.getAction(PdfActionHeading1.ID_Heading1_None);
+		submenuHeading1.add(action);
+		
+		//Adding actions for Heading 2
+		action = registry.getAction(PdfActionHeading2.ID_Heading2_Full);
+		submenuHeading2.add(action);
+		action = registry.getAction(PdfActionHeading2.ID_Heading2_Start);
+		submenuHeading2.add(action);
+		action = registry.getAction(PdfActionHeading2.ID_Heading2_End);
+		submenuHeading2.add(action);
+		action = registry.getAction(PdfActionHeading2.ID_Heading2_None);
+		submenuHeading2.add(action);
+		
+		//Adding actions for Heading 3
+		action = registry.getAction(PdfActionHeading3.ID_Heading3_Full);
+		submenuHeading3.add(action);
+		action = registry.getAction(PdfActionHeading3.ID_Heading3_Start);
+		submenuHeading3.add(action);
+		action = registry.getAction(PdfActionHeading3.ID_Heading3_End);
+		submenuHeading3.add(action);
+		action = registry.getAction(PdfActionHeading3.ID_Heading3_None);
+		submenuHeading3.add(action);
+		
+		//Adding actions for Table
+		action = registry.getAction(PdfActionTable.ID_Table_Full);
+		submenuTable.add(action);
+		action = registry.getAction(PdfActionTable.ID_Table_Start);
+		submenuTable.add(action);
+		action = registry.getAction(PdfActionTable.ID_Table_End);
+		submenuTable.add(action);
+		action = registry.getAction(PdfActionTable.ID_Table_None);
+		submenuTable.add(action);
+		
+		//Adding actions for TableRow
+		action = registry.getAction(PdfActionTableRow.ID_TableRow_Full);
+		submenuTableRow.add(action);
+		action = registry.getAction(PdfActionTableRow.ID_TableRow_Start);
+		submenuTableRow.add(action);
+		action = registry.getAction(PdfActionTableRow.ID_TableRow_End);
+		submenuTableRow.add(action);
+		action = registry.getAction(PdfActionTableRow.ID_TableRow_None);
+		submenuTableRow.add(action);
+		
+		//Adding actions for TableHeader
+		action = registry.getAction(PdfActionTableHeader.ID_TableHeader_Full);
+		submenuTableHeader.add(action);
+		action = registry.getAction(PdfActionTableHeader.ID_TableHeader_Start);
+		submenuTableHeader.add(action);
+		action = registry.getAction(PdfActionTableHeader.ID_TableHeader_End);
+		submenuTableHeader.add(action);
+		action = registry.getAction(PdfActionTableHeader.ID_TableHeader_None);
+		submenuTableHeader.add(action);
+		
+		//Adding actions for TableDetail
+		action = registry.getAction(PdfActionTableDetail.ID_TableDetail_Full);
+		submenuTableDetails.add(action);
+		action = registry.getAction(PdfActionTableDetail.ID_TableDetail_Start);
+		submenuTableDetails.add(action);
+		action = registry.getAction(PdfActionTableDetail.ID_TableDetail_End);
+		submenuTableDetails.add(action);
+		action = registry.getAction(PdfActionTableDetail.ID_TableDetail_None);
+		submenuTableDetails.add(action);
+	
 		menu.add(submenu);
 	}
 

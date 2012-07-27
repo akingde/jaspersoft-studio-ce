@@ -20,9 +20,10 @@
 package com.jaspersoft.studio.editor.preview.view.report;
 
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.fill.FillListener;
 
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 
-public interface IJRPrintable {
+public interface IJRPrintable extends FillListener {
 	public void setJRPRint(Statistics stats, JasperPrint jrprint) throws Exception;
 }

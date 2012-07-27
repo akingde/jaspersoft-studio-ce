@@ -320,12 +320,13 @@ public class CreateElementCommand extends Command {
 					addCommand(lCmd);
 				}
 			}
+
+			if (firstTime) {
+				SelectionHelper.setSelection(jrElement, false);
+				firstTime = false;
+			}
+			executeCommands();
 		}
-		if (firstTime) {
-			SelectionHelper.setSelection(jrElement, false);
-			firstTime = false;
-		}
-		executeCommands();
 	}
 
 	private LayoutCommand lCmd;

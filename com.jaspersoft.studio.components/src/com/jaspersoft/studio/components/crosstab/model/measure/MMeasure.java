@@ -29,7 +29,6 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
@@ -39,11 +38,11 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MMeasure extends APropertyNode implements ICopyable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -113,6 +112,8 @@ public class MMeasure extends APropertyNode implements ICopyable {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor calculationD;
+	private static JSSEnumPropertyDescriptor percentOfTypeD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -145,17 +146,17 @@ public class MMeasure extends APropertyNode implements ICopyable {
 		nameD.setDescription(Messages.MMeasure_name_description);
 		desc.add(nameD);
 
-		ComboBoxPropertyDescriptor calculationD = new ComboBoxPropertyDescriptor(
+		calculationD = new JSSEnumPropertyDescriptor(
 				JRDesignCrosstabMeasure.PROPERTY_CALCULATION,
-				Messages.common_calculation, EnumHelper.getEnumNames(
-						CalculationEnum.values(), NullEnum.NOTNULL));
+				Messages.common_calculation, CalculationEnum.class,
+				NullEnum.NOTNULL);
 		calculationD.setDescription(Messages.MMeasure_calculation_description);
 		desc.add(calculationD);
 
-		ComboBoxPropertyDescriptor percentOfTypeD = new ComboBoxPropertyDescriptor(
+		percentOfTypeD = new JSSEnumPropertyDescriptor(
 				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE,
-				Messages.MMeasure_percentage_of_type, EnumHelper.getEnumNames(
-						CrosstabPercentageEnum.values(), NullEnum.NOTNULL));
+				Messages.MMeasure_percentage_of_type,
+				CrosstabPercentageEnum.class, NullEnum.NOTNULL);
 		percentOfTypeD
 				.setDescription(Messages.MMeasure_percentage_of_type_description);
 		desc.add(percentOfTypeD);
@@ -167,20 +168,20 @@ public class MMeasure extends APropertyNode implements ICopyable {
 				.setDescription(Messages.MMeasure_value_expression_description);
 		desc.add(valueExprD);
 
-		ClassTypePropertyDescriptor valueClassD = new ClassTypePropertyDescriptor(
+		NClassTypePropertyDescriptor valueClassD = new NClassTypePropertyDescriptor(
 				JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS,
 				Messages.MMeasure_value_class);
 		valueClassD.setDescription(Messages.MMeasure_value_class_description);
 		desc.add(valueClassD);
 
-		ClassTypePropertyDescriptor incFactClassD = new ClassTypePropertyDescriptor(
+		NClassTypePropertyDescriptor incFactClassD = new NClassTypePropertyDescriptor(
 				JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME,
 				Messages.MMeasure_incrementer_factory_class_name);
 		incFactClassD
 				.setDescription(Messages.MMeasure_incrementer_factory_class_name_description);
 		desc.add(incFactClassD);
 
-		ClassTypePropertyDescriptor percCalcClassD = new ClassTypePropertyDescriptor(
+		NClassTypePropertyDescriptor percCalcClassD = new NClassTypePropertyDescriptor(
 				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME,
 				Messages.MMeasure_percentage_calculation_class_name);
 		percCalcClassD
@@ -200,9 +201,9 @@ public class MMeasure extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_NAME))
 			return jrField.getName();
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_CALCULATION))
-			return EnumHelper.getValue(jrField.getCalculationValue(), 0, false);
+			return calculationD.getEnumValue(jrField.getCalculationValue());
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE))
-			return EnumHelper.getValue(jrField.getPercentageType(), 0, false);
+			return percentOfTypeD.getEnumValue(jrField.getPercentageType());
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION))
 			return ExprUtil.getExpression(jrField.getValueExpression());
 
@@ -227,12 +228,11 @@ public class MMeasure extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_NAME))
 			jrField.setName((String) value);
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_CALCULATION))
-			jrField.setCalculation((CalculationEnum) EnumHelper.getSetValue(
-					CalculationEnum.values(), value, 0, false));
+			jrField.setCalculation((CalculationEnum) calculationD
+					.getEnumValue(value));
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE))
-			jrField.setPercentageType((CrosstabPercentageEnum) EnumHelper
-					.getSetValue(CrosstabPercentageEnum.values(), value, 0,
-							false));
+			jrField.setPercentageType((CrosstabPercentageEnum) percentOfTypeD
+					.getEnumValue(value));
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION))
 			jrField.setValueExpression(ExprUtil.setValues(
 					jrField.getValueExpression(), value));

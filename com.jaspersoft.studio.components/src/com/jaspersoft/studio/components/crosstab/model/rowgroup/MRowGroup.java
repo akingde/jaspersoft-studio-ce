@@ -31,7 +31,6 @@ import net.sf.jasperreports.crosstabs.type.CrosstabRowPositionEnum;
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabComponentFactory;
@@ -44,7 +43,7 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -104,6 +103,7 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor columnPositionD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -133,10 +133,10 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor columnPositionD = new ComboBoxPropertyDescriptor(
+		columnPositionD = new JSSEnumPropertyDescriptor(
 				JRDesignCrosstabRowGroup.PROPERTY_POSITION,
-				Messages.MRowGroup_row_position, EnumHelper.getEnumNames(
-						CrosstabRowPositionEnum.values(), NullEnum.NOTNULL));
+				Messages.MRowGroup_row_position, CrosstabRowPositionEnum.class,
+				NullEnum.NOTNULL);
 		columnPositionD
 				.setDescription(Messages.MRowGroup_row_position_description);
 		desc.add(columnPositionD);
@@ -159,7 +159,7 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	public Object getPropertyValue(Object id) {
 		JRDesignCrosstabRowGroup jrField = (JRDesignCrosstabRowGroup) getValue();
 		if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_POSITION))
-			return EnumHelper.getValue(jrField.getPositionValue(), 0, false);
+			return columnPositionD.getEnumValue(jrField.getPositionValue());
 		if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_WIDTH))
 			return jrField.getWidth();
 		return super.getPropertyValue(id);
@@ -176,9 +176,8 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCrosstabRowGroup jrField = (JRDesignCrosstabRowGroup) getValue();
 		if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_POSITION))
-			jrField.setPosition((CrosstabRowPositionEnum) EnumHelper
-					.getSetValue(CrosstabRowPositionEnum.values(), value, 0,
-							false));
+			jrField.setPosition((CrosstabRowPositionEnum) columnPositionD
+					.getEnumValue(value));
 		else if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_WIDTH)) {
 			jrField.setWidth((Integer) value);
 			MCrosstab cross = getMCrosstab();
