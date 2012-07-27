@@ -39,6 +39,12 @@ import com.jaspersoft.studio.editor.preview.view.report.swt.action.LastPageActio
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.NextPageAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.PageNumberContributionItem;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.PreviousPageAction;
+import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomActualSizeAction;
+import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomComboContributionItem;
+import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomFitPageAction;
+import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomFitPageWidthAction;
+import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomInAction;
+import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomOutAction;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class SWTViewer extends APreview implements IJRPrintable {
@@ -71,6 +77,15 @@ public class SWTViewer extends APreview implements IJRPrintable {
 		tmanager.add(new PageNumberContributionItem(rptviewer));
 		tmanager.add(new NextPageAction(rptviewer));
 		tmanager.add(new LastPageAction(rptviewer));
+		tmanager.add(new Separator());
+
+		tmanager.add(new ZoomInAction(rptviewer));
+		tmanager.add(new ZoomOutAction(rptviewer));
+
+		tmanager.add(new ZoomComboContributionItem(rptviewer));
+		tmanager.add(new ZoomFitPageWidthAction(rptviewer));
+		tmanager.add(new ZoomFitPageAction(rptviewer));
+		tmanager.add(new ZoomActualSizeAction(rptviewer));
 		tmanager.add(new Separator());
 
 		tmanager.add(ExportMenu.getExportMenu(rptviewer, getPropertiesHelper()));

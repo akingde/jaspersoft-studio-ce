@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.preview.view.report.swt;
 
@@ -31,7 +27,9 @@ import javax.swing.event.EventListenerList;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JRHyperlinkListener;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -76,9 +74,9 @@ public class ReportViewer implements IReportViewer {
 	 * @see com.jasperassistant.designer.viewer.IReportViewer#setDocument(net.sf.jasperreports.engine.JasperPrint)
 	 */
 	public void setDocument(JasperPrint document) {
-//		Assert.isNotNull(document, "ReportViewer.documentNotNull"); //$NON-NLS-1$
-//		Assert.isNotNull(document.getPages(), "ReportViewer.documentNotEmpty"); //$NON-NLS-1$
-//		Assert.isTrue(!document.getPages().isEmpty(), "ReportViewer.documentNotEmpty"); //$NON-NLS-1$
+		//		Assert.isNotNull(document, "ReportViewer.documentNotNull"); //$NON-NLS-1$
+		//		Assert.isNotNull(document.getPages(), "ReportViewer.documentNotEmpty"); //$NON-NLS-1$
+		//		Assert.isTrue(!document.getPages().isEmpty(), "ReportViewer.documentNotEmpty"); //$NON-NLS-1$
 
 		this.document = document;
 		this.pageIndex = Math.min(Math.max(0, pageIndex), getPageCount() - 1);
@@ -107,15 +105,86 @@ public class ReportViewer implements IReportViewer {
 		}
 	}
 
-	/**
-	 * @see com.jasperassistant.designer.viewer.IReportViewer#canChangeZoom()
-	 */
 	public boolean canChangeZoom() {
 		return hasDocument();
 	}
 
 	private void setZoomInternal(double zoom) {
 		this.zoom = zoom;
+	}
+
+	private int zoomMode = ZOOM_MODE_NONE;
+
+	public int getZoomMode() {
+		return zoomMode;
+	}
+
+	public void setZoomMode(int zoomMode) {
+		if (!canChangeZoom())
+			return;
+
+		if (zoomMode != getZoomMode()) {
+			this.zoomMode = zoomMode;
+			setZoomInternal(computeZoom());
+			fireViewerModelChanged();
+		}
+	}
+
+	public double[] getZoomLevels() {
+		return zoomLevels;
+	}
+
+	public void setZoomLevels(double[] levels) {
+		Assert.isNotNull(levels);
+		Assert.isTrue(levels.length > 0);
+		this.zoomLevels = levels;
+	}
+
+	public void zoomIn() {
+		if (canZoomIn())
+			setZoom(getNextZoom());
+	}
+
+	public boolean canZoomIn() {
+		return hasDocument() && getZoom() < getMaxZoom();
+	}
+
+	public void zoomOut() {
+		if (canZoomOut())
+			setZoom(getPreviousZoom());
+	}
+
+	private static final double[] DEFAULT_ZOOM_LEVELS = new double[] { 0.5f, 0.75f, 1.0f, 1.25f, 1.50f, 1.75f, 2.0f };
+	private double[] zoomLevels = DEFAULT_ZOOM_LEVELS;
+
+	private double getMinZoom() {
+		return zoomLevels[0];
+	}
+
+	private double getMaxZoom() {
+		return zoomLevels[zoomLevels.length - 1];
+	}
+
+	private double getNextZoom() {
+		for (int i = 0; i < zoomLevels.length; i++) {
+			if (zoom < zoomLevels[i])
+				return zoomLevels[i];
+		}
+
+		return getMaxZoom();
+	}
+
+	private double getPreviousZoom() {
+		for (int i = zoomLevels.length - 1; i >= 0; i--) {
+			if (zoom > zoomLevels[i])
+				return zoomLevels[i];
+		}
+
+		return getMinZoom();
+	}
+
+	public boolean canZoomOut() {
+		return hasDocument() && getZoom() > getMinZoom();
 	}
 
 	/**
@@ -126,32 +195,32 @@ public class ReportViewer implements IReportViewer {
 	}
 
 	private double computeZoom() {
-		// switch (zoomMode) {
-		// case ZOOM_MODE_ACTUAL_SIZE:
-		// return 1.0;
-		// case ZOOM_MODE_FIT_WIDTH: {
-		// double ratio = ratio(viewerComposite.getFitSize().x, document.getPageWidth());
-		// return ratio(
-		// viewerComposite.getFitSize((int) (document.getPageWidth() * ratio), (int) (document.getPageHeight() * ratio)).x,
-		// document.getPageWidth());
-		// }
-		// case ZOOM_MODE_FIT_HEIGHT: {
-		// double ratio = ratio(viewerComposite.getFitSize().y, document.getPageHeight());
-		// return ratio(
-		// viewerComposite.getFitSize((int) (document.getPageWidth() * ratio), (int) (document.getPageHeight() * ratio)).y,
-		// document.getPageHeight());
-		// }
-		// case ZOOM_MODE_FIT_PAGE:
-		// Point fitSize = viewerComposite.getFitSize();
-		// return Math.min(ratio(fitSize.x, document.getPageWidth()), ratio(fitSize.y, document.getPageHeight()));
-		// }
+		switch (zoomMode) {
+		case ZOOM_MODE_ACTUAL_SIZE:
+			return 1.0;
+		case ZOOM_MODE_FIT_WIDTH: {
+			double ratio = ratio(viewerComposite.getFitSize().x, document.getPageWidth());
+			return ratio(
+					viewerComposite.getFitSize((int) (document.getPageWidth() * ratio), (int) (document.getPageHeight() * ratio)).x,
+					document.getPageWidth());
+		}
+		case ZOOM_MODE_FIT_HEIGHT: {
+			double ratio = ratio(viewerComposite.getFitSize().y, document.getPageHeight());
+			return ratio(
+					viewerComposite.getFitSize((int) (document.getPageWidth() * ratio), (int) (document.getPageHeight() * ratio)).y,
+					document.getPageHeight());
+		}
+		case ZOOM_MODE_FIT_PAGE:
+			Point fitSize = viewerComposite.getFitSize();
+			return Math.min(ratio(fitSize.x, document.getPageWidth()), ratio(fitSize.y, document.getPageHeight()));
+		}
 
 		return zoom;
 	}
 
-	// private double ratio(int a, int b) {
-	// return (a * 100 / b) / 100.0;
-	// }
+	private double ratio(int a, int b) {
+		return (a * 100 / b) / 100.0;
+	}
 
 	private int getPageCount() {
 		return document == null ? 0 : document.getPages().size();
