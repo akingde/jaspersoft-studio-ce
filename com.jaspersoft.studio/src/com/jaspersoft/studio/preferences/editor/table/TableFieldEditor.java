@@ -486,7 +486,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 				}
 			});
 		} else {
-			checkParent(table, parent);
+			// checkParent(table, parent);
 		}
 		return table;
 	}
