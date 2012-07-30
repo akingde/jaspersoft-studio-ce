@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.components.crosstab;
 
+import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -33,8 +34,12 @@ public class CrosstabCell {
 
 	public CrosstabCell(JRDesignCellContents cell) {
 		this.cell = cell;
-		if (cell != null)
-			this.type = cell.getOrigin().getType();
+		if (cell != null) {
+			if (cell.getOrigin() != null)
+				type = cell.getOrigin().getType();
+			else
+				type = JRCrosstabOrigin.TYPE_DATA_CELL;
+		}
 	}
 
 	public CrosstabCell(JRDesignCellContents cell, byte type) {
