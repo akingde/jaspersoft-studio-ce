@@ -331,7 +331,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		desc.add(markupD);
 
 		RWComboBoxPropertyDescriptor fontNameD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME,
-				Messages.common_font_name, ModelUtils.getFontNames(), NullEnum.INHERITED);
+				Messages.common_font_name, ModelUtils.getFontNames(getJasperConfiguration()), NullEnum.INHERITED);
 		fontNameD.setDescription(Messages.MStyle_font_name_description);
 		desc.add(fontNameD);
 

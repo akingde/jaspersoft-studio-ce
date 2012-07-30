@@ -56,6 +56,7 @@ import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRCompiler;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -65,10 +66,10 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.fonts.FontUtil;
 import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
-import net.sf.jasperreports.engine.util.JRFontUtil;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
@@ -910,18 +911,15 @@ public class ModelUtils {
 		return lst.toArray(new String[lst.size()]);
 	}
 
-	public static String[] getFontNames() {
+	public static String[] getFontNames(JasperReportsContext jContext) {
 		java.util.List<String> classes = new ArrayList<String>();
-		classes.add(""); //$NON-NLS-1$
-		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+		classes.add(""); //$NON-NLS-1$ 
 
-		Collection<?> extensionFonts = JRFontUtil.getFontFamilyNames();
+		Collection<?> extensionFonts = FontUtil.getInstance(jContext).getFontFamilyNames();
 		for (Iterator<?> it = extensionFonts.iterator(); it.hasNext();) {
 			String fname = (String) it.next();
 			classes.add(fname);
 		}
-
-		Thread.currentThread().setContextClassLoader(oldCL);
 
 		String[] names = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		classes.add("______________"); //$NON-NLS-1$

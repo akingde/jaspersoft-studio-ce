@@ -78,9 +78,15 @@ public class MFont extends APropertyNode {
 	}
 
 	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		fontNameD.setItems(ModelUtils.getFontNames(getJasperConfiguration()));
+	}
+
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		RWComboBoxPropertyDescriptor fontNameD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_NAME,
-				Messages.common_font_name, ModelUtils.getFontNames(), NullEnum.INHERITED);
+		fontNameD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_NAME, Messages.common_font_name,
+				ModelUtils.getFontNames(getJasperConfiguration()), NullEnum.INHERITED);
 		fontNameD.setDescription(Messages.MFont_font_name_description);
 		desc.add(fontNameD);
 
@@ -168,6 +174,7 @@ public class MFont extends APropertyNode {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private RWComboBoxPropertyDescriptor fontNameD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {

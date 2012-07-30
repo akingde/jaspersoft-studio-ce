@@ -42,6 +42,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class SPFont extends ASPropertyWidget {
 	private Combo fontName;
@@ -144,6 +145,7 @@ public class SPFont extends ASPropertyWidget {
 		this.parentNode = pnode;
 		this.mfont = (MFont) value;
 		if (mfont != null) {
+			fontName.setItems(ModelUtils.getFontNames(parentNode.getJasperConfiguration()));
 			String strfontname = (String) mfont.getPropertyValue(JRBaseStyle.PROPERTY_FONT_NAME);
 			fontName.setText(strfontname != null ? strfontname : ""); //$NON-NLS-1$
 			String[] items = fontName.getItems();

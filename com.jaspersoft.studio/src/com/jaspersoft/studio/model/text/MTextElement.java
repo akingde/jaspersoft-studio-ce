@@ -92,6 +92,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		desc.add(paragraph);
 
 		tFont = new MFont((JRFont) getValue());
+		tFont.setJasperConfiguration(getJasperConfiguration());
 		tFont.createPropertyDescriptors(desc, defaultsMap);
 
 		paragraph.setCategory(Messages.MTextElement_text_properties_category);
@@ -114,6 +115,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 	private MFont getMFont() {
 		if (tFont == null) {
 			tFont = new MFont((JRFont) getValue());
+			tFont.setJasperConfiguration(getJasperConfiguration());
 			setChildListener(tFont);
 		}
 		return tFont;
