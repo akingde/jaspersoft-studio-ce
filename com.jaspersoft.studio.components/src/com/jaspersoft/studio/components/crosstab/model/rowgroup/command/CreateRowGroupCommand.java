@@ -126,19 +126,13 @@ public class CreateRowGroupCommand extends Command {
 
 		JRDesignExpression exp = new JRDesignExpression();
 		exp.setText(""); //$NON-NLS-1$
+		exp.setValueClass(String.class);
 		JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
 		bucket.setExpression(exp);
 		jrGroup.setBucket(bucket);
 
 		JRDesignCellContents headerCell = new JRDesignCellContents();
 		jrGroup.setHeader(headerCell);
-		// the width is the with of the current base cell...
-		// JRDesignCrosstabCell baseCell = (JRDesignCrosstabCell)
-		// jrCrosstab.getCellsMap().get(new Pair(null, null));
-		// int baseHeight = (baseCell != null && baseCell.getHeight() != null) ?
-		// baseCell.getHeight()
-		// : ((baseCell.getContents() != null) ?
-		// baseCell.getContents().getHeight() : 30);
 
 		exp = new JRDesignExpression();
 		exp.setText("$V{" + jrGroup.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$

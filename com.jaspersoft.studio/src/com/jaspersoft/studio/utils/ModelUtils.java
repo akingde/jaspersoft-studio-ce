@@ -879,9 +879,11 @@ public class ModelUtils {
 		for (String key : params.keySet()) {
 			if (key.startsWith(JRCompiler.COMPILER_PREFIX)) {
 				try {
-					Class<?> clazz = jconfig.getClassLoader().loadClass(params.get(key));
-					if (JRCompiler.class.isAssignableFrom(clazz))
-						compilers.add(key.substring(JRCompiler.COMPILER_PREFIX.length()).toLowerCase());
+					if (jconfig.getClassLoader() != null) {
+						Class<?> clazz = jconfig.getClassLoader().loadClass(params.get(key));
+						if (JRCompiler.class.isAssignableFrom(clazz))
+							compilers.add(key.substring(JRCompiler.COMPILER_PREFIX.length()).toLowerCase());
+					}
 				} catch (ClassNotFoundException e) {
 				}
 			}

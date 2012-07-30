@@ -28,6 +28,7 @@ import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
@@ -104,8 +105,8 @@ public class CrosstabWizard extends JSSWizard {
 		step2 = new WizardConnectionPage();
 		addPage(step2);
 		step2.setDataSetRun(mdataset);
-		step2.setExpressionContext(
-				ModelUtils.getElementExpressionContext((JRDesignElement)crosstab.getValue(), crosstab));
+		step2.setExpressionContext(ModelUtils.getElementExpressionContext(
+				(JRDesignElement) crosstab.getValue(), crosstab));
 
 		step3 = new CrosstabWizardColumnPage();
 		addPage(step3);
@@ -125,7 +126,7 @@ public class CrosstabWizard extends JSSWizard {
 		JasperDesign jd = getConfig().getJasperDesign();
 		List<JRDataset> datasetsList = jd.getDatasetsList();
 		MDatasetRun dataSetRun = step1.getDataSetRun();
-		JRDesignDataset ds = null;
+		JRDesignDataset ds = jd.getMainDesignDataset();
 		if (dataSetRun == null) {
 			MDataset mds = (MDataset) getConfig().get(DatasetWizard.DATASET);
 			if (mds != null)
@@ -181,7 +182,7 @@ public class CrosstabWizard extends JSSWizard {
 						m.add(createRowGroups(jdc, f));
 					step4.setFields(m);
 				}
-//				setupColumns();
+				// setupColumns();
 				setupRows();
 			} else
 				page = step4;
@@ -353,18 +354,22 @@ public class CrosstabWizard extends JSSWizard {
 			Object f) {
 		String name = "";
 		String txt = "";
+		String vclass = "";
 		if (f instanceof JRField) {
 			JRField fi = (JRField) f;
 			name = fi.getName();
 			txt = "$F{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+			vclass = fi.getValueClassName();
 		} else if (f instanceof JRParameter) {
 			JRParameter fi = (JRParameter) f;
 			name = fi.getName();
 			txt = "$P{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+			vclass = fi.getValueClassName();
 		} else if (f instanceof JRVariable) {
 			JRVariable fi = (JRVariable) f;
 			name = fi.getName();
 			txt = "$V{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+			vclass = fi.getValueClassName();
 		}
 
 		JRDesignCrosstabRowGroup rowGroup = CreateRowGroupCommand
@@ -372,6 +377,8 @@ public class CrosstabWizard extends JSSWizard {
 
 		((JRDesignExpression) rowGroup.getBucket().getExpression())
 				.setText(txt);
+		((JRDesignCrosstabBucket) rowGroup.getBucket())
+				.setValueClassName(vclass);
 		return rowGroup;
 	}
 
@@ -379,23 +386,29 @@ public class CrosstabWizard extends JSSWizard {
 			JRDesignCrosstab jdc, Object f) {
 		String name = "";
 		String txt = "";
+		String vclass = "";
 		if (f instanceof JRField) {
 			JRField fi = (JRField) f;
 			name = fi.getName();
 			txt = "$F{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+			vclass = fi.getValueClassName();
 		} else if (f instanceof JRParameter) {
 			JRParameter fi = (JRParameter) f;
 			name = fi.getName();
 			txt = "$P{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+			vclass = fi.getValueClassName();
 		} else if (f instanceof JRVariable) {
 			JRVariable fi = (JRVariable) f;
 			name = fi.getName();
 			txt = "$V{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+			vclass = fi.getValueClassName();
 		}
 		JRDesignCrosstabColumnGroup colGroup = CreateColumnGroupCommand
 				.createColumnGroup(getConfig().getJasperDesign(), jdc, name);
 		((JRDesignExpression) colGroup.getBucket().getExpression())
 				.setText(txt);
+		((JRDesignCrosstabBucket) colGroup.getBucket())
+				.setValueClassName(vclass);
 
 		return colGroup;
 	}

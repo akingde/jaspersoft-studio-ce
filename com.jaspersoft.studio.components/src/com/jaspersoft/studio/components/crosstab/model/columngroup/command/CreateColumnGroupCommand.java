@@ -131,6 +131,7 @@ public class CreateColumnGroupCommand extends Command {
 
 		JRDesignExpression exp = new JRDesignExpression();
 		exp.setText(""); //$NON-NLS-1$
+		exp.setValueClass(String.class);
 		JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
 		bucket.setExpression(exp);
 		bucket.setOrder(SortOrderEnum.ASCENDING);
