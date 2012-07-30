@@ -202,7 +202,7 @@ public class SubreportPropertyPage extends WizardPage {
 				JRSubreportParameter prop = (JRSubreportParameter) element;
 				if ("VALUE".equals(property)) //$NON-NLS-1$
 					if (prop.getExpression() != null)
-						return Misc.nvl(prop.getExpression(), "");
+						return prop.getExpression();//Misc.nvl(prop.getExpression(), "");
 				if ("NAME".equals(property)) { //$NON-NLS-1$
 					return prop.getName();
 				}
