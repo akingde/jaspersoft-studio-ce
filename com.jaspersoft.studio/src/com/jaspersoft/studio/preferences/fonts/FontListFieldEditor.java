@@ -174,6 +174,10 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 			List<FontFamily> newfonts = new ArrayList<FontFamily>(lst.size());
 			for (FontFamily f : lst) {
+				String name = "fonts/" + f.getName();
+				ZipEntry ttfZipEntry = new ZipEntry(name);
+				zipos.putNextEntry(ttfZipEntry);
+
 				SimpleFontFamilyExport newf = new SimpleFontFamilyExport((SimpleFontFamily) f);
 				if (f.getNormalFace() != null)
 					newf.setNormal(writeFont2zip(zipos, f.getNormalFace()));
@@ -201,16 +205,12 @@ public class FontListFieldEditor extends TableFieldEditor {
 		byte[] buffer = new byte[4096]; // Create a buffer for copying
 		int bytesRead;
 
-		String name = "fonts/" + font.getName();
-		ZipEntry ttfZipEntry = new ZipEntry(name);
-		zipos.putNextEntry(ttfZipEntry);
-
 		FileInputStream in = new FileInputStream(font.getFile()); // Stream to read file
 		while ((bytesRead = in.read(buffer)) != -1)
 			zipos.write(buffer, 0, bytesRead);
 		in.close();
 
-		return name;
+		return font.getName();
 	}
 
 	private FontFamily runDialog(FontFamily font) {
