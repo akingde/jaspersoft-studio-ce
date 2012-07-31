@@ -19,13 +19,19 @@
  */
 package com.jaspersoft.studio.utils.jasper;
 
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.fonts.FontFamily;
+import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
 
@@ -41,6 +47,8 @@ import org.eclipse.jdt.core.JavaCore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.plugin.IEditorContributor;
+import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
@@ -162,6 +170,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	}
 
 	public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
+	private String strproperties;
 
 	@Override
 	public String getProperty(String key) {

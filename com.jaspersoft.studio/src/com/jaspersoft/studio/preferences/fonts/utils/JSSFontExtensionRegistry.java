@@ -30,38 +30,58 @@ import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.extensions.ExtensionsRegistry;
 
+import org.eclipse.jface.util.IPropertyChangeListener;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class JSSFontExtensionRegistry implements ExtensionsRegistry {
-	// private JRPropertiesMap properties;
 	private List<FontFamily> lst;
-	private String strproperties;
+	private boolean fill = true;
 	private PropertiesHelper ph;
 
+	private PreferenceListener preferenceListener;
+	private JasperReportsContext jrContext;
+
+	private final class PreferenceListener implements IPropertyChangeListener {
+
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+			if (event.getProperty().equals(FontsPreferencePage.FPP_FONT_LIST)) {
+				fill = true;
+			}
+		}
+	}
+
 	public JSSFontExtensionRegistry(JRPropertiesMap properties) {
-		// this.properties = properties;
+		preferenceListener = new PreferenceListener();
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
+		setJrContext(DefaultJasperReportsContext.getInstance());
+	}
+
+	public void setJrContext(JasperReportsContext jrContext) {
+		this.jrContext = jrContext;
 	}
 
 	public <T> List<T> getExtensions(Class<T> extensionType) {
-		JasperReportsContext jrContext = DefaultJasperReportsContext.getInstance();
-		// FIXME: this method is called many times during report executions
-		// we should cache, the list, but, if user ads some font, they will not be visible
-		// maybe JR should cache font list, not us
-		// it will be very good, if we could know JR file, to use properties at the report level
+		if (extensionType != FontFamily.class)
+			return null;
 		if (lst == null)
 			lst = new ArrayList<FontFamily>();
-		if (ph == null)
-			ph = PropertiesHelper.getInstance(jrContext);
-		String strprop = ph.getString(FontsPreferencePage.FPP_FONT_LIST);
-		if (strprop != null && (strproperties == null || !strproperties.equals(strprop))) {
-			lst.clear();
-			List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(jrContext,
-					new ByteArrayInputStream(strprop.getBytes()));
-			if (fonts != null && !fonts.isEmpty())
-				lst.addAll(fonts);
-			strproperties = strprop;
+		if (fill) {
+			if (ph == null)
+				ph = PropertiesHelper.getInstance(jrContext);
+			String strprop = ph.getString(FontsPreferencePage.FPP_FONT_LIST);
+			if (strprop != null) {
+				lst.clear();
+				List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(jrContext,
+						new ByteArrayInputStream(strprop.getBytes()));
+				if (fonts != null && !fonts.isEmpty())
+					lst.addAll(fonts);
+			}
+			fill = false;
 		}
+
 		return (List<T>) lst;
 	}
 }
