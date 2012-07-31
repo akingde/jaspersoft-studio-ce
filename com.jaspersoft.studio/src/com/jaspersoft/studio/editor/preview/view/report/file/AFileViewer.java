@@ -38,16 +38,16 @@ import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.FileUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AFileViewer extends APreview implements IJRPrintable {
 
 	private ReportViewer rptviewer;
 	private Text browser;
 
-	public AFileViewer(Composite parent, PropertiesHelper ph) {
-		super(parent, ph);
+	public AFileViewer(Composite parent, JasperReportsConfiguration jContext) {
+		super(parent, jContext);
 	}
 
 	protected abstract AbstractExportAction createExporter(ReportViewer rptv);
@@ -57,7 +57,7 @@ public abstract class AFileViewer extends APreview implements IJRPrintable {
 	@Override
 	public void contribute2ToolBar(IToolBarManager tmanager) {
 		if (jrprint != null) {
-			tmanager.add(ExportMenu.getExportMenu(rptviewer, getPropertiesHelper()));
+			tmanager.add(ExportMenu.getExportMenu(rptviewer, jContext));
 		}
 	}
 

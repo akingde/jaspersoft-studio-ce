@@ -45,14 +45,14 @@ import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomFitPageAc
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomFitPageWidthAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomInAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomOutAction;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SWTViewer extends APreview implements IJRPrintable {
 
 	protected ReportViewer rptviewer;
 
-	public SWTViewer(Composite parent, PropertiesHelper ph) {
-		super(parent, ph);
+	public SWTViewer(Composite parent, JasperReportsConfiguration jContext) {
+		super(parent, jContext);
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class SWTViewer extends APreview implements IJRPrintable {
 		tmanager.add(new ZoomActualSizeAction(rptviewer));
 		tmanager.add(new Separator());
 
-		tmanager.add(ExportMenu.getExportMenu(rptviewer, getPropertiesHelper()));
+		tmanager.add(ExportMenu.getExportMenu(rptviewer, jContext));
 	}
 
 	protected JasperPrint jrprint;

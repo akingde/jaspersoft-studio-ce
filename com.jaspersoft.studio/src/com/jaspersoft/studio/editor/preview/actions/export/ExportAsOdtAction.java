@@ -25,12 +25,12 @@ import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsOdtAction extends AbstractExportAction {
 
-	public ExportAsOdtAction(IReportViewer viewer, PropertiesHelper ph) {
-		super(viewer, ph);
+	public ExportAsOdtAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+		super(viewer, jContext);
 
 		setText(Messages.ExportAsOdtAction_title);
 		setToolTipText(Messages.ExportAsOdtAction_tooltips);
@@ -41,8 +41,8 @@ public class ExportAsOdtAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
-		JROdtExporter exp = new JROdtExporter();
+	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+		JROdtExporter exp = new JROdtExporter(jContext);
 
 		return exp;
 	}

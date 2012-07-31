@@ -30,8 +30,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
 
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-
 import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -60,8 +58,7 @@ public class Heartbeat {
 	}
 
 	public static void run() {
-		final PropertiesHelper ph = PropertiesHelper
-				.getInstance(DefaultJasperReportsContext.getInstance());
+		final PropertiesHelper ph = PropertiesHelper.getInstance();
 		String uuid = ph.getString(UUID_PROPERTY, null);
 		int newInstallation = 0;
 		if (uuid == null || uuid.length() == 0) {

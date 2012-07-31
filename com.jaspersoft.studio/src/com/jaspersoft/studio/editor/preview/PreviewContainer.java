@@ -182,7 +182,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		cleftcompo.setLayoutData(new GridData(GridData.FILL_BOTH));
 		cleftcompo.setLayout(new StackLayout());
 
-		getLeftContainer().populate(cleftcompo, getReportControler().createControls(cleftcompo, ph));
+		getLeftContainer().populate(cleftcompo, getReportControler().createControls(cleftcompo));
 		getLeftContainer().switchView(null, ReportControler.FORM_PARAMETERS);
 	}
 
@@ -192,7 +192,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	protected Composite createRight(Composite parent) {
 		super.createRight(parent);
 
-		jiveViewer = new JiveViewer(rightComposite, ph);
+		jiveViewer = new JiveViewer(rightComposite, jrContext);
 
 		return rightComposite;
 	}

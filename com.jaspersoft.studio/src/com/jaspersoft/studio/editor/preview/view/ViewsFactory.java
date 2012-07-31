@@ -38,37 +38,37 @@ import com.jaspersoft.studio.editor.preview.view.report.system.PowerPointViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.RTFViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsxViewer;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ViewsFactory {
 	public static final String VIEWER_JAVA = "Java";
 
-	public static LinkedHashMap<String, APreview> createPreviews(Composite composite, PropertiesHelper ph) {
+	public static LinkedHashMap<String, APreview> createPreviews(Composite composite,  JasperReportsConfiguration jContext) {
 		LinkedHashMap<String, APreview> pmap = new LinkedHashMap<String, APreview>();
-		pmap.put(VIEWER_JAVA, new SWTViewer(composite, ph));
+		pmap.put(VIEWER_JAVA, new SWTViewer(composite, jContext));
 
-		pmap.put("HTML", new HTMLViewer(composite, ph));
-		pmap.put("xHTML", new XHTMLViewer(composite, ph));
+		pmap.put("HTML", new HTMLViewer(composite, jContext));
+		pmap.put("xHTML", new XHTMLViewer(composite, jContext));
 		pmap.put("SEPARATOR1", null);
 		pmap.put("SEPARATOR1", null);
-		pmap.put("PDF", new PdfViewer(composite, ph));
+		pmap.put("PDF", new PdfViewer(composite, jContext));
 
 		pmap.put("SEPARATOR1", null);
 
-		pmap.put("RTF", new RTFViewer(composite, ph));
-		pmap.put("DOCx", new DocxViewer(composite, ph));
-		pmap.put("ODT", new OdtViewer(composite, ph));
-		pmap.put("ODS", new OdsViewer(composite, ph));
-		pmap.put("PPTx", new PowerPointViewer(composite, ph));
-		pmap.put("Text", new TXTViewer(composite, ph));
+		pmap.put("RTF", new RTFViewer(composite, jContext));
+		pmap.put("DOCx", new DocxViewer(composite, jContext));
+		pmap.put("ODT", new OdtViewer(composite, jContext));
+		pmap.put("ODS", new OdsViewer(composite, jContext));
+		pmap.put("PPTx", new PowerPointViewer(composite, jContext));
+		pmap.put("Text", new TXTViewer(composite, jContext));
 
 		pmap.put("SEPARATOR2", null);
 
-		pmap.put("XLS", new XlsViewer(composite, ph));
-		pmap.put("XLSx", new XlsxViewer(composite, ph));
-		pmap.put("ExcelAPI", new ExcelAPIViewer(composite, ph));
-		pmap.put("CSV", new CSVViewer(composite, ph));
-		pmap.put("CSV Metadata", new CSVMetadataViewer(composite, ph));
+		pmap.put("XLS", new XlsViewer(composite, jContext));
+		pmap.put("XLSx", new XlsxViewer(composite, jContext));
+		pmap.put("ExcelAPI", new ExcelAPIViewer(composite, jContext));
+		pmap.put("CSV", new CSVViewer(composite, jContext));
+		pmap.put("CSV Metadata", new CSVMetadataViewer(composite, jContext));
 
 		return pmap;
 	}

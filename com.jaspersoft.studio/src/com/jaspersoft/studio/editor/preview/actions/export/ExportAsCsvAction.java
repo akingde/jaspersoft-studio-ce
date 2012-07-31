@@ -26,12 +26,12 @@ import net.sf.jasperreports.engine.export.JRCsvExporterParameter;
 
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsCsvAction extends AbstractExportAction {
 
-	public ExportAsCsvAction(IReportViewer viewer, PropertiesHelper ph) {
-		super(viewer, ph);
+	public ExportAsCsvAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+		super(viewer, jContext);
 		setText(Messages.ExportAsCsvAction_text);
 		setToolTipText(Messages.ExportAsCsvAction_tooltip);
 
@@ -41,13 +41,13 @@ public class ExportAsCsvAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
-		JRCsvExporter exp = new JRCsvExporter();
+	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+		JRCsvExporter exp = new JRCsvExporter(jContext);
 
 		exp.setParameter(JRCsvExporterParameter.FIELD_DELIMITER,
-				ph.getString(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER));
+				jContext.getProperty(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER));
 		exp.setParameter(JRCsvExporterParameter.RECORD_DELIMITER,
-				ph.getString(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER));
+				jContext.getProperty(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER));
 
 		return exp;
 	}

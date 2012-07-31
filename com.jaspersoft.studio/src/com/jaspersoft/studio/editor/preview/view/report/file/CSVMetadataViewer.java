@@ -26,16 +26,16 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsCsvMetadataAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CSVMetadataViewer extends AFileViewer {
-	public CSVMetadataViewer(Composite parent, PropertiesHelper ph) {
-		super(parent, ph);
+	public CSVMetadataViewer(Composite parent, JasperReportsConfiguration jContext) {
+		super(parent, jContext);
 	}
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsCsvMetadataAction(rptv, getPropertiesHelper());
+		return new ExportAsCsvMetadataAction(rptv, jContext);
 	}
 
 	@Override

@@ -38,7 +38,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.preferences.editor.pages.Pages;
 import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AbstractExportAction extends AReportViewerAction {
 
@@ -51,11 +51,11 @@ public abstract class AbstractExportAction extends AReportViewerAction {
 	private String fileName;
 
 	private String filterPath;
-	private PropertiesHelper ph;
+	private JasperReportsConfiguration jContext;
 
-	public AbstractExportAction(IReportViewer viewer, PropertiesHelper ph) {
+	public AbstractExportAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
 		super(viewer);
-		this.ph = ph;
+		this.jContext = jContext;
 	}
 
 	@Override
@@ -187,25 +187,25 @@ public abstract class AbstractExportAction extends AReportViewerAction {
 	}
 
 	protected void exportWithProgress(File file, JRExportProgressMonitor monitor) throws Throwable {
-		ph.getProperties();
-
-		JRAbstractExporter exporter = getExporter(ph);
+		JRAbstractExporter exporter = getExporter(jContext);
 		exporter.setParameter(JRExporterParameter.JASPER_PRINT, getReportViewer().getDocument());
 		exporter.setParameter(JRExporterParameter.OUTPUT_FILE, file);
 		exporter.setParameter(JRExporterParameter.PROGRESS_MONITOR, monitor);
 
 		exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING,
-				ph.getString(JRExporterParameter.PROPERTY_CHARACTER_ENCODING));
+				jContext.getProperty(JRExporterParameter.PROPERTY_CHARACTER_ENCODING));
 
 		exporter.setParameter(JRExporterParameter.IGNORE_PAGE_MARGINS,
-				ph.getBoolean(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS));
+				jContext.getPropertyBoolean(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS));
 		exporter.setParameter(JRExporterParameter.PARAMETERS_OVERRIDE_REPORT_HINTS,
-				ph.getBoolean(JRExporterParameter.PROPERTY_EXPORT_PARAMETERS_OVERRIDE_REPORT_HINTS));
+				jContext.getPropertyBoolean(JRExporterParameter.PROPERTY_EXPORT_PARAMETERS_OVERRIDE_REPORT_HINTS));
 
-		exporter.setParameter(JRExporterParameter.OFFSET_X, ph.getInteger(JRExporterPreferencePage.EXPPARAM_OFFSET_X));
-		exporter.setParameter(JRExporterParameter.OFFSET_Y, ph.getInteger(JRExporterPreferencePage.EXPPARAM_OFFSET_X));
+		exporter.setParameter(JRExporterParameter.OFFSET_X,
+				jContext.getPropertyInteger(JRExporterPreferencePage.EXPPARAM_OFFSET_X));
+		exporter.setParameter(JRExporterParameter.OFFSET_Y,
+				jContext.getPropertyInteger(JRExporterPreferencePage.EXPPARAM_OFFSET_X));
 
-		String indPage = ph.getString(JRExporterPreferencePage.EXPPARAM_INDEX_PAGE, "all");
+		String indPage = jContext.getProperty(JRExporterPreferencePage.EXPPARAM_INDEX_PAGE, "all");
 		Pages p = new Pages().parseString(indPage);
 
 		if (p.getPage() != null)
@@ -218,7 +218,7 @@ public abstract class AbstractExportAction extends AReportViewerAction {
 		exporter.exportReport();
 	}
 
-	protected abstract JRAbstractExporter getExporter(PropertiesHelper ph);
+	protected abstract JRAbstractExporter getExporter(JasperReportsConfiguration jContext);
 
 }
 

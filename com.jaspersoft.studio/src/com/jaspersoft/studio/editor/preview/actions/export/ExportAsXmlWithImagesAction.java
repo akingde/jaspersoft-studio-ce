@@ -27,12 +27,12 @@ import net.sf.jasperreports.engine.export.JRXmlExporterParameter;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsXmlWithImagesAction extends AbstractExportAction {
 
-	public ExportAsXmlWithImagesAction(IReportViewer viewer, PropertiesHelper ph) {
-		super(viewer, ph);
+	public ExportAsXmlWithImagesAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+		super(viewer, jContext);
 
 		setText(Messages.ExportAsXmlWithImagesAction_title);
 		setToolTipText(Messages.ExportAsXmlWithImagesAction_tooltip);
@@ -44,8 +44,8 @@ public class ExportAsXmlWithImagesAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
-		JRXmlExporter exp = new JRXmlExporter();
+	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+		JRXmlExporter exp = new JRXmlExporter(jContext);
 
 		exp.setParameter(JRXmlExporterParameter.IS_EMBEDDING_IMAGES, Boolean.TRUE);
 		exp.setParameter(JRXmlExporterParameter.DTD_LOCATION, XMLExporterPreferencePage.NSF_EXPORT_XML_DTD_LOCATION);

@@ -57,7 +57,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.section.report.util.PageSize;
@@ -103,8 +102,7 @@ final class PageFormatDialog extends FormDialog {
 
 		setJasperDesign(jd);
 
-		uw.setUnit(PropertiesHelper.getInstance(jnode.getJasperConfiguration()).getString(
-				DesignerPreferencePage.P_PAGE_DEFAULT_UNITS));
+		uw.setUnit(jnode.getJasperConfiguration().getProperty(DesignerPreferencePage.P_PAGE_DEFAULT_UNITS));
 		setAllUnits();
 	}
 

@@ -26,12 +26,12 @@ import net.sf.jasperreports.engine.export.JRTextExporterParameter;
 
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsTextAction extends AbstractExportAction {
 
-	public ExportAsTextAction(IReportViewer viewer, PropertiesHelper ph) {
-		super(viewer, ph);
+	public ExportAsTextAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+		super(viewer, jContext);
 		setText(Messages.ExportAsTextAction_title);
 		setToolTipText(Messages.ExportAsTextAction_tooltip);
 
@@ -41,16 +41,17 @@ public class ExportAsTextAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
-		JRTextExporter exp = new JRTextExporter();
+	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+		JRTextExporter exp = new JRTextExporter(jContext);
 
 		exp.setParameter(JRTextExporterParameter.CHARACTER_WIDTH,
-				ph.getFloat(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH, 0f));
+				jContext.getPropertyFloat(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH, 0f));
 		exp.setParameter(JRTextExporterParameter.CHARACTER_HEIGHT,
-				ph.getFloat(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT, 0f));
-		exp.setParameter(JRTextExporterParameter.PAGE_WIDTH, ph.getInteger(JRTextExporterParameter.PROPERTY_PAGE_WIDTH, 0));
+				jContext.getPropertyFloat(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT, 0f));
+		exp.setParameter(JRTextExporterParameter.PAGE_WIDTH,
+				jContext.getPropertyInteger(JRTextExporterParameter.PROPERTY_PAGE_WIDTH, 0));
 		exp.setParameter(JRTextExporterParameter.PAGE_HEIGHT,
-				ph.getInteger(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT, 0));
+				jContext.getPropertyInteger(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT, 0));
 		return exp;
 	}
 

@@ -34,12 +34,10 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class JSSFontExtensionRegistry implements ExtensionsRegistry {
 	private List<FontFamily> lst;
 	private boolean fill = true;
-	private PropertiesHelper ph;
 
 	private PreferenceListener preferenceListener;
 	private JasperReportsContext jrContext;
@@ -69,9 +67,7 @@ public class JSSFontExtensionRegistry implements ExtensionsRegistry {
 		if (lst == null)
 			lst = new ArrayList<FontFamily>();
 		if (fill) {
-			if (ph == null)
-				ph = PropertiesHelper.getInstance(jrContext);
-			String strprop = ph.getString(FontsPreferencePage.FPP_FONT_LIST);
+			String strprop = jrContext.getProperty(FontsPreferencePage.FPP_FONT_LIST);
 			if (strprop != null) {
 				lst.clear();
 				List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(jrContext,

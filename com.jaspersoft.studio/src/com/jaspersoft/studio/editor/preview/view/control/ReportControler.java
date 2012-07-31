@@ -70,7 +70,6 @@ import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -108,7 +107,6 @@ public class ReportControler {
 
 	private List<JRParameter> prompts;
 	private Map<String, Object> jasperParameters;
-	private PropertiesHelper ph;
 	private LinkedHashMap<String, APreview> viewmap;
 	private PreviewContainer pcontainer;
 	private JasperReportsConfiguration jrContext;
@@ -146,12 +144,11 @@ public class ReportControler {
 		jrContext.setJRParameters(jasperParameters);
 	}
 
-	public LinkedHashMap<String, APreview> createControls(Composite composite, PropertiesHelper ph) {
-		this.ph = ph;
+	public LinkedHashMap<String, APreview> createControls(Composite composite) {
 		viewmap = new LinkedHashMap<String, APreview>();
-		viewmap.put(FORM_PARAMETERS, new VParameters(composite, ph));
-		viewmap.put(FORM_REPORT_PARAMETERS, new VReportParameters(composite, ph));
-		viewmap.put(FORM_SORTING, new VSorting(composite, ph));
+		viewmap.put(FORM_PARAMETERS, new VParameters(composite, jrContext));
+		viewmap.put(FORM_REPORT_PARAMETERS, new VReportParameters(composite, jrContext));
+		viewmap.put(FORM_SORTING, new VSorting(composite, jrContext));
 
 		if (jrContext != null && jrContext.getJasperDesign() != null)
 			fillForms();
@@ -223,8 +220,6 @@ public class ReportControler {
 
 					JasperDesign jd = ModelUtils.copyJasperDesign(jrContext.getJasperDesign());
 
-					setupProperties(jd);
-
 					JasperReport jasperReport = compileJasperDesign(file, jd);
 
 					if (jasperReport != null) {
@@ -235,7 +230,7 @@ public class ReportControler {
 						if (pcontainer.getMode().equals(RunStopAction.MODERUN_JIVE)) {
 							runJive(pcontainer, file, jasperReport);
 						} else {
-							setupVirtualizer(jd, ph);
+							setupVirtualizer(jd);
 							c.addMessage("Filling Report");
 
 							setupRecordCounters();
@@ -299,17 +294,13 @@ public class ReportControler {
 		return jasperReport;
 	}
 
-	private void setupProperties(JasperDesign jd) {
-		ph.setProperties(jd);
-	}
-
 	private void setupFileRezolver(IProgressMonitor monitor, IFile file) {
 		jasperParameters.put(JRParameter.REPORT_FILE_RESOLVER, jrContext.getFileResolver());
 	}
 
-	private void setupVirtualizer(JasperDesign jd, PropertiesHelper ps) {
+	private void setupVirtualizer(JasperDesign jd) {
 		c.addMessage("Setting Virtualizer");
-		VirtualizerHelper.setVirtualizer(jd, ps, jasperParameters);
+		VirtualizerHelper.setVirtualizer(jd, jrContext, jasperParameters);
 	}
 
 	private void setupDataAdapter(final PreviewContainer pcontainer) throws JRException {

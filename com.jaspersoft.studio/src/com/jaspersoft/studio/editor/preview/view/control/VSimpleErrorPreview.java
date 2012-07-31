@@ -30,12 +30,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.preview.view.APreview;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VSimpleErrorPreview extends APreview {
 
-	public VSimpleErrorPreview(Composite parent, PropertiesHelper ph) {
-		super(parent, ph);
+	public VSimpleErrorPreview(Composite parent,  JasperReportsConfiguration jContext) {
+		super(parent, jContext);
 	}
 
 	private Text tmessage;

@@ -27,12 +27,12 @@ import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsHtmlAction extends AbstractExportAction {
 
-	public ExportAsHtmlAction(IReportViewer viewer, PropertiesHelper ph) {
-		super(viewer, ph);
+	public ExportAsHtmlAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+		super(viewer, jContext);
 
 		setText(Messages.ExportAsHtmlAction_title);
 		setToolTipText(Messages.ExportAsHtmlAction_tooltip);
@@ -43,36 +43,38 @@ public class ExportAsHtmlAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
-		JRHtmlExporter exp = new JRHtmlExporter();
+	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+		JRHtmlExporter exp = new JRHtmlExporter(jContext);
 
-		exp.setParameter(JRHtmlExporterParameter.FLUSH_OUTPUT, ph.getBoolean(JRHtmlExporterParameter.PROPERTY_FLUSH_OUTPUT));
+		exp.setParameter(JRHtmlExporterParameter.FLUSH_OUTPUT,
+				jContext.getPropertyBoolean(JRHtmlExporterParameter.PROPERTY_FLUSH_OUTPUT));
 		exp.setParameter(JRHtmlExporterParameter.FRAMES_AS_NESTED_TABLES,
-				ph.getBoolean(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES));
+				jContext.getPropertyBoolean(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES));
 		exp.setParameter(JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
-				ph.getBoolean(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS));
+				jContext.getPropertyBoolean(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS));
 		exp.setParameter(JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN,
-				ph.getBoolean(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN));
+				jContext.getPropertyBoolean(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN));
 		exp.setParameter(JRHtmlExporterParameter.IS_WHITE_PAGE_BACKGROUND,
-				ph.getBoolean(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND));
+				jContext.getPropertyBoolean(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND));
 		exp.setParameter(JRHtmlExporterParameter.IS_WRAP_BREAK_WORD,
-				ph.getBoolean(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD));
+				jContext.getPropertyBoolean(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD));
 
-		exp.setParameter(JRHtmlExporterParameter.SIZE_UNIT, ph.getString(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT));
+		exp.setParameter(JRHtmlExporterParameter.SIZE_UNIT,
+				jContext.getProperty(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT));
 
 		exp.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML,
-				ph.getString(HTMLExporterPreferencePage.NSF_EXPORT_HTML_BETWEEN_PAGES));
+				jContext.getProperty(HTMLExporterPreferencePage.NSF_EXPORT_HTML_BETWEEN_PAGES));
 		exp.setParameter(JRHtmlExporterParameter.HTML_HEADER,
-				ph.getString(HTMLExporterPreferencePage.NSF_EXPORT_HTML_HEADER));
+				jContext.getProperty(HTMLExporterPreferencePage.NSF_EXPORT_HTML_HEADER));
 		exp.setParameter(JRHtmlExporterParameter.HTML_FOOTER,
-				ph.getString(HTMLExporterPreferencePage.NSF_EXPORT_HTML_FOOTER));
+				jContext.getProperty(HTMLExporterPreferencePage.NSF_EXPORT_HTML_FOOTER));
 
 		exp.setParameter(JRHtmlExporterParameter.IMAGES_DIR_NAME,
-				ph.getString(HTMLExporterPreferencePage.NSF_EXPORT_HTML_IMAGES_DIR_NAME));
+				jContext.getProperty(HTMLExporterPreferencePage.NSF_EXPORT_HTML_IMAGES_DIR_NAME));
 		exp.setParameter(JRHtmlExporterParameter.IMAGES_URI,
-				ph.getString(HTMLExporterPreferencePage.NSF_EXPORT_HTML_IMAGES_URI));
+				jContext.getProperty(HTMLExporterPreferencePage.NSF_EXPORT_HTML_IMAGES_URI));
 		exp.setParameter(JRHtmlExporterParameter.IS_OUTPUT_IMAGES_TO_DIR,
-				ph.getBoolean(HTMLExporterPreferencePage.NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR));
+				jContext.getPropertyBoolean(HTMLExporterPreferencePage.NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR));
 
 		return exp;
 	}

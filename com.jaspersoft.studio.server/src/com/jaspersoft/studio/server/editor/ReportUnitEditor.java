@@ -123,7 +123,7 @@ public class ReportUnitEditor extends PreviewJRPrint {
 		cleftcompo.setLayout(new StackLayout());
 
 		getLeftContainer().populate(cleftcompo,
-				getReportControler().createControls(cleftcompo, ph));
+				getReportControler().createControls(cleftcompo, jrContext));
 		getLeftContainer().switchView(null, ReportRunControler.FORM_PARAMETERS);
 	}
 

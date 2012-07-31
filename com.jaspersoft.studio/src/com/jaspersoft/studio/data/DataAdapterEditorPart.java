@@ -54,7 +54,6 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.editor.preview.ABasicEditor;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -202,7 +201,6 @@ public class DataAdapterEditorPart extends ABasicEditor {
 		});
 	}
 
-	private PropertiesHelper p;
 	private JasperReportsConfiguration jrContext;
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
@@ -212,8 +210,6 @@ public class DataAdapterEditorPart extends ABasicEditor {
 			resolver.addResolver(SelectionHelper.getFileResolver(file));
 			jrContext.setFileResolver(resolver);
 		}
-		p = PropertiesHelper.getInstance(jrContext);
-		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, p);
 	}
 
 	@Override

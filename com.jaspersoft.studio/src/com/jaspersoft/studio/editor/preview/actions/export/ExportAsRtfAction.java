@@ -25,12 +25,12 @@ import net.sf.jasperreports.engine.export.JRRtfExporter;
 
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsRtfAction extends AbstractExportAction {
 
-	public ExportAsRtfAction(IReportViewer viewer, PropertiesHelper ph) {
-		super(viewer, ph);
+	public ExportAsRtfAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+		super(viewer, jContext);
 
 		setText(Messages.ExportAsRtfAction_title);
 		setToolTipText(Messages.ExportAsRtfAction_tooltip);
@@ -41,8 +41,8 @@ public class ExportAsRtfAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
-		JRRtfExporter exp = new JRRtfExporter();
+	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+		JRRtfExporter exp = new JRRtfExporter(jContext);
 		return exp;
 	}
 }

@@ -35,7 +35,6 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -88,8 +87,7 @@ public class JRXmlWriterHelper {
 	public static String writeReport(JasperReportsConfiguration jrContext, JRReport report, IFile file, boolean showDialog)
 			throws Exception {
 
-		return writeReport(report, file.getCharset(true),
-				getVersion(file, PropertiesHelper.getInstance(jrContext), showDialog));
+		return writeReport(report, file.getCharset(true), getVersion(file, jrContext, showDialog));
 	}
 
 	public static String writeReport(JRReport report, String version) throws Exception {
@@ -127,9 +125,9 @@ public class JRXmlWriterHelper {
 		// return encoding;
 	}
 
-	public static String getVersion(IResource resource, PropertiesHelper ph, boolean showDialog) {
-		String version = ph.getString(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, LAST_VERSION);
-		if (showDialog && ph.getBoolean(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, false)) {
+	public static String getVersion(IResource resource, JasperReportsConfiguration jContext, boolean showDialog) {
+		String version = jContext.getProperty(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, LAST_VERSION);
+		if (showDialog && jContext.getPropertyBoolean(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, false)) {
 			VersionDialog dialog = new VersionDialog(Display.getDefault().getActiveShell(), version, resource.getProject());
 			if (dialog.open() == Dialog.OK) {
 				version = dialog.getVersion();

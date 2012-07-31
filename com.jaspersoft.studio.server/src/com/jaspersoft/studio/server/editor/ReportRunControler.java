@@ -41,12 +41,12 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
 import com.jaspersoft.studio.server.editor.input.VInputControls;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ReportRunControler {
 	public static final String FORM_PARAMETERS = "Input Controls";
@@ -109,9 +109,9 @@ public class ReportRunControler {
 	}
 
 	public LinkedHashMap<String, APreview> createControls(Composite composite,
-			PropertiesHelper ph) {
+			JasperReportsConfiguration jContext) {
 		viewmap = new LinkedHashMap<String, APreview>();
-		viewmap.put(FORM_PARAMETERS, new VInputControls(composite, ph));
+		viewmap.put(FORM_PARAMETERS, new VInputControls(composite, jContext));
 
 		return viewmap;
 	}

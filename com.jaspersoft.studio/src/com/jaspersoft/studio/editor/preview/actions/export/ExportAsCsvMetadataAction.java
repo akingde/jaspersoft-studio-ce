@@ -26,12 +26,12 @@ import net.sf.jasperreports.engine.export.JRCsvMetadataExporterParameter;
 
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsCsvMetadataAction extends AbstractExportAction {
 
-	public ExportAsCsvMetadataAction(IReportViewer viewer, PropertiesHelper ph) {
-		super(viewer, ph);
+	public ExportAsCsvMetadataAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+		super(viewer, jContext);
 
 		setText(Messages.ExportAsCsvMetadataAction_title);
 		setToolTipText(Messages.ExportAsCsvMetadataAction_tooltip);
@@ -42,18 +42,18 @@ public class ExportAsCsvMetadataAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
-		JRCsvMetadataExporter exp = new JRCsvMetadataExporter();
+	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+		JRCsvMetadataExporter exp = new JRCsvMetadataExporter(jContext);
 
 		exp.setParameter(JRCsvMetadataExporterParameter.FIELD_DELIMITER,
-				ph.getString(JRCsvMetadataExporterParameter.PROPERTY_FIELD_DELIMITER));
+				jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_FIELD_DELIMITER));
 		exp.setParameter(JRCsvMetadataExporterParameter.RECORD_DELIMITER,
-				ph.getString(JRCsvMetadataExporterParameter.PROPERTY_RECORD_DELIMITER));
+				jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_RECORD_DELIMITER));
 
 		exp.setParameter(JRCsvMetadataExporterParameter.COLUMN_NAMES,
-				ph.getString(JRCsvMetadataExporterParameter.PROPERTY_COLUMN_NAMES_PREFIX));
+				jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_COLUMN_NAMES_PREFIX));
 		exp.setParameter(JRCsvMetadataExporterParameter.WRITE_HEADER,
-				ph.getBoolean(JRCsvMetadataExporterParameter.PROPERTY_WRITE_HEADER));
+				jContext.getPropertyBoolean(JRCsvMetadataExporterParameter.PROPERTY_WRITE_HEADER));
 
 		return exp;
 	}

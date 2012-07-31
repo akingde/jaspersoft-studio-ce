@@ -26,12 +26,12 @@ import net.sf.jasperreports.engine.export.ooxml.JRDocxExporterParameter;
 
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsDocxAction extends AbstractExportAction {
 
-	public ExportAsDocxAction(IReportViewer viewer, PropertiesHelper ph) {
-		super(viewer, ph);
+	public ExportAsDocxAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+		super(viewer, jContext);
 
 		setText(Messages.ExportAsDocxAction_title);
 		setToolTipText(Messages.ExportAsDocxAction_tooltip);
@@ -42,13 +42,13 @@ public class ExportAsDocxAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
-		JRDocxExporter exp = new JRDocxExporter();
+	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+		JRDocxExporter exp = new JRDocxExporter(jContext);
 
 		exp.setParameter(JRDocxExporterParameter.FRAMES_AS_NESTED_TABLES,
-				ph.getBoolean(JRDocxExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES));
+				jContext.getPropertyBoolean(JRDocxExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES));
 		exp.setParameter(JRDocxExporterParameter.FLEXIBLE_ROW_HEIGHT,
-				ph.getBoolean(JRDocxExporterParameter.PROPERTY_FLEXIBLE_ROW_HEIGHT));
+				jContext.getPropertyBoolean(JRDocxExporterParameter.PROPERTY_FLEXIBLE_ROW_HEIGHT));
 		return exp;
 	}
 }

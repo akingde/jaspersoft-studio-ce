@@ -35,16 +35,16 @@ import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VParameters extends APreview {
 
 	protected Composite composite;
 	protected ScrolledComposite scompo;
 
-	public VParameters(Composite parent, PropertiesHelper ph) {
-		super(parent, ph);
+	public VParameters(Composite parent,  JasperReportsConfiguration jContext) {
+		super(parent, jContext);
 	}
 
 	@Override

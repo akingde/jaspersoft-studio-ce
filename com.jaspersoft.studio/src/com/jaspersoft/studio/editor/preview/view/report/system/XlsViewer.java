@@ -28,17 +28,17 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsXlsxAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class XlsViewer extends ASystemViewer {
 
-	public XlsViewer(Composite parent, PropertiesHelper ph) {
-		super(parent, ph);
+	public XlsViewer(Composite parent,  JasperReportsConfiguration jContext) {
+		super(parent, jContext);
 	}
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsXlsxAction(rptv, getPropertiesHelper());
+		return new ExportAsXlsxAction(rptv, jContext);
 	}
 
 	@Override

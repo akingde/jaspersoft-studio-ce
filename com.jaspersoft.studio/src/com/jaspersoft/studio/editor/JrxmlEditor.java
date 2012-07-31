@@ -91,7 +91,6 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.AContributorAction;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -350,7 +349,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			UIUtils.showError(e1);
 		}
 		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor) {
-			version = JRXmlWriterHelper.getVersion(resource, p, true);
+			version = JRXmlWriterHelper.getVersion(resource, jrContext, true);
 			model2xml(version);
 		} else {
 			try { // just go thru the model, to look what happend with our markers
@@ -523,8 +522,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			resolver.addResolver(SelectionHelper.getFileResolver(file));
 			jrContext.setFileResolver(resolver);
 		}
-		p = PropertiesHelper.getInstance(jrContext);
-		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, p);
 	}
 
 	public static String getFileExtension(IEditorInput editorInput) {
@@ -665,8 +662,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	private ISelection tmpselection;
 	private int activePage = 0;
-
-	private PropertiesHelper p;
 
 	private String version = "last";
 

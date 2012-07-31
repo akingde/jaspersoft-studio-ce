@@ -28,12 +28,12 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VReportParameters extends VParameters {
 
-	public VReportParameters(Composite parent, PropertiesHelper ph) {
-		super(parent, ph);
+	public VReportParameters(Composite parent,  JasperReportsConfiguration jContext) {
+		super(parent, jContext);
 	}
 
 	@Override

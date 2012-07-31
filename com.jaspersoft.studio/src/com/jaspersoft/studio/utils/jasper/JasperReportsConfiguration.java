@@ -27,7 +27,6 @@ import java.util.Map;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fonts.FontFamily;
@@ -48,7 +47,6 @@ import org.eclipse.jdt.core.JavaCore;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
@@ -170,7 +168,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	}
 
 	public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
-	private String strproperties;
 
 	@Override
 	public String getProperty(String key) {
@@ -183,4 +180,83 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		return val;
 	}
 
+	public String getProperty(String key, String def) {
+		String p = getProperty(key);
+		if (p == null)
+			return def;
+		return p;
+	}
+
+	public Character getPropertyCharacter(String key) {
+		String p = getProperty(key);
+		if (p != null)
+			return new Character(p.charAt(0));
+		return null;
+	}
+
+	public Boolean getPropertyBoolean(String key) {
+		String p = getProperty(key);
+		if (p != null)
+			return Boolean.parseBoolean(p);
+		return null;
+	}
+
+	public Boolean getPropertyBoolean(String key, boolean def) {
+		Boolean p = getPropertyBoolean(key);
+		if (p == null)
+			return def;
+		return p;
+	}
+
+	public Integer getPropertyInteger(String key) {
+		String p = getProperty(key);
+		if (p != null)
+			return Integer.getInteger(p);
+		return null;
+	}
+
+	public Integer getPropertyInteger(String key, int def) {
+		Integer p = getPropertyInteger(key);
+		if (p == null)
+			return def;
+		return p;
+	}
+
+	public Float getPropertyFloat(String key) {
+		String p = getProperty(key);
+		if (p != null)
+			return Float.valueOf(p);
+		return null;
+	}
+
+	public Float getPropertyFloat(String key, float def) {
+		Float p = getPropertyFloat(key);
+		if (p == null)
+			return def;
+		return p;
+	}
+
+	private boolean fill = true;
+	private List<FontFamily> lst;
+
+	@Override
+	public <T> List<T> getExtensions(Class<T> extensionType) {
+		if (extensionType == FontFamily.class) {
+			if (lst == null)
+				lst = new ArrayList<FontFamily>();
+			if (fill) {
+				String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
+				if (strprop != null) {
+					lst.clear();
+					List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(this,
+							new ByteArrayInputStream(strprop.getBytes()));
+					if (fonts != null && !fonts.isEmpty())
+						lst.addAll(fonts);
+				}
+				fill = false;
+			}
+			return (List<T>) lst;
+		}
+		return super.getExtensions(extensionType);
+	}
 }

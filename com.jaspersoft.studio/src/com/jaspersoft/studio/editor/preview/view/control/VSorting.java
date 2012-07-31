@@ -36,15 +36,15 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.preview.inputs.dialog.SortFieldSection;
 import com.jaspersoft.studio.editor.preview.view.APreview;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VSorting extends APreview {
 
 	private SortFieldSection sortField;
 	private Composite composite;
 
-	public VSorting(Composite parent, PropertiesHelper ph) {
-		super(parent, ph);
+	public VSorting(Composite parent,  JasperReportsConfiguration jContext) {
+		super(parent, jContext);
 	}
 
 	@Override

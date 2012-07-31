@@ -24,12 +24,12 @@ import net.sf.jasperreports.engine.JRAbstractExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRPptxExporter;
 
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsPptxAction extends AbstractExportAction {
 
-	public ExportAsPptxAction(IReportViewer viewer, PropertiesHelper ph) {
-		super(viewer, ph);
+	public ExportAsPptxAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+		super(viewer, jContext);
 
 		setText("Export As PowerPoint");
 		setToolTipText("Export as PowerPoint");
@@ -40,8 +40,8 @@ public class ExportAsPptxAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
-		JRPptxExporter exp = new JRPptxExporter();
+	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+		JRPptxExporter exp = new JRPptxExporter(jContext);
 
 		return exp;
 	}

@@ -41,13 +41,13 @@ import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.IURLViewable;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.FileUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
 
-	public HTMLViewer(Composite parent, PropertiesHelper ph) {
-		super(parent, ph);
+	public HTMLViewer(Composite parent, JasperReportsConfiguration jContext) {
+		super(parent, jContext);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
 	public void contribute2ToolBar(IToolBarManager tmanager) {
 		tmanager.add(new URLContributionItem(tmpFile.toURI().toASCIIString()));
 		if (jrprint != null) {
-			tmanager.add(ExportMenu.getExportMenu(rptviewer, getPropertiesHelper()));
+			tmanager.add(ExportMenu.getExportMenu(rptviewer, jContext));
 		}
 	}
 
@@ -100,7 +100,7 @@ public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
 	}
 
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsHtmlAction(rptv, getPropertiesHelper());
+		return new ExportAsHtmlAction(rptv, jContext);
 	}
 
 	private File tmpDir;

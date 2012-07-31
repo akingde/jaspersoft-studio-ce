@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.property.section.widgets;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,11 +47,15 @@ public class SPRWCombo extends ASPropertyWidget {
 		return combo;
 	}
 
+	private boolean refresh = false;
+
 	protected void createComponent(Composite parent) {
-		combo = section.getWidgetFactory().createCombo(parent);
+		combo = section.getWidgetFactory().createCombo(parent, SWT.FLAT);
 		combo.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
+				if (refresh)
+					return;
 				section.changeProperty(pDescriptor.getId(), combo.getItem(combo.getSelectionIndex()));
 			}
 
@@ -60,6 +65,8 @@ public class SPRWCombo extends ASPropertyWidget {
 		combo.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
+				if (refresh)
+					return;
 				section.changeProperty(pDescriptor.getId(), combo.getText());
 			}
 		});
@@ -67,6 +74,7 @@ public class SPRWCombo extends ASPropertyWidget {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		refresh = true;
 		final RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) pDescriptor;
 		combo.setItems(pd.getItems());
 		String str = (String) b;
@@ -78,14 +86,14 @@ public class SPRWCombo extends ASPropertyWidget {
 				break;
 			}
 		}
+		combo.select(selection);
 		if (selection == 0 && pd.getItems().length > 0) {
 			str = Misc.nvl(str);
-			int oldpos = str.length();
-			combo.setItem(0, str);
-			combo.setSelection(new Point(oldpos, oldpos));
-		} else {
-			combo.select(selection);
-
+			combo.setText(str);
 		}
+		int stringLength = combo.getText().length();
+
+		combo.setSelection(new Point(stringLength, stringLength));
+		refresh = false;
 	}
 }

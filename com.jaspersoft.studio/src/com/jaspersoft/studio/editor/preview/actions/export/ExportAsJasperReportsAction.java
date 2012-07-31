@@ -31,11 +31,12 @@ import org.eclipse.swt.custom.BusyIndicator;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsJasperReportsAction extends AbstractExportAction {
 
-	public ExportAsJasperReportsAction(IReportViewer viewer, PropertiesHelper ph) {
-		super(viewer, ph);
+	public ExportAsJasperReportsAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+		super(viewer, jContext);
 
 		setText(Messages.ExportAsJasperReportsAction_title);
 		setToolTipText(Messages.ExportAsJasperReportsAction_tooltip);
@@ -63,7 +64,7 @@ public class ExportAsJasperReportsAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
+	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
 		return null;
 	}
 }

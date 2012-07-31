@@ -27,12 +27,12 @@ import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsPdfAction extends AbstractExportAction {
 
-	public ExportAsPdfAction(IReportViewer viewer, PropertiesHelper ph) {
-		super(viewer, ph);
+	public ExportAsPdfAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+		super(viewer, jContext);
 
 		setText(Messages.ExportAsPdfAction_title);
 		setToolTipText(Messages.ExportAsPdfAction_tooltip);
@@ -43,46 +43,54 @@ public class ExportAsPdfAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
-		JRPdfExporter exp = new JRPdfExporter();
+	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+		JRPdfExporter exp = new JRPdfExporter(jContext);
 		// common
-		exp.setParameter(JRPdfExporterParameter.PDF_VERSION, ph.getCharacter(JRPdfExporterParameter.PROPERTY_PDF_VERSION));
+		exp.setParameter(JRPdfExporterParameter.PDF_VERSION,
+				jContext.getPropertyCharacter(JRPdfExporterParameter.PROPERTY_PDF_VERSION));
 		exp.setParameter(JRPdfExporterParameter.PDFA_CONFORMANCE,
-				ph.getCharacter(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE));
+				jContext.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE));
 		exp.setParameter(JRPdfExporterParameter.PDFA_ICC_PROFILE_PATH,
-				ph.getCharacter(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH));
+				jContext.getPropertyCharacter(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH));
 
-		exp.setParameter(JRPdfExporterParameter.IS_COMPRESSED, ph.getBoolean(JRPdfExporterParameter.PROPERTY_COMPRESSED));
+		exp.setParameter(JRPdfExporterParameter.IS_COMPRESSED,
+				jContext.getPropertyBoolean(JRPdfExporterParameter.PROPERTY_COMPRESSED));
 		exp.setParameter(JRPdfExporterParameter.IS_CREATING_BATCH_MODE_BOOKMARKS,
-				ph.getBoolean(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS));
+				jContext.getPropertyBoolean(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS));
 		exp.setParameter(JRPdfExporterParameter.FORCE_SVG_SHAPES,
-				ph.getBoolean(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES));
+				jContext.getPropertyBoolean(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES));
 		exp.setParameter(JRPdfExporterParameter.FORCE_LINEBREAK_POLICY,
-				ph.getBoolean(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY));
-		exp.setParameter(JRPdfExporterParameter.IS_TAGGED, ph.getBoolean(JRPdfExporterParameter.PROPERTY_TAGGED));
-		exp.setParameter(JRPdfExporterParameter.PRINT_SCALING, ph.getString(JRPdfExporterParameter.PROPERTY_PRINT_SCALING));
-		exp.setParameter(JRPdfExporterParameter.TAG_LANGUAGE, ph.getString(JRPdfExporterParameter.PROPERTY_TAG_LANGUAGE));
+				jContext.getPropertyBoolean(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY));
+		exp.setParameter(JRPdfExporterParameter.IS_TAGGED,
+				jContext.getPropertyBoolean(JRPdfExporterParameter.PROPERTY_TAGGED));
+		exp.setParameter(JRPdfExporterParameter.PRINT_SCALING,
+				jContext.getProperty(JRPdfExporterParameter.PROPERTY_PRINT_SCALING));
+		exp.setParameter(JRPdfExporterParameter.TAG_LANGUAGE,
+				jContext.getProperty(JRPdfExporterParameter.PROPERTY_TAG_LANGUAGE));
 		exp.setParameter(JRPdfExporterParameter.PDF_JAVASCRIPT,
-				ph.getString(JRPdfExporterParameter.PROPERTY_PDF_JAVASCRIPT));
+				jContext.getProperty(JRPdfExporterParameter.PROPERTY_PDF_JAVASCRIPT));
 		// metadata
 		exp.setParameter(JRPdfExporterParameter.METADATA_AUTHOR,
-				ph.getString(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_AUTHOR));
+				jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_AUTHOR));
 		exp.setParameter(JRPdfExporterParameter.METADATA_CREATOR,
-				ph.getString(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_CREATOR));
+				jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_CREATOR));
 		exp.setParameter(JRPdfExporterParameter.METADATA_KEYWORDS,
-				ph.getString(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_KEYWORDS));
+				jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_KEYWORDS));
 		exp.setParameter(JRPdfExporterParameter.METADATA_SUBJECT,
-				ph.getString(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_SUBJECT));
+				jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_SUBJECT));
 		exp.setParameter(JRPdfExporterParameter.METADATA_TITLE,
-				ph.getString(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_TITLE));
+				jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_TITLE));
 		// security
-		exp.setParameter(JRPdfExporterParameter.IS_ENCRYPTED, ph.getBoolean(JRPdfExporterParameter.PROPERTY_ENCRYPTED));
-		exp.setParameter(JRPdfExporterParameter.IS_128_BIT_KEY, ph.getBoolean(JRPdfExporterParameter.PROPERTY_128_BIT_KEY));
-		exp.setParameter(JRPdfExporterParameter.USER_PASSWORD, ph.getString(JRPdfExporterParameter.PROPERTY_USER_PASSWORD));
+		exp.setParameter(JRPdfExporterParameter.IS_ENCRYPTED,
+				jContext.getPropertyBoolean(JRPdfExporterParameter.PROPERTY_ENCRYPTED));
+		exp.setParameter(JRPdfExporterParameter.IS_128_BIT_KEY,
+				jContext.getPropertyBoolean(JRPdfExporterParameter.PROPERTY_128_BIT_KEY));
+		exp.setParameter(JRPdfExporterParameter.USER_PASSWORD,
+				jContext.getProperty(JRPdfExporterParameter.PROPERTY_USER_PASSWORD));
 		exp.setParameter(JRPdfExporterParameter.OWNER_PASSWORD,
-				ph.getString(JRPdfExporterParameter.PROPERTY_OWNER_PASSWORD));
+				jContext.getProperty(JRPdfExporterParameter.PROPERTY_OWNER_PASSWORD));
 		exp.setParameter(JRPdfExporterParameter.PERMISSIONS,
-				ph.getString(PDFExporterPreferencePage.NSF_EXPORT_PDF_PERMISSION));
+				jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_PERMISSION));
 
 		return exp;
 	}

@@ -240,7 +240,10 @@ public class MFont extends APropertyNode {
 		else if (id.equals(JRBaseFont.PROPERTY_FONT_NAME))
 			jrElement.setFontName((String) value);
 		else if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
-			jrElement.setFontSize(new Integer((String) value));
+			try {
+				jrElement.setFontSize(new Integer((String) value));
+			} catch (NumberFormatException e) {
+			}
 		else if (id.equals(JRBaseFont.PROPERTY_PDF_FONT_NAME))
 			jrElement.setPdfFontName((String) value);
 		else if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))

@@ -273,9 +273,9 @@ public class PreviewJRPrint extends ABasicEditor {
 		StackLayout stacklayoutView = new StackLayout();
 		rightComposite.setLayout(stacklayoutView);
 
-		getRightContainer().populate(rightComposite, ViewsFactory.createPreviews(rightComposite, ph));
+		getRightContainer().populate(rightComposite, ViewsFactory.createPreviews(rightComposite, jrContext));
 
-		errorPreview = new VSimpleErrorPreview(rightComposite, ph);
+		errorPreview = new VSimpleErrorPreview(rightComposite, jrContext);
 
 		return rightComposite;
 	}

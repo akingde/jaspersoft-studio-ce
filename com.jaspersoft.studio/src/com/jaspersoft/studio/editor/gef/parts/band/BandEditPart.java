@@ -61,9 +61,9 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -76,6 +76,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 public class BandEditPart extends FigureEditPart implements PropertyChangeListener, IContainerPart, IContainer {
 
 	private BandPreferenceListener prefChangelistener;
+	private JasperReportsConfiguration jConfig;
 
 	/*
 	 * Preferences listener for band preferences/properties.
@@ -304,8 +305,9 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	 * Update flag for band name showing.
 	 */
 	private void setBandNameShowing(BandFigure figure) {
-		boolean showBandName = PropertiesHelper.getInstance(getModel().getJasperConfiguration()).getBoolean(
-				DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES, true);
+		if (jConfig == null)
+			jConfig = getModel().getJasperConfiguration();
+		boolean showBandName = jConfig.getPropertyBoolean(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES, true);
 		figure.setShowBandName(showBandName);
 	}
 

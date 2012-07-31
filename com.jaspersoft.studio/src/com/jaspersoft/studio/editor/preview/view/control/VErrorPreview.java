@@ -52,18 +52,18 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.ErrorUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VErrorPreview extends APreview {
 
 	private static final String NL = System.getProperty("line.separator");
 
-	public VErrorPreview(Composite parent, PropertiesHelper ph) {
-		super(parent, ph);
+	public VErrorPreview(Composite parent,  JasperReportsConfiguration jContext) {
+		super(parent, jContext);
 	}
 
 	private Label compilationTime;

@@ -49,13 +49,11 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
 public abstract class ABasicEditor extends EditorPart {
-	protected PropertiesHelper ph;
 	protected boolean listenResource;
 
 	public ABasicEditor(boolean listenResource) {
@@ -250,8 +248,6 @@ public abstract class ABasicEditor extends EditorPart {
 			resolver.addResolver(SelectionHelper.getFileResolver(file));
 			jrContext.setFileResolver(resolver);
 		}
-		ph = PropertiesHelper.getInstance(jrContext);
-		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, ph);
 	}
 
 	protected boolean isDirty = false;
@@ -274,9 +270,5 @@ public abstract class ABasicEditor extends EditorPart {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		isDirty = false;
-	}
-
-	public PropertiesHelper getPropertiesHelper() {
-		return ph;
 	}
 }
