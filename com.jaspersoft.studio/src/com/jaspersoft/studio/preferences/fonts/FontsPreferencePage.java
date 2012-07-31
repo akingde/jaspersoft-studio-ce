@@ -34,7 +34,7 @@ import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
  */
 
 public class FontsPreferencePage extends FieldEditorOverlayPage {
-	public static final String FPP_FONT_LIST = "";
+	public static final String FPP_FONT_LIST = "FONT_LIST";
 
 	public FontsPreferencePage() {
 		super(GRID);
