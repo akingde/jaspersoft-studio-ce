@@ -296,7 +296,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 2;
-		gridData.minimumWidth = 600;
+		gridData.minimumWidth = 500;
 		gridData.heightHint = 500;
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(2, false));

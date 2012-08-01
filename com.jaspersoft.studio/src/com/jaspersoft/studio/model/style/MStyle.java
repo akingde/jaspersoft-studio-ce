@@ -63,6 +63,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
@@ -330,8 +331,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		markupD.setDescription(Messages.MStyle_markup_description);
 		desc.add(markupD);
 
-		RWComboBoxPropertyDescriptor fontNameD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME,
-				Messages.common_font_name, ModelUtils.getFontNames(getJasperConfiguration()), NullEnum.INHERITED);
+		FontNamePropertyDescriptor fontNameD = new FontNamePropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME,
+				Messages.common_font_name);
 		fontNameD.setDescription(Messages.MStyle_font_name_description);
 		desc.add(fontNameD);
 

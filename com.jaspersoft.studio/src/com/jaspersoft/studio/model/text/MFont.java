@@ -55,6 +55,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -80,13 +81,12 @@ public class MFont extends APropertyNode {
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
-		fontNameD.setItems(ModelUtils.getFontNames(getJasperConfiguration()));
 	}
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		fontNameD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_NAME, Messages.common_font_name,
-				ModelUtils.getFontNames(getJasperConfiguration()), NullEnum.INHERITED);
+		FontNamePropertyDescriptor fontNameD = new FontNamePropertyDescriptor(JRBaseFont.PROPERTY_FONT_NAME,
+				Messages.common_font_name);
 		fontNameD.setDescription(Messages.MFont_font_name_description);
 		desc.add(fontNameD);
 
@@ -174,7 +174,6 @@ public class MFont extends APropertyNode {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private RWComboBoxPropertyDescriptor fontNameD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {

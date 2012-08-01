@@ -43,13 +43,23 @@ import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
+	private final class PreferenceListener implements IPropertyChangeListener {
 
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+			if (event.getProperty().equals(FontsPreferencePage.FPP_FONT_LIST)) {
+				fill = true;
+			}
+		}
+	}
+
+	private PreferenceListener preferenceListener;
 	public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
 	private IPreferencesService service;
 	private String qualifier;
@@ -83,7 +93,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			contexts = new IScopeContext[] { INSTANCE_SCOPE };
 		}
 		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
-
+		preferenceListener = new PreferenceListener();
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
 	}
 
 	public void put(String key, Object value) {
