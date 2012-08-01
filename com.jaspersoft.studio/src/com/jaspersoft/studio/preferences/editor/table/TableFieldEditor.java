@@ -296,7 +296,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 2;
-		gridData.widthHint = 600;
+		gridData.minimumWidth = 600;
 		gridData.heightHint = 500;
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(2, false));
@@ -434,6 +434,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 			editor.grabHorizontal = true;
 			table.addListener(SWT.MouseDoubleClick, new Listener() {
 				public void handleEvent(Event event) {
+					handleTableDoubleClick();
 					Rectangle clientArea = table.getClientArea();
 					Point pt = new Point(event.x, event.y);
 					int index = table.getTopIndex();
@@ -489,6 +490,10 @@ public abstract class TableFieldEditor extends FieldEditor {
 			// checkParent(table, parent);
 		}
 		return table;
+	}
+
+	protected void handleTableDoubleClick() {
+
 	}
 
 	protected boolean isFieldEditable(int col, int row) {

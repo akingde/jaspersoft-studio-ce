@@ -94,7 +94,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class ModelUtils.
- */ 
+ */
 public class ModelUtils {
 
 	public static final String MAIN_DATASET = "[Main Dataset]";
@@ -1036,7 +1036,7 @@ public class ModelUtils {
 			for (String k : mp.keySet()) {
 				String v = mp.get(k);
 				if (v.equals(key))
-					return v;
+					return k;
 			}
 		}
 		return key;

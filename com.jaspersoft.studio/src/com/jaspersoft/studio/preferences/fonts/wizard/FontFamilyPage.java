@@ -150,11 +150,20 @@ public class FontFamilyPage extends WizardPage {
 		pdfenc.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				fontFamily.setPdfEncoding(pdfenc.getItem(pdfenc.getSelectionIndex()));
+				String pdfencod = ModelUtils.getPDFEncoding2key(pdfenc.getItem(pdfenc.getSelectionIndex()));
+				fontFamily.setPdfEncoding(pdfencod.isEmpty() ? null : pdfencod);
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
+			}
+		});
+		pdfenc.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				String pdfencod = pdfenc.getText();
+				fontFamily.setPdfEncoding(pdfencod.isEmpty() ? null : pdfencod);
 			}
 		});
 
@@ -235,7 +244,12 @@ public class FontFamilyPage extends WizardPage {
 		if (boldItalicFace != null)
 			bolditalic.setText(boldItalicFace.getName());
 
-		pdfenc.select(ModelUtils.getPDFEncodingIndex(fontFamily.getPdfEncoding()));
+		String pdfEncoding = fontFamily.getPdfEncoding();
+		int pdfEncodingIndex = ModelUtils.getPDFEncodingIndex(ModelUtils.getKey4PDFEncoding(pdfEncoding));
+		pdfenc.select(pdfEncodingIndex >= 0 ? pdfEncodingIndex : 0);
+		if (pdfEncodingIndex < 0 && pdfEncoding != null)
+			pdfenc.setText(pdfEncoding);
+
 		if (fontFamily.isPdfEmbedded() != null)
 			embedepdf.setSelection(fontFamily.isPdfEmbedded());
 	}

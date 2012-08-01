@@ -106,7 +106,7 @@ public class FontLocalesPage extends WizardPage {
 					Locale l = ld.getLocale();
 					if (fontFamily.getLocales() == null)
 						fontFamily.setLocales(new HashSet<String>());
-					if (!fontFamily.supportsLocale(l)) {
+					if (!fontFamily.getLocales().contains(l)) {
 						fontFamily.getLocales().add(l.toString());
 						return l.toString();
 					}

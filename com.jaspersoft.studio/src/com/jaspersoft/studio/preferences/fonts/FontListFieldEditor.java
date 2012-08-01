@@ -298,4 +298,10 @@ public class FontListFieldEditor extends TableFieldEditor {
 	protected boolean isSortable(int row) {
 		return false;
 	}
+
+	@Override
+	protected void handleTableDoubleClick() {
+		super.handleTableDoubleClick();
+		editPressed();
+	}
 }
