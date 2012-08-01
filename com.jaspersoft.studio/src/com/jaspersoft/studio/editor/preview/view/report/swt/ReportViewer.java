@@ -25,6 +25,7 @@ import java.util.List;
 import javax.swing.event.EventListenerList;
 
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.view.JRHyperlinkListener;
 
 import org.eclipse.core.runtime.Assert;
@@ -50,12 +51,13 @@ public class ReportViewer implements IReportViewer {
 	private ViewerCanvas viewerComposite;
 
 	private List<JRHyperlinkListener> hyperlinkListeners;
+	private JasperReportsContext jContext;
 
 	/**
 	 * Default constructor. The default style will be used for the SWT control associated to the viewer.
 	 */
-	public ReportViewer() {
-		this(SWT.NONE);
+	public ReportViewer(JasperReportsContext jContext) {
+		this(SWT.NONE, jContext);
 	}
 
 	/**
@@ -66,8 +68,9 @@ public class ReportViewer implements IReportViewer {
 	 * @param style
 	 *          the style
 	 */
-	public ReportViewer(int style) {
+	public ReportViewer(int style, JasperReportsContext jContext) {
 		this.style = style;
+		this.jContext = jContext;
 	}
 
 	/**
@@ -345,7 +348,7 @@ public class ReportViewer implements IReportViewer {
 	 */
 	public Control createControl(Composite parent) {
 		if (viewerComposite == null) {
-			viewerComposite = new ViewerCanvas(parent, style) {
+			viewerComposite = new ViewerCanvas(parent, style, jContext) {
 				/**
 				 * @see com.jasperassistant.designer.viewer.ViewerCanvas#resize()
 				 */

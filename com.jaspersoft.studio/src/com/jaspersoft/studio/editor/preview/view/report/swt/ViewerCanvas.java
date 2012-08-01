@@ -39,6 +39,7 @@ import net.sf.jasperreports.engine.JRPrintImage;
 import net.sf.jasperreports.engine.JRPrintImageAreaHyperlink;
 import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.Renderable;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporterParameter;
@@ -121,9 +122,11 @@ class ViewerCanvas extends Canvas {
 			refresh();
 		}
 	};
+	private JasperReportsContext jContext;
 
-	ViewerCanvas(Composite parent, int style) {
+	ViewerCanvas(Composite parent, int style, JasperReportsContext jContext) {
 		super(parent, style | SWT.H_SCROLL | SWT.V_SCROLL);
+		this.jContext = jContext;
 		addListener(SWT.Paint, eventListener);
 		addListener(SWT.MouseMove, eventListener);
 		addListener(SWT.MouseDown, eventListener);
@@ -360,7 +363,7 @@ class ViewerCanvas extends Canvas {
 
 		g2d = (Graphics2D) awtImage.getGraphics();
 		try {
-			JRGraphics2DExporter exporter = new JRGraphics2DExporter();
+			JRGraphics2DExporter exporter = new JRGraphics2DExporter(jContext);
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 			exporter.setParameter(JRGraphics2DExporterParameter.GRAPHICS_2D, g2d);
 			exporter.setParameter(JRExporterParameter.PAGE_INDEX, new Integer(viewer.getPageIndex()));

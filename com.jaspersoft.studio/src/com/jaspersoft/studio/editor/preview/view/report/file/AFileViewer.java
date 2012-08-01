@@ -72,7 +72,7 @@ public abstract class AFileViewer extends APreview implements IJRPrintable {
 		browser = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.READ_ONLY);
 		browser.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		rptviewer = new ReportViewer();
+		rptviewer = new ReportViewer(jContext);
 		return composite;
 	}
 
