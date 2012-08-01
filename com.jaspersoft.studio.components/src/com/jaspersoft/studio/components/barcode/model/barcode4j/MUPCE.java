@@ -26,6 +26,7 @@ import net.sf.jasperreports.components.barcode4j.UPCEComponent;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -48,7 +49,11 @@ public class MUPCE extends MBarcode4j {
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
-		el.setComponent(new UPCEComponent());
+		UPCEComponent component = new UPCEComponent();
+		JRDesignExpression exp = new JRDesignExpression();
+		exp.setText("\"123456789\""); //$NON-NLS-1$
+		component.setCodeExpression(exp);
+		el.setComponent(component);
 		el.setComponentKey(new ComponentKey(
 				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "UPCE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return el;

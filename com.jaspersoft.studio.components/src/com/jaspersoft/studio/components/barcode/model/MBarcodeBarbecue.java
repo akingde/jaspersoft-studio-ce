@@ -282,8 +282,7 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_TYPE))
 			jrList.setType((String) value);
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_ROTATION))
-			jrList.setRotation((RotationEnum) rotationD
-					.getEnumValue(RotationEnum.values()));
+			jrList.setRotation((RotationEnum) rotationD.getEnumValue(value));
 
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_HEIGTH))
 			jrList.setBarHeight((Integer) value);

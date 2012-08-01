@@ -23,6 +23,7 @@ import net.sf.jasperreports.components.barcode4j.USPSIntelligentMailComponent;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import com.jaspersoft.studio.model.ANode;
@@ -42,7 +43,11 @@ public class MUSPSIntelligent extends MFourStateBarcode {
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
-		el.setComponent(new USPSIntelligentMailComponent());
+		USPSIntelligentMailComponent component = new USPSIntelligentMailComponent();
+		JRDesignExpression exp = new JRDesignExpression();
+		exp.setText("\"123456789\""); //$NON-NLS-1$
+		component.setCodeExpression(exp);
+		el.setComponent(component);
 		el.setComponentKey(new ComponentKey(
 				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
 				"USPSIntelligentMail")); //$NON-NLS-1$
