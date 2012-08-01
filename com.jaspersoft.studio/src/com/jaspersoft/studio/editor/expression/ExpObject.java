@@ -86,6 +86,10 @@ public class ExpObject implements Comparable<ExpObject>{
 	}
 
 	public String getClassType() {
+		if(classType==null || classType.isEmpty()){
+			// Fallback solution
+			classType="java.lang.Object";
+		}
 		return classType;
 	}
 
