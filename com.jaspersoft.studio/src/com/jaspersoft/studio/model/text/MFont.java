@@ -237,9 +237,13 @@ public class MFont extends APropertyNode {
 			jrElement.setStrikeThrough((Boolean) value);
 		else if (id.equals(JRBaseFont.PROPERTY_PDF_EMBEDDED))
 			jrElement.setPdfEmbedded((Boolean) value);
-		else if (id.equals(JRBaseFont.PROPERTY_FONT_NAME))
-			jrElement.setFontName((String) value);
-		else if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
+		else if (id.equals(JRBaseFont.PROPERTY_FONT_NAME)) {
+			if (value instanceof String) {
+				if (((String) value).isEmpty())
+					value = null;
+				jrElement.setFontName((String) value);
+			}
+		} else if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
 			try {
 				jrElement.setFontSize(new Integer((String) value));
 			} catch (NumberFormatException e) {
