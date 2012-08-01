@@ -30,7 +30,6 @@ import org.eclipse.swt.custom.BusyIndicator;
 
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsJasperReportsAction extends AbstractExportAction {

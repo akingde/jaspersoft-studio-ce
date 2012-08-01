@@ -94,7 +94,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class ModelUtils.
- */
+ */ 
 public class ModelUtils {
 
 	public static final String MAIN_DATASET = "[Main Dataset]";
@@ -830,6 +830,7 @@ public class ModelUtils {
 		return lang;
 	}
 
+	@SuppressWarnings("deprecation")
 	public static String[] getQueryLanguagesOnly() {
 		Set<String> langs = new HashSet<String>();
 		List<?> bundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(JRQueryExecuterFactoryBundle.class);

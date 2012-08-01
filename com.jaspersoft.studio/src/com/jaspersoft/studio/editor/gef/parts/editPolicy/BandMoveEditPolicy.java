@@ -59,7 +59,7 @@ public class BandMoveEditPolicy extends SelectionEditPolicy {
 	private IFigure handle;
 
 	/** The original y location. */
-	private int originalYLocation;
+//	private int originalYLocation;
 
 	/**
 	 * This figure represents the new bottom margin of the band It should turn red when the margin is at the maximum of
@@ -197,7 +197,7 @@ public class BandMoveEditPolicy extends SelectionEditPolicy {
 			((BandMoveFeedbackFigure) feedback).setLabelPosition(mouseLocation.x + 10);
 			Rectangle bounds2 = bounds.getCopy();
 			feedback.translateToRelative(bounds2);
-			originalYLocation = feedback.getBounds().y;
+//			originalYLocation = feedback.getBounds().y;
 			addFeedback(feedback);
 		}
 		return feedback;
@@ -302,7 +302,7 @@ public class BandMoveEditPolicy extends SelectionEditPolicy {
 			removeFeedback(feedback);
 		}
 		feedback = null;
-		originalYLocation = 0;
+//		originalYLocation = 0;
 	}
 
 	/*

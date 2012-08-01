@@ -212,6 +212,7 @@ import net.sf.jasperreports.engine.xml.XmlWriterVisitor;
  * @author Minor enhancements by Barry Klawans (bklawans@users.sourceforge.net)
  * @version $Id: JRXmlWriter.java 4814 2011-11-23 12:09:54Z lucianc $
  */
+@SuppressWarnings("deprecation")
 public class JRXmlWriter_4_5_1 extends JRXmlWriter
 {
 

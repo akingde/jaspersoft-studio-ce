@@ -63,7 +63,11 @@ public class FontLocalesPage extends WizardPage {
 	@Override
 	public void dispose() {
 		List<String> inlist = (List<String>) tableViewer.getInput();
-		fontFamily.setLocales(new HashSet<String>(inlist));
+		HashSet<String> locales = new HashSet<String>(inlist);
+		if (locales.isEmpty())
+			fontFamily.setLocales(null);
+		else
+			fontFamily.setLocales(locales);
 
 		super.dispose();
 	}

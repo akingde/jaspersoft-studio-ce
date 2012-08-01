@@ -551,7 +551,6 @@ public abstract class TableFieldEditor extends FieldEditor {
 	protected void duplicatePressed() {
 		setPresentsDefaultValue(false);
 		int index = table.getSelectionIndex();
-		int target = index + 1;
 
 		if (index >= 0) {
 			TableItem[] selection = table.getSelection();

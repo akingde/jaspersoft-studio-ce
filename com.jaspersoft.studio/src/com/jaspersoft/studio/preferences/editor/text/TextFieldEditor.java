@@ -77,7 +77,7 @@ public class TextFieldEditor extends FieldEditor {
 	/**
 	 * Width of text field in characters; initially unlimited.
 	 */
-	private int widthInChars = UNLIMITED;
+//	private int widthInChars = UNLIMITED;
 
 	/**
 	 * Text limit of text field in characters; initially unlimited.
@@ -123,7 +123,7 @@ public class TextFieldEditor extends FieldEditor {
 	 */
 	public TextFieldEditor(String name, String labelText, int width, int strategy, Composite parent) {
 		init(name, labelText);
-		widthInChars = width;
+//		widthInChars = width;
 		setValidateStrategy(strategy);
 		isValid = false;
 		errorMessage = JFaceResources.getString("StringFieldEditor.errorMessage");//$NON-NLS-1$

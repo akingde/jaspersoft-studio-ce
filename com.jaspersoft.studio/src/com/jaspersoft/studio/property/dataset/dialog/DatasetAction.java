@@ -23,12 +23,10 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
@@ -72,7 +70,7 @@ public class DatasetAction extends SelectionAction {
 			final ReportEditor part = (ReportEditor) getWorkbenchPart();
 			MReport mreport = (MReport) part.getModel().getChildren().get(0);
 			MDataset mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
-			IFile file = ((IFileEditorInput) part.getEditorInput()).getFile();
+//			IFile file = ((IFileEditorInput) part.getEditorInput()).getFile();
 
 			IContentOutlinePage cop = (IContentOutlinePage) part.getAdapter(IContentOutlinePage.class);
 			if (cop != null) {

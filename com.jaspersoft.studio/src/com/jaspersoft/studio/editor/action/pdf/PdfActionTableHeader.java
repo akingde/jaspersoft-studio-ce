@@ -23,13 +23,10 @@
  */
 package com.jaspersoft.studio.editor.action.pdf;
 
-import java.util.List;
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.property.SetValueCommand;
 
 
 public class PdfActionTableHeader extends PdfActionAbstact {

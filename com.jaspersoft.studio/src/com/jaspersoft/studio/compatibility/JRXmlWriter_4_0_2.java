@@ -188,6 +188,7 @@ import net.sf.jasperreports.engine.xml.XmlWriterVisitor;
  * @author Minor enhancements by Barry Klawans (bklawans@users.sourceforge.net)
  * @version $Id: JRXmlWriter.java 4153 2011-01-21 11:53:59Z teodord $
  */
+@SuppressWarnings("deprecation")
 public class JRXmlWriter_4_0_2 extends JRXmlWriter
 {
 
@@ -1884,7 +1885,7 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 
 	/**
 	 *
-	 */
+	 */ 
 	private void writeBubblePlot(JRBubblePlot plot) throws IOException
 	{
 		writer.startElement(JRXmlConstants.ELEMENT_bubblePlot);
@@ -1910,7 +1911,7 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 
 	/**
 	 *
-	 */
+	 */ 
 	private void writeLinePlot(JRLinePlot plot) throws IOException
 	{
 		writer.startElement(JRXmlConstants.ELEMENT_linePlot);
@@ -1936,7 +1937,7 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 		writer.closeElement();
 	}
 
-
+ 
 	private void writeTimeSeriesPlot(JRTimeSeriesPlot plot) throws IOException
 	{
 		writer.startElement(JRXmlConstants.ELEMENT_timeSeriesPlot);
@@ -1965,7 +1966,7 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 
 	/**
 	 *
-	 */
+	 */ 
 	public void writeBar3DPlot(JRBar3DPlot plot) throws IOException
 	{
 		writer.startElement(JRXmlConstants.ELEMENT_bar3DPlot, getNamespace());
@@ -2089,7 +2090,7 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 		writeTimeSeriesPlot((JRTimeSeriesPlot)chart.getPlot());
 		writer.closeElement();
 	}
-
+ 
 	public void writeHighLowDataset(JRHighLowDataset dataset) throws IOException
 	{
 		writer.startElement(JRXmlConstants.ELEMENT_highLowDataset, getNamespace());
@@ -2108,7 +2109,7 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 		writer.closeElement();
 	}
 
-
+ 
 	public void writeHighLowChart(JRChart chart) throws IOException
 	{
 		writer.startElement(JRXmlConstants.ELEMENT_highLowChart, getNamespace());
@@ -2156,7 +2157,7 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 		writer.closeElement();
 	}
 
-
+ 
 	public void writeCandlestickChart(JRChart chart) throws IOException
 	{
 		writer.startElement(JRXmlConstants.ELEMENT_candlestickChart, getNamespace());
@@ -2190,7 +2191,7 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 
 	/**
 	 *
-	 */
+	 */ 
 	private void writeAreaPlot(JRAreaPlot plot) throws IOException
 	{
 		writer.startElement(JRXmlConstants.ELEMENT_areaPlot);
@@ -2362,10 +2363,10 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 		writeValueDisplay(plot.getValueDisplay());
 		writeDataRange(plot.getDataRange());
 
-		List intervals = plot.getIntervals();
+		List<JRMeterInterval> intervals = plot.getIntervals();
 		if (intervals != null)
 		{
-			Iterator iter = intervals.iterator();
+			Iterator<JRMeterInterval> iter = intervals.iterator();
 			while (iter.hasNext())
 			{
 				JRMeterInterval meterInterval =
@@ -2449,10 +2450,10 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 
 		writePlot(chart.getPlot());
 
-		List axes = plot.getAxes();
+		List<JRChartAxis> axes = plot.getAxes();
 		if (axes != null)
 		{
-			Iterator iter = axes.iterator();
+			Iterator<JRChartAxis> iter = axes.iterator();
 			while (iter.hasNext())
 			{
 				JRChartAxis chartAxis =
@@ -2612,8 +2613,8 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 
 		if (crosstab instanceof JRDesignCrosstab)
 		{
-			List cellsList = ((JRDesignCrosstab) crosstab).getCellsList();
-			for (Iterator it = cellsList.iterator(); it.hasNext();)
+			List<JRCrosstabCell> cellsList = ((JRDesignCrosstab) crosstab).getCellsList();
+			for (Iterator<JRCrosstabCell> it = cellsList.iterator(); it.hasNext();)
 			{
 				JRCrosstabCell cell = (JRCrosstabCell) it.next();
 				writeCrosstabCell(cell);
@@ -2622,7 +2623,7 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 		else
 		{
 			JRCrosstabCell[][] cells = crosstab.getCells();
-			Set cellsSet = new HashSet();
+			Set<JRCrosstabCell> cellsSet = new HashSet<JRCrosstabCell>();
 			for (int i = cells.length - 1; i >= 0 ; --i)
 			{
 				for (int j = cells[i].length - 1; j >= 0 ; --j)

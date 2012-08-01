@@ -188,6 +188,7 @@ import net.sf.jasperreports.engine.xml.XmlWriterVisitor;
  * @author Minor enhancements by Barry Klawans (bklawans@users.sourceforge.net)
  * @version $Id: JRXmlWriter.java 4153 2011-01-21 11:53:59Z teodord $
  */
+@SuppressWarnings("deprecation")
 public class JRXmlWriter_4_0_1 extends JRXmlWriter
 {
 
@@ -2362,10 +2363,10 @@ public class JRXmlWriter_4_0_1 extends JRXmlWriter
 		writeValueDisplay(plot.getValueDisplay());
 		writeDataRange(plot.getDataRange());
 
-		List intervals = plot.getIntervals();
+		List<JRMeterInterval> intervals = plot.getIntervals();
 		if (intervals != null)
 		{
-			Iterator iter = intervals.iterator();
+			Iterator<JRMeterInterval> iter = intervals.iterator();
 			while (iter.hasNext())
 			{
 				JRMeterInterval meterInterval =
@@ -2449,10 +2450,10 @@ public class JRXmlWriter_4_0_1 extends JRXmlWriter
 
 		writePlot(chart.getPlot());
 
-		List axes = plot.getAxes();
+		List<JRChartAxis> axes = plot.getAxes();
 		if (axes != null)
 		{
-			Iterator iter = axes.iterator();
+			Iterator<JRChartAxis> iter = axes.iterator();
 			while (iter.hasNext())
 			{
 				JRChartAxis chartAxis =
@@ -2612,8 +2613,8 @@ public class JRXmlWriter_4_0_1 extends JRXmlWriter
 
 		if (crosstab instanceof JRDesignCrosstab)
 		{
-			List cellsList = ((JRDesignCrosstab) crosstab).getCellsList();
-			for (Iterator it = cellsList.iterator(); it.hasNext();)
+			List<JRCrosstabCell> cellsList = ((JRDesignCrosstab) crosstab).getCellsList();
+			for (Iterator<JRCrosstabCell> it = cellsList.iterator(); it.hasNext();)
 			{
 				JRCrosstabCell cell = (JRCrosstabCell) it.next();
 				writeCrosstabCell(cell);
@@ -2622,7 +2623,7 @@ public class JRXmlWriter_4_0_1 extends JRXmlWriter
 		else
 		{
 			JRCrosstabCell[][] cells = crosstab.getCells();
-			Set cellsSet = new HashSet();
+			Set<JRCrosstabCell> cellsSet = new HashSet<JRCrosstabCell>();
 			for (int i = cells.length - 1; i >= 0 ; --i)
 			{
 				for (int j = cells[i].length - 1; j >= 0 ; --j)

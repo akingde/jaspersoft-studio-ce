@@ -132,7 +132,6 @@ public class JRPropertyPage extends WizardPage {
 		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				List<PropertyDTO> list = (List<PropertyDTO>) tableViewer.getInput();
 				int i = 1;
 				String name = "newproperty"; //$NON-NLS-1$
 				while (getName(input, name, i) == null)

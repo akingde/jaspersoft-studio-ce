@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.fonts.FontFace;
 import net.sf.jasperreports.engine.fonts.FontFamily;
@@ -82,8 +83,8 @@ public class FontListFieldEditor extends TableFieldEditor {
 	protected String[][] parseString(String string) {
 		String[][] res = null;
 		if (string != null && !string.isEmpty()) {
-			fontFamily = SimpleFontExtensionHelper.getInstance()
-					.loadFontFamilies(new ByteArrayInputStream(string.getBytes()));
+			fontFamily = SimpleFontExtensionHelper.getInstance().loadFontFamilies(DefaultJasperReportsContext.getInstance(),
+					new ByteArrayInputStream(string.getBytes()));
 
 			res = new String[fontFamily.size()][1];
 			for (int i = 0; i < fontFamily.size(); i++) {

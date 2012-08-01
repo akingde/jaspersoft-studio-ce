@@ -53,7 +53,6 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
-import com.jaspersoft.studio.utils.Misc;
 
 public class SubreportPropertyPage extends WizardPage {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {

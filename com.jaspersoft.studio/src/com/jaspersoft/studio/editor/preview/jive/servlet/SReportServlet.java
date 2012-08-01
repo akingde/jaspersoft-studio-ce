@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.web.JRInteractiveException;
 import net.sf.jasperreports.web.WebReportContext;
 import net.sf.jasperreports.web.servlets.ReportServlet;
@@ -51,8 +50,8 @@ public class SReportServlet extends ReportServlet {
 			if (das != null)
 				prm.putAll((Map<String, Object>) das);
 
-			JasperPrint jasperPrint = (JasperPrint) webReportContext
-					.getParameterValue(WebReportContext.REPORT_CONTEXT_PARAMETER_JASPER_PRINT);
+//			JasperPrint jasperPrint = (JasperPrint) webReportContext
+//					.getParameterValue(WebReportContext.REPORT_CONTEXT_PARAMETER_JASPER_PRINT);
 //			String run = request.getParameter(REQUEST_PARAMETER_RUN_REPORT);
 //			if (jasperPrint == null || Boolean.valueOf(run)) {
 //				String reportUri = request.getParameter(REQUEST_PARAMETER_REPORT_URI);

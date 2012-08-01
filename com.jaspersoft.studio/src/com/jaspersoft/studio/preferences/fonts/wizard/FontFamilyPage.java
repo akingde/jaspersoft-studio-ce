@@ -188,7 +188,7 @@ public class FontFamilyPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.OPEN);
 				fd.setText("Find True Type Font");
-				fd.setFilterExtensions(new String[] { "*.TTF" });
+				fd.setFilterExtensions(new String[] { "*.TTF", "*.ttf" });
 				String selected = fd.open();
 				if (selected != null) {
 					if (type.equals(NORMAL)) {

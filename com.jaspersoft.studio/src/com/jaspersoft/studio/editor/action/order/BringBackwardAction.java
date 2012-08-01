@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.action.order;
 
@@ -36,8 +32,9 @@ import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
-/*/*
- * The Class BringBackwardAction.
+
+/*
+ * /* The Class BringBackwardAction.
  */
 public class BringBackwardAction extends SelectionAction {
 
@@ -85,7 +82,6 @@ public class BringBackwardAction extends SelectionAction {
 			return null;
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
-		int j = 0;
 		CompoundCommand compoundCmd = new CompoundCommand("Bring Backward"); //$NON-NLS-1$
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart part = (EditPart) objects.get(i);
@@ -98,7 +94,6 @@ public class BringBackwardAction extends SelectionAction {
 				int newIndex = parent.getChildren().indexOf(model) - 1;
 				if (newIndex >= 0) {
 					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);
-					j++;
 				} else
 					return null;
 				if (cmd != null)
