@@ -34,7 +34,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.RetargetAction;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 
 /**
  * @author slavic
@@ -47,7 +47,7 @@ public interface IElementDecorator {
 	 * @param fig
 	 * @param jConfig
 	 */
-	public void setupFigure(ComponentFigure fig, JasperReportsConfiguration jConfig);
+	public void setupFigure(ComponentFigure fig, FigureEditPart editPart);
 
 	/**
 	 * register and create all decorator actions in editors ActionRegistry

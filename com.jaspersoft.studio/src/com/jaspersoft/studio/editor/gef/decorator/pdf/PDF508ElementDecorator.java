@@ -24,7 +24,6 @@
 package com.jaspersoft.studio.editor.gef.decorator.pdf;
 
 import java.util.List;
-import java.util.Vector;
 
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
@@ -35,17 +34,24 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.RetargetAction;
 
-import com.jaspersoft.studio.editor.action.pdf.*;
+import com.jaspersoft.studio.editor.action.pdf.PdfActionHeading1;
+import com.jaspersoft.studio.editor.action.pdf.PdfActionHeading2;
+import com.jaspersoft.studio.editor.action.pdf.PdfActionHeading3;
+import com.jaspersoft.studio.editor.action.pdf.PdfActionTable;
+import com.jaspersoft.studio.editor.action.pdf.PdfActionTableDetail;
+import com.jaspersoft.studio.editor.action.pdf.PdfActionTableHeader;
+import com.jaspersoft.studio.editor.action.pdf.PdfActionTableRow;
+import com.jaspersoft.studio.editor.action.pdf.Position;
 import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class PDF508ElementDecorator implements IElementDecorator {
 
 			
 	@Override
-	public void setupFigure(ComponentFigure fig, JasperReportsConfiguration jConfig) {
+	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		// TODO Auto-generated method stub
 
 	}

@@ -40,6 +40,7 @@ import org.eclipse.ui.actions.RetargetAction;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DecoratorManager {
@@ -59,9 +60,9 @@ public class DecoratorManager {
 
 	private List<IElementDecorator> nodeFactory = new ArrayList<IElementDecorator>();
 
-	public void setupFigure(ComponentFigure fig, JasperReportsConfiguration jConfig) {
+	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		for (IElementDecorator f : nodeFactory)
-			f.setupFigure(fig, jConfig);
+			f.setupFigure(fig, editPart);
 	}
 
 	public void registerActions(ActionRegistry registry, List<String> selectionActions, GraphicalViewer gviewer,
