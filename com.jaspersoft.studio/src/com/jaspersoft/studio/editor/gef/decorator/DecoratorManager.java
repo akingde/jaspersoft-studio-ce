@@ -41,7 +41,6 @@ import org.eclipse.ui.actions.RetargetAction;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DecoratorManager {
 	public void init() {
