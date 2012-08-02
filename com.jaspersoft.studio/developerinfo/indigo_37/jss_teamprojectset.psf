@@ -12,8 +12,6 @@
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.expressioneditor.feature,com.jaspersoft.studio.expressioneditor.feature"/>
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.feature,com.jaspersoft.studio.feature"/>
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.html,com.jaspersoft.studio.html"/>
-<project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.mortbay.jetty,com.jaspersoft.studio.mortbay.jetty"/>
-<project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.mortbay.jetty.feature,com.jaspersoft.studio.mortbay.jetty.feature"/>
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.properties,com.jaspersoft.studio.properties"/>
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.server,com.jaspersoft.studio.server"/>
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.updatesite,com.jaspersoft.studio.updatesite"/>

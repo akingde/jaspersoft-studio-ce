@@ -7,8 +7,6 @@
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.data.hive,com.jaspersoft.studio.data.hive"/>
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.data.mongodb,com.jaspersoft.studio.data.mongodb"/>
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.doc,com.jaspersoft.studio.doc"/>
-<project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.eclipse.jetty,com.jaspersoft.studio.eclipse.jetty"/>
-<project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.eclipse.jetty.feature,com.jaspersoft.studio.eclipse.jetty.feature"/>
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.editor.jrexpressions,com.jaspersoft.studio.editor.jrexpressions"/>
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.editor.jrexpressions.ui,com.jaspersoft.studio.editor.jrexpressions.ui"/>
 <project reference="0.9.3,http://jasperforge.org/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.expressioneditor.feature,com.jaspersoft.studio.expressioneditor.feature"/>
