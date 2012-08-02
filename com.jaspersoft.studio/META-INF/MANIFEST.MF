@@ -27,7 +27,8 @@ Bundle-ClassPath: .,
  lib/bsh-2.0b4.jar,
  lib/iText-2.1.7.jar,
  lib/velocity-1.7-dep.jar,
- lib/opal-0.9.1.jar
+ lib/opal-0.9.1.jar,
+ lib/jetty-all-8.1.5.v20120716.jar
 Import-Package: org.eclipse.ui,
  org.eclipse.ui.part
 Eclipse-RegisterBuddy: net.sf.jasperreports
