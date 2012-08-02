@@ -78,6 +78,7 @@ public class ShowErrorsAction extends Action {
 	public void run() {
 		boolean val = !isChecked();
 		diagramViewer.setProperty(ID, new Boolean(val));
+		diagramViewer.getContents().refresh();
 	}
 
 }

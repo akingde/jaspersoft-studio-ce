@@ -23,15 +23,12 @@
  */
 package com.jaspersoft.studio.editor.action.pdf;
 
-import org.eclipse.gef.commands.Command;
-import org.eclipse.ui.IWorkbenchPart;
 
-import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.property.SetValueCommand;
+import org.eclipse.ui.IWorkbenchPart;
 
 public class PdfActionHeading1 extends PdfActionAbstact {
 	
-	/** The Constant ID. */
+	/** Id of the actions */
 	public static final String ID_Heading1_Full = "PdfAction_Heading1_Full"; //$NON-NLS-1$
 	public static final String ID_Heading1_Start = "PdfAction_Heading1_Start"; //$NON-NLS-1$
 	public static final String ID_Heading1_End = "PdfAction_Heading1_End"; //$NON-NLS-1$
@@ -48,13 +45,18 @@ public class PdfActionHeading1 extends PdfActionAbstact {
 	public PdfActionHeading1(IWorkbenchPart part,Position action_position) {
 		super(part, action_position, ID_Heading1_Full, ID_Heading1_Start, ID_Heading1_End, ID_Heading1_None);
 	}
+	
+	/**
+	 * method to return the property name 
+	 * @return Property for which one the value must be changed
+	 */
+	protected String GetPropertyName(){
+		return "net.sf.jasperreports.export.pdf.tag.h1";
+	}
 
 	
-	public Command createCommand(MGraphicElement model){
-		SetValueCommand cmd = new SetValueCommand();
-		cmd.setTarget(model);
-		//Here miss some stuff, because first i want to solve the GeteSelectedObjects()'s problem
-		return cmd;
-	}
+
 	
 }
+
+

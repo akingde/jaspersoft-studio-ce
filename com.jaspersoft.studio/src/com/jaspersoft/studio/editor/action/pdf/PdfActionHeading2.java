@@ -23,32 +23,37 @@
  */
 package com.jaspersoft.studio.editor.action.pdf;
 
-import org.eclipse.gef.commands.Command;
-import org.eclipse.ui.IWorkbenchPart;
 
-import com.jaspersoft.studio.model.MGraphicElement;
+import org.eclipse.ui.IWorkbenchPart;
 
 public class PdfActionHeading2 extends PdfActionAbstact {
 	
-	/** The Constant ID. */
+	/** Id of the actions */
 	public static final String ID_Heading2_Full = "PdfAction_Heading2_Full"; //$NON-NLS-1$
 	public static final String ID_Heading2_Start = "PdfAction_Heading2_Start"; //$NON-NLS-1$
 	public static final String ID_Heading2_End = "PdfAction_Heading2_End"; //$NON-NLS-1$
 	public static final String ID_Heading2_None = "PdfAction_Heading2_None"; //$NON-NLS-1$
 	
+	/**
+	 * Constructs a <code>CreateAction</code> using the specified part.
+	 * 
+	 * @param part
+	 *          The part for this action
+	 * @param action_position
+	 * 					Identify The position of the label
+	 */
 	public PdfActionHeading2(IWorkbenchPart part,Position action_position) {
 		super(part, action_position, ID_Heading2_Full, ID_Heading2_Start, ID_Heading2_End, ID_Heading2_None);
 	}
 
-	
-	public Command createCommand(MGraphicElement model){
-		return null;
+	/**
+	 * method to return the property name 
+	 * @return Property for which one the value must be changed
+	 */
+	protected String GetPropertyName(){
+		return "net.sf.jasperreports.export.pdf.tag.h2";
 	}
-	
-	@Override
-	protected boolean calculateEnabled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+
+
 
 }

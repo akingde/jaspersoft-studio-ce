@@ -23,36 +23,51 @@
  */
 package com.jaspersoft.studio.editor.action.pdf;
 
+import java.util.HashSet;
+import java.util.Iterator;
 
-import org.eclipse.ui.IWorkbenchPart;
-
-public class PdfActionTable extends PdfActionAbstact {
-	
-	/** Id of the actions */
-	public static final String ID_Table_Full = "PdfAction_Table_Full"; //$NON-NLS-1$
-	public static final String ID_Table_Start = "PdfAction_Table_Start"; //$NON-NLS-1$
-	public static final String ID_Table_End = "PdfAction_Table_End"; //$NON-NLS-1$
-	public static final String ID_Table_None = "PdfAction_Table_None"; //$NON-NLS-1$
-	
+/**
+ * Static class used to register a PDF properties, needed to have a common and easy
+ * expandable list of properties. Knowing them it is important because when a new property 
+ * is set for a model, all other pdf properties must be deleted (a model can have only one 
+ * pdf property).
+ * @author Orlandin Marco
+ *
+ */
+public class PropertiesList {
 	
 	/**
-	 * Constructs a <code>CreateAction</code> using the specified part.
-	 * 
-	 * @param part
-	 *          The part for this action
-	 * @param action_position
-	 * 					Identify The position of the label
+	 * Contain the list of registered properties
 	 */
-	public PdfActionTable(IWorkbenchPart part,Position action_position) {
-		super(part, action_position, ID_Table_Full, ID_Table_Start, ID_Table_End, ID_Table_None);
+	private static HashSet<String> propertyList = new HashSet<String>();
+ 
+ /**
+  * Register a new property
+  * @param newItem id of the new property
+  */
+	public static void AddItem(String newItem){
+		propertyList.add(newItem);
+		
 	}
-
+	 
+	
 	/**
-	 * method to return the property name 
-	 * @return Property for which one the value must be changed
+	 * Return an iterator to a property of the list
+	 * @return Iterator to a property, use HasNex()t to know it there are
+	 * an element to read and Next() to read it
 	 */
-	protected String GetPropertyName(){
-		return "net.sf.jasperreports.export.pdf.tag.table";
+	public static Iterator<String> GetIterator(){
+		return propertyList.iterator();
 	}
-
+	
+	/**
+	 * Size of the list
+	 * @return number of registered elements
+	 */
+	public static int Size(){
+		return propertyList.size();
+	}
+	
+	
+ 
 }

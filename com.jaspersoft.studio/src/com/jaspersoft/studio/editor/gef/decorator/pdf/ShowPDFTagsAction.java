@@ -71,6 +71,7 @@ public class ShowPDFTagsAction extends Action {
 			return val.booleanValue();
 		return false;
 	}
+	
 
 	/**
 	 * @see org.eclipse.jface.action.IAction#run()
@@ -78,6 +79,7 @@ public class ShowPDFTagsAction extends Action {
 	public void run() {
 		boolean val = !isChecked();
 		diagramViewer.setProperty(ID, new Boolean(val));
+		diagramViewer.getContents().refresh();
 	}
 
 }

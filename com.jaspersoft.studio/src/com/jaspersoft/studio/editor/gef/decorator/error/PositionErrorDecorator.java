@@ -37,19 +37,22 @@ import org.eclipse.ui.actions.RetargetAction;
 import com.jaspersoft.studio.editor.gef.decorator.ErrorDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.pdf.ShowPDFTagsAction;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
 
 public class PositionErrorDecorator implements IElementDecorator {
 
-	private IDecorator decorator = new ErrorDecorator();
+	private IDecorator decorator;
 
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
+		decorator = new ErrorDecorator(editPart.getModel());
+		//It will remove the type ErrorDecorator from the list because equals is override in ErrorDecorator
 		fig.removeDecorator(decorator);
 		// check if we should show this decorator
-		if (true) {
+		if ((Boolean)editPart.getViewer().getProperty(ShowErrorsAction.ID)) {
 			fig.addDecorator(decorator);
 		}
 	}

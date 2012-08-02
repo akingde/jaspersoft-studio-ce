@@ -23,7 +23,10 @@
  */
 package com.jaspersoft.studio.editor.action.pdf;
 
+import java.util.Iterator;
 import java.util.List;
+
+import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -34,22 +37,46 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.property.SetValueCommand;
 
 
-/*
+/**
  * The Class PdfActionAbstract implements common action (most UI related) of the 
  * pdf action
  */
 public abstract class PdfActionAbstact extends SelectionAction {
 
-	/** The Constant ID. */
+	/** Id of the actions */
 	public final String ID_Full; //$NON-NLS-1$
 	public final String ID_Start; //$NON-NLS-1$
 	public final String ID_End;
 	public final String ID_None; //$NON-NLS-1$
-	
-	protected Position action_position;
 
+	/** Possible values of the action: start, end, full or none */
+	protected Position action_position;
+	
+	/**
+	 * Abstract method to return the property name 
+	 * @return Property for which one the value must be changed
+	 */
+	protected abstract String GetPropertyName();
+	
+	/**
+	 * Base constructor, construct the inner common object of an action
+	 * 
+	 * @param part
+	 *          The part for this action
+	 * @param action_position
+	 * 					Identify The position of the label
+	 * @param ID_Full
+	 * 					Id of the action when click on full
+	 * @param ID_Start
+	 * 					Id of the action when click on Start
+	 * @param ID_End
+	 * 					Id of the action when click on End
+	 * @param ID_None
+	 * 					Id of the action when click on None
+	 */
 	public 	PdfActionAbstact(IWorkbenchPart part,Position action_position, String ID_Full, String ID_Start, String ID_End, String ID_None){
 		super(part);
 		this.action_position = action_position;
@@ -57,9 +84,27 @@ public abstract class PdfActionAbstact extends SelectionAction {
 		this.ID_Start = ID_Start;
 		this.ID_End = ID_End;
 		this.ID_None = ID_None;
+		//the property need to be registered
+		PropertiesList.AddItem(GetPropertyName());
 		initUI();
 	}
 	
+	/**
+	 * Remove every precedent PDF attribute from the models attributes map
+	 * @param v the map of the attributes for a model
+	 */
+	private void CleanOldElements(JRPropertiesMap v){
+		Iterator<String> iterator = PropertiesList.GetIterator();
+		while (iterator.hasNext()){
+			String elementToRemove = iterator.next(); 
+			v.removeProperty(elementToRemove);
+		}
+	}
+	
+	
+	/**
+	 * Create the contextual menu with the label
+	 */
 	protected void initUI() {
 		switch (action_position) {
 		case Full:
@@ -95,7 +140,51 @@ public abstract class PdfActionAbstact extends SelectionAction {
 		}
 	}
 	
-	public abstract Command createCommand(MGraphicElement model);  
+	/**
+	 * Return a string that represent the property value, associating a <code>Position</code> to a string
+	 * @return a string representing the position value
+	 */
+	protected String GetPropertyValue(){
+		String value = "";
+		switch (action_position) {
+		case Full:
+			value = "full";
+			break;
+		case Start:
+			value = "start";
+			break;
+		case End:
+			value = "end";
+			break;
+		case None:
+			value = null;
+			break;
+		}
+		return value;
+
+	}
+	
+	/**
+	 * Create the command for the selected action
+	 * @param model Model of the selected item
+	 * @return the command to execute
+	 */
+	public Command createCommand(MGraphicElement model){
+		SetValueCommand cmd = new SetValueCommand();
+		cmd.setTarget(model);
+		cmd.setPropertyId(MGraphicElement.PROPERTY_MAP);
+		String name = GetPropertyName();
+		JRPropertiesMap v = (JRPropertiesMap)model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+		if (v == null){
+			v = new JRPropertiesMap();
+		} else {
+			v.removeProperty(name);
+		}
+		String value = GetPropertyValue();
+		v.setProperty(name, value);
+		cmd.setPropertyValue(v);
+		return cmd;
+	}
 	
 	
 		/**
@@ -106,9 +195,8 @@ public abstract class PdfActionAbstact extends SelectionAction {
 	private Command createAlignmentCommand() {
 		List<?> editparts = getSelectedObjects();
 		if (editparts.isEmpty() || !(editparts.get(0) instanceof GraphicalEditPart)){
-			System.out.println("void list");
 			return null;
-		}
+		} 
 		CompoundCommand command = new CompoundCommand();
 		command.setDebugLabel(getText());
 		for (int i = 0; i < editparts.size(); i++) {
@@ -130,8 +218,10 @@ public abstract class PdfActionAbstact extends SelectionAction {
 	
 	@Override
 	protected boolean calculateEnabled() {
-		// TODO Auto-generated method stub
-		return true;
+		Command cmd = createAlignmentCommand();
+		if (cmd == null)
+			return false;
+		return cmd.canExecute();
 	}
 
 }

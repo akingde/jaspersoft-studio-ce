@@ -42,91 +42,157 @@ import com.jaspersoft.studio.editor.action.pdf.PdfActionTableDetail;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionTableHeader;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionTableRow;
 import com.jaspersoft.studio.editor.action.pdf.Position;
+import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.PDFDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
 
 public class PDF508ElementDecorator implements IElementDecorator {
 
-			
+	private IDecorator decorator = new PDFDecorator();		
+	
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
-		// TODO Auto-generated method stub
-
+		fig.removeDecorator(decorator);
+		// check if we should show this decorator
+		//J2DScrollingGraphicalViewer
+		
+		if ((Boolean)editPart.getViewer().getProperty(ShowPDFTagsAction.ID)) {
+			fig.addDecorator(decorator);
+		}  //else editPart.getViewer().getContents().refresh();
 	}
 	
-	private void registerHeading(ActionRegistry registry, IWorkbenchPart part){
+	@Override
+	public RetargetAction[] buildMenuActions() {
+		return new RetargetAction[] { new RetargetAction(ShowPDFTagsAction.ID, Messages.ShowPDFTagsAction_title,
+				IAction.AS_CHECK_BOX) };
+	}
+
+	private void registerHeading(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions){
+
+		
 	  IAction action = new PdfActionHeading1(part, Position.Full);
-		registry.registerAction(action);
-	  action = new PdfActionHeading1(part, Position.Start);
-		registry.registerAction(action);
+	  registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new PdfActionHeading1(part, Position.Start);	
+		registry.registerAction(action);	
+		selectionActions.add(action.getId());
 		
 	  action = new PdfActionHeading1(part, Position.End);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionHeading1(part, Position.None);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionHeading2(part, Position.Full);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionHeading2(part, Position.Start);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionHeading2(part, Position.End);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionHeading2(part, Position.None);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionHeading3(part, Position.Full);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionHeading3(part, Position.Start);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionHeading3(part, Position.End);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionHeading3(part, Position.None);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
 	}
 	
-	private void registerTable(ActionRegistry registry, IWorkbenchPart part){
+	private void registerTable(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions){
 		IAction action = new PdfActionTable(part, Position.Full);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTable(part, Position.Start);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTable(part, Position.End);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTable(part, Position.None);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
 	}
 	
-	private void registerTableRow(ActionRegistry registry, IWorkbenchPart part){
+	private void registerTableRow(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions){
 		IAction action = new PdfActionTableRow(part, Position.Full);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTableRow(part, Position.Start);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTableRow(part, Position.End);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTableRow(part, Position.None);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
 	}
 	
 	
-	private void registerTableDetail(ActionRegistry registry, IWorkbenchPart part){
+	private void registerTableDetail(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions){
 		IAction action = new PdfActionTableDetail(part, Position.Full);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTableDetail(part, Position.Start);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTableDetail(part, Position.End);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTableDetail(part, Position.None);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
 	}
 	
-	private void registerTableHeader(ActionRegistry registry, IWorkbenchPart part){
+	private void registerTableHeader(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions){
 		IAction action = new PdfActionTableHeader(part, Position.Full);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTableHeader(part, Position.Start);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTableHeader(part, Position.End);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 	  action = new PdfActionTableHeader(part, Position.None);
 		registry.registerAction(action);
+		selectionActions.add(action.getId());
 	}
 	
 	
@@ -136,11 +202,11 @@ public class PDF508ElementDecorator implements IElementDecorator {
 		gviewer.setProperty(ShowPDFTagsAction.ID, true);
 		IAction action = new ShowPDFTagsAction(gviewer);
 		registry.registerAction(action);
-		registerHeading(registry, part);
-		registerTable(registry, part);
-		registerTableRow(registry, part);
-		registerTableHeader(registry, part);
-		registerTableDetail(registry, part);
+		registerHeading(registry, part, selectionActions);
+		registerTable(registry, part, selectionActions);
+		registerTableRow(registry, part, selectionActions);
+		registerTableHeader(registry, part, selectionActions);
+		registerTableDetail(registry, part, selectionActions);
 		// TODO add pdf actions here
 	}
 
@@ -239,11 +305,7 @@ public class PDF508ElementDecorator implements IElementDecorator {
 		menu.add(submenu);
 	}
 
-	@Override
-	public RetargetAction[] buildMenuActions() {
-		return new RetargetAction[] { new RetargetAction(ShowPDFTagsAction.ID, Messages.ShowPDFTagsAction_title,
-				IAction.AS_CHECK_BOX) };
-	}
+
 
 	@Override
 	public void contribute2Menu(ActionRegistry registry, MenuManager menuManager) {
