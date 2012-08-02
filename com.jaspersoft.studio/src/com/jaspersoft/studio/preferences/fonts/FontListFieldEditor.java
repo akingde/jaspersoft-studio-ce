@@ -80,6 +80,13 @@ public class FontListFieldEditor extends TableFieldEditor {
 	List<FontFamily> fontFamily = new ArrayList<FontFamily>();
 
 	@Override
+	protected void removePressed() {
+		int index = table.getSelectionIndex();
+		fontFamily.remove(index);
+		super.removePressed();
+	}
+
+	@Override
 	protected String[][] parseString(String string) {
 		String[][] res = null;
 		if (string != null && !string.isEmpty()) {
