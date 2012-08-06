@@ -39,7 +39,6 @@ import org.eclipse.ui.actions.RetargetAction;
 
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
-import com.jaspersoft.studio.editor.gef.decorator.pdf.ShowPDFTagsAction;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
@@ -83,7 +82,7 @@ public class PositionErrorDecorator implements IElementDecorator {
 	      Integer father_height = (Integer)fatherModel.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT);	      
 	      if (fig.getJrElement().getElementGroup() instanceof JRBand)
         {
-	      		Integer father_width = itemModel.getRoot().getJasperDesign().getColumnWidth();
+	      		//Integer father_width = itemModel.getRoot().getJasperDesign().getColumnWidth();
             return y + height<=father_height;
         } else if (fig.getJrElement().getElementGroup() != null){
         	Integer father_width = (Integer)fatherModel.getPropertyValue(JRDesignElement.PROPERTY_WIDTH);

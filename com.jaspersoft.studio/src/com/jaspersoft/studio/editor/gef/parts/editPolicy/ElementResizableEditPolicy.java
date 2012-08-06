@@ -19,18 +19,23 @@
  */
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
+import java.util.List;
+
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.gef.selection.ColoredSquareHandles;
 
 public class ElementResizableEditPolicy extends ResizableEditPolicy {
 
@@ -85,6 +90,20 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 
 		feedback.setBounds(rect.resize(-scaleW, -scaleH));
 	}
+	
+	@Override
+	protected void createResizeHandle(List handles, int direction) {
+		if ((getResizeDirections() & direction) == direction) {
+			 ColoredSquareHandles handle = new ColoredSquareHandles((GraphicalEditPart) getHost(), direction);
+			 handle.setDragTracker(getResizeTracker(direction));
+			 handle.setCursor(Cursors.getDirectionalCursor(direction, getHostFigure().isMirrored()));
+			 handles.add(handle);
+		} else {
+		// display 'resize' handle to allow dragging or indicate selection
+		// only
+		createDragHandle(handles, direction);
+		}
+		}
 
 	/**
 	 * Creates the figure used for feedback.

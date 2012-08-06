@@ -26,7 +26,6 @@ import java.awt.Stroke;
 
 import javax.swing.ImageIcon;
 
-import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.Graphics;
@@ -38,9 +37,6 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.ResourceManager;
 
 public class ErrorDecorator implements IDecorator {
@@ -75,7 +71,7 @@ public class ErrorDecorator implements IDecorator {
             g.setColor(new Color(255,0,0,128));
             g.setStroke(new BasicStroke(2.0f));
             g.drawRect(r.x, r.y, r.width - 2, r.height - 2);
-            g.drawImage(warningIcon.getImage(), r.x + r.width - warningIcon.getIconWidth()  , r.y, null);
+            g.drawImage(warningIcon.getImage(), r.x + r.width - warningIcon.getIconWidth()-3  , r.y+1, null);
             fig.setToolTip(new org.eclipse.draw2d.Label(Messages.ErrorDecorator_PositionErrorToolTip,  ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/warning.png"))); //$NON-NLS-2$
       }
   } 	

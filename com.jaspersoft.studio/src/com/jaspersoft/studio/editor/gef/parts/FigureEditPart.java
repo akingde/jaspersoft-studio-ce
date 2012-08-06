@@ -71,7 +71,9 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 				setPrefsBorder(getFigure());
 		}
 	}
+	
 
+	
 	@Override
 	public void activate() {
 		super.activate();

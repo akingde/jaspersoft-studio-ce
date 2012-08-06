@@ -90,7 +90,6 @@ public class PDFDecorator implements IDecorator {
         
       
         JRPropertiesMap v =  fig.getJrElement().getPropertiesMap();
-        
         for (int i=0; i<tags.length; i += 2)
         {  
             String prop = tags[i];
@@ -99,7 +98,7 @@ public class PDFDecorator implements IDecorator {
             if (tagValue != null){
 	            if (tagValue.equals("full")) { drawstart = true; drawend=true;  fullString += label + " ";}
 	            else if (tagValue.equals("start"))  { drawstart = true; startString += label + " ";}
-	            else if (tagValue.equals("end"))  { drawend = true; endString = label + " " + endString; }
+	            else if (tagValue.equals("end"))  { drawend = true; endString = label + " " + endString;}
             }
 
         }
@@ -118,21 +117,21 @@ public class PDFDecorator implements IDecorator {
         g.setColor(new Color(195,47,193));
 
         if (startString.length() > 0) {
-            g.drawString(startString,r.x+2, r.y+12);
+            g.drawString(startString,r.x+4, r.y+11);
         }
 
         if (endString.length() > 0) {
-            int strWidth = graphics.getFontMetrics().getAverageCharWidth()*endString.length();
-            g.drawString(endString, r.x + r.width - 3 - strWidth, r.y + r.height - 3 );
+            int strWidth = g.getFontMetrics().stringWidth(endString);
+            g.drawString(endString, r.x + r.width - strWidth - 6, r.y + r.height - 6 );
         }
 
         if (fullString.length() > 0) {
             int strWidth = 0;
-            if (startString.length() > 0) strWidth = graphics.getFontMetrics().getAverageCharWidth()*(startString.length()+1);
+            if (startString.length() > 0) strWidth = g.getFontMetrics().stringWidth(startString+" ");
             AttributedString as = new AttributedString(fullString);
-            as.addAttribute(TextAttribute.FONT, graphics.getFont());
+            as.addAttribute(TextAttribute.FONT, g.getFont());
             as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-            g.drawString(as.getIterator(), r.x + 4 + strWidth, r.y + 10);
+            g.drawString(as.getIterator(), r.x + 4 + strWidth, r.y + 11);
         }
 
         g.setFont(f);
