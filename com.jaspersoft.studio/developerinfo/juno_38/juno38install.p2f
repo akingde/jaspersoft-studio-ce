@@ -1,7 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='5'>
+  <ius size='6'>
+    <iu id='org.apache.xerces' name='Apache Xerces-J' version='2.9.0.v201101211617'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
+      </repositories>
+    </iu>
     <iu id='org.eclipse.platform.sdk' name='Eclipse Platform SDK' version='3.8.0.I20120608-1200'>
       <repositories size='2'>
         <repository location='http://download.eclipse.org/eclipse/updates/3.8'/>
