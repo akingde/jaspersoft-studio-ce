@@ -84,7 +84,7 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 						JRDesignField jdf = new JRDesignField();
 						jdf.setName(f.getName());
 						jdf.setValueClassName(f.getValueClassName());
-						jdf.setDescription(jdf.getDescription());
+						jdf.setDescription(f.getDescription());
 						fields.add(jdf);
 					}
 				}
