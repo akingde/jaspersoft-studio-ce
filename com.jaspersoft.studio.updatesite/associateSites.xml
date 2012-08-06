@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <associateSites>
 	<associateSite url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/" label="Xtext Releases Update Site"/>
+	<associateSite url="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/" label="Orbit Update site Build R20120526062928"/>
 </associateSites>
