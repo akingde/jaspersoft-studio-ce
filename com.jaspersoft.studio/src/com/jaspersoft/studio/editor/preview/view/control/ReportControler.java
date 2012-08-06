@@ -259,7 +259,7 @@ public class ReportControler {
 	}
 
 	protected void runJive(final PreviewContainer pcontainer, final IFile file, final JasperReport jasperReport) {
-		JettyUtil.startJetty(file.getProject());
+		JettyUtil.startJetty(file.getProject(), jrContext);
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
@@ -272,7 +272,7 @@ public class ReportControler {
 					UUID randomUUID = UUID.randomUUID();
 					Context.putContext(randomUUID.toString(), prm);
 
-					String url = JettyUtil.getURL(file, randomUUID.toString());
+					String url = JettyUtil.getURL(file, randomUUID.toString(), jrContext);
 					pcontainer.getJiveViewer().setURL(url);
 				} catch (Exception e) {
 					UIUtils.showError(e);

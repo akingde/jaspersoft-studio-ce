@@ -35,7 +35,6 @@ public class SReportServlet extends ReportServlet {
 	public static String PRM_JSSContext = "jss.context";
 	public static String PRM_JRPARAMETERS = "prm.in";
 	public static String PRM_JASPERREPORT = "jasperreport";
-
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
@@ -49,43 +48,9 @@ public class SReportServlet extends ReportServlet {
 			Object das = cprm.get(PRM_JRPARAMETERS);
 			if (das != null)
 				prm.putAll((Map<String, Object>) das);
-
-//			JasperPrint jasperPrint = (JasperPrint) webReportContext
-//					.getParameterValue(WebReportContext.REPORT_CONTEXT_PARAMETER_JASPER_PRINT);
-//			String run = request.getParameter(REQUEST_PARAMETER_RUN_REPORT);
-//			if (jasperPrint == null || Boolean.valueOf(run)) {
-//				String reportUri = request.getParameter(REQUEST_PARAMETER_REPORT_URI);
-//
-//				// webReportContext.setParameterValue(JRParameter.REPORT_FILE_RESOLVER, getFileResolver());
-//				// JRResourcesUtil.setThreadFileResolver(getFileResolver());
-//
-//				Boolean isIgnorePagination = Boolean.valueOf(request.getParameter(REQUEST_PARAMETER_IGNORE_PAGINATION));
-//				if (isIgnorePagination != null) {
-//					webReportContext.setParameterValue(JRParameter.IS_IGNORE_PAGINATION, isIgnorePagination);
-//				}
-//
-//				JasperReport jasperReport = (JasperReport) cprm.get(PRM_JASPERREPORT);
-//				if (jasperReport == null) {
-//					// String jrxml = request.getParameter(REQUEST_PARAMETER_REPORT_JRXML);
-//					// if (jrxml != null && jrxml.trim().length() > 0) {
-//					// jrxml = jrxml.trim();
-//					// jasperReport = JasperCompileManager.compileReport(JRXmlLoader.load(RepositoryUtil.getInputStream(jrxml)));
-//					// } else if (reportUri != null && reportUri.trim().length() > 0) {
-//					// reportUri = reportUri.trim();
-//					//
-//					// jasperReport = RepositoryUtil.getReport(reportUri);
-//					// }
-//					//
-//					// if (jasperReport == null) {
-//					// throw new JRException("Report not found at : " + reportUri);
-//					// }
-//				}
-//				jasperPrint = JasperFillManager.fillReport(jasperReport, webReportContext.getParameterValues());
-//
-//				webReportContext.setParameterValue(WebReportContext.REPORT_CONTEXT_PARAMETER_JASPER_PRINT, jasperPrint);
-//			}
 			Context.unsetContext(jsskey);
-		} else
-			super.runReport(request, webReportContext);
+		}
+
+		super.runReport(request, webReportContext);
 	}
 }
