@@ -44,7 +44,6 @@ import com.jaspersoft.studio.editor.action.pdf.PdfActionTableRow;
 import com.jaspersoft.studio.editor.action.pdf.Position;
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
-import com.jaspersoft.studio.editor.gef.decorator.PDFDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
