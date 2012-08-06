@@ -90,7 +90,8 @@ public abstract class PdfActionAbstact extends SelectionAction {
 	}
 	
 	/**
-	 * Remove every precedent PDF attribute from the models attributes map
+	 * Remove every precedent PDF attribute from the models attributes map.
+	 * Actualy not used
 	 * @param v the map of the attributes for a model
 	 */
 	private void CleanOldElements(JRPropertiesMap v){
