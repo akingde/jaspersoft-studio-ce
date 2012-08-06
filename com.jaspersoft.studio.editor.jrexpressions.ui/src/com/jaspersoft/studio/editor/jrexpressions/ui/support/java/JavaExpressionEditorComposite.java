@@ -285,7 +285,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 
 				ObjectCategoryItem tmpCrossTabItem = new ObjectCategoryItem(
 						Category.CROSSTAB, Category.CROSSTAB.getDisplayName()
-								+ i + ") " + crosstabKey);
+								+ " (" + i + ") " + crosstabKey);
 				tmpCrossTabItem.setData(crosstab);
 				rootCategories.add(tmpCrossTabItem);
 			}
