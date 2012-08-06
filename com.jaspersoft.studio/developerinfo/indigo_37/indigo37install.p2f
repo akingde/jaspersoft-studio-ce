@@ -1,12 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='6'>
-    <iu id='epp.package.rcp' name='Eclipse for RCP and RAP Developers' version='1.4.2.20120213-0814'>
-      <repositories size='1'>
-        <repository location='http://download.eclipse.org/releases/indigo'/>
-      </repositories>
-    </iu>
+  <ius size='7'>
     <iu id='org.eclipse.platform.sdk' name='Eclipse Platform SDK' version='3.7.2.M20120208-0800'>
       <repositories size='2'>
         <repository location='http://download.eclipse.org/eclipse/updates/3.7'/>
@@ -24,12 +19,22 @@
         <repository location='http://download.eclipse.org/releases/indigo'/>
       </repositories>
     </iu>
+    <iu id='javax.servlet' name='Servlet API Bundle' version='3.0.0.v201112011016'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='javax.servlet.source' name='Servlet API Source Bundle' version='3.0.0.v201112011016'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
+      </repositories>
+    </iu>
     <iu id='de.itemis.xtext.utils.jface.feature.group' name='Xtext JFace Integration (XJI)' version='1.0.0.201205141449'>
       <repositories size='1'>
         <repository location='http://updates.yakindu.com/indigo/milestones/'/>
       </repositories>
     </iu>
-    <iu id='org.eclipse.xtext.sdk.feature.group' name='Xtext SDK' version='2.2.1.v201112130541'>
+    <iu id='org.eclipse.xtext.sdk.feature.group' name='Xtext SDK' version='2.3.0.v201206120633'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/'/>
       </repositories>
