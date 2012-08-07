@@ -23,7 +23,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
@@ -52,6 +51,7 @@ import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.XMLUtils;
 
 public class FileDataAdapterStorage extends ADataAdapterStorage {
 	private final class ResourceVisitor implements IResourceProxyVisitor {
@@ -188,7 +188,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 
 	public static DataAdapterDescriptor readDataADapter(InputStream in) {
 		try {
-			Document document = JRXmlUtils.parse(in);
+			Document document = XMLUtils.parseNoValidation(in);
 			String adapterClassName = document.getDocumentElement().getAttribute("class");
 			if (adapterClassName == null || adapterClassName.isEmpty())
 				return null;
