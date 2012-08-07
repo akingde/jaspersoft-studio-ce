@@ -43,13 +43,36 @@ import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
-
+/**
+ * Draw the selected PDF 508 attributes on an element
+ * @author Orlandin Marco
+ *
+ */
 public class PDFDecorator implements IDecorator {
 
-  static ImageIcon startImageAwt = null;
-  static ImageIcon endImageAwt = null;
+	/**
+	 * Left upper corner image
+	 */
+  private static ImageIcon startImageAwt = null;
   
+  /**
+   * right lower corner image
+   */
+  private static ImageIcon endImageAwt = null;
   
+  /**
+   * Font of the text
+   */
+  private static Font JSS_TEXT_FONT = new Font("SansSerif", 0, 10);
+  
+  /**
+   * Color of the text
+   */
+  private static Color JSS_TEXT_COLOR = new Color(195,47,193);
+  
+  /**
+   * Constructor, load the images if the weren't loaded before
+   */
   public PDFDecorator(){
   	if (startImageAwt == null || endImageAwt == null){
   			startImageAwt = new javax.swing.ImageIcon(PDFDecorator.class.getResource("/icons/resources/corner1.png"));
@@ -57,10 +80,11 @@ public class PDFDecorator implements IDecorator {
   	}
   }
 	
+  /**
+   * Print on the element it's selected pdf tags
+   */
 	@Override
 	public void paint(Graphics graphics, ComponentFigure fig) {
-		//if (!IReportManager.getInstance().getPreferences().getBoolean("showPDF508Tags", false)) return;
-
     if (fig.getJrElement() instanceof JRDesignElement)
     {
     	
@@ -113,8 +137,8 @@ public class PDFDecorator implements IDecorator {
         endString = endString.trim();
         fullString = fullString.trim();
         
-        g.setFont(new Font("SansSerif", 0, 10));
-        g.setColor(new Color(195,47,193));
+        g.setFont(JSS_TEXT_FONT);
+        g.setColor(JSS_TEXT_COLOR);
 
         if (startString.length() > 0) {
             g.drawString(startString,r.x+4, r.y+11);
@@ -138,15 +162,40 @@ public class PDFDecorator implements IDecorator {
         g.setColor(color);
         
     } 
-    //gr.setTransform(af);
 	}
-
-
-private void drawEnd(Graphics2D gr, Rectangle r) {
-    gr.drawImage(endImageAwt.getImage(), r.x + r.width-endImageAwt.getIconWidth() -2 , r.y + r.height- endImageAwt.getIconHeight() - 2, null);
-}
-private void drawStart(Graphics2D gr, Rectangle r) {
-   gr.drawImage(startImageAwt.getImage(), r.x, r.y, null);
-}
+	
+	/**
+	 * Set the font of the displayed text
+	 * @param newFont the new font
+	 */
+	public void setTextFont(Font newFont){
+		JSS_TEXT_FONT = newFont;
+	}
+	
+	/**
+	 * Set the color of the displayed text
+	 * @param newColor the new color
+	 */	
+	public void setTextColor(Color newColor){
+		JSS_TEXT_COLOR = newColor;
+	}
+	
+	/**
+	 * Draw the image on the right lower corner
+	 * @param gr object used to draw the image
+	 * @param r item where the image will be drawn
+	 */
+	private void drawEnd(Graphics2D gr, Rectangle r) {
+	    gr.drawImage(endImageAwt.getImage(), r.x + r.width-endImageAwt.getIconWidth() -2 , r.y + r.height- endImageAwt.getIconHeight() - 2, null);
+	}
+	
+	/**
+	 * Draw the image on the left upper corner
+	 * @param gr object used to draw the image
+	 * @param r item where the image will be drawn
+	 */
+	private void drawStart(Graphics2D gr, Rectangle r) {
+	   gr.drawImage(startImageAwt.getImage(), r.x, r.y, null);
+	}
 
 }

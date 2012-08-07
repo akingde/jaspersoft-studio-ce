@@ -1,18 +1,11 @@
 package com.jaspersoft.studio.editor.gef.selection;
 
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.security.acl.Owner;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRVerifier;
-
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Locator;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.ResizeHandle;
@@ -22,10 +15,38 @@ import org.eclipse.swt.graphics.Cursor;
 
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.model.text.MStaticText;
 
+/**
+ * Handle to color an design the figures on the border of a selection
+ * @author Marco Orlandin
+ *
+ */
 public class ColoredSquareHandles extends ResizeHandle {
-
+	/**
+	 * The default size for square handles.
+	 */
+	protected static int JSS_HANDLE_SIZE = 9;
+	
+	/**
+	 * The color of an element that cover entirely another element
+	 */
+	protected static Color JSS_OVERLAP_COLOR = ColorConstants.green;
+	
+	/**
+	 * The color of an element that overlap partially another element
+	 */
+	protected static Color JSS_COVER_COLOR = ColorConstants.red;
+	
+	/**
+	 * The color of a focused element
+	 */
+	protected static Color JSS_FOCUSED_COLOR = ColorConstants.blue;
+	
+	/**
+	 * The color of a not focused element
+	 */
+	protected static Color JSS_NOT_FOCUSED_COLOR = ColorConstants.gray;
+	
 	/**
 	 * Creates a new ResizeHandle for the given GraphicalEditPart.
 	 * 
@@ -33,6 +54,14 @@ public class ColoredSquareHandles extends ResizeHandle {
 	 */
 	public ColoredSquareHandles(GraphicalEditPart owner, Locator loc, Cursor c) {
 		super(owner, loc, c);
+	}
+	
+	/**
+	 * Initializes the handle.
+	 */
+	protected void init() {
+		super.init();
+		setPreferredSize(new Dimension(JSS_HANDLE_SIZE, JSS_HANDLE_SIZE));
 	}
 	
 	/*public void paintFigure(Graphics g) {
@@ -75,9 +104,9 @@ public class ColoredSquareHandles extends ResizeHandle {
 				}
 			}
 		}
-		if (cover) return ColorConstants.red;
-		if (overlap) return ColorConstants.green;
-		return (isPrimary()) ? ColorConstants.blue : ColorConstants.gray;
+		if (cover) return JSS_COVER_COLOR;
+		if (overlap) return JSS_OVERLAP_COLOR;
+		return (isPrimary()) ? JSS_FOCUSED_COLOR : JSS_NOT_FOCUSED_COLOR;
 	}
 	
 	/**
@@ -94,6 +123,50 @@ public class ColoredSquareHandles extends ResizeHandle {
 	 */
 	public ColoredSquareHandles(GraphicalEditPart owner, int direction) {
 		super(owner, direction);
+	}
+	
+	/**
+	 * Set the color of the selection resizing images when 2 or more elements are overlapped
+	 * @param newColor the new color
+	 */
+	public void setOverlapColor(Color newColor){
+		JSS_OVERLAP_COLOR.dispose();
+		JSS_OVERLAP_COLOR = newColor;
+	}
+	
+	/**
+	 * Set the color of the selection resizing images when one element cover one or more elements
+	 * @param newColor the new color
+	 */
+	public void setCoverColor(Color newColor){
+		JSS_COVER_COLOR.dispose();
+		JSS_COVER_COLOR = newColor;
+	}
+	
+	/**
+	 * Set the color of the selection resizing images of a focused element
+	 * @param newColor the new color
+	 */
+	public void setFocusedColor(Color newColor){
+		JSS_FOCUSED_COLOR.dispose();
+		JSS_FOCUSED_COLOR = newColor;
+	}
+	
+	/**
+	 * Set the color of the selection resizing images of a not focused element
+	 * @param newColor the new color
+	 */
+	public void setNotFocusedColor(Color newColor){
+		JSS_NOT_FOCUSED_COLOR.dispose();
+		JSS_NOT_FOCUSED_COLOR = newColor;
+	}
+	
+	/**
+	 * Size of the designed resizing images
+	 * @param newSize the new size in pixel
+	 */
+	public void setSize(int newSize){
+		JSS_HANDLE_SIZE = newSize;
 	}
 
 

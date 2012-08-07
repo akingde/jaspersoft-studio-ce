@@ -39,6 +39,11 @@ import com.jaspersoft.studio.editor.java2d.J2DUtils;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.ResourceManager;
 
+/**
+ * Design a border and a warning icon on an element that is out of bounds
+ * @author Orlandin Marco
+ *
+ */
 public class ErrorDecorator implements IDecorator {
 
 	/**
@@ -46,6 +51,15 @@ public class ErrorDecorator implements IDecorator {
 	 */
 	private static ImageIcon warningIcon = null;
 	
+	/**
+	 * The color of the warning border
+	 */
+	private static Color JSS_WARNING_BORDER_COLOR = new Color(255,0,0,128);
+	
+	/**
+	 * The size of the warning border
+	 */
+	private static float JSS_WARNING_BORDER_SIZE = 0.8f;
 	
 	/**
 	 * Standard constructor, load the warningIcon
@@ -68,13 +82,29 @@ public class ErrorDecorator implements IDecorator {
       			Graphics2D g = ((J2DGraphics)graphics).getGraphics2D();
       			Stroke oldStroke = g.getStroke();
       			g.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, graphics.getAbsoluteScale()));
-            g.setColor(new Color(255,0,0,128));
-            g.setStroke(new BasicStroke(0.8f));
+            g.setColor(JSS_WARNING_BORDER_COLOR);
+            g.setStroke(new BasicStroke(JSS_WARNING_BORDER_SIZE));
             g.drawRect(r.x, r.y, r.width - 2, r.height - 2);
             g.drawImage(warningIcon.getImage(), r.x + r.width - warningIcon.getIconWidth()-3  , r.y+1, null);
             fig.setToolTip(new org.eclipse.draw2d.Label(Messages.ErrorDecorator_PositionErrorToolTip,  ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/warning.png"))); //$NON-NLS-2$
       }
   } 	
+	
+	/**
+	 * Set the color of the border of an element when it is out of bounds
+	 * @param newColor the new color
+	 */
+	public void setBorderColor(Color newColor){
+		JSS_WARNING_BORDER_COLOR = newColor;
+	}
+	
+	/**
+	 * Set the size of the border of an element when it is out of bounds
+	 * @param newSize the new size
+	 */
+	public void setBorderSize(float newSize){
+		JSS_WARNING_BORDER_SIZE = newSize;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
