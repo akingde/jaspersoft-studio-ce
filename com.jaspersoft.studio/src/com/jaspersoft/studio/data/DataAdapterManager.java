@@ -21,6 +21,8 @@ package com.jaspersoft.studio.data;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,7 @@ import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.internal.corext.util.CollectionsUtil;
 
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
@@ -76,8 +79,26 @@ public class DataAdapterManager {
 	 * Return a copy of the list of DataAdapterFactories in JaspersoftStudio.
 	 */
 	public static synchronized List<DataAdapterFactory> getDataAdapterFactories() {
+		
+		// Let's sort the list based on the description. Please note that the description may be localized,
+		// so not all the languages have the same order if assumptions are done.
+		
+		DataAdapterFactory[] factories = dataAdapterFactories.toArray(new DataAdapterFactory[dataAdapterFactories.size()]);
+		
+		Arrays.sort(factories, new Comparator<DataAdapterFactory>(){
+
+				@Override
+				public int compare(DataAdapterFactory df1, DataAdapterFactory df2) {
+					
+					String name1 = (df1 == null) ? "" : df1.getLabel();
+					String name2 = (df2 == null) ? "" : df2.getLabel();
+					return name1.compareTo(name2);
+				}
+		});
+		
 		List<DataAdapterFactory> listOfDataAdapterFactories = new ArrayList<DataAdapterFactory>();
-		listOfDataAdapterFactories.addAll(dataAdapterFactories);
+		listOfDataAdapterFactories.addAll(Arrays.asList(factories));
+		
 		return listOfDataAdapterFactories;
 	}
 
