@@ -78,7 +78,7 @@ public class VParameters extends APreview {
 		if (prompts != null)
 			for (JRParameter p : prompts)
 				if (p.isForPrompting() && !p.isSystemDefined()) {
-					createInput(composite, (JRDesignParameter) p, params);
+					createInput(composite, (JRDesignParameter) p, this.params);
 				}
 
 		scompo.setMinSize(composite.getSize());

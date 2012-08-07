@@ -113,7 +113,7 @@ public class ReportControler {
 
 	public ReportControler(PreviewContainer pcontainer, JasperReportsConfiguration jrContext) {
 		this.pcontainer = pcontainer;
-		this.jrContext = jrContext;
+		setJrContext(jrContext);
 	}
 
 	public JasperReportsConfiguration getJrContext() {
@@ -174,7 +174,7 @@ public class ReportControler {
 		c.clearConsole();
 		if (pcontainer.getMode().equals(RunStopAction.MODERUN_LOCAL))
 			pcontainer.setJasperPrint(null, null);
-		jasperParameters.clear();
+		// jasperParameters.clear();
 		fillError = null;
 		stats = new Statistics();
 		stats.startCount(ST_REPORTEXECUTIONTIME);

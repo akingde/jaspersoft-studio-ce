@@ -84,7 +84,9 @@ public class NumericInput extends ADataInput {
 			}
 
 			num = new Spinner(parent, SWT.BORDER);
-			num.setToolTipText(param.getDescription());
+			String desc = Misc.nvl(param.getDescription());
+			desc += "\n" + valueClass;
+			num.setToolTipText(desc);
 			updateInput();
 			final ModifyListener listener2 = new ModifyListener() {
 
