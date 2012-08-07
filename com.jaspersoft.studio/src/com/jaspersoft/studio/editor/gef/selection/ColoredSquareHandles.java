@@ -1,11 +1,17 @@
 package com.jaspersoft.studio.editor.gef.selection;
 
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.security.acl.Owner;
+import java.util.Iterator;
+import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRVerifier;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
@@ -13,6 +19,10 @@ import org.eclipse.gef.handles.ResizeHandle;
 import org.eclipse.gef.handles.SquareHandle;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
+
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.text.MStaticText;
 
 public class ColoredSquareHandles extends ResizeHandle {
 
@@ -46,7 +56,27 @@ public class ColoredSquareHandles extends ResizeHandle {
 	 * @return the color of the handle
 	 */
 	protected Color getFillColor() {
-		//JRVerifier.verifyDesign(jasperDesign);
+		MGraphicElement element = (MGraphicElement)getOwner().getModel();
+		Rectangle bound1 = element.getBounds();
+		List<INode> brothers = element.getParent().getChildren();
+		Iterator<INode> it = brothers.iterator();
+		boolean overlap = false;
+		boolean cover = false;
+		while(it.hasNext() && !cover){
+			INode actualElement = it.next();
+			if (actualElement != element && actualElement instanceof MGraphicElement){
+				MGraphicElement element2 = (MGraphicElement)actualElement;
+				Rectangle bound2 = element2.getBounds();
+				if (bound1.intersects(bound2)){
+					overlap = true;
+				}
+				if (bound1.contains(bound2)){
+					cover = true;
+				}
+			}
+		}
+		if (cover) return ColorConstants.red;
+		if (overlap) return ColorConstants.green;
 		return (isPrimary()) ? ColorConstants.blue : ColorConstants.gray;
 	}
 	

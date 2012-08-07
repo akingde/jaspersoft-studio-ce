@@ -69,7 +69,7 @@ public class ErrorDecorator implements IDecorator {
       			Stroke oldStroke = g.getStroke();
       			g.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, graphics.getAbsoluteScale()));
             g.setColor(new Color(255,0,0,128));
-            g.setStroke(new BasicStroke(2.0f));
+            g.setStroke(new BasicStroke(0.8f));
             g.drawRect(r.x, r.y, r.width - 2, r.height - 2);
             g.drawImage(warningIcon.getImage(), r.x + r.width - warningIcon.getIconWidth()-3  , r.y+1, null);
             fig.setToolTip(new org.eclipse.draw2d.Label(Messages.ErrorDecorator_PositionErrorToolTip,  ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/warning.png"))); //$NON-NLS-2$
