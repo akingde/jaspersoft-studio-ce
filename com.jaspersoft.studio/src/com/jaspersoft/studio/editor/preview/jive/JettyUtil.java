@@ -88,7 +88,7 @@ public final class JettyUtil {
 		JRPropertiesUtil propUtil = JRPropertiesUtil.getInstance(jContext);
 		String repuri = propUtil.getProperty(WebUtil.PROPERTY_REQUEST_PARAMETER_REPORT_URI);
 
-		return String.format("http://localhost:%d/%s/servlets/viewer?%s=%s&%s=%s", port, ctxName, repuri,
+		return String.format("http://localhost:%d/%s/servlets/viewer?%s=%s&%s=%s&jr.async=true", port, ctxName, repuri,
 		// file.getLocation().toString(),
 				file.getProjectRelativePath().toString(), SReportServlet.PRM_JSSContext, uuid);
 	}
@@ -116,6 +116,7 @@ public final class JettyUtil {
 
 		context.addServlet(new ServletHolder(new SResourceServlet()), "/jquery/*");
 		context.addServlet(new ServletHolder(new SResourceServlet()), "/javascript/*");
+		context.addServlet(new ServletHolder(new SResourceServlet()), "/images/*");
 
 		rs = new ServletHolder(new ImageServlet() {
 			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
