@@ -32,7 +32,6 @@ import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jdt.internal.corext.util.CollectionsUtil;
 
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
