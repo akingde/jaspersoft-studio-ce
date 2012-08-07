@@ -43,12 +43,20 @@
 package com.jaspersoft.studio.editor.java2d;
 
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.gef.SelectionManager;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
+
+import com.jaspersoft.studio.editor.gef.selection.JSelectionManager;
 /*
  * The Class J2DScrollingGraphicalViewer.
  */
 public class J2DScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 
+	public J2DScrollingGraphicalViewer(){
+		super();
+		setSelectionManager(new JSelectionManager());
+	}
+	
 	/**
 	 * Internally creates a J2DLightweightSystem.
 	 * 
@@ -58,4 +66,5 @@ public class J2DScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	protected LightweightSystem createLightweightSystem() {
 		return new J2DLightweightSystem();
 	}
+
 }
