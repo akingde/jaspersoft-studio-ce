@@ -41,6 +41,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import com.jaspersoft.studio.editor.preview.jive.servlet.SReportServlet;
+import com.jaspersoft.studio.editor.preview.jive.servlet.SResourceServlet;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -112,6 +113,10 @@ public final class JettyUtil {
 		});
 		rs.setInitParameter("cacheControl", "max-age=0,public");
 		context.addServlet(rs, "/servlets/resource");
+
+		context.addServlet(new ServletHolder(new SResourceServlet()), "/jquery/*");
+		context.addServlet(new ServletHolder(new SResourceServlet()), "/javascript/*");
+
 		rs = new ServletHolder(new ImageServlet() {
 			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -132,6 +137,7 @@ public final class JettyUtil {
 		});
 		rs.setInitParameter("cacheControl", "max-age=0,public");
 		context.addServlet(rs, "/servlets/myviewer");
+
 		rs = new ServletHolder(new ViewerServlet() {
 			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
