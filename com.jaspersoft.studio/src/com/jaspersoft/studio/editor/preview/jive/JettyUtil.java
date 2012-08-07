@@ -87,15 +87,14 @@ public final class JettyUtil {
 		JRPropertiesUtil propUtil = JRPropertiesUtil.getInstance(jContext);
 		String repuri = propUtil.getProperty(WebUtil.PROPERTY_REQUEST_PARAMETER_REPORT_URI);
 
-		return String.format("http://localhost:%d/%s/servlets/report?%s=%s&%s=%s", port, ctxName, repuri, 
-				file.getLocation().toString(),
-//		 file.getProjectRelativePath().toString(),
-				SReportServlet.PRM_JSSContext, uuid);
+		return String.format("http://localhost:%d/%s/servlets/report?%s=%s&%s=%s", port, ctxName, repuri,
+		// file.getLocation().toString(),
+				file.getProjectRelativePath().toString(), SReportServlet.PRM_JSSContext, uuid);
 	}
 
 	private static List<Handler> createContext(IProject project, final JasperReportsConfiguration jContext) {
 		List<Handler> handlers = new ArrayList<Handler>();
-		final String waFolder = project.getLocation().toOSString() + "/";
+		// final String waFolder = project.getLocation().toOSString() + "/";
 
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		context.setContextPath("/" + project.getName());
