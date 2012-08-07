@@ -60,6 +60,7 @@ public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
 		try {
 			browser = new Browser(composite, SWT.NONE);
 			browser.setLayoutData(new GridData(GridData.FILL_BOTH));
+			browser.setJavascriptEnabled(true);
 			rptviewer = new ReportViewer(jContext);
 		} catch (Error e) {
 			e.printStackTrace();

@@ -68,7 +68,7 @@ public class SReportServlet extends ReportServlet {
 
 				cache.set(reportUri, (JasperReport) cprm.get(PRM_JASPERREPORT));
 			}
-			Context.unsetContext(jsskey);
+//			Context.unsetContext(jsskey);
 
 		}
 
