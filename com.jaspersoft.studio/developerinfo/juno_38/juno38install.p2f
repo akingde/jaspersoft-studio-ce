@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='6'>
+  <ius size='7'>
     <iu id='org.apache.xerces' name='Apache Xerces-J' version='2.9.0.v201101211617'>
       <repositories size='2'>
         <repository location='http://download.eclipse.org/releases/juno'/>
@@ -23,6 +23,12 @@
     <iu id='org.eclipse.gef.sdk.feature.group' name='Graphical Editing Framework GEF SDK' version='3.8.0.201206112118'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/releases/juno'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.xalan' name='Xalan-Java' version='2.7.1.v201005080400'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
       </repositories>
     </iu>
     <iu id='de.itemis.xtext.utils.jface.feature.group' name='Xtext JFace Integration (XJI)' version='1.0.0.201205141449'>
