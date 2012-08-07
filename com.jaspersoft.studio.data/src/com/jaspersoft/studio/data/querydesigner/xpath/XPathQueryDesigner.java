@@ -348,6 +348,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 									doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
 								}
 								documentManager.setDocument(doc);
+								documentManager.setJasperConfiguration(XPathQueryDesigner.this.container.getjConfig());
 								Display.getDefault().asyncExec(new Runnable() {
 									@Override
 									public void run() {

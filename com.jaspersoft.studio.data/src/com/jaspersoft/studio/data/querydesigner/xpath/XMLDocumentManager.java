@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
 import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
@@ -22,6 +21,7 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.xml.XMLAttributeNode;
 import com.jaspersoft.studio.model.datasource.xml.XMLNode;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * This class works on the specified xml document or its nodes.
@@ -34,6 +34,7 @@ public class XMLDocumentManager implements ISelectableNodes<XMLNode>{
 	private Document xmlDocument;
 	private JRXPathExecuter xPathExecuter;
 	private Map<XMLNode,Node> documentNodesMap;
+	private JasperReportsConfiguration jConfig;
 	
 	/**
 	 * Sets the {@link Document} object that will 
@@ -176,7 +177,7 @@ public class XMLDocumentManager implements ISelectableNodes<XMLNode>{
 	private JRXPathExecuter getXPathQueryExecuter(){
 		if(xPathExecuter==null){
 			try {
-				xPathExecuter = JRXPathExecuterUtils.getXPathExecuter(DefaultJasperReportsContext.getInstance());
+				xPathExecuter = JRXPathExecuterUtils.getXPathExecuter(jConfig);
 			} catch (JRException e) {
 				UIUtils.showError(e);
 			}
@@ -224,6 +225,15 @@ public class XMLDocumentManager implements ISelectableNodes<XMLNode>{
 			}
 		}
 		return selected;
+	}
+	
+	/**
+	 * Updates the Jasper Configuration reference.
+	 * 
+	 * @param jConfig
+	 */
+	public void setJasperConfiguration(JasperReportsConfiguration jConfig){
+		this.jConfig=jConfig;
 	}
 	
 }
