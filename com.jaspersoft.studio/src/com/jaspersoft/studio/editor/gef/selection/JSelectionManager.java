@@ -9,7 +9,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 /**
- * Class that extend the defaul SelectionManager to change the behavior when a selection of more elements 
+ * Class that extend the default SelectionManager to change the behavior when a selection of more elements 
  * is done
  * @author Orlandin Marco
  *
@@ -31,10 +31,10 @@ public class JSelectionManager extends SelectionManager {
 	public void setSelection(ISelection newSelection) {
 		if (!(newSelection instanceof IStructuredSelection))
 			return;
-		List orderedSelection = ((IStructuredSelection) newSelection).toList();
+		List<?> orderedSelection = ((IStructuredSelection) newSelection).toList();
 		EditPart focusedEditPart = null;
 		if (!orderedSelection.isEmpty()) {
-			Iterator itr = orderedSelection.iterator();
+			Iterator<?> itr = orderedSelection.iterator();
 			EditPart part = (EditPart) itr.next();
 			focusedEditPart = part.getViewer().getFocusEditPart();
 			super.setSelection(newSelection);
