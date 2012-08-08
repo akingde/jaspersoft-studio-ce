@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License  as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero  General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package com.jaspersoft.studio.editor.action.align;
 
 import java.util.ArrayList;
@@ -166,7 +180,7 @@ public class Align2Element extends SelectionAction {
 	 * @param editparts List of selected objects
 	 * @return The primary object or a substitute if itsn't present
 	 */
-	protected Object GetPrimary(List<?> editparts){
+	protected Object getPrimary(List<?> editparts){
 		//editparts must be already checked to be sure that the list is not void
 		Iterator<?> it = editparts.iterator();
 		boolean primaryFound = false;
@@ -192,14 +206,14 @@ public class Align2Element extends SelectionAction {
 	 */
 	protected Pair<List<?>,Object> getOperationSet(Request request) {
 		if (operationSet != null){
-			Object primary = GetPrimary(operationSet);
+			Object primary = getPrimary(operationSet);
 			return new  Pair<List<?>,Object>(operationSet, primary);
 		}
 		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
 		if (editparts.isEmpty()
 				|| !(editparts.get(0) instanceof GraphicalEditPart))
 			return new Pair<List<?>,Object>(Collections.EMPTY_LIST,null);
-		Object primary = GetPrimary(editparts);//editparts.get(editparts.size() - 1);
+		Object primary = getPrimary(editparts);//editparts.get(editparts.size() - 1);
 		editparts = ToolUtilities.getSelectionWithoutDependants(editparts);
 		ToolUtilities.filterEditPartsUnderstanding(editparts, request);
 		if (editparts.size() < 2 || !editparts.contains(primary))
