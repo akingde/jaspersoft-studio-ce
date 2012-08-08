@@ -79,7 +79,7 @@ public class SPRWCombo extends ASPropertyWidget {
 		this.pnode = pnode;
 		refresh = true;
 		final RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) pDescriptor;
-		setNewItems(pd);
+		//setNewItems(pd);
 		String str = (String) b;
 		String[] items = combo.getItems();
 		int selection = 0;
