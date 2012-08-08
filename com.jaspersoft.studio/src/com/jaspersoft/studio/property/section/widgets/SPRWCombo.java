@@ -51,6 +51,7 @@ public class SPRWCombo extends ASPropertyWidget {
 
 	protected void createComponent(Composite parent) {
 		combo = section.getWidgetFactory().createCombo(parent, SWT.FLAT);
+		setNewItems((RWComboBoxPropertyDescriptor) pDescriptor);
 		combo.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -79,7 +80,7 @@ public class SPRWCombo extends ASPropertyWidget {
 		this.pnode = pnode;
 		refresh = true;
 		final RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) pDescriptor;
-		//setNewItems(pd);
+
 		String str = (String) b;
 		String[] items = combo.getItems();
 		int selection = 0;

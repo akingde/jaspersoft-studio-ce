@@ -63,8 +63,11 @@ public class SPFontNameCombo extends SPRWCombo {
 
 	@Override
 	public void setData(APropertyNode pnode, Object b) {
-		if (pnode != null)
-			((RWComboBoxPropertyDescriptor) pDescriptor).setItems(ModelUtils.getFontNames(pnode.getJasperConfiguration()));
+		if (this.pnode == null && pnode != null) {
+			RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) pDescriptor;
+			pd.setItems(ModelUtils.getFontNames(pnode.getJasperConfiguration()));
+			setNewItems((RWComboBoxPropertyDescriptor) pDescriptor);
+		}
 		super.setData(pnode, b);
 	}
 
