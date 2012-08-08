@@ -185,6 +185,18 @@ public class Messages extends NLS {
 	public static String Align2BorderAction_align_to_right_tool_tip;
 	public static String Align2BorderAction_align_to_top;
 	public static String Align2BorderAction_align_to_top_tool_tip;
+	public static String Align2Element_Align_To_Bottom;
+	public static String Align2Element_Align_To_Bottom_tool_tip;
+	public static String Align2Element_Align_To_Center;
+	public static String Align2Element_Align_To_Center_tool_tip;
+	public static String Align2Element_Align_To_Left;
+	public static String Align2Element_Align_To_Left_tool_tip;
+	public static String Align2Element_Align_To_Middle;
+	public static String Align2Element_Align_To_Middle_tooltip;
+	public static String Align2Element_Align_To_Right;
+	public static String Align2Element_Align_To_Right_tool_tip;
+	public static String Align2Element_Align_To_Top;
+	public static String Align2Element_Align_To_Top_tool_tip;
 	public static String AlignSection_common_align;
 	public static String AppContextMenuProvider_align_components;
 	public static String AppContextMenuProvider_align_to_container;

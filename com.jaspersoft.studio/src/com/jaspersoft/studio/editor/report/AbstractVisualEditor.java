@@ -76,6 +76,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
+import com.jaspersoft.studio.editor.action.align.Align2Element;
 import com.jaspersoft.studio.editor.action.copy.CopyAction;
 import com.jaspersoft.studio.editor.action.copy.CutAction;
 import com.jaspersoft.studio.editor.action.copy.PasteAction;
@@ -516,27 +517,27 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		selectionActions.add(action.getId());
 
 		// ------------
-		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.LEFT);
+		action = new Align2Element(this.getSite().getPart(), PositionConstants.LEFT);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.RIGHT);
+		action = new Align2Element(this.getSite().getPart(), PositionConstants.RIGHT);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.TOP);
+		action = new Align2Element(this.getSite().getPart(), PositionConstants.TOP);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.BOTTOM);
+		action = new Align2Element(this.getSite().getPart(), PositionConstants.BOTTOM);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.CENTER);
+		action = new Align2Element(this.getSite().getPart(), PositionConstants.CENTER);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.MIDDLE);
+		action = new Align2Element(this.getSite().getPart(), PositionConstants.MIDDLE);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
