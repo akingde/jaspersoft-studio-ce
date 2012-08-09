@@ -19,8 +19,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import javax.swing.ImageIcon;
-
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.Graphics;
@@ -30,7 +28,6 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
-import com.jaspersoft.studio.editor.java2d.J2DUtils;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.ResourceManager;
 
@@ -41,11 +38,6 @@ import com.jaspersoft.studio.utils.ResourceManager;
  */
 public class ErrorDecorator implements IDecorator {
 
-	/**
-	 * Warning icon
-	 */
-	private static ImageIcon warningIcon = null;
-	
 	/**
 	 * The color of the warning border
 	 */
@@ -60,12 +52,9 @@ public class ErrorDecorator implements IDecorator {
 	 * Standard constructor, load the warningIcon
 	 */
 	public ErrorDecorator(){
-    if (warningIcon == null)
-    {
-        warningIcon = new javax.swing.ImageIcon(ErrorDecorator.class.getResource("/icons/resources/warning.png")); //$NON-NLS-1$
-    }
+
 	}
-	
+		
 	/**
 	 * Print the warning icon when an element is out of bound and set the tooltip text.
 	 */
@@ -73,15 +62,18 @@ public class ErrorDecorator implements IDecorator {
 	public void paint(Graphics graphics, ComponentFigure fig) {
   		if (fig.getJrElement() instanceof JRDesignElement)
       {
-      			Rectangle r = fig.getBounds();
+  					Rectangle r = fig.getBounds();
       			Graphics2D g = ((J2DGraphics)graphics).getGraphics2D();
       			Stroke oldStroke = g.getStroke();
-      			g.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, graphics.getAbsoluteScale()));
+      			Color oldColor = g.getColor();
+      			//g.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, graphics.getAbsoluteScale()));
             g.setColor(JSS_WARNING_BORDER_COLOR);
             g.setStroke(new BasicStroke(JSS_WARNING_BORDER_SIZE));
             g.drawRect(r.x, r.y, r.width - 2, r.height - 2);
-            g.drawImage(warningIcon.getImage(), r.x + r.width - warningIcon.getIconWidth()-3  , r.y+1, null);
-            fig.setToolTip(new org.eclipse.draw2d.Label(Messages.ErrorDecorator_PositionErrorToolTip,  ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/warning.png"))); //$NON-NLS-2$
+            RoundedPolygon.paintWarningIcon(r.x+r.width - 8, r.y, 6, 12,JSS_WARNING_BORDER_SIZE,g);
+            fig.setToolTip(new org.eclipse.draw2d.Label(Messages.ErrorDecorator_PositionErrorToolTip,  ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/warning2.png"))); //$NON-NLS-2$
+            g.setStroke(oldStroke);
+            g.setColor(oldColor);
       }
   } 	
 	
