@@ -178,7 +178,7 @@ public class RoundedPolygon {
 		 //Paint the warning
 	   g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	   g.setStroke(new BasicStroke(stroke));
-	   g.setColor(Color.black);
+	   g.setColor(Color.orange);
 	   p0.moveTo(x - cos, y + sin);
 	   p0.lineTo(x_left_corner+cos, y_corners-sin);
 	   p0.curveTo(x_left_corner+cos, y_corners-sin, x_left_corner , y_corners, x_left_corner+border, y_corners);
@@ -188,7 +188,9 @@ public class RoundedPolygon {
 	   p0.curveTo(x+cos, y + sin, x, y, x - cos, y + sin);
 	   p0.closePath();
 	   g.draw(p0);
-	   GradientPaint gp = new GradientPaint(x, y,Color.yellow.brighter(), x, y_corners,Color.yellow.darker());
+	   Color startColor = new Color(255,238,193);
+	   Color endColor = new Color(255,208,115);
+	   GradientPaint gp = new GradientPaint(x, y,startColor, x, y_corners,endColor);
 	   g.setPaint(gp);
 	   g.fill(p0);
 	   g.setColor(Color.black);

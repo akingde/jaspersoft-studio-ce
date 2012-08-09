@@ -14,10 +14,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.selection;
 
+import java.awt.Graphics2D;
+import java.lang.invoke.ConstantCallSite;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -27,6 +30,7 @@ import org.eclipse.gef.handles.SquareHandle;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 
+import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 
@@ -39,7 +43,7 @@ public class ColoredSquareHandles extends ResizeHandle {
 	/**
 	 * The default size for square handles.
 	 */
-	protected static int JSS_HANDLE_SIZE = 9;
+	protected static int JSS_HANDLE_SIZE = 8;
 	
 	/**
 	 * The color of an element that cover entirely another element
@@ -78,20 +82,22 @@ public class ColoredSquareHandles extends ResizeHandle {
 		setPreferredSize(new Dimension(JSS_HANDLE_SIZE, JSS_HANDLE_SIZE));
 	}
 	
-	/*public void paintFigure(Graphics g) {
+	public void paintFigure(Graphics g) {
 		Rectangle r = getBounds();
 		r.shrink(1, 1);
 		try {
 			g.setBackgroundColor(getFillColor());
 			g.fillRectangle(r.x, r.y, r.width, r.height);
-			g.setForegroundColor(getBorderColor());
-			g.drawRectangle(r.x, r.y, r.width, r.height);
-			g.fillRectangle(r.x-2, r.y-2, 4, 4);
+			g.setForegroundColor(ColorConstants.black);
+			g.drawRectangle(r.x-1, r.y-1, r.width+1, r.height+1);
+			//Graphics2D gr = ((J2DGraphics)g).getGraphics2D();
+			//gr.setColor(ColorConstants.black);
+			//g.drawRectangle(r.x-1, r.y-1, r.width+1, r.height+1);
 		} finally {
 			// We don't really own rect 'r', so fix it.
 			r.expand(1, 1);
 		}
-	}*/
+	}
 	
 	/**
 	 * Returns the color for the inside of the handle.
