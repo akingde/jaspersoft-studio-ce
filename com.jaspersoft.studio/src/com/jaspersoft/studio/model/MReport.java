@@ -364,6 +364,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET)) {
 			if (mDataset == null) {
 				mDataset = new MDataset(this, (JRDesignDataset) jrDesign.getMainDataset());
+				mDataset.setJasperConfiguration(getJasperConfiguration());
 				setChildListener(mDataset);
 			}
 			return mDataset;

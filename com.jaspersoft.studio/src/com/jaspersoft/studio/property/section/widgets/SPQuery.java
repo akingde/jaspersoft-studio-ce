@@ -77,7 +77,6 @@ public class SPQuery extends SPText {
 	public void setData(APropertyNode pnode, Object b) {
 		mdataset = (MDataset) pnode;
 		mquery = (MQuery) b;
-		mquery.setJasperConfiguration(pnode.getJasperConfiguration());
 		super.setData(mquery, mquery.getPropertyValue(JRDesignQuery.PROPERTY_TEXT));
 	}
 
