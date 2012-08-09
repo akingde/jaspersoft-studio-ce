@@ -14,8 +14,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.selection;
 
-import java.awt.Graphics2D;
-import java.lang.invoke.ConstantCallSite;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,7 +28,6 @@ import org.eclipse.gef.handles.SquareHandle;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 
