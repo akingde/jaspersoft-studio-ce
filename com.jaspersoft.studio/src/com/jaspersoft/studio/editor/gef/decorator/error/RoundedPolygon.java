@@ -22,6 +22,58 @@ import java.util.List;
 public class RoundedPolygon {
 	
 	/**
+	 * The start color for the progressive paint of the warning icon
+	 */
+	private static Color startColor =  new Color(255,238,193);
+	
+	/**
+	 * The end color in the progressive paint of the warning icon
+	 */
+	private static Color endColor = new Color(255,208,115);
+	
+	/**
+	 * The color of the border of the warning icon
+	 */
+	private static Color borderColor = Color.orange;
+	
+	/**
+	 * The font used to paint the ! symbol in the warning icon
+	 */
+	private static Font messageFont = new Font("SansSerif", 0, 10);
+	
+	/**
+	 * Set the start color for the progressive paint of the warning icon
+	 * @param newColor the new color
+	 */
+	public static void setStartColor(Color newColor){
+		startColor = newColor;
+	}
+	
+	/**
+	 * Set the end color in the progressive paint of the warning icon
+	 * @param newColor the new color
+	 */
+	public static void setEndColor(Color newColor){
+		endColor = newColor;
+	}
+	
+	/**
+	 * Set the color of the border of the warning icon
+	 * @param newColor the new color
+	 */
+	public static void setBorderColor(Color newColor){
+		borderColor = newColor;
+	}
+	
+	/**
+	 * Set the font that will be used to paint the ! symbol in the warning icon
+	 * @param newFont the new font
+	 */
+	public static void setFont(Font newFont){
+		messageFont = newFont;
+	}
+	
+	/**
 	 * Generate a rounded path for a polygon with more than 3 corners
 	 * @param polygon input polygon
 	 * @return a general path that represent the rounded polygon
@@ -132,17 +184,17 @@ public class RoundedPolygon {
 			Font oldFont = g.getFont();
 			//Paint the path
 			g.setStroke(new BasicStroke(stroke));
-		  g.setColor(Color.black);
+		  g.setColor(borderColor);
 		  g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		  GradientPaint gp = new GradientPaint(x, y,Color.yellow.brighter(), x, y + p0.getBounds().height,Color.yellow.darker());
+		  GradientPaint gp = new GradientPaint(x, y,startColor, x, y + p0.getBounds().height,endColor);
 		  g.draw(p0);
 		  g.setPaint(gp);
 		  g.fill(p0);
 		  g.setColor(Color.black);
-		  g.setFont(new Font("SansSerif", 0, 10));
+		  g.setFont(messageFont);
 		  int fontWidth = g.getFontMetrics().stringWidth("!");
 		  float x_middle = new Float(x-((fontWidth)/2)-0.3);
-		  g.drawString("!", x_middle, y+stroke+10 );
+		  g.drawString("!", x_middle, y+stroke+messageFont.getSize() );
 		  //Restore old graphics value
 		  g.setFont(oldFont);
 		  g.setColor(oldColor);
@@ -178,7 +230,7 @@ public class RoundedPolygon {
 		 //Paint the warning
 	   g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	   g.setStroke(new BasicStroke(stroke));
-	   g.setColor(Color.orange);
+	   g.setColor(borderColor);
 	   p0.moveTo(x - cos, y + sin);
 	   p0.lineTo(x_left_corner+cos, y_corners-sin);
 	   p0.curveTo(x_left_corner+cos, y_corners-sin, x_left_corner , y_corners, x_left_corner+border, y_corners);
@@ -188,16 +240,14 @@ public class RoundedPolygon {
 	   p0.curveTo(x+cos, y + sin, x, y, x - cos, y + sin);
 	   p0.closePath();
 	   g.draw(p0);
-	   Color startColor = new Color(255,238,193);
-	   Color endColor = new Color(255,208,115);
 	   GradientPaint gp = new GradientPaint(x, y,startColor, x, y_corners,endColor);
 	   g.setPaint(gp);
 	   g.fill(p0);
 	   g.setColor(Color.black);
-	   g.setFont(new Font("SansSerif", 0, 10));
+	   g.setFont(messageFont);
 	   int fontWidth = g.getFontMetrics().stringWidth("!");
 	   float x_middle = new Float(x-((fontWidth)/2)-0.3);
-	   g.drawString("!", x_middle, y+stroke+10 );
+	   g.drawString("!", x_middle, y+stroke+messageFont.getSize() );
 	   //Restore old graphics value
 	   g.setFont(oldFont);
 	   g.setColor(oldColor);
