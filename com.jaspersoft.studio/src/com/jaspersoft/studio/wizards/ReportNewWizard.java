@@ -143,19 +143,27 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 				TreeSelection s = (TreeSelection) selection;
 				if (s.getFirstElement() instanceof IFile) {
 					IFile file = (IFile) s.getFirstElement();
-
-					String f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
-
-					int i = 1;
-					while (file.getProject().getFile(f).exists()) {
-						filename = "NEW_REPORT_" + i + ".jrxml";
-						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
-						i++;
-					}
+					filename = getFileName(file.getProject(), file.getProjectRelativePath().removeLastSegments(1).toOSString(),
+							filename);
+				} else if (s.getFirstElement() instanceof IProject) {
+					IProject prj = (IProject) s.getFirstElement();
+					filename = getFileName(prj, "", filename);
 				}
 			}
 			step1.setFileName(filename);
 		}
+	}
+
+	private String getFileName(IProject prj, String prjPath, String filename) {
+		String f = prjPath + "/" + filename;
+
+		int i = 1;
+		while (prj.getFile(f).exists()) {
+			filename = "NEW_REPORT_" + i + ".jrxml";
+			f = prjPath + "/" + filename;
+			i++;
+		}
+		return filename;
 	}
 
 	private JasperReportsConfiguration jConfig = new JasperReportsConfiguration(
@@ -424,7 +432,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
-			if (selection.getFirstElement() instanceof IProject) {
+			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile) {
 				this.selection = selection;
 				return;
 			}
