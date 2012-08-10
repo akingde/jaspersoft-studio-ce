@@ -114,7 +114,7 @@ public class ReportTemplatesWizardPage extends WizardPage {
 
 			public void widgetSelected(SelectionEvent e) {
 				GalleryItem[] selection = gal.getSelection();
-				if (selection != null && selection.length >= 0) {
+				if (selection != null && selection.length > 0) {
 					Object sdata = selection[0].getData("url");
 					if (sdata != null && urls.indexOf(sdata) >= 0)
 						template = urls.indexOf(sdata);

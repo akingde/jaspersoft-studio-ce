@@ -424,6 +424,10 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
+			if (selection.getFirstElement() instanceof IProject) {
+				this.selection = selection;
+				return;
+			}
 			for (Object obj : selection.toList()) {
 				if (obj instanceof EditPart) {
 					IEditorInput ein = SelectionHelper.getActiveJRXMLEditor().getEditorInput();
