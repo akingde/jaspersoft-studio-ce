@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.jasperreports.crosstabs.JRCrosstab;
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
@@ -281,9 +282,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 					.getChildren());
 		}
 
-		for (Iterator<?> it = ct.getCellsList().iterator(); it.hasNext();) {
-			JRDesignCrosstabCell c = (JRDesignCrosstabCell) it.next();
-
+		for (JRCrosstabCell c : ct.getCellsList()) {
 			boolean hide = false;
 			String colname = c.getColumnTotalGroup();
 			if (colname == null)

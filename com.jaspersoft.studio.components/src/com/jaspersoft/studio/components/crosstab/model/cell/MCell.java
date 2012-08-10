@@ -44,7 +44,6 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabCell;
-import com.jaspersoft.studio.components.crosstab.CrosstabManager;
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
@@ -396,27 +395,27 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	}
 
 	public Rectangle getBounds() {
-		int w = 0;
-		int h = 0;
-		Rectangle rCellBounds = new Rectangle();
-		Rectangle rect = null;
-		JRDesignCellContents c = null;
-		if (getValue() != null) {
-			c = (JRDesignCellContents) getValue();
-			w = CrosstabManager.getHW(c.getWidth(), 60);
-			h = CrosstabManager.getHW(c.getHeight(), 20);
-		}
+		// int w = 0;
+		// int h = 0;
+		// Rectangle rCellBounds = new Rectangle();
+		// Rectangle rect = null;
+		// JRDesignCellContents c = null;
+		// if (getValue() != null) {
+		// c = getValue();
+		// w = CrosstabManager.getHW(c.getWidth(), 60);
+		// h = CrosstabManager.getHW(c.getHeight(), 20);
+		// }
 
 		MCrosstab mc = getMCrosstab();
 		if (mc != null) {
-			if (c != null)
-				rCellBounds = mc.getCrosstabManager().getBounds(
-						new CrosstabCell(c));
-			Rectangle b = mc.getBounds();
-			return new Rectangle(b.x + rCellBounds.x, b.y + rCellBounds.y, w, h);
+			return mc.getCrosstabManager().getBounds(
+					new CrosstabCell(getValue()));
+			// Rectangle b = mc.getBounds();
+			// return new Rectangle(b.x + rCellBounds.x, b.y + rCellBounds.y, w,
+			// h);
 		}
 
-		return rect;
+		return null;
 	}
 
 	public JRBoxContainer getBoxContainer() {

@@ -299,12 +299,19 @@ public class CrosstabManager {
 	}
 
 	public Rectangle getBounds(CrosstabCell cell) {
-		Rectangle b = boundsMap.get(cell);
-		if (b != null)
-			return b;
-		if (cell != null)
-			return cell.getBounds();
-		return new Rectangle(0, 0, 60, 20);
+		return matrix.getBounds(cell);
+
+		// Rectangle b = boundsMap.get(cell);
+		// if (b != null)
+		// return b;
+		// if (cell != null) {
+		// Rectangle r = cell.getBounds();
+		// return matrix.getBounds(cell);
+		// // r.y = mr.y;
+		// // r.height = mr.height;
+		// // return r;
+		// }
+		// return new Rectangle(0, 0, 60, 20);
 	}
 
 	public void setWidth(JRDesignCellContents cell, int width) {

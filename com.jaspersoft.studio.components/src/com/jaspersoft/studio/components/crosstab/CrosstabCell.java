@@ -104,11 +104,9 @@ public class CrosstabCell {
 
 	@Override
 	public String toString() {
-		String ctype = Integer.toString(type);
-
-		String str = "[" + type + ":" + ctype + ":" + hashCode() + "]";
+		String str = "[" + type + ":" + hashCode() + "-";
 		if (cell != null)
-			str += "[h:" + cell.getHeight() + "]";
+			str += "-h:" + cell.getHeight() + "]";
 		else
 			str += "[++++]";
 		return str;
@@ -116,20 +114,18 @@ public class CrosstabCell {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof CrosstabCell) {
-			CrosstabCell toObj = (CrosstabCell) obj;
-			if (cell == null && toObj.cell == null)
-				return type == toObj.type;
-			if (cell != null && toObj.cell != null && cell.equals(toObj.cell))
-				return true;
-		}
+		CrosstabCell toObj = (CrosstabCell) obj;
+		if (cell != null)
+			return cell.equals(toObj.cell);
+		if (cell == null && toObj.cell == null)
+			return type == toObj.type;
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
 		if (cell != null)
-			return cell.hashCode() ^ type ^ cell.hashCode();
+			return cell.hashCode();// ^ type;
 		return type;
 	}
 }

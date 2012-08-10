@@ -91,6 +91,11 @@ public class Guide {
 		return y;
 	}
 
+	public void setX(Guide west, JRCellContents c) {
+		if (c != null)
+			y = Math.max(y, west.getY() + c.getWidth());
+	}
+
 	public void setY(Guide north, JRCellContents c) {
 		if (c != null)
 			y = Math.max(y, north.getY() + c.getHeight());
