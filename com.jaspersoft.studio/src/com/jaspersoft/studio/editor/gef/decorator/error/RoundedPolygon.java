@@ -9,6 +9,7 @@ import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
@@ -24,12 +25,12 @@ public class RoundedPolygon {
 	/**
 	 * The start color for the progressive paint of the warning icon
 	 */
-	private static Color startColor =  new Color(255,238,193);
+	private static Color startColor =  new Color(254,234,88);
 	
 	/**
 	 * The end color in the progressive paint of the warning icon
 	 */
-	private static Color endColor = new Color(255,208,115);
+	private static Color endColor = new Color(230,164,38);
 	
 	/**
 	 * The color of the border of the warning icon
@@ -39,7 +40,7 @@ public class RoundedPolygon {
 	/**
 	 * The font used to paint the ! symbol in the warning icon
 	 */
-	private static Font messageFont = new Font("SansSerif", 0, 10);
+	private static Font messageFont = new Font("SansSerif", 0, 9);
 	
 	/**
 	 * Set the start color for the progressive paint of the warning icon
@@ -147,14 +148,14 @@ public class RoundedPolygon {
 	 * @param height height of the base
 	 * @return the general path that represent the triangle
 	 */
-	public static GeneralPath getWarningPath(int x, int y, int width, int height) {
+	public static GeneralPath getWarningPath(float x, float y, float width, float height) {
 	   final GeneralPath p0 = new GeneralPath();
      double border = 2;
 	 	 double sin = Math.sin(Math.toRadians(60.0)) * border;
 		 double cos = Math.cos(Math.toRadians(60.0)) * border;
-	   int x_left_corner = x-width;
-	   int y_corners = y+height;
-	   int x_right_corner = x+width;
+	   float x_left_corner = x-width;
+	   float y_corners = y+height;
+	   float x_right_corner = x+width;
 	   p0.moveTo(x - cos, y + sin);
 	   p0.lineTo(x_left_corner+cos, y_corners-sin);
 	   p0.curveTo(x_left_corner+cos, y_corners-sin, x_left_corner , y_corners, x_left_corner+border, y_corners);
@@ -164,6 +165,60 @@ public class RoundedPolygon {
 	   p0.curveTo(x+cos, y + sin, x, y, x - cos, y + sin);
 	   p0.closePath();
 	   return p0;
+	}
+	
+	public static void paintPath( GeneralPath p0, Graphics2D g, Color fillColor){
+		//Backup old graphics value
+		Color oldColor = g.getColor();
+		Stroke oldStroke = g.getStroke();
+		Object oldRendering = g.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+		Paint oldGradient = g.getPaint();
+		Font oldFont = g.getFont();
+		//Paint the path
+	  g.setColor(fillColor);
+	  g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	  g.fill(p0);
+	  //Restore old graphics value
+	  g.setFont(oldFont);
+	  g.setColor(oldColor);
+	  g.setStroke(oldStroke);
+	  g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,oldRendering);
+	  g.setPaint(oldGradient);
+	}
+	
+	public static void paintGradientPath( GeneralPath p0, Graphics2D g, GradientPaint gp){
+		//Backup old graphics value
+		Color oldColor = g.getColor();
+		Stroke oldStroke = g.getStroke();
+		Object oldRendering = g.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+		Paint oldGradient = g.getPaint();
+		Font oldFont = g.getFont();
+		//Paint the path
+	  g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	  g.setPaint(gp);
+	  g.fill(p0);
+	  //Restore old graphics value
+	  g.setFont(oldFont);
+	  g.setColor(oldColor);
+	  g.setStroke(oldStroke);
+	  g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,oldRendering);
+	  g.setPaint(oldGradient);
+	}
+	
+	
+	public static void paintComplexWarning(int x, int y, int width, int height, float stroke, Graphics2D g) {
+		Shape oldClip = g.getClip();
+		g.setClip(null);
+		//Painting the shadow
+		GeneralPath p0 = getWarningPath(x+1, y+1, width, height);
+		paintPath(p0,g,new Color(0,0,0,128));
+		//Painting the "border"
+		GradientPaint gp = new GradientPaint(x + width, y + height,new Color(207,140,32), x, y,new Color(254,222,55));
+		p0 = getWarningPath(x, y, width, height);
+		paintGradientPath(p0,g,gp);
+		//Painting the internal
+		paintWarningIcon(x, new Float(y+1), new Float(width-0.7), new Float(height-1.5), 0, g);
+		g.setClip(oldClip);
 	}
 	
 	/**
@@ -213,14 +268,14 @@ public class RoundedPolygon {
 	 * @param g Graphics used to paint the triangle, the internal value of the graphics will be 
 	 * restored after the painting
 	 */
-	public static void paintWarningIcon(int x, int y, int width, int height, float stroke, Graphics2D g) {
+	public static void paintWarningIcon(float x, float y, float width, float height, float stroke, Graphics2D g) {
      final GeneralPath p0 = new GeneralPath();
      double border = 2;
 	 	 double sin = Math.sin(Math.toRadians(60.0)) * border;
 		 double cos = Math.cos(Math.toRadians(60.0)) * border;
-	   int x_left_corner = x-width;
-	   int y_corners = y+height;
-	   int x_right_corner = x+width;
+	   float x_left_corner = x-width;
+	   float y_corners = y+height;
+	   float x_right_corner = x+width;
 		 //Backup old graphics value
 		 Color oldColor = g.getColor();
 		 Stroke oldStroke = g.getStroke();

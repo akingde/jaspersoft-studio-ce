@@ -19,16 +19,24 @@
  */
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IRulerUpdatable;
+import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 
@@ -60,11 +68,43 @@ public class FigureSelectionEditPolicy extends SelectionEditPolicy {
 	protected void hideSelection() {
 	}
 
+	/**
+	 * Print an internal border for the figure, semitransparent
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class HighlightBorder extends LineBorder{
+		public HighlightBorder(Color color, int width) {
+			super(color, width);
+		}
+		
+		@Override
+		public void paint(IFigure figure, Graphics graphics, Insets insets) {
+			Graphics2D g = ((J2DGraphics)graphics).getGraphics2D();
+			tempRect.setBounds(getPaintRectangle(figure, insets));
+			if (getWidth() % 2 == 1) {
+				tempRect.width--;
+				tempRect.height--;
+			}
+			tempRect.width = tempRect.width - getWidth();
+			tempRect.height = tempRect.height - getWidth();
+			tempRect.shrink(getWidth() / 2, getWidth() / 2);
+			g.setStroke(new BasicStroke(getWidth()));
+			if (getColor() != null){
+				RGB colorRGB= getColor().getRGB();
+				g.setColor(new java.awt.Color(colorRGB.red, colorRGB.green, colorRGB.blue,128));
+			}
+			g.drawRect(tempRect.x,tempRect.y, tempRect.width, tempRect.height);
+		}
+	}
+	
 	@Override
 	public void showTargetFeedback(Request request) {
 		EditPart host = getHost();
-		if (host instanceof FigureEditPart && host.getSelected() == EditPart.SELECTED_NONE)
-			((FigureEditPart) host).getFigure().setBorder(new LineBorder(ColorConstants.darkGreen, 2));
+		if (host instanceof FigureEditPart && host.getSelected() == EditPart.SELECTED_NONE){
+			
+			((FigureEditPart) host).getFigure().setBorder(new HighlightBorder(ColorConstants.orange, 2));
+		}
 		super.showTargetFeedback(request);
 	}
 

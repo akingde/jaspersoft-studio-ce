@@ -70,7 +70,8 @@ public class ErrorDecorator implements IDecorator {
             g.setColor(JSS_WARNING_BORDER_COLOR);
             g.setStroke(new BasicStroke(JSS_WARNING_BORDER_SIZE));
             g.drawRect(r.x, r.y, r.width - 2, r.height - 2);
-            RoundedPolygon.paintWarningIcon(r.x+r.width - 8, r.y, 6, 12,JSS_WARNING_BORDER_SIZE,g);
+            //RoundedPolygon.paintWarningIcon(r.x+r.width - 8, r.y, 6, 12,JSS_WARNING_BORDER_SIZE,g);
+            RoundedPolygon.paintComplexWarning(r.x+r.width-5, r.y-2, 6, 12,JSS_WARNING_BORDER_SIZE,g);
             fig.setToolTip(new org.eclipse.draw2d.Label(Messages.ErrorDecorator_PositionErrorToolTip,  ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/warning2.png"))); //$NON-NLS-2$
             g.setStroke(oldStroke);
             g.setColor(oldColor);

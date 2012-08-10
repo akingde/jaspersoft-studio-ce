@@ -22,16 +22,18 @@ package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
@@ -40,7 +42,6 @@ import org.eclipse.gef.handles.AbstractHandle;
 import org.eclipse.gef.handles.MoveHandle;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.editor.gef.figures.borders.Line1Border;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -81,6 +82,30 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		super();
 		setDragAllowed(false);
 	}
+	
+	
+	/**
+	 * Class that paint a red lateral border
+	 * @author Marco-Work
+	 *
+	 */
+	private class MarginBorder extends LineBorder {
+		@Override
+		public void paint(IFigure figure, Graphics graphics, Insets insets) {
+			Rectangle bounds = figure.getBounds();
+			Graphics2D g = ((J2DGraphics)graphics).getGraphics2D();
+			Shape oldClip = g.getClip();
+			g.setClip(null);
+			g.setColor(Color.red);
+			g.fillRect(bounds.x-5, bounds.y+1, 4, bounds.height-2);
+			g.setClip(oldClip);
+		}
+
+		public MarginBorder(int width) {
+			super(width);
+		}
+	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -92,13 +117,12 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
 
 		MoveHandle hand = new MoveHandle((GraphicalEditPart) getHost());
-		hand.setBorder(new Line1Border(ColorConstants.gray, 5));
-
+		hand.setBorder(new MarginBorder(5));
 		list.add(hand);
 
-		// BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
-		// buttonPadHandle.setBorder(null);
-		// list.add(buttonPadHandle);
+//		 BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
+//		 buttonPadHandle.setBorder(null);
+//		 list.add(buttonPadHandle);
 		// NonResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(), list);
 		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
 		// // if (hasNorth)

@@ -14,10 +14,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.selection;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics2D;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -25,9 +28,9 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.ResizeHandle;
 import org.eclipse.gef.handles.SquareHandle;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 
+import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 
@@ -45,22 +48,22 @@ public class ColoredSquareHandles extends ResizeHandle {
 	/**
 	 * The color of an element that cover entirely another element
 	 */
-	protected static Color JSS_OVERLAP_COLOR = ColorConstants.green;
+	protected static Color[] JSS_OVERLAP_COLOR = null;
 	
 	/**
 	 * The color of an element that overlap partially another element
 	 */
-	protected static Color JSS_COVER_COLOR = ColorConstants.red;
+	protected static Color[] JSS_COVER_COLOR = null;
 	
 	/**
 	 * The color of a focused element
 	 */
-	protected static Color JSS_FOCUSED_COLOR = ColorConstants.blue;
+	protected static Color[] JSS_FOCUSED_COLOR = null;
 	
 	/**
 	 * The color of a not focused element
 	 */
-	protected static Color JSS_NOT_FOCUSED_COLOR = ColorConstants.gray;
+	protected static Color[] JSS_NOT_FOCUSED_COLOR = null;
 	
 	/**
 	 * Creates a new ResizeHandle for the given GraphicalEditPart.
@@ -72,26 +75,53 @@ public class ColoredSquareHandles extends ResizeHandle {
 	}
 	
 	/**
+	 * Create a color array for border and gradient
+	 * @param baseColor value from 0 to 1 that represent the base color H in HSB system
+	 * @return an array of colors, different version of the base color
+	 */
+	private Color[] CreateColor(float baseColor){
+		Color[] result = {Color.getHSBColor(baseColor, 0.9f, 0.4f),Color.getHSBColor(baseColor, 0.8f, 0.2f),Color.getHSBColor(baseColor, 0.5f, 0.9f)};
+		return result;
+	}
+	
+	/**
 	 * Initializes the handle.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setPreferredSize(new Dimension(JSS_HANDLE_SIZE, JSS_HANDLE_SIZE));
+		//Initialize the color only once
+		if (JSS_OVERLAP_COLOR == null){
+			 float baseColor = new Float(Math.tan(Math.toRadians(120.0)));
+			 JSS_OVERLAP_COLOR = CreateColor(baseColor);
+			 baseColor = new Float(Math.tan(Math.toRadians(0.0)));
+			 JSS_COVER_COLOR = CreateColor(baseColor);
+			 baseColor = new Float(Math.tan(Math.toRadians(30.0)));
+			 JSS_FOCUSED_COLOR = CreateColor(baseColor);
+			 baseColor = new Float(Math.tan(Math.toRadians(0.0)));
+			 Color[] result = {Color.getHSBColor(baseColor, 0.2f, 0.3f),Color.getHSBColor(baseColor, 0.05f, 0.3f),Color.getHSBColor(baseColor, 0.05f, 0.6f)};
+			 JSS_NOT_FOCUSED_COLOR = result;
+		}
 	}
 	
+	/**
+	 * Paint the element with the selected color
+	 */
+	@Override
 	public void paintFigure(Graphics g) {
 		Rectangle r = getBounds();
 		r.shrink(1, 1);
 		try {
-			g.setBackgroundColor(getFillColor());
-			g.fillRectangle(r.x, r.y, r.width, r.height);
-			g.setForegroundColor(ColorConstants.black);
-			g.drawRectangle(r.x-1, r.y-1, r.width+1, r.height+1);
-			//Graphics2D gr = ((J2DGraphics)g).getGraphics2D();
-			//gr.setColor(ColorConstants.black);
-			//g.drawRectangle(r.x-1, r.y-1, r.width+1, r.height+1);
+			Graphics2D gr = ((J2DGraphics)g).getGraphics2D();
+			Color[] newColor = getFillColorAwt();
+			gr.setColor(newColor[0]);
+			gr.setStroke(new BasicStroke(1.0f));
+			gr.drawRect(r.x-1, r.y-1, r.width+1, r.height+1);
+			GradientPaint gp = new GradientPaint(r.x + r.width, r.y + r.height,newColor[1], r.x, r.y, newColor[2]);
+			gr.setPaint(gp);
+			gr.fillRect(r.x, r.y, r.width, r.height);
 		} finally {
-			// We don't really own rect 'r', so fix it.
 			r.expand(1, 1);
 		}
 	}
@@ -101,7 +131,7 @@ public class ColoredSquareHandles extends ResizeHandle {
 	 * 
 	 * @return the color of the handle
 	 */
-	protected Color getFillColor() {
+	protected Color[] getFillColorAwt() {
 		MGraphicElement element = (MGraphicElement)getOwner().getModel();
 		Rectangle bound1 = element.getBounds();
 		List<INode> brothers = element.getParent().getChildren();
@@ -110,7 +140,7 @@ public class ColoredSquareHandles extends ResizeHandle {
 		boolean cover = false;
 		while(it.hasNext() && !cover){
 			INode actualElement = it.next();
-			if (actualElement != element && actualElement instanceof MGraphicElement){
+			if (!actualElement.equals(element) && actualElement instanceof MGraphicElement){
 				MGraphicElement element2 = (MGraphicElement)actualElement;
 				Rectangle bound2 = element2.getBounds();
 				if (bound1.intersects(bound2)){
@@ -144,38 +174,39 @@ public class ColoredSquareHandles extends ResizeHandle {
 	
 	/**
 	 * Set the color of the selection resizing images when 2 or more elements are overlapped
-	 * @param newColor the new color
+	 * @param baseColor value in degree that represent the base color H in HSB system
 	 */
-	public void setOverlapColor(Color newColor){
-		JSS_OVERLAP_COLOR.dispose();
-		JSS_OVERLAP_COLOR = newColor;
+	public void setOverlapColor(float newColor){
+		float baseColor = new Float(Math.tan(Math.toRadians(newColor)));
+		JSS_OVERLAP_COLOR = CreateColor(baseColor);
 	}
 	
 	/**
 	 * Set the color of the selection resizing images when one element cover one or more elements
-	 * @param newColor the new color
+	 * @param baseColor value in degree that represent the base color H in HSB system
 	 */
-	public void setCoverColor(Color newColor){
-		JSS_COVER_COLOR.dispose();
-		JSS_COVER_COLOR = newColor;
+	public void setCoverColor(float newColor){
+		float baseColor = new Float(Math.tan(Math.toRadians(newColor)));
+		JSS_COVER_COLOR = CreateColor(baseColor);
 	}
 	
 	/**
 	 * Set the color of the selection resizing images of a focused element
-	 * @param newColor the new color
+	 * @param baseColor value in degree that represent the base color H in HSB system
 	 */
-	public void setFocusedColor(Color newColor){
-		JSS_FOCUSED_COLOR.dispose();
-		JSS_FOCUSED_COLOR = newColor;
+	public void setFocusedColor(float newColor){
+		float baseColor = new Float(Math.tan(Math.toRadians(newColor)));
+		JSS_FOCUSED_COLOR = CreateColor(baseColor);
 	}
 	
 	/**
 	 * Set the color of the selection resizing images of a not focused element
-	 * @param newColor the new color
+	 * @param baseColor value in degree that represent the base color H in HSB system
 	 */
-	public void setNotFocusedColor(Color newColor){
-		JSS_NOT_FOCUSED_COLOR.dispose();
-		JSS_NOT_FOCUSED_COLOR = newColor;
+	public void setNotFocusedColor(float newColor){
+		float baseColor = new Float(Math.tan(Math.toRadians(newColor)));
+		 Color[] result = {Color.getHSBColor(baseColor, 0.2f, 0.3f),Color.getHSBColor(baseColor, 0.05f, 0.3f),Color.getHSBColor(baseColor, 0.05f, 0.6f)};
+		 JSS_NOT_FOCUSED_COLOR = result;
 	}
 	
 	/**

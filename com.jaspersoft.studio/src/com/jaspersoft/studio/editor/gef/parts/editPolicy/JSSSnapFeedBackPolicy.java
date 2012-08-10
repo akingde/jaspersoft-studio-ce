@@ -41,7 +41,7 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 		static int count;
 
 		FadeIn(Color bg) {
-			setBackgroundColor(bg);
+			setBackgroundColor(ColorConstants.red);
 			super.setOpaque(true);
 		}
 
@@ -62,6 +62,7 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 				}
 				if (opacity != FRAMES - 1) {
 					Display display = Display.getCurrent();
+
 					PaletteData pData = new PaletteData(0xFF, 0xFF00, 0xFF0000);
 					Color localBackgroundColor = createMixedColor();
 					int fillColor = pData.getPixel(localBackgroundColor.getRGB());
