@@ -93,6 +93,8 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 							IResourceChangeListener rcl = new IResourceChangeListener() {
 								public void resourceChanged(IResourceChangeEvent event) {
 									IResourceDelta delta = event.getDelta();
+									if (delta == null)
+										return;
 									try {
 										delta.accept(new IResourceDeltaVisitor() {
 
