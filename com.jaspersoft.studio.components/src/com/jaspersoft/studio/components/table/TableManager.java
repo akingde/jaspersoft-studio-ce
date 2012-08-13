@@ -52,10 +52,10 @@ import com.jaspersoft.studio.utils.ModelUtils;
 public class TableManager {
 	private StandardTable table;
 	private TableUtil tableUtil;
-	private MatrixHelper mh = new MatrixHelper();
+	private TableMatrix mh = new TableMatrix();
 	private JasperDesign jDesign;
 
-	public MatrixHelper getMatrixHelper() {
+	public TableMatrix getMatrixHelper() {
 		return mh;
 	}
 
@@ -79,7 +79,7 @@ public class TableManager {
 	}
 
 	public void initMaps() {
-		mh = new MatrixHelper();
+		mh = new TableMatrix();
 		mh.fillMatrix(table, tableUtil);
 //		 mh.print();
 	}

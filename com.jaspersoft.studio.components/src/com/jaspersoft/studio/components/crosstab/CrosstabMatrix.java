@@ -95,6 +95,20 @@ public class CrosstabMatrix {
 	}
 
 	public void mirrorV() {
+		int size = vGuides.size() / 2;
+		int maxy = vGuides.get(vGuides.size() - 1).getY();
+		for (int i = 0; i <= size; i++) {
+			Guide g = vGuides.get(i);
+			int endpos = vGuides.size() - 1 - i;
+			vGuides.set(i, vGuides.get(endpos));
+			vGuides.set(endpos, g);
+		}
+		for (int i = 0; i <= size; i++) {
+			vGuides.get(i).mirror();
+		}
+		for (Guide g : vGuides) {
+			g.setY(maxy - g.getY());
+		}
 
 	}
 
@@ -175,29 +189,31 @@ public class CrosstabMatrix {
 
 	public void fillDetailsV(Guide gwest, JRDesignCrosstab crosstab) {
 		JRCrosstabCell[][] cells = crosstab.getCells();
-		for (int i = cells.length - 1; i >= 0; i--) {
-			JRCrosstabCell[] rowcells = cells[i];
-			Guide west = gwest;
-			Guide east = vGuides.get(vGuides.size() - 1);
+		if (cells != null)
+			for (int i = cells.length - 1; i >= 0; i--) {
+				JRCrosstabCell[] rowcells = cells[i];
+				Guide west = gwest;
+				Guide east = vGuides.get(vGuides.size() - 1);
 
-			List<JRCrosstabColumnGroup> cols = crosstab.getColumnGroupsList();
-			for (int k = 0; k < cols.size(); k++) {
-				JRCrosstabColumnGroup cg = cols.get(k);
-				boolean last = k == cols.size() - 1;
-				if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.END) {
-					Guide twest = vGuides.get(vGuides.indexOf(east) - 1);
-					addDetailCellV(rowcells, twest, east, cg.getName());
-					east = twest;
-				} else if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.START) {
-					Guide teast = vGuides.get(vGuides.indexOf(west) + 1);
-					addDetailCellV(rowcells, west, teast, cg.getName());
-					west = teast;
-				} else if (!last)
-					continue;
-				if (last)
-					addDetailCellV(rowcells, west, east, null);
+				List<JRCrosstabColumnGroup> cols = crosstab
+						.getColumnGroupsList();
+				for (int k = 0; k < cols.size(); k++) {
+					JRCrosstabColumnGroup cg = cols.get(k);
+					boolean last = k == cols.size() - 1;
+					if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.END) {
+						Guide twest = vGuides.get(vGuides.indexOf(east) - 1);
+						addDetailCellV(rowcells, twest, east, cg.getName());
+						east = twest;
+					} else if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.START) {
+						Guide teast = vGuides.get(vGuides.indexOf(west) + 1);
+						addDetailCellV(rowcells, west, teast, cg.getName());
+						west = teast;
+					} else if (!last)
+						continue;
+					if (last)
+						addDetailCellV(rowcells, west, east, null);
+				}
 			}
-		}
 	}
 
 	private void addDetailCellV(JRCrosstabCell[] rowcells, Guide west,
@@ -219,28 +235,29 @@ public class CrosstabMatrix {
 
 	public void fillDetailsH(Guide gnorth, JRDesignCrosstab crosstab) {
 		JRCrosstabCell[][] cells = crosstab.getCells();
-		for (int i = cells[0].length - 1; i >= 0; i--) {
-			Guide north = gnorth;
-			Guide south = hGuides.get(hGuides.size() - 1);
+		if (cells != null)
+			for (int i = cells[0].length - 1; i >= 0; i--) {
+				Guide north = gnorth;
+				Guide south = hGuides.get(hGuides.size() - 1);
 
-			List<JRCrosstabRowGroup> rows = crosstab.getRowGroupsList();
-			for (int k = 0; k < rows.size(); k++) {
-				JRCrosstabRowGroup cg = rows.get(k);
-				boolean last = k == rows.size() - 1;
-				if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.END) {
-					Guide tnorth = hGuides.get(hGuides.indexOf(south) - 1);
-					addDetailCellH(cells, i, tnorth, south, cg.getName());
-					south = tnorth;
-				} else if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.START) {
-					Guide tsouth = hGuides.get(hGuides.indexOf(north) + 1);
-					addDetailCellH(cells, i, north, tsouth, cg.getName());
-					north = tsouth;
-				} else if (!last)
-					continue;
-				if (last)
-					addDetailCellH(cells, i, north, south, null);
+				List<JRCrosstabRowGroup> rows = crosstab.getRowGroupsList();
+				for (int k = 0; k < rows.size(); k++) {
+					JRCrosstabRowGroup cg = rows.get(k);
+					boolean last = k == rows.size() - 1;
+					if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.END) {
+						Guide tnorth = hGuides.get(hGuides.indexOf(south) - 1);
+						addDetailCellH(cells, i, tnorth, south, cg.getName());
+						south = tnorth;
+					} else if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.START) {
+						Guide tsouth = hGuides.get(hGuides.indexOf(north) + 1);
+						addDetailCellH(cells, i, north, tsouth, cg.getName());
+						north = tsouth;
+					} else if (!last)
+						continue;
+					if (last)
+						addDetailCellH(cells, i, north, south, null);
+				}
 			}
-		}
 	}
 
 	private void addDetailCellH(JRCrosstabCell[][] cells, int i, Guide north,

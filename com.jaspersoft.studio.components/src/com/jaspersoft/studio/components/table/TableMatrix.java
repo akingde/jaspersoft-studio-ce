@@ -38,7 +38,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.utils.Misc;
 
-public class MatrixHelper {
+public class TableMatrix {
 	private List<Guide> hGuides = new ArrayList<Guide>();
 	private List<Guide> vGuides = new ArrayList<Guide>();
 
@@ -186,8 +186,7 @@ public class MatrixHelper {
 		g.setNext(lg.getPrev());
 
 		for (int i = offset + 1; i < size; i++) {
-			g = hGuides.get(i);
-			g.mirror();
+			hGuides.get(i).mirror();
 		}
 
 		hGuides.remove(lg);

@@ -31,7 +31,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.ColumnCell;
-import com.jaspersoft.studio.components.table.MatrixHelper;
+import com.jaspersoft.studio.components.table.TableMatrix;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 
@@ -55,7 +55,7 @@ public class FixCellHeightsCommand extends Command {
 		if (wmap == null)
 			wmap = new HashMap<StandardColumnGroup, Integer>();
 		wmap.clear();
-		MatrixHelper mh = tbManager.getMatrixHelper();
+		TableMatrix mh = tbManager.getMatrixHelper();
 		Map<ColumnCell, Rectangle> map = mh.getCells();
 		for (ColumnCell cc : map.keySet()) {
 			Rectangle b = cc.getBounds();

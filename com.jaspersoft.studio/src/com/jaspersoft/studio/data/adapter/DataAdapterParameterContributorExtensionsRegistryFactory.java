@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.data.adapter;
 
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.ParameterContributorFactory;
 import net.sf.jasperreports.extensions.ExtensionsRegistry;
@@ -32,8 +31,7 @@ import net.sf.jasperreports.extensions.SingletonExtensionRegistry;
  */
 public class DataAdapterParameterContributorExtensionsRegistryFactory implements ExtensionsRegistryFactory {
 	private static final ExtensionsRegistry extensionsRegistry = new SingletonExtensionRegistry<ParameterContributorFactory>(
-			ParameterContributorFactory.class, DataAdapterParameterContributorFactory.getInstance(DefaultJasperReportsContext
-					.getInstance()));
+			ParameterContributorFactory.class, DataAdapterParameterContributorFactory.getInstance());
 
 	public ExtensionsRegistry createRegistry(String registryId, JRPropertiesMap properties) {
 		return extensionsRegistry;
