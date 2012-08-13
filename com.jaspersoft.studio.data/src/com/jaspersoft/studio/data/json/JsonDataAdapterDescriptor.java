@@ -40,9 +40,6 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.querydesigner.json.JsonDataManager;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider {
@@ -85,24 +82,12 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements 
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JasperReportsConfiguration jConfig, JRDataset jDataset)
 			throws JRException, UnsupportedOperationException {
-		List<JRDesignField> fields=new ArrayList<JRDesignField>();
 		Throwable err=null;
+		List<JRDesignField> fields=new ArrayList<JRDesignField>();
 		try {
 			JsonDataManager m=new JsonDataManager();
 			m.loadJsonDataFile(jsonDataAdapter.getFileName());
-			List<JsonSupportNode> selectableNodes = m.getSelectableNodes(jDataset.getQuery().getText());
-			if(!selectableNodes.isEmpty()){
-				// Basic idea: consider the first element node as template
-				JsonSupportNode jsonSupportNode = selectableNodes.get(0);
-				for(INode node : jsonSupportNode.getChildren()){
-					String name = ((JsonSupportNode)node).getNodeText();
-					JRDesignField f=new JRDesignField();
-					f.setName(ModelUtils.getNameForField(fields, name));
-					f.setDescription(name);
-					f.setValueClass(String.class);
-					fields.add(f);
-				}
-			}
+			fields.addAll(m.extractFields(jDataset.getQuery().getText()));
 		} catch (JsonProcessingException e) {
 			err=e;
 		} catch (IOException e) {
@@ -111,7 +96,6 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements 
 		if(err!=null){
 			throw new JRException(err);
 		}
-		
 		return fields;
 	}
 }

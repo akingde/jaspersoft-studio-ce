@@ -29,15 +29,19 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
 
 import com.jaspersoft.studio.data.designer.tree.ISelectableNodes;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * This class works with the specified Json data information.
@@ -124,6 +128,10 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 */
 	private List<JsonSupportNode> getChildrenJsonNodes(JsonNode jsonNode) {
 		List<JsonSupportNode> children=new ArrayList<JsonSupportNode>();
+		if(jsonNode.isArray() && jsonNode.equals(jsonRoot)){
+			// Assumption: consider the first element as a template
+			jsonNode=jsonNode.get(0);
+		}
 		Iterator<String> fieldNames = jsonNode.getFieldNames();
 		while(fieldNames.hasNext()){
 			String name = fieldNames.next();
@@ -171,20 +179,22 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 		JsonQueryHelper jsonQueryHelper = new JsonQueryHelper(mapper);
 		try {
 			JsonNode jsonData = jsonQueryHelper.getJsonData(jsonRoot, query);
-			List<JsonNode> elementsList=new ArrayList<JsonNode>();
-			if(jsonData.isArray()){
-				Iterator<JsonNode> elements = jsonData.getElements();
-				while(elements.hasNext()){
-					elementsList.add(elements.next());
-				}	
-			}
-			else if(jsonData.isObject()){
-				elementsList.add(jsonData);				
-			}
-			
-			for(JsonSupportNode sn : getJsonNodesMap().keySet()){
-				if(elementsList.contains(getJsonNodesMap().get(sn))){
-					selectedList.add(sn);
+			if(jsonData!=null){
+				List<JsonNode> elementsList=new ArrayList<JsonNode>();
+				if(jsonData.isArray()){
+					Iterator<JsonNode> elements = jsonData.getElements();
+					while(elements.hasNext()){
+						elementsList.add(elements.next());
+					}	
+				}
+				else if(jsonData.isObject()){
+					elementsList.add(jsonData);
+				}
+				
+				for(JsonSupportNode sn : getJsonNodesMap().keySet()){
+					if(elementsList.contains(getJsonNodesMap().get(sn))){
+						selectedList.add(sn);
+					}
 				}
 			}
 		} catch (JRException e) {
@@ -192,6 +202,63 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 		}
 		
 		return selectedList;
+	}
+	
+	/**
+	 * Given a JSON selection query, extracts from the result set 
+	 * the list of possible fields that can be used in a report.
+	 * 
+	 * @param query the JSON query text
+	 * @return a list of fields
+	 */
+	public List<JRDesignField> extractFields(String query){
+		JsonQueryHelper jsonQueryHelper=new JsonQueryHelper(mapper);
+		try{
+			JsonNode jsonData = jsonQueryHelper.getJsonData(jsonRoot, query);
+			if(jsonData!=null){
+				if(jsonData.isArray()){
+					return getFieldsFromArrayNode((ArrayNode)jsonData);
+				}
+				else if(jsonData.isObject()){
+					return getFieldsFromObjectNode((ObjectNode)jsonData);
+				}
+			}
+		}catch (JRException e){
+			// Do not care about error in node selection
+		}
+		return new ArrayList<JRDesignField>();
+	}
+	
+	/*
+	 * Gets the fields from a JSON node of type object.
+	 */
+	private List<JRDesignField> getFieldsFromObjectNode(ObjectNode node){
+		List<JRDesignField> fields = new ArrayList<JRDesignField>();
+		Iterator<String> fieldNames = node.getFieldNames();
+		while(fieldNames.hasNext()){
+			String name = fieldNames.next();
+			JRDesignField f=new JRDesignField();
+			f.setName(ModelUtils.getNameForField(fields, name));
+			f.setDescription(name);
+			f.setValueClass(String.class);
+			fields.add(f);		
+		}
+		return fields;
+	}
+	
+	/*
+	 * Gets the fields from a JSON node of type array.
+	 */
+	private List<JRDesignField> getFieldsFromArrayNode(ArrayNode node){
+		// Assumption: consider the first element as template 
+		JsonNode firstEl = node.get(0);
+		if(firstEl instanceof ObjectNode){
+			return getFieldsFromObjectNode((ObjectNode)firstEl);
+		}
+		else if (firstEl instanceof ArrayNode){
+			return getFieldsFromArrayNode((ArrayNode)firstEl);
+		}
+		return new ArrayList<JRDesignField>();
 	}
 
 	public Map<JsonSupportNode, JsonNode> getJsonNodesMap() {
@@ -203,7 +270,8 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	
 	public String getQueryExpression(String existingQuery, JsonSupportNode selectedNode){
 		String absoluteQuery=getAbsoluteQueryExpression(selectedNode);
-		if(existingQuery!=null && absoluteQuery.startsWith(existingQuery)){
+		if(existingQuery!=null && absoluteQuery.startsWith(existingQuery)
+				&& absoluteQuery.length()>existingQuery.length()){
 			// consider also an additional . selector
 			int qLength = existingQuery.length();
 			return absoluteQuery.substring(qLength+Math.min(qLength, 1));
