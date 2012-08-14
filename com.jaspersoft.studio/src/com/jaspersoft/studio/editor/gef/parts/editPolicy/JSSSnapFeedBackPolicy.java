@@ -12,6 +12,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.editpolicies.GraphicalEditPolicy;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -41,7 +42,7 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 		static int count;
 
 		FadeIn(Color bg) {
-			setBackgroundColor(ColorConstants.red);
+			setForegroundColor(bg);
 			super.setOpaque(true);
 		}
 
@@ -54,7 +55,7 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 		 * @see org.eclipse.draw2d.Figure#paintFigure(org.eclipse.draw2d.Graphics)
 		 */
 		protected void paintFigure(Graphics graphics) {
-			if (opacity != FRAMES) {
+			/*if (opacity != FRAMES) {
 				if (image != null) {
 					image.dispose();
 					count--;
@@ -63,13 +64,24 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 				if (opacity != FRAMES - 1) {
 					Display display = Display.getCurrent();
 
-					PaletteData pData = new PaletteData(0xFF, 0xFF00, 0xFF0000);
+					PaletteData pData = new PaletteData(0xFF00, 0xFF00, 0xFF);
+					System.out.println(pData.isDirect);
 					Color localBackgroundColor = createMixedColor();
-					int fillColor = pData.getPixel(localBackgroundColor.getRGB());
+					int fillColor = pData.getPixel(ColorConstants.orange.getRGB());
+					int whiteColor = pData.getPixel(ColorConstants.white.getRGB());
 					localBackgroundColor.dispose();
-					ImageData iData = new ImageData(1, 1, 24, pData);
-					iData.setPixel(0, 0, fillColor);
-					iData.setAlpha(0, 0, 255 * opacity / FRAMES);
+					ImageData iData = new ImageData(6, 1, 24, pData);
+					iData.setPixel(0, 0, whiteColor);
+					iData.setPixel(1, 0, whiteColor);
+					iData.setPixel(2, 0, whiteColor);
+					iData.setPixel(3, 0, whiteColor);
+					iData.setPixel(4, 0, whiteColor);
+					iData.setPixel(5, 0, whiteColor);
+					iData.setAlpha(0, 0, 255);
+					iData.setAlpha(1, 0, 255);
+					iData.setAlpha(2, 0, 255);
+					iData.setAlpha(3, 0, 255);
+					iData.setAlpha(4, 0, 255);
 					image = new Image(display, iData);
 					count++;
 				}
@@ -82,9 +94,14 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 			}
 			Rectangle r = getBounds();
 			if (image != null)
-				graphics.drawImage(image, 0, 0, 1, 1, r.x, r.y, r.width, r.height);
-			else
-				super.paintFigure(graphics);
+				System.out.println("ciao");
+				//graphics.drawImage(image, 0, 0, 5, 1, r.x, r.y, r.width, r.height);
+			else {
+				//super.paintFigure(graphics);*/
+				graphics.setForegroundColor(getForegroundColor());
+				graphics.setLineStyle(SWT.LINE_DOT);
+				graphics.drawRectangle(getBounds());
+			//}
 		}
 
 		/**
@@ -101,6 +118,7 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 
 	// Even offset indicates a vertical feedback line; odd, horizontal.
 	void highlightGuide(Integer pos, Color color, int offset) {
+		System.out.println(pos+ " " + offset);
 		if (pos == null) {
 			if (guide[offset] != null) {
 				removeFeedback(guide[offset]);
@@ -165,6 +183,7 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 				|| req.getType().equals(REQ_ADD) || req.getType().equals(REQ_CREATE)) {
 
 			Integer value;
+			System.out.println(req.getClass().toString());
 			value = (Integer) req.getExtendedData().get(SnapToGeometry.KEY_WEST_ANCHOR);
 			highlightGuide(value, ColorConstants.blue, 0);
 
@@ -178,10 +197,10 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 			highlightGuide(value, ColorConstants.blue, 3);
 
 			value = (Integer) req.getExtendedData().get(SnapToGuides.KEY_VERTICAL_GUIDE);
-			highlightGuide(value, ColorConstants.red, 4);
+			highlightGuide(value, ColorConstants.blue, 4);
 
 			value = (Integer) req.getExtendedData().get(SnapToGuides.KEY_HORIZONTAL_GUIDE);
-			highlightGuide(value, ColorConstants.red, 5);
+			highlightGuide(value, ColorConstants.blue, 5);
 		}
 	}
 

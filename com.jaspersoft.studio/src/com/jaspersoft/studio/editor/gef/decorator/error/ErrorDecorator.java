@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.swt.graphics.RGB;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
@@ -66,11 +67,21 @@ public class ErrorDecorator implements IDecorator {
       			Graphics2D g = ((J2DGraphics)graphics).getGraphics2D();
       			Stroke oldStroke = g.getStroke();
       			Color oldColor = g.getColor();
-      			//g.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, graphics.getAbsoluteScale()));
             g.setColor(JSS_WARNING_BORDER_COLOR);
             g.setStroke(new BasicStroke(JSS_WARNING_BORDER_SIZE));
-            g.drawRect(r.x, r.y, r.width - 2, r.height - 2);
-            //RoundedPolygon.paintWarningIcon(r.x+r.width - 8, r.y, 6, 12,JSS_WARNING_BORDER_SIZE,g);
+            
+            Rectangle tempRect = new Rectangle();
+            tempRect.setBounds(fig.getBounds());
+      			if (JSS_WARNING_BORDER_SIZE % 2 == 1) {
+      				tempRect.width--;
+      				tempRect.height--;
+      			}
+      			tempRect.width = tempRect.width - (int)Math.ceil(JSS_WARNING_BORDER_SIZE);
+      			tempRect.height = tempRect.height - (int)Math.ceil(JSS_WARNING_BORDER_SIZE);
+      			tempRect.shrink(JSS_WARNING_BORDER_SIZE, JSS_WARNING_BORDER_SIZE);
+      			g.setStroke(new BasicStroke(JSS_WARNING_BORDER_SIZE));
+      			g.drawRect(tempRect.x,tempRect.y, tempRect.width, tempRect.height);
+
             RoundedPolygon.paintComplexWarning(r.x+r.width-5, r.y-2, 6, 12,JSS_WARNING_BORDER_SIZE,g);
             fig.setToolTip(new org.eclipse.draw2d.Label(Messages.ErrorDecorator_PositionErrorToolTip,  ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/warning2.png"))); //$NON-NLS-2$
             g.setStroke(oldStroke);

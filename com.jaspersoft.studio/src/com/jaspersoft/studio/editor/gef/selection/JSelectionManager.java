@@ -50,22 +50,24 @@ public class JSelectionManager extends SelectionManager {
 		if (!orderedSelection.isEmpty()) {
 			Iterator<?> itr = orderedSelection.iterator();
 			EditPart part = (EditPart) itr.next();
-			focusedEditPart = part.getViewer().getFocusEditPart();
-			super.setSelection(newSelection);
-			itr = orderedSelection.iterator();
-			boolean foundPrimary = false;
-			while (itr.hasNext()) {
-				part = (EditPart) itr.next();
-				if (part == focusedEditPart){
-					part.setSelected(EditPart.SELECTED_PRIMARY);
-					foundPrimary = true;
-				} else {
-					part.setSelected(EditPart.SELECTED);
+			if (part.getViewer() != null){
+				focusedEditPart = part.getViewer().getFocusEditPart();
+				super.setSelection(newSelection);
+				itr = orderedSelection.iterator();
+				boolean foundPrimary = false;
+				while (itr.hasNext()) {
+					part = (EditPart) itr.next();
+					if (part == focusedEditPart){
+						part.setSelected(EditPart.SELECTED_PRIMARY);
+						foundPrimary = true;
+					} else {
+						part.setSelected(EditPart.SELECTED);
+					}
 				}
-			}
-			//If the primary element is not in the selection, the last on will be selected (standard behavior)
-			if (!foundPrimary){
-				part.setSelected(EditPart.SELECTED_PRIMARY);
+				//If the primary element is not in the selection, the last on will be selected (standard behavior)
+				if (!foundPrimary){
+					part.setSelected(EditPart.SELECTED_PRIMARY);
+				}
 			}
 		}
 	}

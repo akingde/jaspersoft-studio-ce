@@ -44,6 +44,8 @@ public class ReportPageFigure extends APageFigure {
 	/** The bands height. */
 	private int bandsHeight = 0;
 	protected JasperDesign jrDesign = null;
+	/** The bands vertical lines color */
+	protected static Color bandColor = null;
 
 	/**
 	 * Instantiates a new page figure.
@@ -56,6 +58,9 @@ public class ReportPageFigure extends APageFigure {
 	public ReportPageFigure(JasperDesign jd, boolean viewMargins) {
 		super(viewMargins);
 		this.jrDesign = jd;
+		if (bandColor == null){
+			bandColor = new Color(170,168,255);
+		}
 	}
 
 	/**
@@ -102,7 +107,7 @@ public class ReportPageFigure extends APageFigure {
 
 			paintGrid(g, rectangle);
 
-			graphics2d.setColor(Color.RED);
+			graphics2d.setColor(bandColor);
 
 			graphics2d.setStroke(new BasicStroke(0.5f));
 			graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(graphics2d.getStroke(), g.getAbsoluteScale()));

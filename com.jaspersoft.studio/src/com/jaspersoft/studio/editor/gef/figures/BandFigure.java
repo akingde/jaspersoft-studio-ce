@@ -45,7 +45,7 @@ import com.jaspersoft.studio.utils.Misc;
  * The Class BandFigure.
  */
 public class BandFigure extends RectangleFigure {
-	private static Color marginsColor = new Color(null, 0, 0, 255);
+	private static Color marginsColor = new Color(null, 170, 168, 255);
 	private int columnNumber = 1;
 	private int columnSpacing = 0;
 	private int columnWidth = 0;
