@@ -21,6 +21,7 @@ package com.jaspersoft.studio.editor.gef.parts.band;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -33,18 +34,26 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.CompoundSnapToHelper;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.SnapToGeometry;
+import org.eclipse.gef.SnapToGrid;
+import org.eclipse.gef.SnapToGuides;
+import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -53,7 +62,9 @@ import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandMoveEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.JSSSnapFeedBackPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.SameBandEditPartsTracker;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -143,6 +154,16 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		}
 		return null;
 	}
+	
+	
+	/**
+	 * A different drag tracker will be used to allow to do a drag selection without selecting
+	 * the marquee tool
+	 */
+	@Override
+	public DragTracker getDragTracker(Request request) {
+		return new SameBandEditPartsTracker();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -162,6 +183,51 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		setBandNameShowing(rect);
 		return rect;
 	}
+	
+	private class SnapToGeometryThreshold extends SnapToGeometry{
+		
+		public SnapToGeometryThreshold(GraphicalEditPart container) {
+			super(container);
+		}
+		
+		public void setThreshold(double value){
+			super.setThreshold(value);
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Object getAdapter(Class key) {
+		if (key == SnapToHelper.class) {
+			List<SnapToHelper> snapStrategies = new ArrayList<SnapToHelper>();
+			Boolean val = (Boolean) getViewer().getProperty(RulerProvider.PROPERTY_RULER_VISIBILITY);
+			Boolean stg = (Boolean) getViewer().getProperty(SnapToGuidesAction.ID);
+			if (val != null && val.booleanValue() && stg != null && stg.booleanValue())
+				snapStrategies.add(new SnapToGuides(this));
+			val = (Boolean) getViewer().getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED);
+			if (val != null && val.booleanValue()) {
+				
+				SnapToGeometryThreshold snapper = new SnapToGeometryThreshold(this);
+				snapper.setThreshold(6.0);
+				snapStrategies.add(snapper);
+			}
+			val = (Boolean) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ENABLED);
+			if (val != null && val.booleanValue()) {
+				snapStrategies.add(new SnapToGrid(this));
+			}
+
+			if (snapStrategies.size() == 0)
+				return null;
+			if (snapStrategies.size() == 1)
+				return snapStrategies.get(0);
+
+			SnapToHelper ss[] = new SnapToHelper[snapStrategies.size()];
+			for (int i = 0; i < snapStrategies.size(); i++)
+				ss[i] = snapStrategies.get(i);
+			return new CompoundSnapToHelper(ss);
+		}
+		return super.getAdapter(key);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -170,6 +236,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	 */
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
+		installEditPolicy("Snap Feedback", new JSSSnapFeedBackPolicy());
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new BandMoveEditPolicy() {
 			@Override
 			protected void showSelection() {

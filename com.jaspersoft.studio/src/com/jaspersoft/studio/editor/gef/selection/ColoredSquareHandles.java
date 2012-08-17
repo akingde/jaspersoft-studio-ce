@@ -25,9 +25,11 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.ResizeHandle;
 import org.eclipse.gef.handles.SquareHandle;
+import org.eclipse.gef.tools.DragEditPartsTracker;
 import org.eclipse.swt.graphics.Cursor;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
@@ -65,6 +67,7 @@ public class ColoredSquareHandles extends ResizeHandle {
 	 */
 	protected static Color[] JSS_NOT_FOCUSED_COLOR = null;
 	
+
 	/**
 	 * Creates a new ResizeHandle for the given GraphicalEditPart.
 	 * 
@@ -73,6 +76,24 @@ public class ColoredSquareHandles extends ResizeHandle {
 	public ColoredSquareHandles(GraphicalEditPart owner, Locator loc, Cursor c) {
 		super(owner, loc, c);
 	}
+	
+	
+	/**
+	 * Creates a new ResizeHandle for the given GraphicalEditPart.
+	 * <code>direction</code> is the relative direction from the center of the
+	 * owner figure. For example, <code>SOUTH_EAST</code> would place the handle
+	 * in the lower-right corner of its owner figure. These direction constants
+	 * can be found in {@link org.eclipse.draw2d.PositionConstants}.
+	 * 
+	 * @param owner
+	 *            owner of the ResizeHandle
+	 * @param direction
+	 *            relative direction from the center of the owner figure
+	 */
+	public ColoredSquareHandles(GraphicalEditPart owner, int direction) {
+		super(owner, direction);
+	}
+	
 	
 	/**
 	 * Create a color array for border and gradient
@@ -155,23 +176,7 @@ public class ColoredSquareHandles extends ResizeHandle {
 		if (overlap) return JSS_OVERLAP_COLOR;
 		return (isPrimary()) ? JSS_FOCUSED_COLOR : JSS_NOT_FOCUSED_COLOR;
 	}
-	
-	/**
-	 * Creates a new ResizeHandle for the given GraphicalEditPart.
-	 * <code>direction</code> is the relative direction from the center of the
-	 * owner figure. For example, <code>SOUTH_EAST</code> would place the handle
-	 * in the lower-right corner of its owner figure. These direction constants
-	 * can be found in {@link org.eclipse.draw2d.PositionConstants}.
-	 * 
-	 * @param owner
-	 *            owner of the ResizeHandle
-	 * @param direction
-	 *            relative direction from the center of the owner figure
-	 */
-	public ColoredSquareHandles(GraphicalEditPart owner, int direction) {
-		super(owner, direction);
-	}
-	
+
 	/**
 	 * Set the color of the selection resizing images when 2 or more elements are overlapped
 	 * @param baseColor value in degree that represent the base color H in HSB system

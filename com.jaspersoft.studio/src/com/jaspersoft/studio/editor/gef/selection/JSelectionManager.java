@@ -22,6 +22,9 @@ import org.eclipse.gef.SelectionManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
+
 /**
  * Class that extend the default SelectionManager to change the behavior when a selection of more elements 
  * is done
@@ -29,6 +32,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
  *
  */
 public class JSelectionManager extends SelectionManager {
+	
+	private static EditPart lastSelected = null;
 	
 	
 	/**
@@ -52,22 +57,26 @@ public class JSelectionManager extends SelectionManager {
 			EditPart part = (EditPart) itr.next();
 			if (part.getViewer() != null){
 				focusedEditPart = part.getViewer().getFocusEditPart();
+				//Search a focused element into the selection
+				if (!(focusedEditPart instanceof BandEditPart) && (focusedEditPart instanceof FigureEditPart)){
+					lastSelected = focusedEditPart;
+				} 
+				//If not found the last selected element will be choosed if it is in the selection
+				if (lastSelected != null && !orderedSelection.contains(lastSelected)){
+					lastSelected = null;
+				} 
 				super.setSelection(newSelection);
+				//If even the last selected element wasn't in the selection the first element of the selection will be choosed
+				if (lastSelected == null){
+					lastSelected = (EditPart)orderedSelection.get(0);
+				}
+				
 				itr = orderedSelection.iterator();
-				boolean foundPrimary = false;
 				while (itr.hasNext()) {
-					part = (EditPart) itr.next();
-					if (part == focusedEditPart){
-						part.setSelected(EditPart.SELECTED_PRIMARY);
-						foundPrimary = true;
-					} else {
+						part = (EditPart) itr.next();
 						part.setSelected(EditPart.SELECTED);
-					}
 				}
-				//If the primary element is not in the selection, the last on will be selected (standard behavior)
-				if (!foundPrimary){
-					part.setSelected(EditPart.SELECTED_PRIMARY);
-				}
+				lastSelected.setSelected(EditPart.SELECTED_PRIMARY);
 			}
 		}
 	}

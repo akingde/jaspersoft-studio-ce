@@ -36,6 +36,7 @@ import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
@@ -77,6 +78,17 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 				setPrefsBorder(getFigure());
 		}
 	}
+	
+	private class SnapToGeometryThreshold extends SnapToGeometry{
+		
+		public SnapToGeometryThreshold(GraphicalEditPart container) {
+			super(container);
+		}
+		
+		public void setThreshold(double value){
+			super.setThreshold(value);
+		}
+	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -89,7 +101,10 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 				snapStrategies.add(new SnapToGuides(this));
 			val = (Boolean) getViewer().getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED);
 			if (val != null && val.booleanValue()) {
-				snapStrategies.add(new SnapToGeometry(this));
+				
+				SnapToGeometryThreshold snapper = new SnapToGeometryThreshold(this);
+				snapper.setThreshold(6.0);
+				snapStrategies.add(snapper);
 			}
 			val = (Boolean) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ENABLED);
 			if (val != null && val.booleanValue()) {

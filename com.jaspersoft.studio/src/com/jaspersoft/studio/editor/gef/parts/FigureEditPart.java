@@ -35,6 +35,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.SnapToGrid;
+import org.eclipse.gef.tools.DragEditPartsTracker;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -104,6 +105,11 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		setupFigure(rect);
 		return rect;
 	}
+	
+	@Override
+	public org.eclipse.gef.DragTracker getDragTracker(org.eclipse.gef.Request request) {
+		return new DragEditPartsTracker(this);
+	};
 
 	/*
 	 * (non-Javadoc)

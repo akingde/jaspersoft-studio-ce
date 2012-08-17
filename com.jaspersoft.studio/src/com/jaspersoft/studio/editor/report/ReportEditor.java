@@ -115,6 +115,7 @@ public class ReportEditor extends AbstractVisualEditor {
 	protected JDReportOutlineView getOutlineView() {
 		// if (outlinePage == null) {
 		TreeViewer viewer = new TreeViewer();
+		//viewer.setSelectionManager(new JSelectionManager());
 		outlinePage = new JDReportOutlineView(this, viewer) {
 			protected void initActions(ActionRegistry registry, IActionBars bars) {
 				String id = DeleteGroupReportAction.ID;

@@ -1,3 +1,4 @@
+
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -15,9 +16,6 @@ import org.eclipse.gef.editpolicies.GraphicalEditPolicy;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.PaletteData;
-import org.eclipse.swt.widgets.Display;
 
 public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 	IFigure guide[] = new IFigure[6];
@@ -118,7 +116,7 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 
 	// Even offset indicates a vertical feedback line; odd, horizontal.
 	void highlightGuide(Integer pos, Color color, int offset) {
-		System.out.println(pos+ " " + offset);
+		//System.out.println(pos+ " " + offset);
 		if (pos == null) {
 			if (guide[offset] != null) {
 				removeFeedback(guide[offset]);
@@ -183,7 +181,7 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 				|| req.getType().equals(REQ_ADD) || req.getType().equals(REQ_CREATE)) {
 
 			Integer value;
-			System.out.println(req.getClass().toString());
+			//System.out.println(req.getClass().toString()+ " " + req.getType().toString());
 			value = (Integer) req.getExtendedData().get(SnapToGeometry.KEY_WEST_ANCHOR);
 			highlightGuide(value, ColorConstants.blue, 0);
 

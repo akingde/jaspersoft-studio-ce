@@ -31,7 +31,10 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.SharedCursors;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
+import org.eclipse.gef.handles.NonResizableHandleKit;
+import org.eclipse.gef.handles.ResizableHandleKit;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -45,7 +48,7 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 	public ElementResizableEditPolicy() {
 		super();
 	}
-
+	
 	/**
 	 * Shows or updates feedback for a change bounds request.
 	 * 
@@ -89,6 +92,34 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 		((ElementFeedbackFigure) feedback).setText(s);
 
 		feedback.setBounds(rect.resize(-scaleW, -scaleH));
+	}
+
+	
+	protected void createMoveHandle(List handles) {
+		if (isDragAllowed()) {
+			// display 'move' handle to allow dragging
+			ResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(),
+					handles, getDragTracker(), Cursors.SIZEALL);
+		} else {
+			// display 'move' handle only to indicate selection
+			ResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(),
+					handles, getSelectTracker(), SharedCursors.ARROW);
+		}
+	}
+	
+	protected void createDragHandle(List handles, int direction) {
+		if (isDragAllowed()) {
+			// display 'resize' handles to allow dragging (drag tracker)
+			NonResizableHandleKit
+					.addHandle((GraphicalEditPart) getHost(), handles,
+							direction, getDragTracker(), SharedCursors.SIZEALL);
+		} else {
+			// display 'resize' handles to indicate selection only (selection
+			// tracker)
+			NonResizableHandleKit
+					.addHandle((GraphicalEditPart) getHost(), handles,
+							direction, getSelectTracker(), SharedCursors.ARROW);
+		}
 	}
 	
 	@Override

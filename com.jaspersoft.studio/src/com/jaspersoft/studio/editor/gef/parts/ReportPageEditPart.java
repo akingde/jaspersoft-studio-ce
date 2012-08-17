@@ -28,11 +28,14 @@ import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToGrid;
 
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.SameBandEditPartsTracker;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -51,6 +54,12 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 	protected APageFigure newPageFigure() {
 		return new ReportPageFigure(getJasperDesign(), true);
 	}
+	
+	@Override
+	public DragTracker getDragTracker(Request request) {
+		return new SameBandEditPartsTracker();
+	}
+	
 
 	/**
 	 * Setup page figure.

@@ -30,6 +30,7 @@ import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.SameBandEditPartsTracker;
 import com.jaspersoft.studio.editor.java2d.J2DScalableFreeformLayeredPane;
 
 /*
@@ -64,6 +65,14 @@ public class MainDesignerRootEditPart extends ScalableFreeformRootEditPart {
 		zoomLevels.add(ZoomManager.FIT_HEIGHT);
 		zoomManager.setZoomLevelContributions(zoomLevels);
 	}
+	
+	/**
+	 * Return the edited drag tracker, so the selection can be cancelled clicking out of the working area
+	 */
+	@Override
+	public org.eclipse.gef.DragTracker getDragTracker(org.eclipse.gef.Request req) {
+		return new SameBandEditPartsTracker();
+	};
 
 	/*
 	 * (non-Javadoc)

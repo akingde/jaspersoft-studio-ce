@@ -19,24 +19,19 @@
  */
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.apache.commons.validator.Field;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
@@ -45,11 +40,9 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.AbstractHandle;
 import org.eclipse.gef.handles.MoveHandle;
-import org.eclipse.gef.handles.MoveHandleLocator;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
-import com.jaspersoft.studio.editor.java2d.J2DUtils;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
 
@@ -59,7 +52,12 @@ import com.jaspersoft.studio.model.IGraphicElement;
 public class BandResizableEditPolicy extends ResizableEditPolicy {
 
 	private String feedbackText = "";
-
+	
+	/**
+	 * Color of the border painted to show the selection of a band
+	 */
+	private static Color marginColor = null;
+	
 	protected void showChangeBoundsFeedback(ChangeBoundsRequest request) {
 		if (getHost().getModel() instanceof IGraphicElement) {
 			// if (getHost() instanceof BandEditPart
@@ -90,13 +88,16 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		setDragAllowed(false);
 	}
 	
-	
 	/**
-	 * Class that paint a red lateral border
-	 * @author Marco-Work
+	 * Class that paint a lateral border
+	 * @author Orlandin Marco
 	 *
 	 */
 	private class MarginBorder extends LineBorder {
+		
+		/**
+		 * Paint the border reading it from a static variable and setting it if it's null
+		 */
 		@Override
 		public void paint(IFigure figure, Graphics graphics, Insets insets) {
 			if (figure.getChildren().isEmpty()){
@@ -104,20 +105,19 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 			}
 			Rectangle bounds = figure.getBounds();
 			Graphics2D g = ((J2DGraphics)graphics).getGraphics2D();
-			//Shape oldClip = g.getClip();
-			//g.setClip(null);
-			g.setColor(Color.red);
-			//Stroke oldStroke = new BasicStroke(2.0f);
-			//g.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, graphics.getAbsoluteScale()));
-			//g.drawLine(bounds.x+5, bounds.y+5, bounds.x+5, bounds.height+bounds.y-5);
+			if (marginColor == null){
+				marginColor = new Color(128,0,0);
+			}
+			g.setColor(marginColor);
 			g.fillRect(bounds.x-3, bounds.y+5, 5, bounds.height-10);
-			//g.setClip(oldClip);
 		}
 
 		public MarginBorder(int width) {
 			super(width);
 		}
 	}
+	
+
 	
 
 	/*
@@ -129,9 +129,9 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 	protected List<AbstractHandle> createSelectionHandles() {
 		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
 
-	 MoveHandle hand = new MoveHandle((GraphicalEditPart) getHost());
-		hand.setBorder(new MarginBorder(5));
-		list.add(hand);
+		MoveHandle handle = new MoveHandle((GraphicalEditPart) getHost());
+		handle.setBorder(new MarginBorder(5));
+		list.add(handle);
 
 //		 BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
 //		 buttonPadHandle.setBorder(null);
