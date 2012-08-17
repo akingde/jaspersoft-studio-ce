@@ -719,6 +719,9 @@ Public License instead of this License.  But first, please read
    </license>
 
    <plugins>
+      <plugin id="ch.qos.logback.classic"/>
+      <plugin id="ch.qos.logback.core"/>
+      <plugin id="ch.qos.logback.slf4j" fragment="true"/>
       <plugin id="com.google.guava"/>
       <plugin id="com.google.inject"/>
       <plugin id="com.ibm.icu"/>
@@ -734,24 +737,26 @@ Public License instead of this License.  But first, please read
       <plugin id="com.jaspersoft.studio.properties"/>
       <plugin id="com.jaspersoft.studio.rcp"/>
       <plugin id="com.jaspersoft.studio.server"/>
+      <plugin id="de.itemis.xtext.antlr"/>
       <plugin id="de.itemis.xtext.utils.jface"/>
-      <plugin id="javax.el"/>
+      <plugin id="java_cup.runtime"/>
       <plugin id="javax.inject"/>
       <plugin id="javax.servlet"/>
-      <plugin id="javax.servlet.jsp"/>
       <plugin id="javax.xml"/>
       <plugin id="net.sf.jasperreports"/>
       <plugin id="net.sf.jasperreports.doc"/>
+      <plugin id="org.antlr.generator"/>
       <plugin id="org.antlr.runtime"/>
       <plugin id="org.apache.ant"/>
+      <plugin id="org.apache.bcel"/>
       <plugin id="org.apache.commons.cli"/>
       <plugin id="org.apache.commons.lang"/>
       <plugin id="org.apache.commons.logging"/>
-      <plugin id="org.apache.jasper.glassfish"/>
       <plugin id="org.apache.log4j"/>
       <plugin id="org.apache.lucene"/>
       <plugin id="org.apache.lucene.analysis"/>
       <plugin id="org.apache.lucene.core"/>
+      <plugin id="org.apache.xalan"/>
       <plugin id="org.apache.xerces"/>
       <plugin id="org.apache.xml.resolver"/>
       <plugin id="org.apache.xml.serializer"/>
@@ -801,6 +806,8 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.emf.mwe2.runtime"/>
       <plugin id="org.eclipse.equinox.app"/>
       <plugin id="org.eclipse.equinox.common"/>
+      <plugin id="org.eclipse.equinox.http.jetty"/>
+      <plugin id="org.eclipse.equinox.http.servlet"/>
       <plugin id="org.eclipse.equinox.p2.core"/>
       <plugin id="org.eclipse.equinox.p2.engine"/>
       <plugin id="org.eclipse.equinox.p2.metadata"/>
@@ -827,6 +834,13 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.jdt.launching.macosx"/>
       <plugin id="org.eclipse.jdt.launching.ui.macosx"/>
       <plugin id="org.eclipse.jdt.ui"/>
+      <plugin id="org.eclipse.jetty.continuation"/>
+      <plugin id="org.eclipse.jetty.http"/>
+      <plugin id="org.eclipse.jetty.io"/>
+      <plugin id="org.eclipse.jetty.security"/>
+      <plugin id="org.eclipse.jetty.server"/>
+      <plugin id="org.eclipse.jetty.servlet"/>
+      <plugin id="org.eclipse.jetty.util"/>
       <plugin id="org.eclipse.jface"/>
       <plugin id="org.eclipse.jface.databinding"/>
       <plugin id="org.eclipse.jface.text"/>
@@ -881,6 +895,8 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.xtext.util"/>
       <plugin id="org.eclipse.xtext.xbase"/>
       <plugin id="org.eclipse.xtext.xbase.lib"/>
+      <plugin id="org.mortbay.jetty.util"/>
+      <plugin id="org.slf4j.api"/>
    </plugins>
 
    <features>
