@@ -719,9 +719,6 @@ Public License instead of this License.  But first, please read
    </license>
 
    <plugins>
-      <plugin id="ch.qos.logback.classic"/>
-      <plugin id="ch.qos.logback.core"/>
-      <plugin id="ch.qos.logback.slf4j" fragment="true"/>
       <plugin id="com.google.guava"/>
       <plugin id="com.google.inject"/>
       <plugin id="com.ibm.icu"/>
@@ -737,18 +734,14 @@ Public License instead of this License.  But first, please read
       <plugin id="com.jaspersoft.studio.properties"/>
       <plugin id="com.jaspersoft.studio.rcp"/>
       <plugin id="com.jaspersoft.studio.server"/>
-      <plugin id="de.itemis.xtext.antlr"/>
       <plugin id="de.itemis.xtext.utils.jface"/>
-      <plugin id="java_cup.runtime"/>
       <plugin id="javax.inject"/>
       <plugin id="javax.servlet"/>
       <plugin id="javax.xml"/>
       <plugin id="net.sf.jasperreports"/>
       <plugin id="net.sf.jasperreports.doc"/>
-      <plugin id="org.antlr.generator"/>
       <plugin id="org.antlr.runtime"/>
       <plugin id="org.apache.ant"/>
-      <plugin id="org.apache.bcel"/>
       <plugin id="org.apache.commons.cli"/>
       <plugin id="org.apache.commons.lang"/>
       <plugin id="org.apache.commons.logging"/>
@@ -895,15 +888,7 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.xtext.util"/>
       <plugin id="org.eclipse.xtext.xbase"/>
       <plugin id="org.eclipse.xtext.xbase.lib"/>
-      <plugin id="org.mortbay.jetty.util"/>
-      <plugin id="org.slf4j.api"/>
    </plugins>
-
-   <features>
-      <feature id="net.sf.jasperreports" version="4.6.0"/>
-      <feature id="com.jaspersoft.studio.feature" version="1.1.0"/>
-      <feature id="com.jaspersoft.studio.expressioneditor.feature" version="1.1.0"/>
-   </features>
 
 
 </product>
