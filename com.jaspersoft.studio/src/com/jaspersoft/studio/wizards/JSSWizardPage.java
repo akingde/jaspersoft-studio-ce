@@ -24,7 +24,6 @@
 package com.jaspersoft.studio.wizards;
 
 import org.eclipse.jface.wizard.IWizard;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 
 public abstract class JSSWizardPage extends WizardPage {
@@ -40,27 +39,4 @@ public abstract class JSSWizardPage extends WizardPage {
 			return isPageComplete() && ((JSSWizard) wizard).hasNextPage(this) != null;
 		return super.canFlipToNextPage();
 	}
-	
-	
-	/**
-	 * This methos is invoked when the page get visible, and allows to
-	 * perform dynamic wizard changes;
-	 */
-	public void loadSettings()
-	{
-	}
-	
-	@Override
-	public void setVisible(boolean visible) {
-		// TODO Auto-generated method stub
-		super.setVisible(visible);
-		
-		if (visible == true)
-		{
-			loadSettings();
-		}
-	}
-	
-	
-	
 }
