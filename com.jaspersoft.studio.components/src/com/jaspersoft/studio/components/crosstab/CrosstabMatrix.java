@@ -20,6 +20,8 @@
 package com.jaspersoft.studio.components.crosstab;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,21 +97,13 @@ public class CrosstabMatrix {
 	}
 
 	public void mirrorV() {
-		int size = vGuides.size() / 2;
 		int maxy = vGuides.get(vGuides.size() - 1).getY();
-		for (int i = 0; i <= size; i++) {
-			Guide g = vGuides.get(i);
-			int endpos = vGuides.size() - 1 - i;
-			vGuides.set(i, vGuides.get(endpos));
-			vGuides.set(endpos, g);
-		}
-		for (int i = 0; i <= size; i++) {
-			vGuides.get(i).mirror();
-		}
+		Collections.reverse(vGuides);
 		for (Guide g : vGuides) {
 			g.setY(maxy - g.getY());
+			g.mirrorV();
 		}
-
+		
 	}
 
 	public Guide fillRowGroupV(Guide west, Guide east, JRDesignCrosstab crosstab) {

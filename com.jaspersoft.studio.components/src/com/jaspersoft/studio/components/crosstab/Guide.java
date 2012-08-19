@@ -69,21 +69,20 @@ public class Guide {
 		next.add(cell);
 	}
 
-	public void mirror() {
-		switchCells(next);
-		switchCells(prev);
+	public void mirrorV() {
+		switchCellsV(next);
+		switchCellsV(prev);
 
 		List<CrosstabCell> tmp = next;
 		next = prev;
 		prev = tmp;
 	}
 
-	private void switchCells(List<CrosstabCell> cols) {
+	private void switchCellsV(List<CrosstabCell> cols) {
 		for (CrosstabCell cc : cols) {
-			Guide n = cc.getNorth();
-			Guide s = cc.getSouth();
-			cc.setSouth(n);
-			cc.setNorth(s);
+			Guide t = cc.getEast();
+			cc.setEast(cc.getWest());
+			cc.setWest(t);
 		}
 	}
 

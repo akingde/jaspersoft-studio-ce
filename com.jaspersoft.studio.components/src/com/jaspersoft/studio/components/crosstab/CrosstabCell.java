@@ -86,6 +86,11 @@ public class CrosstabCell {
 
 	public Rectangle getBounds() {
 		if (east != null && west != null) {
+			if (east.getY() < west.getY()) {
+				Guide tmp = west;
+				west = east;
+				east = tmp;
+			}
 			int w = east.getY() - west.getY();
 			if (south.getY() < north.getY()) {
 				Guide tmp = north;
