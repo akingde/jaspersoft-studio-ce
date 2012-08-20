@@ -89,7 +89,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.report.ReportGenerator;
 
 public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INewWizard {
-	private static final String NEW_REPORT_JRXML = "NEW_REPORT.jrxml";
+	private static final String NEW_REPORT_JRXML = Messages.ReportNewWizard_8;
 	private ReportTemplatesWizardPage step0;
 	private NewFileCreationWizard step1;
 	private WizardDataSourcePage step2;
@@ -102,12 +102,15 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	 */
 	public ReportNewWizard() {
 		super();
+		setWindowTitle(Messages.ReportNewWizard_title);
 		setNeedsProgressMonitor(true);
 	}
 
 	public ReportNewWizard(IWizard parentWizard, IWizardPage fallbackPage) {
 		super(parentWizard, fallbackPage);
+		setWindowTitle(Messages.ReportNewWizard_title);
 		setNeedsProgressMonitor(true);
+
 	}
 
 	/**
@@ -147,7 +150,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 							filename);
 				} else if (s.getFirstElement() instanceof IProject) {
 					IProject prj = (IProject) s.getFirstElement();
-					filename = getFileName(prj, "", filename);
+					filename = getFileName(prj, Messages.ReportNewWizard_11, filename);
 				}
 			}
 			step1.setFileName(filename);
@@ -155,12 +158,12 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	}
 
 	private String getFileName(IProject prj, String prjPath, String filename) {
-		String f = prjPath + "/" + filename;
+		String f = prjPath + Messages.ReportNewWizard_12 + filename;
 
 		int i = 1;
 		while (prj.getFile(f).exists()) {
-			filename = "NEW_REPORT_" + i + ".jrxml";
-			f = prjPath + "/" + filename;
+			filename = Messages.ReportNewWizard_13 + i + Messages.ReportNewWizard_14;
+			f = prjPath + Messages.ReportNewWizard_15 + filename;
 			i++;
 		}
 		return filename;
@@ -168,8 +171,8 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 
 	private JasperReportsConfiguration jConfig = new JasperReportsConfiguration(
 			DefaultJasperReportsContext.getInstance(), null);
-	public static final String REPORT_FILE = "REPORTFILEWIZARD";
-	public static final String REPORT_DESIGN = "REPORTDESIGNWIZARD";
+	public static final String REPORT_FILE = Messages.ReportNewWizard_16;
+	public static final String REPORT_DESIGN = Messages.ReportNewWizard_17;
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
@@ -204,7 +207,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 			// step2.setFile(jConfig);
 			run(true, true, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask("Getting fields from datasource", IProgressMonitor.UNKNOWN);
+					monitor.beginTask(Messages.ReportNewWizard_18, IProgressMonitor.UNKNOWN);
 					try {
 						// if we don't have fields, call getFields from the QueryDesigner automatically
 						if (step3.getFields() == null || step3.getFields().isEmpty())
@@ -462,7 +465,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 				try {
 					if (p.isAccessible()) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile("file") }));
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(Messages.ReportNewWizard_19) }));
 						return;
 					}
 				} catch (CoreException e) {

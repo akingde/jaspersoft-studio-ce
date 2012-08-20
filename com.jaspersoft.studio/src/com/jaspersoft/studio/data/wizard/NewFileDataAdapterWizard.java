@@ -95,6 +95,7 @@ public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
 	 */
 	public NewFileDataAdapterWizard(DataAdapterDescriptor dataAdapter) {
 		this();
+		setWindowTitle(Messages.DataAdapterWizard_windowtitle);
 		this.dataAdapter = dataAdapter;
 	}
 

@@ -72,7 +72,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  */
 
 public class StyleTemplateNewWizard extends Wizard implements INewWizard {
-	private static final String NEW_STYLE_JRTX = "NEW_STYLE.jrtx";
+	private static final String NEW_STYLE_JRTX = Messages.StyleTemplateNewWizard_0;
 	private WizardNewFileCreationPage step1;
 	private ISelection selection;
 
@@ -81,6 +81,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	 */
 	public StyleTemplateNewWizard() {
 		super();
+		setWindowTitle(Messages.StyleTemplateNewWizard_wizardtitle);
 		setNeedsProgressMonitor(true);
 	}
 
@@ -105,12 +106,12 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 				if (s.getFirstElement() instanceof IFile) {
 					IFile file = (IFile) s.getFirstElement();
 
-					String f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
+					String f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + Messages.StyleTemplateNewWizard_2 + filename;
 
 					int i = 1;
 					while (file.getProject().getFile(f).exists()) {
-						filename = "NEW_STYLE" + i + ".jrtx";
-						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
+						filename = Messages.StyleTemplateNewWizard_3 + i + Messages.StyleTemplateNewWizard_4;
+						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + Messages.StyleTemplateNewWizard_5 + filename;
 						i++;
 					}
 				}
@@ -254,7 +255,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 				try {
 					if (p.isAccessible()) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile("file") }));
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(Messages.StyleTemplateNewWizard_6) }));
 						return;
 					}
 				} catch (CoreException e) {
