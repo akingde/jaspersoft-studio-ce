@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -45,6 +46,7 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
@@ -64,7 +66,7 @@ import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
  * @author Chicu Veaceslav
  */
 public class MBand extends APropertyNode implements IGraphicElement, IPastable, IPastableGraphic, IContainer,
-		IContainerLayout, IContainerEditPart {
+		IContainerLayout, IContainerEditPart, IGroupElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private static final Integer CONST_HEIGHT = new Integer(50);
 	/** The icon descriptor. */
@@ -363,5 +365,10 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	@Override
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };
+	}
+
+	@Override
+	public JRElementGroup getJRElementGroup() {
+		return getValue();
 	}
 }

@@ -53,6 +53,7 @@ import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGuidebleElement;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.band.MBand;
 
 /*
  * The Class PageLayoutEditPolicy.
@@ -209,9 +210,14 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 					constraint.width = jrDesignGraphicElement.getWidth();
 					constraint.height = jrDesignGraphicElement.getHeight();
 				}
+				if (parent instanceof MBand) {
+					MBand band = (MBand) parent;
+					int x = constraint.x - band.getBounds().x;
+					int y = constraint.y - band.getBounds().y;
+					constraint.setLocation(x, y);
+				}
 			}
-			Command cmd = OutlineTreeEditPartFactory.getCreateCommand(parent, aNode, constraint, -1);
-			return cmd;
+			return OutlineTreeEditPartFactory.getCreateCommand(parent, aNode, constraint, -1);
 		}
 		return null;
 	}
