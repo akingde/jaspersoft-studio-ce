@@ -73,7 +73,6 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 			getHostFigure().translateToRelative(rect2);
 
 			oldBounds.resize(rect2.width, rect2.height);
-
 			setFeedbackText(oldBounds.height + (bWidth != null ? "," + oldBounds.width : "") + " px");
 		}
 		super.showChangeBoundsFeedback(request);
@@ -132,10 +131,10 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		MoveHandle handle = new MoveHandle((GraphicalEditPart) getHost());
 		handle.setBorder(new MarginBorder(5));
 		list.add(handle);
-
-//		 BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
-//		 buttonPadHandle.setBorder(null);
-//		 list.add(buttonPadHandle);
+		
+		//	 BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
+		//	 buttonPadHandle.setBorder(null);
+		//	 list.add(buttonPadHandle);
 		// NonResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(), list);
 		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
 		// // if (hasNorth)

@@ -23,6 +23,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JROrigin;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
+
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
@@ -30,6 +38,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -45,6 +54,8 @@ import org.eclipse.gef.tools.SimpleDragTracker;
 import org.eclipse.gef.tools.ToolUtilities;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+
+import com.jaspersoft.studio.model.APropertyNode;
 
 /*
  * The Class BandResizeTracker.
@@ -222,24 +233,7 @@ public class BandResizeTracker extends SimpleDragTracker {
 		return request;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.tools.SimpleDragTracker#updateSourceRequest()
-	 */
-	protected void updateSourceRequest() {
-		ChangeBoundsRequest request = (ChangeBoundsRequest) getSourceRequest();
 
-		Dimension d = getDragMoveDelta();
-
-		request.setSizeDelta(new Dimension(0, d.height));
-		request.setEditParts(getOperationSet());
-		request.setResizeDirection(PositionConstants.SOUTH);
-
-		snapPoint(request);
-
-		request.setLocation(getLocation());
-	}
 
 	@Override
 	protected void setState(int state) {
@@ -331,16 +325,166 @@ public class BandResizeTracker extends SimpleDragTracker {
 		}
 		return command.unwrap();
 	}
+	
+	 /**
+   * This method summarize the JasperReports rules for bands height.
+   * The real check should be done by the JRVerifier class, probably
+   * we should move that code there providing a similar static method.
+   * 
+   * @param b
+   * @param jd
+   * @return
+   */
+  public static int getMaxBandHeight(JRDesignBand b, JasperDesign jd)
+  {
+      if (b == null || jd == null) return 0;
+      
+      JROrigin origin = b.getOrigin();
+      
+      int topBottomMargins = jd.getTopMargin() + jd.getBottomMargin();
+      
+      if ( (origin.getBandTypeValue() == BandTypeEnum.TITLE && jd.isTitleNewPage()) ||
+           (origin.getBandTypeValue() == BandTypeEnum.SUMMARY) ||  // && jd.isSummaryNewPage()
+           origin.getBandTypeValue() == BandTypeEnum.BACKGROUND ||
+           origin.getBandTypeValue() == BandTypeEnum.NO_DATA)
+      {
+          return jd.getPageHeight() - topBottomMargins;
+      }
+      
+      int basicBandsHeight = 0;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.tools.SimpleDragTracker#handleDragInProgress()
+      basicBandsHeight += topBottomMargins;
+      basicBandsHeight += jd.getPageHeader() != null ? jd.getPageHeader().getHeight() : 0;
+      basicBandsHeight += jd.getColumnHeader() != null ? jd.getColumnHeader().getHeight() : 0;
+      basicBandsHeight += jd.getColumnFooter() != null ? jd.getColumnFooter().getHeight() : 0;
+
+      if (b.getOrigin().getBandTypeValue() == BandTypeEnum.LAST_PAGE_FOOTER)
+      {
+          return  jd.getPageHeight() - basicBandsHeight;
+      }
+
+      basicBandsHeight += jd.getPageFooter() != null ? jd.getPageFooter().getHeight() : 0;
+
+      int heighestGroupHeader = 0;
+      int heighestGroupFooter = 0;
+
+      for (int i=0; i<jd.getGroupsList().size(); ++i)
+      {
+          JRDesignGroup grp = (JRDesignGroup)jd.getGroupsList().get(i);
+          JRBand[] bands = grp.getGroupHeaderSection().getBands();
+          for (int k=0; bands != null && k<bands.length; ++k)
+          {
+              heighestGroupHeader = Math.max(heighestGroupHeader, bands[k].getHeight());
+          }
+          bands = grp.getGroupFooterSection().getBands();
+          for (int k=0; bands != null && k<bands.length; ++k)
+          {
+              heighestGroupFooter = Math.max(heighestGroupFooter, bands[k].getHeight());
+          }
+      }
+
+      if (b.getOrigin().getBandTypeValue() == BandTypeEnum.TITLE)
+      {
+          return  jd.getPageHeight() - basicBandsHeight - Math.max(heighestGroupFooter, heighestGroupHeader);
+      }
+
+      if (b.getOrigin().getBandTypeValue() == BandTypeEnum.DETAIL)
+      {
+          return jd.getPageHeight() - basicBandsHeight;
+      }
+
+      int titleHeight = jd.getTitle() != null ? jd.getTitle().getHeight() : 0;
+      if (jd.isTitleNewPage()) titleHeight = 0;
+
+      if (origin.getBandTypeValue() == BandTypeEnum.GROUP_FOOTER ||
+          origin.getBandTypeValue() == BandTypeEnum.GROUP_HEADER)
+      {
+          return jd.getPageHeight() - basicBandsHeight - titleHeight;
+      }
+
+      //int summaryHeight = jd.getSummary() != null ? jd.getSummary().getHeight() : 0;
+      //if (!jd.isSummaryNewPage()) basicBandsHeight += summaryHeight;
+
+      int detailHeight = 0;
+
+      if (jd.getDetailSection() != null)
+      {
+          JRBand[] bandsList = jd.getDetailSection().getBands();
+          for (int k=0; bandsList != null && k<bandsList.length; ++k)
+          {
+              detailHeight = Math.max(detailHeight,bandsList[k].getHeight());
+          }
+      }
+
+      int maxAlternativeSection = Math.max( detailHeight,  Math.max(heighestGroupFooter, heighestGroupHeader) + titleHeight);
+
+      basicBandsHeight += maxAlternativeSection;
+
+      int res = jd.getPageHeight() - basicBandsHeight + b.getHeight();
+      res = Math.min(res, jd.getPageHeight()-topBottomMargins);
+      res = Math.max(res, 0);
+
+      // Calcolate the design page without extra bands and the current band...
+      return res;
+  }
+	
+
+	
+  /**
+   * Update the request and freeze the drag when it has reached it maximum dimension
+   * @return true if the drag can continue, false otherwise
+   */
+	protected boolean conditionallyUpdateSourceRequest() {
+		Dimension d = getDragMoveDelta();
+		ChangeBoundsRequest request = (ChangeBoundsRequest) getSourceRequest();
+		BandEditPart part = (BandEditPart) getOperationSet().get(0);
+		IFigure figure = part.getFigure();
+		int newValue = figure.getBounds().height + request.getSizeDelta().height;
+		int maxBandHeight = getMaxBandHeight(part.getBand(),part.getJasperDesign());
+		boolean inBoundContidion = newValue > 0 && newValue <= maxBandHeight;
+		if (d.height<0 || inBoundContidion){
+			int differences = (d.height + figure.getBounds().height) - maxBandHeight;
+			//Correct the end point of the dragging
+			if (differences > 0) {
+				d.height-=differences;
+			}
+			request.setSizeDelta(new Dimension(0, d.height));
+			request.setEditParts(getOperationSet());
+			request.setResizeDirection(PositionConstants.SOUTH);
+			snapPoint(request);
+			request.setLocation(getLocation());
+		} else {
+			request.setSizeDelta(new Dimension(0, 0));
+			request.setEditParts(getOperationSet());
+			request.setResizeDirection(PositionConstants.NORTH);
+			snapPoint(request);
+			request.setLocation(getLocation());
+		}
+		return inBoundContidion;
+	}
+	
+
+	/**
+	 * Copy of isInDragProgess, since it has package visibility but was still needed a new definition 
+	 * was done
 	 */
+	protected boolean dragInProgress() {
+		return isInState(STATE_DRAG_IN_PROGRESS
+				| STATE_ACCESSIBLE_DRAG_IN_PROGRESS);
+	}
+
+	/**
+	 * Override the original drag in progress to freeze the drag on the reaching of the maximum 
+	 * band dimension
+	 */
+	@Override
 	public boolean handleDragInProgress() {
-		boolean b = super.handleDragInProgress();
-		updateAutoexposeHelper();
-		return b;
+		if (dragInProgress() && conditionallyUpdateSourceRequest()) {
+			showSourceFeedback();
+			setCurrentCommand(getCommand());
+			updateAutoexposeHelper();
+			return true;
+		} else return false;
 	}
 
 }

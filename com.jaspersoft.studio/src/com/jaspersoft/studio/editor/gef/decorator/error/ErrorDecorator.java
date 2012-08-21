@@ -22,6 +22,7 @@ import java.awt.Stroke;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.RGB;
 
@@ -47,7 +48,7 @@ public class ErrorDecorator implements IDecorator {
 	/**
 	 * The size of the warning border
 	 */
-	private static float JSS_WARNING_BORDER_SIZE = 0.8f;
+	private static float JSS_WARNING_BORDER_SIZE = 1.0f;
 	
 	/**
 	 * Standard constructor, load the warningIcon
@@ -70,7 +71,7 @@ public class ErrorDecorator implements IDecorator {
             g.setColor(JSS_WARNING_BORDER_COLOR);
             g.setStroke(new BasicStroke(JSS_WARNING_BORDER_SIZE));
             
-            Rectangle tempRect = new Rectangle();
+            PrecisionRectangle tempRect = new PrecisionRectangle();
             tempRect.setBounds(fig.getBounds());
       			if (JSS_WARNING_BORDER_SIZE % 2 == 1) {
       				tempRect.width--;

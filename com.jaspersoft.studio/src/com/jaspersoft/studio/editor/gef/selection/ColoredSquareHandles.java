@@ -25,11 +25,9 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.ResizeHandle;
 import org.eclipse.gef.handles.SquareHandle;
-import org.eclipse.gef.tools.DragEditPartsTracker;
 import org.eclipse.swt.graphics.Cursor;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
