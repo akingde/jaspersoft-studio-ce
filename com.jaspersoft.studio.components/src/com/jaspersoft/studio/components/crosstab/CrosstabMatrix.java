@@ -20,7 +20,6 @@
 package com.jaspersoft.studio.components.crosstab;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +46,12 @@ public class CrosstabMatrix {
 		return map;
 	}
 
+	public CrosstabCell getCrosstabCell(CrosstabCell colcel) {
+		for (CrosstabCell cc : map.keySet())
+			if (cc.equals(colcel))
+				return cc;
+		return null;
+	}
 	public Rectangle getBounds(CrosstabCell cc) {
 		Rectangle r = map.get(cc);
 		return r.getCopy();

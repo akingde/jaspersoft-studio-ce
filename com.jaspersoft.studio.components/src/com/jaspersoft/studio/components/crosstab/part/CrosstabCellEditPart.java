@@ -44,6 +44,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
+import com.jaspersoft.studio.components.crosstab.CrosstabCell;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
@@ -81,7 +82,8 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			MCell model = getModel();
-			Dimension d = new Dimension(100, 100);
+			Dimension d = model.getMCrosstab().getCrosstabManager()
+					.getCellPackSize(new CrosstabCell(model.getValue()));
 			if (d.height > 0 && d.width > 0) {
 				CompoundCommand c = new CompoundCommand("Resize to container");
 
