@@ -1,22 +1,18 @@
-/*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
+/*******************************************************************************
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * This program is part of Jaspersoft Open Studio.
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
- */
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
 /*
  * Copyright (c) 2006-2007 Nicolas Richeton.
  * All rights reserved. This program and the accompanying materials
@@ -94,10 +90,10 @@ public class DefaultGalleryItemRenderer extends AbstractGalleryItemRenderer {
 	int selectionRadius = 15;
 
 	// Vars used during drawing (optimization)
-	private boolean _drawBackground = false;
-	private Color _drawBackgroundColor = null;
-	private Image _drawImage = null;
-	private Color _drawForegroundColor = null;
+	boolean _drawBackground = false;
+	Color _drawBackgroundColor = null;
+	Image _drawImage = null;
+	Color _drawForegroundColor = null;
 
 	/**
 	 * Returns current label state : enabled or disabled
@@ -294,7 +290,7 @@ public class DefaultGalleryItemRenderer extends AbstractGalleryItemRenderer {
 
 	}
 
-	private void createColors() {
+	void createColors() {
 		if (dropShadowsSize > 0) {
 			int step = 125 / dropShadowsSize;
 			// Create new colors

@@ -1,22 +1,18 @@
-/*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
+/*******************************************************************************
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * This program is part of Jaspersoft Open Studio.
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
- */
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
 /*
  * Copyright (c) 2006-2007 Nicolas Richeton.
  * All rights reserved. This program and the accompanying materials
@@ -101,6 +97,11 @@ public class GalleryItem extends Item {
 	 * 
 	 */
 	private boolean expanded;
+
+	// Image shown when the gallery item is selected
+	private Image selectedImg;
+	// Image shown when the gallery item is not selected
+	private Image standardImg;
 
 	protected boolean isUltraLazyDummy() {
 		return ultraLazyDummy;
@@ -732,4 +733,19 @@ public class GalleryItem extends Item {
 		return text[index];
 	}
 
+	public void setSelectedImage(Image selectedImg){
+		this.selectedImg=selectedImg;
+	}
+	
+	public Image getSelectedImage(){
+		return this.selectedImg;
+	}
+	
+	public void setStandardImage(Image standardImg){
+		this.standardImg=standardImg;
+	}
+	
+	public Image getStanImage(){
+		return standardImg;
+	}
 }
