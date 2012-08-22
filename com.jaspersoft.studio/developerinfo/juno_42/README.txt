@@ -1,5 +1,5 @@
-************** IMPORTANT NOTE **************
-Please note that actually there is no official support for the Eclipse 4.2 platform.
+----------------------------------------
+IMPORTANTE NOTE: Actually there is no official support for the Eclipse 4.2 platform.
 These instructions are meant to be used by the community in order to improve this support
 and help the Jaspersoft Studio Team.
 
@@ -9,7 +9,7 @@ Project tracker: http://jasperforge.org/projects/jaspersoftstudio/tracker/myview
 
 Also use the forum to discuss about this topic and the tracker to submit bugs/patches that can
 be useful to improve the code.
-********************************************
+----------------------------------------
 This folder is meant to contain all the necessary stuff to prepare an up-and-running
 development environment where to build Jaspersoft Studio source code.
 Here is a set of basic step you can take to have a fully working IDE.
@@ -26,6 +26,7 @@ Here is a set of basic step you can take to have a fully working IDE.
 	- Xtext SDK 2.3.0
 	- Xtext JFace Integration 1.0.0
 	- Xalan-Java 2.7.1
+	- Copyright Wizard 1.4.0
 	
 	N.B: You should also import the deltapack for 4.2 in you current platform in order to be able
 	to build the JSS product.

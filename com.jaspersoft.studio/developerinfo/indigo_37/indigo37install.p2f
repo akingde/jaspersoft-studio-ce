@@ -1,7 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='9'>
+  <ius size='10'>
+    <iu id='com.wdev91.eclipse.copyright.feature.feature.group' name='Copyright Wizard' version='1.4.0'>
+      <repositories size='1'>
+        <repository location='http://www.wdev91.com/update/'/>
+      </repositories>
+    </iu>
     <iu id='epp.package.rcp' name='Eclipse for RCP and RAP Developers' version='1.4.2.20120213-0814'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/releases/indigo'/>

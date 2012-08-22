@@ -16,6 +16,8 @@ Here is a set of basic step you can take to have a fully working IDE.
 	- Xtext SDK 2.3.0
 	- Xtext JFace Integration 1.0.0
 	- Apache Xerces-J 2.9.0 [http://wiki.eclipse.org/Orbit/Xerces_in_Eclipse]
+	- Xalan-Java 2.7.1
+	- Copyright Wizard 1.4.0
 	
 	N.B: You should also import the deltapack for 3.8 in you current platform in order to be able
 	to build the JSS product.
