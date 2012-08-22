@@ -57,7 +57,9 @@ public class SPRWCombo extends ASPropertyWidget {
 			public void widgetSelected(SelectionEvent e) {
 				if (refresh)
 					return;
-				section.changeProperty(pDescriptor.getId(), combo.getItem(combo.getSelectionIndex()));
+				if(combo.getSelectionIndex()>=0){
+					section.changeProperty(pDescriptor.getId(), combo.getItem(combo.getSelectionIndex()));					
+				}
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
