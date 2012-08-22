@@ -44,8 +44,6 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -116,14 +114,14 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 		useReport.setSelection(true);
 		setPageComplete(false);
 
-		useReportPath = new WTextExpression(composite, SWT.NONE);
-		useReportPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		useReportPath.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
+		useReportPath = new WTextExpression(composite, SWT.NONE){
+			@Override
+			public void setExpression(JRDesignExpression exp) {
+				super.setExpression(exp);
 				handleDataChanged();
 			}
-		});
+		};
+		useReportPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		if (expContext != null) {
 			useReportPath.setExpressionContext(expContext);
 		}
