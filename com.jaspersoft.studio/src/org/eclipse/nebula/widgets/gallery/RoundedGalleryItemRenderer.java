@@ -39,12 +39,12 @@ public class RoundedGalleryItemRenderer extends DefaultGalleryItemRenderer {
 	public RoundedGalleryItemRenderer() {
 		// Set defaults
 		foregroundColor = Display.getDefault().getSystemColor(
-				SWT.COLOR_LIST_FOREGROUND);
+				SWT.COLOR_BLACK);
 		backgroundColor = Display.getDefault().getSystemColor(
 				SWT.COLOR_LIST_BACKGROUND);
 
 		selectionForegroundColor = Display.getDefault().getSystemColor(
-				SWT.COLOR_LIST_SELECTION_TEXT);
+				SWT.COLOR_BLACK);
 		selectionBackgroundColor = Display.getDefault().getSystemColor(
 				SWT.COLOR_LIST_BACKGROUND);
 
@@ -210,7 +210,8 @@ public class RoundedGalleryItemRenderer extends DefaultGalleryItemRenderer {
 	public Font getFont(GalleryItem item) {
 		Font baseFont = super.getFont(item);
 		FontData fontData = baseFont.getFontData()[0];
-		return ResourceManager.getFont(fontData.getName(), fontData.getHeight()+2, fontData.getStyle());
+		Font itemFont = ResourceManager.getFont(fontData.getName(), fontData.getHeight()+1, fontData.getStyle());
+		return selected ? ResourceManager.getBoldFont(itemFont) : itemFont;
 	}
 	
 }

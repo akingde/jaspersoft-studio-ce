@@ -140,7 +140,7 @@ public class ReportTemplatesWizardPage extends WizardPage {
 			}
 		});
 		
-		scale.setSelection(7);
+		scale.setSelection(6);
 		// Manually fire the event because the invocation 
 		// of #Scale.selection() does not fire it.
 		zoomModified();
