@@ -25,7 +25,7 @@ package com.jaspersoft.studio.model.util;
 
 import com.jaspersoft.studio.model.INode;
 
-public abstract class ModelVisitor {
+public abstract class ModelVisitor<T> {
 
 	public ModelVisitor(INode model) {
 		iterate(model);
@@ -40,13 +40,13 @@ public abstract class ModelVisitor {
 
 	public abstract boolean visit(INode n);
 
-	private Object object;
+	private T object;
 
-	public Object getObject() {
+	public T getObject() {
 		return object;
 	}
 
-	public void setObject(Object object) {
+	public void setObject(T object) {
 		this.object = object;
 	}
 

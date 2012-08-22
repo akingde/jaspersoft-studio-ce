@@ -42,9 +42,6 @@ public class CrosstabManager {
 
 	private JRDesignCrosstab crosstab;
 
-	// private Map<CrosstabCell, Rectangle> boundsMap = new
-	// HashMap<CrosstabCell, Rectangle>();
-
 	public CrosstabManager(JRDesignCrosstab crosstab) {
 		this.crosstab = crosstab;
 		init(crosstab);
@@ -108,152 +105,6 @@ public class CrosstabManager {
 
 	public void init(JRDesignCrosstab crosstab) {
 		matrix.fill(crosstab);
-		matrix.print();
-		// boundsMap.clear();
-		// int tx = 0;
-		// int ty = 0;
-		// JRDesignCellContents headerCell = (JRDesignCellContents) crosstab
-		// .getHeaderCell();
-		// if (headerCell != null) {
-		// boundsMap.put(new CrosstabCell(headerCell),
-		// new Rectangle(0, 0, getHW(headerCell.getWidth()),
-		// getHW(headerCell.getHeight())));
-		// ty = getHW(headerCell.getHeight());
-		// }
-		//
-		// JRCrosstabRowGroup[] rowGroups = crosstab.getRowGroups();
-		// if (rowGroups != null) {
-		// for (JRCrosstabRowGroup p : rowGroups) {
-		// JRDesignCellContents ch = (JRDesignCellContents) p.getHeader();
-		// JRDesignCellContents ct = (JRDesignCellContents) p
-		// .getTotalHeader();
-		//
-		// if (p.getTotalPositionValue().equals(
-		// CrosstabTotalPositionEnum.START)) {
-		// boundsMap.put(new CrosstabCell(ct), new Rectangle(tx, ty,
-		// getHW(ct.getWidth()), getHW(ct.getHeight())));
-		// ty += getHW(ct.getHeight());
-		// } else if (p.getTotalPositionValue().equals(
-		// CrosstabTotalPositionEnum.END)) {
-		// boundsMap.put(new CrosstabCell(ct), new Rectangle(tx, ty
-		// + getHW(ch.getHeight(), 20), getHW(ct.getWidth()),
-		// getHW(ct.getHeight())));
-		// } else {
-		// boundsMap.put(new CrosstabCell(ct), new Rectangle(tx, ty,
-		// 0, 0));
-		// }
-		// boundsMap.put(new CrosstabCell(ch), new Rectangle(tx, ty,
-		// getHW(ch.getWidth()), getHW(ch.getHeight(), 20)));
-		//
-		// tx += getHW(ch.getWidth());
-		// }
-		// }
-		// int ctx = tx;
-		// JRCrosstabColumnGroup[] colGroups = crosstab.getColumnGroups();
-		// if (colGroups != null) {
-		// ty = 0;
-		// for (JRCrosstabColumnGroup p : colGroups) {
-		// JRDesignCellContents ch = (JRDesignCellContents) p.getHeader();
-		// JRDesignCellContents ct = (JRDesignCellContents) p
-		// .getTotalHeader();
-		//
-		// if (p.getTotalPositionValue().equals(
-		// CrosstabTotalPositionEnum.START)) {
-		// boundsMap.put(new CrosstabCell(ct), new Rectangle(tx, ty,
-		// getHW(ct.getWidth()), getHW(ct.getHeight())));
-		// tx += getHW(ct.getWidth());
-		// } else if (p.getTotalPositionValue().equals(
-		// CrosstabTotalPositionEnum.END)) {
-		// boundsMap.put(new CrosstabCell(ct), new Rectangle(tx
-		// + getHW(ch.getWidth(), 20), ty,
-		// getHW(ct.getWidth()), getHW(ct.getHeight())));
-		// } else {
-		// boundsMap.put(new CrosstabCell(ct), new Rectangle(tx, ty,
-		// 0, 0));
-		// }
-		//
-		// boundsMap.put(new CrosstabCell(ch), new Rectangle(tx, ty,
-		// getHW(ch.getWidth(), 20), getHW(ch.getHeight())));
-		// ty += getHW(ch.getHeight());
-		// }
-		// }
-		// int cty = ty;
-		// // update y
-		// if (rowGroups != null && crosstab.getHeaderCell() == null) {
-		// for (JRCrosstabRowGroup p : rowGroups) {
-		// JRDesignCellContents ch = (JRDesignCellContents) p.getHeader();
-		// JRDesignCellContents ct = (JRDesignCellContents) p
-		// .getTotalHeader();
-		// Rectangle r = boundsMap.get(new CrosstabCell(ch));
-		// r.setLocation(r.x, r.y + ty);
-		// r = boundsMap.get(new CrosstabCell(ct));
-		// r.setLocation(r.x, r.y + ty);
-		//
-		// Rectangle rCt = boundsMap.get(new CrosstabCell(ct));
-		// setCellRow(rCt.y, p.getName());
-		// }
-		// boundsMap.put(new CrosstabCell(JRCrosstabOrigin.TYPE_HEADER_CELL),
-		// new Rectangle(0, 0, tx, ty));
-		// }
-		//
-		// tx = ctx;
-		// ty = cty;
-		// JRCrosstabCell[][] cells = crosstab.getCells();
-		// if (cells != null)
-		// for (int i = cells.length - 1; i >= 0; i--) {
-		// JRCrosstabCell[] rows = cells[i];
-		// int h = 0;
-		// for (int j = rows.length - 1; j >= 0; j--) {
-		// JRCrosstabCell cols = rows[j];
-		// if (cols != null) {
-		// JRDesignCellContents cc = (JRDesignCellContents) cols
-		// .getContents();
-		// boundsMap.put(new CrosstabCell(cc),
-		// new Rectangle(tx, ty, getHW(cc.getWidth()),
-		// getHW(cc.getHeight())));
-		// tx += getHW(cc.getWidth());
-		// h = getHW(cc.getHeight());
-		// }
-		// }
-		// ty += h;
-		// tx = ctx;
-		// }
-		//
-		// if (rowGroups != null) {
-		// for (int i = 0; i < rowGroups.length; i++) {
-		// JRCrosstabRowGroup p = (JRCrosstabRowGroup) rowGroups[i];
-		// if (i == rowGroups.length - 1)
-		// setCellRow(boundsMap.get(new CrosstabCell(
-		// (JRDesignCellContents) p.getHeader())).y, null);
-		// if (!p.getTotalPositionValue().equals(
-		// CrosstabTotalPositionEnum.NONE))
-		// setCellRow(boundsMap.get(new CrosstabCell(
-		// (JRDesignCellContents) p.getTotalHeader())).y,
-		// p.getName());
-		// }
-		// }
-		//
-		// if (colGroups != null) {
-		// for (int i = 0; i < colGroups.length; i++) {
-		// JRCrosstabColumnGroup p = (JRCrosstabColumnGroup) colGroups[i];
-		// if (i == colGroups.length - 1)
-		// setCellColumn(boundsMap.get(new CrosstabCell(
-		// (JRDesignCellContents) p.getHeader())).x, null);
-		// if (!p.getTotalPositionValue().equals(
-		// CrosstabTotalPositionEnum.NONE))
-		// setCellColumn(boundsMap.get(new CrosstabCell(
-		// (JRDesignCellContents) p.getTotalHeader())).x,
-		// p.getName());
-		// }
-		// }
-		// // mirror elements if is Right to left
-		// if (crosstab.getRunDirectionValue() != null
-		// && crosstab.getRunDirectionValue().equals(RunDirectionEnum.RTL)) {
-		// int cwidth = crosstab.getWidth();
-		// for (Rectangle r : boundsMap.values()) {
-		// r.setLocation(cwidth - r.x - r.width + crosstab.getX(), r.y);
-		// }
-		// }
 		setSize();
 	}
 
@@ -302,17 +153,6 @@ public class CrosstabManager {
 	public Rectangle getBounds(CrosstabCell cell) {
 		return matrix.getBounds(cell);
 
-		// Rectangle b = boundsMap.get(cell);
-		// if (b != null)
-		// return b;
-		// if (cell != null) {
-		// Rectangle r = cell.getBounds();
-		// return matrix.getBounds(cell);
-		// // r.y = mr.y;
-		// // r.height = mr.height;
-		// // return r;
-		// }
-		// return new Rectangle(0, 0, 60, 20);
 	}
 
 	public void setWidth(JRDesignCellContents cell, int width) {
@@ -427,12 +267,6 @@ public class CrosstabManager {
 	}
 
 	public void setHeight(JRDesignCellContents cell, int height) {
-		// CrosstabCell ccell = matrix.getCrosstabCell(new CrosstabCell(cell));
-		// Guide guide = ccell.getSouth();
-		// for (CrosstabCell cc : guide.getPrev()) {
-		// cc.cell.get setHeight(10);
-		// }
-
 		JRCrosstabCell[][] cells = crosstab.getCells();
 		List<?> colGroupsList = crosstab.getColumnGroupsList();
 		List<?> rowGroupsList = crosstab.getRowGroupsList();
@@ -592,4 +426,15 @@ public class CrosstabManager {
 		return new Dimension(b.width + w, b.height + h);
 	}
 
+	public List<CrosstabCell> getLeftOf(CrosstabCell cell) {
+		cell = matrix.getCrosstabCell(cell);
+		Guide g = cell.getWest();
+		return g.getPrev();
+	}
+
+	public List<CrosstabCell> getTopOf(CrosstabCell cell) {
+		cell = matrix.getCrosstabCell(cell);
+		Guide g = cell.getNorth();
+		return g.getPrev();
+	}
 }
