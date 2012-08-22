@@ -120,7 +120,7 @@ public class MCrosstabHeader extends ANode implements IGraphicElement {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static final CrosstabCell cell = new CrosstabCell(
+	public static final CrosstabCell cell = new CrosstabCell(
 			JRCrosstabOrigin.TYPE_HEADER_CELL);
 
 	@Override

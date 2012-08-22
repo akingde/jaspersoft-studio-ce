@@ -280,8 +280,8 @@ public class CrosstabManager {
 						if (jrCrosstabCell.getContents() == cell) {
 							jrCrosstabCell.setHeight(height);
 
-							for (int k = 0; k < cells.length; k++) {
-								if (cells[k][j] != null) {
+							for (int k = 0; k < cells[i].length; k++) {
+								if (cells[i][k] != null) {
 									((JRDesignCrosstabCell) cells[i][k])
 											.setHeight(height);
 								}
@@ -375,15 +375,6 @@ public class CrosstabManager {
 		}
 	}
 
-	private void setCellWidth(JRDesignCrosstabRowGroup p, int oldValue,
-			int width) {
-		if (width > 0) {
-			p.setWidth(width);
-			p.getEventSupport().firePropertyChange(
-					JRDesignCrosstabRowGroup.PROPERTY_WIDTH, oldValue, width);
-		}
-	}
-
 	private void setCellHeight(JRDesignCrosstabColumnGroup p, int oldValue,
 			int height) {
 		if (height >= 0) {
@@ -391,6 +382,15 @@ public class CrosstabManager {
 			p.getEventSupport().firePropertyChange(
 					JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT, oldValue,
 					height);
+		}
+	}
+
+	private void setCellWidth(JRDesignCrosstabRowGroup p, int oldValue,
+			int width) {
+		if (width > 0) {
+			p.setWidth(width);
+			p.getEventSupport().firePropertyChange(
+					JRDesignCrosstabRowGroup.PROPERTY_WIDTH, oldValue, width);
 		}
 	}
 
@@ -435,6 +435,18 @@ public class CrosstabManager {
 	public List<CrosstabCell> getTopOf(CrosstabCell cell) {
 		cell = matrix.getCrosstabCell(cell);
 		Guide g = cell.getNorth();
+		return g.getPrev();
+	}
+
+	public List<CrosstabCell> getBottomOf(CrosstabCell cell) {
+		cell = matrix.getCrosstabCell(cell);
+		Guide g = cell.getSouth();
+		return g.getPrev();
+	}
+
+	public List<CrosstabCell> getRightOf(CrosstabCell cell) {
+		cell = matrix.getCrosstabCell(cell);
+		Guide g = cell.getEast();
 		return g.getPrev();
 	}
 }

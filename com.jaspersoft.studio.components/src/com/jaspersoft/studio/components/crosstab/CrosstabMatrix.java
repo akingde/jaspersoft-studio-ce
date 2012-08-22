@@ -52,6 +52,7 @@ public class CrosstabMatrix {
 				return cc;
 		return null;
 	}
+
 	public Rectangle getBounds(CrosstabCell cc) {
 		Rectangle r = map.get(cc);
 		return r.getCopy();
@@ -65,6 +66,7 @@ public class CrosstabMatrix {
 	public void fill(JRDesignCrosstab crosstab) {
 		hGuides.clear();
 		vGuides.clear();
+		map.clear();
 
 		Guide north = new Guide(0);
 		hGuides.add(north);
@@ -108,7 +110,7 @@ public class CrosstabMatrix {
 			g.setY(maxy - g.getY());
 			g.mirrorV();
 		}
-		
+
 	}
 
 	public Guide fillRowGroupV(Guide west, Guide east, JRDesignCrosstab crosstab) {

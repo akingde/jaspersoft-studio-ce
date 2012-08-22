@@ -69,6 +69,7 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 		if (drawVisitor == null) {
 			drawVisitor = new DrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
 		}
+		drawVisitor.setClip(false);
 		return drawVisitor;
 	}
 

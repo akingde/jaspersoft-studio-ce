@@ -36,7 +36,9 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabCell;
 import com.jaspersoft.studio.components.crosstab.CrosstabManager;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeader;
 import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeaderCell;
 import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDataCell;
 import com.jaspersoft.studio.model.INode;
@@ -46,9 +48,22 @@ import com.jaspersoft.studio.property.SetValueCommand;
 public class CreateResize {
 	public static Command createResizeCommand(ChangeBoundsRequest request,
 			GraphicalEditPart editPart) {
-		if (!(editPart.getModel() instanceof MCell))
+		Object emodel = editPart.getModel();
+		MCell model = null;
+		if (emodel instanceof MCrosstabHeader) {
+			MCrosstabHeader chmodel = (MCrosstabHeader) emodel;
+			MCrosstab crosstab = chmodel.getCrosstab();
+			CrosstabManager cManager = crosstab.getCrosstabManager();
+			List<CrosstabCell> cells = null;
+			if (request.getResizeDirection() == PositionConstants.SOUTH)
+				cells = cManager.getBottomOf(MCrosstabHeader.cell);
+			else if (request.getResizeDirection() == PositionConstants.EAST)
+				cells = cManager.getRightOf(MCrosstabHeader.cell);
+			model = getNearHeader(model, crosstab, cells);
+		} else if (emodel instanceof MCell)
+			model = (MCell) emodel;
+		if (model == null)
 			return null;
-		MCell model = (MCell) editPart.getModel();
 		Dimension sizeDelta = request.getSizeDelta();
 		CrosstabManager cManager = model.getMCrosstab().getCrosstabManager();
 		if (request.getResizeDirection() == PositionConstants.WEST) {
@@ -106,6 +121,35 @@ public class CreateResize {
 		if (c.isEmpty())
 			return null;
 		return c;
+	}
+
+	public static MCell getNearHeader(MCell model, MCrosstab crosstab,
+			List<CrosstabCell> cells) {
+		if (cells == null || cells.isEmpty())
+			return null;
+		for (CrosstabCell c : cells) {
+			if (c.cell == null)
+				continue;
+			final JRDesignCellContents cell = c.cell;
+			model = new ModelVisitor<MCell>(crosstab) {
+
+				@Override
+				public boolean visit(INode n) {
+					if (n instanceof MCell) {
+						MCell mcell = (MCell) n;
+						if (mcell.getValue().equals(cell)) {
+							setObject(mcell);
+							return false;
+						}
+
+					}
+					return true;
+				}
+			}.getObject();
+			if (model != null)
+				break;
+		}
+		return model;
 	}
 
 	public static MCell getNearCellModel(MCell model,
