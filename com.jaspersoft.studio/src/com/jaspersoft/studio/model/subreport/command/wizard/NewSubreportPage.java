@@ -121,7 +121,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 		useReportPath.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				setPageComplete(!(useReportPath.getExpression() == null || useReportPath.getExpression().getText().isEmpty()));
+				handleDataChanged();
 			}
 		});
 		if (expContext != null) {
@@ -184,9 +184,11 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 				setSelectedNode(null);
 				setUseReportEnabled();
 				setPageComplete(true);
+				handleDataChanged();
 			}
 		});
 
+		handleDataChanged();
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
 	}
 
@@ -194,6 +196,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 		boolean enabled = useReport.getSelection();
 		useReportPath.setEnabled(enabled);
 		useReportB.setEnabled(enabled);
+		handleDataChanged();
 	}
 
 	public void setUpSubreport(IFile file, JasperDesign newjd) {
@@ -266,6 +269,17 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 		this.expContext = expContext;
 		if (useReportPath != null) {
 			useReportPath.setExpressionContext(this.expContext);
+		}
+	}
+
+	public void handleDataChanged() {
+		setErrorMessage(null);
+		setMessage(Messages.WizardNewSubreportPage_description);
+		if (useReport.getSelection()) {
+			boolean complete = !(useReportPath.getExpression() == null || useReportPath.getExpression().getText().isEmpty());
+			if (!complete)
+				setErrorMessage("Please add an expression for subreport path");
+			setPageComplete(complete);
 		}
 	}
 }
