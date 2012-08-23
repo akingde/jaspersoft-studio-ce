@@ -90,10 +90,10 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 	}
 
 	public MDatasetRun getDataSetRun() {
-		if (noDataset.getSelection())
-			return null;
-		if (addDataset.getSelection())
-			return null;
+		// if (noDataset.getSelection())
+		// return null;
+		// if (addDataset.getSelection())
+		// return null;
 		return datasetrun;
 	}
 
@@ -123,6 +123,7 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		addDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				datasetrun = null;
 				handleNewSelected();
 			}
 
@@ -168,6 +169,7 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setSelectedNode(null);
+				datasetrun = null;
 				datasets.setEnabled(selDataset.getSelection());
 				setPageComplete(true);
 			}
