@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureUtilities;
@@ -31,7 +30,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.ConnectionEditPart;
-import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
@@ -41,8 +39,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.SharedCursors;
 import org.eclipse.gef.tools.AbstractTool;
-import org.eclipse.gef.tools.MarqueeDragTracker;
-import org.eclipse.gef.tools.MarqueeSelectionTool;
+import org.eclipse.gef.tools.SelectEditPartTracker;
 import org.eclipse.gef.util.EditPartUtilities;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -63,7 +60,7 @@ import com.jaspersoft.studio.editor.java2d.J2DGraphics;
  * @author Orlandin Marco
  *
  */
-public class SameBandEditPartsTracker extends AbstractTool implements DragTracker {
+public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	
 	/**
 	 * The Figure painted by the selection
@@ -101,6 +98,7 @@ public class SameBandEditPartsTracker extends AbstractTool implements DragTracke
 			schedulePaint = false;
 		}
 	}
+	
 
 	/**
 	 * This behavior selects connections that intersect the marquee rectangle.
@@ -161,14 +159,17 @@ public class SameBandEditPartsTracker extends AbstractTool implements DragTracke
 	 */
 	public static final int BEHAVIOR_NODES_AND_CONNECTIONS = BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS;
 
+	
+	
 	static final int DEFAULT_MODE = 0;
 	static final int TOGGLE_MODE = 1;
 	static final int APPEND_MODE = 2;
 	
-	public SameBandEditPartsTracker() {
-		super();
+	public SameBandEditPartsTracker(EditPart owner) {
+		super(owner);
 	}
 	
+		
 	/**
 	 * When a click is done in a band only that band will be selected and all others
 	 * elements deselected, when is done out of the work area all the elements will be deselected
@@ -361,7 +362,7 @@ public class SameBandEditPartsTracker extends AbstractTool implements DragTracke
 		return secondaryMarqueeSelectedEditParts;
 	}
 
-	private Request createTargetRequest() {
+	protected Request createTargetRequest() {
 		return MARQUEE_REQUEST;
 	}
 
@@ -438,7 +439,7 @@ public class SameBandEditPartsTracker extends AbstractTool implements DragTracke
 		return marqueeRectangleFigure;
 	}
 
-	private Request getTargetRequest() {
+	protected Request getTargetRequest() {
 		if (targetRequest == null)
 			targetRequest = createTargetRequest();
 		return targetRequest;

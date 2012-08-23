@@ -57,7 +57,7 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 	
 	@Override
 	public DragTracker getDragTracker(Request request) {
-		return new SameBandEditPartsTracker();
+		return new SameBandEditPartsTracker(this);
 	}
 	
 

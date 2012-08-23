@@ -153,6 +153,7 @@ public class ColoredSquareHandles extends ResizeHandle {
 	protected Color[] getFillColorAwt() {
 		MGraphicElement element = (MGraphicElement)getOwner().getModel();
 		Rectangle bound1 = element.getBounds();
+		int index1 = element.getParent().getChildren().indexOf(element);
 		List<INode> brothers = element.getParent().getChildren();
 		Iterator<INode> it = brothers.iterator();
 		boolean overlap = false;
@@ -161,11 +162,13 @@ public class ColoredSquareHandles extends ResizeHandle {
 			INode actualElement = it.next();
 			if (!actualElement.equals(element) && actualElement instanceof MGraphicElement){
 				MGraphicElement element2 = (MGraphicElement)actualElement;
+				int index2 = element.getParent().getChildren().indexOf(element2);
 				Rectangle bound2 = element2.getBounds();
 				if (bound1.intersects(bound2)){
 					overlap = true;
 				}
-				if (bound1.contains(bound2)){
+				//Check if contains and the z-order
+				if (bound1.contains(bound2) && index1>index2){
 					cover = true;
 				}
 			}

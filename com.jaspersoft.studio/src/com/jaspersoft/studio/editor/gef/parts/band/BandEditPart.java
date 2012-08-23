@@ -59,6 +59,7 @@ import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
+import com.jaspersoft.studio.editor.gef.parts.SnapToGeometryThreshold;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandMoveEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
@@ -162,7 +163,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	 */
 	@Override
 	public DragTracker getDragTracker(Request request) {
-		return new SameBandEditPartsTracker();
+		return new SameBandEditPartsTracker(this);
 	}
 
 	/*
@@ -184,16 +185,6 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		return rect;
 	}
 	
-	private class SnapToGeometryThreshold extends SnapToGeometry{
-		
-		public SnapToGeometryThreshold(GraphicalEditPart container) {
-			super(container);
-		}
-		
-		public void setThreshold(double value){
-			super.setThreshold(value);
-		}
-	}
 	
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -208,7 +199,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 			if (val != null && val.booleanValue()) {
 				
 				SnapToGeometryThreshold snapper = new SnapToGeometryThreshold(this);
-				snapper.setThreshold(6.0);
+				snapper.setThreshold(2.0);
 				snapStrategies.add(snapper);
 			}
 			val = (Boolean) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ENABLED);

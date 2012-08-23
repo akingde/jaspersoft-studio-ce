@@ -144,7 +144,7 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 			IFigure fig = new FadeIn(color);
 			guide[offset] = fig;
 			addFeedback(fig);
-			fig.translateToRelative(loc);
+		fig.translateToRelative(loc);
 			position = offset % 2 == 0 ? (int) Math.round(loc.preciseX()) : (int) Math.round(loc.preciseY());
 			Rectangle figBounds = getFeedbackLayer().getBounds().getCopy();
 			if ((offset % 2) == 1) {

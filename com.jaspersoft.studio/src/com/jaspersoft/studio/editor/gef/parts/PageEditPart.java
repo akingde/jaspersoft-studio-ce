@@ -22,7 +22,9 @@ package com.jaspersoft.studio.editor.gef.parts;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -78,17 +80,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 				setPrefsBorder(getFigure());
 		}
 	}
-	
-	private class SnapToGeometryThreshold extends SnapToGeometry{
-		
-		public SnapToGeometryThreshold(GraphicalEditPart container) {
-			super(container);
-		}
-		
-		public void setThreshold(double value){
-			super.setThreshold(value);
-		}
-	}
+
 
 	@SuppressWarnings("rawtypes")
 	@Override

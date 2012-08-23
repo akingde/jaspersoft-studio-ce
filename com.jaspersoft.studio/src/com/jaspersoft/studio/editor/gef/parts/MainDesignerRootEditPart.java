@@ -71,7 +71,7 @@ public class MainDesignerRootEditPart extends ScalableFreeformRootEditPart {
 	 */
 	@Override
 	public org.eclipse.gef.DragTracker getDragTracker(org.eclipse.gef.Request req) {
-		return new SameBandEditPartsTracker();
+		return new SameBandEditPartsTracker(this);
 	};
 
 	/*
