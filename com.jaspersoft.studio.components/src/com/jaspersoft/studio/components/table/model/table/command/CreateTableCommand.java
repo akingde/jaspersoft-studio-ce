@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.components.table.model.table.command;
 
-import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -31,7 +30,6 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableWizard;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -108,18 +106,6 @@ public class CreateTableCommand extends CreateElementCommand {
 	public CreateTableCommand(ANode destNode, MGraphicElement srcNode,
 			Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
-	}
-	
-	private void FixColumnSize(){
-		StandardTable tbl = TableManager.getTable(srcNode);
-		int colNumber = tbl.getColumns().size();
-		if (colNumber>0){
-			int colSize = srcNode.getBounds().width/colNumber;
-			for(int i=0; i<colNumber; i++){
-				StandardColumn col = (StandardColumn)tbl.getColumns().get(i);
-				col.setWidth(colSize);
-			}
-		}
 	}
 
 	/**
