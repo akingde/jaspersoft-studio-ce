@@ -177,16 +177,14 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 
 		titlePositionD = new EdgePropertyDescriptor(
 				JRBaseChart.PROPERTY_TITLE_POSITION,
-				Messages.MChart_title_position, EdgeEnum.class,
-				NullEnum.NULL);
+				Messages.MChart_title_position, EdgeEnum.class, NullEnum.NULL);
 		titlePositionD
 				.setDescription(Messages.MChart_title_position_description);
 		desc.add(titlePositionD);
 
 		legendPositionD = new EdgePropertyDescriptor(
 				JRBaseChart.PROPERTY_LEGEND_POSITION,
-				Messages.MChart_legend_position, EdgeEnum.class,
-				NullEnum.NULL);
+				Messages.MChart_legend_position, EdgeEnum.class, NullEnum.NULL);
 		legendPositionD
 				.setDescription(Messages.MChart_legend_position_description);
 		desc.add(legendPositionD);
@@ -579,6 +577,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 	}
 
 	public static void setupChart(JRDesignChart jrChart) {
+		jrChart.setEvaluationTime(EvaluationTimeEnum.REPORT);
 		if (jrChart.getChartType() == JRDesignChart.CHART_TYPE_XYBAR)
 			jrChart.setDataset(new JRDesignXyDataset(null));
 		// dataset initialisation
@@ -619,9 +618,11 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 					.setValueExpression(new JRDesignExpression("new Double(0)"));
 			((JRDesignCategoryDataset) jrChart.getDataset())
 					.addCategorySeries(catSeries);
-		} else if (jrChart.getDataset() instanceof JRDesignValueDataset){
-			JRDesignValueDataset valueDataset = (JRDesignValueDataset)jrChart.getDataset();
-			valueDataset.setValueExpression(new JRDesignExpression("\"CHANGE_ME\""));
+		} else if (jrChart.getDataset() instanceof JRDesignValueDataset) {
+			JRDesignValueDataset valueDataset = (JRDesignValueDataset) jrChart
+					.getDataset();
+			valueDataset.setValueExpression(new JRDesignExpression(
+					"\"CHANGE_ME\""));
 		}
 		// plot initialisation
 		JRChartPlot plot = jrChart.getPlot();
@@ -649,7 +650,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				tplot.setLowRange(getDummyDataRange());
 			if (tplot.getMediumRange() == null)
 				tplot.setMediumRange(getDummyDataRange());
-			if (tplot.getDataRange() == null){
+			if (tplot.getDataRange() == null) {
 				tplot.setDataRange(getDummyDataRange());
 			}
 			if (tplot.getValueLocationValue() == null)
