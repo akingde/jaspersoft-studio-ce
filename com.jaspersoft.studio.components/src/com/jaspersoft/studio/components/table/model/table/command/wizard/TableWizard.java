@@ -28,6 +28,7 @@ import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -43,7 +44,6 @@ import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
-import com.jaspersoft.studio.editor.gef.rulers.component.JDDragGuidePolicy;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.text.MStaticText;
@@ -139,6 +139,14 @@ public class TableWizard extends JSSWizard {
 	public void InitTable(){
 		List<Object> lst = step3.getFields();
 		StandardTable tbl = TableManager.getTable(table);
+		MDataset ds = (MDataset) getConfig().get(DatasetWizard.DATASET);
+		MDatasetRun dataSetRun = step1.getDataSetRun();
+		if (dataSetRun != null) {
+			JRDesignDatasetRun dsrun = dataSetRun.getValue();
+			dsrun.setDatasetName((String) ds
+					.getPropertyValue(JRDesignDataset.PROPERTY_NAME));
+			tbl.setDatasetRun(dsrun);
+		}
 		JasperDesign jd = getConfig().getJasperDesign();
 		CreateDeafultStyles(jd);
 		if (tbl != null && lst != null){

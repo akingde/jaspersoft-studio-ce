@@ -19,15 +19,12 @@
  */
 package com.jaspersoft.studio.components.table.model.table.command;
 
-import java.util.List;
-
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.dialogs.Dialog;
@@ -35,7 +32,6 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.components.table.TableManager;
-import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableWizard;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
