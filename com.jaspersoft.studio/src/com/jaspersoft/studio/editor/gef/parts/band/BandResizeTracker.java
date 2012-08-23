@@ -342,7 +342,7 @@ public class BandResizeTracker extends SimpleDragTracker {
       JROrigin origin = b.getOrigin();
       
       int topBottomMargins = jd.getTopMargin() + jd.getBottomMargin();
-      
+
       if ( (origin.getBandTypeValue() == BandTypeEnum.TITLE && jd.isTitleNewPage()) ||
            (origin.getBandTypeValue() == BandTypeEnum.SUMMARY) ||  // && jd.isSummaryNewPage()
            origin.getBandTypeValue() == BandTypeEnum.BACKGROUND ||
