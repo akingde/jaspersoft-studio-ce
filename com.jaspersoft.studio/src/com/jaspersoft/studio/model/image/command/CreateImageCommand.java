@@ -37,6 +37,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.frame.MFrame;
+import com.jaspersoft.studio.plugin.IEditorContributor;
 
 public class CreateImageCommand extends CreateElementCommand {
 
@@ -75,13 +76,18 @@ public class CreateImageCommand extends CreateElementCommand {
 			fd.setInitialPattern("*.png");//$NON-NLS-1$
 			if (fd.open() == Dialog.OK) {
 				IFile file = (IFile) fd.getFirstResult();
+				IFile contextfile = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+				String filepath = null;
+				if (contextfile != null && file.getProject().equals(contextfile.getProject()))
+					filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", "");
+				else
+					filepath = file.getRawLocationURI().toASCIIString();
 
 				JRDesignExpression jre = new JRDesignExpression();
-				if (file.getFileExtension().equals("svg")) {
-					jre.setText("net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation(\"" + file.getProjectRelativePath().toPortableString() + "\")");//$NON-NLS-1$ //$NON-NLS-2$
-				} else
-
-					jre.setText("\"" + file.getProjectRelativePath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
+				if (file.getFileExtension().equals("svg"))
+					jre.setText("net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation(\"" + filepath + "\")");//$NON-NLS-1$ //$NON-NLS-2$
+				else
+					jre.setText("\"" + filepath + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 				((JRDesignImage) jrElement).setExpression(jre);
 			}
 		}
