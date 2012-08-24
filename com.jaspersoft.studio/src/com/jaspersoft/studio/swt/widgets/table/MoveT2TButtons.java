@@ -44,6 +44,8 @@ package com.jaspersoft.studio.swt.widgets.table;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -54,7 +56,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 public class MoveT2TButtons {
-	private final class MoveListener implements SelectionListener {
+
+	private final class MoveListener implements SelectionListener, IDoubleClickListener {
 		private final TableViewer leftTView;
 		private final TableViewer rightTView;
 
@@ -62,9 +65,21 @@ public class MoveT2TButtons {
 			this.leftTView = leftTView;
 			this.rightTView = rightTView;
 		}
-
-		@SuppressWarnings({ "rawtypes", "unchecked" })
+		
 		public void widgetSelected(SelectionEvent e) {
+			handleSelection();
+		}
+		
+		public void widgetDefaultSelected(SelectionEvent e) {
+			handleSelection();
+		}
+
+		public void doubleClick(DoubleClickEvent event) {
+			handleSelection();
+		}
+		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		private void handleSelection() {
 			StructuredSelection s = (StructuredSelection) leftTView.getSelection();
 			if (!s.isEmpty()) {
 				List left = (List) leftTView.getInput();
@@ -77,10 +92,6 @@ public class MoveT2TButtons {
 				leftTView.refresh();
 				rightTView.refresh();
 			}
-		}
-
-		public void widgetDefaultSelected(SelectionEvent e) {
-
 		}
 	}
 
@@ -131,6 +142,10 @@ public class MoveT2TButtons {
 		delFields.setText("<<"); //$NON-NLS-1$
 		delFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delFields.addSelectionListener(new MoveAllListener(rightTView, leftTView));
+		
+		// Add the doubleclick selection to the table viewers
+		leftTView.addDoubleClickListener(new MoveListener(leftTView, rightTView));
+		rightTView.addDoubleClickListener(new MoveListener(rightTView, leftTView));
 	}
 
 }
