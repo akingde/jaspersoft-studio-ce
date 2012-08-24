@@ -45,6 +45,7 @@ import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.CornerBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.ElementLineBorder;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
@@ -72,9 +73,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 				setPrefsBorder(getFigure());
 		}
 	}
-	
 
-	
 	@Override
 	public void activate() {
 		super.activate();
@@ -105,7 +104,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		setupFigure(rect);
 		return rect;
 	}
-	
+
 	@Override
 	public org.eclipse.gef.DragTracker getDragTracker(org.eclipse.gef.Request request) {
 		return new DragEditPartsTracker(this);
@@ -120,6 +119,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FigureSelectionEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FigurePageLayoutEditPolicy());
 	}
 
 	/*

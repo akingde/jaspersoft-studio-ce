@@ -34,10 +34,12 @@ import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -113,12 +115,14 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
+import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
+import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -464,32 +468,25 @@ public class TableComponentFactory implements IComponentFactory {
 				&& (child.getValue() != null && parent instanceof MCell))
 			return new CreateE4ObjectCommand(child, (MCell) parent, location,
 					newIndex);
-		// } else {
-		// if (child instanceof MStyle) {
-		// if (parent instanceof MGraphicElement
-		// && child.getValue() != null
-		// && !(parent instanceof IContainer)) {
-		// SetValueCommand cmd = new SetValueCommand();
-		// cmd.setTarget((IPropertySource) parent);
-		// cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
-		// JRStyle style = (JRStyle) child.getValue();
-		// cmd.setPropertyValue(style.getName());
-		// return cmd;
-		// }
-		// if (parent instanceof MReport && location != null) {
-		// MGraphicElement element = ModelUtils.getElement4Point(
-		// parent, new Point(location.x, location.y));
-		// if (element != null) {
-		// SetValueCommand cmd = new SetValueCommand();
-		// cmd.setTarget(element);
-		// cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
-		// JRStyle style = (JRStyle) child.getValue();
-		// cmd.setPropertyValue(style.getName());
-		// return cmd;
-		// }
-		// }
-		// }
-		// }
+
+		if (child instanceof MStyle
+				&& (child.getValue() != null && parent instanceof MCell)) {
+			SetValueCommand cmd = new SetValueCommand();
+			cmd.setTarget((MCell) parent);
+			cmd.setPropertyId(DesignCell.PROPERTY_STYLE);
+			JRStyle style = (JRStyle) child.getValue();
+			cmd.setPropertyValue(style.getName());
+			return cmd;
+		}
+		if (child instanceof MStyle
+				&& (child.getValue() != null && parent instanceof MTable)) {
+			SetValueCommand cmd = new SetValueCommand();
+			cmd.setTarget((MTable) parent);
+			cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
+			JRStyle style = (JRStyle) child.getValue();
+			cmd.setPropertyValue(style.getName());
+			return cmd;
+		}
 
 		if (child instanceof MCell) {
 			if (parent instanceof MColumnGroup && !(parent instanceof MCell))
@@ -590,11 +587,11 @@ public class TableComponentFactory implements IComponentFactory {
 			location = location.setLocation(location.x - r.x, location.y - r.y);
 
 			if (cell != null) {
-				ModelVisitor mv = new ModelVisitor(parent) {
+				ModelVisitor<MCell> mv = new ModelVisitor<MCell>(parent) {
 					@Override
 					public boolean visit(INode n) {
 						if (n instanceof MCell && ((MCell) n).getCell() == cell)
-							setObject(n);
+							setObject((MCell) n);
 						return true;
 					}
 				};

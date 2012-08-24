@@ -50,6 +50,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MLineBox;
@@ -85,7 +86,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MStyle extends APropertyNode implements ICopyable, IPastable, IContainerEditPart {
+public class MStyle extends APropertyNode implements ICopyable, IPastable, IContainerEditPart, IDragable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

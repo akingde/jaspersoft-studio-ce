@@ -140,8 +140,7 @@ public class TableCellEditPart extends FigureEditPart implements
 			}
 
 			protected IFigure getLayoutTargetFeedback(Request request) {
-				if (request.getType().equals(RequestConstants.REQ_ADD)
-						&& request instanceof ChangeBoundsRequest) {
+				if (request instanceof ChangeBoundsRequest) {
 					ChangeBoundsRequest cbr = (ChangeBoundsRequest) request;
 					List<EditPart> lst = cbr.getEditParts();
 					for (EditPart ep : lst) {
@@ -149,12 +148,8 @@ public class TableCellEditPart extends FigureEditPart implements
 							return null;
 						if (ep instanceof TableCellEditPart)
 							return null;
-						if (!(ep.getModel() instanceof MCell))
-							return null;
 					}
 				}
-				if (!(getModel() instanceof MCell))
-					return null;
 				if (targetFeedback == null) {
 					targetFeedback = new RectangleFigure();
 					targetFeedback.setFill(false);
@@ -167,7 +162,7 @@ public class TableCellEditPart extends FigureEditPart implements
 					getHostFigure().translateToAbsolute(rect);
 					getFeedbackLayer().translateToRelative(rect);
 
-					targetFeedback.setBounds(rect.shrink(4, 4));
+					targetFeedback.setBounds(rect.shrink(2, 2));
 					targetFeedback.setBorder(new LineBorder(
 							ColorConstants.lightBlue, 3));
 					addFeedback(targetFeedback);
@@ -180,6 +175,7 @@ public class TableCellEditPart extends FigureEditPart implements
 				getLayoutTargetFeedback(request);
 			}
 
+			@Override
 			protected Command getCreateCommand(ANode parent, Object obj,
 					Rectangle constraint) {
 				if (parent instanceof MPage)

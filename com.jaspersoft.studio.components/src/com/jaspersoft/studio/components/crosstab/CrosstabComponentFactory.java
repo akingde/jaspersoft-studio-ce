@@ -34,8 +34,10 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.IFigure;
@@ -117,12 +119,14 @@ import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
+import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
+import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -377,7 +381,24 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 	public Command getCreateCommand(ANode parent, ANode child,
 			Rectangle location, int newIndex) {
-
+		if (child instanceof MStyle
+				&& (child.getValue() != null && parent instanceof MCell)) {
+			SetValueCommand cmd = new SetValueCommand();
+			cmd.setTarget((MCell) parent);
+			cmd.setPropertyId(JRDesignCellContents.PROPERTY_STYLE);
+			JRStyle style = (JRStyle) child.getValue();
+			cmd.setPropertyValue(style.getName());
+			return cmd;
+		}
+		if (child instanceof MStyle
+				&& (child.getValue() != null && parent instanceof MCrosstab)) {
+			SetValueCommand cmd = new SetValueCommand();
+			cmd.setTarget((MCrosstab) parent);
+			cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
+			JRStyle style = (JRStyle) child.getValue();
+			cmd.setPropertyValue(style.getName());
+			return cmd;
+		}
 		if (child instanceof MField
 				&& (child.getValue() != null && parent instanceof MCell))
 			return new CreateCrosstabElement4ObjectCommand(child,

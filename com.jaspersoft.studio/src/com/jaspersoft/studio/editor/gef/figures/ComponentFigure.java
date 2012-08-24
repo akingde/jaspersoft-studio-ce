@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
+import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -51,6 +52,7 @@ public class ComponentFigure extends RectangleFigure {
 	 */
 	public ComponentFigure() {
 		super();
+		setLayoutManager(new FreeformLayout());
 	}
 
 	/**

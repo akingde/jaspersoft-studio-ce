@@ -22,6 +22,7 @@ package com.jaspersoft.studio.editor.gef.parts.band;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -52,6 +53,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -76,6 +78,7 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
+import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -159,11 +162,9 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		}
 		return null;
 	}
-	
-	
+
 	/**
-	 * A different drag tracker will be used to allow to do a drag selection without selecting
-	 * the marquee tool
+	 * A different drag tracker will be used to allow to do a drag selection without selecting the marquee tool
 	 */
 	@Override
 	public DragTracker getDragTracker(Request request) {
@@ -188,8 +189,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		setBandNameShowing(rect);
 		return rect;
 	}
-	
-	
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class key) {
@@ -201,7 +201,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 				snapStrategies.add(new SnapToGuides(this));
 			val = (Boolean) getViewer().getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED);
 			if (val != null && val.booleanValue()) {
-				
+
 				SnapToGeometryThreshold snapper = new SnapToGeometryThreshold(this);
 				snapper.setThreshold(2.0);
 				snapStrategies.add(snapper);
@@ -223,9 +223,6 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		}
 		return super.getAdapter(key);
 	}
-	
-	
-
 
 	/*
 	 * (non-Javadoc)
@@ -241,11 +238,8 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 				updateRulers();
 			}
 		});
-		
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
-			
-			private RectangleFigure targetFeedback;
-			
+
 			@Override
 			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint) {
 				Rectangle rect = ((Rectangle) constraint).getCopy();
@@ -259,27 +253,31 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 				rect = rect.getTranslated(-ReportPageFigure.PAGE_BORDER.left, -ReportPageFigure.PAGE_BORDER.right);
 				if (child.getModel() instanceof MGraphicElement) {
 					MGraphicElement cmodel = (MGraphicElement) child.getModel();
-					if (cmodel.getParent() instanceof MBand && cmodel.getParent() == getModel()) {
+					MBand mband = getModel();
+					if (cmodel.getParent() instanceof MBand && cmodel.getParent() == mband) {
 						return super.createChangeConstraintCommand(child, rect);
 					} else {
 						CompoundCommand c = new CompoundCommand();
 
 						c.add(OutlineTreeEditPartFactory.getOrphanCommand(cmodel.getParent(), cmodel));
-						c.add(new CreateElementCommand((MBand) getModel(), cmodel, rect, -1));
+						c.add(new CreateElementCommand(mband, cmodel, CreateElementCommand.fixLocation(rect, mband,
+								cmodel.getValue()), -1));
 						return c;
 					}
 				}
 				return null;
 			}
-			
+
+			private RectangleFigure targetFeedback;
+
 			/**
-			 * Show the feedback during drag and drop 
+			 * Show the feedback during drag and drop
 			 */
 			protected void showLayoutTargetFeedback(Request request) {
 				super.showLayoutTargetFeedback(request);
 				getLayoutTargetFeedback(request);
 			}
-			
+
 			/**
 			 * Erase the feedback from a ban when no element is dragged into it
 			 */
@@ -290,13 +288,28 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 					targetFeedback = null;
 				}
 			}
-			
+
 			/**
 			 * Paint the figure to give the feedback, a blue border overlapping the band border
-			 * @param request 
+			 * 
+			 * @param request
 			 * @return feedback figure
 			 */
 			protected IFigure getLayoutTargetFeedback(Request request) {
+				if (request.getType().equals(RequestConstants.REQ_CREATE) && request instanceof CreateRequest) {
+					CreateRequest cbr = (CreateRequest) request;
+					if (cbr.getNewObject() instanceof Collection<?>) {
+						Collection<?> c = (Collection<?>) cbr.getNewObject();
+						if (!c.isEmpty() && c.iterator().next() instanceof MStyle)
+							return null;
+					}
+				} else if (request instanceof ChangeBoundsRequest) {
+					ChangeBoundsRequest cbr = (ChangeBoundsRequest) request;
+					List<EditPart> lst = cbr.getEditParts();
+					for (EditPart ep : lst)
+						if (((ANode) ep.getModel()).getParent() == getModel())
+							return null;
+				}
 				if (targetFeedback == null) {
 					targetFeedback = new RectangleFigure();
 					targetFeedback.setFill(false);
@@ -308,12 +321,11 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 					Rectangle rect = new PrecisionRectangle(bounds);
 					getHostFigure().translateToAbsolute(rect);
 					getFeedbackLayer().translateToRelative(rect);
-					
+
 					targetFeedback.setBounds(rect.shrink(0, 1));
 					targetFeedback.getBounds().setX(hostFigure.getBounds().x);
-					//targetFeedback.getBounds().setY(hostFigure.getBounds().y);
-					targetFeedback.setBorder(new LineBorder(
-							ColorConstants.lightBlue, 3));
+					// targetFeedback.getBounds().setY(hostFigure.getBounds().y);
+					targetFeedback.setBorder(new LineBorder(ColorConstants.lightBlue, 1));
 					addFeedback(targetFeedback);
 				}
 				return targetFeedback;

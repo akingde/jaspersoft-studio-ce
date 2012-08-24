@@ -127,8 +127,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 			}
 
 			protected IFigure getLayoutTargetFeedback(Request request) {
-				if (request.getType().equals(RequestConstants.REQ_ADD)
-						&& request instanceof ChangeBoundsRequest) {
+				if (request instanceof ChangeBoundsRequest) {
 					ChangeBoundsRequest cbr = (ChangeBoundsRequest) request;
 					List<EditPart> lst = cbr.getEditParts();
 					for (EditPart ep : lst) {
@@ -150,7 +149,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 					getHostFigure().translateToAbsolute(rect);
 					getFeedbackLayer().translateToRelative(rect);
 
-					targetFeedback.setBounds(rect.shrink(4, 4));
+					targetFeedback.setBounds(rect.shrink(2, 2));
 					targetFeedback.setBorder(new LineBorder(
 							ColorConstants.lightBlue, 3));
 					addFeedback(targetFeedback);

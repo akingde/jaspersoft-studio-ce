@@ -152,8 +152,8 @@ public class CreateElementCommand extends Command {
 		jrElement = (JRDesignElement) srcNode.getValue();
 		if (destNode instanceof IGroupElement) {
 			setContext(destNode, srcNode, index);
-//			if (destNode instanceof MBand)
-//				fixLocation(location, (MBand) destNode);
+			// if (destNode instanceof MBand)
+			// fixLocation(location, (MBand) destNode);
 		} else if (destNode instanceof MFrame) {
 			setContext(destNode, srcNode, index);
 		} else
@@ -219,15 +219,20 @@ public class CreateElementCommand extends Command {
 	}
 
 	public void fixLocation(Rectangle position, MBand band) {
-		int x = position.x - band.getBounds().x;
-		int y = position.y - band.getBounds().y;
 		if (location == null) {
 			if (jrElement != null)
 				location = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
 			else
 				location = new Rectangle(0, 0, 50, 30);
 		}
-		location.setLocation(x, y);
+		location = fixLocation(location, band, jrElement);
+	}
+
+	public static Rectangle fixLocation(Rectangle position, MBand band, JRDesignElement jrElement) {
+		int x = position.x - band.getBounds().x;
+		int y = position.y - band.getBounds().y;
+		position.setLocation(x, y);
+		return position;
 	}
 
 	/**

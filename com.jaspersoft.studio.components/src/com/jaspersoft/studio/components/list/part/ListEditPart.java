@@ -41,8 +41,8 @@ import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -61,76 +61,82 @@ public class ListEditPart extends EditableFigureEditPart {
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
+		installEditPolicy(EditPolicy.LAYOUT_ROLE,
+				new FigurePageLayoutEditPolicy() {
 
-			@Override
-			protected Command getCreateCommand(CreateRequest request) {
-				Rectangle constraint = (Rectangle) getConstraintFor(request);
+					@Override
+					protected Command getCreateCommand(CreateRequest request) {
+						Rectangle constraint = (Rectangle) getConstraintFor(request);
 
-				if (request.getNewObject() instanceof CreateElementAction) {
-					CreateElementAction action = (CreateElementAction) request
-							.getNewObject();
-					action.dropInto(getHost().getModel(), constraint.getCopy(),
-							-1);
-					action.run();
-					return action.getCommand();
-				} else if (request.getNewObject() instanceof MGraphicElement) {
-					return OutlineTreeEditPartFactory.getCreateCommand(
-							(ANode) getHost().getModel(),
-							(ANode) request.getNewObject(),
-							constraint.getCopy(), -1);
-				} else if (request.getNewObject() instanceof Collection<?>) {
-					CompoundCommand cmd = new CompoundCommand();
-					Collection<?> c = (Collection<?>) request.getNewObject();
-					for (Object obj : c) {
-						if (obj instanceof ANode)
-							cmd.add(OutlineTreeEditPartFactory
-									.getCreateCommand((ANode) getHost()
-											.getModel(), (ANode) obj,
-											constraint.getCopy(), -1));
-					}
-					return cmd;
-				}
-				return null;
-			}
-
-			@Override
-			protected Command createAddCommand(EditPart child, Object constraint) {
-				Rectangle rect = (Rectangle) constraint;
-				if (child.getModel() instanceof MGraphicElement) {
-					MGraphicElement cmodel = (MGraphicElement) child.getModel();
-					if (cmodel.getParent() instanceof MList) {
-						MList cparent = (MList) cmodel.getParent();
-						if (cparent == getModel()) {
-							Rectangle r = cmodel.getBounds();
-							SetPageConstraintCommand cmd = new SetPageConstraintCommand();
-							JRDesignElement jde = (JRDesignElement) cmodel
-									.getValue();
-							int x = r.x + rect.x - jde.getX() + 2;
-							int y = r.y + rect.y - jde.getY() + 2;
-							rect.setLocation(x, y);
-							cmd.setContext((ANode) getHost().getModel(),
-									(ANode) child.getModel(), rect);
-
+						if (request.getNewObject() instanceof CreateElementAction) {
+							CreateElementAction action = (CreateElementAction) request
+									.getNewObject();
+							action.dropInto(getHost().getModel(),
+									constraint.getCopy(), -1);
+							action.run();
+							return action.getCommand();
+						} else if (request.getNewObject() instanceof MGraphicElement) {
+							return OutlineTreeEditPartFactory.getCreateCommand(
+									(ANode) getHost().getModel(),
+									(ANode) request.getNewObject(),
+									constraint.getCopy(), -1);
+						} else if (request.getNewObject() instanceof Collection<?>) {
+							CompoundCommand cmd = new CompoundCommand();
+							Collection<?> c = (Collection<?>) request
+									.getNewObject();
+							for (Object obj : c) {
+								if (obj instanceof ANode)
+									cmd.add(OutlineTreeEditPartFactory
+											.getCreateCommand((ANode) getHost()
+													.getModel(), (ANode) obj,
+													constraint.getCopy(), -1));
+							}
 							return cmd;
 						}
-					} else {
-						CompoundCommand c = new CompoundCommand();
-
-						c.add(OutlineTreeEditPartFactory.getOrphanCommand(
-								cmodel.getParent(), cmodel));
-						c.add(new CreateElementCommand((MList) getModel(),
-								cmodel, rect, -1));
-						return c;
+						return null;
 					}
-				} else {
-					return super.createChangeConstraintCommand(child,
-							constraint);
-				}
-				return null;
-			}
 
-		});
+					@Override
+					protected Command createAddCommand(EditPart child,
+							Object constraint) {
+						Rectangle rect = (Rectangle) constraint;
+						if (child.getModel() instanceof MGraphicElement) {
+							MGraphicElement cmodel = (MGraphicElement) child
+									.getModel();
+							if (cmodel.getParent() instanceof MList) {
+								MList cparent = (MList) cmodel.getParent();
+								if (cparent == getModel()) {
+									Rectangle r = cmodel.getBounds();
+									SetPageConstraintCommand cmd = new SetPageConstraintCommand();
+									JRDesignElement jde = (JRDesignElement) cmodel
+											.getValue();
+									int x = r.x + rect.x - jde.getX() + 2;
+									int y = r.y + rect.y - jde.getY() + 2;
+									rect.setLocation(x, y);
+									cmd.setContext(
+											(ANode) getHost().getModel(),
+											(ANode) child.getModel(), rect);
+
+									return cmd;
+								}
+							} else {
+								CompoundCommand c = new CompoundCommand();
+
+								c.add(OutlineTreeEditPartFactory
+										.getOrphanCommand(cmodel.getParent(),
+												cmodel));
+								c.add(new CreateElementCommand(
+										(MList) getModel(), cmodel, rect, -1));
+								return c;
+							}
+						} else {
+							return super.createChangeConstraintCommand(child,
+									constraint);
+						}
+						return null;
+					}
+
+				});
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
 				new FigureSelectionEditPolicy());
 	}
