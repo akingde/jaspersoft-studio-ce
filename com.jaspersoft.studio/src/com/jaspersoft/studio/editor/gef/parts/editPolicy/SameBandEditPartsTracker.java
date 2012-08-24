@@ -14,6 +14,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,6 +64,9 @@ import com.jaspersoft.studio.editor.java2d.J2DGraphics;
  */
 public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	
+	private static Color borderColor = null;
+	private static Color fillColor = null;
+	
 	/**
 	 * The Figure painted by the selection
 	 * @author Orlandin Marco
@@ -80,8 +85,12 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 			Rectangle bounds = getBounds().getCopy();
 			graphics.translate(getLocation());
 			Graphics2D gr = ((J2DGraphics)graphics).getGraphics2D();
-			gr.setColor(new java.awt.Color(195,195,255,128));
+			//gr.setColor(new java.awt.Color(168,202,236,128));
+			gr.setColor(fillColor);
 			gr.fillRect(0,0, bounds.width-1,bounds.height-1);
+			gr.setStroke(new BasicStroke(2.0f));
+			gr.setColor(borderColor);
+			gr.drawRect(0,0, bounds.width-1,bounds.height-1);
 			if (schedulePaint) {
 				Display.getCurrent().timerExec(DELAY, new Runnable() {
 					public void run() {
@@ -167,6 +176,10 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	
 	public SameBandEditPartsTracker(EditPart owner) {
 		super(owner);
+		if (borderColor == null){
+			fillColor = new java.awt.Color(168,202,236,128);
+			borderColor = new java.awt.Color(0,50,200,128);
+		}
 	}
 	
 		
