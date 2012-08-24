@@ -14,6 +14,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.pdf;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.gef.EditPartViewer;
@@ -41,7 +42,8 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class PDF508ElementDecorator implements IElementDecorator {
 
-	private IDecorator decorator = new PDFDecorator();		
+	private IDecorator decorator = new PDFDecorator();
+	private List<String> actionIDs;
 	
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
@@ -300,5 +302,14 @@ public class PDF508ElementDecorator implements IElementDecorator {
 	@Override
 	public void contribute2Menu(ActionRegistry registry, MenuManager menuManager) {
 		menuManager.add(registry.getAction(ShowPDFTagsAction.ID));
+	}
+
+	@Override
+	public List<String> getActionIDs() {
+		if(actionIDs==null){
+			actionIDs=new ArrayList<String>(1);
+			actionIDs.add(ShowPDFTagsAction.ID);
+		}
+		return actionIDs;
 	}
 }

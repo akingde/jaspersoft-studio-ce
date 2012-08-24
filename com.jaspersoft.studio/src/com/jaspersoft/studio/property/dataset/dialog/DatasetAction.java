@@ -30,12 +30,14 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.utils.ResourceManager;
 
 public class DatasetAction extends SelectionAction {
 	public static final String ID = "datasetAction"; //$NON-NLS-1$
@@ -58,6 +60,8 @@ public class DatasetAction extends SelectionAction {
 		super.init();
 		setText("Dataset && Query ...");
 		setToolTipText("DataSet and Query editor dialog");
+		setImageDescriptor(
+				ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/dataset-16.png"));
 		setId(ID);
 		setEnabled(false);
 	}

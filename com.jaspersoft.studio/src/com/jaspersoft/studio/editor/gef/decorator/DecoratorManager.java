@@ -86,4 +86,12 @@ public class DecoratorManager {
 		for (IElementDecorator f : nodeFactory)
 			f.contribute2Menu(registry, menuManager);
 	}
+	
+	public List<String> getActionIDs(){
+		List<String> ids=new ArrayList<String>();
+		for (IElementDecorator f : nodeFactory){
+			ids.addAll(f.getActionIDs());
+		}
+		return ids;
+	}
 }

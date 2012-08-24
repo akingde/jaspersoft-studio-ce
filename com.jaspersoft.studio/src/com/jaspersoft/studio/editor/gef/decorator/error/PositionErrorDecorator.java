@@ -14,6 +14,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.error;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRBand;
@@ -41,6 +42,7 @@ import com.jaspersoft.studio.model.band.MBand;
 public class PositionErrorDecorator implements IElementDecorator {
 
 	private IDecorator decorator = null;
+	private List<String> actionIDs;
 
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
@@ -121,6 +123,15 @@ public class PositionErrorDecorator implements IElementDecorator {
 	@Override
 	public void contribute2Menu(ActionRegistry registry, MenuManager menuManager) {
 		menuManager.add(registry.getAction(ShowErrorsAction.ID));
+	}
+
+	@Override
+	public List<String> getActionIDs() {
+		if(actionIDs==null){
+			actionIDs=new ArrayList<String>(1);
+			actionIDs.add(ShowErrorsAction.ID);
+		}
+		return actionIDs;
 	}
 
 }

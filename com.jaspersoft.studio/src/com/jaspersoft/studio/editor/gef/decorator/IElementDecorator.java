@@ -83,4 +83,12 @@ public interface IElementDecorator {
 	 * @param menuManager
 	 */
 	public void contribute2Menu(ActionRegistry registry, MenuManager menuManager);
+	
+	/**
+	 * Returns the list of Action IDs.
+	 * 
+	 * @return list of id
+	 */
+	public List<String> getActionIDs();
+	
 }

@@ -52,9 +52,9 @@ public class SnapToGuidesAction extends Action {
 	private GraphicalViewer diagramViewer;
 
 	public SnapToGuidesAction(GraphicalViewer diagramViewer) {
-		super(Messages.common_show_grid, AS_CHECK_BOX);
+		super(Messages.common_snap_to_guides, AS_CHECK_BOX);
 		this.diagramViewer = diagramViewer;
-		setText(Messages.common_show_grid);
+		setText(Messages.common_snap_to_guides);
 		setToolTipText(Messages.SnapToGuidesAction_show_grid_tool_tip);
 		setId(ID);
 		setActionDefinitionId(ID);
