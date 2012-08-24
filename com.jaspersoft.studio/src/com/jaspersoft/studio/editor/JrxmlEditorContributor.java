@@ -233,7 +233,9 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			}
 			textEditorContributor.setActiveEditor(activeEditor);
 		} else if (activeEditor instanceof ReportContainer || activeEditor instanceof AbstractVisualEditor) {
-			addZoom(bars.getToolBarManager());
+			// NO LONGER AVAILABLE IN GLOBAL TOOLBAR SINCE
+			// THEY WILL BE VISIBLE IN THE ReportContainer toolbar.
+//			addZoom(bars.getToolBarManager());
 			if (activeEditor instanceof AbstractVisualEditor) {
 				GraphicalViewer graphicalViewer = ((AbstractVisualEditor) activeEditor).getGraphicalViewer();
 				ZoomManager property = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());

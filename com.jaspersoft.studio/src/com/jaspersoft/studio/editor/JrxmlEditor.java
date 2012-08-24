@@ -487,11 +487,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
-			editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
-			for (AContributorAction a : editorActions) {
-				a.setJrConfig(jrContext);
-				((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
-			}
+			// NO LONGER AVAILABLE IN GLOBAL TOOLBAR SINCE
+			// THEY WILL BE VISIBLE IN THE ReportContainer toolbar.
+//			editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
+//			for (AContributorAction a : editorActions) {
+//				a.setJrConfig(jrContext);
+//				((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
+//			}
 			jrContext.setJasperDesign(jd);
 			setModel(ReportFactory.createReport(jrContext));
 		} catch (JRException e) {
