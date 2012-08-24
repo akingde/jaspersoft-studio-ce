@@ -970,4 +970,20 @@
              ClassFactory="com.jaspersoft.studio.model.frame.PostSetSizeFrame">
        </postsetvalue>
     </extension>
+    <extension point="org.eclipse.ui.commands">
+	  <command
+         categoryId="org.eclipse.gef.category.view"
+         description="Show or hide the grid"
+         id="org.eclipse.gef.toggle_grid_visibility"
+         name="ShowGrid">
+	  </command>
+	</extension>
+    <extension 
+          point="org.eclipse.ui.bindings">
+       <key
+             commandId="org.eclipse.gef.toggle_grid_visibility"
+             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+             sequence="M1+M2+Z">
+       </key>
+    </extension>
 </plugin>

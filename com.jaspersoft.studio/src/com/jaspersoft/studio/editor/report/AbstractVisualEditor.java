@@ -273,7 +273,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		IAction showGrid = new ShowGridAction(graphicalViewer);
 		getActionRegistry().registerAction(showGrid);
-
+		//getCommonKeyHandler().put(KeyStroke.getPressed(SWT.F3, 0), showGrid);
 		SnapToGridAction snapGridAction = new SnapToGridAction(graphicalViewer);
 		getActionRegistry().registerAction(snapGridAction);
 

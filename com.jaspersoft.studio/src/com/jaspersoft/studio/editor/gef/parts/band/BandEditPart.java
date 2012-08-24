@@ -31,8 +31,11 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.DragTracker;
@@ -47,6 +50,7 @@ import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -219,6 +223,9 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		}
 		return super.getAdapter(key);
 	}
+	
+	
+
 
 	/*
 	 * (non-Javadoc)
@@ -234,7 +241,11 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 				updateRulers();
 			}
 		});
+		
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
+			
+			private RectangleFigure targetFeedback;
+			
 			@Override
 			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint) {
 				Rectangle rect = ((Rectangle) constraint).getCopy();
@@ -260,6 +271,54 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 				}
 				return null;
 			}
+			
+			/**
+			 * Show the feedback during drag and drop 
+			 */
+			protected void showLayoutTargetFeedback(Request request) {
+				super.showLayoutTargetFeedback(request);
+				getLayoutTargetFeedback(request);
+			}
+			
+			/**
+			 * Erase the feedback from a ban when no element is dragged into it
+			 */
+			protected void eraseLayoutTargetFeedback(Request request) {
+				super.eraseLayoutTargetFeedback(request);
+				if (targetFeedback != null) {
+					removeFeedback(targetFeedback);
+					targetFeedback = null;
+				}
+			}
+			
+			/**
+			 * Paint the figure to give the feedback, a blue border overlapping the band border
+			 * @param request 
+			 * @return feedback figure
+			 */
+			protected IFigure getLayoutTargetFeedback(Request request) {
+				if (targetFeedback == null) {
+					targetFeedback = new RectangleFigure();
+					targetFeedback.setFill(false);
+
+					IFigure hostFigure = getHostFigure();
+					Rectangle bounds = hostFigure.getBounds();
+					if (hostFigure instanceof HandleBounds)
+						bounds = ((HandleBounds) hostFigure).getHandleBounds();
+					Rectangle rect = new PrecisionRectangle(bounds);
+					getHostFigure().translateToAbsolute(rect);
+					getFeedbackLayer().translateToRelative(rect);
+					
+					targetFeedback.setBounds(rect.shrink(0, 1));
+					targetFeedback.getBounds().setX(hostFigure.getBounds().x);
+					//targetFeedback.getBounds().setY(hostFigure.getBounds().y);
+					targetFeedback.setBorder(new LineBorder(
+							ColorConstants.lightBlue, 3));
+					addFeedback(targetFeedback);
+				}
+				return targetFeedback;
+			}
+
 		});
 	}
 
