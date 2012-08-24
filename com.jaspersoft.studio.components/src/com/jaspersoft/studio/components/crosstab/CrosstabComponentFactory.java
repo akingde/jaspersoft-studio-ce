@@ -22,7 +22,6 @@ package com.jaspersoft.studio.components.crosstab;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import net.sf.jasperreports.crosstabs.JRCrosstab;
@@ -33,7 +32,6 @@ import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -137,6 +135,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			CrosstabManager ctManager = new CrosstabManager(ct);
 			MCrosstab mCrosstab = new MCrosstab(parent, ct, newIndex, ctManager);
 			if (parent instanceof MPage) {
+				final JasperDesign jd = parent.getJasperDesign();
+				ReportFactory.createStyles(parent.getJasperConfiguration(), jd,
+						parent, 0);
+
 				MCrosstabParameters mp = new MCrosstabParameters(mCrosstab, ct,
 						JRDesignCrosstab.PROPERTY_PARAMETERS);
 				if (ct.getParameters() != null)
@@ -163,7 +165,6 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				// ---------------------------------
 				createCellNodes(ct, mCrosstab);
 
-				final JasperDesign jd = mCrosstab.getJasperDesign();
 				JRDesignCrosstab st = mCrosstab.getValue();
 
 				DSListener dslistner = new DSListener(parent, jd, st);
@@ -222,7 +223,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			else
 				dataset = (JRDesignDataset) jd.getMainDataset();
 			if (dataset != null) {
-				MDataset nDataset = new MDataset(parent, dataset, 0);
+				MDataset nDataset = new MDataset(parent, dataset, 1);
 				ReportFactory.createDataset(nDataset, dataset, false);
 			}
 

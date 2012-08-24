@@ -77,10 +77,13 @@ public class ListComponentFactory implements IComponentFactory {
 			MList mlist = new MList(parent,
 					(JRDesignComponentElement) jrObject, newIndex);
 			if (mlist.getParent() instanceof MPage) {
+				final JasperDesign jd = mlist.getJasperDesign();
+				ReportFactory.createStyles(mlist.getJasperConfiguration(), jd,
+						mlist.getParent(), 0);
+
 				ReportFactory.createElementsForBand(mlist, list.getContents()
 						.getChildren());
 
-				final JasperDesign jd = mlist.getJasperDesign();
 				StandardListComponent st = mlist.getList();
 
 				DSListener dslistner = new DSListener(parent, jd, st);
@@ -125,7 +128,7 @@ public class ListComponentFactory implements IComponentFactory {
 			else
 				dataset = (JRDesignDataset) jd.getMainDataset();
 			if (dataset != null) {
-				MDataset nDataset = new MDataset(parent, dataset, 0);
+				MDataset nDataset = new MDataset(parent, dataset, 1);
 				ReportFactory.createDataset(nDataset, dataset, false);
 			}
 

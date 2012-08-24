@@ -127,22 +127,7 @@ public class ReportFactory {
 		ANode report = new MReport(node, jConfig);
 		// create first level
 		// create Styles
-		ANode nStyle = new MStyles(report);
-		if (jd.getTemplates() != null) {
-			for (Iterator<JRReportTemplate> it = jd.getTemplatesList().iterator(); it.hasNext();) {
-				createNode(nStyle, it.next(), -1, (IFile) jConfig.get(IEditorContributor.KEY_FILE));
-			}
-		}
-		if (jd.getStyles() != null) {
-			for (JRStyle jrstyle : jd.getStylesList()) {
-				ANode mstyle = createNode(nStyle, jrstyle, -1);
-				if (((JRDesignStyle) jrstyle).getConditionalStyleList() != null) {
-					for (Object jrc : ((JRDesignStyle) jrstyle).getConditionalStyleList()) {
-						createNode(mstyle, jrc, -1);
-					}
-				}
-			}
-		}
+		createStyles(jConfig, jd, report, -1);
 		// create datasets
 		createDataset(report, jd.getMainDesignDataset(), false);
 
@@ -241,6 +226,21 @@ public class ReportFactory {
 			createElementsForBand(background, jd.getBackground().getChildren());
 
 		return node;
+	}
+
+	public static void createStyles(JasperReportsConfiguration jConfig, JasperDesign jd, ANode report, int index) {
+		ANode nStyle = new MStyles(report, index);
+		if (jd.getTemplates() != null)
+			for (Iterator<JRReportTemplate> it = jd.getTemplatesList().iterator(); it.hasNext();)
+				createNode(nStyle, it.next(), -1, (IFile) jConfig.get(IEditorContributor.KEY_FILE));
+		if (jd.getStyles() != null) {
+			for (JRStyle jrstyle : jd.getStylesList()) {
+				ANode mstyle = createNode(nStyle, jrstyle, -1);
+				if (((JRDesignStyle) jrstyle).getConditionalStyleList() != null)
+					for (Object jrc : ((JRDesignStyle) jrstyle).getConditionalStyleList())
+						createNode(mstyle, jrc, -1);
+			}
+		}
 	}
 
 	/**

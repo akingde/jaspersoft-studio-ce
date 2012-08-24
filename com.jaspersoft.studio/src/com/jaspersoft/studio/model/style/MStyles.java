@@ -66,7 +66,11 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 	 *          the parent
 	 */
 	public MStyles(ANode parent) {
-		super(parent, -1);
+		this(parent, -1);
+	}
+
+	public MStyles(ANode parent, int index) {
+		super(parent, index);
 		setValue(getJasperDesign());
 	}
 

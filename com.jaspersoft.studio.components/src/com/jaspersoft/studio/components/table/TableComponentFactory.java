@@ -136,6 +136,9 @@ public class TableComponentFactory implements IComponentFactory {
 
 					// listen for datasets
 					final JasperDesign jd = mt.getJasperDesign();
+					ReportFactory.createStyles(parent.getJasperConfiguration(),
+							jd, parent, 0);
+
 					final MTable finaltable = mt;
 					final PropertyChangeListener listener = new PropertyChangeListener() {
 
@@ -203,7 +206,7 @@ public class TableComponentFactory implements IComponentFactory {
 			else
 				dataset = (JRDesignDataset) jd.getMainDataset();
 			if (dataset != null) {
-				MDataset nDataset = new MDataset(parent, dataset, 0);
+				MDataset nDataset = new MDataset(parent, dataset, 1);
 				ReportFactory.createDataset(nDataset, dataset, false);
 			}
 
