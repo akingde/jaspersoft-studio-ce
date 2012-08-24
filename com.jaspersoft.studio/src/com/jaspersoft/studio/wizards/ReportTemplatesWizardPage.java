@@ -31,6 +31,8 @@ import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.nebula.widgets.gallery.NoGroupRenderer;
 import org.eclipse.nebula.widgets.gallery.RoundedGalleryItemRenderer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -130,7 +132,21 @@ public class ReportTemplatesWizardPage extends WizardPage {
 
 			}
 		});
-
+		gal.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				getContainer().showPage(getNextPage());
+			}
+		});
+		
 		findTemplates();
 
 		scale.addListener(SWT.Selection, new Listener() {
