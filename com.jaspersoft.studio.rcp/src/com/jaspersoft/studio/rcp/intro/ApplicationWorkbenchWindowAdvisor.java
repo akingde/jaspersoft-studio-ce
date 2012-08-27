@@ -57,7 +57,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public void preWindowOpen() {
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-		configurer.setInitialSize(new Point(700, 550));
+		configurer.setInitialSize(new Point(1024, 768));
 		configurer.setShowCoolBar(true);
 		configurer.setShowStatusLine(true);
 		configurer.setShowFastViewBars(true);
@@ -116,6 +116,11 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			}
     	});
 	}
-	
+
+	@Override
+	public void postWindowOpen() {
+		// by default maximize the window
+		getWindowConfigurer().getWindow().getShell().setMaximized(true);
+	}
 	
 }
