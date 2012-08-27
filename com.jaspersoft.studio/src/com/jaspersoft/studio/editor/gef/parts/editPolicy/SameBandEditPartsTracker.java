@@ -177,19 +177,13 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	public SameBandEditPartsTracker(EditPart owner) {
 		super(owner);
 		if (borderColor == null){
-			fillColor = new java.awt.Color(215,216,230,128);
-			borderColor = new java.awt.Color(102,102,176,128);
+			fillColor = new java.awt.Color(168,202,236,128);
+			borderColor = new java.awt.Color(0,50,200,128);
 		}
 	}
 	
-	/**
-	 * Creates a new MarqueeSelectionTool of default type
-	 * {@link #BEHAVIOR_NODES_CONTAINED}.
-	 */
 	public SameBandEditPartsTracker() {
 		this(null);
-		setDefaultCursor(SharedCursors.CROSS);
-		setUnloadWhenFinished(false);
 	}
 	
 		
@@ -209,6 +203,17 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 		}
 		else super.mouseUp(me, viewer);
 	};
+	
+	/**
+	 * Called when the mouse button is released. Overridden to do nothing, since
+	 * a drag tracker does not need to unload when finished.
+	 */
+	protected void handleFinished() {
+		if (unloadWhenFinished())
+			getDomain().loadDefaultTool();
+		else
+			reactivate();
+	}
 
 
 	private static final Request MARQUEE_REQUEST = new Request(
@@ -284,8 +289,6 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 				.addAll(calculateSecondaryMarqueeSelectedEditParts(marqueeSelectedEditParts));
 		return marqueeSelectedEditParts;
 	}
-	
-
 
 	/**
 	 * Responsible of calculating those edit parts that should be regarded as
@@ -521,7 +524,6 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 		return false;
 	}
 
-
 	/**
 	 * This method is called when mouse or keyboard input is invalid and erases
 	 * the feedback.
@@ -708,18 +710,6 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	private boolean isCurrentViewerGraphical() {
 		return getCurrentViewer() instanceof GraphicalViewer;
 	}
-	
-	/**
-	 * Calls {@link #performOpen()} if the double click was with mouse button 1.
-	 * 
-	 * @see org.eclipse.gef.tools.AbstractTool#handleDoubleClick(int)
-	 */
-	protected boolean handleDoubleClick(int button) {
-		if (getSourceEditPart() != null){
-				super.handleDoubleClick(button);
-		}
-		return true;
-	}
 
 	/**
 	 * Calculates and sets a new viewer selection based on the current marquee
@@ -795,6 +785,18 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	}
 
 	/**
+	 * Calls {@link #performOpen()} if the double click was with mouse button 1.
+	 * 
+	 * @see org.eclipse.gef.tools.AbstractTool#handleDoubleClick(int)
+	 */
+	protected boolean handleDoubleClick(int button) {
+		if (getSourceEditPart() != null){
+			super.handleDoubleClick(button);
+		}
+		return true;
+	}
+	
+	/**
 	 * @see org.eclipse.gef.Tool#setViewer(org.eclipse.gef.EditPartViewer)
 	 */
 	public void setViewer(EditPartViewer viewer) {
@@ -821,6 +823,5 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 			editPart.showTargetFeedback(getTargetRequest());
 		}
 	}
-
 	
 }
