@@ -21,7 +21,9 @@ package com.jaspersoft.studio.model.command;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRCommonElement;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.base.JRBaseElement;
@@ -58,6 +60,10 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * link nodes & together.
  * 
  * @author Chicu Veaceslav
+ */
+/**
+ * @author slavic
+ * 
  */
 public class CreateElementCommand extends Command {
 	protected JasperDesign jasperDesign;
@@ -303,11 +309,13 @@ public class CreateElementCommand extends Command {
 	public void execute() {
 		createObject();
 		if (jrElement != null) {
+			removeElement(jasperDesign, jrElement);
 			if (jrGroup instanceof JRDesignElementGroup) {
+				JRDesignElementGroup jrdgroup = (JRDesignElementGroup) jrGroup;
 				if (index < 0 || index > jrGroup.getChildren().size())
-					((JRDesignElementGroup) jrGroup).addElement(jrElement);
+					jrdgroup.addElement(jrElement);
 				else
-					((JRDesignElementGroup) jrGroup).addElement(index, jrElement);
+					jrdgroup.addElement(index, jrElement);
 			} else if (jrGroup instanceof JRDesignFrame) {
 				JRDesignFrame jFrame = (JRDesignFrame) jrGroup;
 				if (index < 0 || index > jrGroup.getChildren().size())
@@ -406,5 +414,34 @@ public class CreateElementCommand extends Command {
 	 */
 	public int getIndex() {
 		return index;
+	}
+
+	/**
+	 * remove element from other containers
+	 * 
+	 * @param jasperDesign
+	 * @param element
+	 */
+	public static void removeElement(JasperDesign jasperDesign, JRDesignElement element) {
+		for (JRBand band : jasperDesign.getAllBands()) {
+			JRDesignBand b = (JRDesignBand) band;
+			b.removeElement(element);
+			removeElement(element, b.getElements());
+		}
+
+	}
+
+	public static void removeElement(JRDesignElement element, JRElement[] elements) {
+		for (JRElement el : elements) {
+			if (el instanceof IGroupElement) {
+				JRDesignElementGroup egroup = (JRDesignElementGroup) ((IGroupElement) el).getJRElementGroup();
+				egroup.removeElement(element);
+				removeElement(element, egroup.getElements());
+			} else if (el instanceof JRDesignFrame) {
+				JRDesignFrame frame = (JRDesignFrame) el;
+				frame.removeElement(element);
+				removeElement(element, frame.getElements());
+			}
+		}
 	}
 }
