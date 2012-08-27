@@ -19,8 +19,14 @@
  */
 package com.jaspersoft.studio.components.table.model.cell.command;
 
+import java.util.List;
+
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.ColumnGroup;
 import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -41,6 +47,7 @@ public class CreateElementCommand extends Command {
 	protected MGraphicElement srcNode;
 	protected JRDesignElement jrElement;
 	private StandardBaseColumn jrColumn;
+	private StandardTable sTable;
 	private JasperDesign jDesign;
 	private DesignCell jrCell;
 
@@ -68,6 +75,7 @@ public class CreateElementCommand extends Command {
 		this.index = index;
 		this.location = position;
 		this.srcNode = srcNode;
+		sTable = destNode.getTable().getStandardTable();
 		this.jrColumn = (StandardBaseColumn) destNode.getValue();
 		jDesign = destNode.getJasperDesign();
 		pholder = ((IContainerLayout) destNode).getPropertyHolder();
@@ -109,6 +117,7 @@ public class CreateElementCommand extends Command {
 	public void execute() {
 		createObject();
 		if (jrElement != null) {
+			removeElements(jrElement);
 			if (index >= 0 && index <= jrCell.getChildren().size())
 				jrCell.addElement(index, jrElement);
 			else
@@ -151,6 +160,38 @@ public class CreateElementCommand extends Command {
 	public void undo() {
 		lCmd.undo();
 		jrCell.removeElement(jrElement);
+	}
+
+	private void removeElements(JRDesignElement element) {
+		com.jaspersoft.studio.model.command.CreateElementCommand.removeElement(
+				jDesign, jrElement);
+		removeElementFromColumn(sTable.getColumns());
+	}
+
+	public void removeElementFromColumn(List<BaseColumn> cols) {
+		for (BaseColumn bc : cols) {
+			com.jaspersoft.studio.model.command.CreateElementCommand
+					.removeElement(jrElement, bc.getTableHeader().getElements());
+			com.jaspersoft.studio.model.command.CreateElementCommand
+					.removeElement(jrElement, bc.getTableFooter().getElements());
+
+			com.jaspersoft.studio.model.command.CreateElementCommand
+					.removeElement(jrElement, bc.getColumnHeader()
+							.getElements());
+			com.jaspersoft.studio.model.command.CreateElementCommand
+					.removeElement(jrElement, bc.getColumnFooter()
+							.getElements());
+
+			for (GroupCell gc : bc.getGroupHeaders())
+				com.jaspersoft.studio.model.command.CreateElementCommand
+						.removeElement(jrElement, gc.getCell().getElements());
+			for (GroupCell gc : bc.getGroupFooters())
+				com.jaspersoft.studio.model.command.CreateElementCommand
+						.removeElement(jrElement, gc.getCell().getElements());
+
+			if (bc instanceof ColumnGroup)
+				removeElementFromColumn(((ColumnGroup) bc).getColumns());
+		}
 	}
 
 }

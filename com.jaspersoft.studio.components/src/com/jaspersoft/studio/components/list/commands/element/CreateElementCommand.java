@@ -125,6 +125,7 @@ public class CreateElementCommand extends Command {
 	public void execute() {
 		createObject();
 		if (jrElement != null) {
+			removeElements(jrElement);
 			DesignListContents dlist = (DesignListContents) listcomponent
 					.getContents();
 			if (index < 0 || index > dlist.getChildren().size())
@@ -179,4 +180,15 @@ public class CreateElementCommand extends Command {
 		dlist.removeElement(jrElement);
 
 	}
+
+	private void removeElements(JRDesignElement element) {
+		com.jaspersoft.studio.model.command.CreateElementCommand.removeElement(
+				jDesign, jrElement);
+
+		DesignListContents dlist = (DesignListContents) listcomponent
+				.getContents();
+		com.jaspersoft.studio.model.command.CreateElementCommand.removeElement(
+				jrElement, dlist.getElements());
+	}
+
 }
