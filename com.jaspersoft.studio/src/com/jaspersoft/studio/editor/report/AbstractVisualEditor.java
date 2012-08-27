@@ -273,7 +273,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		IAction showGrid = new ShowGridAction(graphicalViewer);
 		getActionRegistry().registerAction(showGrid);
-		//getCommonKeyHandler().put(KeyStroke.getPressed(SWT.F3, 0), showGrid);
+
 		SnapToGridAction snapGridAction = new SnapToGridAction(graphicalViewer);
 		getActionRegistry().registerAction(snapGridAction);
 
@@ -433,11 +433,23 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	protected PaletteViewerProvider createPaletteViewerProvider() {
 		return new PaletteViewerProvider(getEditDomain()) {
 			private IMenuListener menuListener;
-
+			
 			@Override
 			protected void configurePaletteViewer(PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
 				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
+				// Uncomment these lines if you want to set as default a palette
+				// with column layout and large icons.
+//				// TODO: we should replace these default suggestions not using the GEF preference
+//				// store explicitly. It would be better override the PaletteViewer creation in order
+//				// to have a custom PaletteViewerPreferences (#viewer.getPaletteViewerPreferences()).
+//				// This way we could store the preferences in our preference store (maybe the JaspersoftStudio plugin one).
+//				// For now we'll stay with this solution avoiding the user to lose previous saved preferences
+//				// regarding the palette.
+//				InternalGEFPlugin.getDefault().getPreferenceStore().setDefault(
+//						PaletteViewerPreferences.PREFERENCE_LAYOUT, PaletteViewerPreferences.LAYOUT_COLUMNS);
+//				InternalGEFPlugin.getDefault().getPreferenceStore().setDefault(
+//						PaletteViewerPreferences.PREFERENCE_COLUMNS_ICON_SIZE,true);
 			}
 
 			@Override

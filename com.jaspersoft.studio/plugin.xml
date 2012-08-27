@@ -155,11 +155,18 @@
                relative="com.jaspersoft.studio.Repository">
          </view>
          <view
-               id="org.eclipse.ui.views.PropertySheet"
+               id="org.eclipse.gef.ui.palette_view"
                minimized="false"
-               ratio="0.75"
+               ratio="0.65"
                relationship="right"
                relative="org.eclipse.ui.editorss">
+         </view>
+         <view
+               id="org.eclipse.ui.views.PropertySheet"
+               minimized="false"
+               ratio="0.40"
+               relationship="bottom"
+               relative="org.eclipse.gef.ui.palette_view">
          </view>
          <view
                id="org.eclipse.ui.views.ProblemView"
