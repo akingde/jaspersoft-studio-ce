@@ -23,7 +23,15 @@ package com.jaspersoft.studio.wizards;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+<<<<<<< .mine
 import java.util.List;
+
+import net.jaspersoft.templates.TemplateBundle;
+import net.jaspersoft.templates.studio.JrxmlTemplateBundle;
+import net.jaspersoft.templates.studio.StudioTemplateManager;
+=======
+import java.util.List;
+>>>>>>> .r1515
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.nebula.widgets.gallery.Gallery;
