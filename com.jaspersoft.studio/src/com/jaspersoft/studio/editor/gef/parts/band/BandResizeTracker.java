@@ -26,7 +26,6 @@ import java.util.List;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
@@ -38,7 +37,6 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -54,8 +52,6 @@ import org.eclipse.gef.tools.SimpleDragTracker;
 import org.eclipse.gef.tools.ToolUtilities;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-
-import com.jaspersoft.studio.model.APropertyNode;
 
 /*
  * The Class BandResizeTracker.

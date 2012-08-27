@@ -21,11 +21,18 @@ package com.jaspersoft.studio.editor.gef.parts;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.handles.HandleBounds;
 
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
@@ -54,6 +61,8 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 
+			private RectangleFigure targetFeedback;
+			
 			@Override
 			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint) {
 				if (parent instanceof MPage)
@@ -96,6 +105,53 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 					return super.createChangeConstraintCommand(child, constraint);
 				}
 				return null;
+			}
+			
+			/**
+			 * Show the feedback during drag and drop 
+			 */
+			protected void showLayoutTargetFeedback(Request request) {
+				super.showLayoutTargetFeedback(request);
+				getLayoutTargetFeedback(request);
+			}
+			
+			/**
+			 * Erase the feedback from a ban when no element is dragged into it
+			 */
+			protected void eraseLayoutTargetFeedback(Request request) {
+				super.eraseLayoutTargetFeedback(request);
+				if (targetFeedback != null) {
+					removeFeedback(targetFeedback);
+					targetFeedback = null;
+				}
+			}
+			
+			/**
+			 * Paint the figure to give the feedback, a blue border overlapping the band border
+			 * @param request 
+			 * @return feedback figure
+			 */
+			protected IFigure getLayoutTargetFeedback(Request request) {
+				if (targetFeedback == null) {
+					targetFeedback = new RectangleFigure();
+					targetFeedback.setFill(false);
+
+					IFigure hostFigure = getHostFigure();
+					Rectangle bounds = hostFigure.getBounds();
+					if (hostFigure instanceof HandleBounds)
+						bounds = ((HandleBounds) hostFigure).getHandleBounds();
+					Rectangle rect = new PrecisionRectangle(bounds);
+					getHostFigure().translateToAbsolute(rect);
+					getFeedbackLayer().translateToRelative(rect);
+					
+					targetFeedback.setBounds(rect.shrink(0, 1));
+					targetFeedback.getBounds().setX(hostFigure.getBounds().x);
+					//targetFeedback.getBounds().setY(hostFigure.getBounds().y);
+					targetFeedback.setBorder(new LineBorder(
+							ColorConstants.lightBlue, 3));
+					addFeedback(targetFeedback);
+				}
+				return targetFeedback;
 			}
 
 		});

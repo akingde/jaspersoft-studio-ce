@@ -520,6 +520,13 @@ public class Messages extends NLS {
 	public static String JDBCDatasourcePage_jars;
 	public static String JDBCDatasourcePage_jdbc_datasource;
 	public static String JDBCDatasourcePage_test_connection;
+	public static String JDMarqueeToolEntry_Behavior_Connections_Contained;
+	public static String JDMarqueeToolEntry_Behavior_Connections_Nodes;
+	public static String JDMarqueeToolEntry_Behavior_Connections_Nodes_fully;
+	public static String JDMarqueeToolEntry_Behavior_Connections_Touched;
+	public static String JDMarqueeToolEntry_Behavior_Nodes_Contained;
+	public static String JDMarqueeToolEntry_Behavior_Nodes_Touched;
+	public static String JDMarqueeToolEntry_Marquee;
 	public static String JDPaletteFactory_complex_components;
 	public static String JDPaletteFactory_unknown_group;
 	public static String JDReportOutlineView_show_outline_tool_tip;

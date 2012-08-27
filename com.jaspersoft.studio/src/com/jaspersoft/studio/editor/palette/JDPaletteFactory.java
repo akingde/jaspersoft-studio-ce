@@ -240,7 +240,7 @@ public class JDPaletteFactory {
 	public static void createToolBar(PaletteRoot paletteRoot) {
 		PaletteToolbar paletteToolbar = new PaletteToolbar("toolbar"); //$NON-NLS-1$
 		paletteToolbar.add(new SelectionToolEntry());
-		paletteToolbar.add(new MarqueeToolEntry());
+		paletteToolbar.add(new JDMarqueeToolEntry());
 		paletteRoot.add(paletteToolbar);
 	}
 }
