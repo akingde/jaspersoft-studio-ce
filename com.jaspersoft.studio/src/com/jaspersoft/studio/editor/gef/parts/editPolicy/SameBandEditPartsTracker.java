@@ -281,6 +281,7 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	 *         selection state should get inverted in toggle mode.
 	 * @since 3.7
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected Collection calculateMarqueeSelectedEditParts() {
 		Collection marqueeSelectedEditParts = new HashSet();
 		marqueeSelectedEditParts
@@ -304,6 +305,7 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	 *         selection.
 	 * @since 3.7
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Collection calculatePrimaryMarqueeSelectedEditParts() {
 		Collection editPartsToProcess = new HashSet();
 		if (marqueeBehavior != BEHAVIOR_CONNECTIONS_CONTAINED
@@ -726,6 +728,7 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	 * 
 	 * @since 3.7
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void performMarqueeSelect() {
 		// determine which edit parts are affected by the current marquee
 		// selection

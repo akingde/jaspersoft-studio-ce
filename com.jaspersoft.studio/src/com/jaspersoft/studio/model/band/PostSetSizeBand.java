@@ -32,6 +32,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
@@ -67,6 +68,11 @@ public class PostSetSizeBand implements IPostSetValue {
 	public Command getBandResizeCommand(MBand mband, JasperDesign jDesign) {
 		JRDesignBand band = mband.getValue();
 		int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
+		//Check if the size is valid
+		int maxHeight = BandResizeTracker.getMaxBandHeight(band, jDesign);
+		if (band.getHeight()>maxHeight){
+			band.setHeight(maxHeight-1);
+		}
 		Dimension d = new Dimension(w, band.getHeight());
 		ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { band }, jDesign, null);
 		return new LayoutCommand(band, layout, d);

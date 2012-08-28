@@ -28,8 +28,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
-import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
-import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.INode;
@@ -56,11 +54,6 @@ public class ResizeCommand extends Command {
 				JRDesignBand band = (JRDesignBand) ((MBand) n).getValue();
 				int h = band.getHeight();
 				JasperDesign jasperDesign = m.getJasperDesign();
-				int maxHeight = BandResizeTracker.getMaxBandHeight(band, jasperDesign);
-				int elementHeight = jrElement.getHeight() + jrElement.getY();
-				if (elementHeight>maxHeight){
-					jrElement.setHeight(maxHeight-jrElement.getY());
-				}
 				int w = jasperDesign.getPageWidth() - jasperDesign.getLeftMargin() - jasperDesign.getRightMargin();
 				parent = new Dimension(w, h);
 			} else if (n instanceof IGraphicElementContainer)

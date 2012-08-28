@@ -35,6 +35,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
@@ -126,8 +127,14 @@ public class SetConstraintCommand extends Command {
 			jrElement.setY(y);
 			jrElement.setWidth(newBounds.width);
 			jrElement.setHeight(newBounds.height);
-
-			adjustBand();
+			if (cBand != null){
+				int maxHeight = BandResizeTracker.getMaxBandHeight(cBand, jrDesign);
+				int elementHeight = jrElement.getHeight() + jrElement.getY();
+				if (elementHeight>maxHeight){
+					jrElement.setHeight(maxHeight-jrElement.getY()-1);
+				}
+				adjustBand();
+			}
 
 			if (jrElement instanceof JRPropertiesHolder && jrGroup != null) {
 				String uuid = null;
@@ -150,12 +157,10 @@ public class SetConstraintCommand extends Command {
 	private int oldBandHeight = -1;
 
 	private void adjustBand() {
-		if (cBand != null) {
-			oldBandHeight = cBand.getHeight();
-			int elHeight = jrElement.getY() + jrElement.getHeight();
-			if (elHeight > cBand.getHeight()) {
+		oldBandHeight = cBand.getHeight();
+		int elHeight = jrElement.getY() + jrElement.getHeight();
+		if (elHeight > cBand.getHeight()) {
 				cBand.setHeight(elHeight);
-			}
 		}
 	}
 

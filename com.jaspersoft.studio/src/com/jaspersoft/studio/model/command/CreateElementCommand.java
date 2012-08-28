@@ -272,7 +272,7 @@ public class CreateElementCommand extends Command {
 				int maxBandHeight = BandResizeTracker.getMaxBandHeight(band,jasperDesign);
 				//If the element is too big it will be resized to the maximum band size
 				if (maxBandHeight<height){
-					height = maxBandHeight;
+					height = maxBandHeight-1;
 					jrElement.setHeight(height-jrElement.getY());
 					location.setHeight(height-jrElement.getY());
 				}
