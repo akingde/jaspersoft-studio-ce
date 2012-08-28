@@ -270,14 +270,8 @@ public class ImageCreationDialog extends Dialog {
 			public void setExpression(JRDesignExpression exp) {
 				super.setExpression(exp);
 				// Keep in synch the expression modification in the widget
-				// with the variable imageExpressionText that will be used
-				// for the final image expression.
-				if(exp==null) {
-					imageExpressionText=null;
-				}
-				else {
-					imageExpressionText=exp.getText();
-				}
+				// with the final image expression.
+				jrImgExpression=exp;
 			}
 		};
 		customExpression.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -378,6 +372,7 @@ public class ImageCreationDialog extends Dialog {
 			try {
 				IFileStore imgFileStore = EFS.getStore(file.getLocationURI());
 				loadImagePreview(file.getLocation().toOSString(), imgFileStore);
+				imageExpressionText=file.getLocation().toOSString();
 			} catch (CoreException e) {
 				UIUtils.showError(e);
 			}
@@ -580,15 +575,19 @@ public class ImageCreationDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		// Updates the expression that will be associated to the image element.
-		if(imageExpressionText!=null){
-			jrImgExpression = new JRDesignExpression();
-			if (imageExpressionText.endsWith(".svg")) //$NON-NLS-1$
-				jrImgExpression.setText("net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation(\"" + imageExpressionText + "\")");//$NON-NLS-1$ //$NON-NLS-2$
-			else
-				jrImgExpression.setText("\"" + imageExpressionText + "\"");//$NON-NLS-1$ //$NON-NLS-2$
-		}
-		else{
-			jrImgExpression=null;
+		// Covers all cases except the custom expression one because 
+		// it is already kept in synch.
+		if(!btnCustomExpression.getSelection()){
+			if(imageExpressionText!=null){
+				jrImgExpression = new JRDesignExpression();
+				if (imageExpressionText.endsWith(".svg")) //$NON-NLS-1$
+					jrImgExpression.setText("net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation(\"" + imageExpressionText + "\")");//$NON-NLS-1$ //$NON-NLS-2$
+				else
+					jrImgExpression.setText("\"" + imageExpressionText + "\"");//$NON-NLS-1$ //$NON-NLS-2$
+			}
+			else{
+				jrImgExpression=null;
+			}
 		}
 		
 		super.okPressed();
