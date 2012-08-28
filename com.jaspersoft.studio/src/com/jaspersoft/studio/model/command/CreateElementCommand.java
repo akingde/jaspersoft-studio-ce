@@ -40,6 +40,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
@@ -268,6 +269,13 @@ public class CreateElementCommand extends Command {
 			JRDesignBand band = (JRDesignBand) jrGroup;
 			int height = jrElement.getY() + jrElement.getHeight();
 			if (band.getHeight() < height) {
+				int maxBandHeight = BandResizeTracker.getMaxBandHeight(band,jasperDesign);
+				//If the element is too big it will be resized to the maximum band size
+				if (maxBandHeight<height){
+					height = maxBandHeight;
+					jrElement.setHeight(height-jrElement.getY());
+					location.setHeight(height-jrElement.getY());
+				}
 				SetValueCommand cmd = new SetValueCommand();
 				cmd.setTarget((IPropertySource) destNode);
 				cmd.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
