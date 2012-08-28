@@ -120,7 +120,7 @@ public class CreateTableCommand extends CreateElementCommand {
 			wizard.init(jConfig);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
-				srcNode = wizard.getTable();
+				srcNode = wizard.getTable(location.width);
 				addCommands(wizard.getCommands());
 				if (srcNode.getValue() == null)
 					jrElement = srcNode.createJRElement(srcNode
@@ -130,7 +130,6 @@ public class CreateTableCommand extends CreateElementCommand {
 				}
 				if (jrElement != null)
 					setElementBounds();
-				wizard.InitTable();
 			}
 		}
 		fixDatasetRun();

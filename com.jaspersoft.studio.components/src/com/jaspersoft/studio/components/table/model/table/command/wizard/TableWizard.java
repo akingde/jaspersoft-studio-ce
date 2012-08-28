@@ -132,27 +132,24 @@ public class TableWizard extends JSSWizard {
 		return super.getNextPage(page);
 	}
 
-	public MTable getTable() {
-		return table;
-	}
-	
-	public void InitTable(){
+	public MTable getTable(int tableWidth) {
 		List<Object> lst = step3.getFields();
 		StandardTable tbl = TableManager.getTable(table);
 		MDataset ds = (MDataset) getConfig().get(DatasetWizard.DATASET);
 		MDatasetRun dataSetRun = step1.getDataSetRun();
 		if (dataSetRun != null) {
 			JRDesignDatasetRun dsrun = dataSetRun.getValue();
-			dsrun.setDatasetName((String) ds
-					.getPropertyValue(JRDesignDataset.PROPERTY_NAME));
+			dsrun.setDatasetName((String) ds.getPropertyValue(JRDesignDataset.PROPERTY_NAME));
 			tbl.setDatasetRun(dsrun);
 		}
 		JasperDesign jd = getConfig().getJasperDesign();
-		CreateDeafultStyles(jd);
+		createDeafultStyles(jd);
 		if (tbl != null && lst != null){
 			int colWidth = 40;
+			if (tableWidth<0)
+				tableWidth = table.getDefaultWidth();
 			if (lst.size()>0)
-				colWidth = table.getBounds().width / lst.size();
+				colWidth = tableWidth / lst.size();
 			for (Object f : lst) {
 				StandardColumn col = CreateColumnCommand.addColumn(jd, tbl,
 				step4.isTableHeader(), step4.isTableFooter(),
@@ -189,9 +186,10 @@ public class TableWizard extends JSSWizard {
 				tbl.addColumn(col);
 			}
 		}
+		return table;
 	}
 	
-	public List<JRDesignStyle> GetStylesList(){
+	public List<JRDesignStyle> getStylesList(){
 		return styleList;
 	}
 	
@@ -200,12 +198,12 @@ public class TableWizard extends JSSWizard {
 	 * @param baseColor value from 0 to 1 that represent the base color H in HSB system
 	 * @return an array of colors, different version of the base color
 	 */
-	private Color[] CreateColor(){
+	private Color[]createColor(){
 		Color[] result = {Color.getHSBColor(baseColor, 0.25f, 1.0f),Color.getHSBColor(baseColor, 0.06f, 1.0f)};
 		return result;
 	}
 	
-	private void CreateDeafultStyles(JasperDesign jd){
+	private void createDeafultStyles(JasperDesign jd){
 		JRDesignStyle newStyle = new JRDesignStyle();
         //Check the first available basename...
         String basename = "Table";
@@ -226,7 +224,7 @@ public class TableWizard extends JSSWizard {
 
         }
 		try {
-			Color[] colors = CreateColor();
+			Color[] colors = createColor();
 			newStyle.setName(basename);
 			newStyle.setMode(ModeEnum.OPAQUE);
 			jd.addStyle(newStyle);

@@ -21,6 +21,7 @@ package com.jaspersoft.studio.editor.gef.parts.band;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.annotation.Inherited;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -237,6 +238,8 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 			protected void showSelection() {
 				updateRulers();
 			}
+			
+			
 		});
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 

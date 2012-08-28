@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.editor.gef.parts.band;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,10 +41,14 @@ import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.Handle;
+import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.editparts.LayerManager;
 import org.eclipse.gef.editparts.ViewportAutoexposeHelper;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
@@ -468,19 +473,47 @@ public class BandResizeTracker extends SimpleDragTracker {
 		return isInState(STATE_DRAG_IN_PROGRESS
 				| STATE_ACCESSIBLE_DRAG_IN_PROGRESS);
 	}
+	
+	/*
+	@Override
+	protected boolean handleButtonDown(int button) {
+		if (((BandEditPart)editpart).getBand().getHeight() == 0){
+			List<EditPart> excluded = new ArrayList<EditPart>();
+			excluded.add(this.editpart);
+			EditPart valid = passHandle(excluded);
+			System.out.println("trovata");
+			 
+		} 
+		return true;
+	};
 
+	
+
+	
+	public EditPart passHandle(List<EditPart> excluded){
+		EditPart part = ((GraphicalViewer) editpart.getViewer()).findObjectAtExcluding(getLocation(),excluded);
+		if (part instanceof BandEditPart)
+			if (((BandEditPart)part).getBand().getHeight()>0){
+				return part;
+			}
+		excluded.add(part);
+		if (part == null)
+			return null;
+		else return passHandle(excluded);
+	}*/
+	
 	/**
 	 * Override the original drag in progress to freeze the drag on the reaching of the maximum 
 	 * band dimension
 	 */
 	@Override
 	public boolean handleDragInProgress() {
-		if (dragInProgress() && conditionallyUpdateSourceRequest()) {
-			showSourceFeedback();
-			setCurrentCommand(getCommand());
-			updateAutoexposeHelper();
+			if (dragInProgress() && conditionallyUpdateSourceRequest()) {
+				showSourceFeedback();
+				setCurrentCommand(getCommand());
+				updateAutoexposeHelper();
+			}
 			return true;
-		} else return false;
 	}
 
 }
