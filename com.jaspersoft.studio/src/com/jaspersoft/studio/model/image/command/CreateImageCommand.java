@@ -23,23 +23,21 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DialogEnabledCommand;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.frame.MFrame;
-import com.jaspersoft.studio.plugin.IEditorContributor;
+import com.jaspersoft.studio.model.image.command.dialog.ImageCreationDialog;
 
-public class CreateImageCommand extends CreateElementCommand {
+public class CreateImageCommand extends CreateElementCommand implements DialogEnabledCommand{
+
+	private JRDesignExpression imageExpression;
 
 	public CreateImageCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
@@ -71,25 +69,21 @@ public class CreateImageCommand extends CreateElementCommand {
 			if (jrElement != null)
 				setElementBounds();
 
-			FilteredResourcesSelectionDialog fd = new FilteredResourcesSelectionDialog(Display.getCurrent().getActiveShell(),
-					false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
-			fd.setInitialPattern("*.png");//$NON-NLS-1$
-			if (fd.open() == Dialog.OK) {
-				IFile file = (IFile) fd.getFirstResult();
-				IFile contextfile = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
-				String filepath = null;
-				if (contextfile != null && file.getProject().equals(contextfile.getProject()))
-					filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", "");
-				else
-					filepath = file.getRawLocationURI().toASCIIString();
-
-				JRDesignExpression jre = new JRDesignExpression();
-				if (file.getFileExtension().equals("svg"))
-					jre.setText("net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation(\"" + filepath + "\")");//$NON-NLS-1$ //$NON-NLS-2$
-				else
-					jre.setText("\"" + filepath + "\"");//$NON-NLS-1$ //$NON-NLS-2$
-				((JRDesignImage) jrElement).setExpression(jre);
-			}
+			// NOTE: #createObject() is invoked during executeCommand that is
+			// supposed to be called only when the ImageCreationDialog has been
+			// opened and closed successfully.
+			// So if we are here, the user has already chosen how to set
+			// the image expression correctly.
+			((JRDesignImage)jrElement).setExpression(imageExpression);
 		}
+	}
+
+	@Override
+	public int openDialog() {
+		ImageCreationDialog d=new ImageCreationDialog(Display.getCurrent().getActiveShell());
+		d.configureDialog(jConfig);
+		int dialogResult = d.open();
+		imageExpression = d.getImageExpression();
+		return dialogResult;
 	}
 }

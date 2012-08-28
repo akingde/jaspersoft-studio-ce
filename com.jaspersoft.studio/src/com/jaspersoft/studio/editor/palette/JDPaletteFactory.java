@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
-import org.eclipse.gef.palette.MarqueeToolEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -158,8 +157,11 @@ public class JDPaletteFactory {
 	 * @return the palette entry
 	 */
 	public static PaletteEntry createJDEntry(IIconDescriptor iconDescriptor, Class<?> aclass) {
-		return new CombinedTemplateCreationEntry(iconDescriptor.getTitle(), iconDescriptor.getDescription(), aclass,
+		CombinedTemplateCreationEntry paletteEntry = new CombinedTemplateCreationEntry(iconDescriptor.getTitle(), iconDescriptor.getDescription(), aclass,
 				new JDPaletteCreationFactory(aclass), iconDescriptor.getIcon16(), iconDescriptor.getIcon32());
+		// Override default CreationTool class with ours
+		paletteEntry.setToolClass(JDCreationTool.class);
+		return paletteEntry;
 	}
 
 	public static PaletteDrawer createElements(PaletteRoot paletteRoot, List<String> ignore, PaletteGroup p,

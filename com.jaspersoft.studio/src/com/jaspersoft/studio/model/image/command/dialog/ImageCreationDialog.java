@@ -1,10 +1,12 @@
 package com.jaspersoft.studio.model.image.command.dialog;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DecimalFormat;
 
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignImage;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
@@ -41,6 +43,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.eclipse.ui.progress.WorkbenchJob;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ImageUtils;
@@ -57,7 +60,8 @@ public class ImageCreationDialog extends Dialog {
 	// Image preview job information
 	private static final int IMAGE_PREVIEW_JOB_DELAY=500;
 	private ImagePreviewJob imagePreviewJob;
-	
+	// Expression that will be associated to the image element
+	private String imageExpressionText;
 	// All widgets stuff
 	private Text txtResourcePath;
 	private Text txtFilesystemPath;
@@ -76,13 +80,15 @@ public class ImageCreationDialog extends Dialog {
 	private Composite cmpImgPreview;
 	private Composite cmpNoImgPreview;
 	private Group grpOptions;
-	private JasperReportsConfiguration jConfig;
-	private JRDesignElement jrElement;
 	private Label imagePreview;
 	private Group grpImagePreview;
 	private StackLayout grpImagePreviewLayout;
 	private Label lblImageSize;
 	private Label lblImageDimension;
+	private WTextExpression customExpression;
+	private JRDesignExpression jrImgExpression;
+
+	private JasperReportsConfiguration jConfig;
 	
 	/**
 	 * Create the dialog.
@@ -96,7 +102,7 @@ public class ImageCreationDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Create new image element");
+		newShell.setText(Messages.ImageCreationDialog_Title);
 	}
 
 	/**
@@ -111,7 +117,7 @@ public class ImageCreationDialog extends Dialog {
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		Group grpImageCreationMode = new Group(container, SWT.NONE);
-		grpImageCreationMode.setText("Image creation mode");
+		grpImageCreationMode.setText(Messages.ImageCreationDialog_CreationModeGroupTitle);
 		grpImageCreationMode.setLayout(new GridLayout(1, false));
 		grpImageCreationMode.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 		
@@ -122,7 +128,7 @@ public class ImageCreationDialog extends Dialog {
 				changeImageCreationMode(cmpWorkspaceResourceSelection);
 			}
 		});
-		btnWorkspaceResource.setText("Workspace resource (an element inside the workspace)");
+		btnWorkspaceResource.setText(Messages.ImageCreationDialog_RadioBtnWSResource);
 		
 		btnAbsolutePath = new Button(grpImageCreationMode, SWT.RADIO);
 		btnAbsolutePath.addSelectionListener(new SelectionAdapter() {
@@ -131,7 +137,7 @@ public class ImageCreationDialog extends Dialog {
 				changeImageCreationMode(cmpFilesystemResourceSelection);
 			}
 		});
-		btnAbsolutePath.setText("Absolute Path in the filesystem (use only for quick testing, never use in real reports)");
+		btnAbsolutePath.setText(Messages.ImageCreationDialog_RadioBtnFSResource);
 
 		btnUrlRemote = new Button(grpImageCreationMode, SWT.RADIO);
 		btnUrlRemote.addSelectionListener(new SelectionAdapter() {
@@ -140,7 +146,7 @@ public class ImageCreationDialog extends Dialog {
 				changeImageCreationMode(cmpURL);
 			}
 		});
-		btnUrlRemote.setText("URL (a remote URL referring to an image, will be the expression value)");
+		btnUrlRemote.setText(Messages.ImageCreationDialog_RadioBtnURLResource);
 		
 		btnNoImage = new Button(grpImageCreationMode, SWT.RADIO);
 		btnNoImage.addSelectionListener(new SelectionAdapter() {
@@ -149,7 +155,7 @@ public class ImageCreationDialog extends Dialog {
 				changeImageCreationMode(cmpNoImage);
 			}
 		});
-		btnNoImage.setText("No image (just create an image element, expression will be modified later)");
+		btnNoImage.setText(Messages.ImageCreationDialog_RadioBtnNoImage);
 		
 		btnCustomExpression = new Button(grpImageCreationMode, SWT.RADIO);
 		btnCustomExpression.addSelectionListener(new SelectionAdapter() {
@@ -158,7 +164,7 @@ public class ImageCreationDialog extends Dialog {
 				changeImageCreationMode(cmpCustomExpression);
 			}
 		});
-		btnCustomExpression.setText("Custom expression (enter an expression for the image using the expression editor)");
+		btnCustomExpression.setText(Messages.ImageCreationDialog_RadioBtnCustomExpr);
 		
 		createOptionsPanel(container);
 		
@@ -177,7 +183,7 @@ public class ImageCreationDialog extends Dialog {
 	 */
 	private void createOptionsPanel(Composite container) {
 		grpOptions = new Group(container, SWT.NONE);
-		grpOptions.setText("Options");
+		grpOptions.setText(Messages.ImageCreationDialog_OptionsGroupTitle);
 		grpOptionsLayout = new StackLayout();
 		grpOptions.setLayout(grpOptionsLayout);
 		grpOptions.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
@@ -197,7 +203,7 @@ public class ImageCreationDialog extends Dialog {
 		
 		Label lblSelectImageFromWS = new Label(cmpWorkspaceResourceSelection, SWT.NONE);
 		lblSelectImageFromWS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-		lblSelectImageFromWS.setText("Select an image resource from the workspace");
+		lblSelectImageFromWS.setText(Messages.ImageCreationDialog_SelectImgFromWS);
 		
 		txtResourcePath = new Text(cmpWorkspaceResourceSelection, SWT.BORDER);
 		txtResourcePath.setEnabled(false);
@@ -211,7 +217,7 @@ public class ImageCreationDialog extends Dialog {
 			}
 		});
 		btnSelectWsRes.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnSelectWsRes.setText("Browse ...");
+		btnSelectWsRes.setText(Messages.ImageCreationDialog_Browse);
 	}
 
 	/*
@@ -223,7 +229,7 @@ public class ImageCreationDialog extends Dialog {
 		
 		Label lblSelectImageFromFilesystem = new Label(cmpFilesystemResourceSelection, SWT.NONE);
 		lblSelectImageFromFilesystem.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
-		lblSelectImageFromFilesystem.setText("Select an image resource from the filesystem");
+		lblSelectImageFromFilesystem.setText(Messages.ImageCreationDialog_SelectImgFromFS);
 		
 		txtFilesystemPath = new Text(cmpFilesystemResourceSelection, SWT.BORDER);
 		txtFilesystemPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -235,7 +241,7 @@ public class ImageCreationDialog extends Dialog {
 		});
 		
 		Button btnSelectFilesystemRes = new Button(cmpFilesystemResourceSelection, SWT.NONE);
-		btnSelectFilesystemRes.setText("Browse ...");
+		btnSelectFilesystemRes.setText(Messages.ImageCreationDialog_Browse);
 		btnSelectFilesystemRes.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -259,7 +265,21 @@ public class ImageCreationDialog extends Dialog {
 		GridLayout cmpCustomExpressionlayout = new GridLayout();
 		cmpCustomExpression.setLayout(cmpCustomExpressionlayout);
 		
-		WTextExpression customExpression=new WTextExpression(cmpCustomExpression, SWT.NONE, "Enter a custom expression for the image:", WTextExpression.LABEL_ON_TOP);
+		customExpression = new WTextExpression(cmpCustomExpression, SWT.NONE, Messages.ImageCreationDialog_EnterExpression, WTextExpression.LABEL_ON_TOP){
+			@Override
+			public void setExpression(JRDesignExpression exp) {
+				super.setExpression(exp);
+				// Keep in synch the expression modification in the widget
+				// with the variable imageExpressionText that will be used
+				// for the final image expression.
+				if(exp==null) {
+					imageExpressionText=null;
+				}
+				else {
+					imageExpressionText=exp.getText();
+				}
+			}
+		};
 		customExpression.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 
@@ -271,7 +291,7 @@ public class ImageCreationDialog extends Dialog {
 		cmpURL.setLayout(new GridLayout(1, false));
 		
 		Label lblNewLabel = new Label(cmpURL, SWT.NONE);
-		lblNewLabel.setText("Enter a URL referring to an external image:");
+		lblNewLabel.setText(Messages.ImageCreationDialog_EnterURL);
 		
 		txtURL = new Text(cmpURL, SWT.BORDER);
 		txtURL.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -291,28 +311,28 @@ public class ImageCreationDialog extends Dialog {
 		grpImagePreviewLayout = new StackLayout();
 		grpImagePreview.setLayout(grpImagePreviewLayout);
 		grpImagePreview.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
-		grpImagePreview.setText("Image preview");
+		grpImagePreview.setText(Messages.ImageCreationDialog_ImagePreviewGroupTitle);
 		
 		cmpImgPreview = new Composite(grpImagePreview, SWT.NONE);
 		cmpImgPreview.setLayout(new GridLayout(1, false));
 		
 		lblImageDimension = new Label(cmpImgPreview, SWT.NONE);
-		lblImageDimension.setText("Dimension: ");
+		lblImageDimension.setText(Messages.ImageCreationDialog_Dimension);
 		lblImageDimension.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		lblImageSize = new Label(cmpImgPreview, SWT.NONE);
-		lblImageSize.setText("Size: ");
+		lblImageSize.setText(Messages.ImageCreationDialog_Size);
 		lblImageSize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		imagePreview = new Label(cmpImgPreview, SWT.NONE);
-		imagePreview.setText("IMAGE HERE");
+		imagePreview.setText("IMAGE HERE"); //$NON-NLS-1$
 		imagePreview.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		cmpNoImgPreview = new Composite(grpImagePreview, SWT.NONE);
 		cmpNoImgPreview.setLayout(new GridLayout(1, false));
 		
 		Label lblNoPreviewAvailable = new Label(cmpNoImgPreview, SWT.NONE);
-		lblNoPreviewAvailable.setText("<No preview image available>");
+		lblNoPreviewAvailable.setText(Messages.ImageCreationDialog_NoPreviewAvailable);
 		lblNoPreviewAvailable.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
 		lblNoPreviewAvailable.setAlignment(SWT.CENTER);
 	}
@@ -322,6 +342,13 @@ public class ImageCreationDialog extends Dialog {
 	 * dedicated options panel and hide the image preview one.
 	 */
 	private void changeImageCreationMode(Control newTopControl){
+		// Resets previous info on the image expression
+		imageExpressionText=null;
+		// Resets widgets 
+		txtResourcePath.setText(""); //$NON-NLS-1$
+		txtFilesystemPath.setText(""); //$NON-NLS-1$
+		txtURL.setText(""); //$NON-NLS-1$
+		customExpression.setExpression(null);
 		// Shows no preview panel and hide the image preview one
 		Image currImgPreview = imagePreview.getImage();
 		if(currImgPreview!=null) currImgPreview.dispose();
@@ -344,17 +371,9 @@ public class ImageCreationDialog extends Dialog {
 			IFile contextfile = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
 			String filepath = null;
 			if (contextfile != null && file.getProject().equals(contextfile.getProject()))
-				filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", "");
+				filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			else
 				filepath = file.getRawLocationURI().toASCIIString();
-
-			JRDesignExpression jre = new JRDesignExpression();
-			if (file.getFileExtension().equals("svg"))
-				jre.setText("net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation(\"" + filepath + "\")");//$NON-NLS-1$ //$NON-NLS-2$
-			else
-				jre.setText("\"" + filepath + "\"");//$NON-NLS-1$ //$NON-NLS-2$
-			((JRDesignImage) jrElement).setExpression(jre);
-			
 			txtResourcePath.setText(filepath);
 			try {
 				IFileStore imgFileStore = EFS.getStore(file.getLocationURI());
@@ -365,7 +384,7 @@ public class ImageCreationDialog extends Dialog {
 		}
 		else{
 			// no image selected
-			txtResourcePath.setText("");
+			txtResourcePath.setText(""); //$NON-NLS-1$
 			grpImagePreviewLayout.topControl=cmpNoImgPreview;
 			grpImagePreview.layout();
 		}
@@ -377,16 +396,9 @@ public class ImageCreationDialog extends Dialog {
 	private void selectImageFromFilesystem() {
 		FileDialog fd = new FileDialog(Display.getDefault()
 				.getActiveShell());
-		fd.setFilterExtensions(new String[]{"*.png","*.jpeg; *.jpg","*.gif","*.*"});
+		fd.setFilterExtensions(new String[]{"*.png","*.jpeg; *.jpg","*.gif","*.*"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		String selection = fd.open();
-		if(selection!=null){
-			JRDesignExpression jre = new JRDesignExpression();
-			if (selection.endsWith(".svg"))
-				jre.setText("net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation(\"" + selection + "\")");//$NON-NLS-1$ //$NON-NLS-2$
-			else
-				jre.setText("\"" + selection + "\"");//$NON-NLS-1$ //$NON-NLS-2$
-			((JRDesignImage) jrElement).setExpression(jre);
-			
+		if(selection!=null){	
 			// After the text modification the image preview job will be invoked...
 			txtFilesystemPath.setText(selection);
 		}
@@ -410,15 +422,15 @@ public class ImageCreationDialog extends Dialog {
 		if(originalImg!=null){
 			int imgHeight = originalImg.getImageData().height;
 			int imgWidth = originalImg.getImageData().width;
-			String sizeInfo="<No size info available>";
+			String sizeInfo=Messages.ImageCreationDialog_NoSizeInfoAvailable;
 			sizeInfo=(DecimalFormat.getNumberInstance().format(
-					imgFileStore.fetchInfo().getLength()))+" bytes";
+					imgFileStore.fetchInfo().getLength()))+Messages.ImageCreationDialog_bytes;
 		
 			// Gets a resized image for the preview area
 			Image resizedImg = ImageUtils.resize(originalImg,Math.min(imgWidth, 200), Math.min(imgHeight, 200));
 			imagePreview.setImage(resizedImg);
-			lblImageDimension.setText("Dimension: "+imgWidth+"x"+imgHeight+"px");
-			lblImageSize.setText("Size: "+sizeInfo);
+			lblImageDimension.setText(Messages.ImageCreationDialog_Dimension+imgWidth+"x"+imgHeight+"px"); //$NON-NLS-2$ //$NON-NLS-3$
+			lblImageSize.setText(Messages.ImageCreationDialog_Size+sizeInfo);
 			grpImagePreviewLayout.topControl=cmpImgPreview;
 			grpImagePreview.layout(true);
 	
@@ -428,6 +440,53 @@ public class ImageCreationDialog extends Dialog {
 			}
 			if(oldPreviewImg!=null){
 				oldPreviewImg.dispose();
+			}
+		}
+	}
+	/*
+	 * Loads the preview image panel with the specified remote URL information.
+	 */
+	private void loadPreviewRemoteImage(String imageURLText) {
+		Image oldPreviewImg = imagePreview.getImage();
+		HttpURLConnection con=null;
+		InputStream imageIS=null;
+		try {
+			URL imageURL = new URL(imageURLText);
+			con = (HttpURLConnection) imageURL.openConnection();
+			imageIS = con.getInputStream();
+			int imageLength = con.getContentLength();
+			Image remoteImg = new Image(getShell().getDisplay(), imageIS);
+			
+			String sizeInfo=Messages.ImageCreationDialog_NoSizeInfoAvailable;
+			sizeInfo=(DecimalFormat.getNumberInstance().format(imageLength))+Messages.ImageCreationDialog_bytes;
+			// Gets a resized image for the preview area
+			int imgWidth = remoteImg.getImageData().width;
+			int imgHeight = remoteImg.getImageData().height;
+			Image resizedImg = ImageUtils.resize(remoteImg,Math.min(imgWidth, 200), Math.min(imgHeight, 200));
+			imagePreview.setImage(resizedImg);
+			lblImageDimension.setText(Messages.ImageCreationDialog_Dimension+imgWidth+"x"+imgHeight+"px"); //$NON-NLS-2$ //$NON-NLS-3$
+			lblImageSize.setText(Messages.ImageCreationDialog_Size+sizeInfo);
+			grpImagePreviewLayout.topControl=cmpImgPreview;
+			grpImagePreview.layout(true);
+			imageExpressionText=imageURLText;
+			
+			// Dispose unused images
+			if(remoteImg!=null){
+				remoteImg.dispose();			
+			}
+			if(oldPreviewImg!=null){
+				oldPreviewImg.dispose();
+			}
+		} catch (Exception e) {
+			grpImagePreviewLayout.topControl=cmpNoImgPreview;
+			grpImagePreview.layout();
+		} finally {
+			if(imageIS!=null){
+				try {
+					imageIS.close();
+				} catch (IOException e) {
+					// Ignore...
+				}
 			}
 		}
 	}
@@ -463,18 +522,16 @@ public class ImageCreationDialog extends Dialog {
 	/**
 	 * Configure required information for the correct dialog functioning.
 	 * 
-	 * @param jrElement
 	 * @param jConfig
 	 */
-	public void configureDialog(JRDesignElement jrElement, JasperReportsConfiguration jConfig) {
-		this.jrElement=jrElement;
+	public void configureDialog(JasperReportsConfiguration jConfig) {
 		this.jConfig=jConfig;
 	}
 
 	@Override
 	public int open() {
-		if(jConfig==null || jrElement==null){
-			throw new RuntimeException("Cannot open the dialog before the configureDialog method has been invoked.");
+		if(jConfig==null){
+			throw new RuntimeException(Messages.ImageCreationDialog_Error);
 		}
 		return super.open();
 	}
@@ -486,28 +543,31 @@ public class ImageCreationDialog extends Dialog {
 	private final class ImagePreviewJob extends WorkbenchJob{
 
 		public ImagePreviewJob(){
-			super("Image preview job");
+			super(Messages.ImageCreationDialog_JobImgPreview);
 			setSystem(true);
 		}
 		
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			monitor.beginTask("Retrieving image...", IProgressMonitor.UNKNOWN);
+			monitor.beginTask(Messages.ImageCreationDialog_JobImgPreviewRetrieving, IProgressMonitor.UNKNOWN);
 			if(btnAbsolutePath.getSelection()){
 				// filesystem path...
 				String imagePath = txtFilesystemPath.getText();
 				IFileStore imgFileStore = EFS.getLocalFileSystem().getStore(new Path(imagePath));
 				loadImagePreview(imagePath, imgFileStore);
+				imageExpressionText=imagePath;
 			}
-			else if(btnUrlRemote.getSelection()) {
+			else if (btnUrlRemote.getSelection()) {
 				// URL
-				
+				String imageURLText = txtURL.getText();
+				loadPreviewRemoteImage(imageURLText);
 			}
 			monitor.done();
 			return Status.OK_STATUS;
 		}
-	}
 
+	}
+	
 	@Override
 	public boolean close() {
 		if(imagePreviewJob!=null){
@@ -516,5 +576,25 @@ public class ImageCreationDialog extends Dialog {
 		}
 		return super.close();
 	}
+
+	@Override
+	protected void okPressed() {
+		// Updates the expression that will be associated to the image element.
+		if(imageExpressionText!=null){
+			jrImgExpression = new JRDesignExpression();
+			if (imageExpressionText.endsWith(".svg")) //$NON-NLS-1$
+				jrImgExpression.setText("net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation(\"" + imageExpressionText + "\")");//$NON-NLS-1$ //$NON-NLS-2$
+			else
+				jrImgExpression.setText("\"" + imageExpressionText + "\"");//$NON-NLS-1$ //$NON-NLS-2$
+		}
+		else{
+			jrImgExpression=null;
+		}
+		
+		super.okPressed();
+	}
 	
+	public JRDesignExpression getImageExpression(){
+		return jrImgExpression;
+	}
 }
