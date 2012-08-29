@@ -163,8 +163,10 @@ public class ParametersTable {
 
 			public void selectionChanged(SelectionChangedEvent event) {
 				StructuredSelection sel = (StructuredSelection) event.getSelection();
-				JRDesignParameter prm = (JRDesignParameter) sel.getFirstElement();
-				delb.setEnabled(!prm.isSystemDefined());
+				if(!sel.isEmpty()){
+					JRDesignParameter prm = (JRDesignParameter) sel.getFirstElement();
+					delb.setEnabled(!prm.isSystemDefined());
+				}
 			}
 		});
 	}
