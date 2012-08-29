@@ -45,6 +45,8 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
+import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
+import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -53,8 +55,25 @@ import com.jaspersoft.studio.utils.Misc;
  * specified, and based upon the <code>showMode</code> flag of the constructor it will be drawn on top of the textbox
  * and button, or on the their left.
  * <p>
+ * 
  * <b>ADDITIONAL NOTE</b>: the widget has a default internal {@link GridLayout} of 2 columns, but in case the
  * <code>LABEL_ON_LEFT</code> flag is specified 3 columns are used instead.
+ * <p>
+ * 
+ * <b>EXPRESSION MODIFICATIONS</b>: to add custom behavior when an expression is modified/set you can either create
+ * a sub-class of the {@link WTextExpression} one, overriding the {@link #setExpression(JRDesignExpression)} method:
+ * <pre>
+ * 	// ...	
+ *	WTextExpression myExpression = new WTextExpression(container, SWT.NONE, "My expression", WTextExpression.LABEL_ON_TOP){
+ *		&#64;Override
+ *		public void setExpression(JRDesignExpression exp) {
+ *			super.setExpression(exp);
+ *			// YOUR CUSTOM CODE HERE...
+ *		}
+ *	};
+ *	// ...
+ * </pre>
+ * or adding a new {@link ExpressionModifiedListener} via {@link #addModifyListener(ExpressionModifiedListener)} method.
  * 
  * @author mrabbi
  * 
@@ -79,6 +98,9 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	private Text textExpression;
 	private Button btnEditExpression;
 	private Label label;
+	
+	// Expression modify listeners
+	private List<ExpressionModifiedListener> listeners = new ArrayList<ExpressionModifiedListener>();
 
 	/**
 	 * Creates the new widget made only by a textbox and a button.
@@ -192,7 +214,6 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 					} else {
 						setExpression(new JRDesignExpression(text));
 					}
-					fireModifyEvent(e);
 				}
 			}
 		});
@@ -209,8 +230,8 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 				WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
-					String newExpText = wizard.getValue().getText();
-					setExpression(new JRDesignExpression(newExpText));
+					JRDesignExpression value = wizard.getValue();
+					setExpression(value);
 				}
 			}
 
@@ -246,6 +267,10 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 			textExpression.setText(""); //$NON-NLS-1$
 			textExpression.setToolTipText(""); //$NON-NLS-1$
 		}
+
+		// Notifies the listeners of the new expression
+		fireModifyEvent();
+		
 		isRefreshing = false;
 	}
 
@@ -290,23 +315,52 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		return this.expression == null ? "" : Misc.nvl(this.getExpression().getText());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.jaspersoft.studio.editor.expression.IExpressionContextSetter#setExpressionContext(com.jaspersoft.studio.editor.expression.ExpressionContext)
+	 */
 	public void setExpressionContext(ExpressionContext expContext) {
 		this.expContext = expContext;
 	}
 
-	public void fireModifyEvent(ModifyEvent event) {
-		for (ModifyListener ml : listeners)
-			ml.modifyText(event);
-	}
-
-	public void addModifyListener(ModifyListener ml) {
+	/**
+	 * Adds a new listener that will be notified of any expression change/notification.
+	 * 
+	 * @param ml the new {@link ExpressionModifiedListener} to add
+	 */
+	public void addModifyListener(ExpressionModifiedListener ml) {
 		listeners.add(ml);
 	}
-
-	public void removeModifyListener(ModifyListener ml) {
+	
+	/**
+	 * Removes an {@link ExpressionModifiedListener} instance.
+	 * 
+	 * @param ml the {@link ExpressionModifiedListener} instance to be removed
+	 */
+	public void removeModifyListener(ExpressionModifiedListener ml) {
 		listeners.remove(ml);
 	}
 
-	private List<ModifyListener> listeners = new ArrayList<ModifyListener>();
+	/* 
+	 * Notifies the listeners of the expression change. 
+	 */
+	private void fireModifyEvent() {
+		ExpressionModifiedEvent event = new ExpressionModifiedEvent(this);
+		event.modifiedExpression=this.expression;
+		for (ExpressionModifiedListener ml : listeners)
+			ml.expressionModified(event);
+	}
 
+	@Override
+	public void dispose() {
+		// Remove modify listeners
+		Object[] listenersArray = listeners.toArray();
+		for(Object l : listenersArray){
+			removeModifyListener((ExpressionModifiedListener)l);
+		}
+		listeners.clear();
+		listeners=null;
+		super.dispose();
+	}
+		
 }

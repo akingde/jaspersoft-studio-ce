@@ -23,8 +23,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -35,6 +33,8 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
+import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -52,9 +52,9 @@ public class SPExpression extends ASPropertyWidget implements IExpressionContext
 
 	protected void createComponent(Composite parent) {
 		expr = new WTextExpression(parent, SWT.NONE, 1);
-		expr.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
+		expr.addModifyListener(new ExpressionModifiedListener() {
+			@Override
+			public void expressionModified(ExpressionModifiedEvent event) {
 				JRDesignExpression exp = expr.getExpression();
 				section.changeProperty(pDescriptor.getId(), exp != null ? exp.clone() : null);
 			}

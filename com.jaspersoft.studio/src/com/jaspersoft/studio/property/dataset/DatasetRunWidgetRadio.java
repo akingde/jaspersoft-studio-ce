@@ -26,8 +26,6 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -39,6 +37,8 @@ import org.eclipse.swt.widgets.Listener;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
+import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 public class DatasetRunWidgetRadio implements IExpressionContextSetter {
@@ -173,10 +173,9 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		addListeners();
 	}
 
-	private ModifyListener mlistener = new ModifyListener() {
-
+	private ExpressionModifiedListener mlistener = new ExpressionModifiedListener() {
 		@Override
-		public void modifyText(ModifyEvent e) {
+		public void expressionModified(ExpressionModifiedEvent event) {
 			if (otherExpr.isEnabled()) {
 				JRDesignExpression exp = otherExpr.getExpression();
 				if (exp != null)
