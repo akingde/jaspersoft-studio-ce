@@ -41,7 +41,7 @@ public class Misc {
 		if (obj == null)
 			return def;
 		else
-			return obj.toString();
+			return obj;
 	}
 
 	/**

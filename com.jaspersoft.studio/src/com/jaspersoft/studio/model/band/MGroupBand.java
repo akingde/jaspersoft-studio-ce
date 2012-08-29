@@ -37,6 +37,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.Misc;
 
 public class MGroupBand extends MGroup implements IPropertySource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -167,7 +168,7 @@ public class MGroupBand extends MGroup implements IPropertySource {
 					.setFooterPosition((FooterPositionEnum) EnumHelper.getSetValue(FooterPositionEnum.values(), value, 1, true));
 
 		else if (id.equals(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE))
-			jrGroup.setMinHeightToStartNewPage(((Integer) value).intValue());
+			jrGroup.setMinHeightToStartNewPage((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		else
 			super.setPropertyValue(id, value);
 	}

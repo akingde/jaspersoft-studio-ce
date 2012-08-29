@@ -73,6 +73,7 @@ import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -448,24 +449,24 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			jrDesign.setLanguage(value == null ? null : ((String) value).toLowerCase());
 
 		else if (id.equals(JasperDesign.PROPERTY_PAGE_HEIGHT))
-			jrDesign.setPageHeight(((Integer) value).intValue());
+			jrDesign.setPageHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		else if (id.equals(JasperDesign.PROPERTY_PAGE_WIDTH))
-			jrDesign.setPageWidth(((Integer) value).intValue());
+			jrDesign.setPageWidth((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		else if (id.equals(JasperDesign.PROPERTY_RIGHT_MARGIN))
-			jrDesign.setRightMargin(((Integer) value).intValue());
+			jrDesign.setRightMargin((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		else if (id.equals(JasperDesign.PROPERTY_LEFT_MARGIN))
-			jrDesign.setLeftMargin(((Integer) value).intValue());
+			jrDesign.setLeftMargin((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		else if (id.equals(JasperDesign.PROPERTY_TOP_MARGIN))
-			jrDesign.setTopMargin(((Integer) value).intValue());
+			jrDesign.setTopMargin((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		else if (id.equals(JasperDesign.PROPERTY_BOTTOM_MARGIN))
-			jrDesign.setBottomMargin(((Integer) value).intValue());
+			jrDesign.setBottomMargin((Integer) Misc.nvl(value, Integer.valueOf(0)));
 
 		else if (id.equals(JasperDesign.PROPERTY_COLUMN_COUNT))
-			jrDesign.setColumnCount(((Integer) value).intValue());
+			jrDesign.setColumnCount((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		else if (id.equals(JasperDesign.PROPERTY_COLUMN_SPACING))
-			jrDesign.setColumnSpacing(((Integer) value).intValue());
+			jrDesign.setColumnSpacing((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		else if (id.equals(JasperDesign.PROPERTY_COLUMN_WIDTH))
-			jrDesign.setColumnWidth(((Integer) value).intValue());
+			jrDesign.setColumnWidth((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		// -- enums
 		else if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
 			jrDesign.setOrientation((OrientationEnum) orientationD.getEnumValue(value));

@@ -59,6 +59,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 
 /*
  * The Class MBand.
@@ -274,8 +275,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignBand jrband = (JRDesignBand) getValue();
 		if (jrband != null) {
-			if (id.equals(JRDesignBand.PROPERTY_HEIGHT))
-				jrband.setHeight(((Integer) value).intValue());
+			if (id.equals(JRDesignBand.PROPERTY_HEIGHT)){
+					jrband.setHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));	
+			}
 			else if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
 				jrband.setSplitType((SplitTypeEnum) splitStyleD.getEnumValue(value));
 			else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION))

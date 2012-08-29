@@ -61,6 +61,7 @@ import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
+import com.jaspersoft.studio.utils.Misc;
 
 /*
  * The Class MGeneric.
@@ -579,17 +580,18 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			for (int i = 0; i < names.length; i++)
 				propertiesMap.setProperty(names[i], v.getProperty(names[i]));
 			this.getPropertyChangeSupport().firePropertyChange(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, false, true);
-		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT))
-			jrElement.setHeight(((Integer) value).intValue());
-		else if (id.equals(JRDesignElement.PROPERTY_WIDTH))
-			jrElement.setWidth(((Integer) value).intValue());
-		else if (id.equals(JRDesignElement.PROPERTY_X)) {
-			System.out.println("Setting element position..."); //$NON-NLS-1$
-			jrElement.setX(((Integer) value).intValue());
+		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT)){
+				jrElement.setHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		}
-
-		else if (id.equals(JRDesignElement.PROPERTY_Y))
-			jrElement.setY(((Integer) value).intValue());
+		else if (id.equals(JRDesignElement.PROPERTY_WIDTH)){
+				jrElement.setWidth((Integer) Misc.nvl(value, Integer.valueOf(0)));
+		}
+		else if (id.equals(JRDesignElement.PROPERTY_X)) {
+			jrElement.setX((Integer) Misc.nvl(value, Integer.valueOf(0)));
+		}
+		else if (id.equals(JRDesignElement.PROPERTY_Y)){
+			jrElement.setY((Integer) Misc.nvl(value, Integer.valueOf(0)));
+		}
 		else
 		// colors
 		if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR)) {
