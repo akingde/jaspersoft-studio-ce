@@ -22,6 +22,7 @@ package com.jaspersoft.studio.components.table.model.cell.command;
 import java.util.List;
 
 import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.ColumnGroup;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.GroupCell;
@@ -170,25 +171,38 @@ public class CreateElementCommand extends Command {
 
 	public void removeElementFromColumn(List<BaseColumn> cols) {
 		for (BaseColumn bc : cols) {
-			com.jaspersoft.studio.model.command.CreateElementCommand
-					.removeElement(jrElement, bc.getTableHeader().getElements());
-			com.jaspersoft.studio.model.command.CreateElementCommand
-					.removeElement(jrElement, bc.getTableFooter().getElements());
-
-			com.jaspersoft.studio.model.command.CreateElementCommand
-					.removeElement(jrElement, bc.getColumnHeader()
-							.getElements());
-			com.jaspersoft.studio.model.command.CreateElementCommand
-					.removeElement(jrElement, bc.getColumnFooter()
-							.getElements());
-
-			for (GroupCell gc : bc.getGroupHeaders())
+			Cell cell = bc.getTableHeader();
+			if (cell != null)
 				com.jaspersoft.studio.model.command.CreateElementCommand
-						.removeElement(jrElement, gc.getCell().getElements());
-			for (GroupCell gc : bc.getGroupFooters())
-				com.jaspersoft.studio.model.command.CreateElementCommand
-						.removeElement(jrElement, gc.getCell().getElements());
+						.removeElement(jrElement, cell.getElements());
 
+			cell = bc.getTableFooter();
+			if (cell != null)
+				com.jaspersoft.studio.model.command.CreateElementCommand
+						.removeElement(jrElement, cell.getElements());
+
+			cell = bc.getColumnHeader();
+			if (cell != null)
+				com.jaspersoft.studio.model.command.CreateElementCommand
+						.removeElement(jrElement, cell.getElements());
+
+			cell = bc.getColumnFooter();
+			if (cell != null)
+				com.jaspersoft.studio.model.command.CreateElementCommand
+						.removeElement(jrElement, cell.getElements());
+
+			for (GroupCell gc : bc.getGroupHeaders()) {
+				cell = gc.getCell();
+				if (cell != null)
+					com.jaspersoft.studio.model.command.CreateElementCommand
+							.removeElement(jrElement, cell.getElements());
+			}
+			for (GroupCell gc : bc.getGroupFooters()) {
+				cell = gc.getCell();
+				if (cell != null)
+					com.jaspersoft.studio.model.command.CreateElementCommand
+							.removeElement(jrElement, cell.getElements());
+			}
 			if (bc instanceof ColumnGroup)
 				removeElementFromColumn(((ColumnGroup) bc).getColumns());
 		}

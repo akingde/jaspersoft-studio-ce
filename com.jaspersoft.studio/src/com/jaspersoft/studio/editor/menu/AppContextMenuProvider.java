@@ -64,6 +64,7 @@ import com.jaspersoft.studio.property.section.report.PageFormatAction;
  * The Class AppContextMenuProvider.
  */
 public class AppContextMenuProvider extends ContextMenuProvider {
+	public static final String SEPARATOR = "menuseparatornonaction";
 
 	public String getID() {
 		return "com.jaspersoft.studio.outline.contextmenu";
@@ -163,6 +164,10 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<String> lst = m.getActionIDs();
 		for (String ids : lst) {
+			if (ids.equals(SEPARATOR)) {
+				menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+				continue;
+			}
 			action = getActionRegistry().getAction(ids);
 			if (action != null && action.isEnabled())
 				menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);

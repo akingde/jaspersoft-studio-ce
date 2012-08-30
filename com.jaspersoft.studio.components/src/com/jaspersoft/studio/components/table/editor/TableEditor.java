@@ -37,6 +37,8 @@ import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBe
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnCellAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction;
+import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnAction;
+import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnCellAction;
 import com.jaspersoft.studio.components.table.model.columngroup.action.CreateColumnGroupAction;
 import com.jaspersoft.studio.components.table.model.columngroup.action.UnGroupColumnsAction;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
@@ -139,6 +141,14 @@ public class TableEditor extends AbstractVisualEditor {
 		action = new CreateColumnCellAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateColumnCellAction.ID);
+
+		action = new DeleteColumnAction(this);
+		registry.registerAction(action);
+		selectionActions.add(DeleteColumnAction.ID);
+
+		action = new DeleteColumnCellAction(this);
+		registry.registerAction(action);
+		selectionActions.add(DeleteColumnCellAction.ID);
 	}
 
 }

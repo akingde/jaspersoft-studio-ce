@@ -82,6 +82,8 @@ import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBe
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnCellAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction;
+import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnAction;
+import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnCellAction;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnFromGroupCommand;
@@ -103,6 +105,7 @@ import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.components.table.part.TableEditPart;
 import com.jaspersoft.studio.components.table.part.TablePageEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -611,6 +614,20 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public Command getDeleteCommand(ANode parent, ANode child) {
+		if (child instanceof MTable)
+			return null;
+		if (parent instanceof MPage)
+			parent = child.getParent();
+		if (child instanceof MGraphicElement && parent instanceof MCell)
+			return new DeleteElementCommand((MCell) parent,
+					(MGraphicElement) child);
+		if (child instanceof MElementGroup && parent instanceof MCell)
+			return new DeleteElementGroupCommand((MCell) parent,
+					(MElementGroup) child);
+		return null;
+	}
+
+	public static Command getDeleteCellCommand(ANode parent, ANode child) {
 		if (child instanceof MCell) {
 			if (parent instanceof MColumnGroupCell)
 				return new DeleteColumnCellCommand((ANode) parent.getParent(),
@@ -621,7 +638,12 @@ public class TableComponentFactory implements IComponentFactory {
 			if (parent instanceof AMCollection)
 				return new DeleteColumnCellCommand((ANode) parent,
 						(MCell) child);
-		} else if (child instanceof MColumn) {
+		}
+		return null;
+	}
+
+	public static Command getDeleteColumnCommand(ANode parent, ANode child) {
+		if (child instanceof MColumn) {
 			if (parent instanceof MTableGroupHeader)
 				return new DeleteColumnCommand((MTableGroupHeader) parent,
 						(MColumn) child);
@@ -639,12 +661,6 @@ public class TableComponentFactory implements IComponentFactory {
 				return new DeleteColumnFromGroupCommand(
 						(MColumnGroupCell) parent, (MColumn) child);
 		}
-		if (child instanceof MGraphicElement && parent instanceof MCell)
-			return new DeleteElementCommand((MCell) parent,
-					(MGraphicElement) child);
-		if (child instanceof MElementGroup && parent instanceof MCell)
-			return new DeleteElementGroupCommand((MCell) parent,
-					(MElementGroup) child);
 		return null;
 	}
 
@@ -684,9 +700,15 @@ public class TableComponentFactory implements IComponentFactory {
 		lst.add(CreateColumnBeforeAction.ID);
 		lst.add(CreateColumnBeginAction.ID);
 		lst.add(CreateColumnEndAction.ID);
+		lst.add(AppContextMenuProvider.SEPARATOR);
+
 		lst.add(CreateColumnGroupAction.ID);
 		lst.add(UnGroupColumnsAction.ID);
 		lst.add(CreateColumnCellAction.ID);
+
+		lst.add(AppContextMenuProvider.SEPARATOR);
+		lst.add(DeleteColumnAction.ID);
+		lst.add(DeleteColumnCellAction.ID);
 		return lst;
 	}
 

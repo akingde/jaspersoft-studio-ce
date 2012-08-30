@@ -240,6 +240,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    org.eclipse.draw2d,
    org.eclipse.gef.ui.parts",
  com.jaspersoft.studio.editor.layout,
+ com.jaspersoft.studio.editor.menu,
  com.jaspersoft.studio.editor.outline;
   uses:="org.eclipse.core.runtime,
    org.eclipse.gef.ui.actions,

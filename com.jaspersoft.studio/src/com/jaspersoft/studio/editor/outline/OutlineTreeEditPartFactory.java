@@ -52,6 +52,7 @@ import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
@@ -185,7 +186,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		if (c != null)
 			return c;
 
-		if (child instanceof MGraphicElement) {
+		if (child instanceof MGraphicElement && !(parent instanceof MPage)) {
 			return new DeleteElementCommand(parent, (MGraphicElement) child);
 		} else if (child instanceof MElementGroup) {
 			return new DeleteElementGroupCommand(parent, (MElementGroup) child);
