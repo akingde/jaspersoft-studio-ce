@@ -217,52 +217,43 @@
         	id="com.jaspersoft.studio.rcp.jssToolbar"
             label="Jaspersoft Studio Toolbar">
 		    <command
-            commandId="org.eclipse.ui.newWizard"
-            id="com.jaspersoft.studio.rcp.newreport"
-            label="New JasperReport"
-            style="push"
-            tooltip="New JasperReport">
-		       <parameter
-		             name="newWizardId"
-		             value="com.jaspersoft.studio.wizards.ReportNewWizard">
-		       </parameter>
-	 	        <visibleWhen checkEnabled="false">
-	                <with variable="activeWorkbenchWindow.activePerspective">
-	                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
-	            	</with>
-			    </visibleWhen>
-		    </command>
-		    <command
-            commandId="org.eclipse.ui.newWizard"
-            id="com.jaspersoft.studio.rcp.newdataadapter"
-            label="New DataAdapter"
-            style="push"
-            tooltip="New DataAdapter">
-		       <parameter
-		             name="newWizardId"
-		             value="com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard">
-		       </parameter>
-	 	        <visibleWhen checkEnabled="false">
-	                <with variable="activeWorkbenchWindow.activePerspective">
-	                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
-	            	</with>
-			    </visibleWhen>		       
+	            commandId="com.jaspersoft.studio.commands.ReportNewWizard"
+	            id="com.jaspersoft.studio.rcp.newreport"
+	            label="New JasperReport"
+	            style="push"
+	            icon="icons/toolbar/jrxml_icon.png"
+	            tooltip="New JasperReport">
+		 	        <visibleWhen checkEnabled="false">
+		                <with variable="activeWorkbenchWindow.activePerspective">
+		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
+		            	</with>
+				    </visibleWhen>
 		    </command>
 		   	<command
-            commandId="org.eclipse.ui.newWizard"
-            id="com.jaspersoft.studio.rcp.newstyletemplate"
-            label="New Style Template"
-            style="push"
-            tooltip="New Style Template">
-		       <parameter
-		             name="newWizardId"
-		             value="com.jaspersoft.studio.wizards.StyleTemplateNewWizard">
-		       </parameter>
-	 	        <visibleWhen checkEnabled="false">
-	                <with variable="activeWorkbenchWindow.activePerspective">
-	                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
-	            	</with>
-			    </visibleWhen>	
+	            commandId="com.jaspersoft.studio.data.commands.NewFileDataAdapterWizard"
+	            id="com.jaspersoft.studio.rcp.newdataadapter"
+	            label="New DataAdapter"
+	            style="push"
+	            icon="icons/toolbar/data_source.png"
+	            tooltip="New DataAdapter">
+		 	        <visibleWhen checkEnabled="false">
+		                <with variable="activeWorkbenchWindow.activePerspective">
+		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
+		            	</with>
+				    </visibleWhen>		       
+		    </command>
+		   	<command
+	            commandId="com.jaspersoft.studio.commands.StyleTemplateNewWizard"
+	            id="com.jaspersoft.studio.rcp.newstyletemplate"
+	            label="New Style Template"
+	            style="push"
+	            icon="icons/toolbar/jasperreports_jrtx.png"
+	            tooltip="New Style Template">
+		 	        <visibleWhen checkEnabled="false">
+		                <with variable="activeWorkbenchWindow.activePerspective">
+		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
+		            	</with>
+				    </visibleWhen>	
 		    </command>
          </toolbar>
 	</menuContribution>

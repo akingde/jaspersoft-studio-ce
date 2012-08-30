@@ -190,15 +190,6 @@
          <hiddenMenuItem
                id="org.eclipse.search.menu">
          </hiddenMenuItem>
-         <newWizardShortcut
-               id="com.jaspersoft.studio.wizards.ReportNewWizard">
-         </newWizardShortcut>
-         <newWizardShortcut
-               id="com.jaspersoft.studio.wizards.StyleTemplateNewWizard">
-         </newWizardShortcut>
-         <newWizardShortcut
-               id="com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard">
-         </newWizardShortcut>
       </perspectiveExtension>
    </extension>
    <extension
@@ -999,6 +990,21 @@
          id="org.eclipse.gef.toggle_grid_visibility"
          name="ShowGrid">
 	  </command>
+	  <command
+         id="com.jaspersoft.studio.commands.ReportNewWizard"
+         name="JasperReport"
+         defaultHandler="com.jaspersoft.studio.wizards.NewReportWizardHandler">
+	  </command>
+	  <command
+         id="com.jaspersoft.studio.commands.StyleTemplateNewWizard"
+         name="StyleTemplate"
+         defaultHandler="com.jaspersoft.studio.wizards.NewStyleTemplateWizardHandler">
+	  </command>
+	  <command
+         id="com.jaspersoft.studio.data.commands.NewFileDataAdapterWizard"
+         name="DataAdapter"
+         defaultHandler="com.jaspersoft.studio.data.wizard.FileDataAdapterWizardHandler">
+	  </command>
 	</extension>
     <extension 
           point="org.eclipse.ui.bindings">
@@ -1007,5 +1013,86 @@
              schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
              sequence="M1+M2+Z">
        </key>
+    </extension>
+    <extension
+          id="com.jaspersoft.studio.menus.filenew"
+          point="org.eclipse.ui.menus">
+       <menuContribution
+             locationURI="menu:new?after=new">
+		  <command
+                commandId="com.jaspersoft.studio.commands.ReportNewWizard"
+                icon="icons/jrxml_icon.png"
+                label="Jasper Report"
+                style="push">
+          </command>
+		  <command
+                commandId="com.jaspersoft.studio.commands.StyleTemplateNewWizard"
+                icon="icons/resources/jasperreports_jrtx.png"
+                label="Style Template File"
+                style="push">
+          </command>
+          <command
+                commandId="com.jaspersoft.studio.data.commands.NewFileDataAdapterWizard"
+                icon="icons/data_source.png"
+                label="Data Adapter"
+                style="push">
+          </command>
+          <separator
+                name="com.jaspersoft.studio.menuseparator1"
+                visible="true">
+          </separator>
+       </menuContribution>
+              <menuContribution
+             	locationURI="popup:common.new.menu?before=new">
+          <command
+                commandId="com.jaspersoft.studio.commands.ReportNewWizard"
+                icon="icons/jrxml_icon.png"
+                label="Jasper Report"
+                style="push">
+                <visibleWhen>
+                	<with
+                       variable="activeMenuSelection">
+                       <iterate>
+                       	 <adapt
+                            type="org.eclipse.core.resources.IProject"/>
+                       </iterate>
+                	</with>
+                </visibleWhen>
+          </command>
+         <command
+                commandId="com.jaspersoft.studio.commands.StyleTemplateNewWizard"
+                icon="icons/resources/jasperreports_jrtx.png"
+                label="Style Template File"
+                style="push">
+                <visibleWhen>
+                	<with
+                       variable="activeMenuSelection">
+                       <iterate>
+                       	 <adapt
+                            type="org.eclipse.core.resources.IProject"/>
+                       </iterate>
+                	</with>
+                </visibleWhen>
+          </command>          
+         <command
+                commandId="com.jaspersoft.studio.data.commands.NewFileDataAdapterWizard"
+                icon="icons/data_source.png"
+                label="Data Adapter"
+                style="push">
+                <visibleWhen>
+                	<with
+                       variable="activeMenuSelection">
+                       <iterate>
+                       	 <adapt
+                            type="org.eclipse.core.resources.IProject"/>
+                       </iterate>
+                	</with>
+                </visibleWhen>
+          </command>          
+          <separator
+                name="com.jaspersoft.studio.separator1"
+                visible="true">
+          </separator>
+       </menuContribution>
     </extension>
 </plugin>

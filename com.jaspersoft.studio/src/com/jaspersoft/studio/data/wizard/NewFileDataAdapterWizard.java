@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -46,7 +48,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.INewWizard;
@@ -66,19 +68,15 @@ import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
+public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implements INewWizard, SelectionListener {
+	/** The wizard ID */
+	public static final String WIZARD_ID = "com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard"; //$NON-NLS-1$
+	/* default name for data adapter file */
 	private static final String NEW_DATAADAPTER_XML = "NEW_DATAADAPTER.xml";
-
 	private ISelection selection;
-
-	private DataAdapterFactory selectedFactory = null;
-
 	private WizardNewFileCreationPage step1;
-
-	private DataAdapterDescriptor dataAdapter = null;
-	private DataAdaptersListPage dataAdapterListPage = null;
-	private DataAdapterEditorPage dataAdapterEditorPage = null;
 
 	/**
 	 * This constructor will set the data adapter wizard. The data adapters list is displayed as first page, then the edit
@@ -86,6 +84,8 @@ public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
 	 */
 	public NewFileDataAdapterWizard() {
 		setWindowTitle(Messages.DataAdapterWizard_windowtitle);
+		this.storage=DataAdapterManager.getPreferencesStorage();
+		init(new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null));
 	}
 
 	/**
@@ -95,7 +95,6 @@ public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
 	 */
 	public NewFileDataAdapterWizard(DataAdapterDescriptor dataAdapter) {
 		this();
-		setWindowTitle(Messages.DataAdapterWizard_windowtitle);
 		this.dataAdapter = dataAdapter;
 	}
 
@@ -255,17 +254,6 @@ public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
 		monitor.worked(1);
 	}
 
-	/**
-	 * Returns the new data adapter (or the modified data adapter in case the wizard is used to edit an existing data
-	 * adapter). It returns null (or the original data adapter) if the wizard has not been completed. The returned object
-	 * is the same used in the constructor in case of editing.
-	 * 
-	 * @return
-	 */
-	public DataAdapterDescriptor getDataAdapter() {
-		return this.dataAdapter;
-	}
-
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
 			for (Object obj : selection.toList()) {
@@ -304,4 +292,5 @@ public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
 		}
 		this.selection = selection;
 	}
+
 }

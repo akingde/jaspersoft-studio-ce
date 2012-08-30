@@ -89,6 +89,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.report.ReportGenerator;
 
 public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INewWizard {
+	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.ReportNewWizard";	
 	private static final String NEW_REPORT_JRXML = Messages.ReportNewWizard_8;
 	private ReportTemplatesWizardPage step0;
 	private NewFileCreationWizard step1;

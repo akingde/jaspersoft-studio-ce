@@ -72,6 +72,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  */
 
 public class StyleTemplateNewWizard extends Wizard implements INewWizard {
+	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.StyleTemplateNewWizard";
 	private static final String NEW_STYLE_JRTX = Messages.StyleTemplateNewWizard_0;
 	private WizardNewFileCreationPage step1;
 	private ISelection selection;
