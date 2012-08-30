@@ -77,7 +77,8 @@ public class CreateColumnCommand extends Command {
 
 	public CreateColumnCommand(MColumn destNode, MColumn srcNode, int index) {
 		this((ANode) destNode, srcNode, index);
-		this.index = jrTable.getColumns().indexOf(destNode.getValue()) + 1;
+		this.index = index;// jrTable.getColumns().indexOf(destNode.getValue())
+							// + 1;
 	}
 
 	protected CreateColumnCommand(ANode destNode, MColumn srcNode, int index) {

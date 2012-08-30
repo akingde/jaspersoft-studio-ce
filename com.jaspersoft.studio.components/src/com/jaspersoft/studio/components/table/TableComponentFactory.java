@@ -77,8 +77,11 @@ import com.jaspersoft.studio.components.table.model.cell.command.ReorderElementC
 import com.jaspersoft.studio.components.table.model.cell.command.ReorderElementGroupCommand;
 import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
-import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAction;
+import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction;
+import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeforeAction;
+import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnCellAction;
+import com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnFromGroupCommand;
@@ -586,10 +589,11 @@ public class TableComponentFactory implements IComponentFactory {
 			MTable mt = (MTable) parent;
 			final Cell cell = mt.getTableManager().getCell(
 					new Point(location.x, location.y));
-			Rectangle r = mt.getTableManager().getCellBounds(cell);
-			location = location.setLocation(location.x - r.x, location.y - r.y);
-
 			if (cell != null) {
+				Rectangle r = mt.getTableManager().getCellBounds(cell);
+				int x = r != null ? r.x : 0;
+				int y = r != null ? r.y : 0;
+				location = location.setLocation(location.x - x, location.y - y);
 				ModelVisitor<MCell> mv = new ModelVisitor<MCell>(parent) {
 					@Override
 					public boolean visit(INode n) {
@@ -676,7 +680,10 @@ public class TableComponentFactory implements IComponentFactory {
 
 	public List<String> getActionsID() {
 		List<String> lst = new ArrayList<String>();
-		lst.add(CreateColumnAction.ID);
+		lst.add(CreateColumnAfterAction.ID);
+		lst.add(CreateColumnBeforeAction.ID);
+		lst.add(CreateColumnBeginAction.ID);
+		lst.add(CreateColumnEndAction.ID);
 		lst.add(CreateColumnGroupAction.ID);
 		lst.add(UnGroupColumnsAction.ID);
 		lst.add(CreateColumnCellAction.ID);

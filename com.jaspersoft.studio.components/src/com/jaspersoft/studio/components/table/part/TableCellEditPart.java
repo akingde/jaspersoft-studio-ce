@@ -177,7 +177,7 @@ public class TableCellEditPart extends FigureEditPart implements
 
 			@Override
 			protected Command getCreateCommand(ANode parent, Object obj,
-					Rectangle constraint) {
+					Rectangle constraint, int index) {
 				if (parent instanceof MPage)
 					parent = getModel();
 				Rectangle b = getModel().getBounds();
@@ -186,7 +186,7 @@ public class TableCellEditPart extends FigureEditPart implements
 				constraint = new Rectangle(x, y, constraint.width,
 						constraint.height);
 
-				return super.getCreateCommand(parent, obj, constraint);
+				return super.getCreateCommand(parent, obj, constraint, index);
 			}
 
 			@Override

@@ -62,16 +62,16 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 
 			private RectangleFigure targetFeedback;
-			
+
 			@Override
-			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint) {
+			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
 				if (parent instanceof MPage)
 					parent = getModel();
 				Rectangle b = getModel().getBounds();
 				int x = constraint.x - b.x - ReportPageFigure.PAGE_BORDER.left;
 				int y = constraint.y - b.y - ReportPageFigure.PAGE_BORDER.top;
 				constraint = new Rectangle(x, y, constraint.width, constraint.height);
-				return super.getCreateCommand(parent, obj, constraint);
+				return super.getCreateCommand(parent, obj, constraint, index);
 			}
 
 			@Override
@@ -106,15 +106,15 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 				}
 				return null;
 			}
-			
+
 			/**
-			 * Show the feedback during drag and drop 
+			 * Show the feedback during drag and drop
 			 */
 			protected void showLayoutTargetFeedback(Request request) {
 				super.showLayoutTargetFeedback(request);
 				getLayoutTargetFeedback(request);
 			}
-			
+
 			/**
 			 * Erase the feedback from a ban when no element is dragged into it
 			 */
@@ -125,10 +125,11 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 					targetFeedback = null;
 				}
 			}
-			
+
 			/**
 			 * Paint the figure to give the feedback, a blue border overlapping the band border
-			 * @param request 
+			 * 
+			 * @param request
 			 * @return feedback figure
 			 */
 			protected IFigure getLayoutTargetFeedback(Request request) {
@@ -143,12 +144,11 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 					Rectangle rect = new PrecisionRectangle(bounds);
 					getHostFigure().translateToAbsolute(rect);
 					getFeedbackLayer().translateToRelative(rect);
-					
+
 					targetFeedback.setBounds(rect.shrink(0, 1));
 					targetFeedback.getBounds().setX(hostFigure.getBounds().x);
-					//targetFeedback.getBounds().setY(hostFigure.getBounds().y);
-					targetFeedback.setBorder(new LineBorder(
-							ColorConstants.lightBlue, 3));
+					// targetFeedback.getBounds().setY(hostFigure.getBounds().y);
+					targetFeedback.setBorder(new LineBorder(ColorConstants.lightBlue, 3));
 					addFeedback(targetFeedback);
 				}
 				return targetFeedback;

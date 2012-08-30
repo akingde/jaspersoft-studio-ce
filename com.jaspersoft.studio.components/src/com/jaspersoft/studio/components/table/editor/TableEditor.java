@@ -32,8 +32,11 @@ import org.eclipse.jface.action.IAction;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
-import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAction;
+import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction;
+import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeforeAction;
+import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnCellAction;
+import com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction;
 import com.jaspersoft.studio.components.table.model.columngroup.action.CreateColumnGroupAction;
 import com.jaspersoft.studio.components.table.model.columngroup.action.UnGroupColumnsAction;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
@@ -107,11 +110,23 @@ public class TableEditor extends AbstractVisualEditor {
 
 	@Override
 	protected void createEditorActions(ActionRegistry registry) {
-		IAction action = new CreateColumnAction(this);
+		IAction action = new CreateColumnEndAction(this);
 		registry.registerAction(action);
 		@SuppressWarnings("unchecked")
 		List<String> selectionActions = getSelectionActions();
-		selectionActions.add(CreateColumnAction.ID);
+		selectionActions.add(CreateColumnEndAction.ID);
+
+		action = new CreateColumnBeginAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateColumnBeginAction.ID);
+
+		action = new CreateColumnBeforeAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateColumnBeforeAction.ID);
+
+		action = new CreateColumnAfterAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateColumnAfterAction.ID);
 
 		action = new CreateColumnGroupAction(this);
 		registry.registerAction(action);

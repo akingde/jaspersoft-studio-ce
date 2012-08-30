@@ -49,6 +49,7 @@ import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.editor.gef.rulers.command.ChangeGuideCommand;
+import com.jaspersoft.studio.editor.gef.util.CreateRequestUtil;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGuidebleElement;
@@ -159,6 +160,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	 */
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
+		int index = CreateRequestUtil.getNewIndex(request);
 		if (request.getType() == REQ_CREATE && getHost() instanceof AJDEditPart) {
 			Rectangle constraint = adaptConstraint(getConstraintFor(request));
 
@@ -167,7 +169,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			if (request.getNewObject() instanceof Collection<?>) {
 				CompoundCommand ccmd = new CompoundCommand();
 				for (Object it : (Collection<?>) request.getNewObject()) {
-					Command cmd = getCreateCommand(parent, it, copyconstraint.getCopy());
+					Command cmd = getCreateCommand(parent, it, copyconstraint.getCopy(), index);
 					if (cmd != null) {
 						ccmd.add(cmd);
 						copyconstraint.translate(70, 0);
@@ -181,7 +183,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 				action.run();
 				return action.getCommand();
 			} else
-				return getCreateCommand(parent, request.getNewObject(), copyconstraint);
+				return getCreateCommand(parent, request.getNewObject(), copyconstraint, index);
 		}
 
 		// Command cmd = chainGuideAttachmentCommand(request, newPart, create, true);
@@ -189,7 +191,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-	protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint) {
+	protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
 		if (obj instanceof ANode) {
 			ANode aNode = (ANode) obj;
 			if (aNode instanceof MGraphicElement) {
@@ -217,7 +219,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 					constraint.setLocation(x, y);
 				}
 			}
-			return OutlineTreeEditPartFactory.getCreateCommand(parent, aNode, constraint, -1);
+			return OutlineTreeEditPartFactory.getCreateCommand(parent, aNode, constraint, index);
 		}
 		return null;
 	}

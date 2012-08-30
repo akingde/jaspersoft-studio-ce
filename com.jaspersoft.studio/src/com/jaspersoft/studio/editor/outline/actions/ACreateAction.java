@@ -1,29 +1,27 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.outline.actions;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
@@ -33,6 +31,7 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
+
 /*
  * The Class ACreateAction.
  */
@@ -95,15 +94,26 @@ public abstract class ACreateAction extends SelectionAction {
 		CreateRequest createReq = new CreateRequest(RequestConstants.REQ_CREATE);
 		createReq.setLocation(location);
 		createReq.setFactory(creationFactory);
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		if (!setExtendedData(map, objects))
+			return null;
+		createReq.setExtendedData(map);
 
 		for (int i = 0; i < objects.size(); i++) {
-			EditPart object = (EditPart) objects.get(i);
-			Command cmd = object.getCommand(createReq);
-			if (cmd != null)
-				return cmd;
+			Object obj = objects.get(i);
+			if (obj instanceof EditPart) {
+				EditPart object = (EditPart) obj;
+				Command cmd = object.getCommand(createReq);
+				if (cmd != null)
+					return cmd;
+			}
 		}
 
 		return null;
+	}
+
+	protected boolean setExtendedData(Map<Object, Object> map, List<?> objects) {
+		return true;
 	}
 
 	/**

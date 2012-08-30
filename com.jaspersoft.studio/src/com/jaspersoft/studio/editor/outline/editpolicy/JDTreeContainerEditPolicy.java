@@ -31,6 +31,7 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
+import com.jaspersoft.studio.editor.gef.util.CreateRequestUtil;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 
@@ -83,6 +84,8 @@ public class JDTreeContainerEditPolicy extends TreeContainerEditPolicy {
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
 		int index = findIndexOfTreeItemAt(request.getLocation());
+		if (index < 0)
+			index = CreateRequestUtil.getNewIndex(request);
 		if (request.getNewObject() instanceof ANode) {
 			return createCreateCommand((ANode) request.getNewObject(), index);
 		} else if (request.getNewObject() instanceof CreateElementAction) {
