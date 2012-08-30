@@ -140,6 +140,12 @@ public class TableWizard extends JSSWizard {
 		MDatasetRun dataSetRun = step1.getDataSetRun();
 		if (dataSetRun != null) {
 			JRDesignDatasetRun dsrun = dataSetRun.getValue();
+			if (ds != null)
+				dsrun.setDatasetName((String) ds
+						.getPropertyValue(JRDesignDataset.PROPERTY_NAME));
+			tbl.setDatasetRun(dsrun);
+		} else if (ds != null) {
+			JRDesignDatasetRun dsrun = new JRDesignDatasetRun();
 			dsrun.setDatasetName((String) ds
 					.getPropertyValue(JRDesignDataset.PROPERTY_NAME));
 			tbl.setDatasetRun(dsrun);
