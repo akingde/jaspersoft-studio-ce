@@ -21,7 +21,6 @@ package com.jaspersoft.studio.editor.gef.parts.band;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.annotation.Inherited;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

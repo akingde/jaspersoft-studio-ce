@@ -43,7 +43,6 @@
 package com.jaspersoft.studio.editor.java2d;
 
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.gef.SelectionManager;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 
 import com.jaspersoft.studio.editor.gef.selection.JSelectionManager;

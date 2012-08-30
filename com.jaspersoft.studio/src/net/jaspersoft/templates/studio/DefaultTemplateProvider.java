@@ -7,15 +7,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import org.eclipse.nebula.widgets.gallery.GalleryItem;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
+import net.jaspersoft.templates.TemplateBundle;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-
-import net.jaspersoft.templates.TemplateBundle;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 /**
  * The default implementation in JSS of template provider looks for templates inside the plugin's templates

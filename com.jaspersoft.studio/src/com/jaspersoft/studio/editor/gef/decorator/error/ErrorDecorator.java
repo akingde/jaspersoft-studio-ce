@@ -24,7 +24,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.swt.graphics.RGB;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;

@@ -31,8 +31,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.ColumnCell;
-import com.jaspersoft.studio.components.table.TableMatrix;
 import com.jaspersoft.studio.components.table.TableManager;
+import com.jaspersoft.studio.components.table.TableMatrix;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 
 public class FixCellHeightsCommand extends Command {

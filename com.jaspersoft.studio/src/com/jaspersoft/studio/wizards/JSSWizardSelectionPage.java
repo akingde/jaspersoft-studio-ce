@@ -30,9 +30,6 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.jface.wizard.IWizardPage;
 
-import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
-import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
-
 public abstract class JSSWizardSelectionPage extends JSSWizardPage {
 
 	/**
