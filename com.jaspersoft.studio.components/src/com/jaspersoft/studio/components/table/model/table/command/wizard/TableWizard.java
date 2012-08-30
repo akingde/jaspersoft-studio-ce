@@ -166,15 +166,20 @@ public class TableWizard extends JSSWizard {
 				col.setWidth(colWidth);
 				// Set the cel color
 				DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
-				colHeadCell.setStyle(styleList.get(2));
+				if (colHeadCell != null)
+					colHeadCell.setStyle(styleList.get(2));
 				DesignCell detCell = (DesignCell) col.getDetailCell();
-				detCell.setStyle(styleList.get(3));
+				if (detCell != null)
+					detCell.setStyle(styleList.get(3));
 				DesignCell tblHeadCell = (DesignCell) col.getTableHeader();
-				tblHeadCell.setStyle(styleList.get(1));
+				if (tblHeadCell != null)
+					tblHeadCell.setStyle(styleList.get(1));
 				DesignCell tblFooterCell = (DesignCell) col.getTableFooter();
-				tblFooterCell.setStyle(styleList.get(1));
+				if (tblFooterCell != null)
+					tblFooterCell.setStyle(styleList.get(1));
 				DesignCell colFooterCell = (DesignCell) col.getColumnFooter();
-				colFooterCell.setStyle(styleList.get(2));
+				if (colFooterCell != null)
+					colFooterCell.setStyle(styleList.get(2));
 				// Color setted
 				if (step4.isColumnHeader()) {
 					JRDesignStaticText sText = (JRDesignStaticText) new MStaticText()
