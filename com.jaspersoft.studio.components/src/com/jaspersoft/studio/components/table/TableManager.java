@@ -81,7 +81,7 @@ public class TableManager {
 	public void initMaps() {
 		mh = new TableMatrix();
 		mh.fillMatrix(table, tableUtil);
-//		 mh.print();
+		// mh.print();
 	}
 
 	public void refresh() {
@@ -303,6 +303,8 @@ public class TableManager {
 	}
 
 	public static StandardTable getTable(ANode destNode) {
+		if (destNode instanceof MTable)
+			return ((MTable) destNode).getStandardTable();
 		if (destNode instanceof MColumn)
 			destNode = ((MColumn) destNode).getMTable();
 		if (destNode.getValue() instanceof JRDesignComponentElement) {

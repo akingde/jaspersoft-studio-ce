@@ -35,6 +35,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.AMCollection;
+import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
@@ -68,6 +69,10 @@ public class CreateColumnCommand extends Command {
 	public CreateColumnCommand(MTableGroupFooter destNode, MColumn srcNode,
 			int index) {
 		this((ANode) destNode.getParent(), srcNode, index);
+	}
+
+	public CreateColumnCommand(MTable destNode, MColumn srcNode, int index) {
+		this((ANode) destNode, srcNode, index);
 	}
 
 	public CreateColumnCommand(MColumn destNode, MColumn srcNode, int index) {

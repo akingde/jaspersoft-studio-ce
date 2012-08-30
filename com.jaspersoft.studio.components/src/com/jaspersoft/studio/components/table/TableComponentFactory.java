@@ -523,6 +523,9 @@ public class TableComponentFactory implements IComponentFactory {
 						(MColumnGroup) child, newIndex);
 
 		} else if (child instanceof MColumn) {
+			if (parent instanceof MTable)
+				return new CreateColumnCommand((MTable) parent,
+						(MColumn) child, newIndex);
 			if (parent instanceof MTableGroupHeader)
 				return new CreateColumnCommand((MTableGroupHeader) parent,
 						(MColumn) child, newIndex);
