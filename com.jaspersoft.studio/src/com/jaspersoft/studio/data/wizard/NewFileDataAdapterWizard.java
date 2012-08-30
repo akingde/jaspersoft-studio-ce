@@ -245,6 +245,9 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 			public void run() {
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
+					// Force the default editor for the data adapter file 
+					// so that it can be opened with the same one in the future
+					IDE.setDefaultEditor(file, DataAdapterEditorPart.ID);
 					IDE.openEditor(page, file, DataAdapterEditorPart.ID);
 				} catch (PartInitException e) {
 					e.printStackTrace();
