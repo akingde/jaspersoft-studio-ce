@@ -78,6 +78,8 @@ public class JSelectionManager extends SelectionManager {
 				}
 				lastSelected.setSelected(EditPart.SELECTED_PRIMARY);
 			}
+		}else {
+			super.deselectAll();
 		}
 	}
 }

@@ -504,6 +504,13 @@
                image="icons/resources/genericelement-16.png"
                label="%element">
          </propertyTab>
+       	 <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Text"
+               category="element"
+               id="com.jaspersoft.studio.editor.propertyTab.style"
+               image="icons/resources/style-16.png"
+               label="%style">
+         </propertyTab>
          <propertyTab
                afterTab="com.jaspersoft.studio.propertyTab.report"
                category="element"
@@ -717,6 +724,14 @@
                class="com.jaspersoft.studio.property.section.text.StaticTextSection"
                id="com.jaspersoft.studio.property.section.text.StaticTextSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.text.MStaticText">
+            </input>
+         </propertySection>
+          <propertySection
+               class="com.jaspersoft.studio.property.section.obj.StylesListSection"
+               id="com.jaspersoft.studio.property.section.obj.StylesListSection"
+               tab="com.jaspersoft.studio.editor.propertyTab.style">
             <input
                   type="com.jaspersoft.studio.model.text.MStaticText">
             </input>

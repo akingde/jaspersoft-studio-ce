@@ -75,6 +75,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Color;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -118,6 +119,11 @@ public class ModelUtils {
 		}
 		return null;
 	}
+	
+	public static org.eclipse.swt.graphics.Color getSWTColorFromAWT(java.awt.Color awtColor) {
+		return new org.eclipse.swt.graphics.Color(null, awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue());
+	}
+
 
 	public static String[] getDataSets(JasperDesign jd, boolean all) {
 		List<JRDataset> datasetsList = new ArrayList<JRDataset>(jd.getDatasetsList());
