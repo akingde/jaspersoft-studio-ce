@@ -22,9 +22,7 @@ package com.jaspersoft.studio.editor.gef.parts;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -38,7 +36,6 @@ import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;

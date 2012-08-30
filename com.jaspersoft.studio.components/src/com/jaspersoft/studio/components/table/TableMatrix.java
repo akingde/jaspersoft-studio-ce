@@ -58,8 +58,7 @@ public class TableMatrix {
 	}
 
 	public Rectangle getYHColumn(BaseColumn bc, int type, String grName) {
-		Rectangle r = map.get(new ColumnCell(type, Misc.nvl(grName), bc));
-		return r.getCopy();
+		return map.get(new ColumnCell(type, Misc.nvl(grName), bc));
 	}
 
 	public ColumnCell getColumnCell(ColumnCell colcel) {

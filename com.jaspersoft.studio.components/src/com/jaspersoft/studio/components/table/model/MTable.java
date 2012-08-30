@@ -307,7 +307,7 @@ public class MTable extends MGraphicElement implements IContainer,
 				|| evt.getNewValue() instanceof DesignCell)
 			getTableManager().update();
 		else if (getTableManager() != null)
-			getTableManager().refresh();
+			getTableManager().update();
 		super.propertyChange(evt);
 	}
 
