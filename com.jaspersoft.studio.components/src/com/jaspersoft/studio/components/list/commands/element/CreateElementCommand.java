@@ -77,7 +77,7 @@ public class CreateElementCommand extends Command {
 		listcomponent = (StandardListComponent) jrElement2.getComponent();
 		this.index = index;
 		this.location = position;
-		jDesign = srcNode.getJasperDesign();
+		jDesign = destNode.getJasperDesign();
 		pholder = ((IContainerLayout) destNode).getPropertyHolder();
 	}
 
