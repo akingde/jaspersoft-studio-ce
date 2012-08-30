@@ -78,8 +78,8 @@ public class CreateColumnGroupAction extends ACreateAction {
 	public Command createCreateCommand(List<?> objects) {
 		if (objects.isEmpty())
 			return null;
-		if (objects.size() == 1)
-			return super.createCreateCommand(objects);
+		// if (objects.size() == 1)
+		// return super.createCreateCommand(objects);
 		List<MColumn> columns = new ArrayList<MColumn>();
 		for (Object obj : objects) {
 			if (!(obj instanceof EditPart))
