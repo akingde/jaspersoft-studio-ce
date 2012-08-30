@@ -143,6 +143,13 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
+		if (page == step1) {
+			IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(step1.getContainerFullPath());
+
+			IFile file = r.getProject().getFile(
+					step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName());
+			getConfig().init(file);
+		}
 		if (page == dataAdapterListPage) {// && event.getTargetPage() == dataAdapterEditorPage) {
 			// Update the layout of the editor page with the proper data adapter editor
 			// provided by the new data adapter
@@ -259,6 +266,10 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
+			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile) {
+				this.selection = selection;
+				return;
+			}
 			for (Object obj : selection.toList()) {
 				if (obj instanceof EditPart) {
 					IEditorInput ein = SelectionHelper.getActiveJRXMLEditor().getEditorInput();
@@ -285,7 +296,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 				try {
 					if (p.isAccessible()) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile("file") }));
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(Messages.ReportNewWizard_19) }));
 						return;
 					}
 				} catch (CoreException e) {
