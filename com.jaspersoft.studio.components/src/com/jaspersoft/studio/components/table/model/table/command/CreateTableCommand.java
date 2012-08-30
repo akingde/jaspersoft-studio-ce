@@ -19,10 +19,6 @@
  */
 package com.jaspersoft.studio.components.table.model.table.command;
 
-import net.sf.jasperreports.components.table.StandardTable;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -36,9 +32,7 @@ import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
-import com.jaspersoft.studio.model.dataset.command.CreateDatasetCommand;
 import com.jaspersoft.studio.model.frame.MFrame;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * link nodes & together.
@@ -131,25 +125,6 @@ public class CreateTableCommand extends CreateElementCommand {
 				if (jrElement != null)
 					setElementBounds();
 			}
-		}
-		fixDatasetRun();
-	}
-
-	private void fixDatasetRun() {
-		if (jrElement != null) {
-			JRDesignComponentElement jrcElement = (JRDesignComponentElement) jrElement;
-			StandardTable jrTable = (StandardTable) jrcElement.getComponent();
-			String dsname = (String) jrTable.getDatasetRun().getDatasetName();
-			if (dsname == null || dsname.trim().isEmpty()) {
-				// create an empty dataset
-				JRDesignDataset jrDataset = new JRDesignDataset(false);
-				jrDataset.setName(ModelUtils.getDefaultName(
-						jasperDesign.getDatasetMap(), "Empty Dataset"));
-				addCommand(new CreateDatasetCommand(jConfig, jrDataset));
-				((JRDesignDatasetRun) jrTable.getDatasetRun())
-						.setDatasetName(jrDataset.getName());
-			}
-
 		}
 	}
 

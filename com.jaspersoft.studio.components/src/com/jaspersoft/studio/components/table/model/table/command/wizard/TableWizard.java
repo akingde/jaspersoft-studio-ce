@@ -46,6 +46,7 @@ import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.dataset.command.CreateDatasetCommand;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
@@ -93,8 +94,8 @@ public class TableWizard extends JSSWizard {
 		step2 = new WizardConnectionPage();
 		addPage(step2);
 		step2.setDataSetRun(mdataset);
-		step2.setExpressionContext(
-				ModelUtils.getElementExpressionContext((JRDesignElement)table.getValue(), table));
+		step2.setExpressionContext(ModelUtils.getElementExpressionContext(
+				(JRDesignElement) table.getValue(), table));
 
 		step3 = new WizardFieldsPage();
 		addPage(step3);
@@ -139,24 +140,25 @@ public class TableWizard extends JSSWizard {
 		MDatasetRun dataSetRun = step1.getDataSetRun();
 		if (dataSetRun != null) {
 			JRDesignDatasetRun dsrun = dataSetRun.getValue();
-			dsrun.setDatasetName((String) ds.getPropertyValue(JRDesignDataset.PROPERTY_NAME));
+			dsrun.setDatasetName((String) ds
+					.getPropertyValue(JRDesignDataset.PROPERTY_NAME));
 			tbl.setDatasetRun(dsrun);
 		}
 		JasperDesign jd = getConfig().getJasperDesign();
 		createDeafultStyles(jd);
-		if (tbl != null && lst != null){
+		if (tbl != null && lst != null) {
 			int colWidth = 40;
-			if (tableWidth<0)
+			if (tableWidth < 0)
 				tableWidth = table.getDefaultWidth();
-			if (lst.size()>0)
+			if (lst.size() > 0)
 				colWidth = tableWidth / lst.size();
 			for (Object f : lst) {
 				StandardColumn col = CreateColumnCommand.addColumn(jd, tbl,
-				step4.isTableHeader(), step4.isTableFooter(),
-				step4.isColumnHeader(), step4.isColumnFooter(),
-				step4.isGroupHeader(), step4.isGroupFooter());
+						step4.isTableHeader(), step4.isTableFooter(),
+						step4.isColumnHeader(), step4.isColumnFooter(),
+						step4.isGroupHeader(), step4.isGroupFooter());
 				col.setWidth(colWidth);
-				//Set the cel color
+				// Set the cel color
 				DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
 				colHeadCell.setStyle(styleList.get(2));
 				DesignCell detCell = (DesignCell) col.getDetailCell();
@@ -167,7 +169,7 @@ public class TableWizard extends JSSWizard {
 				tblFooterCell.setStyle(styleList.get(1));
 				DesignCell colFooterCell = (DesignCell) col.getColumnFooter();
 				colFooterCell.setStyle(styleList.get(2));
-				//Color setted
+				// Color setted
 				if (step4.isColumnHeader()) {
 					JRDesignStaticText sText = (JRDesignStaticText) new MStaticText()
 							.createJRElement(jd);
@@ -176,7 +178,8 @@ public class TableWizard extends JSSWizard {
 					sText.setText(((JRField) f).getName());
 					colHeadCell.addElement(sText);
 				}
-				JRDesignTextField fText = (JRDesignTextField) new MTextField().createJRElement(jd);
+				JRDesignTextField fText = (JRDesignTextField) new MTextField()
+						.createJRElement(jd);
 				fText.setWidth(col.getWidth());
 				fText.setHeight(detCell.getHeight());
 				JRDesignExpression jre = new JRDesignExpression();
@@ -186,43 +189,55 @@ public class TableWizard extends JSSWizard {
 				tbl.addColumn(col);
 			}
 		}
+		String dsname = (String) tbl.getDatasetRun().getDatasetName();
+		if (dsname == null || dsname.trim().isEmpty()) {
+			// create an empty dataset
+			JRDesignDataset jrDataset = new JRDesignDataset(false);
+			jrDataset.setName(ModelUtils.getDefaultName(jd.getDatasetMap(),
+					"Empty Dataset"));
+			addCommand(new CreateDatasetCommand(getConfig(), jrDataset));
+			((JRDesignDatasetRun) tbl.getDatasetRun()).setDatasetName(jrDataset
+					.getName());
+		}
+
 		return table;
 	}
-	
-	public List<JRDesignStyle> getStylesList(){
+
+	public List<JRDesignStyle> getStylesList() {
 		return styleList;
 	}
-	
+
 	/**
 	 * Create a color array for border and gradient
-	 * @param baseColor value from 0 to 1 that represent the base color H in HSB system
+	 * 
+	 * @param baseColor
+	 *            value from 0 to 1 that represent the base color H in HSB
+	 *            system
 	 * @return an array of colors, different version of the base color
 	 */
-	private Color[]createColor(){
-		Color[] result = {Color.getHSBColor(baseColor, 0.25f, 1.0f),Color.getHSBColor(baseColor, 0.06f, 1.0f)};
+	private Color[] createColor() {
+		Color[] result = { Color.getHSBColor(baseColor, 0.25f, 1.0f),
+				Color.getHSBColor(baseColor, 0.06f, 1.0f) };
 		return result;
 	}
-	
-	private void createDeafultStyles(JasperDesign jd){
-		JRDesignStyle newStyle = new JRDesignStyle();
-        //Check the first available basename...
-        String basename = "Table";
-        styleList = new ArrayList<JRDesignStyle>();
-        for (int i=0; ; i++)
-        {
-            String name = basename;
-            if (i > 0)
-            {
-                name = basename + " "+ i;
-            }
-            
-            if (!(jd.getStylesMap().containsKey(name)))
-            {
-                basename = name;
-                break;
-            }
 
-        }
+	private void createDeafultStyles(JasperDesign jd) {
+		JRDesignStyle newStyle = new JRDesignStyle();
+		// Check the first available basename...
+		String basename = "Table";
+		styleList = new ArrayList<JRDesignStyle>();
+		for (int i = 0;; i++) {
+			String name = basename;
+			if (i > 0) {
+				name = basename + " " + i;
+			}
+
+			if (!(jd.getStylesMap().containsKey(name))) {
+				basename = name;
+				break;
+			}
+
+		}
 		try {
 			Color[] colors = createColor();
 			newStyle.setName(basename);
@@ -230,19 +245,19 @@ public class TableWizard extends JSSWizard {
 			jd.addStyle(newStyle);
 			styleList.add(newStyle);
 			newStyle = new JRDesignStyle();
-			newStyle.setName(basename+"_TH");
+			newStyle.setName(basename + "_TH");
 			newStyle.setMode(ModeEnum.OPAQUE);
 			newStyle.setBackcolor(colors[1]);
 			jd.addStyle(newStyle);
 			styleList.add(newStyle);
 			newStyle = new JRDesignStyle();
-			newStyle.setName(basename+"_CH");
+			newStyle.setName(basename + "_CH");
 			newStyle.setMode(ModeEnum.OPAQUE);
 			newStyle.setBackcolor(colors[0]);
 			jd.addStyle(newStyle);
 			styleList.add(newStyle);
 			newStyle = new JRDesignStyle();
-			newStyle.setName(basename+"_TD");
+			newStyle.setName(basename + "_TD");
 			newStyle.setMode(ModeEnum.OPAQUE);
 			newStyle.setBackcolor(Color.white);
 			jd.addStyle(newStyle);
