@@ -19,6 +19,9 @@
  */
 package com.jaspersoft.studio.components.crosstab.model.columngroup.command;
 
+import java.util.List;
+
+import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 
@@ -27,6 +30,7 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroups;
+
 /*
  * The Class ReorderParameterCommand.
  */
@@ -42,13 +46,14 @@ public class ReorderColumnGroupCommand extends Command {
 	 * Instantiates a new reorder parameter command.
 	 * 
 	 * @param child
-	 *          the child
+	 *            the child
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
-	public ReorderColumnGroupCommand(MColumnGroup child, MColumnGroups parent, int newIndex) {
+	public ReorderColumnGroupCommand(MColumnGroup child, MColumnGroups parent,
+			int newIndex) {
 		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
@@ -63,17 +68,20 @@ public class ReorderColumnGroupCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldIndex = jrCrosstab.getColumnGroupsList().indexOf(jrColumnGroup);
+		List<JRCrosstabColumnGroup> columns = jrCrosstab.getColumnGroupsList();
+		oldIndex = columns.indexOf(jrColumnGroup);
 
-		jrCrosstab.getColumnGroupsList().remove(jrColumnGroup);
-		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS,
-				jrColumnGroup, oldIndex);
-		if (newIndex >= 0 && newIndex < jrCrosstab.getColumnGroupsList().size())
-			jrCrosstab.getColumnGroupsList().add(newIndex, jrColumnGroup);
+		columns.remove(jrColumnGroup);
+		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(
+				JRDesignCrosstab.PROPERTY_COLUMN_GROUPS, jrColumnGroup,
+				oldIndex);
+		if (newIndex >= 0 && newIndex < columns.size())
+			columns.add(newIndex, jrColumnGroup);
 		else
-			jrCrosstab.getColumnGroupsList().add(jrColumnGroup);
-		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS,
-				jrColumnGroup, newIndex);
+			columns.add(jrColumnGroup);
+		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(
+				JRDesignCrosstab.PROPERTY_COLUMN_GROUPS, jrColumnGroup,
+				newIndex);
 	}
 
 	/*
@@ -83,14 +91,17 @@ public class ReorderColumnGroupCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		jrCrosstab.getColumnGroupsList().remove(jrColumnGroup);
-		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS,
-				jrColumnGroup, newIndex);
-		if (oldIndex >= 0 && oldIndex < jrCrosstab.getColumnGroupsList().size())
-			jrCrosstab.getColumnGroupsList().add(oldIndex, jrColumnGroup);
+		List<JRCrosstabColumnGroup> columns = jrCrosstab.getColumnGroupsList();
+		columns.remove(jrColumnGroup);
+		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(
+				JRDesignCrosstab.PROPERTY_COLUMN_GROUPS, jrColumnGroup,
+				newIndex);
+		if (oldIndex >= 0 && oldIndex < columns.size())
+			columns.add(oldIndex, jrColumnGroup);
 		else
-			jrCrosstab.getColumnGroupsList().add(jrColumnGroup);
-		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS,
-				jrColumnGroup, oldIndex);
+			columns.add(jrColumnGroup);
+		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(
+				JRDesignCrosstab.PROPERTY_COLUMN_GROUPS, jrColumnGroup,
+				oldIndex);
 	}
 }

@@ -51,16 +51,16 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.utils.EnumHelper;
 
 public class Obj2TextPage extends WizardPage {
 	private CalculationEnum calculation;
+	private String[] names;
 
-	public Obj2TextPage() {
+	public Obj2TextPage(String[] names) {
 		super("obj2text"); //$NON-NLS-1$
 		setTitle(Messages.Obj2TextPage_title);
 		setDescription(Messages.Obj2TextPage_description);
+		this.names = names;
 	}
 
 	public void createControl(Composite parent) {
@@ -71,7 +71,7 @@ public class Obj2TextPage extends WizardPage {
 		setControl(composite);
 
 		final List lst = new List(composite, SWT.BORDER);
-		lst.setItems(EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL));
+		lst.setItems(names);
 		lst.setLayoutData(new GridData(GridData.FILL_BOTH));
 		lst.addSelectionListener(new SelectionListener() {
 

@@ -352,8 +352,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 					nodes.add(n);
 			}
 			mCrosstab.removeChildren(nodes);
-			if (mCrosstab.getCrosstabManager() != null)
-				mCrosstab.getCrosstabManager().refresh();
+//			if (mCrosstab.getCrosstabManager() != null)
+//				mCrosstab.getCrosstabManager().refresh();
 		}
 	}
 
@@ -517,6 +517,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public Command getDeleteCommand(ANode parent, ANode child) {
+		if (child instanceof MCrosstab)
+			return null;
+		if (parent instanceof MPage)
+			parent = child.getParent();
 		if (child instanceof MParameter) {
 			if (parent instanceof MCrosstabParameters)
 				return new DeleteParameterCommand((MCrosstabParameters) parent,
@@ -549,6 +553,19 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				return new DeleteCrosstabWhenNoDataCommand((MCrosstab) parent,
 						(MCrosstabWhenNoDataCell) child);
 		}
+		if (child instanceof MCell) {
+			if (parent instanceof MColumnGroup) {
+				MColumnGroup colgroup = (MColumnGroup) parent;
+				return new DeleteColumnGroupCommand(colgroup.getMCrosstab(),
+						colgroup);
+			}
+			if (parent instanceof MRowGroup) {
+				MRowGroup rowgroup = (MRowGroup) parent;
+				return new DeleteRowGroupCommand(rowgroup.getMCrosstab(),
+						rowgroup);
+			}
+		}
+
 		if (child instanceof MGraphicElement && parent instanceof MCell)
 			return new DeleteElementCommand((MCell) parent,
 					(MGraphicElement) child);

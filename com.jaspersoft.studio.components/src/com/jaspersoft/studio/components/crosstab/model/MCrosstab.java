@@ -376,7 +376,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
-		if (getParent() == null)
+		if (getParent() == null || flagRefreshCells)
 			return;
 		String pname = evt.getPropertyName();
 		Object newValue = evt.getNewValue();
@@ -447,6 +447,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 						MCrosstab.super.propertyChange(evt);
 					}
 				});
+				return;
 			}
 		} else if (pname.equals(JRDesignCrosstab.PROPERTY_MEASURES))
 			getCrosstabManager().refresh();

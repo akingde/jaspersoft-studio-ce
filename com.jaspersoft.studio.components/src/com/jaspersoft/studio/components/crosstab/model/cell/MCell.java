@@ -332,27 +332,28 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 				}
 			} else if (id.equals(JRDesignCrosstabCell.PROPERTY_WIDTH)) {
 				MCrosstab cross = getMCrosstab();
+				if (cross != null) {
+					cross.getCrosstabManager().setWidth(jrElement,
+							(Integer) value);
 
-				cross.getCrosstabManager().setWidth(jrElement, (Integer) value);
-
-				cross.getCrosstabManager().refresh();
-				getPropertyChangeSupport().firePropertyChange(
-						new PropertyChangeEvent(this,
-								JRDesignCrosstabCell.PROPERTY_WIDTH, null,
-								value));
-
+					cross.getCrosstabManager().refresh();
+					getPropertyChangeSupport().firePropertyChange(
+							new PropertyChangeEvent(this,
+									JRDesignCrosstabCell.PROPERTY_WIDTH, null,
+									value));
+				}
 			} else if (id.equals(JRDesignCrosstabCell.PROPERTY_HEIGHT)) {
 				MCrosstab cross = getMCrosstab();
+				if (cross != null) {
+					cross.getCrosstabManager().setHeight(jrElement,
+							(Integer) value);
 
-				cross.getCrosstabManager()
-						.setHeight(jrElement, (Integer) value);
-
-				cross.getCrosstabManager().refresh();
-				getPropertyChangeSupport().firePropertyChange(
-						new PropertyChangeEvent(this,
-								JRDesignCrosstabCell.PROPERTY_HEIGHT, null,
-								value));
-
+					cross.getCrosstabManager().refresh();
+					getPropertyChangeSupport().firePropertyChange(
+							new PropertyChangeEvent(this,
+									JRDesignCrosstabCell.PROPERTY_HEIGHT, null,
+									value));
+				}
 			} else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
 				JRPropertiesMap v = (JRPropertiesMap) value;
 				String[] names = jrElement.getPropertiesMap()

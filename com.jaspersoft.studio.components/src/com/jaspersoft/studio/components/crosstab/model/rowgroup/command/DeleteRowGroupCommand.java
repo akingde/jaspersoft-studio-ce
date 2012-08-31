@@ -28,8 +28,10 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroups;
+
 /*
  * link nodes & together.
  * 
@@ -47,13 +49,19 @@ public class DeleteRowGroupCommand extends Command {
 	 * Instantiates a new delete parameter command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 */
 	public DeleteRowGroupCommand(MRowGroups destNode, MRowGroup srcNode) {
 		super();
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
+		this.jrRowGroup = (JRDesignCrosstabRowGroup) srcNode.getValue();
+	}
+
+	public DeleteRowGroupCommand(MCrosstab destNode, MRowGroup srcNode) {
+		super();
+		this.jrCrosstab = destNode.getValue();
 		this.jrRowGroup = (JRDesignCrosstabRowGroup) srcNode.getValue();
 	}
 
@@ -69,7 +77,8 @@ public class DeleteRowGroupCommand extends Command {
 
 	}
 
-	public static void removeRowGroup(JRDesignCrosstab jrCross, JRDesignCrosstabRowGroup jrRowGr) {
+	public static void removeRowGroup(JRDesignCrosstab jrCross,
+			JRDesignCrosstabRowGroup jrRowGr) {
 		String name = jrRowGr.getName();
 
 		List<?> cells = jrCross.getCellsList();
@@ -109,7 +118,8 @@ public class DeleteRowGroupCommand extends Command {
 	@Override
 	public void undo() {
 		try {
-			CreateRowCommand.addRowGroup(jrCrosstab, jrRowGroup, elementPosition);
+			CreateRowCommand.addRowGroup(jrCrosstab, jrRowGroup,
+					elementPosition);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}

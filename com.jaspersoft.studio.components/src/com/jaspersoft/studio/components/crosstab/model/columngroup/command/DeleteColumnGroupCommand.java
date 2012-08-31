@@ -28,8 +28,10 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroups;
+
 /*
  * link nodes & together.
  * 
@@ -41,19 +43,25 @@ public class DeleteColumnGroupCommand extends Command {
 	private JRDesignCrosstabColumnGroup jrColumnGroup;
 
 	/** The element position. */
-	private int elementPosition = 0;
+	private int index = 0;
 
 	/**
 	 * Instantiates a new delete parameter command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 */
 	public DeleteColumnGroupCommand(MColumnGroups destNode, MColumnGroup srcNode) {
 		super();
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
+		this.jrColumnGroup = (JRDesignCrosstabColumnGroup) srcNode.getValue();
+	}
+
+	public DeleteColumnGroupCommand(MCrosstab destNode, MColumnGroup srcNode) {
+		super();
+		this.jrCrosstab = destNode.getValue();
 		this.jrColumnGroup = (JRDesignCrosstabColumnGroup) srcNode.getValue();
 	}
 
@@ -64,7 +72,7 @@ public class DeleteColumnGroupCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		elementPosition = jrCrosstab.getColumnGroupsList().indexOf(jrColumnGroup);
+		index = jrCrosstab.getColumnGroupsList().indexOf(jrColumnGroup);
 		removeColumnGroup(jrCrosstab, jrColumnGroup);
 	}
 
@@ -88,8 +96,8 @@ public class DeleteColumnGroupCommand extends Command {
 	@Override
 	public void undo() {
 		try {
-			if (elementPosition < 0 || elementPosition > jrCrosstab.getColumnGroupsList().size())
-				jrCrosstab.addColumnGroup(jrColumnGroup);
+			if (index >= 0 && index < jrCrosstab.getColumnGroupsList().size())
+				jrCrosstab.addColumnGroup(index, jrColumnGroup);
 			else
 				jrCrosstab.addColumnGroup(jrColumnGroup);
 			// jrCrosstab.addParameter(elementPosition, jrParameter);
@@ -98,7 +106,8 @@ public class DeleteColumnGroupCommand extends Command {
 		}
 	}
 
-	public static void removeColumnGroup(JRDesignCrosstab jrCross, JRDesignCrosstabColumnGroup jrRowGr) {
+	public static void removeColumnGroup(JRDesignCrosstab jrCross,
+			JRDesignCrosstabColumnGroup jrRowGr) {
 		jrCross.removeColumnGroup(jrRowGr);
 
 		List<?> cells = jrCross.getCellsList();

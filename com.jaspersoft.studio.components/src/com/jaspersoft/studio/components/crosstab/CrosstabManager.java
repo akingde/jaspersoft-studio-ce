@@ -325,7 +325,8 @@ public class CrosstabManager {
 			for (int i = cells.length - 1; i >= 0; i--) {
 				for (int j = cells[i].length - 1; j >= 0; j--) {
 					JRDesignCrosstabCell jrCrosstabCell = (JRDesignCrosstabCell) cells[i][j];
-					if (jrCrosstabCell.getRowTotalGroup() != null
+					if (jrCrosstabCell != null
+							&& jrCrosstabCell.getRowTotalGroup() != null
 							&& rowGroupName != null
 							&& jrCrosstabCell.getRowTotalGroup().equals(
 									rowGroupName)) {

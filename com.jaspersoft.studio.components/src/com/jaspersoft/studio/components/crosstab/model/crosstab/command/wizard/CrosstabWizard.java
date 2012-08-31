@@ -391,8 +391,8 @@ public class CrosstabWizard extends JSSWizard {
 		}
 		CrosstabTotalPositionEnum total = step6.isAddRowTotal() ? CrosstabTotalPositionEnum.END
 				: CrosstabTotalPositionEnum.NONE;
-		JRDesignCrosstabRowGroup rowGroup = CreateRowCommand
-				.createRowGroup(getConfig().getJasperDesign(), jdc, name, total);
+		JRDesignCrosstabRowGroup rowGroup = CreateRowCommand.createRowGroup(
+				getConfig().getJasperDesign(), jdc, name, total);
 
 		((JRDesignExpression) rowGroup.getBucket().getExpression())
 				.setText(txt);
