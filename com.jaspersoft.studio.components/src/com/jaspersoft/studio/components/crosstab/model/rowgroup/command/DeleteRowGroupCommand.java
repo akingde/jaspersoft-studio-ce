@@ -109,7 +109,7 @@ public class DeleteRowGroupCommand extends Command {
 	@Override
 	public void undo() {
 		try {
-			CreateRowGroupCommand.addRowGroup(jrCrosstab, jrRowGroup, elementPosition);
+			CreateRowCommand.addRowGroup(jrCrosstab, jrRowGroup, elementPosition);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}

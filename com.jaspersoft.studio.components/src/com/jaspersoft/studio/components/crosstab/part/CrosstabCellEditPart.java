@@ -43,6 +43,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.CreateRequest;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabCell;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
@@ -136,7 +137,9 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 						if (ep instanceof CrosstabCellEditPart)
 							return null;
 					}
-				}
+				} else if (request instanceof CreateRequest
+						&& !(getModel() instanceof MCell))
+					return null;
 				if (targetFeedback == null) {
 					targetFeedback = new RectangleFigure();
 					targetFeedback.setFill(false);

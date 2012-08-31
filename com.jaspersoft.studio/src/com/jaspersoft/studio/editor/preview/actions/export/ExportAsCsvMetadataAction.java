@@ -45,17 +45,19 @@ public class ExportAsCsvMetadataAction extends AbstractExportAction {
 	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
 		JRCsvMetadataExporter exp = new JRCsvMetadataExporter(jContext);
 
-		exp.setParameter(JRCsvMetadataExporterParameter.FIELD_DELIMITER,
-				jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_FIELD_DELIMITER));
-		exp.setParameter(JRCsvMetadataExporterParameter.RECORD_DELIMITER,
-				jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_RECORD_DELIMITER));
+		String param = jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_FIELD_DELIMITER);
+		exp.setParameter(JRCsvMetadataExporterParameter.FIELD_DELIMITER, param);
 
-		exp.setParameter(JRCsvMetadataExporterParameter.COLUMN_NAMES,
-				jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_COLUMN_NAMES_PREFIX));
-		exp.setParameter(JRCsvMetadataExporterParameter.WRITE_HEADER,
-				jContext.getPropertyBoolean(JRCsvMetadataExporterParameter.PROPERTY_WRITE_HEADER));
+		param = jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_RECORD_DELIMITER);
+		exp.setParameter(JRCsvMetadataExporterParameter.RECORD_DELIMITER, param);
+
+		param = jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_COLUMN_NAMES_PREFIX);
+		if (param != null)
+			exp.setParameter(JRCsvMetadataExporterParameter.COLUMN_NAMES, param);
+
+		Boolean bparam = jContext.getPropertyBoolean(JRCsvMetadataExporterParameter.PROPERTY_WRITE_HEADER);
+		exp.setParameter(JRCsvMetadataExporterParameter.WRITE_HEADER, bparam);
 
 		return exp;
 	}
-
 }

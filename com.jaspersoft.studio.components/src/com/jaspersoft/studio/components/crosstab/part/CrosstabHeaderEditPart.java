@@ -26,13 +26,18 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.crosstab.figure.EmptyCellFigure;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeader;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -48,6 +53,20 @@ public class CrosstabHeaderEditPart extends ACrosstabCellEditPart {
 	@Override
 	public MCrosstabHeader getModel() {
 		return (MCrosstabHeader) super.getModel();
+	}
+
+	@Override
+	protected void createEditPolicies() {
+		super.createEditPolicies();
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
+
+			protected Command getCreateCommand(ANode parent, Object obj,
+					Rectangle constraint, int index) {
+				if (parent instanceof MPage)
+					parent = getModel();
+				return super.getCreateCommand(parent, obj, constraint, index);
+			}
+		});
 	}
 
 	@Override

@@ -85,26 +85,29 @@ public class CrosstabCell {
 	}
 
 	public Rectangle getBounds() {
+		int w = 60;
+		int h = 20;
 		if (east != null && west != null) {
 			if (east.getY() < west.getY()) {
 				Guide tmp = west;
 				west = east;
 				east = tmp;
 			}
-			int w = east.getY() - west.getY();
+			w = east.getY() - west.getY();
+		}
+		if (south != null && north != null) {
 			if (south.getY() < north.getY()) {
 				Guide tmp = north;
 				north = south;
 				south = tmp;
 			}
-			int h = south.getY() - north.getY();
-			if (north == null || south == null)
-				return new Rectangle(0, 0, w, 10);
-			return new Rectangle(west.getY(), north.getY(), w, h);
+			h = south.getY() - north.getY();
 		}
+		if (west != null && north != null)
+			return new Rectangle(west.getY(), north.getY(), w, h);
 		if (cell != null)
 			return new Rectangle(0, 0, cell.getWidth(), cell.getHeight());
-		return new Rectangle(0, 0, 60, 20);
+		return new Rectangle(0, 0, w, h);
 	}
 
 	@Override

@@ -34,11 +34,12 @@ import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
-public class MCrosstabWhenNoData extends ANode {
+public class MCrosstabWhenNoData extends ANode implements IContainerEditPart {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

@@ -28,9 +28,13 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.components.crosstab.model.measure.MMeasure;
 import com.jaspersoft.studio.components.crosstab.model.measure.MMeasures;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.utils.ModelUtils;
+
 /*
  * link nodes & together.
  * 
@@ -51,15 +55,27 @@ public class CreateMeasureCommand extends Command {
 	 * Instantiates a new creates the parameter command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param position
-	 *          the position
+	 *            the position
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
 	public CreateMeasureCommand(MMeasures destNode, MMeasure srcNode, int index) {
+		this((ANode) destNode, srcNode, index);
+	}
+
+	public CreateMeasureCommand(MCrosstab destNode, MMeasure srcNode, int index) {
+		this((ANode) destNode, srcNode, index);
+	}
+
+	public CreateMeasureCommand(MCell destNode, MMeasure srcNode, int index) {
+		this(destNode.getMCrosstab(), srcNode, index);
+	}
+
+	private CreateMeasureCommand(ANode destNode, MMeasure srcNode, int index) {
 		super();
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
 		this.index = index;
@@ -75,7 +91,8 @@ public class CreateMeasureCommand extends Command {
 	@Override
 	public void execute() {
 		if (jrMeasure == null) {
-			jrMeasure = createMesure(jrCrosstab, Messages.CreateMeasureCommand_measure);
+			jrMeasure = createMesure(jrCrosstab,
+					Messages.CreateMeasureCommand_measure);
 		}
 		if (jrMeasure != null) {
 			try {
@@ -86,11 +103,17 @@ public class CreateMeasureCommand extends Command {
 				// jrCrosstab.addParameter(index, jrParameter);
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("A group or measure having the same name already exists in the crosstab")) { //$NON-NLS-1$
-					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getMeasureIndicesMap(), "CopyOFMeasure_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getDefault().getActiveShell(),
-							Messages.CreateMeasureCommand_parameter_name, Messages.CreateMeasureCommand_dialog_text, defaultName,
-							null);
+				if (e.getMessage()
+						.startsWith(
+								"A group or measure having the same name already exists in the crosstab")) { //$NON-NLS-1$
+					String defaultName = ModelUtils
+							.getDefaultName(jrCrosstab.getMeasureIndicesMap(),
+									"CopyOFMeasure_"); //$NON-NLS-1$
+					InputDialog dlg = new InputDialog(Display.getDefault()
+							.getActiveShell(),
+							Messages.CreateMeasureCommand_parameter_name,
+							Messages.CreateMeasureCommand_dialog_text,
+							defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrMeasure.setName(dlg.getValue());
 						execute();
@@ -100,9 +123,11 @@ public class CreateMeasureCommand extends Command {
 		}
 	}
 
-	public static JRDesignCrosstabMeasure createMesure(JRDesignCrosstab jrCrosstab, String name) {
+	public static JRDesignCrosstabMeasure createMesure(
+			JRDesignCrosstab jrCrosstab, String name) {
 		JRDesignCrosstabMeasure jrMeasure = new JRDesignCrosstabMeasure();
-		jrMeasure.setName(ModelUtils.getDefaultName(jrCrosstab.getMeasureIndicesMap(), name));
+		jrMeasure.setName(ModelUtils.getDefaultName(
+				jrCrosstab.getMeasureIndicesMap(), name));
 		return jrMeasure;
 	}
 

@@ -332,11 +332,11 @@ public class ReportControler {
 						pcontainer.setJasperPrint(stats, arg0);
 					if (refresh)
 						return;
+					refresh = true;
 					Display.getDefault().asyncExec(new Runnable() {
 
 						@Override
 						public void run() {
-							refresh = true;
 							stats.endCount(ST_FILLINGTIME);
 							stats.setValue(ST_PAGECOUNT, page);
 							if (scfactory != null)

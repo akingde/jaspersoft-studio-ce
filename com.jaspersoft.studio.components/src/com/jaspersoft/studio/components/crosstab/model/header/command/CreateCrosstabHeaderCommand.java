@@ -26,6 +26,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeader;
+
 /*
  * link nodes & together.
  * 
@@ -40,17 +41,18 @@ public class CreateCrosstabHeaderCommand extends Command {
 	 * Instantiates a new creates the parameter command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param position
-	 *          the position
+	 *            the position
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateCrosstabHeaderCommand(MCrosstab destNode, MCrosstabHeader srcNode) {
+	public CreateCrosstabHeaderCommand(MCrosstab destNode,
+			MCrosstabHeader srcNode) {
 		super();
-		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
+		this.jrCrosstab = destNode.getValue();
 		if (srcNode != null && srcNode.getValue() != null)
 			this.jrCell = (JRDesignCellContents) srcNode.getValue();
 	}

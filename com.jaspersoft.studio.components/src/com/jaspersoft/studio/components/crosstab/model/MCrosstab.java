@@ -378,9 +378,12 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 	public void propertyChange(final PropertyChangeEvent evt) {
 		if (getParent() == null)
 			return;
-		if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_HEADER_CELL)) {
+		String pname = evt.getPropertyName();
+		Object newValue = evt.getNewValue();
+		Object oldValue = evt.getOldValue();
+		if (pname.equals(JRDesignCrosstab.PROPERTY_HEADER_CELL)) {
 			if (evt.getSource() == getValue()) {
-				if (evt.getOldValue() != null && evt.getNewValue() == null) {
+				if (oldValue != null && newValue == null) {
 					List<INode> child = this.getChildren();
 					for (int i = 0; i < child.size(); i++) {
 						INode n = child.get(i);
@@ -397,15 +400,15 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 						if (n instanceof MCrosstabHeader) {
 							removeChild((ANode) n);
 							new MCrosstabHeaderCell(this,
-									(JRCellContents) evt.getNewValue(), i);
+									(JRCellContents) newValue, i);
 						}
 					}
 				}
 			}
-		} else if (evt.getPropertyName().equals(
-				JRDesignCrosstab.PROPERTY_WHEN_NO_DATA_CELL)) {
+			getCrosstabManager().refresh();
+		} else if (pname.equals(JRDesignCrosstab.PROPERTY_WHEN_NO_DATA_CELL)) {
 			if (evt.getSource() == getValue()) {
-				if (evt.getOldValue() != null && evt.getNewValue() == null) {
+				if (oldValue != null && newValue == null) {
 					List<INode> child = this.getChildren();
 					for (int i = 0; i < child.size(); i++) {
 						INode n = child.get(i);
@@ -422,17 +425,15 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 						if (n instanceof MCrosstabWhenNoData) {
 							removeChild((ANode) n);
 							new MCrosstabWhenNoDataCell(this,
-									(JRCellContents) evt.getNewValue(), i);
+									(JRCellContents) newValue, i);
 						}
 					}
 				}
 			}
-		} else if (evt.getPropertyName()
-				.equals(JRDesignCrosstab.PROPERTY_CELLS)
-				|| evt.getPropertyName().equals(
-						JRDesignCrosstab.PROPERTY_ROW_GROUPS)
-				|| evt.getPropertyName().equals(
-						JRDesignCrosstab.PROPERTY_COLUMN_GROUPS)) {
+			getCrosstabManager().refresh();
+		} else if (pname.equals(JRDesignCrosstab.PROPERTY_CELLS)
+				|| pname.equals(JRDesignCrosstab.PROPERTY_ROW_GROUPS)
+				|| pname.equals(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS)) {
 			if (evt.getSource() == getValue() && getValue() != null
 					&& !flagRefreshCells) {
 				flagRefreshCells = true;
@@ -441,12 +442,14 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 					public void run() {
 						CrosstabComponentFactory.createCellNodes(
 								(JRDesignCrosstab) getValue(), MCrosstab.this);
+						getCrosstabManager().refresh();
 						flagRefreshCells = false;
 						MCrosstab.super.propertyChange(evt);
 					}
 				});
 			}
-		}
+		} else if (pname.equals(JRDesignCrosstab.PROPERTY_MEASURES))
+			getCrosstabManager().refresh();
 		super.propertyChange(evt);
 	}
 
