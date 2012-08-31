@@ -90,7 +90,8 @@ public class CreateRowGroupCommand extends Command {
 	public void execute() {
 		if (jrGroup == null) {
 			jrGroup = createRowGroup(jasperDesign, jrCrosstab,
-					Messages.CreateRowGroupCommand_row_group);
+					Messages.CreateRowGroupCommand_row_group,
+					CrosstabTotalPositionEnum.END);
 		}
 		if (jrGroup != null) {
 			try {
@@ -118,8 +119,10 @@ public class CreateRowGroupCommand extends Command {
 	}
 
 	public static JRDesignCrosstabRowGroup createRowGroup(
-			JasperDesign jasperDesign, JRDesignCrosstab jrCrosstab, String name) {
+			JasperDesign jasperDesign, JRDesignCrosstab jrCrosstab,
+			String name, CrosstabTotalPositionEnum total) {
 		JRDesignCrosstabRowGroup jrGroup = new JRDesignCrosstabRowGroup();
+		jrGroup.setTotalPosition(total);
 		jrGroup.setName(ModelUtils.getDefaultName(
 				jrCrosstab.getRowGroupIndicesMap(), name));
 		jrGroup.setWidth(60);
@@ -159,7 +162,6 @@ public class CreateRowGroupCommand extends Command {
 		stext.setText(Messages.common_total + " " + jrGroup.getName()); //$NON-NLS-1$
 		totalCell.addElement(stext);
 		jrGroup.setTotalHeader(totalCell);
-		jrGroup.setTotalPosition(CrosstabTotalPositionEnum.END);
 		return jrGroup;
 	}
 

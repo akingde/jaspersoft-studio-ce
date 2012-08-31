@@ -221,6 +221,8 @@ public class CrosstabMatrix {
 			Guide east, String name) {
 		for (int j = 0; j < rowcells.length; j++) {
 			JRCrosstabCell rc = rowcells[j];
+			if (rc == null)
+				continue;
 			String ctg = rc.getColumnTotalGroup();
 			if ((ctg != null && ctg.equals(name))
 					|| (ctg == null && name == null)) {
@@ -265,15 +267,17 @@ public class CrosstabMatrix {
 			Guide south, String name) {
 		for (int j = 0; j < cells.length; j++) {
 			JRCrosstabCell rc = cells[j][i];
-			String rtg = rc.getRowTotalGroup();
-			if ((rtg != null && rtg.equals(name))
-					|| (rtg == null && name == null)) {
-				CrosstabCell cc = createCell(
-						(JRDesignCellContents) rc.getContents(),
-						JRCrosstabOrigin.TYPE_DATA_CELL);
-				north.addSouth(cc);
-				south.addNorth(cc);
-				break;
+			if (rc != null) {
+				String rtg = rc.getRowTotalGroup();
+				if ((rtg != null && rtg.equals(name))
+						|| (rtg == null && name == null)) {
+					CrosstabCell cc = createCell(
+							(JRDesignCellContents) rc.getContents(),
+							JRCrosstabOrigin.TYPE_DATA_CELL);
+					north.addSouth(cc);
+					south.addNorth(cc);
+					break;
+				}
 			}
 		}
 	}

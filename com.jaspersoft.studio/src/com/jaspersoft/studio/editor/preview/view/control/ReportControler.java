@@ -315,6 +315,7 @@ public class ReportControler {
 		Assert.isTrue(fh != null);
 		IProgressMonitor sm = new SubProgressMonitor(monitor, IProgressMonitor.UNKNOWN,
 				SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
+		IStatus retstatus = Status.OK_STATUS;
 		try {
 			sm.beginTask(Messages.PreviewEditor_fill_report, IProgressMonitor.UNKNOWN);
 			fh.addFillListener((IJRPrintable) pcontainer.getDefaultViewer());
@@ -379,7 +380,8 @@ public class ReportControler {
 			while (finished && fillError == null) {
 				if (sm.isCanceled()) {
 					fh.cancellFill();
-					return Status.CANCEL_STATUS;
+					retstatus = Status.CANCEL_STATUS;
+					break;
 				}
 				Thread.sleep(500);
 				sm.worked(10);
@@ -389,7 +391,8 @@ public class ReportControler {
 		} finally {
 			sm.done();
 		}
-		return Status.OK_STATUS;
+
+		return retstatus;
 	}
 
 	private boolean finished = true;

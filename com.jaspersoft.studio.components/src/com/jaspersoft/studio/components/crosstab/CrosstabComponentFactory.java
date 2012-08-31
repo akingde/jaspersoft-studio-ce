@@ -218,21 +218,23 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				parent.removeChild((ANode) n);
 		JRDesignCrosstabDataset d = (JRDesignCrosstabDataset) st.getDataset();
 		JRDesignDatasetRun dr = (JRDesignDatasetRun) d.getDatasetRun();
+		JRDesignDataset dataset = null;
 		if (dr != null) {
 			dr.getEventSupport().removePropertyChangeListener(dslistner);
 			String dbname = dr.getDatasetName();
-			JRDesignDataset dataset;
 			if (dbname != null)
 				dataset = (JRDesignDataset) jd.getDatasetMap().get(dbname);
 			else
 				dataset = (JRDesignDataset) jd.getMainDataset();
-			if (dataset != null) {
-				MDataset nDataset = new MDataset(parent, dataset, 1);
-				ReportFactory.createDataset(nDataset, dataset, false);
-			}
-
-			dr.getEventSupport().addPropertyChangeListener(dslistner);
+		} else
+			dataset = (JRDesignDataset) jd.getMainDataset();
+		if (dataset != null) {
+			MDataset nDataset = new MDataset(parent, dataset, 1);
+			ReportFactory.createDataset(nDataset, dataset, false);
 		}
+		if (dr != null)
+			dr.getEventSupport().addPropertyChangeListener(dslistner);
+
 	}
 
 	private ANode createColumnGroup(ANode mcg, JRCrosstabColumnGroup p,
