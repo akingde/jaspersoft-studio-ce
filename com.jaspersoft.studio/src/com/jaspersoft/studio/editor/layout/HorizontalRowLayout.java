@@ -48,7 +48,7 @@ public class HorizontalRowLayout implements ILayout {
 			del.setWidth(w + rest);
 			del.setHeight(h);
 			// if last grab free pixels
-			x += w;
+			x += w + rest;
 			if (rest > 0)
 				rest = 0;
 			LayoutManager.layout(map, el);
