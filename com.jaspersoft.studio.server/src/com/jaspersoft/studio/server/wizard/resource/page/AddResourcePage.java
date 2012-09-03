@@ -131,7 +131,7 @@ public class AddResourcePage extends WizardPage {
 			new MInputControl(root, MInputControl.createDescriptor(parent), -1);
 			new MListOfValues(root, MListOfValues.createDescriptor(parent), -1);
 			new MJar(root, MJar.createDescriptor(parent), -1);
-			new MResource(root, MResource.createDescriptor(parent), -1);
+			// new MResource(root, MResource.createDescriptor(parent), -1);
 			new MResourceBundle(root, MResourceBundle.createDescriptor(parent),
 					-1);
 			new MReference(root, MReference.createDescriptor(parent), -1);

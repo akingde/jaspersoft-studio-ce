@@ -67,6 +67,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.RDReferencePage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitOptionsPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDResourceBundlePage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDStyleTemplatePage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDUnknownPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDXmlFile;
 
@@ -126,6 +127,8 @@ public class ResourceFactory {
 					page = new RDXmlFile(parent, (MXmlFile) resource);
 				else if (resource instanceof MUnknown)
 					page = new RDUnknownPage(parent, (MUnknown) resource);
+				else if (resource instanceof MRStyleTemplate)
+					page = new RDStyleTemplatePage(parent, (MRStyleTemplate) resource);
 			}
 			if (page != null)
 				pagemap.put(resource.getClass(), page);
