@@ -1227,6 +1227,7 @@ public class Messages extends NLS {
 	public static String WizardDatasetNewPage_create_new_dataset;
 	public static String WizardDatasetNewPage_dataset_name;
 	public static String WizardDatasetNewPage_description;
+	public static String WizardDatasetNewPage_name_already_exists;
 	public static String WizardDatasetNewPage_name_already_exists_a;
 	public static String WizardDatasetNewPage_name_already_exists_b;
 	public static String WizardDatasetNewPage_validation_not_null;
@@ -1263,6 +1264,11 @@ public class Messages extends NLS {
 	public static String VersionDialog_label2;
 	public static String VersionDialog_title;
 	public static String VersionDialog_warning;
+	public static String WizardDataSourcePage_lblDataset_text;
+	public static String WizardDataSourcePage_lblNewLabel_text;
+	public static String WizardDataSourcePage_btnNew_text;
+	public static String WizardDataSourcePage_lblNewLabel_text_1;
+	public static String WizardDataSourcePage_lblThisDataAdapter_text;
 
 	static {
 		// initialize resource bundle
