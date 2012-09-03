@@ -157,7 +157,7 @@
          <view
                id="org.eclipse.gef.ui.palette_view"
                minimized="false"
-               ratio="0.65"
+               ratio="0.70"
                relationship="right"
                relative="org.eclipse.ui.editorss">
          </view>
