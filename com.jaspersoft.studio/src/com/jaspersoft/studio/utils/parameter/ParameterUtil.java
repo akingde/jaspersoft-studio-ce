@@ -54,6 +54,11 @@ public class ParameterUtil {
 						inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
 					}
 				}
+				else {
+					// Even if no default value expression was specified, tries
+					// to provide a default value based on class type of the parameter.
+					inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
+				}
 			}
 		}
 	}
