@@ -19,6 +19,10 @@
  */
 package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
@@ -51,25 +55,38 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class CrosstabWizardColumnPage extends WizardFieldsPage {
-	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
+	private static final String F_CALCULATION = "CALCULATION";
+	private static final String F_TOTALPOSITION = "TOTALPOSITION";
+	private static final String F_ORDER = "ORDER";
+	private static final String F_NAME = "NAME";
+
+	private final class TLabelProvider extends LabelProvider implements
+			ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
-			JRDesignCrosstabColumnGroup m = (JRDesignCrosstabColumnGroup) element;
+			Wrapper w = (Wrapper) element;
+			JRDesignCrosstabColumnGroup m = (JRDesignCrosstabColumnGroup) w
+					.getValue();
 			String txt = m.getBucket().getExpression().getText();
 			switch (columnIndex) {
 			case 0:
 				if (txt.startsWith("$F{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getImage(MField.getIconDescriptor().getIcon16());
+					return JaspersoftStudioPlugin.getImage(MField
+							.getIconDescriptor().getIcon16());
 				if (txt.startsWith("$P{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getImage(MParameter.getIconDescriptor().getIcon16());
+					return JaspersoftStudioPlugin.getImage(MParameter
+							.getIconDescriptor().getIcon16());
 				if (txt.startsWith("$V{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getImage(MVariable.getIconDescriptor().getIcon16());
+					return JaspersoftStudioPlugin.getImage(MVariable
+							.getIconDescriptor().getIcon16());
 			}
 			return null;
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			JRDesignCrosstabColumnGroup m = (JRDesignCrosstabColumnGroup) element;
+			Wrapper w = (Wrapper) element;
+			JRDesignCrosstabColumnGroup m = (JRDesignCrosstabColumnGroup) w
+					.getValue();
 			JRCrosstabBucket bucket = m.getBucket();
 			String txt = bucket.getExpression().getText();
 			switch (columnIndex) {
@@ -79,6 +96,8 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 				return bucket.getOrderValue().getName();
 			case 2:
 				return m.getTotalPositionValue().getName();
+			case 3:
+				return w.getCalculation().getName();
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -87,8 +106,41 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 	protected CrosstabWizardColumnPage() {
 		super("crosstabcolumnpage"); //$NON-NLS-1$
 		setTitle(Messages.CrosstabWizardColumnPage_columns);
-		setImageDescriptor(Activator.getImageDescriptor("icons/wizard_columns.png"));//$NON-NLS-1$
+		setImageDescriptor(Activator
+				.getImageDescriptor("icons/wizard_columns.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardColumnPage_description);
+	}
+
+	@Override
+	public void setFields(List<?> inFields) {
+		List<Wrapper> nlist = new ArrayList<Wrapper>();
+		for (Object obj : inFields)
+			nlist.add(new Wrapper(obj));
+		super.setFields(nlist);
+	}
+
+	@Override
+	public List<Object> getInFields() {
+		List<Object> wlist = super.getInFields();
+		if (wlist != null) {
+			List<Object> out = new ArrayList<Object>(wlist.size());
+			for (Object w : wlist)
+				out.add(((Wrapper) w).getValue());
+			return out;
+		}
+		return null;
+	}
+
+	@Override
+	public List<Object> getFields() {
+		List<Object> wlist = super.getFields();
+		if (wlist != null) {
+			List<Object> out = new ArrayList<Object>(wlist.size());
+			for (Object w : wlist)
+				out.add(((Wrapper) w).getValue());
+			return out;
+		}
+		return null;
 	}
 
 	@Override
@@ -98,7 +150,7 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 
 	@Override
 	protected void createColumns() {
-		TableColumn[] col = new TableColumn[3];
+		TableColumn[] col = new TableColumn[4];
 		col[0] = new TableColumn(rightTable, SWT.NONE);
 		col[0].setText(Messages.common_fields);
 		col[0].pack();
@@ -111,9 +163,14 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 		col[2].setText(Messages.common_total_position);
 		col[2].pack();
 
+		col[3] = new TableColumn(rightTable, SWT.NONE);
+		col[3].setText(Messages.common_calculation);
+		col[3].pack();
+
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(40, false));
 		tlayout.addColumnData(new ColumnWeightData(30, false));
+		tlayout.addColumnData(new ColumnWeightData(20, false));
+		tlayout.addColumnData(new ColumnWeightData(20, false));
 		tlayout.addColumnData(new ColumnWeightData(30, false));
 		rightTable.setLayout(tlayout);
 	}
@@ -122,23 +179,39 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 	protected void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
-				if (property.equals("ORDER")) //$NON-NLS-1$
+				if (property.equals(F_ORDER)) //$NON-NLS-1$
 					return true;
-				if (property.equals("TOTALPOSITION")) //$NON-NLS-1$
+				if (property.equals(F_TOTALPOSITION)) //$NON-NLS-1$
 					return true;
+				if (property.equals(F_CALCULATION)) { //$NON-NLS-1$
+					Wrapper w = (Wrapper) element;
+					JRDesignCrosstabColumnGroup rg = (JRDesignCrosstabColumnGroup) w
+							.getValue();
+					if (Date.class.isAssignableFrom(rg.getBucket()
+							.getValueClass()))
+						return true;
+				}
 				return false;
 			}
 
 			public Object getValue(Object element, String property) {
-				JRDesignCrosstabColumnGroup prop = (JRDesignCrosstabColumnGroup) element;
-				if ("NAME".equals(property)) //$NON-NLS-1$
-					return ((TLabelProvider) viewer.getLabelProvider()).getColumnText(element, 1);
+				Wrapper w = (Wrapper) element;
+				JRDesignCrosstabColumnGroup prop = (JRDesignCrosstabColumnGroup) w
+						.getValue();
+				if (F_NAME.equals(property)) //$NON-NLS-1$
+					return ((TLabelProvider) viewer.getLabelProvider())
+							.getColumnText(element, 1);
 
-				if ("ORDER".equals(property)) //$NON-NLS-1$
-					return EnumHelper.getValue(prop.getBucket().getOrderValue(), 1, false);
+				if (F_ORDER.equals(property)) //$NON-NLS-1$
+					return EnumHelper.getValue(
+							prop.getBucket().getOrderValue(), 1, false);
 
-				if ("TOTALPOSITION".equals(property)) //$NON-NLS-1$
-					return EnumHelper.getValue(prop.getTotalPositionValue(), 0, false);
+				if (F_TOTALPOSITION.equals(property)) //$NON-NLS-1$
+					return EnumHelper.getValue(prop.getTotalPositionValue(), 0,
+							false);
+
+				if (F_CALCULATION.equals(property)) //$NON-NLS-1$
+					return w.getCalculation().getValue();
 
 				return ""; //$NON-NLS-1$
 			}
@@ -147,25 +220,38 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 				TableItem tableItem = (TableItem) element;
 				setErrorMessage(null);
 				setMessage(getDescription());
-				JRDesignCrosstabColumnGroup data = (JRDesignCrosstabColumnGroup) tableItem.getData();
-				JRDesignCrosstabBucket bucket = (JRDesignCrosstabBucket) data.getBucket();
-				if ("ORDER".equals(property)) { //$NON-NLS-1$
-					bucket.setOrder((SortOrderEnum) EnumHelper.getSetValue(SortOrderEnum.values(), value, 1, false));
-				} else if ("TOTALPOSITION".equals(property)) { //$NON-NLS-1$
-					data.setTotalPosition((CrosstabTotalPositionEnum) EnumHelper.getSetValue(CrosstabTotalPositionEnum.values(),
-							value, 0, false));
+				Wrapper w = (Wrapper) tableItem.getData();
+				JRDesignCrosstabColumnGroup data = (JRDesignCrosstabColumnGroup) w
+						.getValue();
+				JRDesignCrosstabBucket bucket = (JRDesignCrosstabBucket) data
+						.getBucket();
+				if (F_ORDER.equals(property)) { //$NON-NLS-1$
+					bucket.setOrder((SortOrderEnum) EnumHelper.getSetValue(
+							SortOrderEnum.values(), value, 1, false));
+				} else if (F_TOTALPOSITION.equals(property)) { //$NON-NLS-1$
+					data.setTotalPosition((CrosstabTotalPositionEnum) EnumHelper
+							.getSetValue(CrosstabTotalPositionEnum.values(),
+									value, 0, false));
+				} else if (F_CALCULATION.equals(property)) { //$NON-NLS-1$
+					AgregationFunctionEnum function = AgregationFunctionEnum
+							.getByValue((Integer) value);
+					w.setCalculation(function);
+					CrosstabWizard.setBucketExpression(bucket, w.getOldExpText(), function);
 				}
 				viewer.update(element, new String[] { property });
 				viewer.refresh();
 			}
 		});
 
-		viewer
-				.setCellEditors(new CellEditor[] {
-						new TextCellEditor(parent),
-						new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL)),
-						new ComboBoxCellEditor(parent,
-								EnumHelper.getEnumNames(CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL)) });
-		viewer.setColumnProperties(new String[] { "NAME", "ORDER", "TOTALPOSITION" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		viewer.setCellEditors(new CellEditor[] {
+				new TextCellEditor(parent),
+				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(
+						SortOrderEnum.values(), NullEnum.NOTNULL)),
+				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(
+						CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL)),
+				new ComboBoxCellEditor(parent, AgregationFunctionEnum
+						.getStringValues()) });
+		viewer.setColumnProperties(new String[] { F_NAME, F_ORDER,
+				F_TOTALPOSITION, F_CALCULATION });
 	}
 }

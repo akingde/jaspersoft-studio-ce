@@ -303,6 +303,8 @@ public class CrosstabWizard extends JSSWizard {
 		setupRowGroups(jdc);
 		createDetailCells(jdc);
 		crosstab.getValue().preprocess();
+
+		setupMeasures(jdc);
 		return crosstab;
 	}
 
@@ -461,16 +463,21 @@ public class CrosstabWizard extends JSSWizard {
 				+ "_MEASURE"); //$NON-NLS-1$		
 		m.setValueExpression(jre);
 		m.setCalculation(CalculationEnum.COUNT);
-
+		m.setValueClassName(classname);
 		m.setPercentageType(CrosstabPercentageEnum.NONE);
 
-		if (m.getCalculationValue().equals(CalculationEnum.COUNT)
-				|| m.getCalculationValue().equals(
-						CalculationEnum.DISTINCT_COUNT))
-			m.setValueClassName(Integer.class.getName());
-		else
-			m.setValueClassName(classname);
 		return m;
+	}
+
+	private void setupMeasures(JRDesignCrosstab jdc) {
+		for (JRCrosstabMeasure cm : jdc.getMeasures()) {
+			if (cm.getCalculationValue().equals(CalculationEnum.COUNT)
+					|| cm.getCalculationValue().equals(
+							CalculationEnum.DISTINCT_COUNT))
+				((JRDesignCrosstabMeasure) cm).setValueClassName(Integer.class
+						.getName());
+		}
+
 	}
 
 	private ReportObjects colGroups;
@@ -502,6 +509,26 @@ public class CrosstabWizard extends JSSWizard {
 		super.init(jConfig);
 		if (crosstab != null)
 			crosstab.setJasperConfiguration(jConfig);
+	}
+
+	public static void setBucketExpression(JRDesignCrosstabBucket bucket,
+			String oldExpText, AgregationFunctionEnum function) {
+		JRDesignExpression exp = (JRDesignExpression) bucket.getExpression();
+		if (function == AgregationFunctionEnum.UNIQUE)
+			exp.setText(oldExpText);
+		else if (function == AgregationFunctionEnum.YEAR)
+			exp.setText("new SimpleDateFormat(\"yyyy\").format(" + oldExpText
+					+ ")");
+		else if (function == AgregationFunctionEnum.MONTH)
+			exp.setText("new SimpleDateFormat(\"yyyy-MM\").format("
+					+ oldExpText + ")");
+		else if (function == AgregationFunctionEnum.WEEK)
+			exp.setText("new SimpleDateFormat(\"yyyy-ww\").format("
+					+ oldExpText + ")");
+		else if (function == AgregationFunctionEnum.DAY)
+			exp.setText("new SimpleDateFormat(\"yyyy-MM-dd\").format("
+					+ oldExpText + ")");
+		bucket.setExpression(exp);
 	}
 
 }

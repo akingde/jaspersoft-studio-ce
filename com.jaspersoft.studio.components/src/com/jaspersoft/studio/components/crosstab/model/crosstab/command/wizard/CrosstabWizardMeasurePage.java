@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
+import java.sql.Date;
+
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 
@@ -48,7 +50,11 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class CrosstabWizardMeasurePage extends WizardFieldsPage {
-	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
+	private static final String F_CALCULATION = "CALCULATION";
+	private static final String F_NAME = "NAME";
+
+	private final class TLabelProvider extends LabelProvider implements
+			ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			JRDesignCrosstabMeasure m = (JRDesignCrosstabMeasure) element;
@@ -56,11 +62,14 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 			switch (columnIndex) {
 			case 0:
 				if (txt.startsWith("$F{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getImage(MField.getIconDescriptor().getIcon16());
+					return JaspersoftStudioPlugin.getImage(MField
+							.getIconDescriptor().getIcon16());
 				if (txt.startsWith("$P{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getImage(MParameter.getIconDescriptor().getIcon16());
+					return JaspersoftStudioPlugin.getImage(MParameter
+							.getIconDescriptor().getIcon16());
 				if (txt.startsWith("$V{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getImage(MVariable.getIconDescriptor().getIcon16());
+					return JaspersoftStudioPlugin.getImage(MVariable
+							.getIconDescriptor().getIcon16());
 			}
 			return null;
 		}
@@ -81,7 +90,8 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 	protected CrosstabWizardMeasurePage() {
 		super("crosstabmeasurepage"); //$NON-NLS-1$
 		setTitle(Messages.CrosstabWizardMeasurePage_measures);
-		setImageDescriptor(Activator.getImageDescriptor("icons/wizard_details.png"));//$NON-NLS-1$
+		setImageDescriptor(Activator
+				.getImageDescriptor("icons/wizard_details.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardMeasurePage_description);
 	}
 
@@ -109,20 +119,50 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 
 	@Override
 	protected void attachCellEditors(final TableViewer viewer, Composite parent) {
+		final ComboBoxCellEditor calcCombo = new ComboBoxCellEditor(parent,
+				EnumHelper.getEnumNames(CalculationEnum.values(),
+						NullEnum.NOTNULL));
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
-				if (property.equals("CALCULATION")) //$NON-NLS-1$
+				JRDesignCrosstabMeasure prop = (JRDesignCrosstabMeasure) element;
+				if (property.equals(F_CALCULATION)) { //$NON-NLS-1$
+					String[] items = null;
+					if (Date.class.isAssignableFrom(prop.getValueClass()))
+						items = new String[] { CalculationEnum.COUNT.getName(),
+								CalculationEnum.DISTINCT_COUNT.getName(),
+								CalculationEnum.HIGHEST.getName(),
+								CalculationEnum.LOWEST.getName(),
+								CalculationEnum.FIRST.getName(),
+								CalculationEnum.NOTHING.getName() };
+					else if (Number.class.isAssignableFrom(prop.getValueClass()))
+						items = EnumHelper.getEnumNames(
+								CalculationEnum.values(), NullEnum.NOTNULL);
+					else
+						items = new String[] { CalculationEnum.COUNT.getName(),
+								CalculationEnum.DISTINCT_COUNT.getName(),
+								CalculationEnum.FIRST.getName(),
+								CalculationEnum.NOTHING.getName() };
+					calcCombo.setItems(items);
 					return true;
+				}
 				return false;
 			}
 
 			public Object getValue(Object element, String property) {
 				JRDesignCrosstabMeasure prop = (JRDesignCrosstabMeasure) element;
-				if ("NAME".equals(property)) //$NON-NLS-1$
-					return ((TLabelProvider) viewer.getLabelProvider()).getColumnText(element, 1);
+				if (F_NAME.equals(property))
+					return ((TLabelProvider) viewer.getLabelProvider())
+							.getColumnText(element, 1);
 
-				if ("CALCULATION".equals(property)) //$NON-NLS-1$
-					return EnumHelper.getValue(prop.getCalculationValue(), 0, false);
+				if (F_CALCULATION.equals(property)) {
+					String name = prop.getCalculationValue().getName();
+					String[] items = calcCombo.getItems();
+					for (int i = 0; i < items.length; i++) {
+						if (items[i].equals(name))
+							return i;
+					}
+					return 0;
+				}
 
 				return ""; //$NON-NLS-1$
 			}
@@ -131,9 +171,12 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 				TableItem tableItem = (TableItem) element;
 				setErrorMessage(null);
 				setMessage(getDescription());
-				JRDesignCrosstabMeasure data = (JRDesignCrosstabMeasure) tableItem.getData();
-				if ("CALCULATION".equals(property)) { //$NON-NLS-1$
-					data.setCalculation((CalculationEnum) EnumHelper.getSetValue(CalculationEnum.values(), value, 0, false));
+				JRDesignCrosstabMeasure data = (JRDesignCrosstabMeasure) tableItem
+						.getData();
+				if (F_CALCULATION.equals(property)) {
+					CalculationEnum calculation = CalculationEnum
+							.getByName(calcCombo.getItems()[(Integer) value]);
+					data.setCalculation(calculation);
 				}
 				viewer.update(element, new String[] { property });
 				viewer.refresh();
@@ -141,7 +184,7 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 		});
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
-				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL)) });
-		viewer.setColumnProperties(new String[] { "NAME", "CALCULATION" }); //$NON-NLS-1$ //$NON-NLS-2$
+				calcCombo });
+		viewer.setColumnProperties(new String[] { F_NAME, F_CALCULATION }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }
