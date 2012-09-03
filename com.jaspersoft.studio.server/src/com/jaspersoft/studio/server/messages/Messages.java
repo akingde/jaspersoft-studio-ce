@@ -23,6 +23,34 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.server.messages.messages"; //$NON-NLS-1$
+	public static String AddResourcePage_Description;
+	public static String AddResourcePage_Title;
+	public static String ImportDataSourceInfoFromDA_DialogTitle;
+	public static String ImportDataSourceInfoFromDA_InfoLabel;
+	public static String RDDataAdapterPage_Description;
+	public static String RDDataAdapterPage_Title;
+	public static String RDDatasourceBeanPage_BeanMethod;
+	public static String RDDatasourceBeanPage_BeanName;
+	public static String RDDatasourceBeanPage_DatasourceTabItem;
+	public static String RDDatasourceBeanPage_Description;
+	public static String RDDatasourceBeanPage_ImportButton;
+	public static String RDDatasourceBeanPage_ImportButtonTooltip;
+	public static String RDDatasourceBeanPage_Title;
+	public static String RDDatasourceJDBCPage_DatasourceTabItem;
+	public static String RDDatasourceJDBCPage_Description;
+	public static String RDDatasourceJDBCPage_Driver;
+	public static String RDDatasourceJDBCPage_ImportButton;
+	public static String RDDatasourceJDBCPage_ImportButtonTooltip;
+	public static String RDDatasourceJDBCPage_Password;
+	public static String RDDatasourceJDBCPage_Title;
+	public static String RDDatasourceJDBCPage_URL;
+	public static String RDDatasourceJDBCPage_User;
+	public static String RDDatasourceJNDIPage_DatasourceTabItem;
+	public static String RDDatasourceJNDIPage_Description;
+	public static String RDDatasourceJNDIPage_ImportButton;
+	public static String RDDatasourceJNDIPage_ImportButtonTooltip;
+	public static String RDDatasourceJNDIPage_JNDIName;
+	public static String RDDatasourceJNDIPage_Title;
 	public static String ServerProfilePage_1;
 	public static String ServerProfilePage_10;
 	public static String ServerProfilePage_11;

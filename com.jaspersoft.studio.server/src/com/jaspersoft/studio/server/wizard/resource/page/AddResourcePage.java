@@ -35,6 +35,8 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.MDataAdapter;
 import com.jaspersoft.studio.server.model.MDataType;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MInputControl;
@@ -62,9 +64,9 @@ public class AddResourcePage extends WizardPage {
 	private ANode parent;
 
 	public AddResourcePage(ANode parent) {
-		super("addresource");
-		setTitle("Add JasperServer Resource");
-		setDescription("Add JasperServer resource");
+		super("addresource"); //$NON-NLS-1$
+		setTitle(Messages.AddResourcePage_Title);
+		setDescription(Messages.AddResourcePage_Description);
 		this.parent = parent;
 	}
 
@@ -140,6 +142,7 @@ public class AddResourcePage extends WizardPage {
 			new MRStyleTemplate(root, MRStyleTemplate.createDescriptor(parent),
 					-1);
 			new MXmlFile(root, MXmlFile.createDescriptor(parent), -1);
+			new MDataAdapter(root, MDataAdapter.createDescriptor(parent), -1);
 
 			Activator.getExtManager().createNewResource(root, parent);
 

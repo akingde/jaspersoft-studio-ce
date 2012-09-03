@@ -26,6 +26,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.model.MDataAdapter;
 import com.jaspersoft.studio.server.model.MDataType;
 import com.jaspersoft.studio.server.model.MDummy;
 import com.jaspersoft.studio.server.model.MFolder;
@@ -50,6 +51,7 @@ import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
 import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
+import com.jaspersoft.studio.server.wizard.resource.page.RDDataAdapterPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDataTypePage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceBeanPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceJDBCPage;
@@ -129,6 +131,8 @@ public class ResourceFactory {
 					page = new RDUnknownPage(parent, (MUnknown) resource);
 				else if (resource instanceof MRStyleTemplate)
 					page = new RDStyleTemplatePage(parent, (MRStyleTemplate) resource);
+				else if (resource instanceof MDataAdapter)
+					page = new RDDataAdapterPage(parent,(MDataAdapter)resource);
 			}
 			if (page != null)
 				pagemap.put(resource.getClass(), page);

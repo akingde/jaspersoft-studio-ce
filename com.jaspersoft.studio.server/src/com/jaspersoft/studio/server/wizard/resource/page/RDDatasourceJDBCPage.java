@@ -19,26 +19,33 @@
  */
 package com.jaspersoft.studio.server.wizard.resource.page;
 
+import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
+
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MRDatasourceJDBC;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class RDDatasourceJDBCPage extends AResourcePage {
 
 	public RDDatasourceJDBCPage(ANode parent, MRDatasourceJDBC resource) {
-		super("rdjdbcdatasource", parent, resource);
-		setTitle("Datasource JDBC");
-		setDescription("JDBC Datasource");
+		super("rdjdbcdatasource", parent, resource); //$NON-NLS-1$
+		setTitle(Messages.RDDatasourceJDBCPage_Title);
+		setDescription(Messages.RDDatasourceJDBCPage_Description);
 	}
 
 	@Override
@@ -51,40 +58,68 @@ public class RDDatasourceJDBCPage extends AResourcePage {
 
 	protected void createDatasourceTab(TabFolder tabFolder) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("Datasource");
+		item.setText(Messages.RDDatasourceJDBCPage_DatasourceTabItem);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		item.setControl(composite);
 
-		UIUtils.createLabel(composite, "Driver");
+		UIUtils.createLabel(composite, Messages.RDDatasourceJDBCPage_Driver);
 
-		Text tdriver = new Text(composite, SWT.BORDER);
+		final Text tdriver = new Text(composite, SWT.BORDER);
 		tdriver.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "URL");
+		UIUtils.createLabel(composite, Messages.RDDatasourceJDBCPage_URL);
 
-		Text turl = new Text(composite, SWT.BORDER);
+		final Text turl = new Text(composite, SWT.BORDER);
 		turl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "User");
+		UIUtils.createLabel(composite, Messages.RDDatasourceJDBCPage_User);
 
-		Text tuser = new Text(composite, SWT.BORDER);
+		final Text tuser = new Text(composite, SWT.BORDER);
 		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "Password");
+		UIUtils.createLabel(composite, Messages.RDDatasourceJDBCPage_Password);
 
-		Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+		final Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		Button importDA=new Button(composite, SWT.NONE);
+		importDA.setText(Messages.RDDatasourceJDBCPage_ImportButton);
+		importDA.setToolTipText(Messages.RDDatasourceJDBCPage_ImportButtonTooltip);
+		importDA.setLayoutData(new GridData(SWT.RIGHT,SWT.TOP,true,false,2,1));
+		importDA.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ImportDataSourceInfoFromDA dialog=new ImportDataSourceInfoFromDA(getShell(), "JDBC", JdbcDataAdapter.class); //$NON-NLS-1$
+				if(dialog.open()==Window.OK){
+					// get information from the selected DA
+					JdbcDataAdapter da = (JdbcDataAdapter) dialog.getSelectedDataAdapter();
+					if(da!=null){
+						tdriver.setText(da.getDriver());
+						turl.setText(da.getUrl());
+						tuser.setText(da.getUsername());
+						tpass.setText(da.getPassword());
+					}
+					else{
+						tdriver.setText(""); //$NON-NLS-1$
+						turl.setText(""); //$NON-NLS-1$
+						tuser.setText(""); //$NON-NLS-1$
+						tpass.setText("");						 //$NON-NLS-1$
+					}
+				}
+			}
+		});
 
 		bindingContext.bindValue(
 				SWTObservables.observeText(tdriver, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "driverClass"));
+				PojoObservables.observeValue(res.getValue(), "driverClass")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(turl, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "connectionUrl"));
+				PojoObservables.observeValue(res.getValue(), "connectionUrl")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tuser, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "username"));
+				PojoObservables.observeValue(res.getValue(), "username")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "password"));
+				PojoObservables.observeValue(res.getValue(), "password")); //$NON-NLS-1$
 	}
+	
 }
