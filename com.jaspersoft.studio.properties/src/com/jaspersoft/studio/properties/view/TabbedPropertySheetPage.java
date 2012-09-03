@@ -30,8 +30,6 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
@@ -376,13 +374,13 @@ public class TabbedPropertySheetPage extends Page implements
 		tabbedPropertyViewer
 				.addSelectionChangedListener(new SelectionChangedListener());
 
-		tabbedPropertyComposite.getScrolledComposite().addControlListener(
-				new ControlAdapter() {
-
-					public void controlResized(ControlEvent e) {
-						resizeScrolledComposite();
-					}
-				});
+//		tabbedPropertyComposite.getScrolledComposite().addControlListener(
+//				new ControlAdapter() {
+//
+//					public void controlResized(ControlEvent e) {
+//						resizeScrolledComposite();
+//					}
+//				});
 
 		/**
 		 * Add a part activation listener.

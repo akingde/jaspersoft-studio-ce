@@ -12,13 +12,14 @@ package com.jaspersoft.studio.properties.internal;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
@@ -103,30 +104,45 @@ public class TabbedPropertyComposite extends Composite {
 
 		scrolledComposite = factory.createScrolledComposite(mainComposite,
 				SWT.H_SCROLL | SWT.V_SCROLL | SWT.NO_FOCUS);
-		scrolledComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		tabComposite = factory.createComposite(scrolledComposite, SWT.NO_FOCUS);
-		mainComposite.addControlListener(new ControlAdapter() {
-			@Override
-			public void controlResized(ControlEvent e) {
-				setupScrolledComposite();
-			}
-		});
-		GridLayout layout2 = new GridLayout();
-		layout2.marginWidth = 0;
-		layout2.marginHeight = 0;
-		tabComposite.setLayout(layout2);
-
-		scrolledComposite.setContent(tabComposite);
+		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		
 		scrolledComposite.setAlwaysShowScrollBars(false);
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setExpandHorizontal(true);
-		setupScrolledComposite();
+
+		tabComposite = factory.createComposite(scrolledComposite, SWT.NO_FOCUS);
+		GridLayout layout2 = new GridLayout();
+		layout2.marginWidth = 0;
+		layout2.marginHeight = 0;
+		layout2.makeColumnsEqualWidth = true;
+		tabComposite.setLayout(layout2);
+		
+//		tabComposite.addControlListener(new ControlAdapter() {
+//			@Override
+//			public void controlResized(ControlEvent e) {
+//				setupScrolledComposite();
+//			}
+//		});
+		
+		scrolledComposite.setContent(tabComposite);
+//		setupScrolledComposite();
 	}
 
 	public void setupScrolledComposite() {
-		scrolledComposite.setMinSize(300, 1800);
-		mainComposite.layout(true);
+		Point minSize = getScrolledBoxMinSize();
+		scrolledComposite.setMinSize(minSize.x, minSize.y);
+		mainComposite.layout();
+	}
+
+	private Point getScrolledBoxMinSize() {
+		for (Control c : tabComposite.getChildren()){
+			if(c.isVisible()){
+				Rectangle scrolledBounds = c.getBounds();
+				Point defaultSize = c.computeSize(SWT.DEFAULT,SWT.DEFAULT);
+				return c.computeSize(defaultSize.x,Math.max(scrolledBounds.height, defaultSize.y));
+			}
+		}
+		return new Point(0,0);
 	}
 
 	/**
