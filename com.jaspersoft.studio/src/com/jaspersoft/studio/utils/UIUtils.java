@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 
 package com.jaspersoft.studio.utils;
@@ -32,8 +27,10 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
@@ -149,12 +146,12 @@ public class UIUtils {
 		}
 	}
 
-	public static CLabel createLabel(Composite parent, String txt) {
+	public static Label createLabel(Composite parent, String txt) {
 		return createLabel(parent, txt, -1);
 	}
 
-	public static CLabel createLabel(Composite parent, String txt, int span) {
-		CLabel lbl = new CLabel(parent, SWT.RIGHT);
+	public static Label createLabel(Composite parent, String txt, int span) {
+		Label lbl = new Label(parent, SWT.RIGHT);
 		lbl.setText(txt);
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
@@ -183,6 +180,22 @@ public class UIUtils {
 
 	public static void setBold(Control control) {
 		control.setFont(SWTResourceManager.getBoldFont(control.getFont()));
+	}
+
+	public static int getCharWidth(Drawable control) {
+		GC gc = new GC(control);
+		FontMetrics fm = gc.getFontMetrics();
+		int w = fm.getAverageCharWidth();
+		gc.dispose();
+		return w;
+	}
+
+	public static int getCharHeight(Drawable control) {
+		GC gc = new GC(control);
+		FontMetrics fm = gc.getFontMetrics();
+		int h = fm.getHeight();
+		gc.dispose();
+		return h;
 	}
 
 	public static void setFontHeight(Control control, int height) {
@@ -263,14 +276,14 @@ public class UIUtils {
 		text.addListener(SWT.MouseDown, listener);
 		text.addListener(SWT.MouseUp, listener);
 	}
-	
+
 	/**
-	 * Setups the start of cell editing on a {@link TableViewer} when 
-	 * a {@link DoubleClickEvent} occurs. 
+	 * Setups the start of cell editing on a {@link TableViewer} when a {@link DoubleClickEvent} occurs.
 	 * 
-	 * @param tviewer the table viewer
+	 * @param tviewer
+	 *          the table viewer
 	 */
-	public static void setViewerCellEditingOnDblClick(TableViewer tviewer){
+	public static void setViewerCellEditingOnDblClick(TableViewer tviewer) {
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tviewer) {
 			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
 				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION;

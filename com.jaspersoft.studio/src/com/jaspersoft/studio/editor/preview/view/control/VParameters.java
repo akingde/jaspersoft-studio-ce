@@ -30,11 +30,13 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -43,7 +45,7 @@ public class VParameters extends APreview {
 	protected Composite composite;
 	protected ScrolledComposite scompo;
 
-	public VParameters(Composite parent,  JasperReportsConfiguration jContext) {
+	public VParameters(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
 	}
 
@@ -117,12 +119,20 @@ public class VParameters extends APreview {
 		for (IDataInput in : ReportControler.inputs) {
 			if (in.isForType(pres.getValueClass())) {
 				in = in.getInstance();
-				if (!in.isLabeled())
-					UIUtils.createLabel(sectionClient, Messages.getString(pres.getLabel()));
+				if (!in.isLabeled()) {
+					Label lbl = UIUtils.createLabel(sectionClient, Messages.getString(pres.getLabel()));
+					lbl.setToolTipText(createToolTip(p));
+				}
 				in.createInput(sectionClient, pres, params);
 				break;
 			}
 		}
+	}
+
+	public static String createToolTip(JRDesignParameter param) {
+		String desc = Misc.nvl(param.getDescription());
+		desc += "\n" + param.getValueClassName();
+		return desc;
 	}
 
 }

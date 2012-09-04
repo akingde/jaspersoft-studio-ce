@@ -58,7 +58,8 @@ public class NumericInput extends ADataInput {
 	private int pageIncrement;
 
 	public boolean isForType(Class<?> valueClass) {
-		return Integer.class.isAssignableFrom(valueClass) || Short.class.isAssignableFrom(valueClass)
+		return Integer.class.isAssignableFrom(valueClass) 
+				|| Short.class.isAssignableFrom(valueClass)
 				|| Byte.class.isAssignableFrom(valueClass);
 	}
 

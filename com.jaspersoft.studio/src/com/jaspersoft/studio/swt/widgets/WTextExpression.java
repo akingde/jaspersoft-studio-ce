@@ -31,8 +31,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -48,6 +46,7 @@ import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionE
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * Expression widget re-usable in custom dialogs and wizards. The text of the expression is represented inside the
@@ -195,11 +194,8 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 			label.setText(textLabel);
 		}
 
-		textExpression = new Text(this, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-		GC gcText = new GC(textExpression);
-		FontMetrics textFM = gcText.getFontMetrics();
-		int heightHint = textFM.getHeight() * getTextLinesNumber();
-		gcText.dispose();
+		textExpression = new Text(this, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL); 
+		int heightHint = UIUtils.getCharHeight(textExpression); 
 		GridData gdTextExpression = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2);
 		gdTextExpression.heightHint = heightHint;
 		textExpression.setLayoutData(gdTextExpression);

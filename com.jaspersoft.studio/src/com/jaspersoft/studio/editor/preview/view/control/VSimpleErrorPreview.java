@@ -20,8 +20,6 @@
 package com.jaspersoft.studio.editor.preview.view.control;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -30,11 +28,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VSimpleErrorPreview extends APreview {
 
-	public VSimpleErrorPreview(Composite parent,  JasperReportsConfiguration jContext) {
+	public VSimpleErrorPreview(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
 	}
 
@@ -62,11 +61,7 @@ public class VSimpleErrorPreview extends APreview {
 		lbl.setText("The document is empty.");
 		GridData layoutData = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
 
-		GC gc = new GC(lbl);
-		FontMetrics fontMetrics = gc.getFontMetrics();
-		int h = fontMetrics.getHeight();
-		gc.dispose();
-		layoutData.heightHint = h * 2 + 50;
+		layoutData.heightHint = UIUtils.getCharHeight(lbl) * 2 + 50;
 		lbl.setLayoutData(layoutData);
 
 		// tmessage = new Text(composite, SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);

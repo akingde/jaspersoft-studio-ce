@@ -43,8 +43,12 @@ import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.Map;
 
+import org.apache.commons.validator.routines.BigDecimalValidator;
+import org.apache.commons.validator.routines.ByteValidator;
 import org.apache.commons.validator.routines.DoubleValidator;
 import org.apache.commons.validator.routines.FloatValidator;
+import org.apache.commons.validator.routines.IntegerValidator;
+import org.apache.commons.validator.routines.ShortValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -55,6 +59,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class BigNumericInput extends ADataInput {
 	private Text num;
@@ -64,14 +69,16 @@ public class BigNumericInput extends ADataInput {
 	public boolean isForType(Class<?> valueClass) {
 		return (Long.class.isAssignableFrom(valueClass) || BigInteger.class.isAssignableFrom(valueClass)
 				|| BigDecimal.class.isAssignableFrom(valueClass) || Float.class.isAssignableFrom(valueClass)
-				|| Double.class.isAssignableFrom(valueClass) || Number.class.isAssignableFrom(valueClass));
+				|| Double.class.isAssignableFrom(valueClass) || Integer.class.isAssignableFrom(valueClass)
+				|| Short.class.isAssignableFrom(valueClass) || Byte.class.isAssignableFrom(valueClass) || Number.class
+					.isAssignableFrom(valueClass));
 	}
 
 	@Override
 	public void createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
 		super.createInput(parent, param, params);
 		if (Number.class.isAssignableFrom(param.getValueClass())) {
-			num = new Text(parent, SWT.BORDER);
+			num = new Text(parent, SWT.BORDER | SWT.RIGHT);
 			setMandatory(param, num);
 
 			setError(num, "");
@@ -79,7 +86,6 @@ public class BigNumericInput extends ADataInput {
 
 			String desc = Misc.nvl(param.getDescription());
 			desc += "\n" + param.getValueClass();
-			num.setToolTipText(desc);
 			num.setToolTipText(desc);
 			updateInput();
 			num.addListener(SWT.Verify, new Listener() {
@@ -89,10 +95,9 @@ public class BigNumericInput extends ADataInput {
 						hideError(num);
 						String number = e.text;
 						String oldText = ((Text) e.widget).getText();
-						if (e.start == 0)
-							number = e.text + oldText;
-						else
-							number = oldText.substring(0, e.start) + e.text;
+						if (e.start != e.end)
+							oldText = oldText.substring(0, e.start) + oldText.substring(e.end);
+						number = oldText.substring(0, e.start) + e.text;
 						if (oldText.length() - 1 > e.start + 1)
 							number += oldText.substring(e.start + 1);
 
@@ -100,6 +105,11 @@ public class BigNumericInput extends ADataInput {
 							number = "-0";//$NON-NLS-1$
 						if (number.equals(".")) //$NON-NLS-1$
 							number = "0.";//$NON-NLS-1$
+
+						if (number.isEmpty()) {
+							e.doit = true;
+							return;
+						}
 
 						if (param.getValueClass().equals(Long.class)) {
 							Long.parseLong(number);
@@ -109,48 +119,53 @@ public class BigNumericInput extends ADataInput {
 							e.doit = FloatValidator.getInstance().isValid(number);
 						} else if (param.getValueClass().equals(Double.class)) {
 							e.doit = DoubleValidator.getInstance().isValid(number);
+						} else if (param.getValueClass().equals(Integer.class)) {
+							e.doit = IntegerValidator.getInstance().isValid(number);
+						} else if (param.getValueClass().equals(Short.class)) {
+							e.doit = ShortValidator.getInstance().isValid(number);
+						} else if (param.getValueClass().equals(Byte.class)) {
+							e.doit = ByteValidator.getInstance().isValid(number);
+						} else if (param.getValueClass().equals(BigDecimal.class)) {
+							e.doit = BigDecimalValidator.getInstance().isValid(number);
 						}
-
-						if (min != null)
-							if (param.isStrictMin()) {
-								if (compareTo(getNumber(number), min) <= 0)
+						if (e.doit) {
+							if (min != null)
+								if (param.isStrictMin()) {
+									if (compareTo(getNumber(number), min) <= 0)
+										setError(num, "Value can not be smaller than: " + min);
+								} else if (compareTo(getNumber(number), min) < 0) {
 									setError(num, "Value can not be smaller than: " + min);
-							} else if (compareTo(getNumber(number), min) < 0) {
-								setError(num, "Value can not be smaller than: " + min);
-							}
-						if (max != null) {
-							if (param.isStrictMax()) {
-								if (compareTo(getNumber(number), max) >= 0)
+								}
+							if (max != null) {
+								if (param.isStrictMax()) {
+									if (compareTo(getNumber(number), max) >= 0)
+										setError(num, "Value can not be greater than: " + max);
+								} else if (compareTo(getNumber(number), max) > 0)
 									setError(num, "Value can not be greater than: " + max);
-							} else if (compareTo(getNumber(number), max) > 0)
-								setError(num, "Value can not be greater than: " + max);
+							}
 						}
-
 					} catch (NumberFormatException ne) {
 						e.doit = false;
 					}
 				}
 			});
-			if (param.getMinValue() != null) {
+			if (param.getMinValue() != null)
 				min = getNumber(param.getMinValue());
-			}
-			if (param.getMaxValue() != null) {
+			if (param.getMaxValue() != null)
 				max = getNumber(param.getMaxValue());
-			}
-
 			ModifyListener listener = new ModifyListener() {
 
 				public void modifyText(ModifyEvent e) {
 					try {
 						updateModel(getNumber(num.getText()));
 					} catch (NumberFormatException ne) {
-
 					}
 				}
 			};
 			num.addModifyListener(listener);
-			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			GridData gd = new GridData();
 			gd.horizontalIndent = 8;
+			gd.widthHint = 25 * UIUtils.getCharWidth(num) - 22;
 			num.setLayoutData(gd);
 		}
 	}
@@ -164,11 +179,17 @@ public class BigNumericInput extends ADataInput {
 			return ((Float) n1).compareTo((Float) n2);
 		} else if (param.getValueClass().equals(Double.class)) {
 			return ((Double) n1).compareTo((Double) n2);
+		} else if (param.getValueClass().equals(Integer.class)) {
+			return ((Integer) n1).compareTo((Integer) n2);
+		} else if (param.getValueClass().equals(Short.class)) {
+			return ((Short) n1).compareTo((Short) n2);
+		} else if (param.getValueClass().equals(Byte.class)) {
+			return ((Byte) n1).compareTo((Byte) n2);
 		}
 		return 0;
 	}
 
-	protected Number getNumber(String number) {
+	protected Number getNumber(String number) throws NumberFormatException {
 		if (param.getValueClass().equals(Long.class)) {
 			return new Long(number);
 		} else if (param.getValueClass().equals(BigInteger.class)) {
@@ -177,6 +198,12 @@ public class BigNumericInput extends ADataInput {
 			return new Float(number);
 		} else if (param.getValueClass().equals(Double.class)) {
 			return new Double(number);
+		} else if (param.getValueClass().equals(Integer.class)) {
+			return new Integer(number);
+		} else if (param.getValueClass().equals(Short.class)) {
+			return new Short(number);
+		} else if (param.getValueClass().equals(Byte.class)) {
+			return new Byte(number);
 		}
 		return null;
 	}

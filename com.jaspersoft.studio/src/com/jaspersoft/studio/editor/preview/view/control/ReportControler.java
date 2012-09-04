@@ -59,7 +59,6 @@ import com.jaspersoft.studio.editor.preview.input.DateInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ImageInput;
 import com.jaspersoft.studio.editor.preview.input.LocaleInput;
-import com.jaspersoft.studio.editor.preview.input.NumericInput;
 import com.jaspersoft.studio.editor.preview.input.TextInput;
 import com.jaspersoft.studio.editor.preview.input.TimeZoneInput;
 import com.jaspersoft.studio.editor.preview.jive.Context;
@@ -99,7 +98,6 @@ public class ReportControler {
 		inputs.add(new TextInput());
 		inputs.add(new LocaleInput());
 		inputs.add(new TimeZoneInput());
-		inputs.add(new NumericInput());
 		inputs.add(new BigNumericInput());
 		inputs.add(new DateInput());
 		inputs.add(new ImageInput());

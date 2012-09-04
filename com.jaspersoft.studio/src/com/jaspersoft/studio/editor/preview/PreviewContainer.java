@@ -140,7 +140,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 		createRight(sashform);
 
-		sashform.setWeights(new int[] { 500, 1000 });
+		sashform.setWeights(new int[] { 60, 40 });
 	}
 
 	@Override

@@ -29,8 +29,6 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
@@ -46,6 +44,7 @@ import com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.di
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class SPColorSeries extends ASPropertyWidget {
 	protected Composite composite;
@@ -95,10 +94,7 @@ public class SPColorSeries extends ASPropertyWidget {
 	}
 
 	protected void setWidth(Composite parent, int chars) {
-		GC gc = new GC(parent);
-		FontMetrics fontMetrics = gc.getFontMetrics();
-		int w = fontMetrics.getAverageCharWidth() * chars;
-		gc.dispose();
+		int w = UIUtils.getCharWidth(parent) * chars;
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			rd.width = w;
