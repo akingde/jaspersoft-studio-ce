@@ -22,13 +22,6 @@ package com.jaspersoft.studio.editor.part;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.gef.ui.actions.ActionRegistry;
-import org.eclipse.gef.ui.actions.GEFActionConstants;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuCreator;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -37,25 +30,16 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
-import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
-import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
-import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
-import com.jaspersoft.studio.editor.report.ReportEditor;
-import com.jaspersoft.studio.plugin.AContributorAction;
-import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 
 public class TFContainer extends Composite {
 	private StackLayout stackLayout;
 	private ToolBar toolBar;
 	private ToolBar additionalToolbar;
+	private ToolBarManager additionalToolbarManager;
 
 	public TFContainer(Composite parent, int style) {
 		super(parent, style);
@@ -101,7 +85,15 @@ public class TFContainer extends Composite {
 			toolBar.getItem(i).setSelection(i == selection);
 		}
 		stackLayout.topControl = getItem(selection).getControl();
-
+		
+		Object data = toolBar.getItem(selection).getData();
+		if(data instanceof TFItem){
+			TFItem tfItem=(TFItem)data; 
+			if(tfItem.getData() instanceof AbstractVisualEditor){
+				populateAdditionalToolbar((AbstractVisualEditor) tfItem.getData());
+			}
+		}
+		
 		getParent().layout();
 	}
 
@@ -126,8 +118,6 @@ public class TFContainer extends Composite {
 
 	private List<SelectionListener> listeners = new ArrayList<SelectionListener>();
 	private Composite content;
-	private ToolBarManager additionalToolbarManager;
-	private boolean additionalToolbarPopulated;
 
 	public void addSelectionListener(SelectionListener listener) {
 		listeners.add(listener);
@@ -158,9 +148,6 @@ public class TFContainer extends Composite {
 	public void update(TFItem tfItem) {
 		for (ToolItem it : toolBar.getItems()) {
 			if (it.getData() == tfItem) {	
-				if(tfItem.getData() instanceof ReportEditor){
-					populateAdditionalToolbar((ReportEditor) tfItem.getData());
-				}
 				it.setText(tfItem.getText());
 				it.setImage(tfItem.getImage());
 				toolBar.update();
@@ -173,82 +160,9 @@ public class TFContainer extends Composite {
 	/*
 	 * Enrich the toolbar manager registered for the additional toolbar on the right.
 	 */
-	private void populateAdditionalToolbar(ReportEditor reportEditor){
-		if(!additionalToolbarPopulated){
-			additionalToolbarManager.add(reportEditor.getActionRegistry().getAction(DatasetAction.ID));
-			additionalToolbarManager.add(new Separator());
-			additionalToolbarManager.add(reportEditor.getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
-			additionalToolbarManager.add(reportEditor.getActionRegistry().getAction(GEFActionConstants.ZOOM_OUT));
-			additionalToolbarManager.add(new RZoomComboContributionItem(reportEditor.getEditorSite().getPage()));
-			additionalToolbarManager.add(new Separator());
-			// Contributed actions
-			List<AContributorAction> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
-			for (AContributorAction a : contributedActions){
-				additionalToolbarManager.add(a);
-			}
-			additionalToolbarManager.add(new DropDownAction(reportEditor.getActionRegistry()));
-			additionalToolbarManager.update(true);
-			additionalToolbarPopulated=true;
-		}
-	}
-	
-	/*
-	 * Dropdown action to contribute a settings menu with the menu items
-	 * taken from the global View menu.
-	 */
-	private class DropDownAction extends Action implements IMenuCreator {
-		private Menu menu;
-		private ActionRegistry actionRegistry;
-
-		public DropDownAction(ActionRegistry actionRegistry) {
-			setText("Settings");
-			setMenuCreator(this);
-			this.actionRegistry=actionRegistry;
-		}
-
-		@Override
-		public void dispose() {
-			if (menu != null) {
-				menu.dispose();
-				menu = null;
-			}
-		}
-
-		@Override
-		public Menu getMenu(Menu parent) {
-			return null;
-		}
-
-		@Override
-		public Menu getMenu(Control parent) {
-			if (menu != null)
-				menu.dispose();
-			menu = new Menu(parent);
-			addActionToMenu(menu, actionRegistry.getAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY));
-			addActionToMenu(menu, actionRegistry.getAction(SnapToGuidesAction.ID));
-			new MenuItem(menu, SWT.SEPARATOR);
-			addActionToMenu(menu, actionRegistry.getAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY));
-			addActionToMenu(menu, actionRegistry.getAction(SnapToGridAction.ID));
-			addActionToMenu(menu, actionRegistry.getAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY));
-			addActionToMenu(menu, actionRegistry.getAction(SizeGridAction.ID));
-			new MenuItem(menu, SWT.SEPARATOR);
-			for(String id : JaspersoftStudioPlugin.getDecoratorManager().getActionIDs()){
-				addActionToMenu(menu, actionRegistry.getAction(id));
-			}
-			return menu;
-		}
-		
-		/*
-		 * Adds an item to the existing menu using, using the contributed action.
-		 */
-		private void addActionToMenu(Menu parent, IAction action) {
-			ActionContributionItem item = new ActionContributionItem(action);
-			item.fill(parent, -1);
-		}
-
-		@Override
-		public void run() {
-			// Do Nothing
-		}
+	private void populateAdditionalToolbar(AbstractVisualEditor editor){
+		additionalToolbarManager.removeAll();
+		editor.contributeItemsToEditorTopToolbar(additionalToolbarManager);
+		additionalToolbarManager.update(true);
 	}
 }

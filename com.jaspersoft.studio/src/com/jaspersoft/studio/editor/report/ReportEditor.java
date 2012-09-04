@@ -23,12 +23,16 @@ import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.IActionBars;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -36,6 +40,8 @@ import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
+import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
+import com.jaspersoft.studio.editor.gef.ui.actions.ViewSettingsDropDownAction;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
@@ -50,6 +56,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.plugin.AContributorAction;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
@@ -230,5 +237,28 @@ public class ReportEditor extends AbstractVisualEditor {
 		action = new DatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
+	}
+
+	@Override
+	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
+		toolbarManager.add(getActionRegistry().getAction(DatasetAction.ID));
+		toolbarManager.add(new Separator());
+		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
+		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_OUT));
+		RZoomComboContributionItem zoomItem = new RZoomComboContributionItem(getEditorSite().getPage());
+		GraphicalViewer graphicalViewer = getGraphicalViewer();
+		ZoomManager property = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());
+		if (property != null)
+			zoomItem.setZoomManager(property);
+		zoomItem.setEnabled(true);
+		toolbarManager.add(zoomItem);
+		toolbarManager.add(new Separator());
+		// Contributed actions
+		List<AContributorAction> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
+		for (AContributorAction a : contributedActions){
+			toolbarManager.add(a);
+		}
+		// Global "View" menu items
+		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));		
 	}
 }

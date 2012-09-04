@@ -60,6 +60,8 @@ import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -90,6 +92,8 @@ import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerComposite;
+import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
+import com.jaspersoft.studio.editor.gef.ui.actions.ViewSettingsDropDownAction;
 import com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
@@ -615,5 +619,38 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 	protected void createEditorActions(ActionRegistry registry) {
 
+	}
+
+	/**
+	 * Contributes items to the specified toolbar that is supposed to be put
+	 * on the top right of the current visual editor 
+	 * (i.e: ReportEditor, CrosstabEditor, TableEditor, ListEditor).
+	 * <p>
+	 * 
+	 * Default behavior contributes the following items:
+	 * <ul>
+	 * 	<li>Zoom In</li>
+	 * 	<li>Zoom Out</li>
+	 * 	<li>Zoom Combo</li>
+	 * 	<li>Global "View" settings drop down menu</li>
+	 * </ul>
+	 * 
+	 * Sub-classes may want to override this method to modify the toolbar.
+	 * 
+	 * @param toolbarManager the toolbar manager to be enriched
+	 */
+	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
+		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
+		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_OUT));
+		RZoomComboContributionItem zoomItem = new RZoomComboContributionItem(getEditorSite().getPage());
+		GraphicalViewer graphicalViewer = getGraphicalViewer();
+		ZoomManager property = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());
+		if (property != null)
+			zoomItem.setZoomManager(property);
+		zoomItem.setEnabled(true);
+		toolbarManager.add(zoomItem);
+		toolbarManager.add(new Separator());
+		// Global "View" menu items
+		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));		
 	}
 }
