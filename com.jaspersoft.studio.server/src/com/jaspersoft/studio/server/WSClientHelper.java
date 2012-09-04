@@ -238,8 +238,14 @@ public class WSClientHelper {
 				}
 			} else
 				rd = cli.addOrModifyResource(rd, file);
-			if (refresh)
-				refreshResource((MResource) res.getParent(), monitor);
+			if (refresh && res.getParent() instanceof MResource){
+				// standard resource creation inside an existing MResource 
+				refreshResource((MResource) res.getParent(), monitor);	
+			}
+			else if (res.getParent() instanceof MServerProfile){
+				// resource created inside the root folder
+				connectGetData((MServerProfile)res.getParent(), monitor);
+			}
 		}
 		return rd;
 

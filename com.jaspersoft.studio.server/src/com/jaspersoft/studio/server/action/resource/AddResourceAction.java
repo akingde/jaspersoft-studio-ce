@@ -39,6 +39,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.AddResourceWizard;
 import com.jaspersoft.studio.utils.UIUtils;
 
@@ -76,6 +77,11 @@ public class AddResourceAction extends Action {
 					MResource res = wizard.getResource();
 					res.setParent(parent, -1);
 					dorun(res);
+					if(parent instanceof MServerProfile){
+						// we should force a refresh in case of a resource
+						// created under the main root folder
+						treeViewer.refresh();
+					}
 				}
 			}
 			break;
