@@ -33,6 +33,7 @@ import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.property.PostSetValueManager;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.DriversManager;
 
 /*
  * The main plugin class to be used in the desktop.
@@ -165,7 +166,15 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 		}
 		return decoratorManager;
 	}
+	private static DriversManager driversManager;
 
+	public static DriversManager getDriversManager() {
+		if (driversManager == null) {
+			driversManager = new DriversManager();
+			driversManager.init();
+		}
+		return driversManager;
+	}
 	private static PostSetValueManager postSetValueManager;
 
 	public static PostSetValueManager getPostSetValueManager() {

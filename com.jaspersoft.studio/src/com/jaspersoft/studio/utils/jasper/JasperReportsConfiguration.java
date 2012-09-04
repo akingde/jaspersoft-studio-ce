@@ -83,8 +83,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			lookupOrders = new String[] { ProjectScope.SCOPE, InstanceScope.SCOPE };
 			contexts = new IScopeContext[] { new ProjectScope(project), INSTANCE_SCOPE };
 			try {
-				if (project.getNature(JavaCore.NATURE_ID) != null)
-					setClassLoader(JavaProjectClassLoader.instance(JavaCore.create(project), this.getClass().getClassLoader()));
+				if (project.getNature(JavaCore.NATURE_ID) != null) {
+					ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(project), this.getClass().getClassLoader());
+					cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
+					setClassLoader(cl);
+				}
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}

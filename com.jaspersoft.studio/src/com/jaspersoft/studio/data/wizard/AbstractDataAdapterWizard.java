@@ -16,6 +16,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.MessageBox;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
@@ -26,26 +27,26 @@ import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 /**
- * Abstract superclass for data adapter wizards.
- * It maintains a list of shared fields and methods, 
- * plus the behavior of the button used to test the data adapter. 
+ * Abstract superclass for data adapter wizards. It maintains a list of shared fields and methods, plus the behavior of
+ * the button used to test the data adapter.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
-public abstract class AbstractDataAdapterWizard extends JSSWizard implements SelectionListener{
-	
+public abstract class AbstractDataAdapterWizard extends JSSWizard implements SelectionListener {
+
 	protected DataAdapterDescriptor dataAdapter = null;
 	protected DataAdapterWizardDialog wizardDialog = null;
 	protected DataAdapterFactory selectedFactory = null;
 	protected DataAdaptersListPage dataAdapterListPage = null;
 	protected DataAdapterEditorPage dataAdapterEditorPage = null;
 	protected ADataAdapterStorage storage;
-	
+
 	/**
 	 * Sets the wizard dialog that is used to display the wizard.
 	 * 
-	 * @param wizardDialog the dialog displaying the wizard
+	 * @param wizardDialog
+	 *          the dialog displaying the wizard
 	 */
 	public void setWizardDialog(DataAdapterWizardDialog wizardDialog) {
 		this.wizardDialog = wizardDialog;
@@ -117,8 +118,10 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 							cl = new CompositeClassloader(cl, JavaProjectClassLoader.instance(JavaCore.create(p)));
 					}
 				}
-				if (cl != null)
+				if (cl != null) {
+					cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
 					Thread.currentThread().setContextClassLoader(cl);
+				}
 
 				getConfig().setClassLoader(cl);
 
@@ -142,7 +145,7 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// Do nothing...
 	}
-	
+
 	/**
 	 * Returns the new data adapter (or the modified data adapter in case the wizard is used to edit an existing data
 	 * adapter). It returns null (or the original data adapter) if the wizard has not been completed. The returned object

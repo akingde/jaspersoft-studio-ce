@@ -27,6 +27,7 @@
 <plugin>
    <extension-point id="components" name="Components" schema="schema/components.exsd"/>
    <extension-point id="decorators" name="Decorators" schema="schema/decorator.exsd"/>
+   <extension-point id="drivers" name="Drivers" schema="schema/drivers.exsd"/>
    <extension-point id="postsetvalue" name="PostSetValue" schema="schema/postsetvalue.exsd"/>
    <extension-point id="dataAdapters" name="Data Adapters" schema="schema/dataAdapters.exsd"/>
    <extension-point id="queryDesigner" name="Query Designer" schema="schema/queryDesigner.exsd"/> 
