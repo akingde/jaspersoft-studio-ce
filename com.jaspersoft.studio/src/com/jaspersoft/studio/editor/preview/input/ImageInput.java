@@ -62,6 +62,7 @@ public class ImageInput extends ADataInput {
 			btn = new Button(parent, SWT.NONE);
 			btn.setText(Messages.ImageInput_selectimage);
 			btn.setToolTipText(param.getDescription());
+			btn.addFocusListener(focusListener);
 			btn.setAlignment(SWT.LEFT);
 			GridData gd = new GridData();
 			gd.heightHint = 70;

@@ -50,6 +50,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.editor.preview.view.control.VParameters;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class DateInput extends ADataInput {
@@ -79,6 +80,8 @@ public class DateInput extends ADataInput {
 					|| param.getValueClass().equals(java.util.Date.class)) {
 				createTimestamp(parent, param, params);
 			}
+			date.setToolTipText(VParameters.createToolTip(param));
+			date.addFocusListener(focusListener);
 		}
 	}
 

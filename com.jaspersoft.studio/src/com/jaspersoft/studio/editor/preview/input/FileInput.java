@@ -49,6 +49,7 @@ public class FileInput extends ADataInput {
 			btn = new Button(parent, SWT.BORDER);
 			btn.setText("Select File");
 			btn.setToolTipText(param.getDescription());
+			btn.addFocusListener(focusListener);
 			btn.setAlignment(SWT.LEFT);
 			GridData gd = new GridData();
 			gd.heightHint = 70;

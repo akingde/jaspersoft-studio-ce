@@ -49,6 +49,7 @@ import com.jaspersoft.studio.components.list.part.ListPageEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -212,7 +213,8 @@ public class ListComponentFactory implements IComponentFactory {
 				return new CreateListCommand(parent, (MGraphicElement) child,
 						location, newIndex);
 
-			if (parent instanceof IGroupElement) {
+			if (parent instanceof IGroupElement
+					&& parent instanceof IGraphicElementContainer) {
 				return new CreateListCommand(parent, (MGraphicElement) child,
 						location, newIndex);
 			}

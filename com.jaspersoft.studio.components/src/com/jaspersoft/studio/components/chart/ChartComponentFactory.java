@@ -109,6 +109,7 @@ import com.jaspersoft.studio.components.chart.wizard.action.ChartWizardAction;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -219,7 +220,8 @@ public class ChartComponentFactory implements IComponentFactory {
 				return new CreateChartCommand(parent, (MGraphicElement) child,
 						location, newIndex);
 
-			if (parent instanceof IGroupElement) {
+			if (parent instanceof IGroupElement
+					&& parent instanceof IGraphicElementContainer) {
 				return new CreateChartCommand(parent, (MGraphicElement) child,
 						location, newIndex);
 			}

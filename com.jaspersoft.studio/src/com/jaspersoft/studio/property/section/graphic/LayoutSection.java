@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property.section.graphic;
 
@@ -39,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -60,17 +57,17 @@ public class LayoutSection extends AbstractSection {
 		String[] labels = new String[layouts.length];
 		for (int i = 0; i < layouts.length; i++)
 			labels[i] = layouts[i].getName();
-		pd = new JSSComboPropertyDescriptor(MGraphicElement.PROPERTY_MAP, "Layout", labels);
-		pd.setDescription("Set Layout Manager for container");
+		pd = new JSSComboPropertyDescriptor(MGraphicElement.PROPERTY_MAP, Messages.LayoutSection_combotitle, labels);
+		pd.setDescription(Messages.LayoutSection_combodescription);
 	}
 
 	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		super.createControls(parent, aTabbedPropertySheetPage);
 
-		parent = getWidgetFactory().createSection(parent, "Layout", false, 2);
+		parent = getWidgetFactory().createSection(parent, Messages.LayoutSection_sectiontitle, false, 2);
 
-		getWidgetFactory().createCLabel(parent, "Layouts", SWT.RIGHT);
+		getWidgetFactory().createCLabel(parent, Messages.LayoutSection_propertylable, SWT.RIGHT);
 
 		widgets.put(pd.getId(), new SPReadCombo(parent, this, pd) {
 			protected void handlePropertyChange() {
@@ -87,7 +84,7 @@ public class LayoutSection extends AbstractSection {
 					if (n != null && n instanceof MReport) {
 						MReport mrep = (MReport) n;
 						JRPropertiesMap pmap = (JRPropertiesMap) mrep.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-						pmap.setProperty(ILayout.KEY + "." + uuid, layouts[ind].getClass().getName());
+						pmap.setProperty(ILayout.KEY + "." + uuid, layouts[ind].getClass().getName()); //$NON-NLS-1$
 						section.changePropertyOn(MGraphicElement.PROPERTY_MAP, pmap, mrep);
 					}
 				}
@@ -133,7 +130,7 @@ public class LayoutSection extends AbstractSection {
 				JRPropertiesMap pmap = pholder.getPropertiesMap();
 				String key = ILayout.KEY;
 				if (uuid != null)
-					key += "." + uuid;
+					key += "." + uuid; //$NON-NLS-1$
 				String str = pmap.getProperty(key);
 				if (str != null) {
 					for (int i = 0; i < layouts.length; i++) {

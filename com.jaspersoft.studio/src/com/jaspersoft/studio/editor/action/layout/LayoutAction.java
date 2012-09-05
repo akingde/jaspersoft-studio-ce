@@ -1,31 +1,30 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.action.layout;
 
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -33,17 +32,24 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.property.SetValueCommand;
 
 public class LayoutAction extends SelectionAction {
 
@@ -120,8 +126,32 @@ public class LayoutAction extends SelectionAction {
 				size = prnt.getSize();
 				size.expand(prnt.getLeftPadding(), prnt.getTopPadding());
 			}
-
-			return new LayoutCommand(container, layout, size);
+			APropertyNode mcontainer = getContainerNode(n);
+			CompoundCommand cc = new CompoundCommand("Layout Elements");
+			if (mcontainer.getValue() instanceof JRPropertiesHolder) {
+				JRPropertiesMap pmap = (JRPropertiesMap) mcontainer.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+				pmap.setProperty(ILayout.KEY, layout.getClass().getName());
+				SetValueCommand c = new SetValueCommand();
+				c.setTarget((IPropertySource) mcontainer);
+				c.setPropertyId(MGraphicElement.PROPERTY_MAP);
+				c.setPropertyValue(pmap);
+				cc.add(c);
+			} else if (mcontainer.getValue() instanceof JRBaseElement) {
+				String uuid = ((JRBaseElement) mcontainer.getValue()).getUUID().toString();
+				INode root = mcontainer.getRoot();
+				if (root != null && n instanceof MReport) {
+					MReport mrep = (MReport) n;
+					JRPropertiesMap pmap = (JRPropertiesMap) mrep.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+					pmap.setProperty(ILayout.KEY + "." + uuid, layout.getClass().getName()); //$NON-NLS-1$
+					SetValueCommand c = new SetValueCommand();
+					c.setTarget((MReport) root);
+					c.setPropertyId(MGraphicElement.PROPERTY_MAP);
+					c.setPropertyValue(pmap);
+					cc.add(c);
+				}
+			}
+			cc.add(new LayoutCommand(container, layout, size));
+			return cc;
 		}
 		return null;
 	}
@@ -134,6 +164,17 @@ public class LayoutAction extends SelectionAction {
 			return (JRElementGroup) val;
 		if (val instanceof JRDesignElement)
 			return getContainer(n.getParent());
+		return null;
+	}
+
+	private APropertyNode getContainerNode(ANode n) {
+		Object val = n.getValue();
+		if (n instanceof IGroupElement)
+			return (APropertyNode) n;
+		if (val instanceof JRElementGroup)
+			return (APropertyNode) n;
+		if (val instanceof JRDesignElement)
+			return getContainerNode(n.getParent());
 		return null;
 	}
 

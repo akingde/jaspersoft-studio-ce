@@ -46,7 +46,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 
 public class BooleanInput extends ADataInput {
 	private Button bbuton;
@@ -59,11 +58,10 @@ public class BooleanInput extends ADataInput {
 	public void createInput(Composite parent, IParameter param, Map<String, Object> params) {
 		super.createInput(parent, param, params);
 		if (isForType(param.getValueClass())) {
-			new Label(parent, SWT.NONE);
-
 			bbuton = new Button(parent, SWT.CHECK);
 			bbuton.setText(param.getLabel());
 			bbuton.setToolTipText(param.getDescription());
+			bbuton.addFocusListener(focusListener);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
 			bbuton.setLayoutData(gd);

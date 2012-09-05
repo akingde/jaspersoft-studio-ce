@@ -269,12 +269,12 @@ public class CreateElementCommand extends Command {
 			JRDesignBand band = (JRDesignBand) jrGroup;
 			int height = jrElement.getY() + jrElement.getHeight();
 			if (band.getHeight() < height) {
-				int maxBandHeight = BandResizeTracker.getMaxBandHeight(band,jasperDesign);
-				//If the element is too big it will be resized to the maximum band size
-				if (maxBandHeight<height){
-					height = maxBandHeight-1;
-					jrElement.setHeight(height-jrElement.getY());
-					location.setHeight(height-jrElement.getY());
+				int maxBandHeight = BandResizeTracker.getMaxBandHeight(band, jasperDesign);
+				// If the element is too big it will be resized to the maximum band size
+				if (maxBandHeight < height) {
+					height = maxBandHeight - 1;
+					jrElement.setHeight(height - jrElement.getY());
+					location.setHeight(height - jrElement.getY());
 				}
 				SetValueCommand cmd = new SetValueCommand();
 				cmd.setTarget((IPropertySource) destNode);
@@ -337,7 +337,7 @@ public class CreateElementCommand extends Command {
 					uuid = ((JRBaseElement) destValue).getUUID().toString();
 				if (destValue instanceof JRCommonElement) {
 					JRCommonElement jce = (JRCommonElement) destValue;
-					d.setSize(jce.getWidth(), jce.getHeight());
+					d = new Dimension(jce.getWidth(), jce.getHeight());
 				}
 				if (destValue instanceof JRDesignBand) {
 					int w = jasperDesign.getPageWidth() - jasperDesign.getLeftMargin() - jasperDesign.getRightMargin();

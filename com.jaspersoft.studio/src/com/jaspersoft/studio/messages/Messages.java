@@ -585,6 +585,10 @@ public class Messages extends NLS {
 	public static String JrxmlEditorContributor_select_all;
 	public static String JrxmlEditorContributor_show_ruler;
 	public static String JrxmlEditorContributor_view;
+	public static String LayoutSection_combodescription;
+	public static String LayoutSection_combotitle;
+	public static String LayoutSection_propertylable;
+	public static String LayoutSection_sectiontitle;
 	public static String LinePenSection_pen_width_tool_tip;
 	public static String LocaleDialog_0;
 	public static String LocaleDialog_1;

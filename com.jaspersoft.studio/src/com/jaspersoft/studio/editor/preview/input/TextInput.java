@@ -47,6 +47,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.editor.preview.view.control.VParameters;
+
 public class TextInput extends ADataInput {
 	private Text txt;
 
@@ -59,7 +61,8 @@ public class TextInput extends ADataInput {
 		super.createInput(parent, param, params);
 		if (isForType(param.getValueClass())) {
 			txt = new Text(parent, SWT.BORDER);
-			txt.setToolTipText(param.getDescription());
+			txt.setToolTipText(VParameters.createToolTip(param));
+			txt.addFocusListener(focusListener);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
 			txt.setLayoutData(gd);

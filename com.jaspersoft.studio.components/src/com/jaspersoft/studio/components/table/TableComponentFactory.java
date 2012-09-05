@@ -108,6 +108,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MCollection;
@@ -583,7 +584,8 @@ public class TableComponentFactory implements IComponentFactory {
 				return new CreateTableCommand(parent, (MGraphicElement) child,
 						location, newIndex);
 
-			if (parent instanceof IGroupElement) {
+			if (parent instanceof IGroupElement
+					&& parent instanceof IGraphicElementContainer) {
 				return new CreateTableCommand(parent, (MGraphicElement) child,
 						location, newIndex);
 			}

@@ -58,7 +58,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.editor.preview.view.control.VParameters;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class BigNumericInput extends ADataInput {
@@ -84,9 +84,8 @@ public class BigNumericInput extends ADataInput {
 			setError(num, "");
 			hideError(num);
 
-			String desc = Misc.nvl(param.getDescription());
-			desc += "\n" + param.getValueClass();
-			num.setToolTipText(desc);
+			num.setToolTipText(VParameters.createToolTip(param));
+			num.addFocusListener(focusListener);
 			updateInput();
 			num.addListener(SWT.Verify, new Listener() {
 

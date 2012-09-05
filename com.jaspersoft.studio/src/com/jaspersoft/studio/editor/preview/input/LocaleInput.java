@@ -62,8 +62,10 @@ public class LocaleInput extends ADataInput {
 		if (Locale.class.isAssignableFrom(param.getValueClass())) {
 			wlocal = new WLocale(parent, SWT.DROP_DOWN | SWT.BORDER);
 			wlocal.setToolTipText(param.getDescription());
-			wlocal.setBackground(wlocal.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-			wlocal.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			wlocal.addFocusListener(focusListener);
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalIndent = 8;
+			wlocal.setLayoutData(gd);
 			if (params.get(param.getName()) != null)
 				wlocal.setSelection((Locale) params.get(param.getName()));
 			wlocal.addSelectionListener(new SelectionAdapter() {

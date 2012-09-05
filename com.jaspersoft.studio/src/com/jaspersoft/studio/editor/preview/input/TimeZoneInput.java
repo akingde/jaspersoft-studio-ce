@@ -61,9 +61,11 @@ public class TimeZoneInput extends ADataInput {
 		super.createInput(parent, param, params);
 		if (TimeZone.class.isAssignableFrom(param.getValueClass())) {
 			txt = new WTimeZone(parent, SWT.DROP_DOWN | SWT.BORDER);
-			txt.setBackground(txt.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			txt.setToolTipText(param.getDescription());
-			txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			txt.addFocusListener(focusListener);
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalIndent = 8;
+			txt.setLayoutData(gd);
 			txt.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {

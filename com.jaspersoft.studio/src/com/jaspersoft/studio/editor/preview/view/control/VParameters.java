@@ -27,12 +27,14 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
+import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
@@ -55,12 +57,15 @@ public class VParameters extends APreview {
 		scompo.setExpandHorizontal(true);
 		scompo.setExpandVertical(true);
 		scompo.setMinWidth(100);
+		scompo.setMinHeight(100);
 		scompo.setAlwaysShowScrollBars(false);
 
 		composite = new Composite(scompo, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		GridLayout layout = new GridLayout();
+		layout.marginWidth = 2;
+		composite.setLayout(layout);
 		composite.setBackground(parent.getBackground());
-
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 		scompo.setContent(composite);
 		return scompo;
 	}
@@ -73,10 +78,9 @@ public class VParameters extends APreview {
 	public void createInputControls(List<JRParameter> prompts, Map<String, Object> params) {
 		this.params = params;
 		this.prompts = prompts;
-		composite.setBackgroundMode(SWT.INHERIT_FORCE);
-		for (Control c : composite.getChildren()) {
+
+		for (Control c : composite.getChildren())
 			c.dispose();
-		}
 		if (prompts != null)
 			for (JRParameter p : prompts)
 				if (p.isForPrompting() && !p.isSystemDefined()) {
@@ -96,9 +100,8 @@ public class VParameters extends APreview {
 			for (JRParameter p : prompts)
 				if (p.isForPrompting() && !p.isSystemDefined() && haveWidget4Type(p)) {
 					count++;
-					if (params.containsKey(p.getName())) {
+					if (params.containsKey(p.getName()))
 						return true;
-					}
 				}
 		if (count > 0)
 			return false;
@@ -107,9 +110,8 @@ public class VParameters extends APreview {
 
 	protected boolean haveWidget4Type(JRParameter p) {
 		for (IDataInput in : ReportControler.inputs) {
-			if (in.isForType(p.getValueClass())) {
+			if (in.isForType(p.getValueClass()))
 				return true;
-			}
 		}
 		return false;
 	}
@@ -120,18 +122,27 @@ public class VParameters extends APreview {
 			if (in.isForType(pres.getValueClass())) {
 				in = in.getInstance();
 				if (!in.isLabeled()) {
-					Label lbl = UIUtils.createLabel(sectionClient, Messages.getString(pres.getLabel()));
-					lbl.setToolTipText(createToolTip(p));
+					Label lbl = new Label(sectionClient, SWT.WRAP);
+					lbl.setText(Messages.getString(pres.getLabel()));
+					lbl.setToolTipText(createToolTip(pres));
+					GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+					gd.horizontalIndent = 8;
+					lbl.setLayoutData(gd);
+					UIUtils.setBold(lbl);
 				}
 				in.createInput(sectionClient, pres, params);
+
+				Label lblsep = new Label(sectionClient, SWT.SEPARATOR | SWT.HORIZONTAL | SWT.SHADOW_NONE);
+				lblsep.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 				break;
 			}
 		}
 	}
 
-	public static String createToolTip(JRDesignParameter param) {
+	public static String createToolTip(IParameter param) {
 		String desc = Misc.nvl(param.getDescription());
-		desc += "\n" + param.getValueClassName();
+		if (param.getValueClass() != null)
+			desc += "\nThe class type is:" + param.getValueClass().getCanonicalName();
 		return desc;
 	}
 

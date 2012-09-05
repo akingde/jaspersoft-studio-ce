@@ -47,6 +47,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.jaspersoft.studio.editor.preview.view.control.VParameters;
 import com.jaspersoft.studio.utils.Misc;
 
 public class NumericInput extends ADataInput {
@@ -58,8 +59,7 @@ public class NumericInput extends ADataInput {
 	private int pageIncrement;
 
 	public boolean isForType(Class<?> valueClass) {
-		return Integer.class.isAssignableFrom(valueClass) 
-				|| Short.class.isAssignableFrom(valueClass)
+		return Integer.class.isAssignableFrom(valueClass) || Short.class.isAssignableFrom(valueClass)
 				|| Byte.class.isAssignableFrom(valueClass);
 	}
 
@@ -85,9 +85,8 @@ public class NumericInput extends ADataInput {
 			}
 
 			num = new Spinner(parent, SWT.BORDER);
-			String desc = Misc.nvl(param.getDescription());
-			desc += "\n" + valueClass;
-			num.setToolTipText(desc);
+			num.addFocusListener(focusListener);
+			num.setToolTipText(VParameters.createToolTip(param));
 			updateInput();
 			final ModifyListener listener2 = new ModifyListener() {
 
