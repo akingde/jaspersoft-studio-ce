@@ -53,12 +53,13 @@ public class PostSetSizeCell implements IPostSetValue {
 						.equals(DesignCell.PROPERTY_HEIGHT))) {
 			MCell mband = (MCell) target;
 			JasperDesign jDesign = mband.getJasperDesign();
-			return getResizeCommand(mband, jDesign);
+			return getResizeCommand(mband, jDesign, prop);
 		}
 		return null;
 	}
 
-	public Command getResizeCommand(MCell mcell, JasperDesign jDesign) {
+	public Command getResizeCommand(MCell mcell, JasperDesign jDesign,
+			Object prop) {
 		MTable mTable = mcell.getMTable();
 
 		JRPropertiesHolder[] pholder = new JRPropertiesHolder[3];
@@ -69,13 +70,17 @@ public class PostSetSizeCell implements IPostSetValue {
 		ColumnCell cc = tb.getMatrixHelper().getColumnCell(
 				new ColumnCell(mcell.getType(), mcell.getGrName(), mcell
 						.getValue()));
-
-		if (TableManager.isBottomOfTable(cc.type)) {
-			Guide guide = cc.getNorth();
+		if (prop.equals(DesignCell.PROPERTY_HEIGHT))
+			if (TableManager.isBottomOfTable(cc.type)) {
+				Guide guide = cc.getNorth();
+				createCommands(jDesign, pholder, c, guide.getNext());
+			} else {
+				Guide guide = cc.getSouth();
+				createCommands(jDesign, pholder, c, guide.getPrev());
+			}
+		else if (prop.equals(StandardBaseColumn.PROPERTY_WIDTH)) {
+			Guide guide = cc.getWest();
 			createCommands(jDesign, pholder, c, guide.getNext());
-		} else {
-			Guide guide = cc.getSouth();
-			createCommands(jDesign, pholder, c, guide.getPrev());
 		}
 		return c;
 	}

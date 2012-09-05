@@ -130,6 +130,7 @@ public class LayoutAction extends SelectionAction {
 			CompoundCommand cc = new CompoundCommand("Layout Elements");
 			if (mcontainer.getValue() instanceof JRPropertiesHolder) {
 				JRPropertiesMap pmap = (JRPropertiesMap) mcontainer.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+				pmap = (JRPropertiesMap) pmap.clone();
 				pmap.setProperty(ILayout.KEY, layout.getClass().getName());
 				SetValueCommand c = new SetValueCommand();
 				c.setTarget((IPropertySource) mcontainer);
@@ -142,6 +143,7 @@ public class LayoutAction extends SelectionAction {
 				if (root != null && n instanceof MReport) {
 					MReport mrep = (MReport) n;
 					JRPropertiesMap pmap = (JRPropertiesMap) mrep.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+					pmap = (JRPropertiesMap) pmap.clone();
 					pmap.setProperty(ILayout.KEY + "." + uuid, layout.getClass().getName()); //$NON-NLS-1$
 					SetValueCommand c = new SetValueCommand();
 					c.setTarget((MReport) root);

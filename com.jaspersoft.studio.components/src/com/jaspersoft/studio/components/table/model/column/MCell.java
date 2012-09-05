@@ -284,6 +284,7 @@ public class MCell extends MColumn implements IGraphicElement,
 							v.getProperty(names[i]));
 				this.getPropertyChangeSupport().firePropertyChange(
 						MGraphicElement.PROPERTY_MAP, false, true);
+				return; // Attention! MColumn has his own property map, here we work with cell
 			}
 		}
 		super.setPropertyValue(id, value);

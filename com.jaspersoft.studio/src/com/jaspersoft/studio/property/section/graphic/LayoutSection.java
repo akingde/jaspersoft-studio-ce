@@ -76,6 +76,7 @@ public class LayoutSection extends AbstractSection {
 					return;
 				if (pnode.getValue() instanceof JRPropertiesHolder) {
 					JRPropertiesMap pmap = (JRPropertiesMap) pnode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+					pmap = (JRPropertiesMap) pmap.clone();
 					pmap.setProperty(ILayout.KEY, layouts[ind].getClass().getName());
 					section.changeProperty(MGraphicElement.PROPERTY_MAP, pmap);
 				} else if (pnode.getValue() instanceof JRBaseElement) {
@@ -84,6 +85,7 @@ public class LayoutSection extends AbstractSection {
 					if (n != null && n instanceof MReport) {
 						MReport mrep = (MReport) n;
 						JRPropertiesMap pmap = (JRPropertiesMap) mrep.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+						pmap = (JRPropertiesMap) pmap.clone();
 						pmap.setProperty(ILayout.KEY + "." + uuid, layouts[ind].getClass().getName()); //$NON-NLS-1$
 						section.changePropertyOn(MGraphicElement.PROPERTY_MAP, pmap, mrep);
 					}
@@ -117,7 +119,9 @@ public class LayoutSection extends AbstractSection {
 				this.pnode = pnode;
 				index = 0;
 				Object obj = pnode.getValue();
-				if (obj != null && obj instanceof JRPropertiesHolder) {
+				if (b instanceof JRPropertiesMap) {
+					index = getIndex(null, (JRPropertiesMap) b);
+				} else if (obj != null && obj instanceof JRPropertiesHolder) {
 					index = getIndex((JRPropertiesHolder) obj, null);
 				} else if (obj instanceof JRBaseElement) {
 					JasperDesign jDesign = pnode.getJasperDesign();
@@ -127,7 +131,10 @@ public class LayoutSection extends AbstractSection {
 			}
 
 			private int getIndex(JRPropertiesHolder pholder, String uuid) {
-				JRPropertiesMap pmap = pholder.getPropertiesMap();
+				return getIndex(uuid, pholder.getPropertiesMap());
+			}
+
+			private int getIndex(String uuid, JRPropertiesMap pmap) {
 				String key = ILayout.KEY;
 				if (uuid != null)
 					key += "." + uuid; //$NON-NLS-1$
