@@ -15,4 +15,7 @@ To do this there are several options:
 	
 	3.	Use the Eclipse Juno 3.8 release. If you prefer to use this version you should check the
 		information contained in the subfolder juno_38.
+		
+	4.	Use the Eclipse Juno 4.2 release. If you want to help us improving the support to the new e4
+		platform please check the information contained in the subfolder juno_42.
  

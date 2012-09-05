@@ -11,6 +11,7 @@ Here is a set of basic step you can take to have a fully working IDE.
 	- Eclipse Platform SDK 3.7.2
 	- Eclipse SDK 3.7.2
 	- GEF SDK 3.7.2
+	- Nebula Official Widgets Release 1.0.0
 	- Xtext SDK 2.3.0
 	- Xtext JFace Integration 1.0.0
 	- Servlet API Bundle 3.0.0 + Servlet API Source Bundle 3.0.0

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='8'>
+  <ius size='9'>
     <iu id='com.wdev91.eclipse.copyright.feature.feature.group' name='Copyright Wizard' version='1.4.0'>
       <repositories size='1'>
         <repository location='http://www.wdev91.com/update/'/>
@@ -29,6 +29,11 @@
         <repository location='http://download.eclipse.org/releases/juno'/>
       </repositories>
     </iu>
+    <iu id='org.eclipse.nebula.feature.feature.group' name='Nebula Widgets' version='1.0.0.201208281846'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/technology/nebula/snapshot'/>
+      </repositories>
+    </iu>    
     <iu id='org.apache.xalan' name='Xalan-Java' version='2.7.1.v201005080400'>
       <repositories size='3'>
         <repository location='http://download.eclipse.org/releases/indigo'/>
