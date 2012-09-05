@@ -51,6 +51,7 @@ public class Messages extends NLS {
 	public static String RDDatasourceJNDIPage_ImportButtonTooltip;
 	public static String RDDatasourceJNDIPage_JNDIName;
 	public static String RDDatasourceJNDIPage_Title;
+	public static String ServerManager_ErrorMessage1;
 	public static String ServerProfilePage_1;
 	public static String ServerProfilePage_10;
 	public static String ServerProfilePage_11;

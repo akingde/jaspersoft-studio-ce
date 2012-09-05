@@ -38,10 +38,12 @@ import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -85,9 +87,12 @@ public class SelectorJrxml {
 		bRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				RepositoryDialog rd = new RepositoryDialog(Display.getDefault()
-						.getActiveShell(), parent.getRoot()) {
-
+				// N.B: remember we need to pass a fresh new MServerProfile info in order
+				// to avoid problem of refreshing (children/parent relationship changes)
+				// due to tree viewer node expansion...
+				RepositoryDialog rd = new RepositoryDialog(
+						Display.getDefault().getActiveShell(), 
+						ServerManager.getMServerProfileCopy((MServerProfile)parent.getRoot())) {
 					@Override
 					public boolean isResourceCompatible(MResource r) {
 						return r instanceof MJrxml;
@@ -103,7 +108,7 @@ public class SelectorJrxml {
 							ref.setIsReference(true);
 							ref.setMainReport(true);
 							ref.setReferenceUri(ref.getUriString());
-							ref.setParentFolder(runit.getUriString() + "_files");
+							ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() +  "_files");
 							ref.setWsType(ResourceDescriptor.TYPE_JRXML);
 							ref.setUriString(ref.getParentFolder() + "/"
 									+ ref.getName());

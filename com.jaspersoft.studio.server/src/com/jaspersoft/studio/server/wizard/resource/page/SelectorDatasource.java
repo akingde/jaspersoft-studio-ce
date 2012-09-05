@@ -37,8 +37,10 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.wizard.resource.AddResourceWizard;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
@@ -84,9 +86,12 @@ public class SelectorDatasource {
 		bRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				RepositoryDialog rd = new RepositoryDialog(Display.getDefault()
-						.getActiveShell(), parent.getRoot()) {
-
+				// N.B: remember we need to pass a fresh new MServerProfile info in order
+				// to avoid problem of refreshing (children/parent relationship changes)
+				// due to tree viewer node expansion...
+				RepositoryDialog rd = new RepositoryDialog(
+						Display.getDefault().getActiveShell(), 
+						ServerManager.getMServerProfileCopy((MServerProfile)parent.getRoot())) {
 					@Override
 					public boolean isResourceCompatible(MResource r) {
 						return isDatasource(r.getValue());
@@ -98,10 +103,10 @@ public class SelectorDatasource {
 						ResourceDescriptor runit = res.getValue();
 						try {
 							ResourceDescriptor ref = rs.getValue();
-							ref = WSClientHelper.getResource(parent, ref);
+  							ref = WSClientHelper.getResource(parent, ref);
 							ref.setIsReference(true);
 							ref.setReferenceUri(ref.getUriString());
-							ref.setParentFolder(runit.getUriString() + "_files");
+							ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files");
 							ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
 							ref.setUriString(ref.getParentFolder() + "/"
 									+ ref.getName());
