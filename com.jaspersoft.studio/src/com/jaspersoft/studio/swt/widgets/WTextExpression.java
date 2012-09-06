@@ -201,11 +201,9 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		fd_textExpression.bottom = new FormAttachment(100);
 		fd_textExpression.top = new FormAttachment(0);
 		fd_textExpression.left = new FormAttachment(0);
+		fd_textExpression.height = heightHint;
+		
 		textExpression.setLayoutData(fd_textExpression);
-		
-		int heightHint = UIUtils.getCharHeight(textExpression); 
-		fd_textExpression.height
-		
 		
 		textExpression.addModifyListener(new ModifyListener() {
 
