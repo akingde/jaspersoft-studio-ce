@@ -1,4 +1,4 @@
-package net.jaspersoft.templates;
+package com.jaspersoft.templates;
 
 /**
  * If an error occure while loading templates or creating a report, this type of Excepion helps to

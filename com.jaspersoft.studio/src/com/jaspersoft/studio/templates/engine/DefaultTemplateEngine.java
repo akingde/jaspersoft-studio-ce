@@ -3,10 +3,6 @@ package com.jaspersoft.studio.templates.engine;
 import java.util.List;
 import java.util.Map;
 
-import net.jaspersoft.templates.ReportBundle;
-import net.jaspersoft.templates.TemplateBundle;
-import net.jaspersoft.templates.TemplateEngine;
-import net.jaspersoft.templates.TemplateEngineException;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -27,6 +23,10 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.templates.ReportBundle;
+import com.jaspersoft.templates.TemplateBundle;
+import com.jaspersoft.templates.TemplateEngine;
+import com.jaspersoft.templates.TemplateEngineException;
 
 
 /**

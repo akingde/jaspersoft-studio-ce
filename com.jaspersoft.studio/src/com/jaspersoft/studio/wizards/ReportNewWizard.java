@@ -26,9 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.jaspersoft.templates.ReportBundle;
-import net.jaspersoft.templates.TemplateBundle;
-import net.jaspersoft.templates.TemplateEngine;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
@@ -75,6 +72,9 @@ import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.templates.ReportBundle;
+import com.jaspersoft.templates.TemplateBundle;
+import com.jaspersoft.templates.TemplateEngine;
 
 /**
  * Basic wizard to create a new report.

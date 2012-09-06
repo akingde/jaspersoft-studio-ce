@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.jaspersoft.templates.TemplateEngine;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.JRReportTemplate;
@@ -22,6 +21,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.ResourceManager;
+import com.jaspersoft.templates.TemplateEngine;
 
 /**
  * This is a generic template bundle able to laod info from a JRXML file.

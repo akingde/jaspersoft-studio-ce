@@ -12,8 +12,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.templates.TemplateBundle;
 
-import net.jaspersoft.templates.TemplateBundle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 

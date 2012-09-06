@@ -1,4 +1,4 @@
-package net.jaspersoft.templates;
+package com.jaspersoft.templates;
 
 import java.util.List;
 

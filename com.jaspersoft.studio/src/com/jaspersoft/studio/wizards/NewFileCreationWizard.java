@@ -27,7 +27,6 @@ import java.io.File;
 import java.text.MessageFormat;
 import java.util.Map;
 
-import net.jaspersoft.templates.TemplateBundle;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -40,6 +39,7 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.templates.TemplateBundle;
 
 public class NewFileCreationWizard extends WizardNewFileCreationPage {
 

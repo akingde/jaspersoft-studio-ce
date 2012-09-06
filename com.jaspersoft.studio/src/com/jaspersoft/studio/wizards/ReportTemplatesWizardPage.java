@@ -24,7 +24,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.jaspersoft.templates.TemplateBundle;
 
 import org.eclipse.nebula.widgets.gallery.Gallery;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
@@ -50,6 +49,7 @@ import com.jaspersoft.studio.templates.StudioTemplateManager;
 import com.jaspersoft.studio.utils.ResourceManager;
 import com.jaspersoft.studio.utils.SWTImageEffects;
 import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
+import com.jaspersoft.templates.TemplateBundle;
 
 /**
  * This page is used to allow the user to select a template bundle.
