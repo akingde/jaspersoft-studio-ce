@@ -48,7 +48,7 @@ import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.utils.Console;
 
 public class PreviewJRPrint extends ABasicEditor {
-	private boolean hideParameters;
+	private boolean hideParameters = true;
 
 	public void setHideParameters(boolean hideParameters) {
 		this.hideParameters = hideParameters;

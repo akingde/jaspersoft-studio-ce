@@ -42,19 +42,6 @@ import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 
 public class LeftToolBarManager extends ATopToolBarManager {
 
-	// private final class PinAction extends Action {
-	// private PinAction() {
-	// super();
-	// setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseicons/icon_con_pin.png"));
-	// setToolTipText("Pin Parameters Panel");
-	// }
-	//
-	// @Override
-	// public void run() {
-	// container.setHideParameters(!container.isHideParameters());
-	// }
-	// }
-
 	public LeftToolBarManager(PreviewJRPrint container, Composite parent) {
 		super(container, parent);
 	}
@@ -102,18 +89,19 @@ public class LeftToolBarManager extends ATopToolBarManager {
 
 		ToolItemContribution titem = new ToolItemContribution("id", SWT.CHECK);
 		tbManager.add(titem);
-		
+
 		tbManager.update(true);
-		
+
 		final ToolItem item = titem.getToolItem();
+
+		item.setImage(JaspersoftStudioPlugin.getImage("icons/eclipseicons/pin.png"));
+		item.setToolTipText("Pin Parameters Panel");
+		item.setSelection(!container.isHideParameters());
 		item.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				container.setHideParameters(!container.isHideParameters());
 			}
 		});
-		item.setImage(JaspersoftStudioPlugin.getImage("icons/eclipseicons/pin.png"));
-		item.setToolTipText("Pin Parameters Panel");
-		item.setSelection(container.isHideParameters());
 	}
 
 	public void setLabelText(String key) {
