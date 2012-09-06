@@ -64,4 +64,8 @@ public interface IDataInput {
 
 	public void dispose();
 
+	public boolean isDirty();
+
+	public void setDirty(boolean dirty);
+
 }

@@ -120,7 +120,8 @@ public class ReportControler {
 
 	public void setJrContext(JasperReportsConfiguration jrContext) {
 		this.jrContext = jrContext;
-		prompts = jrContext.getJasperDesign().getParametersList();
+		if (jrContext.getJasperDesign() != null)
+			prompts = jrContext.getJasperDesign().getParametersList();
 		setParameters();
 		if (viewmap != null)
 			fillForms();
@@ -147,9 +148,6 @@ public class ReportControler {
 		viewmap.put(FORM_PARAMETERS, new VParameters(composite, jrContext));
 		viewmap.put(FORM_REPORT_PARAMETERS, new VReportParameters(composite, jrContext));
 		viewmap.put(FORM_SORTING, new VSorting(composite, jrContext));
-
-		if (jrContext != null && jrContext.getJasperDesign() != null)
-			fillForms();
 		return viewmap;
 	}
 

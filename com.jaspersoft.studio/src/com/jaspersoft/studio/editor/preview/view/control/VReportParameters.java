@@ -19,35 +19,21 @@
  */
 package com.jaspersoft.studio.editor.preview.view.control;
 
-import java.util.List;
-import java.util.Map;
-
 import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VReportParameters extends VParameters {
 
-	public VReportParameters(Composite parent,  JasperReportsConfiguration jContext) {
+	public VReportParameters(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
 	}
 
 	@Override
-	public void createInputControls(List<JRParameter> prompts, Map<String, Object> params) {
-		for (Control c : composite.getChildren()) {
-			c.dispose();
-		}
-		if (prompts != null)
-			for (JRParameter p : prompts)
-				if (p.isSystemDefined()) {
-					createInput(composite, (JRDesignParameter) p, params);
-				}
-		scompo.setMinSize(composite.getSize());
-		composite.pack();
+	protected boolean isParameterToShow(JRParameter p) {
+		return p.isSystemDefined();
 	}
 
 }

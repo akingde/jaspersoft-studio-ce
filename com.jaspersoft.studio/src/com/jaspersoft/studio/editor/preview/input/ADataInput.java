@@ -83,11 +83,24 @@ public abstract class ADataInput implements IDataInput {
 
 	public final void updateModel(Object value) {
 		updateParameterMap(value);
+		dirty = true;
 		pcsupport.firePropertyChange(param.getName(), null, value);
 	}
 
 	protected void updateParameterMap(Object value) {
 		params.put(param.getName(), value);
+	}
+
+	private boolean dirty = false;
+
+	@Override
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	@Override
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
 	}
 
 	public boolean isLabeled() {
