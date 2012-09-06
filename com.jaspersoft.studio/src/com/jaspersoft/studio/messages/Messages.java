@@ -109,6 +109,7 @@ public class Messages extends NLS {
 	public static String common_line_spacing;
 	public static String common_line_style;
 	public static String common_main_report;
+	public static String common_mode;
 	public static String common_name;
 	public static String common_new;
 	public static String common_null;
@@ -161,6 +162,12 @@ public class Messages extends NLS {
 	public static String common_this_is_not_an_integer_number;
 	public static String common_time;
 	public static String common_top;
+	public static String common_lineStyle;
+	public static String common_lineWidth;
+	public static String common_lineColor;
+	public static String common_horizontalAlignment;
+	public static String common_verticalAlignment;
+	public static String common_LinePen_lineStyle;
 	public static String common_underline;
 	public static String common_up;
 	public static String common_username;
@@ -1160,6 +1167,8 @@ public class Messages extends NLS {
 	public static String SortFieldSection_sort_field;
 	public static String SortFieldSection_sort_fields;
 	public static String SortFieldSection_sort_order;
+	public static String StylesSectionList_Element_Attributes;
+	public static String StylesSectionList_Inherited_From_Style;
 	public static String StyleTemplateNewWizard_0;
 	public static String StyleTemplateNewWizard_2;
 	public static String StyleTemplateNewWizard_3;

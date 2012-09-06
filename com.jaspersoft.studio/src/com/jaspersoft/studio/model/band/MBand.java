@@ -19,16 +19,19 @@
  */
 package com.jaspersoft.studio.model.band;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRGraphicElement;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.SplitTypeEnum;
@@ -210,7 +213,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-
+	
+	
 	/**
 	 * Creates the property descriptors.
 	 * 

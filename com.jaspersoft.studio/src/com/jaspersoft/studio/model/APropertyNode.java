@@ -76,6 +76,7 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	 *          the desc
 	 */
 	public abstract void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap);
+	
 
 	/**
 	 * @param descriptors
@@ -135,6 +136,16 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		postDescriptors(descriptors);
 		return descriptors;
 	}
+	
+	/**
+	 * Return a list of the attribute descriptor that depends from a style
+	 * @return Hashmap where the key is the attribute id, and the value it's the attribute itself
+	 */
+	public HashMap<String,Object> getStylesDescriptors(){
+		return new HashMap<String, Object>();
+	}
+	
+	
 
 	/*
 	 * (non-Javadoc)

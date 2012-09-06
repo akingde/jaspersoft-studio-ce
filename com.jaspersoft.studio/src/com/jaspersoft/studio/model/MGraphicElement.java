@@ -19,11 +19,13 @@
  */
 package com.jaspersoft.studio.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRGraphicElement;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
@@ -33,6 +35,7 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.PositionTypeEnum;
@@ -330,6 +333,18 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	protected void setGroupItems(String[] items) {
 		if (groupChangesD != null)
 			groupChangesD.setItems(items);
+	}
+	
+	@Override
+	public HashMap<String,Object> getStylesDescriptors() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		if (getValue() == null)
+			return result;
+		JRDesignElement element = (JRDesignElement) getValue();
+		result.put(JRDesignStyle.PROPERTY_BACKCOLOR, element.getOwnBackcolor());
+		result.put(JRDesignStyle.PROPERTY_FORECOLOR, element.getOwnForecolor());
+		result.put(JRDesignStyle.PROPERTY_MODE, element.getOwnModeValue());
+		return result;
 	}
 
 	/**

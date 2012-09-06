@@ -19,11 +19,13 @@
  */
 package com.jaspersoft.studio.model.text;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRFont;
+import net.sf.jasperreports.engine.JRStaticText;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -63,6 +65,16 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 	public MTextElement(ANode parent, JRDesignElement jrLine, int newIndex) {
 		super(parent, jrLine, newIndex);
 	}
+	
+	@Override
+	public HashMap<String,Object> getStylesDescriptors() {
+		HashMap<String, Object> result = super.getStylesDescriptors();
+		if (getValue() == null)
+			return result;
+		result.putAll(tFont.getStylesDescriptors());
+		return result;
+	}
+
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {

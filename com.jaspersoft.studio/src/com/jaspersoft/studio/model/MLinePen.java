@@ -19,12 +19,15 @@
  */
 package com.jaspersoft.studio.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRGraphicElement;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBasePen;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -46,6 +49,18 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 	public MLinePen(JRPen linePen) {
 		super();
 		setValue(linePen);
+	}
+	
+	@Override
+	public HashMap<String,Object> getStylesDescriptors() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		if (getValue() == null)
+			return result;
+		JRBasePen element = (JRBasePen) getValue();
+		result.put(JRBasePen.PROPERTY_LINE_COLOR, element.getOwnLineColor());
+		result.put(JRBasePen.PROPERTY_LINE_STYLE, element.getOwnLineStyleValue());
+		result.put(JRBasePen.PROPERTY_LINE_WIDTH, element.getOwnLineWidth());
+		return result;
 	}
 
 	@Override

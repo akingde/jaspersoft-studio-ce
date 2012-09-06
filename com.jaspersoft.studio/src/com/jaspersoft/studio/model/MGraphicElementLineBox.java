@@ -19,12 +19,15 @@
  */
 package com.jaspersoft.studio.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRStaticText;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -49,6 +52,17 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 	public MGraphicElementLineBox(ANode parent, JRDesignElement jrLine, int newIndex) {
 		super(parent, jrLine, newIndex);
 	}
+	
+	@Override
+	public HashMap<String,Object> getStylesDescriptors() {
+		HashMap<String, Object> result = super.getStylesDescriptors();
+		if (getValue() == null)
+			return result;
+		MLineBox element = (MLineBox) getPropertyValue(LINE_BOX);
+		result.putAll(element.getStylesDescriptors());
+		return result;
+	}
+	
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {

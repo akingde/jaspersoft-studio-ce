@@ -19,12 +19,15 @@
  */
 package com.jaspersoft.studio.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRGraphicElement;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -40,6 +43,30 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 	public MLineBox(JRLineBox lineBox) {
 		super();
 		setValue(lineBox);
+	}
+	
+	@Override
+	public HashMap<String,Object> getStylesDescriptors() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		if (getValue() == null)
+			return result;
+		JRBaseLineBox element = (JRBaseLineBox) getValue();
+		result.put(JRBaseLineBox.PROPERTY_PADDING, element.getOwnPadding());
+		result.put(JRBaseLineBox.PROPERTY_TOP_PADDING, element.getOwnTopPadding());
+		result.put(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, element.getOwnBottomPadding());
+		result.put(JRBaseLineBox.PROPERTY_LEFT_PADDING, element.getOwnLeftPadding());
+		result.put(JRBaseLineBox.PROPERTY_RIGHT_PADDING, element.getOwnRightPadding());
+		MLinePen linePen = (MLinePen)getPropertyValue(LINE_PEN);
+		result.put(LINE_PEN, linePen);
+		MLinePen linePenTop = (MLinePen)getPropertyValue(LINE_PEN_TOP);
+		result.put(LINE_PEN_TOP, linePenTop);
+		MLinePen linePenBottom = (MLinePen)getPropertyValue(LINE_PEN_BOTTOM);
+		result.put(LINE_PEN_BOTTOM, linePenBottom);
+		MLinePen linePenLeft = (MLinePen)getPropertyValue(LINE_PEN_LEFT);
+		result.put(LINE_PEN_LEFT, linePenLeft);
+		MLinePen linePenRight = (MLinePen)getPropertyValue(LINE_PEN_RIGHT);
+		result.put(LINE_PEN_RIGHT, linePenRight);
+		return result;
 	}
 
 	@Override

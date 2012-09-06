@@ -20,13 +20,20 @@
 package com.jaspersoft.studio.model.style;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyDescriptor;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRBox;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRLineBox;
+import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseFont;
+import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
+import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -200,6 +207,40 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				styleD.setItems(items);
 			}
 		}
+	}
+	
+	public HashMap<String,Object> getStylesDescriptors() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		if (getValue() == null)
+			return result;
+		JRStyle element = (JRStyle) getValue();
+		result.put(JRDesignStyle.PROPERTY_BACKCOLOR, element.getOwnBackcolor());
+		result.put(JRDesignStyle.PROPERTY_FORECOLOR, element.getOwnForecolor());
+		result.put(JRDesignStyle.PROPERTY_FILL, element.getOwnFillValue());
+		result.put(JRDesignStyle.PROPERTY_FONT_NAME, element.getOwnFontName());
+		result.put(JRDesignStyle.PROPERTY_FONT_SIZE, element.getOwnFontSize());
+		result.put(JRDesignStyle.PROPERTY_BOLD, element.isOwnBold());
+		result.put(JRDesignStyle.PROPERTY_ITALIC, element.isOwnItalic());
+		result.put(JRDesignStyle.PROPERTY_UNDERLINE, element.isOwnUnderline());
+		result.put(JRDesignStyle.PROPERTY_STRIKE_THROUGH, element.isOwnStrikeThrough());
+		result.put(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT, element.getOwnHorizontalAlignmentValue());
+		result.put(JRDesignStyle.PROPERTY_MARKUP, element.getOwnMarkup());
+		result.put(JRDesignStyle.PROPERTY_MODE, element.getOwnModeValue());
+		result.put(JRDesignStyle.PROPERTY_PATTERN, element.getOwnPattern());
+		result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, element.getOwnPdfEncoding());
+		result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, element.getOwnPdfFontName());
+		result.put(JRDesignStyle.PROPERTY_PDF_EMBEDDED, element.isOwnPdfEmbedded());
+		result.put(JRDesignStyle.PROPERTY_RADIUS, element.getOwnRadius());
+		result.put(JRDesignStyle.PROPERTY_ROTATION, element.getOwnRotationValue());
+		result.put(JRDesignStyle.PROPERTY_SCALE_IMAGE, element.getOwnScaleImageValue());
+		result.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT, element.getOwnVerticalAlignmentValue());
+		//Add the line element
+		MLinePen linePen = (MLinePen)getPropertyValue(LINE_PEN);
+		result.putAll(linePen.getStylesDescriptors());
+		//Add the box element
+		MLineBox lineBox = (MLineBox)getPropertyValue(LINE_BOX);
+		result.putAll(lineBox.getStylesDescriptors());
+		return result;
 	}
 
 	/**

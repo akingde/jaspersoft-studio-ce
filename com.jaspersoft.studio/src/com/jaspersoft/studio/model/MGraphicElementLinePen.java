@@ -19,12 +19,14 @@
  */
 package com.jaspersoft.studio.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -48,6 +50,16 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 
 	public MGraphicElementLinePen(ANode parent, JRDesignElement jrLine, int newIndex) {
 		super(parent, jrLine, newIndex);
+	}
+	
+	@Override
+	public HashMap<String,Object> getStylesDescriptors() {
+		HashMap<String, Object> result = super.getStylesDescriptors();
+		if (getValue() == null)
+			return result;
+		MLinePen linepen = (MLinePen)getPropertyValue(LINE_PEN);
+		result.putAll(linepen.getStylesDescriptors());
+		return result;
 	}
 
 	@Override

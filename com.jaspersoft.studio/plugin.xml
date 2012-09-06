@@ -727,6 +727,30 @@
             <input
                   type="com.jaspersoft.studio.model.text.MStaticText">
             </input>
+            <input
+                  type="com.jaspersoft.studio.model.image.MImage">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.MBreak">
+            </input>
+			<input
+                  type="com.jaspersoft.studio.model.MRectangle">
+            </input>
+			<input
+                  type="com.jaspersoft.studio.model.MLine">
+            </input>
+			<input
+                  type="com.jaspersoft.studio.model.text.MTextField">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+            <input
+            	type = "com.jaspersoft.studio.model.frame.MFrame">
+            </input>
+            <input
+            	type = "com.jaspersoft.studio.model.MEllipse">
+            </input>
          </propertySection>
          <propertySection
                class="com.jaspersoft.studio.property.section.graphic.ImageFieldSection"

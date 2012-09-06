@@ -38,12 +38,15 @@
  */
 package com.jaspersoft.studio.model.text;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRFont;
+import net.sf.jasperreports.engine.JRGraphicElement;
 import net.sf.jasperreports.engine.base.JRBaseFont;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
@@ -81,6 +84,24 @@ public class MFont extends APropertyNode {
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
+	}
+	
+	@Override
+	public HashMap<String,Object> getStylesDescriptors() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		if (getValue() == null)
+			return result;
+		JRFont element = (JRFont) getValue();
+		result.put(JRDesignStyle.PROPERTY_FONT_NAME, element.getOwnFontName());
+		result.put(JRDesignStyle.PROPERTY_FONT_SIZE, element.getOwnFontSize());
+		result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, element.getOwnPdfEncoding());
+		result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, element.getOwnPdfFontName());
+		result.put(JRDesignStyle.PROPERTY_BOLD, element.isOwnBold());
+		result.put(JRDesignStyle.PROPERTY_ITALIC, element.isOwnItalic());
+		result.put(JRDesignStyle.PROPERTY_UNDERLINE, element.isOwnUnderline());
+		result.put(JRDesignStyle.PROPERTY_PDF_EMBEDDED, element.isOwnPdfEmbedded());
+		result.put(JRDesignStyle.PROPERTY_STRIKE_THROUGH, element.isOwnStrikeThrough());
+		return result;
 	}
 
 	@Override
@@ -153,12 +174,12 @@ public class MFont extends APropertyNode {
 		pdfEmbedD.setDescription(Messages.MFont_pdf_embedded_description);
 		desc.add(pdfEmbedD);
 
+		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
+		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, "10"); //$NON-NLS-1$
 		defaultsMap.put(JRBaseFont.PROPERTY_STRIKE_THROUGH, Boolean.FALSE);
 		defaultsMap.put(JRBaseFont.PROPERTY_UNDERLINE, Boolean.FALSE);
 		defaultsMap.put(JRBaseFont.PROPERTY_ITALIC, Boolean.FALSE);
 		defaultsMap.put(JRBaseFont.PROPERTY_BOLD, Boolean.FALSE);
-		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
-		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, "10"); //$NON-NLS-1$
 
 		fontNameD.setCategory(Messages.common_font);
 		fontSizeD.setCategory(Messages.common_font);

@@ -161,6 +161,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
+	
 
 	private MDataset mDataset;
 
