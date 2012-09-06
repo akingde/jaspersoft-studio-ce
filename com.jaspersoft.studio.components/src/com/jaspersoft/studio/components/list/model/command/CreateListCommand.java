@@ -106,9 +106,11 @@ public class CreateListCommand extends CreateElementCommand {
 	protected void createObject() {
 		if (jrElement == null) {
 			ListWizard wizard = new ListWizard();
+			wizard.setConfig(jConfig);
+			
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
-			wizard.init(jConfig);
+			
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getList();

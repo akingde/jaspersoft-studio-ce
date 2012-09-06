@@ -111,7 +111,7 @@ public class CreateTableCommand extends CreateElementCommand {
 			TableWizard wizard = new TableWizard();
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
-			wizard.init(jConfig);
+			wizard.setConfig(jConfig);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getTable(location.width);

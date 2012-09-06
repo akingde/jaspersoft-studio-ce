@@ -42,12 +42,63 @@
  */
 package com.jaspersoft.studio.property.dataset.wizard;
 
+import java.util.List;
+import java.util.Map;
+
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.wizards.JSSWizard;
 
 public class WizardFieldsGroupByPage extends WizardFieldsPage {
+	
+	
+
 	public WizardFieldsGroupByPage() {
 		super("groupfields"); //$NON-NLS-1$
 		setTitle(Messages.WizardFieldsGroupByPage_group_by);
 		setDescription(Messages.WizardFieldsGroupByPage_description);
+	}
+
+
+
+	/**
+	 * This procedure initialize the dialog page with the list of available objects.
+	 * This implementation looks for object set in the map as DATASET_FIELDS
+	 * if this is for real just the first time the page is shown.
+	 * 
+	 */
+	public void loadSettings() {
+		
+		if (getSettings() == null) return;
+		
+		if (getSettings().containsKey( WizardDataSourcePage.DATASET_FIELDS))
+		{
+			setAvailableFields( (List<?>)(getSettings().get( WizardDataSourcePage.DATASET_FIELDS )) );
+		}
+		else
+		{
+			setAvailableFields(null);
+		}
+	}
+
+	
+	
+	/**
+	 * Every time a new selection occurs, the selected fields are stored in the settings map
+	 * with the key WizardDataSourcePage.GROUP_FIELDS
+	 */
+	@Override
+	public void storeSettings()
+	{
+		System.out.println("Saving group fields...");
+		if (getWizard() instanceof JSSWizard &&
+				getWizard() != null)
+			{
+				Map<String, Object> settings = ((JSSWizard)getWizard()).getSettings();
+			
+				if (settings == null) return;
+				
+				settings.put(WizardDataSourcePage.GROUP_FIELDS,  getSelectedFields() ); // the type is IPath
+			}
+		
 	}
 }

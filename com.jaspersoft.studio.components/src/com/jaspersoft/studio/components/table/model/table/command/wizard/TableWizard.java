@@ -26,6 +26,8 @@ import java.util.List;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
+import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -44,26 +46,35 @@ import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
+import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.dataset.command.CreateDatasetCommand;
+import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
-import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 public class TableWizard extends JSSWizard {
 	private WizardDatasetPage step1;
-	private WizardFieldsPage step3;
+	private TableWizardFieldsPage step3;
 	private WizardConnectionPage step2;
 	private TableWizardLayoutPage step4;
-	private MTable table;
+	private MTable table = null;;
+	
+	/**
+	 * The set of styles that will be created as the table is added to the report
+	 */
 	private List<JRDesignStyle> styleList;
+	
+	
 	float baseColor = new Float(Math.tan(Math.toRadians(208.0)));
 
 	public TableWizard() {
@@ -74,84 +85,116 @@ public class TableWizard extends JSSWizard {
 
 	@Override
 	public void addPages() {
-		table = new MTable();
-		table.setValue(table.createJRElement(getConfig().getJasperDesign()));
-		table.setJasperConfiguration(getConfig());
-
-		MDatasetRun mdataset = (MDatasetRun) table
-				.getPropertyValue(StandardTable.PROPERTY_DATASET_RUN);
-		if (mdataset == null)
-			mdataset = new MDatasetRun(new JRDesignDatasetRun(), getConfig()
-					.getJasperDesign());
-		mdataset.setPropertyValue(
-				JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION,
-				"$P{REPORT_CONNECTION}");
-
-		step1 = new WizardDatasetPage(getConfig(), false, "Table");
+		
+		step1 = new WizardDatasetPage(false, "Table");
 		addPage(step1);
-		step1.setDataSetRun(mdataset);
-
+		
 		step2 = new WizardConnectionPage();
 		addPage(step2);
-		step2.setDataSetRun(mdataset);
-		step2.setExpressionContext(ModelUtils.getElementExpressionContext(
-				(JRDesignElement) table.getValue(), table));
+		
+		
+		// Setting up the expressions context. This is not really useful, since
+		// we still don't know where the element will be added, so this call will fall back to the default dataset.
+		// FIXME: pass a proper ANode to the wizard to let the code to lookup for a more appropriate dataset.
+		step2.setExpressionContext(ModelUtils.getElementExpressionContext(null, null));
 
-		step3 = new WizardFieldsPage();
+		step3 = new TableWizardFieldsPage();
 		addPage(step3);
 
 		step4 = new TableWizardLayoutPage();
 		addPage(step4);
 	}
 
+	/**
+	 * The getNextPage implementations does nothing, since all the logic has
+	 * been moved inside each page, specifically extended for
+	 * this wizard
+	 * 
+	 * @see com.jaspersoft.studio.wizards.JSSWizard#getNextPage(org.eclipse.jface.wizard.IWizardPage)
+	 *
+	 * @param the current page.
+	 *
+	 * @return the next page
+	 */
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		if (page == step1) {
-			if (getConfig().getJasperDesign().getDatasetsList().size() == 0)
-				return step2;
-		}
-		if (page == step2) {
-			MDatasetRun dataSetRun = step1.getDataSetRun();
-			if (dataSetRun == null) {
-				MDataset ds = (MDataset) getConfig().get(DatasetWizard.DATASET);
-				if (ds != null) {
-					step3.setFields(new ArrayList<JRField>(ds.getValue()
-							.getFieldsList()));
-				} else
-					page = step3;
-			} else {
-				String dsname = (String) dataSetRun
-						.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
-				if (dsname != null && !dsname.isEmpty()) {
-					step3.setFields(new ArrayList<Object>(ModelUtils
-							.getFields4Datasource(
-									getConfig().getJasperDesign(), dsname)));
-				} else
-					page = step3;
-			}
-		}
+		
+		// Nothing to do. If you change this method, please update the
+		// comment.
+		
 		return super.getNextPage(page);
 	}
+	
+	/**
+	 * This method returns a dataset object
+	 * based on what has been selected in the first step
+	 * of the wizard (existing dataset, main dataset, new dataset, etc...)
+	 * 
+	 *  @return JRDesignDataset
+	 */
+	public JRDesignDataset getDataset() {
+		return step1.getSelectedDataset();
+	}
+		
 
+	/* ************************************************************** */
+	// Table generation code...
+	
+	
+	
+	/**
+	 * 
+	 * Generates the table created by this wizard.
+	 * This method will generate the table only the first time it is called, then
+	 * a cached version will be returned, this because the creation of the table
+	 * involved the creation of a set of commands, and we don't want to create
+	 * commands twice. The second time the call is made, the cached table will be
+	 * returned.</br>
+	 * </br>
+	 * Please note that if this method is invoked before the end of the wizard, the final table may
+	 * result incomplete.
+	 * 
+	 * 
+	 * @param tableWidth
+	 * 				An optional width to be used as size of the table to create. This will help
+	 *              to calculate the columns width.
+	 *
+	 *  @return MTable
+	 *  			An MTable object with a JasperReports configuration attached.
+	 */
 	public MTable getTable(int tableWidth) {
-		List<Object> lst = step3.getFields();
+		
+		if (table != null) return table;
+		
+		table = new MTable();
+		table.setValue(table.createJRElement(getConfig().getJasperDesign()));
+		table.setJasperConfiguration(getConfig());
+	
+		List<Object> lst = step3.getSelectedFields();
+		
 		StandardTable tbl = TableManager.getTable(table);
-		MDataset ds = (MDataset) getConfig().get(DatasetWizard.DATASET);
-		MDatasetRun dataSetRun = step1.getDataSetRun();
-		if (dataSetRun != null) {
-			JRDesignDatasetRun dsrun = dataSetRun.getValue();
-			if (ds != null)
-				dsrun.setDatasetName((String) ds
-						.getPropertyValue(JRDesignDataset.PROPERTY_NAME));
-			tbl.setDatasetRun(dsrun);
-		} else if (ds != null) {
-			JRDesignDatasetRun dsrun = new JRDesignDatasetRun();
-			dsrun.setDatasetName((String) ds
-					.getPropertyValue(JRDesignDataset.PROPERTY_NAME));
-			tbl.setDatasetRun(dsrun);
+
+		// Configure a proper dataset run...
+		JRDesignDataset dataset = getDataset();
+		
+		JRDesignDatasetRun datasetRun = step2.getJRDesignDatasetRun();
+		if (datasetRun == null)
+		{
+			datasetRun = new JRDesignDatasetRun();
+			
 		}
+		datasetRun.setDatasetName( dataset.isMainDataset() ? null : dataset.getName() );
+		tbl.setDatasetRun(datasetRun);
+		
+		
+		// Create a command to add the styles...
+		
+		
+		// Get the connection/datasource expression from the proper wizard step...
 		JasperDesign jd = getConfig().getJasperDesign();
+		
 		createDeafultStyles(jd);
+		
 		if (tbl != null && lst != null) {
 			int colWidth = 40;
 			if (tableWidth < 0)
@@ -213,6 +256,8 @@ public class TableWizard extends JSSWizard {
 
 		return table;
 	}
+	
+	
 
 	public List<JRDesignStyle> getStylesList() {
 		return styleList;
@@ -233,10 +278,13 @@ public class TableWizard extends JSSWizard {
 	}
 
 	private void createDeafultStyles(JasperDesign jd) {
-		JRDesignStyle newStyle = new JRDesignStyle();
+		
+		
+		
 		// Check the first available basename...
 		String basename = "Table";
 		styleList = new ArrayList<JRDesignStyle>();
+		
 		for (int i = 0;; i++) {
 			String name = basename;
 			if (i > 0) {
@@ -247,41 +295,40 @@ public class TableWizard extends JSSWizard {
 				basename = name;
 				break;
 			}
+		}
+		
+		JRDesignStyle newStyle = null;
+		Color[] colors = createColor();
+		
+		newStyle = new JRDesignStyle();
+		newStyle.setName(basename);
+		newStyle.setMode(ModeEnum.OPAQUE);
+		addCommand( new CreateStyleCommand(jd, newStyle));
+		styleList.add(newStyle);
 
-		}
-		try {
-			Color[] colors = createColor();
-			newStyle.setName(basename);
-			newStyle.setMode(ModeEnum.OPAQUE);
-			jd.addStyle(newStyle);
-			styleList.add(newStyle);
-			newStyle = new JRDesignStyle();
-			newStyle.setName(basename + "_TH");
-			newStyle.setMode(ModeEnum.OPAQUE);
-			newStyle.setBackcolor(colors[1]);
-			jd.addStyle(newStyle);
-			styleList.add(newStyle);
-			newStyle = new JRDesignStyle();
-			newStyle.setName(basename + "_CH");
-			newStyle.setMode(ModeEnum.OPAQUE);
-			newStyle.setBackcolor(colors[0]);
-			jd.addStyle(newStyle);
-			styleList.add(newStyle);
-			newStyle = new JRDesignStyle();
-			newStyle.setName(basename + "_TD");
-			newStyle.setMode(ModeEnum.OPAQUE);
-			newStyle.setBackcolor(Color.white);
-			jd.addStyle(newStyle);
-			styleList.add(newStyle);
-		} catch (JRException e) {
-			e.printStackTrace();
-		}
+		newStyle = new JRDesignStyle();
+		newStyle.setName(basename + "_TH");
+		newStyle.setMode(ModeEnum.OPAQUE);
+		newStyle.setBackcolor(colors[1]);
+		addCommand( new CreateStyleCommand(jd, newStyle));
+		styleList.add(newStyle);
+		
+		newStyle = new JRDesignStyle();
+		newStyle.setName(basename + "_CH");
+		newStyle.setMode(ModeEnum.OPAQUE);
+		newStyle.setBackcolor(colors[0]);
+		addCommand( new CreateStyleCommand(jd, newStyle));
+		styleList.add(newStyle);
+		
+		newStyle = new JRDesignStyle();
+		newStyle.setName(basename + "_TD");
+		newStyle.setMode(ModeEnum.OPAQUE);
+		newStyle.setBackcolor(Color.white);
+		addCommand( new CreateStyleCommand(jd, newStyle));
+		styleList.add(newStyle);
+
 	}
 
-	@Override
-	public void init(JasperReportsConfiguration jConfig) {
-		super.init(jConfig);
-		if (table != null)
-			table.setJasperConfiguration(jConfig);
-	}
+	
+	
 }

@@ -38,7 +38,10 @@
  */
 package com.jaspersoft.studio.swt.widgets.table;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -50,11 +53,47 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.swt.events.ChangeEvent;
+import com.jaspersoft.studio.swt.events.ChangeListener;
 
 public class ListOrderButtons {
 	private Button upField;
 	private Button downFields;
 
+	
+	private Set<ChangeListener> listeners = new HashSet<ChangeListener>(1); // or can use ChangeSupport in NB 6.0
+
+	/**
+	 * Add a change listener to listen for changes on the selected fields
+	 * 
+	 * @param ChangeListener a listener
+	 */
+	public final void addChangeListener(ChangeListener l) {
+		synchronized (listeners) {
+			listeners.add(l);
+		}
+	}
+
+	public final void removeChangeListener(ChangeListener l) {
+		synchronized (listeners) {
+			listeners.remove(l);
+		}
+	}
+
+	/**
+	 * Method to invoke when the out fields set changes.
+	 */
+	protected final void fireChangeEvent() {
+		Iterator<ChangeListener> it;
+		synchronized (listeners) {
+			it = new HashSet<ChangeListener>(listeners).iterator();
+		}
+		ChangeEvent ev = new ChangeEvent(this);
+		while (it.hasNext()) {
+			it.next().changed(ev);
+		}
+	}
+	
 	private final class ElementOrderChanger implements SelectionListener {
 		private final TableViewer tableViewer;
 		private boolean up;
@@ -83,6 +122,8 @@ public class ListOrderButtons {
 				tableViewer.refresh();
 				tableViewer.setSelection(s);
 				tableViewer.reveal(s.getFirstElement());
+				
+				fireChangeEvent();
 			}
 		}
 

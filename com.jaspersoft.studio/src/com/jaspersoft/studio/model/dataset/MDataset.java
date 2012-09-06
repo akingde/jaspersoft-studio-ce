@@ -126,7 +126,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 	public String getDisplayText() {
 		if (getValue() != null)
 			return ((JRDesignDataset) getValue()).getName();
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	/*
@@ -185,7 +185,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 		desc.add(propertiesD);
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
-				Messages.common_class);
+				Messages.MDataset_scriplet_class);
 		classD.setDescription(Messages.MDataset_class_description);
 		desc.add(classD);
 
@@ -309,7 +309,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 		jrDesignDataset.setName(ModelUtils.getDefaultName(jrDesign.getDatasetMap(), "Dataset")); //$NON-NLS-1$
 		JRDesignQuery jrDesignQuery = new JRDesignQuery();
 		jrDesignQuery.setLanguage("sql"); //$NON-NLS-1$
-		jrDesignQuery.setText("");
+		jrDesignQuery.setText(""); //$NON-NLS-1$
 		jrDesignDataset.setQuery(jrDesignQuery);
 		return jrDesignDataset;
 	}

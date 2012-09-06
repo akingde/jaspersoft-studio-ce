@@ -84,17 +84,16 @@ public class SPDatasetRun extends ASPropertyWidget {
 		dsRunWidget = new DatasetRunWidgetRadio(parent) {
 			@Override
 			protected void setNoConnection() {
+				super.setNoConnection();
 				changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, "");
 			}
 
 			@Override
 			protected void setDatasource(String exTxt) {
 				if (datasetrun != null) {
+					
+					super.setDatasource(exTxt);
 					JRDesignExpression jde = (JRDesignExpression) datasetrun.getDataSourceExpression();
-					// if (jde == null)
-					jde = new JRDesignExpression();
-					jde.setValueClass(JRDataSource.class);
-					jde.setText(exTxt);
 					changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, jde);
 				}
 			}
@@ -102,11 +101,9 @@ public class SPDatasetRun extends ASPropertyWidget {
 			@Override
 			protected void setConnection(String exTxt) {
 				if (datasetrun != null) {
+					
+					super.setConnection(exTxt);
 					JRDesignExpression jde = (JRDesignExpression) datasetrun.getConnectionExpression();
-					// if (jde == null)
-					jde = new JRDesignExpression();
-					jde.setValueClass(Connection.class);
-					jde.setText(exTxt); 
 					changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, jde);
 				}
 			}

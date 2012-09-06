@@ -50,6 +50,16 @@ import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
+	
+	
+	/**
+	 * The key which identified the file being edited
+	 */
+	public static final String REPORT_FILE = "REPORTFILEWIZARD"; //$NON-NLS-1$
+	public static final String REPORT_DESIGN = "REPORTDESIGNWIZARD"; //$NON-NLS-1$
+	
+	
+	
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {

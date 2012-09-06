@@ -210,7 +210,9 @@ public class RoundedGalleryItemRenderer extends DefaultGalleryItemRenderer {
 	public Font getFont(GalleryItem item) {
 		Font baseFont = super.getFont(item);
 		FontData fontData = baseFont.getFontData()[0];
-		Font itemFont = ResourceManager.getFont(fontData.getName(), fontData.getHeight()+1, fontData.getStyle());
+		Font itemFont = ResourceManager.getFont(fontData.getName(), fontData.getHeight(), fontData.getStyle());
+		
+		// If we are rendering the selected item, we return a bold version of the font...
 		return selected ? ResourceManager.getBoldFont(itemFont) : itemFont;
 	}
 	

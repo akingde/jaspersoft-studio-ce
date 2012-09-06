@@ -43,8 +43,15 @@
 package com.jaspersoft.studio.editor.java2d;
 
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.KeyHandler;
+import org.eclipse.gef.KeyStroke;
+import org.eclipse.gef.MouseWheelHandler;
+import org.eclipse.gef.MouseWheelZoomHandler;
+import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.actions.ActionFactory;
 /*
  * A J2DGraphicalEditorWithFlyoutPalette is a GraphicalEditorWithFlyoutPalette but a
  * J2DScrollingGraphicalViewer is created instead of a ScrollingGraphicalViewer.
@@ -84,4 +91,5 @@ public abstract class J2DGraphicalEditorWithFlyoutPalette extends GraphicalEdito
 		hookGraphicalViewer();
 		initializeGraphicalViewer();
 	}
+
 }

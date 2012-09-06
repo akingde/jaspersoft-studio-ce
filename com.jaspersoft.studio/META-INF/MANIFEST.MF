@@ -442,6 +442,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    com.jaspersoft.studio.model.util,
    org.eclipse.core.resources,
    com.jaspersoft.studio.utils.jasper",
+ com.jaspersoft.studio.model.style.command,
  com.jaspersoft.studio.model.text;
   uses:="com.jaspersoft.studio.model.util,
    net.sf.jasperreports.engine.design,

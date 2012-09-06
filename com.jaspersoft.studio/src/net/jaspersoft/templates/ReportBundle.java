@@ -1,16 +1,32 @@
 package net.jaspersoft.templates;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
-public interface ReportBundle {
+import net.sf.jasperreports.engine.design.JasperDesign;
 
+public class ReportBundle {
+
+	
+	private TemplateBundle template = null;
+	private JasperDesign jasperDesign = null;
+	
+	public ReportBundle(TemplateBundle template)
+	{
+		this.template = template;
+	}
+	
 	/**
 	 * The list of all the resources available in this bundle.
 	 * 
 	 * @return
 	 */
-	public List<String> getResourceNames();
+	public List<String> getResourceNames()
+	{
+		return template.getResourceNames();
+	}
+
 	
 	/**
 	 * This method allows to get the data of a particular resource which is part of
@@ -20,6 +36,25 @@ public interface ReportBundle {
 	 * @param name
 	 * @return
 	 */
-	public InputStream getResource(String name);
+	public InputStream getResource(String name)
+	{
+		return template.getResource(name);
+	}
+
+
+	/**
+	 * @return the jasperDesign
+	 */
+	public JasperDesign getJasperDesign() {
+		return jasperDesign;
+	}
+
+
+	/**
+	 * @param jasperDesign the jasperDesign to set
+	 */
+	public void setJasperDesign(JasperDesign jasperDesign) {
+		this.jasperDesign = jasperDesign;
+	}
 	
 }

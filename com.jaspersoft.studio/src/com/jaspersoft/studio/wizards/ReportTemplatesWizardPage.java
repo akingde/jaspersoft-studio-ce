@@ -22,10 +22,10 @@ package com.jaspersoft.studio.wizards;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
-import org.eclipse.jface.wizard.WizardPage;
+import net.jaspersoft.templates.TemplateBundle;
+
 import org.eclipse.nebula.widgets.gallery.Gallery;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.nebula.widgets.gallery.NoGroupRenderer;
@@ -44,23 +44,34 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Scale;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.templates.JrxmlTemplateBundle;
+import com.jaspersoft.studio.templates.StudioTemplateManager;
 import com.jaspersoft.studio.utils.ResourceManager;
 import com.jaspersoft.studio.utils.SWTImageEffects;
 import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
 
-public class ReportTemplatesWizardPage extends WizardPage {
+/**
+ * This page is used to allow the user to select a template bundle.
+ * The selected template bundle (TemplateBundle)  is stored in the JSSWizard.getSettings() map with the key "template".
+ * Any following page can use this information to propose specific defaults (i.e. the new file name...)
+ * 
+ * @author gtoffoli
+ *
+ */
+public class ReportTemplatesWizardPage extends JSSWizardPage {
 	private java.util.List<URL> urls = new ArrayList<URL>();
-	private int template;
+	private java.util.List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>();
+
+	
 	private Gallery gal;
 	private GalleryItem itemGroup;
 	private List<Image> templateImages;
+	
+	private TemplateBundle selectedTemplate = null;
 
-	public URL getTemplate() {
-		if (template >= 0 && template < urls.size())
-			return urls.get(template);
-		return null;
+	public TemplateBundle getTemplateBundle() {
+		return selectedTemplate;
 	}
 
 	/**
@@ -120,12 +131,8 @@ public class ReportTemplatesWizardPage extends WizardPage {
 		gal.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				GalleryItem[] selection = gal.getSelection();
-				if (selection != null && selection.length >= 0) {
-					Object sdata = selection[0].getData("url");
-					if (sdata != null && urls.indexOf(sdata) >= 0)
-						template = urls.indexOf(sdata);
-				}
+				storeSettings();
+				setPageComplete(validatePage());
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -170,109 +177,54 @@ public class ReportTemplatesWizardPage extends WizardPage {
 			gr.setItemSize((int) (GALLERY_WIDTH * c), (int) (GALLERY_HEIGHT * c));
 	}
 
+	
+	
 	public void findTemplates() {
-		java.util.List<String> items = new ArrayList<String>();
-		Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle().findEntries("templates", "*.jrxml", true); //$NON-NLS-1$ //$NON-NLS-2$
-		while (en.hasMoreElements()) {
-			URL obj = (URL) en.nextElement();
-			urls.add(obj);
 
-			String filename = obj.getFile().replaceAll("/templates/", "");
-			items.add(filename);
-
-			GalleryItem item = new GalleryItem(itemGroup, SWT.NONE);
-			item.setData("url", obj);
-			String tname = capitalizeFirstLetters(filename.replaceAll(".jrxml", "").replace("_", " "));
-
-			item.setText(tname); //$NON-NLS-1$
-			Image itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".png"));
-			if (itemImage == null)
-				itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".gif"));
-			if (itemImage == null)
-				itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".jpg"));
-			if (itemImage == null)
-				itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".jpg"));
-			if (itemImage == null)
-				itemImage = JaspersoftStudioPlugin.getImage("blank_a4.png");
-
-			if (itemImage != null) {
-				Image selectedImg=new Image(itemImage.getDevice(), 
-						SWTImageEffects.extendArea(itemImage.getImageData(), 40, null));
-				Image standardShadowedImg=new Image(itemImage.getDevice(), 
-						Glow.glow(itemImage.getImageData(), ResourceManager.getColor(SWT.COLOR_GRAY), 40, 0, 255));
-				item.setSelectedImage(selectedImg);
-				item.setStandardImage(standardShadowedImg);
-				item.setImage(standardShadowedImg);
-				// Save image references, so they can later be disposed
-				templateImages.add(selectedImg);
-				templateImages.add(standardShadowedImg);
-			}
-
-			if (gal.getSelectionCount() <= 0)
-				gal.setSelection(new GalleryItem[] { item });
-		}
-
-	}
-
-/*	
-	public void findTemplates() {
-		
-		
-		System.out.println(StudioTemplateManager.getInstance().getTemplateBundles());
-		
+		// Load all the available templates by invoking the template manager
 		List<TemplateBundle> bundles = StudioTemplateManager.getInstance().getTemplateBundles();
 		
 		for (TemplateBundle b : bundles)
 		{
 			GalleryItem item = new GalleryItem(itemGroup, SWT.NONE);
-			item.setData("url", b);
+			item.setData("template", b);
+			urls.add(null);
+			templateBundles.add(b);
 			
 			if (b instanceof JrxmlTemplateBundle)
 			{
 				Image itemImage = ((JrxmlTemplateBundle)b).getIcon();
+				
 				if (itemImage != null)
-					item.setImage(itemImage);
+				{
+					
+						// Add viewer required effects to the images shown...
+						Image selectedImg =new Image(itemImage.getDevice(), SWTImageEffects.extendArea(itemImage.getImageData(), 40, null));
+						Image standardShadowedImg=new Image(itemImage.getDevice(), Glow.glow(itemImage.getImageData(), ResourceManager.getColor(SWT.COLOR_GRAY), 40, 0, 255));
+						item.setSelectedImage(selectedImg);
+						item.setStandardImage(standardShadowedImg);
+						item.setImage(standardShadowedImg);
+						
+						// Save image references, so they can later be disposed
+						templateImages.add(selectedImg);
+						templateImages.add(standardShadowedImg);
+						//item.setImage(itemImage);
+				}
+				
+				item.setText( b.getLabel()); //$NON-NLS-1$
+				
+				if (gal.getSelectionCount() <= 0)
+				{
+					gal.setSelection(new GalleryItem[] { item });
+					storeSettings();
+					setPageComplete(validatePage());
+				}
+			
 			}
-			
-			item.setText( b.getLabel()+"test"); //$NON-NLS-1$
-			
-			if (gal.getSelectionCount() <= 0)
-				gal.setSelection(new GalleryItem[] { item });
 		}
-		*/
-//		
-//		java.util.List<String> items = new ArrayList<String>();
-//		Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle().findEntries("templates", "*.jrxml", true); //$NON-NLS-1$ //$NON-NLS-2$
-//		while (en.hasMoreElements()) {
-//			URL obj = (URL) en.nextElement();
-//			urls.add(obj);
-//
-//			String filename = obj.getFile().replaceAll("/templates/", "");
-//			items.add(filename);
-//
-//			GalleryItem item = new GalleryItem(itemGroup, SWT.NONE);
-//			item.setData("url", obj);
-//			String tname = capitalizeFirstLetters(filename.replaceAll(".jrxml", "").replace("_", " "));
-//
-//			item.setText(tname); //$NON-NLS-1$
-//			Image itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".png"));
-//			if (itemImage == null)
-//				itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".gif"));
-//			if (itemImage == null)
-//				itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".jpg"));
-//			if (itemImage == null)
-//				itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".jpg"));
-//			if (itemImage == null)
-//				itemImage = JaspersoftStudioPlugin.getImage("blank_a4.png");
-//
-//			if (itemImage != null)
-//				item.setImage(itemImage);
-//
-//			if (gal.getSelectionCount() <= 0)
-//				gal.setSelection(new GalleryItem[] { item });
-//		}
+		
+	}
 
-//	}
 
 	public static String capitalizeFirstLetters(String s) {
 
@@ -309,5 +261,40 @@ public class ReportTemplatesWizardPage extends WizardPage {
 		templateImages.clear();
 		templateImages=null;
 	}
+
+
+	/**
+	 * We don't want to proceed until a template has been selected...
+	 * In this method we check if the user has made her selection
+	 */
+	public boolean validatePage()
+	{
+		if (gal.getSelectionCount() == 0) return false;
+		return true;
+	}
+	
+	
+	/**
+	 * Store inside the wizard settings the user selection.
+	 */
+	public void storeSettings()
+	{
+		if (getSettings() == null) return;
+		if (gal == null) return;
+		
+		GalleryItem[] selection = gal.getSelection();
+		
+		if (selection != null && selection.length > 0) {
+			
+			selectedTemplate = (TemplateBundle) selection[0].getData("template");
+			getSettings().put("template",  selectedTemplate );
+		}
+		else
+		{
+			getSettings().remove("template");
+			selectedTemplate = null;
+		}
+	}
+	
 	
 }

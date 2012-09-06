@@ -23,23 +23,212 @@
  */
 package com.jaspersoft.studio.wizards;
 
+import java.io.File;
+import java.text.MessageFormat;
+import java.util.Map;
+
+import net.jaspersoft.templates.TemplateBundle;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class NewFileCreationWizard extends WizardNewFileCreationPage {
 
+	IStructuredSelection currentSelection = null;
+	
+	/**
+	 * This variable is used to load default file name in case this page is
+	 * shown for the first time, otherwise the page is left as it is.
+	 */
+	boolean firstLoad = true;
+	
 	public NewFileCreationWizard(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
+		
+		this.currentSelection = selection;
+		
+		setTitle(Messages.ReportNewWizard_0);
+		setDescription(Messages.ReportNewWizardPage_description);
+		setFileExtension("jrxml");//$NON-NLS-1$
 	}
 
+	
+	/**
+	 * Add an extra check to validate if the directory inside the project exists or not.
+	 * We don't want to create a new directory for the user...
+	 * 
+	 */
 	@Override
 	public boolean validatePage() {
-		return super.validatePage();
+		
+		
+		boolean valid = super.validatePage();
+		
+		if (valid)
+		{
+			// We need to check that the selected directory does exist, otherwise we need to set an error...
+			IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(getContainerFullPath());
+			
+			System.out.println(r + "  " + getContainerFullPath() + " " + ((r == null) ? null : r.getType() ));
+			
+			if (r == null || !r.exists() || (r.getType() & IResource.FILE) != 0)
+			{
+				setMessage("The directory specified does not exist or is not a valid folder", DialogPage.ERROR);
+				valid = false;
+			}
+		}
+		return valid;
+		
 	}
 
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
+		
+		if (visible == true)
+		{
+			// check for a better file name...
+			loadSettings();
+		}
+		
 		validatePage();
 	}
+	
+	
+	/**
+	 * This procedure look if a file name has been set already for this dialog page.
+	 * If not, the dialog page will try to load default settings...
+	 * 
+	 * 
+	 */
+	public void loadSettings() {
+		
+		if (!firstLoad) return;
+		
+		firstLoad = false;
+		
+		String baseName = Messages.ReportNewWizard_8;
+		System.out.println("Seeting up the file name");
+		
+	// If a template has been selected, let's try use its name as file name...
+		if (getWizard() != null && getWizard() instanceof JSSWizard)
+		{
+			JSSWizard jssw = (JSSWizard)getWizard();
+			if (jssw.getSettings() != null && jssw.getSettings().get("template") != null)
+			{
+				try {
+					TemplateBundle tb = (TemplateBundle) jssw.getSettings().get("template");
+					baseName = tb.getLabel();
+					// Sanityze the file name...
+					baseName = baseName.replace(File.separator, "_");
+					baseName = baseName.replace(" ", "_");
+				} catch (Exception ex)
+				{
+					
+				}
+			}
+		}
+		
+		String filename = baseName + ".jrxml";
+		
+		if (this.currentSelection != null) {
+			if (this.currentSelection instanceof TreeSelection) {
+				TreeSelection s = (TreeSelection) this.currentSelection;
+				if (s.getFirstElement() instanceof IFile) {
+					IFile file = (IFile) s.getFirstElement();
+					
+					filename = getValidFileName(
+								file.getProject(),
+								file.getProjectRelativePath().removeLastSegments(1).toOSString(),
+								baseName);
+				} else if (s.getFirstElement() instanceof IProject) {
+					IProject prj = (IProject) s.getFirstElement();
+					filename = getValidFileName(
+							 prj,
+							 Messages.ReportNewWizard_11,
+							 baseName);
+				}
+			}
+			setFileName(filename);
+		}
+	}
+	
+	/**
+	 * 
+	 * Find the first not existing file in the given project path with the name:
+	 * 
+	 * basename.jrxml
+	 * 
+	 * If that file exists, the first not exising file named basename_x.jrxml is return.
+	 * 
+	 * @param prj
+	 * @param prjPath
+	 * @param basename
+	 * @return the first valid file name
+	 */
+	private String getValidFileName(IProject prj, String prjPath, String basename) {
+		
+		String filename = basename + ".jrxml";
+		String pattern = basename + "_{0}.jrxml"; 
+		
+		// Initial name...
+		String f = prjPath + File.separator + filename;
+		
+		int i = 1;
+		while (prj.getFile(f).exists()) {
+			filename = MessageFormat.format(pattern, new Object[]{i});
+			f = prjPath + File.separator + filename;
+			i++;
+		}
+		return filename;
+	}
+	
+	
+	/**
+	 * We use the setPageComplete to run the code which will store in the settings what has been
+	 * selected by the user (or reset what has been stored if complete is false).
+	 */
+	public void setPageComplete(boolean complete) {
+    super.setPageComplete(complete);
+    
+    // Store the user selection in the settings...
+    storeSettings();
+    
+	}
+	
+	
+	/**
+	 * Store inside the wizard settings the user selection.
+	 */
+	public void storeSettings()
+	{
+		if (getWizard() instanceof JSSWizard &&
+				getWizard() != null)
+			{
+				Map<String, Object> settings = ((JSSWizard)getWizard()).getSettings();
+			
+				if (settings == null) return;
+				
+				if (isPageComplete()){
+					settings.put(JSSWizard.FILE_PATH,  this.getContainerFullPath() ); // the type is IPath
+					settings.put(JSSWizard.FILE_NAME,  this.getFileName() );
+				}
+				else
+				{
+					settings.remove(JSSWizard.FILE_PATH);
+					settings.remove(JSSWizard.FILE_NAME);
+				}
+			}
+	}
+	
+	
 }

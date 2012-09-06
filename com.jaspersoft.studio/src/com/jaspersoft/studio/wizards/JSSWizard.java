@@ -43,7 +43,31 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public abstract class JSSWizard extends Wizard {
+public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeListener {
+	
+	/**
+	 * The key to identify the JasperReports configuration inside the wizard settings.
+	 * @see getConfig() is a shortcut to quickly get the configuration.
+	 * By default, there is always one configuration in the wizard, but subclasses may
+	 * force the use of a local configuration.
+	 */
+	public static final String JASPERREPORTS_CONFIGURATION = "jasperreports_configuration"; //$NON-NLS-1$
+	
+	/**
+	 * Key to retrieve the path of the directory in which resides the file being edited (or the location in which we are working in order
+	 * to get a reference to a project).
+	 * 
+	 * The key points to an element of type IPath
+	 * 
+	 */
+	public static final String FILE_PATH = "file_path";
+	
+	/**
+	 * Key to retrieve the name of the file being edited
+	 */
+	public static final String FILE_NAME = "file_name";
+	
+	
 	private IWizard parentWizard;
 	private IWizardPage fallbackPage;
 	private List<IWizard> childWizards = new ArrayList<IWizard>();
@@ -59,8 +83,9 @@ public abstract class JSSWizard extends Wizard {
 		
 		if (parentWizard != null && parentWizard instanceof JSSWizard)
 		{
-			((JSSWizard)parentWizard).getSettings();
+			return ((JSSWizard)parentWizard).getSettings();
 		}
+		
 		return settings;
 	}
 	
@@ -90,6 +115,11 @@ public abstract class JSSWizard extends Wizard {
 			return fallbackPage;
 		}
 		return wpage;
+	}
+	
+	public IWizard getParentWizard()
+	{
+		return this.parentWizard;
 	}
 
 	protected void addChild(IWizard w) {
@@ -128,16 +158,20 @@ public abstract class JSSWizard extends Wizard {
 		return true;
 	}
 
-	private JasperReportsConfiguration config;
-
 	public void setConfig(JasperReportsConfiguration config) {
-		this.config = config;
+		
+		if (config == null)
+		{
+			getSettings().remove(JASPERREPORTS_CONFIGURATION);
+		}
+		else
+		{
+			getSettings().put(JASPERREPORTS_CONFIGURATION, config);
+		}
 	}
 
 	public JasperReportsConfiguration getConfig() {
-		if (config == null && parentWizard instanceof JSSWizard)
-			config = ((JSSWizard) parentWizard).getConfig();
-		return config;
+		return (JasperReportsConfiguration) getSettings().get(JASPERREPORTS_CONFIGURATION);
 	}
 
 	public void run(boolean fork, boolean cancelable, IRunnableWithProgress runnable) {
@@ -150,6 +184,11 @@ public abstract class JSSWizard extends Wizard {
 		}
 	}
 
+	/**
+	 * 
+	 * @deprecated Use setConfig() instead
+	 * @param jConfig
+	 */
 	public void init(JasperReportsConfiguration jConfig) {
 		setConfig(jConfig);
 	}
@@ -195,7 +234,21 @@ public abstract class JSSWizard extends Wizard {
    */
   public void addPage(IWizardPage page) {
   	wizardPages.add(page);
-      page.setWizard(this);
+    page.setWizard(this);
+    
+    if (page instanceof JSSWizardPage)
+    {
+    	((JSSWizardPage)page).addChangeListener(this);
+    	
+    	IWizard wiz = this.getParentWizard();
+    	while (wiz != null && wiz instanceof JSSWizard)
+    	{
+    		JSSWizard parentw = (JSSWizard)wiz;
+    		((JSSWizardPage)page).addChangeListener(parentw);
+    		wiz = parentw.getParentWizard();
+    	}
+    }
+  
   }
 
   /**
@@ -209,6 +262,11 @@ public abstract class JSSWizard extends Wizard {
   		wizardPages.add(index, page);
       page.setWizard(this);
       
+      if (page instanceof JSSWizardPage)
+      {
+      	((JSSWizardPage)page).addChangeListener(this);
+      }
+      
       if (getContainer() != null && getContainer().getCurrentPage() != null)
       {
       	getContainer().updateButtons();
@@ -221,6 +279,11 @@ public abstract class JSSWizard extends Wizard {
   		// Check if the page to remove is the current one, in that case it is not possible to remove that page...
   	  if (getContainer() != null && getContainer().getCurrentPage() == page) return;
   	
+  	  if (page instanceof JSSWizardPage)
+      {
+      	((JSSWizardPage)page).removeChangeListener(this);
+      }
+  	  
   		wizardPages.remove(page);
 	  	
   		// Update the buttons if the page has been removed...
@@ -372,6 +435,16 @@ public abstract class JSSWizard extends Wizard {
     	getContainer().updateButtons();
     }
 	}
+
+	
+	/**
+	 * When a JSS page UI changes, we may get notified with this method.
+	 */
+	@Override
+	public void pageChanged(JSSWizardPageChangeEvent event) {
+	}
+	
+	
 	
 	
 }

@@ -29,11 +29,15 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -42,7 +46,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  *
  */
 public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
-		IFieldsProvider {
+		IFieldsProvider, IWizardDataEditorProvider {
 	private JdbcDataAdapter jdbcDataAdapter = new JdbcDataAdapterImpl();
 
 	@Override
@@ -88,8 +92,27 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 			fprovider = new JDBCFieldsProvider();
 	}
 
+	
+
 	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		getFieldProvider();
 		return fprovider.supportsGetFieldsOperation(jConfig);
+	}
+
+	
+	/**
+	 * 
+	 * @see com.jaspersoft.studio.data.IWizardDataEditorProvider#createDataEditorComposite(java.awt.Composite, org.eclipse.jface.wizard.WizardPage)
+	 *
+	 * @param Composite parent - the parent composite
+	 * @param WizardPage page - the page used to show the composite, it can be used to access the nested Wizard (probably JSSWizard)
+	 *
+	 * @return an editor composite extending AWizardDataEditorComposite
+	 */
+	@Override
+	public AWizardDataEditorComposite createDataEditorComposite(
+			Composite parent, WizardPage page) {
+		
+		return new JDBCWizardDataEditorComposite(parent, page, this);
 	}
 }

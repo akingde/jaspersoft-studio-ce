@@ -19,9 +19,9 @@
  */
 package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
@@ -30,18 +30,14 @@ import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -50,17 +46,17 @@ import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.variable.MVariable;
-import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.wizards.JSSWizard;
 
-public class CrosstabWizardRowPage extends WizardFieldsPage {
+public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 	private static final String F_CALCULATION = "CALCULATION";
 	private static final String F_TOTALPOSITION = "TOTALPOSITION";
 	private static final String F_ORDER = "ORDER";
 	private static final String F_NAME = "NAME";
 
-	private final class TLabelProvider extends LabelProvider implements
+	private final class TRowLabelProvider extends LabelProvider implements
 			ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -88,10 +84,10 @@ public class CrosstabWizardRowPage extends WizardFieldsPage {
 			JRDesignCrosstabRowGroup m = (JRDesignCrosstabRowGroup) w
 					.getValue();
 			JRCrosstabBucket bucket = m.getBucket();
-			String txt = bucket.getExpression().getText();
+			
 			switch (columnIndex) {
 			case 0:
-				return txt.substring(3, txt.length() - 1);
+				return w.getLabel();
 			case 1:
 				return bucket.getOrderValue().getName();
 			case 2:
@@ -104,77 +100,33 @@ public class CrosstabWizardRowPage extends WizardFieldsPage {
 	}
 
 	protected CrosstabWizardRowPage() {
-		super("crosstabrowpage"); //$NON-NLS-1$
+		this("crosstabrowpage"); //$NON-NLS-1$
+	}
+		
+	protected CrosstabWizardRowPage(String pagename) {
+		super(pagename); 
 		setTitle(Messages.CrosstabWizardRowPage_rows);
 		setImageDescriptor(Activator
 				.getImageDescriptor("icons/wizard_rows.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardRowPage_description);
 	}
 
-	@Override
-	public void setFields(List<?> inFields) {
-		List<Wrapper> nlist = new ArrayList<Wrapper>();
-		for (Object obj : inFields)
-			nlist.add(new Wrapper(obj));
-		super.setFields(nlist);
-	}
 
-	@Override
-	public List<Object> getInFields() {
-		List<Object> wlist = super.getInFields();
-		if (wlist != null) {
-			List<Object> out = new ArrayList<Object>(wlist.size());
-			for (Object w : wlist)
-				out.add(((Wrapper) w).getValue());
-			return out;
-		}
-		return null;
-	}
-
-	@Override
-	public List<Object> getFields() {
-		List<Object> wlist = super.getFields();
-		if (wlist != null) {
-			List<Object> out = new ArrayList<Object>(wlist.size());
-			for (Object w : wlist)
-				out.add(((Wrapper) w).getValue());
-			return out;
-		}
-		return null;
-	}
-
+	/**
+	 * Set the label provider, which is an instance of the local class TLabelProvider.
+	 * This implementation deals with Row Groups.
+	 * 
+	 * @see com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabWizardColumnPage#setLabelProvider(org.eclipse.jface.viewers.TableViewer)
+	 *
+	 * @param
+	 *
+	 * @return
+	 */
 	@Override
 	protected void setLabelProvider(TableViewer tableViewer) {
-		tableViewer.setLabelProvider(new TLabelProvider());
+		tableViewer.setLabelProvider(new TRowLabelProvider());
 	}
-
-	@Override
-	protected void createColumns() {
-		TableColumn[] col = new TableColumn[4];
-		col[0] = new TableColumn(rightTable, SWT.NONE);
-		col[0].setText(Messages.common_fields);
-		col[0].pack();
-
-		col[1] = new TableColumn(rightTable, SWT.NONE);
-		col[1].setText(Messages.common_order);
-		col[1].pack();
-
-		col[2] = new TableColumn(rightTable, SWT.NONE);
-		col[2].setText(Messages.common_total_position);
-		col[2].pack();
-
-		col[3] = new TableColumn(rightTable, SWT.NONE);
-		col[3].setText(Messages.common_calculation);
-		col[3].pack();
-
-		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(30, false));
-		tlayout.addColumnData(new ColumnWeightData(20, false));
-		tlayout.addColumnData(new ColumnWeightData(20, false));
-		tlayout.addColumnData(new ColumnWeightData(30, false));
-		rightTable.setLayout(tlayout);
-	}
-
+	
 	@Override
 	protected void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
@@ -199,7 +151,7 @@ public class CrosstabWizardRowPage extends WizardFieldsPage {
 				JRDesignCrosstabRowGroup prop = (JRDesignCrosstabRowGroup) w
 						.getValue();
 				if (F_NAME.equals(property)) //$NON-NLS-1$
-					return ((TLabelProvider) viewer.getLabelProvider())
+					return ((TRowLabelProvider) viewer.getLabelProvider())
 							.getColumnText(element, 1);
 
 				if (F_ORDER.equals(property)) //$NON-NLS-1$
@@ -243,13 +195,79 @@ public class CrosstabWizardRowPage extends WizardFieldsPage {
 			}
 		});
 
+		
 		viewer.setCellEditors(new CellEditor[] {
 				new TextCellEditor(parent),
 				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(
 						SortOrderEnum.values(), NullEnum.NOTNULL)),
+				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(
+						CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL)),
 				new ComboBoxCellEditor(parent, AgregationFunctionEnum
 						.getStringValues()) });
 		viewer.setColumnProperties(new String[] { F_NAME, F_ORDER,
-				F_TOTALPOSITION, F_CALCULATION }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				F_TOTALPOSITION, F_CALCULATION });
+	}
+	
+	
+	/**
+	 * This procedure initialize the dialog page with the list of available objects.
+	 * This implementation looks for object set in the map as DISCOVERED_FIELDS.
+	 * 
+	 */
+	public void loadSettings() {
+		
+		if (getSettings() == null) return;
+		
+		if (getWizard() instanceof CrosstabWizard)
+		{
+			setAvailableFields(((CrosstabWizard)getWizard()).getAvailableRowGroups());
+		}
+		else
+		{
+			setAvailableFields(null);
+		}
+	}
+	
+	
+	/**
+	 * Every time a new selection occurs, the selected fields are stored in the settings map
+	 * with the key WizardDataSourcePage.DATASET_FIELDS
+	 */
+	public void storeSettings()
+	{
+		if (getWizard() instanceof JSSWizard &&
+				getWizard() != null)
+			{
+				Map<String, Object> settings = ((JSSWizard)getWizard()).getSettings();
+			
+				if (settings == null) return;
+				
+				settings.put(CrosstabWizard.CROSSTAB_ROWS,  getSelectedFields() ); 
+			}
+		
+	}
+	
+	/**
+	 * This function checks if a particular right element is in the provided list, 
+	 * and which is the matching element in that list.
+	 * 
+	 * This implementation is based on the string value returned by
+	 * left and right getText label providers on column 0
+	 * 
+	 * @param object
+	 * @param fields
+	 * @return
+	 */
+	protected Object findElement(Object object, List<?> fields) {
+		
+		String objName = ((TRowLabelProvider)rightTView.getLabelProvider()).getColumnText(object, 0);
+		for (Object obj : fields)
+		{
+			if (((TRowLabelProvider)leftTView.getLabelProvider()).getColumnText(obj,0).equals(objName))
+			{
+				return obj;
+			}
+		}
+		return null;
 	}
 }

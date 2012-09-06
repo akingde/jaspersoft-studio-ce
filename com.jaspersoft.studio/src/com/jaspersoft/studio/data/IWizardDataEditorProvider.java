@@ -42,39 +42,28 @@
 **/
 package com.jaspersoft.studio.data;
 
-import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRDesignField;
+
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.widgets.Composite;
 /*
- * This Interface provides a way for a DataAdapter to provide fields , editor and query design capabilities
- * inside a wizard.
+ * This Interface provides a way for a DataAdapter to provide an editor during the first step of a wizard.
+ * If the data adapter selected by the user in the wizard implements this interface, the editor contributed
+ * allows the user to retrieve fields from the data adapter itself.
+ * 
+ * 
+ * An example is a simple text area used to insert an SQL query.
  * 
  * @author gtoffoli
  *
  */
-public interface IWizardFieldsProvider {
+public interface IWizardDataEditorProvider {
 
 	/**
    * Return the name of the language to use
    * Null if a language is not required.
    */
-  public String getQueryLanguage();
-  
-  /**
-   * Return the fields read the specified query
-   */
-  public List<JRDesignField> readFields(String query) throws Exception;
-  
-  /**
-   * Return the fields read the specified query
-   */
-  public boolean supportsDesign();
-  
-
-	// /**
-	// * Return the fields read the specified query
-	// */
-	// public String designQuery(String query);
+	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page);
   
 }
 

@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -186,6 +187,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 					if (cl != null)
 						Thread.currentThread().setContextClassLoader(cl);
 
+					
 					DataAdapterServiceUtil.getInstance(jrContext).getService(editor.getDataAdapter().getDataAdapter()).test();
 
 					MessageBox mb = new MessageBox(btnTest.getShell(), SWT.ICON_INFORMATION | SWT.OK);

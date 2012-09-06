@@ -220,7 +220,16 @@ public class ExpressionInterpreter {
 		if (jasperDesign != null) {
 			String[] imports = jasperDesign.getImports();
 			for (int i = 0; imports != null && i < imports.length; ++i) {
-				interpreter.eval("import " + imports[i] + ";");
+				
+				String importString = imports[i];
+				if (importString.startsWith("static "))
+				{
+					interpreter.eval("static import " + imports[i].substring("static ".length()) + ";");
+				}
+				else
+				{
+					interpreter.eval("import " + imports[i] + ";");
+				}
 			}
 		}
 	}

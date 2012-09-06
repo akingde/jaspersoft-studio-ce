@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
@@ -36,7 +37,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -47,16 +47,29 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.subreport.command.wizard.NewSubreportPage;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.wizards.JSSWizardPage;
 
-public class SubreportPropertyPage extends WizardPage {
+public class SubreportPropertyPage extends JSSWizardPage {
+
+	
+	/**
+	 * This variable stores the last set of parameters specified by
+	 * using loadSettings. Settings will be reloaded if the new
+	 * array is different from this one...
+	 */
+	private JRParameter[] lastParameters = null;
+	
+	
+	
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
-
+		
 		public Image getColumnImage(Object element, int columnIndex) {
 			return null;
 		}
@@ -99,6 +112,9 @@ public class SubreportPropertyPage extends WizardPage {
 			fillTable(table);
 	}
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public SubreportPropertyPage() {
 		this("subreportpage"); //$NON-NLS-1$
 	}
@@ -246,6 +262,46 @@ public class SubreportPropertyPage extends WizardPage {
 
 			tableViewer.setInput(plist);
 		}
+	}
+	
+	
+	
+	@Override
+	public void setVisible(boolean visible) {
+		loadSettings();
+		super.setVisible(visible);
+	}
+
+	protected void loadSettings()
+	{
+			JRParameter[] parameters = null;
+			// load settings, if available..
+			if (getSettings() != null && getSettings().containsKey( NewSubreportPage.SUBREPORT_PARAMETERS ))
+			{
+				parameters = (JRParameter[])getSettings().get( NewSubreportPage.SUBREPORT_PARAMETERS );
+			}
+			
+			if (lastParameters != parameters)
+			{
+				lastParameters = parameters;
+				List<JRDesignSubreportParameter> sParameters = new ArrayList<JRDesignSubreportParameter>();
+				
+				if (lastParameters != null && lastParameters.length > 0)
+				{
+					// Create an array of subreport parameters to be used in in the table model...
+					for (JRParameter p : lastParameters)
+					{
+						if (!p.isSystemDefined())
+						{
+							JRDesignSubreportParameter sp = new JRDesignSubreportParameter();
+							sp.setName(p.getName());
+							sp.setExpression(new JRDesignExpression());
+							sParameters.add(sp);
+						}
+					}
+				}
+				setValue(sParameters.toArray(new JRDesignSubreportParameter[sParameters.size()]));
+			}
 	}
 
 }

@@ -88,4 +88,71 @@ public class ExprUtil {
 	public static JRExpression getExpression(JRExpression jrExpression) {
 		return jrExpression;
 	}
+	
+	
+	/**
+	 * Create a JRDesignExpression by specifying the expression text.
+	 * 
+	 * @param text - The text of the expression, or null for empty expressions
+	 * 
+	 * @return a new JRDesignExpression
+	 */
+	public static JRDesignExpression createExpression(String text)
+	{
+		return createExpression(text);
+	}
+	
+	/**
+	 * Create a JRDesignExpression by specifying the expression text.
+	 * An optional value class name can be used as expression class.
+	 * Value class name should be specified only if strictly required, since it is
+	 * deprecated by JasperReports.
+	 * 
+	 * @param text - The text of the expression, or null for empty expressions
+	 * @param valueClassName - A string representing the class returned by the expression
+	 *
+	 * @return a new JRDesignExpression
+	 */
+	@SuppressWarnings("deprecation")
+	public static JRDesignExpression createExpression(String text, String valueClassName)
+	{
+		JRDesignExpression exp = new JRDesignExpression();
+		
+		if (text != null)
+		{
+			exp.setText(text);
+		}
+		
+		if (valueClassName != null)
+		{
+			exp.setValueClassName(valueClassName);
+		}
+		
+		return exp;
+		
+	}
+	
+	/**
+	 * Create a JRDesignExpression by specifying the expression text.
+	 * An optional value class can be used as expression class.
+	 * Value class should be specified only if strictly required, since it is
+	 * deprecated by JasperReports.
+	 * 
+	 * @param text - An expression, or null if the expression is empty.
+	 * @param valueClass - A value class, or null for default
+	 * 
+	 * @return a new JRDesignExpression
+	 */
+	public static JRDesignExpression createExpression(String text, Class valueClass)
+	{
+		String valueClassName = null;
+		if (valueClass != null)
+		{
+			valueClassName = valueClass.getName();
+			if (valueClass.isArray()) valueClassName = null;
+			else if (valueClass.isArray()) valueClassName = null;
+			else if (valueClass.isPrimitive()) valueClassName = null;
+		}
+		return createExpression(text, valueClassName);
+	}
 }

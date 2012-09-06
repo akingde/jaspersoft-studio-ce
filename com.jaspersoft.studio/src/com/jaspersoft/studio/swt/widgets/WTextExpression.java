@@ -31,6 +31,8 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -46,6 +48,9 @@ import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionE
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.utils.Misc;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormAttachment;
 import com.jaspersoft.studio.utils.UIUtils;
 
 /**
@@ -178,11 +183,6 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 			columnsNum = 3;
 		}
 
-		GridLayout widgetLayout = new GridLayout(columnsNum, false);
-		widgetLayout.marginHeight = 0;
-		widgetLayout.marginWidth = 0;
-		setLayout(widgetLayout);
-
 		if (columnsNum == 3) {
 			label = new Label(this, SWT.NONE);
 			label.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
@@ -193,12 +193,20 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 			label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 			label.setText(textLabel);
 		}
+		setLayout(new FormLayout());
 
-		textExpression = new Text(this, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL); 
+		textExpression = new Text(this, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		int heightHint = UIUtils.getCharHeight(textExpression); 
-		GridData gdTextExpression = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2);
-		gdTextExpression.heightHint = heightHint;
-		textExpression.setLayoutData(gdTextExpression);
+		FormData fd_textExpression = new FormData();
+		fd_textExpression.bottom = new FormAttachment(100);
+		fd_textExpression.top = new FormAttachment(0);
+		fd_textExpression.left = new FormAttachment(0);
+		textExpression.setLayoutData(fd_textExpression);
+		
+		int heightHint = UIUtils.getCharHeight(textExpression); 
+		fd_textExpression.height
+		
+		
 		textExpression.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -215,7 +223,11 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		});
 
 		btnEditExpression = new Button(this, SWT.FLAT);
-		btnEditExpression.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
+		fd_textExpression.right = new FormAttachment(btnEditExpression, -6);
+		FormData fd_btnEditExpression = new FormData();
+		fd_btnEditExpression.right = new FormAttachment(100);
+		fd_btnEditExpression.top = new FormAttachment(0);
+		btnEditExpression.setLayoutData(fd_btnEditExpression);
 		btnEditExpression.setImage(JaspersoftStudioPlugin.getImage(BUTTON_ICON_PATH));
 		btnEditExpression.addSelectionListener(new SelectionListener() {
 

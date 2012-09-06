@@ -127,7 +127,7 @@ public class DataAdapterManager {
 			st[1] = getProjectStorage(file.getProject());
 		return st;
 	}
-
+	
 	public static ADataAdapterStorage getProjectStorage(IProject key) {
 		ADataAdapterStorage s = storages.get(key);
 		if (s == null) {

@@ -39,6 +39,7 @@
 package com.jaspersoft.studio.property.dataset.wizard;
 
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
@@ -46,15 +47,35 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidgetRadio;
 
 public class WizardConnectionPage extends WizardPage implements IExpressionContextSetter{
-	private MDatasetRun datasetrun;
+	
+
 	private DatasetRunWidgetRadio dsRun;
 	private JRDesignDatasetRun jrDsRun;
 	private ExpressionContext expContext;
 
+	
+//	/**
+//	 * Force this wizard page to work with the given dataset run...
+//	 * If the dataset run does not contain any JRDesignDatasetRun,
+//	 * a new one is created.
+//	 * 
+//	 * @param datasetrun
+//	 */
+//	public void setDataSetRun(MDatasetRun datasetrun) {
+//		
+//		if (datasetrun != null && datasetrun.getValue() != null)
+//		{
+//			jrDsRun = datasetrun.getValue();
+//		}
+//		
+//		dsRun.setData(jrDsRun);
+//		
+//	}
+	
+	/*
 	public void setDataSetRun(MDatasetRun datasetrun) {
 		this.datasetrun = datasetrun;
 		jrDsRun = (JRDesignDatasetRun) datasetrun.getValue();
@@ -69,11 +90,20 @@ public class WizardConnectionPage extends WizardPage implements IExpressionConte
 	public MDatasetRun getDataSetRun() {
 		return datasetrun;
 	}
-
+	*/
+	
+	
 	public WizardConnectionPage() {
 		super("connectionpage"); //$NON-NLS-1$
 		setTitle(Messages.common_connection);
 		setDescription(Messages.WizardConnectionPage_description);
+		
+		jrDsRun = new JRDesignDatasetRun();
+		
+		// By default we set the dataset run to use the report connection...
+		JRDesignExpression exp = new JRDesignExpression();
+		exp.setText("$P{REPORT_CONNECTION}");
+		jrDsRun.setConnectionExpression( exp );
 	}
 
 	public void createControl(Composite parent) {
@@ -91,4 +121,10 @@ public class WizardConnectionPage extends WizardPage implements IExpressionConte
 			dsRun.setExpressionContext(expContext);
 		}
 	}
+	
+	public JRDesignDatasetRun getJRDesignDatasetRun()
+	{
+		return jrDsRun;
+	}
+	
 }

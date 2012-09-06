@@ -629,6 +629,7 @@ public class Messages extends NLS {
 	public static String MDataset_query_description;
 	public static String MDataset_resource_bundle;
 	public static String MDataset_resource_bundle_description;
+	public static String MDataset_scriplet_class;
 	public static String MDataset_when_resource_missing_type;
 	public static String MDataset_when_resource_missing_type_description;
 	public static String MDatasetRun_connection_expression_description;
@@ -1273,6 +1274,10 @@ public class Messages extends NLS {
 	public static String WizardDataSourcePage_btnNew_text;
 	public static String WizardDataSourcePage_lblNewLabel_text_1;
 	public static String WizardDataSourcePage_lblThisDataAdapter_text;
+	public static String NewSubreportPage_useReport_text;
+	public static String NewSubreportPage_newReport_text;
+	public static String NewSubreportPage_useReportB_text;
+	public static String NewSubreportPage_empty_text;
 
 	static {
 		// initialize resource bundle

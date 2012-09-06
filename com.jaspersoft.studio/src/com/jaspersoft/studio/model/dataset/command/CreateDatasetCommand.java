@@ -97,19 +97,17 @@ public class CreateDatasetCommand extends Command {
 		}
 	}
 
+	/**
+	 * If no jrDataset has been set yet, run the Wizard to create a JRDesignDataset...
+	 */
 	protected void createObject() {
 		if (jrDataset == null) {
 			DatasetWizard wizard = new DatasetWizard();
 			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-			wizard.init(jConfig);
+			wizard.setConfig(jConfig);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
-				MDataset srcNode = wizard.getDataset();
-				if (srcNode.getValue() == null)
-					jrDataset = MDataset.createJRDataset(jrDesign);
-				else {
-					jrDataset = (JRDesignDataset) srcNode.getValue();
-				}
+				jrDataset = wizard.getDataset();
 			}
 		}
 	}

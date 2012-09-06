@@ -52,6 +52,23 @@ public class CreateStyleCommand extends Command {
 	private int index;
 
 	/**
+	 * Instantiates a new creates the style command to append a new style at the
+	 * end of the list
+	 * 
+	 * @param jd
+	 *          the jasper design on which we are operating
+	 * @param style
+	 *          the style to add
+	 */
+	public CreateStyleCommand(JasperDesign jd, JRDesignStyle style) {
+		super();
+		this.jrDesign = jd;
+		this.jrStyle = style;
+		this.index = -1;
+	}
+	
+	
+	/**
 	 * Instantiates a new creates the style command.
 	 * 
 	 * @param destNode

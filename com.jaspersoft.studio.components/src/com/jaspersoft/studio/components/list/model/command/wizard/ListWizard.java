@@ -22,11 +22,17 @@ package com.jaspersoft.studio.components.list.model.command.wizard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRDatasetParameter;
+import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
@@ -43,18 +49,25 @@ import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
+/**
+ * Wizard to create an MList. 
+ * 
+ * @author gtoffoli
+ *
+ */
 public class ListWizard extends JSSWizard {
+	
 	private WizardDatasetPage step1;
 	private WizardConnectionPage step2;
 	private WizardFieldsPage step3;
-	private MList list;
-	private JRDesignDataset jrdataset;
-
+	
+	
 	public ListWizard() {
 		super();
 		setWindowTitle(Messages.common_list);
@@ -63,78 +76,87 @@ public class ListWizard extends JSSWizard {
 
 	@Override
 	public void addPages() {
-		list = new MList();
-		list.setValue(list.createJRElement(getConfig().getJasperDesign()));
-		list.setJasperConfiguration(getConfig());
 
-		MDatasetRun mdatasetrun = (MDatasetRun) list
-				.getPropertyValue(MList.PREFIX + "DATASET_RUN");//$NON-NLS-1$
-		if (mdatasetrun == null)
-			mdatasetrun = new MDatasetRun(new JRDesignDatasetRun(), getConfig()
-					.getJasperDesign());
-		mdatasetrun.setPropertyValue(
-				JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION,
-				"$P{REPORT_CONNECTION}");
-
-		step1 = new WizardDatasetPage(getConfig(), false, "List");
+		step1 = new WizardDatasetPage(false, "List");
 		addPage(step1);
-		step1.setDataSetRun(mdatasetrun);
 
 		step2 = new WizardConnectionPage();
 		addPage(step2);
-		step2.setDataSetRun(mdatasetrun);
 
 		step3 = new WizardFieldsPage();
 		addPage(step3);
+		step3.setTitle("List fields");
+		step3.setDescription("You can optionally select a set of fields from the dataset used to fill this list, in this way the list will be prepopulated with a set of properly configured text fields");
 	}
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		JasperDesign jd = getConfig().getJasperDesign();
-		List<JRDataset> datasetsList = jd.getDatasetsList();
-		if (page == step1) {
-			if (datasetsList.size() == 0)
-				return step2;
-		}
+		
+		// Configuring next steps..
 		if (page == step2) {
-			jrdataset = getDataset();
-			if (jrdataset != null)
-				step3.setFields(new ArrayList<JRField>(Arrays.asList(jrdataset
-						.getFields())));
+			
+			// If we come from this step, we have devided which
+			// dataset to use, it could be an existing one, a new one
+			// or even an empty one.
+			
+			JRDesignDataset listDataset = step1.getSelectedDataset();
+			if (listDataset != null && listDataset.getFieldsList().size() > 0)
+			{
+				getSettings().put( WizardDataSourcePage.DISCOVERED_FIELDS, new ArrayList<Object>( listDataset.getFieldsList() ));
+			}
 			else
+			{
+				// we need to skip step3...
 				page = step3;
+			}
 		}
 		return super.getNextPage(page);
 	}
 
-	private JRDesignDataset getDataset() {
-		JasperDesign jd = getConfig().getJasperDesign();
-		List<JRDataset> datasetsList = jd.getDatasetsList();
-		MDatasetRun dataSetRun = step1.getDataSetRun();
-		JRDesignDataset ds = null;
-		if (dataSetRun == null) {
-			MDataset mds = (MDataset) getConfig().get(DatasetWizard.DATASET);
-			if (mds != null)
-				ds = mds.getValue();
-		} else {
-			String dsname = (String) dataSetRun
-					.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
-			for (JRDataset d : datasetsList)
-				if (d.getName().equals(dsname)) {
-					ds = (JRDesignDataset) d;
-					break;
-				}
-		}
-		return ds;
-	}
 
+	/**
+	 * 
+	 * Create a new instance of List component, and return the model object (MList).
+	 * Based on the information provided by the users, we configure a simple list.
+	 * 
+	 *
+	 *  @return MList
+	 */
 	public MList getList() {
-		JRDesignComponentElement jrElement = list.getValue();
-		StandardListComponent jrList = (StandardListComponent) jrElement
-				.getComponent();
+		
+		MList list = new MList();
+		
+		JRDesignComponentElement jrElement = list.createJRElement(getConfig().getJasperDesign());
+		StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
+		
+		// Get a copy of the dataset run created by the step2
+		JRDesignDatasetRun datasetRun = (JRDesignDatasetRun) step2.getJRDesignDatasetRun().clone();
+		
+		// Set the dataset name used by this dataset run...
+		jrList.setDatasetRun(datasetRun);
+		
+		// This is all the times a new instance of JRDataset, we
+		// are interested only in its name
+		JRDesignDataset listDataset = step1.getSelectedDataset();
+		
+		if (listDataset != null)
+		{
+			datasetRun.setDatasetName(listDataset.getName());
+		}
+		else
+		{
+			// FIXME: Consider to create an empty dataset here....
+			// even if we should never finish in this situation...
+		}
+		
+		
+		list.setValue(jrElement);
+		list.setJasperConfiguration(getConfig());
 
-		List<Object> lst = step3.getFields();
+		// Create the list with a set of elements..
+		List<Object> lst = step3.getSelectedFields();
 		JasperDesign jd = getConfig().getJasperDesign();
+		
 		int x = 0;
 		MTextField mtext = new MTextField();
 		if (lst != null)
@@ -150,19 +172,26 @@ public class ListWizard extends JSSWizard {
 						element.getHeight()));
 				jrElement.setWidth(Math.max(x, jrElement.getWidth()));
 			}
-		if (jrdataset == null)
-			jrList.setDatasetRun(null);
-		else
-			((JRDesignDatasetRun) jrList.getDatasetRun())
-					.setDatasetName(jrdataset.getName());
-
+	
 		return list;
 	}
 
+	/**
+	 * 
+	 * In this wizard, the only required step is the first one, which force the user to
+	 * pick a dataset (or decide to create a new one).
+	 * 
+	 * @see com.jaspersoft.studio.wizards.JSSWizard#canFinish()
+	 *
+	 * @return true if the step is not the first one
+	 */
 	@Override
-	public void init(JasperReportsConfiguration jConfig) {
-		super.init(jConfig);
-		if (list != null)
-			list.setJasperConfiguration(jConfig);
+	public boolean canFinish() {
+		
+		if (getContainer().getCurrentPage() == step1) return false;
+		return super.canFinish();
 	}
+
+	
+
 }

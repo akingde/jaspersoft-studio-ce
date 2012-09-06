@@ -7,6 +7,7 @@ public class Wrapper {
 	private Object value;
 	private AgregationFunctionEnum calculation = AgregationFunctionEnum.UNIQUE;
 	private String oldExpText;
+	private String label = null;
 
 	public Wrapper(Object value) {
 		super();
@@ -47,4 +48,21 @@ public class Wrapper {
 	public int hashCode() {
 		return value.hashCode();
 	}
+	
+	/**
+	 * Return the name of the object without any special syntax like $ etc..
+	 * The value comes from the old expression text
+	 * which we assume is in the form $?{AAAAAA}
+	 *
+	 *  @return String
+	 */
+	public String getLabel() {
+		
+		String label = getOldExpText();
+		if (label == null) return ""; // this case should never be true.
+		
+		label = label.substring(3, label.length() - 1);
+		return label;
+	}
+
 }

@@ -3,6 +3,8 @@ package net.jaspersoft.templates;
 import java.io.InputStream;
 import java.util.List;
 
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 
 
 /**
@@ -39,8 +41,22 @@ public interface TemplateBundle {
 	 */
 	public TemplateEngine getTemplateEngine();
 	
+	
+	
+	/**
+	 * The main JasperDesign. Many templates may store template information
+	 * directly inside the primary jrxml.
+	 * 
+	 * @return
+	 */
+	public JasperDesign getJasperDesign();
+	
+	
 	/**
 	 * The list of all the resources available in this bundle.
+	 * Resource names are mostly files that are part of a bundle (i.e. images, fonts or jrtx files).
+	 * The template engine may decide to just copy this resources inside the
+	 * final report bundle.
 	 * 
 	 * @return
 	 */

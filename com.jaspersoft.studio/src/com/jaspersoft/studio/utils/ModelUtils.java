@@ -125,9 +125,22 @@ public class ModelUtils {
 	}
 
 
-	public static String[] getDataSets(JasperDesign jd, boolean all) {
+	/**
+	 * Get all the available datasets in the provided JasperDesign.
+	 * 
+	 * If the main datasetis included, since the main dataset has not a name,
+	 * it is assigned with a constanct name:
+	 * 
+	 * {@link ModelUtils.MAIN_DATASET MAIN_DATASET}
+	 * 
+	 * 
+	 * @param jd
+	 * @param includeMainDataset - true to include the main dataset
+	 * @return an array of strings with the names of the datasets.
+	 */
+	public static String[] getDataSets(JasperDesign jd, boolean includeMainDataset) {
 		List<JRDataset> datasetsList = new ArrayList<JRDataset>(jd.getDatasetsList());
-		if (all)
+		if (includeMainDataset)
 			datasetsList.add(0, jd.getMainDataset());
 		String[] res = new String[datasetsList.size()];
 		for (int i = 0; i < datasetsList.size(); i++) {

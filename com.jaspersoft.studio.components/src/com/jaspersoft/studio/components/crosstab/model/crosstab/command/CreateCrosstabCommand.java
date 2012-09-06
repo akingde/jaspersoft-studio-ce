@@ -111,7 +111,7 @@ public class CreateCrosstabCommand extends CreateElementCommand {
 		if (jrElement == null) {
 			// here put a wizard
 			CrosstabWizard wizard = new CrosstabWizard();
-			wizard.init(jConfig);
+			wizard.setConfig(jConfig);
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();

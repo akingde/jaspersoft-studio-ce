@@ -20,24 +20,17 @@
 package com.jaspersoft.studio.wizards;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import net.jaspersoft.templates.ReportBundle;
+import net.jaspersoft.templates.TemplateBundle;
+import net.jaspersoft.templates.TemplateEngine;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRImage;
-import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JRDesignSection;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -72,30 +65,37 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
-import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
-import com.jaspersoft.studio.utils.ExpressionUtil;
-import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.wizards.report.ReportGenerator;
 
+/**
+ * Basic wizard to create a new report.
+ * @author gtoffoli
+ *
+ */
 public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INewWizard {
+	
 	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.ReportNewWizard";	
 	private static final String NEW_REPORT_JRXML = Messages.ReportNewWizard_8;
+	
 	private ReportTemplatesWizardPage step0;
 	private NewFileCreationWizard step1;
 	private WizardDataSourcePage step2;
 	private WizardFieldsPage step3;
 	private WizardFieldsGroupByPage step4;
+	
+	private CongratulationsWizardPage congratulationsStep;
+	
+	private boolean showCongratulationsStep = true;
+	
 	private ISelection selection;
 
 	/**
@@ -105,13 +105,20 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 		super();
 		setWindowTitle(Messages.ReportNewWizard_title);
 		setNeedsProgressMonitor(true);
+		
+		// Attention! This operation should always be performed by
+		// the wizard caller, since we are forcing here a new config.
+		setConfig(new JasperReportsConfiguration(
+			DefaultJasperReportsContext.getInstance(), null));
+		
+		this.getSettings().put("jasperreports_configuration", new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(),null));
 	}
 
 	public ReportNewWizard(IWizard parentWizard, IWizardPage fallbackPage) {
 		super(parentWizard, fallbackPage);
 		setWindowTitle(Messages.ReportNewWizard_title);
 		setNeedsProgressMonitor(true);
-
+		showCongratulationsStep = false;
 	}
 
 	/**
@@ -124,13 +131,9 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 		addPage(step0);
 
 		step1 = new NewFileCreationWizard("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
-		step1.setTitle(Messages.ReportNewWizard_0);
-		step1.setDescription(Messages.ReportNewWizardPage_description);
-		step1.setFileExtension("jrxml");//$NON-NLS-1$
-		setupNewFileName();
 		addPage(step1);
 
-		step2 = new WizardDataSourcePage(jConfig);
+		step2 = new WizardDataSourcePage();
 		addPage(step2);
 
 		step3 = new WizardFieldsPage();
@@ -138,112 +141,57 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 
 		step4 = new WizardFieldsGroupByPage();
 		addPage(step4);
-	}
-
-	public void setupNewFileName() {
-		String filename = NEW_REPORT_JRXML;
-		if (selection != null) {
-			if (selection instanceof TreeSelection) {
-				TreeSelection s = (TreeSelection) selection;
-				if (s.getFirstElement() instanceof IFile) {
-					IFile file = (IFile) s.getFirstElement();
-					filename = getFileName(file.getProject(), file.getProjectRelativePath().removeLastSegments(1).toOSString(),
-							filename);
-				} else if (s.getFirstElement() instanceof IProject) {
-					IProject prj = (IProject) s.getFirstElement();
-					filename = getFileName(prj, Messages.ReportNewWizard_11, filename);
-				}
-			}
-			step1.setFileName(filename);
+		
+		if (showCongratulationsStep)
+		{
+			congratulationsStep = new CongratulationsWizardPage();
+			addPage(congratulationsStep);
 		}
 	}
 
-	private String getFileName(IProject prj, String prjPath, String filename) {
-		String f = prjPath + Messages.ReportNewWizard_12 + filename;
 
-		int i = 1;
-		while (prj.getFile(f).exists()) {
-			filename = Messages.ReportNewWizard_13 + i + Messages.ReportNewWizard_14;
-			f = prjPath + Messages.ReportNewWizard_15 + filename;
-			i++;
-		}
-		return filename;
-	}
-
-	private JasperReportsConfiguration jConfig = new JasperReportsConfiguration(
-			DefaultJasperReportsContext.getInstance(), null);
-	public static final String REPORT_FILE = Messages.ReportNewWizard_16;
-	public static final String REPORT_DESIGN = Messages.ReportNewWizard_17;
-
+	/**
+	 * This method drive the logic to just skip steps.
+	 * 
+	 * The getNextPage method is generally used to get stuff from a page and configure the next one
+	 * creating more logic between pages. This logic has been moved elsewhere: the glue used in JSSWizard
+	 * is acutally the settings map, which is passed along the way, since stored inside the wizard.
+	 * A mechanism to load and store settings allow the pages to act in a consistent way
+	 * without having to put any logic here, even if logic can still be added in case of special
+	 * behaviours (just like it would be possible to extend the relevant pages).
+	 * 
+	 * An interesting example is the JSSWizardPage and JSSWizardRunnablePage which provide
+	 * the base pages to JSS based wizard. In particular the JSSWizardRunnablePage allows
+	 * to execute a process on next, which can be used for time consuming tasks (like read fields).
+	 * 
+	 */
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		if (page == step0)
-			step1.validatePage();
-		if (page == step1) {
-			IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(step1.getContainerFullPath());
-
-			IFile file = r.getProject().getFile(
-					step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName());
-			jConfig.init(file);
-			jConfig.setJasperDesign(getJasperDesign());
-
-			if (getConfig() != null) {
-				getConfig().put(REPORT_FILE, file);
-				getConfig().put(REPORT_DESIGN, getJasperDesign());
-			}
-			step2.setFile(jConfig);
-		}
-		if (page == step2) {
-			// IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(step1.getContainerFullPath());
-			//
-			// IFile file = r.getProject().getFile(
-			// step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName());
-			// jConfig.init(file);
-			// jConfig.setJasperDesign(getJasperDesign());
-			//
-			// if (getConfig() != null) {
-			// getConfig().put(REPORT_FILE, file);
-			// getConfig().put(REPORT_DESIGN, getJasperDesign());
-			// }
-			// step2.setFile(jConfig);
-			run(true, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask(Messages.ReportNewWizard_18, IProgressMonitor.UNKNOWN);
-					try {
-						// if we don't have fields, call getFields from the QueryDesigner automatically
-						if (step3.getFields() == null || step3.getFields().isEmpty())
-							step2.getFields(monitor);
-
-						final JRDesignDataset dataset = step2.getDataset();
-						if (dataset != null && dataset.getFieldsList() != null) {
-							Display.getDefault().syncExec(new Runnable() {
-
-								public void run() {
-									step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));
-								}
-							});
-
-						}
-					} catch (Exception e) {
-						UIUtils.showError(e);
-					} finally {
-						monitor.done();
-					}
+		
+		if (page == step2)
+		{
+			if (!getSettings().containsKey(WizardDataSourcePage.DISCOVERED_FIELDS) ||
+					((List<?>)getSettings().get(WizardDataSourcePage.DISCOVERED_FIELDS)).isEmpty() )
+			{
+				if (!showCongratulationsStep)
+				{
+					// ask for the next page by giving the last page available...
+					return super.getNextPage(getPageList().get( getPageList().size()-1 ));
 				}
-			});
+				return congratulationsStep;
+			}
 		}
-
-		if (page == step4 && step3.getFields() != null)
-			step4.setFields(new ArrayList<Object>(step3.getFields()));
 		return super.getNextPage(page);
 	}
-
+	
+	
 	/**
 	 * This method is called when 'Finish' button is pressed in the wizard. We will create an operation and run it using
 	 * wizard as execution context.
 	 */
 	@Override
 	public boolean performFinish() {
+		
 		final String containerName = step1.getContainerFullPath().toPortableString();
 		final String fileName = step1.getFileName();
 
@@ -272,156 +220,136 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	 * The worker method. It will find the container, create the file if missing or just replace its contents, and open
 	 * the editor on the newly created file.
 	 */
-
 	private void doFinish(String containerName, String fileName, IProgressMonitor monitor) throws CoreException {
-		// create a sample file
+
 		monitor.beginTask(Messages.ReportNewWizard_3 + fileName, 2);
+		
+		
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
 		if (!resource.exists() || !(resource instanceof IContainer)) {
 			throwCoreException(String.format(Messages.ReportNewWizard_4, containerName));
 		}
-		IContainer container = (IContainer) resource;
-		reportFile = container.getFile(new Path(fileName));
+		
+		Map<String, Object> templateSettings = new HashMap<String, Object>();
+		
+		TemplateBundle templateBundle = step0.getTemplateBundle();
+		
+		JRDesignDataset dataset = WizardUtils.createDataset(true, getSettings());
+		
+		templateSettings.put( DefaultTemplateEngine.DATASET, dataset );
+		
+		if (getSettings().containsKey( WizardDataSourcePage.DATASET_FIELDS))
+		{
+			templateSettings.put( DefaultTemplateEngine.FIELDS, 
+														getSettings().get(WizardDataSourcePage.DATASET_FIELDS) );
+		}
+		
+		if (getSettings().containsKey( WizardDataSourcePage.GROUP_FIELDS))
+		{
+			templateSettings.put( DefaultTemplateEngine.GROUP_FIELDS, 
+														getSettings().get(WizardDataSourcePage.GROUP_FIELDS) );
+		}
+				
+		
+		
+		TemplateEngine templateEngine = templateBundle.getTemplateEngine();
+		
 		try {
-			InputStream stream = openContentStream(monitor);
+			
+			ReportBundle reportBundle = templateEngine.generateReportBundle(templateBundle, templateSettings);
+
+			
+			// Save the data adapter used...
+			if (step2.getDataAdapter() != null)
+			{
+				reportBundle.getJasperDesign().setProperty(MReport.DEFAULT_DATAADAPTER, step2.getDataAdapter().getName() );
+			}
+			
+			// Store the report bundle on file system
+			IContainer container = (IContainer) resource;
+			reportFile = container.getFile(new Path(fileName));
+			
+			// Save the all the files...
+			String contents = JRXmlWriterHelper.writeReport(getConfig(), reportBundle.getJasperDesign(), reportFile, false);
+			ByteArrayInputStream stream = new ByteArrayInputStream(contents.getBytes());
+			
 			if (reportFile.exists()) {
 				reportFile.setContents(stream, true, true, monitor);
 			} else {
 				reportFile.create(stream, true, monitor);
 			}
 			stream.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		monitor.worked(1);
-		monitor.setTaskName(Messages.ReportNewWizard_5);
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				try {
-					IDE.openEditor(page, reportFile, true);
-				} catch (PartInitException e) {
-					e.printStackTrace();
+			
+			saveReportBundleResources(monitor, reportBundle, container);
+			
+			monitor.worked(1);
+			monitor.setTaskName(Messages.ReportNewWizard_5);
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					try {
+						IDE.openEditor(page, reportFile, true);
+					} catch (PartInitException e) {
+						e.printStackTrace();
+					}
 				}
-			}
-		});
-		monitor.worked(1);
+			});
+			
+			monitor.worked(1);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			UIUtils.showError(e);
+			e.printStackTrace();
+			
+		}
 	}
 
-	private IFile reportFile;
-	private JasperDesign jDesign;
+  private IFile reportFile;
+	//private JasperDesign jDesign;
 
 	public IFile getReportFile() {
 		return reportFile;
 	}
 
+
 	/**
-	 * We will initialize file contents with a sample text.
+	 * Store all the resources provided by the report bundle in the same folder as the
+	 * new report.
+	 * 
+	 * @param monitor
+	 * @param reportBundle
+	 * @param container
 	 */
-
-	private InputStream openContentStream(IProgressMonitor monitor) {
-		jDesign = null;
-		if (step0.getTemplate() != null) {
-			URL obj = step0.getTemplate();
-			try {
-				jDesign = JRXmlLoader.load(obj.openStream());
-
-				copyTemplateResources(monitor, jDesign, reportFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (JRException e) {
-				e.printStackTrace();
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
-		getJasperDesign();
-		Display.getDefault().syncExec(new Runnable() {
-
-			public void run() {
-				DataAdapterDescriptor dataAdapter = step2.getDataAdapter();
-				if (dataAdapter != null)
-					jDesign.setProperty(MReport.DEFAULT_DATAADAPTER, dataAdapter.getName());
-
-				DatasetWizard.setUpDataset(jDesign.getMainDesignDataset(), step2, step3, step4);
-				new ReportGenerator().processTemplate(jDesign, step3.getFields(), step4.getFields());
-
-			}
-		});
-		try {
-			String contents = JRXmlWriterHelper.writeReport(jConfig, jDesign, reportFile, false);
-			return new ByteArrayInputStream(contents.getBytes());
-		} catch (Exception e) {
-			UIUtils.showError(e);
-		}
-		return null;
-	}
-
-	protected JasperDesign getJasperDesign() {
-		if (jDesign == null) {
-			jDesign = new JasperDesign();
-			jDesign.setPageWidth(800);
-			jDesign.setPageHeight(1200);
-			jDesign.setTopMargin(30);
-			jDesign.setBottomMargin(30);
-			jDesign.setLeftMargin(25);
-			jDesign.setRightMargin(25);
-			jDesign.setName(Messages.ReportNewWizard_new_report);
-
-			JRDesignQuery jrDesignQuery = new JRDesignQuery();
-			jrDesignQuery.setLanguage("sql"); //$NON-NLS-1$
-			jrDesignQuery.setText(""); //$NON-NLS-1$
-			jDesign.setQuery(jrDesignQuery);
-
-			JRDesignBand jb = new JRDesignBand();
-			jb.setHeight(100);
-			jDesign.setPageHeader(jb);
-
-			jb = new JRDesignBand();
-			jb.setHeight(200);
-			((JRDesignSection) jDesign.getDetailSection()).addBand(jb);
-
-			jb = new JRDesignBand();
-			jb.setHeight(100);
-			jDesign.setPageFooter(jb);
-		}
-		return jDesign;
-	}
-
-	private void copyTemplateResources(final IProgressMonitor monitor, final JasperDesign jd, final IFile repFile)
-			throws CoreException, IOException {
-		monitor.subTask(Messages.ReportNewWizard_6);
-		try {
-			List<JRDesignElement> list = ModelUtils.getAllGElements(jd);
-			for (JRDesignElement el : list) {
-				if (el instanceof JRImage) {
-					JRImage im = (JRImage) el;
-					String str = ExpressionUtil.eval(im.getExpression(), jConfig);
-					if (str != null) {// resolv image
-						Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle()
-								.findEntries(Messages.ReportNewWizard_7, str, true);
-						while (en.hasMoreElements()) {
-							URL uimage = (URL) en.nextElement();
-							IFile f = repFile.getParent().getFile(new Path(str));
-							try {
-								if (!f.exists())
-									f.create(uimage.openStream(), true, monitor);
-							} catch (CoreException e) {
-								e.printStackTrace();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
+	private void saveReportBundleResources(final IProgressMonitor monitor, ReportBundle reportBundle, IContainer container) {
+		
+			monitor.subTask(Messages.ReportNewWizard_6);
+		
+			List<String> resourceNames = reportBundle.getResourceNames();
+			
+			for (String resourceName : resourceNames)
+			{
+				IFile resourceFile = container.getFile(new Path(resourceName));
+				
+				
+				try {
+					if (!resourceFile.exists())
+					{
+						InputStream is = reportBundle.getResource(resourceName);
+						if (is != null)
+						{
+							
+							resourceFile.create(is, true, monitor);
 						}
 					}
+				} catch (Exception e) {
+					UIUtils.showError(e);
+					e.printStackTrace();
 				}
 			}
-		} catch (Exception e) {
-			UIUtils.showError(e);
-		} finally {
+
 			monitor.done();
-		}
 	}
 
 	private void throwCoreException(String message) throws CoreException {
@@ -476,4 +404,23 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 		}
 		this.selection = selection;
 	}
+
+	/**
+	 * We don't want to finish the wizard at "any" time. This methods allows
+	 * to decide when we can and when we cannot finish...
+	 * 
+	 */
+	@Override
+	public boolean canFinish() {
+		
+		if (getContainer().getCurrentPage() != congratulationsStep)
+		{
+			return false;
+		}
+		
+		return super.canFinish();
+	}
+	
+	
+	
 }

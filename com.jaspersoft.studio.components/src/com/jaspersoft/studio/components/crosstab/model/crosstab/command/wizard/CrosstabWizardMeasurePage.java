@@ -20,6 +20,8 @@
 package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
 import net.sf.jasperreports.engine.type.CalculationEnum;
@@ -48,12 +50,13 @@ import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.wizards.JSSWizard;
 
 public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 	private static final String F_CALCULATION = "CALCULATION";
 	private static final String F_NAME = "NAME";
 
-	private final class TLabelProvider extends LabelProvider implements
+	private final class TMeasureLabelProvider extends LabelProvider implements
 			ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -97,7 +100,7 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 
 	@Override
 	protected void setLabelProvider(TableViewer tableViewer) {
-		tableViewer.setLabelProvider(new TLabelProvider());
+		tableViewer.setLabelProvider(new TMeasureLabelProvider());
 	}
 
 	@Override
@@ -151,7 +154,7 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 			public Object getValue(Object element, String property) {
 				JRDesignCrosstabMeasure prop = (JRDesignCrosstabMeasure) element;
 				if (F_NAME.equals(property))
-					return ((TLabelProvider) viewer.getLabelProvider())
+					return ((TMeasureLabelProvider) viewer.getLabelProvider())
 							.getColumnText(element, 1);
 
 				if (F_CALCULATION.equals(property)) {
@@ -187,4 +190,70 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 				calcCombo });
 		viewer.setColumnProperties(new String[] { F_NAME, F_CALCULATION }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	
+	
+	
+	/**
+	 * This procedure initialize the dialog page with the list of available objects.
+	 * This implementation looks for object set in the map as DISCOVERED_FIELDS.
+	 * 
+	 */
+	public void loadSettings() {
+		
+		if (getSettings() == null) return;
+		
+		if (getWizard() instanceof CrosstabWizard)
+		{
+			setAvailableFields(((CrosstabWizard)getWizard()).getAvailableMeasures());
+		}
+		else
+		{
+			setAvailableFields(null);
+		}
+	}
+	
+	
+	/**
+	 * Every time a new selection occurs, the selected fields are stored in the settings map
+	 * with the key WizardDataSourcePage.DATASET_FIELDS
+	 */
+	public void storeSettings()
+	{
+		if (getWizard() instanceof JSSWizard &&
+				getWizard() != null)
+			{
+				Map<String, Object> settings = ((JSSWizard)getWizard()).getSettings();
+			
+				if (settings == null) return;
+				
+				settings.put(CrosstabWizard.CROSSTAB_MEASURES,  getSelectedFields() ); 
+			}
+		
+	}
+	
+	
+	/**
+	 * This function checks if a particular right element is in the provided list, 
+	 * and which is the matching element in that list.
+	 * 
+	 * This implementation is based on the string value returned by
+	 * left and right getText label providers on column 0
+	 * 
+	 * @param object
+	 * @param fields
+	 * @return
+	 */
+	protected Object findElement(Object object, List<?> fields) {
+		
+		String objName = ((TMeasureLabelProvider)rightTView.getLabelProvider()).getColumnText(object, 0);
+		for (Object obj : fields)
+		{
+			if (((TMeasureLabelProvider)leftTView.getLabelProvider()).getColumnText(obj,0).equals(objName))
+			{
+				return obj;
+			}
+		}
+		return null;
+	}
+	
 }

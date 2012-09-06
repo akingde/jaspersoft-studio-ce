@@ -26,8 +26,9 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -42,52 +43,56 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 public class DatasetRunWidgetRadio implements IExpressionContextSetter {
-	protected JRDesignDatasetRun datasetrun;
 
+	protected JRDesignDatasetRun datasetrun;
+	
+	protected boolean ignoreUpdates = false;
+	
 	public DatasetRunWidgetRadio(Composite parent) {
 		createControl(parent);
 	}
 
 	public void setData(JRDesignDatasetRun datasetrun) {
+		
+		if (this.datasetrun == datasetrun) return;
 		this.datasetrun = datasetrun;
+		
 		removeListeners();
 
 		if (datasetrun != null) {
-			dsRunExpr.setEnabled(false);
-			otherExpr.setEnabled(false);
+			
+			datasourceExpressionBox.setEnabled(false);
+			connectionExpressionBox.setEnabled(false);
 
-			sameCon.setSelection(false);
-			otherCon.setSelection(false);
-			jrdCon.setSelection(false);
-			emptyCon.setSelection(false);
-			noCon.setSelection(false);
-			otherExpr.setExpression(null);
-			dsRunExpr.setExpression(null);
+			radioUseParentConnection.setSelection(false);
+			radioUseConnectionExpression.setSelection(false);
+			radioUseDatasourceExpression.setSelection(false);
+			radioUseEmptyDatasource.setSelection(false);
+			radioNoConnection.setSelection(false);
+			connectionExpressionBox.setExpression(null);
+			datasourceExpressionBox.setExpression(null);
 
-			if (datasetrun.getConnectionExpression() == null && datasetrun.getDataSourceExpression() == null) {
-				noCon.setSelection(true);
-			} else if (datasetrun.getConnectionExpression() != null
-					&& datasetrun.getConnectionExpression().getText().equals("$P{REPORT_CONNECTION}")) {
-				sameCon.setSelection(true);
-				otherExpr.setEnabled(true);
-				otherExpr.setExpression((JRDesignExpression) datasetrun.getConnectionExpression());
-			} else if (datasetrun.getConnectionExpression() != null) {
-				otherExpr.setEnabled(true);
-				otherExpr.setExpression((JRDesignExpression) datasetrun.getConnectionExpression());
-				otherCon.setSelection(true);
-			} else if (datasetrun.getDataSourceExpression() != null
-					&& datasetrun.getDataSourceExpression().getText()
-							.startsWith("new net.sf.jasperreports.engine.JREmptyDataSource(")) {
-				emptyCon.setSelection(true);
-				dsRunExpr.setEnabled(true);
-				dsRunExpr.setExpression((JRDesignExpression) datasetrun.getDataSourceExpression());
-			} else if (datasetrun.getDataSourceExpression() != null) {
-				dsRunExpr.setEnabled(true);
-				dsRunExpr.setExpression((JRDesignExpression) datasetrun.getDataSourceExpression());
-				jrdCon.setSelection(true);
-			} else {
-				noCon.setSelection(true);
+			if (datasetrun.getConnectionExpression() != null)
+			{
+				connectionExpressionBox.setExpression((JRDesignExpression) datasetrun.getConnectionExpression());
+				boolean isReportConnection = datasetrun.getConnectionExpression().getText().equals("$P{REPORT_CONNECTION}");
+				connectionExpressionBox.setEnabled(!isReportConnection);
+				radioUseParentConnection.setSelection(isReportConnection);
+				radioUseConnectionExpression.setSelection(!isReportConnection);
 			}
+			else if (datasetrun.getDataSourceExpression() != null)
+			{
+				datasourceExpressionBox.setExpression((JRDesignExpression) datasetrun.getDataSourceExpression());
+				boolean isEmptyDatasource = datasetrun.getDataSourceExpression().getText().equals("new net.sf.jasperreports.engine.JREmptyDataSource()");
+				datasourceExpressionBox.setEnabled(!isEmptyDatasource);
+				radioUseEmptyDatasource.setSelection(isEmptyDatasource);
+				radioUseDatasourceExpression.setSelection(!isEmptyDatasource);
+			}
+			else
+			{
+				radioNoConnection.setSelection(true);
+			}
+			
 		}
 		addListeners();
 	}
@@ -101,89 +106,112 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 	}
 
 	private Composite composite;
-	private WTextExpression dsRunExpr;
-	private WTextExpression otherExpr;
-	private Button sameCon;
-	private Button otherCon;
-	private Button jrdCon;
-	private Button emptyCon;
-	private Button noCon;
+	private WTextExpression datasourceExpressionBox;
+	private WTextExpression connectionExpressionBox;
+	private Button radioUseParentConnection;
+	private Button radioUseConnectionExpression;
+	private Button radioUseDatasourceExpression;
+	private Button radioUseEmptyDatasource;
+	private Button radioNoConnection;
 	private Listener listener;
 
 	public void createControl(Composite parent) {
 		composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new FormLayout());
 
-		noCon = new Button(composite, SWT.RADIO);
-		noCon.setText(Messages.WizardConnectionPage_noconnection_text);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		noCon.setLayoutData(gd);
+		radioNoConnection = new Button(composite, SWT.RADIO);
+		FormData fd_noCon = new FormData();
+		radioNoConnection.setLayoutData(fd_noCon);
+		radioNoConnection.setText(Messages.WizardConnectionPage_noconnection_text);
 
-		sameCon = new Button(composite, SWT.RADIO);
-		sameCon.setText(Messages.WizardConnectionPage_mainreport_text);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		sameCon.setLayoutData(gd);
+		radioUseParentConnection = new Button(composite, SWT.RADIO);
+		fd_noCon.left = new FormAttachment(radioUseParentConnection, 0, SWT.LEFT);
+		FormData fd_sameCon = new FormData();
+		fd_sameCon.left = new FormAttachment(0, 10);
+		fd_sameCon.top = new FormAttachment(0, 10);
+		radioUseParentConnection.setLayoutData(fd_sameCon);
+		radioUseParentConnection.setText(Messages.WizardConnectionPage_mainreport_text);
 
-		otherCon = new Button(composite, SWT.RADIO);
-		otherCon.setText(Messages.WizardConnectionPage_connection_text);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		otherCon.setLayoutData(gd);
+		radioUseConnectionExpression = new Button(composite, SWT.RADIO);
+		FormData fd_otherCon = new FormData();
+		fd_otherCon.left = new FormAttachment(0, 10);
+		fd_otherCon.top = new FormAttachment(radioUseParentConnection, 6);
+		radioUseConnectionExpression.setLayoutData(fd_otherCon);
+		radioUseConnectionExpression.setText(Messages.WizardConnectionPage_connection_text);
 
-		otherExpr = new WTextExpression(composite, SWT.NONE);
-		otherExpr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		connectionExpressionBox = new WTextExpression(composite, SWT.NONE);
+		FormData fd_otherExpr = new FormData();
+		fd_otherExpr.bottom = new FormAttachment(radioUseConnectionExpression, 69, SWT.BOTTOM);
+		fd_otherExpr.left = new FormAttachment(0, 10);
+		fd_otherExpr.right = new FormAttachment(100, -5);
+		fd_otherExpr.top = new FormAttachment(radioUseConnectionExpression, 6);
+		connectionExpressionBox.setLayoutData(fd_otherExpr);
 
-		emptyCon = new Button(composite, SWT.RADIO);
-		emptyCon.setText(Messages.WizardConnectionPage_empty_connection_text);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		emptyCon.setLayoutData(gd);
+		radioUseEmptyDatasource = new Button(composite, SWT.RADIO);
+		FormData fd_emptyCon = new FormData();
+		fd_emptyCon.left = new FormAttachment(0, 10);
+		fd_emptyCon.top = new FormAttachment(connectionExpressionBox, 16);
+		radioUseEmptyDatasource.setLayoutData(fd_emptyCon);
+		radioUseEmptyDatasource.setText(Messages.WizardConnectionPage_empty_connection_text);
 
-		jrdCon = new Button(composite, SWT.RADIO);
-		jrdCon.setText(Messages.WizardConnectionPage_datasource_text);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		jrdCon.setLayoutData(gd);
+		radioUseDatasourceExpression = new Button(composite, SWT.RADIO);
+		FormData fd_jrdCon = new FormData();
+		fd_jrdCon.left = new FormAttachment(0, 10);
+		fd_jrdCon.top = new FormAttachment(radioUseEmptyDatasource, 6);
+		radioUseDatasourceExpression.setLayoutData(fd_jrdCon);
+		radioUseDatasourceExpression.setText(Messages.WizardConnectionPage_datasource_text);
 
-		dsRunExpr = new WTextExpression(composite, SWT.NONE);
-		dsRunExpr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		datasourceExpressionBox = new WTextExpression(composite, SWT.NONE);
+		fd_noCon.top = new FormAttachment(0, 254);
+		FormData fd_dsRunExpr = new FormData();
+		fd_dsRunExpr.bottom = new FormAttachment(radioNoConnection, -6);
+		fd_dsRunExpr.top = new FormAttachment(radioUseDatasourceExpression, 6);
+		fd_dsRunExpr.right = new FormAttachment(connectionExpressionBox, 0, SWT.RIGHT);
+		fd_dsRunExpr.left = new FormAttachment(0, 10);
+		datasourceExpressionBox.setLayoutData(fd_dsRunExpr);
 
 		listener = new Listener() {
 			int time = -1;
 
 			public void handleEvent(Event event) {
-				if (time > 0 && event.time - time < 20)
-					return;
-				time = event.time;
-				if (noCon.getSelection())
+				//if (time > 0 && event.time - time < 20)
+				//	return;
+				//time = event.time;
+				
+				if (radioNoConnection.getSelection())
 					setNoConnection();
-				else if (otherCon.getSelection())
-					setConnection("new Connection()"); //$NON-NLS-1$
-				else if (jrdCon.getSelection())
-					setDatasource("new JRDataSource()");//$NON-NLS-1$ 
-				else if (sameCon.getSelection())
+				else if (radioUseConnectionExpression.getSelection() ||
+								 radioUseParentConnection.getSelection())
+				{
 					setConnection("$P{REPORT_CONNECTION}"); //$NON-NLS-1$
-				else if (emptyCon.getSelection())
-					setDatasource("new net.sf.jasperreports.engine.JREmptyDataSource()");//$NON-NLS-1$
+				}
+				else if (radioUseDatasourceExpression.getSelection() ||
+							   radioUseEmptyDatasource.getSelection())
+				{
+					setDatasource("new net.sf.jasperreports.engine.JREmptyDataSource()");//$NON-NLS-1$ 
+				}
+				
+				connectionExpressionBox.setEnabled( radioUseConnectionExpression.getSelection()  );
+				datasourceExpressionBox.setEnabled( radioUseDatasourceExpression.getSelection() );
 			}
 		};
 
 		addListeners();
+		
+		listener.handleEvent(new Event());
 	}
 
 	private ExpressionModifiedListener mlistener = new ExpressionModifiedListener() {
 		@Override
 		public void expressionModified(ExpressionModifiedEvent event) {
-			if (otherExpr.isEnabled()) {
-				JRDesignExpression exp = otherExpr.getExpression();
+			if (connectionExpressionBox.isEnabled()) {
+				JRDesignExpression exp = connectionExpressionBox.getExpression();
 				if (exp != null)
 					setConnection(exp.getText());
 				else
 					setConnection(null);
 			} else {
-				JRDesignExpression exp = dsRunExpr.getExpression();
+				JRDesignExpression exp = datasourceExpressionBox.getExpression();
 				if (exp != null)
 					setDatasource(exp.getText());
 				else
@@ -193,30 +221,35 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 	};
 
 	protected void removeListeners() {
-		sameCon.removeListener(SWT.Selection, listener);
-		otherCon.removeListener(SWT.Selection, listener);
-		otherExpr.removeModifyListener(mlistener);
-		jrdCon.removeListener(SWT.Selection, listener);
-		dsRunExpr.removeModifyListener(mlistener);
-		emptyCon.removeListener(SWT.Selection, listener);
-		noCon.removeListener(SWT.Selection, listener);
+		radioUseParentConnection.removeListener(SWT.Selection, listener);
+		radioUseConnectionExpression.removeListener(SWT.Selection, listener);
+		connectionExpressionBox.removeModifyListener(mlistener);
+		radioUseDatasourceExpression.removeListener(SWT.Selection, listener);
+		datasourceExpressionBox.removeModifyListener(mlistener);
+		radioUseEmptyDatasource.removeListener(SWT.Selection, listener);
+		radioNoConnection.removeListener(SWT.Selection, listener);
 	}
 
 	protected void addListeners() {
-		sameCon.addListener(SWT.Selection, listener);
-		otherCon.addListener(SWT.Selection, listener);
-		otherExpr.addModifyListener(mlistener);
-		jrdCon.addListener(SWT.Selection, listener);
-		dsRunExpr.addModifyListener(mlistener);
-		emptyCon.addListener(SWT.Selection, listener);
-		noCon.addListener(SWT.Selection, listener);
+		radioUseParentConnection.addListener(SWT.Selection, listener);
+		radioUseConnectionExpression.addListener(SWT.Selection, listener);
+		connectionExpressionBox.addModifyListener(mlistener);
+		radioUseDatasourceExpression.addListener(SWT.Selection, listener);
+		datasourceExpressionBox.addModifyListener(mlistener);
+		radioUseEmptyDatasource.addListener(SWT.Selection, listener);
+		radioNoConnection.addListener(SWT.Selection, listener);
 	}
 
 	protected void setNoConnection() {
 		if (datasetrun != null) {
+			
 			datasetrun.setConnectionExpression(null);
 			datasetrun.setDataSourceExpression(null);
-			setData(datasetrun);
+			
+			removeListeners();
+			connectionExpressionBox.setExpression(null);
+			datasourceExpressionBox.setExpression(null);
+			addListeners();
 		}
 	}
 
@@ -229,7 +262,12 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 			jde.setText(exTxt);
 			datasetrun.setConnectionExpression(null);
 			datasetrun.setDataSourceExpression(jde);
-			setData(datasetrun);
+			
+			removeListeners();
+			connectionExpressionBox.setExpression(null);
+			datasourceExpressionBox.setExpression(jde);
+			addListeners();
+			//setData(datasetrun);
 		}
 	}
 
@@ -242,12 +280,19 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 			jde.setText(exTxt);
 			datasetrun.setConnectionExpression(jde);
 			datasetrun.setDataSourceExpression(null);
-			setData(datasetrun);
+			
+			removeListeners();
+			datasourceExpressionBox.setExpression(null);
+			connectionExpressionBox.setExpression(jde);
+			addListeners();
+			//setData(datasetrun);
 		}
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {
-		this.dsRunExpr.setExpressionContext(expContext);
-		this.otherExpr.setExpressionContext(expContext);
+		this.datasourceExpressionBox.setExpressionContext(expContext);
+		this.connectionExpressionBox.setExpressionContext(expContext);
 	}
+	
+
 }

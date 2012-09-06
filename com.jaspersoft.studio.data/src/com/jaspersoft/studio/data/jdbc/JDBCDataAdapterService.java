@@ -29,13 +29,27 @@ import net.sf.jasperreports.engine.JasperReportsContext;
  * @version $Id: JRBaseBand.java 4319 2011-05-17 09:22:14Z teodord $
  */
 public class JDBCDataAdapterService extends JdbcDataAdapterService {
+	
+	JdbcDataAdapter jdbcDataAdapter = null;
+	
 	public JDBCDataAdapterService(JasperReportsContext jContext,
 			JdbcDataAdapter jdbcDataAdapter) {
 		super(jContext, jdbcDataAdapter);
+		
+		this.jdbcDataAdapter = jdbcDataAdapter;
 	}
 
 	@Override
 	public String getPassword() throws JRException {
-		throw new JRException("FIXME: Password dialog not implemented!");
+	
+		System.out.println("Asking for password.... " + jdbcDataAdapter.getPassword());
+		if (jdbcDataAdapter.getPassword() == null)
+		{
+			throw new JRException("FIXME: Password dialog not implemented!");
+		}
+		
+		return jdbcDataAdapter.getPassword();
 	}
+
+	
 }
