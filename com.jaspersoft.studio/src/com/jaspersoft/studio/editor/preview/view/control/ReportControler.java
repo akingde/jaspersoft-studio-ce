@@ -191,7 +191,8 @@ public class ReportControler {
 					c.addMessage("You have some input parameters, that you have to fill first");
 					UIUtils.showWarning("You have some input parameters, that you have to fill first");
 				}
-				pcontainer.showParameters(notprmfiled);
+				if (pcontainer.isHideParameters())
+					pcontainer.showParameters(notprmfiled);
 			}
 		});
 	}

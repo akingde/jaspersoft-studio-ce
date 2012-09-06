@@ -34,6 +34,7 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
@@ -181,6 +182,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		cleftcompo.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		cleftcompo.setLayoutData(new GridData(GridData.FILL_BOTH));
 		cleftcompo.setLayout(new StackLayout());
+		
+		new  Label(leftComposite, SWT.NONE).setText("fkdasjlfajslkfa");
 
 		getLeftContainer().populate(cleftcompo, getReportControler().createControls(cleftcompo));
 		getLeftContainer().switchView(null, ReportControler.FORM_PARAMETERS);
