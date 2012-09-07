@@ -256,6 +256,7 @@ public class ReportEditor extends AbstractVisualEditor {
 		// Contributed actions
 		List<AContributorAction> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
 		for (AContributorAction a : contributedActions){
+			a.setJrConfig((JasperReportsConfiguration)getGraphicalViewer().getProperty("JRCONTEXT"));
 			toolbarManager.add(a);
 		}
 		// Global "View" menu items
