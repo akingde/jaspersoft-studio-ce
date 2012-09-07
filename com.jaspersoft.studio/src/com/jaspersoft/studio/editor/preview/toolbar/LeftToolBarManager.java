@@ -38,6 +38,7 @@ import com.jaspersoft.studio.editor.preview.actions.ViewExecutionInfoAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewParametersAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewReportParametersAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewSortFieldsAction;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 
 public class LeftToolBarManager extends ATopToolBarManager {
@@ -60,7 +61,7 @@ public class LeftToolBarManager extends ATopToolBarManager {
 		prmtbar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		label = new Label(prmtbar, SWT.NONE);
-		label.setText("Parameters");
+		label.setText(Messages.LeftToolBarManager_label);
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		topToolBar = new ToolBar(prmtbar, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
@@ -87,15 +88,15 @@ public class LeftToolBarManager extends ATopToolBarManager {
 			vexecAction = new ViewExecutionInfoAction(pvcont);
 		tbManager.add(vexecAction);
 
-		ToolItemContribution titem = new ToolItemContribution("id", SWT.CHECK);
+		ToolItemContribution titem = new ToolItemContribution("id", SWT.CHECK); //$NON-NLS-1$
 		tbManager.add(titem);
 
 		tbManager.update(true);
 
 		final ToolItem item = titem.getToolItem();
 
-		item.setImage(JaspersoftStudioPlugin.getImage("icons/eclipseicons/pin.png"));
-		item.setToolTipText("Pin Parameters Panel");
+		item.setImage(JaspersoftStudioPlugin.getImage("icons/eclipseicons/pin.png")); //$NON-NLS-1$
+		item.setToolTipText(Messages.LeftToolBarManager_pintooltip);
 		item.setSelection(!container.isHideParameters());
 		item.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {

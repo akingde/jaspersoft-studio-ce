@@ -596,6 +596,8 @@ public class Messages extends NLS {
 	public static String LayoutSection_combotitle;
 	public static String LayoutSection_propertylable;
 	public static String LayoutSection_sectiontitle;
+	public static String LeftToolBarManager_label;
+	public static String LeftToolBarManager_pintooltip;
 	public static String LinePenSection_pen_width_tool_tip;
 	public static String LocaleDialog_0;
 	public static String LocaleDialog_1;
@@ -1278,6 +1280,7 @@ public class Messages extends NLS {
 	public static String VersionDialog_label2;
 	public static String VersionDialog_title;
 	public static String VersionDialog_warning;
+	public static String ViewExecutionInfoAction_tooltip;
 	public static String WizardDataSourcePage_lblDataset_text;
 	public static String WizardDataSourcePage_lblNewLabel_text;
 	public static String WizardDataSourcePage_btnNew_text;
