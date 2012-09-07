@@ -34,8 +34,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -58,8 +56,7 @@ import com.jaspersoft.studio.utils.UIUtils;
  * and button, or on the their left.
  * <p>
  * 
- * <b>ADDITIONAL NOTE</b>: the widget has a default internal {@link GridLayout} of 2 columns, but in case the
- * <code>LABEL_ON_LEFT</code> flag is specified 3 columns are used instead.
+ * <b>ADDITIONAL NOTE</b>: the widget has a default internal layout of type {@link FormLayout}. 
  * <p>
  * 
  * <b>EXPRESSION MODIFICATIONS</b>: to add custom behavior when an expression is modified/set you can either create
@@ -94,6 +91,8 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	private static final String BUTTON_ICON_PATH = "icons/resources/expressionedit-16.png"; //$NON-NLS-1$
 	private int customTextLinesNumber = -1;
 	private ExpressionContext expContext;
+	private int oldpos = 0;
+	private boolean isRefreshing = false;
 
 	// Widgets
 	private JRDesignExpression expression;
@@ -175,34 +174,18 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	public WTextExpression(Composite parent, int style, String textLabel, int showMode, int linesNum) {
 		super(parent, style);
 		this.customTextLinesNumber = linesNum;
-
-		int columnsNum = 2;
-		if (showMode == LABEL_ON_LEFT && textLabel != null) {
-			columnsNum = 3;
-		}
-
-		if (columnsNum == 3) {
-			label = new Label(this, SWT.NONE);
-			label.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
-			label.setText(textLabel);
-		} else if (columnsNum == 2 && showMode == LABEL_ON_TOP && textLabel != null) {
-			// Draws also the information label on the top
-			label = new Label(this, SWT.NONE);
-			label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-			label.setText(textLabel);
-		}
 		setLayout(new FormLayout());
 
-		textExpression = new Text(this, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-		int heightHint = UIUtils.getCharHeight(textExpression); 
-		FormData fd_textExpression = new FormData();
-		fd_textExpression.bottom = new FormAttachment(100);
-		fd_textExpression.top = new FormAttachment(0);
-		fd_textExpression.left = new FormAttachment(0);
-		fd_textExpression.height = heightHint;
-		
-		textExpression.setLayoutData(fd_textExpression);
-		
+		if(textLabel!=null && (showMode==LABEL_ON_LEFT || showMode == LABEL_ON_TOP)){
+			// Create the needed label
+			label = new Label(this, SWT.NONE);
+			label.setText(textLabel);
+		}
+		else{
+			showMode=LABEL_NONE;
+		}
+
+		textExpression = new Text(this, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);	
 		textExpression.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -219,11 +202,6 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		});
 
 		btnEditExpression = new Button(this, SWT.FLAT);
-		fd_textExpression.right = new FormAttachment(btnEditExpression, -6);
-		FormData fd_btnEditExpression = new FormData();
-		fd_btnEditExpression.right = new FormAttachment(100);
-		fd_btnEditExpression.top = new FormAttachment(0);
-		btnEditExpression.setLayoutData(fd_btnEditExpression);
 		btnEditExpression.setImage(JaspersoftStudioPlugin.getImage(BUTTON_ICON_PATH));
 		btnEditExpression.addSelectionListener(new SelectionListener() {
 
@@ -243,10 +221,73 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 				widgetSelected(e);
 			}
 		});
+		
+		configureWidgetsLayoutData(showMode);
+
 	}
 
-	private int oldpos = 0;
-	private boolean isRefreshing = false;
+	/*
+	 * Sets the layout data information for the custom widget controls.
+	 */
+	private void configureWidgetsLayoutData(int showMode) {
+		int heightHint = UIUtils.getCharHeight(textExpression); 
+		if (showMode == LABEL_ON_LEFT) {
+			// Configuration with label on left
+			FormData fd_label = new FormData();
+			fd_label.top = new FormAttachment(0,3);
+			fd_label.left = new FormAttachment(0);
+			label.setLayoutData(fd_label);
+
+			FormData fd_btnEditExpression = new FormData();
+			fd_btnEditExpression.top = new FormAttachment(0);
+			fd_btnEditExpression.right = new FormAttachment(100);
+			btnEditExpression.setLayoutData(fd_btnEditExpression);
+			
+			FormData fd_textExpression = new FormData();
+			fd_textExpression.bottom = new FormAttachment(100);
+			fd_textExpression.top = new FormAttachment(label,-3,SWT.TOP);
+			fd_textExpression.right = new FormAttachment(btnEditExpression, -5,SWT.LEFT);
+			fd_textExpression.left = new FormAttachment(label, 5);
+			fd_textExpression.height = heightHint;
+			textExpression.setLayoutData(fd_textExpression);
+		}
+		else if (showMode == LABEL_ON_TOP) {
+			// Configuration with label on top
+			FormData fd_label = new FormData();
+			fd_label.left = new FormAttachment(0);
+			fd_label.right = new FormAttachment(100);
+			fd_label.top = new FormAttachment(0);
+			label.setLayoutData(fd_label);
+			
+			FormData fd_btnEditExpression = new FormData();
+			fd_btnEditExpression.top = new FormAttachment(label,5);
+			fd_btnEditExpression.right = new FormAttachment(label, 0, SWT.RIGHT);
+			btnEditExpression.setLayoutData(fd_btnEditExpression);
+			
+			FormData fd_textExpression = new FormData();
+			fd_textExpression.top = new FormAttachment(label,5);
+			fd_textExpression.right = new FormAttachment(btnEditExpression, -5);
+			fd_textExpression.bottom = new FormAttachment(100);
+			fd_textExpression.left = new FormAttachment(0);
+			fd_textExpression.height = heightHint;
+			textExpression.setLayoutData(fd_textExpression);
+		} 
+		else {
+			// Standard configuration
+			FormData fd_textExpression = new FormData();
+			fd_textExpression.bottom = new FormAttachment(100);
+			fd_textExpression.top = new FormAttachment(0);
+			fd_textExpression.left = new FormAttachment(0);
+			fd_textExpression.right = new FormAttachment(btnEditExpression, -5);
+			fd_textExpression.height = heightHint;
+			textExpression.setLayoutData(fd_textExpression);
+			
+			FormData fd_btnEditExpression = new FormData();
+			fd_btnEditExpression.right = new FormAttachment(100);
+			fd_btnEditExpression.top = new FormAttachment(0);
+			btnEditExpression.setLayoutData(fd_btnEditExpression);
+		}
+	}
 
 	/**
 	 * Sets the expression for the widget.

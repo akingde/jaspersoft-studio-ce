@@ -23,13 +23,19 @@
  */
 package com.jaspersoft.studio.editor.expression;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
 import net.sf.jasperreports.expressions.functions.util.FunctionsLibraryUtil;
 
 import org.eclipse.core.runtime.Assert;
@@ -151,7 +157,8 @@ public class ExpressionEditorSupportUtil {
 	 */
 	public static void addFunctionsLibraryImports(JasperDesign jd){
 		Assert.isNotNull(jd);
-		List<String> libraryClasses = FunctionsLibraryUtil.getLibraryClasses();
+		List<JRExpression> collectedExpressions = JRExpressionCollector.collectExpressions(jd);
+		List<String> libraryClasses = getStaticImportsForExpressions(collectedExpressions);
 		for(String clazzName : libraryClasses){
 			jd.addImport("static " + clazzName + ".*");
 		}
@@ -187,15 +194,32 @@ public class ExpressionEditorSupportUtil {
 	 */
 	public static void updateFunctionsLibraryImports(JasperDesign jasperDesign) {
 		Assert.isNotNull(jasperDesign);
-		// Add the imports needed for the functions library, if needed
+		// Always remove previously set functions library imports
+		ExpressionEditorSupportUtil.removeFunctionsLibraryImports(jasperDesign);
+		// Add the imports needed for the functions library, if preference is set
 		boolean useImports = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(
 				ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS);
 		if(useImports){
 			ExpressionEditorSupportUtil.addFunctionsLibraryImports(jasperDesign);
 		}
-		else{
-			ExpressionEditorSupportUtil.removeFunctionsLibraryImports(jasperDesign);
+	}
+	
+	/**
+	 * Retrieves a list of needed static imports for expression functions depending 
+	 * on the specified list of {@link JRExpression}.
+	 * 
+	 * @param expressions a list of expressions from which to extract the needed static imports
+	 * @return a list of static imports that should be added to the main report
+	 */
+	public static List<String> getStaticImportsForExpressions(List<JRExpression> expressions){
+		Set<String> importsSet=new HashSet<String>();
+		for (JRExpression jre : expressions){
+			List<JRExprFunctionBean> functions = FunctionsLibraryUtil.findFunctions(jre);
+			for (JRExprFunctionBean f : functions){
+				importsSet.add(f.getFunctionClassName());
+			}
 		}
+		return Arrays.asList(importsSet.toArray(new String[]{}));
 	}
 	
 }
