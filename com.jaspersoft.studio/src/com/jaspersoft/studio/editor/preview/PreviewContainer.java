@@ -28,13 +28,17 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
@@ -52,7 +56,9 @@ import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.editor.preview.view.report.html.JiveViewer;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -159,7 +165,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				protected void fillToolbar(IToolBarManager tbManager) {
 					if (runMode.equals(RunStopAction.MODERUN_LOCAL)) {
 						if (pvModeAction == null)
-							pvModeAction = new SwitchViewsAction(container.getRightContainer(), "Java", true);
+							pvModeAction = new SwitchViewsAction(container.getRightContainer(), Messages.PreviewContainer_javatitle, true);
 						tbManager.add(pvModeAction);
 					}
 					tbManager.add(new Separator());
@@ -186,8 +192,28 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		Composite bottom = new Composite(leftComposite, SWT.NONE);
 		bottom.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 		bottom.setLayout(new GridLayout(2, false));
-		new Button(bottom, SWT.PUSH).setText("Run");
-		new Button(bottom, SWT.PUSH).setText("Reset To Defaults");
+
+		ToolBar tb = new ToolBar(bottom, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
+		ToolBarManager tbm = new ToolBarManager(tb);
+		tbm.add(new RunStopAction(this));
+		ToolItemContribution tireset = new ToolItemContribution("", SWT.PUSH); //$NON-NLS-1$
+		tbm.add(tireset);
+		tbm.update(true);
+		ToolItem toolItem = tireset.getToolItem();
+		toolItem.setText(Messages.PreviewContainer_resetactiontitle);
+		toolItem.setToolTipText(Messages.PreviewContainer_resetactiontooltip);
+		toolItem.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				reportControler.resetParametersToDefault();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		tbm.update(true);
 
 		getLeftContainer().populate(cleftcompo, getReportControler().createControls(cleftcompo));
 		getLeftContainer().switchView(null, ReportControler.FORM_PARAMETERS);

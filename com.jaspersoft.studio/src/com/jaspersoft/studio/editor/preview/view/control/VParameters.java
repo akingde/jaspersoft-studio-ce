@@ -31,6 +31,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -67,6 +68,7 @@ public class VParameters extends APreview {
 		composite = new Composite(scompo, SWT.NONE);
 		GridLayout layout = new GridLayout();
 		layout.marginWidth = 2;
+		layout.marginBottom = 20;
 		composite.setLayout(layout);
 		composite.setBackground(parent.getBackground());
 		composite.setBackgroundMode(SWT.INHERIT_FORCE);
@@ -75,7 +77,14 @@ public class VParameters extends APreview {
 
 			@Override
 			public void controlResized(ControlEvent e) {
-				setScrollbarMinHeight();
+				int w = scompo.getClientArea().width;
+				Point csize = composite.computeSize(w, SWT.DEFAULT, true);
+
+				composite.setSize(w, Math.max(csize.y, composite.getSize().y));
+				composite.layout();
+				scompo.setMinHeight(composite.getSize().y);
+
+				// setScrollbarMinHeight();
 			}
 
 			@Override
@@ -115,17 +124,17 @@ public class VParameters extends APreview {
 		setScrollbarMinHeight();
 		if (showEmptyParametersWarning) {
 			setupDefaultValues();
-			setNotDirty();
+			setDirty(false);
 		}
 		showEmptyParametersWarning = false;
 	}
 
-	private void setNotDirty() {
+	public void setDirty(boolean dirty) {
 		for (IDataInput di : incontrols.values())
-			di.setDirty(false);
+			di.setDirty(dirty);
 	}
 
-	private void setupDefaultValues() {
+	public void setupDefaultValues() {
 		JRDataset mDataset = jContext.getJasperDesign().getMainDataset();
 		for (String pname : incontrols.keySet()) {
 			for (JRParameter p : prompts) {

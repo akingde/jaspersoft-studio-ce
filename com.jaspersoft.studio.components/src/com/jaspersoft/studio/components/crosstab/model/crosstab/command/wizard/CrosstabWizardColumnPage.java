@@ -25,19 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
-import net.sf.jasperreports.crosstabs.type.CrosstabPercentageEnum;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
-import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.type.CalculationEnum;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -58,22 +48,16 @@ import org.eclipse.swt.widgets.TableItem;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
-import com.jaspersoft.studio.components.crosstab.model.columngroup.command.CreateColumnCommand;
-import com.jaspersoft.studio.components.crosstab.model.measure.command.CreateMeasureCommand;
-import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.CreateRowCommand;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.variable.MVariable;
-import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 public class CrosstabWizardColumnPage extends WizardFieldsPage {
-	
-	
+
 	private static final String F_CALCULATION = "CALCULATION";
 	private static final String F_TOTALPOSITION = "TOTALPOSITION";
 	private static final String F_ORDER = "ORDER";
@@ -84,18 +68,16 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			Wrapper w = (Wrapper) element;
-			JRDesignCrosstabColumnGroup m = (JRDesignCrosstabColumnGroup) w
-					.getValue();
-			String txt = m.getBucket().getExpression().getText();
+			String oldExpText = w.getOldExpText();
 			switch (columnIndex) {
 			case 0:
-				if (txt.startsWith("$F{")) //$NON-NLS-1$
+				if (oldExpText.startsWith("$F{")) //$NON-NLS-1$
 					return JaspersoftStudioPlugin.getImage(MField
 							.getIconDescriptor().getIcon16());
-				if (txt.startsWith("$P{")) //$NON-NLS-1$
+				if (oldExpText.startsWith("$P{")) //$NON-NLS-1$
 					return JaspersoftStudioPlugin.getImage(MParameter
 							.getIconDescriptor().getIcon16());
-				if (txt.startsWith("$V{")) //$NON-NLS-1$
+				if (oldExpText.startsWith("$V{")) //$NON-NLS-1$
 					return JaspersoftStudioPlugin.getImage(MVariable
 							.getIconDescriptor().getIcon16());
 			}
@@ -107,7 +89,7 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 			JRDesignCrosstabColumnGroup m = (JRDesignCrosstabColumnGroup) w
 					.getValue();
 			JRCrosstabBucket bucket = m.getBucket();
-			
+
 			switch (columnIndex) {
 			case 0:
 				return w.getLabel();
@@ -125,9 +107,9 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 	protected CrosstabWizardColumnPage() {
 		this("crosstabcolumnpage"); //$NON-NLS-1$
 	}
-		
+
 	protected CrosstabWizardColumnPage(String pagename) {
-		super(pagename); 
+		super(pagename);
 		setTitle(Messages.CrosstabWizardColumnPage_columns);
 		setImageDescriptor(Activator
 				.getImageDescriptor("icons/wizard_columns.png"));//$NON-NLS-1$
@@ -137,8 +119,7 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 	@Override
 	public void setAvailableFields(List<?> inFields) {
 		List<Wrapper> nlist = new ArrayList<Wrapper>();
-		if (inFields != null)
-		{
+		if (inFields != null) {
 			for (Object obj : inFields)
 				nlist.add(new Wrapper(obj));
 		}
@@ -225,7 +206,8 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 				JRDesignCrosstabColumnGroup prop = (JRDesignCrosstabColumnGroup) w
 						.getValue();
 				if (F_NAME.equals(property)) //$NON-NLS-1$
-					return ((TColumnLabelProvider) viewer.getLabelProvider()).getColumnText(element, 1);
+					return ((TColumnLabelProvider) viewer.getLabelProvider())
+							.getColumnText(element, 1);
 
 				if (F_ORDER.equals(property)) //$NON-NLS-1$
 					return EnumHelper.getValue(
@@ -261,7 +243,8 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 					AgregationFunctionEnum function = AgregationFunctionEnum
 							.getByValue((Integer) value);
 					w.setCalculation(function);
-					CrosstabWizard.setBucketExpression(bucket, w.getOldExpText(), function);
+					CrosstabWizard.setBucketExpression(bucket,
+							w.getOldExpText(), function);
 				}
 				viewer.update(element, new String[] { property });
 				viewer.refresh();
@@ -271,79 +254,75 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 		viewer.setCellEditors(new CellEditor[] {
 				new TextCellEditor(parent),
 				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(
-						SortOrderEnum.values(), NullEnum.NOTNULL), SWT.READ_ONLY),
+						SortOrderEnum.values(), NullEnum.NOTNULL),
+						SWT.READ_ONLY),
 				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(
-						CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL), SWT.READ_ONLY),
+						CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL),
+						SWT.READ_ONLY),
 				new ComboBoxCellEditor(parent, AgregationFunctionEnum
 						.getStringValues(), SWT.READ_ONLY) });
 		viewer.setColumnProperties(new String[] { F_NAME, F_ORDER,
 				F_TOTALPOSITION, F_CALCULATION });
 	}
-	
-	
-	
+
 	/**
-	 * This procedure initialize the dialog page with the list of available objects.
-	 * This implementation looks for object set in the map as DISCOVERED_FIELDS.
+	 * This procedure initialize the dialog page with the list of available
+	 * objects. This implementation looks for object set in the map as
+	 * DISCOVERED_FIELDS.
 	 * 
 	 */
 	public void loadSettings() {
-		
-		if (getSettings() == null) return;
-		
-		if (getWizard() instanceof CrosstabWizard)
-		{
-			setAvailableFields(((CrosstabWizard)getWizard()).getAvailableColumnGroups());
-		}
-		else
-		{
+
+		if (getSettings() == null)
+			return;
+
+		if (getWizard() instanceof CrosstabWizard) {
+			setAvailableFields(((CrosstabWizard) getWizard())
+					.getAvailableColumnGroups());
+		} else {
 			setAvailableFields(null);
 		}
 	}
-	
-	
+
 	/**
-	 * Every time a new selection occurs, the selected fields are stored in the settings map
-	 * with the key WizardDataSourcePage.DATASET_FIELDS
+	 * Every time a new selection occurs, the selected fields are stored in the
+	 * settings map with the key WizardDataSourcePage.DATASET_FIELDS
 	 */
-	public void storeSettings()
-	{
-		if (getWizard() instanceof JSSWizard &&
-				getWizard() != null)
-			{
-				Map<String, Object> settings = ((JSSWizard)getWizard()).getSettings();
-			
-				if (settings == null) return;
-				
-				settings.put(CrosstabWizard.CROSSTAB_COLUMNS,  getSelectedFields() ); 
-			}
-		
+	public void storeSettings() {
+		if (getWizard() instanceof JSSWizard && getWizard() != null) {
+			Map<String, Object> settings = ((JSSWizard) getWizard())
+					.getSettings();
+
+			if (settings == null)
+				return;
+
+			settings.put(CrosstabWizard.CROSSTAB_COLUMNS, getSelectedFields());
+		}
+
 	}
-	
-	
+
 	/**
-	 * This function checks if a particular right element is in the provided list, 
-	 * and which is the matching element in that list.
+	 * This function checks if a particular right element is in the provided
+	 * list, and which is the matching element in that list.
 	 * 
-	 * This implementation is based on the string value returned by
-	 * left and right getText label providers on column 0
+	 * This implementation is based on the string value returned by left and
+	 * right getText label providers on column 0
 	 * 
 	 * @param object
 	 * @param fields
 	 * @return
 	 */
 	protected Object findElement(Object object, List<?> fields) {
-		
-		String objName = ((TColumnLabelProvider)rightTView.getLabelProvider()).getColumnText(object, 0);
-		for (Object obj : fields)
-		{
-			if (((TColumnLabelProvider)leftTView.getLabelProvider()).getColumnText(obj,0).equals(objName))
-			{
+
+		String objName = ((TColumnLabelProvider) rightTView.getLabelProvider())
+				.getColumnText(object, 0);
+		for (Object obj : fields) {
+			if (((TColumnLabelProvider) leftTView.getLabelProvider())
+					.getColumnText(obj, 0).equals(objName)) {
 				return obj;
 			}
 		}
 		return null;
 	}
-	
-	
+
 }

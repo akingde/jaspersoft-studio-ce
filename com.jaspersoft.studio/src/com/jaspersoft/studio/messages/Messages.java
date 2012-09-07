@@ -1070,6 +1070,9 @@ public class Messages extends NLS {
 	public static String PDFExporterPreferencePage_83;
 	public static String PDFExporterPreferencePage_84;
 	public static String PercentagePattern_description;
+	public static String PreviewContainer_javatitle;
+	public static String PreviewContainer_resetactiontitle;
+	public static String PreviewContainer_resetactiontooltip;
 	public static String PreviewEditor_connection_could_not_be_established;
 	public static String PreviewEditor_fill_report;
 	public static String PreviewEditor_no_datasource;
@@ -1085,6 +1088,16 @@ public class Messages extends NLS {
 	public static String ReloadAction_reload;
 	public static String ReloadAction_reload_description;
 	public static String ReloadAction_reload_tool_tip;
+	public static String ReportControler_inputparameterstitle;
+	public static String ReportControler_msg_compiling;
+	public static String ReportControler_msg_fillparameters;
+	public static String ReportControler_msg_fillreports;
+	public static String ReportControler_msg_reportfinished;
+	public static String ReportControler_msg_setdataadapter;
+	public static String ReportControler_msg_setvirtualizer;
+	public static String ReportControler_reportparameterstitle;
+	public static String ReportControler_sortoptiontitle;
+	public static String ReportControler_stats_start;
 	public static String ReportNewWizard_0;
 	public static String ReportNewWizard_1;
 	public static String ReportNewWizard_11;

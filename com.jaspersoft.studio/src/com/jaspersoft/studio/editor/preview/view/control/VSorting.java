@@ -57,13 +57,18 @@ public class VSorting extends APreview {
 
 		composite = new Composite(scompo, SWT.NONE);
 		composite.setBackground(parent.getBackground());
-		composite.setLayout(new GridLayout());
+		GridLayout layout = new GridLayout();
+		layout.marginBottom = 20;
+		composite.setLayout(layout);
 		scompo.setContent(composite);
 
 		composite.addControlListener(new ControlListener() {
 
 			@Override
 			public void controlResized(ControlEvent e) {
+				int h = composite.getSize().y;
+				composite.setSize(composite.computeSize(SWT.DEFAULT, h, true));
+				composite.layout();
 				scompo.setMinSize(composite.getSize());
 			}
 

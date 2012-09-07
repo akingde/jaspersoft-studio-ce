@@ -61,18 +61,16 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			Wrapper w = (Wrapper) element;
-			JRDesignCrosstabRowGroup m = (JRDesignCrosstabRowGroup) w
-					.getValue();
-			String txt = m.getBucket().getExpression().getText();
+			String oldExpText = w.getOldExpText();
 			switch (columnIndex) {
 			case 0:
-				if (txt.startsWith("$F{")) //$NON-NLS-1$
+				if (oldExpText.startsWith("$F{")) //$NON-NLS-1$
 					return JaspersoftStudioPlugin.getImage(MField
 							.getIconDescriptor().getIcon16());
-				if (txt.startsWith("$P{")) //$NON-NLS-1$
+				if (oldExpText.startsWith("$P{")) //$NON-NLS-1$
 					return JaspersoftStudioPlugin.getImage(MParameter
 							.getIconDescriptor().getIcon16());
-				if (txt.startsWith("$V{")) //$NON-NLS-1$
+				if (oldExpText.startsWith("$V{")) //$NON-NLS-1$
 					return JaspersoftStudioPlugin.getImage(MVariable
 							.getIconDescriptor().getIcon16());
 			}
@@ -84,7 +82,7 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 			JRDesignCrosstabRowGroup m = (JRDesignCrosstabRowGroup) w
 					.getValue();
 			JRCrosstabBucket bucket = m.getBucket();
-			
+
 			switch (columnIndex) {
 			case 0:
 				return w.getLabel();
@@ -102,31 +100,30 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 	protected CrosstabWizardRowPage() {
 		this("crosstabrowpage"); //$NON-NLS-1$
 	}
-		
+
 	protected CrosstabWizardRowPage(String pagename) {
-		super(pagename); 
+		super(pagename);
 		setTitle(Messages.CrosstabWizardRowPage_rows);
 		setImageDescriptor(Activator
 				.getImageDescriptor("icons/wizard_rows.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardRowPage_description);
 	}
 
-
 	/**
-	 * Set the label provider, which is an instance of the local class TLabelProvider.
-	 * This implementation deals with Row Groups.
+	 * Set the label provider, which is an instance of the local class
+	 * TLabelProvider. This implementation deals with Row Groups.
 	 * 
 	 * @see com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabWizardColumnPage#setLabelProvider(org.eclipse.jface.viewers.TableViewer)
-	 *
+	 * 
 	 * @param
-	 *
+	 * 
 	 * @return
 	 */
 	@Override
 	protected void setLabelProvider(TableViewer tableViewer) {
 		tableViewer.setLabelProvider(new TRowLabelProvider());
 	}
-	
+
 	@Override
 	protected void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
@@ -195,7 +192,6 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 			}
 		});
 
-		
 		viewer.setCellEditors(new CellEditor[] {
 				new TextCellEditor(parent),
 				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(
@@ -207,64 +203,61 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 		viewer.setColumnProperties(new String[] { F_NAME, F_ORDER,
 				F_TOTALPOSITION, F_CALCULATION });
 	}
-	
-	
+
 	/**
-	 * This procedure initialize the dialog page with the list of available objects.
-	 * This implementation looks for object set in the map as DISCOVERED_FIELDS.
+	 * This procedure initialize the dialog page with the list of available
+	 * objects. This implementation looks for object set in the map as
+	 * DISCOVERED_FIELDS.
 	 * 
 	 */
 	public void loadSettings() {
-		
-		if (getSettings() == null) return;
-		
-		if (getWizard() instanceof CrosstabWizard)
-		{
-			setAvailableFields(((CrosstabWizard)getWizard()).getAvailableRowGroups());
-		}
-		else
-		{
+
+		if (getSettings() == null)
+			return;
+
+		if (getWizard() instanceof CrosstabWizard) {
+			setAvailableFields(((CrosstabWizard) getWizard())
+					.getAvailableRowGroups());
+		} else {
 			setAvailableFields(null);
 		}
 	}
-	
-	
+
 	/**
-	 * Every time a new selection occurs, the selected fields are stored in the settings map
-	 * with the key WizardDataSourcePage.DATASET_FIELDS
+	 * Every time a new selection occurs, the selected fields are stored in the
+	 * settings map with the key WizardDataSourcePage.DATASET_FIELDS
 	 */
-	public void storeSettings()
-	{
-		if (getWizard() instanceof JSSWizard &&
-				getWizard() != null)
-			{
-				Map<String, Object> settings = ((JSSWizard)getWizard()).getSettings();
-			
-				if (settings == null) return;
-				
-				settings.put(CrosstabWizard.CROSSTAB_ROWS,  getSelectedFields() ); 
-			}
-		
+	public void storeSettings() {
+		if (getWizard() instanceof JSSWizard && getWizard() != null) {
+			Map<String, Object> settings = ((JSSWizard) getWizard())
+					.getSettings();
+
+			if (settings == null)
+				return;
+
+			settings.put(CrosstabWizard.CROSSTAB_ROWS, getSelectedFields());
+		}
+
 	}
-	
+
 	/**
-	 * This function checks if a particular right element is in the provided list, 
-	 * and which is the matching element in that list.
+	 * This function checks if a particular right element is in the provided
+	 * list, and which is the matching element in that list.
 	 * 
-	 * This implementation is based on the string value returned by
-	 * left and right getText label providers on column 0
+	 * This implementation is based on the string value returned by left and
+	 * right getText label providers on column 0
 	 * 
 	 * @param object
 	 * @param fields
 	 * @return
 	 */
 	protected Object findElement(Object object, List<?> fields) {
-		
-		String objName = ((TRowLabelProvider)rightTView.getLabelProvider()).getColumnText(object, 0);
-		for (Object obj : fields)
-		{
-			if (((TRowLabelProvider)leftTView.getLabelProvider()).getColumnText(obj,0).equals(objName))
-			{
+
+		String objName = ((TRowLabelProvider) rightTView.getLabelProvider())
+				.getColumnText(object, 0);
+		for (Object obj : fields) {
+			if (((TRowLabelProvider) leftTView.getLabelProvider())
+					.getColumnText(obj, 0).equals(objName)) {
 				return obj;
 			}
 		}

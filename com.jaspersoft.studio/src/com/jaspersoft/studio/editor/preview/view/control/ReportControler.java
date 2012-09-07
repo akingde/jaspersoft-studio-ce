@@ -77,20 +77,20 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ReportControler {
 
-	public static final String ST_RECORDCOUNTER = "RECORDCOUNTER";
+	public static final String ST_RECORDCOUNTER = "RECORDCOUNTER"; //$NON-NLS-1$
 
-	public static final String ST_PAGECOUNT = "PAGECOUNT";
+	public static final String ST_PAGECOUNT = "PAGECOUNT"; //$NON-NLS-1$
 
-	public static final String ST_FILLINGTIME = "FILLINGTIME";
+	public static final String ST_FILLINGTIME = "FILLINGTIME"; //$NON-NLS-1$
 
-	public static final String ST_COMPILATIONTIME = "COMPILATIONTIME";
+	public static final String ST_COMPILATIONTIME = "COMPILATIONTIME"; //$NON-NLS-1$
 
-	public static final String ST_REPORTEXECUTIONTIME = "REPORTEXECUTIONTIME";
+	public static final String ST_REPORTEXECUTIONTIME = "REPORTEXECUTIONTIME"; //$NON-NLS-1$
 
-	public static final String FORM_SORTING = "Sorting Options";
+	public static final String FORM_SORTING = Messages.ReportControler_sortoptiontitle;
 
-	public static final String FORM_REPORT_PARAMETERS = "Report Parameters";
-	public static final String FORM_PARAMETERS = "Input Parameters";
+	public static final String FORM_REPORT_PARAMETERS = Messages.ReportControler_reportparameterstitle;
+	public static final String FORM_PARAMETERS = Messages.ReportControler_inputparameterstitle;
 
 	public static List<IDataInput> inputs = new ArrayList<IDataInput>();
 	static {
@@ -125,6 +125,10 @@ public class ReportControler {
 		setParameters();
 		if (viewmap != null)
 			fillForms();
+	}
+
+	public void resetParametersToDefault() {
+		prmInput.setupDefaultValues();
 	}
 
 	private void setParameters() {
@@ -174,7 +178,7 @@ public class ReportControler {
 		fillError = null;
 		stats = new Statistics();
 		stats.startCount(ST_REPORTEXECUTIONTIME);
-		c.addMessage("Start Report Execution");
+		c.addMessage(Messages.ReportControler_stats_start);
 
 		pcontainer.setNotRunning(false);
 		runJob(pcontainer);
@@ -184,12 +188,13 @@ public class ReportControler {
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
-				c.addMessage("Report Execution Finished.");
+				c.addMessage(Messages.ReportControler_msg_reportfinished);
 				pcontainer.setNotRunning(true);
 				boolean notprmfiled = !prmInput.checkFieldsFilled();
 				if (notprmfiled) {
-					c.addMessage("You have some input parameters, that you have to fill first");
-					UIUtils.showWarning("You have some input parameters, that you have to fill first");
+					c.addMessage(Messages.ReportControler_msg_fillparameters);
+					UIUtils.showWarning(Messages.ReportControler_msg_fillparameters);
+					prmInput.setDirty(true);
 				}
 				if (pcontainer.isHideParameters())
 					pcontainer.showParameters(notprmfiled);
@@ -220,15 +225,16 @@ public class ReportControler {
 					JasperReport jasperReport = compileJasperDesign(file, jd);
 
 					if (jasperReport != null) {
-						if (!prmInput.checkFieldsFilled())
+						if (!prmInput.checkFieldsFilled()) {
 							return Status.CANCEL_STATUS;
+						}
 
 						setupDataAdapter(pcontainer);
 						if (pcontainer.getMode().equals(RunStopAction.MODERUN_JIVE)) {
 							runJive(pcontainer, file, jasperReport);
 						} else {
 							setupVirtualizer(jd);
-							c.addMessage("Filling Report");
+							c.addMessage(Messages.ReportControler_msg_fillreports);
 
 							setupRecordCounters();
 							// We create the fillHandle to run the report based on the type of data adapter....
@@ -280,7 +286,7 @@ public class ReportControler {
 
 	private JasperReport compileJasperDesign(IFile file, JasperDesign jd) throws CoreException {
 		stats.startCount(ST_COMPILATIONTIME);
-		c.addMessage("Compiling");
+		c.addMessage(Messages.ReportControler_msg_compiling);
 		if (compiler == null) {
 			compiler = new JasperReportCompiler();
 			compiler.setErrorHandler(new JRErrorHandler(c));
@@ -296,12 +302,12 @@ public class ReportControler {
 	}
 
 	private void setupVirtualizer(JasperDesign jd) {
-		c.addMessage("Setting Virtualizer");
+		c.addMessage(Messages.ReportControler_msg_setvirtualizer);
 		VirtualizerHelper.setVirtualizer(jd, jrContext, jasperParameters);
 	}
 
 	private void setupDataAdapter(final PreviewContainer pcontainer) throws JRException {
-		c.addMessage("Setting DataAdapter Connection");
+		c.addMessage(Messages.ReportControler_msg_setdataadapter);
 		DataAdapterDescriptor daDesc = pcontainer.getDataAdapterDesc();
 		if (daDesc != null)
 			jasperParameters.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, daDesc.getDataAdapter());
@@ -399,9 +405,9 @@ public class ReportControler {
 
 	private Statistics stats;
 
-	public static final String ST_REPORTSIZE = "REPORTSIZE";
+	public static final String ST_REPORTSIZE = "REPORTSIZE"; //$NON-NLS-1$
 
-	public static final String ST_EXPORTTIME = "ST_EXPORTTIME";
+	public static final String ST_EXPORTTIME = "ST_EXPORTTIME"; //$NON-NLS-1$
 
 	private JasperReportCompiler compiler;
 
