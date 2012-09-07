@@ -8,25 +8,32 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import javax.swing.text.StyleConstants.ColorConstants;
-
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.type.JREnum;
 
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -36,7 +43,6 @@ import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyles;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
-import com.jaspersoft.studio.property.descriptor.color.ColorCellEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -46,6 +52,8 @@ public class StylesListSection extends AbstractSection {
 	private static MStyles stylesClass = null;
 	
 	private static Color leftStringColor = null;
+	
+	private static ImageData image = new ImageData(StylesListSection.class.getResourceAsStream("/icons/resources/remove-16.png"));
 	
 	private HashMap<String,MStyle> styleMaps;
 	
@@ -57,18 +65,20 @@ public class StylesListSection extends AbstractSection {
 	
 	private HashMap<String, Object> elementAttributes = null;
 	
+	private IconMouseTracker trackerListener = new IconMouseTracker();
+
+	private boolean needRefresh = false;
+	
 	private class ElementClickListener implements MouseListener {
 		
 		private	APropertyNode element;
 		
 		private String property;
 		
-		private Object oldValue;
 		
 		public ElementClickListener(APropertyNode element, String property){
 			this.element = element;
 			this.property = property;
-			oldValue = null;
 		}
 		
     public void mouseDown(MouseEvent e) {
@@ -76,22 +86,89 @@ public class StylesListSection extends AbstractSection {
 
     public void mouseUp(MouseEvent e) {
     	Object propertyValue = element.getPropertyValue(property);
-    	System.out.println(element.getClass()+"."+ property+":"+oldValue +"->"+propertyValue);
-    	if (oldValue == null && propertyValue!=null){
-    		oldValue = propertyValue;
-    		element.setPropertyValue(property, null);
-    		((StyledText)e.getSource()).setForeground(org.eclipse.draw2d.ColorConstants.gray);
-    	} else if (oldValue != null && propertyValue == null){
-    		element.setPropertyValue(property, oldValue);
-    		oldValue = null;
-    		((StyledText)e.getSource()).setForeground(org.eclipse.draw2d.ColorConstants.black);
-    	}
+    	System.out.println(element.getClass()+"."+ property+":"+propertyValue  +"-> null");
+			CommandStack cs = getEditDomain().getCommandStack();
+			CompoundCommand cc = new CompoundCommand("Set " + property);
+    	Command c = changeProperty(property, null,element);
+   		if (c != null) cc.add(c);
+  		if (!cc.getCommands().isEmpty()) {
+				cs.execute(cc);
+				System.out.println("new value " +  element.getPropertyValue(property));
+    		needRefresh = true;
+    		refresh();
+  		}
     }
 
     public void mouseDoubleClick(MouseEvent e) {
 
     }
   }
+	
+	private class MouseHoverListener implements Listener {
+
+     public void handleEvent(Event e) {
+     	 System.out.println("puzza");
+     	 Composite parentLayout = ((Composite)e.widget);
+    	 if (parentLayout.getChildren().length>1){
+    		 parentLayout.getChildren()[0].setVisible(true);
+    	 }
+     }
+   }
+	
+	private class MouseExitListener implements Listener {
+
+    public void handleEvent(Event e) {
+    	Composite parentLayout = ((Composite)e.widget);
+      for (Control control : parentLayout.getChildren()) {
+        if (control == e.item || parentLayout == e.item)
+            return;
+      }
+   	 System.out.println("out");
+   	 if (parentLayout.getChildren().length>1){
+   		parentLayout.getChildren()[0].setVisible(false);
+   	 }
+    }
+  }
+	
+	private class IconMouseTracker implements MouseTrackListener{
+
+		Composite lastElementSelected = null;
+		
+		public void refresh(){
+			lastElementSelected = null;
+		}
+		
+		@Override
+		public void mouseEnter(MouseEvent e) {
+			Composite parentLayout = null;
+			if (e.widget instanceof Composite)
+				parentLayout = ((Composite)e.widget);
+			else 
+				parentLayout = ((Control)e.widget).getParent();
+			if (lastElementSelected == null)
+				lastElementSelected = parentLayout;
+			if (parentLayout.getChildren().length > 1) {
+				lastElementSelected.getChildren()[0].setVisible(false);
+	   		lastElementSelected = parentLayout;	
+				parentLayout.getChildren()[0].setVisible(true);
+			}
+		}
+
+		@Override
+		public void mouseExit(MouseEvent e) {
+			Composite parentLayout = null;
+			if (e.widget instanceof Composite)
+				parentLayout = ((Composite)e.widget);
+			else 
+				parentLayout = ((Control)e.widget).getParent();
+    	if (parentLayout.getChildren().length>1)
+    		parentLayout.getChildren()[0].setVisible(false);
+		}
+
+		@Override
+		public void mouseHover(MouseEvent e) {}
+		
+	}
 	
 	private LinkedList <MStyle> buildStylesGerarchy(APropertyNode element){
 		LinkedList <MStyle> result = new LinkedList <MStyle>();
@@ -114,59 +191,26 @@ public class StylesListSection extends AbstractSection {
 		valueText.setStyleRange(style1);
 	}
 	
-	private StyledText paintColor(Composite parent, Color colorValue, String colorName, GridData gData, boolean addLine){
-		StyledText label = new StyledText(parent, SWT.READ_ONLY);
-		label.setText(Messages.getString("common_"+colorName));
-		label.setLayoutData(gData);
-		label.setForeground(leftStringColor);
-		label.setEnabled(false);
-		label.setEditable(false);
-		StyledText valueText = new StyledText(parent, SWT.READ_ONLY);
+	private Control paintColor(Composite parent, Color colorValue, String colorName, GridData gData, boolean addLine){
 		String stringValue = "RGB("+colorValue.getRed()+","+colorValue.getGreen()+","+colorValue.getBlue()+")";
-		valueText.setText(stringValue);
-		valueText.setLayoutData(gData);
-		valueText.setEnabled(true);
-		valueText.setEditable(false);
-		DefaultToolTip toolTip = new DefaultToolTip(valueText);
-		toolTip.setBackgroundColor(colorValue);
-		toolTip.setText("           ");
-		toolTip.setHideDelay(0);
-		toolTip.setPopupDelay(0);
-		if (addLine){
-			strikeStyledText(valueText);
-			strikeStyledText(label);
-			//label.addPaintListener(new LinePaintListener());
-		}
-		return valueText;
-	}
-	
-	private StyledText printLabels(Composite parent, String name, String value, GridData gData, boolean addLine){
-  	StyledText label = new StyledText(parent, SWT.NONE);
- 		label.setText(Messages.getString("common_"+name)); //$NON-NLS-1$
+		Composite nameComp = new Composite(parent, SWT.NONE);
+		nameComp.setLayout(new RowLayout());
+		nameComp.setLayoutData(gData);
+		
+ 	 	Label imageLabel = new Label(nameComp, SWT.NONE);
+		imageLabel.setImage(new Image(null, image));
+ 	 	imageLabel.setVisible(false);
+		
+		StyledText label = new StyledText(nameComp, SWT.NONE);
+ 		label.setText(Messages.getString("common_"+colorName)); //$NON-NLS-1$
   	label.setForeground(leftStringColor);
-		label.setLayoutData(gData);
 		label.setEditable(false);
 		label.setEnabled(false);
-		StyledText valueText = new StyledText(parent, SWT.NONE);
-		valueText.setText(value);
-		valueText.setEditable(false);
-		if (addLine){
-			strikeStyledText(valueText);
-			strikeStyledText(label);
-		}
-		return valueText;
-	}
-	
-	
-	private StyledText paintCheckBox(Composite parent, String name, boolean checked, GridData gData, boolean addLine){
-		StyledText label = new StyledText(parent, SWT.NONE);
-		label.setText(name);
-		label.setLayoutData(gData);
-		label.setForeground(leftStringColor);
-		label.setEditable(false);
-		label.setEnabled(false);
-		StyledText valueText = new StyledText(parent, SWT.NONE);
-		String stringValue = Messages.getString("common_boolean_"+checked);
+		
+		Composite valueComp = new Composite(parent, SWT.NONE);
+		valueComp.setLayout(new RowLayout());
+		valueComp.setLayoutData(gData);
+		StyledText valueText = new StyledText(valueComp, SWT.NONE);
 		valueText.setText(stringValue);
 		valueText.setEditable(false);
 		valueText.setEnabled(false);
@@ -174,30 +218,99 @@ public class StylesListSection extends AbstractSection {
 			strikeStyledText(valueText);
 			strikeStyledText(label);
 		}
-		return valueText;
+		DefaultToolTip toolTip = new DefaultToolTip(valueComp);
+		toolTip.setBackgroundColor(colorValue);
+		toolTip.setText("           ");
+		toolTip.setHideDelay(0);
+		toolTip.setPopupDelay(0);
+		return imageLabel;
+	}
+	
+	private Control printLabels(Composite parent, String name, String value, GridData gData, boolean addLine){
+		Composite valueComp = new Composite(parent, SWT.NONE);
+		valueComp.setLayout(new RowLayout());
+		valueComp.setLayoutData(gData);
+		
+ 	 	Label imageLabel = new Label(valueComp, SWT.NONE);
+		imageLabel.setImage(new Image(null, image));
+ 	 	imageLabel.setVisible(false);
+
+ 	 
+		StyledText label = new StyledText(valueComp, SWT.NONE);
+ 		label.setText(Messages.getString("common_"+name)); //$NON-NLS-1$
+  	label.setForeground(leftStringColor);
+		label.setEditable(false);
+		label.setEnabled(false);
+		
+		
+		StyledText valueText = new StyledText(parent, SWT.NONE);
+		valueText.setText(value);
+		valueText.setEditable(false);
+		valueText.setEnabled(false);
+		if (addLine){
+			strikeStyledText(valueText);
+			strikeStyledText(label);
+		}
+		return imageLabel;
+	}
+	
+	
+	private Control paintCheckBox(Composite parent, String name, boolean checked, GridData gData, boolean addLine){
+		String stringValue = Messages.getString("common_boolean_"+checked);
+		return printLabels(parent, name,stringValue, gData, addLine);
+	}
+	
+	private void AddListener(Control element){
+//		element.addMouseListener(new ElementClickListener(actualElement,name));
+//		element.getParent().addListener(SWT.MouseEnter, new MouseHoverListener());
+//		element.getParent().addListener(SWT.MouseExit, new MouseExitListener());
+		Composite parent = element.getParent();
+		parent.addMouseTrackListener(trackerListener);
+		for(Control son : parent.getChildren()){
+			son.addMouseTrackListener(trackerListener);
+		}
 	}
 	
 
-	private void printObject(String keyPrefix, String name, Object value, Composite parent, GridData gData, boolean printLine, APropertyNode actualElement){
+	private void printObject(String keyPrefix, String name, Object value, Composite parent, GridData gData, boolean printLine, APropertyNode actualElement, boolean addListener){
 		if (value instanceof Color){
 			Color valImage = (Color)value;
-			paintColor(parent,valImage, keyPrefix+name, gData, printLine).addMouseListener(new ElementClickListener(actualElement,name));
+			Control label = paintColor(parent,valImage, keyPrefix+name, gData, printLine);
+			if (addListener) {
+				AddListener(label);
+				label.addMouseListener(new ElementClickListener(actualElement,name));
+			}
 		} else if (value instanceof java.awt.Color){
 			java.awt.Color valImage = (java.awt.Color)value;
-			paintColor(parent, ModelUtils.getSWTColorFromAWT(valImage), keyPrefix+name, gData, printLine).addMouseListener(new ElementClickListener(actualElement,name));
+			Control label = paintColor(parent, ModelUtils.getSWTColorFromAWT(valImage), keyPrefix+name, gData, printLine);
+			if (addListener) {
+				AddListener(label);
+				label.addMouseListener(new ElementClickListener(actualElement,name));
+			}
 		} else if (value instanceof JREnum){
 			JREnum enumValue = (JREnum) value;
-			printLabels(parent, keyPrefix+name, enumValue.getName(), gData, printLine).addMouseListener(new ElementClickListener(actualElement,name));
+			Control label = printLabels(parent, keyPrefix+name, enumValue.getName(), gData, printLine);
+			if (addListener) {
+				AddListener(label);
+				label.addMouseListener(new ElementClickListener(actualElement,name));
+			}
 		} else if (value instanceof Boolean){
-			paintCheckBox(parent,keyPrefix+name,(Boolean)value, gData, printLine).addMouseListener(new ElementClickListener(actualElement,name));
+			Control label = paintCheckBox(parent,keyPrefix+name,(Boolean)value, gData, printLine);
+			if (addListener) {
+				AddListener(label);
+				label.addMouseListener(new ElementClickListener(actualElement,name));
+			}
 		} else if (value instanceof MLinePen){
 			MLinePen lineValue = (MLinePen) value;
 			//I need to pass a new context for the linepen because it's a composite value, so in the main hashmap i have only the
 			//complex value, not all it's fields
 			printStyleAttribute(parent, lineValue, null, keyPrefix+name+"_", ((MLinePen)elementAttributes.get(name)).getStylesDescriptors());
 		} else {
-			printLabels(parent, keyPrefix+name, value.toString(), gData, printLine).addMouseListener(new ElementClickListener(actualElement,name));
-			//System.out.println(value.getClass().toString());
+			Control label = printLabels(parent, keyPrefix+name, value.toString(), gData, printLine);
+			if (addListener) {
+				AddListener(label);
+				label.addMouseListener(new ElementClickListener(actualElement,name));
+			}
 		}
 	}
 	
@@ -223,14 +336,14 @@ public class StylesListSection extends AbstractSection {
 		GridData sameSizeGridData = new GridData();
 		sameSizeGridData.verticalAlignment = SWT.CENTER;
 		sameSizeGridData.heightHint = 20;
-		sameSizeGridData.widthHint = 150;
+		sameSizeGridData.widthHint = 200;
 		elementAttributes = element.getStylesDescriptors();
 		Iterator<String> it=elementAttributes.keySet().iterator();
 	  while (it.hasNext()) {
 	  	String key = it.next();
 	  	Object elementAttribute = elementAttributes.get(key);
 	  	if (elementAttribute!=null){
-	  		printObject("",key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(key),element);
+	  		printObject("",key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(key),element,true);
 	  		ovverridenAttributes.add(key);
 	  	}
 	  }
@@ -243,14 +356,14 @@ public class StylesListSection extends AbstractSection {
 		GridData sameSizeGridData = new GridData();
 		sameSizeGridData.verticalAlignment = SWT.CENTER;
 		sameSizeGridData.heightHint = 20;
-		sameSizeGridData.widthHint = 150;
+		sameSizeGridData.widthHint = 200;
 		HashMap<String, Object> properties = element.getStylesDescriptors();
 		Iterator<String> it=properties.keySet().iterator();
 	  while (it.hasNext()) {
 	  	String key = it.next();
 	  	Object elementAttribute = properties.get(key);
 	  	if (elementAttribute!=null && localElementAttributes.containsKey(key)){
-	  		printObject(keyPrefix, key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(keyPrefix + key),element);
+	  		printObject(keyPrefix, key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(keyPrefix + key),element,true);
 	  		ovverridenAttributes.add(keyPrefix +key);
 	  	}
 	  }
@@ -286,13 +399,13 @@ public class StylesListSection extends AbstractSection {
 		GridData sameSizeGridData = new GridData();
 		sameSizeGridData.verticalAlignment = SWT.CENTER;
 		sameSizeGridData.heightHint = 20;
-		sameSizeGridData.widthHint = 150;
+		sameSizeGridData.widthHint = 200;
 		Iterator<String> it=defaultValues.keySet().iterator();
 		while (it.hasNext()) {
 		  	String key = it.next();
 		  	Object elementAttribute = defaultValues.get(key);
 		  	if (elementAttribute != null && elementAttributes.containsKey(key)){
-		  		printObject("",key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(key),element);
+		  		printObject("",key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(key),element,false);
 		  	}
 		}
 	}
@@ -300,7 +413,8 @@ public class StylesListSection extends AbstractSection {
 	@Override
 	public void refresh() {
 		isRefreshing = true;
-		if (getElement() != element){
+		if (getElement() != element || needRefresh){
+			trackerListener.refresh();
 			element = getElement();
 			initStyleMaps();
 			//Dispose the old widgets
@@ -317,6 +431,8 @@ public class StylesListSection extends AbstractSection {
 			elementAttributes = null;
 			ovverridenAttributes = null;
 			styleMaps = null;
+			needRefresh = false;
+			parent.layout();
 		}
 		isRefreshing = false;
 	}

@@ -262,7 +262,7 @@ public class MFont extends APropertyNode {
 				if (((String) value).isEmpty())
 					value = null;
 				jrElement.setFontName((String) value);
-			}
+			} else if (value == null) jrElement.setFontName((String) value);
 		} else if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
 			try {
 				jrElement.setFontSize(new Integer((String) value));

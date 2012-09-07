@@ -517,9 +517,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return valignD.getEnumValue(jrstyle.getOwnVerticalAlignmentValue());
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			return rotationD.getEnumValue(jrstyle.getOwnRotationValue());
-		if (id.equals(JRBaseStyle.PROPERTY_MODE))
+		if (id.equals(JRBaseStyle.PROPERTY_MODE)){
+			if (modeD == null) modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class, NullEnum.INHERITED);
 			return modeD.getEnumValue(jrstyle.getOwnModeValue());
-
+		}
 		if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrstyle.isOwnBlankWhenNull();
 		if (id.equals(JRBaseStyle.PROPERTY_STRIKE_THROUGH))
@@ -534,7 +535,11 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return jrstyle.getOwnFontName();
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
 			return jrstyle.getOwnFontSize() != null ? jrstyle.getOwnFontSize().toString() : ""; //$NON-NLS-1$
-
+		if (lineBox != null) {
+			Object val = lineBox.getPropertyValue(id);
+			if (val != null)
+				return val;
+		}
 		return null;
 	}
 
@@ -604,7 +609,11 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			jrstyle.setFontName((String) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
-			jrstyle.setFontSize(new Integer((String) value));
+			if ((value instanceof String && value.toString().length()==0) || value == null) jrstyle.setFontSize(null);
+			else jrstyle.setFontSize(new Integer((String) value));
+		else 	if (lineBox != null) {
+			lineBox.setPropertyValue(id, value);
+		}
 	}
 
 	/**
