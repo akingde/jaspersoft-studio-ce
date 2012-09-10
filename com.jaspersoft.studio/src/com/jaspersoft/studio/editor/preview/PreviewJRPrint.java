@@ -186,6 +186,7 @@ public class PreviewJRPrint extends ABasicEditor {
 		if (rightContainer == null) {
 			rightContainer = new MultiPageContainer() {
 				public void switchView(Statistics stats, String key) {
+					currentViewer = key;
 					APreview aPreview = pmap.get(key);
 					if (aPreview instanceof IJRPrintable) {
 						console = getConsole();
@@ -202,9 +203,15 @@ public class PreviewJRPrint extends ABasicEditor {
 					currentViewer = key;
 					super.switchView(stats, key);
 				}
+				@Override
+				public void switchView(String key) {
+					currentViewer = key;
+					super.switchView(key);
+				}
 
 				@Override
 				public void switchView(Statistics stats, APreview view) {
+					//set currentviewer key
 					if (view instanceof IJRPrintable) {
 						try {
 							((IJRPrintable) view).setJRPRint(stats, jasperPrint);
