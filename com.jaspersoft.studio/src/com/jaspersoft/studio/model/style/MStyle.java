@@ -234,6 +234,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		result.put(JRDesignStyle.PROPERTY_ROTATION, element.getOwnRotationValue());
 		result.put(JRDesignStyle.PROPERTY_SCALE_IMAGE, element.getOwnScaleImageValue());
 		result.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT, element.getOwnVerticalAlignmentValue());
+		result.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,element.isOwnBlankWhenNull());
 		//Add the line element
 		MLinePen linePen = (MLinePen)getPropertyValue(LINE_PEN);
 		result.putAll(linePen.getStylesDescriptors());

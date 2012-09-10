@@ -3,16 +3,23 @@ package com.jaspersoft.studio.model;
 import java.awt.Color;
 import java.util.HashMap;
 
+import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
 import net.sf.jasperreports.engine.JRCommonText;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
+import net.sf.jasperreports.engine.base.JRBasePrintElement;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.fill.JRFillElement;
+import net.sf.jasperreports.engine.fill.JRTemplateElement;
+import net.sf.jasperreports.engine.type.EnumUtil;
 import net.sf.jasperreports.engine.type.FillEnum;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
+import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.RotationEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
@@ -28,7 +35,7 @@ public class DefaultValuesMap {
 	}
 	
 	@SuppressWarnings("deprecation")
-	private static HashMap<String, Object> initializeType(Class type){
+	private static HashMap<String, Object> initializeType(Object type){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		result.put(JRDesignStyle.PROPERTY_FONT_NAME, JRProperties.getProperty(JRFont.DEFAULT_FONT_NAME));
 		result.put(JRBaseLineBox.PROPERTY_PADDING, INTEGER_ZERO);
@@ -40,7 +47,7 @@ public class DefaultValuesMap {
 		result.put(JRDesignStyle.PROPERTY_MARKUP,JRCommonText.MARKUP_NONE);
 		result.put(JRBasePen.PROPERTY_LINE_STYLE, LineStyleEnum.SOLID);
 		
-		if (type == JRStyle.class){
+		if (type.getClass() == JRStyle.class){
 			result.put(JRDesignStyle.PROPERTY_FONT_SIZE, null);
 			result.put(JRDesignStyle.PROPERTY_BOLD, null);
 			result.put(JRDesignStyle.PROPERTY_ITALIC, null);
@@ -77,21 +84,33 @@ public class DefaultValuesMap {
 			result.put(JRDesignStyle.PROPERTY_BACKCOLOR, Color.white);
 			result.put(JRDesignStyle.PROPERTY_FORECOLOR, Color.black);
 			result.put(JRDesignStyle.PROPERTY_FILL, FillEnum.SOLID);
+			ModeEnum opaqueValue = ModeEnum.getByValue(ModeEnum.OPAQUE.getValue());
+			if (type instanceof JRTemplateElement){
+				result.put(JRDesignStyle.PROPERTY_MODE, opaqueValue);
+			} else if (type instanceof JRBaseElement) {
+				result.put(JRDesignStyle.PROPERTY_MODE, opaqueValue);
+			} else if (type instanceof JRBasePrintElement) {
+				result.put(JRDesignStyle.PROPERTY_MODE, opaqueValue);
+			} else if (type instanceof JRFillElement){
+				result.put(JRDesignStyle.PROPERTY_MODE, opaqueValue);
+			} else {
+				result.put(JRDesignStyle.PROPERTY_MODE, ModeEnum.getByValue(ModeEnum.TRANSPARENT.getValue()));
+			}
 		}
 		return result;
 	}
 	
-	public static HashMap<String, Object> getPropertiesByType(Class type){
+	public static HashMap<String, Object> getPropertiesByType(Object type){
 		 initValuesMap();
-		 HashMap<String, Object> result = valuesMap.get(type);
+		 HashMap<String, Object> result = valuesMap.get(type.getClass());
 		 if (result == null){
 			 result = initializeType(type);
-			 valuesMap.put(type, result);
+			 valuesMap.put(type.getClass(), result);
 		 }
 		 return result;
 	}
 	
-	public static Object getValue(String key, Class type){
-		return getPropertiesByType(type).get(key);
+	public static Object getValue(String key, Object type){
+		return getPropertiesByType(type.getClass()).get(key);
 	}
 }
