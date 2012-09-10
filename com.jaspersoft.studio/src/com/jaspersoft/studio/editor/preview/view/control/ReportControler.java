@@ -313,14 +313,19 @@ public class ReportControler {
 			jasperParameters.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, daDesc.getDataAdapter());
 	}
 
+	public void stop() {
+		if (pmonitor != null)
+			pmonitor.setCanceled(true);
+	}
+
 	private IStatus fillReport(AsynchronousFillHandle fh, IProgressMonitor monitor, final PreviewContainer pcontainer)
 			throws JRException, InterruptedException {
 		Assert.isTrue(fh != null);
-		IProgressMonitor sm = new SubProgressMonitor(monitor, IProgressMonitor.UNKNOWN,
+		pmonitor = new SubProgressMonitor(monitor, IProgressMonitor.UNKNOWN,
 				SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
 		IStatus retstatus = Status.OK_STATUS;
 		try {
-			sm.beginTask(Messages.PreviewEditor_fill_report, IProgressMonitor.UNKNOWN);
+			pmonitor.beginTask(Messages.PreviewEditor_fill_report, IProgressMonitor.UNKNOWN);
 			fh.addFillListener((IJRPrintable) pcontainer.getDefaultViewer());
 			fh.addFillListener(new FillListener() {
 				private boolean refresh = false;
@@ -381,18 +386,18 @@ public class ReportControler {
 			fh.startFill();
 			finished = true;
 			while (finished && fillError == null) {
-				if (sm.isCanceled()) {
+				if (pmonitor.isCanceled()) {
 					fh.cancellFill();
 					retstatus = Status.CANCEL_STATUS;
 					break;
 				}
 				Thread.sleep(500);
-				sm.worked(10);
+				pmonitor.worked(10);
 			}
 			if (fillError != null)
 				throw new JRException(fillError);
 		} finally {
-			sm.done();
+			pmonitor.done();
 		}
 
 		return retstatus;
@@ -410,6 +415,8 @@ public class ReportControler {
 	public static final String ST_EXPORTTIME = "ST_EXPORTTIME"; //$NON-NLS-1$
 
 	private JasperReportCompiler compiler;
+
+	private IProgressMonitor pmonitor;
 
 	private void handleFillException(Throwable t) {
 		fillError = t;

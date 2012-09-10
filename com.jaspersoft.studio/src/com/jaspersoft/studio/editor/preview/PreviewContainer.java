@@ -269,7 +269,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	private ReportControler reportControler;
 
-	private ReportControler getReportControler() {
+	public ReportControler getReportControler() {
 		if (reportControler == null) {
 			reportControler = new ReportControler(this, jrContext);
 		}

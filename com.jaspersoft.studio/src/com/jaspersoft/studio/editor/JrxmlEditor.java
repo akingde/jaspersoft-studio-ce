@@ -489,11 +489,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
 			// NO LONGER AVAILABLE IN GLOBAL TOOLBAR SINCE
 			// THEY WILL BE VISIBLE IN THE ReportContainer toolbar.
-//			editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
-//			for (AContributorAction a : editorActions) {
-//				a.setJrConfig(jrContext);
-//				((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
-//			}
+			// editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
+			// for (AContributorAction a : editorActions) {
+			// a.setJrConfig(jrContext);
+			// ((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
+			// }
 			jrContext.setJasperDesign(jd);
 			setModel(ReportFactory.createReport(jrContext));
 		} catch (JRException e) {
@@ -637,6 +637,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					}
 				if (activePage != PAGE_PREVIEW)
 					updateVisualView();
+				else {
+					// stop running reports
+					previewEditor.getReportControler().stop();
+				}
 				reportContainer.getActiveEditor().getSite().getSelectionProvider().setSelection(tmpselection);
 				break;
 			case PAGE_XMLEDITOR:
