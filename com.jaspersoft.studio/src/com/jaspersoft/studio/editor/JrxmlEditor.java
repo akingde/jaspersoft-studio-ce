@@ -30,10 +30,8 @@ import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.FileResolver;
-import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
@@ -91,6 +89,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.AContributorAction;
+import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -540,18 +539,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public static InputStream getXML(IEditorInput editorInput, String encoding, InputStream in, String version)
 			throws JRException {
 		String fileExtension = getFileExtension(editorInput);
-		if (fileExtension.equals("jasper")) { //$NON-NLS-1$
-			JasperReport report = (JasperReport) JRLoader.loadObject(in);
-			// ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			String str;
-			try {
-				str = JRXmlWriterHelper.writeReport(report, JRXmlWriterHelper.fixencoding(encoding), version);
-				return new ByteArrayInputStream(str.getBytes());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return in;
+		InputStream jrxmlInputStream = JRXMLUtils.getJRXMLInputStream(in, fileExtension, encoding, version);
+		return jrxmlInputStream!=null ? jrxmlInputStream : in;
 	}
 
 	/**

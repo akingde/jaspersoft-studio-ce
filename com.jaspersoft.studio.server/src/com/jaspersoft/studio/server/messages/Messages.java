@@ -61,6 +61,12 @@ public class Messages extends NLS {
 	public static String ServerProfilePage_4;
 	public static String ServerProfilePage_8;
 	public static String ServerProfilePage_9;
+	public static String ValidationUtils_DescriptionTooLongErr;
+	public static String ValidationUtils_LabelEmptyErr;
+	public static String ValidationUtils_LabelTooLongErr;
+	public static String ValidationUtils_NameEmptyErr;
+	public static String ValidationUtils_NameInvalidCharsErr;
+	public static String ValidationUtils_NameTooLongErr;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

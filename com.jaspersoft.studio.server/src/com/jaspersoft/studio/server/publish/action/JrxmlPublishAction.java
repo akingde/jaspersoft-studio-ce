@@ -150,9 +150,8 @@ public class JrxmlPublishAction extends AContributorAction {
 		String version = ServerManager.getVersion(mrunit);
 		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(jd, version));
 		jrxml.setFile(file);
-
+		mrunit.setFile(file);
 		mrunit.getValue().getChildren().add(jrxml.getValue());
-
 		mrunit.setValue(save(monitor, mrunit));
 
 		List<MResource> files = jrConfig.get(KEY_PUBLISH2JSS_DATA,
@@ -182,7 +181,7 @@ public class JrxmlPublishAction extends AContributorAction {
 
 	private ResourceDescriptor getMainReport(JasperDesign jd) {
 		ResourceDescriptor mainr = new ResourceDescriptor();
-		mainr.setName(jd.getName());
+		mainr.setName("main_jrxml");
 		mainr.setLabel("Main jrxml");
 		mainr.setWsType(ResourceDescriptor.TYPE_JRXML);
 		mainr.setIsNew(true);

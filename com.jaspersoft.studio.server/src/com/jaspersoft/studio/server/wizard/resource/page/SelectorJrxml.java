@@ -160,8 +160,11 @@ public class SelectorJrxml {
 
 					replaceMainReport(res, jrxmlDescriptor);
 
-					((AFileResource) res).setFile(new File(((IFile) wizard
-							.getFirstResult()).getLocationURI()));
+					File selectedFile = new File(((IFile) wizard
+							.getFirstResult()).getLocationURI());
+					((AFileResource) res).setFile(selectedFile);
+					
+					jsLocDS.setText(selectedFile.getAbsolutePath());
 				}
 			}
 		});

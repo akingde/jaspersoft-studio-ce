@@ -32,6 +32,6 @@ public class RDJrxmlPage extends AFileResourcePage {
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { ".jrxml" };
+		return new String[] { "*.jrxml" };
 	}
 }
