@@ -109,7 +109,7 @@ public class QueryDesigner extends AQueryDesigner {
 			}
 
 		});
-		setFieldProviderEnabled(false);
+		setFieldProviderEnabled(true);
 		return tbCompo;
 	}
 
