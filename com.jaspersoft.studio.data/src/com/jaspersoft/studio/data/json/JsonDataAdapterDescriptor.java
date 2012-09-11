@@ -32,9 +32,9 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
-import org.codehaus.jackson.JsonProcessingException;
 import org.eclipse.swt.graphics.Image;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
