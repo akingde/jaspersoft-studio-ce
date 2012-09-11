@@ -292,6 +292,12 @@
             id="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
             name="Fonts">
       </page>
+      <page
+            id="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage" 
+            name="Templates locations"
+            class="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage"
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage">
+      </page>      
    </extension>
    <extension
          id=""
@@ -416,6 +422,17 @@
             id="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage.property"
             name="Fonts"
             objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            id="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage.property" 
+            name="Templates locations"
+            class="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage"
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property">
+            <enabledWhen>
+	            <adapt
+	                  type="org.eclipse.core.resources.IProject">
+	            </adapt>
+            </enabledWhen>
       </page>
    </extension>
    <extension

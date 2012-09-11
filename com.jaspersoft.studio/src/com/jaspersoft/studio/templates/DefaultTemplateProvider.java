@@ -3,19 +3,19 @@ package com.jaspersoft.studio.templates;
 import java.io.File;
 import java.io.FileFilter;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.StringTokenizer;
 
-import org.eclipse.nebula.widgets.gallery.GalleryItem;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage;
 import com.jaspersoft.templates.TemplateBundle;
-
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 /**
  * The default implementation in JSS of template provider looks for templates inside the plugin's templates
@@ -52,39 +52,58 @@ public class DefaultTemplateProvider implements TemplateProvider {
 						}
 					} catch (Exception ex)
 					{
-						System.out.println(ex.getMessage() + " " + templateURL);
-						// An error occurred while loading a template... let's ignore this template and continue.
+						// Log error but continue...
+						JaspersoftStudioPlugin.getInstance().getLog().log(
+								new Status(IStatus.ERROR,JaspersoftStudioPlugin.PLUGIN_ID,
+										MessageFormat.format(Messages.DefaultTemplateProvider_TemplateLoadingErr,new Object[]{templateURL}), ex));
+
 					}
 				}
 		}
 		
 		templates.addAll(cache);
-		// Look for other templates inside a specific directory...
-		
-		File dir = new File("/Applications/iReport.app/Contents/Resources/ireport/ireport/templates");
-		File[] files = dir.listFiles(new FileFilter() {
-			
-			@Override
-			public boolean accept(File f) {
-				return f.getName().endsWith(".jrxml");
-			}
-		});
-			
-		for (File f : files)
-		{
-			try {
-				JrxmlTemplateBundle bundle = new JrxmlTemplateBundle( f.toURI().toURL() );
-				if (bundle != null)
-				{
-					templates.add(bundle);
-				}
-			} catch (Exception ex)
-			{
-				System.out.println(ex.getMessage() + " " + f);
-				// An error occurred while loading a template... let's ignore this template and continue.
-			}
-		}
+
+		loadAdditionalTemplateBundles(templates);
 		
 	  return templates;
 	}
+	
+	/*
+	 * Look for other templates inside the specified directories in the preferences.
+	 */
+	private void loadAdditionalTemplateBundles(List<TemplateBundle> templates) {
+		String paths = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+				.getString(TemplateLocationsPreferencePage.TPP_TEMPLATES_LOCATIONS_LIST);
+		StringTokenizer st = new StringTokenizer(paths, File.pathSeparator + "\n\r");//$NON-NLS-1$
+		ArrayList<String> pathsList = new ArrayList<String>();
+		while (st.hasMoreTokens()) {
+			pathsList.add(st.nextToken());
+		}
+
+		for (String dir : pathsList) {
+			File[] files = new File(dir).listFiles(new FileFilter() {
+				@Override
+				public boolean accept(File f) {
+					return f.getName().endsWith(".jrxml"); //$NON-NLS-1$
+				}
+			});
+
+			if (files != null) {
+				for (File f : files) {
+					try {
+						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(f.toURI().toURL());
+						if (bundle != null) {
+							templates.add(bundle);
+						}
+					} catch (Exception ex) {
+						// Log error but continue...
+						JaspersoftStudioPlugin.getInstance().getLog().log(
+								new Status(IStatus.ERROR,JaspersoftStudioPlugin.PLUGIN_ID,
+										MessageFormat.format(Messages.DefaultTemplateProvider_TemplateLoadingErr,new Object[]{f.getAbsolutePath()}), ex));
+					}
+				}
+			}
+		}
+	}
+
 }

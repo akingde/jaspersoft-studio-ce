@@ -343,6 +343,7 @@ public class Messages extends NLS {
 	public static String DatasourceComboItem_select_a_datasource;
 	public static String DatePattern_description;
 	public static String DatePattern_template_formats;
+	public static String DefaultTemplateProvider_TemplateLoadingErr;
 	public static String DeleteDataSourceAction_delete;
 	public static String DeleteDataSourceAction_description;
 	public static String DeleteDataSourceAction_tool_tip;
@@ -1195,6 +1196,9 @@ public class Messages extends NLS {
 	public static String StyleTemplateNewWizard_wizardtitle;
 	public static String SubreportPropertiesLabelProvider_numbers_of_parameters;
 	public static String SubreportPropertyPage_description;
+	public static String TemplateLocationsPreferencePage_Description;
+	public static String TemplateLocationsPreferencePage_Locations;
+	public static String TemplateLocationsPreferencePage_Message;
 	public static String TextExporterPreferencePage_10;
 	public static String TextExporterPreferencePage_11;
 	public static String TextExporterPreferencePage_12;
