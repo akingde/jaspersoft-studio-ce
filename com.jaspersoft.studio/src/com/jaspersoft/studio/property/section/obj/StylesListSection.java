@@ -99,12 +99,12 @@ public class StylesListSection extends AbstractSection {
 	 * Manager for the events binded to the mouse
 	 */
 	private IconMouseTracker trackerListener = new IconMouseTracker();
-
-	/**
-	 * Boolean flag to enable the refresh of the page
-	 */
-	private boolean needRefresh = false;
 	
+	/**
+	 * Set to true if a refresh of the widget is needed
+	 */
+	private boolean forceRefresh = false;
+
 	/**
 	 * Class to manage the events of the mouse click, used to remove an attribute from an element or one
 	 * of it's styles
@@ -143,7 +143,8 @@ public class StylesListSection extends AbstractSection {
    		if (c != null) cc.add(c);
   		if (!cc.getCommands().isEmpty()) {
 				cs.execute(cc);
-    		needRefresh = true;
+				
+				forceRefresh = true;
     		refresh();
   		}
     }
@@ -257,7 +258,7 @@ public class StylesListSection extends AbstractSection {
        int b = color.getBlue();  
        String s = Integer.toHexString(r) + Integer.toHexString(g) +  
                         Integer.toHexString(b);
-       return  StringUtils.rightPad(s, 6, "0").toUpperCase();
+       return  "#"+StringUtils.rightPad(s, 6, "0").toUpperCase();
    }
 	
 	/**
@@ -313,7 +314,7 @@ public class StylesListSection extends AbstractSection {
 	 * @param name The name of the attribute
 	 * @param value The value of the attribute
 	 * @param gData Grid data for the layout
-	 * @param addLine true if a stoke line is needed
+	 * @param addLine true if a stroke line is needed
 	 * @return The button where the click handle will be added
 	 */
 	private Control printLabels(Composite parent, String name, String value, GridData gData, boolean addLine){
@@ -549,6 +550,25 @@ public class StylesListSection extends AbstractSection {
 		}
 	}
 	
+	private boolean CheckDifferences(HashMap<String, Object> element1Attributes, HashMap<String, Object> element2Attributes){
+		boolean areEquals = true;
+		Iterator<String> it=element2Attributes.keySet().iterator();
+		while(areEquals && it.hasNext()){
+			String key = it.next();
+			Object actualValue = element2Attributes.get(key);
+			Object prevValue = element1Attributes.get(key);
+			//I have one new key
+			if (!element1Attributes.containsKey(key)) areEquals = false;
+			else {
+				if (actualValue == null)
+					//case: The new value is null but the old one not
+					areEquals = prevValue == null;
+				else  areEquals = actualValue.equals(prevValue);
+			}
+		}
+		return areEquals;
+	}
+	
 	/**
 	 * Check if the element attributes, or the attributes from one of it's styles are changed and in that case it update the
 	 * the widget
@@ -557,19 +577,13 @@ public class StylesListSection extends AbstractSection {
 	private boolean checkRefresh(){
 		HashMap<String, Object> actualAttributes = element.getStylesDescriptors();
 		boolean areEquals = true;
-		Iterator<String> it=actualAttributes.keySet().iterator();
-		while(areEquals && it.hasNext()){
-			String key = it.next();
-			Object actualValue = actualAttributes.get(key);
-			Object prevValue = elementAttributes.get(key);
-			if (actualValue != null){
-				if (!elementAttributes.containsKey(key) || !actualValue.equals(prevValue)){
-					areEquals = false;
-					elementAttributes = actualAttributes;
-				}
-			}
-		}
-		return !areEquals;
+		if (getElement() != element || forceRefresh) areEquals = false;
+		//	if (areEquals)
+			//The element are not obviously different, check if all it's attributes are equals
+		//	areEquals = CheckDifferences(elementAttributes, actualAttributes);
+		elementAttributes = actualAttributes;
+		forceRefresh = false;
+		return true;//!areEquals;
 	}
 	
 	/**
@@ -578,24 +592,23 @@ public class StylesListSection extends AbstractSection {
 	@Override
 	public void refresh() {
 		isRefreshing = true;
-		if (getElement() != element || needRefresh || checkRefresh()){
+		if (checkRefresh()){
 			trackerListener.refresh();
 			element = getElement();
-			initStyleMaps();
 			//Dispose the old widgets
 			 for (Control kid : parent.getChildren()) {
          kid.dispose();
        }
 			GridLayout layout = new GridLayout(2,false);
+			layout.marginWidth=0;
 			parent.setLayout(layout);
+			initStyleMaps();
 			LinkedList <MStyle> styles = buildStylesGerarchy(element);
 			printElementAttribute(parent,element,Messages.StylesSectionList_Element_Attributes);
 			printStyles(styles,parent);
-			if (element.getDefaultsMap() == null) element.getPropertyDescriptors();
-			printDefaultValues(parent,element.getDefaultsMap());
+			printDefaultValues(parent,DefaultValuesMap.getPropertiesByType(element.getClass()));
 			ovverridenAttributes = null;
 			styleMaps = null;
-			needRefresh = false;
 			parent.layout();
 		}
 		isRefreshing = false;
@@ -622,7 +635,8 @@ public class StylesListSection extends AbstractSection {
 		GridLayout layout = new GridLayout(2,false);
 		layout.marginWidth=0;
 		parent.setLayout(layout);
-		LinkedList <MStyle> styles = buildStylesGerarchy(element);
+		initStyleMaps();
+		LinkedList<MStyle> styles = buildStylesGerarchy(element);
 		elementAttributes = element.getStylesDescriptors();
 		printElementAttribute(parent,element,Messages.StylesSectionList_Element_Attributes);
 		printStyles(styles,parent);

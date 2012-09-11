@@ -117,6 +117,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return null;
 	}
 
+
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#setInput(org.eclipse.ui.IWorkbenchPart,
 	 *      org.eclipse.jface.viewers.ISelection)

@@ -541,6 +541,11 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			if (val != null)
 				return val;
 		}
+		if (linePen != null) {
+			Object val = linePen.getPropertyValue(id);
+			if (val != null)
+				return val;
+		}
 		return null;
 	}
 
@@ -614,6 +619,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			else jrstyle.setFontSize(new Integer((String) value));
 		else 	if (lineBox != null) {
 			lineBox.setPropertyValue(id, value);
+		} 
+		if (linePen!=null){
+			linePen.setPropertyValue(id, value);
 		}
 	}
 
