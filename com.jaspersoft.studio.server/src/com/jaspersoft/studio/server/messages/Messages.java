@@ -25,8 +25,15 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.server.messages.messages"; //$NON-NLS-1$
 	public static String AddResourcePage_Description;
 	public static String AddResourcePage_Title;
+	public static String DatasourceSelectionComposite_FromRepository;
+	public static String DatasourceSelectionComposite_LocalDatasource;
+	public static String DatasourceSelectionComposite_NoDatasource;
+	public static String DatasourceSelectionPage_Description;
+	public static String DatasourceSelectionPage_Title;
 	public static String ImportDataSourceInfoFromDA_DialogTitle;
 	public static String ImportDataSourceInfoFromDA_InfoLabel;
+	public static String Publish2ServerWizard_MonitorName;
+	public static String Publish2ServerWizard_Title;
 	public static String RDDataAdapterPage_Description;
 	public static String RDDataAdapterPage_Title;
 	public static String RDDatasourceBeanPage_BeanMethod;

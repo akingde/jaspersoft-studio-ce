@@ -30,6 +30,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.FindResources;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -39,6 +40,7 @@ public class Publish2ServerWizard extends Wizard {
 	private JasperDesign jDesign;
 	private RUnitLocationPage page0;
 	private ResourcesPage page1;
+	private DatasourceSelectionPage page2;
 	private int page;
 	private ANode n;
 	JasperReportsConfiguration jrConfig;
@@ -46,7 +48,7 @@ public class Publish2ServerWizard extends Wizard {
 	public Publish2ServerWizard(ANode n, JasperDesign jDesign,
 			JasperReportsConfiguration jrConfig, int page) {
 		super();
-		setWindowTitle("Report Publishing Wizard");
+		setWindowTitle(Messages.Publish2ServerWizard_Title);
 		this.jDesign = jDesign;
 		this.page = page;
 		this.n = n;
@@ -61,6 +63,9 @@ public class Publish2ServerWizard extends Wizard {
 
 		page1 = new ResourcesPage(jrConfig);
 		addPage(page1);
+		
+		page2 = new DatasourceSelectionPage(jrConfig);
+		addPage(page2);
 	}
 
 	@Override
@@ -71,7 +76,7 @@ public class Publish2ServerWizard extends Wizard {
 					public void run(IProgressMonitor monitor)
 							throws InvocationTargetException,
 							InterruptedException {
-						monitor.beginTask("Looking For Resources To Publish",
+						monitor.beginTask(Messages.Publish2ServerWizard_MonitorName,
 								IProgressMonitor.UNKNOWN);
 						try {
 							MReportUnit mrunit = page0.getReportUnit();
@@ -96,6 +101,9 @@ public class Publish2ServerWizard extends Wizard {
 			} catch (InterruptedException e) {
 				UIUtils.showError(e.getCause());
 			}
+			
+			// configure page 2
+			page2.configurePage(getReportUnit().getParent(),getReportUnit());
 		}
 		return super.getNextPage(page);
 	}

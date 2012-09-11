@@ -75,7 +75,7 @@ public class SelectorDatasource {
 		brRepo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				setEnabled(0);
+				setEnabled(SelectionType.REMOTE_DATASOURCE);
 			}
 		});
 
@@ -129,7 +129,7 @@ public class SelectorDatasource {
 		brLocal.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				setEnabled(1);
+				setEnabled(SelectionType.LOCAL_DATASOURCE);
 			}
 		});
 
@@ -185,7 +185,7 @@ public class SelectorDatasource {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				removeDatasource(res);
-				setEnabled(2);
+				setEnabled(SelectionType.NO_DATASOURCE);
 			}
 
 		});
@@ -193,17 +193,17 @@ public class SelectorDatasource {
 		ResourceDescriptor r = getDatasource(res.getValue());
 		if (r != null) {
 			if (r.getIsReference()) {
-				setEnabled(0);
+				setEnabled(SelectionType.REMOTE_DATASOURCE);
 			} else {
-				setEnabled(1);
+				setEnabled(SelectionType.LOCAL_DATASOURCE);
 			}
 		} else {
-			setEnabled(2);
+			setEnabled(SelectionType.NO_DATASOURCE);
 		}
 
 	}
 
-	private void setEnabled(int pos) {
+	private void setEnabled(SelectionType type) {
 		bRef.setEnabled(false);
 		jsRefDS.setEnabled(false);
 
@@ -217,26 +217,25 @@ public class SelectorDatasource {
 		jsRefDS.setText("");
 		jsLocDS.setText("");
 		ResourceDescriptor r = getDatasource(res.getValue());
-		switch (pos) {
-		case 0:
+		switch (type) {
+		case REMOTE_DATASOURCE:
 			bRef.setEnabled(true);
 			brRepo.setSelection(true);
 			jsRefDS.setEnabled(true);
 			if (r != null)
 				jsRefDS.setText(Misc.nvl(r.getReferenceUri()));
 			break;
-		case 1:
+		case LOCAL_DATASOURCE:
 			brLocal.setSelection(true);
 			bLoc.setEnabled(true);
 			jsLocDS.setEnabled(true);
 			if (r != null)
 				jsLocDS.setText(Misc.nvl(r.getName()));
 			break;
-		case 2:
+		case NO_DATASOURCE:
 			brNone.setSelection(true);
 			break;
 		}
-
 	}
 
 	public static void replaceDatasource(final MResource res, ResourceDescriptor rd) {
@@ -317,5 +316,9 @@ public class SelectorDatasource {
 						&& r.getResourcePropertyValue("PROP_RESOURCE_TYPE") != null && r
 						.getResourcePropertyValue("PROP_RESOURCE_TYPE")
 						.equals("com.jaspersoft.jasperserver.api.metadata.jasperreports.domain.CustomReportDataSource"));
+	}
+	
+	public enum SelectionType {
+		REMOTE_DATASOURCE, LOCAL_DATASOURCE, NO_DATASOURCE
 	}
 }
