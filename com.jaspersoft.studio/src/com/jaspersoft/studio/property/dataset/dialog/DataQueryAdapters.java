@@ -72,10 +72,10 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class DataQueryAdapters {
-	
-	public static final int CONTAINER_WITH_NO_TABLES=0x01;
-	public static final int CONTAINER_WITH_INFO_TABLES=0x02;
-	
+
+	public static final int CONTAINER_WITH_NO_TABLES = 0x01;
+	public static final int CONTAINER_WITH_INFO_TABLES = 0x02;
+
 	private JRDesignDataset newdataset;
 	private JasperDesign jDesign;
 	private JasperReportsConfiguration jConfig;
@@ -245,7 +245,8 @@ public abstract class DataQueryAdapters {
 		IDataAdapterRunnable adapterRunReport = new IDataAdapterRunnable() {
 
 			public void runReport(DataAdapterDescriptor da) {
-				newdataset.setProperty(MReport.DEFAULT_DATAADAPTER, da.getName());
+				if (da != null)
+					newdataset.setProperty(MReport.DEFAULT_DATAADAPTER, da.getName());
 				currentDesigner.setDataAdapter(da);
 			}
 
@@ -413,7 +414,7 @@ public abstract class DataQueryAdapters {
 	public JasperReportsConfiguration getjConfig() {
 		return jConfig;
 	}
-	
+
 	public abstract int getContainerType();
-	
+
 }
