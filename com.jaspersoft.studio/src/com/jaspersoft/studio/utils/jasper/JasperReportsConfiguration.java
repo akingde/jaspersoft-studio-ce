@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
+import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
 
@@ -50,16 +51,13 @@ import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
-	
-	
+
 	/**
 	 * The key which identified the file being edited
 	 */
 	public static final String REPORT_FILE = "REPORTFILEWIZARD"; //$NON-NLS-1$
 	public static final String REPORT_DESIGN = "REPORTDESIGNWIZARD"; //$NON-NLS-1$
-	
-	
-	
+
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
@@ -96,6 +94,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				if (project.getNature(JavaCore.NATURE_ID) != null) {
 					ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(project), this.getClass().getClassLoader());
 					cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
+					cl = new CompositeClassloader(cl, getClass().getClassLoader());
 					setClassLoader(cl);
 				}
 			} catch (CoreException e) {

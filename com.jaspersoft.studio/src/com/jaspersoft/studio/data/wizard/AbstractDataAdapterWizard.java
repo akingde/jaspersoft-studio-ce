@@ -120,6 +120,7 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 				}
 				if (cl != null) {
 					cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
+					cl = new CompositeClassloader(cl, getClass().getClassLoader());
 					Thread.currentThread().setContextClassLoader(cl);
 				}
 

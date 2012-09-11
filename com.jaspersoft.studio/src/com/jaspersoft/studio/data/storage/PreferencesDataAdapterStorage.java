@@ -19,14 +19,18 @@
  */
 package com.jaspersoft.studio.data.storage;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URL;
+import java.util.Enumeration;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.empty.EmptyDataAdapterImpl;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.runtime.Status;
+import org.osgi.framework.Bundle;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
@@ -38,8 +42,6 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
-import com.jaspersoft.studio.data.empty.EmptyDataAdapterDescriptor;
-import com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
@@ -107,13 +109,27 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			}
 		}
 		if (daDescriptors.isEmpty()) {
-			EmptyDataAdapterFactory edaf = new EmptyDataAdapterFactory();
-			EmptyDataAdapterDescriptor edad = edaf.createDataAdapter();
-			EmptyDataAdapterImpl dataAdapter = new EmptyDataAdapterImpl();
-			dataAdapter.setName(Messages.DataAdapterManager_oneemptyrecord);
-			dataAdapter.setRecordCount(1);
-			edad.setDataAdapter(dataAdapter);
-			addDataAdapter(getNewID(), edad);
+			Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
+			Enumeration<URL> urls = bundle.findEntries("defaults/dataadapter/prefs/", "*.xml", true);
+			while (urls.hasMoreElements()) {
+				InputStream in = null;
+				try {
+					in = urls.nextElement().openStream();
+					DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(in);
+					addDataAdapter(getNewID(), dad);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					if (in != null)
+						try {
+							in.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+				}
+
+			}
+
 		}
 	}
 
