@@ -131,7 +131,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 			// Assumption: consider the first element as a template
 			jsonNode=jsonNode.get(0);
 		}
-		Iterator<String> fieldNames = jsonNode.getFieldNames();
+		Iterator<String> fieldNames = jsonNode.fieldNames();
 		while(fieldNames.hasNext()){
 			String name = fieldNames.next();
 			JsonNode tmpNode = jsonNode.get(name);
@@ -146,7 +146,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 				children.add(child);
 			}
 			else if(tmpNode.isArray()){
-				Iterator<JsonNode> elements = tmpNode.getElements();
+				Iterator<JsonNode> elements = tmpNode.elements();
 				while(elements.hasNext()){
 					JsonNode el=elements.next();
 					JsonSupportNode child=new JsonSupportNode();
@@ -181,7 +181,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 			if(jsonData!=null){
 				List<JsonNode> elementsList=new ArrayList<JsonNode>();
 				if(jsonData.isArray()){
-					Iterator<JsonNode> elements = jsonData.getElements();
+					Iterator<JsonNode> elements = jsonData.elements();
 					while(elements.hasNext()){
 						elementsList.add(elements.next());
 					}	
@@ -233,7 +233,7 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 */
 	private List<JRDesignField> getFieldsFromObjectNode(ObjectNode node){
 		List<JRDesignField> fields = new ArrayList<JRDesignField>();
-		Iterator<String> fieldNames = node.getFieldNames();
+		Iterator<String> fieldNames = node.fieldNames();
 		while(fieldNames.hasNext()){
 			String name = fieldNames.next();
 			JRDesignField f=new JRDesignField();
