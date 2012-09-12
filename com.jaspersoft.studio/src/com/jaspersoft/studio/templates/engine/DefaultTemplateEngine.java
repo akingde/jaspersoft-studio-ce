@@ -23,6 +23,8 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.templates.ReportBundle;
 import com.jaspersoft.templates.TemplateBundle;
 import com.jaspersoft.templates.TemplateEngine;
@@ -49,8 +51,14 @@ public class DefaultTemplateEngine implements TemplateEngine{
 	@Override
 	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings) throws TemplateEngineException {
 		
-		
-		JasperDesign jd = template.getJasperDesign();
+		JasperDesign jdCopy=null;
+		try {
+			// N.B: We need a fresh new copy of the jasper design!
+			jdCopy=ModelUtils.copyJasperDesign(template.getJasperDesign());
+		} catch (JRException e) {
+			UIUtils.showError(e);
+			return null;
+		}
 		
 		List<Object> fields = (List<Object>)settings.get( FIELDS );
 		List<Object> groupFields = (List<Object>)settings.get( GROUP_FIELDS );
@@ -60,25 +68,25 @@ public class DefaultTemplateEngine implements TemplateEngine{
 		
 		if (dataset != null)
 		{
-			jd.getMainDesignDataset().setQuery( (JRDesignQuery) dataset.getQuery() );
+			jdCopy.getMainDesignDataset().setQuery( (JRDesignQuery) dataset.getQuery() );
 			
 			System.out.println("Query: " + dataset.getQuery().getText() );
 			
 			for (JRField f : dataset.getFields())
 			{
 				try {
-					jd.getMainDesignDataset().addField(f);
+					jdCopy.getMainDesignDataset().addField(f);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 		
-		processTemplate(jd,  fields,  groupFields);
+		processTemplate(jdCopy,  fields,  groupFields);
 		
 		ReportBundle reportBundle = new ReportBundle(template);
 		
-		reportBundle.setJasperDesign(jd);
+		reportBundle.setJasperDesign(jdCopy);
 		
 		return reportBundle;
 	}
