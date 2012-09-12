@@ -427,6 +427,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
 				setChildListener(mChartPlot);
 			}
+			mChartPlot.setJasperConfiguration(getJasperConfiguration());
 			return mChartPlot;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
