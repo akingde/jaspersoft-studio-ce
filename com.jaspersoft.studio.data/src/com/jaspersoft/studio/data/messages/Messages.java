@@ -77,6 +77,7 @@ public class Messages extends NLS {
 	public static String CustomJrdsDataAdapterComposite_2;
 	public static String CustomJrdsDataAdapterComposite_3;
 	public static String EjbqlDataAdapterComposite_0;
+	public static String EjbqlWizardDataEditorComposite_Title;
 	public static String HibernateDataAdapterComposite_0;
 	public static String HibernateDataAdapterComposite_1;
 	public static String HibernateDataAdapterComposite_4;

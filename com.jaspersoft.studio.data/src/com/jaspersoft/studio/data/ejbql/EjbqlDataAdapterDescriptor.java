@@ -23,13 +23,17 @@ import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.ejbql.EjbqlDataAdapter;
 import net.sf.jasperreports.data.ejbql.EjbqlDataAdapterImpl;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 
-public class EjbqlDataAdapterDescriptor extends DataAdapterDescriptor {
+public class EjbqlDataAdapterDescriptor extends DataAdapterDescriptor implements IWizardDataEditorProvider {
 	private EjbqlDataAdapterImpl beanDataAdapter = new EjbqlDataAdapterImpl();
 
 	@Override
@@ -55,8 +59,14 @@ public class EjbqlDataAdapterDescriptor extends DataAdapterDescriptor {
 	@Override
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/bean.png");
+			return Activator.getImage("icons/bean.png"); //$NON-NLS-1$
 		}
 		return null;
+	}
+
+	@Override
+	public AWizardDataEditorComposite createDataEditorComposite(
+			Composite parent, WizardPage page) {
+		return new EjbqlWizardDataEditorComposite(parent, page, this);
 	}
 }
