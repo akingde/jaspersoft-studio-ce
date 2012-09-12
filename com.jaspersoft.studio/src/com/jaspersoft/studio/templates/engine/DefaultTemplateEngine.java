@@ -106,7 +106,7 @@ public class DefaultTemplateEngine implements TemplateEngine{
 		}
 
 		// Adjusting groups
-		if (groupFields != null)
+		if (!jd.getGroupsList().isEmpty() && groupFields != null)
 			for (int i = 0; i < groupFields.size(); ++i) {
 				JRField gr = (JRField) groupFields.get(i);
 				JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(i);
