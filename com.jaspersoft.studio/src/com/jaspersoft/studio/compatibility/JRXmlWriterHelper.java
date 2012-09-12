@@ -90,13 +90,8 @@ public class JRXmlWriterHelper {
 		if (!writers.containsKey(version))
 			version = LAST_VERSION;
 		report.removeProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION);
-		if (writers.containsKey(version)) {
+		if (writers.containsKey(version))
 			report.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION, version);
-			// Class<? extends JRXmlWriter> clazz = writers.get(version);
-			// if (clazz != null)
-			// return (String) clazz.getMethod("writeReport", new Class[] { JRReport.class, String.class }).invoke(null,
-			// new Object[] { report, encoding });
-		}
 		String xml = JRXmlWriter.writeReport(report, encoding);
 		xml = xml.replaceFirst(
 				"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + version + "-->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
