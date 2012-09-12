@@ -34,18 +34,23 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.data.querydesigner.xpath.XPath2WizardDataEditorComposite;
 import com.jaspersoft.studio.data.xml.XMLDataAdapterDescriptor;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor implements IFieldsProvider
+public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor implements IFieldsProvider,IWizardDataEditorProvider
 {
 	private RemoteXmlDataAdapter remoteXmlDataAdapter = new RemoteXmlDataAdapterImpl();
 	
@@ -72,7 +77,7 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor imp
 		// TODO Auto-generated method stub
 		if (size == 16)
 		{
-			return  Activator.getImage("icons/blue-document-code.png");
+			return  Activator.getImage("icons/blue-document-code.png"); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -100,6 +105,11 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor imp
 		}
 		return fields;
 	}
-	
+
+	@Override
+	public AWizardDataEditorComposite createDataEditorComposite(
+			Composite parent, WizardPage page) {
+		return new XPath2WizardDataEditorComposite(parent, page, this);
+	}
 	
 }

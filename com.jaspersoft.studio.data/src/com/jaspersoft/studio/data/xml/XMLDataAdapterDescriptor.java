@@ -38,20 +38,25 @@ import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
 import net.sf.jasperreports.engine.util.xml.JRXPathExecuterFactory;
 import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.data.querydesigner.xpath.XPathWizardDataEditorComposite;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider
+public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider,IWizardDataEditorProvider
 {
 	private XmlDataAdapter xmlDataAdapter = new XmlDataAdapterImpl();
 	
@@ -78,7 +83,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 		// TODO Auto-generated method stub
 		if (size == 16)
 		{
-			return  Activator.getImage("icons/blue-document-code.png");
+			return  Activator.getImage("icons/blue-document-code.png"); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -146,7 +151,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 				f.setName(ModelUtils.getNameForField(fields, item.getNodeName()));
 				f.setValueClass(String.class);
 				if(item.getNodeType()==Node.ATTRIBUTE_NODE){
-					f.setDescription("@"+item.getNodeName());					
+					f.setDescription("@"+item.getNodeName());					 //$NON-NLS-1$
 					fields.add(f);
 				}
 				else if(item.getNodeType()==Node.ELEMENT_NODE){
@@ -156,5 +161,11 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 			}
 		}
 		return fields;
+	}
+
+	@Override
+	public AWizardDataEditorComposite createDataEditorComposite(
+			Composite parent, WizardPage page) {
+		return new XPathWizardDataEditorComposite(parent, page, this);
 	}
 }

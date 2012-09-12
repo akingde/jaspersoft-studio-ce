@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -90,10 +89,27 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 	
 	public SimpleQueryWizardDataEditorComposite(Composite parent, WizardPage page, DataAdapterDescriptor dataAdapterDescriptor) {
 		super(parent, page);
-		
 		this.dataAdapterDescriptor = dataAdapterDescriptor;
 		this.page = page;
-		
+		init();
+		createCompositeContent();
+	}
+	
+	/**
+	 * Initializes additional information that are supposed to
+	 * be sub-class specific and executed in the constructor 
+	 * before the main composite content creation.
+	 * This method is called before {@link #createCompositeContent()}. 
+	 */
+	protected void init() {
+		// do nothig - default behavior
+	}
+	
+	/**
+	 * Sets layout and creates the content of the main composite.
+	 * Created widgets should use <code>this</code> as parent composite. 
+	 */
+	protected void createCompositeContent(){
 	  setLayout(new FormLayout());
 		
 		lblTitle = new Label(this, SWT.NONE);
@@ -126,7 +142,6 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 		
 		queryString = styledText.getText();
 	}
-	
 	
 	public String getQueryString()
 	{

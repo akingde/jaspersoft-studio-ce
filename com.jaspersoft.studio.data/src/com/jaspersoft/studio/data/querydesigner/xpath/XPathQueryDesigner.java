@@ -37,9 +37,7 @@ import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSourceEvent;
@@ -68,8 +66,6 @@ import com.jaspersoft.studio.data.designer.tree.TreeBasedQueryDesigner;
 import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.xml.XMLAttributeNode;
 import com.jaspersoft.studio.model.datasource.xml.XMLNode;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
@@ -107,7 +103,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 			toolbarComposite.setLayout(layout);
 	
 			Button btn = new Button(toolbarComposite, SWT.PUSH);
-			btn.setText("Read Fields");
+			btn.setText(Messages.XPathQueryDesigner_ReadFieldsButton);
 			btn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
 			btn.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -181,7 +177,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 				if(s.getFirstElement() instanceof XMLNode){
 					XMLNode xmlNode=(XMLNode) s.getFirstElement();
 					String xPathExpression = documentManager.getXPathExpression(null,xmlNode);
-					queryTextArea.setText((xPathExpression!=null) ? xPathExpression : ""); 
+					queryTextArea.setText((xPathExpression!=null) ? xPathExpression : "");  //$NON-NLS-1$
 				}
 			}
 		});
@@ -413,47 +409,6 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 		}
 	}
 	
-	/*
-	 * Content provider for the Xpath tree viewer.
-	 */
-	private final class XPathTreeViewerContentProvider implements
-			ITreeContentProvider {
-		public Object[] getChildren(Object element) {
-			if(element instanceof XMLNode){
-				return ((ANode)element).getChildren().toArray();
-			}
-			return new Object[0];
-		}
-
-		public Object getParent(Object element) {
-			if(element instanceof XMLNode){
-				return ((XMLNode) element).getParent();
-			}
-			return null;
-		}
-
-		public Object[] getElements(Object element) {
-			if (element instanceof XMLTreeCustomStatus){
-				return new Object[]{element};
-			}
-			if(element instanceof MRoot){
-				return ((MRoot) element).getChildren().toArray();
-			}
-			return getChildren(element);
-		}
-
-		public boolean hasChildren(Object element) {
-			return getChildren(element).length > 0;
-		}
-
-		public void dispose() {
-		}
-
-		public void inputChanged(Viewer viewer, Object old_input,
-				Object new_input) {
-		}
-	}
-
 	/*
 	 * Job that is responsible to update the treeviewer presentation 
 	 * depending on the nodes selected by the XPath query.

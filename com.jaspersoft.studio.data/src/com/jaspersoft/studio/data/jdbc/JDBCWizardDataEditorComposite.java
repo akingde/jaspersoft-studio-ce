@@ -5,6 +5,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.data.querydesigner.sql.SQLLineStyler;
 import com.jaspersoft.studio.data.ui.SimpleQueryWizardDataEditorComposite;
 
@@ -15,8 +16,8 @@ public class JDBCWizardDataEditorComposite extends SimpleQueryWizardDataEditorCo
 	public JDBCWizardDataEditorComposite(Composite parent, WizardPage page, JDBCDataAdapterDescriptor dataAdapterDescriptor) {
 	
 		super(parent, page);
-		setQueryLanguage("sql");
-		setTitle("Insert an SQL query and press next");
+		setQueryLanguage("sql"); //$NON-NLS-1$
+		setTitle(Messages.JDBCWizardDataEditorComposite_Title);
 		
 		this.setDataAdapterDescriptor(dataAdapterDescriptor);
 		

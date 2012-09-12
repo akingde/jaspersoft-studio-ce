@@ -23,6 +23,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.data.messages.messages"; //$NON-NLS-1$
+	public static String ATreeWizardDataEditorComposite_Title;
 	public static String BeanDataAdapterComposite_0;
 	public static String BeanDataAdapterComposite_1;
 	public static String BeanDataAdapterComposite_2;
@@ -95,6 +96,7 @@ public class Messages extends NLS {
 	public static String JDBCDataAdapterComposite_serveraddress;
 	public static String JDBCDataAdapterComposite_urllabel;
 	public static String JDBCDataAdapterComposite_username;
+	public static String JDBCWizardDataEditorComposite_Title;
 	public static String JndiDataAdapterComposite_0;
 	public static String JrdsProviderDataAdapterComposite_0;
 	public static String JrdsProviderDataAdapterComposite_1;
@@ -186,12 +188,15 @@ public class Messages extends NLS {
 	public static String XPathQueryDesigner_ExpandAllItem;
 	public static String XPathQueryDesigner_InfoTitle;
 	public static String XPathQueryDesigner_JobTitle;
+	public static String XPathQueryDesigner_ReadFieldsButton;
 	public static String XPathQueryDesigner_RefreshItem;
 	public static String XPathQueryDesigner_RefreshJobTitle;
 	public static String XPathQueryDesigner_RefreshTaskTitle;
 	public static String XPathQueryDesigner_SetDocRootItem;
 	public static String XPathQueryDesigner_SetRecordItem;
 	public static String XPathQueryDesigner_TaskTitle;
+	public static String XPathWizardDataEditorComposite_RefreshJobTitle;
+	public static String XPathWizardDataEditorComposite_TaskName;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
