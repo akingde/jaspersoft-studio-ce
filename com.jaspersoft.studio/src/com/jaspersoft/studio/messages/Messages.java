@@ -1183,6 +1183,7 @@ public class Messages extends NLS {
 	public static String SortFieldSection_sort_field;
 	public static String SortFieldSection_sort_fields;
 	public static String SortFieldSection_sort_order;
+	public static String StylesListSection_removeAttribure_tooltip;
 	public static String StylesSectionList_Element_Attributes;
 	public static String StylesSectionList_Inherited_From_Style;
 	public static String StyleTemplateNewWizard_0;

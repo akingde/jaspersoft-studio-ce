@@ -59,7 +59,8 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		if (getValue() == null)
 			return result;
 		MLineBox element = (MLineBox) getPropertyValue(LINE_BOX);
-		result.putAll(element.getStylesDescriptors());
+		//result.putAll(element.getStylesDescriptors());
+		result.put(LINE_BOX, element);
 		return result;
 	}
 	

@@ -58,7 +58,8 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 		if (getValue() == null)
 			return result;
 		MLinePen linepen = (MLinePen)getPropertyValue(LINE_PEN);
-		result.putAll(linepen.getStylesDescriptors());
+		//result.putAll(linepen.getStylesDescriptors());
+		result.put(LINE_PEN, linepen);
 		return result;
 	}
 

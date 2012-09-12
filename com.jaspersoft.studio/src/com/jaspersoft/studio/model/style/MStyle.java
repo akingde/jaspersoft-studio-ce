@@ -227,9 +227,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		result.put(JRDesignStyle.PROPERTY_MARKUP, element.getOwnMarkup());
 		result.put(JRDesignStyle.PROPERTY_MODE, element.getOwnModeValue());
 		result.put(JRDesignStyle.PROPERTY_PATTERN, element.getOwnPattern());
-		result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, element.getOwnPdfEncoding());
-		result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, element.getOwnPdfFontName());
-		result.put(JRDesignStyle.PROPERTY_PDF_EMBEDDED, element.isOwnPdfEmbedded());
+		//result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, element.getOwnPdfEncoding());
+		//result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, element.getOwnPdfFontName());
+		//result.put(JRDesignStyle.PROPERTY_PDF_EMBEDDED, element.isOwnPdfEmbedded());
 		result.put(JRDesignStyle.PROPERTY_RADIUS, element.getOwnRadius());
 		result.put(JRDesignStyle.PROPERTY_ROTATION, element.getOwnRotationValue());
 		result.put(JRDesignStyle.PROPERTY_SCALE_IMAGE, element.getOwnScaleImageValue());
@@ -237,10 +237,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		result.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,element.isOwnBlankWhenNull());
 		//Add the line element
 		MLinePen linePen = (MLinePen)getPropertyValue(LINE_PEN);
-		result.putAll(linePen.getStylesDescriptors());
+		//result.putAll(linePen.getStylesDescriptors());
+		result.put(LINE_PEN, linePen);
 		//Add the box element
 		MLineBox lineBox = (MLineBox)getPropertyValue(LINE_BOX);
-		result.putAll(lineBox.getStylesDescriptors());
+		//result.putAll(lineBox.getStylesDescriptors());
+		result.put(LINE_BOX, lineBox);
 		return result;
 	}
 
