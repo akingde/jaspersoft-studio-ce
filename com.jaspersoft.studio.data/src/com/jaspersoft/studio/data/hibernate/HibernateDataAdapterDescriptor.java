@@ -23,13 +23,17 @@ import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.hibernate.HibernateDataAdapter;
 import net.sf.jasperreports.data.hibernate.HibernateDataAdapterImpl;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 
-public class HibernateDataAdapterDescriptor extends DataAdapterDescriptor {
+public class HibernateDataAdapterDescriptor extends DataAdapterDescriptor implements IWizardDataEditorProvider{
 	private HibernateDataAdapterImpl beanDataAdapter = new HibernateDataAdapterImpl();
 
 	@Override
@@ -55,8 +59,14 @@ public class HibernateDataAdapterDescriptor extends DataAdapterDescriptor {
 	@Override
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/hibernate.png");
+			return Activator.getImage("icons/hibernate.png"); //$NON-NLS-1$
 		}
 		return null;
+	}
+
+	@Override
+	public AWizardDataEditorComposite createDataEditorComposite(
+			Composite parent, WizardPage page) {
+		return new HQLWizardDataEditorComposite(parent, page, this);
 	}
 }
