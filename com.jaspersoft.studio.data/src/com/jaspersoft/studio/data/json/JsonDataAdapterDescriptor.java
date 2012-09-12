@@ -32,17 +32,21 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.querydesigner.json.JsonDataManager;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider {
+public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider,IWizardDataEditorProvider {
 	private JsonDataAdapterImpl jsonDataAdapter = new JsonDataAdapterImpl();
 
 	@Override
@@ -97,5 +101,11 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements 
 			throw new JRException(err);
 		}
 		return fields;
+	}
+
+	@Override
+	public AWizardDataEditorComposite createDataEditorComposite(
+			Composite parent, WizardPage page) {
+		return new JsonWizardDataEditorComposite(parent, page, this);
 	}
 }

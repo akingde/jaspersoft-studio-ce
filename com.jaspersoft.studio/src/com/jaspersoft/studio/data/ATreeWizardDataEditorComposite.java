@@ -102,6 +102,7 @@ public abstract class ATreeWizardDataEditorComposite extends SimpleQueryWizardDa
 	 * 
 	 */
 	protected void queryTextAreaModified(){
+		setQueryString(queryTextArea.getText());
 		// invoke decoration if any
 		decorateTreeUsingQueryText();
 	}

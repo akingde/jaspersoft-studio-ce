@@ -147,7 +147,10 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 	{
 		return queryString;
 	}
-
+	
+	public void setQueryString(String querystring){
+		this.queryString=querystring;
+	}
 
 	/**
 	 * @return the title

@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.designer.tree.NodeBoldStyledLabelProvider.CustomStyleStatus;
+import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
@@ -33,10 +34,10 @@ import com.jaspersoft.studio.utils.ResourceManager;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-enum JsonTreeCustomStatus implements CustomStyleStatus{
-	LOADING_JSON("Loading Json data...","icons/waiting.gif"),
-	ERROR_LOADING_JSON("Error loading the Json file.", "icons/error.gif"),
-	FILE_NOT_FOUND("No Json file found.", "icons/warning.gif");
+public enum JsonTreeCustomStatus implements CustomStyleStatus{
+	LOADING_JSON(Messages.JsonTreeCustomStatus_LoadingJsonMessage,"icons/waiting.gif"), //$NON-NLS-2$
+	ERROR_LOADING_JSON(Messages.JsonTreeCustomStatus_ErrorLoadingMessage, "icons/error.gif"), //$NON-NLS-2$
+	FILE_NOT_FOUND(Messages.JsonTreeCustomStatus_NoJsonMessage, "icons/warning.gif"); //$NON-NLS-2$
 	
 	private String message;
 	private String imagePath;

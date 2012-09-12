@@ -33,9 +33,7 @@ import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSourceEvent;
@@ -58,9 +56,9 @@ import org.eclipse.ui.progress.WorkbenchJob;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.tree.NodeBoldStyledLabelProvider;
 import com.jaspersoft.studio.data.designer.tree.TreeBasedQueryDesigner;
+import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
-import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 
@@ -100,7 +98,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 			toolbarComposite.setLayout(layout);
 	
 			Button btn = new Button(toolbarComposite, SWT.PUSH);
-			btn.setText("Read Fields");
+			btn.setText(Messages.JsonQueryDesigner_ReadFieldsBtn);
 			btn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
 			btn.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -181,7 +179,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 	@Override
 	protected void refreshTreeViewerContent(final DataAdapterDescriptor da) {
 		if(!isRefreshing){
-			this.container.getQueryStatus().showInfo("");
+			this.container.getQueryStatus().showInfo(""); //$NON-NLS-1$
 			if(da!=null && da.getDataAdapter() instanceof JsonDataAdapter){
 				treeViewer.setInput(JsonTreeCustomStatus.LOADING_JSON);
 				
@@ -191,7 +189,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 						@Override
 						public void run(IProgressMonitor monitor) throws InvocationTargetException,
 								InterruptedException {
-							monitor.beginTask("Loading Json resource...", -1);
+							monitor.beginTask(Messages.JsonQueryDesigner_Task, -1);
 							String fileName = ((JsonDataAdapter)da.getDataAdapter()).getFileName();
 							try {
 								jsonDataManager.loadJsonDataFile(fileName);
@@ -277,7 +275,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 	private void createContextualMenu() {
 		Menu contextMenu=new Menu(treeViewer.getTree());
 		final MenuItem setRecordNodeItem=new MenuItem(contextMenu, SWT.PUSH);
-		setRecordNodeItem.setText("Set record node (generate query)");
+		setRecordNodeItem.setText(Messages.JsonQueryDesigner_ItemSetRecordNode);
 		setRecordNodeItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -290,7 +288,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 		});
 		new MenuItem(contextMenu, SWT.SEPARATOR);
 		final MenuItem addNodeAsFieldItem1=new MenuItem(contextMenu, SWT.PUSH);
-		addNodeAsFieldItem1.setText("Add node as field");
+		addNodeAsFieldItem1.setText(Messages.JsonQueryDesigner_ItemAddNode);
 		addNodeAsFieldItem1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -304,7 +302,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 			}
 		});
 		final MenuItem addNodeAsFieldItem2=new MenuItem(contextMenu, SWT.PUSH);
-		addNodeAsFieldItem2.setText("Add as field (absolute path)");
+		addNodeAsFieldItem2.setText(Messages.JsonQueryDesigner_ItemAddNodeAbsolute);
 		addNodeAsFieldItem2.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -319,7 +317,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 		});
 		new MenuItem(contextMenu, SWT.SEPARATOR);
 		final MenuItem expandAllItem=new MenuItem(contextMenu, SWT.PUSH);
-		expandAllItem.setText("Expand all");
+		expandAllItem.setText(Messages.JsonQueryDesigner_ItemExpandAll);
 		expandAllItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -327,7 +325,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 			}
 		});
 		final MenuItem collapseAllItem=new MenuItem(contextMenu, SWT.PUSH);
-		collapseAllItem.setText("Collapse all");
+		collapseAllItem.setText(Messages.JsonQueryDesigner_ItemCollapseAll);
 		collapseAllItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -335,7 +333,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 			}
 		});
 		final MenuItem resetRefreshDocItem=new MenuItem(contextMenu, SWT.PUSH);
-		resetRefreshDocItem.setText("Reset/Refresh document");
+		resetRefreshDocItem.setText(Messages.JsonQueryDesigner_ItemResetRefresh);
 		resetRefreshDocItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -369,66 +367,19 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 
 	
 	/*
-	 * Content provider for the tree visualizing the json information.
-	 */
-	private final class JsonTreeContentProvider implements ITreeContentProvider {
-
-		@Override
-		public void dispose() {
-		}
-
-		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		}
-
-		@Override
-		public Object[] getElements(Object inputElement) {
-			if(inputElement instanceof MRoot){
-				return ((MRoot) inputElement).getChildren().toArray();
-			}
-			if(inputElement instanceof JsonTreeCustomStatus){
-				return new Object[]{inputElement};
-			}
-			return new Object[0];
-		}
-
-		@Override
-		public Object[] getChildren(Object parentElement) {
-			if(parentElement instanceof JsonSupportNode){
-				return ((JsonSupportNode) parentElement).getChildren().toArray();
-			}
-			return new Object[0];
-		}
-
-		@Override
-		public Object getParent(Object element) {
-			if(element instanceof JsonSupportNode){
-				return ((JsonSupportNode) element).getParent();
-			}
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(Object element) {
-			return getChildren(element).length>0;
-		}
-		
-	}
-	
-	/*
 	 * Job that is responsible to update the treeviewer presentation 
 	 * depending on the nodes selected by the Json query.
 	 */
 	private final class DecorateTreeViewerJob extends WorkbenchJob{
 
 		public DecorateTreeViewerJob(){
-			super("Refresh panel job");
+			super(Messages.JsonQueryDesigner_Job);
 			setSystem(true);
 		}
 		
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			monitor.beginTask("Decorating...", IProgressMonitor.UNKNOWN);
+			monitor.beginTask(Messages.JsonQueryDesigner_JobTask, IProgressMonitor.UNKNOWN);
 			String query=queryTextArea.getText();
 			treeLabelProvider.setSelectedNodes(jsonDataManager.getSelectableNodes(query));
 			treeViewer.refresh();
