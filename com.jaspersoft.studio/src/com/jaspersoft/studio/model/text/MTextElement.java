@@ -71,9 +71,12 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		HashMap<String, Object> result = super.getStylesDescriptors();
 		if (getValue() == null)
 			return result;
+		result.put(PARAGRAPH, getPropertyValue(PARAGRAPH));
 		result.putAll(tFont.getStylesDescriptors());
 		return result;
 	}
+	
+	private static final String PARAGRAPH= "paragraph"; //$NON-NLS-1$
 
 
 	@Override
@@ -100,7 +103,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		rotationD.setDescription(Messages.MTextElement_rotation_description);
 		desc.add(rotationD);
 
-		JRPropertyDescriptor paragraph = new JRPropertyDescriptor("paragraph", "Paragraph");
+		JRPropertyDescriptor paragraph = new JRPropertyDescriptor(PARAGRAPH, "Paragraph");
 		desc.add(paragraph);
 
 		tFont = new MFont((JRFont) getValue());
@@ -140,7 +143,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		if (id.equals(JRDesignStyle.PROPERTY_MARKUP))
 			return jrElement.getOwnMarkup();
 
-		if (id.equals("paragraph")) {
+		if (id.equals(PARAGRAPH)) {
 			if (mParagraph == null) {
 				mParagraph = new MParagraph((JRBaseParagraph) jrElement.getParagraph());
 				setChildListener(mParagraph);

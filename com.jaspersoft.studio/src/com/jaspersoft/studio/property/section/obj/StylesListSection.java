@@ -44,6 +44,7 @@ import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -428,6 +429,11 @@ public class StylesListSection extends AbstractSection {
 			//I need to pass a new context for the linepen because it's a composite value, so in the main hashmap i have only the
 			//complex value, not all it's fields
 			printStyleAttribute(parent, lineValue, null, name+"_", actualElement.getStylesDescriptors()); //$NON-NLS-1$
+		} else if (value instanceof MParagraph){
+			MParagraph lineValue = (MParagraph) value;
+			//I need to pass a new context for the linepen because it's a composite value, so in the main hashmap i have only the
+			//complex value, not all it's fields
+			printStyleAttribute(parent, lineValue, null, name+"_", actualElement.getStylesDescriptors()); //$NON-NLS-1$
 		} else if (value instanceof MLineBox){
 			MLineBox lineValue = (MLineBox) value;
 			printStyleAttribute(parent, lineValue, null, name+"_", lineValue.getStylesDescriptors()); //$NON-NLS-1$
@@ -620,8 +626,8 @@ public class StylesListSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		trackerListener.refresh();
-		elementAttributes = element.getStylesDescriptors();
 		element = getElement();
+		elementAttributes = element.getStylesDescriptors();
 		//Dispose the old widgets
 		 for (Control kid : parent.getChildren()) {
        kid.dispose();

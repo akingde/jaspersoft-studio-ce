@@ -21,12 +21,14 @@ package com.jaspersoft.studio.model.text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.TabStop;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
+import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.type.LineSpacingEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -48,6 +50,25 @@ public class MParagraph extends APropertyNode {
 		setValue(bParagraph);
 	}
 
+	
+	@Override
+	public HashMap<String,Object> getStylesDescriptors() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		if (getValue() == null)
+			return result;
+		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
+		result.put(JRBaseParagraph.PROPERTY_SPACING_BEFORE, jrElement.getOwnSpacingBefore());
+		result.put(JRBaseParagraph.PROPERTY_SPACING_AFTER, jrElement.getOwnSpacingAfter());
+		result.put(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT, jrElement.getOwnFirstLineIndent());
+		result.put(JRBaseParagraph.PROPERTY_LEFT_INDENT, jrElement.getOwnLeftIndent());
+		result.put(JRBaseParagraph.PROPERTY_LINE_SPACING, jrElement.getOwnLineSpacing());
+		result.put(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE, jrElement.getOwnLineSpacingSize());
+		result.put(JRBaseParagraph.PROPERTY_RIGHT_INDENT, jrElement.getOwnRightIndent());
+		result.put(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH, jrElement.getOwnTabStopWidth());
+		return result;
+	}
+
+	
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		lineSpacingD = new JSSEnumPropertyDescriptor(JRBaseParagraph.PROPERTY_LINE_SPACING, Messages.common_line_spacing,

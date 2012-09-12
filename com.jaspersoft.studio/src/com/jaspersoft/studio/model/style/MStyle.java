@@ -20,20 +20,14 @@
 package com.jaspersoft.studio.model.style;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyDescriptor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRBox;
 import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRLineBox;
-import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseFont;
-import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
-import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -184,6 +178,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 	private static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
 	private static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
+	private static final String PARAGRAPH= "paragraph"; //$NON-NLS-1$
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
@@ -235,13 +230,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		result.put(JRDesignStyle.PROPERTY_SCALE_IMAGE, element.getOwnScaleImageValue());
 		result.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT, element.getOwnVerticalAlignmentValue());
 		result.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,element.isOwnBlankWhenNull());
-		//Add the line element
+		result.put(PARAGRAPH, getPropertyValue(PARAGRAPH));
 		MLinePen linePen = (MLinePen)getPropertyValue(LINE_PEN);
-		//result.putAll(linePen.getStylesDescriptors());
 		result.put(LINE_PEN, linePen);
-		//Add the box element
 		MLineBox lineBox = (MLineBox)getPropertyValue(LINE_BOX);
-		//result.putAll(lineBox.getStylesDescriptors());
 		result.put(LINE_BOX, lineBox);
 		return result;
 	}
@@ -392,7 +384,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		patternD.setDescription(Messages.MStyle_pattern_description);
 		desc.add(patternD);
 
-		JRPropertyDescriptor paragraph = new JRPropertyDescriptor("paragraph", "Paragraph");
+		JRPropertyDescriptor paragraph = new JRPropertyDescriptor(PARAGRAPH, "Paragraph");
 		desc.add(paragraph);
 
 		paragraph.setCategory(Messages.common_text);
@@ -475,7 +467,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 					return jrstyle.getStyle().getName();
 				return ""; //$NON-NLS-1$
 			}
-			if (id.equals("paragraph")) {
+			if (id.equals(PARAGRAPH)) {
 				if (mParagraph == null) {
 					mParagraph = new MParagraph((JRBaseParagraph) jrstyle.getParagraph());
 					setChildListener(mParagraph);
