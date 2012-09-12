@@ -33,7 +33,7 @@ import com.jaspersoft.studio.utils.ResourceManager;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-enum XMLTreeCustomStatus implements CustomStyleStatus {
+public enum XMLTreeCustomStatus implements CustomStyleStatus {
 	LOADING_XML("Loading XML data...","icons/waiting.gif"),
 	ERROR_LOADING_XML("Error loading the XML file.", "icons/error.gif"),
 	FILE_NOT_FOUND("No file found.", "icons/warning.gif");

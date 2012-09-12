@@ -210,6 +210,7 @@ public class Messages extends NLS {
 	public static String AppContextMenuProvider_order;
 	public static String AppContextMenuProvider_size_components;
 	public static String AppContextMenuProvider_size_to_container;
+	public static String ATreeWizardDataEditorComposite_Title;
 	public static String BandConstraintCommand_band_resized;
 	public static String BandGroupWizard_group_band;
 	public static String BandSection_height_tool_tip;

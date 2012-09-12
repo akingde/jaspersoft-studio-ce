@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.querydesigner.xpath;
+package com.jaspersoft.studio.data.xml;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,10 +24,13 @@ import org.eclipse.ui.progress.WorkbenchJob;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import com.jaspersoft.studio.data.ATreeWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.tree.NodeBoldStyledLabelProvider;
 import com.jaspersoft.studio.data.messages.Messages;
-import com.jaspersoft.studio.data.xml.XMLDataAdapterDescriptor;
+import com.jaspersoft.studio.data.querydesigner.xpath.XMLDocumentManager;
+import com.jaspersoft.studio.data.querydesigner.xpath.XMLTreeCustomStatus;
+import com.jaspersoft.studio.data.querydesigner.xpath.XPathTreeViewerContentProvider;
 import com.jaspersoft.studio.model.datasource.xml.XMLNode;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -38,7 +41,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class XPathWizardDataEditorComposite extends	ATreeWizardDataEditorComposite {
+public class XMLWizardDataEditorComposite extends	ATreeWizardDataEditorComposite {
 
 	private static final int JOB_DELAY=300;
 	private XMLDocumentManager documentManager;
@@ -46,7 +49,7 @@ public class XPathWizardDataEditorComposite extends	ATreeWizardDataEditorComposi
 	private NodeBoldStyledLabelProvider<XMLNode> treeLabelProvider;
 	private XPathTreeViewerContentProvider treeContentProvider;
 	
-	public XPathWizardDataEditorComposite(Composite parent, WizardPage page,
+	public XMLWizardDataEditorComposite(Composite parent, WizardPage page,
 			DataAdapterDescriptor dataAdapterDescriptor) {
 		super(parent, page, dataAdapterDescriptor);
 	}

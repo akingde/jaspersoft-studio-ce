@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jaspersoft.studio.data.querydesigner.xpath;
+package com.jaspersoft.studio.data.remotexml;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.remotexml.RemoteXMLDataAdapterDescriptor;
+import com.jaspersoft.studio.data.xml.XMLWizardDataEditorComposite;
 
 /**
  * Editor composite for the Xpath2 query language.
@@ -26,10 +26,10 @@ import com.jaspersoft.studio.data.remotexml.RemoteXMLDataAdapterDescriptor;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class XPath2WizardDataEditorComposite extends
-		XPathWizardDataEditorComposite {
+public class RemoteXMLWizardDataEditorComposite extends
+		XMLWizardDataEditorComposite {
 
-	public XPath2WizardDataEditorComposite(Composite parent, WizardPage page,
+	public RemoteXMLWizardDataEditorComposite(Composite parent, WizardPage page,
 			DataAdapterDescriptor dataAdapterDescriptor) {
 		super(parent, page, dataAdapterDescriptor);
 	}

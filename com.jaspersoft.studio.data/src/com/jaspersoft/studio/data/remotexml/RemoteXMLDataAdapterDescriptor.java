@@ -45,7 +45,6 @@ import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
-import com.jaspersoft.studio.data.querydesigner.xpath.XPath2WizardDataEditorComposite;
 import com.jaspersoft.studio.data.xml.XMLDataAdapterDescriptor;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -109,7 +108,7 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor imp
 	@Override
 	public AWizardDataEditorComposite createDataEditorComposite(
 			Composite parent, WizardPage page) {
-		return new XPath2WizardDataEditorComposite(parent, page, this);
+		return new RemoteXMLWizardDataEditorComposite(parent, page, this);
 	}
 	
 }

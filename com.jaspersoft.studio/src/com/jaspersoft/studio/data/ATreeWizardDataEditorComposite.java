@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.querydesigner.xpath;
+package com.jaspersoft.studio.data;
 
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
@@ -16,10 +16,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.QueryStatus;
-import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.data.ui.SimpleQueryWizardDataEditorComposite;
+import com.jaspersoft.studio.messages.Messages;
 
 /**
  * 
