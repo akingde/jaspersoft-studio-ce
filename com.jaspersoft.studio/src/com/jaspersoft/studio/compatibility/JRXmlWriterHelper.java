@@ -19,13 +19,16 @@
  */
 package com.jaspersoft.studio.compatibility;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRReport;
+import net.sf.jasperreports.engine.xml.JRXmlBaseWriter;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 import org.eclipse.core.resources.IFile;
@@ -46,28 +49,16 @@ public class JRXmlWriterHelper {
 	private static final Map<String, Class<? extends JRXmlWriter>> writers = new HashMap<String, Class<? extends JRXmlWriter>>();
 
 	static {
-		writers.put("4_5_1", JRXmlWriter_4_5_1.class);
-		writers.put("4_0_2", JRXmlWriter_4_0_2.class);
-		writers.put("4_0_1", JRXmlWriter_4_0_1.class);
-		writers.put("3_7_4", JRXmlWriter_3_7_4.class);
-		writers.put("3_7_3", JRXmlWriter_3_7_3.class);
-		// writers.put("3_7_1", JRXmlWriter_3_7_1.class);
-		// writers.put("3_6_2", JRXmlWriter_3_6_2.class);
-		// writers.put("3_6_1", JRXmlWriter_3_6_1.class);
-		// writers.put("3_6_0", JRXmlWriter_3_6_0.class);
-		// writers.put("3_5_2", JRXmlWriter_3_5_2.class);
-		// writers.put("3_5_1", JRXmlWriter_3_5_1.class);
-		// writers.put("3_5_0", JRXmlWriter_3_5_0.class);
-		// writers.put("3_1_4", JRXmlWriter_3_1_4.class);
-		// writers.put("3_1_3", JRXmlWriter_3_1_3.class);
-		// writers.put("3_1_2", JRXmlWriter_3_1_2.class);
-		// writers.put("3_1_0", JRXmlWriter_3_1_0.class);
-		// writers.put("3_0_1", JRXmlWriter_3_0_1.class);
-		// writers.put("3_0_0", JRXmlWriter_3_0_0.class);
-		// writers.put("2_0_5", JRXmlWriter_2_0_5.class);
-		// writers.put("2_0_4", JRXmlWriter_2_0_4.class);
-		// writers.put("2_0_3", JRXmlWriter_2_0_3.class);
-		// writers.put("2_0_2", JRXmlWriter_2_0_2.class);
+		for (Field f : JRConstants.class.getFields()) {
+			if (f.getName().startsWith("VERSION_"))
+				try {
+					writers.put((String) f.get(null), JRXmlWriter.class);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+		}
 	}
 
 	public static String[][] getVersions() {
@@ -96,14 +87,15 @@ public class JRXmlWriterHelper {
 
 	public static String writeReport(JRReport report, String encoding, String version) throws Exception {
 		encoding = fixencoding(encoding);
-		if (!writers.containsKey(version)) {
+		if (!writers.containsKey(version))
 			version = LAST_VERSION;
-		}
+		report.removeProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION);
 		if (writers.containsKey(version)) {
-			Class<? extends JRXmlWriter> clazz = writers.get(version);
-			if (clazz != null)
-				return (String) clazz.getMethod("writeReport", new Class[] { JRReport.class, String.class }).invoke(null,
-						new Object[] { report, encoding });
+			report.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION, version);
+			// Class<? extends JRXmlWriter> clazz = writers.get(version);
+			// if (clazz != null)
+			// return (String) clazz.getMethod("writeReport", new Class[] { JRReport.class, String.class }).invoke(null,
+			// new Object[] { report, encoding });
 		}
 		String xml = JRXmlWriter.writeReport(report, encoding);
 		xml = xml.replaceFirst(
