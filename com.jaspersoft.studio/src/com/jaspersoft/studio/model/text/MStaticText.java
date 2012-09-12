@@ -128,6 +128,14 @@ public class MStaticText extends MTextElement {
 	}
 
 	@Override
+	public Object getPropertyActualValue(Object id) {
+		JRDesignStaticText jrElement = (JRDesignStaticText) getValue();
+		if (id.equals(JRBaseStaticText.PROPERTY_TEXT))
+			return jrElement.getText();
+		return super.getPropertyActualValue(id);
+	}
+	
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignStaticText jrElement = (JRDesignStaticText) getValue();
 		if (id.equals(JRBaseStaticText.PROPERTY_TEXT))

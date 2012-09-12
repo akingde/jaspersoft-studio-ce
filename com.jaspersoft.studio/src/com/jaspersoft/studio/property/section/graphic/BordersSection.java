@@ -382,7 +382,7 @@ public class BordersSection extends AbstractSection {
 		isRefreshing = true;
 		APropertyNode m = getElement();
 		if (m != null) {
-			MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
+			MLineBox lb = (MLineBox) m.getPropertyActualValue(MGraphicElementLineBox.LINE_BOX);
 			refreshPadding(lb);
 			refreshLinePen(lb, MLineBox.LINE_PEN, JRBaseLineBox.PROPERTY_PADDING);
 			refreshLinePen(lb, MLineBox.LINE_PEN_TOP, JRBaseLineBox.PROPERTY_TOP_PADDING);
@@ -405,7 +405,7 @@ public class BordersSection extends AbstractSection {
 		if (lb != null) {
 			Set<String> keys = pMap.keySet();
 			for (String key : keys) {
-				Integer padding = (Integer) lb.getPropertyValue(key);
+				Integer padding = (Integer) lb.getPropertyActualValue(key);
 				Spinner spinner = pMap.get(key);
 				if (spinner != null && !spinner.isDisposed())
 					spinner.setSelection(padding != null ? padding : 0);
@@ -419,9 +419,9 @@ public class BordersSection extends AbstractSection {
 
 	public void refreshLinePen(MLineBox lb, String property, String mapProperty) {
 		if (lb != null) {
-			MLinePen lp = (MLinePen) lb.getPropertyValue(property);
+			MLinePen lp = (MLinePen) lb.getPropertyActualValue(property);
 
-			Float propertyValue = (Float) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
+			Float propertyValue = (Float) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_WIDTH);
 			Spinner lineWidth = lineWidthMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_WIDTH); //$NON-NLS-1$
 			if (lineWidth != null && !lineWidth.isDisposed()) {
 				UIUtils.setSpinnerSelection(lineWidth, null, (int) ((propertyValue == null) ? 0 : propertyValue.doubleValue()
@@ -430,11 +430,11 @@ public class BordersSection extends AbstractSection {
 
 			SPLineStyleEnum lineStyle = lineStyleMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_STYLE); //$NON-NLS-1$
 			if (lineStyle != null && !isDisposed()) {
-				int ls = ((Integer) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue();
+				int ls = ((Integer) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue();
 				lineStyle.setData(ls);
 			}
 
-			RGB backcolor = (RGB) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
+			RGB backcolor = (RGB) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_COLOR);
 			ToolItem lineColor = lineColorMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_COLOR); //$NON-NLS-1$
 			if (lineColor != null && !lineColor.isDisposed())
 				lineColor.setImage(colorLabelProvider.getImage(backcolor));

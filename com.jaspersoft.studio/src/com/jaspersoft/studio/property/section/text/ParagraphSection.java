@@ -36,6 +36,19 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Chicu Veaceslav
  */
 public class ParagraphSection extends AbstractSection {
+	
+	
+	public void refresh() {
+		isRefreshing = true;
+		APropertyNode element = getElement();
+		if (element != null) {
+			element.getPropertyDescriptors();
+			for (Object key : widgets.keySet()) {
+				widgets.get(key).setData(element, element.getPropertyActualValue(key));
+			}
+		}
+		isRefreshing = false;
+	}
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,

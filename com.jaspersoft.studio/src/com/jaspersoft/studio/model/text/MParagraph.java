@@ -146,6 +146,39 @@ public class MParagraph extends APropertyNode {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
+	
+	
+	public Object getPropertyActualValue(Object id) {
+		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
+		if (jrElement != null) {
+			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING))
+				return lineSpacingD.getEnumValue(jrElement.getLineSpacing());
+			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE))
+				return jrElement.getLineSpacingSize();
+
+			if (id.equals(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT))
+				return jrElement.getFirstLineIndent();
+
+			if (id.equals(JRBaseParagraph.PROPERTY_LEFT_INDENT))
+				return jrElement.getLeftIndent();
+			if (id.equals(JRBaseParagraph.PROPERTY_RIGHT_INDENT))
+				return jrElement.getRightIndent();
+
+			if (id.equals(JRBaseParagraph.PROPERTY_SPACING_BEFORE))
+				return jrElement.getSpacingBefore();
+			if (id.equals(JRBaseParagraph.PROPERTY_SPACING_AFTER))
+				return jrElement.getSpacingAfter();
+			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH))
+				return jrElement.getTabStopWidth();
+			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOPS)) {
+				TabStop[] tabStops = jrElement.getTabStops();
+				if (tabStops != null)
+					return Arrays.asList(tabStops);
+				return new ArrayList<TabStop>();
+			}
+		}
+		return null;
+	}
 
 	/*
 	 * (non-Javadoc)

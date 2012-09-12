@@ -551,6 +551,69 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 		return null;
 	}
+	
+	public Object getPropertyActualValue(Object id) {
+		JRDesignElement jrElement = (JRDesignElement) getValue();
+		if (id.equals(JRDesignElement.PROPERTY_KEY))
+			return jrElement.getKey();
+		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION)) {
+			return ExprUtil.getExpression(jrElement.getPrintWhenExpression());
+		}
+		if (id.equals(JRDesignElement.PROPERTY_PARENT_STYLE)) {
+			if (jrElement.getStyleNameReference() != null)
+				return jrElement.getStyleNameReference();
+			if (jrElement.getStyle() != null)
+				return jrElement.getStyle().getName();
+			return ""; //$NON-NLS-1$
+		}
+		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES)) {
+			if (jrElement.getPrintWhenGroupChanges() != null)
+				return jrElement.getPrintWhenGroupChanges().getName();
+			return ""; //$NON-NLS-1$
+		}
+		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+			// jrElement.getPropertyExpressions();
+			// jrElement.getPropertiesMap()
+			// FIXME: jrElement.getPropertyExpression(); same field
+			return jrElement.getPropertiesMap();
+		}
+		if (id.equals(JRDesignElement.PROPERTY_HEIGHT))
+			return new Integer(jrElement.getHeight());
+		if (id.equals(JRDesignElement.PROPERTY_WIDTH))
+			return new Integer(jrElement.getWidth());
+		if (id.equals(JRDesignElement.PROPERTY_X))
+			return new Integer(jrElement.getX());
+		if (id.equals(JRDesignElement.PROPERTY_Y))
+			return new Integer(jrElement.getY());
+		// colors
+		if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getBackcolor());
+		if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getForecolor());
+		// opacity
+		if (id.equals(JRBaseStyle.PROPERTY_MODE))
+			return opaqueD.getEnumValue(jrElement.getModeValue());
+		if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
+			return positionTypeD.getEnumValue(jrElement.getPositionTypeValue());
+		if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))
+			return stretchTypeD.getEnumValue(jrElement.getStretchTypeValue());
+
+		if (id.equals(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES))
+			return new Boolean(jrElement.isPrintRepeatedValues());
+		if (id.equals(JRDesignElement.PROPERTY_REMOVE_LINE_WHEN_BLANK))
+			return new Boolean(jrElement.isRemoveLineWhenBlank());
+		if (id.equals(JRDesignElement.PROPERTY_PRINT_IN_FIRST_WHOLE_BAND))
+			return new Boolean(jrElement.isPrintInFirstWholeBand());
+		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS))
+			return new Boolean(jrElement.isPrintWhenDetailOverflows());
+
+		if (id.equals(PROPERTY_MAP)) {
+			// to avoid duplication I remove it first
+			return jrElement.getPropertiesMap().cloneProperties();
+		}
+
+		return null;
+	}
 
 	/*
 	 * (non-Javadoc)

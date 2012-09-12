@@ -125,6 +125,20 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		return null;
 	}
 
+	public Object getPropertyActualValue(Object id) {
+		// pen
+		JRPen linePen = (JRPen) getValue();
+		if (linePen != null) {
+			if (id.equals(JRBasePen.PROPERTY_LINE_COLOR))
+				return Colors.getSWTRGB4AWTGBColor(linePen.getLineColor());
+			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH))
+				return linePen.getLineWidth();
+			if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
+				return penLineStyleD.getEnumValue(linePen.getLineStyleValue());
+		}
+		return null;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

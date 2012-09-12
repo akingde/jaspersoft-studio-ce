@@ -37,6 +37,19 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  */
 public class LinePenSection extends AbstractSection {
 
+	public void refresh() {
+		isRefreshing = true;
+		APropertyNode element = getElement();
+		if (element != null) {
+			element.getPropertyDescriptors();
+			for (Object key : widgets.keySet()) {
+				widgets.get(key).setData(element, element.getPropertyActualValue(key));
+			}
+		}
+		isRefreshing = false;
+	}
+
+	
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {
 		APropertyNode model = super.getModelFromEditPart(item);

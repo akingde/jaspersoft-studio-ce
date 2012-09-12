@@ -68,6 +68,16 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	public abstract void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1);
 
 	public abstract IPropertyDescriptor[] getDescriptors();
+	
+	/**
+	 * Return the actual value of an attribute, so the value that the system is 
+	 * using
+	 * @param id
+	 * @return
+	 */
+	public Object getPropertyActualValue(Object id){
+		return getPropertyValue(id);
+	}
 
 	/**
 	 * Creates the property descriptors.

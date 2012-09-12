@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -37,6 +38,19 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  */
 public class FontSection extends AbstractSection {
 
+	public void refresh() {
+		isRefreshing = true;
+		APropertyNode element = getElement();
+		if (element != null) {
+			element.getPropertyDescriptors();
+			for (Object key : widgets.keySet()) {
+				widgets.get(key).setData(element, element.getPropertyActualValue(key));
+			}
+		}
+		isRefreshing = false;
+	}
+
+	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)

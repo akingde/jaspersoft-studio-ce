@@ -135,6 +135,38 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		}
 		return tFont;
 	}
+	
+	@Override
+	public Object getPropertyActualValue(Object id) {
+		JRDesignTextElement jrElement = (JRDesignTextElement) getValue();
+
+		if (id.equals(JRDesignStyle.PROPERTY_MARKUP))
+			return jrElement.getMarkup();
+
+		if (id.equals(PARAGRAPH)) {
+			if (mParagraph == null) {
+				mParagraph = new MParagraph((JRBaseParagraph) jrElement.getParagraph());
+				setChildListener(mParagraph);
+			}
+			return mParagraph;
+		}
+
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
+			return hAlignD.getEnumValue(jrElement.getHorizontalAlignmentValue());
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
+			return vAlignD.getEnumValue(jrElement.getVerticalAlignmentValue());
+		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
+			return rotationD.getEnumValue(jrElement.getRotationValue());
+
+		if (getMFont() != null) {
+			Object val = tFont.getPropertyActualValue(id);
+			if (val != null)
+				return val;
+		}
+
+		return super.getPropertyActualValue(id);
+	}
+
 
 	@Override
 	public Object getPropertyValue(Object id) {

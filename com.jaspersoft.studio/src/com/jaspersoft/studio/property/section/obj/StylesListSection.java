@@ -31,14 +31,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -268,9 +263,6 @@ public class StylesListSection extends AbstractSection {
        return  "#"+StringUtils.rightPad(s, 6, "0").toUpperCase(); //$NON-NLS-1$ //$NON-NLS-2$
    }
 	 
-	 private Color getOppositeColor(Color base){
-		 return new Color(null,255-base.getRed(),255-base.getGreen(), 255-base.getBlue());
-	 }
 	
 	/**
 	 * Paint on the main widget the fields to show the value of an attribute color. the color will be expressed in textual
@@ -294,7 +286,7 @@ public class StylesListSection extends AbstractSection {
  	 	imageLabel.setVisible(false);
 		
 		StyledText label = new StyledText(nameComp, SWT.NONE);
- 		label.setText(Messages.getString("common_"+colorName)); //$NON-NLS-1$
+ 		label.setText(colorName); //$NON-NLS-1$
   	label.setForeground(leftStringColor);
 		label.setEditable(false);
 		label.setEnabled(false);
@@ -346,7 +338,7 @@ public class StylesListSection extends AbstractSection {
  	 	imageLabel.setVisible(false);
 
 		StyledText label = new StyledText(valueComp, SWT.NONE);
- 		label.setText(Messages.getString("common_"+name)); //$NON-NLS-1$
+ 		label.setText(name); //$NON-NLS-1$
   	label.setForeground(leftStringColor);
 		label.setEditable(false);
 		label.setEnabled(false);
@@ -402,10 +394,10 @@ public class StylesListSection extends AbstractSection {
 	 * @param actualElement element that contain the attribute
 	 * @param addListener true if to the element will be added the listener for the mouse move\click
 	 */
-	private void printObject(String name, Object value, Composite parent, GridData gData, boolean printLine, APropertyNode actualElement, boolean addListener){
+	private void printObject(String namePrefix, String name, Object value, Composite parent, GridData gData, boolean printLine, APropertyNode actualElement, boolean addListener, HashMap<String, Object> localContext){
 		if (value instanceof Color){
 			Color valImage = (Color)value;
-			Control label = paintColor(parent,valImage, name, gData, printLine, actualElement.getPropertyDescriptor(name).getDescription());
+			Control label = paintColor(parent,valImage, Messages.getString("common"+namePrefix+"_"+name), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription());
 			if (addListener) {
 				AddListener(label);
 				label.addMouseListener(new ElementClickListener(actualElement,name));
@@ -413,7 +405,7 @@ public class StylesListSection extends AbstractSection {
 			}
 		} else if (value instanceof java.awt.Color){
 			java.awt.Color valImage = (java.awt.Color)value;
-			Control label = paintColor(parent, ModelUtils.getSWTColorFromAWT(valImage), name, gData, printLine, actualElement.getPropertyDescriptor(name).getDescription());
+			Control label = paintColor(parent, ModelUtils.getSWTColorFromAWT(valImage), Messages.getString("common"+namePrefix+"_"+name), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription());
 			if (addListener) {
 				AddListener(label);
 				label.addMouseListener(new ElementClickListener(actualElement,name));
@@ -421,14 +413,14 @@ public class StylesListSection extends AbstractSection {
 			}
 		} else if (value instanceof JREnum){
 			JREnum enumValue = (JREnum) value;
-			Control label = printLabels(parent, name, enumValue.getName(), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription());
+			Control label = printLabels(parent,  Messages.getString("common"+namePrefix+"_"+name), enumValue.getName(), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription());
 			if (addListener) {
 				AddListener(label);
 				label.addMouseListener(new ElementClickListener(actualElement,name));
 				label.setToolTipText(Messages.StylesListSection_removeAttribure_tooltip); //$NON-NLS-1$
 			}
 		} else if (value instanceof Boolean){
-			Control label = paintCheckBox(parent,name,(Boolean)value, gData, printLine, actualElement.getPropertyDescriptor(name).getDescription());
+			Control label = paintCheckBox(parent, Messages.getString("common"+namePrefix+"_"+name),(Boolean)value, gData, printLine, actualElement.getPropertyDescriptor(name).getDescription());
 			if (addListener) {
 				AddListener(label);
 				label.addMouseListener(new ElementClickListener(actualElement,name));
@@ -438,17 +430,15 @@ public class StylesListSection extends AbstractSection {
 			MLinePen lineValue = (MLinePen) value;
 			//I need to pass a new context for the linepen because it's a composite value, so in the main hashmap i have only the
 			//complex value, not all it's fields
-			printStyleAttribute(parent, lineValue, null, name+"_", actualElement.getStylesDescriptors()); //$NON-NLS-1$
+			printStyleAttribute(parent, lineValue, null, namePrefix+"_"+name, ((MLinePen)localContext.get(name)).getStylesDescriptors()); //$NON-NLS-1$
 		} else if (value instanceof MParagraph){
 			MParagraph lineValue = (MParagraph) value;
-			//I need to pass a new context for the linepen because it's a composite value, so in the main hashmap i have only the
-			//complex value, not all it's fields
-			printStyleAttribute(parent, lineValue, null, name+"_", actualElement.getStylesDescriptors()); //$NON-NLS-1$
+			printStyleAttribute(parent, lineValue, null, namePrefix+"_"+name, ((MParagraph)localContext.get(name)).getStylesDescriptors()); //$NON-NLS-1$
 		} else if (value instanceof MLineBox){
 			MLineBox lineValue = (MLineBox) value;
-			printStyleAttribute(parent, lineValue, null, name+"_", lineValue.getStylesDescriptors()); //$NON-NLS-1$
+			printStyleAttribute(parent, lineValue, null, namePrefix+"_"+name,  ((MLineBox)localContext.get(name)).getStylesDescriptors()); //$NON-NLS-1$
 		} else {
-			Control label = printLabels(parent, name, value.toString(), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription());
+			Control label = printLabels(parent,  Messages.getString("common"+namePrefix+"_"+name), value.toString(), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription());
 			if (addListener) {
 				AddListener(label);
 				label.addMouseListener(new ElementClickListener(actualElement,name));
@@ -495,7 +485,7 @@ public class StylesListSection extends AbstractSection {
 	  	String key = it.next();
 	  	Object elementAttribute = elementAttributes.get(key);
 	  	if (elementAttribute!=null){
-	  		printObject(key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(key),element,true); //$NON-NLS-1$
+	  		printObject("",key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(key),element,true, elementAttributes); //$NON-NLS-1$
 	  		ovverridenAttributes.add(key);
 	  	}
 	  }
@@ -523,11 +513,12 @@ public class StylesListSection extends AbstractSection {
 	  	String key = it.next();
 	  	Object elementAttribute = properties.get(key);
 	  	if (elementAttribute!=null && localElementAttributes.containsKey(key)){
-	  		printObject(key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(keyPrefix + key),element,true);
+	  		printObject(keyPrefix, key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(keyPrefix + key),element,true, localElementAttributes);
 	  		ovverridenAttributes.add(keyPrefix +key);
 	  	}
 	  }
 	}
+	
 	
 	/**
 	 * Print the attributes of all the styles of the element
@@ -577,7 +568,7 @@ public class StylesListSection extends AbstractSection {
 		  	String key = it.next();
 		  	Object elementAttribute = defaultValues.get(key);
 		  	if (elementAttribute != null && elementAttributes.containsKey(key)){
-		  		printObject(key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(key),element,false); //$NON-NLS-1$
+		  		printObject("",key, elementAttribute, parent,sameSizeGridData, ovverridenAttributes.contains(key),element,false, elementAttributes); //$NON-NLS-1$
 		  	}
 		}
 	}

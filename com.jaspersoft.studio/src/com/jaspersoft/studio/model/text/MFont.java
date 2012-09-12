@@ -212,6 +212,29 @@ public class MFont extends APropertyNode {
 		defaultsMap = defaultsMap1;
 	}
 
+	public Object getPropertyActualValue(Object id) {
+		JRFont jrElement = (JRFont) getValue();
+		if (id.equals(JRBaseFont.PROPERTY_BOLD))
+			return jrElement.isBold();
+		if (id.equals(JRBaseFont.PROPERTY_UNDERLINE))
+			return jrElement.isUnderline();
+		if (id.equals(JRBaseFont.PROPERTY_ITALIC))
+			return jrElement.isItalic();
+		if (id.equals(JRBaseFont.PROPERTY_STRIKE_THROUGH))
+			return jrElement.isStrikeThrough();
+		if (id.equals(JRBaseFont.PROPERTY_PDF_EMBEDDED))
+			return jrElement.isPdfEmbedded();
+		if (id.equals(JRBaseFont.PROPERTY_FONT_NAME))
+			return jrElement.getFontName();
+		if (id.equals(JRBaseFont.PROPERTY_PDF_FONT_NAME))
+			return jrElement.getPdfFontName();
+		if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
+			return ModelUtils.getKey4PDFEncoding(jrElement.getPdfEncoding());
+		if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
+			return  Integer.toString(jrElement.getFontSize()); //$NON-NLS-1$
+		return null;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
