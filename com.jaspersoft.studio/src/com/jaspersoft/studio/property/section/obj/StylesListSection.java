@@ -25,13 +25,20 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseTrackListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -276,7 +283,7 @@ public class StylesListSection extends AbstractSection {
 	 * @param toolTip tooltip text of the element name label
 	 * @return The button where the click handle will be added
 	 */
-	private Control paintColor(Composite parent, Color colorValue, String colorName, GridData gData, boolean addLine, String toolTip){
+	private Control paintColor(Composite parent, final Color colorValue, String colorName, GridData gData, boolean addLine, String toolTip){
 		String stringValue = getHexFromRGB(colorValue);
 		Composite nameComp = new Composite(parent, SWT.NONE);
 		nameComp.setLayout(new RowLayout());
@@ -294,25 +301,28 @@ public class StylesListSection extends AbstractSection {
 		nameComp.setToolTipText(toolTip);
 		
 		Composite valueComp = new Composite(parent, SWT.NONE);
-		valueComp.setLayout(new RowLayout());
+		RowLayout inLineLayout = new RowLayout();
+		valueComp.setLayout(inLineLayout);
 		valueComp.setLayoutData(gData);
+		
 		StyledText valueText = new StyledText(valueComp, SWT.NONE);
+		valueText.addPaintListener(new PaintListener() {
+	      public void paintControl(PaintEvent e) {
+	        e.gc.setBackground(colorValue);
+	        e.gc.drawRectangle(0, 0, 13, 13);
+	        e.gc.fillRectangle(1,1,12,12);
+	      
+	      }
+	  });
+		valueText.setLeftMargin(18);
 		valueText.setText(stringValue);
+		valueText.setAlignment(SWT.LEFT);
 		valueText.setEditable(false);
 		valueText.setEnabled(true);
 		if (addLine){
 			strikeStyledText(valueText);
 			strikeStyledText(label);
 		}
-		
-		//Add the tool tip on the composite under the element, it works anyway because the element is disabled
-		valueText.setBackground(colorValue);
-		valueText.setForeground(getOppositeColor(colorValue));
-		//DefaultToolTip toolTip = new DefaultToolTip(valueComp);
-		//toolTip.setBackgroundColor(colorValue);
-		//toolTip.setText("           "); //$NON-NLS-1$
-		//toolTip.setHideDelay(0);
-		//toolTip.setPopupDelay(0);
 		return imageLabel;
 	}
 	
