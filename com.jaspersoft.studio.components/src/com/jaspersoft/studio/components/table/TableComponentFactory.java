@@ -463,6 +463,14 @@ public class TableComponentFactory implements IComponentFactory {
 
 	public Command getCreateCommand(ANode parent, ANode child,
 			Rectangle location, int newIndex) {
+		if (parent instanceof MPage) {
+			for (INode c : parent.getChildren()) {
+				if (c instanceof MTable) {
+					parent = (ANode) c;
+					break;
+				}
+			}
+		}
 		if (child instanceof MField
 				&& (child.getValue() != null && parent instanceof MCell))
 			return new CreateE4ObjectCommand(child, (MCell) parent, location,

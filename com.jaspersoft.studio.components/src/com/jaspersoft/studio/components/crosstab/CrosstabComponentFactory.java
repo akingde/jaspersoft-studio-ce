@@ -384,6 +384,14 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 	public Command getCreateCommand(ANode parent, ANode child,
 			Rectangle location, int newIndex) {
+		if (parent instanceof MPage) {
+			for (INode c : parent.getChildren()) {
+				if (c instanceof MCrosstab) {
+					parent = (ANode) c;
+					break;
+				}
+			}
+		}
 		if (child instanceof MStyle
 				&& (child.getValue() != null && parent instanceof MCell)) {
 			SetValueCommand cmd = new SetValueCommand();
