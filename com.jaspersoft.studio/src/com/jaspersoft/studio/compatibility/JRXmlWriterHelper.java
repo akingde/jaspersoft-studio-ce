@@ -66,6 +66,7 @@ public class JRXmlWriterHelper {
 	public static String[][] getVersions() {
 		List<String> sl = new ArrayList<String>(writers.keySet());
 		Collections.sort(sl);
+		Collections.reverse(sl);
 		String[][] r = new String[sl.size() + 1][2];
 		r[0] = new String[] { "Last Version", "last" };
 		int i = 1;
