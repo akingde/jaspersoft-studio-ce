@@ -49,9 +49,7 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
-import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
 public abstract class ABasicEditor extends EditorPart {
 	protected boolean listenResource;
@@ -242,12 +240,8 @@ public abstract class ABasicEditor extends EditorPart {
 	protected JasperReportsConfiguration jrContext;
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
-		if (jrContext == null) {
+		if (jrContext == null)
 			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
-			ProxyFileResolver resolver = new ProxyFileResolver();
-			resolver.addResolver(SelectionHelper.getFileResolver(file));
-			jrContext.setFileResolver(resolver);
-		}
 	}
 
 	protected boolean isDirty = false;

@@ -519,9 +519,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null) {
 			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
-			ProxyFileResolver resolver = new ProxyFileResolver();
-			resolver.addResolver(SelectionHelper.getFileResolver(file));
-			jrContext.setFileResolver(resolver);
+			
 		}
 	}
 

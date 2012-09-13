@@ -38,7 +38,6 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
  * link nodes & together.
@@ -116,8 +115,6 @@ public class CreateChartCommand extends CreateElementCommand {
 		if (jrElement == null) {
 			JRDesignChart newchart = MChart.createJRElement(jasperDesign,
 					JRDesignChart.CHART_TYPE_AREA);
-
-			jConfig.setFileResolver(SelectionHelper.getFileResolver());
 
 			ChartWizard wizard = new ChartWizard(
 					new MChart(null, newchart, -1),

@@ -25,7 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -55,10 +54,8 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.editor.preview.ABasicEditor;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
 public class DataAdapterEditorPart extends ABasicEditor {
 	public static final String ID = "com.jaspersoft.studio.data.DataAdapterEditorPart";
@@ -187,7 +184,6 @@ public class DataAdapterEditorPart extends ABasicEditor {
 					if (cl != null)
 						Thread.currentThread().setContextClassLoader(cl);
 
-					
 					DataAdapterServiceUtil.getInstance(jrContext).getService(editor.getDataAdapter().getDataAdapter()).test();
 
 					MessageBox mb = new MessageBox(btnTest.getShell(), SWT.ICON_INFORMATION | SWT.OK);
@@ -206,12 +202,8 @@ public class DataAdapterEditorPart extends ABasicEditor {
 	private JasperReportsConfiguration jrContext;
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
-		if (jrContext == null) {
+		if (jrContext == null)
 			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
-			ProxyFileResolver resolver = new ProxyFileResolver();
-			resolver.addResolver(SelectionHelper.getFileResolver(file));
-			jrContext.setFileResolver(resolver);
-		}
 	}
 
 	@Override
