@@ -19,11 +19,14 @@
  */
 package com.jaspersoft.studio.editor.preview.view.report.system;
 
+import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsExcelAPIAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
+import com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExcelAPIViewer extends ASystemViewer {
@@ -41,5 +44,8 @@ public class ExcelAPIViewer extends ASystemViewer {
 	protected String getExtension() {
 		return ".xls";
 	}
-
+	@Override
+	public PreferencePage getPreferencePage() {
+		return new ExcelExporterPreferencePage();
+	}
 }

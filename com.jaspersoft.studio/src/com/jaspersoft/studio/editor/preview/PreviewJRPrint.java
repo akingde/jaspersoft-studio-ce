@@ -187,22 +187,12 @@ public class PreviewJRPrint extends ABasicEditor {
 			rightContainer = new MultiPageContainer() {
 				public void switchView(Statistics stats, String key) {
 					currentViewer = key;
-					APreview aPreview = pmap.get(key);
-					if (aPreview instanceof IJRPrintable) {
-						console = getConsole();
-						try {
-							((IJRPrintable) aPreview).setJRPRint(stats, jasperPrint);
-							console.setStatistics(stats);
-						} catch (Exception e) {
-							switchView(stats, errorPreview);
-
-							console.addError(e);
-							return;
-						}
-					}
-					currentViewer = key;
+					APreview view = pmap.get(key);
+					if (!switchRightView(view, stats, this))
+						return;
 					super.switchView(stats, key);
 				}
+
 				@Override
 				public void switchView(String key) {
 					currentViewer = key;
@@ -211,18 +201,8 @@ public class PreviewJRPrint extends ABasicEditor {
 
 				@Override
 				public void switchView(Statistics stats, APreview view) {
-					//set currentviewer key
-					if (view instanceof IJRPrintable) {
-						try {
-							((IJRPrintable) view).setJRPRint(stats, jasperPrint);
-							console.setStatistics(stats);
-						} catch (Exception e) {
-							switchView(stats, errorPreview);
-
-							console.addError(e);
-							return;
-						}
-					}
+					if (!switchRightView(view, stats, this))
+						return;
 					super.switchView(stats, view);
 					topToolBarManager.contributeItems(view);
 				}
@@ -235,6 +215,21 @@ public class PreviewJRPrint extends ABasicEditor {
 			};
 		}
 		return rightContainer;
+	}
+
+	protected boolean switchRightView(APreview view, Statistics stats, MultiPageContainer container) {
+		if (view instanceof IJRPrintable) {
+			try {
+				((IJRPrintable) view).setJRPRint(stats, jasperPrint);
+				console.setStatistics(stats);
+			} catch (Exception e) {
+				container.switchView(stats, errorPreview);
+
+				console.addError(e);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override

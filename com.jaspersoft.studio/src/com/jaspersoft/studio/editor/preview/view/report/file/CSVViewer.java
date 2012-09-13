@@ -21,11 +21,13 @@ package com.jaspersoft.studio.editor.preview.view.report.file;
 
 import net.sf.jasperreports.engine.JasperPrint;
 
+import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsCsvAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
+import com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CSVViewer extends AFileViewer {
@@ -50,6 +52,11 @@ public class CSVViewer extends AFileViewer {
 	@Override
 	public void pageUpdated(JasperPrint arg0, int arg1) {
 
+	}
+
+	@Override
+	public PreferencePage getPreferencePage() {
+		return new CSVExporterPreferencePage();
 	}
 
 }

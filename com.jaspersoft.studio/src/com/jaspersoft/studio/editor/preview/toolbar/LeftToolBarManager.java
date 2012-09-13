@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
-import com.jaspersoft.studio.editor.preview.actions.ViewExecutionInfoAction;
+import com.jaspersoft.studio.editor.preview.actions.ViewExporterAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewParametersAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewReportParametersAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewSortFieldsAction;
@@ -52,7 +52,8 @@ public class LeftToolBarManager extends ATopToolBarManager {
 	private ViewParametersAction vprmAction;
 	private ViewReportParametersAction vprmrepAction;
 	private ViewSortFieldsAction vsortAction;
-	private ViewExecutionInfoAction vexecAction;
+	// private ViewExecutionInfoAction vexecAction;
+	private ViewExporterAction vexpAction;
 
 	@Override
 	protected void createToolBar(Composite parent) {
@@ -84,9 +85,12 @@ public class LeftToolBarManager extends ATopToolBarManager {
 		if (vsortAction == null)
 			vsortAction = new ViewSortFieldsAction(pvcont.getLeftContainer());
 		tbManager.add(vsortAction);
-		if (vexecAction == null)
-			vexecAction = new ViewExecutionInfoAction(pvcont);
-		tbManager.add(vexecAction);
+		// if (vexecAction == null)
+		// vexecAction = new ViewExecutionInfoAction(pvcont);
+		// tbManager.add(vexecAction);
+		if (vexpAction == null)
+			vexpAction = new ViewExporterAction(pvcont.getLeftContainer());
+		tbManager.add(vexpAction);
 
 		ToolItemContribution titem = new ToolItemContribution("id", SWT.CHECK); //$NON-NLS-1$
 		tbManager.add(titem);

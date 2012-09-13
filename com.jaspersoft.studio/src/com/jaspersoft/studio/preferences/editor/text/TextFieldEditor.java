@@ -34,6 +34,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.utils.Misc;
+
 public class TextFieldEditor extends FieldEditor {
 
 	/**
@@ -77,7 +79,7 @@ public class TextFieldEditor extends FieldEditor {
 	/**
 	 * Width of text field in characters; initially unlimited.
 	 */
-//	private int widthInChars = UNLIMITED;
+	// private int widthInChars = UNLIMITED;
 
 	/**
 	 * Text limit of text field in characters; initially unlimited.
@@ -123,7 +125,7 @@ public class TextFieldEditor extends FieldEditor {
 	 */
 	public TextFieldEditor(String name, String labelText, int width, int strategy, Composite parent) {
 		init(name, labelText);
-//		widthInChars = width;
+		// widthInChars = width;
 		setValidateStrategy(strategy);
 		isValid = false;
 		errorMessage = JFaceResources.getString("StringFieldEditor.errorMessage");//$NON-NLS-1$
@@ -238,7 +240,7 @@ public class TextFieldEditor extends FieldEditor {
 	protected void doLoad() {
 		if (textField != null) {
 			String value = getPreferenceStore().getString(getPreferenceName());
-			textField.setText(value);
+			textField.setText(Misc.nvl(value));
 			oldValue = value;
 		}
 	}

@@ -35,4 +35,5 @@ public class XHTMLViewer extends HTMLViewer {
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
 		return new ExportAsXHtmlAction(rptv, jContext);
 	}
+
 }

@@ -17,36 +17,15 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.preview.view.report.system;
+package com.jaspersoft.studio.editor.preview.actions;
 
-import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.swt.widgets.Composite;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.preview.MultiPageContainer;
 
-import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
-import com.jaspersoft.studio.editor.preview.actions.export.ExportAsPdfAction;
-import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
-import com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-
-public class PdfViewer extends ASystemViewer {
-
-	public PdfViewer(Composite parent, JasperReportsConfiguration jContext) {
-		super(parent, jContext);
+public class ViewExporterAction extends ASwitchAction {
+	public ViewExporterAction(MultiPageContainer container) {
+		super(container, "Exporter Parameters");
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/equalizer--arrow.png")); //$NON-NLS-1$
+		setToolTipText("Set exporter parameters");
 	}
-
-	@Override
-	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsPdfAction(rptv, jContext);
-	}
-
-	@Override
-	protected String getExtension() {
-		return ".pdf";
-	}
-
-	@Override
-	public PreferencePage getPreferencePage() {
-		return new PDFExporterPreferencePage();
-	}
-
 }

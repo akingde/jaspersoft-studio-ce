@@ -25,6 +25,7 @@ import java.io.IOException;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.layout.GridData;
@@ -36,15 +37,17 @@ import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsHtmlAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.IURLViewable;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
+import com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage;
 import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
+public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable, IPreferencePage {
 
 	public HTMLViewer(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
@@ -136,6 +139,11 @@ public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
 	@Override
 	public void pageUpdated(JasperPrint arg0, int arg1) {
 
+	}
+
+	@Override
+	public PreferencePage getPreferencePage() {
+		return new HTMLExporterPreferencePage();
 	}
 
 }

@@ -51,6 +51,7 @@ public class MultiPageContainer {
 		this.stats = stats;
 		((StackLayout) composite.getLayout()).topControl = view.getControl();
 		composite.layout();
+		// here should update exporters properties
 	}
 
 	public List<String> getKeys() {

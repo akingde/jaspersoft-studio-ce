@@ -91,7 +91,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				} else {
 					throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 				}
-				in = JrxmlEditor.getXML(input, file.getCharset(true), in, null);
+				in = JrxmlEditor.getXML(jrContext, input, file.getCharset(true), in, null);
 				getJrContext(file);
 				jrContext.setJasperDesign(JRXmlLoader.load(in));
 				setJasperDesign(jrContext);
@@ -147,7 +147,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 		createRight(sashform);
 
-		sashform.setWeights(new int[] { 30, 70 });
+		sashform.setWeights(new int[] { 40, 60 });
 	}
 
 	@Override
@@ -165,7 +165,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				protected void fillToolbar(IToolBarManager tbManager) {
 					if (runMode.equals(RunStopAction.MODERUN_LOCAL)) {
 						if (pvModeAction == null)
-							pvModeAction = new SwitchViewsAction(container.getRightContainer(), Messages.PreviewContainer_javatitle, true);
+							pvModeAction = new SwitchViewsAction(container.getRightContainer(), Messages.PreviewContainer_javatitle,
+									true);
 						tbManager.add(pvModeAction);
 					}
 					tbManager.add(new Separator());
@@ -228,6 +229,12 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		jiveViewer = new JiveViewer(rightComposite, jrContext);
 
 		return rightComposite;
+	}
+
+	@Override
+	protected boolean switchRightView(APreview view, Statistics stats, MultiPageContainer container) {
+		reportControler.viewerChanged(view);
+		return super.switchRightView(view, stats, container);
 	}
 
 	public void runReport(DataAdapterDescriptor myDataAdapter) {

@@ -36,6 +36,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.utils.Misc;
+
 public class NStringFieldEditor extends FieldEditor {
 
 	/**
@@ -274,7 +276,7 @@ public class NStringFieldEditor extends FieldEditor {
 			value = value.replaceAll("\r", "\\\\r");
 			value = value.replaceAll("\t", "\\\\t");
 		}
-		textField.setText(value);
+		textField.setText(Misc.nvl(value));
 	}
 
 	private String getTextValue() {

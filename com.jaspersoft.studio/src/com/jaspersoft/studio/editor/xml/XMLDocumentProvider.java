@@ -53,11 +53,17 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.xml.scanners.XMLPartitionScanner;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * /* The Class XMLDocumentProvider.
  */
 public class XMLDocumentProvider extends FileDocumentProvider {
+	private JasperReportsConfiguration jrContext;
+
+	public XMLDocumentProvider(JasperReportsConfiguration jrContext) {
+		this.jrContext = jrContext;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -67,21 +73,14 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	@Override
 	protected IDocument createDocument(Object element) throws CoreException {
 		IDocument document = super.createDocument(element);
-		if (document != null)
-    {
-			IDocumentPartitioner partitioner = new XMLPartitioner(new XMLPartitionScanner(), new String[]
-        {
-                XMLPartitionScanner.XML_START_TAG,
-                XMLPartitionScanner.XML_PI,
-                XMLPartitionScanner.XML_DOCTYPE,
-                XMLPartitionScanner.XML_END_TAG,
-                XMLPartitionScanner.XML_TEXT,
-                XMLPartitionScanner.XML_CDATA,
-                XMLPartitionScanner.XML_COMMENT
-        });
-        partitioner.connect(document);
-        document.setDocumentPartitioner(partitioner);
-    }
+		if (document != null) {
+			IDocumentPartitioner partitioner = new XMLPartitioner(new XMLPartitionScanner(), new String[] {
+					XMLPartitionScanner.XML_START_TAG, XMLPartitionScanner.XML_PI, XMLPartitionScanner.XML_DOCTYPE,
+					XMLPartitionScanner.XML_END_TAG, XMLPartitionScanner.XML_TEXT, XMLPartitionScanner.XML_CDATA,
+					XMLPartitionScanner.XML_COMMENT });
+			partitioner.connect(document);
+			document.setDocumentPartitioner(partitioner);
+		}
 		return document;
 	}
 
@@ -110,7 +109,7 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 					IFile file = ((IFileEditorInput) editorInput).getFile();
 					stream = file.getContents(false);
 					setDocumentContent(document,
-							JrxmlEditor.getXML(editorInput, encoding, stream, JRXmlWriterHelper.LAST_VERSION), encoding);
+							JrxmlEditor.getXML(jrContext, editorInput, encoding, stream, JRXmlWriterHelper.LAST_VERSION), encoding);
 				} else
 					return super.setDocumentContent(document, editorInput, encoding);
 			}

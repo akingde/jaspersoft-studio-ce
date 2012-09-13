@@ -245,10 +245,24 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		return p;
 	}
 
+	public Long getPropertyLong(String key) {
+		String p = getProperty(key);
+		if (p != null)
+			return Long.getLong(p);
+		return null;
+	}
+
 	public Float getPropertyFloat(String key) {
 		String p = getProperty(key);
 		if (p != null)
 			return Float.valueOf(p);
+		return null;
+	}
+
+	public Double getPropertyDouble(String key) {
+		String p = getProperty(key);
+		if (p != null)
+			return Double.valueOf(p);
 		return null;
 	}
 

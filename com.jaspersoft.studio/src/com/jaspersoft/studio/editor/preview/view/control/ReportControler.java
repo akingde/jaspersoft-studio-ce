@@ -88,6 +88,7 @@ public class ReportControler {
 	public static final String ST_REPORTEXECUTIONTIME = "REPORTEXECUTIONTIME"; //$NON-NLS-1$
 
 	public static final String FORM_SORTING = Messages.ReportControler_sortoptiontitle;
+	public static final String FORM_EXPORTER = Messages.ReportControler_exportertitle;
 
 	public static final String FORM_REPORT_PARAMETERS = Messages.ReportControler_reportparameterstitle;
 	public static final String FORM_PARAMETERS = Messages.ReportControler_inputparameterstitle;
@@ -152,6 +153,7 @@ public class ReportControler {
 		viewmap.put(FORM_PARAMETERS, new VParameters(composite, jrContext));
 		viewmap.put(FORM_REPORT_PARAMETERS, new VReportParameters(composite, jrContext));
 		viewmap.put(FORM_SORTING, new VSorting(composite, jrContext));
+		viewmap.put(FORM_EXPORTER, new VExporter(composite, jrContext));
 		return viewmap;
 	}
 
@@ -164,6 +166,11 @@ public class ReportControler {
 
 		VSorting vs = (VSorting) viewmap.get(FORM_SORTING);
 		vs.setJasperReports(jrContext.getJasperDesign(), prompts, jasperParameters);
+	}
+
+	public void viewerChanged(APreview view) {
+		VExporter vs = (VExporter) viewmap.get(FORM_EXPORTER);
+		vs.setPreferencesPage(view);
 	}
 
 	private Console c;

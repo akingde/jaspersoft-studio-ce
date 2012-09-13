@@ -205,7 +205,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Creates page 0 of the multi-page editor, which contains a text editor.
 	 */
 	void createPage1() throws PartInitException {
-		xmlEditor = new XMLEditor();
+		xmlEditor = new XMLEditor(jrContext);
 		int index = addPage(xmlEditor, getEditorInput());
 		setPageText(index, Messages.common_source);
 		xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput())
@@ -480,7 +480,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 			getJrContext(file);
 
-			in = getXML(editorInput, file.getCharset(true), in, version);
+			in = getXML(jrContext, editorInput, file.getCharset(true), in, version);
 
 			InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
 
@@ -536,11 +536,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		return fileExtention;
 	}
 
-	public static InputStream getXML(IEditorInput editorInput, String encoding, InputStream in, String version)
-			throws JRException {
+	public static InputStream getXML(JasperReportsConfiguration jrContext, IEditorInput editorInput, String encoding,
+			InputStream in, String version) throws JRException {
 		String fileExtension = getFileExtension(editorInput);
-		InputStream jrxmlInputStream = JRXMLUtils.getJRXMLInputStream(in, fileExtension, encoding, version);
-		return jrxmlInputStream!=null ? jrxmlInputStream : in;
+		InputStream jrxmlInputStream = JRXMLUtils.getJRXMLInputStream(jrContext, in, fileExtension, encoding, version);
+		return jrxmlInputStream != null ? jrxmlInputStream : in;
 	}
 
 	/**
@@ -710,7 +710,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				}
 			}
 
-			String xml = JRXmlWriterHelper.writeReport(report, "UTF-8", version);
+			String xml = JRXmlWriterHelper.writeReport(jrContext, report, "UTF-8", version);
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 

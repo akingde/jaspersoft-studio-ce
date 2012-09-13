@@ -32,6 +32,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.xml.outline.EditorContentOutlinePage;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class XMLEditor.
@@ -52,11 +53,11 @@ public class XMLEditor extends TextEditor {
 	/**
 	 * Instantiates a new xML editor.
 	 */
-	public XMLEditor() {
+	public XMLEditor(JasperReportsConfiguration jrContext) {
 		super();
 		colorManager = new ColorManager();
 		setSourceViewerConfiguration(new XMLConfiguration(colorManager));
-		setDocumentProvider(new XMLDocumentProvider());
+		setDocumentProvider(new XMLDocumentProvider(jrContext));
 	}
 
 	@Override

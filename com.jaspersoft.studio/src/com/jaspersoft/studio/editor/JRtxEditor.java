@@ -404,7 +404,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 	 */
 	void createPage1() {
 		try {
-			xmlEditor = new XMLEditor();
+			xmlEditor = new XMLEditor(jrContext);
 			int index = addPage(xmlEditor, getEditorInput());
 			setPageText(index, Messages.common_source);
 			xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput())

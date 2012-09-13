@@ -127,9 +127,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 							e.printStackTrace();
 						}
 				}
-
 			}
-
 		}
 	}
 

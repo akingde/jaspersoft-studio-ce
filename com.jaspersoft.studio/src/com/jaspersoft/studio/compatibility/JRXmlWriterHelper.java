@@ -26,8 +26,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRReport;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.xml.JRXmlBaseWriter;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
@@ -78,21 +80,24 @@ public class JRXmlWriterHelper {
 	public static String writeReport(JasperReportsConfiguration jrContext, JRReport report, IFile file, boolean showDialog)
 			throws Exception {
 
-		return writeReport(report, file.getCharset(true), getVersion(file, jrContext, showDialog));
+		return writeReport(jrContext, report, file.getCharset(true), getVersion(file, jrContext, showDialog));
 	}
 
-	public static String writeReport(JRReport report, String version) throws Exception {
-		return writeReport(report, fixencoding("UTF-8"), version);
+	public static String writeReport(JasperReportsContext jrContext, JRReport report, String version) throws Exception {
+		return writeReport(jrContext, report, fixencoding("UTF-8"), version);
 	}
 
-	public static String writeReport(JRReport report, String encoding, String version) throws Exception {
+	public static String writeReport(JasperReportsContext jrContext, JRReport report, String encoding, String version)
+			throws Exception {
 		encoding = fixencoding(encoding);
 		if (!writers.containsKey(version))
 			version = LAST_VERSION;
-		report.removeProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION);
+		if (jrContext == null)
+			jrContext = DefaultJasperReportsContext.getInstance();
+		jrContext.removeProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION);
 		if (writers.containsKey(version))
-			report.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION, version);
-		String xml = JRXmlWriter.writeReport(report, encoding);
+			jrContext.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION, version);
+		String xml = new JRXmlWriter(jrContext).write(report, encoding);
 		xml = xml.replaceFirst(
 				"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + version + "-->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
 		return xml;

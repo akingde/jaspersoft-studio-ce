@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -32,6 +33,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.FirstPageAction;
@@ -47,7 +49,7 @@ import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomInAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomOutAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class SWTViewer extends APreview implements IJRPrintable {
+public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage {
 
 	protected ReportViewer rptviewer;
 
@@ -135,6 +137,11 @@ public class SWTViewer extends APreview implements IJRPrintable {
 				}
 			});
 		}
+	}
+
+	@Override
+	public PreferencePage getPreferencePage() {
+		return null;
 	}
 
 }
