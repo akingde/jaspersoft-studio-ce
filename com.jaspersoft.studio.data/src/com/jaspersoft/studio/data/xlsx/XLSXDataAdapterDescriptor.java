@@ -29,16 +29,21 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.data.ui.EmptyWizardDataEditorComposite;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements
-		IFieldsProvider {
+		IFieldsProvider, IWizardDataEditorProvider {
 	private XlsxDataAdapter xlsxDataAdapter = new XlsxDataAdapterImpl();
 
 	@Override
@@ -87,5 +92,11 @@ public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements
 	private void getFieldProvider() {
 		if (fprovider == null)
 			fprovider = new XLSXFieldsProvider();
+	}
+
+	@Override
+	public AWizardDataEditorComposite createDataEditorComposite(
+			Composite parent, WizardPage page) {
+		return new EmptyWizardDataEditorComposite(parent, page, this);
 	}
 }

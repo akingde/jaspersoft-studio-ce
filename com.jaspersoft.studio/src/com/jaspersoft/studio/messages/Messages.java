@@ -389,6 +389,7 @@ public class Messages extends NLS {
 	public static String EmptyDatasourcePage_description;
 	public static String EmptyDatasourcePage_empty_datasource;
 	public static String EmptyDatasourcePage_size_tool_tip;
+	public static String EmptyWizardDataEditorComposite_TitleMsg;
 	public static String ErrorDecorator_PositionErrorToolTip;
 	public static String ExcelExporterPreferencePage_29;
 	public static String ExcelExporterPreferencePage_30;
