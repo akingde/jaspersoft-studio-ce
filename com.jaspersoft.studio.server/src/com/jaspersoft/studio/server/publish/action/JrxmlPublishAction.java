@@ -148,7 +148,8 @@ public class JrxmlPublishAction extends AContributorAction {
 		MJrxml jrxml = new MJrxml(mrunit, getMainReport(jd), 0);
 		File file = FileUtils.createTempFile("jrsres", ".jrxml");
 		String version = ServerManager.getVersion(mrunit);
-		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(jd, version));
+		FileUtils.writeFile(file,
+				JRXmlWriterHelper.writeReport(null, jd, version));
 		jrxml.setFile(file);
 		mrunit.setFile(file);
 		mrunit.getValue().getChildren().add(jrxml.getValue());

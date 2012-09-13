@@ -58,7 +58,7 @@ public class JrxmlExporter extends AExporter {
 				try {
 					MServerProfile sp = (MServerProfile) res.getRoot();
 					if (sp != null) {
-						fw.write(JRXmlWriterHelper.writeReport(jd, sp
+						fw.write(JRXmlWriterHelper.writeReport(null, jd, sp
 								.getValue().getJrVersion()));
 					}
 				} finally {

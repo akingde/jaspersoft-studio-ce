@@ -82,18 +82,21 @@ public class JrxmlPublishContributor implements IPublishContributor {
 				fileset, file);
 		if (fres == null)
 			return;
-		
+
 		IFile[] fs = root.findFilesForLocationURI(fres.getFile().toURI());
 		if (fs != null && fs.length > 0) {
 			InputStream jrxmlInputStream = JRXMLUtils.getJRXMLInputStream(
-					fs[0].getContents(), fs[0].getFileExtension(), fs[0].getCharset(true), version);
-			InputSource is = new InputSource(new InputStreamReader(jrxmlInputStream, "UTF-8"));
-			JasperDesign jrd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
+					jrConfig, fs[0].getContents(), fs[0].getFileExtension(),
+					fs[0].getCharset(true), version);
+			InputSource is = new InputSource(new InputStreamReader(
+					jrxmlInputStream, "UTF-8"));
+			JasperDesign jrd = new JRXmlLoader(
+					JRXmlDigesterFactory.createDigester()).loadXML(is);
 			if (jrd != null) {
 				publishJrxml(mrunit, monitor, jrd, fileset, fs[0]);
 				File f = FileUtils.createTempFile("jrsres", ".jrxml");
 				FileUtils.writeFile(f,
-						JRXmlWriterHelper.writeReport(jrd, version));
+						JRXmlWriterHelper.writeReport(jrConfig, jrd, version));
 				fres.setFile(f);
 			}
 		}
