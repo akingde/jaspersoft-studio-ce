@@ -21,8 +21,6 @@ package com.jaspersoft.studio.components.crosstab.part;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
@@ -31,7 +29,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.RectangleFigure;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -45,7 +42,7 @@ import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
-import com.jaspersoft.studio.components.crosstab.CrosstabCell;
+import com.jaspersoft.studio.components.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
@@ -61,7 +58,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
-import com.jaspersoft.studio.property.SetValueCommand;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -82,27 +78,10 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 	@Override
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
-			MCell model = getModel();
-			Dimension d = model.getMCrosstab().getCrosstabManager()
-					.getCellPackSize(new CrosstabCell(model.getValue()));
-			if (d.height > 0 && d.width > 0) {
-				CompoundCommand c = new CompoundCommand("Resize to container");
-
-				SetValueCommand cmd = new SetValueCommand();
-
-				cmd.setTarget(model);
-				cmd.setPropertyId(DesignCell.PROPERTY_HEIGHT);
-				cmd.setPropertyValue(d.height);
-				c.add(cmd);
-
-				cmd = new SetValueCommand();
-				cmd.setTarget(model);
-				cmd.setPropertyId(StandardColumn.PROPERTY_WIDTH);
-				cmd.setPropertyValue(d.width);
-				c.add(cmd);
-
+			Command c = CrosstabComponentFactory.INST().getStretch2Content(
+					getModel());
+			if (c != null)
 				getViewer().getEditDomain().getCommandStack().execute(c);
-			}
 		}
 		super.performRequest(req);
 	}

@@ -17,47 +17,34 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action.layout;
+package com.jaspersoft.studio.editor.action.band;
 
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.views.properties.IPropertySource;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.layout.ILayout;
-import com.jaspersoft.studio.editor.layout.LayoutCommand;
-import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
-import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
-import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
 
-public class LayoutAction extends SelectionAction {
+public class MaximizeContainerAction extends SelectionAction {
 
 	/** The Constant ID. */
-	public static final String ID = "LayoutGroup"; //$NON-NLS-1$
-
-	private ILayout layout;
+	public static final String ID = "maximizecontainer"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -65,15 +52,14 @@ public class LayoutAction extends SelectionAction {
 	 * @param part
 	 *          The part for this action
 	 */
-	public LayoutAction(IWorkbenchPart part, Class<?> type) {
+	public MaximizeContainerAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(false);
-		layout = LayoutManager.instLayout(type.getName());
-		setText(layout.getName());
-		setToolTipText(layout.getToolTip());
-		setId(type.getName());
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(layout.getIcon()));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(layout.getIcon()));
+		setText("Maximize Band Height");
+		setToolTipText("Maximize Band Height");
+		setId(ID);
+		// setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(layout.getIcon()));
+		// setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(layout.getIcon()));
 		setEnabled(false);
 	}
 
@@ -118,50 +104,18 @@ public class LayoutAction extends SelectionAction {
 			if (container == null)
 				return null;
 
-			Dimension size = null;
-			if (container instanceof JRDesignElement) {
-				JRDesignElement c = (JRDesignElement) container;
-				size = new Dimension(c.getWidth(), c.getHeight());
-			} else if (container instanceof JRDesignBand) {
-				int h = ((JRDesignBand) container).getHeight();
-				JasperDesign jDesign = n.getJasperDesign();
-				int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
-				size = new Dimension(w, h);
-			} else if (n instanceof IGraphicElementContainer) {
-				size = ((IGraphicElementContainer) n).getSize();
-				size.expand(((IGraphicElementContainer) n).getLeftPadding(), ((IGraphicElementContainer) n).getTopPadding());
-			} else if (n.getParent() instanceof IGraphicElementContainer) {
-				IGraphicElementContainer prnt = (IGraphicElementContainer) n.getParent();
-				size = prnt.getSize();
-				size.expand(prnt.getLeftPadding(), prnt.getTopPadding());
-			}
 			APropertyNode mcontainer = getContainerNode(n);
 			CompoundCommand cc = new CompoundCommand(getText());
-			if (mcontainer.getValue() instanceof JRPropertiesHolder) {
-				JRPropertiesMap pmap = (JRPropertiesMap) mcontainer.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-				pmap = (JRPropertiesMap) pmap.clone();
-				pmap.setProperty(ILayout.KEY, layout.getClass().getName());
-				SetValueCommand c = new SetValueCommand();
-				c.setTarget((IPropertySource) mcontainer);
-				c.setPropertyId(MGraphicElement.PROPERTY_MAP);
-				c.setPropertyValue(pmap);
-				cc.add(c);
-			} else if (mcontainer.getValue() instanceof JRBaseElement) {
-				String uuid = ((JRBaseElement) mcontainer.getValue()).getUUID().toString();
-				INode root = mcontainer.getRoot();
-				if (root != null && n instanceof MReport) {
-					MReport mrep = (MReport) n;
-					JRPropertiesMap pmap = (JRPropertiesMap) mrep.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-					pmap = (JRPropertiesMap) pmap.clone();
-					pmap.setProperty(ILayout.KEY + "." + uuid, layout.getClass().getName()); //$NON-NLS-1$
-					SetValueCommand c = new SetValueCommand();
-					c.setTarget((MReport) root);
-					c.setPropertyId(MGraphicElement.PROPERTY_MAP);
-					c.setPropertyValue(pmap);
-					cc.add(c);
+			if (container instanceof JRDesignBand) {
+				int bandHeight = ModelUtils.getMaxBandHeight((JRDesignBand) container, mcontainer.getJasperDesign());
+				if (bandHeight > 0) {
+					SetValueCommand cmd = new SetValueCommand();
+					cmd.setTarget(mcontainer);
+					cmd.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
+					cmd.setPropertyValue(bandHeight);
+					cc.add(cmd);
 				}
 			}
-			cc.add(new LayoutCommand(container, layout, size));
 			return cc;
 		}
 		return null;

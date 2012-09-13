@@ -23,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.component.Component;
@@ -33,11 +34,14 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.components.list.commands.element.CreateListElement4ObjectCommand;
 import com.jaspersoft.studio.components.list.editor.ListEditor;
@@ -288,5 +292,57 @@ public class ListComponentFactory implements IComponentFactory {
 		}
 
 		return null;
+	}
+
+	@Override
+	public Command getStretch2Content(ANode model) {
+		if (model instanceof MList) {
+			if (model.getParent() instanceof MPage) {
+				StandardListComponent jrList = (StandardListComponent) ((MList) model)
+						.getValue().getComponent();
+				Dimension d = ModelUtils.getContainerSize(jrList.getContents()
+						.getChildren(), new Dimension(0, 0));
+				if (d.height > 0 && d.width > 0) {
+					CompoundCommand c = new CompoundCommand(
+							"Resize to container");
+
+					SetValueCommand cmd = new SetValueCommand();
+					cmd.setTarget((IPropertySource) model);
+					cmd.setPropertyId(JRDesignElement.PROPERTY_HEIGHT);
+					cmd.setPropertyValue(d.height);
+					c.add(cmd);
+
+					cmd = new SetValueCommand();
+					cmd.setTarget((IPropertySource) model);
+					cmd.setPropertyId(MList.PREFIX
+							+ DesignListContents.PROPERTY_HEIGHT);
+					cmd.setPropertyValue(d.height);
+					c.add(cmd);
+
+					cmd = new SetValueCommand();
+					cmd.setTarget((IPropertySource) model);
+					cmd.setPropertyId(JRDesignElement.PROPERTY_WIDTH);
+					cmd.setPropertyValue(d.width);
+					c.add(cmd);
+
+					cmd = new SetValueCommand();
+					cmd.setTarget((IPropertySource) model);
+					cmd.setPropertyId(MList.PREFIX
+							+ DesignListContents.PROPERTY_WIDTH);
+					cmd.setPropertyValue(d.width);
+					c.add(cmd);
+					return c;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static ListComponentFactory inst;
+
+	public static ListComponentFactory INST() {
+		if (inst == null)
+			inst = new ListComponentFactory();
+		return inst;
 	}
 }

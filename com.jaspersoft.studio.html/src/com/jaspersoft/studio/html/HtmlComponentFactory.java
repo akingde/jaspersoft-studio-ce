@@ -141,4 +141,9 @@ public class HtmlComponentFactory implements IComponentFactory {
 		return null;
 	}
 
+	@Override
+	public Command getStretch2Content(ANode node) {
+		return null;
+	}
+
 }

@@ -44,10 +44,12 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.WorkbenchPart;
@@ -787,5 +789,44 @@ public class TableComponentFactory implements IComponentFactory {
 					mtable.getJasperConfiguration());
 		}
 		return null;
+	}
+
+	@Override
+	public Command getStretch2Content(ANode node) {
+		if (node instanceof MColumn) {
+			MColumn model = (MColumn) node;
+			ColumnCell cc = new ColumnCell(model.getType(), model.getGrName(),
+					model.getValue());
+
+			Dimension d = model.getMTable().getTableManager()
+					.getCellPackSize(cc);
+			if (d.height > 0 && d.width > 0) {
+				CompoundCommand c = new CompoundCommand("Resize to container");
+
+				SetValueCommand cmd = new SetValueCommand();
+
+				cmd.setTarget(model);
+				cmd.setPropertyId(DesignCell.PROPERTY_HEIGHT);
+				cmd.setPropertyValue(d.height);
+				c.add(cmd);
+
+				cmd = new SetValueCommand();
+				cmd.setTarget(model);
+				cmd.setPropertyId(StandardColumn.PROPERTY_WIDTH);
+				cmd.setPropertyValue(d.width);
+				c.add(cmd);
+
+				return c;
+			}
+		}
+		return null;
+	}
+
+	private static TableComponentFactory inst;
+
+	public static TableComponentFactory INST() {
+		if (inst == null)
+			inst = new TableComponentFactory();
+		return inst;
 	}
 }

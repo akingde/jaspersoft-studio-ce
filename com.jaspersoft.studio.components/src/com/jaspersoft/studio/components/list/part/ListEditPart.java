@@ -21,11 +21,8 @@ package com.jaspersoft.studio.components.list.part;
 
 import java.util.Collection;
 
-import net.sf.jasperreports.components.list.DesignListContents;
-import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -34,8 +31,8 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.components.list.ListComponentFactory;
 import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
@@ -46,10 +43,7 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPoli
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
-import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 public class ListEditPart extends EditableFigureEditPart {
 
@@ -145,44 +139,9 @@ public class ListEditPart extends EditableFigureEditPart {
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			MList model = (MList) getModel();
-			if (model.getParent() instanceof MPage) {
-				StandardListComponent jrList = (StandardListComponent) model
-						.getValue().getComponent();
-				Dimension d = ModelUtils.getContainerSize(jrList.getContents()
-						.getChildren(), new Dimension(0, 0));
-				if (d.height > 0 && d.width > 0) {
-					CompoundCommand c = new CompoundCommand(
-							"Resize to container");
-
-					SetValueCommand cmd = new SetValueCommand();
-					cmd.setTarget((IPropertySource) model);
-					cmd.setPropertyId(JRDesignElement.PROPERTY_HEIGHT);
-					cmd.setPropertyValue(d.height);
-					c.add(cmd);
-
-					cmd = new SetValueCommand();
-					cmd.setTarget((IPropertySource) model);
-					cmd.setPropertyId(MList.PREFIX
-							+ DesignListContents.PROPERTY_HEIGHT);
-					cmd.setPropertyValue(d.height);
-					c.add(cmd);
-
-					cmd = new SetValueCommand();
-					cmd.setTarget((IPropertySource) model);
-					cmd.setPropertyId(JRDesignElement.PROPERTY_WIDTH);
-					cmd.setPropertyValue(d.width);
-					c.add(cmd);
-
-					cmd = new SetValueCommand();
-					cmd.setTarget((IPropertySource) model);
-					cmd.setPropertyId(MList.PREFIX
-							+ DesignListContents.PROPERTY_WIDTH);
-					cmd.setPropertyValue(d.width);
-					c.add(cmd);
-
-					getViewer().getEditDomain().getCommandStack().execute(c);
-				}
-			}
+			Command c = ListComponentFactory.INST().getStretch2Content(model);
+			if (c != null)
+				getViewer().getEditDomain().getCommandStack().execute(c);
 		}
 		super.performRequest(req);
 	}

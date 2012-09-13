@@ -24,6 +24,8 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
@@ -41,10 +43,12 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
@@ -688,5 +692,41 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	public ExpressionContext getElementExpressionContext(Object jrObject) {
 		// FIXME - Implement this method.
 		return null;
+	}
+
+	@Override
+	public Command getStretch2Content(ANode node) {
+		if (node instanceof MCell) {
+			MCell model = (MCell) node;
+			Dimension d = model.getMCrosstab().getCrosstabManager()
+					.getCellPackSize(new CrosstabCell(model.getValue()));
+			if (d.height > 0 && d.width > 0) {
+				CompoundCommand c = new CompoundCommand("Resize to container");
+
+				SetValueCommand cmd = new SetValueCommand();
+
+				cmd.setTarget(model);
+				cmd.setPropertyId(DesignCell.PROPERTY_HEIGHT);
+				cmd.setPropertyValue(d.height);
+				c.add(cmd);
+
+				cmd = new SetValueCommand();
+				cmd.setTarget(model);
+				cmd.setPropertyId(StandardColumn.PROPERTY_WIDTH);
+				cmd.setPropertyValue(d.width);
+				c.add(cmd);
+
+				return c;
+			}
+		}
+		return null;
+	}
+
+	private static CrosstabComponentFactory inst;
+
+	public static CrosstabComponentFactory INST() {
+		if (inst == null)
+			inst = new CrosstabComponentFactory();
+		return inst;
 	}
 }

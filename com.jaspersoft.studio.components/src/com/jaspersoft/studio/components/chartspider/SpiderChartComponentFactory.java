@@ -175,4 +175,9 @@ public class SpiderChartComponentFactory implements IComponentFactory {
 		// FIXME - Implement this method.
 		return null;
 	}
+
+	@Override
+	public Command getStretch2Content(ANode node) {
+		return null;
+	}
 }

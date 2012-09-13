@@ -35,6 +35,8 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
+import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
+import com.jaspersoft.studio.editor.action.band.Stretch2ContentAction;
 import com.jaspersoft.studio.editor.action.layout.LayoutAction;
 import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
 import com.jaspersoft.studio.editor.action.order.BringForwardAction;
@@ -309,6 +311,14 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 
 		menu.add(submenu);
 		// ------------------------------
+
+		action = getActionRegistry().getAction(MaximizeContainerAction.ID);
+		if (action.isEnabled())
+			menu.add(action);
+
+		action = getActionRegistry().getAction(Stretch2ContentAction.ID);
+		if (action.isEnabled())
+			menu.add(action);
 
 		submenu = new MenuManager("Arrange In Container", JaspersoftStudioPlugin.getImageDescriptor("icons/layout-6.png"), //$NON-NLS-1$
 				LayoutAction.ID);

@@ -374,4 +374,9 @@ public class ChartComponentFactory implements IComponentFactory {
 		// dataset information associated.
 		return null;
 	}
+
+	@Override
+	public Command getStretch2Content(ANode node) {
+		return null;
+	}
 }

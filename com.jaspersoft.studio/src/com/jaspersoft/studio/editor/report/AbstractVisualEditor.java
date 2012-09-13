@@ -78,6 +78,8 @@ import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.align.Align2Element;
+import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
+import com.jaspersoft.studio.editor.action.band.Stretch2ContentAction;
 import com.jaspersoft.studio.editor.action.copy.CopyAction;
 import com.jaspersoft.studio.editor.action.copy.CutAction;
 import com.jaspersoft.studio.editor.action.copy.PasteAction;
@@ -437,23 +439,23 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	protected PaletteViewerProvider createPaletteViewerProvider() {
 		return new PaletteViewerProvider(getEditDomain()) {
 			private IMenuListener menuListener;
-			
+
 			@Override
 			protected void configurePaletteViewer(PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
 				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
 				// Uncomment these lines if you want to set as default a palette
 				// with column layout and large icons.
-//				// TODO: we should replace these default suggestions not using the GEF preference
-//				// store explicitly. It would be better override the PaletteViewer creation in order
-//				// to have a custom PaletteViewerPreferences (#viewer.getPaletteViewerPreferences()).
-//				// This way we could store the preferences in our preference store (maybe the JaspersoftStudio plugin one).
-//				// For now we'll stay with this solution avoiding the user to lose previous saved preferences
-//				// regarding the palette.
-//				InternalGEFPlugin.getDefault().getPreferenceStore().setDefault(
-//						PaletteViewerPreferences.PREFERENCE_LAYOUT, PaletteViewerPreferences.LAYOUT_COLUMNS);
-//				InternalGEFPlugin.getDefault().getPreferenceStore().setDefault(
-//						PaletteViewerPreferences.PREFERENCE_COLUMNS_ICON_SIZE,true);
+				// // TODO: we should replace these default suggestions not using the GEF preference
+				// // store explicitly. It would be better override the PaletteViewer creation in order
+				// // to have a custom PaletteViewerPreferences (#viewer.getPaletteViewerPreferences()).
+				// // This way we could store the preferences in our preference store (maybe the JaspersoftStudio plugin one).
+				// // For now we'll stay with this solution avoiding the user to lose previous saved preferences
+				// // regarding the palette.
+				// InternalGEFPlugin.getDefault().getPreferenceStore().setDefault(
+				// PaletteViewerPreferences.PREFERENCE_LAYOUT, PaletteViewerPreferences.LAYOUT_COLUMNS);
+				// InternalGEFPlugin.getDefault().getPreferenceStore().setDefault(
+				// PaletteViewerPreferences.PREFERENCE_COLUMNS_ICON_SIZE,true);
 			}
 
 			@Override
@@ -609,6 +611,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
+		action = new MaximizeContainerAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+
+		action = new Stretch2ContentAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+
 		// ------------------
 
 		action = new ShowPropertyViewAction(this);
@@ -622,22 +632,22 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	}
 
 	/**
-	 * Contributes items to the specified toolbar that is supposed to be put
-	 * on the top right of the current visual editor 
+	 * Contributes items to the specified toolbar that is supposed to be put on the top right of the current visual editor
 	 * (i.e: ReportEditor, CrosstabEditor, TableEditor, ListEditor).
 	 * <p>
 	 * 
 	 * Default behavior contributes the following items:
 	 * <ul>
-	 * 	<li>Zoom In</li>
-	 * 	<li>Zoom Out</li>
-	 * 	<li>Zoom Combo</li>
-	 * 	<li>Global "View" settings drop down menu</li>
+	 * <li>Zoom In</li>
+	 * <li>Zoom Out</li>
+	 * <li>Zoom Combo</li>
+	 * <li>Global "View" settings drop down menu</li>
 	 * </ul>
 	 * 
 	 * Sub-classes may want to override this method to modify the toolbar.
 	 * 
-	 * @param toolbarManager the toolbar manager to be enriched
+	 * @param toolbarManager
+	 *          the toolbar manager to be enriched
 	 */
 	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
@@ -651,6 +661,6 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		toolbarManager.add(zoomItem);
 		toolbarManager.add(new Separator());
 		// Global "View" menu items
-		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));		
+		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));
 	}
 }

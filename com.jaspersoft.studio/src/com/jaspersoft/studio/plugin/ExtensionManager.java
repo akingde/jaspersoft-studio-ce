@@ -217,6 +217,15 @@ public class ExtensionManager {
 		return null;
 	}
 
+	public Command getStretch2Content(ANode node) {
+		for (IComponentFactory f : nodeFactory) {
+			Command c = f.getStretch2Content(node);
+			if (c != null)
+				return c;
+		}
+		return null;
+	}
+
 	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
 		for (IComponentFactory f : nodeFactory) {
 			Command c = f.getCreateCommand(parent, child, location, newIndex);
