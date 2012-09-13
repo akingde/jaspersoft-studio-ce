@@ -125,16 +125,20 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		setExtensions(RepositoryService.class, list);
 
 		ProxyFileResolver resolver = new ProxyFileResolver();
-//		 SimpleFileResolver fileResolver = null;
-//		 if (file == null)
-//					fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$
-//		 }));
-//		 else
-//		 fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()),
-//							new File("."), //$NON-NLS-1$
-//		 new File(file.getProject().getLocationURI()) }));
-//		 fileResolver.setResolveAbsolutePath(true);
-//		 resolver.addResolver(fileResolver);
+		try {
+			SimpleFileResolver fileResolver = null;
+			if (file == null)
+				fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$
+				}));
+			else
+				fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()),
+						new File("."), //$NON-NLS-1$
+						new File(file.getProject().getLocationURI()) }));
+			fileResolver.setResolveAbsolutePath(true);
+			resolver.addResolver(fileResolver);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		setFileResolver(resolver);
 	}
 
