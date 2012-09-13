@@ -44,6 +44,7 @@ import org.eclipse.gef.rulers.RulerProvider;
 
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
+import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
@@ -52,6 +53,7 @@ import com.jaspersoft.studio.editor.gef.rulers.command.ChangeGuideCommand;
 import com.jaspersoft.studio.editor.gef.util.CreateRequestUtil;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGuidebleElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
@@ -168,11 +170,29 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			Rectangle copyconstraint = constraint.getCopy();
 			if (request.getNewObject() instanceof Collection<?>) {
 				CompoundCommand ccmd = new CompoundCommand();
-				for (Object it : (Collection<?>) request.getNewObject()) {
-					Command cmd = getCreateCommand(parent, it, copyconstraint.getCopy(), index);
-					if (cmd != null) {
-						ccmd.add(cmd);
-						copyconstraint.translate(70, 0);
+				Collection<?> objs = (Collection<?>) request.getNewObject();
+				if (parent instanceof IGraphicElement && !isGraphicObjects(objs)) {
+					Rectangle rparent = ((IGraphicElement) parent).getBounds();
+					int w = rparent.width / objs.size();
+					int rest = rparent.width - w * objs.size();
+					copyconstraint.setLocation(rparent.x + ReportPageFigure.PAGE_BORDER.left, copyconstraint.getLocation().y);
+					copyconstraint.setWidth(w + rest);
+					for (Object it : objs) {
+						Command cmd = getCreateCommand(parent, it, copyconstraint.getCopy(), index);
+						if (cmd != null) {
+							ccmd.add(cmd);
+							copyconstraint.translate(w + rest, 0);
+							copyconstraint.setWidth(w);
+							rest = 0;
+						}
+					}
+				} else {
+					for (Object it : objs) {
+						Command cmd = getCreateCommand(parent, it, copyconstraint.getCopy(), index);
+						if (cmd != null) {
+							ccmd.add(cmd);
+							copyconstraint.translate(70, 0);
+						}
 					}
 				}
 				if (!ccmd.isEmpty())
@@ -185,10 +205,14 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			} else
 				return getCreateCommand(parent, request.getNewObject(), copyconstraint, index);
 		}
-
-		// Command cmd = chainGuideAttachmentCommand(request, newPart, create, true);
-		// return chainGuideAttachmentCommand(request, newPart, cmd, false);
 		return null;
+	}
+
+	private boolean isGraphicObjects(Collection<?> objs) {
+		for (Object obj : objs)
+			if (!(obj instanceof MGraphicElement))
+				return false;
+		return true;
 	}
 
 	protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
