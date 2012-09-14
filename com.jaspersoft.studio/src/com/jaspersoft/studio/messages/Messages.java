@@ -1186,6 +1186,11 @@ public class Messages extends NLS {
 	public static String SortFieldSection_sort_field;
 	public static String SortFieldSection_sort_fields;
 	public static String SortFieldSection_sort_order;
+	public static String SP3Boolean_False_Value;
+	public static String SP3Boolean_True_Value;
+	public static String SP3Boolean_Undefined_Value;
+	public static String SPButon_Size_Decrement;
+	public static String SPButon_Size_Increment;
 	public static String StylesListSection_Inherited_From_Default_Style;
 	public static String StylesListSection_removeAttribure_tooltip;
 	public static String StylesSectionList_Element_Attributes;

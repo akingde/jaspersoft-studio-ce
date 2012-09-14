@@ -277,6 +277,58 @@ public class MImage extends MGraphicElementLineBox {
 			return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
 		return super.getPropertyValue(id);
 	}
+	
+	@Override
+	public Object getPropertyActualValue(Object id) {
+		JRDesignImage jrElement = (JRDesignImage) getValue();
+		if (id.equals(JRBaseStyle.PROPERTY_FILL))
+			return fillD.getEnumValue(jrElement.getFillValue());
+		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
+			return scaleImageD.getEnumValue(jrElement.getScaleImageValue());
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
+			return hAlignD.getEnumValue(jrElement.getHorizontalAlignmentValue());
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
+			return vAlignD.getEnumValue(jrElement.getVerticalAlignmentValue());
+		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
+			return onErrorTypeD.getEnumValue(jrElement.getOnErrorTypeValue());
+		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
+			return evaluationTimeD.getEnumValue(jrElement.getEvaluationTimeValue());
+		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getExpression());
+
+		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
+			if (jrElement.getEvaluationGroup() != null)
+				return jrElement.getEvaluationGroup().getName();
+			return ""; //$NON-NLS-1$
+		}
+
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
+			if (propertyDTO == null) {
+				propertyDTO = new ParameterDTO();
+				propertyDTO.setJasperDesign(getJasperDesign());
+				propertyDTO.setValue(jrElement.getHyperlinkParameters());
+			}
+			return propertyDTO;
+		}
+		if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
+			return jrElement.getUsingCache();
+		if (id.equals(JRBaseImage.PROPERTY_LAZY))
+			return new Boolean(jrElement.isLazy());
+		// hyperlink --------------------------------------
+		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
+			return jrElement.getLinkTarget();
+		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
+			return jrElement.getLinkType();
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkAnchorExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkPageExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkReferenceExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
+		return super.getPropertyActualValue(id);
+	}
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {

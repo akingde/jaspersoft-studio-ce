@@ -107,6 +107,16 @@ public class MEllipse extends MGraphicElementLinePen {
 			return EnumHelper.getValue(jrElement.getOwnFillValue(), 1, true);
 		return super.getPropertyValue(id);
 	}
+	
+	
+	@Override
+	public Object getPropertyActualValue(Object id) {
+		JRDesignEllipse jrElement = (JRDesignEllipse) getValue();
+		if (id.equals(JRBaseStyle.PROPERTY_FILL))
+			return EnumHelper.getValue(jrElement.getFillValue(), 1, true);
+		return super.getPropertyActualValue(id);
+	}
+
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {

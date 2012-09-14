@@ -56,6 +56,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
+import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -65,6 +66,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.ButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
@@ -308,9 +310,14 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 		modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class,
 				NullEnum.INHERITED);
-		modeD.setDescription(Messages.MStyle_mode_description);
-		desc.add(modeD);
-
+		//modeD.setDescription(Messages.MStyle_mode_description);
+		//desc.add(modeD);
+		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(
+				JRBaseStyle.PROPERTY_MODE, Messages.common_opaque,NullEnum.INHERITED);
+		opaqueDBool.setDescription(Messages.MStyle_mode_description);
+		desc.add(opaqueDBool);
+		
+		
 		CheckBoxPropertyDescriptor blankWhenNullD = new CheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL,
 				Messages.common_blank_when_null, NullEnum.INHERITED);
 		blankWhenNullD.setDescription(Messages.MStyle_blank_when_null_description);
@@ -378,6 +385,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
+				
+		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(MFont.FONT_INCREMENT,this, true);
+		desc.add(fontIncrement);
+		
+		ButtonPropertyDescriptor fontDecrement = new ButtonPropertyDescriptor(MFont.FONT_DECREMENT,this, false);
+		desc.add(fontDecrement);
 
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRBaseStyle.PROPERTY_PATTERN,
 				Messages.common_pattern);
@@ -514,7 +527,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return rotationD.getEnumValue(jrstyle.getOwnRotationValue());
 		if (id.equals(JRBaseStyle.PROPERTY_MODE)){
 			if (modeD == null) modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class, NullEnum.INHERITED);
-			return modeD.getEnumValue(jrstyle.getOwnModeValue());
+			return modeD.getEnumValue(jrstyle.getOwnModeValue()).equals(modeD.getEnumValue(ModeEnum.TRANSPARENT));
 		}
 		if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrstyle.isOwnBlankWhenNull();
@@ -537,6 +550,99 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		}
 		if (linePen != null) {
 			Object val = linePen.getPropertyValue(id);
+			if (val != null)
+				return val;
+		}
+		return null;
+	}
+	
+	
+	public Object getPropertyActualValue(Object id) {
+		if (getValue() == null)
+			return null;
+		if (getValue() instanceof JRDesignStyle) {
+			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
+			if (id.equals(JRDesignStyle.PROPERTY_NAME))
+				return jrstyle.getName();
+			if (id.equals(JRDesignStyle.PROPERTY_DEFAULT))
+				return new Boolean(jrstyle.isDefault());
+			if (id.equals(JRDesignStyle.PROPERTY_PARENT_STYLE)) {
+				if (jrstyle.getStyleNameReference() != null)
+					return jrstyle.getStyleNameReference();
+				if (jrstyle.getStyle() != null)
+					return jrstyle.getStyle().getName();
+				return ""; //$NON-NLS-1$
+			}
+			if (id.equals(PARAGRAPH)) {
+				if (mParagraph == null) {
+					mParagraph = new MParagraph((JRBaseParagraph) jrstyle.getParagraph());
+					setChildListener(mParagraph);
+				}
+				return mParagraph;
+			}
+		}
+
+		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
+		if (id.equals(LINE_PEN)) {
+			if (linePen == null) {
+				linePen = new MLinePen(jrstyle.getLinePen());
+				setChildListener(linePen);
+			}
+			return linePen;
+		}
+		if (id.equals(LINE_BOX)) {
+			if (lineBox == null) {
+				lineBox = new MLineBox(jrstyle.getLineBox());
+				setChildListener(lineBox);
+			}
+			return lineBox;
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_PATTERN))
+			return jrstyle.getPattern();
+		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
+			return jrstyle.getRadius();
+		if (id.equals(JRBaseStyle.PROPERTY_MARKUP))
+			return jrstyle.getMarkup();
+		if (id.equals(JRDesignStyle.PROPERTY_FORECOLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrstyle.getForecolor());
+		else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrstyle.getBackcolor());
+
+		if (id.equals(JRBaseStyle.PROPERTY_FILL))
+			return fillD.getEnumValue(jrstyle.getFillValue());
+		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
+			return scaleD.getEnumValue(jrstyle.getScaleImageValue());
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
+			return halignD.getEnumValue(jrstyle.getHorizontalAlignmentValue());
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
+			return valignD.getEnumValue(jrstyle.getVerticalAlignmentValue());
+		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
+			return rotationD.getEnumValue(jrstyle.getRotationValue());
+		if (id.equals(JRBaseStyle.PROPERTY_MODE)){
+			if (modeD == null) modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class, NullEnum.INHERITED);
+			return modeD.getEnumValue(jrstyle.getModeValue()).equals(modeD.getEnumValue(ModeEnum.TRANSPARENT));
+		}
+		if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
+			return jrstyle.isBlankWhenNull();
+		if (id.equals(JRBaseStyle.PROPERTY_STRIKE_THROUGH))
+			return jrstyle.isStrikeThrough();
+		if (id.equals(JRBaseStyle.PROPERTY_UNDERLINE))
+			return jrstyle.isUnderline();
+		if (id.equals(JRBaseStyle.PROPERTY_ITALIC))
+			return jrstyle.isItalic();
+		if (id.equals(JRBaseStyle.PROPERTY_BOLD))
+			return jrstyle.isBold();
+		if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
+			return jrstyle.getFontName();
+		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
+			return jrstyle.getFontSize() != null ? jrstyle.getFontSize().toString() : ""; //$NON-NLS-1$
+		if (lineBox != null) {
+			Object val = lineBox.getPropertyActualValue(id);
+			if (val != null)
+				return val;
+		}
+		if (linePen != null) {
+			Object val = linePen.getPropertyActualValue(id);
 			if (val != null)
 				return val;
 		}
@@ -594,8 +700,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		else if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			jrstyle.setRotation((RotationEnum) rotationD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_MODE))
-			jrstyle.setMode((ModeEnum) modeD.getEnumValue(value));
-
+			if (value == null) jrstyle.setMode(null);
+			else if ((Boolean)value) jrstyle.setMode(ModeEnum.TRANSPARENT);
+			else jrstyle.setMode(ModeEnum.OPAQUE);
 		else if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrstyle.setBlankWhenNull((Boolean) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_STRIKE_THROUGH))

@@ -36,6 +36,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  */
 public class TextSection extends AbstractSection {
 
+
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();

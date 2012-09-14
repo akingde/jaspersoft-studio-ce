@@ -44,7 +44,6 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRFont;
-import net.sf.jasperreports.engine.JRGraphicElement;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 
@@ -58,6 +57,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.ButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -68,6 +68,9 @@ import com.jaspersoft.studio.utils.ModelUtils;
 public class MFont extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	public static final String FONT_INCREMENT = "FONT_INCREMENT";
+	public static final String FONT_DECREMENT = "FONT_DECREMENT";
+	
 	public MFont(JRFont value) {
 		super();
 		setValue(value);
@@ -116,6 +119,12 @@ public class MFont extends APropertyNode {
 		fontSizeD.setDescription(Messages.MFont_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
+		
+		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(FONT_INCREMENT,this, true);
+		desc.add(fontIncrement);
+		
+		ButtonPropertyDescriptor fontDecrement = new ButtonPropertyDescriptor(FONT_DECREMENT,this, false);
+		desc.add(fontDecrement);
 
 		RWComboBoxPropertyDescriptor pdfFontNameD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_PDF_FONT_NAME,
 				Messages.MFont_pdf_font_name, ModelUtils.getPDFFontNames(), NullEnum.INHERITED);
@@ -131,7 +140,7 @@ public class MFont extends APropertyNode {
 				NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/bold.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/edit-bold.png"));
 			}
 		};
 		boldD.setDescription(Messages.MFont_bold_description);
@@ -141,7 +150,7 @@ public class MFont extends APropertyNode {
 				Messages.common_italic, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/italic.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/edit-italic.png"));
 			}
 		};
 		italicD.setDescription(Messages.MFont_italic_description);
@@ -152,7 +161,7 @@ public class MFont extends APropertyNode {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this,
-						JaspersoftStudioPlugin.getImage("icons/resources/underline.png"));
+						JaspersoftStudioPlugin.getImage("icons/resources/edit-underline.png"));
 			}
 		};
 		underlineD.setDescription(Messages.MFont_underline_description);
@@ -163,7 +172,7 @@ public class MFont extends APropertyNode {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this,
-						JaspersoftStudioPlugin.getImage("icons/resources/strikethrought.png"));
+						JaspersoftStudioPlugin.getImage("icons/resources/edit-strike.png"));
 			}
 		};
 		strikeTroughD.setDescription(Messages.MFont_strike_trough_description);

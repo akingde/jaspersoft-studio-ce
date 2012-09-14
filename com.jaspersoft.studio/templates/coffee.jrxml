@@ -7,7 +7,7 @@
 	<style name="Row" isDefault="false" mode="Transparent">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
-			<style isDefault="false" style="Row" backcolor="#E6DAC3"/>
+			<style backcolor="#E6DAC3"/>
 		</conditionalStyle>
 	</style>
 	<group name="Group1">

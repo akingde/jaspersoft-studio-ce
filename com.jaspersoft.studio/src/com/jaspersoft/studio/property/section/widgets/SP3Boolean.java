@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -44,7 +45,7 @@ public class SP3Boolean extends ASPropertyWidget {
 
 	public void createComponent(Composite parent) {
 		cmb3Bool = section.getWidgetFactory().createCombo(parent, SWT.READ_ONLY);
-		cmb3Bool.setItems(new String[] { "NULL", "TRUE", "FALSE" });
+		cmb3Bool.setItems(new String[] { Messages.SP3Boolean_Undefined_Value, Messages.SP3Boolean_True_Value, Messages.SP3Boolean_False_Value });
 		cmb3Bool.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

@@ -96,6 +96,7 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		return super.getPropertyValue(id);
 	}
 	
+	
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		// pen
@@ -107,7 +108,7 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 			}
 			return lineBox;
 		}
-		return super.getPropertyValue(id);
+		return super.getPropertyActualValue(id);
 	}
 
 	public JRBoxContainer getBoxContainer() {

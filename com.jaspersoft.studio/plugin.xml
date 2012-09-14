@@ -483,14 +483,14 @@
          <propertyTab
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
-               image="icons/resources/eclipse/left_align.gif"
+               image="icons/resources/ruler.png"
                label="%appearance">
          </propertyTab>
          <propertyTab
                afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
-               image="icons/resources/eclipse/border_frame.gif"
+               image="icons/resources/border-outside-thick.png"
                label="%borders">
          </propertyTab>
          <propertyTab

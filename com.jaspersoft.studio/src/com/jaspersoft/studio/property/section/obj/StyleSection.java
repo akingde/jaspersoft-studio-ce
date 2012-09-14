@@ -29,11 +29,26 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class StyleSection extends AbstractSection {
+	
+	public void refresh() {
+		isRefreshing = true;
+		APropertyNode element = getElement();
+		if (element != null) {
+			element.getPropertyDescriptors();
+			for (Object key : widgets.keySet()) {
+				widgets.get(key).setData(element, element.getPropertyActualValue(key));
+			}
+		}
+		isRefreshing = false;
+	}
+
+	
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 

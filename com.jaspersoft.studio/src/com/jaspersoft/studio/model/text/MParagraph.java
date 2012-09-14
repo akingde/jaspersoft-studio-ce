@@ -51,7 +51,7 @@ public class MParagraph extends APropertyNode {
 	}
 
 	
-	@Override
+	/*@Override
 	public HashMap<String,Object> getStylesDescriptors() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		if (getValue() == null)
@@ -61,12 +61,12 @@ public class MParagraph extends APropertyNode {
 		result.put(JRBaseParagraph.PROPERTY_SPACING_AFTER, jrElement.getOwnSpacingAfter());
 		result.put(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT, jrElement.getOwnFirstLineIndent());
 		result.put(JRBaseParagraph.PROPERTY_LEFT_INDENT, jrElement.getOwnLeftIndent());
-		result.put(JRBaseParagraph.PROPERTY_LINE_SPACING, jrElement.getOwnLineSpacing());
+		//result.put(JRBaseParagraph.PROPERTY_LINE_SPACING, jrElement.getOwnLineSpacing());
 		result.put(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE, jrElement.getOwnLineSpacingSize());
 		result.put(JRBaseParagraph.PROPERTY_RIGHT_INDENT, jrElement.getOwnRightIndent());
 		result.put(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH, jrElement.getOwnTabStopWidth());
 		return result;
-	}
+	}*/
 
 	
 	@Override

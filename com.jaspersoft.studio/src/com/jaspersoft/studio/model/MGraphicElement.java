@@ -25,7 +25,6 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRGraphicElement;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
@@ -405,8 +404,15 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 		opaqueD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.common_opaque, ModeEnum.class,
 				NullEnum.INHERITED);
-		opaqueD.setDescription(Messages.MGraphicElement_opaque_description);
-		desc.add(opaqueD);
+		//opaqueD.setDescription(Messages.MGraphicElement_opaque_description);
+		//opaqueD.setCategory(Messages.common_graphic);
+		//desc.add(opaqueD);
+		
+		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(
+				JRBaseStyle.PROPERTY_MODE, Messages.common_opaque);
+		opaqueDBool.setDescription(Messages.MGraphicElement_opaque_description);
+		opaqueDBool.setCategory(Messages.common_graphic);
+		desc.add(opaqueDBool);
 
 		positionTypeD = new JSSEnumPropertyDescriptor(JRDesignElement.PROPERTY_POSITION_TYPE,
 				Messages.common_position_type, PositionTypeEnum.class, NullEnum.NOTNULL);
@@ -459,14 +465,13 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 		forecolorD.setCategory(Messages.common_graphic);
 		backcolorD.setCategory(Messages.common_graphic);
-		opaqueD.setCategory(Messages.common_graphic);
 		styleD.setCategory(Messages.common_graphic);
 
 		defaultsMap.put(JRDesignElement.PROPERTY_PARENT_STYLE, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, null);
 
-		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, opaqueD.getEnumValue(ModeEnum.OPAQUE));
+		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, Boolean.FALSE);
 		defaultsMap.put(JRDesignElement.PROPERTY_POSITION_TYPE,
 				positionTypeD.getEnumValue(PositionTypeEnum.FIX_RELATIVE_TO_TOP));
 		defaultsMap.put(JRDesignElement.PROPERTY_STRETCH_TYPE, stretchTypeD.getEnumValue(StretchTypeEnum.NO_STRETCH));
@@ -481,6 +486,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	private RWComboBoxPropertyDescriptor styleD;
 	private RComboBoxPropertyDescriptor groupChangesD;
 	private static JSSEnumPropertyDescriptor positionTypeD;
+	//private static JSSEnumPropertyDescriptor opaqueD;
 	private static JSSEnumPropertyDescriptor opaqueD;
 	private static JSSEnumPropertyDescriptor stretchTypeD;
 
@@ -529,7 +535,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getOwnForecolor());
 		// opacity
 		if (id.equals(JRBaseStyle.PROPERTY_MODE))
-			return opaqueD.getEnumValue(jrElement.getOwnModeValue());
+			return opaqueD.getEnumValue(jrElement.getOwnModeValue()).equals(opaqueD.getEnumValue(ModeEnum.TRANSPARENT));
 		if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
 			return positionTypeD.getEnumValue(jrElement.getPositionTypeValue());
 		if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))
@@ -592,7 +598,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getForecolor());
 		// opacity
 		if (id.equals(JRBaseStyle.PROPERTY_MODE))
-			return opaqueD.getEnumValue(jrElement.getModeValue());
+			return opaqueD.getEnumValue(jrElement.getModeValue()).equals(opaqueD.getEnumValue(ModeEnum.TRANSPARENT));
 		if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
 			return positionTypeD.getEnumValue(jrElement.getPositionTypeValue());
 		if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))
@@ -679,7 +685,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		} else
 		// opacity
 		if (id.equals(JRBaseStyle.PROPERTY_MODE))
-			jrElement.setMode((ModeEnum) opaqueD.getEnumValue(value));
+			if (value == null) jrElement.setMode(null);
+			else if ((Boolean)value) jrElement.setMode(ModeEnum.TRANSPARENT);
+			else jrElement.setMode(ModeEnum.OPAQUE);
 		else if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
 			jrElement.setPositionType((PositionTypeEnum) positionTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))

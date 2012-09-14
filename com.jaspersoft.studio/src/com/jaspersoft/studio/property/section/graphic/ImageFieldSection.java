@@ -29,6 +29,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -41,6 +42,20 @@ import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
  */
 public class ImageFieldSection extends AbstractSection {
 
+	
+	public void refresh() {
+		isRefreshing = true;
+		APropertyNode element = getElement();
+		if (element != null) {
+			element.getPropertyDescriptors();
+			for (Object key : widgets.keySet()) {
+				widgets.get(key).setData(element, element.getPropertyActualValue(key));
+			}
+		}
+		isRefreshing = false;
+	}
+
+	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)

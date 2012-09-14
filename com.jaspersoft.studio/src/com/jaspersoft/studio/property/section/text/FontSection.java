@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.ToolBar;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -58,15 +59,19 @@ public class FontSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite group = getWidgetFactory().createSection(parent, Messages.common_font, true, 2);
+		Composite group = getWidgetFactory().createSection(parent, Messages.common_font, true, 4);
 
 		createWidget4Property(group, JRBaseStyle.PROPERTY_FONT_NAME, false);
 
 		createWidget4Property(group, JRBaseStyle.PROPERTY_FONT_SIZE, false);
+		
+		createWidget4Property(group, MFont.FONT_INCREMENT, false);
+		
+		createWidget4Property(group, MFont.FONT_DECREMENT, false);
 
 		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.WRAP | SWT.LEFT);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 4;
 		toolBar.setLayoutData(gd);
 		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_BOLD, false);
 		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_ITALIC, false);
