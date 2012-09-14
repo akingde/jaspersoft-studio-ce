@@ -21,11 +21,13 @@ package com.jaspersoft.studio.utils.jasper;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
@@ -53,7 +55,9 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.plugin.IEditorContributor;
+import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
+import com.jaspersoft.studio.utils.FileUtils;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
@@ -66,7 +70,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(FontsPreferencePage.FPP_FONT_LIST)) {
+			String property = event.getProperty();
+			if (property.equals(FontsPreferencePage.FPP_FONT_LIST)
+					|| property.equals(PropertyListFieldEditor.NET_SF_JASPERREPORTS_JRPROPERTIES)) {
 				fill = true;
 			}
 		}
@@ -224,10 +230,24 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	}
 
 	public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
+	private Properties props;
 
 	@Override
 	public String getProperty(String key) {
-		String val = service.getString(qualifier, key, null, contexts);
+		if (props == null)
+			props = new Properties();
+		if (fill) {
+			try {
+				props = FileUtils.load(service.getString(qualifier, "net.sf.jasperreports.JRPROPERTIES", null, contexts));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		String val = props.getProperty(key);
+		if (val == null)
+			val = props.getProperty(PROPERTY_JRPROPERTY_PREFIX + key);
+		if (val == null)
+			val = service.getString(qualifier, key, null, contexts);
 		if (val == null)
 			val = service.getString(qualifier, PROPERTY_JRPROPERTY_PREFIX + key, null, contexts);
 

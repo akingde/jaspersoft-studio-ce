@@ -39,6 +39,8 @@ import com.jaspersoft.studio.utils.FileUtils;
 
 public class PropertyListFieldEditor extends TableFieldEditor {
 
+	public static final String NET_SF_JASPERREPORTS_JRPROPERTIES = "net.sf.jasperreports.JRPROPERTIES";
+
 	public PropertyListFieldEditor() {
 		super();
 	}
@@ -71,7 +73,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			// getPreferenceStore().setValue(item.getText(0), item.getText(1));
 			props.setProperty(item.getText(0), item.getText(1));
 		}
-		getPreferenceStore().setValue("net.sf.jasperreports.JRPROPERTIES", FileUtils.getPropertyAsString(props));
+		getPreferenceStore().setValue(NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(props));
 	}
 
 	/*
@@ -83,7 +85,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			Collections.sort(lst, new PropertyComparator());
 			Properties props = null;
 			try {
-				props = FileUtils.load(getPreferenceStore().getString("net.sf.jasperreports.JRPROPERTIES"));
+				props = FileUtils.load(getPreferenceStore().getString(NET_SF_JASPERREPORTS_JRPROPERTIES));
 				for (Object key : props.keySet()) {
 					String value = props.getProperty((String) key);
 					TableItem tableItem = new TableItem(getTable(), SWT.NONE);

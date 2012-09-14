@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
@@ -27,6 +22,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.channels.FileChannel;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -228,9 +224,11 @@ public class FileUtils {
 	}
 
 	public static String getPropertyAsString(Properties prop) {
-		StringWriter writer = new StringWriter();
-		prop.list(new PrintWriter(writer));
-		return writer.getBuffer().toString();
+		StringBuffer str = new StringBuffer();
+		for (String key : prop.stringPropertyNames()) {
+			str.append(key).append("=").append(prop.getProperty(key)).append("\n");
+		}
+		return str.toString();
 	}
 
 	public static Properties load(String propertiesString) throws IOException {
