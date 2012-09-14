@@ -20,10 +20,8 @@
 package com.jaspersoft.studio.utils.jasper;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +36,9 @@ import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
+import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
 import net.sf.jasperreports.repo.FileRepositoryService;
+import net.sf.jasperreports.repo.PersistenceServiceFactory;
 import net.sf.jasperreports.repo.RepositoryService;
 
 import org.eclipse.core.resources.IFile;
@@ -124,28 +123,34 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	private void initFileResolver(IFile file) {
 		List<RepositoryService> list = getExtensions(RepositoryService.class);
 		if (file != null) {
-			list.add(new FileRepositoryService(this, file.getParent().getLocationURI().toASCIIString(), true));
+			list.add(new FileRepositoryService(this, file.getParent().getLocation().toFile().getAbsolutePath(), true));
 			list.add(new FileRepositoryService(this, ".", true));
-			list.add(new FileRepositoryService(this, file.getProject().getLocationURI().toASCIIString(), true));
+			list.add(new FileRepositoryService(this, file.getProject().getLocation().toFile().getAbsolutePath(), true));
 		}
 		setExtensions(RepositoryService.class, list);
-
-		ProxyFileResolver resolver = new ProxyFileResolver();
-		try {
-			SimpleFileResolver fileResolver = null;
-			if (file == null)
-				fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$
-				}));
-			else
-				fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()),
-						new File("."), //$NON-NLS-1$
-						new File(file.getProject().getLocationURI()) }));
-			fileResolver.setResolveAbsolutePath(true);
-			resolver.addResolver(fileResolver);
-		} catch (Exception e) {
-			e.printStackTrace();
+		
+		List<PersistenceServiceFactory> persistenceServiceFactoryList = getExtensions(PersistenceServiceFactory.class);
+		if (persistenceServiceFactoryList != null) {
+			persistenceServiceFactoryList.add(FileRepositoryPersistenceServiceFactory.getInstance());
 		}
-		setFileResolver(resolver);
+		setExtensions(PersistenceServiceFactory.class, persistenceServiceFactoryList);
+
+//		ProxyFileResolver resolver = new ProxyFileResolver();
+//		try {
+//			SimpleFileResolver fileResolver = null;
+//			if (file == null)
+//				fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$
+//				}));
+//			else
+//				fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()),
+//						new File("."), //$NON-NLS-1$
+//						new File(file.getProject().getLocationURI()) }));
+//			fileResolver.setResolveAbsolutePath(true);
+//			resolver.addResolver(fileResolver);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		setFileResolver(resolver);
 	}
 
 	public void put(String key, Object value) {
