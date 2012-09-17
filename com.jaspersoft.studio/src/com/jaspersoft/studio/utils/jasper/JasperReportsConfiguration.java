@@ -128,29 +128,14 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			list.add(new FileRepositoryService(this, file.getProject().getLocation().toFile().getAbsolutePath(), true));
 		}
 		setExtensions(RepositoryService.class, list);
-		
+
 		List<PersistenceServiceFactory> persistenceServiceFactoryList = getExtensions(PersistenceServiceFactory.class);
 		if (persistenceServiceFactoryList != null) {
 			persistenceServiceFactoryList.add(FileRepositoryPersistenceServiceFactory.getInstance());
 		}
 		setExtensions(PersistenceServiceFactory.class, persistenceServiceFactoryList);
 
-//		ProxyFileResolver resolver = new ProxyFileResolver();
-//		try {
-//			SimpleFileResolver fileResolver = null;
-//			if (file == null)
-//				fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$
-//				}));
-//			else
-//				fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()),
-//						new File("."), //$NON-NLS-1$
-//						new File(file.getProject().getLocationURI()) }));
-//			fileResolver.setResolveAbsolutePath(true);
-//			resolver.addResolver(fileResolver);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		setFileResolver(resolver);
+		setFileResolver(new ProxyFileResolver());
 	}
 
 	public void put(String key, Object value) {
