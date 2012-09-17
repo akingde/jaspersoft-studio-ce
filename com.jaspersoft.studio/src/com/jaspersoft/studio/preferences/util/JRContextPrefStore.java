@@ -51,7 +51,10 @@ public class JRContextPrefStore extends EventManager implements IPreferenceStore
 
 	@Override
 	public boolean getBoolean(String name) {
-		return jConfig.getPropertyBoolean(name);
+		Boolean pboolean = jConfig.getPropertyBoolean(name);
+		if (pboolean != null)
+			return pboolean;
+		return BOOLEAN_DEFAULT_DEFAULT;
 	}
 
 	@Override
