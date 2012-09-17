@@ -544,9 +544,9 @@ public abstract class TableFieldEditor extends FieldEditor {
 			TableItem tableItem = new TableItem(table, SWT.NONE);
 			tableItem.setText(newInputObject);
 			selectionChanged();
+			table.showColumn(table.getColumn(0));
 			table.showItem(tableItem);
 			table.showSelection();
-			table.showColumn(table.getColumn(0));
 		}
 	}
 

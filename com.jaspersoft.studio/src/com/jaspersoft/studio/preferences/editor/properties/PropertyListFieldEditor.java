@@ -73,7 +73,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 
 	@Override
 	protected String[] getNewInputObject() {
-		final String[] prop = new String[1];
+		final String[] prop = new String[2];
 		Dialog dialog = new Dialog(Display.getDefault().getActiveShell()) {
 
 			/*
