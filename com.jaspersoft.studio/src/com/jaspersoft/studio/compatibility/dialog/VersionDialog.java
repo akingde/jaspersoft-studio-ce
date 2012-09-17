@@ -98,7 +98,7 @@ public class VersionDialog extends Dialog {
 				String uuid = JaspersoftStudioPlugin.getUniqueIdentifier();
 				try {
 					isprj = project.getPersistentProperty(key) == null;
-					if (isprj)
+					if (!isprj)
 						overlayStore = new ScopedPreferenceStore(JasperReportsConfiguration.INSTANCE_SCOPE, uuid);
 				} catch (CoreException e1) {
 					e1.printStackTrace();
@@ -107,8 +107,7 @@ public class VersionDialog extends Dialog {
 					overlayStore = new ScopedPreferenceStore(new ProjectScope(project), uuid);
 				overlayStore.putValue(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, Boolean.toString(!b.getSelection()));
 				try {
-					if (isprj)
-						project.setPersistentProperty(key, "true");
+					project.setPersistentProperty(key, Boolean.toString(isprj));
 					overlayStore.save();
 				} catch (IOException e1) {
 					e1.printStackTrace();

@@ -23,12 +23,14 @@ package com.jaspersoft.studio.preferences.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.internal.resources.ProjectPreferences;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceNode;
@@ -50,6 +52,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.osgi.service.prefs.BackingStoreException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
@@ -302,15 +305,28 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 */
 	public boolean performOk() {
 		boolean result = super.performOk();
-		if (result && isPropertyPage()) {
-			IResource resource = (IResource) getElement();
-			try {
-				String value = (useProjectSettingsButton.getSelection()) ? TRUE : FALSE;
-				resource.setPersistentProperty(new QualifiedName(pageId, USEPROJECTSETTINGS), value);
-			} catch (CoreException e) {
+		if (result) {
+			if (isPropertyPage()) {
+				IResource resource = (IResource) getElement();
+				try {
+					String value = (useProjectSettingsButton.getSelection()) ? TRUE : FALSE;
+					resource.setPersistentProperty(new QualifiedName(pageId, USEPROJECTSETTINGS), value);
+
+					if (!useProjectSettingsButton.getSelection()) {
+						for (IEclipsePreferences ep : overlayStore.getPreferenceNodes(true)) {
+							try {
+								if (ep instanceof ProjectPreferences) {
+									ep.clear();
+									ep.flush();
+								}
+							} catch (BackingStoreException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				} catch (CoreException e) {
+				}
 			}
-		}else{
-			// FIXME: clear all project preferences
 		}
 		return result;
 	}
