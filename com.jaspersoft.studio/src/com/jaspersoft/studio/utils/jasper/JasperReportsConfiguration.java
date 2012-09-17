@@ -229,7 +229,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		if (fill) {
 			try {
 				props = FileUtils.load(service.getString(qualifier, "net.sf.jasperreports.JRPROPERTIES", null, contexts));
-			} catch (Exception e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}

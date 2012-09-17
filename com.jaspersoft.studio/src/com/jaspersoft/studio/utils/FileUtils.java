@@ -18,11 +18,8 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.nio.channels.FileChannel;
-import java.util.Enumeration;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -233,7 +230,8 @@ public class FileUtils {
 
 	public static Properties load(String propertiesString) throws IOException {
 		Properties properties = new Properties();
-		properties.load(new StringReader(propertiesString));
+		if (propertiesString != null)
+			properties.load(new StringReader(propertiesString));
 		return properties;
 	}
 }
