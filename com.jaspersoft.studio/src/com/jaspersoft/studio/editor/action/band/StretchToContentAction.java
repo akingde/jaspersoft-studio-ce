@@ -46,7 +46,7 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public class Stretch2ContentAction extends SelectionAction {
+public class StretchToContentAction extends SelectionAction {
 
 	/** The Constant ID. */
 	public static final String ID = "stretch2content"; //$NON-NLS-1$
@@ -57,7 +57,7 @@ public class Stretch2ContentAction extends SelectionAction {
 	 * @param part
 	 *          The part for this action
 	 */
-	public Stretch2ContentAction(IWorkbenchPart part) {
+	public StretchToContentAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(false);
 		setText("Stretch To Content");

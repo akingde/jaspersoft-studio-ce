@@ -36,7 +36,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
-import com.jaspersoft.studio.editor.action.band.Stretch2ContentAction;
+import com.jaspersoft.studio.editor.action.band.StretchToContentAction;
 import com.jaspersoft.studio.editor.action.layout.LayoutAction;
 import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
 import com.jaspersoft.studio.editor.action.order.BringForwardAction;
@@ -316,7 +316,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		if (action.isEnabled())
 			menu.add(action);
 
-		action = getActionRegistry().getAction(Stretch2ContentAction.ID);
+		action = getActionRegistry().getAction(StretchToContentAction.ID);
 		if (action.isEnabled())
 			menu.add(action);
 
