@@ -10,6 +10,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.util.SafeRunnable;
 
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRContextPrefStore extends EventManager implements IPreferenceStore {
@@ -167,7 +168,7 @@ public class JRContextPrefStore extends EventManager implements IPreferenceStore
 	public String getString(String name) {
 		if (name == null)
 			return null;
-		return jConfig.getProperty(name);
+		return Misc.nvl(jConfig.getProperty(name));
 	}
 
 	@Override

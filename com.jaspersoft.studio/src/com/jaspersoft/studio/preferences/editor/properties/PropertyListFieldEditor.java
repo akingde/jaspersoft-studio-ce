@@ -29,10 +29,22 @@ import java.util.Properties;
 
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.FileUtils;
@@ -46,7 +58,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 	}
 
 	public PropertyListFieldEditor(String name, String labelText, Composite parent) {
-		super(name, labelText, new String[] { "Property", "Value" }, new int[] { 400, 30 }, parent);
+		super(name, labelText, new String[] { "Property", "Value" }, new int[] { 200, 30 }, parent);
 	}
 
 	@Override
@@ -61,8 +73,63 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 
 	@Override
 	protected String[] getNewInputObject() {
+		final String[] prop = new String[1];
+		Dialog dialog = new Dialog(Display.getDefault().getActiveShell()) {
 
-		return new String[] { "prop", "value" };
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
+			 */
+			protected Control createDialogArea(Composite parent) {
+				Composite composite = (Composite) super.createDialogArea(parent);
+				composite.setLayout(new GridLayout(2, false));
+				Label label = new Label(composite, SWT.NONE);
+				label.setText("Property Name");
+
+				final Text text = new Text(composite, SWT.BORDER);
+				text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+				text.setText("net.sf.jaspersoft.");
+				text.addModifyListener(new ModifyListener() {
+
+					@Override
+					public void modifyText(ModifyEvent e) {
+						prop[0] = text.getText();
+					}
+				});
+
+				label = new Label(composite, SWT.NONE);
+				label.setText("Value");
+
+				final Text tname = new Text(composite, SWT.BORDER);
+				tname.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+				tname.setText("< type value here >");
+				tname.addModifyListener(new ModifyListener() {
+
+					@Override
+					public void modifyText(ModifyEvent e) {
+						prop[1] = tname.getText();
+					}
+				});
+				applyDialogFont(composite);
+				return composite;
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
+			 */
+			protected void configureShell(Shell newShell) {
+				super.configureShell(newShell);
+				newShell.setSize(500, 200);
+				newShell.setText("Properties Dialog");
+			}
+
+		};
+		if (dialog.open() == Window.OK)
+			return prop;
+		return null;
 	}
 
 	protected void doStore() {
@@ -146,5 +213,12 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			return PropertiesHelper.DPROP.getProperty(ti.getText(0)) == null;
 		}
 		return super.isFieldEditable(col, row);
+	}
+
+	@Override
+	protected void createButtons(Composite box) {
+		addButton = createPushButton(box, Messages.common_add);
+		duplicateButton = createPushButton(box, "Duplicate");
+		removeButton = createPushButton(box, Messages.common_delete);
 	}
 }
