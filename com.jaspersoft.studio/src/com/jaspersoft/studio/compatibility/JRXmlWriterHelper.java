@@ -35,11 +35,14 @@ import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
+import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -99,7 +102,7 @@ public class JRXmlWriterHelper {
 		if (writers.containsKey(version))
 			jrContext.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION, version);
 
-//		jrContext.setProperty("net.sf.jasperreports.components.table.version", version);
+		// jrContext.setProperty("net.sf.jasperreports.components.table.version", version);
 		String xml = new JRXmlWriter(jrContext).write(report, encoding);
 		xml = xml.replaceFirst(
 				"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + version + "-->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$

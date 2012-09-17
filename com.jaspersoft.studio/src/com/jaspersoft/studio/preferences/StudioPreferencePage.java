@@ -32,6 +32,7 @@ import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 public class StudioPreferencePage extends FieldEditorOverlayPage {
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.StudioPreferencePage.property";
 	public static final String JSS_COMPATIBILITY_SHOW_DIALOG = "com.jaspersoft.studio.compatibility.showdialog"; //$NON-NLS-1$
 	public static final String JSS_COMPATIBILITY_VERSION = "com.jaspersoft.studio.compatibility.version"; //$NON-NLS-1$
 
@@ -81,7 +82,7 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 
 	@Override
 	protected String getPageId() {
-		return "com.jaspersoft.studio.preferences.StudioPreferencePage.property";
+		return PAGE_ID;
 	}
 
 }

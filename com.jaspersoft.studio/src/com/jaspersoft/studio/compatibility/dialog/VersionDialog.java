@@ -19,8 +19,12 @@
  */
 package com.jaspersoft.studio.compatibility.dialog;
 
+import java.io.IOException;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -37,6 +41,8 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
+import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VersionDialog extends Dialog {
 
@@ -86,9 +92,29 @@ public class VersionDialog extends Dialog {
 		b.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				ScopedPreferenceStore overlayStore = new ScopedPreferenceStore(new ProjectScope(project),
-						JaspersoftStudioPlugin.getUniqueIdentifier());
-				overlayStore.putValue(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, Boolean.toString(b.getSelection()));
+				ScopedPreferenceStore overlayStore = null;
+				boolean isprj = true;
+				QualifiedName key = new QualifiedName(StudioPreferencePage.PAGE_ID, FieldEditorOverlayPage.USEPROJECTSETTINGS);
+				String uuid = JaspersoftStudioPlugin.getUniqueIdentifier();
+				try {
+					isprj = project.getPersistentProperty(key) == null;
+					if (isprj)
+						overlayStore = new ScopedPreferenceStore(JasperReportsConfiguration.INSTANCE_SCOPE, uuid);
+				} catch (CoreException e1) {
+					e1.printStackTrace();
+				}
+				if (overlayStore == null)
+					overlayStore = new ScopedPreferenceStore(new ProjectScope(project), uuid);
+				overlayStore.putValue(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, Boolean.toString(!b.getSelection()));
+				try {
+					if (isprj)
+						project.setPersistentProperty(key, "true");
+					overlayStore.save();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (CoreException e1) {
+					e1.printStackTrace();
+				}
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {

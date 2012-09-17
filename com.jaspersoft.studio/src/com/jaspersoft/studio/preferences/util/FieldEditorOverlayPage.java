@@ -309,6 +309,8 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 				resource.setPersistentProperty(new QualifiedName(pageId, USEPROJECTSETTINGS), value);
 			} catch (CoreException e) {
 			}
+		}else{
+			// FIXME: clear all project preferences
 		}
 		return result;
 	}

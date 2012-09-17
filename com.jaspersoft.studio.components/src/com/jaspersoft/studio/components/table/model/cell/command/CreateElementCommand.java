@@ -91,11 +91,11 @@ public class CreateElementCommand extends Command {
 		}
 		if (jrElement != null) {
 			if (location == null)
-				location = new Rectangle(0, 0, Math.min(
-						srcNode.getDefaultWidth(), jrColumn.getWidth()
-								- location.x), Math.min(
-						srcNode.getDefaultHeight(), jrCell.getHeight()
-								- location.y));
+				location = new Rectangle(
+						0,
+						0,
+						Math.min(srcNode.getDefaultWidth(), jrColumn.getWidth()),
+						Math.min(srcNode.getDefaultHeight(), jrCell.getHeight()));
 			if (location.width < 0)
 				location.width = srcNode.getDefaultWidth();
 			if (location.height < 0)
