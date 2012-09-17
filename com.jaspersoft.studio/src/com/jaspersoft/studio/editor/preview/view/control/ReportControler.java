@@ -218,9 +218,7 @@ public class ReportControler {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 				try {
-					Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
 					final IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
 
 					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
@@ -258,7 +256,6 @@ public class ReportControler {
 					monitor.done();
 
 					finishReport(pcontainer);
-					Thread.currentThread().setContextClassLoader(oldLoader);
 				}
 				return Status.OK_STATUS;
 			}

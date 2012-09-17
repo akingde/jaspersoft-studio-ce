@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
+import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -161,7 +161,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	public void setClassLoader(ClassLoader classLoader) {
 		this.classLoader = classLoader;
 		super.setClassLoader(classLoader);
-		put(JasperReportCompiler.CURRENTCLASSLOADER, classLoader);
+		put(AbstractClasspathAwareDataAdapterService.CURRENT_CLASS_LOADER, classLoader);
 	}
 
 	public FileResolver getFileResolver() {
