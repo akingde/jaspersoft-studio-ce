@@ -59,7 +59,7 @@ public class CustomJrdsDataAdapterComposite extends ADataAdapterComposite {
 
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setText(Messages.CustomJrdsDataAdapterComposite_0);
-		GridData gd = new GridData(GridData.FILL_BOTH);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		lblNewLabel.setLayoutData(gd);
 
@@ -70,14 +70,14 @@ public class CustomJrdsDataAdapterComposite extends ADataAdapterComposite {
 
 		Label lblNewLabel_1 = new Label(this, SWT.NONE);
 		lblNewLabel_1.setText(Messages.CustomJrdsDataAdapterComposite_3);
-		gd = new GridData(GridData.FILL_BOTH);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		lblNewLabel_1.setLayoutData(gd);
 
 		textMethodToCall = new Text(this, SWT.BORDER);
 		textMethodToCall.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
-		gd = new GridData(GridData.FILL_BOTH);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		textMethodToCall.setLayoutData(gd);
 

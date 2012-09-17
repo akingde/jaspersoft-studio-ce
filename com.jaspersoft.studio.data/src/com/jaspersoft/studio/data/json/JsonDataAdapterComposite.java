@@ -110,8 +110,7 @@ public class JsonDataAdapterComposite extends ADataAdapterComposite {
 		composite_1.setLayout(new FillLayout(SWT.VERTICAL));
 
 		btnRadioButtonUseXpath = new Button(composite_1, SWT.RADIO);
-		btnRadioButtonUseXpath
-				.setText(Messages.JsonDataAdapterComposite_2);
+		btnRadioButtonUseXpath.setText(Messages.JsonDataAdapterComposite_2);
 
 		btnRadioButtonCreateDataAdapter = new Button(composite_1, SWT.RADIO);
 		btnRadioButtonCreateDataAdapter
@@ -224,6 +223,8 @@ public class JsonDataAdapterComposite extends ADataAdapterComposite {
 			public void widgetSelected(SelectionEvent e) {
 				textSelectExpression.setEnabled(false);
 				useConnection = true;
+				pchangesuport.firePropertyChange("createdataadapter", false,
+						true);
 			}
 		});
 
@@ -233,6 +234,8 @@ public class JsonDataAdapterComposite extends ADataAdapterComposite {
 					public void widgetSelected(SelectionEvent e) {
 						textSelectExpression.setEnabled(true);
 						useConnection = false;
+						pchangesuport.firePropertyChange("createdataadapter",
+								false, true);
 					}
 				});
 
@@ -332,19 +335,21 @@ public class JsonDataAdapterComposite extends ADataAdapterComposite {
 				.observeSelection(btnRadioButtonCreateDataAdapter),
 				PojoObservables.observeValue(dataAdapter, "useConnection")); //$NON-NLS-1$
 
-		bindingContext.bindValue(SWTObservables.observeText(textLocale,
-				SWT.Modify), PojoObservables
-				.observeValue(dataAdapter, "locale"), new UpdateValueStrategy() //$NON-NLS-1$
-				.setConverter(new String2LocaleConverter()),
-				new UpdateValueStrategy()
-						.setConverter(new LocaleToStringConverter()));
+		bindingContext
+				.bindValue(
+						SWTObservables.observeText(textLocale, SWT.Modify),
+						PojoObservables.observeValue(dataAdapter, "locale"), new UpdateValueStrategy() //$NON-NLS-1$
+								.setConverter(new String2LocaleConverter()),
+						new UpdateValueStrategy()
+								.setConverter(new LocaleToStringConverter()));
 
-		bindingContext.bindValue(SWTObservables.observeText(textTimeZone,
-				SWT.Modify), PojoObservables.observeValue(dataAdapter,
-				"timeZone"), new UpdateValueStrategy() //$NON-NLS-1$
-				.setConverter(new String2TimeZoneConverter()),
-				new UpdateValueStrategy()
-						.setConverter(new TimeZone2StringConverter()));
+		bindingContext
+				.bindValue(
+						SWTObservables.observeText(textTimeZone, SWT.Modify),
+						PojoObservables.observeValue(dataAdapter, "timeZone"), new UpdateValueStrategy() //$NON-NLS-1$
+								.setConverter(new String2TimeZoneConverter()),
+						new UpdateValueStrategy()
+								.setConverter(new TimeZone2StringConverter()));
 
 		if (xmlDataAdapter.isUseConnection()) {
 			useConnection = true;

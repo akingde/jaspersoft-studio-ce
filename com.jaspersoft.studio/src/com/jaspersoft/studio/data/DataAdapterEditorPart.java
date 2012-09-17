@@ -94,6 +94,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 		try {
 			IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
 			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+			descriptor = dacomposite.getDataAdapter();
 
 			String xml = DataAdapterManager.toDataAdapterFile(descriptor);
 
@@ -162,10 +163,10 @@ public class DataAdapterEditorPart extends ABasicEditor {
 		nameComposite = new NameComposite(c, SWT.NONE);
 
 		editor = descriptor.getEditor();
-		ADataAdapterComposite composite = editor.getComposite(c, SWT.NONE, null);
+		dacomposite = editor.getComposite(c, SWT.NONE, null);
 
 		nameComposite.addModifyListener(modelListener);
-		composite.addModifyListener(modelListener);
+		dacomposite.addModifyListener(modelListener);
 
 		editor.setDataAdapter(descriptor);
 		nameComposite.setDataAdapter(descriptor);
@@ -200,6 +201,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 	}
 
 	private JasperReportsConfiguration jrContext;
+	private ADataAdapterComposite dacomposite;
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null)

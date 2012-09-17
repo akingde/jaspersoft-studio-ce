@@ -224,6 +224,8 @@ public class XMLDataAdapterComposite extends ADataAdapterComposite {
 			public void widgetSelected(SelectionEvent e) {
 				textSelectExpression.setEnabled(false);
 				useConnection = false;
+				pchangesuport.firePropertyChange("createdataadapter", true,
+						false);
 			}
 		});
 
@@ -233,6 +235,8 @@ public class XMLDataAdapterComposite extends ADataAdapterComposite {
 					public void widgetSelected(SelectionEvent e) {
 						textSelectExpression.setEnabled(true);
 						useConnection = true;
+						pchangesuport.firePropertyChange("createdataadapter",
+								false, true);
 					}
 				});
 
