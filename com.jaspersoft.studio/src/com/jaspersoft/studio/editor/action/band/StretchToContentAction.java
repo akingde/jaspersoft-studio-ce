@@ -137,11 +137,11 @@ public class StretchToContentAction extends SelectionAction {
 					cc.add(cmd);
 				}
 			} else if (n instanceof IGraphicElementContainer) {
-				Command c = JaspersoftStudioPlugin.getExtensionManager().getStretch2Content(n);
+				Command c = JaspersoftStudioPlugin.getExtensionManager().getStretchToContent(n);
 				if (c != null)
 					cc.add(c);
 			} else if (n.getParent() instanceof IGraphicElementContainer) {
-				Command c = JaspersoftStudioPlugin.getExtensionManager().getStretch2Content(n.getParent());
+				Command c = JaspersoftStudioPlugin.getExtensionManager().getStretchToContent(n.getParent());
 				if (c != null)
 					cc.add(c);
 			}

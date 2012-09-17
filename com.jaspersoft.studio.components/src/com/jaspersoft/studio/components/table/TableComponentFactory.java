@@ -792,7 +792,7 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	@Override
-	public Command getStretch2Content(ANode node) {
+	public Command getStretchToContent(ANode node) {
 		if (node instanceof MColumn) {
 			MColumn model = (MColumn) node;
 			ColumnCell cc = new ColumnCell(model.getType(), model.getGrName(),

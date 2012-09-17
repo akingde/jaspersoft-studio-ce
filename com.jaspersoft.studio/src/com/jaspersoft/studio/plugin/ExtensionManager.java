@@ -217,9 +217,9 @@ public class ExtensionManager {
 		return null;
 	}
 
-	public Command getStretch2Content(ANode node) {
+	public Command getStretchToContent(ANode node) {
 		for (IComponentFactory f : nodeFactory) {
-			Command c = f.getStretch2Content(node);
+			Command c = f.getStretchToContent(node);
 			if (c != null)
 				return c;
 		}

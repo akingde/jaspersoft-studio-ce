@@ -78,7 +78,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 	@Override
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
-			Command c = CrosstabComponentFactory.INST().getStretch2Content(
+			Command c = CrosstabComponentFactory.INST().getStretchToContent(
 					getModel());
 			if (c != null)
 				getViewer().getEditDomain().getCommandStack().execute(c);

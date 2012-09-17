@@ -695,7 +695,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	@Override
-	public Command getStretch2Content(ANode node) {
+	public Command getStretchToContent(ANode node) {
 		if (node instanceof MCell) {
 			MCell model = (MCell) node;
 			Dimension d = model.getMCrosstab().getCrosstabManager()

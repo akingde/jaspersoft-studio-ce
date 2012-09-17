@@ -295,7 +295,7 @@ public class ListComponentFactory implements IComponentFactory {
 	}
 
 	@Override
-	public Command getStretch2Content(ANode model) {
+	public Command getStretchToContent(ANode model) {
 		if (model instanceof MList) {
 			if (model.getParent() instanceof MPage) {
 				StandardListComponent jrList = (StandardListComponent) ((MList) model)

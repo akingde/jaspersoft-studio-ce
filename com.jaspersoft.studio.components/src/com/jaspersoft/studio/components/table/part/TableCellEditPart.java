@@ -88,7 +88,7 @@ public class TableCellEditPart extends FigureEditPart implements
 	@Override
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
-			Command c = TableComponentFactory.INST().getStretch2Content(
+			Command c = TableComponentFactory.INST().getStretchToContent(
 					getModel());
 			if (c != null)
 				getViewer().getEditDomain().getCommandStack().execute(c);

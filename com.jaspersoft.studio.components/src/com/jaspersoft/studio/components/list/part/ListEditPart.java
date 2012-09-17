@@ -139,7 +139,7 @@ public class ListEditPart extends EditableFigureEditPart {
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			MList model = (MList) getModel();
-			Command c = ListComponentFactory.INST().getStretch2Content(model);
+			Command c = ListComponentFactory.INST().getStretchToContent(model);
 			if (c != null)
 				getViewer().getEditDomain().getCommandStack().execute(c);
 		}

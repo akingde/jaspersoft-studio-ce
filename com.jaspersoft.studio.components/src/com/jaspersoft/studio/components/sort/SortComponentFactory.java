@@ -134,7 +134,7 @@ public class SortComponentFactory implements IComponentFactory {
 	}
 
 	@Override
-	public Command getStretch2Content(ANode node) {
+	public Command getStretchToContent(ANode node) {
 		return null;
 	}
 }

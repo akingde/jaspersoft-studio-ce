@@ -48,7 +48,7 @@ public interface IComponentFactory {
 
 	public EditPart createEditPart(EditPart context, Object model);
 
-	public Command getStretch2Content(ANode node);
+	public Command getStretchToContent(ANode node);
 	
 	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex);
 
