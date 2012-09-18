@@ -24,6 +24,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.page.AddResourcePage;
 import com.jaspersoft.studio.server.wizard.resource.page.ResourceDescriptorPage;
@@ -33,7 +34,7 @@ public class AddResourceWizard extends Wizard {
 
 	public AddResourceWizard(ANode parent) {
 		super();
-		setWindowTitle("Add Resource wizard");
+		setWindowTitle(Messages.AddResourceWizard_windowtitle);
 		this.parent = parent;
 	}
 

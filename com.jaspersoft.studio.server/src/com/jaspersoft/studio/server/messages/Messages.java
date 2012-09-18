@@ -25,6 +25,21 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.server.messages.messages"; //$NON-NLS-1$
 	public static String AddResourcePage_Description;
 	public static String AddResourcePage_Title;
+	public static String AddResourceWizard_windowtitle;
+	public static String AFileResourcePage_downloadfilebutton;
+	public static String AFileResourcePage_filedialogtitle;
+	public static String AFileResourcePage_filetabitem;
+	public static String AFileResourcePage_selectresourcefile;
+	public static String AFileResourcePage_uploadfile;
+	public static String AResourcePage_creationdate;
+	public static String AResourcePage_description;
+	public static String AResourcePage_id;
+	public static String AResourcePage_name;
+	public static String AResourcePage_parentfolder;
+	public static String AResourcePage_tabitemgeneral;
+	public static String AResourcePage_title;
+	public static String AResourcePage_type;
+	public static String AResourcePage_windowdescription;
 	public static String DatasourceSelectionComposite_FromRepository;
 	public static String DatasourceSelectionComposite_LocalDatasource;
 	public static String DatasourceSelectionComposite_NoDatasource;
@@ -77,6 +92,9 @@ public class Messages extends NLS {
 	public static String RUnitLocationPage_reportunitlabel;
 	public static String RUnitLocationPage_title;
 	public static String SelectorDatasource_TabTitle;
+	public static String SelectorQuery_browse;
+	public static String SelectorQuery_localresource;
+	public static String SelectorQuery_selectfromrepository;
 	public static String ServerManager_ErrorMessage1;
 	public static String ServerProfilePage_1;
 	public static String ServerProfilePage_10;
@@ -97,6 +115,7 @@ public class Messages extends NLS {
 	public static String ResourcesPage_table_overwrite;
 	public static String ResourcesPage_table_resource;
 	public static String ResourcesPage_title;
+	public static String ResourceWizard_windowtitle;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

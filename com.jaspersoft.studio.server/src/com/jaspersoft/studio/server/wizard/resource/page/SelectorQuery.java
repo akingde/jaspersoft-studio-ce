@@ -36,6 +36,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
@@ -63,7 +64,7 @@ public class SelectorQuery {
 		composite.setLayout(new GridLayout(2, false));
 
 		brRepo = new Button(composite, SWT.RADIO);
-		brRepo.setText("Select from Repository");
+		brRepo.setText(Messages.SelectorQuery_selectfromrepository);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		brRepo.setLayoutData(gd);
@@ -78,7 +79,7 @@ public class SelectorQuery {
 		jsRefDS.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		bRef = new Button(composite, SWT.PUSH);
-		bRef.setText("Browse");
+		bRef.setText(Messages.SelectorQuery_browse);
 		bRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -99,8 +100,8 @@ public class SelectorQuery {
 							ref = WSClientHelper.getResource(parent, ref);
 							ref.setIsReference(false);
 							ref.setReferenceUri(ref.getUriString());
-							ref.setParentFolder(runit.getUriString() + "_files");
-							ref.setUriString(ref.getParentFolder() + "/"
+							ref.setParentFolder(runit.getUriString() + "_files"); //$NON-NLS-1$
+							ref.setUriString(ref.getParentFolder() + "/" //$NON-NLS-1$
 									+ ref.getName());
 							ref.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 							replaceQuery(res, ref);
@@ -115,7 +116,7 @@ public class SelectorQuery {
 		});
 
 		brLocal = new Button(composite, SWT.RADIO);
-		brLocal.setText("Local Resource");
+		brLocal.setText(Messages.SelectorQuery_localresource);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		brLocal.setLayoutData(gd);
@@ -130,7 +131,7 @@ public class SelectorQuery {
 		jsLocDS.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		bLoc = new Button(composite, SWT.PUSH);
-		bLoc.setText("...");
+		bLoc.setText("..."); //$NON-NLS-1$
 		bLoc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -149,7 +150,7 @@ public class SelectorQuery {
 					ref = MRQuery.createDescriptor(res);
 					ref.setIsNew(true);
 					ref.setIsReference(false);
-					ref.setParentFolder(runit.getUriString() + "_files");
+					ref.setParentFolder(runit.getUriString() + "_files"); //$NON-NLS-1$
 
 					newref = true;
 				}
@@ -159,7 +160,7 @@ public class SelectorQuery {
 				dialog.create();
 				if (dialog.open() != Dialog.OK)
 					return;
-				ref.setUriString(ref.getParentFolder() + "/" + ref.getName());
+				ref.setUriString(ref.getParentFolder() + "/" + ref.getName()); //$NON-NLS-1$
 				if (newref) {
 					replaceQuery(res, ref);
 				} else {
@@ -243,8 +244,8 @@ public class SelectorQuery {
 		brRepo.setSelection(false);
 		brLocal.setSelection(false);
 
-		jsRefDS.setText("");
-		jsLocDS.setText("");
+		jsRefDS.setText(""); //$NON-NLS-1$
+		jsLocDS.setText(""); //$NON-NLS-1$
 
 		ResourceDescriptor r = getQuery(res.getValue());
 		switch (pos) {

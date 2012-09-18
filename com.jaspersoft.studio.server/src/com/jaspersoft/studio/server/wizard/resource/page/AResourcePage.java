@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.utils.UIUtils;
 
@@ -48,8 +49,8 @@ public abstract class AResourcePage extends WizardPage {
 
 	public AResourcePage(String pageName, ANode parent, MResource resource) {
 		super(pageName);
-		setTitle("Resource Editor");
-		setDescription("Read and modify resource.");
+		setTitle(Messages.AResourcePage_title);
+		setDescription(Messages.AResourcePage_windowdescription);
 		this.res = resource;
 		this.parent = parent;
 	}
@@ -71,35 +72,35 @@ public abstract class AResourcePage extends WizardPage {
 
 	protected void createGeneralTab(TabFolder tabFolder) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("General");
+		item.setText(Messages.AResourcePage_tabitemgeneral);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		item.setControl(composite);
 
-		UIUtils.createLabel(composite, "Parent Folder");
+		UIUtils.createLabel(composite, Messages.AResourcePage_parentfolder);
 		Text tparent = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		tparent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "Type");
+		UIUtils.createLabel(composite, Messages.AResourcePage_type);
 		Text ttype = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "Creation Date:");
+		UIUtils.createLabel(composite, Messages.AResourcePage_creationdate);
 		Text tcdate = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		tcdate.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		UIUtils.createSeparator(composite, 2);
 
-		UIUtils.createLabel(composite, "ID");
+		UIUtils.createLabel(composite, Messages.AResourcePage_id);
 		Text tid = new Text(composite, SWT.BORDER);
 		tid.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "Name");
+		UIUtils.createLabel(composite, Messages.AResourcePage_name);
 		Text tname = new Text(composite, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "Description");
+		UIUtils.createLabel(composite, Messages.AResourcePage_description);
 		Text tdesc = new Text(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;
@@ -107,27 +108,27 @@ public abstract class AResourcePage extends WizardPage {
 
 		ResourceDescriptor rd = res.getValue();
 		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE),
-				PojoObservables.observeValue(rd, "parentFolder"));
+				PojoObservables.observeValue(rd, "parentFolder")); //$NON-NLS-1$
 
 		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE),
-				PojoObservables.observeValue(rd, "creationDate"));
+				PojoObservables.observeValue(rd, "creationDate")); //$NON-NLS-1$
 
 		bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE),
-				PojoObservables.observeValue(rd, "wsType"));
+				PojoObservables.observeValue(rd, "wsType")); //$NON-NLS-1$
 
 		bindingContext.bindValue(SWTObservables.observeText(tid, SWT.Modify),
-				PojoObservables.observeValue(rd, "name"),
+				PojoObservables.observeValue(rd, "name"), //$NON-NLS-1$
 				new UpdateValueStrategy()
 						.setAfterConvertValidator(new IDStringValidator()),
 				null);
 
 		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
-				PojoObservables.observeValue(rd, "label"),
+				PojoObservables.observeValue(rd, "label"), //$NON-NLS-1$
 				new UpdateValueStrategy()
 						.setAfterConvertValidator(new EmptyStringValidator()),
 				null);
 		bindingContext.bindValue(SWTObservables.observeText(tdesc, SWT.Modify),
-				PojoObservables.observeValue(rd, "description"));
+				PojoObservables.observeValue(rd, "description")); //$NON-NLS-1$
 
 		tid.setEditable(rd.getIsNew());
 		if (rd.getIsNew())

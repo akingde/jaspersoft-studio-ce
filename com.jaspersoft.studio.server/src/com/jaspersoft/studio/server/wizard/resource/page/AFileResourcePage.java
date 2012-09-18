@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -61,15 +62,15 @@ public abstract class AFileResourcePage extends AResourcePage {
 
 	protected void createFileTab(TabFolder tabFolder) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("File");
+		item.setText(Messages.AFileResourcePage_filetabitem);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 		item.setControl(composite);
 
 		Button bexport = new Button(composite, SWT.PUSH | SWT.LEFT);
-		bexport.setText("Download File");
-		bexport.setImage(Activator.getImage("icons/drive-download.png"));
+		bexport.setText(Messages.AFileResourcePage_downloadfilebutton);
+		bexport.setImage(Activator.getImage("icons/drive-download.png")); //$NON-NLS-1$
 		bexport.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -77,7 +78,7 @@ public abstract class AFileResourcePage extends AResourcePage {
 						.getActiveShell(), SWT.SAVE);
 				fd.setFilterExtensions(getFilter());
 				fd.setFileName(res.getValue().getName());
-				fd.setText("Save Resource To File ...");
+				fd.setText(Messages.AFileResourcePage_filedialogtitle);
 				String filename = fd.open();
 				doSaveFile(filename);
 			}
@@ -85,15 +86,15 @@ public abstract class AFileResourcePage extends AResourcePage {
 		});
 
 		Button bimport = new Button(composite, SWT.PUSH | SWT.LEFT);
-		bimport.setText("Upload File");
-		bimport.setImage(Activator.getImage("icons/drive-upload.png"));
+		bimport.setText(Messages.AFileResourcePage_uploadfile);
+		bimport.setImage(Activator.getImage("icons/drive-upload.png")); //$NON-NLS-1$
 		bimport.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(Display.getDefault()
 						.getActiveShell(), SWT.OPEN);
 				fd.setFilterExtensions(getFilter());
-				fd.setText("Select Resource File ...");
+				fd.setText(Messages.AFileResourcePage_selectresourcefile);
 				String filename = fd.open();
 				if (filename != null) {
 					((AFileResource) res).setFile(new File(filename));
@@ -108,7 +109,7 @@ public abstract class AFileResourcePage extends AResourcePage {
 		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE),
-				PojoObservables.observeValue(res, "fileName"));
+				PojoObservables.observeValue(res, "fileName")); //$NON-NLS-1$
 
 		createFileTab(composite);
 
@@ -131,18 +132,18 @@ public abstract class AFileResourcePage extends AResourcePage {
 				WSClientHelper.getResource(AFileResourcePage.this.res,
 						res.getValue(), filename);
 				File file = new File(filename);
-				int dotPos = filename.lastIndexOf(".");
+				int dotPos = filename.lastIndexOf("."); //$NON-NLS-1$
 				String strFilename = filename.substring(0, dotPos);
 				ImageTypeEnum itype = JRTypeSniffer.getImageTypeValue(FileUtils
 						.getBytes(file));
 				if (itype == ImageTypeEnum.GIF) {
-					file = FileUtils.fileRenamed(file, strFilename, ".gif");
+					file = FileUtils.fileRenamed(file, strFilename, ".gif"); //$NON-NLS-1$
 				} else if (itype == ImageTypeEnum.JPEG) {
-					file = FileUtils.fileRenamed(file, strFilename, ".jpeg");
+					file = FileUtils.fileRenamed(file, strFilename, ".jpeg"); //$NON-NLS-1$
 				} else if (itype == ImageTypeEnum.PNG) {
-					file = FileUtils.fileRenamed(file, strFilename, ".png");
+					file = FileUtils.fileRenamed(file, strFilename, ".png"); //$NON-NLS-1$
 				} else if (itype == ImageTypeEnum.TIFF) {
-					file = FileUtils.fileRenamed(file, strFilename, ".tiff");
+					file = FileUtils.fileRenamed(file, strFilename, ".tiff"); //$NON-NLS-1$
 				}
 				((AFileResource) res).setFile(file);
 			} catch (Exception e1) {

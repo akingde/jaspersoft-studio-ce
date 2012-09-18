@@ -23,13 +23,14 @@ import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 
 public class ResourceWizard extends Wizard {
 
 	public ResourceWizard(ANode parent, MResource resource) {
 		super();
-		setWindowTitle("Resource Editor");
+		setWindowTitle(Messages.ResourceWizard_windowtitle);
 		this.resource = resource;
 		this.parent = parent;
 	}

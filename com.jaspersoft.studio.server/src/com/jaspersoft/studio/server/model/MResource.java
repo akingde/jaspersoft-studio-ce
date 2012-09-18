@@ -148,7 +148,7 @@ public class MResource extends APropertyNode implements ICopyable {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setIsNew(true);
 		rd.setIsReference(false);
-		rd.setName("New Resource");
+		rd.setName("NewResource");
 		// rd.setLabel(rd.getName());
 		if (parent instanceof MResource)
 			rd.setParentFolder(((MResource) parent).getValue().getUriString());
