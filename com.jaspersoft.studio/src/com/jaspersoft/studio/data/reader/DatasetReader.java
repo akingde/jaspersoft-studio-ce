@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.data.reader;
 
@@ -54,9 +50,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * Reader class for generic dataset.
  * <p>
  * Example of usage: data preview in dataset dialog.
- *  
+ * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
 public class DatasetReader {
 
@@ -68,62 +64,62 @@ public class DatasetReader {
 	// and other properties
 	private JRDesignDataset designDataset;
 	// Max records num
-	private int maxRecords=-1;
+	private int maxRecords = -1;
 	// Listeners for dataset reading
 	// They will receive event notification for example by a scriptlet
 	private List<DatasetReaderListener> listeners;
 	// Status flag that lets you know if a report is running
 	private boolean running;
-	
-	public DatasetReader(){
-		listeners=new ArrayList<DatasetReaderListener>();
+
+	public DatasetReader() {
+		listeners = new ArrayList<DatasetReaderListener>();
 	}
-	
+
 	/**
 	 * Executes the task for the dataset reading task.
 	 * <p>
 	 * The following sequential steps are performed:
 	 * <ol>
-	 * 	<li>loading the jasper design for the custom data preview report;</li>
-	 * 	<li>setting the query information and report language</li>
-	 * 	<li>replacing properties map</li>
-	 * 	<li>adding the standard parameters and custom ones</li>
-	 * 	<li>adding the fields</li>
-	 * 	<li>compiling the report obtaining a jasper report object</li>
-	 * 	<li>setting the parameters (including data adapter contributed ones) map</li>
-	 * 	<li>filling the report</li>
+	 * <li>loading the jasper design for the custom data preview report;</li>
+	 * <li>setting the query information and report language</li>
+	 * <li>replacing properties map</li>
+	 * <li>adding the standard parameters and custom ones</li>
+	 * <li>adding the fields</li>
+	 * <li>compiling the report obtaining a jasper report object</li>
+	 * <li>setting the parameters (including data adapter contributed ones) map</li>
+	 * <li>filling the report</li>
 	 * </ol>
 	 * 
-	 * @param jConfig the configuration instance
+	 * @param jConfig
+	 *          the configuration instance
 	 */
-	public void start(JasperReportsConfiguration jConfig){
-		InputStream is=null;
+	public void start(JasperReportsConfiguration jConfig) {
+		InputStream is = null;
 		// Temporary replace the class loader to get the "report" one.
 		// This is necessary for example to load JDBC drivers or additional
-		// classes that are in the classpath of the JasperReports project 
+		// classes that are in the classpath of the JasperReports project
 		// containing the report.
 		ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(jConfig.getClassLoader());
 		try {
-			running=true;
+			running = true;
 			// 1. Load JD from custom data preview report
-			String reportLocation=
-					JaspersoftStudioPlugin.getInstance().getFileLocation(DataPreviewScriptlet.PREVIEW_REPORT_PATH);
-			is=new FileInputStream(reportLocation);
-			JasperDesign dataJD=JRXmlLoader.load(is);
-			
+			String reportLocation = JaspersoftStudioPlugin.getInstance().getFileLocation(
+					DataPreviewScriptlet.PREVIEW_REPORT_PATH);
+			is = new FileInputStream(reportLocation);
+			JasperDesign dataJD = JRXmlLoader.load(is);
+
 			// 2. Set query information
-			JRDesignQuery query=new JRDesignQuery();
+			JRDesignQuery query = new JRDesignQuery();
 			query.setLanguage(designDataset.getQuery().getLanguage());
 			query.setText(designDataset.getQuery().getText());
 			dataJD.setQuery(query);
 			// and the report language to the actual report one
-			dataJD.setLanguage(
-					jConfig.getJasperDesign().getLanguage());
-						
+			dataJD.setLanguage(jConfig.getJasperDesign().getLanguage());
+
 			// 3. Replace properties map
 			ModelUtils.replacePropertiesMap(jConfig.getJasperDesign().getPropertiesMap(), dataJD.getPropertiesMap());
-			
+
 			// 4. Set "standard" parameters
 			List<JRParameter> parametersList = designDataset.getParametersList();
 			for (JRParameter param : parametersList) {
@@ -135,77 +131,78 @@ public class DatasetReader {
 				dataJD.addParameter(param);
 			}
 			// and add the custom ones
-			JRDesignParameter pColumns=new JRDesignParameter();
+			JRDesignParameter pColumns = new JRDesignParameter();
 			pColumns.setName(DataPreviewScriptlet.PARAM_COLUMNS);
 			pColumns.setValueClass(List.class);
 			dataJD.addParameter(pColumns);
-			JRDesignParameter pListeners=new JRDesignParameter();
+			JRDesignParameter pListeners = new JRDesignParameter();
 			pListeners.setName(DataPreviewScriptlet.PARAM_LISTENERS);
 			pListeners.setValueClass(List.class);
 			dataJD.addParameter(pListeners);
-			
+
 			// 5. Add the fields
-			if(columns.size()>0){
+			if (columns.size() > 0) {
 				// Clear "dirty" fields
 				dataJD.getFieldsList().clear();
 				dataJD.getFieldsMap().clear();
-				// 
+				//
 				JRField[] fields = designDataset.getFields();
-				for(JRField f : fields){
+				for (JRField f : fields) {
 					dataJD.addField(f);
 				}
 			}
-			
+
 			// 6. Compile report
-			JasperReport jrobj=JasperCompileManager.compileReport(dataJD);
-			
+			JasperReport jrobj = JasperCompileManager.compileReport(dataJD);
+
 			// 7. Prepare parameters
-			HashMap<String, Object> hm=new HashMap<String, Object>();
+			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put(DataPreviewScriptlet.PARAM_COLUMNS, columns);
 			hm.put(DataPreviewScriptlet.PARAM_LISTENERS, listeners);
-			if(maxRecords>0) hm.put(JRDesignParameter.REPORT_MAX_COUNT,maxRecords);
-			// add also prompting parameters that may have previously 
+			if (maxRecords > 0)
+				hm.put(JRDesignParameter.REPORT_MAX_COUNT, maxRecords);
+			// add also prompting parameters that may have previously
 			// set during a preview phase. This way we can get a more
 			// likely "default" value.
-			if(jConfig.getJRParameters()!=null){
+			if (jConfig.getJRParameters() != null) {
 				hm.putAll(jConfig.getJRParameters());
 			}
 
 			// 8. Contribute parameters from the data adapter
 			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(dataAdapterDesc.getDataAdapter());
 			das.contributeParameters(hm);
-			
+
 			// 9. Fill the report
-			JasperFillManager.fillReport(jrobj, hm);
-			
-		} catch (DataPreviewInterruptedException e){
+			JasperFillManager.getInstance(jConfig).fill(jrobj, hm);
+
+		} catch (DataPreviewInterruptedException e) {
 			// DO NOTHING
 			// This exception should occur only when
 			// a stop on the reading has been invoked.
-		} catch (Exception e)  {
+		} catch (Exception e) {
 			UIUtils.showError(Messages.DatasetReader_GenericErrorMsg, e);
 		} finally {
-			if(is!=null){
+			if (is != null) {
 				try {
 					is.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			running=false;
-			for(DatasetReaderListener l : listeners){
+			running = false;
+			for (DatasetReaderListener l : listeners) {
 				l.finished();
 			}
 			Thread.currentThread().setContextClassLoader(originalClassLoader);
 		}
 	}
-	
+
 	/**
 	 * Ends the dataset reading task.
 	 */
-	public void stop(){
-		if(running){
-			for(DatasetReaderListener l : listeners){
+	public void stop() {
+		if (running) {
+			for (DatasetReaderListener l : listeners) {
 				// Invalidating the listener will cause the running scriptlet
 				// to launch a JRScriptletException, that will abort the running report.
 				l.invalidate();
@@ -214,7 +211,7 @@ public class DatasetReader {
 	}
 
 	/* Getters and setters */
-	
+
 	public DataAdapterDescriptor getDataAdapterDescriptor() {
 		return dataAdapterDesc;
 	}
@@ -246,35 +243,36 @@ public class DatasetReader {
 	public void setMaxRecords(int maxRecords) {
 		this.maxRecords = maxRecords;
 	}
-	
+
 	/* Listener methods */
-	
+
 	/**
-	 * Adds a new {@link DatasetReaderListener} to the list of listeners that
-	 * will be notified when a read event on the dataset occurs.
+	 * Adds a new {@link DatasetReaderListener} to the list of listeners that will be notified when a read event on the
+	 * dataset occurs.
 	 * 
-	 * @param listener the listener to add
+	 * @param listener
+	 *          the listener to add
 	 */
 	public void addDatasetReaderListener(DatasetReaderListener listener) {
 		listeners.add(listener);
 	}
 
 	/**
-	 * Removes the specified {@link DatasetReaderListener} from the list of listeners that
-	 * will be notified when a read event on the dataset occurs.
+	 * Removes the specified {@link DatasetReaderListener} from the list of listeners that will be notified when a read
+	 * event on the dataset occurs.
 	 * 
-	 * @param listener the listener to remove
+	 * @param listener
+	 *          the listener to remove
 	 */
-	public void removeDatasetReaderListener(DatasetReaderListener listener){
+	public void removeDatasetReaderListener(DatasetReaderListener listener) {
 		listeners.remove(listener);
 	}
 
 	/**
-	 * @return <code>true</code> if the dataset reader is running,
-	 * 					<code>false</code> otherwise
+	 * @return <code>true</code> if the dataset reader is running, <code>false</code> otherwise
 	 */
 	public boolean isRunning() {
 		return this.running;
 	}
-	
+
 }
