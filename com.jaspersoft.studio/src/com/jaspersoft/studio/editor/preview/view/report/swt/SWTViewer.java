@@ -96,10 +96,12 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 	protected JasperPrint jrprint;
 
 	public void setJRPRint(Statistics stats, JasperPrint jrprint) {
-		if (this.jrprint == null || this.jrprint != jrprint) {
-			rptviewer.setDocument(jrprint);
-			rptviewer.gotoFirstPage();
-		}
+		int ind = Math.max(0, rptviewer.getPageIndex());
+		// if (this.jrprint == null || this.jrprint != jrprint) {
+		rptviewer.setDocument(jrprint);
+		rptviewer.setPageIndex(ind);
+		// rptviewer.gotoFirstPage();
+		// }
 		this.jrprint = jrprint;
 	}
 

@@ -26,6 +26,8 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.editor.preview.view.report.file.CSVMetadataViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.CSVViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.TXTViewer;
+import com.jaspersoft.studio.editor.preview.view.report.file.XMLImagesViewer;
+import com.jaspersoft.studio.editor.preview.view.report.file.XMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.html.HTMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.html.XHTMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
@@ -43,7 +45,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class ViewsFactory {
 	public static final String VIEWER_JAVA = "Java";
 
-	public static LinkedHashMap<String, APreview> createPreviews(Composite composite,  JasperReportsConfiguration jContext) {
+	public static LinkedHashMap<String, APreview> createPreviews(Composite composite, JasperReportsConfiguration jContext) {
 		LinkedHashMap<String, APreview> pmap = new LinkedHashMap<String, APreview>();
 		pmap.put(VIEWER_JAVA, new SWTViewer(composite, jContext));
 
@@ -69,6 +71,11 @@ public class ViewsFactory {
 		pmap.put("ExcelAPI", new ExcelAPIViewer(composite, jContext));
 		pmap.put("CSV", new CSVViewer(composite, jContext));
 		pmap.put("CSV Metadata", new CSVMetadataViewer(composite, jContext));
+
+		pmap.put("SEPARATOR1", null);
+
+		pmap.put("XML", new XMLViewer(composite, jContext));
+		pmap.put("XML With Images", new XMLImagesViewer(composite, jContext));
 
 		return pmap;
 	}
