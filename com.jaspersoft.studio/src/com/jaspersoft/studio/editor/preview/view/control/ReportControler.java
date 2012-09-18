@@ -219,6 +219,8 @@ public class ReportControler {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
+					setParameters();
+
 					final IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
 
 					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
