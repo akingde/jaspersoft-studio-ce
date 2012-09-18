@@ -42,7 +42,9 @@ public class JSSEnumPropertyDescriptor extends ComboBoxPropertyDescriptor implem
 		jrEnums = jrEnum.getEnumConstants();
 		this.start = jrEnums[0].getValue();
 	}
+	
 
+	
 	public Integer getEnumValue(JREnum jrvalue) {
 		return EnumHelper.getValue(jrvalue, start, type != NullEnum.NOTNULL);
 	}

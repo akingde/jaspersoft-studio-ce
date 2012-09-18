@@ -19,15 +19,14 @@
  */
 package com.jaspersoft.studio.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRGraphicElement;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBasePen;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -35,17 +34,21 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.LineStylePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSPopupPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
+import com.jaspersoft.studio.utils.ResourceManager;
 
 public class MLinePen extends APropertyNode implements IPropertySource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private static List<ComboItem> lineSpacingItems = null;
+	
 	public MLinePen(JRPen linePen) {
 		super();
 		setValue(linePen);
@@ -62,6 +65,24 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		result.put(JRBasePen.PROPERTY_LINE_WIDTH, element.getOwnLineWidth());
 		return result;
 	}
+	
+	private List<ComboItem> createLineSpacingItems(){
+		if (lineSpacingItems == null){
+			lineSpacingItems = new ArrayList<ComboItem>();
+			LineStyleEnum[] values = LineStyleEnum.class.getEnumConstants();
+			lineSpacingItems.add(new ComboItem(Messages.getString("LineSpacing_nullEnum"), true,  ResourceManager.getImageDescriptor(this.getClass(),"/icons/resources/inherited.png"), 0, NullEnum.INHERITED, 0));
+			ImageDescriptor[] images = new ImageDescriptor[] { JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-solid.png"),
+																													JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-dashed.png"),
+																												JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-dotted.png"),
+																												JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-double.png"), };
+			for(int i=0; i<values.length; i++){
+				LineStyleEnum value = values[i];
+				lineSpacingItems.add(new ComboItem(Messages.getString("LineStyle_".concat(value.getName())), true, images[i], i+1, value , i+1));
+			}
+		}
+		return lineSpacingItems;
+	}
+	
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
@@ -76,8 +97,10 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		penLineWidthD.setDescription(Messages.MLinePen_line_width_description);
 		desc.add(penLineWidthD);
 
-		penLineStyleD = new LineStylePropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_line_style,
-				LineStyleEnum.class, NullEnum.INHERITED);
+		/*penLineStyleD = new LineStylePropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_line_style,
+				LineStyleEnum.class, NullEnum.INHERITED);*/
+		penLineStyleD = new JSSPopupPropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_line_style,
+				LineStyleEnum.class, NullEnum.INHERITED, createLineSpacingItems());
 		penLineStyleD.setDescription(Messages.MLinePen_line_style_description);
 		desc.add(penLineStyleD);
 
@@ -88,7 +111,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor penLineStyleD;
+	private static JSSPopupPropertyDescriptor penLineStyleD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {

@@ -19,25 +19,26 @@
  */
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.property.combomenu.ComboItem;
+import com.jaspersoft.studio.property.combomenu.ComboItemAction;
+import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPLineStyleEnum {
-	private ToolItem lsSolid;
-	private ToolItem lsDashed;
-	private ToolItem lsDotted;
-	private ToolItem lsDouble;
+	
+	ComboMenuViewer combo;
 
 	public SPLineStyleEnum(Composite parent, AbstractSection section, String property) {
 		createComponent(parent, section, property);
@@ -48,6 +49,23 @@ public class SPLineStyleEnum {
 		composite.setBackground(parent.getBackground());
 		composite.setLayout(new RowLayout());
 
+		List<ComboItem> itemsList = new ArrayList<ComboItem>();
+		itemsList.add(new ComboItem("Inherited", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/inherited.png"),0, NullEnum.INHERITED, null));
+		itemsList.add(new ComboItem("Solid line", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-solid.png"),1, LineStyleEnum.SOLID, new Integer(LineStyleEnum.SOLID.getValue() + 1)));
+		itemsList.add(new ComboItem("Dashed line", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-dashed.png"),2, LineStyleEnum.DASHED, new Integer(LineStyleEnum.DASHED.getValue() + 1)));
+		itemsList.add(new ComboItem("Dotted line", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-dotted.png"),3, LineStyleEnum.DOTTED, new Integer(LineStyleEnum.DOTTED.getValue() + 1)));
+		itemsList.add(new ComboItem("Double line", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-double.png"),4, LineStyleEnum.DOUBLE, new Integer(LineStyleEnum.DOUBLE.getValue() + 1)));
+		combo = new ComboMenuViewer(composite, SWT.NORMAL, SPRWPopUpCombo.getLongest(itemsList));
+		
+		combo.setItems(itemsList);
+		combo.addSelectionListener(new ComboItemAction() {
+				@Override
+				public void exec() {
+						propertyChange(section,JRBasePen.PROPERTY_LINE_STYLE, combo.getSelectionValue() != null ? (Integer)combo.getSelectionValue() : null);			
+				}
+		});
+		
+		/*
 		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.WRAP | SWT.LEFT);
 		toolBar.setBackground(composite.getBackground());
 
@@ -89,7 +107,7 @@ public class SPLineStyleEnum {
 				propertyChange(section, JRBasePen.PROPERTY_LINE_STYLE, lsDouble.getSelection() ? new Integer(
 						LineStyleEnum.DOUBLE.getValue() + 1) : null);
 			}
-		});
+		});*/
 	}
 
 	public void propertyChange(AbstractSection section, String property, Integer value) {
@@ -97,9 +115,10 @@ public class SPLineStyleEnum {
 	}
 
 	public void setData(Integer b) {
-		lsSolid.setSelection(b != null && b.intValue() == LineStyleEnum.SOLID.getValue() + 1);
-		lsDashed.setSelection(b != null && b.intValue() == LineStyleEnum.DASHED.getValue() + 1);
-		lsDotted.setSelection(b != null && b.intValue() == LineStyleEnum.DOTTED.getValue() + 1);
-		lsDouble.setSelection(b != null && b.intValue() == LineStyleEnum.DOUBLE.getValue() + 1);
+		//lsSolid.setSelection(b != null && b.intValue() == LineStyleEnum.SOLID.getValue() + 1);
+		//lsDashed.setSelection(b != null && b.intValue() == LineStyleEnum.DASHED.getValue() + 1);
+		//lsDotted.setSelection(b != null && b.intValue() == LineStyleEnum.DOTTED.getValue() + 1);
+		//lsDouble.setSelection(b != null && b.intValue() == LineStyleEnum.DOUBLE.getValue() + 1);
+		combo.select(b);
 	}
 }
