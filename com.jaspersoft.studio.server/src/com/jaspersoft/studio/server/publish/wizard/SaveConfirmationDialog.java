@@ -42,7 +42,7 @@ public class SaveConfirmationDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Export Report to JasperServer");
+		newShell.setText(Messages.SaveConfirmationDialog_title);
 	}
 
 	private boolean allways;
@@ -57,7 +57,7 @@ public class SaveConfirmationDialog extends Dialog {
 		container.setLayout(new GridLayout());
 
 		Label label = new Label(container, SWT.WRAP);
-		label.setText("Do you want to publish this report to JasperServer?");
+		label.setText(Messages.SaveConfirmationDialog_question);
 
 		final Button b = new Button(container, SWT.CHECK);
 		b.setText(Messages.VersionDialog_checkbox);

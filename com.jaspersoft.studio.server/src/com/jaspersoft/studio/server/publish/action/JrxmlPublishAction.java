@@ -45,6 +45,7 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
@@ -60,16 +61,16 @@ import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JrxmlPublishAction extends AContributorAction {
-	private static final String ID = "PUBLISHJRXML";
-	public static final String KEY_PUBLISH2JSSWIZARD_SILENT = "PUBLISH2JSSWIZARD_SILENT";
-	public static final String KEY_PUBLISH2JSS_DATA = "PUBLISH2JSS_DATA";
+	private static final String ID = "PUBLISHJRXML"; //$NON-NLS-1$
+	public static final String KEY_PUBLISH2JSSWIZARD_SILENT = "PUBLISH2JSSWIZARD_SILENT"; //$NON-NLS-1$
+	public static final String KEY_PUBLISH2JSS_DATA = "PUBLISH2JSS_DATA"; //$NON-NLS-1$
 	private MReportUnit mrunit;
 
 	public JrxmlPublishAction() {
-		super(ID, "Publish Report to JasperServer");
-		setToolTipText("Publish Report to JasperServer");
+		super(ID, Messages.JrxmlPublishAction_title);
+		setToolTipText(Messages.JrxmlPublishAction_tooltip);
 		ImageDescriptor icon16 = Activator
-				.getImageDescriptor("icons/server--upload.png");
+				.getImageDescriptor("icons/server--upload.png"); //$NON-NLS-1$
 		setImageDescriptor(icon16);
 		setDisabledImageDescriptor(icon16);
 	}
@@ -95,7 +96,7 @@ public class JrxmlPublishAction extends AContributorAction {
 			} else if (!createDialog(node, jd, 2))
 				return;
 		}
-		Job job = new Job("Publish Report Unit") {
+		Job job = new Job(Messages.JrxmlPublishAction_jobname) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
@@ -146,7 +147,7 @@ public class JrxmlPublishAction extends AContributorAction {
 			mrunit = new MReportUnit(parent, rd);
 		}
 		MJrxml jrxml = new MJrxml(mrunit, getMainReport(jd), 0);
-		File file = FileUtils.createTempFile("jrsres", ".jrxml");
+		File file = FileUtils.createTempFile("jrsres", ".jrxml"); //$NON-NLS-1$ //$NON-NLS-2$
 		String version = ServerManager.getVersion(mrunit);
 		FileUtils.writeFile(file,
 				JRXmlWriterHelper.writeReport(null, jd, version));
@@ -182,8 +183,8 @@ public class JrxmlPublishAction extends AContributorAction {
 
 	private ResourceDescriptor getMainReport(JasperDesign jd) {
 		ResourceDescriptor mainr = new ResourceDescriptor();
-		mainr.setName("main_jrxml");
-		mainr.setLabel("Main jrxml");
+		mainr.setName(Messages.JrxmlPublishAction_defaultresourcename);
+		mainr.setLabel(Messages.JrxmlPublishAction_defaultresourcelabel);
 		mainr.setWsType(ResourceDescriptor.TYPE_JRXML);
 		mainr.setIsNew(true);
 		mainr.setMainReport(true);

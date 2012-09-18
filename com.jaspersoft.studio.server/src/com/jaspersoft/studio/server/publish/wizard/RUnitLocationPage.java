@@ -50,6 +50,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.server.ServerProvider;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.utils.ValidationUtils;
@@ -64,8 +65,8 @@ public class RUnitLocationPage extends WizardPage {
 
 	public RUnitLocationPage(JasperDesign jDesign, ANode n) {
 		super("serverpublish"); //$NON-NLS-1$
-		setTitle("Publish To JasperServer");
-		setDescription("Select Jasper Reports Server and location where report will be published");
+		setTitle(Messages.RUnitLocationPage_title);
+		setDescription(Messages.RUnitLocationPage_description);
 		this.jDesign = jDesign;
 		this.n = n;
 	}
@@ -109,7 +110,7 @@ public class RUnitLocationPage extends WizardPage {
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		ColumnViewerToolTipSupport.enableFor(treeViewer);
 		bnRunit = new Button(composite, SWT.CHECK);
-		bnRunit.setText("Create Report Unit");
+		bnRunit.setText(Messages.RUnitLocationPage_addreportunit_button);
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.horizontalSpan = 2;
 		bnRunit.setLayoutData(gd);
@@ -140,7 +141,7 @@ public class RUnitLocationPage extends WizardPage {
 		// Report Unit ID (resource descriptor name)   
 		Label lblRepoUnitID = new Label(composite, SWT.NONE);
 		lblRepoUnitID.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
-		lblRepoUnitID.setText("Report Unit Name (ID)");
+		lblRepoUnitID.setText(Messages.RUnitLocationPage_lblreportunit);
 		ruID = new Text(composite, SWT.BORDER);
 		ruID.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ruID.addModifyListener(new ModifyListener() {
@@ -148,7 +149,7 @@ public class RUnitLocationPage extends WizardPage {
 			public void modifyText(ModifyEvent e) {
 				String rtext = ruID.getText();
 				ResourceDescriptor ru = getNewRunit().getValue();
-				ru.setName(rtext.replace(" ", ""));	
+				ru.setName(rtext.replace(" ", ""));	 //$NON-NLS-1$ //$NON-NLS-2$
 				setErrorMessage(ValidationUtils.validateName(rtext));
 			}
 		});
@@ -160,12 +161,12 @@ public class RUnitLocationPage extends WizardPage {
 				}
 			}
 		});
-		ruID.setText(jDesign.getName().replace(" ", ""));
+		ruID.setText(jDesign.getName().replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		// Report Unit shown label (resource descriptor label)
 		Label lblRepoUnitName = new Label(composite, SWT.NONE);
 		lblRepoUnitName.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
-		lblRepoUnitName.setText("Report Unit Label");
+		lblRepoUnitName.setText(Messages.RUnitLocationPage_reportunitlabel);
 		ruLabel = new Text(composite, SWT.BORDER);
 		ruLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ruLabel.addModifyListener(new ModifyListener() {
@@ -183,7 +184,7 @@ public class RUnitLocationPage extends WizardPage {
 		Label lblRepoUnitDescription = new Label(composite, SWT.NONE);
 		GridData descLblGD = new GridData(SWT.FILL,SWT.TOP,false,false);
 		lblRepoUnitDescription.setLayoutData(descLblGD);
-		lblRepoUnitDescription.setText("Report Unit Description");
+		lblRepoUnitDescription.setText(Messages.RUnitLocationPage_reportunitdesc_label);
 		ruDescription = new Text(composite, SWT.BORDER | SWT.MULTI);
 		GridData descGD = new GridData(SWT.FILL,SWT.TOP,true,true);
 		descGD.minimumHeight=50;
@@ -197,7 +198,7 @@ public class RUnitLocationPage extends WizardPage {
 				setErrorMessage(ValidationUtils.validateDesc(rtext));
 			}
 		});
-		ruDescription.setText("");		
+		ruDescription.setText("");		 //$NON-NLS-1$
 
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -268,7 +269,7 @@ public class RUnitLocationPage extends WizardPage {
 			nrd.setDescription(ruDescription.getText());
 			String uri = ((MFolder) obj).getValue().getUriString();
 			nrd.setParentFolder(uri);
-			nrd.setUriString(uri + "/" + nrd.getName());
+			nrd.setUriString(uri + "/" + nrd.getName()); //$NON-NLS-1$
 		} else {
 			setPageComplete(false);
 		}

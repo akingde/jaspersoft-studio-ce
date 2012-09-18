@@ -47,6 +47,8 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.messages.messages"; //$NON-NLS-1$
 	private static final String MESSAGES_BY_KEYS = "com.jaspersoft.studio.messages.messagesbykeys"; //$NON-NLS-1$
 	private static final ResourceBundle RB_MESSAGES_BY_KEYS = ResourceBundle.getBundle(MESSAGES_BY_KEYS);
+	public static String SaveConfirmationDialog_question;
+	public static String SaveConfirmationDialog_title;
 	public static String ShowPDFTagsAction_title;
 	public static String ShowPDFTagsAction_tooltip;
 	public static String ShowErrorsAction_title;

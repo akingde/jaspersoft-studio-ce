@@ -44,12 +44,13 @@ import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
 import com.jaspersoft.studio.server.editor.input.VInputControls;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ReportRunControler {
-	public static final String FORM_PARAMETERS = "Input Controls";
+	public static final String FORM_PARAMETERS = "Input Controls"; //$NON-NLS-1$
 
 	private LinkedHashMap<String, APreview> viewmap;
 	private ReportUnitEditor pcontainer;
@@ -134,7 +135,7 @@ public class ReportRunControler {
 
 		stats = new Statistics();
 		stats.startCount(ReportControler.ST_REPORTEXECUTIONTIME);
-		c.addMessage("Start");
+		c.addMessage(Messages.ReportRunControler_statsstart);
 
 		pcontainer.setNotRunning(false);
 
@@ -151,9 +152,9 @@ public class ReportRunControler {
 											icm.getParameters());
 							for (String key : files.keySet()) {
 								FileContent fc = (FileContent) files.get(key);
-								if (key.equals("jasperPrint")) {
+								if (key.equals("jasperPrint")) { //$NON-NLS-1$
 									final File f = File.createTempFile(
-											"jrprint", ".jrprint");
+											"jrprint", ".jrprint"); //$NON-NLS-1$ //$NON-NLS-2$
 									f.deleteOnExit();
 									f.createNewFile();
 									FileOutputStream htmlFile = new FileOutputStream(
@@ -190,22 +191,22 @@ public class ReportRunControler {
 		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
-				c.addMessage("end report");
+				c.addMessage(Messages.ReportRunControler_statsend);
 				stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
 				c.addMessage(String.format(
-						"Total time: %1$.3f s",
+						Messages.ReportRunControler_totaltime,
 						(double) (stats
 								.getDuration(ReportControler.ST_REPORTEXECUTIONTIME) / 1000)));
 				pcontainer.setNotRunning(true);
 
 				boolean notprmfiled = !prmInput.checkFieldsFilled();
 				if (notprmfiled) {
-					c.addMessage("You have some input parameters, that you have to fill first");
-					UIUtils.showWarning("You have some input parameters, that you have to fill first");
+					c.addMessage(Messages.ReportRunControler_inputparamwarnmessage);
+					UIUtils.showWarning(Messages.ReportRunControler_inputparamwarnmessage);
 				}
 				pcontainer.showParameters(notprmfiled);
 				if (pcontainer.getJasperPrint() != null)
-					c.addMessage(String.format("Number of Pages: %d",
+					c.addMessage(String.format(Messages.ReportRunControler_numberofpages,
 							pcontainer.getJasperPrint().getPages().size()));
 			}
 		});

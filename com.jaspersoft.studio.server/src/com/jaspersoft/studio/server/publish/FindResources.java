@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
@@ -22,7 +23,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class FindResources {
 	public void find(final MReportUnit mrunit,
 			final JasperReportsConfiguration jrConfig, final JasperDesign jd) {
-		Job job = new Job("Analyze ReportUnit Resources To Publish") {
+		Job job = new Job(Messages.FindResources_jobname) {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
 				try {

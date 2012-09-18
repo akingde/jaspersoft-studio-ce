@@ -17,6 +17,7 @@ import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MDummy;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
@@ -25,7 +26,7 @@ import com.jaspersoft.studio.utils.UIUtils;
 
 public class FindReportUnit {
 	public void find(final JrxmlPublishAction action, final JasperDesign jd) {
-		Job job = new Job("Publish Report Unit") {
+		Job job = new Job(Messages.FindReportUnit_jobname) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
@@ -65,14 +66,15 @@ public class FindReportUnit {
 
 		final String prop = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
 		if (prop != null) {
-			final MServerProfile mserv = (MServerProfile) new ModelVisitor(root) {
+			final MServerProfile mserv = (MServerProfile) new ModelVisitor<MServerProfile>(
+					root) {
 
 				@Override
 				public boolean visit(INode n) {
 					if (n instanceof MServerProfile
 							&& ((MServerProfile) n).getValue().getUrl()
 									.equals(prop)) {
-						setObject(n);
+						setObject((MServerProfile) n);
 						return false;
 					}
 					return false;

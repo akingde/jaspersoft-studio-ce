@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.TableItem;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -35,8 +36,8 @@ public class ResourcesPage extends WizardPage {
 
 	protected ResourcesPage(JasperReportsConfiguration jConfig) {
 		super("serverrespublish"); //$NON-NLS-1$
-		setTitle("Publish To JasperServer");
-		setDescription("Select Resources to publish");
+		setTitle(Messages.ResourcesPage_title);
+		setDescription(Messages.ResourcesPage_description);
 		this.jConfig = jConfig;
 	}
 
@@ -53,10 +54,10 @@ public class ResourcesPage extends WizardPage {
 
 		TableColumn[] col = new TableColumn[2];
 		col[0] = new TableColumn(table, SWT.NONE);
-		col[0].setText("Resource");
+		col[0].setText(Messages.ResourcesPage_table_resource);
 
 		col[1] = new TableColumn(table, SWT.NONE);
-		col[1].setText("Overwrite");
+		col[1].setText(Messages.ResourcesPage_table_overwrite);
 
 		TableLayout tlayout = new TableLayout();
 		tlayout.addColumnData(new ColumnWeightData(80, false));

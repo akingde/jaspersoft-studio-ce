@@ -30,8 +30,15 @@ public class Messages extends NLS {
 	public static String DatasourceSelectionComposite_NoDatasource;
 	public static String DatasourceSelectionPage_Description;
 	public static String DatasourceSelectionPage_Title;
+	public static String FindReportUnit_jobname;
+	public static String FindResources_jobname;
 	public static String ImportDataSourceInfoFromDA_DialogTitle;
 	public static String ImportDataSourceInfoFromDA_InfoLabel;
+	public static String JrxmlPublishAction_defaultresourcelabel;
+	public static String JrxmlPublishAction_defaultresourcename;
+	public static String JrxmlPublishAction_jobname;
+	public static String JrxmlPublishAction_title;
+	public static String JrxmlPublishAction_tooltip;
 	public static String Publish2ServerWizard_MonitorName;
 	public static String Publish2ServerWizard_Title;
 	public static String RDDataAdapterPage_Description;
@@ -58,6 +65,17 @@ public class Messages extends NLS {
 	public static String RDDatasourceJNDIPage_ImportButtonTooltip;
 	public static String RDDatasourceJNDIPage_JNDIName;
 	public static String RDDatasourceJNDIPage_Title;
+	public static String ReportRunControler_inputparamwarnmessage;
+	public static String ReportRunControler_numberofpages;
+	public static String ReportRunControler_statsend;
+	public static String ReportRunControler_statsstart;
+	public static String ReportRunControler_totaltime;
+	public static String RUnitLocationPage_addreportunit_button;
+	public static String RUnitLocationPage_description;
+	public static String RUnitLocationPage_lblreportunit;
+	public static String RUnitLocationPage_reportunitdesc_label;
+	public static String RUnitLocationPage_reportunitlabel;
+	public static String RUnitLocationPage_title;
 	public static String SelectorDatasource_TabTitle;
 	public static String ServerManager_ErrorMessage1;
 	public static String ServerProfilePage_1;
@@ -75,6 +93,10 @@ public class Messages extends NLS {
 	public static String ValidationUtils_NameEmptyErr;
 	public static String ValidationUtils_NameInvalidCharsErr;
 	public static String ValidationUtils_NameTooLongErr;
+	public static String ResourcesPage_description;
+	public static String ResourcesPage_table_overwrite;
+	public static String ResourcesPage_table_resource;
+	public static String ResourcesPage_title;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
