@@ -63,7 +63,7 @@ public class Publish2ServerWizard extends Wizard {
 
 		page1 = new ResourcesPage(jrConfig);
 		addPage(page1);
-		
+
 		page2 = new DatasourceSelectionPage(jrConfig);
 		addPage(page2);
 	}
@@ -76,19 +76,31 @@ public class Publish2ServerWizard extends Wizard {
 					public void run(IProgressMonitor monitor)
 							throws InvocationTargetException,
 							InterruptedException {
-						monitor.beginTask(Messages.Publish2ServerWizard_MonitorName,
+						monitor.beginTask(
+								Messages.Publish2ServerWizard_MonitorName,
 								IProgressMonitor.UNKNOWN);
 						try {
 							MReportUnit mrunit = page0.getReportUnit();
 							n = mrunit;
-							new FindResources().find(monitor, mrunit, jrConfig,
-									jDesign);
-							Display.getDefault().syncExec(new Runnable() {
-								public void run() {
-									page1.fillData();
+							if (new FindResources().find(monitor, mrunit,
+									jrConfig, jDesign)) {
+								Display.getDefault().syncExec(new Runnable() {
+									public void run() {
+										page1.fillData();
 
-								}
-							});
+									}
+								});
+							} else {
+								Display.getDefault().syncExec(new Runnable() {
+
+									@Override
+									public void run() {
+										page2.configurePage(getReportUnit()
+												.getParent(), getReportUnit());
+										getContainer().showPage(page2);
+									}
+								});
+							}
 						} catch (Exception e) {
 							UIUtils.showError(e);
 						} finally {
@@ -101,9 +113,9 @@ public class Publish2ServerWizard extends Wizard {
 			} catch (InterruptedException e) {
 				UIUtils.showError(e.getCause());
 			}
-			
+
 			// configure page 2
-			page2.configurePage(getReportUnit().getParent(),getReportUnit());
+			page2.configurePage(getReportUnit().getParent(), getReportUnit());
 		}
 		return super.getNextPage(page);
 	}

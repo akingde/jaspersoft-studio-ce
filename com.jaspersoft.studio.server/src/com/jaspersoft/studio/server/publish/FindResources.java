@@ -2,6 +2,7 @@ package com.jaspersoft.studio.server.publish;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -41,7 +42,7 @@ public class FindResources {
 		job.schedule();
 	}
 
-	public void find(IProgressMonitor monitor, MReportUnit mrunit,
+	public boolean find(IProgressMonitor monitor, MReportUnit mrunit,
 			JasperReportsConfiguration jrConfig, JasperDesign jd)
 			throws Exception {
 		jrConfig.put(JrxmlPublishAction.KEY_PUBLISH2JSS_DATA,
@@ -56,6 +57,8 @@ public class FindResources {
 		new JrxmlPublishContributor().publishJrxml(mrunit, monitor, jd,
 				fileset, file, version, jrConfig);
 
+		Object r = jrConfig.get(JrxmlPublishAction.KEY_PUBLISH2JSS_DATA);
+		return r != null && r instanceof List && ((List<?>) r).size() > 0;
 	}
 
 }
