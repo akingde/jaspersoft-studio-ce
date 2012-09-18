@@ -46,8 +46,9 @@ public abstract class ASystemViewer extends SWTViewer {
 
 	@Override
 	public void setJRPRint(Statistics stats, JasperPrint jrprint) {
+		boolean same = this.jrprint == jrprint;
 		super.setJRPRint(stats, jrprint);
-		if (this.jrprint != null) {
+		if (this.jrprint != null && !same) {
 			try {
 				File tmpFile = File.createTempFile("report", getExtension());
 				AbstractExportAction exp = createExporter(rptviewer);

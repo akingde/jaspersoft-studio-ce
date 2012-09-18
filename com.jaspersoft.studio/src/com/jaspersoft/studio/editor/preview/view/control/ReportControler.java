@@ -340,8 +340,14 @@ public class ReportControler {
 
 				@Override
 				public void pageGenerated(JasperPrint arg0, final int page) {
-					if (page == 0)
-						pcontainer.setJasperPrint(stats, arg0);
+					if (page == 0) {
+						Display.getDefault().syncExec(new Runnable() {
+							public void run() {
+								pcontainer.getRightContainer().switchView(stats, pcontainer.getDefaultViewerKey());
+							}
+						});
+					}
+					// pcontainer.setJasperPrint(stats, arg0);
 					if (refresh)
 						return;
 					refresh = true;
