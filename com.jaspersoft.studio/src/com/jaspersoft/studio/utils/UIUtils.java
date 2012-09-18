@@ -20,6 +20,9 @@ import net.sf.jasperreports.eclipse.ui.util.ExceptionDetailsErrorDialog;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
@@ -27,6 +30,8 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.FontMetrics;
@@ -46,6 +51,9 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
+import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
+import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 public class UIUtils {
 
@@ -292,4 +300,66 @@ public class UIUtils {
 
 		TableViewerEditor.create(tviewer, actSupport, ColumnViewerEditor.DEFAULT);
 	}
+	
+	/**
+	 * Creates an error decoration on the top left of the specified {@link Text} widget
+	 * when the text is empty or null.
+	 * 
+	 * @param widget the text widget to which attach the decorator
+	 * @param marginWidth margin between decoration and widget
+	 * @param description description message to show on hover
+	 */
+	public static void createErrorDecorationForEmptyText(final Text widget, int marginWidth, String description){
+		final ControlDecoration textDecoration = createErrorDecoration(widget, marginWidth, description);
+		widget.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if(widget.getText()==null || widget.getText().trim().isEmpty()){
+					textDecoration.show();
+				}
+				else {
+					textDecoration.hide();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Creates an error decoration on the top left of the specified {@link WTextExpression} widget
+	 * when the expression text is empty or null.
+	 * 
+	 * @param widget the expression widget to which attach the decorator
+	 * @param marginWidth margin between decoration and widget
+	 * @param description description message to show on hover
+	 */
+	public static void createErrorDecorationForBlankExpression(final WTextExpression widget, int marginWidth, String description){
+		final ControlDecoration textDecoration = createErrorDecoration(widget, marginWidth, description);
+		widget.addModifyListener(new ExpressionModifiedListener() {
+			@Override
+			public void expressionModified(ExpressionModifiedEvent event) {
+				if(widget.getText()==null || widget.getText().trim().isEmpty()){
+					textDecoration.show();
+				}
+				else {
+					textDecoration.hide();
+				}
+			}
+		});
+	}
+	
+	/*
+	 * Create a decoration attached to the specified control.
+	 */
+	private static ControlDecoration createErrorDecoration(final Control control, int marginWidth, String description) {
+		final ControlDecoration textDecoration = new ControlDecoration(
+				control, SWT.LEFT | SWT.TOP);
+		textDecoration.setDescriptionText(description);
+		textDecoration.setMarginWidth(marginWidth);
+		FieldDecoration fieldDecoration = FieldDecorationRegistry
+			    .getDefault().getFieldDecoration(
+			         FieldDecorationRegistry.DEC_ERROR);
+		textDecoration.setImage(fieldDecoration.getImage());
+		return textDecoration;
+	}
+	
 }
