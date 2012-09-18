@@ -50,11 +50,11 @@ public class JRSEditorContributor implements IEditorContributor {
 
 		prop = jd.getProperty("com.jaspersoft.ji.adhoc");
 		if (prop != null && prop.equals("1")) {
-			UIUtils.showWarning("You have selected to edit an Ad Hoc report.\n"
-					+ "If you continue, the report will lose its sorting and grouping.\n"
-					+ "Furthermore, any changes you make in Jaspersoft Studio will be lost\n"
-					+ "next Time you edit it via the Ad Hoc report editor.\n"
-					+ "Continue anyway?");
+//			UIUtils.showWarning("You have selected to edit an Ad Hoc report.\n"
+//					+ "If you continue, the report will lose its sorting and grouping.\n"
+//					+ "Furthermore, any changes you make in Jaspersoft Studio will be lost\n"
+//					+ "next Time you edit it via the Ad Hoc report editor.\n"
+//					+ "Continue anyway?");
 		}
 
 	}
