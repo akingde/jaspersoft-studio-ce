@@ -30,8 +30,8 @@ import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.components.table.TableComponentFactory;
+import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
-import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 
 /*
  * The Class CreateGroupAction.
@@ -76,8 +76,8 @@ public class DeleteColumnCellAction extends DeleteAction {
 		CompoundCommand compoundCmd = new CompoundCommand(getText());
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart object = (EditPart) objects.get(i);
-			if (object instanceof TableCellEditPart) {
-				MColumn model = ((TableCellEditPart) object).getModel();
+			if (object.getModel() instanceof MCell) {
+				MColumn model = (MColumn) object.getModel();
 				Command cmd = TableComponentFactory.getDeleteCellCommand(
 						model.getParent(), model);
 				if (cmd != null)
