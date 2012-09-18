@@ -72,7 +72,7 @@ public class ViewsFactory {
 		pmap.put("CSV", new CSVViewer(composite, jContext));
 		pmap.put("CSV Metadata", new CSVMetadataViewer(composite, jContext));
 
-		pmap.put("SEPARATOR1", null);
+		pmap.put("SEPARATOR3", null);
 
 		pmap.put("XML", new XMLViewer(composite, jContext));
 		pmap.put("XML With Images", new XMLImagesViewer(composite, jContext));
