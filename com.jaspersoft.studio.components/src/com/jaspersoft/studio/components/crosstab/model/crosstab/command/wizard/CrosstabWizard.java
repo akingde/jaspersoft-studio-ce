@@ -218,31 +218,37 @@ public class CrosstabWizard extends JSSWizard {
 		
 		// Add measures...
 		List<Object> measures = (List<Object>) getSettings().get( CROSSTAB_MEASURES );
-		for (Object obj : measures) {
-			try {
-				jdc.addMeasure((JRDesignCrosstabMeasure) obj);
-			} catch (JRException e) {
-				e.printStackTrace();
+		if(measures!=null){
+			for (Object obj : measures) {
+				try {
+					jdc.addMeasure((JRDesignCrosstabMeasure) obj);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
 		// Add measures...
 		List<Object> columnGroups = (List<Object>) getSettings().get( CROSSTAB_COLUMNS);
-		for (Object obj : columnGroups) {
-			try {
-				CreateColumnCommand.addColumnGroup(jdc, (JRDesignCrosstabColumnGroup) obj, -1);
-			} catch (JRException e) {
-				e.printStackTrace();
+		if(columnGroups!=null){
+			for (Object obj : columnGroups) {
+				try {
+					CreateColumnCommand.addColumnGroup(jdc, (JRDesignCrosstabColumnGroup) obj, -1);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
 		// Add measures...
 		List<Object> rowGroups = (List<Object>) getSettings().get( CROSSTAB_ROWS );
-		for (Object obj : rowGroups) {
-			try {
-				CreateRowCommand.addRowGroup(jdc, (JRDesignCrosstabRowGroup) obj, -1);
-			} catch (JRException e) {
-				e.printStackTrace();
+		if(rowGroups!=null){
+			for (Object obj : rowGroups) {
+				try {
+					CreateRowCommand.addRowGroup(jdc, (JRDesignCrosstabRowGroup) obj, -1);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
