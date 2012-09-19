@@ -50,6 +50,7 @@ import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * Class that paint the widget where are shown the attributes of element, those inherited by the it's styles, and the 
@@ -621,18 +622,15 @@ public class StylesListSection extends AbstractSection {
 	
 	private void printWindowTitle(Composite parent){
 		StyledText  label = new StyledText(parent, SWT.WRAP);
-		label.setAlignment(SWT.CENTER);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = SWT.FILL;
-		gridData.verticalAlignment = SWT.FILL;
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
+		gridData.verticalAlignment = SWT.CENTER;
 		gridData.horizontalSpan = 2;
-		gridData.widthHint = SWT.FILL;
-		gridData.heightHint = 40;
+		gridData.horizontalIndent = 5;
+		gridData.heightHint = 20;
 		label.setLayoutData(gridData);
-		String eol = System.getProperty("line.separator"); 
-		label.setText("In this window are shown the attribute of the element that".concat(eol).concat("can be inherithed from a style or from a default value")); //$NON-NLS-1$
+		label.setFont(ResourceManager.getBoldFont(label.getFont()));
+		label.setText(Messages.StylesListSection_Title);
 		label.setEnabled(false);
 	}
 

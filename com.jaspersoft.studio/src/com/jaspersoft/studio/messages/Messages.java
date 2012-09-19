@@ -1195,6 +1195,7 @@ public class Messages extends NLS {
 	public static String SPButon_Size_Increment;
 	public static String StylesListSection_Inherited_From_Default_Style;
 	public static String StylesListSection_removeAttribure_tooltip;
+	public static String StylesListSection_Title;
 	public static String StylesSectionList_Element_Attributes;
 	public static String StylesSectionList_Inherited_From_Style;
 	public static String StyleTemplateNewWizard_0;
