@@ -26,28 +26,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
-import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
 /*
  * The location section on the location tab.
  * 
  * @author Chicu Veaceslav
  */
-public class AlignSection extends AbstractSection {
-	
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-			element.getPropertyDescriptors();
-			for (Object key : widgets.keySet()) {
-				widgets.get(key).setData(element, element.getPropertyActualValue(key));
-			}
-		}
-		isRefreshing = false;
-	}
+public class AlignSection extends AbstractRealValueSection {
 	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,

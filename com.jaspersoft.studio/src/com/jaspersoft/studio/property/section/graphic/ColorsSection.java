@@ -21,33 +21,20 @@ package com.jaspersoft.studio.property.section.graphic;
 
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
-import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
 /*
  * The location section on the location tab.
  * 
  * @author Chicu Veaceslav
  */
-public class ColorsSection extends AbstractSection {
-
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-			element.getPropertyDescriptors();
-			for (Object key : widgets.keySet()) {
-				widgets.get(key).setData(element, element.getPropertyActualValue(key));
-			}
-		}
-		isRefreshing = false;
-	}
-
-	
+public class ColorsSection extends AbstractRealValueSection {
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -55,13 +42,20 @@ public class ColorsSection extends AbstractSection {
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent.setLayout(new GridLayout(6, false));
+		parent.setLayout(new GridLayout(4, false));
 
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_FORECOLOR);
 
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_BACKCOLOR);
-
-		createWidget4Property(parent, JRBaseStyle.PROPERTY_MODE);
+		
+		Composite transparencyComp = new Composite(parent, SWT.NONE);
+		GridLayout transparencyLayout = new GridLayout(2,false);
+		transparencyLayout.marginWidth = 0;
+		transparencyComp.setLayout(transparencyLayout);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 4;
+		transparencyComp.setLayoutData(gd);
+		createWidget4Property(transparencyComp, JRBaseStyle.PROPERTY_MODE,false);
 	}
 
 }

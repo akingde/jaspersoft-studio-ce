@@ -44,6 +44,7 @@ import com.jaspersoft.studio.model.DefaultValuesMap;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyles;
 import com.jaspersoft.studio.model.text.MParagraph;
@@ -544,6 +545,9 @@ public class StylesListSection extends AbstractSection {
 	private void initStyleMaps(){
 		styleMaps = new HashMap<String, MStyle>();
 		ovverridenAttributes = new HashSet<String>();
+		if (stylesClass == null){
+			initializeStyleMap(element);
+		}
 		List<INode> list = stylesClass.getChildren();
 		Iterator<INode> it = list.iterator();
 		while(it.hasNext()){
@@ -670,6 +674,11 @@ public class StylesListSection extends AbstractSection {
 			INode childElement = it.next();
 			if (childElement instanceof MStyles)
 				stylesClass = (MStyles) childElement;
+			if (childElement instanceof MPage){
+				//Inside a page
+				children = childElement.getChildren();
+				it = children.iterator();
+			}
 		}
 		leftStringColor = new Color(null,42,96,213);
 	}
@@ -681,9 +690,6 @@ public class StylesListSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		element = getElement();
-		if (stylesClass == null){
-			initializeStyleMap(element);
-		}
 		initStyleMaps();
 		GridLayout layout = new GridLayout(2,false);
 		layout.marginWidth=0;

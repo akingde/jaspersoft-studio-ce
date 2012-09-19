@@ -28,27 +28,14 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLinePen;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
-import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
 /*
  * The location section on the location tab.
  * 
  * @author Chicu Veaceslav
  */
-public class LinePenSection extends AbstractSection {
-
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-			element.getPropertyDescriptors();
-			for (Object key : widgets.keySet()) {
-				widgets.get(key).setData(element, element.getPropertyActualValue(key));
-			}
-		}
-		isRefreshing = false;
-	}
-
+public class LinePenSection extends AbstractRealValueSection {
 	
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {

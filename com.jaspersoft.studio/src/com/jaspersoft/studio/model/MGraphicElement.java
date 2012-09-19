@@ -411,7 +411,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(
 				JRBaseStyle.PROPERTY_MODE, Messages.common_opaque);
 		opaqueDBool.setDescription(Messages.MGraphicElement_opaque_description);
-		opaqueDBool.setCategory(Messages.common_graphic);
 		desc.add(opaqueDBool);
 
 		positionTypeD = new JSSEnumPropertyDescriptor(JRDesignElement.PROPERTY_POSITION_TYPE,
