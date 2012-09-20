@@ -51,6 +51,10 @@ public abstract class ADataAdapterStorage {
 	}
 
 	public void addDataAdapter(String url, DataAdapterDescriptor adapter) {
+		if (daDescriptors.containsKey(url)) {
+			daDescriptors.remove(url);
+			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, daDescriptors.get(url), null);
+		}
 		daDescriptors.put(url, adapter);
 		propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, null, adapter);
 	}
