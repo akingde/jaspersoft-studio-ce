@@ -80,10 +80,9 @@ public class Guide {
 
 	private void switchCells(List<ColumnCell> cols) {
 		for (ColumnCell cc : cols) {
-			Guide n = cc.getNorth();
-			Guide s = cc.getSouth();
-			cc.setSouth(n);
-			cc.setNorth(s);
+			Guide t = cc.getSouth();
+			cc.setSouth(cc.getNorth());
+			cc.setNorth(t);
 		}
 	}
 

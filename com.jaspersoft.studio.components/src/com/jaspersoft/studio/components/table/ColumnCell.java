@@ -82,13 +82,16 @@ public class ColumnCell {
 	}
 
 	public Rectangle getBounds() {
+		int h = 20;
 		int w = east.getY() - west.getY();
-		if (south.getY() < north.getY()) {
-			Guide tmp = north;
-			north = south;
-			south = tmp;
+		if (south != null && north != null) {
+			if (south.getY() < north.getY()) {
+				Guide tmp = north;
+				north = south;
+				south = tmp;
+			}
+			h = south.getY() - north.getY();
 		}
-		int h = south.getY() - north.getY();
 		if (north == null || south == null)
 			return new Rectangle(0, 0, w, 10);
 		return new Rectangle(west.getY(), north.getY(), w, h);
