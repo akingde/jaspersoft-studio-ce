@@ -51,14 +51,14 @@ public class PostSetSizeCell implements IPostSetValue {
 		if (target instanceof MColumn
 				&& (prop.equals(StandardBaseColumn.PROPERTY_WIDTH) || prop
 						.equals(DesignCell.PROPERTY_HEIGHT))) {
-			MCell mband = (MCell) target;
+			MColumn mband = (MColumn) target;
 			JasperDesign jDesign = mband.getJasperDesign();
 			return getResizeCommand(mband, jDesign, prop);
 		}
 		return null;
 	}
 
-	public Command getResizeCommand(MCell mcell, JasperDesign jDesign,
+	public Command getResizeCommand(MColumn mcell, JasperDesign jDesign,
 			Object prop) {
 		MTable mTable = mcell.getMTable();
 

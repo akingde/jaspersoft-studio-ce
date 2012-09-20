@@ -27,7 +27,6 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import net.sf.jasperreports.components.table.BaseColumn;
-import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
@@ -172,11 +171,9 @@ public class TableMatrix {
 
 	public void mirrorBottom(int offset) {
 		int size = hGuides.size();
-		int y = hGuides.get(offset).getY();
-		int maxy = hGuides.get(size - 1).getY();
+		int maxy = 0;
 		for (int i = offset + 1; i < size; i++) {
-			Guide g = hGuides.get(i);
-			g.setY(y + maxy - g.getY());
+			maxy = Math.max(maxy, hGuides.get(i).getY());
 		}
 
 		Guide g = hGuides.get(offset);
@@ -200,6 +197,17 @@ public class TableMatrix {
 			Guide tmp = hGuides.get(tind);
 			hGuides.set(tind, hGuides.get(bind));
 			hGuides.set(bind, tmp);
+		}
+		Guide fg = hGuides.get(offset + 1);
+		for (ColumnCell cc : fg.getPrev()) {
+			cc.setSouth(g);
+		}
+
+		int y = hGuides.get(offset).getY();
+
+		for (int i = offset + 1; i < size; i++) {
+			g = hGuides.get(i);
+			g.setY(y + maxy - g.getY());
 		}
 	}
 
@@ -299,8 +307,7 @@ public class TableMatrix {
 
 	public ColumnCell createCell(BaseColumn bc, int type, String grName) {
 		ColumnCell cc = new ColumnCell(type, grName, bc);
-		Cell c = TableUtil.getCell(bc, type, grName);
-		cc.setCell((DesignCell) c);
+		cc.setCell((DesignCell) TableUtil.getCell(bc, type, grName));
 		map.put(cc, null);
 		return cc;
 	}
@@ -311,10 +318,10 @@ public class TableMatrix {
 			Guide g = hGuides.get(i);
 			System.out.println("row:" + i + "\n" + g.toString());
 		}
-		System.out.println("-- VERTICAL --------------------");
-		for (int i = 0; i < vGuides.size(); i++) {
-			Guide g = vGuides.get(i);
-			System.out.println("col:" + i + "\n" + g.toString());
-		}
+		// System.out.println("-- VERTICAL --------------------");
+		// for (int i = 0; i < vGuides.size(); i++) {
+		// Guide g = vGuides.get(i);
+		// System.out.println("col:" + i + "\n" + g.toString());
+		// }
 	}
 }
