@@ -1,11 +1,11 @@
 package com.jaspersoft.studio.editor.palette;
 
-import org.eclipse.gef.SharedImages;
 import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.SameBandEditPartsTracker;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.compatibility.SharedImages;
 
 /**
  * Refactoring of the original MarqueeToolEntry to use the drag manager SameBandEditPartsTracker instead of 
@@ -128,4 +128,5 @@ public class JDMarqueeToolEntry extends ToolEntry {
 			return SharedImages.DESC_MARQUEE_TOOL_16;
 		}
 	}
+
 }
