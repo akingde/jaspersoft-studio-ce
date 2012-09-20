@@ -52,8 +52,7 @@ public class SPQuery extends SPText {
 			public void widgetSelected(SelectionEvent e) {
 				PatternEditor wizard = new PatternEditor();
 				wizard.setValue(ftext.getText());
-				DatasetDialog dlg = new DatasetDialog(ftext.getShell(), mdataset, mdataset.getMreport(), mquery
-						.getJasperConfiguration());
+				DatasetDialog dlg = new DatasetDialog(ftext.getShell(), mdataset, mquery.getJasperConfiguration());
 				if (dlg.open() == Window.OK)
 					section.getEditDomain().getCommandStack().execute(dlg.getCommand());
 			}

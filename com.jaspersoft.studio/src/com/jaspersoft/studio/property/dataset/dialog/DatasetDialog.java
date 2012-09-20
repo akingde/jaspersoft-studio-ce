@@ -62,7 +62,6 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MQuery;
-import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.command.CreateFieldCommand;
 import com.jaspersoft.studio.model.field.command.DeleteFieldCommand;
@@ -79,13 +78,12 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPreviewInfoProvider {
 	private MDataset mdataset;
-	private MReport mreport;
+	// private MReport mreport;
 	private JasperReportsConfiguration jConfig;
 
-	public DatasetDialog(Shell shell, MDataset mdataset, MReport mreport, JasperReportsConfiguration jConfig) {
+	public DatasetDialog(Shell shell, MDataset mdataset, JasperReportsConfiguration jConfig) {
 		super(shell);
 		this.mdataset = mdataset;
-		this.mreport = mreport;
 		this.jConfig = jConfig;
 		newdataset = (JRDesignDataset) ((JRDesignDataset) mdataset.getValue()).clone();
 	}
@@ -118,7 +116,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			public void setFields(List<JRDesignField> fields) {
 				DatasetDialog.this.setFields(fields);
 			}
-			
+
 			@Override
 			public List<JRDesignField> getCurrentFields() {
 				return DatasetDialog.this.getCurrentFields();
@@ -133,7 +131,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			public int getContainerType() {
 				return CONTAINER_WITH_INFO_TABLES;
 			}
-			
+
 		};
 
 		dataquery.createToolbar(body);
@@ -155,19 +153,19 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		//
 		// ctf.setTopRight(c);
 
-		dataquery.setDefaultDataAdapter(mreport);
+		dataquery.setDefaultDataAdapter(mdataset.getMreport());
 
 		createBottom(sf, toolkit);
 		sf.setWeights(new int[] { 450, 250 });
 
-		setDataset(mreport.getJasperDesign(), newdataset);
+		setDataset(mdataset.getJasperDesign(), newdataset);
 	}
 
 	public void setFields(List<JRDesignField> fields) {
 		ftable.setFields(fields);
 	}
-	
-	public List<JRDesignField> getCurrentFields(){
+
+	public List<JRDesignField> getCurrentFields() {
 		return ftable.getFields();
 	}
 
@@ -189,9 +187,9 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	private void createDataPreview(FormToolkit toolkit, CTabFolder tabFolder) {
 		CTabItem dataPreviewtab = new CTabItem(tabFolder, SWT.NONE);
 		dataPreviewtab.setText(Messages.DatasetDialog_DataPreviewTab);
-		
-		dataPreviewTable = new DataPreviewTable(tabFolder,this, background);
-		
+
+		dataPreviewTable = new DataPreviewTable(tabFolder, this, background);
+
 		dataPreviewtab.setControl(dataPreviewTable.getControl());
 	}
 
@@ -241,7 +239,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 				wizard.setValue(ExprUtil.setValues(new JRDesignExpression(), filterExpression.getText(), null));
 				JRDesignDataset designDataset = mdataset.getValue();
 				if (designDataset != null) {
-					wizard.setExpressionContext(new ExpressionContext(designDataset, mreport.getJasperConfiguration()));
+					wizard.setExpressionContext(new ExpressionContext(designDataset, mdataset.getJasperConfiguration()));
 				} else {
 					wizard.setExpressionContext(ExpressionEditorSupportUtil.getReportExpressionContext());
 				}
@@ -290,8 +288,8 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	}
 
 	public void createCommand() {
-		JRDesignDataset ds = (JRDesignDataset) (mdataset.getParent() == null ? mreport.getJasperDesign()
-				.getMainDesignDataset() : mdataset.getValue());
+		JRDesignDataset ds = (JRDesignDataset) (mdataset.getParent() == null ? mdataset.getJasperConfiguration()
+				.getJasperDesign().getMainDesignDataset() : mdataset.getValue());
 		command = new CompoundCommand();
 
 		String lang = newdataset.getQuery().getLanguage();
@@ -346,6 +344,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.IDataPreviewInfoProvider#getJasperReportsConfig()
 	 */
 	public JasperReportsConfiguration getJasperReportsConfig() {
@@ -354,6 +353,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.IDataPreviewInfoProvider#getDataAdapterDescriptor()
 	 */
 	public DataAdapterDescriptor getDataAdapterDescriptor() {
@@ -362,6 +362,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.IDataPreviewInfoProvider#getDesignDataset()
 	 */
 	public JRDesignDataset getDesignDataset() {
@@ -370,6 +371,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.IDataPreviewInfoProvider#getFieldsForPreview()
 	 */
 	public List<JRDesignField> getFieldsForPreview() {

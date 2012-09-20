@@ -60,8 +60,8 @@ public class DatasetAction extends SelectionAction {
 		super.init();
 		setText("Dataset && Query ...");
 		setToolTipText("DataSet and Query editor dialog");
-		setImageDescriptor(
-				ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/dataset-16.png"));
+		setImageDescriptor(ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID,
+				"icons/resources/dataset-16.png"));
 		setId(ID);
 		setEnabled(false);
 	}
@@ -74,7 +74,7 @@ public class DatasetAction extends SelectionAction {
 			final ReportEditor part = (ReportEditor) getWorkbenchPart();
 			MReport mreport = (MReport) part.getModel().getChildren().get(0);
 			MDataset mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
-//			IFile file = ((IFileEditorInput) part.getEditorInput()).getFile();
+			// IFile file = ((IFileEditorInput) part.getEditorInput()).getFile();
 
 			IContentOutlinePage cop = (IContentOutlinePage) part.getAdapter(IContentOutlinePage.class);
 			if (cop != null) {
@@ -88,8 +88,8 @@ public class DatasetAction extends SelectionAction {
 
 			part.getAdapter(String.class);
 
-			final DatasetDialog dlg = new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mreport,
-					mreport.getJasperConfiguration());
+			final DatasetDialog dlg = new DatasetDialog(Display.getDefault().getActiveShell(), mdataset,
+					mdataset.getJasperConfiguration());
 			if (dlg.open() == Window.OK) {
 				Display.getCurrent().asyncExec(new Runnable() {
 
