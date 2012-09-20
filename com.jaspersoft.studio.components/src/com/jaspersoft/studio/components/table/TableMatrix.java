@@ -175,7 +175,11 @@ public class TableMatrix {
 		for (int i = offset + 1; i < size; i++) {
 			maxy = Math.max(maxy, hGuides.get(i).getY());
 		}
-
+		int y = hGuides.get(offset).getY();
+		for (int i = offset + 1; i < size; i++) {
+			Guide g = hGuides.get(i);
+			g.setY(y + maxy - g.getY());
+		}
 		Guide g = hGuides.get(offset);
 		Guide lg = hGuides.get(size - 1);
 
@@ -203,12 +207,6 @@ public class TableMatrix {
 			cc.setSouth(g);
 		}
 
-		int y = hGuides.get(offset).getY();
-
-		for (int i = offset + 1; i < size; i++) {
-			g = hGuides.get(i);
-			g.setY(y + maxy - g.getY());
-		}
 	}
 
 	private Guide fillRowDetail(Guide north, Guide south, List<BaseColumn> cols) {
