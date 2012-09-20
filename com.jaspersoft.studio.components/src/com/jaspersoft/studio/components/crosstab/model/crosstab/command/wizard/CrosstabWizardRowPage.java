@@ -107,6 +107,7 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 		setImageDescriptor(Activator
 				.getImageDescriptor("icons/wizard_rows.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardRowPage_description);
+		setPageComplete(false);
 	}
 
 	/**
@@ -236,6 +237,7 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 				return;
 
 			settings.put(CrosstabWizard.CROSSTAB_ROWS, getSelectedFields());
+			setPageComplete(!(getSelectedFields()==null || getSelectedFields().isEmpty()));
 		}
 
 	}

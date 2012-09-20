@@ -96,6 +96,7 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 		setImageDescriptor(Activator
 				.getImageDescriptor("icons/wizard_details.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardMeasurePage_description);
+		setPageComplete(false);
 	}
 
 	@Override
@@ -227,6 +228,7 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 				if (settings == null) return;
 				
 				settings.put(CrosstabWizard.CROSSTAB_MEASURES,  getSelectedFields() ); 
+				setPageComplete(!(getSelectedFields()==null || getSelectedFields().isEmpty()));
 			}
 		
 	}

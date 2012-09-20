@@ -206,15 +206,20 @@ public class CrosstabWizard extends JSSWizard {
 		JRDesignCrosstab jdc = (JRDesignCrosstab) crosstab.getValue();
 		JRDesignDataset dataset = getDataset();
 		
-		JRDesignDatasetRun datasetRun = (JRDesignDatasetRun) jdc.getDataset().getDatasetRun();
-		if (datasetRun == null)
-		{
-			datasetRun = new JRDesignDatasetRun();
-			((JRDesignCrosstabDataset)jdc.getDataset()).setDatasetRun(datasetRun);
+		if(dataset.isMainDataset()){
+			// main dataset selected => dataset run is null
+			((JRDesignCrosstabDataset)jdc.getDataset()).setDatasetRun(null);
 		}
-		
-		datasetRun.setDatasetName( dataset.isMainDataset() ? null : dataset.getName() );
-		datasetRun.setConnectionExpression( ExprUtil.createExpression("$P{REPORT_CONNECTION}","java.sql.Connection") );
+		else{
+			JRDesignDatasetRun datasetRun = (JRDesignDatasetRun) jdc.getDataset().getDatasetRun();
+			if (datasetRun == null)
+			{
+				datasetRun = new JRDesignDatasetRun();
+				((JRDesignCrosstabDataset)jdc.getDataset()).setDatasetRun(datasetRun);
+			}
+			datasetRun.setDatasetName(dataset.getName());
+			datasetRun.setConnectionExpression( ExprUtil.createExpression("$P{REPORT_CONNECTION}","java.sql.Connection") );
+		}
 		
 		// Add measures...
 		List<Object> measures = (List<Object>) getSettings().get( CROSSTAB_MEASURES );

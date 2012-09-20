@@ -114,6 +114,7 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 		setImageDescriptor(Activator
 				.getImageDescriptor("icons/wizard_columns.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardColumnPage_description);
+		setPageComplete(false);
 	}
 
 	@Override
@@ -297,6 +298,7 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 				return;
 
 			settings.put(CrosstabWizard.CROSSTAB_COLUMNS, getSelectedFields());
+			setPageComplete(!(getSelectedFields()==null || getSelectedFields().isEmpty()));
 		}
 
 	}
