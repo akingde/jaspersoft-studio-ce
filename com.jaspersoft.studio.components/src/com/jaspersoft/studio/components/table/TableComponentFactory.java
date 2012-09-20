@@ -22,6 +22,7 @@ package com.jaspersoft.studio.components.table;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -79,6 +80,7 @@ import com.jaspersoft.studio.components.table.model.cell.command.ReorderElementC
 import com.jaspersoft.studio.components.table.model.cell.command.ReorderElementGroupCommand;
 import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.column.MColumnComparator;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeforeAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction;
@@ -288,6 +290,7 @@ public class TableComponentFactory implements IComponentFactory {
 			MTableHeader mth, MTableColumnHeader mch, MTableDetail mtd,
 			MTableColumnFooter mcf, MTableFooter mtf,
 			List<MTableGroupHeader> grHeaders, List<MTableGroupFooter> grFooter) {
+		int j = 1;
 		for (int i = 0; i < columns.size(); i++) {
 			BaseColumn bc = columns.get(i);
 			createCellTableHeader(mth, bc, i + 1, i);
@@ -298,7 +301,7 @@ public class TableComponentFactory implements IComponentFactory {
 				createCellGroupHeader(mtgh, bc, i + 1, mtgh.getJrDesignGroup()
 						.getName(), i);
 
-			createCellDetail(mtd, bc, i + 1, i);
+			j = createCellDetail(mtd, bc, j, i);
 
 			for (MTableGroupFooter mtgh : grFooter)
 				createCellGroupFooter(mtgh, bc, i + 1, mtgh.getJrDesignGroup()
@@ -308,6 +311,7 @@ public class TableComponentFactory implements IComponentFactory {
 
 			createCellTableFooter(mtf, bc, i + 1, i);
 		}
+		Collections.sort(mtd.getChildren(), MColumnComparator.inst());
 	}
 
 	public static int createCellGroupHeader(ANode mth, BaseColumn bc, int i,
