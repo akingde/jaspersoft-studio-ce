@@ -222,10 +222,14 @@ public class Messages extends NLS {
 	public static String BordersSection_border_and_padding;
 	public static String BordersSection_bottom_border_tool_tip;
 	public static String BordersSection_box;
+	public static String BordersSection_Default_Label;
 	public static String BordersSection_left_border_tool_tip;
+	public static String BordersSection_Left_Right_Borders;
+	public static String BordersSection_No_Borders;
 	public static String BordersSection_padding_tool_tip;
 	public static String BordersSection_right_border_tool_tip;
 	public static String BordersSection_top_border_tool_tip;
+	public static String BordersSection_Top_Bottom_Borders;
 	public static String BordersSection_width_tool_tip;
 	public static String BringBackwardAction_send_backward;
 	public static String BringBackwardAction_send_backward_tool_tip;

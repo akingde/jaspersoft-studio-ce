@@ -46,9 +46,11 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.forms.widgets.ColumnLayout;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
@@ -60,6 +62,7 @@ import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.graphic.LineBoxDrawer.Location;
 import com.jaspersoft.studio.property.section.widgets.SPLineStyleEnum;
 import com.jaspersoft.studio.utils.UIUtils;
 
@@ -72,10 +75,13 @@ public class BordersSection extends AbstractSection {
 
 	private ToolItem allBorder;
 	private ToolItem noneBorder;
+	private ToolItem upDownBorder;
+	private ToolItem leftRightBorder;
 	private StackLayout stackLayout;
 	private Control ac;
 	private Group rightPanel;
 	private LineBoxDrawer bd;
+	private RGB lastColorSelected;
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
@@ -106,16 +112,26 @@ public class BordersSection extends AbstractSection {
 		rightPanel.setLayout(stackLayout);
 
 		ac = createStyle(rightPanel, JRBaseLineBox.PROPERTY_PADDING);
-
-		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.WRAP);
+		
+		Composite toolBarLayout = new Composite(composite, SWT.NONE);
+		toolBarLayout.setLayout(new ColumnLayout());
+		GridData toolBardGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, false);
+		toolBardGridData.horizontalSpan = 3;
+		toolBardGridData.widthHint = 200;
+		toolBardGridData.horizontalIndent = 5;
+		toolBarLayout.setLayoutData(toolBardGridData);
+		Label textLabel = new Label(toolBarLayout,SWT.NONE);
+		textLabel.setText(Messages.BordersSection_Default_Label);
+		ToolBar toolBar = new ToolBar(toolBarLayout, SWT.FLAT | SWT.WRAP);
 		toolBar.setBackground(composite.getBackground());
-		toolBar.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
-
+		//toolBar.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 		createButtons(toolBar);
 
 		stackLayout.topControl = ac;
 		allBorder.setSelection(false);
 		noneBorder.setSelection(false);
+		leftRightBorder.setSelection(false);
+		upDownBorder.setSelection(false);
 	}
 
 	private void createBorderPreview(Composite composite) {
@@ -174,12 +190,15 @@ public class BordersSection extends AbstractSection {
 		toolBar.setBackground(composite.getBackground());
 
 		lineColor = new ToolItem(toolBar, SWT.RADIO);
+		lastColorSelected = new RGB(0, 0, 0);
+		lineColor.setImage(colorLabelProvider.getImage(lastColorSelected));
 		lineColor.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(composite.getShell());
 				cd.setText(Messages.common_line_color);
 				cd.setRGB((RGB) getElement().getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR));
 				RGB newColor = cd.open();
+				lastColorSelected = newColor;
 				changeProperty(property, JRBasePen.PROPERTY_LINE_COLOR, newColor);
 			}
 		});
@@ -191,7 +210,7 @@ public class BordersSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, Messages.common_pen_width + ":", SWT.RIGHT); //$NON-NLS-1$
 
 		lineWidth = new Spinner(composite, SWT.BORDER | SWT.FLAT);
-		lineWidth.setValues(0, 0, 5000, 1, 1, 1);
+		lineWidth.setValues(10, 0, 5000, 1, 1, 1);
 		lineWidth.setToolTipText(Messages.BordersSection_width_tool_tip);
 		lineWidth.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -211,35 +230,127 @@ public class BordersSection extends AbstractSection {
 				((BordersSection) section).changeProperty(prop, property, value);
 			}
 		};
+		lineStyle.setData(1);
 	}
 
 	private void createButtons(ToolBar toolBar) {
-		allBorder = new ToolItem(toolBar, SWT.RADIO);
-		allBorder.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				if (allBorder.getSelection()) {
-					noneBorder.setSelection(false);
-				}
-			}
-		});
-		allBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_frame.gif")); //$NON-NLS-1$
-		allBorder.setToolTipText(Messages.BordersSection_all_borders_tool_tip);
-
-		noneBorder = new ToolItem(toolBar, SWT.RADIO);
+		
+		noneBorder = new ToolItem(toolBar, SWT.PUSH);
 		noneBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				if (noneBorder.getSelection()) {
-					allBorder.setSelection(false);
-				}
+				RGB beforeSelectionColor = lastColorSelected;
+				int selection = lineWidth.getSelection();
+				Object beforeSelectionStyle = lineStyle.getSelectedValue();
+				bd.setBorderSelected(Location.LEFT);
+				bd.setBorderSelected(Location.RIGHT);
+				bd.setBorderSelected(Location.TOP);
+				bd.setBorderSelected(Location.BOTTOM);
+				RGB color = new RGB(0,0,0);
+				Float newValue = new Float(0);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_STYLE, 1);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_COLOR, color);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_WIDTH, newValue);
+				bd.unselectAll();
+				//The selection action change the displayed values, so i need to restore them after the unselect
+				lineStyle.setData((Integer)beforeSelectionStyle);
+				lineWidth.setSelection(selection);
+				lineColor.setData(beforeSelectionColor);
 			}
 		});
-		noneBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_frame.gif")); //$NON-NLS-1$
-		noneBorder.setToolTipText(Messages.BordersSection_all_borders_tool_tip);
+		noneBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/border.png")); //$NON-NLS-1$
+		noneBorder.setToolTipText(Messages.BordersSection_No_Borders);
+		
+		allBorder = new ToolItem(toolBar, SWT.PUSH);
+		allBorder.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				bd.setBorderSelected(Location.LEFT);
+				bd.setBorderSelected(Location.RIGHT);
+				bd.setBorderSelected(Location.TOP);
+				bd.setBorderSelected(Location.BOTTOM);
+				int selection = lineWidth.getSelection();
+				int digits = lineWidth.getDigits();
+				Float newValue = new Float(selection / Math.pow(10, digits));
+				RGB color = lastColorSelected;
+				Object style = lineStyle.getSelectedValue();
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_STYLE, style);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_COLOR, color);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_WIDTH, newValue);
+				bd.unselectAll();
+			}
+		});
+		allBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/border-outside.png")); //$NON-NLS-1$
+		allBorder.setToolTipText(Messages.BordersSection_all_borders_tool_tip);
+		
+		leftRightBorder = new ToolItem(toolBar, SWT.PUSH);
+		leftRightBorder.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				RGB beforeSelectionColor = lastColorSelected;
+				int selection = lineWidth.getSelection();
+				int digits = lineWidth.getDigits();
+				Float beforeSelectionWidth = new Float(selection / Math.pow(10, digits));
+				Object beforeSelectionStyle = lineStyle.getSelectedValue();
+				bd.setBorderSelected(Location.LEFT,false);
+				bd.setBorderSelected(Location.RIGHT,false);
+				bd.setBorderSelected(Location.TOP);
+				bd.setBorderSelected(Location.BOTTOM);
+				RGB color = new RGB(0,0,0);
+				Float newValue = new Float(0);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_STYLE, 1);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_COLOR, color);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_WIDTH, newValue);
+				bd.setBorderSelected(Location.LEFT);
+				bd.setBorderSelected(Location.RIGHT);
+				bd.setBorderSelected(Location.TOP,false);
+				bd.setBorderSelected(Location.BOTTOM,false);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_STYLE, beforeSelectionStyle);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_COLOR, beforeSelectionColor);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_WIDTH, beforeSelectionWidth);
+				bd.unselectAll();
+				lineColor.setData(beforeSelectionColor);
+				lineWidth.setSelection(selection);
+				lineStyle.setData((Integer)beforeSelectionStyle);
+			}
+		});
+		leftRightBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/border-right-left.png")); //$NON-NLS-1$
+		leftRightBorder.setToolTipText(Messages.BordersSection_Left_Right_Borders);
+		
+		upDownBorder = new ToolItem(toolBar, SWT.PUSH);
+		upDownBorder.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				RGB beforeSelectionColor = lastColorSelected;
+				int selection = lineWidth.getSelection();
+				int digits = lineWidth.getDigits();
+				Float beforeSelectionWidth = new Float(selection / Math.pow(10, digits));
+				Object beforeSelectionStyle = lineStyle.getSelectedValue();
+				bd.setBorderSelected(Location.LEFT);
+				bd.setBorderSelected(Location.RIGHT);
+				bd.setBorderSelected(Location.TOP,false);
+				bd.setBorderSelected(Location.BOTTOM,false);
+				RGB color = new RGB(0,0,0);
+				Float newValue = new Float(0);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_STYLE, 1);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_COLOR, color);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_WIDTH, newValue);
+				bd.setBorderSelected(Location.LEFT,false);
+				bd.setBorderSelected(Location.RIGHT,false);
+				bd.setBorderSelected(Location.TOP);
+				bd.setBorderSelected(Location.BOTTOM);;
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_STYLE, beforeSelectionStyle);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_COLOR, beforeSelectionColor);
+				changeProperty(JRBaseLineBox.PROPERTY_PADDING,JRBasePen.PROPERTY_LINE_WIDTH, beforeSelectionWidth);
+				bd.unselectAll();
+				lineColor.setData(beforeSelectionColor);
+				lineWidth.setSelection(selection);
+				lineStyle.setData((Integer)beforeSelectionStyle);
+			}
+		});
+		upDownBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/border-top-bottom.png")); //$NON-NLS-1$
+		upDownBorder.setToolTipText(Messages.BordersSection_Top_Bottom_Borders);
 	}
 
 	public void changeProperty(String prop, String property, Object newValue) {
 		if (!isRefreshing) {
-			CompoundCommand cc = new CompoundCommand("Change padding");
+			CompoundCommand cc = new CompoundCommand("Change padding"); //$NON-NLS-1$
 			for (APropertyNode m : getElements()) {
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 				Command c = null;
@@ -337,6 +448,7 @@ public class BordersSection extends AbstractSection {
 			RGB backcolor = (RGB) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_COLOR);
 			if (lineColor != null && !lineColor.isDisposed())
 				lineColor.setImage(colorLabelProvider.getImage(backcolor));
+				lastColorSelected = backcolor;
 		}
 	}
 

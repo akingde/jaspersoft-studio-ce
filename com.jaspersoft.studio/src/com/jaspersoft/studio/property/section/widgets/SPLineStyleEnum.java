@@ -43,6 +43,10 @@ public class SPLineStyleEnum {
 	public SPLineStyleEnum(Composite parent, AbstractSection section, String property) {
 		createComponent(parent, section, property);
 	}
+	
+	public Object getSelectedValue(){
+		return combo.getSelectionValue();
+	}
 
 	public void createComponent(Composite parent, final AbstractSection section, final String property) {
 		Composite composite = new Composite(parent, SWT.NONE);
