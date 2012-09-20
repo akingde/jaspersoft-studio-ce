@@ -12,10 +12,22 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.ILineBox;
 
+/**
+ * Widget that contains the method to represent the border of an element and permit 
+ * to view or edit their properties
+ * @author Marco Orlandin
+ *
+ */
 class LineBoxRectangle extends RectangleFigure {
 	
+	/**
+	 * The drawer of the border
+	 */
 	private LineBoxDrawer bd;
 	
+	/**
+	 * The section of the element
+	 */
 	private BordersSection section;
 	
 	public LineBoxRectangle(LineBoxDrawer drawer, BordersSection section){
@@ -23,8 +35,9 @@ class LineBoxRectangle extends RectangleFigure {
 		this.section = section;
 	}
 	
-	
-
+	/**
+	 * Request the painting of the border
+	 */
 	@Override
 	public void paint(Graphics graphics) {
 		try {

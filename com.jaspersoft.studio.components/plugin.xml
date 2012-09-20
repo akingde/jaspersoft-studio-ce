@@ -424,7 +424,7 @@
          <propertySection
                class="com.jaspersoft.studio.components.map.property.MapSection"
                id="com.jaspersoft.studio.components.map.property.MapSection"
-               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Map">
             <input
                   type="com.jaspersoft.studio.components.map.model.MMap">
             </input>

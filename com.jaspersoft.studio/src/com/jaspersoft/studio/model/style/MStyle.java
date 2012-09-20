@@ -89,7 +89,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MStyle extends APropertyNode implements ICopyable, IPastable, IContainerEditPart, IDragable {
+public class MStyle extends APropertyNode implements ICopyable, IPastable, IContainerEditPart, IDragable, MNotConditionalMarker {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

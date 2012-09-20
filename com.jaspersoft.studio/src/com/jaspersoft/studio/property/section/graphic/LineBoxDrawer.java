@@ -24,22 +24,60 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Canvas;
 
+/**
+ * Paint the border of an element in the box viewer and make them selectable to easily change the property of one or more 
+ * of them
+ * @author Orlandin Marco
+ *
+ */
 class LineBoxDrawer extends BoxDrawer {
 	
+	/**
+	 * List of the area where there is a selectable borders
+	 */
 	private List<Border> clickablesElements = new ArrayList<Border>();
 	
+	/**
+	 * Area where the borders will be painted
+	 */
 	private Canvas paintingSquare;
 	
+	/**
+	 * The last border selected
+	 */
+	private Border lastSelected = null;
+	
+	/**
+	 * Location of a border
+	 *
+	 */
 	public static enum Location{LEFT,RIGHT,BOTTOM,TOP};
 	
+	/**
+	 * Stroke used to do the selection effect of a border
+	 */
 	private static Stroke dashedStroke = null;
 	
-	private class Border{
+	/**
+	 * Describe the position of a border and store if it is or not selected
+	 * @author Orlandin Marco
+	 *
+	 */
+	class Border{
 		
+		/**
+		 * The border selection area
+		 */
 		private Rectangle rect;
 		
+		/**
+		 * The border position
+		 */
 		private Location border;
 		
+		/**
+		 * True if selected, otherwise false
+		 */
 		private boolean selected;
 
 		
@@ -53,10 +91,20 @@ class LineBoxDrawer extends BoxDrawer {
 			return border;
 		}
 		
+		/**
+		 * Used to check a point is inside the border area
+		 * @param x coordinate x of the point
+		 * @param y coordinate y of the point
+		 * @return true if the point is inside the border area
+		 */
 		public boolean isIntersecting(int x, int y){
 			return rect.contains(new Point(x, y));
 		}
 		
+		/**
+		 * Set the selection area of a border
+		 * @param rect a rectangle where the bounds are the selection area
+		 */
 		public void setRectangle(Rectangle rect){
 			this.rect = rect;
 		}
@@ -65,20 +113,39 @@ class LineBoxDrawer extends BoxDrawer {
 			return selected;
 		}
 		
+		/**
+		 * Complement the selection value of a border
+		 * @return True if the border is selected after the change, otherwise false
+		 */
 		public boolean changeSelected(){
 			selected = !selected;
+			if (selected)
+				lastSelected = this;
 			return selected;
 		}
 		
+		/**
+		 * Return the selection area of a border
+		 * @return a rectangle where the bounds are the selection area
+		 */
 		public Rectangle getRect(){
 			return rect;
 		}
 		
+		/**
+		 * Set the selection value
+		 * @param newValue the value to assign to the selection
+		 */
 		public void setSelected(boolean newValue){
 			selected = newValue;
 		}
 		
 	}
+	
+	public Border getLastSelected(){
+		return lastSelected;
+	}
+	
 	
 	public LineBoxDrawer(JasperReportsContext jasperReportsContext, Canvas square) {
 		super(jasperReportsContext);
@@ -89,10 +156,7 @@ class LineBoxDrawer extends BoxDrawer {
 		paintingSquare.addMouseListener(new MouseListener() {
 			
 			@Override
-			public void mouseUp(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseUp(MouseEvent e) {}
 			
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -105,39 +169,64 @@ class LineBoxDrawer extends BoxDrawer {
 			}
 			
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseDoubleClick(MouseEvent e) {}
 		});
 	}
 	
+	/**
+	 * Request the repaint of the painting area
+	 */
 	public void refresh(){
 		paintingSquare.redraw();
 	}
 	
+	/**
+	 * Check if the left border is selected, if there isn't a left 
+	 * border it count as unselected
+	 * @return True if the left border is selected, otherwise false
+	 */
 	public boolean isLeftSelected(){
 		Border border = getBorder(Location.LEFT);
 		return border != null ? border.getSelected() : false;
 	}
 	
+	/**
+	 * Check if the right border is selected, if there isn't a right 
+	 * border it count as unselected
+	 * @return True if the right border is selected, otherwise false
+	 */
 	public boolean isRightSelected(){
 		Border border = getBorder(Location.RIGHT);
 		return border != null ? border.getSelected() : false;
 	}
 	
+	/**
+	 * Check if the top border is selected, if there isn't a top 
+	 * border it count as unselected
+	 * @return True if the top border is selected, otherwise false
+	 */
 	public boolean isTopSelected(){
 		Border border = getBorder(Location.TOP);
 		return border != null ? border.getSelected() : false;
 	}
 	
+	/**
+	 * Check if the bottom border is selected, if there isn't a bottom 
+	 * border it count as unselected
+	 * @return True if the bottom border is selected, otherwise false
+	 */
 	public boolean isBottomSelected(){
 		Border border = getBorder(Location.BOTTOM);
 		return border != null ? border.getSelected() : false;
 	}
 
+	/**
+	 * Draw the border and the guide line
+	 * @param graphics2d
+	 * @param box
+	 * @param element
+	 */
 	public void drawBox(Graphics2D graphics2d, JRLineBox box, JRPrintElement element) {
-		//drawBox(graphics2d, box, element, 0, 0);
 		drawGuideLines(graphics2d, box.getTopPen(), box.getLeftPen(), box.getBottomPen(), box.getRightPen(), element, 0, 0);
 		drawLeftPen(graphics2d, box.getTopPen(), box.getLeftPen(), box.getBottomPen(), element, 0, 0);
 		drawTopPen(graphics2d, box.getTopPen(), box.getLeftPen(), box.getRightPen(), element, 0, 0);
@@ -145,37 +234,44 @@ class LineBoxDrawer extends BoxDrawer {
 		drawRightPen(graphics2d, box.getTopPen(), box.getBottomPen(), box.getRightPen(), element, 0, 0);
 	}
 	
-	private void removeBorder(Location borderPosition){
-		Iterator<Border> it = clickablesElements.iterator();
-		boolean notFound = true;
-		while(it.hasNext() && notFound){
-			if (it.next().equals(borderPosition)){
-				notFound = false;
-				it.remove();
-			}
-		}
-	}
-	
+	/**
+	 * Set a specific border selected
+	 * @param borderPosition the border
+	 */
 	public void setBorderSelected(Location borderPosition){
 		setBorderSelected(borderPosition, true);
 	}
 	
+	/**
+	 * Set the selection value of a specific border
+	 * @param borderPosition the border
+	 * @param selectedValue the new selection value
+	 */
 	public void setBorderSelected(Location borderPosition, boolean selectedValue){
 		Border selected = getBorder(borderPosition);
 		if (selected!=null){
 			selected.setSelected(selectedValue);
 		} else {
-			Border newBorder = new Border(new Rectangle(), borderPosition);
-			newBorder.setSelected(selectedValue);
-			clickablesElements.add(newBorder);
+			selected = new Border(new Rectangle(), borderPosition);
+			selected.setSelected(selectedValue);
+			clickablesElements.add(selected);
 		}
+		lastSelected = selected;
 	}
 	
+	/**
+	 * Unselect all the borders
+	 */
 	public void unselectAll(){
 		for(Border bord : clickablesElements)
 			bord.setSelected(false);
 	}
 	
+	/**
+	 * Return s specific border
+	 * @param borderPosition the wanted border
+	 * @return the requested border or null if it doesn't exist
+	 */
 	private Border getBorder(Location borderPosition){
 		Iterator<Border> it = clickablesElements.iterator();
 		Border result = null;
@@ -188,7 +284,12 @@ class LineBoxDrawer extends BoxDrawer {
 		return result;
 	}
 	
-	
+	/**
+	 * Update the selection area of a border, if it doesn't exist will be created
+	 * @param borderPosition the border to update
+	 * @param newSize the new selection area
+	 * @return the updated border
+	 */
 	private Border updateBorder(Location borderPosition, Rectangle newSize){
 		Iterator<Border> it = clickablesElements.iterator();
 		boolean notFound = true;
@@ -208,6 +309,17 @@ class LineBoxDrawer extends BoxDrawer {
 	}
 
 
+	/**
+	 * Draw the guide lines at every corner of the painting area
+	 * @param grx
+	 * @param topPen
+	 * @param leftPen
+	 * @param bottomPen
+	 * @param rightPen
+	 * @param element
+	 * @param offsetX
+	 * @param offsetY
+	 */
 	protected void drawGuideLines(Graphics2D grx, JRPen topPen, JRPen leftPen, JRPen bottomPen, JRPen rightPen, JRPrintElement element, int offsetX, int offsetY){
 		Stroke oldStroke = grx.getStroke();
 		Color oldColor = grx.getColor();
@@ -245,6 +357,9 @@ class LineBoxDrawer extends BoxDrawer {
 		grx.setColor(oldColor);
 	}
 	
+	/**
+	 * Paint the left border
+	 */
 	protected void drawLeftPen(Graphics2D grx, JRPen topPen, JRPen leftPen, JRPen bottomPen, JRPrintElement element, 
 																int offsetX, int offsetY)
 	{
@@ -258,12 +373,14 @@ class LineBoxDrawer extends BoxDrawer {
 		if (leftStroke != null && height > 0)
 		{
 			leftPenWidth = leftPen.getLineWidth().floatValue();
+			//If the line is to thin a bigger value will be used for the slection
 			if (leftPenWidth>7)
 				selectionWidth = leftPenWidth;
 			lineStyle = leftPen.getLineStyleValue();
 			grx.setStroke(leftStroke);
 			grx.setColor(leftPen.getLineColor());
 		} else {
+			//If the border is not present will be used a white transparent border as placeholder for the  sleection
 			grx.setStroke(new BasicStroke(7));
 			grx.setColor(new Color(255,255,255,0));
 			lineStyle = LineStyleEnum.SOLID;
@@ -321,6 +438,9 @@ class LineBoxDrawer extends BoxDrawer {
 		}
 	}
 	
+	/**
+	 * Paint the right border
+	 */
 	protected void drawRightPen(Graphics2D grx, JRPen topPen, JRPen bottomPen, JRPen rightPen, JRPrintElement element, int offsetX, int offsetY)
 		{
 			Stroke rightStroke = JRPenUtil.getStroke(rightPen, BasicStroke.CAP_BUTT);
@@ -398,6 +518,9 @@ class LineBoxDrawer extends BoxDrawer {
 			}
 		}
 	
+	/**
+	 * Paint the top border
+	 */
 	protected void drawTopPen(Graphics2D grx, JRPen topPen, JRPen leftPen, JRPen rightPen, JRPrintElement element, int offsetX, int offsetY)
 		{
 			Stroke topStroke = JRPenUtil.getStroke(topPen, BasicStroke.CAP_BUTT);
@@ -474,6 +597,9 @@ class LineBoxDrawer extends BoxDrawer {
 			}
 		}
 
+	/**
+	 * Paint the bottom border
+	 */
 	protected void drawBottomPen(Graphics2D grx, JRPen leftPen, JRPen bottomPen, JRPen rightPen, JRPrintElement element, int offsetX, int offsetY)
 		{
 			Stroke bottomStroke = JRPenUtil.getStroke(bottomPen, BasicStroke.CAP_BUTT);
