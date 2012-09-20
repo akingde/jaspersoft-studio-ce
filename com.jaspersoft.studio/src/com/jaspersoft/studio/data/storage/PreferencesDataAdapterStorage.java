@@ -116,7 +116,8 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				try {
 					in = urls.nextElement().openStream();
 					DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(in);
-					addDataAdapter(getNewID(), dad);
+					if (findDataAdapter(dad.getName()) == null)
+						addDataAdapter(getNewID(), dad);
 				} catch (IOException e) {
 					e.printStackTrace();
 				} finally {

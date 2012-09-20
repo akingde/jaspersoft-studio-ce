@@ -104,12 +104,13 @@ public abstract class ADataAdapterStorage {
 		return true;
 	}
 
-	public DataAdapterDescriptor findDataAdapter(String url) {
+	public DataAdapterDescriptor findDataAdapter(String name) {
 		if (daDescriptors != null)
 			for (DataAdapterDescriptor dataAdapter : daDescriptors.values()) {
-				if (dataAdapter.getName().equals(url))
+				if (dataAdapter.getName().equals(name))
 					return dataAdapter;
 			}
 		return null;
 	}
+
 }
