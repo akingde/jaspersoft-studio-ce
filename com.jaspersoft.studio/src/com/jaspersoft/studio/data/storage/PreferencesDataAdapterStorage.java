@@ -108,26 +108,24 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				e.printStackTrace();
 			}
 		}
-		if (daDescriptors.isEmpty()) {
-			Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
-			Enumeration<URL> urls = bundle.findEntries("defaults/dataadapter/prefs/", "*.xml", true);
-			while (urls.hasMoreElements()) {
-				InputStream in = null;
-				try {
-					in = urls.nextElement().openStream();
-					DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(in);
-					if (findDataAdapter(dad.getName()) == null)
-						addDataAdapter(getNewID(), dad);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					if (in != null)
-						try {
-							in.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-				}
+		Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
+		Enumeration<URL> urls = bundle.findEntries("defaults/dataadapter/prefs/", "*.xml", true);
+		while (urls.hasMoreElements()) {
+			InputStream in = null;
+			try {
+				in = urls.nextElement().openStream();
+				DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(in);
+				if (findDataAdapter(dad.getName()) == null)
+					addDataAdapter(getNewID(), dad);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (in != null)
+					try {
+						in.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 			}
 		}
 	}
