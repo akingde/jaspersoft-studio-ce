@@ -35,7 +35,7 @@ import org.eclipse.gef.SnapToGrid;
 
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.SameBandEditPartsTracker;
+import com.jaspersoft.studio.editor.gef.parts.band.SameBandEditPartsTracker;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;

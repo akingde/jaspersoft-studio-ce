@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.gef.parts.editPolicy;
+package com.jaspersoft.studio.editor.gef.parts.band;
 
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -38,8 +38,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
-import com.jaspersoft.studio.editor.gef.parts.band.BandResizeHandle;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.property.SetValueCommand;

@@ -10,7 +10,7 @@
  * You should have received a copy of the GNU Affero General Public License along with this program. If not, see
  * <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.jaspersoft.studio.editor.gef.parts.editPolicy;
+package com.jaspersoft.studio.editor.gef.parts.band;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -47,7 +47,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
-import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.utils.compatibility.FigureUtilities;
 

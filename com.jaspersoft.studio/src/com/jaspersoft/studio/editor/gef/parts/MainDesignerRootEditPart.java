@@ -30,7 +30,7 @@ import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.SameBandEditPartsTracker;
+import com.jaspersoft.studio.editor.gef.parts.band.SameBandEditPartsTracker;
 import com.jaspersoft.studio.editor.java2d.J2DScalableFreeformLayeredPane;
 
 /*

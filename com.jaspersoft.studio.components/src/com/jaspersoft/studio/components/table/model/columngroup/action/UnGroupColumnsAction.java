@@ -21,6 +21,7 @@ package com.jaspersoft.studio.components.table.model.columngroup.action;
 
 import java.util.List;
 
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
@@ -118,8 +119,8 @@ public class UnGroupColumnsAction extends SelectionAction {
 		List<?> objects = getSelectedObjects();
 		if (objects != null && objects.size() == 1) {
 			Object sel = objects.get(0);
-			if (sel instanceof TableCellEditPart)
-				sel = ((TableCellEditPart) sel).getModel();
+			if (sel instanceof EditPart)
+				sel = ((EditPart) sel).getModel();
 			return objects.get(0) instanceof MColumnGroup
 					|| sel instanceof MColumnGroupCell;
 		}

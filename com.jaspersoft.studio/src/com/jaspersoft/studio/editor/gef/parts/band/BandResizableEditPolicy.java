@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.gef.parts.editPolicy;
+package com.jaspersoft.studio.editor.gef.parts.band;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
