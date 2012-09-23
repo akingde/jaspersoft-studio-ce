@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.figures;
 
@@ -41,11 +37,13 @@ import org.eclipse.swt.graphics.Color;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.SWTResourceManager;
+
 /*
  * The Class BandFigure.
  */
 public class BandFigure extends RectangleFigure {
-	private static Color marginsColor = new Color(null, 170, 168, 255);
+	public static Color marginsColor = SWTResourceManager.getColor(170, 168, 255);
 	private int columnNumber = 1;
 	private int columnSpacing = 0;
 	private int columnWidth = 0;
@@ -139,14 +137,14 @@ public class BandFigure extends RectangleFigure {
 
 			g.drawLine(b.x, b.y, b.x + b.width, b.y);
 			g.drawLine(b.x, b.y + b.height - 1, b.x + b.width, b.y + b.height - 1);
-			
-			if(!Misc.nvl(bandText).isEmpty() && showBandName){
+
+			if (!Misc.nvl(bandText).isEmpty() && showBandName) {
 				Font currfont = g.getFont();
 				g.setFont(currfont.deriveFont(16f));
-				if(bandNamePosition==null){
+				if (bandNamePosition == null) {
 					computeBandNamePositionAndSize(g);
 				}
-				if(bandNameSize.height<b.height){
+				if (bandNameSize.height < b.height) {
 					java.awt.Color currColor = g.getColor();
 					g.setColor(java.awt.Color.GRAY);
 					g.drawString(bandText, bandNamePosition.x, bandNamePosition.y);
@@ -161,7 +159,7 @@ public class BandFigure extends RectangleFigure {
 					if (i > 0)
 						g.drawLine(x, b.y, x, b.y + b.height + 1);
 					x += columnWidth;
-					if (i < columnNumber-1)
+					if (i < columnNumber - 1)
 						g.drawLine(x, b.y, x, b.y + b.height + 1);
 					x += columnSpacing;
 				}
@@ -182,37 +180,38 @@ public class BandFigure extends RectangleFigure {
 		float sw = (float) currfont.getStringBounds(bandText, frc).getWidth();
 		LineMetrics lm = currfont.getLineMetrics(bandText, frc);
 		float sh = lm.getHeight();
-		Rectangle tmpRect=getClientArea();
-		float sx = tmpRect.x + (tmpRect.width - sw)/2;
-		float sy = tmpRect.y + (tmpRect.height+sh)/2 - lm.getDescent();
-		bandNamePosition=new Point((int)sx,(int)sy);
-		bandNameSize=new Dimension((int)sw,(int)sh);
+		Rectangle tmpRect = getClientArea();
+		float sx = tmpRect.x + (tmpRect.width - sw) / 2;
+		float sy = tmpRect.y + (tmpRect.height + sh) / 2 - lm.getDescent();
+		bandNamePosition = new Point((int) sx, (int) sy);
+		bandNameSize = new Dimension((int) sw, (int) sh);
 	}
 
 	/**
 	 * Enables/disables the showing of the band name in background.
 	 * 
-	 * @param showBandName flag for band name showing.
+	 * @param showBandName
+	 *          flag for band name showing.
 	 */
-	public void setShowBandName(boolean showBandName){
-		this.showBandName=showBandName;
+	public void setShowBandName(boolean showBandName) {
+		this.showBandName = showBandName;
 	}
-	
+
 	/**
-	 * Sets a human-readable text that will be painted
-	 * in the band background. Usually it is the band name.
+	 * Sets a human-readable text that will be painted in the band background. Usually it is the band name.
 	 * <p>
 	 * 
-	 * <b>NOTE</b>: the text will be drawn only if the related property <i>"Show Band names"</i>
-	 * from the preference page <i>Jaspersoft Studio-&gt;Report Designer</i> is enabled.
-	 *  
-	 * @param bandText the band text
+	 * <b>NOTE</b>: the text will be drawn only if the related property <i>"Show Band names"</i> from the preference page
+	 * <i>Jaspersoft Studio-&gt;Report Designer</i> is enabled.
+	 * 
+	 * @param bandText
+	 *          the band text
 	 */
-	public void setBandText(String bandText){
-		this.bandText=bandText;
+	public void setBandText(String bandText) {
+		this.bandText = bandText;
 		// reset the band name position and size
-		this.bandNamePosition=null;
-		this.bandNameSize=null;
+		this.bandNamePosition = null;
+		this.bandNameSize = null;
 	}
 
 }

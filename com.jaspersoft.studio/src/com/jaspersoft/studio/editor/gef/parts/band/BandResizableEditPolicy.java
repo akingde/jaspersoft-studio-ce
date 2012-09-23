@@ -52,12 +52,12 @@ import com.jaspersoft.studio.model.IGraphicElement;
 public class BandResizableEditPolicy extends ResizableEditPolicy {
 
 	private String feedbackText = "";
-	
+
 	/**
 	 * Color of the border painted to show the selection of a band
 	 */
 	private static Color marginColor = null;
-	
+
 	protected void showChangeBoundsFeedback(ChangeBoundsRequest request) {
 		if (getHost().getModel() instanceof IGraphicElement) {
 			// if (getHost() instanceof BandEditPart
@@ -86,38 +86,36 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		super();
 		setDragAllowed(false);
 	}
-	
+
 	/**
 	 * Class that paint a lateral border
+	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
 	private class MarginBorder extends LineBorder {
-		
+
 		/**
 		 * Paint the border reading it from a static variable and setting it if it's null
 		 */
 		@Override
 		public void paint(IFigure figure, Graphics graphics, Insets insets) {
-			if (figure.getChildren().isEmpty()){
+			if (figure.getChildren().isEmpty()) {
 				figure.add(new Label());
 			}
 			Rectangle bounds = figure.getBounds();
-			Graphics2D g = ((J2DGraphics)graphics).getGraphics2D();
-			if (marginColor == null){
-				marginColor = new Color(128,0,0);
+			Graphics2D g = ((J2DGraphics) graphics).getGraphics2D();
+			if (marginColor == null) {
+				marginColor = new Color(128, 0, 0);
 			}
 			g.setColor(marginColor);
-			g.fillRect(bounds.x-3, bounds.y+5, 5, bounds.height-10);
+			g.fillRect(bounds.x - 3, bounds.y + 5, 5, bounds.height - 10);
 		}
 
 		public MarginBorder(int width) {
 			super(width);
 		}
 	}
-	
-
-	
 
 	/*
 	 * (non-Javadoc)
@@ -131,10 +129,10 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		MoveHandle handle = new MoveHandle((GraphicalEditPart) getHost());
 		handle.setBorder(new MarginBorder(5));
 		list.add(handle);
-		
-		//	 BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
-		//	 buttonPadHandle.setBorder(null);
-		//	 list.add(buttonPadHandle);
+
+		// BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
+		// buttonPadHandle.setBorder(null);
+		// list.add(buttonPadHandle);
 		// NonResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(), list);
 		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
 		// // if (hasNorth)

@@ -29,6 +29,8 @@ import org.eclipse.gef.handles.ResizeHandle;
 import org.eclipse.gef.tools.ResizeTracker;
 import org.eclipse.swt.graphics.Color;
 
+import com.jaspersoft.studio.editor.gef.figures.BandFigure;
+
 /*
  * The Class BandResizeHandle.
  */
@@ -49,8 +51,13 @@ public class CellResizeHandle extends ResizeHandle {
 	public CellResizeHandle(GraphicalEditPart owner, int direction) {
 		super(owner, direction);
 		setLocator(new CellResizeHandleLocator(owner, direction));
-		setPreferredSize(2, 2);
+		setPreferredSize(1, 1);
 		cursorDirection = direction;
+	}
+
+	@Override
+	protected Color getBorderColor() {
+		return BandFigure.marginsColor;
 	}
 
 	/*

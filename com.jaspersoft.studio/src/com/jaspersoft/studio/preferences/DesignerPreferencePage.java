@@ -85,7 +85,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
 		store.setDefault(P_PAGE_DEFAULT_UNITS, "px"); //$NON-NLS-1$
 		store.setDefault(P_SHOW_REPORT_BAND_NAMES, true); //$NON-NLS-1$
-		store.setDefault(P_CONTAINER_MARGIN_COLOR, "0,230,0"); //$NON-NLS-1$
+		store.setDefault(P_CONTAINER_MARGIN_COLOR, "170,168,255"); //$NON-NLS-1$
 	}
 
 	@Override

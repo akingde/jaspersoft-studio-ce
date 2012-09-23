@@ -55,7 +55,9 @@ import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.rulers.RulerProvider;
+import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -79,6 +81,7 @@ import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SWTResourceManager;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -100,10 +103,14 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	private final class BandPreferenceListener implements IPropertyChangeListener {
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 			if (event.getProperty().equals(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES)) {
-				setBandNameShowing((BandFigure) getFigure());
+				setBandNameShowing(getFigure());
+			} else if (event.getProperty().equals(DesignerPreferencePage.P_CONTAINER_MARGIN_COLOR)) {
+				setBandMarginColor(getFigure());
 			}
 		}
 	}
+
+	public static final RGB DEFAULTCOLOR = new RGB(170, 168, 255);
 
 	@Override
 	public void activate() {
@@ -116,6 +123,11 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	public void deactivate() {
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().removePropertyChangeListener(prefChangelistener);
 		super.deactivate();
+	}
+
+	@Override
+	public BandFigure getFigure() {
+		return (BandFigure) super.getFigure();
 	}
 
 	/**
@@ -184,6 +196,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		rect.setForegroundColor(ColorConstants.blue);
 		setupBandFigure(rect);
 		setBandNameShowing(rect);
+		setBandMarginColor(rect);
 		return rect;
 	}
 
@@ -441,5 +454,10 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	public Dimension getContaierSize() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private void setBandMarginColor(BandFigure bfigure) {
+		String mcolor = jConfig.getProperty(DesignerPreferencePage.P_CONTAINER_MARGIN_COLOR, "");
+		bfigure.setMarginsColor(SWTResourceManager.getColor(StringConverter.asRGB(mcolor, DEFAULTCOLOR)));
 	}
 }
