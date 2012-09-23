@@ -163,5 +163,10 @@ public class JsonWizardDataEditorComposite extends ATreeWizardDataEditorComposit
 		}
 		super.dispose();
 	}
+	
+	@Override
+	public String getQueryLanguage() {
+		return "json"; //$NON-NLS-1$
+	}
 
 }
