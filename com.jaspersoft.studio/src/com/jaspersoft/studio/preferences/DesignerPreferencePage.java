@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
@@ -35,11 +36,12 @@ import com.jaspersoft.studio.property.section.report.util.Unit;
 public class DesignerPreferencePage extends FieldEditorOverlayPage {
 
 	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.DesignerPreferencePage.property";
-	
+
 	public static final String P_ELEMENT_DESIGN_BORDER_STYLE = "elementDesignBorderStyle"; //$NON-NLS-1$
 	public static final String P_PAGE_DESIGN_BORDER_STYLE = "pageDesignBorderStyle"; //$NON-NLS-1$
 	public static final String P_PAGE_DEFAULT_UNITS = "pageDEFAULTUNITS"; //$NON-NLS-1$
-	public static final String P_SHOW_REPORT_BAND_NAMES="showReportBandNames"; //$NON-NLS-1$
+	public static final String P_SHOW_REPORT_BAND_NAMES = "showReportBandNames"; //$NON-NLS-1$
+	public static final String P_CONTAINER_MARGIN_COLOR = "containerMarginColor"; //$NON-NLS-1$
 
 	public DesignerPreferencePage() {
 		super(GRID);
@@ -62,9 +64,12 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				new String[][] {
 						{ Messages.DesignerPreferencePage_fancy_shadow, "shadow" }, { Messages.DesignerPreferencePage_simple_shadow, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-1$ //$NON-NLS-2$
 
-		addField(new ComboFieldEditor(P_PAGE_DEFAULT_UNITS, Messages.DesignerPreferencePage_unit, Unit.getUnits2(), getFieldEditorParent()));
-		
-		addField(new BooleanFieldEditor(P_SHOW_REPORT_BAND_NAMES, Messages.DesignerPreferencePage_show_band_names, getFieldEditorParent()));
+		addField(new ComboFieldEditor(P_PAGE_DEFAULT_UNITS, Messages.DesignerPreferencePage_unit, Unit.getUnits2(),
+				getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(P_SHOW_REPORT_BAND_NAMES, Messages.DesignerPreferencePage_show_band_names,
+				getFieldEditorParent()));
+		addField(new ColorFieldEditor(P_CONTAINER_MARGIN_COLOR, "Band Margin Color", getFieldEditorParent()));
 	}
 
 	/*
@@ -80,6 +85,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
 		store.setDefault(P_PAGE_DEFAULT_UNITS, "px"); //$NON-NLS-1$
 		store.setDefault(P_SHOW_REPORT_BAND_NAMES, true); //$NON-NLS-1$
+		store.setDefault(P_CONTAINER_MARGIN_COLOR, "0,230,0"); //$NON-NLS-1$
 	}
 
 	@Override

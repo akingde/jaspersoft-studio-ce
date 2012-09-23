@@ -64,6 +64,7 @@ public class SPExpression extends ASPropertyWidget implements IExpressionContext
 			gd.widthHint = 100;
 			expr.setLayoutData(gd);
 		}
+		expr.getTextControl().addFocusListener(focusListener);
 	}
 
 	public void setData(APropertyNode pnode, Object b) {

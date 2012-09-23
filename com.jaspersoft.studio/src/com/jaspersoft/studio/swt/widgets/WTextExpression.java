@@ -385,6 +385,9 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	public void removeModifyListener(ExpressionModifiedListener ml) {
 		listeners.remove(ml);
 	}
+	public Text getTextControl(){
+		return textExpression;
+	}
 
 	/* 
 	 * Notifies the listeners of the expression change. 
