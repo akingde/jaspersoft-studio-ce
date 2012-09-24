@@ -234,10 +234,10 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
   					
   				}
   			
-		  		return ((IFieldsProvider)getDataAdapterDescriptor()).getFields(
-		  				
-							DataAdapterServiceUtil.getInstance(getJasperReportsConfiguration()).getService(getDataAdapterDescriptor().getDataAdapter()), 
-							getJasperReportsConfiguration(),
+		  		JasperReportsConfiguration jContext = getJasperReportsConfiguration();
+					return ((IFieldsProvider)getDataAdapterDescriptor()).getFields(
+							DataAdapterServiceUtil.getInstance(jContext).getService(getDataAdapterDescriptor().getDataAdapter()), 
+							jContext,
 							dataset);
   		
   		} catch (JRException ex)

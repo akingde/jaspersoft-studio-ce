@@ -78,24 +78,25 @@ import com.jaspersoft.templates.TemplateEngine;
 
 /**
  * Basic wizard to create a new report.
+ * 
  * @author gtoffoli
- *
+ * 
  */
 public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INewWizard {
-	
-	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.ReportNewWizard";	
+
+	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.ReportNewWizard";
 	private static final String NEW_REPORT_JRXML = Messages.ReportNewWizard_8;
-	
+
 	private ReportTemplatesWizardPage step0;
 	private NewFileCreationWizard step1;
 	private WizardDataSourcePage step2;
 	private WizardFieldsPage step3;
 	private WizardFieldsGroupByPage step4;
-	
+
 	private CongratulationsWizardPage congratulationsStep;
-	
+
 	private boolean showCongratulationsStep = true;
-	
+
 	private ISelection selection;
 
 	/**
@@ -105,13 +106,10 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 		super();
 		setWindowTitle(Messages.ReportNewWizard_title);
 		setNeedsProgressMonitor(true);
-		
+
 		// Attention! This operation should always be performed by
 		// the wizard caller, since we are forcing here a new config.
-		setConfig(new JasperReportsConfiguration(
-			DefaultJasperReportsContext.getInstance(), null));
-		
-		this.getSettings().put("jasperreports_configuration", new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(),null));
+		setConfig(new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null));
 	}
 
 	public ReportNewWizard(IWizard parentWizard, IWizardPage fallbackPage) {
@@ -141,57 +139,50 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 
 		step4 = new WizardFieldsGroupByPage();
 		addPage(step4);
-		
-		if (showCongratulationsStep)
-		{
+
+		if (showCongratulationsStep) {
 			congratulationsStep = new CongratulationsWizardPage();
 			addPage(congratulationsStep);
 		}
 	}
 
-
 	/**
 	 * This method drive the logic to just skip steps.
 	 * 
-	 * The getNextPage method is generally used to get stuff from a page and configure the next one
-	 * creating more logic between pages. This logic has been moved elsewhere: the glue used in JSSWizard
-	 * is acutally the settings map, which is passed along the way, since stored inside the wizard.
-	 * A mechanism to load and store settings allow the pages to act in a consistent way
-	 * without having to put any logic here, even if logic can still be added in case of special
+	 * The getNextPage method is generally used to get stuff from a page and configure the next one creating more logic
+	 * between pages. This logic has been moved elsewhere: the glue used in JSSWizard is acutally the settings map, which
+	 * is passed along the way, since stored inside the wizard. A mechanism to load and store settings allow the pages to
+	 * act in a consistent way without having to put any logic here, even if logic can still be added in case of special
 	 * behaviours (just like it would be possible to extend the relevant pages).
 	 * 
-	 * An interesting example is the JSSWizardPage and JSSWizardRunnablePage which provide
-	 * the base pages to JSS based wizard. In particular the JSSWizardRunnablePage allows
-	 * to execute a process on next, which can be used for time consuming tasks (like read fields).
+	 * An interesting example is the JSSWizardPage and JSSWizardRunnablePage which provide the base pages to JSS based
+	 * wizard. In particular the JSSWizardRunnablePage allows to execute a process on next, which can be used for time
+	 * consuming tasks (like read fields).
 	 * 
 	 */
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		
-		if (page == step2)
-		{
-			if (!getSettings().containsKey(WizardDataSourcePage.DISCOVERED_FIELDS) ||
-					((List<?>)getSettings().get(WizardDataSourcePage.DISCOVERED_FIELDS)).isEmpty() )
-			{
-				if (!showCongratulationsStep)
-				{
+
+		if (page == step2) {
+			if (!getSettings().containsKey(WizardDataSourcePage.DISCOVERED_FIELDS)
+					|| ((List<?>) getSettings().get(WizardDataSourcePage.DISCOVERED_FIELDS)).isEmpty()) {
+				if (!showCongratulationsStep) {
 					// ask for the next page by giving the last page available...
-					return super.getNextPage(getPageList().get( getPageList().size()-1 ));
+					return super.getNextPage(getPageList().get(getPageList().size() - 1));
 				}
 				return congratulationsStep;
 			}
 		}
 		return super.getNextPage(page);
 	}
-	
-	
+
 	/**
 	 * This method is called when 'Finish' button is pressed in the wizard. We will create an operation and run it using
 	 * wizard as execution context.
 	 */
 	@Override
 	public boolean performFinish() {
-		
+
 		final String containerName = step1.getContainerFullPath().toPortableString();
 		final String fileName = step1.getFileName();
 
@@ -223,66 +214,57 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	private void doFinish(String containerName, String fileName, IProgressMonitor monitor) throws CoreException {
 
 		monitor.beginTask(Messages.ReportNewWizard_3 + fileName, 2);
-		
-		
+
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
 		if (!resource.exists() || !(resource instanceof IContainer)) {
 			throwCoreException(String.format(Messages.ReportNewWizard_4, containerName));
 		}
-		
+
 		Map<String, Object> templateSettings = new HashMap<String, Object>();
-		
+
 		TemplateBundle templateBundle = step0.getTemplateBundle();
-		
+
 		JRDesignDataset dataset = WizardUtils.createDataset(true, getSettings());
-		
-		templateSettings.put( DefaultTemplateEngine.DATASET, dataset );
-		
-		if (getSettings().containsKey( WizardDataSourcePage.DATASET_FIELDS))
-		{
-			templateSettings.put( DefaultTemplateEngine.FIELDS, 
-														getSettings().get(WizardDataSourcePage.DATASET_FIELDS) );
+
+		templateSettings.put(DefaultTemplateEngine.DATASET, dataset);
+
+		if (getSettings().containsKey(WizardDataSourcePage.DATASET_FIELDS)) {
+			templateSettings.put(DefaultTemplateEngine.FIELDS, getSettings().get(WizardDataSourcePage.DATASET_FIELDS));
 		}
-		
-		if (getSettings().containsKey( WizardDataSourcePage.GROUP_FIELDS))
-		{
-			templateSettings.put( DefaultTemplateEngine.GROUP_FIELDS, 
-														getSettings().get(WizardDataSourcePage.GROUP_FIELDS) );
+
+		if (getSettings().containsKey(WizardDataSourcePage.GROUP_FIELDS)) {
+			templateSettings.put(DefaultTemplateEngine.GROUP_FIELDS, getSettings().get(WizardDataSourcePage.GROUP_FIELDS));
 		}
-				
-		
-		
+
 		TemplateEngine templateEngine = templateBundle.getTemplateEngine();
-		
+
 		try {
-			
+
 			ReportBundle reportBundle = templateEngine.generateReportBundle(templateBundle, templateSettings);
 
-			
 			// Save the data adapter used...
-			if (step2.getDataAdapter() != null)
-			{
-				reportBundle.getJasperDesign().setProperty(MReport.DEFAULT_DATAADAPTER, step2.getDataAdapter().getName() );
+			if (step2.getDataAdapter() != null) {
+				reportBundle.getJasperDesign().setProperty(MReport.DEFAULT_DATAADAPTER, step2.getDataAdapter().getName());
 			}
-			
+
 			// Store the report bundle on file system
 			IContainer container = (IContainer) resource;
 			reportFile = container.getFile(new Path(fileName));
-			
+
 			// Save the all the files...
 			String contents = JRXmlWriterHelper.writeReport(getConfig(), reportBundle.getJasperDesign(), reportFile, false);
 			ByteArrayInputStream stream = new ByteArrayInputStream(contents.getBytes());
-			
+
 			if (reportFile.exists()) {
 				reportFile.setContents(stream, true, true, monitor);
 			} else {
 				reportFile.create(stream, true, monitor);
 			}
 			stream.close();
-			
+
 			saveReportBundleResources(monitor, reportBundle, container);
-			
+
 			monitor.worked(1);
 			monitor.setTaskName(Messages.ReportNewWizard_5);
 			Display.getDefault().asyncExec(new Runnable() {
@@ -295,61 +277,56 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 					}
 				}
 			});
-			
+
 			monitor.worked(1);
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			UIUtils.showError(e);
 			e.printStackTrace();
-			
+
 		}
 	}
 
-  private IFile reportFile;
-	//private JasperDesign jDesign;
+	private IFile reportFile;
+
+	// private JasperDesign jDesign;
 
 	public IFile getReportFile() {
 		return reportFile;
 	}
 
-
 	/**
-	 * Store all the resources provided by the report bundle in the same folder as the
-	 * new report.
+	 * Store all the resources provided by the report bundle in the same folder as the new report.
 	 * 
 	 * @param monitor
 	 * @param reportBundle
 	 * @param container
 	 */
 	private void saveReportBundleResources(final IProgressMonitor monitor, ReportBundle reportBundle, IContainer container) {
-		
-			monitor.subTask(Messages.ReportNewWizard_6);
-		
-			List<String> resourceNames = reportBundle.getResourceNames();
-			
-			for (String resourceName : resourceNames)
-			{
-				IFile resourceFile = container.getFile(new Path(resourceName));
-				
-				
-				try {
-					if (!resourceFile.exists())
-					{
-						InputStream is = reportBundle.getResource(resourceName);
-						if (is != null)
-						{
-							
-							resourceFile.create(is, true, monitor);
-						}
-					}
-				} catch (Exception e) {
-					UIUtils.showError(e);
-					e.printStackTrace();
-				}
-			}
 
-			monitor.done();
+		monitor.subTask(Messages.ReportNewWizard_6);
+
+		List<String> resourceNames = reportBundle.getResourceNames();
+
+		for (String resourceName : resourceNames) {
+			IFile resourceFile = container.getFile(new Path(resourceName));
+
+			try {
+				if (!resourceFile.exists()) {
+					InputStream is = reportBundle.getResource(resourceName);
+					if (is != null) {
+
+						resourceFile.create(is, true, monitor);
+					}
+				}
+			} catch (Exception e) {
+				UIUtils.showError(e);
+				e.printStackTrace();
+			}
+		}
+
+		monitor.done();
 	}
 
 	private void throwCoreException(String message) throws CoreException {
@@ -406,21 +383,18 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	}
 
 	/**
-	 * We don't want to finish the wizard at "any" time. This methods allows
-	 * to decide when we can and when we cannot finish...
+	 * We don't want to finish the wizard at "any" time. This methods allows to decide when we can and when we cannot
+	 * finish...
 	 * 
 	 */
 	@Override
 	public boolean canFinish() {
-		
-		if (getContainer().getCurrentPage() != congratulationsStep)
-		{
+
+		if (getContainer().getCurrentPage() != congratulationsStep) {
 			return false;
 		}
-		
+
 		return super.canFinish();
 	}
-	
-	
-	
+
 }
