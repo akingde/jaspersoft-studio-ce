@@ -45,22 +45,23 @@ import com.jaspersoft.studio.swt.widgets.WTextExpression;
 public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 
 	protected JRDesignDatasetRun datasetrun;
-	
+
 	protected boolean ignoreUpdates = false;
-	
+
 	public DatasetRunWidgetRadio(Composite parent) {
 		createControl(parent);
 	}
 
 	public void setData(JRDesignDatasetRun datasetrun) {
-		
-		if (this.datasetrun == datasetrun) return;
+
+		if (this.datasetrun == datasetrun)
+			return;
 		this.datasetrun = datasetrun;
-		
+
 		removeListeners();
 
 		if (datasetrun != null) {
-			
+
 			datasourceExpressionBox.setEnabled(false);
 			connectionExpressionBox.setEnabled(false);
 
@@ -72,27 +73,23 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 			connectionExpressionBox.setExpression(null);
 			datasourceExpressionBox.setExpression(null);
 
-			if (datasetrun.getConnectionExpression() != null)
-			{
+			if (datasetrun.getConnectionExpression() != null) {
 				connectionExpressionBox.setExpression((JRDesignExpression) datasetrun.getConnectionExpression());
 				boolean isReportConnection = datasetrun.getConnectionExpression().getText().equals("$P{REPORT_CONNECTION}");
 				connectionExpressionBox.setEnabled(!isReportConnection);
 				radioUseParentConnection.setSelection(isReportConnection);
 				radioUseConnectionExpression.setSelection(!isReportConnection);
-			}
-			else if (datasetrun.getDataSourceExpression() != null)
-			{
+			} else if (datasetrun.getDataSourceExpression() != null) {
 				datasourceExpressionBox.setExpression((JRDesignExpression) datasetrun.getDataSourceExpression());
-				boolean isEmptyDatasource = datasetrun.getDataSourceExpression().getText().equals("new net.sf.jasperreports.engine.JREmptyDataSource()");
+				boolean isEmptyDatasource = datasetrun.getDataSourceExpression().getText()
+						.equals("new net.sf.jasperreports.engine.JREmptyDataSource()");
 				datasourceExpressionBox.setEnabled(!isEmptyDatasource);
 				radioUseEmptyDatasource.setSelection(isEmptyDatasource);
 				radioUseDatasourceExpression.setSelection(!isEmptyDatasource);
-			}
-			else
-			{
+			} else {
 				radioNoConnection.setSelection(true);
 			}
-			
+
 		}
 		addListeners();
 	}
@@ -119,13 +116,7 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FormLayout());
 
-		radioNoConnection = new Button(composite, SWT.RADIO);
-		FormData fd_noCon = new FormData();
-		radioNoConnection.setLayoutData(fd_noCon);
-		radioNoConnection.setText(Messages.WizardConnectionPage_noconnection_text);
-
 		radioUseParentConnection = new Button(composite, SWT.RADIO);
-		fd_noCon.left = new FormAttachment(radioUseParentConnection, 0, SWT.LEFT);
 		FormData fd_sameCon = new FormData();
 		fd_sameCon.left = new FormAttachment(0, 10);
 		fd_sameCon.top = new FormAttachment(0, 10);
@@ -150,7 +141,7 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		radioUseEmptyDatasource = new Button(composite, SWT.RADIO);
 		FormData fd_emptyCon = new FormData();
 		fd_emptyCon.left = new FormAttachment(0, 10);
-		fd_emptyCon.top = new FormAttachment(connectionExpressionBox, 16);
+		fd_emptyCon.top = new FormAttachment(connectionExpressionBox, 6);
 		radioUseEmptyDatasource.setLayoutData(fd_emptyCon);
 		radioUseEmptyDatasource.setText(Messages.WizardConnectionPage_empty_connection_text);
 
@@ -162,42 +153,45 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		radioUseDatasourceExpression.setText(Messages.WizardConnectionPage_datasource_text);
 
 		datasourceExpressionBox = new WTextExpression(composite, SWT.NONE);
-		fd_noCon.top = new FormAttachment(0, 254);
 		FormData fd_dsRunExpr = new FormData();
-		fd_dsRunExpr.bottom = new FormAttachment(radioNoConnection, -6);
 		fd_dsRunExpr.top = new FormAttachment(radioUseDatasourceExpression, 6);
 		fd_dsRunExpr.right = new FormAttachment(connectionExpressionBox, 0, SWT.RIGHT);
 		fd_dsRunExpr.left = new FormAttachment(0, 10);
 		datasourceExpressionBox.setLayoutData(fd_dsRunExpr);
 
+		radioNoConnection = new Button(composite, SWT.RADIO);
+		FormData fd_noCon = new FormData();
+		fd_noCon.left = new FormAttachment(radioUseParentConnection, 0, SWT.LEFT);
+		fd_noCon.bottom = new FormAttachment(100, 0);
+		radioNoConnection.setLayoutData(fd_noCon);
+		radioNoConnection.setText(Messages.WizardConnectionPage_noconnection_text);
+
+		fd_dsRunExpr.bottom = new FormAttachment(radioNoConnection, -6, SWT.TOP);
+		fd_dsRunExpr.height = 69;
+
 		listener = new Listener() {
 			int time = -1;
 
 			public void handleEvent(Event event) {
-				//if (time > 0 && event.time - time < 20)
-				//	return;
-				//time = event.time;
-				
+				// if (time > 0 && event.time - time < 20)
+				// return;
+				// time = event.time;
+
 				if (radioNoConnection.getSelection())
 					setNoConnection();
-				else if (radioUseConnectionExpression.getSelection() ||
-								 radioUseParentConnection.getSelection())
-				{
+				else if (radioUseConnectionExpression.getSelection() || radioUseParentConnection.getSelection()) {
 					setConnection("$P{REPORT_CONNECTION}"); //$NON-NLS-1$
-				}
-				else if (radioUseDatasourceExpression.getSelection() ||
-							   radioUseEmptyDatasource.getSelection())
-				{
+				} else if (radioUseDatasourceExpression.getSelection() || radioUseEmptyDatasource.getSelection()) {
 					setDatasource("new net.sf.jasperreports.engine.JREmptyDataSource()");//$NON-NLS-1$ 
 				}
-				
-				connectionExpressionBox.setEnabled( radioUseConnectionExpression.getSelection()  );
-				datasourceExpressionBox.setEnabled( radioUseDatasourceExpression.getSelection() );
+
+				connectionExpressionBox.setEnabled(radioUseConnectionExpression.getSelection());
+				datasourceExpressionBox.setEnabled(radioUseDatasourceExpression.getSelection());
 			}
 		};
 
 		addListeners();
-		
+
 		listener.handleEvent(new Event());
 	}
 
@@ -242,10 +236,10 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 
 	protected void setNoConnection() {
 		if (datasetrun != null) {
-			
+
 			datasetrun.setConnectionExpression(null);
 			datasetrun.setDataSourceExpression(null);
-			
+
 			removeListeners();
 			connectionExpressionBox.setExpression(null);
 			datasourceExpressionBox.setExpression(null);
@@ -262,12 +256,12 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 			jde.setText(exTxt);
 			datasetrun.setConnectionExpression(null);
 			datasetrun.setDataSourceExpression(jde);
-			
+
 			removeListeners();
 			connectionExpressionBox.setExpression(null);
 			datasourceExpressionBox.setExpression(jde);
 			addListeners();
-			//setData(datasetrun);
+			// setData(datasetrun);
 		}
 	}
 
@@ -280,12 +274,12 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 			jde.setText(exTxt);
 			datasetrun.setConnectionExpression(jde);
 			datasetrun.setDataSourceExpression(null);
-			
+
 			removeListeners();
 			datasourceExpressionBox.setExpression(null);
 			connectionExpressionBox.setExpression(jde);
 			addListeners();
-			//setData(datasetrun);
+			// setData(datasetrun);
 		}
 	}
 
@@ -293,6 +287,5 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		this.datasourceExpressionBox.setExpressionContext(expContext);
 		this.connectionExpressionBox.setExpressionContext(expContext);
 	}
-	
 
 }
