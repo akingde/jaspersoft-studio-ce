@@ -19,17 +19,21 @@
  */
 package com.jaspersoft.studio.components.chart.wizard;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.nebula.widgets.gallery.DefaultGalleryItemRenderer;
 import org.eclipse.nebula.widgets.gallery.Gallery;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.nebula.widgets.gallery.NoGroupRenderer;
+import org.eclipse.nebula.widgets.gallery.RoundedGalleryItemRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -39,6 +43,9 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
+import com.jaspersoft.studio.utils.ResourceManager;
+import com.jaspersoft.studio.utils.SWTImageEffects;
+import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 public class ChartTypeWizardPage extends JSSWizardPage {
@@ -49,6 +56,8 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 	private Scale zoomFactor;
 	private Gallery chartsGallery;
 	private GalleryItem itemGroup;
+	private static Map<String,Image> standardImages=new HashMap<String, Image>();
+	private static Map<String,Image> selectedImages=new HashMap<String, Image>();
 
 	protected ChartTypeWizardPage(MChart chart) {
 		super("chartwizard"); //$NON-NLS-1$
@@ -82,11 +91,11 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 		gd.widthHint = 500;
 		chartsGallery.setLayoutData(gd);
 		chartsGallery.setGroupRenderer(gr);
-		DefaultGalleryItemRenderer ir = new DefaultGalleryItemRenderer();
+		RoundedGalleryItemRenderer ir = new RoundedGalleryItemRenderer();
 		ir.setShowLabels(true);
-		ir.setShowRoundedSelectionCorners(false);
-		ir.setSelectionForegroundColor(getShell().getDisplay().getSystemColor(
-				SWT.COLOR_BLUE));
+//		ir.setShowRoundedSelectionCorners(false);
+//		ir.setSelectionForegroundColor(getShell().getDisplay().getSystemColor(
+//				SWT.COLOR_BLUE));
 		chartsGallery.setItemRenderer(ir);
 
 		itemGroup = new GalleryItem(chartsGallery, SWT.NONE);
@@ -203,131 +212,148 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 		case JRDesignChart.CHART_TYPE_AREA:
 			GalleryItem ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_area_chart);
-			ti.setImage(Activator.getImage("/icons/area.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/area_big.png");	//$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_AREA);
 			return ti;
 
 		case JRDesignChart.CHART_TYPE_BAR:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_bar_chart);
-			ti.setImage(Activator.getImage("/icons/bar.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/bar_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_BAR);
 			return ti;
 		case JRDesignChart.CHART_TYPE_BAR3D:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_bar3d_chart);
-			ti.setImage(Activator.getImage("/icons/bar3d.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/bar3d_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_BAR3D);
 			return ti;
 		case JRDesignChart.CHART_TYPE_BUBBLE:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_bubble_chart);
-			ti.setImage(Activator.getImage("/icons/bubble.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/bubble_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_BUBBLE);
 			return ti;
 		case JRDesignChart.CHART_TYPE_CANDLESTICK:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_candlestick_chart);
-			ti.setImage(Activator.getImage("/icons/candlestick.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/candlestick_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_CANDLESTICK);
 			return ti;
 		case JRDesignChart.CHART_TYPE_GANTT:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_gantt);
-			ti.setImage(Activator.getImage("/icons/gantt.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/gantt_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_GANTT);
 			return ti;
 		case JRDesignChart.CHART_TYPE_HIGHLOW:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_highlow_chart);
-			ti.setImage(Activator.getImage("/icons/highlow.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/highlow_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_HIGHLOW);
 			return ti;
 		case JRDesignChart.CHART_TYPE_LINE:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_line_chart);
-			ti.setImage(Activator.getImage("/icons/line.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/line_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_LINE);
 			return ti;
 		case JRDesignChart.CHART_TYPE_METER:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_meter_chart);
-			ti.setImage(Activator.getImage("/icons/meter.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/meter_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_METER);
 			return ti;
 		case JRDesignChart.CHART_TYPE_MULTI_AXIS:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_multiaxes_chart);
-			ti.setImage(Activator.getImage("/icons/multiaxis.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/multiaxis_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_MULTI_AXIS);
 			return ti;
 		case JRDesignChart.CHART_TYPE_PIE:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_pie_chart);
-			ti.setImage(Activator.getImage("/icons/pie.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/pie_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_PIE);
 			return ti;
 		case JRDesignChart.CHART_TYPE_PIE3D:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_pie3d_chart);
-			ti.setImage(Activator.getImage("/icons/pie3d.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/pie3d_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_PIE3D);
 			return ti;
 		case JRDesignChart.CHART_TYPE_SCATTER:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_scatter_chart);
-			ti.setImage(Activator.getImage("/icons/scatter.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/scatter_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_SCATTER);
 			return ti;
 		case JRDesignChart.CHART_TYPE_STACKEDAREA:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_stacked_area);
-			ti.setImage(Activator.getImage("/icons/stackedarea.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/stackedarea_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_STACKEDAREA);
 			return ti;
 		case JRDesignChart.CHART_TYPE_STACKEDBAR:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_stacked_bar);
-			ti.setImage(Activator.getImage("/icons/stackedbar.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/stackedbar_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_STACKEDBAR);
 			return ti;
 		case JRDesignChart.CHART_TYPE_STACKEDBAR3D:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_stacked_bar3D);
-			ti.setImage(Activator.getImage("/icons/stackedbar3d.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/stackedbar3d_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_STACKEDBAR3D);
 			return ti;
 		case JRDesignChart.CHART_TYPE_THERMOMETER:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_thermometer_chart);
-			ti.setImage(Activator.getImage("/icons/thermometer.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/thermometer_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_THERMOMETER);
 			return ti;
 		case JRDesignChart.CHART_TYPE_TIMESERIES:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_timeseries_chart);
-			ti.setImage(Activator.getImage("/icons/timeseries.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/timeseries_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_TIMESERIES);
 			return ti;
 		case JRDesignChart.CHART_TYPE_XYAREA:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_xy_area);
-			ti.setImage(Activator.getImage("/icons/xyarea.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/xyarea_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_XYAREA);
 			return ti;
 		case JRDesignChart.CHART_TYPE_XYBAR:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_xy_bar);
-			ti.setImage(Activator.getImage("/icons/xybar.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/xybar_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_XYBAR);
 			return ti;
 		case JRDesignChart.CHART_TYPE_XYLINE:
 			ti = new GalleryItem(gr, SWT.NONE);
 			ti.setText(Messages.common_xy_line);
-			ti.setImage(Activator.getImage("/icons/xyline.png")); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti,"/icons/xyline_big.png"); //$NON-NLS-1$
 			ti.setData(JRDesignChart.CHART_TYPE_XYLINE);
 			return ti;
 		}
 		return null;
+	}
+	
+	private static void setGallyeryItemImageInfo(GalleryItem item, String imagePath){
+		Image selectedImg=selectedImages.get(imagePath);
+		Image standardImg=standardImages.get(imagePath);
+		if(selectedImg==null || standardImg==null){
+			Image itemImage = Activator.getImage(imagePath);
+			// Add viewer required effects to the images shown...
+			selectedImg =new Image(itemImage.getDevice(), SWTImageEffects.extendArea(itemImage.getImageData(), 20, null));
+			standardImg=new Image(itemImage.getDevice(), Glow.glow(itemImage.getImageData(), ResourceManager.getColor(SWT.COLOR_GRAY), 20, 0, 255));
+			// Cache images
+			standardImages.put(imagePath, standardImg);
+			selectedImages.put(imagePath, selectedImg);
+		}
+		item.setSelectedImage(selectedImg);
+		item.setStandardImage(standardImg);
+		item.setImage(standardImg);
 	}
 }
