@@ -211,6 +211,8 @@ public class BigNumericInput extends ADataInput {
 		Object value = params.get(param.getName());
 		if (value != null && value instanceof Number)
 			num.setText(NumberFormat.getInstance().format(value));
+		else
+			num.setText("");
 	}
 
 }

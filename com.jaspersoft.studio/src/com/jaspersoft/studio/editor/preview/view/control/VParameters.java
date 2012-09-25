@@ -142,6 +142,9 @@ public class VParameters extends APreview {
 					if (p.getDefaultValueExpression() != null) {
 						params.put(pname, ExpressionUtil.eval(p.getDefaultValueExpression(), mDataset, jContext));
 						incontrols.get(pname).updateInput();
+					} else {
+						params.put(pname, null);
+						incontrols.get(pname).updateInput();
 					}
 					break;
 				}
