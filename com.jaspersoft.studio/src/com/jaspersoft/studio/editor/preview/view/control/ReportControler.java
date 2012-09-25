@@ -380,6 +380,14 @@ public class ReportControler {
 							if (scfactory != null)
 								stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
 							stats.endCount(ST_REPORTEXECUTIONTIME);
+							APreview pv = pcontainer.getDefaultViewer();
+							if (pv instanceof IJRPrintable)
+								try {
+									((IJRPrintable) pv).setJRPRint(stats, null);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+
 							pcontainer.setJasperPrint(stats, jPrint);
 							finished = false;
 						}
