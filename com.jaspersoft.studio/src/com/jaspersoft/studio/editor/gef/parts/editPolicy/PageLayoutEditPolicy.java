@@ -171,7 +171,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			if (request.getNewObject() instanceof Collection<?>) {
 				CompoundCommand ccmd = new CompoundCommand();
 				Collection<?> objs = (Collection<?>) request.getNewObject();
-				if (parent instanceof IGraphicElement && !isGraphicObjects(objs)) {
+				if (parent instanceof IGraphicElement && !isGraphicObjects(objs) && objs.size() > 1) {
 					Rectangle rparent = ((IGraphicElement) parent).getBounds();
 					int w = rparent.width / objs.size();
 					int rest = rparent.width - w * objs.size();
