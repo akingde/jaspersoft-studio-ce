@@ -74,7 +74,11 @@ public class JRContextPrefStore extends EventManager implements IPreferenceStore
 		Object p = defaultProperties.get(name);
 		if (p != null)
 			if (p instanceof String)
-				return Double.parseDouble((String) p);
+				try {
+					return Double.parseDouble((String) p);
+				} catch (NumberFormatException e) {
+					;
+				}
 			else if (p instanceof Double)
 				return (Double) p;
 		return DOUBLE_DEFAULT_DEFAULT;
@@ -85,7 +89,11 @@ public class JRContextPrefStore extends EventManager implements IPreferenceStore
 		Object p = defaultProperties.get(name);
 		if (p != null)
 			if (p instanceof String)
-				return Float.parseFloat((String) p);
+				try {
+					return Float.parseFloat((String) p);
+				} catch (NumberFormatException e) {
+					;
+				}
 			else if (p instanceof Float)
 				return (Float) p;
 		return FLOAT_DEFAULT_DEFAULT;
@@ -96,7 +104,11 @@ public class JRContextPrefStore extends EventManager implements IPreferenceStore
 		Object p = defaultProperties.get(name);
 		if (p != null)
 			if (p instanceof String)
-				return Integer.parseInt((String) p);
+				try {
+					return Integer.parseInt((String) p);
+				} catch (NumberFormatException e) {
+					;
+				}
 			else if (p instanceof Integer)
 				return (Integer) p;
 		return INT_DEFAULT_DEFAULT;
@@ -107,7 +119,11 @@ public class JRContextPrefStore extends EventManager implements IPreferenceStore
 		Object p = defaultProperties.get(name);
 		if (p != null)
 			if (p instanceof String)
-				return Long.parseLong((String) p);
+				try {
+					return Long.parseLong((String) p);
+				} catch (NumberFormatException e) {
+					;
+				}
 			else if (p instanceof Long)
 				return (Long) p;
 		return LONG_DEFAULT_DEFAULT;
