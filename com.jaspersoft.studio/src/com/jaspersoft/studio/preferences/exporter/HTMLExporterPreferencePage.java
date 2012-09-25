@@ -45,6 +45,8 @@ import com.jaspersoft.studio.utils.Misc;
  * 
  */
 public class HTMLExporterPreferencePage extends FieldEditorOverlayPage {
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage.property";
+
 	public static final String NSF_EXPORT_HTML_ACCESSIBLE = "net.sf.jasperreports.export.html.accessible"; //$NON-NLS-1$
 
 	public static final String NSF_EXPORT_HTML_HEADER = "net.sf.jasperreports.export.html.header"; //$NON-NLS-1$
@@ -187,7 +189,7 @@ public class HTMLExporterPreferencePage extends FieldEditorOverlayPage {
 
 	@Override
 	protected String getPageId() {
-		return "com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage.property"; //$NON-NLS-1$
+		return PAGE_ID;
 	}
 
 }
