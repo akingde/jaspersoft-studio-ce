@@ -73,7 +73,8 @@ public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable, 
 
 	@Override
 	public void contribute2ToolBar(IToolBarManager tmanager) {
-		tmanager.add(new URLContributionItem(tmpFile.toURI().toASCIIString()));
+		if (tmpFile != null)
+			tmanager.add(new URLContributionItem(tmpFile.toURI().toASCIIString()));
 		if (jrprint != null) {
 			tmanager.add(ExportMenu.getExportMenu(rptviewer, jContext));
 		}
