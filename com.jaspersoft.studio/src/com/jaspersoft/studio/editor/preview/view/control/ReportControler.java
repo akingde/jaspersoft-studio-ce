@@ -143,7 +143,8 @@ public class ReportControler {
 				if (obj != null && obj.getClass().equals(p.getValueClass()))
 					map.put(p.getName(), obj);
 			}
-			jasperParameters = map;
+			jasperParameters.clear();
+			jasperParameters.putAll(map); 
 		}
 		jrContext.setJRParameters(jasperParameters);
 	}
