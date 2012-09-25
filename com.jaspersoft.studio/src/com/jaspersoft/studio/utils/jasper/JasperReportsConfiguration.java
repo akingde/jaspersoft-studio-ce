@@ -255,7 +255,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
 	public Character getPropertyCharacter(String key) {
 		String p = getProperty(key);
-		if (p != null)
+		if (p != null && !p.isEmpty())
 			return new Character(p.charAt(0));
 		return null;
 	}

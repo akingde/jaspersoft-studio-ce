@@ -89,8 +89,9 @@ public class ExportAsPdfAction extends AbstractExportAction {
 				jContext.getProperty(JRPdfExporterParameter.PROPERTY_USER_PASSWORD));
 		exp.setParameter(JRPdfExporterParameter.OWNER_PASSWORD,
 				jContext.getProperty(JRPdfExporterParameter.PROPERTY_OWNER_PASSWORD));
-		exp.setParameter(JRPdfExporterParameter.PERMISSIONS,
-				jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_PERMISSION));
+		String perm = jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_PERMISSION);
+		if (perm != null && !perm.isEmpty())
+			exp.setParameter(JRPdfExporterParameter.PERMISSIONS, new Integer(perm));
 
 		return exp;
 	}

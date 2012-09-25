@@ -238,7 +238,8 @@ public class JRContextPrefStore extends EventManager implements IPreferenceStore
 	@Override
 	public void setDefault(String name, String defaultObject) {
 		Assert.isTrue(name != null);
-		defaultProperties.put(name, defaultObject.toString());
+		if (defaultObject != null)
+			defaultProperties.put(name, defaultObject.toString());
 	}
 
 	@Override

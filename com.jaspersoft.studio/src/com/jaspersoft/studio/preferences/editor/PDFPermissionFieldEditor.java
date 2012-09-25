@@ -105,7 +105,8 @@ public class PDFPermissionFieldEditor extends FieldEditor {
 	private void setProperty(String resourcePreference) {
 		Integer ires = 0;
 		try {
-			ires = new Integer(resourcePreference);
+			if (resourcePreference != null && !resourcePreference.isEmpty())
+				ires = new Integer(resourcePreference);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
