@@ -444,7 +444,8 @@ public class ReportControler {
 			@Override
 			public void run() {
 				stats.endCount(ST_FILLINGTIME);
-				stats.setValue(ST_PAGECOUNT, jPrint.getPages().size());
+				if (jPrint != null)
+					stats.setValue(ST_PAGECOUNT, jPrint.getPages().size());
 				if (scfactory != null)
 					stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
 				stats.endCount(ST_REPORTEXECUTIONTIME);
