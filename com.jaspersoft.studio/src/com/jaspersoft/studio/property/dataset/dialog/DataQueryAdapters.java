@@ -353,6 +353,17 @@ public abstract class DataQueryAdapters {
 				if (currentDesigner != null)
 					currentDesigner.setDataAdapter((DataAdapterDescriptor) obj);
 			}
+			else {
+				String defaultDAName = mreport.getValue().getProperty(MReport.DEFAULT_DATAADAPTER);
+				if(defaultDAName!=null){
+					DataAdapterDescriptor daFound = DataAdapterManager.getPreferencesStorage().findDataAdapter(defaultDAName);
+					if(daFound!=null){
+						dscombo.setSelected(daFound);
+						if (currentDesigner != null)
+							currentDesigner.setDataAdapter(daFound);
+					}
+				}
+			}
 		}
 	}
 
