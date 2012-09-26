@@ -398,9 +398,9 @@ public class ReportFactory {
 		} else if (jrObject instanceof JRDesignVariable) {
 			JRDesignVariable jrVariable = (JRDesignVariable) jrObject;
 			if (jrVariable.isSystemDefined())
-				return new MVariableSystem(parent, jrVariable, -1);
+				return new MVariableSystem(parent, jrVariable, newIndex);
 			else
-				return new MVariable(parent, jrVariable, -1);
+				return new MVariable(parent, jrVariable, newIndex);
 		} else if (jrObject instanceof JRDesignScriptlet) {
 			if (parent instanceof MScriptlets) {
 				MScriptlets ms = (MScriptlets) parent;
