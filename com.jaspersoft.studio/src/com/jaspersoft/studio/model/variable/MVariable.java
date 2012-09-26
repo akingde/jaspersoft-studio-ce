@@ -263,8 +263,14 @@ public class MVariable extends MVariableSystem implements ICopyable {
 			jrVariable.setIncrementType((IncrementTypeEnum) incrementTypeD.getEnumValue(value));
 			if (!jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP))
 				jrVariable.setIncrementGroup(null);
-		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
-			jrVariable.setIncrementerFactoryClassName((String) value);
+		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME)){
+			if(value==null || ((String)value).isEmpty()){
+				jrVariable.setIncrementerFactoryClassName(null);
+			}
+			else{
+				jrVariable.setIncrementerFactoryClassName((String) value);
+			}
+		}
 	}
 
 	private JRDesignDataset dataset;
