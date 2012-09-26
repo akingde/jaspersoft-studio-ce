@@ -321,8 +321,11 @@ public abstract class DataQueryAdapters {
 		changeLanguage();
 
 		if (jDesign != null) {
-			String defadapter = jDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
-			dscombo.setSelected(defadapter);
+			String defaultAdapter = ds.getPropertiesMap().getProperty(MReport.DEFAULT_DATAADAPTER);
+			if(defaultAdapter==null){
+				defaultAdapter=jDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
+			}
+			dscombo.setSelected(defaultAdapter);
 			currentDesigner.setDataAdapter(dscombo.getSelected());
 		}
 	}
@@ -356,12 +359,9 @@ public abstract class DataQueryAdapters {
 			else {
 				String defaultDAName = mreport.getValue().getProperty(MReport.DEFAULT_DATAADAPTER);
 				if(defaultDAName!=null){
-					DataAdapterDescriptor daFound = DataAdapterManager.getPreferencesStorage().findDataAdapter(defaultDAName);
-					if(daFound!=null){
-						dscombo.setSelected(daFound);
+						dscombo.setSelected(defaultDAName);
 						if (currentDesigner != null)
-							currentDesigner.setDataAdapter(daFound);
-					}
+							currentDesigner.setDataAdapter(dscombo.getSelected());
 				}
 			}
 		}
