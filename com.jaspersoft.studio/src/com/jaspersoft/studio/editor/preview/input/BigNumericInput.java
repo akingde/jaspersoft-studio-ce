@@ -41,6 +41,7 @@ package com.jaspersoft.studio.editor.preview.input;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.validator.routines.BigDecimalValidator;
@@ -115,17 +116,17 @@ public class BigNumericInput extends ADataInput {
 						} else if (param.getValueClass().equals(BigInteger.class)) {
 							new BigInteger(number);
 						} else if (param.getValueClass().equals(Float.class)) {
-							e.doit = FloatValidator.getInstance().isValid(number);
+							e.doit = FloatValidator.getInstance().isValid(number, Locale.US);
 						} else if (param.getValueClass().equals(Double.class)) {
-							e.doit = DoubleValidator.getInstance().isValid(number);
+							e.doit = DoubleValidator.getInstance().isValid(number, Locale.US);
 						} else if (param.getValueClass().equals(Integer.class)) {
-							e.doit = IntegerValidator.getInstance().isValid(number);
+							e.doit = IntegerValidator.getInstance().isValid(number, Locale.US);
 						} else if (param.getValueClass().equals(Short.class)) {
-							e.doit = ShortValidator.getInstance().isValid(number);
+							e.doit = ShortValidator.getInstance().isValid(number, Locale.US);
 						} else if (param.getValueClass().equals(Byte.class)) {
-							e.doit = ByteValidator.getInstance().isValid(number);
+							e.doit = ByteValidator.getInstance().isValid(number, Locale.US);
 						} else if (param.getValueClass().equals(BigDecimal.class)) {
-							e.doit = BigDecimalValidator.getInstance().isValid(number);
+							e.doit = BigDecimalValidator.getInstance().isValid(number, Locale.US);
 						}
 						if (e.doit) {
 							if (min != null)
@@ -209,9 +210,11 @@ public class BigNumericInput extends ADataInput {
 
 	public void updateInput() {
 		Object value = params.get(param.getName());
-		if (value != null && value instanceof Number)
-			num.setText(NumberFormat.getInstance().format(value));
-		else
+		if (value != null && value instanceof Number) {
+			NumberFormat nformat = NumberFormat.getInstance(Locale.US);
+			nformat.setGroupingUsed(false);
+			num.setText(nformat.format(value));
+		} else
 			num.setText("");
 	}
 
