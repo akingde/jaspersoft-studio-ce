@@ -36,6 +36,8 @@ public class DatasetTimeSeriesSection extends DatasetSection {
 	@Override
 	public void createControls(Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
+		super.createControls(parent, tabbedPropertySheetPage);
+		
 		parent = getWidgetFactory().createSection(parent, "Time Series Dataset", false, 2, 2);
 
 		createWidget4Property(parent,

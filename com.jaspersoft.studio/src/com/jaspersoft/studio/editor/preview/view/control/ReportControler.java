@@ -144,7 +144,7 @@ public class ReportControler {
 					map.put(p.getName(), obj);
 			}
 			jasperParameters.clear();
-			jasperParameters.putAll(map); 
+			jasperParameters.putAll(map);
 		}
 		jrContext.setJRParameters(jasperParameters);
 	}
@@ -257,7 +257,6 @@ public class ReportControler {
 					c.addError(e);
 				} finally {
 					monitor.done();
-
 					finishReport(pcontainer);
 				}
 				return Status.OK_STATUS;
@@ -325,8 +324,8 @@ public class ReportControler {
 			pmonitor.setCanceled(true);
 	}
 
-	private IStatus fillReport(AsynchronousFillHandle fh, IProgressMonitor monitor, final PreviewContainer pcontainer)
-			throws JRException, InterruptedException {
+	private IStatus fillReport(final AsynchronousFillHandle fh, IProgressMonitor monitor,
+			final PreviewContainer pcontainer) throws JRException, InterruptedException {
 		Assert.isTrue(fh != null);
 		pmonitor = new SubProgressMonitor(monitor, IProgressMonitor.UNKNOWN,
 				SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
@@ -334,75 +333,9 @@ public class ReportControler {
 		try {
 			pmonitor.beginTask(Messages.PreviewEditor_fill_report, IProgressMonitor.UNKNOWN);
 			fh.addFillListener((IJRPrintable) pcontainer.getDefaultViewer());
-			fh.addFillListener(new FillListener() {
-				private boolean refresh = false;
-
-				@Override
-				public void pageUpdated(JasperPrint arg0, int page) {
-				}
-
-				@Override
-				public void pageGenerated(JasperPrint arg0, final int page) {
-					if (page == 0) {
-						Display.getDefault().syncExec(new Runnable() {
-							public void run() {
-								pcontainer.getRightContainer().switchView(stats, pcontainer.getDefaultViewerKey());
-							}
-						});
-					}
-					// pcontainer.setJasperPrint(stats, arg0);
-					if (refresh)
-						return;
-					refresh = true;
-					Display.getDefault().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							stats.endCount(ST_FILLINGTIME);
-							stats.setValue(ST_PAGECOUNT, page);
-							if (scfactory != null)
-								stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
-							stats.endCount(ST_REPORTEXECUTIONTIME);
-							c.setStatistics(stats);
-							refresh = false;
-						}
-					});
-				}
-			});
-			fh.addListener(new AsynchronousFilllListener() {
-
-				public void reportFinished(final JasperPrint jPrint) {
-					Display.getDefault().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							stats.endCount(ST_FILLINGTIME);
-							stats.setValue(ST_PAGECOUNT, jPrint.getPages().size());
-							if (scfactory != null)
-								stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
-							stats.endCount(ST_REPORTEXECUTIONTIME);
-							APreview pv = pcontainer.getDefaultViewer();
-							if (pv instanceof IJRPrintable)
-								try {
-									((IJRPrintable) pv).setJRPRint(stats, null);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-
-							pcontainer.setJasperPrint(stats, jPrint);
-							finished = false;
-						}
-					});
-				}
-
-				public void reportFillError(Throwable t) {
-					handleFillException(t);
-				}
-
-				public void reportCancelled() {
-					c.addMessage(Messages.PreviewEditor_report_fill_canceled);
-				}
-			});
+			PageGenerationListener pgListener = new PageGenerationListener();
+			fh.addFillListener(pgListener);
+			fh.addListener(pgListener);
 			stats.startCount(ST_FILLINGTIME);
 			fh.startFill();
 			finished = true;
@@ -424,6 +357,59 @@ public class ReportControler {
 		}
 
 		return retstatus;
+	}
+
+	class PageGenerationListener implements AsynchronousFilllListener, FillListener {
+		JasperPrint jrPrint;
+		private boolean refresh = false;
+
+		@Override
+		public void pageUpdated(JasperPrint arg0, int page) {
+		}
+
+		@Override
+		public void pageGenerated(JasperPrint arg0, final int page) {
+			this.jrPrint = arg0;
+			if (page == 0) {
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						pcontainer.getRightContainer().switchView(stats, pcontainer.getDefaultViewerKey());
+					}
+				});
+			}
+			// pcontainer.setJasperPrint(stats, arg0);
+			if (refresh)
+				return;
+			refresh = true;
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					stats.endCount(ST_FILLINGTIME);
+					stats.setValue(ST_PAGECOUNT, page);
+					if (scfactory != null)
+						stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
+					stats.endCount(ST_REPORTEXECUTIONTIME);
+					c.setStatistics(stats);
+					refresh = false;
+				}
+			});
+		}
+
+		public void reportFinished(final JasperPrint jPrint) {
+			this.jrPrint = jPrint;
+			finishUpdateViewer(pcontainer, jPrint);
+		}
+
+		public void reportFillError(Throwable t) {
+			handleFillException(t);
+		}
+
+		public void reportCancelled() {
+			if (jrPrint != null)
+				finishUpdateViewer(pcontainer, jrPrint);
+			c.addMessage(Messages.PreviewEditor_report_fill_canceled);
+		}
 	}
 
 	private boolean finished = true;
@@ -450,5 +436,29 @@ public class ReportControler {
 		scfactory = new RecordCountScriptletFactory();
 		extensions.add(scfactory);
 		jrContext.setExtensions(ScriptletFactory.class, extensions);
+	}
+
+	private void finishUpdateViewer(final PreviewContainer pcontainer, final JasperPrint jPrint) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				stats.endCount(ST_FILLINGTIME);
+				stats.setValue(ST_PAGECOUNT, jPrint.getPages().size());
+				if (scfactory != null)
+					stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
+				stats.endCount(ST_REPORTEXECUTIONTIME);
+				APreview pv = pcontainer.getDefaultViewer();
+				if (pv instanceof IJRPrintable)
+					try {
+						((IJRPrintable) pv).setJRPRint(stats, null);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+				pcontainer.setJasperPrint(stats, jPrint);
+				finished = false;
+			}
+		});
 	}
 }
