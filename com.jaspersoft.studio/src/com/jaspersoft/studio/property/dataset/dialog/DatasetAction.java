@@ -23,6 +23,7 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -36,6 +37,7 @@ import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.utils.ResourceManager;
 
@@ -108,6 +110,11 @@ public class DatasetAction extends SelectionAction {
 		List<Object> selection = getSelectedObjects();
 		if (!selection.isEmpty() && selection.size() == 1) {
 			Object obj = selection.get(0);
+			if (obj instanceof EditPart) {
+				if (((EditPart) obj).getModel() instanceof MDataset || ((EditPart) obj).getModel() instanceof MBand
+						|| ((EditPart) obj).getModel() instanceof MReport)
+					return true;
+			}
 			if (obj instanceof ReportPageEditPart || obj instanceof BandEditPart)
 				return true;
 		}
