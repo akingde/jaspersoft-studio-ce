@@ -33,6 +33,7 @@ import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.components.table.model.MTableHeader;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.model.ANode;
+
 /*
  * link nodes & together.
  * 
@@ -44,16 +45,20 @@ public class CreateColumnCellCommand extends Command {
 	private Class<ANode> type;
 	private String groupName;
 	private Cell jrCell;
+	private int height = 0;
 
 	@SuppressWarnings("unchecked")
 	public CreateColumnCellCommand(ANode parent, MColumn srcNode) {
 		super();
 		type = (Class<ANode>) parent.getClass();
 		if (parent instanceof MTableGroupHeader)
-			groupName = ((MTableGroupHeader) parent).getJrDesignGroup().getName();
+			groupName = ((MTableGroupHeader) parent).getJrDesignGroup()
+					.getName();
 		if (parent instanceof MTableGroupFooter)
-			groupName = ((MTableGroupFooter) parent).getJrDesignGroup().getName();
+			groupName = ((MTableGroupFooter) parent).getJrDesignGroup()
+					.getName();
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
+		height = srcNode.getBounds().height;
 	}
 
 	/*
@@ -83,7 +88,7 @@ public class CreateColumnCellCommand extends Command {
 
 	protected Cell createCell() {
 		DesignCell cell = new DesignCell();
-		cell.setHeight(10);
+		cell.setHeight(height);
 		return cell;
 	}
 
