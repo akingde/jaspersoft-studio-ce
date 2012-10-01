@@ -223,6 +223,7 @@ public class PreviewJRPrint extends ABasicEditor {
 				((IJRPrintable) view).setJRPRint(stats, jasperPrint);
 				console.setStatistics(stats);
 			} catch (Exception e) {
+				errorPreview.setMessage("The document is empty.");
 				container.switchView(stats, errorPreview);
 
 				console.addError(e);
@@ -261,6 +262,10 @@ public class PreviewJRPrint extends ABasicEditor {
 	}
 
 	private VSimpleErrorPreview errorPreview;
+
+	public VSimpleErrorPreview getErrorView() {
+		return errorPreview;
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {

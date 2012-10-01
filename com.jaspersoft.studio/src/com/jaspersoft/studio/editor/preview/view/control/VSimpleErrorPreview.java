@@ -25,7 +25,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -37,7 +36,7 @@ public class VSimpleErrorPreview extends APreview {
 		super(parent, jContext);
 	}
 
-	private Text tmessage;
+	private Label tmessage;
 
 	@Override
 	public Control createControl(final Composite parent) {
@@ -57,16 +56,19 @@ public class VSimpleErrorPreview extends APreview {
 	}
 
 	protected void createMessages(Composite composite) {
-		Label lbl = new Label(composite, SWT.PUSH);
-		lbl.setText("The document is empty.");
-		GridData layoutData = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
+		tmessage = new Label(composite, SWT.PUSH | SWT.CENTER | SWT.WRAP);
+		tmessage.setText("Starting to generate a new report, please wait ...");
+		// GridData layoutData = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
+		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
+		layoutData.horizontalAlignment = SWT.CENTER;
+		layoutData.verticalAlignment = SWT.CENTER;
+		layoutData.grabExcessHorizontalSpace = true;
+		layoutData.grabExcessVerticalSpace = true;
+		layoutData.horizontalSpan = 1;
+		layoutData.verticalSpan = 1;
 
-		layoutData.heightHint = UIUtils.getCharHeight(lbl) * 2 + 50;
-		lbl.setLayoutData(layoutData);
-
-		// tmessage = new Text(composite, SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
-		// tmessage.setText("EmptyDocument");
-		// tmessage.setLayoutData(new GridData(GridData.FILL_BOTH));
+		layoutData.heightHint = UIUtils.getCharHeight(tmessage) * 2 + 50;
+		tmessage.setLayoutData(layoutData);
 	}
 
 	public void setMessage(String msg) {
@@ -75,6 +77,8 @@ public class VSimpleErrorPreview extends APreview {
 
 	public void addMessage(String msg) {
 		tmessage.setText(tmessage.getText() + msg + "\n");
+		tmessage.getParent().update();
+		tmessage.getParent().layout();
 	}
 
 	private Composite container;

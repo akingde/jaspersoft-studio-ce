@@ -110,7 +110,7 @@ public class MBreak extends MGraphicElement {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		typeD = new JSSEnumPropertyDescriptor(JRBaseBreak.PROPERTY_TYPE, Messages.MBreak_type, BreakTypeEnum.class,
-				NullEnum.NULL);
+				NullEnum.NOTNULL);
 		typeD.setDescription(Messages.MBreak_type_description);
 		desc.add(typeD);
 		typeD.setCategory(Messages.MBreak_break_properties_category);
@@ -163,7 +163,10 @@ public class MBreak extends MGraphicElement {
 	 */
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
-		return new JRDesignBreak();
+		JRDesignBreak brk = new JRDesignBreak();
+		brk.setWidth(getDefaultWidth());
+		brk.setHeight(getDefaultHeight());
+		return brk;
 	}
 
 	/*

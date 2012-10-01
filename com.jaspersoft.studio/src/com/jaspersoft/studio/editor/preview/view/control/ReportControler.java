@@ -177,6 +177,10 @@ public class ReportControler {
 	private Console c;
 
 	public void runReport() {
+		VSimpleErrorPreview errorView = pcontainer.getErrorView();
+		pcontainer.getRightContainer().switchView(null, errorView);
+		errorView.setMessage("Starting new report, please wait ...");
+
 		c = pcontainer.getConsole();
 		c.showConsole();
 		c.clearConsole();
@@ -201,7 +205,11 @@ public class ReportControler {
 				boolean notprmfiled = !prmInput.checkFieldsFilled();
 				if (notprmfiled) {
 					c.addMessage(Messages.ReportControler_msg_fillparameters);
-					UIUtils.showWarning(Messages.ReportControler_msg_fillparameters);
+					VSimpleErrorPreview errorView = pcontainer.getErrorView();
+					pcontainer.getRightContainer().switchView(null, errorView);
+					errorView.setMessage(Messages.ReportControler_msg_fillparameters);
+					// UIUtils.showWarning(Messages.ReportControler_msg_fillparameters);
+					prmInput.setFocus();
 					prmInput.setDirty(true);
 				}
 				if (pcontainer.isHideParameters())

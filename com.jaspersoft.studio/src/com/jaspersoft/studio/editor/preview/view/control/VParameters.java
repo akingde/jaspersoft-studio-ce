@@ -57,6 +57,15 @@ public class VParameters extends APreview {
 		super(parent, jContext);
 	}
 
+	public void setFocus() {
+		for (Control c : composite.getChildren()) {
+			if ((c.getStyle() & SWT.NO_FOCUS) == 0) {
+				c.setFocus();
+				break;
+			}
+		}
+	}
+
 	@Override
 	protected Control createControl(final Composite parent) {
 		scompo = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
@@ -68,6 +77,7 @@ public class VParameters extends APreview {
 		composite = new Composite(scompo, SWT.NONE);
 		GridLayout layout = new GridLayout();
 		layout.marginWidth = 2;
+		layout.marginRight = 6;
 		layout.marginBottom = 20;
 		composite.setLayout(layout);
 		composite.setBackground(parent.getBackground());
