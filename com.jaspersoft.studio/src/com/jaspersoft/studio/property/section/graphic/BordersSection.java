@@ -38,7 +38,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -168,7 +167,7 @@ public class BordersSection extends AbstractSection {
 		Composite mainLayout = new Composite(parent, SWT.NONE);
 		mainLayout.setBackground(mainLayout.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		mainLayout.setLayout(new GridLayout(1,true));
-		mainLayout.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false));
+		mainLayout.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 				
 		createPaddingPanel(mainLayout);
 		

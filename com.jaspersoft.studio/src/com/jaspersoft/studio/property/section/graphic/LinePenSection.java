@@ -21,8 +21,11 @@ package com.jaspersoft.studio.property.section.graphic;
 
 import net.sf.jasperreports.engine.base.JRBasePen;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLinePen;
@@ -54,9 +57,15 @@ public class LinePenSection extends AbstractRealValueSection {
 
 		parent.setLayout(new GridLayout(2, false));
 
-		createWidget4Property(parent, JRBasePen.PROPERTY_LINE_COLOR);
-		createWidget4Property(parent, JRBasePen.PROPERTY_LINE_STYLE);
-		createWidget4Property(parent, JRBasePen.PROPERTY_LINE_WIDTH);
+		Group panel = new Group(parent, SWT.NONE);
+		panel.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		panel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		panel.setLayout(new GridLayout(2,false));
+		panel.setText("Line");
+		
+		createWidget4Property(panel, JRBasePen.PROPERTY_LINE_COLOR);
+		createWidget4Property(panel, JRBasePen.PROPERTY_LINE_STYLE);
+		createWidget4Property(panel, JRBasePen.PROPERTY_LINE_WIDTH);
 	}
 
 }

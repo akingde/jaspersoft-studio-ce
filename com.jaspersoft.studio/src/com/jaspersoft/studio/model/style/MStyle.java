@@ -313,8 +313,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		//modeD.setDescription(Messages.MStyle_mode_description);
 		//desc.add(modeD);
 		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(
-				JRBaseStyle.PROPERTY_MODE, Messages.common_opaque,NullEnum.INHERITED);
-		opaqueDBool.setDescription(Messages.MStyle_mode_description);
+				JRBaseStyle.PROPERTY_MODE, Messages.common_opaque);
+		opaqueDBool.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueDBool);
 		
 		
