@@ -32,10 +32,12 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
-import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
+import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportEditor;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.dataset.MDataset;
@@ -73,10 +75,26 @@ public class DatasetAction extends SelectionAction {
 	 */
 	public void run() {
 		try {
-			final ReportEditor part = (ReportEditor) getWorkbenchPart();
-			MReport mreport = (MReport) part.getModel().getChildren().get(0);
-			MDataset mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
-			// IFile file = ((IFileEditorInput) part.getEditorInput()).getFile();
+			final AbstractVisualEditor part = (AbstractVisualEditor) getWorkbenchPart();
+			MDataset mdataset = null;
+			if(part instanceof ReportEditor){
+				MReport mreport = (MReport) part.getModel().getChildren().get(0);
+				mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+			}
+			else {
+				// Handle custom editors for elements like table, crosstab and list
+				if(part.getModel().getChildren().size()>0){
+					INode firstChild = part.getModel().getChildren().get(0);
+					if(firstChild instanceof MPage){
+						for(INode c : firstChild.getChildren()){
+							if(c instanceof MDataset){
+								mdataset = (MDataset)c;
+								break;
+							}
+						}
+					}
+				}
+			}
 
 			IContentOutlinePage cop = (IContentOutlinePage) part.getAdapter(IContentOutlinePage.class);
 			if (cop != null) {
@@ -110,13 +128,14 @@ public class DatasetAction extends SelectionAction {
 		List<Object> selection = getSelectedObjects();
 		if (!selection.isEmpty() && selection.size() == 1) {
 			Object obj = selection.get(0);
+			if(obj instanceof IDatasetDialogSupport){
+				return true;
+			}
 			if (obj instanceof EditPart) {
 				if (((EditPart) obj).getModel() instanceof MDataset || ((EditPart) obj).getModel() instanceof MBand
-						|| ((EditPart) obj).getModel() instanceof MReport)
+						|| ((EditPart) obj).getModel() instanceof MReport || ((EditPart)obj).getParent() instanceof PageEditPart)
 					return true;
 			}
-			if (obj instanceof ReportPageEditPart || obj instanceof BandEditPart)
-				return true;
 		}
 
 		return false;

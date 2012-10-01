@@ -28,6 +28,8 @@ import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.Separator;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
@@ -44,6 +46,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -135,7 +138,17 @@ public class CrosstabEditor extends AbstractVisualEditor {
 		action = new CreateCrosstabParameterAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateCrosstabParameterAction.ID);
+		
+		action = new DatasetAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+	}
 
+	@Override
+	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
+		toolbarManager.add(getActionRegistry().getAction(DatasetAction.ID));
+		toolbarManager.add(new Separator());
+		super.contributeItemsToEditorTopToolbar(toolbarManager);
 	}
 
 }

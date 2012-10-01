@@ -42,6 +42,7 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
@@ -49,7 +50,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class ReportPageEditPart extends PageEditPart implements PropertyChangeListener {
+public class ReportPageEditPart extends PageEditPart implements PropertyChangeListener,IDatasetDialogSupport {
 
 	protected APageFigure newPageFigure() {
 		return new ReportPageFigure(getJasperDesign(), true);

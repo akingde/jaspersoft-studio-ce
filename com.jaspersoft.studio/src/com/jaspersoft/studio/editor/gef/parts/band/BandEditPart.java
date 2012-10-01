@@ -80,6 +80,7 @@ import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SWTResourceManager;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -92,7 +93,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav, Giulio Toffoli
  */
-public class BandEditPart extends FigureEditPart implements PropertyChangeListener, IContainerPart, IContainer {
+public class BandEditPart extends FigureEditPart implements PropertyChangeListener, IContainerPart, IContainer, IDatasetDialogSupport {
 
 	private BandPreferenceListener prefChangelistener;
 	private JasperReportsConfiguration jConfig;

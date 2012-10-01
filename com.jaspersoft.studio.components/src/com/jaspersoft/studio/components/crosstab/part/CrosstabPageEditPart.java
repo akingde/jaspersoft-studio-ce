@@ -33,8 +33,9 @@ import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
+import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 
-public class CrosstabPageEditPart extends PageEditPart {
+public class CrosstabPageEditPart extends PageEditPart implements IDatasetDialogSupport {
 
 	@Override
 	protected APageFigure newPageFigure() {

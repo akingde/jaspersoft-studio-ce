@@ -28,8 +28,9 @@ import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 
-public class ListPageEditPart extends PageEditPart {
+public class ListPageEditPart extends PageEditPart implements IDatasetDialogSupport {
 
 	@Override
 	protected APageFigure newPageFigure() {
