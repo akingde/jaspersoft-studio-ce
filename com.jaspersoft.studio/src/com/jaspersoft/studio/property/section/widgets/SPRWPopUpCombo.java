@@ -62,7 +62,9 @@ public class SPRWPopUpCombo extends ASPropertyWidget {
 
 	@Override
 	public Control getControl() {
-		return combo.getControl();
+		if (combo!=null)
+			return combo.getControl();
+		else return null;
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
@@ -98,6 +100,7 @@ public class SPRWPopUpCombo extends ASPropertyWidget {
 					}
 			});
 			combo.setToolTipText(pDescriptor.getDescription());
+			getControl().addFocusListener(focusListener);
 		}
 	}
 
