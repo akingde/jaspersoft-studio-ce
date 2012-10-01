@@ -1,16 +1,21 @@
 /*******************************************************************************
- * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
- * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
+ * ---------------------------------------------------------------------
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
- * details.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * You should have received a copy of the GNU Affero General Public License along with this program. If not, see
- * <http://www.gnu.org/licenses/>.
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ * ---------------------------------------------------------------------
  ******************************************************************************/
-package com.jaspersoft.studio.editor.gef.parts.band;
+package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -47,6 +52,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
+import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.utils.compatibility.FigureUtilities;
 
@@ -56,7 +62,7 @@ import com.jaspersoft.studio.utils.compatibility.FigureUtilities;
  * This because MarqueeDragTracker dosen't provide an easy way to change the selection appearance. So this extended copy
  * was done to give this possibility. This class handle a double type of selection, in fact when selecting up to down
  * only elements Completely enclosed in the selection will be selected, otherwise an element will be selected even if
- * it's only touched.
+ * it's only touched
  * 
  * @author Orlandin Marco
  * 

@@ -1,23 +1,27 @@
+/*******************************************************************************
+ * ---------------------------------------------------------------------
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ * ---------------------------------------------------------------------
+ ******************************************************************************/
 package com.jaspersoft.studio.model;
 
 import java.awt.Color;
 import java.util.HashMap;
 
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.LineStylePropertyDescriptor;
-
-import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
-import net.sf.jasperreports.engine.JRBox;
 import net.sf.jasperreports.engine.JRCommonText;
 import net.sf.jasperreports.engine.JRFont;
-import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseElement;
@@ -27,7 +31,6 @@ import net.sf.jasperreports.engine.base.JRBasePrintElement;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.fill.JRFillElement;
 import net.sf.jasperreports.engine.fill.JRTemplateElement;
-import net.sf.jasperreports.engine.type.EnumUtil;
 import net.sf.jasperreports.engine.type.FillEnum;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
@@ -37,12 +40,33 @@ import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 import net.sf.jasperreports.engine.util.JRProperties;
 
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.LineStylePropertyDescriptor;
+
+/**
+ * This class store statically the default values of many element
+ * @author Marco Orlandin
+ *
+ */
 public class DefaultValuesMap {
+	
+	/**
+	 * Hashmap that cache the properties for every requested type. Using this every request after the 
+	 * first for the same type will not rebuild the default values map.
+	 */
 	private static HashMap<Class, HashMap<String,Object>> valuesMap = null;
 	
 	private static final Integer INTEGER_ZERO = Integer.valueOf(0);
 	
-	
+	/**
+	 * Initialize the static fields
+	 */
 	private static void initValuesMap(){
 		if (valuesMap == null) valuesMap = new HashMap<Class, HashMap<String,Object>>();
 	}
@@ -160,6 +184,11 @@ public class DefaultValuesMap {
 		};
 	}
 	
+	/**
+	 * Create the default property map for a wide range of object
+	 * @param type the type of the element for which the properties are requested
+	 * @return the default properties of the requested element
+	 */
 	@SuppressWarnings("deprecation")
 	private static HashMap<String, Object> initializeType(Object type){
 		HashMap<String, Object> result = new HashMap<String, Object>();
@@ -229,16 +258,30 @@ public class DefaultValuesMap {
 		return result;
 	}
 	
+	/**
+	 * Return all the property for an element with a requested type
+	 * @param type the type of the element
+	 * @return An hashmap of the default property, where the key is the property name and the 
+	 * value is an object representing the property value
+	 */
 	public static HashMap<String, Object> getPropertiesByType(Object type){
 		 initValuesMap();
+		 //Check the requested properties are cached
 		 HashMap<String, Object> result = valuesMap.get(type.getClass());
 		 if (result == null){
+			 //The are not, so i need to create them
 			 result = initializeType(type);
 			 valuesMap.put(type.getClass(), result);
 		 }
 		 return result;
 	}
 	
+	/**
+	 * Return the default property value for an element with a specified type
+	 * @param key the key of the property
+	 * @param type the type of the element that contains the property
+	 * @return an object representing the property
+	 */
 	public static Object getValue(String key, Object type){
 		return getPropertiesByType(type.getClass()).get(key);
 	}

@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * ---------------------------------------------------------------------
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ * ---------------------------------------------------------------------
+ ******************************************************************************/
 package com.jaspersoft.studio.property.section.obj;
 
 import java.beans.PropertyChangeEvent;
@@ -667,6 +684,10 @@ public class StylesListSection extends AbstractSection {
 		isRefreshing = false;
 	}
 	
+	/**
+	 * Create the map of the style for an element
+	 * @param element
+	 */
 	private void initializeStyleMap(APropertyNode element){
 		List<INode> children = element.getRoot().getChildren();
 		Iterator<INode> it = children.iterator();
@@ -674,8 +695,8 @@ public class StylesListSection extends AbstractSection {
 			INode childElement = it.next();
 			if (childElement instanceof MStyles)
 				stylesClass = (MStyles) childElement;
+			//The root is a subreport or a table, i need to move into an upper levele
 			if (childElement instanceof MPage){
-				//Inside a page
 				children = childElement.getChildren();
 				it = children.iterator();
 			}
@@ -684,7 +705,7 @@ public class StylesListSection extends AbstractSection {
 	}
 	
 	/**
-	 * Initialize the styles widget
+	 * Initialize the styles widget, create the control and set them
 	 */
 	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {

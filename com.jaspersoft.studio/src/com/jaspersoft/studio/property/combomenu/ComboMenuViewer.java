@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * ---------------------------------------------------------------------
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ * ---------------------------------------------------------------------
+ ******************************************************************************/
 package com.jaspersoft.studio.property.combomenu;
 
 import java.util.ArrayList;
@@ -127,8 +144,8 @@ public class ComboMenuViewer  {
     }
     
     /**
-     * Add a new action to execute when an element form the popup menu il selected
-     * @param listener the ne action
+     * Add a new action to execute when an element form the popup menu is selected
+     * @param listener the action to execute when the element is selected
      */
     public void addSelectionListener(ComboItemAction listener){
     	listeners.add(listener);
@@ -142,11 +159,18 @@ public class ComboMenuViewer  {
     	dropDownHandle.getControl().setToolTipText(text);
     }
 
-    
+    /**
+     * Used to check if the popup menu has element inside it
+     * @return true if there are entry, otherwise false
+     */
     protected boolean hasNoElement() {
         return elementList.isEmpty();
     }
 
+    /**
+     * Return the number of entry in the popup menu
+     * @return number of entry
+     */
     protected int getItemCount() {
         return elementList.size();
     }
@@ -209,7 +233,7 @@ public class ComboMenuViewer  {
 
     /**
      * Return the control of the combobox
-     * @return
+     * @return A reference to the combobox control
      */
     public Control getControl() {
         return dropDownHandle.getControl();
@@ -229,7 +253,7 @@ public class ComboMenuViewer  {
     }
 
     /**
-     * Open the popoup menu inside the menumanger an place it under the combobox
+     * Open the popoup menu inside the menumanger and place it under the combobox
      * @param menuManager
      */
     protected void openPopupMenu(MenuManager menuManager) {
@@ -391,21 +415,6 @@ public class ComboMenuViewer  {
             popupMenu.dispose();
             popupMenu = null;
         }
-    }
-
-    /**
-     * Calculate the union from the text and an image
-     * @param size
-     * @param width
-     * @param height
-     * @return
-     */
-    protected static Point union(Point size, int width, int height) {
-        if (size == null)
-            return new Point(width, height);
-        size.x = Math.max(size.x, width);
-        size.y = Math.max(size.y, height);
-        return size;
     }
 
     /**

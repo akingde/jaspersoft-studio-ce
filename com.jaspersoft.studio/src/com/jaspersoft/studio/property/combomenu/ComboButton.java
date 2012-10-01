@@ -3,8 +3,6 @@ package com.jaspersoft.studio.property.combomenu;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.StyleConstants.ColorConstants;
-
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.SafeRunnable;

@@ -42,7 +42,8 @@ public class GraphicSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent.setLayout(new GridLayout(2, false));
+		parent = getWidgetFactory().createSection(parent, "Detail", false, 2);
+		//parent.setLayout(new GridLayout(2, false));
 
 		createWidget4Property(parent, JRDesignElement.PROPERTY_KEY).getControl().setLayoutData(
 				new GridData(GridData.FILL_HORIZONTAL));

@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * ---------------------------------------------------------------------
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ * ---------------------------------------------------------------------
+ ******************************************************************************/
 package com.jaspersoft.studio.property.section.graphic;
 
 import java.awt.BasicStroke;
@@ -57,6 +74,11 @@ class LineBoxDrawer extends BoxDrawer {
 	 * Stroke used to do the selection effect of a border
 	 */
 	private static Stroke dashedStroke = null;
+	
+	/**
+	 * The color used for the guidelines
+	 */
+	private static Color guideColor = null;
 	
 	/**
 	 * Describe the position of a border and store if it is or not selected
@@ -142,15 +164,29 @@ class LineBoxDrawer extends BoxDrawer {
 		
 	}
 	
+	/**
+	 * Return the last border selected
+	 * @return A reference to the last selected border, could be null if no border
+	 * was selected from the creation time
+	 */
 	public Border getLastSelected(){
 		return lastSelected;
 	}
 	
-	
+	/**
+	 * Build the class and add a Listener to the canvas to check the mouse click on the area. When a mouse click
+	 * is detected will be checked if it's position is inside the area of a border. In that case the border selection value
+	 * will be complemented and the canvas area will be redrawn
+	 * @param jasperReportsContext
+	 * @param square the canvas painting area
+	 */
 	public LineBoxDrawer(JasperReportsContext jasperReportsContext, Canvas square) {
 		super(jasperReportsContext);
 		if (dashedStroke == null){
-			dashedStroke = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, new float[]{4,4}, 0f);
+			//Create the dashed stroke to paint the selection
+			dashedStroke = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, new float[]{2,2}, 0f);
+			//Create the guideColoros
+			guideColor = new Color(192,192,192);
 		}
 		paintingSquare = square;
 		paintingSquare.addMouseListener(new MouseListener() {
@@ -323,8 +359,8 @@ class LineBoxDrawer extends BoxDrawer {
 	protected void drawGuideLines(Graphics2D grx, JRPen topPen, JRPen leftPen, JRPen bottomPen, JRPen rightPen, JRPrintElement element, int offsetX, int offsetY){
 		Stroke oldStroke = grx.getStroke();
 		Color oldColor = grx.getColor();
-		grx.setStroke(new BasicStroke(3));
-		grx.setColor(Color.gray);
+		grx.setStroke(new BasicStroke(1));
+		grx.setColor(guideColor);
 		float topOffset = topPen.getLineWidth().floatValue() / 2 - BorderOffset.getOffset(topPen);
 		int width = element.getWidth();
 		int height = element.getHeight();

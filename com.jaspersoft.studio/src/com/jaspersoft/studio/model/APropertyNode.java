@@ -71,9 +71,9 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	
 	/**
 	 * Return the actual value of an attribute, so the value that the system is 
-	 * using
-	 * @param id
-	 * @return
+	 * using, not considering if it's inherited or of the element
+	 * @param id of the attribute
+	 * @return the attribute value.
 	 */
 	public Object getPropertyActualValue(Object id){
 		return getPropertyValue(id);

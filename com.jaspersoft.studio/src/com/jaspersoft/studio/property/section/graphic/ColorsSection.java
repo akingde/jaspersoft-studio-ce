@@ -42,10 +42,12 @@ public class ColorsSection extends AbstractRealValueSection {
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent.setLayout(new GridLayout(4, false));
 
+		parent = getWidgetFactory().createSection(parent, "Color", false, 4);
+		
+		//parent.setLayout(new GridLayout(4, false));
+		
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_FORECOLOR);
-
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_BACKCOLOR);
 		
 		Composite transparencyComp = new Composite(parent, SWT.NONE);
