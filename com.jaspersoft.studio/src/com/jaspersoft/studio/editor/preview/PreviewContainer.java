@@ -37,6 +37,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
@@ -237,7 +238,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return super.switchRightView(view, stats, container);
 	}
 
-	public void runReport(DataAdapterDescriptor myDataAdapter) {
+	public void runReport(final DataAdapterDescriptor myDataAdapter) {
 		if (isNotRunning()) {
 			// check if we can run the report
 			topToolBarManager.setEnabled(false);
@@ -283,12 +284,18 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return reportControler;
 	}
 
-	public void setJasperDesign(JasperReportsConfiguration jConfig) {
-		getReportControler().setJrContext(jConfig);
-		setupDataAdapter();
-		if (isDirty() || getJasperPrint() == null)
-			runReport(dataAdapterDesc);
-		isDirty = false;
+	public void setJasperDesign(final JasperReportsConfiguration jConfig) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				getReportControler().setJrContext(jConfig);
+				setupDataAdapter();
+				if (isDirty() || getJasperPrint() == null)
+					runReport(dataAdapterDesc);
+				isDirty = false;
+			}
+		});
 	}
 
 	private void setupDataAdapter() {
