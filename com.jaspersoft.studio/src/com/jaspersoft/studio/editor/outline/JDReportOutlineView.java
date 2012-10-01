@@ -37,10 +37,8 @@ import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
-import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.parts.ContentOutlinePage;
@@ -48,7 +46,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -68,11 +65,11 @@ import org.eclipse.ui.part.PageBook;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
+import com.jaspersoft.studio.editor.dnd.JSSTemplateTransferDropTargetListener;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
-import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.messages.Messages;
@@ -186,12 +183,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		ContextMenuProvider provider = getMenuContentProvider();
 		getViewer().setContextMenu(provider);
 
-		getViewer().addDropTargetListener((TransferDropTargetListener) new TemplateTransferDropTargetListener(getViewer()) {
-			@Override
-			protected CreationFactory getFactory(Object template) {
-				return new JDPaletteCreationFactory(template);
-			}
-		});
+		getViewer().addDropTargetListener(new JSSTemplateTransferDropTargetListener(getViewer()));
 		getViewer().addDragSourceListener(new TemplateTransferDragSourceListener(getViewer()) {
 			@Override
 			protected Object getTemplate() {
