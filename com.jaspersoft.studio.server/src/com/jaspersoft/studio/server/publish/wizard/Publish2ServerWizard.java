@@ -43,7 +43,7 @@ public class Publish2ServerWizard extends Wizard {
 	private DatasourceSelectionPage page2;
 	private int page;
 	private ANode n;
-	JasperReportsConfiguration jrConfig;
+	private JasperReportsConfiguration jrConfig;
 
 	public Publish2ServerWizard(ANode n, JasperDesign jDesign,
 			JasperReportsConfiguration jrConfig, int page) {

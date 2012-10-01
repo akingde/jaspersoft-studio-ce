@@ -233,6 +233,7 @@ public class TableMatrix {
 				Guide gn = addNext(north, hGuides);
 				gn.addNorth(cell);
 				gn.setY(north, cell.cell);
+				south.setY(Math.max(gn.getY(), south.getY()));
 				fillRowTop(gn, south, ((StandardColumnGroup) bc).getColumns(),
 						type, grName);
 			} else {
