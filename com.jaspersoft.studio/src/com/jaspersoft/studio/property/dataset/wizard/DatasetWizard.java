@@ -27,6 +27,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.command.CreateDatasetCommand;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardPageChangeEvent;
 import com.jaspersoft.studio.wizards.WizardUtils;
@@ -107,13 +108,15 @@ public class DatasetWizard extends JSSWizard {
 	 * @throws JRException 
 	 */
 	public JRDesignDataset getDataset() {
-
-		//	JRDesignDataset jdataset = (JRDesignDataset) dataset.getValue();
-		//	setUpDataset(jdataset, step2, step3, step4);
-		//
-		//	return dataset;
-		
-		return WizardUtils.createDataset(false, getSettings());
+		JRDesignDataset ds = WizardUtils.createDataset(false, getSettings());
+		if(step2.getDataAdapter()!=null){
+			// Save the information on the default data adapter
+			// to propose selected for this specific dataset
+			ds.getPropertiesMap().setProperty(
+					DataQueryAdapters.DEFAULT_DATAADAPTER, 
+					step2.getDataAdapter().getName());
+		}
+		return ds;
 	}
 
 	
@@ -150,8 +153,7 @@ public class DatasetWizard extends JSSWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		
-		addCommand( new CreateDatasetCommand(getConfig(), getDataset() ));
+		addCommand(new CreateDatasetCommand(getConfig(),getDataset()));
 		return super.performFinish();
 	}
 

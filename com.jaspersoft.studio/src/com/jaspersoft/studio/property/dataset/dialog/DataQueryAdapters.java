@@ -65,7 +65,6 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.widget.DataAdapterAction;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -73,13 +72,15 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class DataQueryAdapters {
 
+	/** Property to save a default data adapter to select */
+	public static final String DEFAULT_DATAADAPTER = "com.jaspersoft.studio.data.defaultdataadapter";
+	
 	public static final int CONTAINER_WITH_NO_TABLES = 0x01;
 	public static final int CONTAINER_WITH_INFO_TABLES = 0x02;
 
 	private JRDesignDataset newdataset;
 	private JasperDesign jDesign;
 	private JasperReportsConfiguration jConfig;
-
 	private Color background;
 	private IFile file;
 
@@ -246,7 +247,7 @@ public abstract class DataQueryAdapters {
 
 			public void runReport(DataAdapterDescriptor da) {
 				if (da != null)
-					newdataset.setProperty(MReport.DEFAULT_DATAADAPTER, da.getName());
+					newdataset.setProperty(DEFAULT_DATAADAPTER, da.getName());
 				currentDesigner.setDataAdapter(da);
 			}
 
@@ -319,11 +320,13 @@ public abstract class DataQueryAdapters {
 			langCombo.setItem(0, Misc.nvl(query.getLanguage()));
 		isRefresh = false;
 		changeLanguage();
-
+		
 		if (jDesign != null) {
-			String defaultAdapter = ds.getPropertiesMap().getProperty(MReport.DEFAULT_DATAADAPTER);
-			if(defaultAdapter==null){
-				defaultAdapter=jDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
+			// Try to find the default data adapter for the specified dataset
+			String defaultAdapter = ds.getPropertiesMap().getProperty(DEFAULT_DATAADAPTER);
+			if(defaultAdapter==null && ds.isMainDataset()){
+				// if none available get the default for the main report
+				defaultAdapter=jDesign.getProperty(DEFAULT_DATAADAPTER);
 			}
 			dscombo.setSelected(defaultAdapter);
 			currentDesigner.setDataAdapter(dscombo.getSelected());
@@ -347,25 +350,6 @@ public abstract class DataQueryAdapters {
 	public abstract List<JRDesignField> getCurrentFields();
 
 	public abstract void setParameters(List<JRDesignParameter> params);
-
-	public void setDefaultDataAdapter(MReport mreport) {
-		if (mreport != null) {
-			Object obj = mreport.getParameter(MReport.DEFAULT_DATAADAPTER);
-			if (obj != null && obj instanceof DataAdapterDescriptor) {
-				dscombo.setSelected((DataAdapterDescriptor) obj);
-				if (currentDesigner != null)
-					currentDesigner.setDataAdapter((DataAdapterDescriptor) obj);
-			}
-			else {
-				String defaultDAName = mreport.getValue().getProperty(MReport.DEFAULT_DATAADAPTER);
-				if(defaultDAName!=null){
-						dscombo.setSelected(defaultDAName);
-						if (currentDesigner != null)
-							currentDesigner.setDataAdapter(dscombo.getSelected());
-				}
-			}
-		}
-	}
 
 	public DataAdapterDescriptor getDataAdapter() {
 		return dscombo.getSelected();

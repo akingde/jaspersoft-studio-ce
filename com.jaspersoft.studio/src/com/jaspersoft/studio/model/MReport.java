@@ -914,7 +914,6 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		return parameters.get(key);
 	}
 
-	public static final String DEFAULT_DATAADAPTER = "com.jaspersoft.studio.data.defaultdataadapter";
 	private static JSSEnumPropertyDescriptor orientationD;
 	private static JSSEnumPropertyDescriptor printOrderD;
 	private static JSSEnumPropertyDescriptor whenNoDataD;

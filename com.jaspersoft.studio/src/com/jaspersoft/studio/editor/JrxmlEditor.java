@@ -89,6 +89,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.AContributorAction;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -140,10 +141,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
 			if (myDataAdapterDesc != null) {
 				JasperDesign jasperDesign = getJasperDesign();
-				String oldp = jasperDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
+				String oldp = jasperDesign.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
 				if (oldp == null || (oldp != null && !oldp.equals(myDataAdapterDesc.getName()))) {
-					getMReport().putParameter(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc);
-					jasperDesign.setProperty(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
+					getMReport().putParameter(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc);
+					jasperDesign.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
 					setDirty(true);
 				}
 			}
@@ -699,11 +700,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			MReport mReport = getMReport();
 			if (mReport != null) {
 				report = mReport.getJasperDesign();
-				Object obj = mReport.getParameter(MReport.DEFAULT_DATAADAPTER);
+				Object obj = mReport.getParameter(DataQueryAdapters.DEFAULT_DATAADAPTER);
 				if (obj != null && obj instanceof DataAdapterDescriptor) {
 					String dataAdapterDesc = previewEditor.getDataAdapterDesc().getName();
-					report.removeProperty(MReport.DEFAULT_DATAADAPTER);
-					report.setProperty(MReport.DEFAULT_DATAADAPTER, dataAdapterDesc);
+					report.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+					report.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, dataAdapterDesc);
 				}
 			}
 

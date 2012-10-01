@@ -153,12 +153,14 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		//
 		// ctf.setTopRight(c);
 
-		dataquery.setDefaultDataAdapter(mdataset.getMreport());
-
 		createBottom(sf, toolkit);
 		sf.setWeights(new int[] { 450, 250 });
 
-		setDataset(mdataset.getJasperDesign(), newdataset);
+		JasperDesign jd = mdataset.getJasperDesign();
+		if(jd==null){
+			jd=mdataset.getMreport().getJasperDesign();
+		}
+		setDataset(jd, newdataset);
 	}
 
 	public void setFields(List<JRDesignField> fields) {

@@ -79,10 +79,18 @@ public class DatasetAction extends SelectionAction {
 			MDataset mdataset = null;
 			if(part instanceof ReportEditor){
 				MReport mreport = (MReport) part.getModel().getChildren().get(0);
-				mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+				// First check if any MDataset element is selected
+				mdataset = getSelectedMDataset();
+				if(mdataset==null){
+					// if we return the main dataset element
+					mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+				}
 			}
 			else {
 				// Handle custom editors for elements like table, crosstab and list
+				// FIXME - Now this solution works because list/crosstab/table editors will
+				// have only one child MDataset element. Once this will be no longer valid,
+				// the code below must be changed
 				if(part.getModel().getChildren().size()>0){
 					INode firstChild = part.getModel().getChildren().get(0);
 					if(firstChild instanceof MPage){
@@ -140,4 +148,20 @@ public class DatasetAction extends SelectionAction {
 
 		return false;
 	}
+	
+	/*
+	 * Returns the currently selected MDataset object (i.e: in the Outline) if any.
+	 */
+	private MDataset getSelectedMDataset(){
+		List<Object> selection = getSelectedObjects();
+		if (!selection.isEmpty() && selection.size() == 1) {
+			Object obj = selection.get(0);
+			if (obj instanceof EditPart && 
+					((EditPart) obj).getModel() instanceof MDataset){
+				return (MDataset) ((EditPart) obj).getModel();
+			}
+		}
+		return null;
+	}
+	
 }

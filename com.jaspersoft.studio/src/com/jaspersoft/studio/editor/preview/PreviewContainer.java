@@ -58,7 +58,7 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.editor.preview.view.report.html.JiveViewer;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -302,7 +302,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		JasperDesign jd = getReportControler().getJrContext().getJasperDesign();
 		PreviewTopToolBarManager pt = (PreviewTopToolBarManager) topToolBarManager1;
 		if (pt != null && jd != null) {
-			String strda = jd.getProperty(MReport.DEFAULT_DATAADAPTER);
+			String strda = jd.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
 			if (strda != null)
 				pt.setDataAdapters(strda);
 		}

@@ -64,7 +64,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
@@ -245,7 +245,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 
 			// Save the data adapter used...
 			if (step2.getDataAdapter() != null) {
-				reportBundle.getJasperDesign().setProperty(MReport.DEFAULT_DATAADAPTER, step2.getDataAdapter().getName());
+				reportBundle.getJasperDesign().setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, step2.getDataAdapter().getName());
 			}
 
 			// Store the report bundle on file system
