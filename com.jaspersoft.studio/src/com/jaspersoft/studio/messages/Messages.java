@@ -230,6 +230,7 @@ public class Messages extends NLS {
 	public static String BordersSection_No_Borders;
 	public static String BordersSection_Padding_Box_Title;
 	public static String BordersSection_padding_tool_tip;
+	public static String BordersSection_preview_ToolTip;
 	public static String BordersSection_right_border_tool_tip;
 	public static String BordersSection_Right_Label;
 	public static String BordersSection_Same_Padding_Value_Check;
@@ -253,6 +254,7 @@ public class Messages extends NLS {
 	public static String ColorsSection_element_forecolor_tool_tip;
 	public static String ColorsSection_transparency;
 	public static String ColorsSection_transparency_tool_tip;
+	public static String ColorStyledText_LineColor_ToolTip;
 	public static String CreateBandAction_create_band;
 	public static String CreateBandAction_create_band_tool_tip;
 	public static String CreateConditionalStyleAction_create_conditional_style;

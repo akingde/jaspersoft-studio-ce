@@ -65,6 +65,30 @@ public class ColorLabelProvider extends LabelProvider {
 		}
 		return super.getImage(element);
 	}
+	
+	public Image getImage(Object element, int width, int height) {
+		if (element == null)
+			return JaspersoftStudioPlugin.getImage("icons/resources/nocolor.png");
+		if (element instanceof RGB) {
+			RGB rgb = (RGB) element;
+			RGB black = new RGB(0, 0, 0);
+			PaletteData dataPalette = new PaletteData(new RGB[] { black, black, rgb });
+			Display display = Display.getCurrent();
+			ImageData data = new ImageData(width, height, 4, dataPalette);
+			data.transparentPixel = 0;
+			data.transparentPixel = 0;
+			for (int y = 0; y < data.height; y++) {
+				for (int x = 0; x < data.width; x++) {
+					if (x == 0 || y == 0 || x == data.width - 1 || y == data.height - 1)
+						data.setPixel(x, y, 1);
+					else
+						data.setPixel(x, y, 2);
+				}
+			}
+			return new Image(display, data);
+		}
+		return super.getImage(element);
+	}
 
 	@Override
 	public String getText(Object element) {

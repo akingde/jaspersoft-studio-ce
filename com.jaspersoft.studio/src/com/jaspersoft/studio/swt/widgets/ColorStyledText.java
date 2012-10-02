@@ -8,17 +8,11 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CaretEvent;
-import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -28,8 +22,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 
 /**
  * This class is used to paint a "Color TextBox", a label where a color is expressed 
@@ -67,23 +64,19 @@ public class ColorStyledText {
 	private boolean raiseEvents = true;
 	
 	/**
-	 * Class that handle the painting of the Text area and add to the text a representation of 
-	 * the color
-	 * @author Orlandin Marco
-	 *
+	 * Label where the color is printed
 	 */
-	private class ColorListener implements PaintListener{
-		
-		public ColorListener(){}
-		
-    public void paintControl(PaintEvent e) {
-    	if (color!=null){
-	      e.gc.setBackground(color);
-	      e.gc.drawRectangle(1, 1, 13, 13);
-	      e.gc.fillRectangle(2,2,12,12);
-    	}
-    }
-	}
+	private Label colorButton;
+	
+	/**
+	 * Provider to convert a RGB color into an image
+	 */
+	private ColorLabelProvider provider;
+	
+	/**
+	 * Guard that block the modify event when another is already going
+	 */
+	private boolean refreshingGuard;
 	
 	/**
 	 * Class that handle the editing of the textual value of the color, if the textual
@@ -98,34 +91,48 @@ public class ColorStyledText {
 
 		@Override
 		public void modifyText(ModifyEvent e) {
-			String text = textArea.getText();
-			//Add to the start of the string the symbol #
-			if (!text.startsWith("#")){
-				text = "#".concat(text);
-				textArea.setText(text);
-			}
-			
-			//Convert the text into color only if there are exactly seven chars, a # symbol followed by 
-			//three pair of hex values
-			if (text.length()==7){
+			//Check if there are others modifyEvent goind
+			if (!refreshingGuard){
+				refreshingGuard = true;
+				String text = textArea.getText();
+				//Convert the text into color only if there are exactly seven chars, a # symbol followed by 
+				//three pair of hex values
 				Color newColor = null;
 				try{
-					newColor =  new Color(null,
-		          Integer.valueOf( text.substring( 1, 3 ), 16 ),
-		          Integer.valueOf( text.substring( 3, 5 ), 16 ),
-		          Integer.valueOf( text.substring( 5, 7 ), 16 ) );
+					if (text.startsWith("[") && text.endsWith("]")){
+						int index1 = text.indexOf("[")+1; 
+						int index2 = text.indexOf(","); 
+						int index3 = text.indexOf(",", index2+1); 
+						int index4 = text.indexOf("]"); 
+						int redCompontent = Integer.valueOf(text.substring(index1, index2));
+						int greenCompontent = Integer.valueOf(text.substring(index2+1, index3));
+						int blueCompontent = Integer.valueOf(text.substring(index3+1, index4));
+						newColor = new Color(null, redCompontent, greenCompontent, blueCompontent);
+					} else if (text.startsWith("#") && text.length() == 7){
+						newColor =  new Color(null,
+			          Integer.valueOf( text.substring( 1, 3 ), 16 ),
+			          Integer.valueOf( text.substring( 3, 5 ), 16 ),
+			          Integer.valueOf( text.substring( 5, 7 ), 16 ) );
+					} else if (!text.startsWith("#") && text.length() == 6){
+						newColor =  new Color(null,
+			          Integer.valueOf( text.substring( 0, 2 ), 16 ),
+			          Integer.valueOf( text.substring( 2, 4 ), 16 ),
+			          Integer.valueOf( text.substring( 4, 6 ), 16 ) );
+					}
 				} catch(NumberFormatException ex){
-					newColor = color;
+				} catch(IllegalArgumentException ex){
 				}
-				
 				//If the color has been changed and the event flag is open then fire the events
-				if (color != newColor){
+				if (newColor != null){
 					color = newColor;
+					textArea.setText(getHexFromRGB(color));
+					colorButton.setImage(provider.getImage(color.getRGB(),18,14));
 					if (raiseEvents)
 						for(ModifyListener element : listener){
 							element.modifyText(e);
 						}
 				}
+				refreshingGuard = false;
 			}
 		}
 	}
@@ -163,9 +170,10 @@ public class ColorStyledText {
 	 * @param parent the composite where the the element will be placed
 	 */
 	public ColorStyledText(Composite parent){
+		refreshingGuard = false;
 		listener = new ArrayList<ModifyListener>();
 		final Composite paintArea = new Composite(parent, SWT.BORDER);
-		GridLayout layout = new GridLayout(2,false);
+		GridLayout layout = new GridLayout(3,false);
 		paintArea.setLayout(layout);
 		layout.horizontalSpacing = 0;
 		layout.verticalSpacing = 0;
@@ -179,78 +187,37 @@ public class ColorStyledText {
 		GridData textData = new GridData();
 		textData.verticalAlignment = SWT.CENTER;
 		textData.widthHint = 50;
-		textData.heightHint = 16;
+		textData.heightHint = 16;	
 		
-		textArea = new StyledText(paintArea, SWT.SINGLE);
-		textArea.setLayoutData(textData);
-		textArea.setLeftMargin(18);
-		textArea.setAlignment(SWT.LEFT);
-		textArea.addPaintListener(new ColorListener());
-		textArea.addModifyListener(new EditListener());
-		
-		textArea.addCaretListener(new CaretListener() {
-			@Override
-			public void caretMoved(CaretEvent event) {
-				//The cursor can not move behind the # symbol 
-				if (textArea.getCaretOffset() == 0)
-					textArea.setCaretOffset(1);
-			}
-		});
-		
-		//Mouse listener to avoid that the cursor is placed before the # symbol when the focus is gained
-		textArea.addMouseListener(new MouseListener() {
-			
+		provider = new ColorLabelProvider(NullEnum.NULL);
+		colorButton = new Label( paintArea, SWT.FILL);
+		colorButton.setLayoutData(data);
+		colorButton.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
+		colorButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent e) {}
 			
 			@Override
 			public void mouseDown(MouseEvent e) {
-				if (textArea.getCaretOffset()== 0)
-					textArea.setCaretOffset(1);
+				ColorDialog cd = new ColorDialog(paintArea.getShell());
+				cd.setText(Messages.common_line_color);
+				RGB newColor = cd.open();
+				setColor(newColor,true);
 			}
-			
+
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {}
 		});
 		
-		//Handle the text insertion to avoid string too long or invalid
-		textArea.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyReleased(KeyEvent e) {}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				String actualText = textArea.getText();
-				int offset = textArea.getCaretOffset();
-				//String too long, restore the old one
-				if (textArea.getCaretOffset() == 8)
-					textArea.setText(lastValidText);
-				//Character valid but string full, the new character will substitute the one after it
-				else if (actualText.length()>7 && isAlphanumeric(e.keyCode)){
-					lastValidText = actualText.substring(0,textArea.getCaretOffset()).concat(actualText.substring(offset+1));
-					textArea.setText(lastValidText);
-					textArea.setCaretOffset(offset);
-				//The space are not allowed, restore the old text
-				} else if (e.keyCode == ' '){
-					textArea.setText(lastValidText);
-					textArea.setCaretOffset(offset);
-				} else if (e.keyCode == SWT.BS){
-					//Handle the backspace to avoid the removal of the # symbol
-					if (textArea.getCaretOffset()==0){
-						textArea.setText(lastValidText);
-						textArea.setCaretOffset(1);
-					}
-					else 
-						lastValidText = actualText;
-				} else  lastValidText = actualText;
-			}
-		});
-		
+		textArea = new StyledText(paintArea, SWT.SINGLE);
+		textArea.setLayoutData(textData);
+		textArea.setAlignment(SWT.LEFT);
+		textArea.addModifyListener(new EditListener());
 		
 		final Button lineColor = new Button(paintArea, SWT.PUSH | SWT.FILL);
 		lineColor.setLayoutData(data);
-		lineColor.setText("...");
+		lineColor.setText("..."); //$NON-NLS-1$
+		lineColor.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip); //$NON-NLS-1$
 		
 		//Open the color selection window when the button is pushed
 		lineColor.addSelectionListener(new SelectionAdapter() {
@@ -265,7 +232,7 @@ public class ColorStyledText {
 	}
 	
 	private String leftPadWithZero(String baseString){
-		return StringUtils.leftPad(baseString, 2,"0");
+		return StringUtils.leftPad(baseString, 2,"0"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -280,7 +247,7 @@ public class ColorStyledText {
        int b = color.getBlue();  
        String s = leftPadWithZero(Integer.toHexString(r)) + leftPadWithZero(Integer.toHexString(g)) +  
       		 					leftPadWithZero(Integer.toHexString(b));
-       return  "#".concat(s.toUpperCase()); //$NON-NLS-1$ //$NON-NLS-2$
+       return  "#".concat(s.toUpperCase()); //$NON-NLS-1$ 
    }
 	 
 	 /**

@@ -255,6 +255,14 @@ class LineBoxDrawer extends BoxDrawer {
 		Border border = getBorder(Location.BOTTOM);
 		return border != null ? border.getSelected() : false;
 	}
+	
+	/**
+	 * Check if all the borders are unselected
+	 * @return return true if the borders are all unselected, false otherwise
+	 */
+	public boolean areAllUnslected(){
+		return !(isBottomSelected() || isTopSelected() || isLeftSelected() || isRightSelected());
+	}
 
 	/**
 	 * Draw the border and the guide line
@@ -373,21 +381,23 @@ class LineBoxDrawer extends BoxDrawer {
 		
 		float translationLeftBottomY=  element.getY() + offsetY + height - BorderOffset.getOffset(bottomPen);
 		
+		int voidOffset = 2;
+		
 		//Left Upper corner
-		grx.drawLine(0, Math.round(translationLeftUpperY), Math.round(translationLeftUpperX), Math.round(translationLeftUpperY));
-		grx.drawLine(Math.round(translationLeftUpperX),  0, Math.round(translationLeftUpperX),  Math.round(translationRightUpperY));
+		grx.drawLine(0, Math.round(translationLeftUpperY), Math.round(translationLeftUpperX) - voidOffset, Math.round(translationLeftUpperY));
+		grx.drawLine(Math.round(translationLeftUpperX),  0, Math.round(translationLeftUpperX),  Math.round(translationRightUpperY) - voidOffset);
 		
 		//Right upper corner
-		grx.drawLine(Math.round(translationRightUpperX),  Math.round(translationRightUpperY), paintingSquare.getBounds().width,  Math.round(translationRightUpperY));
-		grx.drawLine(Math.round(translationRightUpperX),  0,Math.round(translationRightUpperX),  Math.round(translationRightUpperY));
+		grx.drawLine(Math.round(translationRightUpperX) + voidOffset,  Math.round(translationRightUpperY), paintingSquare.getBounds().width,  Math.round(translationRightUpperY));
+		grx.drawLine(Math.round(translationRightUpperX),  0,Math.round(translationRightUpperX),  Math.round(translationRightUpperY) - voidOffset);
 		
 		//Left bottom corner
-		grx.drawLine(0, Math.round(translationLeftBottomY), Math.round(translationLeftUpperX), Math.round(translationLeftBottomY));
-		grx.drawLine(Math.round(translationLeftUpperX), Math.round(translationLeftBottomY), Math.round(translationLeftUpperX), paintingSquare.getBounds().height);
+		grx.drawLine(0, Math.round(translationLeftBottomY), Math.round(translationLeftUpperX)-voidOffset, Math.round(translationLeftBottomY));
+		grx.drawLine(Math.round(translationLeftUpperX), Math.round(translationLeftBottomY) + voidOffset, Math.round(translationLeftUpperX), paintingSquare.getBounds().height);
 		
 		//Right bottom corner
-		grx.drawLine(Math.round(translationRightUpperX), Math.round(translationLeftBottomY), paintingSquare.getBounds().width, Math.round(translationLeftBottomY));
-		grx.drawLine(Math.round(translationRightUpperX), Math.round(translationLeftBottomY), Math.round(translationRightUpperX), paintingSquare.getBounds().height);
+		grx.drawLine(Math.round(translationRightUpperX) + voidOffset, Math.round(translationLeftBottomY), paintingSquare.getBounds().width, Math.round(translationLeftBottomY));
+		grx.drawLine(Math.round(translationRightUpperX), Math.round(translationLeftBottomY) + voidOffset, Math.round(translationRightUpperX), paintingSquare.getBounds().height);
 		
 		grx.setStroke(oldStroke);
 		grx.setColor(oldColor);
