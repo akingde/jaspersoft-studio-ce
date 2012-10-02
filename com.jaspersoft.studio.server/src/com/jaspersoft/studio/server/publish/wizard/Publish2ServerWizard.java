@@ -27,8 +27,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -70,6 +72,7 @@ public class Publish2ServerWizard extends Wizard {
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
+		final MReportUnit rpunit = getReportUnit();
 		if (page == page1) {
 			try {
 				getContainer().run(true, true, new IRunnableWithProgress() {
@@ -91,18 +94,26 @@ public class Publish2ServerWizard extends Wizard {
 									}
 								});
 							} else {
-								Display.getDefault().syncExec(new Runnable() {
-
-									@Override
-									public void run() {
-										page2.configurePage(getReportUnit()
-												.getParent(), getReportUnit());
-										getContainer().showPage(page2);
-									}
-								});
+								if (rpunit.getValue().getIsNew())
+									Display.getDefault().syncExec(
+											new Runnable() {
+												@Override
+												public void run() {
+													page2.configurePage(
+															rpunit.getParent(),
+															rpunit);
+													getContainer().showPage(
+															page2);
+												}
+											});
+								else if (getContainer() instanceof WizardDialog)
+									throw new InterruptedException("finish");
 							}
 						} catch (Exception e) {
-							UIUtils.showError(e);
+							if (e instanceof InterruptedException)
+								throw (InterruptedException) e;
+							else
+								UIUtils.showError(e);
 						} finally {
 							monitor.done();
 						}
@@ -111,11 +122,15 @@ public class Publish2ServerWizard extends Wizard {
 			} catch (InvocationTargetException e) {
 				UIUtils.showError(e.getCause());
 			} catch (InterruptedException e) {
-				UIUtils.showError(e.getCause());
+				if (e.getMessage().equals("finish"))
+					closeWizard();
+				else
+					UIUtils.showError(e.getCause());
 			}
-
-			// configure page 2
-			page2.configurePage(getReportUnit().getParent(), getReportUnit());
+			page2.configurePage(rpunit.getParent(), rpunit);
+			ResourceDescriptor rdunit = rpunit.getValue();
+			if (!rdunit.getIsNew())
+				return super.getNextPage(page2);
 		}
 		return super.getNextPage(page);
 	}
@@ -138,5 +153,14 @@ public class Publish2ServerWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 		return true;
+	}
+
+	private void closeWizard() {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				((WizardDialog) getContainer()).close();
+			}
+		});
 	}
 }
