@@ -227,7 +227,9 @@ public class ReportControler {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
+				ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 				try {
+					Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
 					setParameters();
 
 					final IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
@@ -261,9 +263,18 @@ public class ReportControler {
 								return Status.CANCEL_STATUS;
 						}
 					}
-				} catch (Throwable e) {
+				} catch (final Throwable e) {
 					c.addError(e);
+					Display.getDefault().syncExec(new Runnable() {
+
+						public void run() {
+							VSimpleErrorPreview errorView = pcontainer.getErrorView();
+							pcontainer.getRightContainer().switchView(null, errorView);
+							errorView.setMessage(e.getMessage());
+						}
+					});
 				} finally {
+					Thread.currentThread().setContextClassLoader(oldLoader);
 					monitor.done();
 					finishReport(pcontainer);
 				}

@@ -272,7 +272,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 						public void run() {
 							event.getTreeViewer().collapseToLevel(
-									(MServerProfile) event.getElement(), 1);
+									event.getElement(), 1);
 						}
 					});
 					UIUtils.showError(e);

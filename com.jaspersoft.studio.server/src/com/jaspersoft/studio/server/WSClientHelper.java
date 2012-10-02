@@ -155,8 +155,12 @@ public class WSClientHelper {
 								depth);
 					else
 						ResourceFactory.getResource(node, res, index);
+					if (monitor.isCanceled())
+						return children;
 				}
 			}
+			if (monitor.isCanceled())
+				return children;
 		}
 		return children;
 	}
@@ -238,13 +242,12 @@ public class WSClientHelper {
 				}
 			} else
 				rd = cli.addOrModifyResource(rd, file);
-			if (refresh && res.getParent() instanceof MResource){
-				// standard resource creation inside an existing MResource 
-				refreshResource((MResource) res.getParent(), monitor);	
-			}
-			else if (res.getParent() instanceof MServerProfile){
+			if (refresh && res.getParent() instanceof MResource) {
+				// standard resource creation inside an existing MResource
+				refreshResource((MResource) res.getParent(), monitor);
+			} else if (res.getParent() instanceof MServerProfile) {
 				// resource created inside the root folder
-				connectGetData((MServerProfile)res.getParent(), monitor);
+				connectGetData((MServerProfile) res.getParent(), monitor);
 			}
 		}
 		return rd;
