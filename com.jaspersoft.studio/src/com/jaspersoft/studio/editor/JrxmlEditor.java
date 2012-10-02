@@ -404,7 +404,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						.getProgressMonitor();
 
 				try {
-					file.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
+					if (!file.exists())
+						file.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
 					IFileEditorInput modelFile = new FileEditorInput(file);
 					setInputWithNotify(modelFile);
 					xmlEditor.setInput(modelFile);
@@ -519,7 +520,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null) {
 			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
-			
+
 		}
 	}
 
