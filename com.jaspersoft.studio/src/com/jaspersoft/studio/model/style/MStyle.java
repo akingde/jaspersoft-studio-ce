@@ -527,7 +527,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return rotationD.getEnumValue(jrstyle.getOwnRotationValue());
 		if (id.equals(JRBaseStyle.PROPERTY_MODE)){
 			if (modeD == null) modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class, NullEnum.INHERITED);
-			return modeD.getEnumValue(jrstyle.getOwnModeValue()).equals(modeD.getEnumValue(ModeEnum.TRANSPARENT));
+			ModeEnum modeValue = jrstyle.getOwnModeValue();
+			return modeValue != null ? modeValue.equals(ModeEnum.TRANSPARENT) : null;
 		}
 		if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrstyle.isOwnBlankWhenNull();

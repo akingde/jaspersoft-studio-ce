@@ -533,8 +533,10 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getOwnForecolor());
 		// opacity
-		if (id.equals(JRBaseStyle.PROPERTY_MODE))
-			return opaqueD.getEnumValue(jrElement.getOwnModeValue()).equals(opaqueD.getEnumValue(ModeEnum.TRANSPARENT));
+		if (id.equals(JRBaseStyle.PROPERTY_MODE)){
+				ModeEnum modeValue = jrElement.getOwnModeValue();
+				return modeValue != null ? modeValue.equals(ModeEnum.TRANSPARENT) : null;
+		}
 		if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
 			return positionTypeD.getEnumValue(jrElement.getPositionTypeValue());
 		if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))
