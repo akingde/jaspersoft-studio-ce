@@ -26,9 +26,9 @@ public class HQLScanner extends SQLScanner {
 					"select", "set", "some", "true", "union", "update",
 					"versioned", "where", "and", "or", "as", "on", "with",
 					"by", "both", "empty", "leading", "member", "object",
-					"of", "trailing" });
+					"of", "trailing",
 			// built-in fuctions
-			hqlKeywords.addAll(Arrays.asList(new String[] {
+
 					// standard sql92 functions
 					"substring",
 					"locate",
@@ -67,7 +67,7 @@ public class HQLScanner extends SQLScanner {
 					"substring", "locate", "bit_length", "coalesce",
 					"atan2", "log", "mod", "nvl", "nvl2", "power",
 					"add_months", "months_between", "next_day", "max",
-					"min" }));
+					"min" });
 		}
 		return hqlKeywords;
 	}

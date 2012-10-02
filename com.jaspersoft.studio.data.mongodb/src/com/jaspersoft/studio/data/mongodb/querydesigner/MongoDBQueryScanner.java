@@ -11,9 +11,9 @@ import com.jaspersoft.studio.data.querydesigner.sql.SQLScanner;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  */
 public class MongoDBQueryScanner extends SQLScanner {
-	
+
 	private static List<String> hqlKeywords;
-	
+
 	@Override
 	protected List<String> getSQLKeywords() {
 		if (hqlKeywords == null) {
@@ -21,14 +21,40 @@ public class MongoDBQueryScanner extends SQLScanner {
 					"delete", "desc", "distinct", "elements", "escape",
 					"exists", "false", "fetch", "from", "full", "group",
 					"having", "in", "indices", "inner", "insert", "into",
-					"is", "join", "left", "like", "new", "not", "null",
-					"or", "order", "outer", "properties", "right",
-					"select", "set", "some", "true", "union", "update",
-					"versioned", "where", "and", "or", "as", "on", "with",
-					"by", "both", "empty", "leading", "member", "object",
-					"of", "trailing" });
-			// built-in fuctions
-			hqlKeywords.addAll(Arrays.asList(new String[] {
+					"is",
+					"join",
+					"left",
+					"like",
+					"new",
+					"not",
+					"null",
+					"or",
+					"order",
+					"outer",
+					"properties",
+					"right",
+					"select",
+					"set",
+					"some",
+					"true",
+					"union",
+					"update",
+					"versioned",
+					"where",
+					"and",
+					"or",
+					"as",
+					"on",
+					"with",
+					"by",
+					"both",
+					"empty",
+					"leading",
+					"member",
+					"object",
+					"of",
+					"trailing",
+					// built-in fuctions
 					// standard sql92 functions
 					"substring",
 					"locate",
@@ -55,21 +81,20 @@ public class MongoDBQueryScanner extends SQLScanner {
 					"str",
 
 					// misc functions - based on oracle dialect
-					"sign", "acos", "asin", "atan", "cos", "cosh", "exp",
-					"ln", "sin", "sinh", "stddev", "sqrt", "tan", "tanh",
-					"variance", "round", "trunc", "ceil", "floor", "chr",
-					"initcap", "lower", "ltrim", "rtrim", "soundex",
-					"upper", "ascii", "length", "to_char", "to_date",
-					"current_date", "current_time", "current_timestamp",
-					"lastday", "sysday", "systimestamp", "uid", "user",
-					"rowid", "rownum", "concat", "instr", "instrb", "lpad",
-					"replace", "rpad", "substr", "substrb", "translate",
-					"substring", "locate", "bit_length", "coalesce",
-					"atan2", "log", "mod", "nvl", "nvl2", "power",
-					"add_months", "months_between", "next_day", "max",
-					"min" }));
+					"sign", "acos", "asin", "atan", "cos", "cosh", "exp", "ln",
+					"sin", "sinh", "stddev", "sqrt", "tan", "tanh", "variance",
+					"round", "trunc", "ceil", "floor", "chr", "initcap",
+					"lower", "ltrim", "rtrim", "soundex", "upper", "ascii",
+					"length", "to_char", "to_date", "current_date",
+					"current_time", "current_timestamp", "lastday", "sysday",
+					"systimestamp", "uid", "user", "rowid", "rownum", "concat",
+					"instr", "instrb", "lpad", "replace", "rpad", "substr",
+					"substrb", "translate", "substring", "locate",
+					"bit_length", "coalesce", "atan2", "log", "mod", "nvl",
+					"nvl2", "power", "add_months", "months_between",
+					"next_day", "max", "min" });
 		}
 		return hqlKeywords;
 	}
-	
+
 }
