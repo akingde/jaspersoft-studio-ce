@@ -54,13 +54,11 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 					getCurrentEvent().detail = DND.DROP_NONE;
 					return;
 				}
-				else {
-					if (command != null && command.canExecute())
-						getViewer().getEditDomain().getCommandStack().execute(command);
-					else
-						getCurrentEvent().detail = DND.DROP_NONE;
-				}
 			}
+			if (command != null && command.canExecute())
+				getViewer().getEditDomain().getCommandStack().execute(command);
+			else
+				getCurrentEvent().detail = DND.DROP_NONE;
 		} else
 			getCurrentEvent().detail = DND.DROP_NONE;
 		selectAddedObject();
