@@ -232,7 +232,7 @@ public class ColorStyledText {
 					textArea.setText(lastValidText);
 					textArea.setCaretOffset(offset);
 				//The space are not allowed, restore the old text
-				} else if (e.keyCode == SWT.SPACE){
+				} else if (e.keyCode == ' '){
 					textArea.setText(lastValidText);
 					textArea.setCaretOffset(offset);
 				} else if (e.keyCode == SWT.BS){

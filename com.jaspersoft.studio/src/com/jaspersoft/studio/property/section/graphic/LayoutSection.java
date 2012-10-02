@@ -100,12 +100,18 @@ public class LayoutSection extends AbstractSection {
 						d = ((IGraphicElementContainer) pnode).getSize();
 					if (destValue instanceof JRCommonElement) {
 						JRCommonElement jce = (JRCommonElement) destValue;
-						d.setSize(jce.getWidth(), jce.getHeight());
+						// Commented for back-compatibility in 3.6. 
+						// Replaced with the following line.
+						// d.setSize(jce.getWidth(), jce.getHeight());
+						d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
 					}
 					if (destValue instanceof JRDesignBand) {
 						JasperDesign jDesign = pnode.getJasperDesign();
 						int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
-						d.setSize(w, ((JRDesignBand) destValue).getHeight());
+						// Commented for back-compatibility in 3.6. 
+						// Replaced with the following line.
+						// d.setSize(w, ((JRDesignBand) destValue).getHeight());
+						d.setSize(new Dimension(w, ((JRDesignBand) destValue).getHeight()));
 					}
 					cs.execute(new LayoutCommand((JRElementGroup) destValue, layouts[ind], d));
 				}

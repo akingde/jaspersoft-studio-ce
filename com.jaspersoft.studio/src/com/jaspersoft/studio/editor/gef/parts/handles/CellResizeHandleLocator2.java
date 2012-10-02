@@ -91,7 +91,12 @@ public class CellResizeHandleLocator2 extends RelativeLocator {
 		Dimension d = targetSize;
 		if (editPart instanceof IContainerPart) {
 			d = ((IContainerPart) editPart).getContaierSize();
-			d = d.getCopy().setHeight(d.height + 18).scale(xzoom);
+			// Commented for back-compatibility in 3.6. 
+			// Replaced with the following 3 lines.
+			// d = d.getCopy().setHeight(d.height + 18).scale(xzoom);
+			Dimension dcopy = d.getCopy();
+			dcopy.height = d.height + 18;
+			d = dcopy.scale(xzoom);
 		}
 
 		int w = 4;

@@ -146,7 +146,10 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 					getFeedbackLayer().translateToRelative(rect);
 
 					targetFeedback.setBounds(rect.shrink(0, 1));
-					targetFeedback.getBounds().setX(hostFigure.getBounds().x);
+					// Commented for back-compatibility in 3.6. 
+					// Replaced with the following line.
+					// targetFeedback.getBounds().setX(hostFigure.getBounds().x);
+					targetFeedback.getBounds().x = hostFigure.getBounds().x;
 					// targetFeedback.getBounds().setY(hostFigure.getBounds().y);
 					targetFeedback.setBorder(new LineBorder(ColorConstants.lightBlue, 3));
 					addFeedback(targetFeedback);

@@ -94,11 +94,17 @@ public class DeleteElementCommand extends Command {
 			Dimension d = new Dimension(0, 0);
 			if (jrGroup instanceof JRCommonElement) {
 				JRCommonElement jce = (JRCommonElement) jrGroup;
-				d.setSize(jce.getWidth(), jce.getHeight());
+				// Commented for back-compatibility in 3.6. 
+				// Replaced with the following line.
+				// d.setSize(jce.getWidth(), jce.getHeight());
+				d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
 			}
 			if (jrGroup instanceof JRDesignBand) {
 				int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
-				d.setSize(w, ((JRDesignBand) jrGroup).getHeight());
+				// Commented for back-compatibility in 3.6. 
+				// Replaced with the following line.
+				// d.setSize(w, ((JRDesignBand) jrGroup).getHeight());
+				d.setSize(new Dimension(w, ((JRDesignBand) jrGroup).getHeight()));
 			}
 			if (lCmd == null) {
 				ILayout layout = LayoutManager.getLayout(pholder, jDesign, uuid);

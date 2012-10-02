@@ -111,7 +111,8 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 		if (request.getType().equals(REQ_RESIZE) && sizeDelta.width == 0
 				&& sizeDelta.height == 0)
 			return;
-		PrecisionRectangle rdelta = new PrecisionRectangle(moveDelta, sizeDelta);
+		PrecisionRectangle rdelta = new PrecisionRectangle(
+				new Rectangle(moveDelta, sizeDelta));
 
 		FeedbackFigure feedback = (FeedbackFigure) getDragSourceFeedbackFigure();
 		IFigure hfig = getHostFigure();

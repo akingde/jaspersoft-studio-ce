@@ -176,13 +176,19 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 					int w = rparent.width / objs.size();
 					int rest = rparent.width - w * objs.size();
 					copyconstraint.setLocation(rparent.x + ReportPageFigure.PAGE_BORDER.left, copyconstraint.getLocation().y);
-					copyconstraint.setWidth(w + rest);
+					// Commented for back-compatibility in 3.6. 
+					// Replaced with the following line.
+					// copyconstraint.setWidth(w + rest);
+					copyconstraint.width = w + rest;
 					for (Object it : objs) {
 						Command cmd = getCreateCommand(parent, it, copyconstraint.getCopy(), index);
 						if (cmd != null) {
 							ccmd.add(cmd);
 							copyconstraint.translate(w + rest, 0);
-							copyconstraint.setWidth(w);
+							// Commented for back-compatibility in 3.6. 
+							// Replaced with the following line.
+							// copyconstraint.setWidth(w);
+							copyconstraint.width = w;
 							rest = 0;
 						}
 					}

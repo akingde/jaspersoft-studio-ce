@@ -5,14 +5,43 @@
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.util;
 
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.*;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
-import org.eclipse.emf.ecore.util.Switch;
-
 import org.eclipse.xtext.common.types.JvmTypeReference;
+
+import com.jaspersoft.studio.editor.jrexpressions.compatibility.Switch;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Arguments;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ArrayCreator;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ArrayInitializer;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.BinaryExpression;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.BooleanLiteral;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.CastedExpression;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.CharLiteral;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.DoubleLiteral;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ExpressionList;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FloatLiteral;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.IntLiteral;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRExpressionModel;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRFieldObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRParameterObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRVariableObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JasperReportsExpression;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmGenericArrayTypeReference;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmLowerBound;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmParameterizedTypeReference;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmUpperBound;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmWildcardTypeReference;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.LongLiteral;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.NullLiteral;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StringLiteral;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TestExpression;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Type;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass;
 
 /**
  * <!-- begin-user-doc -->

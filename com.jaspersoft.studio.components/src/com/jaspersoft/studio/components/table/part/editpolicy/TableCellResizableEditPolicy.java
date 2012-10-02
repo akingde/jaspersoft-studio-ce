@@ -137,7 +137,8 @@ public class TableCellResizableEditPolicy extends ResizableEditPolicy {
 		if (request.getType().equals(REQ_RESIZE) && sizeDelta.width == 0
 				&& sizeDelta.height == 0)
 			return;
-		PrecisionRectangle rdelta = new PrecisionRectangle(moveDelta, sizeDelta);
+		PrecisionRectangle rdelta = new PrecisionRectangle(
+				new Rectangle(moveDelta, sizeDelta));
 
 		FeedbackFigure feedback = (FeedbackFigure) getDragSourceFeedbackFigure();
 		IFigure hfig = getHostFigure();
@@ -291,7 +292,7 @@ public class TableCellResizableEditPolicy extends ResizableEditPolicy {
 				gr.setComposite(ac);
 				gr.setColor(Color.red);
 
-				PrecisionRectangle r = new PrecisionRectangle(x1, y1, x1, y2);
+				PrecisionRectangle r = new PrecisionRectangle(new Rectangle(x1, y1, x1, y2));
 				getHostFigure().translateToAbsolute(r);
 				getFeedbackLayer().translateToRelative(r);
 				gr.drawLine(r.x, r.y, r.x, r.height);

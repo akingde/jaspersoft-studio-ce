@@ -274,7 +274,10 @@ public class CreateElementCommand extends Command {
 				if (maxBandHeight < height) {
 					height = maxBandHeight - 1;
 					jrElement.setHeight(height - jrElement.getY());
-					location.setHeight(height - jrElement.getY());
+					// Commented for back-compatibility in 3.6. 
+					// Replaced with the following line.
+					// location.setHeight(height - jrElement.getY());
+					location.height= height - jrElement.getY();
 				}
 				SetValueCommand cmd = new SetValueCommand();
 				cmd.setTarget((IPropertySource) destNode);

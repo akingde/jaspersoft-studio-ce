@@ -142,7 +142,10 @@ public class SetConstraintCommand extends Command {
 					uuid = ((JRBaseElement) jrElement).getUUID().toString();
 				if (jrElement instanceof JRCommonElement) {
 					JRCommonElement jce = (JRCommonElement) jrElement;
-					d.setSize(jce.getWidth(), jce.getHeight());
+					// Commented for back-compatibility in 3.6. 
+					// Replaced with the following line.
+					// d.setSize(jce.getWidth(), jce.getHeight());
+					d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
 				}
 				if (lCmd == null) {
 					ILayout layout = LayoutManager.getLayout(pholder, jrDesign, uuid);

@@ -36,6 +36,9 @@ import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.NonResizableHandleKit;
 import org.eclipse.gef.handles.ResizableHandleKit;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.tools.DragEditPartsTracker;
+import org.eclipse.gef.tools.ResizeTracker;
+import org.eclipse.gef.tools.SelectEditPartTracker;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.selection.ColoredSquareHandles;
@@ -122,19 +125,18 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 		}
 	}
 	
-	@Override
 	protected void createResizeHandle(List handles, int direction) {
 		if ((getResizeDirections() & direction) == direction) {
-			 ColoredSquareHandles handle = new ColoredSquareHandles((GraphicalEditPart) getHost(), direction);
-			 handle.setDragTracker(getResizeTracker(direction));
-			 handle.setCursor(Cursors.getDirectionalCursor(direction, getHostFigure().isMirrored()));
-			 handles.add(handle);
+			ColoredSquareHandles handle = new ColoredSquareHandles((GraphicalEditPart) getHost(), direction);
+			handle.setDragTracker(getResizeTracker(direction));
+			handle.setCursor(Cursors.getDirectionalCursor(direction, getHostFigure().isMirrored()));
+			handles.add(handle);
 		} else {
-		// display 'resize' handle to allow dragging or indicate selection
-		// only
-		createDragHandle(handles, direction);
+			// display 'resize' handle to allow dragging or indicate selection
+			// only
+			createDragHandle(handles, direction);
 		}
-		}
+	}
 
 	/**
 	 * Creates the figure used for feedback.
@@ -152,5 +154,42 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 		addFeedback(r);
 		return r;
 	}
+	
+	// ==== BACK COMPATIBILITY METHODS ==== //
+	
+	/**
+	 * Returns a drag tracker to use by a resize handle.
+	 * 
+	 * @return a new {@link ResizeTracker}
+	 * @since 3.7
+	 */
+	protected DragEditPartsTracker getDragTracker() {
+		return new DragEditPartsTracker(getHost());
+	}
+	
+	/**
+	 * Returns a selection tracker to use by a selection handle.
+	 * 
+	 * @return a new {@link ResizeTracker}
+	 * @since 3.7
+	 */
+	protected SelectEditPartTracker getSelectTracker() {
+		return new SelectEditPartTracker(getHost());
+	}
+	
+	/**
+	 * Returns a resize tracker for the given direction to be used by a resize
+	 * handle.
+	 * 
+	 * @param direction
+	 *            the resize direction for the {@link ResizeTracker}.
+	 * @return a new {@link ResizeTracker}
+	 * @since 3.7
+	 */
+	protected ResizeTracker getResizeTracker(int direction) {
+		return new ResizeTracker((GraphicalEditPart) getHost(), direction);
+	}
 
+	// =================================== //
+	
 }
