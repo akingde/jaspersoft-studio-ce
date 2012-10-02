@@ -427,9 +427,10 @@ class LineBoxDrawer extends BoxDrawer {
 			grx.setColor(leftPen.getLineColor());
 		} else {
 			//If the border is not present will be used a white transparent border as placeholder for the  sleection
-			grx.setStroke(new BasicStroke(7));
-			grx.setColor(new Color(255,255,255,0));
-			lineStyle = LineStyleEnum.SOLID;
+			grx.setStroke(new BasicStroke(2));
+			grx.setColor(Color.LIGHT_GRAY);
+			grx.setStroke(dashedStroke);
+			lineStyle = LineStyleEnum.DASHED;
 		}
 		AffineTransform oldTx = grx.getTransform();
 		if (lineStyle == LineStyleEnum.DOUBLE)
@@ -506,9 +507,10 @@ class LineBoxDrawer extends BoxDrawer {
 				grx.setStroke(rightStroke);
 				grx.setColor(rightPen.getLineColor());
 			} else {
-				grx.setStroke(new BasicStroke(7));
-				grx.setColor(new Color(255,255,255,0));
-				lineStyle = LineStyleEnum.SOLID;
+				grx.setStroke(new BasicStroke(2));
+				grx.setColor(Color.LIGHT_GRAY);
+				grx.setStroke(dashedStroke);
+				lineStyle = LineStyleEnum.DASHED;
 			}
 			AffineTransform oldTx = grx.getTransform();
 			if (lineStyle == LineStyleEnum.DOUBLE)
@@ -585,9 +587,10 @@ class LineBoxDrawer extends BoxDrawer {
 				grx.setStroke(topStroke);
 				grx.setColor(topPen.getLineColor());
 			} else {
-				grx.setStroke(new BasicStroke(7));
-				grx.setColor(new Color(255,255,255,0));
-				lineStyle = LineStyleEnum.SOLID;
+				grx.setStroke(new BasicStroke(2));
+				grx.setColor(Color.LIGHT_GRAY);
+				grx.setStroke(dashedStroke);
+				lineStyle = LineStyleEnum.DASHED;
 			}
 			AffineTransform oldTx = grx.getTransform();
 			if (lineStyle == LineStyleEnum.DOUBLE)
@@ -665,9 +668,10 @@ class LineBoxDrawer extends BoxDrawer {
 				grx.setStroke(bottomStroke);
 				grx.setColor(bottomPen.getLineColor());
 			} else {
-				grx.setStroke(new BasicStroke(7));
-				grx.setColor(new Color(255,255,255,0));
-				lineStyle = LineStyleEnum.SOLID;
+				grx.setStroke(new BasicStroke(2));
+				grx.setColor(Color.LIGHT_GRAY);
+				grx.setStroke(dashedStroke);
+				lineStyle = LineStyleEnum.DASHED;
 			}
 			AffineTransform oldTx = grx.getTransform();
 			if (lineStyle == LineStyleEnum.DOUBLE)
