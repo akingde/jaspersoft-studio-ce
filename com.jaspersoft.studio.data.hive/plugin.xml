@@ -5,5 +5,12 @@
          point="com.jaspersoft.studio.dataAdapters">
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.hive.HiveDataAdapterFactory"/>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.queryDesigner">
+      <queryDesigner
+            QueryDesignerClass="com.jaspersoft.studio.data.hive.querydesigner.HiveQLQueryDesigner"
+            language="HiveQL">
+      </queryDesigner>
+   </extension>
 
 </plugin>

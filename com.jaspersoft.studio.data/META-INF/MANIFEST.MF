@@ -22,4 +22,5 @@ Bundle-ClassPath: lib/mondrian-3.2.0-13661-JS.jar,
  lib/javacup-0.10k.jar,
  .
 Export-Package: com.jaspersoft.studio.data.jdbc,
- com.jaspersoft.studio.data.messages
+ com.jaspersoft.studio.data.messages,
+ com.jaspersoft.studio.data.querydesigner.sql

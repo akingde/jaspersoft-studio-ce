@@ -5,7 +5,8 @@ Bundle-SymbolicName: com.jaspersoft.studio.data.hive;singleton:=true
 Bundle-Version: 1.3.0
 Bundle-Activator: com.jaspersoft.studio.data.hive.Activator
 Bundle-Vendor: Jaspersoft Corporation
-Require-Bundle: com.jaspersoft.studio.data;bundle-version="1.3.0";visibility:=reexport
+Require-Bundle: com.jaspersoft.studio.data;bundle-version="1.3.0";visibility:=reexport,
+ org.slf4j.api;bundle-version="1.6.4"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: registered

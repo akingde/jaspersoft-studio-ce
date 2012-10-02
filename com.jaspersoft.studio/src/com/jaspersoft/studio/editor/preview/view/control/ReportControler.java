@@ -270,7 +270,7 @@ public class ReportControler {
 						public void run() {
 							VSimpleErrorPreview errorView = pcontainer.getErrorView();
 							pcontainer.getRightContainer().switchView(null, errorView);
-							errorView.setMessage(e.getMessage());
+							errorView.setMessage("Error generating report.");
 						}
 					});
 				} finally {
