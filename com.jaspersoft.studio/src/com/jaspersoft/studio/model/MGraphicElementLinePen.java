@@ -26,7 +26,6 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
