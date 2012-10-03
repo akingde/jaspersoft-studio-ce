@@ -6,18 +6,17 @@ import java.util.List;
 import com.jaspersoft.studio.data.querydesigner.sql.SQLScanner;
 
 /**
- * Class implementing a simple fuzzy scanner for HQL.
+ * Class implementing a simple fuzzy scanner for Hive-QL.
  * 
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  */
 public class HiveQLScanner extends SQLScanner {
 
-	private static List<String> hqlKeywords;
+	private static List<String> hiveQLKeywords;
 
 	@Override
 	protected List<String> getSQLKeywords() {
-		if (hqlKeywords == null) {
-			hqlKeywords = Arrays.asList(new String[] { "between", "class",
+		if (hiveQLKeywords == null) {
+			hiveQLKeywords = Arrays.asList(new String[] { "between", "class",
 					"delete", "desc", "distinct", "elements", "escape",
 					"exists", "false", "fetch", "from", "full", "group",
 					"having", "in", "indices", "inner", "insert", "into", "is",
@@ -36,7 +35,7 @@ public class HiveQLScanner extends SQLScanner {
 					"get_json_object", "count", "sum", "avg", "min", "max",
 					"min" });
 		}
-		return hqlKeywords;
+		return hiveQLKeywords;
 	}
 
 }

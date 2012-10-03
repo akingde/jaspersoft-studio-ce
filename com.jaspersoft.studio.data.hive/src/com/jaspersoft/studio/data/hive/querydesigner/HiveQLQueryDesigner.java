@@ -24,10 +24,8 @@ import com.jaspersoft.studio.data.querydesigner.sql.SQLLineStyler;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
 
 /**
- * Simple query designer for HQL (hibernate) that provides syntax highlighting.
+ * Simple query designer for Hive-QL that provides syntax highlighting.
  * 
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
  */
 public class HiveQLQueryDesigner extends SimpleSQLQueryDesigner {
 	

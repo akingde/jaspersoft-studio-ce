@@ -4,9 +4,8 @@ import com.jaspersoft.studio.data.querydesigner.sql.SQLLineStyler;
 import com.jaspersoft.studio.data.querydesigner.sql.SQLScanner;
 
 /**
- * Line style for HQL language.
+ * Line style for Hive-QL language.
  * 
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  */
 public class HiveQLLineStyler extends SQLLineStyler {
 	@Override
