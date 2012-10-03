@@ -22,7 +22,6 @@ package com.jaspersoft.studio.property.section.graphic;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
