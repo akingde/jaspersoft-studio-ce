@@ -20,21 +20,65 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.mongodb.querydesigner;
 
-import com.jaspersoft.studio.data.querydesigner.sql.SQLLineStyler;
-import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+
+import com.jaspersoft.studio.data.designer.QueryDesigner;
 
 /**
- * Simple query designer for Mongo Query Language that provides syntax highlighting.
+ * Simple query designer for HQL (hibernate) that provides syntax highlighting.
  * 
- * FIXME - This class is a placeholder. Query language for MongoDB is based on JSON
- * so we need to decide how to implement query designer for it and its syntax highlighting support.
+ * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class MongoDBQueryDesigner extends SimpleSQLQueryDesigner {
-	
+public class MongoDBQueryDesigner extends QueryDesigner {
+	/* Main control of the designer */
+	protected Composite control;
+	/* Text area where enter the query */
+	protected StyledText queryTextArea;
+	private MongoDBLineStyler lineStyler = new MongoDBLineStyler();
+
+	public Control getControl() {
+		return control;
+	}
+
+	public Control createControl(Composite parent) {
+		control = new Composite(parent, SWT.NONE);
+		GridLayout controlGl = new GridLayout(1, true);
+		controlGl.marginWidth = 0;
+		controlGl.marginHeight = 0;
+		control.setLayout(controlGl);
+
+		queryTextArea = new StyledText(control, SWT.BORDER);
+		queryTextArea.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				queryTextAreaModified();
+			}
+		});
+		queryTextArea.addLineStyleListener(lineStyler);
+		queryTextArea.setLayoutData(new GridData(GridData.FILL_BOTH));
+		return control;
+	}
+
+	protected void queryTextAreaModified() {
+		// keep the query info updated
+		((JRDesignQuery) jDataset.getQuery()).setText(queryTextArea.getText());
+	}
+
 	@Override
-	protected SQLLineStyler getSQLBasedLineStyler() {
-		return new MongoDBQueryLineStyler();
+	public void setQuery(JasperDesign jDesign, JRDataset jDataset) {
+		super.setQuery(jDesign, jDataset);
+		queryTextArea.setText(jDataset.getQuery().getText());
 	}
 
 }
