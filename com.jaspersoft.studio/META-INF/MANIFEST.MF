@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio Designer
 Bundle-SymbolicName: com.jaspersoft.studio;singleton:=true
-Bundle-Version: 1.3.0
+Bundle-Version: 1.3.1
 Bundle-Activator: com.jaspersoft.studio.JaspersoftStudioPlugin
 Bundle-Vendor: Jaspersoft Corporation
 Bundle-Localization: plugin
@@ -16,8 +16,8 @@ Bundle-NativeCode:
 Require-Bundle: org.eclipse.ui.cheatsheets;visibility:=reexport,
  org.eclipse.core.filesystem;visibility:=reexport,
  org.eclipse.gef;bundle-version="3.5.0";visibility:=reexport,
- net.sf.jasperreports;bundle-version="4.8.0";visibility:=reexport,
- com.jaspersoft.studio.properties;bundle-version="1.3.0";visibility:=reexport,
+ net.sf.jasperreports;bundle-version="4.8.1";visibility:=reexport,
+ com.jaspersoft.studio.properties;bundle-version="1.3.1";visibility:=reexport,
  org.eclipse.help.ui;bundle-version="3.4.1";visibility:=reexport,
  org.eclipse.ui.console,
  org.eclipse.ui.forms;bundle-version="3.3.0",

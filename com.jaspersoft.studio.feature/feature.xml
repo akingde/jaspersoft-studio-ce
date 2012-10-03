@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.feature"
       label="Jaspersoft Studio"
-      version="1.3.0"
+      version="1.3.1"
       provider-name="Jaspersoft Corporation"
       plugin="net.sf.jasperreports"
       os="linux,macosx,win32"
@@ -59,70 +59,70 @@
          id="com.jaspersoft.studio"
          download-size="0"
          install-size="0"
-         version="1.3.0"
+         version="1.3.1"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.doc"
          download-size="0"
          install-size="0"
-         version="1.3.0"
+         version="1.3.1"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.html"
          download-size="0"
          install-size="0"
-         version="1.3.0"
+         version="1.3.1"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.data"
          download-size="0"
          install-size="0"
-         version="1.3.0"
+         version="1.3.1"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.components"
          download-size="0"
          install-size="0"
-         version="1.3.0"
+         version="1.3.1"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.server"
          download-size="0"
          install-size="0"
-         version="1.3.0"
+         version="1.3.1"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.data.hive"
          download-size="0"
          install-size="0"
-         version="1.3.0"
+         version="1.3.1"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.data.mongodb"
          download-size="0"
          install-size="0"
-         version="1.3.0"
+         version="1.3.1"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.properties"
          download-size="0"
          install-size="0"
-         version="1.3.0"
+         version="1.3.1"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.data.drivers"
          download-size="0"
          install-size="0"
-         version="1.3.0"
+         version="1.3.1"
          unpack="false"/>
 
 </feature>
