@@ -24,10 +24,11 @@ import com.jaspersoft.studio.data.querydesigner.sql.SQLLineStyler;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
 
 /**
- * Simple query designer for HQL (hibernate) that provides syntax highlighting.
+ * Simple query designer for Mongo Query Language that provides syntax highlighting.
  * 
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * FIXME - This class is a placeholder. Query language for MongoDB is based on JSON
+ * so we need to decide how to implement query designer for it and its syntax highlighting support.
+ * 
  */
 public class MongoDBQueryDesigner extends SimpleSQLQueryDesigner {
 	

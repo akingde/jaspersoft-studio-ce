@@ -6,9 +6,10 @@ import java.util.List;
 import com.jaspersoft.studio.data.querydesigner.sql.SQLScanner;
 
 /**
- * Class implementing a simple fuzzy scanner for HQL.
+ * Class implementing a simple fuzzy scanner for Mongo Query Language.
  * 
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
+ * FIXME - This class is a placeholder. Query language for MongoDB is based on JSON
+ * so we need to decide how to implement query designer for it and its syntax highlighting support.
  */
 public class MongoDBQueryScanner extends SQLScanner {
 
