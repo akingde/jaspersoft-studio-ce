@@ -13,13 +13,13 @@
         <repository location='http://www.wdev91.com/update/'/>
       </repositories>
     </iu>
-    <iu id='org.eclipse.platform.sdk' name='Eclipse Platform SDK' version='3.8.0.I20120608-1200'>
+    <iu id='org.eclipse.platform.sdk' name='Eclipse Platform SDK' version='3.8.1.M20120914-1540'>
       <repositories size='2'>
         <repository location='http://download.eclipse.org/eclipse/updates/3.8'/>
         <repository location='http://download.eclipse.org/releases/juno'/>
       </repositories>
     </iu>
-    <iu id='org.eclipse.sdk.ide' name='Eclipse SDK' version='3.8.0.I20120608-1200'>
+    <iu id='org.eclipse.sdk.ide' name='Eclipse SDK' version='3.8.1.M20120914-1540'>
       <repositories size='2'>
         <repository location='http://download.eclipse.org/eclipse/updates/3.8'/>
         <repository location='http://download.eclipse.org/releases/juno'/>
@@ -30,11 +30,11 @@
         <repository location='http://download.eclipse.org/releases/juno'/>
       </repositories>
     </iu>
-    <iu id='org.eclipse.nebula.feature.feature.group' name='Nebula Widgets' version='1.0.0.201208281846'>
+    <iu id='org.eclipse.nebula.feature.feature.group' name='Nebula Widgets' version='1.0.0.201209281401'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/technology/nebula/snapshot'/>
       </repositories>
-    </iu>    
+    </iu>
     <iu id='org.slf4j.api' name='SLF4J API' version='1.6.4.v20120130-2120'>
       <repositories size='3'>
         <repository location='http://download.eclipse.org/eclipse/updates/3.8'/>
@@ -53,7 +53,7 @@
         <repository location='http://updates.yakindu.com/indigo/milestones/'/>
       </repositories>
     </iu>
-    <iu id='org.eclipse.xtext.sdk.feature.group' name='Xtext SDK' version='2.3.0.v201206120633'>
+    <iu id='org.eclipse.xtext.sdk.feature.group' name='Xtext SDK' version='2.3.1.v201208210947'>
       <repositories size='2'>
         <repository location='http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/'/>
         <repository location='http://download.eclipse.org/releases/juno'/>

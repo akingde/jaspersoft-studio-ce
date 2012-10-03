@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='11'>
+  <ius size='12'>
     <iu id='com.wdev91.eclipse.copyright.feature.feature.group' name='Copyright Wizard' version='1.4.0'>
       <repositories size='1'>
         <repository location='http://www.wdev91.com/update/'/>
@@ -44,6 +44,12 @@
         <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
       </repositories>
     </iu>
+    <iu id='org.slf4j.api' name='SLF4J API' version='1.6.4.v20120130-2120'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/releases/indigo'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
+      </repositories>
+    </iu>    
     <iu id='org.apache.xalan' name='Xalan-Java' version='2.7.1.v201005080400'>
       <repositories size='2'>
         <repository location='http://download.eclipse.org/releases/indigo'/>
