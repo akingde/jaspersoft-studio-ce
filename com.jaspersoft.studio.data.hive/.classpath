@@ -13,6 +13,5 @@
 	<classpathentry kind="lib" path="lib/libthrift-0.9.0-snapshot-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/libthrift-0.9.0-snapshot-test.jar"/>
 	<classpathentry kind="lib" path="lib/libthrift-0.9.0-snapshot.jar"/>
-	<classpathentry kind="lib" path="lib/commons-pool-1.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
