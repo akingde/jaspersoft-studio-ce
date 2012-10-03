@@ -366,7 +366,7 @@ public class BordersSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, Messages.common_pen_width + ":", SWT.RIGHT); //$NON-NLS-1$
 
 		lineWidth = new Spinner(composite, SWT.BORDER | SWT.FLAT);
-		lineWidth.setValues(10, 0, 5000, 1, 1, 1);
+		lineWidth.setValues(0, 0, 5000, 1, 1, 1);
 		lineWidth.setToolTipText(Messages.BordersSection_width_tool_tip);
 		lineWidth.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -627,7 +627,7 @@ public class BordersSection extends AbstractSection {
 			else {
 				//No border is selected, set the control to the default value
 				lineColor.setColor(new RGB(0, 0, 0));
-				lineWidth.setValues(10, 0, 5000, 1, 1, 1);
+				lineWidth.setValues(0, 0, 5000, 1, 1, 1);
 				lineStyle.setData(1);
 			}
 		}

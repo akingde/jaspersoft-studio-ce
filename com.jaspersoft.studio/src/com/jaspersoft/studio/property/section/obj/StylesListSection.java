@@ -54,6 +54,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -82,7 +83,6 @@ public class StylesListSection extends AbstractSection {
 	 * Reference to the container of all the styles
 	 */
 	private static MStyles stylesClass = null;
-	
 	
 	/**
 	 * Color for the text that represent the attribute name
@@ -125,6 +125,14 @@ public class StylesListSection extends AbstractSection {
 	private IconMouseTracker trackerListener = new IconMouseTracker();
 	
 	/**
+	 * Used as guard when an remove click listener is created. If it's true the listener
+	 * assume that it's created because it's assigned to the main element, otherwise it was 
+	 * Assigned to a an element in the hierarchy of the main element. This could be done using a parameter 
+	 * Instead of a local variable, but to keep the method signature more simply this approach was choose
+	 */
+	private Boolean mainElementEvent;
+	
+	/**
 	 * Store the field of the last change event received, used to avoid multiple refreshing for the same event
 	 */
 	private ArrayList<Object> lastChangeEvent = null;
@@ -140,16 +148,23 @@ public class StylesListSection extends AbstractSection {
 		/**
 		 * Element binded to this event
 		 */
-		private	APropertyNode element;
+		private	APropertyNode targetElement;
 		
 		/**
 		 * Property of the element binded to this event
 		 */
 		private String property;
 		
+		/**
+		 * True if this listener is used to remove a property from the main element, false
+		 * otherwise. In this last case a warning popup is showed before the cancellation
+		 */
+		private boolean isTargetMain;
 		
-		public ElementClickListener(APropertyNode element, String property){
-			this.element = element;
+		
+		public ElementClickListener(APropertyNode targetElement, String property){
+			isTargetMain = mainElementEvent;
+			this.targetElement = targetElement;
 			this.property = property;
 		}
 		
@@ -161,13 +176,23 @@ public class StylesListSection extends AbstractSection {
      * commands (so the operation can be undone)
      */
     public void mouseUp(MouseEvent e) {
-			CommandStack cs = getEditDomain().getCommandStack();
-			CompoundCommand cc = new CompoundCommand("Set " + property); //$NON-NLS-1$
-    	Command c = changeProperty(property, null,element);
-   		if (c != null) cc.add(c);
-  		if (!cc.getCommands().isEmpty()) {
-				cs.execute(cc);			
-  		}
+    	boolean executeCommand = true;
+    	if (!isTargetMain){
+    	  MessageBox messageBox = new MessageBox(e.widget.getDisplay().getActiveShell(), SWT.ICON_WARNING | SWT.YES | SWT.NO);
+        messageBox.setText(Messages.StylesListSection_Warining_Box_Title);
+        messageBox.setMessage(Messages.StylesListSection_Warning_Box_Message);
+        int buttonID = messageBox.open();
+        if (buttonID == SWT.NO) executeCommand = false;
+    	}
+    	if (executeCommand){
+				CommandStack cs = getEditDomain().getCommandStack();
+				CompoundCommand cc = new CompoundCommand("Set " + property); //$NON-NLS-1$
+	    	Command c = changeProperty(property, null,targetElement);
+	   		if (c != null) cc.add(c);
+	  		if (!cc.getCommands().isEmpty()) {
+					cs.execute(cc);			
+	  		}
+    	}
     }
 
     public void mouseDoubleClick(MouseEvent e) {
@@ -675,7 +700,11 @@ public class StylesListSection extends AbstractSection {
 		printWindowTitle(parent);
 		initStyleMaps();
 		LinkedList <MStyle> styles = buildStylesGerarchy(element);
+		//Printing the main attribute, opening the guard
+		mainElementEvent = true;
 		printElementAttribute(parent,element,Messages.StylesSectionList_Element_Attributes);
+		//Element printed, closing the guard
+		mainElementEvent = false;
 		printStyles(styles,parent);
 		printDefaultValues(parent,DefaultValuesMap.getPropertiesByType(element));
 		ovverridenAttributes = null;
@@ -719,7 +748,11 @@ public class StylesListSection extends AbstractSection {
 		initStyleMaps();
 		LinkedList<MStyle> styles = buildStylesGerarchy(element);
 		elementAttributes = element.getStylesDescriptors();
+		//Printing the main attribute, opening the guard
+		mainElementEvent = true;
 		printElementAttribute(parent,element,Messages.StylesSectionList_Element_Attributes);
+		//Element printed, closing the guard
+		mainElementEvent = false;
 		printStyles(styles,parent);
 		printDefaultValues(parent,DefaultValuesMap.getPropertiesByType(element));
 		ovverridenAttributes = null;

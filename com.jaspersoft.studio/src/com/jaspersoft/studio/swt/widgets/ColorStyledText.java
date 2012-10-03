@@ -91,7 +91,7 @@ public class ColorStyledText {
 
 		@Override
 		public void modifyText(ModifyEvent e) {
-			//Check if there are others modifyEvent goind
+			//Check if there are others modifyEvent going
 			if (!refreshingGuard){
 				refreshingGuard = true;
 				String text = textArea.getText();
@@ -142,7 +142,7 @@ public class ColorStyledText {
 	 * @param keyCode the key code
 	 * @return true if the code is of a number, false otherwise
 	 */
-	private boolean isNumber(int keyCode){
+	public static boolean isNumber(int keyCode){
 		return (keyCode >=48 && keyCode <=57);
 	}
 	
@@ -151,7 +151,7 @@ public class ColorStyledText {
 	 * @param keyCode the key code
 	 * @return true if the code is of a character, false otherwise
 	 */
-	private boolean isCharachter(int keyCode){
+	public static boolean isCharachter(int keyCode){
 		return (keyCode >=97 && keyCode <=122);
 	}
 	
@@ -160,13 +160,13 @@ public class ColorStyledText {
 	 * @param keyCode the key code
 	 * @return true if the code is of a alphanumeric, false otherwise
 	 */
-	private boolean isAlphanumeric(int keyCode){
+	public static boolean isAlphanumeric(int keyCode){
 		return isNumber(keyCode) || isCharachter(keyCode);
 	}
 	
 	
 	/**
-	 * Construc the element
+	 * Construct the element
 	 * @param parent the composite where the the element will be placed
 	 */
 	public ColorStyledText(Composite parent){
@@ -199,10 +199,12 @@ public class ColorStyledText {
 			
 			@Override
 			public void mouseDown(MouseEvent e) {
-				ColorDialog cd = new ColorDialog(paintArea.getShell());
+				ColorDialog cd = new ColorDialog(colorButton.getDisplay().getActiveShell());
 				cd.setText(Messages.common_line_color);
 				RGB newColor = cd.open();
-				setColor(newColor,true);
+				if (newColor != null){
+					setColor(newColor,true);
+				}
 			}
 
 			@Override
@@ -222,11 +224,13 @@ public class ColorStyledText {
 		//Open the color selection window when the button is pushed
 		lineColor.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				ColorDialog cd = new ColorDialog(paintArea.getShell());
+				ColorDialog cd = new ColorDialog(colorButton.getDisplay().getActiveShell());
 				cd.setText(Messages.common_line_color);
 				RGB newColor = cd.open();
-				lineColor.setSelection(false);
-				setColor(newColor,true);
+				if (newColor != null){
+					lineColor.setSelection(false);
+					setColor(newColor,true);
+				}
 			}
 		});
 	}

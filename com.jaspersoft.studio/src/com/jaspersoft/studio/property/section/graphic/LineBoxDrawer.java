@@ -49,6 +49,8 @@ import org.eclipse.swt.widgets.Canvas;
  */
 class LineBoxDrawer extends BoxDrawer {
 	
+  private static final int selectionWidth = 9;
+	
 	/**
 	 * List of the area where there is a selectable borders
 	 */
@@ -276,6 +278,53 @@ class LineBoxDrawer extends BoxDrawer {
 		drawTopPen(graphics2d, box.getTopPen(), box.getLeftPen(), box.getRightPen(), element, 0, 0);
 		drawBottomPen(graphics2d, box.getLeftPen(), box.getBottomPen(), box.getRightPen(), element, 0, 0);
 		drawRightPen(graphics2d, box.getTopPen(), box.getBottomPen(), box.getRightPen(), element, 0, 0);
+		drawSelections(graphics2d);
+	}
+	
+	/**
+	 * Draw a single selection box with the actual stroke\color. The box is draw
+	 * only if the actual location exist and it's selected
+	 * @param loc location to draw
+	 * @param grx graphics used to paint the box
+	 */
+	private void drawSelection(Location loc, Graphics2D grx, boolean isOffset1, boolean isOffset2){
+		Border border = getBorder(loc);
+		if (border != null && getBorder(loc).getSelected()){
+			int offset1 = 0;
+			int offset2 = 0;
+			Rectangle rect = border.getRect();
+			//Calculate the offset value
+			if (isOffset1) offset1 = Math.round(selectionWidth/2);
+			offset2 = offset1;
+			if (isOffset2) offset2 += Math.round(selectionWidth/2);
+			if (loc == Location.LEFT || loc == Location.RIGHT)
+				grx.drawRect(rect.x, rect.y+offset1, rect.width, rect.height-offset2);
+			else
+				grx.drawRect(rect.x+offset1, rect.y, rect.width-offset2, rect.height);
+		}
+	}
+	
+	/**
+	 * Draw the selection box for all the locations that are selected
+	 * @param grx graphics used to paint the boxes
+	 */
+	private void drawSelections(Graphics2D grx){
+		Stroke oldStroke = grx.getStroke();
+		Color oldColor = grx.getColor();
+		grx.setColor(Color.black);
+		grx.setXORMode(Color.white);
+		grx.setStroke(dashedStroke);
+		boolean isLeftSelected = isLeftSelected();
+		boolean isTopSelected = isTopSelected();
+		boolean isRightSelected = isRightSelected();
+		boolean isBottomSelected = isBottomSelected();
+		drawSelection(Location.LEFT, grx, isTopSelected, isBottomSelected);
+		drawSelection(Location.RIGHT, grx, isTopSelected, isBottomSelected);
+		drawSelection(Location.TOP, grx, isLeftSelected, isRightSelected);
+		drawSelection(Location.BOTTOM, grx, isLeftSelected, isRightSelected);
+		grx.setStroke(oldStroke);
+		grx.setColor(oldColor);
+		grx.setXORMode(oldColor);
 	}
 	
 	/**
@@ -352,9 +401,9 @@ class LineBoxDrawer extends BoxDrawer {
 		return actualElement;
 	}
 
-
+	
 	/**
-	 * Draw the guide lines at every corner of the painting area
+	 * Draw the guide lines at every corner of the painting area and initialize the selection areas
 	 * @param grx
 	 * @param topPen
 	 * @param leftPen
@@ -369,39 +418,55 @@ class LineBoxDrawer extends BoxDrawer {
 		Color oldColor = grx.getColor();
 		grx.setStroke(new BasicStroke(1));
 		grx.setColor(guideColor);
-		float topOffset = topPen.getLineWidth().floatValue() / 2 - BorderOffset.getOffset(topPen);
+		int topOffset = 0;//topPen.getLineWidth().floatValue();
 		int width = element.getWidth();
 		int height = element.getHeight();
 		
-		float translationLeftUpperX = element.getX() + offsetX + BorderOffset.getOffset(leftPen);
-		float translationLeftUpperY= element.getY() + offsetY - topOffset;
+		int translationLeftUpperX = element.getX() + offsetX;
+		int translationLeftUpperY= element.getY() + offsetY - topOffset;
 		
-		float translationRightUpperX = element.getX() + offsetX + width - BorderOffset.getOffset(rightPen);
-		float translationRightUpperY=  element.getY() + offsetY - topOffset;
+		int translationRightUpperX = element.getX() + offsetX + width;
+		int translationRightUpperY=  element.getY() + offsetY - topOffset;
 		
-		float translationLeftBottomY=  element.getY() + offsetY + height - BorderOffset.getOffset(bottomPen);
+		int translationLeftBottomY=  element.getY() + offsetY + height;
 		
+		//Offset between the the angles of a guideline
 		int voidOffset = 2;
 		
 		//Left Upper corner
-		grx.drawLine(0, Math.round(translationLeftUpperY), Math.round(translationLeftUpperX) - voidOffset, Math.round(translationLeftUpperY));
-		grx.drawLine(Math.round(translationLeftUpperX),  0, Math.round(translationLeftUpperX),  Math.round(translationRightUpperY) - voidOffset);
+		grx.drawLine(0, translationLeftUpperY, translationLeftUpperX - voidOffset, translationLeftUpperY);
+		grx.drawLine(translationLeftUpperX, 0, translationLeftUpperX, translationRightUpperY - voidOffset);
 		
 		//Right upper corner
-		grx.drawLine(Math.round(translationRightUpperX) + voidOffset,  Math.round(translationRightUpperY), paintingSquare.getBounds().width,  Math.round(translationRightUpperY));
-		grx.drawLine(Math.round(translationRightUpperX),  0,Math.round(translationRightUpperX),  Math.round(translationRightUpperY) - voidOffset);
+		grx.drawLine(translationRightUpperX + voidOffset, translationRightUpperY, paintingSquare.getBounds().width,  translationRightUpperY);
+		grx.drawLine(translationRightUpperX, 0, translationRightUpperX, translationRightUpperY - voidOffset);
 		
 		//Left bottom corner
-		grx.drawLine(0, Math.round(translationLeftBottomY), Math.round(translationLeftUpperX)-voidOffset, Math.round(translationLeftBottomY));
-		grx.drawLine(Math.round(translationLeftUpperX), Math.round(translationLeftBottomY) + voidOffset, Math.round(translationLeftUpperX), paintingSquare.getBounds().height);
+		grx.drawLine(0, translationLeftBottomY, translationLeftUpperX - voidOffset, translationLeftBottomY);
+		grx.drawLine(translationLeftUpperX, translationLeftBottomY + voidOffset, translationLeftUpperX, paintingSquare.getBounds().height);
 		
 		//Right bottom corner
-		grx.drawLine(Math.round(translationRightUpperX) + voidOffset, Math.round(translationLeftBottomY), paintingSquare.getBounds().width, Math.round(translationLeftBottomY));
-		grx.drawLine(Math.round(translationRightUpperX), Math.round(translationLeftBottomY) + voidOffset, Math.round(translationRightUpperX), paintingSquare.getBounds().height);
+		grx.drawLine(translationRightUpperX + voidOffset, translationLeftBottomY, paintingSquare.getBounds().width, translationLeftBottomY);
+		grx.drawLine(translationRightUpperX, translationLeftBottomY + voidOffset, translationRightUpperX, paintingSquare.getBounds().height);
 		
 		grx.setStroke(oldStroke);
 		grx.setColor(oldColor);
+		
+		
+		//Initialize the selection rectangles
+		Rectangle leftRect = new Rectangle(translationLeftUpperX-selectionWidth/2, translationLeftUpperY, selectionWidth, translationLeftBottomY-translationLeftUpperY);
+		updateBorder(Location.LEFT, leftRect);
+		
+		Rectangle rightRect = new Rectangle(translationRightUpperX-selectionWidth/2, translationRightUpperY, selectionWidth, translationLeftBottomY-translationLeftUpperY);
+		updateBorder(Location.RIGHT, rightRect);
+		
+		Rectangle topRect = new Rectangle(translationLeftUpperX, translationLeftUpperY-selectionWidth/2, translationRightUpperX-translationLeftUpperX,selectionWidth);
+		updateBorder(Location.TOP, topRect);
+		
+		Rectangle bottomRect = new Rectangle(translationLeftUpperX, translationLeftBottomY-selectionWidth/2, translationRightUpperX-translationLeftUpperX,selectionWidth);
+		updateBorder(Location.BOTTOM, bottomRect);
 	}
+	
 	
 	/**
 	 * Paint the left border
@@ -413,20 +478,16 @@ class LineBoxDrawer extends BoxDrawer {
 		int height = element.getHeight();
 		float topOffset = topPen.getLineWidth().floatValue() / 2 - BorderOffset.getOffset(topPen);
 		float bottomOffset = bottomPen.getLineWidth().floatValue() / 2 - BorderOffset.getOffset(bottomPen);
-		float leftPenWidth = 7.0f;
-		float selectionWidth = 7.0f;
+		float leftPenWidth = leftPen.getLineWidth().floatValue();
 		LineStyleEnum lineStyle;
 		if (leftStroke != null && height > 0)
 		{
-			leftPenWidth = leftPen.getLineWidth().floatValue();
-			//If the line is to thin a bigger value will be used for the slection
-			if (leftPenWidth>7)
-				selectionWidth = leftPenWidth;
 			lineStyle = leftPen.getLineStyleValue();
 			grx.setStroke(leftStroke);
 			grx.setColor(leftPen.getLineColor());
 		} else {
-			//If the border is not present will be used a white transparent border as placeholder for the  sleection
+			//If the border is not present will be used a white transparent border as placeholder for the  selection and instead of 
+			//the border a gray dashed line will be painted
 			grx.setStroke(new BasicStroke(2));
 			grx.setColor(Color.LIGHT_GRAY);
 			grx.setStroke(dashedStroke);
@@ -443,17 +504,6 @@ class LineBoxDrawer extends BoxDrawer {
 			grx.scale(scaleX, scaleY);
 			grx.drawLine(0, 0, 0, height);
 			grx.setTransform(oldTx);
-			Rectangle newRect = new Rectangle(Math.round((translationX-selectionWidth/2)*scaleX),Math.round(translationY*scaleY), Math.round(selectionWidth+selectionWidth/3),height);
-			Border updatedBorder = updateBorder(Location.LEFT, newRect);
-			if (updatedBorder.getSelected()){
-				Color oldColor = grx.getColor();
-				Stroke oldStroke = grx.getStroke();
-				grx.setColor(Color.black);
-				grx.setStroke(dashedStroke);
-				grx.drawRect(newRect.x-1, newRect.y-1, newRect.width+5, newRect.height+2);
-				grx.setStroke(oldStroke);
-				grx.setColor(oldColor);
-			}
 			grx.translate(element.getX() + offsetX + leftPenWidth / 3, element.getY() + offsetY + topOffset / 3);
 			if(height > (topOffset + bottomOffset) / 3)
 			{
@@ -471,17 +521,6 @@ class LineBoxDrawer extends BoxDrawer {
 			grx.scale(scaleX, scaleY);
 			grx.drawLine(0,	0, 0,	height);
 			grx.setTransform(oldTx);
-			Rectangle newRect = new Rectangle(Math.round((translationX-selectionWidth/2)*scaleX),Math.round(translationY*scaleY), Math.round(selectionWidth),height);
-			Border updatedBorder = updateBorder(Location.LEFT, newRect);
-			if (updatedBorder.getSelected()){
-				Stroke oldStroke = grx.getStroke();
-				Color oldColor = grx.getColor();
-				grx.setColor(Color.black);
-				grx.setStroke(dashedStroke);
-				grx.drawRect(newRect.x-3, newRect.y-2, newRect.width+6, newRect.height+4);
-				grx.setStroke(oldStroke);
-				grx.setColor(oldColor);
-			}
 		}
 	}
 	
@@ -495,14 +534,10 @@ class LineBoxDrawer extends BoxDrawer {
 			int width = element.getWidth();
 			float topOffset = topPen.getLineWidth().floatValue() / 2 - BorderOffset.getOffset(topPen);
 			float bottomOffset = bottomPen.getLineWidth().floatValue() / 2 - BorderOffset.getOffset(bottomPen);
-			float rightPenWidth = 7.0f;
-			float selectionWidth = 7.0f;
+			float rightPenWidth = rightPen.getLineWidth().floatValue();
 			LineStyleEnum lineStyle;
 			if (rightStroke != null && height > 0)
 			{
-				rightPenWidth = rightPen.getLineWidth().floatValue();
-				if (rightPenWidth>7)
-					selectionWidth = rightPenWidth;
 				lineStyle = rightPen.getLineStyleValue();
 				grx.setStroke(rightStroke);
 				grx.setColor(rightPen.getLineColor());
@@ -523,17 +558,6 @@ class LineBoxDrawer extends BoxDrawer {
 				grx.scale(scaleX, scaleY);
 				grx.drawLine(0, 0, 0, height);
 				grx.setTransform(oldTx);
-				Rectangle newRect = new Rectangle(Math.round((translationX-selectionWidth)*scaleX),Math.round(translationY*scaleY), Math.round(selectionWidth+selectionWidth/3),height);
-				Border updatedBorder = updateBorder(Location.RIGHT, newRect);
-				if (updatedBorder.getSelected()){
-					Color oldColor = grx.getColor();
-					Stroke oldStroke = grx.getStroke();
-					grx.setColor(Color.black);
-					grx.setStroke(dashedStroke);
-					grx.drawRect(newRect.x-1, newRect.y-1, newRect.width+5, newRect.height+2);
-					grx.setStroke(oldStroke);
-					grx.setColor(oldColor);
-				}
 				grx.translate(element.getX() + offsetX + width - rightPenWidth / 3, element.getY() + offsetY + topOffset / 3);
 				if(height > (topOffset + bottomOffset) / 3)
 				{
@@ -541,8 +565,7 @@ class LineBoxDrawer extends BoxDrawer {
 				}
 				grx.drawLine(0, 0, 0, height);
 				grx.setTransform(oldTx);
-			}
-			else
+			} else
 			{
 				float translationX = element.getX() + offsetX + width - BorderOffset.getOffset(rightPen);
 				float translationY=  element.getY() + offsetY - topOffset;
@@ -551,18 +574,7 @@ class LineBoxDrawer extends BoxDrawer {
 				float scaleY = (height + topOffset + bottomOffset)/ height; 
 				grx.scale(scaleX, scaleY);
 				grx.drawLine(0,	0, 0,	height);
-				Rectangle newRect = new Rectangle(Math.round((translationX-selectionWidth/2)*scaleX),Math.round(translationY*scaleY), Math.round(selectionWidth),height);
-				Border updatedBorder = updateBorder(Location.RIGHT, newRect);
 				grx.setTransform(oldTx);
-				if (updatedBorder.getSelected()){
-					Stroke oldStroke = grx.getStroke();
-					Color oldColor = grx.getColor();
-					grx.setColor(Color.black);
-					grx.setStroke(dashedStroke);
-					grx.drawRect(newRect.x-3, newRect.y-2, newRect.width+6, newRect.height+4);
-					grx.setStroke(oldStroke);
-					grx.setColor(oldColor);
-				}
 			}
 		}
 	
@@ -575,14 +587,10 @@ class LineBoxDrawer extends BoxDrawer {
 			int width = element.getWidth();
 			float leftOffset = leftPen.getLineWidth().floatValue() / 2 - BorderOffset.getOffset(leftPen);
 			float rightOffset = rightPen.getLineWidth().floatValue() / 2 - BorderOffset.getOffset(rightPen);
-			float topPenWidth = 7.0f;
-			float selectionWidth = 7.0f;
+			float topPenWidth = topPen.getLineWidth().floatValue();
 			LineStyleEnum lineStyle;
 			if (topStroke != null && width > 0)
 			{
-				topPenWidth = topPen.getLineWidth().floatValue();
-				if (topPenWidth>7)
-					selectionWidth = topPenWidth;
 				lineStyle = topPen.getLineStyleValue();
 				grx.setStroke(topStroke);
 				grx.setColor(topPen.getLineColor());
@@ -603,17 +611,6 @@ class LineBoxDrawer extends BoxDrawer {
 				grx.scale(scaleX, scaleY);
 				grx.drawLine(0, 0, width, 0);
 				grx.setTransform(oldTx);
-				Rectangle newRect = new Rectangle(Math.round(translationX*scaleX),Math.round((translationY-selectionWidth/3)*scaleY), width, Math.round(selectionWidth+selectionWidth/3));
-				Border updatedBorder = updateBorder(Location.TOP, newRect);
-				if (updatedBorder.getSelected()){
-					Color oldColor = grx.getColor();
-					Stroke oldStroke = grx.getStroke();
-					grx.setColor(Color.black);
-					grx.setStroke(dashedStroke);
-					grx.drawRect(newRect.x-1, newRect.y-1, newRect.width+5, newRect.height+2);
-					grx.setStroke(oldStroke);
-					grx.setColor(oldColor);
-				}
 				grx.translate(element.getX() + offsetX + leftOffset / 3, element.getY() + offsetY + topPenWidth / 3);
 				if(width > (leftOffset + rightOffset) / 3)
 				{
@@ -631,18 +628,7 @@ class LineBoxDrawer extends BoxDrawer {
 				float scaleY = 1; 
 				grx.scale(scaleX,scaleY);
 				grx.drawLine(0, 0, width, 0);
-				Rectangle newRect = new Rectangle(Math.round(translationX*scaleX),Math.round((translationY-selectionWidth/2)*scaleY), width, Math.round(selectionWidth));
-				Border updatedBorder = updateBorder(Location.TOP, newRect);
 				grx.setTransform(oldTx);
-				if (updatedBorder.getSelected()){
-					Stroke oldStroke = grx.getStroke();
-					Color oldColor = grx.getColor();
-					grx.setColor(Color.black);
-					grx.setStroke(dashedStroke);
-					grx.drawRect(newRect.x-3, newRect.y-2, newRect.width+6, newRect.height+4);
-					grx.setStroke(oldStroke);
-					grx.setColor(oldColor);
-				}
 			}
 		}
 
@@ -656,14 +642,10 @@ class LineBoxDrawer extends BoxDrawer {
 			int height = element.getHeight();
 			float leftOffset = leftPen.getLineWidth().floatValue() / 2 - BorderOffset.getOffset(leftPen);
 			float rightOffset = rightPen.getLineWidth().floatValue() / 2 - BorderOffset.getOffset(rightPen);
-			float bottomPenWidth = 7.0f;
-			float selectionWidth = 7.0f;
+			float bottomPenWidth = bottomPen.getLineWidth().floatValue();
 			LineStyleEnum lineStyle;
 			if (bottomStroke != null && width > 0)
 			{
-				bottomPenWidth = bottomPen.getLineWidth().floatValue();
-				if (bottomPenWidth>7)
-					selectionWidth = bottomPenWidth;
 				lineStyle = bottomPen.getLineStyleValue();
 				grx.setStroke(bottomStroke);
 				grx.setColor(bottomPen.getLineColor());
@@ -683,18 +665,7 @@ class LineBoxDrawer extends BoxDrawer {
 				float scaleY = 1; 
 				grx.scale(scaleX, scaleY);
 				grx.drawLine(0, 0, width, 0);
-				Rectangle newRect = new Rectangle(Math.round(translationX*scaleX),Math.round((translationY-selectionWidth)*scaleY), width, Math.round(selectionWidth+selectionWidth/3));
-				Border updatedBorder = updateBorder(Location.BOTTOM, newRect);
 				grx.setTransform(oldTx);
-				if (updatedBorder.getSelected()){
-					Color oldColor = grx.getColor();
-					Stroke oldStroke = grx.getStroke();
-					grx.setColor(Color.black);
-					grx.setStroke(dashedStroke);
-					grx.drawRect(newRect.x-1, newRect.y-1, newRect.width+5, newRect.height+2);
-					grx.setStroke(oldStroke);
-					grx.setColor(oldColor);
-				}
 				grx.translate(element.getX() + offsetX + leftOffset / 3, element.getY() + offsetY + height - bottomPenWidth / 3);
 				if(width > (leftOffset + rightOffset) / 3)
 				{
@@ -712,18 +683,7 @@ class LineBoxDrawer extends BoxDrawer {
 				float scaleY = 1; 
 				grx.scale(scaleX, scaleY);
 				grx.drawLine(0, 0, width, 0);
-				Rectangle newRect = new Rectangle(Math.round(translationX*scaleX),Math.round((translationY-selectionWidth/2)*scaleY), width, Math.round(selectionWidth));
-				Border updatedBorder = updateBorder(Location.BOTTOM, newRect);
 				grx.setTransform(oldTx);
-				if (updatedBorder.getSelected()){
-					Stroke oldStroke = grx.getStroke();
-					Color oldColor = grx.getColor();
-					grx.setColor(Color.black);
-					grx.setStroke(dashedStroke);
-					grx.drawRect(newRect.x-3, newRect.y-2, newRect.width+6, newRect.height+4);
-					grx.setStroke(oldStroke);
-					grx.setColor(oldColor);
-				}
 			}
 		}
 	
