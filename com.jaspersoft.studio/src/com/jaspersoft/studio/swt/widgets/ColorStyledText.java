@@ -1,7 +1,21 @@
+/*******************************************************************************
+ * ---------------------------------------------------------------------
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ * ---------------------------------------------------------------------
+ ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
-
-
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,10 +189,10 @@ public class ColorStyledText {
 		final Composite paintArea = new Composite(parent, SWT.BORDER);
 		GridLayout layout = new GridLayout(3,false);
 		paintArea.setLayout(layout);
-		layout.horizontalSpacing = 0;
+		layout.horizontalSpacing = 1;
 		layout.verticalSpacing = 0;
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
+		layout.marginHeight = 1;
+		layout.marginWidth = 1;
 		GridData data = new GridData();
 		data.heightHint = 16;
 		data.verticalAlignment = SWT.CENTER;
@@ -216,10 +230,11 @@ public class ColorStyledText {
 		textArea.setAlignment(SWT.LEFT);
 		textArea.addModifyListener(new EditListener());
 		
+
 		final Button lineColor = new Button(paintArea, SWT.PUSH | SWT.FILL);
 		lineColor.setLayoutData(data);
-		lineColor.setText("..."); //$NON-NLS-1$
-		lineColor.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip); //$NON-NLS-1$
+		lineColor.setText("..."); 
+		lineColor.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
 		
 		//Open the color selection window when the button is pushed
 		lineColor.addSelectionListener(new SelectionAdapter() {
