@@ -33,7 +33,7 @@ public class MongoDbFieldsProvider implements IFieldsProvider {
         dataAdapterService.contributeParameters(parameters);
         ParameterUtil.setParameters(jasperReportsConfiguration, dataset, parameters);
 
-        return com.jaspersoft.mongodb.MongoDbFieldsProvider.getInstance().getFields(dataset, parameters,
+        return com.jaspersoft.mongodb.MongoDbFieldsProvider.getInstance().getFields(jasperReportsConfiguration, dataset, parameters,
                 (MongoDbConnection) parameters.get(JRParameter.REPORT_CONNECTION));
     }
 }

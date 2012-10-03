@@ -4,6 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="lib/mongo-java-driver-2.7.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/js-mongodb-datasource-0.9.3.jar" sourcepath="/js-mongodb-datasource/src"/>
+	<classpathentry kind="lib" path="lib/commons-pool-1.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
