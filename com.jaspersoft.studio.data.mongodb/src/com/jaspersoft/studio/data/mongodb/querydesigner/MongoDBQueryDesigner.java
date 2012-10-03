@@ -29,9 +29,7 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.data.designer.QueryDesigner;
 
 /**
- * Simple query designer for HQL (hibernate) that provides syntax highlighting.
- * 
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
+ * Simple query designer for MongoDB query language that provides syntax highlighting.
  * 
  */
 public class MongoDBQueryDesigner extends QueryDesigner {

@@ -34,11 +34,10 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
- * This class provides the style information for the Json Query text line being drawn.
+ * This class provides the style information for the MongoDB query text (JSON based) line being drawn.
  * <p>
  * NOTE: Re-used code and idea from JavaViewer SWT Example. 
  * 
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * @see MongoDBScanner
  *
  */

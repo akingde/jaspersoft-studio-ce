@@ -23,9 +23,6 @@ package com.jaspersoft.studio.data.mongodb.querydesigner;
 
 /**
  * Enumeration for different types of Json Query tokens.
- * 
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
  */
 public enum JsonTokensType {
 	TEXT(true),KEYWORD(true),QUOTED_LITERAL(true),NUMBER(true),

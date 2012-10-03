@@ -25,12 +25,11 @@ import java.util.List;
 
 
 /**
- * Class implementing a simple fuzzy scanner for Json query text.
+ * Class implementing a simple fuzzy scanner for MongoDB query text (JSON based).
  * <p>
  * 
  * NOTE: Re-used code and idea from JavaViewer SWT Example. 
  *  
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * @see MongoDBLineStyler
  */
 public class MongoDBScanner {
