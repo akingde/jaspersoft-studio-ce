@@ -317,6 +317,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.eclipse.xtext.util"/>
       <plugin id="org.eclipse.xtext.xbase"/>
       <plugin id="org.eclipse.xtext.xbase.lib"/>
+      <plugin id="org.slf4j.api"/>
    </plugins>
 
 
