@@ -19,16 +19,6 @@ Here is a set of basic step you can take to have a fully working IDE.
 3) 	Use the juno42install.p2f file to have all the required features installed.
 	You can do it by using the menu File->Import->Install->Install Software Items from File.
 	Select the "juno38install.p2f" file and follow the steps.
-	This will install the following features:
-	- Eclipse Platform SDK 4.2.0
-	- Eclipse SDK 4.2.0
-	- GEF SDK 3.8.0
-	- Nebula Official Widgets Release 1.0.0
-	- Xtext SDK 2.3.0
-	- Xtext JFace Integration 1.0.0
-	- Xalan-Java 2.7.1
-	- Copyright Wizard 1.4.0
-	
 	N.B: You should also import the deltapack for 4.2 in you current platform in order to be able
 	to build the JSS product.
 4)	Next step after the restart is to import the needed SVN projects.

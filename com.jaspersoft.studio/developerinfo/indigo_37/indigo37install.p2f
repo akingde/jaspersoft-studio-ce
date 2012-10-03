@@ -29,11 +29,11 @@
         <repository location='http://download.eclipse.org/releases/indigo'/>
       </repositories>
     </iu>
-    <iu id='org.eclipse.nebula.feature.feature.group' name='Nebula Widgets' version='1.0.0.201208281846'>
+    <iu id='org.eclipse.nebula.feature.feature.group' name='Nebula Widgets' version='1.0.0.201209281401'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/technology/nebula/snapshot'/>
       </repositories>
-    </iu>    
+    </iu>
     <iu id='javax.servlet' name='Servlet API Bundle' version='3.0.0.v201112011016'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
@@ -46,10 +46,9 @@
     </iu>
     <iu id='org.slf4j.api' name='SLF4J API' version='1.6.4.v20120130-2120'>
       <repositories size='2'>
-        <repository location='http://download.eclipse.org/releases/indigo'/>
         <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
       </repositories>
-    </iu>    
+    </iu>
     <iu id='org.apache.xalan' name='Xalan-Java' version='2.7.1.v201005080400'>
       <repositories size='2'>
         <repository location='http://download.eclipse.org/releases/indigo'/>
@@ -61,7 +60,7 @@
         <repository location='http://updates.yakindu.com/indigo/milestones/'/>
       </repositories>
     </iu>
-    <iu id='org.eclipse.xtext.sdk.feature.group' name='Xtext SDK' version='2.3.0.v201206120633'>
+    <iu id='org.eclipse.xtext.sdk.feature.group' name='Xtext SDK' version='2.3.1.v201208210947'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/'/>
       </repositories>
