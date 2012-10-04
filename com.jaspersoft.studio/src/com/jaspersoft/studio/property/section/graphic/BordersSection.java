@@ -153,7 +153,6 @@ public class BordersSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 		
 		Composite mainLayout = new Composite(parent, SWT.NONE);
-		//mainLayout.setBackground(mainLayout.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		mainLayout.setLayout(new GridLayout(1,true));
 		mainLayout.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 				
@@ -161,7 +160,6 @@ public class BordersSection extends AbstractSection {
 		
 		Group rightPanel = new Group(mainLayout, SWT.NONE);
 		rightPanel.setText(Messages.BordersSection_border);
-		//rightPanel.setBackground(mainLayout.getBackground());
 		rightPanel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		rightPanel.setLayout(new GridLayout(2,false));
 				
@@ -179,7 +177,6 @@ public class BordersSection extends AbstractSection {
 		Label textLabel = new Label(toolBarLayout,SWT.NONE);
 		textLabel.setText(Messages.BordersSection_Default_Label);
 		ToolBar toolBar = new ToolBar(toolBarLayout, SWT.FLAT | SWT.WRAP);
-		//toolBar.setBackground(rightPanel.getBackground());
 		createButtons(toolBar);
 
 		allBorder.setSelection(false);
@@ -278,7 +275,6 @@ public class BordersSection extends AbstractSection {
 		Group composite = new Group(parent, SWT.NONE);
 		composite.setText(Messages.BordersSection_Padding_Box_Title);
 		
-		composite.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		GridLayout layout = new GridLayout(4, false);
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -347,7 +343,6 @@ public class BordersSection extends AbstractSection {
 
 	private Control createStyle(Composite parent, final String property) {
 		final Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		GridLayout layout = new GridLayout(2, false);
 		composite.setLayout(layout);
 

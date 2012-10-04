@@ -43,7 +43,7 @@ public class ColorsSection extends AbstractRealValueSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = getWidgetFactory().createSection(parent, "Color", false, 4);
+		parent = getWidgetFactory().createSection(parent, "Color", true, 4);
 		
 		//parent.setLayout(new GridLayout(4, false));
 		

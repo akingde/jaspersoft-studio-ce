@@ -43,7 +43,7 @@ public class SizeSection extends AbstractRealValueSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = getWidgetFactory().createSection(parent, "Size", false, 4);
+		parent = getWidgetFactory().createSection(parent, "Size", true, 4);
 
 		getWidgetFactory().createCLabel(parent, "w", SWT.RIGHT).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		createWidget4Property(parent, JRDesignElement.PROPERTY_WIDTH, false);

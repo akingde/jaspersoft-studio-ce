@@ -45,7 +45,7 @@ public class ParagraphSection extends AbstractRealValueSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = getWidgetFactory().createSection(parent, "Paragraph", false, 2);
+		parent = getWidgetFactory().createSection(parent, "Paragraph", true, 2);
 
 		createWidget4Property(parent, JRBaseParagraph.PROPERTY_LINE_SPACING);
 		createWidget4Property(parent, JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE);

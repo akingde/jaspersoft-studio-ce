@@ -43,7 +43,7 @@ public class LocationSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = getWidgetFactory().createSection(parent, "Location", false, 4);
+		parent = getWidgetFactory().createSection(parent, "Location", true, 4);
 		
 
 		getWidgetFactory().createCLabel(parent, "x", SWT.RIGHT).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));

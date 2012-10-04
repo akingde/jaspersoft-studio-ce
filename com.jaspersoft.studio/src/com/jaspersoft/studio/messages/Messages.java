@@ -509,6 +509,7 @@ public class Messages extends NLS {
 	public static String G2DExporterPreferencePage_2;
 	public static String G2DExporterPreferencePage_3;
 	public static String G2DExporterPreferencePage_4;
+	public static String GraphicSection_Detail_Section_Title;
 	public static String HeadingAction_heading;
 	public static String HTMLExporterPreferencePage_14;
 	public static String HTMLExporterPreferencePage_15;
