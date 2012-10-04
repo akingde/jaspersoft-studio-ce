@@ -16,6 +16,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MDummy;
+import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
@@ -86,8 +87,13 @@ public class FindReportUnit {
 				String prunit = jd.getProperty(JrxmlExporter.PROP_REPORTUNIT);
 				if (prunit != null) {
 					WSClientHelper.connectGetData(mserv, monitor);
-					sp = WSClientHelper.findSelected(mserv.getChildren(),
+					// We can try to locate a previous existing Report Unit.
+					// If not possible we will popup the selection tree as usual.
+					MResource selectedRepoUnit = WSClientHelper.findSelected(mserv.getChildren(),
 							monitor, prunit, mserv.getWsClient());
+					if(selectedRepoUnit!=null){
+						sp=selectedRepoUnit;
+					}
 				}
 
 			}
