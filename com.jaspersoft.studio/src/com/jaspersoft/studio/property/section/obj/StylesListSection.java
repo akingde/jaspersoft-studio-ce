@@ -190,7 +190,15 @@ public class StylesListSection extends AbstractSection {
 	    	Command c = changeProperty(property, null,targetElement);
 	   		if (c != null) cc.add(c);
 	  		if (!cc.getCommands().isEmpty()) {
+	  			Object oldValue =  targetElement.getPropertyValue(property);
 					cs.execute(cc);			
+					//Force a refresh
+					refresh();
+					lastChangeEvent = new ArrayList<Object>();
+					lastChangeEvent.add(oldValue);
+					lastChangeEvent.add(null);
+					lastChangeEvent.add(targetElement);
+					lastChangeEvent.add(property);
 	  		}
     	}
     }
@@ -620,6 +628,7 @@ public class StylesListSection extends AbstractSection {
 		}
 	}
 	
+	
 	/**
 	 * Add not only this node to the notify handler but all it's root, so even change in it's styles will be notified
 	 */
@@ -639,7 +648,24 @@ public class StylesListSection extends AbstractSection {
 	}
 	
 	/**
-	 * Override of the property change handler, check if the last event received was alredy notified
+	 * Check if the actual old value and new value are equals to those received in the last refresh
+	 * @param oldValue the new oldValue
+	 * @param newValue the new newValue
+	 * @return true if the new oldValue and the new newValue are equals to those received in the precedent call of a proprty change
+	 * false otherwise
+	 */
+	private boolean checkValuesEqual(Object oldValue, Object newValue){
+		boolean oldValueEqual = false;
+		//If the values are not null use the equals operator, otherwise ==
+		oldValueEqual = oldValue != null ? oldValue.equals(lastChangeEvent.get(0)) : oldValue == lastChangeEvent.get(0);
+		boolean newValueEqual = false;
+		if (oldValueEqual)
+			newValueEqual = newValue != null ? newValue.equals(lastChangeEvent.get(1)) : newValue == lastChangeEvent.get(1);
+		return (newValueEqual && oldValueEqual);
+	}
+	
+	/**
+	 * Override of the property change handler, check if the last event received was already notified
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (!isDisposed()) {
@@ -652,7 +678,7 @@ public class StylesListSection extends AbstractSection {
 				lastChangeEvent.add(evt.getPropertyName());
 				refresh();
 			} else {
-				if (lastChangeEvent.get(0) != evt.getOldValue() || lastChangeEvent.get(1) != evt.getNewValue() ||
+				if (!checkValuesEqual(evt.getOldValue(),evt.getNewValue()) ||
 						!lastChangeEvent.get(2).equals(evt.getSource()) || !lastChangeEvent.get(3).equals(evt.getPropertyName())){
 					refresh();
 					lastChangeEvent = new ArrayList<Object>();
