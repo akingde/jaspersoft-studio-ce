@@ -47,80 +47,79 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * This class works on the specified xml document or its nodes.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
-public class XMLDocumentManager implements ISelectableNodes<XMLNode>{
+public class XMLDocumentManager implements ISelectableNodes<XMLNode> {
 
 	private Document xmlDocument;
 	private JRXPathExecuter xPathExecuter;
-	private Map<XMLNode,Node> documentNodesMap;
+	private Map<XMLNode, Node> documentNodesMap;
 	private JasperReportsConfiguration jConfig;
-	
+
 	/**
-	 * Sets the {@link Document} object that will 
-	 * be handled by the manager.
+	 * Sets the {@link Document} object that will be handled by the manager.
 	 * 
-	 * @param doc the xml document
+	 * @param doc
+	 *            the xml document
 	 */
-	public void setDocument(Document doc){
-		this.xmlDocument=doc;
+	public void setDocument(Document doc) {
+		this.xmlDocument = doc;
 		getDocumentNodesMap().clear();
 	}
-	
+
 	/**
-	 * @return <code>true</code> if an xml document is set,
-	 * 			<code>false</code> otherwise
+	 * @return <code>true</code> if an xml document is set, <code>false</code>
+	 *         otherwise
 	 */
-	public boolean isDocumentSet(){
-		return this.xmlDocument!=null;
+	public boolean isDocumentSet() {
+		return this.xmlDocument != null;
 	}
-	
+
 	/**
-	 * Creates a tree of {@link ANode} elements representing
-	 * the input document.
+	 * Creates a tree of {@link ANode} elements representing the input document.
 	 * 
-	 * @param docNode root node
+	 * @param docNode
+	 *            root node
 	 * @return the model representing the XML document
 	 */
-	public MRoot getXMLDocumentModel(){
-		if(xmlDocument!=null){
-			MRoot docRoot=new MRoot(null, null);
+	public MRoot getXMLDocumentModel() {
+		if (xmlDocument != null) {
+			MRoot docRoot = new MRoot(null, null);
 			List<XMLNode> childrenXMLNodes = getChildrenXMLNodes(xmlDocument);
-			for(XMLNode childNode : childrenXMLNodes){
+			for (XMLNode childNode : childrenXMLNodes) {
 				childNode.setParent(docRoot, -1);
 			}
 			return docRoot;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	/*
 	 * Get the list of XMLNodes for the specified document node.
 	 */
-	private List<XMLNode> getChildrenXMLNodes(Node node){
-		List<XMLNode> children=new ArrayList<XMLNode>();
-		
-		// Attributes 
+	private List<XMLNode> getChildrenXMLNodes(Node node) {
+		List<XMLNode> children = new ArrayList<XMLNode>();
+
+		// Attributes
 		NamedNodeMap attrs = node.getAttributes();
 		if (attrs != null) {
-			for (int i = 0; i < attrs.getLength(); i++){
-				XMLAttributeNode attrNode=new XMLAttributeNode();
-				getDocumentNodesMap().put(attrNode,attrs.item(i));
+			for (int i = 0; i < attrs.getLength(); i++) {
+				XMLAttributeNode attrNode = new XMLAttributeNode();
+				getDocumentNodesMap().put(attrNode, attrs.item(i));
 				attrNode.setName(attrs.item(i).getNodeName());
 				children.add(attrNode);
 			}
 		}
 		// Standard nodes
-		NodeList nl=node.getChildNodes();
-		for (int i = 0; i < nl.getLength(); i++){
-			if (nl.item(i).getNodeType() == Node.ELEMENT_NODE){
-				XMLNode n=new XMLNode();
-				getDocumentNodesMap().put(n,nl.item(i));
+		NodeList nl = node.getChildNodes();
+		for (int i = 0; i < nl.getLength(); i++) {
+			if (nl.item(i).getNodeType() == Node.ELEMENT_NODE) {
+				XMLNode n = new XMLNode();
+				getDocumentNodesMap().put(n, nl.item(i));
 				n.setName(nl.item(i).getNodeName());
 				List<XMLNode> childrenXMLNodes = getChildrenXMLNodes(nl.item(i));
-				for(XMLNode childNode : childrenXMLNodes){
+				for (XMLNode childNode : childrenXMLNodes) {
 					childNode.setParent(n, -1);
 				}
 				children.add(n);
@@ -130,130 +129,141 @@ public class XMLDocumentManager implements ISelectableNodes<XMLNode>{
 	}
 
 	/**
-	 * Returns the XPath expression (absolute or relative) that locates the
-	 * node in XML document.
+	 * Returns the XPath expression (absolute or relative) that locates the node
+	 * in XML document.
 	 * 
-	 * @param query	an existing XPath expression that can be used in order to
-	 * 				return a relative expression. It can be <code>null</code>.
-	 * @param xmlNode	the node for which to extract the XPath expression
+	 * @param query
+	 *            an existing XPath expression that can be used in order to
+	 *            return a relative expression. It can be <code>null</code>.
+	 * @param xmlNode
+	 *            the node for which to extract the XPath expression
 	 * @return
 	 */
-	public String getXPathExpression(String query, XMLNode xmlNode){
-		Node selectedNode=getDocumentNodesMap().get(xmlNode);
-		boolean isAttribute=(selectedNode instanceof Attr);
-		String attributePostfix="";
-		if(isAttribute){
-			attributePostfix="/@"+selectedNode.getNodeName();
+	public String getXPathExpression(String query, XMLNode xmlNode) {
+		Node selectedNode = getDocumentNodesMap().get(xmlNode);
+		boolean isAttribute = (selectedNode instanceof Attr);
+		String attributePostfix = "";
+		if (isAttribute) {
+			attributePostfix = "/@" + selectedNode.getNodeName();
 		}
 		String selectedPath = getAbsoluteXPathExpression(selectedNode);
-		if(query==null || query.equals("")){
+		if (query == null || query.equals("")) {
 			// Absolute expression
 			return getAbsoluteXPathExpression(selectedNode);
-		}
-		else {
+		} else {
 			List<Node> selectedNodeList = selectNodeList(query);
-			for(Node currnode : selectedNodeList){
+			for (Node currnode : selectedNodeList) {
 				String currentPath = getAbsoluteXPathExpression(currnode);
-				if(selectedPath.equals(currentPath)){
+				if (selectedPath.equals(currentPath)) {
 					return "child::text()";
-				}
-				else if(selectedPath.startsWith(currentPath)){
+				} else if (selectedPath.startsWith(currentPath)) {
 					// selected node is child of the current one
-					return selectedPath.replace(currentPath+"/", "");
-				}
-				else if(currentPath.startsWith(selectedPath)){
+					return selectedPath.replace(currentPath + "/", "");
+				} else if (currentPath.startsWith(selectedPath)) {
 					// selected node is parent of the current one
-					return "anchestor::"+selectedNode.getNodeName();
-				}
-				else if(isAttribute && 
-						currentPath.startsWith(selectedPath.replace(attributePostfix, ""))){
-					// special case of the selected attribute and located on anchestor node
-					return "anchestor::"+((Attr)selectedNode).getOwnerElement().getNodeName()+attributePostfix;
+					return "anchestor::" + selectedNode.getNodeName();
+				} else if (isAttribute
+						&& currentPath.startsWith(selectedPath.replace(
+								attributePostfix, ""))) {
+					// special case of the selected attribute and located on
+					// anchestor node
+					return "anchestor::"
+							+ ((Attr) selectedNode).getOwnerElement()
+									.getNodeName() + attributePostfix;
 				}
 			}
 		}
 		return selectedPath;
 	}
-	
+
 	/*
-	 * Simple way to retrieve the absolute XPath expression that would
-	 * permit to locate the node similar to the node specified.
+	 * Simple way to retrieve the absolute XPath expression that would permit to
+	 * locate the node similar to the node specified.
 	 */
-	private String getAbsoluteXPathExpression(Node node){
-		StringBuffer sb=new StringBuffer();
-		while(!(node instanceof Document)){
-			if(node instanceof Attr){
-				sb.insert(0,"/@"+node.getNodeName());
-				node=((Attr)node).getOwnerElement();
-			}
-			else{
-				sb.insert(0,"/"+node.getNodeName());
-				node=node.getParentNode();					
+	private String getAbsoluteXPathExpression(Node node) {
+		StringBuffer sb = new StringBuffer();
+		while (!(node instanceof Document)) {
+			if (node instanceof Attr) {
+				sb.insert(0, "/@" + node.getNodeName());
+				node = ((Attr) node).getOwnerElement();
+			} else {
+				sb.insert(0, "/" + node.getNodeName());
+				node = node.getParentNode();
 			}
 		}
 		return sb.toString();
 	}
-	
-	private JRXPathExecuter getXPathQueryExecuter(){
-		if(xPathExecuter==null){
+
+	private JRXPathExecuter getXPathQueryExecuter() {
+		if (xPathExecuter == null) {
 			try {
 				xPathExecuter = JRXPathExecuterUtils.getXPathExecuter(jConfig);
 			} catch (JRException e) {
+				UIUtils.showError(e);
+			} catch (Error e) {
 				UIUtils.showError(e);
 			}
 		}
 		return xPathExecuter;
 	}
-	
-	public Map<XMLNode, Node> getDocumentNodesMap(){
-		if(this.documentNodesMap==null){
-			this.documentNodesMap=new HashMap<XMLNode, Node>();
+
+	public Map<XMLNode, Node> getDocumentNodesMap() {
+		if (this.documentNodesMap == null) {
+			this.documentNodesMap = new HashMap<XMLNode, Node>();
 		}
 		return this.documentNodesMap;
 	}
 
 	/**
-	 * Selects the {@link Node} elements found by executing
-	 * the input XPath query. 
-	 *  
-	 * @param query the query to execute
+	 * Selects the {@link Node} elements found by executing the input XPath
+	 * query.
+	 * 
+	 * @param query
+	 *            the query to execute
 	 * @return list of selected nodes
 	 */
 	public List<Node> selectNodeList(String query) {
-		List<Node> nodes=new ArrayList<Node>();
+		List<Node> nodes = new ArrayList<Node>();
 		try {
-			NodeList selectNodeList = getXPathQueryExecuter().selectNodeList(this.xmlDocument, query);
-			for(int i=0;i<selectNodeList.getLength();i++){
-				nodes.add(selectNodeList.item(i));
+			JRXPathExecuter xPathQueryExecuter = getXPathQueryExecuter();
+			if (xPathQueryExecuter != null) {
+				NodeList selectNodeList = xPathQueryExecuter.selectNodeList(
+						this.xmlDocument, query);
+				for (int i = 0; i < selectNodeList.getLength(); i++) {
+					nodes.add(selectNodeList.item(i));
+				}
 			}
 		} catch (JRException e) {
 			// Do not care about error in node selection
 		}
 		return nodes;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.querydesigner.ISelectableNodes#getSelectableNodes(java.lang.String)
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.data.querydesigner.ISelectableNodes#getSelectableNodes
+	 * (java.lang.String)
 	 */
-	public List<XMLNode> getSelectableNodes(String query){
+	public List<XMLNode> getSelectableNodes(String query) {
 		List<Node> nodes = selectNodeList(query);
-		List<XMLNode> selected=new ArrayList<XMLNode>();
-		for(XMLNode n : getDocumentNodesMap().keySet()){
-			if(nodes.contains(getDocumentNodesMap().get(n))){
+		List<XMLNode> selected = new ArrayList<XMLNode>();
+		for (XMLNode n : getDocumentNodesMap().keySet()) {
+			if (nodes.contains(getDocumentNodesMap().get(n))) {
 				selected.add(n);
 			}
 		}
 		return selected;
 	}
-	
+
 	/**
 	 * Updates the Jasper Configuration reference.
 	 * 
 	 * @param jConfig
 	 */
-	public void setJasperConfiguration(JasperReportsConfiguration jConfig){
-		this.jConfig=jConfig;
+	public void setJasperConfiguration(JasperReportsConfiguration jConfig) {
+		this.jConfig = jConfig;
 	}
-	
+
 }
