@@ -951,6 +951,7 @@ public class Messages extends NLS {
 	public static String MVariable_reset_type_description;
 	public static String MVariableSystem_name_description;
 	public static String MVariableSystem_value_class_name_description;
+	public static String NullEnum_NullEnum_Undefined;
 	public static String NumericPattern_decimal_places;
 	public static String NumericPattern_description;
 	public static String NumericPattern_leading_zeroes;

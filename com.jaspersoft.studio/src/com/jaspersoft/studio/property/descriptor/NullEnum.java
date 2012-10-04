@@ -45,8 +45,11 @@ package com.jaspersoft.studio.property.descriptor;
 import com.jaspersoft.studio.messages.Messages;
 
 public enum NullEnum {
-	NOTNULL((byte) 1, ""), NULL((byte) 2, "<" + Messages.common_null.toUpperCase() + ">"), INHERITED((byte) 3, Messages.common_null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-
+	NOTNULL((byte) 1, ""), 
+	NULL((byte) 2, "<" + Messages.common_null.toUpperCase() + ">"),
+	INHERITED((byte) 3, "<".concat(Messages.common_null.toUpperCase()).concat(">")), 
+	UNDEFINED((byte) 3, Messages.NullEnum_NullEnum_Undefined); //Undefined has the same value of inherited, and the same use but with a more user friendly message
+	
 	private final transient byte value;
 	private final transient String name;
 

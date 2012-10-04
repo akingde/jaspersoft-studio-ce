@@ -224,9 +224,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		result.put(JRDesignStyle.PROPERTY_MARKUP, element.getOwnMarkup());
 		result.put(JRDesignStyle.PROPERTY_MODE, element.getOwnModeValue());
 		result.put(JRDesignStyle.PROPERTY_PATTERN, element.getOwnPattern());
-		//result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, element.getOwnPdfEncoding());
-		//result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, element.getOwnPdfFontName());
-		//result.put(JRDesignStyle.PROPERTY_PDF_EMBEDDED, element.isOwnPdfEmbedded());
 		result.put(JRDesignStyle.PROPERTY_RADIUS, element.getOwnRadius());
 		result.put(JRDesignStyle.PROPERTY_ROTATION, element.getOwnRotationValue());
 		result.put(JRDesignStyle.PROPERTY_SCALE_IMAGE, element.getOwnScaleImageValue());
@@ -284,12 +281,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		desc.add(radiusD);
 
 		fillD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
-				NullEnum.INHERITED);
+				NullEnum.UNDEFINED);
 		fillD.setDescription(Messages.MStyle_fill_description);
 		desc.add(fillD);
 
 		scaleD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_SCALE_IMAGE, Messages.MStyle_scale,
-				ScaleImageEnum.class, NullEnum.INHERITED);
+				ScaleImageEnum.class, NullEnum.UNDEFINED);
 		scaleD.setDescription(Messages.MStyle_scale_description);
 		desc.add(scaleD);
 
@@ -310,8 +307,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 		modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class,
 				NullEnum.INHERITED);
-		//modeD.setDescription(Messages.MStyle_mode_description);
-		//desc.add(modeD);
 		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(
 				JRBaseStyle.PROPERTY_MODE, Messages.common_opaque);
 		opaqueDBool.setDescription(Messages.MGraphicElement_opaque_description);
