@@ -1,7 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='12'>
+  <ius size='13'>
+    <iu id='org.apache.commons.pool' name='Apache Commons Pool' version='1.6.0.v201204271246'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
+      </repositories>
+    </iu>  
     <iu id='com.wdev91.eclipse.copyright.feature.feature.group' name='Copyright Wizard' version='1.4.0'>
       <repositories size='1'>
         <repository location='http://www.wdev91.com/update/'/>
