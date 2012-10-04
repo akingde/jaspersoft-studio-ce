@@ -194,14 +194,13 @@ public class ColorStyledText {
 		layout.marginHeight = 1;
 		layout.marginWidth = 1;
 		GridData data = new GridData();
-		data.heightHint = 16;
+		data.heightHint = 20;
+		data.widthHint = 35;
 		data.verticalAlignment = SWT.CENTER;
-		data.horizontalAlignment = SWT.CENTER;
+		data.horizontalAlignment = SWT.RIGHT;
 		
 		GridData textData = new GridData();
 		textData.verticalAlignment = SWT.CENTER;
-		textData.widthHint = 50;
-		textData.heightHint = 16;	
 		
 		provider = new ColorLabelProvider(NullEnum.NULL);
 		colorButton = new Label( paintArea, SWT.FILL);
