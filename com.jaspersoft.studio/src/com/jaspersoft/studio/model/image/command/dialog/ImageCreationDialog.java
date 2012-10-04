@@ -544,21 +544,27 @@ public class ImageCreationDialog extends Dialog {
 		
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			monitor.beginTask(Messages.ImageCreationDialog_JobImgPreviewRetrieving, IProgressMonitor.UNKNOWN);
-			if(btnAbsolutePath.getSelection()){
-				// filesystem path...
-				String imagePath = txtFilesystemPath.getText();
-				IFileStore imgFileStore = EFS.getLocalFileSystem().getStore(new Path(imagePath));
-				loadImagePreview(imagePath, imgFileStore);
-				imageExpressionText=imagePath;
+			if(ImageCreationDialog.this.getDialogArea()!=null && 
+					!ImageCreationDialog.this.getDialogArea().isDisposed()){			
+				monitor.beginTask(Messages.ImageCreationDialog_JobImgPreviewRetrieving, IProgressMonitor.UNKNOWN);
+				if(btnAbsolutePath.getSelection()){
+					// filesystem path...
+					String imagePath = txtFilesystemPath.getText();
+					IFileStore imgFileStore = EFS.getLocalFileSystem().getStore(new Path(imagePath));
+					loadImagePreview(imagePath, imgFileStore);
+					imageExpressionText=imagePath;
+				}
+				else if (btnUrlRemote.getSelection()) {
+					// URL
+					String imageURLText = txtURL.getText();
+					loadPreviewRemoteImage(imageURLText);
+				}
+				monitor.done();
+				return Status.OK_STATUS;
 			}
-			else if (btnUrlRemote.getSelection()) {
-				// URL
-				String imageURLText = txtURL.getText();
-				loadPreviewRemoteImage(imageURLText);
+			else {
+				return Status.CANCEL_STATUS;
 			}
-			monitor.done();
-			return Status.OK_STATUS;
 		}
 
 	}

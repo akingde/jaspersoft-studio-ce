@@ -46,12 +46,12 @@ import com.jaspersoft.studio.editor.expression.ExpressionStatus;
 import com.jaspersoft.studio.editor.expression.IExpressionStatusChangeListener;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionEvent;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionListener;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectsNavigatorContentProvider;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectsNavigatorLabelProvider;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.StyledTextXtextAdapter2;
-import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
 
 /**
  * Standard implementation of the main editing area for JasperReports
@@ -358,11 +358,16 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			monitor.beginTask("Refreshing...", IProgressMonitor.UNKNOWN);
-			synchCurrentFunctionDetails();
-			updateExpressionStatus();
-			monitor.done();
-			return Status.OK_STATUS;
+			if(!isDisposed()){
+				monitor.beginTask("Refreshing...", IProgressMonitor.UNKNOWN);
+				synchCurrentFunctionDetails();
+				updateExpressionStatus();
+				monitor.done();
+				return Status.OK_STATUS;
+			}
+			else{
+				return Status.CANCEL_STATUS;
+			}
 		}
 	}
 	
@@ -500,6 +505,15 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 			synchCurrentFunctionDetails();
 			updateExpressionStatus();
 		}
+	}
+	
+	@Override
+	public void dispose() {
+		if(updatePanelJob!=null){
+			updatePanelJob.cancel();
+			updatePanelJob=null;
+		}
+		super.dispose();
 	}
 
 }

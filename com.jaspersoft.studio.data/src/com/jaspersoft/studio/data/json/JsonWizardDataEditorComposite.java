@@ -145,12 +145,17 @@ public class JsonWizardDataEditorComposite extends ATreeWizardDataEditorComposit
 		
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			monitor.beginTask(Messages.JsonWizardDataEditorComposite_Task, IProgressMonitor.UNKNOWN);
-			String query=queryTextArea.getText();
-			treeLabelProvider.setSelectedNodes(jsonDataManager.getSelectableNodes(query));
-			treeViewer.refresh();
-			monitor.done();
-			return Status.OK_STATUS;
+			if(!isDisposed()){
+				monitor.beginTask(Messages.JsonWizardDataEditorComposite_Task, IProgressMonitor.UNKNOWN);
+				String query=queryTextArea.getText();
+				treeLabelProvider.setSelectedNodes(jsonDataManager.getSelectableNodes(query));
+				treeViewer.refresh();
+				monitor.done();
+				return Status.OK_STATUS;
+			}
+			else {
+				return Status.CANCEL_STATUS;
+			}
 		}
 		
 	}

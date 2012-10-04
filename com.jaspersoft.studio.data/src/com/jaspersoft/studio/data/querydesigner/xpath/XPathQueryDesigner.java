@@ -422,12 +422,17 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 		
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			monitor.beginTask(Messages.XPathQueryDesigner_RefreshTaskTitle, IProgressMonitor.UNKNOWN);
-			String query=queryTextArea.getText();
-			treeLabelProvider.setSelectedNodes(documentManager.getSelectableNodes(query));
-			treeViewer.refresh();
-			monitor.done();
-			return Status.OK_STATUS;
+			if(control!=null && !control.isDisposed()){
+				monitor.beginTask(Messages.XPathQueryDesigner_RefreshTaskTitle, IProgressMonitor.UNKNOWN);
+				String query=queryTextArea.getText();
+				treeLabelProvider.setSelectedNodes(documentManager.getSelectableNodes(query));
+				treeViewer.refresh();
+				monitor.done();
+				return Status.OK_STATUS;
+			}
+			else {
+				return Status.CANCEL_STATUS;
+			}
 		}
 		
 	}

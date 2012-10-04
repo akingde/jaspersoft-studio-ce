@@ -379,12 +379,17 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 		
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			monitor.beginTask(Messages.JsonQueryDesigner_JobTask, IProgressMonitor.UNKNOWN);
-			String query=queryTextArea.getText();
-			treeLabelProvider.setSelectedNodes(jsonDataManager.getSelectableNodes(query));
-			treeViewer.refresh();
-			monitor.done();
-			return Status.OK_STATUS;
+			if(control!=null && !control.isDisposed()){
+				monitor.beginTask(Messages.JsonQueryDesigner_JobTask, IProgressMonitor.UNKNOWN);
+				String query=queryTextArea.getText();
+				treeLabelProvider.setSelectedNodes(jsonDataManager.getSelectableNodes(query));
+				treeViewer.refresh();
+				monitor.done();
+				return Status.OK_STATUS;
+			}
+			else{
+				return Status.CANCEL_STATUS;
+			}
 		}
 		
 	}

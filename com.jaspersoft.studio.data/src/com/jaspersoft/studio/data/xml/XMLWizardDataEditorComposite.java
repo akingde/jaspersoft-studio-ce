@@ -146,12 +146,17 @@ public class XMLWizardDataEditorComposite extends	ATreeWizardDataEditorComposite
 		
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			monitor.beginTask(Messages.XPathWizardDataEditorComposite_TaskName, IProgressMonitor.UNKNOWN);
-			String query=queryTextArea.getText();
-			treeLabelProvider.setSelectedNodes(documentManager.getSelectableNodes(query));
-			treeViewer.refresh();
-			monitor.done();
-			return Status.OK_STATUS;
+			if(!isDisposed()){
+				monitor.beginTask(Messages.XPathWizardDataEditorComposite_TaskName, IProgressMonitor.UNKNOWN);
+				String query=queryTextArea.getText();
+				treeLabelProvider.setSelectedNodes(documentManager.getSelectableNodes(query));
+				treeViewer.refresh();
+				monitor.done();
+				return Status.OK_STATUS;
+			}
+			else {
+				return Status.CANCEL_STATUS;
+			}
 		}
 		
 	}
