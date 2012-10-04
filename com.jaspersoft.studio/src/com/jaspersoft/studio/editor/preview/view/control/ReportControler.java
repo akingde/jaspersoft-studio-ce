@@ -371,6 +371,8 @@ public class ReportControler {
 				throw new JRException(fillError);
 		} catch (OutOfMemoryError e) {
 			pcontainer.setJasperPrint(stats, null);
+		}catch(Error e){
+			e.printStackTrace();
 		} finally {
 			pmonitor.done();
 		}

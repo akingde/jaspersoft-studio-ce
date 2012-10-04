@@ -1,16 +1,14 @@
 /*******************************************************************************
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License  as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero  General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.error;
 
@@ -21,6 +19,7 @@ import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -36,6 +35,7 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 
@@ -90,6 +90,13 @@ public class PositionErrorDecorator implements IElementDecorator {
 				JRDesignBand band = ((MBand) itemModel.getParent()).getValue();
 				fh = band.getHeight();
 				fw = itemModel.getJasperDesign().getPageWidth();
+			} else if (itemModel.getParent() instanceof IGraphicElement) {
+				IGraphicElement ge = (IGraphicElement) itemModel.getParent();
+				Rectangle r = ge.getBounds();
+				if (r != null) {
+					fh = r.height;
+					fw = r.width;
+				}
 			}
 			if (fig.getJrElement().getElementGroup() instanceof JRBand) {
 				// Integer father_width = itemModel.getRoot().getJasperDesign().getColumnWidth();
@@ -127,8 +134,8 @@ public class PositionErrorDecorator implements IElementDecorator {
 
 	@Override
 	public List<String> getActionIDs() {
-		if(actionIDs==null){
-			actionIDs=new ArrayList<String>(1);
+		if (actionIDs == null) {
+			actionIDs = new ArrayList<String>(1);
 			actionIDs.add(ShowErrorsAction.ID);
 		}
 		return actionIDs;
