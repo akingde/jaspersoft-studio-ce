@@ -20,6 +20,7 @@ package com.jaspersoft.studio.property.section.graphic;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.gef.commands.Command;
@@ -152,7 +153,7 @@ public class BordersSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 		
 		Composite mainLayout = new Composite(parent, SWT.NONE);
-		mainLayout.setBackground(mainLayout.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		//mainLayout.setBackground(mainLayout.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		mainLayout.setLayout(new GridLayout(1,true));
 		mainLayout.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 				
@@ -160,7 +161,7 @@ public class BordersSection extends AbstractSection {
 		
 		Group rightPanel = new Group(mainLayout, SWT.NONE);
 		rightPanel.setText(Messages.BordersSection_border);
-		rightPanel.setBackground(mainLayout.getBackground());
+		//rightPanel.setBackground(mainLayout.getBackground());
 		rightPanel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		rightPanel.setLayout(new GridLayout(2,false));
 				
@@ -178,7 +179,7 @@ public class BordersSection extends AbstractSection {
 		Label textLabel = new Label(toolBarLayout,SWT.NONE);
 		textLabel.setText(Messages.BordersSection_Default_Label);
 		ToolBar toolBar = new ToolBar(toolBarLayout, SWT.FLAT | SWT.WRAP);
-		toolBar.setBackground(rightPanel.getBackground());
+		//toolBar.setBackground(rightPanel.getBackground());
 		createButtons(toolBar);
 
 		allBorder.setSelection(false);
@@ -192,7 +193,8 @@ public class BordersSection extends AbstractSection {
 	 * @param composite the composite where the canvas will be placed
 	 */
 	private void createBorderPreview(Composite composite) {
-		square = new Canvas(composite, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND);
+		square = new Canvas(composite, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		square.setBackground(ColorConstants.white);
 		//The mouse down may select a border and the mouse up refresh the painting area
 		square.addMouseListener(new MouseListener() {
 			

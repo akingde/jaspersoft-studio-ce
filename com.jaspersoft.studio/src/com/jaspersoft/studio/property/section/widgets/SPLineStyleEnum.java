@@ -67,7 +67,9 @@ public class SPLineStyleEnum {
 	public void createComponent(Composite parent, final AbstractSection section, final String property) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		RowLayout layout = new RowLayout();
+		layout.marginLeft = 0;
+		composite.setLayout(layout);
 		//Creating the list of entry
 		List<ComboItem> itemsList = new ArrayList<ComboItem>();
 		itemsList.add(new ComboItem("Inherited", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/inherited.png"),0, NullEnum.INHERITED, null));

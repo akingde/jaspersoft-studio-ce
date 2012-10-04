@@ -186,6 +186,7 @@ public class ColorStyledText {
 	public ColorStyledText(Composite parent){
 		refreshingGuard = false;
 		listener = new ArrayList<ModifyListener>();
+		provider = new ColorLabelProvider(NullEnum.NULL);
 		final Composite paintArea = new Composite(parent, SWT.BORDER);
 		GridLayout layout = new GridLayout(3,false);
 		paintArea.setLayout(layout);
@@ -193,18 +194,15 @@ public class ColorStyledText {
 		layout.verticalSpacing = 0;
 		layout.marginHeight = 1;
 		layout.marginWidth = 1;
-		GridData data = new GridData();
-		data.heightHint = 20;
-		data.widthHint = 35;
-		data.verticalAlignment = SWT.CENTER;
-		data.horizontalAlignment = SWT.RIGHT;
 		
-		GridData textData = new GridData();
-		textData.verticalAlignment = SWT.CENTER;
-		
-		provider = new ColorLabelProvider(NullEnum.NULL);
+		//Paint the preview box
+		GridData previewData = new GridData();
+		previewData.heightHint = 20;
+		previewData.widthHint = 20;
+		previewData.verticalAlignment = SWT.CENTER;
+		previewData.horizontalAlignment = SWT.RIGHT;
 		colorButton = new Label( paintArea, SWT.FILL);
-		colorButton.setLayoutData(data);
+		colorButton.setLayoutData(previewData);
 		colorButton.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
 		colorButton.addMouseListener(new MouseListener() {
 			@Override
@@ -223,15 +221,24 @@ public class ColorStyledText {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {}
 		});
-		
+
+		//Paint the text area
+		GridData textData = new GridData();
+		textData.verticalAlignment = SWT.CENTER;
+		textData.horizontalAlignment = SWT.LEFT;
 		textArea = new StyledText(paintArea, SWT.SINGLE);
 		textArea.setLayoutData(textData);
 		textArea.setAlignment(SWT.LEFT);
 		textArea.addModifyListener(new EditListener());
 		
-
+		//Paint the button
+		GridData lineColorData = new GridData();
+		lineColorData.heightHint = 20;
+		lineColorData.widthHint = 35;
+		lineColorData.verticalAlignment = SWT.CENTER;
+		lineColorData.horizontalAlignment = SWT.RIGHT;
 		final Button lineColor = new Button(paintArea, SWT.PUSH | SWT.FILL);
-		lineColor.setLayoutData(data);
+		lineColor.setLayoutData(lineColorData);
 		lineColor.setText("..."); 
 		lineColor.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
 		

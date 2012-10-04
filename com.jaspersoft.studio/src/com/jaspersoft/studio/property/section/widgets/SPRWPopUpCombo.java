@@ -96,7 +96,6 @@ public class SPRWPopUpCombo extends ASPropertyWidget {
 					@Override
 					public void exec() {
 							section.changeProperty(pDescriptor.getId(), combo.getSelectionValue());			
-							System.out.println("changed " +pDescriptor.getId()+" to " + combo.getSelectionValue().toString());
 					}
 			});
 			combo.setToolTipText(pDescriptor.getDescription());
