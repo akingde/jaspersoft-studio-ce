@@ -45,7 +45,7 @@ public class SaveConfirmationDialog extends Dialog {
 		newShell.setText(Messages.SaveConfirmationDialog_title);
 	}
 
-	private boolean allways;
+	private boolean allways = false;
 
 	public boolean getAllways() {
 		return allways;
@@ -77,7 +77,7 @@ public class SaveConfirmationDialog extends Dialog {
 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.YES_ID,
+		createButton(parent, IDialogConstants.OK_ID,
 				IDialogConstants.YES_LABEL, true);
 		createButton(parent, IDialogConstants.NO_ID, IDialogConstants.NO_LABEL,
 				false);
@@ -86,9 +86,8 @@ public class SaveConfirmationDialog extends Dialog {
 	@Override
 	protected void buttonPressed(int buttonId) {
 		super.buttonPressed(buttonId);
-		if (IDialogConstants.NO_ID == buttonId) {
+		if (IDialogConstants.NO_ID == buttonId)
 			cancelPressed();
-		}
 	}
 
 }

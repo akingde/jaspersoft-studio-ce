@@ -85,17 +85,18 @@ public class Publish2ServerWizard extends Wizard {
 						try {
 							MReportUnit mrunit = page0.getReportUnit();
 							n = mrunit;
+
 							if (new FindResources().find(monitor, mrunit,
 									jrConfig, jDesign)) {
 								Display.getDefault().syncExec(new Runnable() {
 									public void run() {
 										page1.fillData();
-
+										page2.setPreviousPage(page1);
 									}
 								});
 							} else {
 								if (rpunit.getValue().getIsNew())
-									Display.getDefault().syncExec(
+									Display.getDefault().asyncExec(
 											new Runnable() {
 												@Override
 												public void run() {
@@ -104,6 +105,8 @@ public class Publish2ServerWizard extends Wizard {
 															rpunit);
 													getContainer().showPage(
 															page2);
+													page2.setPreviousPage(page0);
+													page2.setPageComplete(true);
 												}
 											});
 								else if (getContainer() instanceof WizardDialog)

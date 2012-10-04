@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -316,9 +317,9 @@ public class ExtensionManager {
 			f.onLoad(jd, editor);
 	}
 
-	public void onSave(JasperReportsConfiguration jrConfig) {
+	public void onSave(JasperReportsConfiguration jrConfig, IProgressMonitor monitor) {
 		for (IEditorContributor f : eContributor)
-			f.onSave(jrConfig);
+			f.onSave(jrConfig, monitor);
 	}
 
 	public void onRun() {

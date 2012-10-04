@@ -48,6 +48,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.DocumentEvent;
@@ -330,7 +331,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *          the monitor
 	 */
 	@Override
-	public void doSave(IProgressMonitor monitor) {
+	public void doSave(final IProgressMonitor monitor) {
 		isRefresh = true;
 
 		// Check for function library static imports (see issue #0005771)
@@ -341,7 +342,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			ExpressionEditorSupportUtil.updateFunctionsLibraryImports(getJasperDesign());
 		}
 
-		IFile resource = ((IFileEditorInput) getEditorInput()).getFile();
+		final IFile resource = ((IFileEditorInput) getEditorInput()).getFile();
 		try {
 			resource.setCharset("UTF-8", monitor);
 		} catch (CoreException e1) {
@@ -367,8 +368,24 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				e.printStackTrace();
 			}
 		}
-		JaspersoftStudioPlugin.getExtensionManager().onSave(jrContext);
+		Display.getDefault().syncExec(new Runnable() {
 
+			@Override
+			public void run() {
+				JaspersoftStudioPlugin.getExtensionManager().onSave(jrContext, monitor);
+				try {
+					model2xml(version);
+					doSaveEditors(monitor);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		// doSaveEditors(monitor);
+	}
+
+	private void doSaveEditors(final IProgressMonitor monitor) {
 		xmlEditor.doSave(monitor);
 		reportContainer.doSave(monitor);
 		previewEditor.doSave(monitor);
@@ -395,27 +412,28 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void doSaveAs() {
 		SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
 		saveAsDialog.setOriginalFile(((FileEditorInput) getEditorInput()).getFile());
-		saveAsDialog.open();
-		IPath path = saveAsDialog.getResult();
-		if (path != null) {
-			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-			if (file != null) {
-				IProgressMonitor monitor = getActiveEditor().getEditorSite().getActionBars().getStatusLineManager()
-						.getProgressMonitor();
+		if (saveAsDialog.open() == Dialog.OK) {
+			IPath path = saveAsDialog.getResult();
+			if (path != null) {
+				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+				if (file != null) {
+					IProgressMonitor monitor = getActiveEditor().getEditorSite().getActionBars().getStatusLineManager()
+							.getProgressMonitor();
 
-				try {
-					if (!file.exists())
-						file.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
-					IFileEditorInput modelFile = new FileEditorInput(file);
-					setInputWithNotify(modelFile);
-					xmlEditor.setInput(modelFile);
-					setPartName(file.getName());
+					try {
+						if (!file.exists())
+							file.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
+						IFileEditorInput modelFile = new FileEditorInput(file);
+						setInputWithNotify(modelFile);
+						xmlEditor.setInput(modelFile);
+						setPartName(file.getName());
 
-					doSave(monitor);
-				} catch (CoreException e) {
-					UIUtils.showError(e);
-				} catch (UnsupportedEncodingException e) {
-					UIUtils.showError(e);
+						doSave(monitor);
+					} catch (CoreException e) {
+						UIUtils.showError(e);
+					} catch (UnsupportedEncodingException e) {
+						UIUtils.showError(e);
+					}
 				}
 			}
 		}

@@ -65,6 +65,14 @@ public class JrxmlPublishAction extends AContributorAction {
 	public static final String KEY_PUBLISH2JSSWIZARD_SILENT = "PUBLISH2JSSWIZARD_SILENT"; //$NON-NLS-1$
 	public static final String KEY_PUBLISH2JSS_DATA = "PUBLISH2JSS_DATA"; //$NON-NLS-1$
 	private MReportUnit mrunit;
+	private int startpage = 1;
+	private IProgressMonitor monitor;
+
+	public JrxmlPublishAction(int startpage, IProgressMonitor monitor) {
+		this();
+		this.startpage = startpage;
+		this.monitor = monitor;
+	}
 
 	public JrxmlPublishAction() {
 		super(ID, Messages.JrxmlPublishAction_title);
@@ -78,13 +86,30 @@ public class JrxmlPublishAction extends AContributorAction {
 	@Override
 	public void run() {
 		try {
-			new FindReportUnit().find(this, getJasperDesign());
+			final JasperDesign jasperDesign = getJasperDesign();
+			if (monitor != null)
+				new FindReportUnit().find(this, jasperDesign, startpage,
+						monitor);
+			else {
+				Job job = new Job(Messages.FindReportUnit_jobname) {
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						new FindReportUnit().find(JrxmlPublishAction.this,
+								jasperDesign, startpage, monitor);
+						return Status.OK_STATUS;
+					}
+
+				};
+				job.setPriority(Job.LONG);
+				job.schedule();
+			}
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}
 	}
 
-	public void publishReportUnit(final ANode node, final JasperDesign jd) {
+	public void publishReportUnit(final ANode node, final JasperDesign jd,
+			int startpage, IProgressMonitor monitor) {
 		boolean silent = jrConfig.get(KEY_PUBLISH2JSSWIZARD_SILENT, false);
 		if (node == null || !(node instanceof MReportUnit)) {
 			if (!createDialog(node, jd, 1))
@@ -93,35 +118,21 @@ public class JrxmlPublishAction extends AContributorAction {
 			mrunit = (MReportUnit) node;
 			if (silent) {
 				new FindResources().find(mrunit, jrConfig, jd);
-			} else if (!createDialog(node, jd, 2))
+			} else if (!createDialog(node, jd, startpage))
 				return;
 		}
-		Job job = new Job(Messages.JrxmlPublishAction_jobname) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					publishResources(monitor, jd, node);
-					if (monitor.isCanceled())
-						return Status.CANCEL_STATUS;
-					// clean
-					jrConfig.remove(KEY_PUBLISH2JSS_DATA);
-					Display.getDefault().syncExec(new Runnable() {
 
-						public void run() {
-							postProcessLocal();
-						}
-					});
-				} catch (Exception e) {
-					UIUtils.showError(e);
-				} finally {
-					monitor.done();
-				}
-				return Status.OK_STATUS;
-			}
+		try {
+			publishResources(monitor, jd, node);
+			if (monitor.isCanceled())
+				return;
+			// clean
+			jrConfig.remove(KEY_PUBLISH2JSS_DATA);
+			postProcessLocal();
+		} catch (Exception e) {
+			UIUtils.showError(e);
+		}
 
-		};
-		job.setPriority(Job.LONG);
-		job.schedule();
 	}
 
 	private boolean createDialog(ANode n, JasperDesign jd, int page) {
@@ -145,7 +156,8 @@ public class JrxmlPublishAction extends AContributorAction {
 		if (mrunit == null || !(mrunit instanceof MReportUnit)) {
 			ResourceDescriptor rd = MReportUnit.createDescriptor(parent);
 			mrunit = new MReportUnit(parent, rd);
-		}
+		} else if (mrunit.getParent() == null)
+			mrunit.setParent(parent, -1);
 		MJrxml jrxml = new MJrxml(mrunit, getMainReport(jd), 0);
 		File file = FileUtils.createTempFile("jrsres", ".jrxml"); //$NON-NLS-1$ //$NON-NLS-2$
 		String version = ServerManager.getVersion(mrunit);
@@ -195,7 +207,7 @@ public class JrxmlPublishAction extends AContributorAction {
 
 	protected void postProcessLocal() {
 		JasperDesign rpt = jrConfig.getJasperDesign();
-		if (mrunit != null) {
+		if (mrunit != null && mrunit.getValue() != null) {
 			ResourceDescriptor runit = mrunit.getValue();
 			rpt.setProperty(JrxmlExporter.PROP_REPORTUNIT, runit.getUriString());
 

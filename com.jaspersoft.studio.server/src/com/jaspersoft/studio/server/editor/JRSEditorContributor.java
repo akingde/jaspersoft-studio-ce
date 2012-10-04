@@ -21,6 +21,7 @@ package com.jaspersoft.studio.server.editor;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -47,43 +48,45 @@ public class JRSEditorContributor implements IEditorContributor {
 			return;
 		edit.addFileResolver(new JSFileResolver(jd));
 
-//		prop = jd.getProperty("com.jaspersoft.ji.adhoc");
-//		if (prop != null && prop.equals("1")) {
-//			UIUtils.showWarning("You have selected to edit an Ad Hoc report.\n"
-//					+ "If you continue, the report will lose its sorting and grouping.\n"
-//					+ "Furthermore, any changes you make in Jaspersoft Studio will be lost\n"
-//					+ "next Time you edit it via the Ad Hoc report editor.\n"
-//					+ "Continue anyway?");
-//		}
+		// prop = jd.getProperty("com.jaspersoft.ji.adhoc");
+		// if (prop != null && prop.equals("1")) {
+		// UIUtils.showWarning("You have selected to edit an Ad Hoc report.\n"
+		// + "If you continue, the report will lose its sorting and grouping.\n"
+		// +
+		// "Furthermore, any changes you make in Jaspersoft Studio will be lost\n"
+		// + "next Time you edit it via the Ad Hoc report editor.\n"
+		// + "Continue anyway?");
+		// }
 
 	}
 
 	public static final String KEY_PUBLISH2JSS = "PUBLISH2JSS";
 	public static final String KEY_PUBLISH2JSS_SILENT = "PUBLISH2JSS.SILENT";
 
-	public void onSave(JasperReportsConfiguration jrConfig) {
+	public void onSave(JasperReportsConfiguration jrConfig,
+			IProgressMonitor monitor) {
 		JasperDesign jd = jrConfig.getJasperDesign();
 
 		String prop = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
 		if (prop == null)
 			return;
 
-		boolean run = jrConfig.get(KEY_PUBLISH2JSS, true);
+		boolean run = jrConfig.get(KEY_PUBLISH2JSS, false);
 		boolean allways = jrConfig.get(KEY_PUBLISH2JSS_SILENT, false);
-		if (run && !allways) {
-			Shell shell = Display.getDefault().getActiveShell();
-			SaveConfirmationDialog dialog = new SaveConfirmationDialog(shell);
+		if (!allways) {
+			SaveConfirmationDialog dialog = new SaveConfirmationDialog(Display
+					.getDefault().getActiveShell());
 			run = (dialog.open() == Dialog.OK);
 			jrConfig.put(KEY_PUBLISH2JSS, run);
 			jrConfig.put(KEY_PUBLISH2JSS_SILENT, dialog.getAllways());
 		}
 		if (run)
-			getAction(jrConfig).run();
+			getAction(monitor, jrConfig).run();
 	}
 
-	protected static JrxmlPublishAction getAction(
+	protected static JrxmlPublishAction getAction(IProgressMonitor monitor,
 			JasperReportsConfiguration jrConfig) {
-		JrxmlPublishAction publishAction = new JrxmlPublishAction();
+		JrxmlPublishAction publishAction = new JrxmlPublishAction(2, monitor);
 		publishAction.setJrConfig(jrConfig);
 		return publishAction;
 	}

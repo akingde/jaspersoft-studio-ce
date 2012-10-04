@@ -5,9 +5,6 @@ import java.util.List;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
@@ -25,29 +22,22 @@ import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class FindReportUnit {
-	public void find(final JrxmlPublishAction action, final JasperDesign jd) {
-		Job job = new Job(Messages.FindReportUnit_jobname) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					final ANode node = find(monitor, jd);
-					Display.getDefault().syncExec(new Runnable() {
+	public void find(final JrxmlPublishAction action, final JasperDesign jd,
+			final int startpage, final IProgressMonitor monitor) {
+		monitor.subTask(Messages.FindReportUnit_jobname);
+		try {
+			final ANode node = find(monitor, jd);
+			Display.getDefault().syncExec(new Runnable() {
 
-						public void run() {
-							action.publishReportUnit(node, jd);
-						}
-					});
-				} catch (Exception e) {
-					UIUtils.showError(e);
-				} finally {
-					monitor.done();
+				public void run() {
+					action.publishReportUnit(node, jd, startpage, monitor);
 				}
-				return Status.OK_STATUS;
-			}
-
-		};
-		job.setPriority(Job.LONG);
-		job.schedule();
+			});
+		} catch (Exception e) {
+			UIUtils.showError(e);
+		} finally {
+			monitor.done();
+		}
 	}
 
 	private ANode find(IProgressMonitor monitor, JasperDesign jd) {

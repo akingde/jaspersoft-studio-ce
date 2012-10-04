@@ -41,6 +41,10 @@ public class ResourcesPage extends WizardPage {
 		this.jConfig = jConfig;
 	}
 
+	public boolean isEmpty() {
+		return tableViewer.getTable().getItemCount() > 0;
+	}
+
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		setControl(composite);
