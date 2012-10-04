@@ -126,6 +126,8 @@ public class JrxmlPublishAction extends AContributorAction {
 			publishResources(monitor, jd, node);
 			if (monitor.isCanceled())
 				return;
+			UIUtils.showInformation("Your report was published to JasperReports Server with success!\nPlease refresh Repository View to see changes.");
+
 			// clean
 			jrConfig.remove(KEY_PUBLISH2JSS_DATA);
 			postProcessLocal();
@@ -180,6 +182,7 @@ public class JrxmlPublishAction extends AContributorAction {
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;
 		}
+
 		return Status.OK_STATUS;
 	}
 

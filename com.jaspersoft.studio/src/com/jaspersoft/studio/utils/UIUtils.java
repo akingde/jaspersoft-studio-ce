@@ -87,6 +87,15 @@ public class UIUtils {
 		});
 	}
 
+	public static void showInformation(final String message) {
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				MessageDialog.open(MessageDialog.INFORMATION, Display.getDefault().getActiveShell(), "Information", message,
+						SWT.SHEET);
+			}
+		});
+	}
+
 	/**
 	 * @return true if yes
 	 */
@@ -300,24 +309,25 @@ public class UIUtils {
 
 		TableViewerEditor.create(tviewer, actSupport, ColumnViewerEditor.DEFAULT);
 	}
-	
+
 	/**
-	 * Creates an error decoration on the top left of the specified {@link Text} widget
-	 * when the text is empty or null.
+	 * Creates an error decoration on the top left of the specified {@link Text} widget when the text is empty or null.
 	 * 
-	 * @param widget the text widget to which attach the decorator
-	 * @param marginWidth margin between decoration and widget
-	 * @param description description message to show on hover
+	 * @param widget
+	 *          the text widget to which attach the decorator
+	 * @param marginWidth
+	 *          margin between decoration and widget
+	 * @param description
+	 *          description message to show on hover
 	 */
-	public static void createErrorDecorationForEmptyText(final Text widget, int marginWidth, String description){
+	public static void createErrorDecorationForEmptyText(final Text widget, int marginWidth, String description) {
 		final ControlDecoration textDecoration = createErrorDecoration(widget, marginWidth, description);
 		widget.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if(widget.getText()==null || widget.getText().trim().isEmpty()){
+				if (widget.getText() == null || widget.getText().trim().isEmpty()) {
 					textDecoration.show();
-				}
-				else {
+				} else {
 					textDecoration.hide();
 				}
 			}
@@ -325,41 +335,42 @@ public class UIUtils {
 	}
 
 	/**
-	 * Creates an error decoration on the top left of the specified {@link WTextExpression} widget
-	 * when the expression text is empty or null.
+	 * Creates an error decoration on the top left of the specified {@link WTextExpression} widget when the expression
+	 * text is empty or null.
 	 * 
-	 * @param widget the expression widget to which attach the decorator
-	 * @param marginWidth margin between decoration and widget
-	 * @param description description message to show on hover
+	 * @param widget
+	 *          the expression widget to which attach the decorator
+	 * @param marginWidth
+	 *          margin between decoration and widget
+	 * @param description
+	 *          description message to show on hover
 	 */
-	public static void createErrorDecorationForBlankExpression(final WTextExpression widget, int marginWidth, String description){
+	public static void createErrorDecorationForBlankExpression(final WTextExpression widget, int marginWidth,
+			String description) {
 		final ControlDecoration textDecoration = createErrorDecoration(widget, marginWidth, description);
 		widget.addModifyListener(new ExpressionModifiedListener() {
 			@Override
 			public void expressionModified(ExpressionModifiedEvent event) {
-				if(widget.getText()==null || widget.getText().trim().isEmpty()){
+				if (widget.getText() == null || widget.getText().trim().isEmpty()) {
 					textDecoration.show();
-				}
-				else {
+				} else {
 					textDecoration.hide();
 				}
 			}
 		});
 	}
-	
+
 	/*
 	 * Create a decoration attached to the specified control.
 	 */
 	private static ControlDecoration createErrorDecoration(final Control control, int marginWidth, String description) {
-		final ControlDecoration textDecoration = new ControlDecoration(
-				control, SWT.LEFT | SWT.TOP);
+		final ControlDecoration textDecoration = new ControlDecoration(control, SWT.LEFT | SWT.TOP);
 		textDecoration.setDescriptionText(description);
 		textDecoration.setMarginWidth(marginWidth);
-		FieldDecoration fieldDecoration = FieldDecorationRegistry
-			    .getDefault().getFieldDecoration(
-			         FieldDecorationRegistry.DEC_ERROR);
+		FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(
+				FieldDecorationRegistry.DEC_ERROR);
 		textDecoration.setImage(fieldDecoration.getImage());
 		return textDecoration;
 	}
-	
+
 }
