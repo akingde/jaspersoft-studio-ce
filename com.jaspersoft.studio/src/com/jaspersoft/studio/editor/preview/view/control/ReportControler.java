@@ -264,15 +264,7 @@ public class ReportControler {
 						}
 					}
 				} catch (final Throwable e) {
-					c.addError(e);
-					Display.getDefault().syncExec(new Runnable() {
-
-						public void run() {
-							VSimpleErrorPreview errorView = pcontainer.getErrorView();
-							pcontainer.getRightContainer().switchView(null, errorView);
-							errorView.setMessage("Error generating report.");
-						}
-					});
+					showRunReport(pcontainer, e);
 				} finally {
 					Thread.currentThread().setContextClassLoader(oldLoader);
 					monitor.done();
@@ -371,8 +363,9 @@ public class ReportControler {
 				throw new JRException(fillError);
 		} catch (OutOfMemoryError e) {
 			pcontainer.setJasperPrint(stats, null);
-		}catch(Error e){
-			e.printStackTrace();
+		} catch (Throwable e) {
+			handleFillException(e);
+			showRunReport(pcontainer, e);
 		} finally {
 			pmonitor.done();
 		}
@@ -480,6 +473,18 @@ public class ReportControler {
 
 				pcontainer.setJasperPrint(stats, jPrint);
 				finished = false;
+			}
+		});
+	}
+
+	private void showRunReport(final PreviewContainer pcontainer, final Throwable e) {
+		c.addError(e);
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				VSimpleErrorPreview errorView = pcontainer.getErrorView();
+				pcontainer.getRightContainer().switchView(null, errorView);
+				errorView.setMessage("Error generating report.");
 			}
 		});
 	}
