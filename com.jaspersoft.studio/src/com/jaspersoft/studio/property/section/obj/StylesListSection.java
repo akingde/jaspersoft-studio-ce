@@ -55,6 +55,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -136,6 +137,11 @@ public class StylesListSection extends AbstractSection {
 	 * Store the field of the last change event received, used to avoid multiple refreshing for the same event
 	 */
 	private ArrayList<Object> lastChangeEvent = null;
+	
+	/**
+	 * Boolean flag to take trace it the tab is shown
+	 */
+	private boolean shown = false;
 
 	/**
 	 * Class to manage the events of the mouse click, used to remove an attribute from an element or one
@@ -189,7 +195,7 @@ public class StylesListSection extends AbstractSection {
 				CompoundCommand cc = new CompoundCommand("Set " + property); //$NON-NLS-1$
 	    	Command c = changeProperty(property, null,targetElement);
 	   		if (c != null) cc.add(c);
-	  		if (!cc.getCommands().isEmpty()) {
+	  		if (!cc.getCommands().isEmpty()) {			
 	  			Object oldValue =  targetElement.getPropertyValue(property);
 					cs.execute(cc);			
 					//Force a refresh
@@ -230,26 +236,27 @@ public class StylesListSection extends AbstractSection {
 		}
 		
 		/**
-		 * Handle the event of the mouse enter on area that show the delete image, eventually 
-		 * hide the old one. Change event the mouse cursor to an hand.
+		 * Handle the event of the mouse enter on area that show the delete image, eventually hide the old one. Change event
+		 * the mouse cursor to an hand.
 		 */
 		@Override
 		public void mouseEnter(MouseEvent e) {
 			Composite parentLayout = null;
 			if (e.widget instanceof Composite)
-				parentLayout = ((Composite)e.widget);
-			else 
-				parentLayout = ((Control)e.widget).getParent();
+				parentLayout = ((Composite) e.widget);
+			else
+				parentLayout = ((Control) e.widget).getParent();
 			if (lastElementSelected == null)
 				lastElementSelected = parentLayout;
-			parentLayout.getDisplay().getFocusControl().getDisplay();
-			//Check that the hovered control has the focused father or the same father of the focused control
-			Control focusedControl = parentLayout.getDisplay().getFocusControl();
-			if (parentLayout.getChildren().length > 1 && (focusedControl.getParent() == parentLayout.getParent() || focusedControl == parentLayout.getParent())) {
+			// We must be sure that the properties view is the one that currently is active
+			// Properties view has ID = org.eclipse.ui.views.PropertySheet
+			String activePartViewID = "";
+			activePartViewID = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite().getId();
+			if (parentLayout.getChildren().length > 1 && "org.eclipse.ui.views.PropertySheet".equals(activePartViewID)) {
 				lastElementSelected.getChildren()[0].setVisible(false);
-	   		lastElementSelected = parentLayout;	
+				lastElementSelected = parentLayout;
 				parentLayout.getChildren()[0].setVisible(true);
-				parentLayout.getChildren()[0].setCursor(new Cursor(null,SWT.CURSOR_HAND));
+				parentLayout.getChildren()[0].setCursor(new Cursor(null, SWT.CURSOR_HAND));
 			}
 		}
 
@@ -640,14 +647,16 @@ public class StylesListSection extends AbstractSection {
 			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
 			getElement().getRoot().getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
+		shown = true;
 	}
 
 	/**
 	 * Add not only this node to the notify handler but all it's root, so even change in it's styles will be notified
 	 */
 	public void aboutToBeHidden() {
-		if (getElement() != null)
-			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
+		//if (getElement() != null)
+			//getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
+		shown = false;
 	}
 	
 	/**
@@ -681,8 +690,9 @@ public class StylesListSection extends AbstractSection {
 				lastChangeEvent.add(evt.getPropertyName());
 				refresh();
 			} else {
-				if (!checkValuesEqual(evt.getOldValue(),evt.getNewValue()) ||
-						!lastChangeEvent.get(2).equals(evt.getSource()) || !lastChangeEvent.get(3).equals(evt.getPropertyName())){
+				//Print only if the event is changed and the tab is shown
+				if ((!checkValuesEqual(evt.getOldValue(),evt.getNewValue()) ||
+						!lastChangeEvent.get(2).equals(evt.getSource()) || !lastChangeEvent.get(3).equals(evt.getPropertyName())) && shown){
 					refresh();
 					lastChangeEvent = new ArrayList<Object>();
 					lastChangeEvent.add(evt.getOldValue());
