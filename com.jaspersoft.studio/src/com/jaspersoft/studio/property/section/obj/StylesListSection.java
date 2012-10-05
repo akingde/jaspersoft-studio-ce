@@ -200,6 +200,7 @@ public class StylesListSection extends AbstractSection {
 					cs.execute(cc);			
 					//Force a refresh
 					refresh();
+					parent.setFocus();
 					lastChangeEvent = new ArrayList<Object>();
 					lastChangeEvent.add(oldValue);
 					lastChangeEvent.add(null);
@@ -747,7 +748,6 @@ public class StylesListSection extends AbstractSection {
 		ovverridenAttributes = null;
 		styleMaps = null;
 		parent.layout();
-		parent.setFocus();
 		isRefreshing = false;
 	}
 	
