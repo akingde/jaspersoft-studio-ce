@@ -28,7 +28,6 @@ import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBasePrintElement;
-import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import net.sf.jasperreports.engine.fill.JRFillElement;
