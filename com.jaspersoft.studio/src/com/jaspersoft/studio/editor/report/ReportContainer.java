@@ -127,7 +127,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	@Override
 	protected void createPages() {
 		try {
-			ReportEditor reportEditor = new ReportEditor(jrContext);
+			reportEditor = new ReportEditor(jrContext);
 			int index = addPage(reportEditor, getEditorInput());
 			setPageText(index, Messages.common_main_report);
 			setPageImage(index, reportEditor.getPartImage());
@@ -223,6 +223,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 				ANode node = m.createNode(rep, obj, -1);
 
 				ave = m.getEditor(obj, jrContext);
+				ave.getEditDomain().setCommandStack(reportEditor.getEditDomain().getCommandStack());
 				if (ave != null) {
 					int index = addPage(ave, getEditorInput());
 
@@ -319,6 +320,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 
 	/** The property sheet page. */
 	private IPropertySheetPage propertySheetPage;
+
+	private ReportEditor reportEditor;
 
 	/**
 	 * Gets the property sheet page.

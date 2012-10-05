@@ -133,6 +133,11 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		return super.getEditDomain();
 	}
 
+	@Override
+	public void setEditDomain(DefaultEditDomain ed) {
+		super.setEditDomain(ed);
+	}
+
 	public void setPartImage(Image partImage) {
 		this.partImage = partImage;
 	}
