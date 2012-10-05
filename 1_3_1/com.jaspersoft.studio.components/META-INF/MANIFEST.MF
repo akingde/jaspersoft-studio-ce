@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JasperReport Components
+Bundle-SymbolicName: com.jaspersoft.studio.components; singleton:=true
+Bundle-Version: 1.3.1
+Bundle-Activator: com.jaspersoft.studio.components.Activator
+Bundle-Vendor: Jaspersoft Corporation
+Require-Bundle: com.jaspersoft.studio;bundle-version="1.3.1"
+Eclipse-RegisterBuddy: com.jaspersoft.studio
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
