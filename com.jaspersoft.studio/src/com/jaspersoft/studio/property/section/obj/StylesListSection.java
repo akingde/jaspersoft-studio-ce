@@ -55,7 +55,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -71,6 +70,7 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.ResourceManager;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * Class that paint the widget where are shown the attributes of element, those inherited by the it's styles, and the 
@@ -248,11 +248,9 @@ public class StylesListSection extends AbstractSection {
 				parentLayout = ((Control) e.widget).getParent();
 			if (lastElementSelected == null)
 				lastElementSelected = parentLayout;
+			
 			// We must be sure that the properties view is the one that currently is active
-			// Properties view has ID = org.eclipse.ui.views.PropertySheet
-			String activePartViewID = "";
-			activePartViewID = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite().getId();
-			if (parentLayout.getChildren().length > 1 && "org.eclipse.ui.views.PropertySheet".equals(activePartViewID)) {
+			if (parentLayout.getChildren().length > 1 && UIUtils.isPropertiesViewFocused()) {
 				lastElementSelected.getChildren()[0].setVisible(false);
 				lastElementSelected = parentLayout;
 				parentLayout.getChildren()[0].setVisible(true);
@@ -729,10 +727,10 @@ public class StylesListSection extends AbstractSection {
 		trackerListener.refresh();
 		element = getElement();
 		elementAttributes = element.getStylesDescriptors();
-		//Dispose the old widgets
-		 for (Control kid : parent.getChildren()) {
-       kid.dispose();
-     }
+		// Dispose the old widgets
+		for (Control kid : parent.getChildren()) {
+			kid.dispose();
+		}
 		GridLayout layout = new GridLayout(2,false);
 		layout.marginWidth=0;
 		parent.setLayout(layout);
@@ -749,6 +747,7 @@ public class StylesListSection extends AbstractSection {
 		ovverridenAttributes = null;
 		styleMaps = null;
 		parent.layout();
+		parent.setFocus();
 		isRefreshing = false;
 	}
 	

@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
@@ -56,6 +57,8 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 public class UIUtils {
+	/** ID for the "Properties View" */
+	public static final String PROPERTIES_VIEW_ID="org.eclipse.ui.views.PropertySheet"; //$NON-NLS-1$
 
 	public static void showError(final Throwable t) {
 		showError(t.getMessage(), t);
@@ -373,4 +376,20 @@ public class UIUtils {
 		return textDecoration;
 	}
 
+	/**
+	 * Checks if the PropertiesView has currently the focus.
+	 * 
+	 * @return <code>true</code> if the properties view has the focus, <code>false</code> otherwise
+	 */
+	public static boolean isPropertiesViewFocused(){
+		try {
+			String activePartViewID = 
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite().getId();
+			return PROPERTIES_VIEW_ID.equals(activePartViewID);
+		}
+		catch (Exception e){
+			return false;
+		}
+	}
+	
 }
