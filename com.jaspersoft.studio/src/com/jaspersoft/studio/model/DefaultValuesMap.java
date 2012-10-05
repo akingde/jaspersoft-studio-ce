@@ -28,7 +28,9 @@ import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBasePrintElement;
+import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import net.sf.jasperreports.engine.fill.JRFillElement;
 import net.sf.jasperreports.engine.fill.JRTemplateElement;
 import net.sf.jasperreports.engine.type.FillEnum;
@@ -243,7 +245,10 @@ public class DefaultValuesMap {
 			result.put(JRDesignStyle.PROPERTY_FORECOLOR, Color.black);
 			result.put(JRDesignStyle.PROPERTY_FILL, FillEnum.SOLID);
 			ModeEnum opaqueValue = ModeEnum.getByValue(ModeEnum.OPAQUE.getValue());
-			if (type instanceof JRTemplateElement){
+			ModeEnum transparentValue = ModeEnum.getByValue(ModeEnum.TRANSPARENT.getValue());
+			if (type instanceof JRDesignTextElement){
+				result.put(JRDesignStyle.PROPERTY_MODE, transparentValue);
+			} else if (type instanceof JRTemplateElement){
 				result.put(JRDesignStyle.PROPERTY_MODE, opaqueValue);
 			} else if (type instanceof JRBaseElement) {
 				result.put(JRDesignStyle.PROPERTY_MODE, opaqueValue);
@@ -252,7 +257,7 @@ public class DefaultValuesMap {
 			} else if (type instanceof JRFillElement){
 				result.put(JRDesignStyle.PROPERTY_MODE, opaqueValue);
 			} else {
-				result.put(JRDesignStyle.PROPERTY_MODE, ModeEnum.getByValue(ModeEnum.TRANSPARENT.getValue()));
+				result.put(JRDesignStyle.PROPERTY_MODE, transparentValue);
 			}
 		}
 		return result;
@@ -266,12 +271,16 @@ public class DefaultValuesMap {
 	 */
 	public static HashMap<String, Object> getPropertiesByType(Object type){
 		 initValuesMap();
+		 Object jrValue = type;
+		 //The element is choose on the jrtype, if a model is passed then the jrtype will be extracted
+		 if (type instanceof APropertyNode)
+			 jrValue = ((APropertyNode)type).getValue();
 		 //Check the requested properties are cached
-		 HashMap<String, Object> result = valuesMap.get(type.getClass());
+		 HashMap<String, Object> result = valuesMap.get(jrValue.getClass());
 		 if (result == null){
 			 //The are not, so i need to create them
-			 result = initializeType(type);
-			 valuesMap.put(type.getClass(), result);
+			 result = initializeType(jrValue);
+			 valuesMap.put(jrValue.getClass(), result);
 		 }
 		 return result;
 	}

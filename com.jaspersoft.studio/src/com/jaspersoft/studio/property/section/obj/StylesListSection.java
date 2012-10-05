@@ -81,11 +81,6 @@ import com.jaspersoft.studio.utils.UIUtils;
 public class StylesListSection extends AbstractSection {
 	
 	/**
-	 * Reference to the container of all the styles
-	 */
-	private static MStyles stylesClass = null;
-	
-	/**
 	 * Color for the text that represent the attribute name
 	 */
 	private static Color leftStringColor = null;
@@ -143,6 +138,7 @@ public class StylesListSection extends AbstractSection {
 	 */
 	private boolean shown = false;
 
+	
 	/**
 	 * Class to manage the events of the mouse click, used to remove an attribute from an element or one
 	 * of it's styles
@@ -604,10 +600,10 @@ public class StylesListSection extends AbstractSection {
 	private void initStyleMaps(){
 		styleMaps = new HashMap<String, MStyle>();
 		ovverridenAttributes = new HashSet<String>();
-		if (stylesClass == null){
-			initializeStyleMap(element);
+		if (leftStringColor == null){
+			leftStringColor = new Color(null,42,96,213);
 		}
-		List<INode> list = stylesClass.getChildren();
+		List<INode> list = getStylesRoot(element).getChildren();
 		Iterator<INode> it = list.iterator();
 		while(it.hasNext()){
 			MStyle element = (MStyle)it.next();
@@ -645,6 +641,11 @@ public class StylesListSection extends AbstractSection {
 		if (getElement() != null) {
 			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
 			getElement().getRoot().getPropertyChangeSupport().addPropertyChangeListener(this);
+			//Set the handler for every style also because in this way an update of the style is immediately reflected
+			for(INode style : getStylesRoot(element).getChildren()){
+				style.getPropertyChangeSupport().removePropertyChangeListener(this);
+				style.getPropertyChangeSupport().addPropertyChangeListener(this);
+			}
 		}
 		shown = true;
 	}
@@ -653,8 +654,12 @@ public class StylesListSection extends AbstractSection {
 	 * Add not only this node to the notify handler but all it's root, so even change in it's styles will be notified
 	 */
 	public void aboutToBeHidden() {
-		//if (getElement() != null)
-			//getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
+		if (getElement() != null){
+			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
+			for(INode style : getStylesRoot(element).getChildren()){
+				style.getPropertyChangeSupport().removePropertyChangeListener(this);
+			}
+		}
 		shown = false;
 	}
 	
@@ -752,23 +757,25 @@ public class StylesListSection extends AbstractSection {
 	}
 	
 	/**
-	 * Create the map of the style for an element
-	 * @param element
+	 * Return a reference to the node father of all the styles
+	 * @param element 
+	 * @return reference to the father of all the styles
 	 */
-	private void initializeStyleMap(APropertyNode element){
+	private MStyles getStylesRoot(APropertyNode element){
 		List<INode> children = element.getRoot().getChildren();
 		Iterator<INode> it = children.iterator();
+		MStyles stylesClass = null;
 		while(it.hasNext() && stylesClass == null){
 			INode childElement = it.next();
 			if (childElement instanceof MStyles)
 				stylesClass = (MStyles) childElement;
-			//The root is a subreport or a table, i need to move into an upper levele
+			//The root is a subreport or a table, i need to move into an upper level
 			if (childElement instanceof MPage){
 				children = childElement.getChildren();
 				it = children.iterator();
 			}
 		}
-		leftStringColor = new Color(null,42,96,213);
+		return stylesClass;
 	}
 	
 	/**
