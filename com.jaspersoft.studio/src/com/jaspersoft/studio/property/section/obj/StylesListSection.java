@@ -185,7 +185,7 @@ public class StylesListSection extends AbstractSection {
         if (buttonID == SWT.NO) executeCommand = false;
     	}
     	if (executeCommand){
-				CommandStack cs = getEditDomain().getCommandStack();
+				CommandStack cs =  getEditDomain().getCommandStack();
 				CompoundCommand cc = new CompoundCommand("Set " + property); //$NON-NLS-1$
 	    	Command c = changeProperty(property, null,targetElement);
 	   		if (c != null) cc.add(c);
@@ -242,7 +242,10 @@ public class StylesListSection extends AbstractSection {
 				parentLayout = ((Control)e.widget).getParent();
 			if (lastElementSelected == null)
 				lastElementSelected = parentLayout;
-			if (parentLayout.getChildren().length > 1) {
+			parentLayout.getDisplay().getFocusControl().getDisplay();
+			//Check that the hovered control has the focused father or the same father of the focused control
+			Control focusedControl = parentLayout.getDisplay().getFocusControl();
+			if (parentLayout.getChildren().length > 1 && (focusedControl.getParent() == parentLayout.getParent() || focusedControl == parentLayout.getParent())) {
 				lastElementSelected.getChildren()[0].setVisible(false);
 	   		lastElementSelected = parentLayout;	
 				parentLayout.getChildren()[0].setVisible(true);
