@@ -71,37 +71,43 @@ public abstract class ASPropertyWidget {
 
 		@Override
 		public void focusLost(FocusEvent e) {
-			IStatusLineManager statusLineManager = getStatusLineManager();
-			if (statusLineManager != null)
-				statusLineManager.setMessage(null);
+			handleFocusLost();
 		}
 
 		@Override
 		public void focusGained(FocusEvent e) {
-			IStatusLineManager statusLineManager = getStatusLineManager();
-			if (statusLineManager != null)
-				statusLineManager.setMessage(pDescriptor.getDescription());
-		}
-
-		private IStatusLineManager getStatusLineManager() {
-			IWorkbench wb = PlatformUI.getWorkbench();
-			IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
-
-			IWorkbenchPage page = win.getActivePage();
-
-			IWorkbenchPart part = page.getActivePart();
-			IWorkbenchPartSite site = part.getSite();
-			IActionBars actionBars = null;
-			if (site instanceof IEditorSite)
-				actionBars = ((IEditorSite) site).getActionBars();
-			else if (site instanceof IViewSite)
-				actionBars = ((IViewSite) site).getActionBars();
-			if (actionBars == null)
-				return null;
-
-			return actionBars.getStatusLineManager();
-
+			handleFocusGained();
 		}
 	};
+
+	private IStatusLineManager getStatusLineManager() {
+		IWorkbench wb = PlatformUI.getWorkbench();
+		IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
+
+		IWorkbenchPage page = win.getActivePage();
+
+		IWorkbenchPart part = page.getActivePart();
+		IWorkbenchPartSite site = part.getSite();
+		IActionBars actionBars = null;
+		if (site instanceof IEditorSite)
+			actionBars = ((IEditorSite) site).getActionBars();
+		else if (site instanceof IViewSite)
+			actionBars = ((IViewSite) site).getActionBars();
+		if (actionBars == null)
+			return null;
+		return actionBars.getStatusLineManager();
+	}
+
+	protected void handleFocusGained() {
+		IStatusLineManager statusLineManager = getStatusLineManager();
+		if (statusLineManager != null)
+			statusLineManager.setMessage(pDescriptor.getDescription());
+	}
+
+	protected void handleFocusLost() {
+		IStatusLineManager statusLineManager = getStatusLineManager();
+		if (statusLineManager != null)
+			statusLineManager.setMessage(null);
+	}
 
 }

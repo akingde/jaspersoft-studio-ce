@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.property.section.widgets;
 
+import org.eclipse.jface.fieldassist.AutoCompleteField;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -34,8 +36,9 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
-public class SPText extends ASPropertyWidget {
+public class SPText extends AHistorySPropertyWidget {
 	protected Text ftext;
 
 	public SPText(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
@@ -47,8 +50,14 @@ public class SPText extends ASPropertyWidget {
 		return ftext;
 	}
 
+	@Override
+	protected Text getTextControl() {
+		return ftext;
+	}
+
 	protected void createComponent(Composite parent) {
 		ftext = section.getWidgetFactory().createText(parent, "", SWT.LEFT);
+		autocomplete = new AutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
 		ftext.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				handleTextChanged(section, pDescriptor.getId(), ftext.getText());

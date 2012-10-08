@@ -22,11 +22,14 @@ package com.jaspersoft.studio.property.section.widgets;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import org.eclipse.jface.fieldassist.AutoCompleteField;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -37,8 +40,9 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
-public class SPExpression extends ASPropertyWidget implements IExpressionContextSetter {
+public class SPExpression extends AHistorySPropertyWidget implements IExpressionContextSetter {
 	private WTextExpression expr;
 
 	public SPExpression(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
@@ -48,6 +52,11 @@ public class SPExpression extends ASPropertyWidget implements IExpressionContext
 	@Override
 	public Control getControl() {
 		return expr;
+	}
+
+	@Override
+	protected Text getTextControl() {
+		return expr.getTextControl();
 	}
 
 	protected void createComponent(Composite parent) {
@@ -65,6 +74,8 @@ public class SPExpression extends ASPropertyWidget implements IExpressionContext
 			expr.setLayoutData(gd);
 		}
 		expr.getTextControl().addFocusListener(focusListener);
+		autocomplete = new AutoCompleteField(expr.getTextControl(), new TextContentAdapter(),
+				InputHistoryCache.get(getHistoryKey()));
 	}
 
 	public void setData(APropertyNode pnode, Object b) {

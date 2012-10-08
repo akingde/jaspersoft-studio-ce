@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.property.section.widgets;
 
+import org.eclipse.jface.fieldassist.AutoCompleteField;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -34,8 +36,9 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
-public class SPNumber extends ASPropertyWidget {
+public class SPNumber extends AHistorySPropertyWidget {
 	protected Text ftext;
 
 	public SPNumber(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
@@ -44,6 +47,11 @@ public class SPNumber extends ASPropertyWidget {
 
 	@Override
 	public Control getControl() {
+		return ftext;
+	}
+
+	@Override
+	protected Text getTextControl() {
 		return ftext;
 	}
 
@@ -57,6 +65,7 @@ public class SPNumber extends ASPropertyWidget {
 
 	protected void createComponent(Composite parent) {
 		ftext = section.getWidgetFactory().createText(parent, "", SWT.RIGHT);
+		autocomplete = new AutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
 		ftext.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -96,8 +105,8 @@ public class SPNumber extends ASPropertyWidget {
 		setWidth(parent, 6);
 	}
 
-	protected void setWidth(Composite parent, int chars) { 
-		int w = UIUtils.getCharWidth(ftext)* chars; 
+	protected void setWidth(Composite parent, int chars) {
+		int w = UIUtils.getCharWidth(ftext) * chars;
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			rd.width = w;
