@@ -35,6 +35,7 @@ import net.sf.jasperreports.engine.util.SimpleFileResolver;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.utils.ReferenceResolver;
 import com.jaspersoft.studio.utils.CacheMap;
 
 /**
@@ -74,6 +75,8 @@ public class JSFileResolver extends SimpleFileResolver {
 
 	@Override
 	public File resolveFile(String fileName) {
+		if(c == null)
+			init();
 		if (c != null && fileName.startsWith("repo:")) {
 			File f = map.get(fileName);
 			if (f != null)
@@ -85,6 +88,8 @@ public class JSFileResolver extends SimpleFileResolver {
 					ResourceDescriptor r = new ResourceDescriptor();
 					r.setUriString(objectUri);
 					r = c.get(r, null);
+					if (r.getIsReference())
+						r = ReferenceResolver.resolveReference(c, r, null);
 
 					f = File.createTempFile("jrsfr", r.getName());
 					c.get(r, f);
@@ -103,6 +108,8 @@ public class JSFileResolver extends SimpleFileResolver {
 
 					// find the resource...
 					for (ResourceDescriptor r : reportUnitResources) {
+						if (r.getIsReference())
+							r = ReferenceResolver.resolveReference(c, r, null);
 						if (r.getName().equals(objectUri) && isFileResource(r)) {
 							f = File.createTempFile("jrsfr", r.getName());
 							c.get(r, f);
