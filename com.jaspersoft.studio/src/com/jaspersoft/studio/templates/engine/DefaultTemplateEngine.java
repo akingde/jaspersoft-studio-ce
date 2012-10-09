@@ -106,8 +106,20 @@ public class DefaultTemplateEngine implements TemplateEngine{
 		}
 
 		// Adjusting groups
-		if (!jd.getGroupsList().isEmpty() && groupFields != null)
+		if (groupFields != null)
 			for (int i = 0; i < groupFields.size(); ++i) {
+				
+				if (jd.getGroupsList().size() <= i) {
+					try {
+						// Add a new group on the fly...
+						JRDesignGroup g = new JRDesignGroup();
+						g.setName(((JRField) groupFields.get(i)).getName());
+						jd.addGroup(g);
+					} catch (JRException e) {
+						// Duplicate group name should never occur
+					}
+				}
+				
 				JRField gr = (JRField) groupFields.get(i);
 				JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(i);
 
