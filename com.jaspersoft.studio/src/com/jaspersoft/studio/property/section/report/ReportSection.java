@@ -25,7 +25,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -100,15 +99,15 @@ public class ReportSection extends AbstractSection {
 		MDataset mDataset = (MDataset)getElement().getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
 		if (mDataset != null){
 			gd = new GridData();
-			gd.horizontalSpan = 3;
-			Composite rowComposite = new Composite(group, SWT.NONE);
-			rowComposite.setLayout(new RowLayout());
-			rowComposite.setLayoutData(gd);
-			createWidget4Property(mDataset, rowComposite, JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, true);
-			createWidget4Property(mDataset, group, JRDesignDataset.PROPERTY_SCRIPTLET_CLASS, true);
-			gd = new GridData();
 			gd.horizontalSpan = 2;
-			createWidget4Property(mDataset, group, JRDesignDataset.PROPERTY_QUERY, true).getControl().setLayoutData(gd);
+			//gd = new GridData();
+			//gd.horizontalSpan = 3;
+			//Composite rowComposite = new Composite(group, SWT.NONE);
+			//rowComposite.setLayout(new RowLayout());
+			//rowComposite.setLayoutData(gd);
+			createWidget4Property(mDataset, group, JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, true).getControl().setLayoutData(gd);
+			createWidget4Property(mDataset, group, JRDesignDataset.PROPERTY_SCRIPTLET_CLASS, true);
+			createWidget4Property(mDataset, group, JRDesignDataset.PROPERTY_QUERY, false);
 		}
 
 	}
