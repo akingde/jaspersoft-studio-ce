@@ -22,7 +22,6 @@ package com.jaspersoft.studio.editor.gef.figures.borders;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -117,20 +116,19 @@ public class ShadowBorder extends AbstractBorder {
 
 		// TOP LEFT ______________________________________________
 		r = new Rectangle2D.Double(x, y, 10, 10);
-		float[] dist = { 0f, 0.95f };
-		Color[] colors = { new Color(0, 0, 0, 60), new Color(0, 0, 0, 0) };
-		RadialGradientPaint radgp = new RadialGradientPaint(new Point2D.Float(x + 10, x + 10), 10f, dist, colors);
-		// RoundGradientPaint rgp = new RoundGradientPaint(x + 10, y + 10, new Color(0, 0, 0, 60), new Point2D.Float(0,
-		// 9.8f),
-		// new Color(0, 0, 0, 0));
+		// float[] dist = { 0f, 0.95f };
+		// Color[] colors = { new Color(0, 0, 0, 60), new Color(0, 0, 0, 0) };
+		// RadialGradientPaint radgp = new RadialGradientPaint(new Point2D.Float(x + 10, x + 10), 10f, dist, colors);
+		RoundGradientPaint rgp = new RoundGradientPaint(x + 9.5, y + 9.5f, new Color(0, 0, 0, 60), new Point2D.Float(0,
+				6.5f), new Color(0, 0, 0, 0));
 
-		g.setPaint(radgp);
+		g.setPaint(rgp);
 		g.fill(r);
 
 		// TOP RIGHT ______________________________________________
 		r = new Rectangle2D.Double(x + width - 10, y, 10, 10);
-		RoundGradientPaint rgp = new RoundGradientPaint(r.getX() + 0.5, r.getY() + 9.5f, new Color(0, 0, 0, 60),
-				new Point2D.Float(0, 6.5f), new Color(0, 0, 0, 0));
+		rgp = new RoundGradientPaint(r.getX() + 0.5, r.getY() + 9.5f, new Color(0, 0, 0, 60), new Point2D.Float(0, 6.5f),
+				new Color(0, 0, 0, 0));
 
 		g.setPaint(rgp);
 		g.fill(r);
