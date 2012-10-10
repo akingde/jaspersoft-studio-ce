@@ -61,6 +61,7 @@ public class ValueUnitsWidget {
 
 	public void setMax(int max) {
 		this.max = max;
+		val.setMaximum(max);
 	}
 
 	public void createComponent(Composite parent, String label, String toolTip) {
@@ -91,6 +92,9 @@ public class ValueUnitsWidget {
 
 		spinerSelection = new SpinerSelectionListener();
 		val.addSelectionListener(spinerSelection);
+
+		spinerModify = new SpinerModifyListener();
+		val.addModifyListener(spinerModify);
 
 		unitc.select(0);
 		setSpinerValue(unit.getUnit());

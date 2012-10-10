@@ -22,8 +22,10 @@ package com.jaspersoft.studio.editor.gef.figures;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Stroke;
+import java.awt.TexturePaint;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 
@@ -34,6 +36,7 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Color;
 
+import com.jaspersoft.studio.editor.gef.texture.EmptyTexture;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 import com.jaspersoft.studio.utils.Misc;
@@ -113,6 +116,7 @@ public class BandFigure extends RectangleFigure {
 		setLayoutManager(new FreeformLayout());
 		setOpaque(false);
 		this.drawColumn = drawColumn;
+		createTexture();
 	}
 
 	/*
@@ -158,9 +162,16 @@ public class BandFigure extends RectangleFigure {
 				for (int i = 0; i < columnNumber; i++) {
 					if (i > 0)
 						g.drawLine(x, b.y, x, b.y + b.height + 1);
+
 					x += columnWidth;
-					if (i < columnNumber - 1)
+					if (i < columnNumber - 1) {
+						Paint p = g.getPaint();
+						g.setPaint(tp);
+						g.fillRect(x, b.y, columnSpacing, b.y + b.height + 1);
+						g.setPaint(p);
+
 						g.drawLine(x, b.y, x, b.y + b.height + 1);
+					}
 					x += columnSpacing;
 				}
 			}
@@ -214,4 +225,11 @@ public class BandFigure extends RectangleFigure {
 		this.bandNameSize = null;
 	}
 
+	private TexturePaint tp;
+
+	public TexturePaint createTexture() {
+		if (tp == null)
+			tp = EmptyTexture.createTexture(null, null);
+		return tp;
+	}
 }

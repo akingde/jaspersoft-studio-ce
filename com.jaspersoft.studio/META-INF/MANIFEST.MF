@@ -232,6 +232,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    org.eclipse.swt.widgets,
    org.eclipse.gef.ui.parts,
    org.eclipse.gef",
+ com.jaspersoft.studio.editor.gef.texture,
  com.jaspersoft.studio.editor.gef.ui.actions;uses:="org.eclipse.gef.ui.actions,org.eclipse.ui,org.eclipse.swt.widgets",
  com.jaspersoft.studio.editor.gef.util,
  com.jaspersoft.studio.editor.java2d;

@@ -136,12 +136,31 @@ final class PageFormatDialog extends FormDialog {
 		ModifyListener listener = new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
+				if (e.getSource() != cwidth)
+					recalcColumns();
 				setTBounds();
 			}
 		};
 		cols.addModifyListener(listener);
 		cwidth.addModifyListener(listener);
 		space.addModifyListener(listener);
+	}
+
+	private void recalcColumns() {
+		int pagespace = pwidth.getValue() - lmargin.getValue() - rmargin.getValue();
+		int nrcolspace = cols.getSelection() - 1;
+		int colspace = nrcolspace * space.getValue();
+		int mspace = nrcolspace > 0 ? colspace / nrcolspace : pagespace;
+		int maxspace = nrcolspace > 0 ? pagespace / nrcolspace : pagespace;
+		if (mspace > maxspace)
+			mspace = maxspace;
+
+		if (mspace < space.getValue())
+			space.setValue(mspace);
+		space.setMax(maxspace);
+
+		int cw = (int) Math.ceil((double) (pagespace - nrcolspace * space.getValue()) / (cols.getSelection()));
+		cwidth.setValue(cw);
 	}
 
 	private void createMargins(Composite composite) {
@@ -170,6 +189,7 @@ final class PageFormatDialog extends FormDialog {
 		ModifyListener mlistner = new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
+				recalcColumns();
 				setTBounds();
 			}
 		};
@@ -225,8 +245,8 @@ final class PageFormatDialog extends FormDialog {
 			@Override
 			public void paint(Graphics graphics) {
 				Dimension psize = parent.getSize();
-				float zoom = Math.max((float) pwidth.getValue() / (float) (psize.width + 10), (float) pheigh.getValue()
-						/ (float) (psize.height + 10));
+				float zoom = Math.max((float) pwidth.getValue() / (float) (psize.width - 20), (float) pheigh.getValue()
+						/ (float) (psize.height - 20));
 
 				int x = getBounds().x + 10 + Math.round(lmargin.getValue() / zoom);
 				int y = getBounds().y + 10 + Math.round(tmargin.getValue() / zoom);
@@ -235,16 +255,18 @@ final class PageFormatDialog extends FormDialog {
 				int h = getBounds().height - 20 - Math.round((bmargin.getValue()) / zoom)
 						- Math.round(tmargin.getValue() / zoom);
 				graphics.setForegroundColor(ColorConstants.blue);
-				graphics.setBackgroundColor(ColorConstants.blue);
+				graphics.setBackgroundColor(ColorConstants.lightGray);
 				graphics.setLineWidthFloat(0.1f);
 				graphics.drawRectangle(x, y, w, h);
 
-				int xl = x;
+				int sw = Math.round(space.getValue() / zoom);
+				w = Math.round((cwidth.getValue()) / zoom);
 				for (int i = 1; i < cols.getSelection(); i++) {
-					xl += Math.round(cwidth.getValue() / zoom);
-					graphics.drawLine(xl, y, xl, y + h);
-					xl += Math.round(space.getValue() / zoom);
-					graphics.drawLine(xl, y, xl, y + h);
+					x += w;
+					graphics.drawLine(x, y, x, y + h);
+					graphics.fillRectangle(x, y, sw, h);
+					x += sw;
+					graphics.drawLine(x, y, x, y + h);
 				}
 				paintBorder(graphics);
 			}
@@ -272,9 +294,6 @@ final class PageFormatDialog extends FormDialog {
 		borderPreview.setSize(w, h);
 		int x = psize.width / 2 - w / 2;
 		int y = psize.height / 2 - h / 2;
-
-		System.out.println(String.format("x: %d, y: %d, w: %d, h: %d; pw: %d, ph: %d", x, y, w, h, pwidth.getValue(),
-				pheigh.getValue()));
 
 		borderPreview.setLocation(new org.eclipse.draw2d.geometry.Point(x, y));
 		parent.invalidate();
@@ -308,6 +327,7 @@ final class PageFormatDialog extends FormDialog {
 		uw.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
+				recalcColumns();
 				setAllUnits();
 			}
 
@@ -333,6 +353,7 @@ final class PageFormatDialog extends FormDialog {
 			public void modifyText(ModifyEvent e) {
 				String format = PageSize.deductPageFormat(pwidth.getValue(), pheigh.getValue());
 				pformat.select(PageSize.getFormatIndx(format));
+				recalcColumns();
 				setTBounds();
 			}
 
@@ -346,6 +367,7 @@ final class PageFormatDialog extends FormDialog {
 				Point p = PageSize.getFormatSize(PageSize.getFormats()[pformat.getSelectionIndex()]);
 				pwidth.setValue(p.x);
 				pheigh.setValue(p.y);
+				recalcColumns();
 				setTBounds();
 			}
 

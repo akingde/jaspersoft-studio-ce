@@ -19,11 +19,8 @@
  */
 package com.jaspersoft.studio.components.crosstab.figure;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.TexturePaint;
-import java.awt.image.BufferedImage;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
@@ -35,11 +32,10 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+import com.jaspersoft.studio.editor.gef.texture.EmptyTexture;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 public class EmptyCellFigure extends FrameFigure {
-	private static final Color COLOR1 = new Color(224, 224, 224);
-	private static final Color COLOR2 = new Color(255, 255, 255);
 
 	public EmptyCellFigure() {
 		super();
@@ -84,27 +80,8 @@ public class EmptyCellFigure extends FrameFigure {
 	private TexturePaint tp;
 
 	public TexturePaint createTexture() {
-		if (tp == null) {
-			int gridSize = 10;
-			BufferedImage img = new BufferedImage(gridSize * 2, gridSize * 2,
-					BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g2 = img.createGraphics();
-
-			AlphaComposite ac = AlphaComposite.getInstance(
-					AlphaComposite.SRC_OVER, 0.2f);
-			g2.setComposite(ac);
-
-			g2.setColor(COLOR1);
-			g2.fillRect(0, 0, 10, 10);
-			g2.fillRect(10, 10, 10, 10);
-
-			g2.setColor(COLOR2);
-			g2.fillRect(10, 0, 10, 10);
-			g2.fillRect(0, 10, 10, 10);
-
-			tp = new TexturePaint(img, new java.awt.Rectangle(0, 0, gridSize,
-					gridSize));
-		}
+		if (tp == null)
+			tp = EmptyTexture.createTexture(null, null);
 		return tp;
 	}
 }

@@ -396,26 +396,10 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	}
 
 	public Rectangle getBounds() {
-		// int w = 0;
-		// int h = 0;
-		// Rectangle rCellBounds = new Rectangle();
-		// Rectangle rect = null;
-		// JRDesignCellContents c = null;
-		// if (getValue() != null) {
-		// c = getValue();
-		// w = CrosstabManager.getHW(c.getWidth(), 60);
-		// h = CrosstabManager.getHW(c.getHeight(), 20);
-		// }
-
 		MCrosstab mc = getMCrosstab();
-		if (mc != null) {
+		if (mc != null)
 			return mc.getCrosstabManager().getBounds(
 					new CrosstabCell(getValue()));
-			// Rectangle b = mc.getBounds();
-			// return new Rectangle(b.x + rCellBounds.x, b.y + rCellBounds.y, w,
-			// h);
-		}
-
 		return null;
 	}
 
