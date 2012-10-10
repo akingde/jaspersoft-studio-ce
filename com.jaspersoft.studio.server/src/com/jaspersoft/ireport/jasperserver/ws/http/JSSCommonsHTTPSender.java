@@ -19,7 +19,7 @@ import org.osgi.framework.ServiceReference;
 
 import com.jaspersoft.studio.server.Activator;
 
-public class JSSCommonsHTTPSender  extends CommonsHTTPSender {
+public class JSSCommonsHTTPSender extends CommonsHTTPSender {
 	private static final long serialVersionUID = 8881188152022966420L;
 
 	public JSSCommonsHTTPSender() {
@@ -79,7 +79,7 @@ public class JSSCommonsHTTPSender  extends CommonsHTTPSender {
 	public static IProxyService getProxyService() {
 		BundleContext bc = Activator.getDefault().getBundle()
 				.getBundleContext();
-		ServiceReference<?> serviceReference = bc
+		ServiceReference serviceReference = bc
 				.getServiceReference(IProxyService.class.getName());
 		return (IProxyService) bc.getService(serviceReference);
 	}
