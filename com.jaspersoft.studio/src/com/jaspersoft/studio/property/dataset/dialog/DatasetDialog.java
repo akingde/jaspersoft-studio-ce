@@ -34,22 +34,16 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -70,10 +64,8 @@ import com.jaspersoft.studio.model.parameter.command.DeleteParameterCommand;
 import com.jaspersoft.studio.model.sortfield.command.CreateSortFieldCommand;
 import com.jaspersoft.studio.model.sortfield.command.DeleteSortFieldCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
-import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
-import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPreviewInfoProvider {
@@ -227,48 +219,23 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		bptab.setText(Messages.DatasetDialog_filterexpression);
 
 		Composite sectionClient = toolkit.createComposite(tabFolder);
-		sectionClient.setLayout(new GridLayout(2, false));
+		FillLayout fLayout = new FillLayout();
+		fLayout.marginHeight=5;
+		fLayout.marginWidth=5;
+		sectionClient.setLayout(fLayout);
 
-		filterExpression = new Text(sectionClient, SWT.MULTI | SWT.BORDER);
-		filterExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		Button but = new Button(sectionClient, SWT.NONE);
-		but.setText(Messages.DatasetDialog_selecttitle);
-		but.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				JRExpressionEditor wizard = new JRExpressionEditor();
-				wizard.setValue(ExprUtil.setValues(new JRDesignExpression(), filterExpression.getText(), null));
-				JRDesignDataset designDataset = mdataset.getValue();
-				if (designDataset != null) {
-					wizard.setExpressionContext(new ExpressionContext(designDataset, mdataset.getJasperConfiguration()));
-				} else {
-					wizard.setExpressionContext(ExpressionEditorSupportUtil.getReportExpressionContext());
-				}
-				WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-				dialog.create();
-				if (dialog.open() == Dialog.OK) {
-					filterExpression.setText(wizard.getValue().getText());
-				}
-			}
-		});
-		but.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+		filterExpression=new WTextExpression(sectionClient, SWT.NONE);
+		filterExpression.setBackground(sectionClient.getBackground());
+		JRDesignDataset designDataset = mdataset.getValue();
+		if (designDataset != null) {
+			filterExpression.setExpressionContext(new ExpressionContext(designDataset, mdataset.getJasperConfiguration()));
+		} else {
+			filterExpression.setExpressionContext(ExpressionEditorSupportUtil.getReportExpressionContext());
+		}
+		filterExpression.setExpression((JRDesignExpression)newdataset.getFilterExpression());
 
 		bptab.setControl(sectionClient);
-
-		if (newdataset.getFilterExpression() != null)
-			filterExpression.setText(Misc.nvl(newdataset.getFilterExpression().getText(), "")); //$NON-NLS-1$
 	}
-
-	// private void createDataPreview(FormToolkit toolkit, CTabFolder tabFolder) {
-	// CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-	// bptab.setText(Messages.DatasetDialog_datapreviewtab);
-	//
-	// Composite sectionClient = toolkit.createComposite(tabFolder);
-	// sectionClient.setLayout(new GridLayout(2, false));
-	//
-	// bptab.setControl(sectionClient);
-	// }
 
 	private CompoundCommand command;
 	private Color background;
@@ -282,7 +249,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	private ParametersTable ptable;
 	private SortFieldsTable sftable;
 	private DataQueryAdapters dataquery;
-	private Text filterExpression;
+	private WTextExpression filterExpression;
 	private DataPreviewTable dataPreviewTable;
 
 	public void setDataset(JasperDesign jDesign, JRDesignDataset ds) {
