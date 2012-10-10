@@ -1027,9 +1027,6 @@
             <input
                   type="com.jaspersoft.studio.model.dataset.MDataset">
             </input>
-            <input
-                  type="com.jaspersoft.studio.model.MReport">
-            </input>
          </propertySection>
          <propertySection
                class="com.jaspersoft.studio.property.section.obj.FieldSection"

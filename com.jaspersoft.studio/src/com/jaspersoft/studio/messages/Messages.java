@@ -653,6 +653,7 @@ public class Messages extends NLS {
 	public static String MConditionalStyle_conditional_expression_description;
 	public static String MConditionalStyle_properties_category;
 	public static String MDataset_class_description;
+	public static String MDataset_Edit_Query_Button_Text;
 	public static String MDataset_filter_expression;
 	public static String MDataset_filter_expression_description;
 	public static String MDataset_name_description;
@@ -1152,6 +1153,7 @@ public class Messages extends NLS {
 	public static String ReportNewWizardPage_file_name_must_be_valid;
 	public static String ReportNewWizardPage_project_must_be_writable;
 	public static String ReportNewWizardPage_select_new_file_container;
+	public static String ReportSection_Dataset_Label;
 	public static String ReportTemplatesWizardPage_description;
 	public static String ReportTemplatesWizardPage_title;
 	public static String ResetValueCommand_restore_default_value;

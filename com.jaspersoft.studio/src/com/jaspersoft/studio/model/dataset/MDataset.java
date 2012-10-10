@@ -46,7 +46,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.resource.NResourcePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
@@ -194,8 +194,8 @@ public class MDataset extends APropertyNode implements ICopyable {
 		resBundleD.setDescription(Messages.MDataset_resource_bundle_description);
 		desc.add(resBundleD);
 
-		JRQueryPropertyDescriptor queryD = new JRQueryPropertyDescriptor(JRDesignDataset.PROPERTY_QUERY,
-				Messages.common_query, NullEnum.NULL);
+		JRQueryButtonPropertyDescriptor queryD = new JRQueryButtonPropertyDescriptor(JRDesignDataset.PROPERTY_QUERY,
+				Messages.common_query, NullEnum.NULL, Messages.MDataset_Edit_Query_Button_Text);
 		queryD.setDescription(Messages.MDataset_query_description);
 		desc.add(queryD);
 

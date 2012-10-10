@@ -104,6 +104,28 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 		return null;
 	}
+	
+	public ASPropertyWidget createWidget4Property(APropertyNode element, Composite composite, Object property, boolean showLabel) {
+		if (element != null) {
+			IPropertyDescriptor[] pds = element.getPropertyDescriptors();
+			for (IPropertyDescriptor pd : pds) {
+				if (pd.getId().equals(property)) {
+					CLabel label = null;
+					if (showLabel)
+						label = getWidgetFactory().createCLabel(composite, pd.getDisplayName(), SWT.NONE);
+					ASPropertyWidget widget = SPWidgetFactory.createWidget(composite, this, pd);
+					if (widget != null) {
+						widget.setLabel(label);
+						widgets.put(pd.getId(), widget);
+						return widget;
+					}
+					break;
+				}
+			}
+		}
+		return null;
+	}
+
 
 	public IPropertyDescriptor getPropertyDesriptor(Object property) {
 		if (getElement() != null) {
