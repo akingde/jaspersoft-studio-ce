@@ -1,14 +1,32 @@
+/*******************************************************************************
+ * ---------------------------------------------------------------------
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ * ---------------------------------------------------------------------
+ ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
 import net.sf.jasperreports.engine.base.JRBaseFont;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -16,17 +34,17 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
+/**
+ * Class that implement a toolbar with two buttons to change the font size
+ * @author Orlandin Marco
+ *
+ */
 public class SPButon extends ASPropertyWidget {
 
 	/**
-	 * The button widget
+	 * The buttons toolbar
 	 */
-	private Button button;
-	
-	/**
-	 * True if it is a decrement button, false otherwise
-	 */
-	private boolean increment;
+	private ToolBar buttons;
 	
 	/**
 	 * The element with the font attribute
@@ -34,9 +52,14 @@ public class SPButon extends ASPropertyWidget {
 	private APropertyNode fontValue;
 	
 	/**
-	 * The image for the button
+	 * The image for the button of increment
 	 */
-	private Image imageValue;
+	private Image imageValueIncrement;
+	
+	/**
+	 * The image for the button of decrement
+	 */
+	private Image imageValueDecrement;
 	
 	/**
 	 * Percentual factor for the increment\decrement
@@ -44,56 +67,75 @@ public class SPButon extends ASPropertyWidget {
 	private static Integer factor = 10;
 	
 	/**
-	 * Tooltip message
+	 * Tooltip message for the increment button
 	 */
-	private String message;
+	private String messageIncrement;
+	
+	/**
+	 * Tooltip message for the decrement button
+	 */
+	private String messageDecrement;
 
 	/**
 	 * Crate a new button for increment or decrement of the font size
 	 * @param parent parent where the button will be painted
 	 * @param section section of the element
 	 * @param pDescriptor descriptor of the attribute
-	 * @param increment True if it is a decrement button, false otherwise
 	 * @param fontValue The element with the font attribute
 	 */
-	public SPButon(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, boolean increment, APropertyNode fontValue){
+	public SPButon(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, APropertyNode fontValue){
 		super(parent, section, pDescriptor);
-		this.increment = increment;
-		if (increment) {
-			message = Messages.SPButon_Size_Increment.concat(factor.toString());
-			imageValue = JaspersoftStudioPlugin.getImage("/icons/resources/edit-size-up.png"); 
-		}
-		else {
-			message = Messages.SPButon_Size_Decrement.concat(factor.toString());
-			imageValue = JaspersoftStudioPlugin.getImage("/icons/resources/edit-size-down.png"); 
-		}
+		messageIncrement = Messages.SPButon_Size_Increment.concat(factor.toString());
+		imageValueIncrement = JaspersoftStudioPlugin.getImage("/icons/resources/edit-size-up.png"); 
+		messageDecrement = Messages.SPButon_Size_Decrement.concat(factor.toString());
+		imageValueDecrement = JaspersoftStudioPlugin.getImage("/icons/resources/edit-size-down.png"); 
 		this.fontValue = fontValue;
 		createComponent(parent);
 	}
 	
+	/**
+	 * Create a single button into the toolbar
+	 * @param increment true if the button should be used for increment, false otherwise
+	 */
+	private void createButton(final boolean increment){
+		Image imageValue;
+		String message;
+		if (increment){
+			imageValue = imageValueIncrement;
+			message = messageIncrement;
+		} else {
+			imageValue = imageValueDecrement;
+			message = messageDecrement;
+		}
+		ToolItem button = new ToolItem(buttons, SWT.PUSH);
+		button.setImage(imageValue);
+		button.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				Object fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
+				Integer newValue = 2;
+				if (fontSize != null && fontSize.toString().length()>0) 
+					newValue = Integer.valueOf(fontSize.toString());
+					Integer plus = null;
+					if (increment) plus = Math.round((new Float(newValue) / 100)*factor)+1;
+					else plus =  Math.round((new Float(newValue) / 100)*-factor)-1;
+					if ((newValue+plus)>99) newValue = 99;
+					else if ((newValue+plus)>0) newValue += plus;
+				section.changeProperty(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString());
+			}
+
+		});
+		button.setToolTipText(message);		
+	}
+	
+	
 	@Override
 	protected void createComponent(Composite parent) {
 		if (fontValue != null){
-			Button button = new Button(parent, SWT.PUSH);
-			button.setImage(imageValue);
-			button.addListener(SWT.Selection, new Listener() {
-	
-				@Override
-				public void handleEvent(Event event) {
-					Object fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
-					Integer newValue = 2;
-					if (fontSize != null && fontSize.toString().length()>0) 
-						newValue = Integer.valueOf(fontSize.toString());
-						Integer plus = null;
-						if (increment) plus = Math.round((new Float(newValue) / 100)*factor)+1;
-						else plus =  Math.round((new Float(newValue) / 100)*-factor)-1;
-						if ((newValue+plus)>99) newValue = 99;
-						else if ((newValue+plus)>0) newValue += plus;
-					section.changeProperty(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString());
-				}
-	
-			});
-			button.setToolTipText(message);
+			buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
+			createButton(true);
+			createButton(false);
 		}
 	}
 
@@ -103,7 +145,7 @@ public class SPButon extends ASPropertyWidget {
 
 	@Override
 	public Control getControl() {
-		return button;
+		return buttons;
 	}
 
 }

@@ -22,6 +22,7 @@ package com.jaspersoft.studio.property.section.widgets;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignFont;
+import net.sf.jasperreports.engine.util.JRStyleResolver;
 
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
@@ -133,13 +134,13 @@ public class SPFont extends ASPropertyWidget {
 		gd.horizontalSpan = 2;
 		toolBar.setLayoutData(gd);
 
-		boldButton = createItem(toolBar, JRBaseStyle.PROPERTY_BOLD, "icons/resources/bold.png");
+		boldButton = createItem(toolBar, JRBaseStyle.PROPERTY_BOLD, "icons/resources/edit-bold.png");
 
-		italicButton = createItem(toolBar, JRBaseStyle.PROPERTY_ITALIC, "icons/resources/italic.png");
+		italicButton = createItem(toolBar, JRBaseStyle.PROPERTY_ITALIC, "icons/resources/edit-italic.png");
 
-		underlineButton = createItem(toolBar, JRBaseStyle.PROPERTY_UNDERLINE, "icons/resources/underline.png");
+		underlineButton = createItem(toolBar, JRBaseStyle.PROPERTY_UNDERLINE, "icons/resources/edit-underline.png");
 
-		strikeTroughtButton = createItem(toolBar, JRBaseStyle.PROPERTY_STRIKE_THROUGH, "icons/resources/strikethrought.png");
+		strikeTroughtButton = createItem(toolBar, JRBaseStyle.PROPERTY_STRIKE_THROUGH, "icons/resources/edit-strike.png");
 	}
 
 	private ToolItem createItem(ToolBar toolBar, Object id, String image) {
@@ -170,8 +171,11 @@ public class SPFont extends ASPropertyWidget {
 		this.parentNode = pnode;
 		this.mfont = (MFont) value;
 		if (mfont != null) {
+			
+			JRFont fontValue = (JRFont) mfont.getValue();
+			
 			fontName.setItems(ModelUtils.getFontNames(parentNode.getJasperConfiguration()));
-			String strfontname = (String) mfont.getPropertyValue(JRBaseStyle.PROPERTY_FONT_NAME);
+			String strfontname =  JRStyleResolver.getFontName(fontValue);//(String) mfont.getPropertyValue(JRBaseStyle.PROPERTY_FONT_NAME);
 			fontName.setText(strfontname != null ? strfontname : ""); //$NON-NLS-1$
 			String[] items = fontName.getItems();
 			for (int i = 0; i < items.length; i++) {
@@ -181,7 +185,7 @@ public class SPFont extends ASPropertyWidget {
 				}
 			}
 
-			String strfontsize = (String) mfont.getPropertyValue(JRBaseStyle.PROPERTY_FONT_SIZE);
+			String strfontsize =  Integer.toString(JRStyleResolver.getFontSize(fontValue)); //(String) mfont.getPropertyValue(JRBaseStyle.PROPERTY_FONT_SIZE);
 			items = fontSize.getItems();
 			fontSize.setText(strfontsize != null ? strfontsize : ""); //$NON-NLS-1$
 			for (int i = 0; i < items.length; i++) {
@@ -191,13 +195,13 @@ public class SPFont extends ASPropertyWidget {
 				}
 			}
 
-			Boolean b = (Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_BOLD);
+			Boolean b = JRStyleResolver.isBold(fontValue); //(Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_BOLD);
 			boldButton.setSelection(b != null ? b.booleanValue() : false);
-			b = (Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_ITALIC);
+			b = JRStyleResolver.isItalic(fontValue); //(Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_ITALIC);
 			italicButton.setSelection(b != null ? b.booleanValue() : false);
-			b = (Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_UNDERLINE);
+			b = JRStyleResolver.isUnderline(fontValue);  //(Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_UNDERLINE);
 			underlineButton.setSelection(b != null ? b.booleanValue() : false);
-			b = (Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_STRIKE_THROUGH);
+			b = JRStyleResolver.isStrikeThrough(fontValue); //(Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_STRIKE_THROUGH);
 			strikeTroughtButton.setSelection(b != null ? b.booleanValue() : false);
 		}
 	}

@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.editor.report;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -28,6 +29,7 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.DefaultEditDomain;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
@@ -63,9 +65,11 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
@@ -116,6 +120,56 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	private FlyoutPreferences palettePreferences;
 	private JasperReportsConfiguration jrContext;
 
+	/**
+	 * Class that extend a default domain and give the possibility to check if a keyboard key is held down
+	 * @author Orlandin Marco
+	 *
+	 */
+	public static class KeyPressedEventDomain extends DefaultEditDomain{
+		
+		/**
+		 * Map to keeping track if a key is held down
+		 */
+		private HashMap<Integer, Boolean> keyMap;
+		
+		/**
+		 * 
+		 * @param editorPart
+		 */
+		public KeyPressedEventDomain(IEditorPart editorPart){
+			super(editorPart);
+			keyMap = new HashMap<Integer, Boolean>();
+		}
+		
+		/**
+		 * Register in the map that a key is pressed, marking it as hold down
+		 */
+		@Override
+		public void keyDown(KeyEvent keyEvent, EditPartViewer viewer) {
+			super.keyDown(keyEvent, viewer);
+			keyMap.put(keyEvent.keyCode, true);
+		}
+		
+		/**
+		 * Register in the map that a key is released, marking it as not hold down
+		 */
+		@Override
+		public void keyUp(KeyEvent keyEvent, EditPartViewer viewer) {
+			super.keyDown(keyEvent, viewer);
+			keyMap.put(keyEvent.keyCode, false);
+		}
+		
+		/**
+		 * Check if a key is held down or not
+		 * @param keyCode an SWT keycode
+		 * @return true if the key is held down, otherwise false
+		 */
+		public Boolean isPressed(Integer keyCode){
+			Boolean value = keyMap.get(keyCode);
+			return value != null ? value : false;
+		}
+	}
+	
 	public Image getPartImage() {
 		return partImage;
 	}
@@ -124,7 +178,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 * Instantiates a new abstract visual editor.
 	 */
 	public AbstractVisualEditor(JasperReportsConfiguration jrContext) {
-		setEditDomain(new DefaultEditDomain(this));
+		setEditDomain(new KeyPressedEventDomain(this));
 		this.jrContext = jrContext;
 	}
 

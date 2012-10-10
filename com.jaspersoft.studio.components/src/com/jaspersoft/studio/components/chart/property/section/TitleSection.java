@@ -25,15 +25,16 @@ import net.sf.jasperreports.engine.design.JRDesignChart;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
-import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
 /*
  * The location section on the location tab.
  * 
  * @author Chicu Veaceslav
  */
-public class TitleSection extends AbstractSection {
+public class TitleSection extends AbstractRealValueSection {
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -43,23 +44,23 @@ public class TitleSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite group = getWidgetFactory().createSection(parent, "Title",
-				true, 4);
+		Composite group = getWidgetFactory().createSection(parent, Messages.TitleSection_Title_Label,
+				true, 2);
 
-		getWidgetFactory().createCLabel(group, "Expression");
+		getWidgetFactory().createCLabel(group, Messages.TitleSection_Expression_Label);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
+		//gd.horizontalSpan = 3;
 		createWidget4Property(group, JRDesignChart.PROPERTY_TITLE_EXPRESSION,
 				false).getControl().setLayoutData(gd);
 
-		getWidgetFactory().createCLabel(group, "Position");
+		getWidgetFactory().createCLabel(group, Messages.TitleSection_Position_Label);
 		createWidget4Property(group, JRBaseChart.PROPERTY_TITLE_POSITION, false);
 
-		getWidgetFactory().createCLabel(group, "Color");
+		getWidgetFactory().createCLabel(group, Messages.TitleSection_Color_Label);
 		createWidget4Property(group, JRBaseChart.PROPERTY_TITLE_COLOR, false);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 4;
+		gd.horizontalSpan = 2;
 		createWidget4Property(group, JRDesignChart.PROPERTY_TITLE_FONT, false)
 				.getControl().setLayoutData(gd);
 

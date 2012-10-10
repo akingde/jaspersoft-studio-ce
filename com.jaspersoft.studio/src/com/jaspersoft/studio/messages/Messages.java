@@ -616,6 +616,10 @@ public class Messages extends NLS {
 	public static String LayoutSection_sectiontitle;
 	public static String LeftToolBarManager_label;
 	public static String LeftToolBarManager_pintooltip;
+	public static String LegendSection_Backcolor_Label;
+	public static String LegendSection_Forecolor_Label;
+	public static String LegendSection_Legend_Label;
+	public static String LegendSection_Position_Label;
 	public static String LinePenSection_pen_width_tool_tip;
 	public static String LocaleDialog_0;
 	public static String LocaleDialog_1;
@@ -1225,6 +1229,9 @@ public class Messages extends NLS {
 	public static String StyleTemplateNewWizard_wizardtitle;
 	public static String SubreportPropertiesLabelProvider_numbers_of_parameters;
 	public static String SubreportPropertyPage_description;
+	public static String SubTitleSection_Color_Label;
+	public static String SubTitleSection_Expression_Label;
+	public static String SubTitleSection_Subtitle_Label;
 	public static String TemplateLocationsPreferencePage_Description;
 	public static String TemplateLocationsPreferencePage_Locations;
 	public static String TemplateLocationsPreferencePage_Message;
@@ -1249,6 +1256,10 @@ public class Messages extends NLS {
 	public static String TimeZoneDialog_0;
 	public static String TimeZoneDialog_1;
 	public static String TimeZoneDialog_2;
+	public static String TitleSection_Color_Label;
+	public static String TitleSection_Expression_Label;
+	public static String TitleSection_Position_Label;
+	public static String TitleSection_Title_Label;
 	public static String WHyperlink_AddBtn;
 	public static String WHyperlink_AddParameterDialogLbl1;
 	public static String WHyperlink_AddParameterDialogLbl2;

@@ -380,12 +380,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
-				
-		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(MFont.FONT_INCREMENT,this, true);
+		
+		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(MFont.FONT_INCREMENT,this);
 		desc.add(fontIncrement);
 		
-		ButtonPropertyDescriptor fontDecrement = new ButtonPropertyDescriptor(MFont.FONT_DECREMENT,this, false);
-		desc.add(fontDecrement);
 
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRBaseStyle.PROPERTY_PATTERN,
 				Messages.common_pattern);

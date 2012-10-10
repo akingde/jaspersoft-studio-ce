@@ -120,11 +120,8 @@ public class MFont extends APropertyNode {
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
 		
-		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(FONT_INCREMENT,this, true);
+		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(FONT_INCREMENT,this);
 		desc.add(fontIncrement);
-		
-		ButtonPropertyDescriptor fontDecrement = new ButtonPropertyDescriptor(FONT_DECREMENT,this, false);
-		desc.add(fontDecrement);
 
 		RWComboBoxPropertyDescriptor pdfFontNameD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_PDF_FONT_NAME,
 				Messages.MFont_pdf_font_name, ModelUtils.getPDFFontNames(), NullEnum.INHERITED);
