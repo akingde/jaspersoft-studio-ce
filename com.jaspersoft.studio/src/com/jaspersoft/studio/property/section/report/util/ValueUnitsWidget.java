@@ -20,6 +20,8 @@
 package com.jaspersoft.studio.property.section.report.util;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -41,12 +43,21 @@ public class ValueUnitsWidget {
 		}
 	}
 
+	private final class SpinerModifyListener implements ModifyListener {
+		@Override
+		public void modifyText(ModifyEvent e) {
+			unit.setValue(new Float(val.getSelection() / Math.pow(10, digits)).floatValue(),
+					Unit.getUnits()[unitc.getSelectionIndex()]);
+		}
+	}
+
 	private Unit unit = new Unit(0, Unit.PX);
 	private int max = Integer.MAX_VALUE;
 	private int digits = 0;
 	private Combo unitc;
 	private Spinner val;
 	private SpinerSelectionListener spinerSelection;
+	private SpinerModifyListener spinerModify;
 
 	public void setMax(int max) {
 		this.max = max;
@@ -101,7 +112,15 @@ public class ValueUnitsWidget {
 		val.addSelectionListener(listener);
 	}
 
-	public void removeSelectionListener(SelectionListener listener) {
+	public void removeSelectionListener(ModifyListener listener) {
+		val.removeModifyListener(listener);
+	}
+
+	public void addModifyListener(ModifyListener listener) {
+		val.addModifyListener(listener);
+	}
+
+	public void removeModifyListener(SelectionListener listener) {
 		val.removeSelectionListener(listener);
 	}
 

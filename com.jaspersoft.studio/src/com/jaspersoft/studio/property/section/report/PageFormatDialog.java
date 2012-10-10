@@ -35,6 +35,8 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
@@ -131,19 +133,15 @@ final class PageFormatDialog extends FormDialog {
 		uvWidgets.add(cwidth);
 		uvWidgets.add(space);
 
-		SelectionListener listener = new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
+		ModifyListener listener = new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
 				setTBounds();
 			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		};
-		cols.addSelectionListener(listener);
-		cwidth.addSelectionListener(listener);
-		space.addSelectionListener(listener);
+		cols.addModifyListener(listener);
+		cwidth.addModifyListener(listener);
+		space.addModifyListener(listener);
 	}
 
 	private void createMargins(Composite composite) {
@@ -169,20 +167,16 @@ final class PageFormatDialog extends FormDialog {
 		uvWidgets.add(lmargin);
 		uvWidgets.add(rmargin);
 
-		SelectionListener mlistner = new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
+		ModifyListener mlistner = new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
 				setTBounds();
 			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		};
-		tmargin.addSelectionListener(mlistner);
-		bmargin.addSelectionListener(mlistner);
-		lmargin.addSelectionListener(mlistner);
-		rmargin.addSelectionListener(mlistner);
+		tmargin.addModifyListener(mlistner);
+		bmargin.addModifyListener(mlistner);
+		lmargin.addModifyListener(mlistner);
+		rmargin.addModifyListener(mlistner);
 	}
 
 	private void createOrientation(Composite composite) {
@@ -200,9 +194,11 @@ final class PageFormatDialog extends FormDialog {
 				// change width with height
 				int w = pwidth.getValue();
 				int h = pheigh.getValue();
-				pwidth.setValue(h);
-				pheigh.setValue(w);
-				setTBounds();
+				if ((w > h && portrait.getSelection()) || (h > w && !portrait.getSelection())) {
+					pwidth.setValue(h);
+					pheigh.setValue(w);
+					setTBounds();
+				}
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -228,7 +224,6 @@ final class PageFormatDialog extends FormDialog {
 
 			@Override
 			public void paint(Graphics graphics) {
-
 				Dimension psize = parent.getSize();
 				float zoom = Math.max((float) pwidth.getValue() / (float) (psize.width + 10), (float) pheigh.getValue()
 						/ (float) (psize.height + 10));
@@ -278,6 +273,9 @@ final class PageFormatDialog extends FormDialog {
 		int x = psize.width / 2 - w / 2;
 		int y = psize.height / 2 - h / 2;
 
+		System.out.println(String.format("x: %d, y: %d, w: %d, h: %d; pw: %d, ph: %d", x, y, w, h, pwidth.getValue(),
+				pheigh.getValue()));
+
 		borderPreview.setLocation(new org.eclipse.draw2d.geometry.Point(x, y));
 		parent.invalidate();
 		square.redraw();
@@ -318,20 +316,29 @@ final class PageFormatDialog extends FormDialog {
 			}
 		});
 
-		SelectionListener psizeListener = new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
+		// SelectionListener psizeListener = new SelectionListener() {
+		//
+		// public void widgetSelected(SelectionEvent e) {
+		// String format = PageSize.deductPageFormat(pwidth.getValue(), pheigh.getValue());
+		// pformat.select(PageSize.getFormatIndx(format));
+		// setTBounds();
+		// }
+		//
+		// public void widgetDefaultSelected(SelectionEvent e) {
+		// widgetSelected(e);
+		// }
+		// };
+		ModifyListener psizeMListener = new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
 				String format = PageSize.deductPageFormat(pwidth.getValue(), pheigh.getValue());
 				pformat.select(PageSize.getFormatIndx(format));
 				setTBounds();
 			}
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		};
-		pwidth.addSelectionListener(psizeListener);
-		pheigh.addSelectionListener(psizeListener);
+		pwidth.addModifyListener(psizeMListener);
+		pheigh.addModifyListener(psizeMListener);
 
 		pformat.addSelectionListener(new SelectionListener() {
 
