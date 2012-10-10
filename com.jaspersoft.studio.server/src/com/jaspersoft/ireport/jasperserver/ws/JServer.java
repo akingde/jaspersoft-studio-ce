@@ -23,106 +23,119 @@
  */
 package com.jaspersoft.ireport.jasperserver.ws;
 
-
 /**
- *
+ * 
  * @author gtoffoli
  */
 public class JServer {
-    
-    
-     private String name;
-     private String url;
-     private String username;
-     private String password;
-       
-     private WSClient wSClient = null;
-     
-     private boolean loaded = false;
-     private boolean loading = false;
-     
-     private String locale = null;
-     
-    /** Creates a new instance of JServer */
-    public JServer() {
-    }
 
-    public String getName() {
-        return name;
-    }
+	private int timeout;
+	private String name;
+	private String url;
+	private String username;
+	private String password;
+	private boolean chunked;
 
-    public void setName(String name) {
-        this.name = name;
-        setWSClient(null);
-    }
+	private WSClient wSClient = null;
 
-    public String getUrl() {
-        return url;
-    }
+	private boolean loaded = false;
+	private boolean loading = false;
 
-    public void setUrl(String url) {
-        this.url = url;
-        setWSClient(null);
-    }
+	private String locale = null;
 
-    public String getUsername() {
-        return username;
-    }
+	/** Creates a new instance of JServer */
+	public JServer() {
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-        setWSClient(null);
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setName(String name) {
+		this.name = name;
+		setWSClient(null);
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-        setWSClient(null);
-    }
-    
-    public String toString()
-    {
-        return ""+getName();
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public boolean isLoaded() {
-        return loaded;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+		setWSClient(null);
+	}
 
-    public void setLoaded(boolean loaded) {
-        this.loaded = loaded;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public WSClient getWSClient() throws Exception {
-    	if (wSClient == null) {
-    		setWSClient(new WSClient(this));
-    	}
-    	return wSClient;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+		setWSClient(null);
+	}
 
-    public void setWSClient(WSClient wSClient) {
-        this.wSClient = wSClient;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getLocale() {
-        return locale;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+		setWSClient(null);
+	}
 
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
+	public String toString() {
+		return "" + getName();
+	}
 
-    public boolean isLoading() {
-        return loading;
-    }
+	public boolean isLoaded() {
+		return loaded;
+	}
 
-    public void setLoading(boolean loading) {
-        this.loading = loading;
-    }
-    
-    
-    
+	public void setLoaded(boolean loaded) {
+		this.loaded = loaded;
+	}
+
+	public WSClient getWSClient() throws Exception {
+		if (wSClient == null) {
+			setWSClient(new WSClient(this));
+		}
+		return wSClient;
+	}
+
+	public void setWSClient(WSClient wSClient) {
+		this.wSClient = wSClient;
+	}
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
+
+	public boolean isLoading() {
+		return loading;
+	}
+
+	public void setLoading(boolean loading) {
+		this.loading = loading;
+	}
+
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
+	public boolean isChunked() {
+		return chunked;
+	}
+
+	public void setChunked(boolean chunked) {
+		this.chunked = chunked;
+	}
+
 }

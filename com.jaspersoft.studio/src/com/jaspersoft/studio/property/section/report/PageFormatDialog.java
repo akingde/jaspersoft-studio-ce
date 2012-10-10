@@ -109,6 +109,7 @@ final class PageFormatDialog extends FormDialog {
 	private void createColumns(Composite composite) {
 		Group bright = toolkit.createGroup(composite, Messages.PageFormatDialog_2);
 		bright.setLayoutData(new GridData(GridData.FILL_BOTH));
+		bright.setBackgroundMode(SWT.INHERIT_FORCE);
 		bright.setLayout(new GridLayout(3, false));
 
 		toolkit.createLabel(bright, Messages.PageFormatDialog_3);
@@ -147,6 +148,7 @@ final class PageFormatDialog extends FormDialog {
 		Group bleft = toolkit.createGroup(composite, Messages.PageFormatDialog_9);
 		bleft.setLayoutData(new GridData(GridData.FILL_BOTH));
 		bleft.setLayout(new GridLayout(3, false));
+		bleft.setBackgroundMode(SWT.INHERIT_FORCE);
 
 		tmargin = new ValueUnitsWidget();
 		tmargin.createComponent(bleft, Messages.PageFormatDialog_10, Messages.PageFormatDialog_11);

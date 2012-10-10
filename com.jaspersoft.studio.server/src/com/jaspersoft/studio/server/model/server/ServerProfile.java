@@ -29,6 +29,8 @@ public class ServerProfile implements Resource, Cloneable {
 	private String user;
 	private String organisation;
 	private String jrVersion = JRXmlWriterHelper.LAST_VERSION;
+	private int timeout = 350000;
+	private boolean chunked;
 
 	public String getJrVersion() {
 		return jrVersion;
@@ -78,6 +80,22 @@ public class ServerProfile implements Resource, Cloneable {
 
 	public void setPass(String pass) {
 		this.pass = pass;
+	}
+
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
+	public boolean isChunked() {
+		return chunked;
+	}
+
+	public void setChunked(boolean chunked) {
+		this.chunked = chunked;
 	}
 
 	@Override

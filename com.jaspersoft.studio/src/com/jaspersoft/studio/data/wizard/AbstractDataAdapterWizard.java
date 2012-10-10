@@ -1,20 +1,27 @@
 package com.jaspersoft.studio.data.wizard;
 
+import java.lang.reflect.InvocationTargetException;
+
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -41,6 +48,16 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 	protected DataAdaptersListPage dataAdapterListPage = null;
 	protected DataAdapterEditorPage dataAdapterEditorPage = null;
 	protected ADataAdapterStorage storage;
+
+	public AbstractDataAdapterWizard() {
+		super();
+		setNeedsProgressMonitor(true);
+	}
+
+	public AbstractDataAdapterWizard(IWizard parentWizard, IWizardPage fallbackPage) {
+		super(parentWizard, fallbackPage);
+		setNeedsProgressMonitor(true);
+	}
 
 	/**
 	 * Sets the wizard dialog that is used to display the wizard.
@@ -106,38 +123,54 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 	 */
 	public void widgetSelected(SelectionEvent e) {
 		if (getContainer().getCurrentPage() == dataAdapterEditorPage) {
-			ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+			final DataAdapter da = dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapter();
 			try {
-				ClassLoader cl = null;
-				IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-				for (IProject p : prjs) {
-					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
-						if (cl == null)
-							cl = JavaProjectClassLoader.instance(JavaCore.create(p));
-						else
-							cl = new CompositeClassloader(cl, JavaProjectClassLoader.instance(JavaCore.create(p)));
+				getContainer().run(true, true, new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						monitor.beginTask("Testing DataAdapter", SWT.INDETERMINATE);
+						ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+						try {
+							ClassLoader cl = null;
+							IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+							for (IProject p : prjs) {
+								if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
+									if (cl == null)
+										cl = JavaProjectClassLoader.instance(JavaCore.create(p));
+									else
+										cl = new CompositeClassloader(cl, JavaProjectClassLoader.instance(JavaCore.create(p)));
+								}
+							}
+							if (cl != null) {
+								cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
+								cl = new CompositeClassloader(cl, getClass().getClassLoader());
+								Thread.currentThread().setContextClassLoader(cl);
+							}
+
+							getConfig().setClassLoader(cl);
+
+							DataAdapterServiceUtil.getInstance(getConfig()).getService(da).test();
+							Display.getDefault().asyncExec(new Runnable() {
+
+								@Override
+								public void run() {
+									UIUtils.showInformation(Messages.DataAdapterWizard_testbutton,
+											Messages.DataAdapterWizard_testsuccesful);
+								}
+							});
+						} catch (Exception e1) {
+							UIUtils.showError(e1);
+						} finally {
+							monitor.done();
+							Thread.currentThread().setContextClassLoader(oldCL);
+						}
 					}
-				}
-				if (cl != null) {
-					cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
-					cl = new CompositeClassloader(cl, getClass().getClassLoader());
-					Thread.currentThread().setContextClassLoader(cl);
-				}
-
-				getConfig().setClassLoader(cl);
-
-				DataAdapterServiceUtil.getInstance(getConfig())
-						.getService(dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapter()).test();
-
-				MessageBox mb = new MessageBox(getContainer().getShell(), SWT.ICON_INFORMATION | SWT.OK);
-				mb.setText(Messages.DataAdapterWizard_testbutton);
-				mb.setMessage(Messages.DataAdapterWizard_testsuccesful);
-				mb.open();
-
-			} catch (Exception e1) {
+				});
+			} catch (InvocationTargetException e1) {
 				UIUtils.showError(e1);
-			} finally {
-				Thread.currentThread().setContextClassLoader(oldCL);
+			} catch (InterruptedException e1) {
+				UIUtils.showError(e1);
 			}
 		}
 	}

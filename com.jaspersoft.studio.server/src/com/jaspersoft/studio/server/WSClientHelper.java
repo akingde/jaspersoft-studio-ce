@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.axis.AxisProperties;
+import org.apache.axis.components.net.DefaultCommonsHTTPClientProperties;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 
@@ -55,16 +57,9 @@ public class WSClientHelper {
 		JServer server = msp.getWsClient() == null ? new JServer() : msp
 				.getWsClient().getServer();
 		ServerProfile sp = msp.getValue();
-		server.setName(sp.getName());
-		server.setUrl(sp.getUrl());
-		String username = sp.getUser();
-		if (sp.getOrganisation() != null
-				&& !sp.getOrganisation().trim().isEmpty())
-			username += "|" + sp.getOrganisation();
-		server.setUsername(username);
-		server.setPassword(sp.getPass());
+		setupJServer(server, sp);
 		if (msp.getWsClient() == null)
-			msp.setWsClient(new WSClient(server));
+			msp.setWsClient(server.getWSClient());
 		return msp.getWsClient();
 	}
 
@@ -76,6 +71,20 @@ public class WSClientHelper {
 
 		ServerProfile sp = msp.getValue();
 		JServer server = new JServer();
+		setupJServer(server, sp);
+
+		WSClient client = server.getWSClient();
+		if (client.list(rd) == null)
+			return false;
+		monitor.subTask("Connected");
+		return true;
+	}
+
+	private static void setupJServer(JServer server, ServerProfile sp) {
+		AxisProperties
+				.setProperty(
+						DefaultCommonsHTTPClientProperties.MAXIMUM_CONNECTIONS_PER_HOST_PROPERTY_KEY,
+						"4");
 		server.setName(sp.getName());
 		server.setUrl(sp.getUrl());
 		String username = sp.getUser();
@@ -84,12 +93,8 @@ public class WSClientHelper {
 			username += "|" + sp.getOrganisation();
 		server.setUsername(username);
 		server.setPassword(sp.getPass());
-
-		WSClient client = new WSClient(server);
-		if (client.list(rd) == null)
-			return false;
-		monitor.subTask("Connected");
-		return true;
+		server.setTimeout(sp.getTimeout());
+		server.setChunked(sp.isChunked());
 	}
 
 	public static void connectGetData(MServerProfile msp,

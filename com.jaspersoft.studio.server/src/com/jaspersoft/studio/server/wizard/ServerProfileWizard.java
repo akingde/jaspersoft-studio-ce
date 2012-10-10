@@ -23,7 +23,6 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -42,6 +41,7 @@ public class ServerProfileWizard extends Wizard {
 		super();
 		setWindowTitle("Server profile wizard");
 		this.serverProfile = sprofile;
+		setNeedsProgressMonitor(true);
 	}
 
 	@Override
@@ -74,9 +74,8 @@ public class ServerProfileWizard extends Wizard {
 	}
 
 	private void handleConnect(final boolean onlycheck) {
-		ProgressMonitorDialog pm = new ProgressMonitorDialog(getShell());
 		try {
-			pm.run(true, true, new IRunnableWithProgress() {
+			getContainer().run(true, true, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
 					try {
@@ -98,7 +97,7 @@ public class ServerProfileWizard extends Wizard {
 
 			});
 		} catch (InvocationTargetException e) {
-			UIUtils.showError(e.getCause());
+			UIUtils.showError(e);
 		} catch (InterruptedException e) {
 			UIUtils.showError(e);
 		}

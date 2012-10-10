@@ -33,11 +33,17 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.compatibility.dialog.VersionCombo;
@@ -46,6 +52,8 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.validator.URLValidator;
+import com.jaspersoft.studio.utils.SWTResourceManager;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class ServerProfilePage extends WizardPage {
 	private MServerProfile sprofile;
@@ -57,7 +65,7 @@ public class ServerProfilePage extends WizardPage {
 		this.sprofile = sprofile;
 	}
 
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		DataBindingContext dbc = new DataBindingContext();
 		WizardPageSupport.create(this, dbc);
 
@@ -84,7 +92,7 @@ public class ServerProfilePage extends WizardPage {
 		Group gr = new Group(composite, SWT.NONE);
 		gr.setText(Messages.ServerProfilePage_8);
 		gr.setLayout(new GridLayout(2, false));
-		gd = new GridData(GridData.FILL_BOTH);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gr.setLayoutData(gd);
 
@@ -100,16 +108,45 @@ public class ServerProfilePage extends WizardPage {
 		Text tpass = new Text(gr, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Composite cmp = new Composite(composite, SWT.NONE);
-		cmp.setLayout(new GridLayout(2, false));
-		gd = new GridData();
+		final Section expcmp = new Section(composite,
+				ExpandableComposite.TREE_NODE);
+		expcmp.setTitleBarForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+		UIUtils.setBold(expcmp);
+		expcmp.setText("Advanced Settings");
+		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
-		cmp.setLayoutData(gd);
+		expcmp.setLayoutData(gd);
+		expcmp.setExpanded(true);
+
+		Composite cmp = new Composite(expcmp, SWT.NONE);
+		cmp.setLayout(new GridLayout(2, false));
+
+		expcmp.setClient(cmp);
+		expcmp.addExpansionListener(new ExpansionAdapter() {
+			public void expansionStateChanged(ExpansionEvent e) {
+				parent.getParent().layout(true);
+			}
+		});
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				expcmp.setExpanded(false);
+			}
+		});
 
 		new Label(cmp, SWT.NONE).setText("JasperReports Library Version");
 
 		VersionCombo cversion = new VersionCombo(cmp);
 		cversion.setVersion(JRXmlWriterHelper.LAST_VERSION);
+
+		new Label(cmp, SWT.NONE).setText("Connection Timeout [ms]");
+
+		Text ttimeout = new Text(cmp, SWT.BORDER);
+		ttimeout.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		Button bchunked = new Button(cmp, SWT.CHECK);
+		bchunked.setText("Http Chuncked Requests");
 
 		ServerProfile value = sprofile.getValue();
 		dbc.bindValue(SWTObservables.observeText(tname, SWT.Modify),
@@ -142,6 +179,12 @@ public class ServerProfilePage extends WizardPage {
 				null);
 		dbc.bindValue(SWTObservables.observeText(tpass, SWT.Modify),
 				PojoObservables.observeValue(value, "pass")); //$NON-NLS-1$
+
+		dbc.bindValue(SWTObservables.observeText(ttimeout, SWT.Modify),
+				PojoObservables.observeValue(value, "timeout")); //$NON-NLS-1$
+
+		dbc.bindValue(SWTObservables.observeSelection(bchunked),
+				PojoObservables.observeValue(value, "chunked")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeText(cversion.getControl()),
 				PojoObservables.observeValue(new Proxy(value), "jrVersion")); //$NON-NLS-1$

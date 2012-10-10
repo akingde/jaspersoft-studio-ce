@@ -58,7 +58,7 @@ import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 public class UIUtils {
 	/** ID for the "Properties View" */
-	public static final String PROPERTIES_VIEW_ID="org.eclipse.ui.views.PropertySheet"; //$NON-NLS-1$
+	public static final String PROPERTIES_VIEW_ID = "org.eclipse.ui.views.PropertySheet"; //$NON-NLS-1$
 
 	public static void showError(final Throwable t) {
 		showError(t.getMessage(), t);
@@ -91,10 +91,13 @@ public class UIUtils {
 	}
 
 	public static void showInformation(final String message) {
+		showInformation("Information", message);
+	}
+
+	public static void showInformation(final String title, final String message) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				MessageDialog.open(MessageDialog.INFORMATION, Display.getDefault().getActiveShell(), "Information", message,
-						SWT.SHEET);
+				MessageDialog.open(MessageDialog.INFORMATION, Display.getDefault().getActiveShell(), title, message, SWT.SHEET);
 			}
 		});
 	}
@@ -381,15 +384,14 @@ public class UIUtils {
 	 * 
 	 * @return <code>true</code> if the properties view has the focus, <code>false</code> otherwise
 	 */
-	public static boolean isPropertiesViewFocused(){
+	public static boolean isPropertiesViewFocused() {
 		try {
-			String activePartViewID = 
-					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite().getId();
+			String activePartViewID = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart()
+					.getSite().getId();
 			return PROPERTIES_VIEW_ID.equals(activePartViewID);
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			return false;
 		}
 	}
-	
+
 }

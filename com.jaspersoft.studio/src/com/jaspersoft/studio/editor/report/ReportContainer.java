@@ -223,8 +223,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 				ANode node = m.createNode(rep, obj, -1);
 
 				ave = m.getEditor(obj, jrContext);
-				ave.getEditDomain().setCommandStack(reportEditor.getEditDomain().getCommandStack());
 				if (ave != null) {
+					ave.getEditDomain().setCommandStack(reportEditor.getEditDomain().getCommandStack());
 					int index = addPage(ave, getEditorInput());
 
 					editors.add(ave);
