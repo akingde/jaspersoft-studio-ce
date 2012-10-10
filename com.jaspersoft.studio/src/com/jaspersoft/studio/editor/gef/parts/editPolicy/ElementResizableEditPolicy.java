@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -27,6 +28,7 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -50,6 +52,32 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 	 */
 	public ElementResizableEditPolicy() {
 		super();
+	}
+	
+	/**
+	 * This method override the ResizableEditPolicy createSelectionHandle(). It's identical to
+	 * 3.7 and later methods, but different from previous versions. In this way the behavior of this 
+	 * handle under eclipse 3.6 and eclipse 3.7+ is uniformed
+	 */
+	@Override
+	protected List createSelectionHandles() {
+		if (getResizeDirections() == PositionConstants.NONE) {
+			// non resizable, so delegate to super implementation
+			return super.createSelectionHandles();
+		}
+
+		// resizable in at least one direction
+		List list = new ArrayList();
+		createMoveHandle(list);
+		createResizeHandle(list, PositionConstants.NORTH);
+		createResizeHandle(list, PositionConstants.EAST);
+		createResizeHandle(list, PositionConstants.SOUTH);
+		createResizeHandle(list, PositionConstants.WEST);
+		createResizeHandle(list, PositionConstants.SOUTH_EAST);
+		createResizeHandle(list, PositionConstants.SOUTH_WEST);
+		createResizeHandle(list, PositionConstants.NORTH_WEST);
+		createResizeHandle(list, PositionConstants.NORTH_EAST);
+		return list;
 	}
 	
 	/**
