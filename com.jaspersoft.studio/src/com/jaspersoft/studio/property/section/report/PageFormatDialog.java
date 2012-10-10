@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.forms.FormDialog;
@@ -112,7 +113,8 @@ final class PageFormatDialog extends FormDialog {
 		bright.setBackgroundMode(SWT.INHERIT_FORCE);
 		bright.setLayout(new GridLayout(3, false));
 
-		toolkit.createLabel(bright, Messages.PageFormatDialog_3);
+		new Label(bright, SWT.NONE).setText(Messages.PageFormatDialog_3);
+
 		cols = new Spinner(bright, SWT.BORDER);
 		cols.setValues(1, 1, Integer.MAX_VALUE, 0, 1, 10);
 		cols.setToolTipText(Messages.PageFormatDialog_4);
