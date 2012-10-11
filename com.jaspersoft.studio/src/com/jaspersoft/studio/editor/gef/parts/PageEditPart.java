@@ -26,7 +26,6 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
@@ -56,11 +55,13 @@ import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.JSSSnapFeedBackPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class PageEditPart.
@@ -78,7 +79,6 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		}
 	}
 
-
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class key) {
@@ -90,7 +90,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 				snapStrategies.add(new SnapToGuides(this));
 			val = (Boolean) getViewer().getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED);
 			if (val != null && val.booleanValue()) {
-				
+
 				SnapToGeometryThreshold snapper = new SnapToGeometryThreshold(this);
 				snapper.setThreshold(6.0);
 				snapStrategies.add(snapper);
@@ -127,9 +127,12 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		super.deactivate();
 	}
 
+	private JasperReportsConfiguration jConfig;
+
 	protected void setPrefsBorder(IFigure rect) {
-		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
-				DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE, "shadow", null); //$NON-NLS-1$
+		if (jConfig == null)
+			jConfig = ((APropertyNode) getModel()).getJasperConfiguration();
+		String pref = jConfig.getProperty(DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE, "shadow"); //$NON-NLS-1$
 
 		if (pref.equals("shadow")) //$NON-NLS-1$
 			rect.setBorder(new ShadowBorder());

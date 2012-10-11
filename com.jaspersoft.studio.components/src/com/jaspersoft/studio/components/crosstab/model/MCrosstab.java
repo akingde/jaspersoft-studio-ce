@@ -381,7 +381,11 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		String pname = evt.getPropertyName();
 		Object newValue = evt.getNewValue();
 		Object oldValue = evt.getOldValue();
-		if (pname.equals(JRDesignCrosstab.PROPERTY_HEADER_CELL)) {
+		if (pname.equals(JRDesignElement.PROPERTY_WIDTH)
+				|| pname.equals(JRDesignElement.PROPERTY_HEIGHT)) {
+			getValue().preprocess();
+			getCrosstabManager().init(getValue());
+		} else if (pname.equals(JRDesignCrosstab.PROPERTY_HEADER_CELL)) {
 			if (evt.getSource() == getValue()) {
 				if (oldValue != null && newValue == null) {
 					List<INode> child = this.getChildren();

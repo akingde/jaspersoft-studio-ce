@@ -35,12 +35,8 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 
-public class CrosstabPageEditPart extends PageEditPart implements IDatasetDialogSupport {
-
-	@Override
-	protected APageFigure newPageFigure() {
-		return new ContainerPageFigure(true);
-	}
+public class CrosstabPageEditPart extends PageEditPart implements
+		IDatasetDialogSupport {
 
 	@Override
 	protected void setupPageFigure(APageFigure figure2) {

@@ -93,10 +93,12 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav, Giulio Toffoli
  */
-public class BandEditPart extends FigureEditPart implements PropertyChangeListener, IContainerPart, IContainer, IDatasetDialogSupport {
+public class BandEditPart extends FigureEditPart implements PropertyChangeListener, IContainerPart, IContainer,
+		IDatasetDialogSupport {
 
 	private BandPreferenceListener prefChangelistener;
 	private JasperReportsConfiguration jConfig;
+	public static final RGB DEFAULTCOLOR = new RGB(170, 168, 255);
 
 	/*
 	 * Preferences listener for band preferences/properties.
@@ -110,8 +112,6 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 			}
 		}
 	}
-
-	public static final RGB DEFAULTCOLOR = new RGB(170, 168, 255);
 
 	@Override
 	public void activate() {
@@ -335,7 +335,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 					getFeedbackLayer().translateToRelative(rect);
 
 					targetFeedback.setBounds(rect.shrink(0, 1));
-					// Commented for back-compatibility in 3.6. 
+					// Commented for back-compatibility in 3.6.
 					// Replaced with the following line.
 					// targetFeedback.getBounds().setX(hostFigure.getBounds().x);
 					targetFeedback.getBounds().x = hostFigure.getBounds().x;
@@ -461,6 +461,8 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	}
 
 	private void setBandMarginColor(BandFigure bfigure) {
+		if (jConfig == null)
+			jConfig = getModel().getJasperConfiguration();
 		String mcolor = jConfig.getProperty(DesignerPreferencePage.P_CONTAINER_MARGIN_COLOR, "");
 		bfigure.setMarginsColor(SWTResourceManager.getColor(StringConverter.asRGB(mcolor, DEFAULTCOLOR)));
 	}

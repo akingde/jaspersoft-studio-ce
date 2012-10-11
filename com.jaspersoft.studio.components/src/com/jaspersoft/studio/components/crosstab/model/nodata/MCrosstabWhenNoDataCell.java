@@ -59,7 +59,7 @@ public class MCrosstabWhenNoDataCell extends MCell {
 		if (mc != null) {
 			Dimension d = mc.getCrosstabManager().getSize();
 
-			return new Rectangle(0, d.height + 2 * APageFigure.PAGE_BORDER.top,
+			return new Rectangle(0, d.height + 4 * APageFigure.PAGE_BORDER.top,
 					getValue().getWidth() + 2, getValue().getHeight() + 2);
 		}
 		return null;

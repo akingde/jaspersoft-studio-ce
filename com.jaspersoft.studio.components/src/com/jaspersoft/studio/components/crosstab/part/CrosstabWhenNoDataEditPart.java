@@ -42,9 +42,12 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.jface.util.IPropertyChangeListener;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.EmptyCellFigure;
+import com.jaspersoft.studio.components.crosstab.figure.WhenNoDataCellFigure;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.components.crosstab.model.cell.command.CreateElementCommand;
@@ -53,6 +56,8 @@ import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDat
 import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDataCell;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
+import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
+import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
@@ -60,6 +65,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -205,8 +212,8 @@ public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
 		rect.setToolTip(new Label(((ANode) model).getToolTip()));
 
 		Rectangle bounds = ((IGraphicElement) model).getBounds();
-		int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
-		int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
+		int x = bounds.x;
+		int y = bounds.y;
 
 		rect.setLocation(new Point(x, y));
 
@@ -217,7 +224,10 @@ public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
 		else if (getModel() instanceof MCell)
 			((CellFigure) rect).setJRElement((JRDesignCellContents) getModel()
 					.getValue(), dv);
-		rect.setSize(bounds.width, bounds.height);
+		rect.setSize(bounds.width + ReportPageFigure.PAGE_BORDER.left
+				+ ReportPageFigure.PAGE_BORDER.right, bounds.height + 30
+				+ ReportPageFigure.PAGE_BORDER.top
+				+ ReportPageFigure.PAGE_BORDER.bottom);
 		updateRulers();
 
 		if (getSelected() == 1)
@@ -246,4 +256,63 @@ public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
 		return null;
 	}
 
+	private JasperReportsConfiguration jConfig;
+	private CellPreferenceListener prefChangelistener;
+
+	private final class CellPreferenceListener implements
+			IPropertyChangeListener {
+		public void propertyChange(
+				org.eclipse.jface.util.PropertyChangeEvent event) {
+			if (event.getProperty().equals(
+					DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES)) {
+				setBandNameShowing(getFigure());
+			} else if (event.getProperty().equals(
+					DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE))
+				setPrefsBorder(getFigure());
+		}
+	}
+
+	@Override
+	public void activate() {
+		super.activate();
+		prefChangelistener = new CellPreferenceListener();
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+				.addPropertyChangeListener(prefChangelistener);
+	}
+
+	@Override
+	public void deactivate() {
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+				.removePropertyChangeListener(prefChangelistener);
+		super.deactivate();
+	}
+
+	@Override
+	protected IFigure createFigure() {
+		IFigure fig = super.createFigure();
+		if (fig instanceof WhenNoDataCellFigure)
+			setBandNameShowing(fig);
+		return fig;
+	}
+
+	public void setPrefsBorder(IFigure rect) {
+		if (jConfig == null)
+			jConfig = getModel().getJasperConfiguration();
+		String pref = jConfig.getProperty(
+				DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE, "shadow");
+		if (pref.equals("shadow")) //$NON-NLS-1$
+			rect.setBorder(new ShadowBorder());
+		else
+			rect.setBorder(new SimpleShadowBorder());
+	}
+
+	private void setBandNameShowing(IFigure figure) {
+		if (figure instanceof WhenNoDataCellFigure) {
+			if (jConfig == null)
+				jConfig = getModel().getJasperConfiguration();
+			boolean showBandName = jConfig.getPropertyBoolean(
+					DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES, true);
+			((WhenNoDataCellFigure) figure).setShowBandName(showBandName);
+		}
+	}
 }

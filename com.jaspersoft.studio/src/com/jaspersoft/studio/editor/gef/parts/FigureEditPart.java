@@ -25,7 +25,6 @@ import java.beans.PropertyChangeListener;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -49,9 +48,11 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPol
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class FigureEditPart.
@@ -135,9 +136,12 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		rect.repaint();
 	}
 
+	private JasperReportsConfiguration jConfig;
+
 	public void setPrefsBorder(IFigure rect) {
-		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
-				DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null); //$NON-NLS-1$
+		if (jConfig == null)
+			jConfig = ((ANode) getModel()).getJasperConfiguration();
+		String pref = jConfig.getProperty(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
 
 		if (pref.equals("rectangle")) //$NON-NLS-1$
 			rect.setBorder(new ElementLineBorder(ColorConstants.black));
