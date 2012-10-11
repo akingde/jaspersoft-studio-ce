@@ -165,7 +165,8 @@ public class CrosstabManager {
 			for (int i = cells.length - 1; i >= 0; i--) {
 				for (int j = cells[i].length - 1; j >= 0; j--) {
 					JRDesignCrosstabCell jrCrosstabCell = (JRDesignCrosstabCell) cells[i][j];
-					if (jrCrosstabCell.getContents() == cell) {
+					if (jrCrosstabCell != null
+							&& jrCrosstabCell.getContents() == cell) {
 						jrCrosstabCell.setWidth(width);
 
 						for (int k = 0; k < cells.length; k++) {
@@ -397,6 +398,8 @@ public class CrosstabManager {
 
 	public Dimension getCellPackSize(CrosstabCell cc) {
 		cc = matrix.getCrosstabCell(cc);
+		if (cc == null)
+			return null;
 		Guide g = cc.getEast();
 		int w = -g.getY();
 		for (CrosstabCell c : g.getPrev()) {

@@ -21,18 +21,45 @@ package com.jaspersoft.studio.components.crosstab.part;
 
 import java.util.List;
 
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.handles.HandleBounds;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.CreateRequest;
 
+import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.EmptyCellFigure;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.components.crosstab.model.cell.command.CreateElementCommand;
+import com.jaspersoft.studio.components.crosstab.model.cell.command.OrphanElementCommand;
 import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoData;
+import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDataCell;
+import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -44,17 +71,138 @@ import com.jaspersoft.studio.model.IGraphicElement;
  * 
  */
 public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
+	 */
+	@Override
+	protected void createEditPolicies() {
+		if (getModel() instanceof MCrosstabWhenNoData)
+			super.createEditPolicies();
+		else {
+			installEditPolicy(EditPolicy.COMPONENT_ROLE,
+					new ElementEditPolicy());
+			installEditPolicy(EditPolicy.LAYOUT_ROLE,
+					new PageLayoutEditPolicy() {
+
+						private RectangleFigure targetFeedback;
+
+						protected void eraseLayoutTargetFeedback(Request request) {
+							super.eraseLayoutTargetFeedback(request);
+							if (targetFeedback != null) {
+								removeFeedback(targetFeedback);
+								targetFeedback = null;
+							}
+						}
+
+						protected IFigure getLayoutTargetFeedback(
+								Request request) {
+							if (request instanceof ChangeBoundsRequest) {
+								ChangeBoundsRequest cbr = (ChangeBoundsRequest) request;
+								List<EditPart> lst = cbr.getEditParts();
+								for (EditPart ep : lst) {
+									if (((ANode) ep.getModel()).getParent() == getModel())
+										return null;
+									if (ep instanceof CrosstabCellEditPart)
+										return null;
+								}
+							} else if (request instanceof CreateRequest
+									&& !(getModel() instanceof MCell))
+								return null;
+							if (targetFeedback == null) {
+								targetFeedback = new RectangleFigure();
+								targetFeedback.setFill(false);
+
+								IFigure hostFigure = getHostFigure();
+								Rectangle bounds = hostFigure.getBounds();
+								if (hostFigure instanceof HandleBounds)
+									bounds = ((HandleBounds) hostFigure)
+											.getHandleBounds();
+								Rectangle rect = new PrecisionRectangle(bounds);
+								getHostFigure().translateToAbsolute(rect);
+								getFeedbackLayer().translateToRelative(rect);
+
+								targetFeedback.setBounds(rect.shrink(2, 2));
+								targetFeedback.setBorder(new LineBorder(
+										ColorConstants.lightBlue, 3));
+								addFeedback(targetFeedback);
+							}
+							return targetFeedback;
+						}
+
+						protected void showLayoutTargetFeedback(Request request) {
+							super.showLayoutTargetFeedback(request);
+							getLayoutTargetFeedback(request);
+						}
+
+						protected Command getCreateCommand(ANode parent,
+								Object obj, Rectangle constraint, int index) {
+							if (parent instanceof MPage)
+								parent = getModel();
+							Rectangle b = ((MCell) getModel()).getBounds();
+							int x = constraint.x - b.x
+									- ReportPageFigure.PAGE_BORDER.left;
+							int y = constraint.y - b.y
+									- ReportPageFigure.PAGE_BORDER.top;
+							constraint = new Rectangle(x, y, constraint.width,
+									constraint.height);
+
+							return super.getCreateCommand(parent, obj,
+									constraint, index);
+						}
+
+						@Override
+						protected Command createAddCommand(EditPart child,
+								Object constraint) {
+							Rectangle rect = (Rectangle) constraint;
+							if (child.getModel() instanceof MGraphicElement) {
+								MGraphicElement cmodel = (MGraphicElement) child
+										.getModel();
+								MCell cparent = (MCell) cmodel.getParent();
+								if (cparent == getModel()) {
+									SetPageConstraintCommand cmd = new SetPageConstraintCommand();
+									MGraphicElement model = (MGraphicElement) child
+											.getModel();
+									Rectangle r = model.getBounds();
+
+									JRDesignElement jde = (JRDesignElement) model
+											.getValue();
+									int x = r.x + rect.x - jde.getX() + 1;
+									int y = r.y + rect.y - jde.getY() + 1;
+									rect.setLocation(x, y);
+									cmd.setContext(getModel(),
+											(ANode) child.getModel(), rect);
+
+									return cmd;
+								} else {
+									CompoundCommand c = new CompoundCommand();
+
+									c.add(new OrphanElementCommand(cparent,
+											cmodel));
+									c.add(new CreateElementCommand(
+											(MCell) getModel(), cmodel, rect,
+											-1));
+									return c;
+								}
+							}
+							return null;
+						}
+
+					});
+		}
+	}
 
 	@Override
-	public MCrosstabWhenNoData getModel() {
-		return (MCrosstabWhenNoData) super.getModel();
+	public EditPolicy getEditPolicy() {
+		return null;
 	}
 
 	@Override
 	protected void setupFigure(IFigure rect) {
 		updateContainerSize();
-		MCrosstabWhenNoData model = getModel();
-		rect.setToolTip(new Label(model.getToolTip()));
+		IGraphicElement model = (IGraphicElement) getModel();
+		rect.setToolTip(new Label(((ANode) model).getToolTip()));
 
 		Rectangle bounds = ((IGraphicElement) model).getBounds();
 		int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
@@ -62,8 +210,13 @@ public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
 
 		rect.setLocation(new Point(x, y));
 
-		((EmptyCellFigure) rect).setJRElement(null, getDrawVisitor(),
-				new Dimension(bounds.width, bounds.height));
+		DrawVisitor dv = getDrawVisitor();
+		if (rect instanceof EmptyCellFigure)
+			((EmptyCellFigure) rect).setJRElement(null, dv, new Dimension(
+					bounds.width, bounds.height));
+		else if (getModel() instanceof MCell)
+			((CellFigure) rect).setJRElement((JRDesignCellContents) getModel()
+					.getValue(), dv);
 		rect.setSize(bounds.width, bounds.height);
 		updateRulers();
 
@@ -86,7 +239,11 @@ public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
 
 	@Override
 	protected MCrosstab getCrosstab() {
-		return getModel().getCrosstab();
+		if (getModel() instanceof MCrosstabWhenNoDataCell)
+			return ((MCrosstabWhenNoDataCell) getModel()).getCrosstab();
+		if (getModel() instanceof MCrosstabWhenNoData)
+			return ((MCrosstabWhenNoData) getModel()).getCrosstab();
+		return null;
 	}
 
 }

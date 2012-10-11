@@ -55,7 +55,9 @@ public class CrosstabMatrix {
 
 	public Rectangle getBounds(CrosstabCell cc) {
 		Rectangle r = map.get(cc);
-		return r.getCopy();
+		if (r != null)
+			return r.getCopy();
+		return null;
 	}
 
 	private void fixCells() {

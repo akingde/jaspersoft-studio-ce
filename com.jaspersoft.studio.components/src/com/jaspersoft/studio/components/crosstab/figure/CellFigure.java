@@ -62,7 +62,5 @@ public class CellFigure extends FrameFigure {
 
 	@Override
 	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-
 	}
-
 }

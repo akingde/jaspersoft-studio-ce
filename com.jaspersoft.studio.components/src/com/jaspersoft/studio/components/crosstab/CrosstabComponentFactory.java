@@ -56,6 +56,7 @@ import com.jaspersoft.studio.components.crosstab.editor.CrosstabEditor;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.CrosstabFigure;
 import com.jaspersoft.studio.components.crosstab.figure.EmptyCellFigure;
+import com.jaspersoft.studio.components.crosstab.figure.WhenNoDataCellFigure;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
@@ -646,6 +647,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		if (node instanceof MCrosstabHeader
 				|| node instanceof MCrosstabWhenNoData)
 			return new EmptyCellFigure();
+		if (node instanceof MCrosstabWhenNoDataCell)
+			return new WhenNoDataCellFigure();
 		if (node instanceof MCell)
 			return new CellFigure();
 		return null;
@@ -663,6 +666,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		}
 		if (model instanceof MCrosstab)
 			return new CrosstabEditPart();
+		if (model instanceof MCrosstabWhenNoDataCell)
+			return new CrosstabWhenNoDataEditPart();
 		if (model instanceof MCell)
 			return new CrosstabCellEditPart();
 		if (model instanceof MCrosstabHeader)
@@ -700,7 +705,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			MCell model = (MCell) node;
 			Dimension d = model.getMCrosstab().getCrosstabManager()
 					.getCellPackSize(new CrosstabCell(model.getValue()));
-			if (d.height > 0 && d.width > 0) {
+			if (d != null && d.height > 0 && d.width > 0) {
 				CompoundCommand c = new CompoundCommand("Resize to container");
 
 				SetValueCommand cmd = new SetValueCommand();
