@@ -119,6 +119,9 @@
             icon="icons/data_source.png"
             id="com.jaspersoft.studio.data.DataAdapterEditorPart"
             name="DataAdapter Editor">
+         <contentTypeBinding
+               contentTypeId="com.jaspersoft.studio.data.dataAdapter">
+         </contentTypeBinding>
       </editor>
    </extension>
    <extension
@@ -1306,5 +1309,15 @@
                 visible="true">
           </separator>
        </menuContribution>
+    </extension>
+    <extension
+          point="org.eclipse.core.contenttype.contentTypes">
+       <content-type
+             describer="com.jaspersoft.studio.data.DataAdapterDescriber"
+             file-extensions="xml"
+             id="com.jaspersoft.studio.data.dataAdapter"
+             name="DataAdapter File"
+             priority="high">
+       </content-type>
     </extension>
 </plugin>

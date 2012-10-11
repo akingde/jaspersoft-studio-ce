@@ -33,28 +33,13 @@ public class WhenNoDataCellFigure extends CellFigure {
 		super();
 	}
 
-	// @Override
-	// public void setBorder(Border border) {
-	// super.setBorder(new ShadowBorder());
-	// }
-	//
-	// protected void paintBorder(Graphics graphics) {
-	// if (getBorder() != null)
-	// getBorder().paint(this, graphics, getBorder().getInsets(this));
-	// }
-
 	@Override
 	public void paint(Graphics graphics) {
 		Rectangle b = (this instanceof HandleBounds) ? ((HandleBounds) this)
 				.getHandleBounds() : this.getBounds();
-		// graphics.translate(b.x, b.y);
 		graphics.setBackgroundColor(ColorConstants.white);
 		graphics.fillRectangle(b.x, b.y, b.width, b.height);
 
-		// graphics.setForegroundColor(ColorConstants.blue);
-		// graphics.setBackgroundColor(ColorConstants.lightGray);
-		// graphics.setLineWidthFloat(0.1f);
-		// graphics.drawRectangle(b.x, b.y, b.width, b.height);
 		super.paint(graphics);
 		if (getParent() instanceof APageFigure) {
 			GridLayer grid = ((APageFigure) getParent()).getGrid();
