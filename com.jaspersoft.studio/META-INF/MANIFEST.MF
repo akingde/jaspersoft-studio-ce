@@ -176,6 +176,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    net.sf.jasperreports.engine",
  com.jaspersoft.studio.editor.gef.figures.borders;uses:="org.eclipse.draw2d.geometry,org.eclipse.swt.graphics,org.eclipse.draw2d",
  com.jaspersoft.studio.editor.gef.figures.layers;uses:="org.eclipse.gef.editparts,org.eclipse.draw2d",
+ com.jaspersoft.studio.editor.gef.figures.svg,
  com.jaspersoft.studio.editor.gef.figures.util,
  com.jaspersoft.studio.editor.gef.parts;
   uses:="net.sf.jasperreports.engine.design,

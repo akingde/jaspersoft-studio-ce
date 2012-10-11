@@ -43,9 +43,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
-import com.jaspersoft.studio.utils.ResourceManager;
-import com.jaspersoft.studio.utils.SWTImageEffects;
-import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
+import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 public class ChartTypeWizardPage extends JSSWizardPage {
@@ -341,19 +339,8 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 	}
 	
 	private static void setGallyeryItemImageInfo(GalleryItem item, String imagePath){
-		Image selectedImg=selectedImages.get(imagePath);
-		Image standardImg=standardImages.get(imagePath);
-		if(selectedImg==null || standardImg==null){
-			Image itemImage = Activator.getImage(imagePath);
-			// Add viewer required effects to the images shown...
-			selectedImg =new Image(itemImage.getDevice(), SWTImageEffects.extendArea(itemImage.getImageData(), 20, null));
-			standardImg=new Image(itemImage.getDevice(), Glow.glow(itemImage.getImageData(), ResourceManager.getColor(SWT.COLOR_GRAY), 20, 0, 255));
-			// Cache images
-			standardImages.put(imagePath, standardImg);
-			selectedImages.put(imagePath, selectedImg);
-		}
-		item.setSelectedImage(selectedImg);
-		item.setStandardImage(standardImg);
-		item.setImage(standardImg);
+		UIUtils.setGallyeryItemImageInfo(
+				item, Activator.PLUGIN_ID, 
+				imagePath, selectedImages, standardImages);
 	}
 }

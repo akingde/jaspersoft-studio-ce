@@ -23,6 +23,8 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
@@ -198,5 +200,15 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 		Assert.isNotNull(path);
 		return FileLocator.toFileURL(getBundle().getEntry(path)).getPath();
 	}
+	
+	public void log(int severity, String message, Throwable t) {
+		IStatus status = new Status(severity, PLUGIN_ID, 0, message, t);
+		getLog().log(status);
+	}
+
+	public void logError(String message, Throwable t) {
+		log(IStatus.ERROR, message, t);
+	}
+
 
 }

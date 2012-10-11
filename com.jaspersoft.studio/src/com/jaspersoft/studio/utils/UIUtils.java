@@ -14,6 +14,7 @@ package com.jaspersoft.studio.utils;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.ExceptionDetailsErrorDialog;
 
@@ -29,6 +30,7 @@ import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -36,6 +38,7 @@ import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
@@ -55,6 +58,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
+import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
 
 public class UIUtils {
 	/** ID for the "Properties View" */
@@ -393,5 +397,38 @@ public class UIUtils {
 			return false;
 		}
 	}
+	
+	/**
+	 * Customizes a {@link GalleryItem} in order to enrich with a "standard" image plus
+	 * a "selected" image with a custom shadow.
+	 * <p>
+	 * 
+	 * Cache maps are used for performance purposes.
+	 * 
+	 * @param item the gallery item to modify
+	 * @param pluginID the ID of the plugin, where the image is located
+	 * @param imagePath the plugin-relative path of the image
+	 * @param selectedImagesCache a cache of selected images
+	 * @param standardImagesCache a cache of standard images
+	 */
+	public static void setGallyeryItemImageInfo(
+			GalleryItem item, String pluginID, String imagePath,
+			Map<String, Image> selectedImagesCache, Map<String, Image> standardImagesCache){
+		Image selectedImg=selectedImagesCache.get(imagePath);
+		Image standardImg=standardImagesCache.get(imagePath);
+		if(selectedImg==null || standardImg==null){
+			Image itemImage = ResourceManager.getPluginImage(pluginID, imagePath);
+			// Add viewer required effects to the images shown...
+			selectedImg =new Image(itemImage.getDevice(), SWTImageEffects.extendArea(itemImage.getImageData(), 20, null));
+			standardImg=new Image(itemImage.getDevice(), Glow.glow(itemImage.getImageData(), ResourceManager.getColor(SWT.COLOR_GRAY), 20, 0, 255));
+			// Cache images
+			standardImagesCache.put(imagePath, standardImg);
+			selectedImagesCache.put(imagePath, selectedImg);
+		}
+		item.setSelectedImage(selectedImg);
+		item.setStandardImage(standardImg);
+		item.setImage(standardImg);
+	}
+	
 
 }
