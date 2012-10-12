@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.editor.preview.view.report.system;
 
+import net.sf.jasperreports.engine.JasperPrint;
+
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -40,7 +42,7 @@ public class PdfViewer extends ASystemViewer {
 	}
 
 	@Override
-	protected String getExtension() {
+	protected String getExtension(JasperPrint jrprint) {
 		return ".pdf";
 	}
 

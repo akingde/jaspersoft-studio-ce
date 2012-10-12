@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.editor.preview.view.report.system;
 
+import net.sf.jasperreports.engine.JasperPrint;
+
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
@@ -38,7 +40,7 @@ public class OdsViewer extends ASystemViewer {
 	}
 
 	@Override
-	protected String getExtension() {
+	protected String getExtension(JasperPrint jrprint) {
 		return ".ods";
 	}
 

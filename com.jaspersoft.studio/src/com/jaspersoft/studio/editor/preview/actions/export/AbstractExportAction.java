@@ -58,9 +58,16 @@ public abstract class AbstractExportAction extends AReportViewerAction {
 		this.jContext = jContext;
 	}
 
+	protected void setFileExtensions() {
+
+	}
+
 	@Override
 	public void run() {
 		FileDialog dialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SINGLE | SWT.SAVE);
+
+		setFileExtensions();
+
 		if (filterNames != null)
 			dialog.setFilterNames(filterNames);
 		if (fileExtensions != null)

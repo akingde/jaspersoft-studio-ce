@@ -32,7 +32,7 @@ import com.jaspersoft.studio.editor.gef.util.FigureTextWriter;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 public class WhenNoDataCellFigure extends CellFigure {
-	private static final String HINT = "When no data cell is drawed if dataset for crosstab is empty.";
+	private static final String HINT = "If the crosstab will not contain any data, this cell will be printed instead.";
 	private FigureTextWriter twriter = new FigureTextWriter();
 
 	public WhenNoDataCellFigure() {

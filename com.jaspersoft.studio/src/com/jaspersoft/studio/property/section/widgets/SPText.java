@@ -56,7 +56,7 @@ public class SPText extends AHistorySPropertyWidget {
 	}
 
 	protected void createComponent(Composite parent) {
-		ftext = section.getWidgetFactory().createText(parent, "", SWT.LEFT);
+		ftext = section.getWidgetFactory().createText(parent, "", SWT.LEFT | SWT.BORDER | SWT.FLAT);
 		autocomplete = new AutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
 		ftext.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {

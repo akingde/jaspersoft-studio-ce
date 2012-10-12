@@ -21,6 +21,7 @@
 package com.jaspersoft.studio.editor.preview.actions.export;
 
 import net.sf.jasperreports.engine.JRAbstractExporter;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 
@@ -36,9 +37,21 @@ public class ExportAsXlsxAction extends AbstractExportAction {
 		setText(Messages.ExportAsXlsxAction_title);
 		setToolTipText(Messages.ExportAsXlsxAction_tooltip);
 
-		setFileExtensions(new String[] { "*.xlsx" }); //$NON-NLS-1$
-		setFilterNames(new String[] { Messages.ExportAsXlsxAction_filternames });
+		setFileExtensions(new String[] { "*.xlsx;*.xlsm" }); //$NON-NLS-1$
+		setFilterNames(new String[] { "XLSx (*.xlsx)", "XLSm (*.xlsm)" });
 		setDefaultFileExtension("xlsx"); //$NON-NLS-1$
+	}
+
+	@Override
+	protected void setFileExtensions() {
+		JasperPrint jrPrint = getReportViewer().getDocument();
+		String ext = ".xlsx";
+		if (jrPrint.getProperty(JRXlsxExporter.PROPERTY_MACRO_TEMPLATE) != null)
+			ext = ".xlsm";
+
+		setDefaultFileExtension(ext);
+		setFilterNames(new String[] { ext.toUpperCase() + " (*." + ext + ")" });
+		setFileExtensions(new String[] { "*" + ext });
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public abstract class ASystemViewer extends SWTViewer {
 
 	protected abstract AbstractExportAction createExporter(ReportViewer rptv);
 
-	protected abstract String getExtension();
+	protected abstract String getExtension(JasperPrint jrprint);
 
 	@Override
 	public void setJRPRint(Statistics stats, JasperPrint jrprint) {
@@ -50,20 +50,27 @@ public abstract class ASystemViewer extends SWTViewer {
 		super.setJRPRint(stats, jrprint);
 		if (this.jrprint != null && !same) {
 			try {
-				File tmpFile = File.createTempFile("report", getExtension());
+				String ext = getExtension(jrprint);
+				File tmpFile = File.createTempFile("report", ext);
 				AbstractExportAction exp = createExporter(rptviewer);
 				stats.startCount(ReportControler.ST_EXPORTTIME);
 				exp.export(tmpFile);
 				stats.endCount(ReportControler.ST_EXPORTTIME);
 				stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
 
-				Program p = Program.findProgram(getExtension());
+				Program p = Program.findProgram(ext);
 				if (p != null)
 					p.execute(tmpFile.getAbsolutePath());
+				else
+					// TODO here we can propose a better dialog, like open with...(create association, etc.)
+					UIUtils
+							.showWarning(String
+									.format(
+											"No file association defined in your sistem for: %s\nFile is located at: \n\n%s\n\nPlease open it manually or fix file association and retry.",
+											ext, tmpFile.getAbsolutePath()));
 			} catch (Exception e) {
 				UIUtils.showError(e);
 			}
 		}
 	}
-
 }
