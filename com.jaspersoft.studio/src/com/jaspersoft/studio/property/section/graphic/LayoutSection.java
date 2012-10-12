@@ -65,6 +65,9 @@ public class LayoutSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		super.createControls(parent, aTabbedPropertySheetPage);
 
+		if (getElement().getValue() == null)
+			return;
+
 		parent = getWidgetFactory().createSection(parent, Messages.LayoutSection_sectiontitle, false, 2);
 
 		getWidgetFactory().createCLabel(parent, Messages.LayoutSection_propertylable, SWT.RIGHT);
@@ -100,7 +103,7 @@ public class LayoutSection extends AbstractSection {
 						d = ((IGraphicElementContainer) pnode).getSize();
 					if (destValue instanceof JRCommonElement) {
 						JRCommonElement jce = (JRCommonElement) destValue;
-						// Commented for back-compatibility in 3.6. 
+						// Commented for back-compatibility in 3.6.
 						// Replaced with the following line.
 						// d.setSize(jce.getWidth(), jce.getHeight());
 						d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
@@ -108,7 +111,7 @@ public class LayoutSection extends AbstractSection {
 					if (destValue instanceof JRDesignBand) {
 						JasperDesign jDesign = pnode.getJasperDesign();
 						int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
-						// Commented for back-compatibility in 3.6. 
+						// Commented for back-compatibility in 3.6.
 						// Replaced with the following line.
 						// d.setSize(w, ((JRDesignBand) destValue).getHeight());
 						d.setSize(new Dimension(w, ((JRDesignBand) destValue).getHeight()));

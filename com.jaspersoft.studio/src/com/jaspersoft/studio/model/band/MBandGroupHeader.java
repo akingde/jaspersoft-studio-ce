@@ -33,6 +33,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.group.MGroup;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 
@@ -82,6 +83,8 @@ public class MBandGroupHeader extends MBand {
 	public MBandGroupHeader(ANode parent, JRDesignGroup jrGroup, JRBand jrband, int index) {
 		super(parent, jrband, BandTypeEnum.GROUP_HEADER, index);
 		this.jrGroup = jrGroup;
+		mGroup = new MGroup(null, jrGroup, -1);
+		setChildListener(mGroup);
 		mGroupBand = new MGroupBand(jrGroup);
 	}
 
@@ -92,6 +95,12 @@ public class MBandGroupHeader extends MBand {
 	 */
 	public JRDesignGroup getJrGroup() {
 		return jrGroup;
+	}
+
+	private MGroup mGroup;
+
+	public MGroup getMGroup() {
+		return mGroup;
 	}
 
 	/*

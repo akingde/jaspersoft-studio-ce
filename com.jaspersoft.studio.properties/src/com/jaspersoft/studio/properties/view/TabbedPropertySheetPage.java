@@ -374,13 +374,13 @@ public class TabbedPropertySheetPage extends Page implements
 		tabbedPropertyViewer
 				.addSelectionChangedListener(new SelectionChangedListener());
 
-//		tabbedPropertyComposite.getScrolledComposite().addControlListener(
-//				new ControlAdapter() {
-//
-//					public void controlResized(ControlEvent e) {
-//						resizeScrolledComposite();
-//					}
-//				});
+		// tabbedPropertyComposite.getScrolledComposite().addControlListener(
+		// new ControlAdapter() {
+		//
+		// public void controlResized(ControlEvent e) {
+		// resizeScrolledComposite();
+		// }
+		// });
 
 		/**
 		 * Add a part activation listener.
@@ -393,7 +393,7 @@ public class TabbedPropertySheetPage extends Page implements
 		 * Add a label provider change listener.
 		 */
 		if (hasTitleBar) {
-			if(registry == null)
+			if (registry == null)
 				initContributor(currentContributorId);
 			registry.getLabelProvider().addListener(this);
 		}
@@ -936,7 +936,7 @@ public class TabbedPropertySheetPage extends Page implements
 			 * selection has the same contributor id as current, so leave
 			 * existing registry.
 			 */
-			return;
+//			return;
 		}
 
 		/**

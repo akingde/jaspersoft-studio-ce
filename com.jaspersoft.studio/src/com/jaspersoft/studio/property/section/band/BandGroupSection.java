@@ -22,7 +22,6 @@ package com.jaspersoft.studio.property.section.band;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -37,7 +36,7 @@ public class BandGroupSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		if (getElement().getValue() != null) {
-			parent.setLayout(new GridLayout(2, false));
+			parent = getWidgetFactory().createSection(parent, "Group Band Properties", false, 2);
 
 			createWidget4Property(parent, JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE);
 

@@ -21,7 +21,6 @@ package com.jaspersoft.studio.property.section.band;
 
 import net.sf.jasperreports.engine.design.JRDesignBand;
 
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -40,13 +39,14 @@ public class BandSection extends AbstractSection {
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
+		if (getElement().getValue() != null) {
+			parent = getWidgetFactory().createSection(parent, "Band Properties", false, 2);
 
-		parent.setLayout(new GridLayout(2, false));
+			createWidget4Property(parent, JRDesignBand.PROPERTY_HEIGHT);
 
-		createWidget4Property(parent, JRDesignBand.PROPERTY_HEIGHT);
+			createWidget4Property(parent, JRDesignBand.PROPERTY_SPLIT_TYPE);
 
-		createWidget4Property(parent, JRDesignBand.PROPERTY_SPLIT_TYPE);
-
-		createWidget4Property(parent, JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION);
+			createWidget4Property(parent, JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION);
+		}
 	}
 }

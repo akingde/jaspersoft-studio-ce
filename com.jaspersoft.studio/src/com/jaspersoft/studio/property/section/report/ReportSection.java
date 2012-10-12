@@ -101,11 +101,6 @@ public class ReportSection extends AbstractSection {
 		if (mDataset != null) {
 			gd = new GridData();
 			gd.horizontalSpan = 2;
-			// gd = new GridData();
-			// gd.horizontalSpan = 3;
-			// Composite rowComposite = new Composite(group, SWT.NONE);
-			// rowComposite.setLayout(new RowLayout());
-			// rowComposite.setLayoutData(gd);
 			createWidget4Property(mDataset, group, JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, true).getControl()
 					.setLayoutData(gd);
 			createWidget4Property(mDataset, group, JRDesignDataset.PROPERTY_SCRIPTLET_CLASS, true);

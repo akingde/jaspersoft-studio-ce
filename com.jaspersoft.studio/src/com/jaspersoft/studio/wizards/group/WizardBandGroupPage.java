@@ -211,6 +211,7 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 		Composite expCompo = new Composite(composite, SWT.NONE);
 		layout = new GridLayout();
 		layout.numColumns = 2;
+		layout.marginWidth = 0;
 		expCompo.setLayout(layout);
 		gd = new GridData(GridData.FILL_BOTH);
 		// gd.horizontalSpan = 2;

@@ -1,18 +1,13 @@
 /*******************************************************************************
- * ---------------------------------------------------------------------
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com.
+ * --------------------------------------------------------------------- Copyright (C) 2005 - 2012 Jaspersoft
+ * Corporation. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  * ---------------------------------------------------------------------
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
@@ -32,6 +27,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MQuery;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
@@ -39,8 +35,9 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 
 /**
  * A button that when clicked open the edit query dialog
+ * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class SPQueryButton extends ASPropertyWidget {
 
@@ -48,36 +45,41 @@ public class SPQueryButton extends ASPropertyWidget {
 	 * The button control
 	 */
 	private Button editQueryButton;
-	
+
 	/**
 	 * The query of the report
 	 */
 	private MQuery mquery;
-	
+
 	/**
 	 * The main dataset of the report
 	 */
 	private MDataset mdataset;
-	
+
 	/**
 	 * 
 	 * @param parent
 	 * @param section
 	 * @param pDescriptor
-	 * @param buttonText text on the button
+	 * @param buttonText
+	 *          text on the button
 	 */
 	public SPQueryButton(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, String buttonText) {
 		super(parent, section, pDescriptor);
 		createButton(parent, buttonText);
 	}
-	
+
 	@Override
-	protected void createComponent(Composite parent) {}
-	
+	protected void createComponent(Composite parent) {
+	}
+
 	/**
 	 * Build the button
-	 * @param parent composite where is placed
-	 * @param buttonText text on the button
+	 * 
+	 * @param parent
+	 *          composite where is placed
+	 * @param buttonText
+	 *          text on the button
 	 */
 	protected void createButton(Composite parent, String buttonText) {
 		editQueryButton = section.getWidgetFactory().createButton(parent, buttonText, SWT.PUSH);
@@ -86,7 +88,7 @@ public class SPQueryButton extends ASPropertyWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				PatternEditor wizard = new PatternEditor();
-				wizard.setValue( mquery.getPropertyValue(JRDesignQuery.PROPERTY_TEXT).toString());
+				wizard.setValue(mquery.getPropertyValue(JRDesignQuery.PROPERTY_TEXT).toString());
 				DatasetDialog dlg = new DatasetDialog(editQueryButton.getShell(), mdataset, mquery.getJasperConfiguration());
 				if (dlg.open() == Window.OK)
 					section.getEditDomain().getCommandStack().execute(dlg.getCommand());
@@ -96,7 +98,10 @@ public class SPQueryButton extends ASPropertyWidget {
 
 	@Override
 	public void setData(APropertyNode pnode, Object value) {
-		mdataset = (MDataset) pnode.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+		if (pnode instanceof MDataset)
+			mdataset = (MDataset) pnode;
+		else if (pnode instanceof MReport)
+			mdataset = (MDataset) pnode.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
 		mquery = (MQuery) mdataset.getPropertyValue(JRDesignDataset.PROPERTY_QUERY);
 	}
 

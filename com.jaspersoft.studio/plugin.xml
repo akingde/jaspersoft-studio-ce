@@ -1112,6 +1112,14 @@
                   type="com.jaspersoft.studio.model.IContainerLayout">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.GroupSection"
+               id="com.jaspersoft.studio.property.section.obj.GroupSectionBand"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.band.MBandGroupHeader">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension
