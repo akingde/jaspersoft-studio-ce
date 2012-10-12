@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
@@ -138,7 +138,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, Messages.common_name);
+		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MGroup_name_description);
 		desc.add(nameD);
 

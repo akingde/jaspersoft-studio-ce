@@ -614,6 +614,12 @@
                image="icons/resources/dataset-16.png"
                label="Hyperlink">
          </propertyTab>
+         <propertyTab
+               category="element"
+               id="com.jaspersoft.studio.editor.section.GROUP"
+               image="icons/resources/groups-16.png"
+               label="Group">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -1074,7 +1080,7 @@
          <propertySection
                class="com.jaspersoft.studio.property.section.obj.GroupSection"
                id="com.jaspersoft.studio.property.section.obj.GroupSection"
-               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+               tab="com.jaspersoft.studio.editor.section.GROUP">
             <input
                   type="com.jaspersoft.studio.model.group.MGroup">
             </input>

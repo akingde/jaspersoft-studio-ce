@@ -64,68 +64,62 @@ import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 /**
- * This is the first page of a typical wizard to build a new dataset, and it asks
- * for a name and for the method to create the dataset (i.e. by using a data adapter
- * or just create an empty dataset).
+ * This is the first page of a typical wizard to build a new dataset, and it asks for a name and for the method to
+ * create the dataset (i.e. by using a data adapter or just create an empty dataset).
  * 
  * The method set the settings property {@link DatasetWizard.DATASET_NAME DATASET_NAME}
  * 
- * The wizard that uses this page should check if the user has selected to create an empty dataset
- * or a new one in order to provide correct feedback on the canFinish method.
+ * The wizard that uses this page should check if the user has selected to create an empty dataset or a new one in order
+ * to provide correct feedback on the canFinish method.
  * 
  * @author gtoffoli
- *
+ * 
  */
 public class WizardDatasetNewPage extends JSSWizardPage {
-	
-	
+
 	/**
 	 * Key used to store the name of the new dataset
 	 */
 	public static final String DATASET_NAME = "wizard_dataset_name"; //$NON-NLS-1$
-	
-	
+
 	/**
-	 * Key used to store a boolean value which says if the user decided to use an empty 
-	 * dataset or not
+	 * Key used to store a boolean value which says if the user decided to use an empty dataset or not
 	 */
 	public static final String DATASET_EMPTY = "wizard_dataset_empty"; //$NON-NLS-1$
-	
+
 	private boolean emptyDataset = false;
-	
+
 	private Text dsname;
 
-//	public void setDataSet(MDataset dataset) {
-//		this.dataset = dataset;
-//		JRDesignDataset ct = (JRDesignDataset) dataset.getValue();
-//		if (ct == null)
-//			dataset.setValue(new JRDesignDataset(false));
-//	}
+	// public void setDataSet(MDataset dataset) {
+	// this.dataset = dataset;
+	// JRDesignDataset ct = (JRDesignDataset) dataset.getValue();
+	// if (ct == null)
+	// dataset.setValue(new JRDesignDataset(false));
+	// }
 
-//	public MDataset getDataSet() {
-//		return dataset;
-//	}
+	// public MDataset getDataSet() {
+	// return dataset;
+	// }
 
-	
 	/**
 	 * Look for a JasperDesign available in the JasperReports configuration (if available)
 	 * 
 	 * 
 	 * @return the JasperDesign being edited
 	 */
-	public JasperDesign getJasperDesign()
-	{
+	public JasperDesign getJasperDesign() {
 		// Look for a jasperdesign inside the wizard JasperReports configuration...
-		JasperReportsConfiguration config = (JasperReportsConfiguration) getSettings().get( JSSWizard.JASPERREPORTS_CONFIGURATION );
-		
-		if (config != null)
-		{
+		JasperReportsConfiguration config = (JasperReportsConfiguration) getSettings().get(
+				JSSWizard.JASPERREPORTS_CONFIGURATION);
+
+		if (config != null) {
 			return config.getJasperDesign();
 		}
-		
+
 		return null;
 	}
-	
+
 	public boolean isEmptyDataset() {
 		return emptyDataset;
 	}
@@ -147,45 +141,43 @@ public class WizardDatasetNewPage extends JSSWizardPage {
 
 		Label lbl = new Label(composite, SWT.NONE);
 		FormData fd_lbl = new FormData();
-		fd_lbl.top = new FormAttachment(0, 7);
 		fd_lbl.left = new FormAttachment(0, 5);
 		lbl.setLayoutData(fd_lbl);
 		lbl.setText(Messages.WizardDatasetNewPage_dataset_name + ":"); //$NON-NLS-1$
 
 		dsname = new Text(composite, SWT.BORDER);
 		FormData fd_dsname = new FormData();
-		fd_dsname.right = new FormAttachment(0, 585);
-		fd_dsname.top = new FormAttachment(0, 5);
-		fd_dsname.left = new FormAttachment(0, 98);
+		fd_dsname.top = new FormAttachment(0, 0);
+		fd_dsname.right = new FormAttachment(100, 0);
+		fd_lbl.bottom = new FormAttachment(dsname, 0, SWT.BOTTOM);
+		fd_dsname.left = new FormAttachment(lbl, 5);
 		dsname.setLayoutData(fd_dsname);
-		
-		
-//		if (dataset != null) {
-//			String str = (String) dataset.getPropertyValue(JRDesignDataset.PROPERTY_NAME);
-//			dsname.setText(str);
-//		} else
-		
+
+		// if (dataset != null) {
+		// String str = (String) dataset.getPropertyValue(JRDesignDataset.PROPERTY_NAME);
+		// dsname.setText(str);
+		// } else
+
 		// Look for a default dataset name...
 		JasperDesign jd = getJasperDesign();
-		if (jd != null)
-		{
+		if (jd != null) {
 			dsname.setText(ModelUtils.getDefaultName(jd.getDatasetMap(), "Dataset")); //$NON-NLS-1$
 		}
-		
+
 		dsname.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
 				String dstext = dsname.getText();
-				
+
 				JasperDesign jd = getJasperDesign();
-				
+
 				if (dstext == null || dstext.trim().equals("")) {//$NON-NLS-1$
 					setErrorMessage(Messages.WizardDatasetNewPage_validation_not_null);
 					setPageComplete(false);
 				} else if (jd != null && jd.getDatasetMap().get(dstext) != null) {
-					
-					MessageFormat.format( Messages.WizardDatasetNewPage_name_already_exists, new Object[]{dstext});
-					
+
+					MessageFormat.format(Messages.WizardDatasetNewPage_name_already_exists, new Object[] { dstext });
+
 					setErrorMessage(Messages.WizardDatasetNewPage_name_already_exists_a
 							+ " \"" + dstext + "\" " + Messages.WizardDatasetNewPage_name_already_exists_b); //$NON-NLS-1$ //$NON-NLS-2$
 					setPageComplete(false);
@@ -193,9 +185,9 @@ public class WizardDatasetNewPage extends JSSWizardPage {
 					setPageComplete(true);
 					setErrorMessage(null);
 					setMessage(getDescription());
-					
+
 					// Update dataset name...
-					//dataset.setPropertyValue(JRDesignDataset.PROPERTY_NAME, dstext);
+					// dataset.setPropertyValue(JRDesignDataset.PROPERTY_NAME, dstext);
 					storeSettings();
 				}
 			}
@@ -235,27 +227,25 @@ public class WizardDatasetNewPage extends JSSWizardPage {
 		});
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard"); //$NON-NLS-1$
-		
-		
+
 		storeSettings();
 	}
+
 	//
 	// @Override
 	// public boolean canFlipToNextPage() {
 	// return isPageComplete() && !emptyDataset;
 	// }
-	
-	
+
 	/**
-	 * Save the name of the dataset selected by the user. If there is a JasperDesign set in
-	 * the JasperReports configuration, the name is also validated.
+	 * Save the name of the dataset selected by the user. If there is a JasperDesign set in the JasperReports
+	 * configuration, the name is also validated.
 	 */
-	public void storeSettings()
-	{
-			if (getSettings() == null) return;
-			getSettings().put( DATASET_NAME , dsname.getText());
-			getSettings().put( DATASET_EMPTY , emptyDataset);
+	public void storeSettings() {
+		if (getSettings() == null)
+			return;
+		getSettings().put(DATASET_NAME, dsname.getText());
+		getSettings().put(DATASET_EMPTY, emptyDataset);
 	}
-	
 
 }

@@ -50,7 +50,7 @@ public class ReportSection extends AbstractSection {
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.grabExcessHorizontalSpace = true;
-		Composite firstSection = new Composite(parent, SWT.FILL);
+		Composite firstSection = getWidgetFactory().createComposite(parent);
 		firstSection.setLayout(new GridLayout(3, false));
 		firstSection.setLayoutData(gd);
 
