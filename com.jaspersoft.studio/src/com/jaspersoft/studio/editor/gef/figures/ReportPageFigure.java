@@ -58,8 +58,8 @@ public class ReportPageFigure extends APageFigure {
 	public ReportPageFigure(JasperDesign jd, boolean viewMargins) {
 		super(viewMargins);
 		this.jrDesign = jd;
-		if (bandColor == null){
-			bandColor = new Color(170,168,255);
+		if (bandColor == null) {
+			bandColor = new Color(170, 168, 255);
 		}
 	}
 
@@ -101,21 +101,22 @@ public class ReportPageFigure extends APageFigure {
 
 			Point bottomLeft = new Point(topLeft.x, clientArea.y + pageHeight);
 			Point bottomRight = new Point(topRight.x, clientArea.y + pageHeight);
+			if (g instanceof J2DGraphics) {
+				Graphics2D graphics2d = ((J2DGraphics) g).getGraphics2D();
+				Stroke oldStroke = graphics2d.getStroke();
 
-			Graphics2D graphics2d = ((J2DGraphics) g).getGraphics2D();
-			Stroke oldStroke = graphics2d.getStroke();
+				paintGrid(g, rectangle);
 
-			paintGrid(g, rectangle);
+				graphics2d.setColor(bandColor);
 
-			graphics2d.setColor(bandColor);
+				graphics2d.setStroke(new BasicStroke(0.5f));
+				graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(graphics2d.getStroke(), g.getAbsoluteScale()));
 
-			graphics2d.setStroke(new BasicStroke(0.5f));
-			graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(graphics2d.getStroke(), g.getAbsoluteScale()));
-
-			// g.drawLine(clientArea.x, clientArea.y + topMargin, clientArea.x + pageWidth, clientArea.y + topMargin);
-			g.drawLine(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y);
-			g.drawLine(topRight.x, topRight.y, bottomRight.x, bottomRight.y);
-			graphics2d.setStroke(oldStroke);
+				// g.drawLine(clientArea.x, clientArea.y + topMargin, clientArea.x + pageWidth, clientArea.y + topMargin);
+				g.drawLine(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y);
+				g.drawLine(topRight.x, topRight.y, bottomRight.x, bottomRight.y);
+				graphics2d.setStroke(oldStroke);
+			}
 		}
 		if (getBorder() != null)
 			getBorder().paint(this, g, NO_INSETS);
@@ -137,6 +138,5 @@ public class ReportPageFigure extends APageFigure {
 		return new Rectangle(clientArea.x - insets.right, clientArea.y - insets.top,
 				pageWidth + insets.left + insets.right, pageHeight + insets.top + insets.bottom);
 	}
- 
 
 }

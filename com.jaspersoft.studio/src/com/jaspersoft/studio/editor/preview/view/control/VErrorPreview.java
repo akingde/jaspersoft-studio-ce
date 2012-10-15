@@ -62,7 +62,7 @@ public class VErrorPreview extends APreview {
 
 	private static final String NL = System.getProperty("line.separator");
 
-	public VErrorPreview(Composite parent,  JasperReportsConfiguration jContext) {
+	public VErrorPreview(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
 	}
 
@@ -182,6 +182,8 @@ public class VErrorPreview extends APreview {
 
 			public void handleEvent(Event event) {
 				int sindex = wtable.getSelectionIndex();
+				if (sindex < 0 || sindex > errors.size())
+					return;
 				Object e = errors.get(sindex);
 				if (e instanceof Throwable)
 					UIUtils.showError((Throwable) e);
