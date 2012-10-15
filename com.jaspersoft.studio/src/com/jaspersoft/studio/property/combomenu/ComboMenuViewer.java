@@ -23,18 +23,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 
 /**
  * Class that manage the Combo Popup, create the popup manu and execture the action. the combo popup want to imitate a combobox
@@ -79,7 +80,7 @@ public class ComboMenuViewer  {
     /**
      * The popup menu
      */
-    private MenuManager popupMenu = null;
+    private Menu popupMenu = null;
     
     /**
      * Last element selected in the menu
@@ -92,21 +93,55 @@ public class ComboMenuViewer  {
      * @author Orlandin Marco
      *
      */
-    private class ComboAction extends Action {
+    private class ComboAction extends SelectionAdapter {
     	/**
     	 * element that this entry represent
     	 */
     	private ComboItem item;
     	
     	/**
+    	 * Text value of this item
+    	 */
+    	private String name;
+    	
+    	/**
+    	 * Listener for this item
+    	 */
+    	private List<ComboItemAction> listeners;
+    	
+    	/**
+    	 * Image of the item
+    	 */
+    	private Image descriptor;
+    	
+    	/**
     	 * Create a new entry for the menu
     	 * @param name Name of the entry
     	 * @param style Style of the entry
     	 * @param item element that this entry represent
+    	 * @param Image of the item
     	 */
-    	public ComboAction(String name, int style, ComboItem item){
-    		super(name,style);
+    	public ComboAction(String name, List<ComboItemAction>  listeners, ComboItem item, Image descriptor){
+    		this.name = name;
+    		this.listeners = listeners;
     		this.item = item;
+    		this.descriptor = descriptor;
+    	}
+    	
+    	/**
+    	 * Return the image for this item
+    	 * @return image for the item, could be null
+    	 */
+    	public Image getImageDescriptor(){
+    		return descriptor;
+    	}
+    	
+    	/**
+    	 * Text value for this item
+    	 * @return
+    	 */
+    	public String getText(){
+    		return name;
     	}
     	
     	/**
@@ -116,6 +151,19 @@ public class ComboMenuViewer  {
     	public ComboItem getItem(){
     		return item;
     	}
+    	
+    	/**
+    	 * Selection event
+    	 */
+    	public void widgetSelected(SelectionEvent event) {
+      	dropDownHandle.setText(getText());
+      	dropDownHandle.setImage(getImageDescriptor());
+      	selectedItem = getItem();
+        for(ComboItemAction listener: this.listeners){
+        	listener.exec();
+        }
+      }
+    	
     }
     
     /**
@@ -256,8 +304,8 @@ public class ComboMenuViewer  {
      * Open the popoup menu inside the menumanger and place it under the combobox
      * @param menuManager
      */
-    protected void openPopupMenu(MenuManager menuManager) {
-        Menu menu = menuManager.getMenu();
+    protected void openPopupMenu(Menu menu) {
+       // Menu menu = menuManager.getMenu();
         if (menu != null && !menu.isDisposed()) {
             if (menu.isVisible()) {
                 menu.setVisible(false);
@@ -272,11 +320,10 @@ public class ComboMenuViewer  {
      * Create a new menumanger
      * @return
      */
-    protected MenuManager createPopupMenu() {
-        MenuManager popupMenu = new MenuManager();
-        refreshPopupMenu(popupMenu);
-        popupMenu.createContextMenu(getControl());
-        return popupMenu;
+    protected Menu createPopupMenu() {
+    		Menu newMenu = new Menu(getControl());
+        refreshPopupMenu(newMenu);
+        return newMenu;
     }
     
     /**
@@ -297,25 +344,13 @@ public class ComboMenuViewer  {
     	createPopupMenu();
     }
 
-    /**
-     * Set an action to represent an item with an image and a text
-     * @param action the action to initialize
-     * @param element the element that the action represent
-     */
-    protected void updateAction(IAction action, ComboItem element) {
-      String text = element.getText();
-      if (text == null)
-          text = ""; //$NON-NLS-1$
-      action.setText(text);
-      action.setImageDescriptor(element.getImage());
-    }
 
     /**
      * Refresh the popup menu deleting the old entry and creating the updated one
      * @param menuManager
      */
-    protected void refreshPopupMenu(MenuManager menuManager) {
-        menuManager.removeAll();
+    protected void refreshPopupMenu(Menu newMenu) {
+        //menuManager.removeAll();
         //The elements will be sorted in ascending order
       	Collections.sort(elementList, new Comparator<ComboItem>() {
   				@Override
@@ -325,20 +360,18 @@ public class ComboMenuViewer  {
   			});
       	//Add the new elements
         for (ComboItem element : elementList) {
-        	ComboAction action = new ComboAction(element.getText(), SWT.NONE, element){
-            public void run() {
-            	dropDownHandle.setText(getText());
-            	dropDownHandle.setImage(getImageDescriptor());
-            	selectedItem = getItem();
-              for(ComboItemAction listener: listeners){
-              	listener.exec();
-              }
-            }
-          };
-          updateAction(action, element);
-          menuManager.add(action);
+        	if (element.isSeparator()){
+        		new MenuItem(newMenu, SWT.SEPARATOR);
+        	} else {
+        		MenuItem item = new MenuItem(newMenu, SWT.PUSH);
+            String text = element.getText();
+            item.setText(text);
+            item.setImage( element.getImage());
+            ComboAction action = new ComboAction(text, new ArrayList<ComboItemAction>(listeners), element, element.getImage());
+            item.addSelectionListener(action);
+        	}
         }
-        setSelectionToMenu(menuManager);
+        setSelectionToMenu(newMenu);
     }
 
     /**
@@ -364,9 +397,9 @@ public class ComboMenuViewer  {
      */
     protected void closePopup() {
         if (popupMenu != null) {
-            Menu menu = popupMenu.getMenu();
-            if (menu != null && !menu.isDisposed()) {
-                menu.setVisible(false);
+            //Menu menu = popupMenu.getMenu();
+            if (popupMenu != null && !popupMenu.isDisposed()) {
+            	popupMenu.setVisible(false);
             }
         }
     }
@@ -375,9 +408,8 @@ public class ComboMenuViewer  {
      * Set the actual item selected in the menu
      * @param menuManager
      */
-    protected void setSelectionToMenu(MenuManager menuManager) {
+    protected void setSelectionToMenu(Menu menu) {
         int index = getSelectionIndex();
-        Menu menu = menuManager.getMenu();
         if (menu != null && !menu.isDisposed()) {
             if (index < 0 || index >= menu.getItemCount()) {
                 menu.setDefaultItem(null);
@@ -438,9 +470,9 @@ public class ComboMenuViewer  {
      * @return true if the popup menu is visible, otherwise false
      */
     public boolean isDropDownVisible() {
-        return popupMenu != null && popupMenu.getMenu() != null
-                && !popupMenu.getMenu().isDisposed()
-                && popupMenu.getMenu().isVisible();
+        return popupMenu != null
+                && !popupMenu.isDisposed()
+                && popupMenu.isVisible();
     }
 
 }

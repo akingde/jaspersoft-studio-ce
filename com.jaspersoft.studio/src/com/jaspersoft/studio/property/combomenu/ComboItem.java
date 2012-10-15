@@ -17,7 +17,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.combomenu;
 
-import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.messages.Messages;
 
@@ -31,7 +31,7 @@ public class ComboItem {
 		/**
 		 * The action image
 		 */
-		private ImageDescriptor image;
+		private Image image;
 		
 		/**
 		 * The action textual value
@@ -83,7 +83,7 @@ public class ComboItem {
 		 * @param item Item that this action represent
 		 * @param value Value to return when this item is selected
 		 */
-		public ComboItem(String label, boolean printDirectly, ImageDescriptor image, int order, Object item, Object value){
+		public ComboItem(String label, boolean printDirectly, Image image, int order, Object item, Object value){
 			this(label, printDirectly, order, item, value);
 			this.image = image;
 		}
@@ -97,7 +97,7 @@ public class ComboItem {
 			return order;
 		}
 		
-		public ImageDescriptor getImage(){
+		public Image getImage(){
 			return image;
 		}
 		
@@ -111,5 +111,9 @@ public class ComboItem {
 		
 		public void setOrder(int newPosition){
 			order = newPosition;
+		}
+		
+		public boolean isSeparator(){
+			return false;
 		}
 }

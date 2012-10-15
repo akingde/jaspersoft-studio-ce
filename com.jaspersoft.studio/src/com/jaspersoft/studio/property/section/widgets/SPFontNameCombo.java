@@ -1,74 +1,156 @@
-/*
- * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2011 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+/*******************************************************************************
+ * ---------------------------------------------------------------------
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * This program is part of JasperReports.
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- * 
- * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
- * <http://www.gnu.org/licenses/>.
- */
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ * ---------------------------------------------------------------------
+ ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.sf.jasperreports.engine.base.JRBaseFont;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.PaletteData;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
-import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.combomenu.ComboItem;
+import com.jaspersoft.studio.property.combomenu.ComboItemAction;
+import com.jaspersoft.studio.property.combomenu.ComboItemSeparator;
+import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.ResourceManager;
 
-public class SPFontNameCombo extends SPRWCombo {
-	private final class PreferenceListener implements IPropertyChangeListener {
+/**
+ * A combo popup menu that could be used to represent a font
+ * @author Orlandin Marco
+ *
+ */
+public class SPFontNameCombo extends ASPropertyWidget {
+	
+	/**
+	 * The combo popup
+	 */
+	protected ComboMenuViewer combo;
+	
+	/**
+	 * True if the combo popup was already initialized with the data, false otherwise
+	 */
+	protected boolean dataSetted;
+	
+	public SPFontNameCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		super(parent, section, pDescriptor);
+		dataSetted = false;
+	}
+	
+	/**
+	 * Create a sample image for a font. when an image is created it is cashed, so future request for that sample 
+	 * doesn't Require the image recreation.
+	 * @param fontName name of the font for the requested sample
+	 * @return image of the sample
+	 */
+	public static Image createFontImage(final String fontName){
+    Display display = Display.getCurrent();
+    Color TRANSPARENT_COLOR = display.getSystemColor(SWT.COLOR_WHITE);
+    Color DRAWING_COLOR = display.getSystemColor(SWT.COLOR_BLACK);
+    Image stringImage = ResourceManager.getImage(fontName);
+    if (stringImage == null){
+	    PaletteData paletteData = new PaletteData( new RGB[]{
+	    	   TRANSPARENT_COLOR.getRGB(),
+	    	   DRAWING_COLOR.getRGB()
+	    	   });
+	    	 
+	    ImageData imageData = new ImageData( 55, 15, 4, paletteData);
+	    imageData.transparentPixel = 0; // index of the palette
+	    stringImage = new Image( display, imageData);
+	    ResourceManager.addImage(fontName, stringImage);
+    }
+    GC stringGc = new GC(stringImage);
+    stringGc.setForeground(DRAWING_COLOR);
+    stringGc.setBackground(TRANSPARENT_COLOR);
+    
+    stringGc.setFont(ResourceManager.getFont(fontName, 10, 0));
+  
+    stringGc.drawText("Sample", 0, 0);
 
-		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(FontsPreferencePage.FPP_FONT_LIST)) {
-				if (pnode != null) {
-					((RWComboBoxPropertyDescriptor) pDescriptor)
-							.setItems(ModelUtils.getFontNames(pnode.getJasperConfiguration()));
-					setNewItems((RWComboBoxPropertyDescriptor) pDescriptor);
+    stringGc.dispose();
+    return stringImage;
+	}
+
+	/** 
+	 * Set the data of the combo popup, and if it wasn't initialized the fonts will be added
+	 */
+	@Override
+	public void setData(APropertyNode pnode, Object b) {
+		if (pnode != null) {
+			if (!dataSetted){
+				List<String[]> fontsList = ModelUtils.getFontNames(pnode.getJasperConfiguration());
+				List<ComboItem> itemsList = new ArrayList<ComboItem>();
+				int i = 0;
+				for(int index = 0; index<fontsList.size(); index++){
+					String[] fonts = fontsList.get(index);
+					for(String element : fonts){
+						itemsList.add(new ComboItem(element, true,  createFontImage(element), i, element,  element));
+						i++;
+					}
+					if (index+1 != fontsList.size() && fonts.length>0){
+						itemsList.add(new ComboItemSeparator(i));
+						i++;
+					}
 				}
+				combo.setItems(itemsList);
+				combo.addSelectionListener(new ComboItemAction() {
+						/**
+						 * The action to execute when an entry is selected
+						 */
+						@Override
+						public void exec() {
+								propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME, combo.getSelectionValue() != null ? combo.getSelectionValue().toString() : null);			
+						}
+				});
+				dataSetted = true;
 			}
+			combo.setText(b.toString());
 		}
 	}
 
-	private PreferenceListener preferenceListener;
+	public void propertyChange(AbstractSection section, String property, String value) {
+		section.changeProperty(property, value);
+	}
 
-	public SPFontNameCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
-		super(parent, section, pDescriptor);
-		preferenceListener = new PreferenceListener();
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
-		combo.addDisposeListener(new DisposeListener() {
-
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				JaspersoftStudioPlugin.getInstance().getPreferenceStore().removePropertyChangeListener(preferenceListener);
+	
+	@Override
+	protected void createComponent(Composite parent) {
+			if (combo == null){
+				combo = new ComboMenuViewer(parent, ComboMenuViewer.NO_IMAGE, "SampleSample");
 			}
-		});
 	}
 
 	@Override
-	public void setData(APropertyNode pnode, Object b) {
-		if (this.pnode == null && pnode != null) {
-			RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) pDescriptor;
-			pd.setItems(ModelUtils.getFontNames(pnode.getJasperConfiguration()));
-			setNewItems((RWComboBoxPropertyDescriptor) pDescriptor);
-		}
-		super.setData(pnode, b);
+	public Control getControl() {
+		return combo != null ? combo.getControl() : null;
 	}
 
 }

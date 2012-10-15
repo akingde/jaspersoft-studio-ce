@@ -36,7 +36,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -278,16 +277,11 @@ public class BordersSection extends AbstractSection {
 		GridLayout layout = new GridLayout(4, false);
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		Composite rowComp = new Composite(composite, SWT.NONE);
-		RowLayout checkLayout = new RowLayout();
-		checkLayout.marginLeft = 0;
-		checkLayout.center = true;
-		rowComp.setLayout(checkLayout);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 4;
-		rowComp.setLayoutData(gd);
 		
-		checkBoxPadding = new Button(rowComp, SWT.CHECK);
+		checkBoxPadding = getWidgetFactory().createButton(composite, Messages.BordersSection_Same_Padding_Value_Check, SWT.CHECK);
+		checkBoxPadding.setLayoutData(gd);
 		checkBoxPadding.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				checkBoxValueChange();
@@ -295,7 +289,6 @@ public class BordersSection extends AbstractSection {
 			}
 		});
 		
-		getWidgetFactory().createCLabel(rowComp, Messages.BordersSection_Same_Padding_Value_Check, SWT.RIGHT);
 		getWidgetFactory().createCLabel(composite, Messages.BordersSection_Left_Label, SWT.RIGHT); 
 		
 		paddingLeft = new Spinner(composite, SWT.BORDER | SWT.FLAT);

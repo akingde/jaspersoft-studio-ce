@@ -76,9 +76,6 @@ public class MStaticText extends MTextElement {
 		result.put(JRDesignStyle.PROPERTY_FONT_NAME, element.getOwnFontName());
 		result.put(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT, element.getOwnHorizontalAlignmentValue());
 		result.put(JRDesignStyle.PROPERTY_MARKUP, element.getOwnMarkup());
-		//result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, element.getOwnPdfEncoding());
-		//result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, element.getOwnPdfFontName());
-		//result.put(JRDesignStyle.PROPERTY_ROTATION, element.getOwnRotationValue());
 		result.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT, element.getOwnVerticalAlignmentValue());
 		return result;
 	}

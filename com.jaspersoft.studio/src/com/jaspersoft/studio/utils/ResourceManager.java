@@ -48,6 +48,10 @@ import org.osgi.framework.Bundle;
  * @author Dan Rubel
  */
 public class ResourceManager extends SWTResourceManager {
+	
+	
+	
+	
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Image
@@ -99,6 +103,52 @@ public class ResourceManager extends SWTResourceManager {
 		}
 		return image;
 	}
+	
+	/**
+	 * Cache map for the images indexed by a string. Used for the image that are not loaded by disk, but 
+	 * created ad execution time (as the font samples)
+	 */
+	private static Map<String, Image> m_descriptorImageByIdMap = new HashMap<String, Image>();
+	
+	/**
+	 * Extract an image from the cache map it is present
+	 * @param descriptor key of the image
+	 * @return the image, could be null
+	 */
+	public static Image getImage(String descriptor) {
+		if (descriptor == null) {
+			return null;
+		}
+		Image image = m_descriptorImageByIdMap.get(descriptor);
+		return image;
+	}
+	
+	/**
+	 * Add an image to the cache map, if the key is already present then the image will not 
+	 * added
+	 * @param descriptor key of the image
+	 * @param image the image to add
+	 * @return true if the image was added, false otherwise
+	 */
+	public static boolean addImage(String descriptor, Image image){
+		if (m_descriptorImageByIdMap.containsKey(descriptor)) return false;
+		m_descriptorImageByIdMap.put(descriptor, image);
+		return true;
+	}
+	
+	/**
+	 * Dispose all of the cached images.
+	 */
+	public static void disposeImagesById() {
+		SWTResourceManager.disposeImages();
+		{
+			for (Iterator<Image> I = m_descriptorImageByIdMap.values().iterator(); I.hasNext();) {
+				I.next().dispose();
+			}
+			m_descriptorImageByIdMap.clear();
+		}
+	}
+	
 	/**
 	 * Maps images to decorated images.
 	 */
@@ -416,5 +466,6 @@ public class ResourceManager extends SWTResourceManager {
 		disposeColors();
 		disposeFonts();
 		disposeImages();
+		disposeImagesById();
 	}
 }

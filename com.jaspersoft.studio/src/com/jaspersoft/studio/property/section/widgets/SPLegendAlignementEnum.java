@@ -28,12 +28,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboItemAction;
 import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * This class define a position selector as a popoup combo menu
@@ -75,10 +75,10 @@ public class SPLegendAlignementEnum extends ASPropertyWidget{
 		//Creating the list of entry
 		List<ComboItem> itemsList = new ArrayList<ComboItem>();
 		//itemsList.add(new ComboItem("None", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-edge-top.gif"),0, NullEnum.UNDEFINED,  null));
-		itemsList.add(new ComboItem("Top", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-edge-top.gif"),0, EdgeEnum.TOP,  new Integer(EdgeEnum.TOP.getValue())));
-		itemsList.add(new ComboItem("Bottom", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-edge-bottom.gif"),1, EdgeEnum.BOTTOM, new Integer(EdgeEnum.BOTTOM.getValue())));
-		itemsList.add(new ComboItem("Left", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-edge-left.gif"),2, EdgeEnum.LEFT, new Integer(EdgeEnum.LEFT.getValue())));
-		itemsList.add(new ComboItem("Right", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-edge-right.gif"),3, EdgeEnum.RIGHT, new Integer(EdgeEnum.RIGHT.getValue())));
+		itemsList.add(new ComboItem("Top", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/eclipse/align-edge-top.gif"),0, EdgeEnum.TOP,  new Integer(EdgeEnum.TOP.getValue())));
+		itemsList.add(new ComboItem("Bottom", true, ResourceManager.getImage(this.getClass(), "/icons/resources/eclipse/align-edge-bottom.gif"),1, EdgeEnum.BOTTOM, new Integer(EdgeEnum.BOTTOM.getValue())));
+		itemsList.add(new ComboItem("Left", true, ResourceManager.getImage(this.getClass(), "/icons/resources/eclipse/align-edge-left.gif"),2, EdgeEnum.LEFT, new Integer(EdgeEnum.LEFT.getValue())));
+		itemsList.add(new ComboItem("Right", true, ResourceManager.getImage(this.getClass(), "/icons/resources/eclipse/align-edge-right.gif"),3, EdgeEnum.RIGHT, new Integer(EdgeEnum.RIGHT.getValue())));
 		//Creating the combo popup
 		combo = new ComboMenuViewer(composite, SWT.NORMAL, SPRWPopUpCombo.getLongest(itemsList));
 		combo.setItems(itemsList);

@@ -1,33 +1,33 @@
-/*
- * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2011 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+/*******************************************************************************
+ * ---------------------------------------------------------------------
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * This program is part of JasperReports.
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- * 
- * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
- * <http://www.gnu.org/licenses/>.
- */
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ * ---------------------------------------------------------------------
+ ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.engine.JRFont;
+import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignFont;
 import net.sf.jasperreports.engine.util.JRStyleResolver;
 
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -45,70 +45,150 @@ import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
+import com.jaspersoft.studio.property.combomenu.ComboItem;
+import com.jaspersoft.studio.property.combomenu.ComboItemAction;
+import com.jaspersoft.studio.property.combomenu.ComboItemSeparator;
+import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
+import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
 
+/**
+ * This class implement the subsection into the cart property tab
+ * @author Chicu Veaceslav & Orlandin Marco
+ *
+ */
 public class SPFont extends ASPropertyWidget {
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 			if (event.getProperty().equals(FontsPreferencePage.FPP_FONT_LIST)) {
 				if (parentNode != null) {
-					fontName.setItems(ModelUtils.getFontNames(parentNode.getJasperConfiguration()));
+					List<String[]> fonts = ModelUtils.getFontNames(parentNode.getJasperConfiguration());
+					fontName.setItems(stringToItems(fonts));
 				}
 			}
 		}
 	}
+	
 
 	private PreferenceListener preferenceListener;
-	private Combo fontName;
+	
+	/**
+	 * The combo popup with the font names
+	 */
+	private ComboMenuViewer fontName;
+	
+	/**
+	 * The combo with the font size
+	 */
 	private Combo fontSize;
+	
+	/**
+	 * Buttom for the attribute bold
+	 */
 	private ToolItem boldButton;
+	
+	/**
+	 * Button for the attribute italic
+	 */
 	private ToolItem italicButton;
+	
+	/**
+	 * Button for the attribute underline
+	 */
 	private ToolItem underlineButton;
+	
+	/**
+	 * Button for the attribute striketrought
+	 */
 	private ToolItem strikeTroughtButton;
+	
+	/**
+	 * Flag to check if the font name was already been inserted into the combo popup
+	 */
+	private boolean itemsSetted;
+	
+	/**
+	 * Font model
+	 */
+	private MFont mfont;
+	
+	/**
+	 * Node represented
+	 */
+	private APropertyNode parentNode;
+	
+	/**
+	 * Composite where the control will be placed
+	 */
+	private Composite group;
 
 	public SPFont(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 		preferenceListener = new PreferenceListener();
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
-		fontName.addDisposeListener(new DisposeListener() {
-
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				JaspersoftStudioPlugin.getInstance().getPreferenceStore().removePropertyChangeListener(preferenceListener);
-			}
-		});
+		itemsSetted = false;
 	}
+	
 
 	@Override
 	public Control getControl() {
 		return group.getParent();
 	}
 
+	/**
+	 * Convert a list of array of string into a List of ComboItem, ready to be inserted into 
+	 * a combo popup
+	 * @param fontsList List of array of fonts, between every array will be inserted a separator
+	 * @return List of combo item
+	 */
+	private List<ComboItem> stringToItems(List<String[]> fontsList){
+		int i = 0;
+		List<ComboItem> itemsList = new ArrayList<ComboItem>();
+		for(int index = 0; index<fontsList.size(); index++){
+			String[] fonts = fontsList.get(index);
+			for(String element : fonts){
+				itemsList.add(new ComboItem(element, true,  SPFontNameCombo.createFontImage(element), i, element,  element));
+				i++;
+			}
+			if (index+1 != fontsList.size() && fonts.length>0){
+				itemsList.add(new ComboItemSeparator(i));
+				i++;
+			}
+		}
+		return itemsList;
+	}
+	
+
+	/**
+	 * Property change action
+	 * @param section
+	 * @param property
+	 * @param value
+	 * @param pd
+	 */
+	public void propertyChange(AbstractSection section, String property, String value, FontNamePropertyDescriptor pd) {
+		changeProperty(section, pDescriptor.getId(), pd.getId(), value);
+	}
+
+	
 	protected void createComponent(Composite parent) {
 		mfont = new MFont(new JRDesignFont(null));
 
 		group = section.getWidgetFactory().createSection(parent, pDescriptor.getDisplayName(), true, 2);
 
-		final RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) mfont
+		final FontNamePropertyDescriptor pd = (FontNamePropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
-		fontName = section.getWidgetFactory().createCombo(group, SWT.NONE);
-		fontName.setItems(pd.getItems());
-		fontName.addModifyListener(new ModifyListener() {
-			private int time = 0;
-
-			public void modifyText(ModifyEvent e) {
-				if (e.time - time > 100) {
-					String value = fontName.getText();
-					if (!value.equals("______________")) //$NON-NLS-1$
-						changeProperty(section, pDescriptor.getId(), pd.getId(), value);
-				}
-				time = e.time;
+		fontName = new ComboMenuViewer(group, ComboMenuViewer.NO_IMAGE, "SampleSample");
+		fontName.setToolTipText(pd.getDescription());
+		fontName.addSelectionListener(new ComboItemAction() {
+			@Override
+			public void exec() {
+				propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME, fontName.getSelectionValue() != null ? fontName.getSelectionValue().toString() : null, pd);			
 			}
 		});
-		fontName.setToolTipText(pd.getDescription());
 
 		final RWComboBoxPropertyDescriptor pd1 = (RWComboBoxPropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE);
@@ -143,6 +223,13 @@ public class SPFont extends ASPropertyWidget {
 		strikeTroughtButton = createItem(toolBar, JRBaseStyle.PROPERTY_STRIKE_THROUGH, "icons/resources/edit-strike.png");
 	}
 
+	/**
+	 * Create a tool bar button
+	 * @param toolBar the parent tool bar
+	 * @param id the id of the property changed by the button press
+	 * @param image the image of the tool button
+	 * @return the created tool button
+	 */
 	private ToolItem createItem(ToolBar toolBar, Object id, String image) {
 		final IPropertyDescriptor ipd = mfont.getPropertyDescriptor(id);
 
@@ -163,10 +250,9 @@ public class SPFont extends ASPropertyWidget {
 			section.changePropertyOn(property, new MFont((JRFont) mfont.getValue()), parentNode);
 	}
 
-	private MFont mfont;
-	private APropertyNode parentNode;
-	private Composite group;
-
+	/**
+	 * Set the font name, the font size and the font attribute in the respective controls
+	 */
 	public void setData(APropertyNode pnode, Object value) {
 		this.parentNode = pnode;
 		this.mfont = (MFont) value;
@@ -174,20 +260,16 @@ public class SPFont extends ASPropertyWidget {
 			
 			JRFont fontValue = (JRFont) mfont.getValue();
 			
-			fontName.setItems(ModelUtils.getFontNames(parentNode.getJasperConfiguration()));
-			String strfontname =  JRStyleResolver.getFontName(fontValue);//(String) mfont.getPropertyValue(JRBaseStyle.PROPERTY_FONT_NAME);
-			fontName.setText(strfontname != null ? strfontname : ""); //$NON-NLS-1$
-			String[] items = fontName.getItems();
-			for (int i = 0; i < items.length; i++) {
-				if (items[i].equals(strfontname)) {
-					fontName.select(i);
-					break;
-				}
+			if (!itemsSetted){
+				fontName.setItems(stringToItems(ModelUtils.getFontNames(parentNode.getJasperConfiguration())));
+				itemsSetted = true;
 			}
-
-			String strfontsize =  Integer.toString(JRStyleResolver.getFontSize(fontValue)); //(String) mfont.getPropertyValue(JRBaseStyle.PROPERTY_FONT_SIZE);
-			items = fontSize.getItems();
-			fontSize.setText(strfontsize != null ? strfontsize : ""); //$NON-NLS-1$
+			String strfontname =  JRStyleResolver.getFontName(fontValue);
+			fontName.setText(strfontname);
+			
+			String strfontsize =  Integer.toString(JRStyleResolver.getFontSize(fontValue)); 
+			String[] items = fontSize.getItems();
+			fontSize.setText(strfontsize != null ? strfontsize : ""); 
 			for (int i = 0; i < items.length; i++) {
 				if (items[i].equals(strfontsize)) {
 					fontSize.select(i);
@@ -195,13 +277,13 @@ public class SPFont extends ASPropertyWidget {
 				}
 			}
 
-			Boolean b = JRStyleResolver.isBold(fontValue); //(Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_BOLD);
+			Boolean b = JRStyleResolver.isBold(fontValue); 
 			boldButton.setSelection(b != null ? b.booleanValue() : false);
-			b = JRStyleResolver.isItalic(fontValue); //(Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_ITALIC);
+			b = JRStyleResolver.isItalic(fontValue); 
 			italicButton.setSelection(b != null ? b.booleanValue() : false);
-			b = JRStyleResolver.isUnderline(fontValue);  //(Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_UNDERLINE);
+			b = JRStyleResolver.isUnderline(fontValue); 
 			underlineButton.setSelection(b != null ? b.booleanValue() : false);
-			b = JRStyleResolver.isStrikeThrough(fontValue); //(Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_STRIKE_THROUGH);
+			b = JRStyleResolver.isStrikeThrough(fontValue); 
 			strikeTroughtButton.setSelection(b != null ? b.booleanValue() : false);
 		}
 	}

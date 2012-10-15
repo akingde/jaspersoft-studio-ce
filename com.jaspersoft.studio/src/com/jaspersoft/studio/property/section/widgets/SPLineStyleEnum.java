@@ -27,12 +27,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboItemAction;
 import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * Reperesent the lineStyle of an element as a combo popup element.
@@ -72,11 +72,11 @@ public class SPLineStyleEnum {
 		composite.setLayout(layout);
 		//Creating the list of entry
 		List<ComboItem> itemsList = new ArrayList<ComboItem>();
-		itemsList.add(new ComboItem("Inherited", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/inherited.png"),0, NullEnum.INHERITED, null));
-		itemsList.add(new ComboItem("Solid line", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-solid.png"),1, LineStyleEnum.SOLID, new Integer(LineStyleEnum.SOLID.getValue() + 1)));
-		itemsList.add(new ComboItem("Dashed line", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-dashed.png"),2, LineStyleEnum.DASHED, new Integer(LineStyleEnum.DASHED.getValue() + 1)));
-		itemsList.add(new ComboItem("Dotted line", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-dotted.png"),3, LineStyleEnum.DOTTED, new Integer(LineStyleEnum.DOTTED.getValue() + 1)));
-		itemsList.add(new ComboItem("Double line", true,  JaspersoftStudioPlugin.getImageDescriptor("icons/resources/line-double.png"),4, LineStyleEnum.DOUBLE, new Integer(LineStyleEnum.DOUBLE.getValue() + 1)));
+		itemsList.add(new ComboItem("Inherited", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/inherited.png"),0, NullEnum.INHERITED, null));
+		itemsList.add(new ComboItem("Solid line", true, ResourceManager.getImage(this.getClass(), "/icons/resources/line-solid.png"),1, LineStyleEnum.SOLID, new Integer(LineStyleEnum.SOLID.getValue() + 1)));
+		itemsList.add(new ComboItem("Dashed line", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/line-dashed.png"),2, LineStyleEnum.DASHED, new Integer(LineStyleEnum.DASHED.getValue() + 1)));
+		itemsList.add(new ComboItem("Dotted line", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/line-dotted.png"),3, LineStyleEnum.DOTTED, new Integer(LineStyleEnum.DOTTED.getValue() + 1)));
+		itemsList.add(new ComboItem("Double line", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/line-double.png"),4, LineStyleEnum.DOUBLE, new Integer(LineStyleEnum.DOUBLE.getValue() + 1)));
 		//Creating the combo popup
 		combo = new ComboMenuViewer(composite, SWT.NORMAL, SPRWPopUpCombo.getLongest(itemsList));
 		combo.setItems(itemsList);

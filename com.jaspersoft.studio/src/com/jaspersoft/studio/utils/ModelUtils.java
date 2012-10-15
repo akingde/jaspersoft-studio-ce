@@ -926,24 +926,29 @@ public class ModelUtils {
 		return lst.toArray(new String[lst.size()]);
 	}
 
-	public static String[] getFontNames(JasperReportsContext jContext) {
-		java.util.List<String> classes = new ArrayList<String>();
-		classes.add(""); //$NON-NLS-1$ 
-
+	/**
+	 * Return the font names, the names can be split in more array to categorize them. 
+	 * In this way when represented, the category can be graphically divided  (for example with a separator)
+	 * @param jContext
+	 * @return
+	 */
+	public static List<String[]> getFontNames(JasperReportsContext jContext) {
+		java.util.List<String[]> classes = new ArrayList<String[]>();
+		java.util.List<String> elements = new ArrayList<String>();
 		Collection<?> extensionFonts = FontUtil.getInstance(jContext).getFontFamilyNames();
 		for (Iterator<?> it = extensionFonts.iterator(); it.hasNext();) {
 			String fname = (String) it.next();
-			classes.add(fname);
+			elements.add(fname);
 		}
-
+		classes.add(elements.toArray(new String[elements.size()]));
+		elements = new ArrayList<String>();
 		String[] names = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		classes.add("______________"); //$NON-NLS-1$
 		for (int i = 0; i < names.length; i++) {
 			String name = names[i];
-			classes.add(name);
+			elements.add(name);
 		}
-
-		return classes.toArray(new String[classes.size()]);
+		classes.add(elements.toArray(new String[elements.size()]));
+		return classes;
 	}
 
 	public static String[][] getPDFFontNames2() {
