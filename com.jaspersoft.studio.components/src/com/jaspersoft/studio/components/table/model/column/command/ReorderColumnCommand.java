@@ -53,7 +53,7 @@ public class ReorderColumnCommand extends Command {
 	public ReorderColumnCommand(MColumn child, MTable parent, int newIndex) {
 		super(Messages.ReorderColumnCommand_reorder_columns);
 
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrTable = TableManager.getTable(parent);
 		this.jrColumn = child.getValue();
 	}

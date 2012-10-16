@@ -27,6 +27,7 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.dataset.MChartDataset;
 import com.jaspersoft.studio.components.chart.model.series.gantt.MGanttSeries;
+
 /*
  * The Class ReorderElementCommand.
  */
@@ -42,15 +43,16 @@ public class ReorderGanttSeriesCommand extends Command {
 	 * Instantiates a new reorder element command.
 	 * 
 	 * @param child
-	 *          the child
+	 *            the child
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
-	public ReorderGanttSeriesCommand(MGanttSeries child, MChartDataset parent, int newIndex) {
+	public ReorderGanttSeriesCommand(MGanttSeries child, MChartDataset parent,
+			int newIndex) {
 		super(Messages.common_reorder_elements);
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrElement = (JRDesignGanttSeries) child.getValue();
 		this.jrGroup = (JRDesignGanttDataset) parent.getValue();
 	}

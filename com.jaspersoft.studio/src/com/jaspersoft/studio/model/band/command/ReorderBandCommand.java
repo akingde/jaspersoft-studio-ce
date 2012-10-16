@@ -77,7 +77,7 @@ public class ReorderBandCommand extends Command {
 	public ReorderBandCommand(MBandGroupHeader child, int newIndex) {
 		super(Messages.common_reorder_elements);
 
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrDesignSection = (JRDesignSection) child.getJrGroup().getGroupHeaderSection();
 		this.jrBand = (JRDesignBand) child.getValue();
 	}
@@ -111,7 +111,7 @@ public class ReorderBandCommand extends Command {
 	public ReorderBandCommand(MBand child, MReport parent, int newIndex) {
 		super(Messages.common_reorder_elements);
 
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrDesignSection = (JRDesignSection) parent.getJasperDesign().getDetailSection();
 		this.jrBand = (JRDesignBand) child.getValue();
 	}

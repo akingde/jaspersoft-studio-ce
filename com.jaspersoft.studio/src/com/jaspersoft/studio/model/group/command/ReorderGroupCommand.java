@@ -78,7 +78,7 @@ public class ReorderGroupCommand extends Command {
 	public ReorderGroupCommand(MGroup child, MGroups parent, int newIndex) {
 		super(Messages.common_reorder_elements);
 
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrDataset = (JRDesignDataset) parent.getValue();
 		this.jrGroup = (JRDesignGroup) child.getValue();
 	}

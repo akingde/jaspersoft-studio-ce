@@ -56,7 +56,7 @@ public class ReorderDatasetCommand extends Command {
 	public ReorderDatasetCommand(MReport child, MDataset parent, int newIndex) {
 		super(Messages.common_reorder_elements);
 
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrDesign = child.getJasperDesign();
 		this.jrField = parent.getValue();
 	}

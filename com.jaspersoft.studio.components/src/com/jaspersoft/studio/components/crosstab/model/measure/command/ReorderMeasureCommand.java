@@ -54,7 +54,7 @@ public class ReorderMeasureCommand extends Command {
 	public ReorderMeasureCommand(MMeasure child, MMeasures parent, int newIndex) {
 		super(Messages.common_reorder_elements);
 
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrCrosstab = (JRDesignCrosstab) parent.getValue();
 		this.jrMeasure = (JRDesignCrosstabMeasure) child.getValue();
 	}

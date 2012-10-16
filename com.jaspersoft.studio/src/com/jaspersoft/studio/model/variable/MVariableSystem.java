@@ -26,7 +26,9 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -80,6 +82,11 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	public MVariableSystem(ANode parent, JRDesignVariable jrVariable, int newIndex) {
 		super(parent, newIndex);
 		setValue(jrVariable);
+	}
+
+	@Override
+	public Color getForeground() {
+		return ColorConstants.lightGray;
 	}
 
 	/*

@@ -1134,6 +1134,14 @@
                   type="com.jaspersoft.studio.model.scriptlet.MScriptlet">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.ScriptletSystemSection"
+               id="com.jaspersoft.studio.property.section.obj.ScriptletSystemSection"
+               tab="com.jaspersoft.studio.editor.section.SCRIPTLET">
+            <input
+                  type="com.jaspersoft.studio.model.scriptlet.MSystemScriptlet">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension

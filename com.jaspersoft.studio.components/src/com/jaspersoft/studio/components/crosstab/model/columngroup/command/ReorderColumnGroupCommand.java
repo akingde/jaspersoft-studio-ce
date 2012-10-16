@@ -56,7 +56,7 @@ public class ReorderColumnGroupCommand extends Command {
 			int newIndex) {
 		super(Messages.common_reorder_elements);
 
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrCrosstab = (JRDesignCrosstab) parent.getValue();
 		this.jrColumnGroup = (JRDesignCrosstabColumnGroup) child.getValue();
 	}

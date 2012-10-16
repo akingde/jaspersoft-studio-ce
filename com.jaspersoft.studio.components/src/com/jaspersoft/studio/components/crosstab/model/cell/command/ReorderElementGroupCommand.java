@@ -47,7 +47,7 @@ public class ReorderElementGroupCommand extends Command {
 	 */
 	public ReorderElementGroupCommand(MElementGroup child, MCell parent, int newIndex) {
 		super(Messages.common_reorder_elements);
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrElement = (JRDesignElementGroup) child.getValue();
 		this.jrCell = (JRDesignCellContents) parent.getValue();
 	}

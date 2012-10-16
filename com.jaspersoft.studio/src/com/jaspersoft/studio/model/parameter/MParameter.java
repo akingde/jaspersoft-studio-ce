@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -83,6 +84,11 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	 */
 	public MParameter(ANode parent, JRDesignParameter jrParameter, int newIndex) {
 		super(parent, jrParameter, newIndex);
+	}
+
+	@Override
+	public Color getForeground() {
+		return null;
 	}
 
 	private static IPropertyDescriptor[] descriptors;

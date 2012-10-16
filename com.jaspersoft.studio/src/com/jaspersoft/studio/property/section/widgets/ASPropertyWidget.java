@@ -51,6 +51,11 @@ public abstract class ASPropertyWidget {
 			getControl().addFocusListener(focusListener);
 	}
 
+	public void setReadOnly(boolean readonly) {
+		if (getControl() != null)
+			getControl().setEnabled(!readonly);
+	}
+
 	protected abstract void createComponent(Composite parent);
 
 	public abstract void setData(APropertyNode pnode, Object value);

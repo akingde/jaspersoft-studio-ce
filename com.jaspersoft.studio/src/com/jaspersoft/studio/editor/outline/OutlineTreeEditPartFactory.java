@@ -101,6 +101,7 @@ import com.jaspersoft.studio.model.parameter.command.DeleteParameterCommand;
 import com.jaspersoft.studio.model.parameter.command.ReorderParameterCommand;
 import com.jaspersoft.studio.model.scriptlet.MScriptlet;
 import com.jaspersoft.studio.model.scriptlet.MScriptlets;
+import com.jaspersoft.studio.model.scriptlet.MSystemScriptlet;
 import com.jaspersoft.studio.model.scriptlet.command.CreateScriptletCommand;
 import com.jaspersoft.studio.model.scriptlet.command.DeleteScriptletCommand;
 import com.jaspersoft.studio.model.scriptlet.command.ReorderScriptletCommand;
@@ -346,6 +347,16 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			}
 		} else if (child instanceof MScriptlet) {
 			if (parent instanceof MScriptlets) {
+				int system = -1;
+				for (INode n : parent.getChildren()) {
+					if (n instanceof MSystemScriptlet) {
+						system++;
+						continue;
+					}
+					break;
+				}
+				newIndex -= system + 1;
+
 				return new ReorderScriptletCommand((MScriptlet) child, (MScriptlets) parent, newIndex);
 			}
 		}

@@ -76,7 +76,7 @@ public class ReorderVariableCommand extends Command {
 	public ReorderVariableCommand(MVariable child, MVariables parent, int newIndex) {
 		super(Messages.common_reorder_elements);
 
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrDataset = (JRDesignDataset) parent.getValue();
 		this.jrVariable = (JRDesignVariable) child.getValue();
 	}

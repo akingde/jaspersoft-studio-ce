@@ -57,7 +57,7 @@ public class ReorderStyleTemplateCommand extends Command {
 	 */
 	public ReorderStyleTemplateCommand(MStyleTemplate child, MStyles parent, int newIndex) {
 		super(Messages.common_reorder_elements);
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrDesign = parent.getJasperDesign();
 		this.jrTemplate = (JRDesignReportTemplate) child.getValue();
 	}

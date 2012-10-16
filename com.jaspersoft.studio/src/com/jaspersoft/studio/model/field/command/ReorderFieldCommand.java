@@ -78,7 +78,7 @@ public class ReorderFieldCommand extends Command {
 	public ReorderFieldCommand(MField child, MFields parent, int newIndex) {
 		super(Messages.common_reorder_elements);
 
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrDataset = (JRDesignDataset) parent.getValue();
 		this.jrField = (JRDesignField) child.getValue();
 	}

@@ -31,14 +31,22 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPClassType extends SPText {
 
+	private Button btn;
+
 	public SPClassType(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
+	}
+
+	@Override
+	public void setReadOnly(boolean readonly) {
+		super.setReadOnly(readonly);
+		btn.setEnabled(!readonly);
 	}
 
 	protected void createComponent(Composite parent) {
 		super.createComponent(parent);
 
-		Button btn = section.getWidgetFactory().createButton(parent, "...", SWT.PUSH);
+		btn = section.getWidgetFactory().createButton(parent, "...", SWT.PUSH);
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

@@ -52,7 +52,7 @@ public class ReorderCategorySeriesCommand extends Command {
 	public ReorderCategorySeriesCommand(MCategorySeries child,
 			MChartSpiderDataset parent, int newIndex) {
 		super(Messages.common_reorder_elements);
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrElement = (JRDesignCategorySeries) child.getValue();
 		this.jrGroup = (StandardSpiderDataset) parent.getValue();
 	}

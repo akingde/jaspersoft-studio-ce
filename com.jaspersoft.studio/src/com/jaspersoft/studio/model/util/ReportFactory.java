@@ -91,6 +91,7 @@ import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.scriptlet.MScriptlet;
 import com.jaspersoft.studio.model.scriptlet.MScriptlets;
+import com.jaspersoft.studio.model.scriptlet.MSystemScriptlet;
 import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
@@ -283,9 +284,17 @@ public class ReportFactory {
 
 		// create scriplets
 		ANode nScriptlets = new MScriptlets(nDataset, dataSet);
-		if (dataSet.getScriptletClass() != null) {
+		if (dataSet.getParametersMap().containsKey(JRParameter.REPORT_SCRIPTLET)) {
+			JRParameter prm = dataSet.getParametersMap().get(JRParameter.REPORT_SCRIPTLET);
 			JRDesignScriptlet jrscriptlet = new JRDesignScriptlet();
 			jrscriptlet.setName("REPORT_SCRIPTLET");
+			jrscriptlet.setDescription("Default Scriptlet");
+			jrscriptlet.setValueClassName(prm.getValueClassName());
+			createNode(nScriptlets, jrscriptlet, -1);
+		}
+		if (dataSet.getScriptletClass() != null) {
+			JRDesignScriptlet jrscriptlet = new JRDesignScriptlet();
+			jrscriptlet.setName("DATASET_SCRIPTLET");
 			jrscriptlet.setDescription("Default Scriptlet");
 			jrscriptlet.setValueClassName(dataSet.getScriptletClass());
 			createNode(nScriptlets, jrscriptlet, -1);
@@ -406,10 +415,17 @@ public class ReportFactory {
 				MScriptlets ms = (MScriptlets) parent;
 				for (INode node : ms.getChildren()) {
 					JRDesignScriptlet jds = (JRDesignScriptlet) node.getValue();
-					if (jds.getName().equals("REPORT_SCRIPTLET"))
+					if (jds.getName().equals("REPORT_SCRIPTLET") || jds.getName().equals("DATASET_SCRIPTLET")) {
+						if (newIndex < 0)
+							newIndex = 0;
 						newIndex++;
+					}
 				}
 			}
+			if (((JRDesignScriptlet) jrObject).getName().equals("REPORT_SCRIPTLET"))
+				return new MSystemScriptlet(parent, (JRDesignScriptlet) jrObject, newIndex);
+			if (((JRDesignScriptlet) jrObject).getName().equals("DATASET_SCRIPTLET"))
+				return new MSystemScriptlet(parent, (JRDesignScriptlet) jrObject, newIndex);
 
 			return new MScriptlet(parent, (JRDesignScriptlet) jrObject, newIndex);
 		} else if (jrObject instanceof JRDesignDataset) {

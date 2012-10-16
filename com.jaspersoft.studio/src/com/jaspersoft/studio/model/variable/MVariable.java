@@ -30,6 +30,7 @@ import net.sf.jasperreports.engine.type.CalculationEnum;
 import net.sf.jasperreports.engine.type.IncrementTypeEnum;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -73,6 +74,11 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	 */
 	public MVariable() {
 		super();
+	}
+
+	@Override
+	public Color getForeground() {
+		return null;
 	}
 
 	/**
@@ -263,11 +269,10 @@ public class MVariable extends MVariableSystem implements ICopyable {
 			jrVariable.setIncrementType((IncrementTypeEnum) incrementTypeD.getEnumValue(value));
 			if (!jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP))
 				jrVariable.setIncrementGroup(null);
-		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME)){
-			if(value==null || ((String)value).isEmpty()){
+		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME)) {
+			if (value == null || ((String) value).isEmpty()) {
 				jrVariable.setIncrementerFactoryClassName(null);
-			}
-			else{
+			} else {
 				jrVariable.setIncrementerFactoryClassName((String) value);
 			}
 		}

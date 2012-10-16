@@ -53,7 +53,7 @@ public class ReorderColumnGroupCommand extends Command {
 	public ReorderColumnGroupCommand(MColumn child, MColumnGroup parent,
 			int newIndex) {
 		super(Messages.ReorderColumnGroupCommand_reorder_column_group);
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrGroup = (StandardColumnGroup) parent.getValue();
 		this.jrColumn = (StandardBaseColumn) child.getValue();
 	}

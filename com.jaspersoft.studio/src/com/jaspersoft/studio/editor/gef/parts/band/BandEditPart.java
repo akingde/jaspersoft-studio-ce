@@ -191,7 +191,8 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		BandTypeEnum bandTypeValue = jrBand.getOrigin().getBandTypeValue();
 		boolean drawColumns = bandTypeValue.equals(BandTypeEnum.COLUMN_FOOTER)
 				|| bandTypeValue.equals(BandTypeEnum.COLUMN_HEADER) || bandTypeValue.equals(BandTypeEnum.GROUP_FOOTER)
-				|| bandTypeValue.equals(BandTypeEnum.COLUMN_HEADER) || bandTypeValue.equals(BandTypeEnum.DETAIL);
+				|| bandTypeValue.equals(BandTypeEnum.GROUP_HEADER) || bandTypeValue.equals(BandTypeEnum.COLUMN_HEADER)
+				|| bandTypeValue.equals(BandTypeEnum.DETAIL);
 
 		BandFigure rect = new BandFigure(drawColumns);
 		rect.setForegroundColor(ColorConstants.blue);

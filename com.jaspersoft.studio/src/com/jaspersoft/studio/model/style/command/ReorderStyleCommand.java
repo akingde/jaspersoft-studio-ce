@@ -59,7 +59,7 @@ public class ReorderStyleCommand extends Command {
 	public ReorderStyleCommand(MStyle child, MStyles parent, int newIndex) {
 		super(Messages.common_reorder_elements);
 
-		this.newIndex = newIndex;
+		this.newIndex = Math.max(0, newIndex);
 		this.jrDesign = parent.getJasperDesign();
 		this.jrStyle = (JRDesignStyle) child.getValue();
 	}

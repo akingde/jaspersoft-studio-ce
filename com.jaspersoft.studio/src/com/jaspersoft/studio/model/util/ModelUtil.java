@@ -23,7 +23,7 @@ import com.jaspersoft.studio.model.INode;
 
 public class ModelUtil {
 	public static INode getNode(final Object obj, INode parent) {
-		ModelVisitor mv = new ModelVisitor(parent) {
+		ModelVisitor<INode> mv = new ModelVisitor<INode>(parent) {
 
 			@Override
 			public boolean visit(INode n) {
