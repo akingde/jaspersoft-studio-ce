@@ -38,9 +38,6 @@
  */
 package com.jaspersoft.studio.wizards.group;
 
-import java.util.ArrayList;
-
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
@@ -135,13 +132,13 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 		setTitle(Messages.common_group);
 		setDescription(Messages.WizardBandGroupPage_description);
 		this.jrDesign = jrDesign;
-		// fList = ModelUtils.getReportObjects4Datasource(jrDesign.getMainDataset());
-		fList = new ArrayList<Object>(jrDesign.getFieldsList());
-		for (int i = 0; i < jrDesign.getVariablesList().size(); i++) {
-			JRDesignVariable v = (JRDesignVariable) jrDesign.getVariablesList().get(i);
-			if (!v.isSystemDefined())
-				fList.add(v);
-		}
+		fList = ModelUtils.getReportObjects4Datasource(jrDesign.getMainDataset());
+		// fList = new ArrayList<Object>(jrDesign.getFieldsList());
+		// for (int i = 0; i < jrDesign.getVariablesList().size(); i++) {
+		// JRDesignVariable v = (JRDesignVariable) jrDesign.getVariablesList().get(i);
+		// if (!v.isSystemDefined())
+		// fList.add(v);
+		// }
 	}
 
 	public void createControl(Composite parent) {
