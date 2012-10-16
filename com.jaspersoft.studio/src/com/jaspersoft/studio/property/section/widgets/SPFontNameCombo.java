@@ -23,15 +23,11 @@ import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.PaletteData;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
@@ -71,7 +67,7 @@ public class SPFontNameCombo extends ASPropertyWidget {
 	 * @param fontName name of the font for the requested sample
 	 * @return image of the sample
 	 */
-	public static Image createFontImage(final String fontName){
+	/*public static Image createFontImage(final String fontName){
     Display display = Display.getCurrent();
     Color TRANSPARENT_COLOR = display.getSystemColor(SWT.COLOR_WHITE);
     Color DRAWING_COLOR = display.getSystemColor(SWT.COLOR_BLACK);
@@ -93,11 +89,38 @@ public class SPFontNameCombo extends ASPropertyWidget {
     
     stringGc.setFont(ResourceManager.getFont(fontName, 10, 0));
   
-    stringGc.drawText("Sample", 0, 0);
+    stringGc.drawText("Sample", 0, 0,SWT.DRAW_TRANSPARENT);
 
     stringGc.dispose();
     return stringImage;
+	}*/
+	
+	private static Image getBaseImage(){
+		Image backGround = ResourceManager.getImage("baseFontBackGroundImage");
+    if (backGround == null){
+    	backGround = new Image(null, 55, 15);
+    	ResourceManager.addImage("baseFontBackGroundImage", backGround);
+    }
+    return backGround;
 	}
+	
+	public static Image createFontImage(final String fontName){
+		Image stringImage = ResourceManager.getImage(fontName);
+		//Check if the image is cached
+    if (stringImage == null){
+	    ImageData imageData = getBaseImage().getImageData();
+	    imageData.transparentPixel = imageData.getPixel(0, 0);
+	    stringImage = new Image(null, imageData);
+	    GC stringGc = new GC(stringImage);
+	    stringGc.setFont(ResourceManager.getFont(fontName, 10, 0));
+	    stringGc.setTextAntialias(SWT.ON);
+	    stringGc.drawText("Sample", 0, 0,SWT.DRAW_TRANSPARENT);
+	    stringGc.dispose();
+	    ResourceManager.addImage(fontName, stringImage);
+    }
+    return stringImage;
+	}
+
 
 	/** 
 	 * Set the data of the combo popup, and if it wasn't initialized the fonts will be added
