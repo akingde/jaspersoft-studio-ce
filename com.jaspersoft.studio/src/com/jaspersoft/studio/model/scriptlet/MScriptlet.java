@@ -32,7 +32,6 @@ import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -142,7 +141,7 @@ public class MScriptlet extends APropertyNode implements ICopyable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignScriptlet.PROPERTY_NAME, Messages.common_name);
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignScriptlet.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MScriptlet_name_description);
 		desc.add(nameD);
 

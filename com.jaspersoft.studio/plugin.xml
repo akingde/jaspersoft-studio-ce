@@ -620,6 +620,12 @@
                image="icons/resources/groups-16.png"
                label="Group">
          </propertyTab>
+         <propertyTab
+               category="element"
+               id="com.jaspersoft.studio.editor.section.SCRIPTLET"
+               image="icons/resources/scriptlet-16.png"
+               label="Scriptlet">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -1118,6 +1124,14 @@
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
             <input
                   type="com.jaspersoft.studio.model.band.MBandGroupHeader">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.ScriptletSection"
+               id="com.jaspersoft.studio.property.section.obj.ScriptletSection"
+               tab="com.jaspersoft.studio.editor.section.SCRIPTLET">
+            <input
+                  type="com.jaspersoft.studio.model.scriptlet.MScriptlet">
             </input>
          </propertySection>
       </propertySections>
