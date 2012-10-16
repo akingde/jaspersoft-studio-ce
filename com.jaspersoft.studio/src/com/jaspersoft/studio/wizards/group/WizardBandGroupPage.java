@@ -57,6 +57,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -91,6 +92,7 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 	private Table leftTable;
 	private TableViewer leftTView;
 	private ExpressionContext expContext;
+	private Button bfield;
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
@@ -133,31 +135,25 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 		setTitle(Messages.common_group);
 		setDescription(Messages.WizardBandGroupPage_description);
 		this.jrDesign = jrDesign;
+		// fList = ModelUtils.getReportObjects4Datasource(jrDesign.getMainDataset());
 		fList = new ArrayList<Object>(jrDesign.getFieldsList());
 		for (int i = 0; i < jrDesign.getVariablesList().size(); i++) {
 			JRDesignVariable v = (JRDesignVariable) jrDesign.getVariablesList().get(i);
 			if (!v.isSystemDefined())
 				fList.add(v);
-
 		}
 	}
 
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 3;
-		composite.setLayout(layout);
+		composite.setLayout(new GridLayout(2, false));
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.NONE);
 		lbl.setText(Messages.common_group_name);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		lbl.setLayoutData(gd);
 
 		grName = new Text(composite, SWT.BORDER);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		grName.setLayoutData(gd);
 		grName.addModifyListener(new ModifyListener() {
 
@@ -178,42 +174,72 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 		});
 		grName.setText(ModelUtils.getDefaultName(jrDesign.getMainDesignDataset().getGroupsMap(), Messages.common_group));
 
-		lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.WizardBandGroupPage_group_by_following_expression);
+		bfield = new Button(composite, SWT.RADIO);
+		bfield.setText("Create Group from a report object");
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		lbl.setLayoutData(gd);
+		gd.horizontalSpan = 2;
+		bfield.setLayoutData(gd);
+		bfield.setSelection(true);
 
-		leftTable = new Table(composite, SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
-		gd = new GridData(GridData.FILL_VERTICAL);
-		gd.widthHint = 250;
-		gd.heightHint = 400;
-		leftTable.setLayoutData(gd);
-		leftTable.setHeaderVisible(true);
+		Button bexpr = new Button(composite, SWT.RADIO);
+		bexpr.setText("Create Group from expression");
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		bexpr.setLayoutData(gd);
 
-		TableColumn[] col = new TableColumn[1];
-		col[0] = new TableColumn(leftTable, SWT.NONE);
-		col[0].setText(Messages.common_report_objects);
-		col[0].pack();
+		final Composite cmp = new Composite(composite, SWT.NONE);
+		final StackLayout stackLayout = new StackLayout();
+		cmp.setLayout(stackLayout);
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		cmp.setLayoutData(gd);
 
-		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(100, false));
-		leftTable.setLayout(tlayout);
+		final Composite objCmp = createObjectFields(cmp);
 
-		leftTView = new TableViewer(leftTable);
-		leftTView.setContentProvider(new ListContentProvider());
-		leftTView.setLabelProvider(new TLabelProvider());
+		final Composite expCmp = createExpression(cmp);
 
-		Button addField = new Button(composite, SWT.PUSH);
-		addField.setText(" > "); //$NON-NLS-1$
-		addField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		stackLayout.topControl = objCmp;
+
+		bfield.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				stackLayout.topControl = objCmp;
+				cmp.layout(true);
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+		bexpr.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				stackLayout.topControl = expCmp;
+				cmp.layout(true);
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
+	}
+
+	private Composite createExpression(Composite cmp) {
+		Composite composite = new Composite(cmp, SWT.NONE);
+		composite.setLayout(new GridLayout());
 
 		Composite expCompo = new Composite(composite, SWT.NONE);
-		layout = new GridLayout();
+		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		layout.marginWidth = 0;
 		expCompo.setLayout(layout);
-		gd = new GridData(GridData.FILL_BOTH);
+		GridData gd = new GridData(GridData.FILL_BOTH);
 		// gd.horizontalSpan = 2;
 		expCompo.setLayoutData(gd);
 
@@ -255,8 +281,34 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 			}
 		});
 
-		addField.addSelectionListener(new SelectionListener() {
+		leftTView.setInput(fList);
+		return composite;
+	}
 
+	private Composite createObjectFields(Composite cmp) {
+		Composite composite = new Composite(cmp, SWT.NONE);
+		composite.setLayout(new GridLayout());
+
+		leftTable = new Table(composite, SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
+		leftTable.setLayoutData(new GridData(GridData.FILL_BOTH));
+		leftTable.setHeaderVisible(true);
+
+		TableColumn[] col = new TableColumn[1];
+		col[0] = new TableColumn(leftTable, SWT.NONE);
+		col[0].setText(Messages.common_report_objects);
+		col[0].pack();
+
+		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, false));
+		leftTable.setLayout(tlayout);
+
+		leftTView = new TableViewer(leftTable);
+		leftTView.setContentProvider(new ListContentProvider());
+		leftTView.setLabelProvider(new TLabelProvider());
+
+		leftTable.addSelectionListener(new SelectionListener() {
+
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				StructuredSelection sel = (StructuredSelection) leftTView.getSelection();
 				if (!sel.isEmpty()) {
@@ -268,21 +320,16 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 						jrExpression.setText("$V{" + ((JRDesignVariable) obj).getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
 					}
 
-					JRExpression mexp = (JRExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
-
-					group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, mexp);
-					dsExpr.setText(jrExpression.getText());
+					group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, jrExpression);
 				}
-
 			}
 
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
+
 			}
 		});
-
-		leftTView.setInput(fList);
-
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
+		return composite;
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {
