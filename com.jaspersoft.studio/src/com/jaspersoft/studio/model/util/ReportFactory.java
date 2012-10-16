@@ -286,13 +286,13 @@ public class ReportFactory {
 		if (dataSet.getScriptletClass() != null) {
 			JRDesignScriptlet jrscriptlet = new JRDesignScriptlet();
 			jrscriptlet.setName("REPORT_SCRIPTLET");
+			jrscriptlet.setDescription("Default Scriptlet");
 			jrscriptlet.setValueClassName(dataSet.getScriptletClass());
 			createNode(nScriptlets, jrscriptlet, -1);
 		}
 		if (dataSet.getScriptletsList() != null) {
-			for (JRScriptlet jrScriptlet : dataSet.getScriptletsList()) {
+			for (JRScriptlet jrScriptlet : dataSet.getScriptletsList())
 				createNode(nScriptlets, jrScriptlet, -1);
-			}
 		}
 
 		if (showGroups) {

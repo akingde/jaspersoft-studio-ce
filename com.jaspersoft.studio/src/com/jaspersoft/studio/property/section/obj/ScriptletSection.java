@@ -21,6 +21,7 @@ package com.jaspersoft.studio.property.section.obj;
 
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -30,11 +31,14 @@ public class ScriptletSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = getWidgetFactory().createSection(parent, "Scriptlet Properties", false, 2);
+		parent = getWidgetFactory().createSection(parent, "Scriptlet Properties", false, 3);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		createWidget4Property(parent, JRDesignScriptlet.PROPERTY_NAME).getControl().setLayoutData(gd);
 
-		createWidget4Property(parent, JRDesignScriptlet.PROPERTY_NAME);
-
-		createWidget4Property(parent, JRDesignScriptlet.PROPERTY_DESCRIPTION);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		createWidget4Property(parent, JRDesignScriptlet.PROPERTY_DESCRIPTION).getControl().setLayoutData(gd);
 
 		createWidget4Property(parent, JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME);
 	}

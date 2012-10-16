@@ -39,7 +39,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -147,7 +147,8 @@ public class MScriptlet extends APropertyNode implements ICopyable {
 
 		List<Class<?>> clist = new ArrayList<Class<?>>();
 		clist.add(JRAbstractScriptlet.class);
-		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME,
+		clist.add(JRDefaultScriptlet.class);
+		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME,
 				Messages.common_class);
 		classD.setClasses(clist);
 		classD.setDescription(Messages.MScriptlet_class_description);
