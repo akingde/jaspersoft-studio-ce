@@ -289,6 +289,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 			@Override
 			public void run() {
+				Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
 				getReportControler().setJrContext(jConfig);
 				setupDataAdapter();
 				if (isDirty() || getJasperPrint() == null)

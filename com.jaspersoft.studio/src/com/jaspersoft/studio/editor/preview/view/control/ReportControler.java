@@ -29,6 +29,7 @@ import java.util.UUID;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -69,6 +70,7 @@ import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -140,8 +142,13 @@ public class ReportControler {
 			List<JRParameter> prm = jrContext.getJasperDesign().getParametersList();
 			for (JRParameter p : prm) {
 				Object obj = jasperParameters.get(p.getName());
-				if (obj != null && obj.getClass().equals(p.getValueClass()))
-					map.put(p.getName(), obj);
+				if (p.getName().endsWith(JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX))
+					continue;
+				try {
+					if (obj != null && obj.getClass().equals(p.getValueClass()))
+						map.put(p.getName(), obj);
+				} catch (Exception e) {
+				}
 			}
 			jasperParameters.clear();
 			jasperParameters.putAll(map);
@@ -229,6 +236,7 @@ public class ReportControler {
 			protected IStatus run(IProgressMonitor monitor) {
 				ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 				try {
+					jrContext.init((IFile) jrContext.get(IEditorContributor.KEY_FILE));
 					Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
 					setParameters();
 
