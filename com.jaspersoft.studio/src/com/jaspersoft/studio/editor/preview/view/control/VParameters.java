@@ -126,9 +126,14 @@ public class VParameters extends APreview {
 		if (prompts != null)
 			for (JRParameter p : prompts)
 				if (isParameterToShow(p)) {
-					boolean created = createInput(composite, (JRDesignParameter) p, this.params, first);
-					if (first && created)
-						first = false;
+					try {
+						boolean created = createInput(composite, (JRDesignParameter) p, this.params, first);
+						if (first && created)
+							first = false;
+					} catch (Exception e) {
+						if (!(e instanceof ClassNotFoundException))
+							e.printStackTrace();
+					}
 				}
 		composite.pack();
 		setScrollbarMinHeight();
@@ -189,7 +194,8 @@ public class VParameters extends APreview {
 		return incontrols.containsKey(p.getName());
 	}
 
-	protected boolean createInput(Composite sectionClient, JRDesignParameter p, Map<String, Object> params, boolean first) {
+	protected boolean createInput(Composite sectionClient, JRDesignParameter p, Map<String, Object> params, boolean first)
+			throws ClassNotFoundException {
 		ParameterJasper pres = new ParameterJasper(p);
 		for (IDataInput in : ReportControler.inputs) {
 			if (in.isForType(pres.getValueClass())) {

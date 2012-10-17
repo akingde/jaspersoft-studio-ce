@@ -38,8 +38,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
-import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
@@ -185,26 +183,16 @@ public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignDataset ds = null;
-		ANode n = getParent().getParent();
-		if (n instanceof MDataset)
-			ds = ((MDataset) n).getValue();
-		else if (n instanceof MReport)
-			ds = (JRDesignDataset) ((MReport) n).getValue().getMainDataset();
 		JRDesignScriptlet jrField = (JRDesignScriptlet) getValue();
-		if (jrField.getValueClassName().equals("REPORT_SCRIPTLET")) {
-			if (id.equals(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME)) {
-				ds.setScriptletClass((String) value);
-			}
-		} else {
-			if (id.equals(JRDesignScriptlet.PROPERTY_NAME)) {
-				if (!ds.getScriptletClass().equals(value))
-					jrField.setName((String) value);
-			} else if (id.equals(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME))
-				jrField.setValueClassName((String) value);
-			else if (id.equals(JRDesignScriptlet.PROPERTY_DESCRIPTION))
-				jrField.setDescription((String) value);
-		}
+		if (id.equals(JRDesignScriptlet.PROPERTY_NAME)) {
+			jrField.setName((String) value);
+		} else if (id.equals(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME)) {
+			if (((String) value).isEmpty())
+				value = null;
+			jrField.setValueClassName((String) value);
+		} else if (id.equals(JRDesignScriptlet.PROPERTY_DESCRIPTION))
+			jrField.setDescription((String) value);
+
 	}
 
 	/**
