@@ -25,13 +25,6 @@ import java.util.List;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.OrientationEnum;
 
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.draw2d.RectangleFigure;
-import org.eclipse.draw2d.XYLayout;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
@@ -43,10 +36,8 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -54,8 +45,6 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 
-import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
-import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MReport;
@@ -152,22 +141,22 @@ final class PageFormatDialog extends FormDialog {
 	}
 
 	private void recalcColumns() {
-		if (!ignoreEvents) {
-			int pagespace = pwidth.getValue() - lmargin.getValue() - rmargin.getValue();
-			int nrcolspace = cols.getSelection() - 1;
-			int colspace = nrcolspace * space.getValue();
-			int mspace = nrcolspace > 0 ? colspace / nrcolspace : pagespace;
-			int maxspace = nrcolspace > 0 ? pagespace / nrcolspace : pagespace;
-			if (mspace > maxspace)
-				mspace = maxspace;
+		int pagespace = pwidth.getValue() - lmargin.getValue() - rmargin.getValue();
+		int nrcolspace = cols.getSelection() - 1;
+		int colspace = nrcolspace * space.getValue();
+		int mspace = nrcolspace > 0 ? colspace / nrcolspace : pagespace;
+		int maxspace = nrcolspace > 0 ? pagespace / nrcolspace : pagespace;
+		if (mspace > maxspace)
+			mspace = maxspace;
 
-			if (mspace < space.getValue())
-				space.setValue(mspace);
-			space.setMax(maxspace);
+		if (mspace < space.getValue() && !ignoreEvents)
+			space.setValue(mspace);
+		space.setMax(maxspace);
 
-			int cw = (int) Math.ceil((double) (pagespace - nrcolspace * space.getValue()) / (cols.getSelection()));
+		int cw = (int) Math.ceil((double) (pagespace - nrcolspace * space.getValue()) / (cols.getSelection()));
+		if (!ignoreEvents)
 			cwidth.setValue(cw);
-		}
+		cwidth.setMax(cw);
 	}
 
 	private void createMargins(Composite composite) {
@@ -218,6 +207,8 @@ final class PageFormatDialog extends FormDialog {
 		SelectionListener orientationlistner = new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
+				if (ignoreEvents)
+					return;
 				// change width with height
 				int w = pwidth.getValue();
 				int h = pheigh.getValue();
@@ -236,76 +227,27 @@ final class PageFormatDialog extends FormDialog {
 	}
 
 	private void createThumbnail(Composite composite) {
-		square = new Canvas(composite, SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND);
+		pageFormatWidget = new PageFormatWidget(composite, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 2;
-		square.setLayoutData(gd);
-
-		lws = new J2DLightweightSystem();
-		lws.setControl(square);
-		parent = new Figure();
-		parent.setLayoutManager(new XYLayout());
-		lws.setContents(parent);
-
-		borderPreview = new RectangleFigure() {
-
-			@Override
-			public void paint(Graphics graphics) {
-				Dimension psize = parent.getSize();
-				float zoom = Math.max((float) pwidth.getValue() / (float) (psize.width - 20), (float) pheigh.getValue()
-						/ (float) (psize.height - 20));
-
-				int x = getBounds().x + 10 + Math.round(lmargin.getValue() / zoom);
-				int y = getBounds().y + 10 + Math.round(tmargin.getValue() / zoom);
-				int w = getBounds().width - 20 - Math.round((rmargin.getValue()) / zoom)
-						- Math.round(lmargin.getValue() / zoom);
-				int h = getBounds().height - 20 - Math.round((bmargin.getValue()) / zoom)
-						- Math.round(tmargin.getValue() / zoom);
-				graphics.setForegroundColor(ColorConstants.blue);
-				graphics.setBackgroundColor(ColorConstants.lightGray);
-				graphics.setLineWidthFloat(0.1f);
-				graphics.drawRectangle(x, y, w, h);
-
-				int sw = Math.round(space.getValue() / zoom);
-				w = Math.round((cwidth.getValue()) / zoom);
-				for (int i = 1; i < cols.getSelection(); i++) {
-					x += w;
-					graphics.drawLine(x, y, x, y + h);
-					graphics.fillRectangle(x, y, sw, h);
-					x += sw;
-					graphics.drawLine(x, y, x, y + h);
-				}
-				paintBorder(graphics);
-			}
-		};
-		borderPreview.setBorder(new ShadowBorder());
-		parent.add(borderPreview);
-
-		Display.getCurrent().asyncExec(new Runnable() {
-
-			public void run() {
-				setTBounds();
-			}
-		});
-
+		pageFormatWidget.setLayoutData(gd);
 	}
 
 	private void setTBounds() {
-		Dimension psize = parent.getSize();
+		pageFormatWidget.setCols(cols.getSelection());
 
-		float zoom = Math.max((float) pwidth.getValue() / (float) (psize.width + 10), (float) pheigh.getValue()
-				/ (float) (psize.height + 10));
+		pageFormatWidget.setTmargin(tmargin.getValue());
+		pageFormatWidget.setBmargin(bmargin.getValue());
+		pageFormatWidget.setLmargin(lmargin.getValue());
+		pageFormatWidget.setRmargin(rmargin.getValue());
 
-		int w = Math.max(22, Math.round(pwidth.getValue() / zoom));
-		int h = Math.max(22, Math.round(pheigh.getValue() / zoom));
-		borderPreview.setSize(w, h);
-		int x = psize.width / 2 - w / 2;
-		int y = psize.height / 2 - h / 2;
+		pageFormatWidget.setPheight(pheigh.getValue());
+		pageFormatWidget.setPwidth(pwidth.getValue());
 
-		borderPreview.setLocation(new org.eclipse.draw2d.geometry.Point(x, y));
-		parent.invalidate();
-		square.redraw();
-		lws.getUpdateManager().performUpdate();
+		pageFormatWidget.setSpace(space.getValue());
+		pageFormatWidget.setCwidth(cwidth.getValue());
+
+		pageFormatWidget.setTBounds();
 	}
 
 	private void createPageSize(Composite composite) {
@@ -343,18 +285,6 @@ final class PageFormatDialog extends FormDialog {
 			}
 		});
 
-		// SelectionListener psizeListener = new SelectionListener() {
-		//
-		// public void widgetSelected(SelectionEvent e) {
-		// String format = PageSize.deductPageFormat(pwidth.getValue(), pheigh.getValue());
-		// pformat.select(PageSize.getFormatIndx(format));
-		// setTBounds();
-		// }
-		//
-		// public void widgetDefaultSelected(SelectionEvent e) {
-		// widgetSelected(e);
-		// }
-		// };
 		ModifyListener psizeMListener = new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -403,10 +333,7 @@ final class PageFormatDialog extends FormDialog {
 	private Spinner cols;
 	private Combo pformat;
 	private CompoundCommand command;
-	private Figure parent;
-	private RectangleFigure borderPreview;
-	private Canvas square;
-	private LightweightSystem lws;
+	private PageFormatWidget pageFormatWidget;
 	private UnitsWidget uw;
 	private TabbedPropertySheetWidgetFactory toolkit;
 	private boolean ignoreEvents;
@@ -427,6 +354,8 @@ final class PageFormatDialog extends FormDialog {
 		space.setValue(jd.getColumnSpacing());
 		cols.setSelection(jd.getColumnCount());
 
+		landscape.setSelection(false);
+		portrait.setSelection(false);
 		if (jd.getOrientationValue().equals(OrientationEnum.LANDSCAPE))
 			landscape.setSelection(true);
 		else if (jd.getOrientationValue().equals(OrientationEnum.PORTRAIT))
