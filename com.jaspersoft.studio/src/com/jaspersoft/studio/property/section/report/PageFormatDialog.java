@@ -152,20 +152,22 @@ final class PageFormatDialog extends FormDialog {
 	}
 
 	private void recalcColumns() {
-		int pagespace = pwidth.getValue() - lmargin.getValue() - rmargin.getValue();
-		int nrcolspace = cols.getSelection() - 1;
-		int colspace = nrcolspace * space.getValue();
-		int mspace = nrcolspace > 0 ? colspace / nrcolspace : pagespace;
-		int maxspace = nrcolspace > 0 ? pagespace / nrcolspace : pagespace;
-		if (mspace > maxspace)
-			mspace = maxspace;
+		if (!ignoreEvents) {
+			int pagespace = pwidth.getValue() - lmargin.getValue() - rmargin.getValue();
+			int nrcolspace = cols.getSelection() - 1;
+			int colspace = nrcolspace * space.getValue();
+			int mspace = nrcolspace > 0 ? colspace / nrcolspace : pagespace;
+			int maxspace = nrcolspace > 0 ? pagespace / nrcolspace : pagespace;
+			if (mspace > maxspace)
+				mspace = maxspace;
 
-		if (mspace < space.getValue())
-			space.setValue(mspace);
-		space.setMax(maxspace);
+			if (mspace < space.getValue())
+				space.setValue(mspace);
+			space.setMax(maxspace);
 
-		int cw = (int) Math.ceil((double) (pagespace - nrcolspace * space.getValue()) / (cols.getSelection()));
-		cwidth.setValue(cw);
+			int cw = (int) Math.ceil((double) (pagespace - nrcolspace * space.getValue()) / (cols.getSelection()));
+			cwidth.setValue(cw);
+		}
 	}
 
 	private void createMargins(Composite composite) {
@@ -407,8 +409,10 @@ final class PageFormatDialog extends FormDialog {
 	private LightweightSystem lws;
 	private UnitsWidget uw;
 	private TabbedPropertySheetWidgetFactory toolkit;
+	private boolean ignoreEvents;
 
 	private void setJasperDesign(JasperDesign jd) {
+		ignoreEvents = true;
 		pheigh.setValue(jd.getPageHeight());
 		pwidth.setValue(jd.getPageWidth());
 		String format = PageSize.deductPageFormat(jd.getPageWidth(), jd.getPageHeight());
@@ -427,6 +431,7 @@ final class PageFormatDialog extends FormDialog {
 			landscape.setSelection(true);
 		else if (jd.getOrientationValue().equals(OrientationEnum.PORTRAIT))
 			portrait.setSelection(true);
+		ignoreEvents = false;
 	}
 
 	@Override
