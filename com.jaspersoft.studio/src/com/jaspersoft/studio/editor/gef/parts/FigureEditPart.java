@@ -49,6 +49,7 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPoli
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
@@ -105,10 +106,46 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		setupFigure(rect);
 		return rect;
 	}
+	
 
+	/**
+	 * Instead of the default drag tracker an overridden one is returned, in this way we can control the edit 
+	 * part targeted from a drag & drop operation, and if the target is isn't an IContainer then it's parent is returned 
+	 * Change by Orlandin Marco
+	 */
 	@Override
 	public org.eclipse.gef.DragTracker getDragTracker(org.eclipse.gef.Request request) {
-		return new DragEditPartsTracker(this);
+		return new DragEditPartsTracker(this){
+			/**
+			 * Take and edit part and search it's container
+			 * @param child
+			 * @return the container of the child, could be null
+			 */
+			private EditPart searchParent(EditPart child){
+				if (child != null){
+					Object parentModel = ((APropertyNode)child.getModel()).getParent();
+					for(Object actualChild: child.getParent().getChildren()){
+						EditPart actualChildPart = (EditPart) actualChild;
+						if (parentModel == actualChildPart.getModel()){
+							return actualChildPart;
+						}
+					}
+				}
+				return null;
+			}
+			
+			/**
+			 * Called to get the destination edit part during a drag and drop, if the destination its not
+			 * a container the it parent is taken
+			 */
+			protected EditPart getTargetEditPart() {
+				EditPart target = super.getTargetEditPart();
+				EditPart parent = null;
+				if (!(target instanceof IContainer))
+					parent = searchParent(target);
+				return parent != null ? parent : target;
+			}
+		};
 	};
 
 	/*
