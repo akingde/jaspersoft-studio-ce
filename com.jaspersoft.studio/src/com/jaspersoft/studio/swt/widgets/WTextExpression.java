@@ -302,7 +302,6 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		// PAY ATTENTION: Checks are needed in order to avoid notification
 		// loop due to the modifyEvent raised after a setText call.
 		if (exp != null && !exp.getText().equals(textExpression.getText())) {
-			textExpression.setFocus();
 			textExpression.setText(exp.getText());
 			textExpression.setToolTipText(exp.getText());
 			if (exp.getText().length() >= oldpos)

@@ -503,13 +503,6 @@
                label="Report">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.propertyTab.report"
-               category="element"
-               id="com.jaspersoft.studio.propertyTab.pageFormat"
-               image="icons/resources/eclipse/border_frame.gif"
-               label="%pageformat">
-         </propertyTab>
-         <propertyTab
                afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Text"
@@ -949,32 +942,6 @@
             </input>
             <input
                   type="com.jaspersoft.studio.model.band.MBandGroupFooter">
-            </input>
-         </propertySection>
-         <propertySection
-               class="com.jaspersoft.studio.property.section.report.PageSizeSection"
-               id="com.jaspersoft.studio.property.section.report.PageSizeSection"
-               tab="com.jaspersoft.studio.propertyTab.pageFormat">
-            <input
-                  type="com.jaspersoft.studio.model.MReport">
-            </input>
-         </propertySection>
-         <propertySection
-               afterSection="com.jaspersoft.studio.property.section.report.PageSizeSection"
-               class="com.jaspersoft.studio.property.section.report.PageMarginSection"
-               id="com.jaspersoft.studio.property.section.report.PageMarginSection"
-               tab="com.jaspersoft.studio.propertyTab.pageFormat">
-            <input
-                  type="com.jaspersoft.studio.model.MReport">
-            </input>
-         </propertySection>
-         <propertySection
-               afterSection="com.jaspersoft.studio.property.section.report.PageMarginSection"
-               class="com.jaspersoft.studio.property.section.report.PageColumnsSection"
-               id="com.jaspersoft.studio.property.section.report.PageColumnsSection"
-               tab="com.jaspersoft.studio.propertyTab.pageFormat">
-            <input
-                  type="com.jaspersoft.studio.model.MReport">
             </input>
          </propertySection>
          <propertySection
