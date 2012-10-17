@@ -67,7 +67,6 @@ public class ValueUnitsWidget {
 	public void createComponent(Composite parent, String label, String toolTip) {
 		Label lbl = new Label(parent, SWT.NONE);
 		lbl.setText(label);
-		lbl.setBackground(parent.getBackground()); 
 		val = new Spinner(parent, SWT.BORDER | SWT.RIGHT);
 		val.setToolTipText(toolTip);
 		GridData gd = new GridData();
