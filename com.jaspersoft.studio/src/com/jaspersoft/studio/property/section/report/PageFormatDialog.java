@@ -69,7 +69,6 @@ import com.jaspersoft.studio.property.section.report.util.ValueUnitsWidget;
 final class PageFormatDialog extends FormDialog {
 	private JasperDesign jd;
 	private MReport jnode;
-	private boolean alreadyUpdating;
 
 	public PageFormatDialog(Shell shell, ANode node) {
 		super(shell);
@@ -87,7 +86,7 @@ final class PageFormatDialog extends FormDialog {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		mform.getForm().setText(Messages.PageFormatDialog_1);
-		alreadyUpdating = false;
+
 		toolkit = new TabbedPropertySheetWidgetFactory();
 
 		Composite composite = mform.getForm().getBody();
@@ -116,9 +115,7 @@ final class PageFormatDialog extends FormDialog {
 		bright.setBackgroundMode(SWT.INHERIT_FORCE);
 		bright.setLayout(new GridLayout(3, false));
 
-		Label lbl = new Label(bright, SWT.NONE);
-		lbl.setText(Messages.PageFormatDialog_3);
-		lbl.setBackground(bright.getBackground());
+		new Label(bright, SWT.NONE).setText(Messages.PageFormatDialog_3);
 
 		cols = new Spinner(bright, SWT.BORDER);
 		cols.setValues(1, 1, Integer.MAX_VALUE, 0, 1, 10);
@@ -126,36 +123,26 @@ final class PageFormatDialog extends FormDialog {
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		cols.setLayoutData(gd);
-		
+
+		cwidth = new ValueUnitsWidget();
+		cwidth.createComponent(bright, Messages.PageFormatDialog_5, Messages.PageFormatDialog_6);
+
 		space = new ValueUnitsWidget();
 		space.createComponent(bright, Messages.PageFormatDialog_7, Messages.PageFormatDialog_8);
 
-		//Adding the column width label
-		lbl = new Label(bright, SWT.NONE);
-		lbl.setText(Messages.PageFormatDialog_5);
-		lbl.setBackground(bright.getBackground());
-		cwidth = new Label(bright, SWT.NONE);
-		cwidth.setToolTipText(Messages.PageFormatDialog_6);
-		GridData gdSText = new GridData();
-		gdSText.widthHint = 80;
-		gdSText.horizontalSpan = 2;
-		cwidth.setLayoutData(gdSText);
-
+		uvWidgets.add(cwidth);
 		uvWidgets.add(space);
 
 		ModifyListener listener = new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (!alreadyUpdating){
-					alreadyUpdating = true;
+				if (e.getSource() != cwidth)
 					recalcColumns();
-					setTBounds();
-					alreadyUpdating = false;
-				}
+				setTBounds();
 			}
 		};
-		
 		cols.addModifyListener(listener);
+		cwidth.addModifyListener(listener);
 		space.addModifyListener(listener);
 	}
 
@@ -173,7 +160,7 @@ final class PageFormatDialog extends FormDialog {
 		space.setMax(maxspace);
 
 		int cw = (int) Math.ceil((double) (pagespace - nrcolspace * space.getValue()) / (cols.getSelection()));
-		cwidth.setText(String.valueOf(cw));
+		cwidth.setValue(cw);
 	}
 
 	private void createMargins(Composite composite) {
@@ -239,7 +226,6 @@ final class PageFormatDialog extends FormDialog {
 			}
 		};
 		portrait.addSelectionListener(orientationlistner);
-		landscape.addSelectionListener(orientationlistner);
 	}
 
 	private void createThumbnail(Composite composite) {
@@ -274,7 +260,7 @@ final class PageFormatDialog extends FormDialog {
 				graphics.drawRectangle(x, y, w, h);
 
 				int sw = Math.round(space.getValue() / zoom);
-				w = Math.round((Integer.valueOf(cwidth.getText())) / zoom);
+				w = Math.round((cwidth.getValue()) / zoom);
 				for (int i = 1; i < cols.getSelection(); i++) {
 					x += w;
 					graphics.drawLine(x, y, x, y + h);
@@ -403,7 +389,7 @@ final class PageFormatDialog extends FormDialog {
 	private ValueUnitsWidget bmargin;
 	private ValueUnitsWidget lmargin;
 	private ValueUnitsWidget rmargin;
-	private Label cwidth;
+	private ValueUnitsWidget cwidth;
 	private ValueUnitsWidget space;
 	private Button portrait;
 	private Button landscape;
@@ -428,7 +414,7 @@ final class PageFormatDialog extends FormDialog {
 		lmargin.setValue(jd.getLeftMargin());
 		rmargin.setValue(jd.getRightMargin());
 
-		cwidth.setText(String.valueOf(jd.getColumnWidth()));
+		cwidth.setValue(jd.getColumnWidth());
 		space.setValue(jd.getColumnSpacing());
 		cols.setSelection(jd.getColumnCount());
 
@@ -466,8 +452,8 @@ final class PageFormatDialog extends FormDialog {
 
 		if (jd.getColumnCount() != cols.getSelection())
 			command.add(createCommand(JasperDesign.PROPERTY_COLUMN_COUNT, cols.getSelection()));
-		if (jd.getColumnWidth() != Integer.valueOf(cwidth.getText()))
-			command.add(createCommand(JasperDesign.PROPERTY_COLUMN_WIDTH, Integer.valueOf(cwidth.getText())));
+		if (jd.getColumnWidth() != cwidth.getValue())
+			command.add(createCommand(JasperDesign.PROPERTY_COLUMN_WIDTH, cwidth.getValue()));
 		if (jd.getColumnSpacing() != space.getValue())
 			command.add(createCommand(JasperDesign.PROPERTY_COLUMN_SPACING, space.getValue()));
 
