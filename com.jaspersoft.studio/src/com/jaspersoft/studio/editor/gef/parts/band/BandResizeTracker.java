@@ -41,12 +41,14 @@ import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ViewportAutoexposeHelper;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.AbstractTool;
 import org.eclipse.gef.tools.SimpleDragTracker;
 import org.eclipse.gef.tools.ToolUtilities;
@@ -60,6 +62,7 @@ public class BandResizeTracker extends SimpleDragTracker {
 
 	/** The editpart. */
 	private EditPart editpart;
+	
 
 	/** The expose helper. */
 	private AutoexposeHelper exposeHelper;
@@ -158,6 +161,22 @@ public class BandResizeTracker extends SimpleDragTracker {
 		setSourceEditPart(sourceEditPart);
 		setAutoexposeHelper(new ViewportAutoexposeHelper((GraphicalEditPart) sourceEditPart.getViewer().getRootEditPart()));
 		updateAutoexposeHelper();
+	}
+	
+	/**
+	 * Handle the doubleclick on the resize bar, in this way is possible to resize the band to the minimum size to contains all 
+	 * the element
+	 */
+	protected boolean handleDoubleClick(int button) {
+		if (getSourceEditPart() != null) {
+			if (button == 1) {
+				SelectionRequest request = new SelectionRequest();
+				request.setLocation(getLocation());
+				request.setType(RequestConstants.REQ_OPEN);
+				getSourceEditPart().performRequest(request);
+			}
+		}
+		return true;
 	}
 
 	/*

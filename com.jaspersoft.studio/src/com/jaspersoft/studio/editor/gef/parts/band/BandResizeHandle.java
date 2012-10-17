@@ -35,7 +35,7 @@ import com.jaspersoft.studio.editor.report.AbstractVisualEditor.KeyPressedEventD
 public class BandResizeHandle extends AbstractHandle {
 
 	/** The tracker. */
-	BandResizeTracker tracker = null;
+	DragTracker tracker = null;
 	
 	/**
 	 * Constructor for SectionResizeHandle.
