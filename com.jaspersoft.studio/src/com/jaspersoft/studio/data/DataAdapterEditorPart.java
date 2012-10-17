@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -76,7 +77,9 @@ public class DataAdapterEditorPart extends ABasicEditor {
 			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 			in = file.getContents(true);
 
-			descriptor = FileDataAdapterStorage.readDataADapter(in);
+			descriptor = FileDataAdapterStorage.readDataADapter(in, file.getProject());
+			if (descriptor == null)
+				throw new PartInitException("Can't find DataAdapter mapping.");
 		} catch (CoreException e) {
 			UIUtils.showError(e);
 		} finally {
@@ -161,43 +164,44 @@ public class DataAdapterEditorPart extends ABasicEditor {
 		c.setLayout(rowLayout);
 
 		nameComposite = new NameComposite(c, SWT.NONE);
+		if (descriptor != null) {
+			editor = descriptor.getEditor();
+			dacomposite = editor.getComposite(c, SWT.NONE, null);
 
-		editor = descriptor.getEditor();
-		dacomposite = editor.getComposite(c, SWT.NONE, null);
+			nameComposite.addModifyListener(modelListener);
+			dacomposite.addModifyListener(modelListener);
 
-		nameComposite.addModifyListener(modelListener);
-		dacomposite.addModifyListener(modelListener);
+			editor.setDataAdapter(descriptor);
+			nameComposite.setDataAdapter(descriptor);
 
-		editor.setDataAdapter(descriptor);
-		nameComposite.setDataAdapter(descriptor);
+			final Button btnTest = new Button(c, SWT.PUSH);
+			btnTest.setText("Test Connection");
 
-		final Button btnTest = new Button(c, SWT.PUSH);
-		btnTest.setText("Test Connection");
+			btnTest.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+					try {
+						ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(((IFileEditorInput) getEditorInput())
+								.getFile().getProject()));
 
-		btnTest.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
-				try {
-					ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(((IFileEditorInput) getEditorInput())
-							.getFile().getProject()));
+						if (cl != null)
+							Thread.currentThread().setContextClassLoader(cl);
 
-					if (cl != null)
-						Thread.currentThread().setContextClassLoader(cl);
+						DataAdapterServiceUtil.getInstance(jrContext).getService(editor.getDataAdapter().getDataAdapter()).test();
 
-					DataAdapterServiceUtil.getInstance(jrContext).getService(editor.getDataAdapter().getDataAdapter()).test();
-
-					MessageBox mb = new MessageBox(btnTest.getShell(), SWT.ICON_INFORMATION | SWT.OK);
-					mb.setText(Messages.DataAdapterWizard_testbutton);
-					mb.setMessage(Messages.DataAdapterWizard_testsuccesful);
-					mb.open();
-				} catch (Exception e1) {
-					UIUtils.showError(e1);
-				} finally {
-					Thread.currentThread().setContextClassLoader(oldCL);
+						MessageBox mb = new MessageBox(btnTest.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+						mb.setText(Messages.DataAdapterWizard_testbutton);
+						mb.setMessage(Messages.DataAdapterWizard_testsuccesful);
+						mb.open();
+					} catch (Exception e1) {
+						UIUtils.showError(e1);
+					} finally {
+						Thread.currentThread().setContextClassLoader(oldCL);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	private JasperReportsConfiguration jrContext;

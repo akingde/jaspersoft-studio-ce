@@ -23,6 +23,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
+import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
@@ -42,13 +44,22 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.widgets.Display;
+import org.exolab.castor.mapping.Mapping;
+import org.exolab.castor.mapping.MappingException;
+import org.exolab.castor.xml.MarshalException;
+import org.exolab.castor.xml.Unmarshaller;
+import org.exolab.castor.xml.ValidationException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.DefaultDataAdapterDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.XMLUtils;
@@ -175,7 +186,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 
 	protected void checkFile(final IFile file) throws CoreException {
 		if (file.getName().endsWith(".xml")) {
-			final DataAdapterDescriptor das = readDataADapter(file.getContents());
+			final DataAdapterDescriptor das = readDataADapter(file.getContents(), file.getProject());
 			if (das != null) {
 				Display.getDefault().asyncExec(new Runnable() {
 
@@ -188,7 +199,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 		}
 	}
 
-	public static DataAdapterDescriptor readDataADapter(InputStream in) {
+	public static DataAdapterDescriptor readDataADapter(InputStream in, IProject project) {
 		try {
 			Document document = XMLUtils.parseNoValidation(in);
 			String adapterClassName = document.getDocumentElement().getAttribute("class");
@@ -196,7 +207,25 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 				return null;
 			DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(adapterClassName);
 			if (factory == null) {
-				// we should at least log a warning here....
+				if (project != null) {
+					DefaultDataAdapterDescriptor ddad = new DefaultDataAdapterDescriptor();
+					ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(project), project.getClass()
+							.getClassLoader());
+					Class<?> clazz = cl.loadClass(adapterClassName);
+					if (clazz != null) {
+						InputStream mis = cl.getResourceAsStream(clazz.getName().replace(".", "/") + ".xml");
+						if (mis != null) {
+							Mapping mapping = new Mapping(cl);
+							mapping.loadMapping(new InputSource(mis));
+
+							DataAdapter dataAdapter = (DataAdapter) CastorUtil.read(document.getDocumentElement(), mapping);
+							if (dataAdapter != null) {
+								ddad.setDataAdapter(dataAdapter);
+								return ddad;
+							}
+						}
+					}
+				}// we should at least log a warning here....
 				JaspersoftStudioPlugin
 						.getInstance()
 						.getLog()
@@ -215,4 +244,5 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 		}
 		return null;
 	}
+
 }

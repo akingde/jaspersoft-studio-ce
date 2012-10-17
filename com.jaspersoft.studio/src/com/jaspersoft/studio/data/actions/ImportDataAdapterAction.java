@@ -114,7 +114,8 @@ public class ImportDataAdapterAction extends Action {
 
 				protected void checkFile(IFile file) throws CoreException {
 					if (file.getName().endsWith(".xml")) {
-						final DataAdapterDescriptor das = FileDataAdapterStorage.readDataADapter(file.getContents());
+						final DataAdapterDescriptor das = FileDataAdapterStorage.readDataADapter(file.getContents(),
+								file.getProject());
 						if (das != null) {
 							Display.getDefault().asyncExec(new Runnable() {
 
