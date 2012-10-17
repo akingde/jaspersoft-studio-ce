@@ -136,13 +136,18 @@ final class PageFormatDialog extends FormDialog {
 		ModifyListener listener = new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (e.getSource() != cwidth)
-					recalcColumns();
+				recalcColumns();
 				setTBounds();
 			}
 		};
 		cols.addModifyListener(listener);
-		cwidth.addModifyListener(listener);
+		cwidth.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				setTBounds();
+			}
+		});
 		space.addModifyListener(listener);
 	}
 
