@@ -123,6 +123,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 			 */
 			private EditPart searchParent(EditPart child){
 				if (child != null){
+					//This use the model for the search because every EditPart in the report has the same father.
 					Object parentModel = ((APropertyNode)child.getModel()).getParent();
 					for(Object actualChild: child.getParent().getChildren()){
 						EditPart actualChildPart = (EditPart) actualChild;

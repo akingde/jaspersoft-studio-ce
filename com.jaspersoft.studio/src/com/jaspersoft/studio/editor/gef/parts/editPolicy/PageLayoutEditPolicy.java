@@ -53,6 +53,7 @@ import com.jaspersoft.studio.editor.gef.rulers.command.ChangeGuideCommand;
 import com.jaspersoft.studio.editor.gef.util.CreateRequestUtil;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGuidebleElement;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -220,7 +221,37 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 				return false;
 		return true;
 	}
+	
+	/**
+	 * Take and edit part and search it's container
+	 * @param child
+	 * @return the container of the child, could be null
+	 */
+	private IGraphicElement searchParent(ANode child){
+		if (child != null){
+			//This use the model for the search because every EditPart in the report has the same father.
+			Object parentModel = child.getParent();
+			for(Object actualChild: getHost().getParent().getChildren()){
+				EditPart actualChildPart = (EditPart) actualChild;
+				if (parentModel == actualChildPart.getModel()){
+					return (IGraphicElement)actualChildPart.getModel();
+				}
+			}
+		}
+		return null;
+	}
 
+	/**
+	 * Edited by Orlandin Marco: added the search of the container element in case the the parent node is 
+	 * not a container. Doing this is necessary to permit to user to placing and element up another even if 
+	 * the second is not a container.
+	 * 
+	 * @param parent
+	 * @param obj
+	 * @param constraint
+	 * @param index
+	 * @return
+	 */
 	protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
 		if (obj instanceof ANode) {
 			ANode aNode = (ANode) obj;
@@ -247,6 +278,15 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 					int x = constraint.x - band.getBounds().x;
 					int y = constraint.y - band.getBounds().y;
 					constraint.setLocation(x, y);
+				} else if (parent instanceof MGraphicElement){
+					//Parent is a graphical element, check if it's a container
+					if (!(parent instanceof IContainer)){
+							IGraphicElement container = searchParent(parent);
+							int x = constraint.x - container.getBounds().x;
+							int y = constraint.y - container.getBounds().y;
+							constraint.setLocation(x, y);
+							parent = (ANode)container;
+					}
 				}
 			}
 			return OutlineTreeEditPartFactory.getCreateCommand(parent, aNode, constraint, index);
