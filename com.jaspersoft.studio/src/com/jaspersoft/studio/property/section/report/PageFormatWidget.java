@@ -11,6 +11,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
@@ -109,6 +110,10 @@ public class PageFormatWidget extends Composite {
 
 	public void setBmargin(int bmargin) {
 		this.bmargin = bmargin;
+	}
+	
+	public Control getCanvas(){
+		return square;
 	}
 
 	private int pwidth;

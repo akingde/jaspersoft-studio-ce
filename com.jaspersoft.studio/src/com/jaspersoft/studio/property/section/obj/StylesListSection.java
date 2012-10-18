@@ -42,7 +42,6 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -84,8 +83,7 @@ public class StylesListSection extends AbstractSection {
 	/**
 	 * Image show to remove an attribute
 	 */
-	private static ImageData image = new ImageData(
-			StylesListSection.class.getResourceAsStream("/icons/resources/remove-16.png")); //$NON-NLS-1$
+	private static Image image = ResourceManager.getImage("/icons/resources/remove-16.png"); //$NON-NLS-1$
 
 	/**
 	 * Map of all the styles, where the name of the style is it's key
@@ -351,7 +349,7 @@ public class StylesListSection extends AbstractSection {
 		nameComp.setLayoutData(gData);
 
 		Label imageLabel = new Label(nameComp, SWT.NONE);
-		imageLabel.setImage(new Image(null, image));
+		imageLabel.setImage(image);
 		imageLabel.setVisible(false);
 
 		StyledText label = new StyledText(nameComp, SWT.NONE);
@@ -411,7 +409,7 @@ public class StylesListSection extends AbstractSection {
 		valueComp.setLayoutData(gData);
 
 		Label imageLabel = new Label(valueComp, SWT.NONE);
-		imageLabel.setImage(new Image(null, image));
+		imageLabel.setImage(image);
 		imageLabel.setVisible(false);
 
 		StyledText label = new StyledText(valueComp, SWT.NONE);
