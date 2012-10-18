@@ -36,6 +36,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -196,9 +197,14 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 	 * @return the composite representing the content area
 	 */
 	protected Composite createContentArea(Composite parent){
-		Composite cmpContentArea = new Composite(parent, SWT.NONE);
+	  ScrolledComposite sc = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		GridData gd_ContentArea=new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
-		cmpContentArea.setLayoutData(gd_ContentArea);
+		sc.setLayoutData(gd_ContentArea);
+		Composite cmpContentArea = new Composite(sc, SWT.NONE);
+		sc.setContent(cmpContentArea);
+		sc.setMinSize(400,400);
+		sc.setExpandHorizontal(true);
+	  sc.setExpandVertical(true);
 		return cmpContentArea;
 	}
 	
