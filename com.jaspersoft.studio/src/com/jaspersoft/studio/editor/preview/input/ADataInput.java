@@ -107,6 +107,13 @@ public abstract class ADataInput implements IDataInput {
 		return false;
 	}
 
+	protected void handleFocusLost() {
+		IStatusLineManager statusLineManager = getStatusLineManager();
+		if (statusLineManager != null)
+			statusLineManager.setMessage(null);
+		updateInput();
+	}
+
 	public static void setMandatory(IParameter param, Control num) {
 		if (param.isMandatory()) {
 			ControlDecoration controlDecoration = new ControlDecoration(num, SWT.LEFT | SWT.TOP);
@@ -135,9 +142,7 @@ public abstract class ADataInput implements IDataInput {
 
 		@Override
 		public void focusLost(FocusEvent e) {
-			IStatusLineManager statusLineManager = getStatusLineManager();
-			if (statusLineManager != null)
-				statusLineManager.setMessage(null);
+			handleFocusLost();
 		}
 
 		@Override
@@ -147,24 +152,27 @@ public abstract class ADataInput implements IDataInput {
 				statusLineManager.setMessage(param.getDescription());
 		}
 
-		private IStatusLineManager getStatusLineManager() {
-			IWorkbench wb = PlatformUI.getWorkbench();
-			IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
-
-			IWorkbenchPage page = win.getActivePage();
-
-			IWorkbenchPart part = page.getActivePart();
-			IWorkbenchPartSite site = part.getSite();
-			IActionBars actionBars = null;
-			if (site instanceof IEditorSite)
-				actionBars = ((IEditorSite) site).getActionBars();
-			else if (site instanceof IViewSite)
-				actionBars = ((IViewSite) site).getActionBars();
-			if (actionBars == null)
-				return null;
-
-			return actionBars.getStatusLineManager();
-
-		}
 	};
+
+	private IStatusLineManager getStatusLineManager() {
+		IWorkbench wb = PlatformUI.getWorkbench();
+		IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
+
+		IWorkbenchPage page = win.getActivePage();
+
+		IWorkbenchPart part = page.getActivePart();
+		if (part == null)
+			return null;
+		IWorkbenchPartSite site = part.getSite();
+		IActionBars actionBars = null;
+		if (site instanceof IEditorSite)
+			actionBars = ((IEditorSite) site).getActionBars();
+		else if (site instanceof IViewSite)
+			actionBars = ((IViewSite) site).getActionBars();
+		if (actionBars == null)
+			return null;
+
+		return actionBars.getStatusLineManager();
+
+	}
 }

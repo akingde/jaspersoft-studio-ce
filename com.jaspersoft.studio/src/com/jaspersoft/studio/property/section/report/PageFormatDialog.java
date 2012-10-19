@@ -157,6 +157,11 @@ final class PageFormatDialog extends FormDialog {
 		if (!ignoreEvents)
 			cwidth.setValue(cw);
 		cwidth.setMax(cw);
+
+		tmargin.setMax(pheigh.getValue() - bmargin.getValue());
+		bmargin.setMax(pheigh.getValue() - tmargin.getValue());
+		lmargin.setMax(pwidth.getValue() - rmargin.getValue());
+		rmargin.setMax(pwidth.getValue() - lmargin.getValue());
 	}
 
 	private void createMargins(Composite composite) {

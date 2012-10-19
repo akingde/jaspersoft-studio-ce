@@ -145,7 +145,7 @@ public class ReportControler {
 				if (p.getName().endsWith(JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX))
 					continue;
 				try {
-					if (obj != null && obj.getClass().equals(p.getValueClass()))
+					if (obj != null && p.getValueClass().isAssignableFrom(obj.getClass()))
 						map.put(p.getName(), obj);
 				} catch (Exception e) {
 				}
