@@ -50,6 +50,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.DefaultValuesMap;
@@ -83,7 +84,8 @@ public class StylesListSection extends AbstractSection {
 	/**
 	 * Image show to remove an attribute
 	 */
-	private static Image image = ResourceManager.getImage("/icons/resources/remove-16.png"); //$NON-NLS-1$
+
+	private static Image image = ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/remove-16.png");
 
 	/**
 	 * Map of all the styles, where the name of the style is it's key
@@ -742,8 +744,12 @@ public class StylesListSection extends AbstractSection {
 	public void aboutToBeHidden() {
 		if (getElement() != null) {
 			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
-			for (INode style : getStylesRoot(element).getChildren()) {
-				style.getPropertyChangeSupport().removePropertyChangeListener(this);
+			MStyles styles = getStylesRoot(element);
+			//check in case the selected element was deleted
+			if (styles != null){
+				for (INode style : styles.getChildren()) {
+					style.getPropertyChangeSupport().removePropertyChangeListener(this);
+				}
 			}
 		}
 		shown = false;
