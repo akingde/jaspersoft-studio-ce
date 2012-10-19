@@ -49,6 +49,10 @@ public class Messages extends NLS {
 
 	public static String common_properties_category;
 	
+	public static String MHtml_cliponoverflow;
+
+	public static String MHtml_cliponoverflow_desc;
+
 	public static String MHtml_content_expression;
 	public static String MHtml_content_expression_description;
 	public static String MHtml_evaluation_group;

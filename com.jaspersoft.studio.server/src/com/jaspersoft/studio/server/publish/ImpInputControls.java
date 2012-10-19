@@ -24,6 +24,8 @@ import java.util.Date;
 
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.types.date.DateRange;
+import net.sf.jasperreports.types.date.TimestampRange;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -72,6 +74,10 @@ public class ImpInputControls {
 			} else if (Timestamp.class.isAssignableFrom(p.getValueClass())) {
 				addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE_TIME);
 			} else if (Date.class.isAssignableFrom(p.getValueClass())) {
+				addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE);
+			} else if (TimestampRange.class.isAssignableFrom(p.getValueClass())) {
+				addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE_TIME);
+			} else if (DateRange.class.isAssignableFrom(p.getValueClass())) {
 				addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE);
 			} else if (Number.class.isAssignableFrom(p.getValueClass())) {
 				addType(rd, mres, ResourceDescriptor.DT_TYPE_NUMBER);

@@ -36,15 +36,21 @@ public class JSSEnumPropertyDescriptor extends ComboBoxPropertyDescriptor implem
 	private int start = 0;
 	private JREnum[] jrEnums;
 
+	public JSSEnumPropertyDescriptor(Object id, String displayName, Class<? extends JREnum> jrEnum, NullEnum type,
+			int skipPositions) {
+		super(id, displayName, EnumHelper.getEnumNames(jrEnum.getEnumConstants(), type, skipPositions));
+		this.type = type;
+		jrEnums = jrEnum.getEnumConstants();
+		this.start = jrEnums[0].getValue();
+	}
+
 	public JSSEnumPropertyDescriptor(Object id, String displayName, Class<? extends JREnum> jrEnum, NullEnum type) {
 		super(id, displayName, EnumHelper.getEnumNames(jrEnum.getEnumConstants(), type));
 		this.type = type;
 		jrEnums = jrEnum.getEnumConstants();
 		this.start = jrEnums[0].getValue();
 	}
-	
 
-	
 	public Integer getEnumValue(JREnum jrvalue) {
 		return EnumHelper.getValue(jrvalue, start, type != NullEnum.NOTNULL);
 	}
