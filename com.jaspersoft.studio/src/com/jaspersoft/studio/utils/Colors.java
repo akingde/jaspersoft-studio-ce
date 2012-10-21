@@ -232,4 +232,23 @@ public class Colors {
 		else 
 			return s;
 	}
+
+	/**
+	 * Gets the AWT color for the specified color string.
+	 * The input string should be an hexadecimal representation of an RGB.
+	 * For example: #FAE123.
+	 * 
+	 * @param hexColorString the hexadecimal string representing the color
+	 * @return the converted AWT Color
+	 */
+	public static java.awt.Color decodeHexColor(String hexColorString) {
+		java.awt.Color color = null;
+		if(hexColorString.startsWith("#") && hexColorString.length()==7){
+			int red = Integer.parseInt(hexColorString.substring(1, 3), 16);
+			int green = Integer.parseInt(hexColorString.substring(3, 5), 16);
+			int blue = Integer.parseInt(hexColorString.substring(5, 7), 16);
+			color = getAWT4SWTRGBColor(new RGB(red, green, blue));
+		}
+		return color;
+	}
 }
