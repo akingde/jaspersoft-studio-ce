@@ -50,6 +50,11 @@ import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.page.SelectorDatasource;
 
 public class WSClientHelper {
+	private static Map<WSClient, ServerProfile> clients = new HashMap<WSClient, ServerProfile>();
+
+	public static ServerProfile getServerProfile(WSClient cli) {
+		return clients.get(cli);
+	}
 
 	public static WSClient connect(MServerProfile msp, IProgressMonitor monitor)
 			throws Exception {
@@ -60,7 +65,9 @@ public class WSClientHelper {
 		setupJServer(server, sp);
 		if (msp.getWsClient() == null)
 			msp.setWsClient(server.getWSClient());
-		return msp.getWsClient();
+		WSClient wsclient = msp.getWsClient();
+		clients.put(wsclient, sp);
+		return wsclient;
 	}
 
 	public static boolean checkConnection(MServerProfile msp,

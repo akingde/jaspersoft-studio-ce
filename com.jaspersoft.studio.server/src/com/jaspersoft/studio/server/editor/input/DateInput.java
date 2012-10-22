@@ -19,9 +19,29 @@
  */
 package com.jaspersoft.studio.server.editor.input;
 
+import java.util.Map;
+
+import org.eclipse.swt.widgets.Composite;
+
+import com.jaspersoft.studio.editor.preview.input.IParameter;
+import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.model.server.ServerProfile;
+
 public class DateInput extends
 		com.jaspersoft.studio.editor.preview.input.DateInput {
 	public DateInput() {
-		super(true);
+		super(true, true);
+	}
+
+	@Override
+	public void createInput(Composite parent, IParameter param,
+			Map<String, Object> params) {
+		if (param instanceof PResourceDescriptor) {
+			PResourceDescriptor p = (PResourceDescriptor) param;
+			ServerProfile sp = WSClientHelper.getServerProfile(p.getWsClient());
+			if (sp != null)
+				setSupportDateRange(sp.isSupportsDateRanges());
+		}
+		super.createInput(parent, param, params);
 	}
 }

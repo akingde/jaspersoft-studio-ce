@@ -24,12 +24,13 @@ import net.sf.jasperreports.repo.Resource;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 
 public class ServerProfile implements Resource, Cloneable {
+	private boolean supportsDateRanges;
 	private String name;
 	private String url;
 	private String user;
 	private String organisation;
 	private String jrVersion = JRXmlWriterHelper.LAST_VERSION;
-	private int timeout = 350000;
+	private int timeout = 300000;
 	private boolean chunked;
 
 	public String getJrVersion() {
@@ -96,6 +97,14 @@ public class ServerProfile implements Resource, Cloneable {
 
 	public void setChunked(boolean chunked) {
 		this.chunked = chunked;
+	}
+
+	public boolean isSupportsDateRanges() {
+		return supportsDateRanges;
+	}
+
+	public void setSupportsDateRanges(boolean supportsDateRanges) {
+		this.supportsDateRanges = supportsDateRanges;
 	}
 
 	@Override

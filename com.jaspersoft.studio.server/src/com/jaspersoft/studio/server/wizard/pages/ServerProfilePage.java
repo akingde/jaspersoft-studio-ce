@@ -147,6 +147,15 @@ public class ServerProfilePage extends WizardPage {
 
 		Button bchunked = new Button(cmp, SWT.CHECK);
 		bchunked.setText("Http Chuncked Requests");
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		bchunked.setLayoutData(gd);
+
+		Button bdaterange = new Button(cmp, SWT.CHECK);
+		bdaterange.setText("Supports DateRange Expressions");
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		bdaterange.setLayoutData(gd);
 
 		ServerProfile value = sprofile.getValue();
 		dbc.bindValue(SWTObservables.observeText(tname, SWT.Modify),
@@ -185,6 +194,9 @@ public class ServerProfilePage extends WizardPage {
 
 		dbc.bindValue(SWTObservables.observeSelection(bchunked),
 				PojoObservables.observeValue(value, "chunked")); //$NON-NLS-1$
+
+		dbc.bindValue(SWTObservables.observeSelection(bdaterange),
+				PojoObservables.observeValue(value, "supportsDateRanges")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeText(cversion.getControl()),
 				PojoObservables.observeValue(new Proxy(value), "jrVersion")); //$NON-NLS-1$

@@ -22,6 +22,9 @@ package com.jaspersoft.studio.server.wizard;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
@@ -59,7 +62,21 @@ public class ServerProfileWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		handleConnect(false);
+		Job job = new Job("Connect To JasperReports Server") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					return connect(false, monitor);
+				} catch (InvocationTargetException e) {
+					UIUtils.showError(e);
+				}
+				return Status.CANCEL_STATUS;
+			}
+		};
+		job.setSystem(true);
+		job.schedule();
+
 		return true;
 	}
 
@@ -78,21 +95,7 @@ public class ServerProfileWizard extends Wizard {
 			getContainer().run(true, true, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
-					try {
-						monitor.beginTask("Connecting to the server",
-								IProgressMonitor.UNKNOWN);
-						if (onlycheck) {
-							if (WSClientHelper.checkConnection(serverProfile,
-									monitor))
-								connectionOK();
-						} else
-							WSClientHelper.connectGetData(serverProfile,
-									monitor);
-					} catch (Throwable e) {
-						throw new InvocationTargetException(e);
-					} finally {
-						monitor.done();
-					}
+					connect(onlycheck, monitor);
 				}
 
 			});
@@ -110,5 +113,23 @@ public class ServerProfileWizard extends Wizard {
 						"Connection to JasperServer", "Successfull");
 			}
 		});
+	}
+
+	private IStatus connect(final boolean onlycheck, IProgressMonitor monitor)
+			throws InvocationTargetException {
+		try {
+			monitor.beginTask("Connecting to the server",
+					IProgressMonitor.UNKNOWN);
+			if (onlycheck) {
+				if (WSClientHelper.checkConnection(serverProfile, monitor))
+					connectionOK();
+			} else
+				WSClientHelper.connectGetData(serverProfile, monitor);
+		} catch (Throwable e) {
+			throw new InvocationTargetException(e);
+		} finally {
+			monitor.done();
+		}
+		return Status.OK_STATUS;
 	}
 }

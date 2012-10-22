@@ -11,15 +11,25 @@ public class DRDateTime extends CDateTime {
 		super(parent, style);
 	}
 
+	private boolean supportDateRange = true;
+
+	public void setSupportDateRange(boolean supportDateRange) {
+		this.supportDateRange = supportDateRange;
+	}
+
 	@Override
 	public void setSelection(Date selection) {
 		super.setSelection(selection);
-		removeTextListener();
+		if (supportDateRange)
+			removeTextListener();
 	}
 
 	@Override
 	protected void addTextListener() {
-		removeTextListener();
+		if (supportDateRange)
+			removeTextListener();
+		else
+			super.addTextListener();
 	}
 
 	public void addModifyListener(ModifyListener listener) {

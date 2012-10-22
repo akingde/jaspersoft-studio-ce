@@ -40,6 +40,8 @@ package com.jaspersoft.studio.editor.preview.input;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -64,13 +66,15 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class DateInput extends ADataInput {
+	private boolean supportDateRange;
 
 	public DateInput() {
-		this(false);
+		this(false, true);
 	}
 
-	public DateInput(boolean isNumeric) {
+	public DateInput(boolean isNumeric, boolean supportDateRange) {
 		this.isNumeric = isNumeric;
+		this.supportDateRange = supportDateRange;
 	}
 
 	public boolean isForType(Class<?> valueClass) {
@@ -99,6 +103,7 @@ public class DateInput extends ADataInput {
 
 	protected void createTimestampRange(Composite parent, final IParameter param, final Map<String, Object> params) {
 		date = new DRDateTime(parent, CDT.BORDER | CDT.DATE_SHORT | CDT.TIME_MEDIUM | CDT.DROP_DOWN);
+		((DRDateTime) date).setSupportDateRange(supportDateRange);
 
 		GridData gd = new GridData();
 		gd.horizontalIndent = 8;
@@ -136,6 +141,7 @@ public class DateInput extends ADataInput {
 
 	protected void createDateRange(Composite parent, final IParameter param, final Map<String, Object> params) {
 		date = new DRDateTime(parent, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN);
+		((DRDateTime) date).setSupportDateRange(supportDateRange);
 
 		GridData gd = new GridData();
 		gd.horizontalIndent = 8;
@@ -222,6 +228,14 @@ public class DateInput extends ADataInput {
 	public void updateInput() {
 		Object d = params.get(param.getName());
 		if (d != null) {
+			if (d instanceof String) {
+				try {
+					SimpleDateFormat sdf = new SimpleDateFormat(date.getPattern());
+					sdf.parse((String) d);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
 			if (d instanceof Date) {
 				date.setSelection((Date) d);
 			} else if (d instanceof Long) {
@@ -245,5 +259,13 @@ public class DateInput extends ADataInput {
 
 	private boolean isNumeric = false;
 	private CDateTime date;
+
+	public boolean isSupportDateRange() {
+		return supportDateRange;
+	}
+
+	public void setSupportDateRange(boolean supportDateRange) {
+		this.supportDateRange = supportDateRange;
+	}
 
 }
