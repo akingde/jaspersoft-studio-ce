@@ -15,6 +15,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -27,6 +32,9 @@ import org.eclipse.swt.widgets.Display;
  * @author Chicu Veaceslav
  */
 public class Colors {
+	
+	/** Pattern for hexadecimal colors (i.e: #FFCA12) */
+	public static final Pattern HEX_COLOR_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
 	
 	/**
 	 * Gets the sW t4 awt color.
@@ -241,14 +249,50 @@ public class Colors {
 	 * @param hexColorString the hexadecimal string representing the color
 	 * @return the converted AWT Color
 	 */
-	public static java.awt.Color decodeHexColor(String hexColorString) {
-		java.awt.Color color = null;
+	public static java.awt.Color decodeHexStringAsAWTColor(String hexColorString) {
+		RGB decodedRGB = decodeHexStringAsSWTRGB(hexColorString);
+		if(decodedRGB != null){
+			return getAWT4SWTRGBColor(decodedRGB);
+		}
+		else {
+			return null;
+		}
+	}
+	
+
+	/**
+	 * Gets the SWT RGB for the specified color string.
+	 * The input string should be an hexadecimal representation of an RGB.
+	 * For example: #FAE123.
+	 * 
+	 * @param hexColorString the hexadecimal string representing the color
+	 * @return the converted {@link RGB}
+	 */
+	public static RGB decodeHexStringAsSWTRGB(String hexColorString) {
+		RGB rgb = null;
 		if(hexColorString.startsWith("#") && hexColorString.length()==7){
 			int red = Integer.parseInt(hexColorString.substring(1, 3), 16);
 			int green = Integer.parseInt(hexColorString.substring(3, 5), 16);
 			int blue = Integer.parseInt(hexColorString.substring(5, 7), 16);
-			color = getAWT4SWTRGBColor(new RGB(red, green, blue));
+			rgb = new RGB(red, green, blue);
 		}
-		return color;
+		return rgb;
+	}
+	
+	/**
+	 * Decodes a text string that can contain a list of hex colors,
+	 * as a more suitable array that can be manipulated.
+	 *
+	 * @param hexColorsArray an array-like string that contains multiple colors
+	 * @return an array with all the hex colors extracted
+	 */
+	public static String[] decodeHexColorsArray(String hexColorsArray){
+		if(hexColorsArray == null) return new String[0];
+		Matcher m = HEX_COLOR_PATTERN.matcher(hexColorsArray);
+		List<String> listMatches = new ArrayList<String>();
+		while (m.find()) {
+			listMatches.add(m.group(0));
+		}
+		return listMatches.toArray(new String[listMatches.size()]);
 	}
 }
