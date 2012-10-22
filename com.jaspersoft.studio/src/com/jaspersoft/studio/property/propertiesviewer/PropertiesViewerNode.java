@@ -112,4 +112,9 @@ public class PropertiesViewerNode implements IPropertiesViewerNode {
 		}
 	}
 
+	@Override
+	public String getHelpContextID() {
+		return null;
+	}
+
 }

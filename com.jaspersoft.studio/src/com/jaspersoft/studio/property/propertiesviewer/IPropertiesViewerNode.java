@@ -94,4 +94,12 @@ public interface IPropertiesViewerNode {
      * A common behavior can be the control update depending on the internal status.
      */
     public void update();
+    
+    /**
+     * Returns a suitable context ID for the help system, if it exists.
+     * This way we can provide a "location" sensitive help.
+     *  
+     * @return the help context id for this node, <code>null</code> otherwise
+     */
+    public String getHelpContextID();
 }

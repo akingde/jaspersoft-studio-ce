@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -309,6 +310,14 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 	 */
 	public void selectPropertiesNode(IPropertiesViewerNode node){
 		filteredTree.getViewer().setSelection(new StructuredSelection(node));
+		// update the help information if available
+		String helpContextID = node.getHelpContextID();
+		if(helpContextID!=null && !helpContextID.isEmpty()){
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(this.getParent(), helpContextID);
+		}
+		else {
+			// TODO - any way to remove a previously attached help?
+		}
 	}
 
 }
