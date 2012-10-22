@@ -111,8 +111,8 @@ public class PageFormatWidget extends Composite {
 	public void setBmargin(int bmargin) {
 		this.bmargin = bmargin;
 	}
-	
-	public Control getCanvas(){
+
+	public Control getCanvas() {
 		return square;
 	}
 
@@ -127,20 +127,23 @@ public class PageFormatWidget extends Composite {
 	private int bmargin;
 
 	public void setTBounds() {
-		Dimension psize = parentFigure.getSize();
+		if (!isDisposed()) {
+			Dimension psize = parentFigure.getSize();
 
-		float zoom = Math.max((float) pwidth / (float) (psize.width + 10), (float) pheight / (float) (psize.height + 10));
+			float zoom = Math.max((float) pwidth / (float) (psize.width + 10), (float) pheight / (float) (psize.height + 10));
 
-		int w = Math.max(22, Math.round(pwidth / zoom));
-		int h = Math.max(22, Math.round(pheight / zoom));
-		borderPreview.setSize(w, h);
-		int x = psize.width / 2 - w / 2;
-		int y = psize.height / 2 - h / 2;
+			int w = Math.max(22, Math.round(pwidth / zoom));
+			int h = Math.max(22, Math.round(pheight / zoom));
+			borderPreview.setSize(w, h);
+			int x = psize.width / 2 - w / 2;
+			int y = psize.height / 2 - h / 2;
 
-		borderPreview.setLocation(new org.eclipse.draw2d.geometry.Point(x, y));
-		parentFigure.invalidate();
-		square.redraw();
-		lws.getUpdateManager().performUpdate();
+			borderPreview.setLocation(new org.eclipse.draw2d.geometry.Point(x, y));
+			parentFigure.invalidate();
+
+			square.redraw();
+			lws.getUpdateManager().performUpdate();
+		}
 	}
 
 }
