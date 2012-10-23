@@ -38,6 +38,13 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public interface IComponentFactory {
+	
+	/**
+	 * Context menu group for component related actions. Value:
+	 * <code>"com.jaspersoft.studio.group.component"</code>
+	 */
+	public static final String GROUP_COMPONENT = "com.jaspersoft.studio.group.component"; //$NON-NLS-1$
+	
 	public ANode createNode(ANode parent, Object jrObject, int newIndex);
 
 	public List<?> getChildren4Element(Object jrObject);

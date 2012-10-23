@@ -59,6 +59,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 import com.jaspersoft.studio.property.section.report.PageFormatAction;
 
@@ -95,6 +96,9 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 	 */
 	@Override
 	public void buildContextMenu(IMenuManager menu) {
+		// Add component actions group
+		menu.add(new Separator(IComponentFactory.GROUP_COMPONENT));
+		
 		GEFActionConstants.addStandardActionGroups(menu);
 
 		IAction action = getActionRegistry().getAction(ActionFactory.UNDO.getId());
@@ -167,12 +171,12 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		List<String> lst = m.getActionIDs();
 		for (String ids : lst) {
 			if (ids.equals(SEPARATOR)) {
-				menu.appendToGroup(GEFActionConstants.GROUP_ADD, new Separator());
+				menu.appendToGroup(IComponentFactory.GROUP_COMPONENT, new Separator());
 				continue;
 			}
 			action = getActionRegistry().getAction(ids);
 			if (action != null && action.isEnabled())
-				menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
+				menu.appendToGroup(IComponentFactory.GROUP_COMPONENT, action);
 		}
 
 		action = getActionRegistry().getAction(DeleteGroupReportAction.ID);

@@ -255,10 +255,12 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 		Control currentControl = node.getControl();
 		for (int i = 0; i < children.length; i++) {
 			if (children[i] != currentControl) {
+				children[i].setEnabled(false);
 				children[i].setVisible(false);
 			}
 		}
 		// Make the new page visible
+		currentControl.setEnabled(true);
 		currentControl.setVisible(true);
 		contentAreaLayout.topControl=currentControl;
 		contentArea.layout();
