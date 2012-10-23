@@ -1251,4 +1251,22 @@ public class ModelUtils {
 			}
 		}
 	}
+
+	/**
+	 * Returns the language set for the report to which the input jasper configuration belongs to.
+	 * 
+	 * @param jconfig
+	 *          the jasper configuration
+	 * @return the current report language if any, <code>null</code> otherwise
+	 */
+	public static String getCurrentReportLanguage(JasperReportsConfiguration jconfig){
+		Assert.isNotNull(jconfig);
+		JasperDesign jd = jconfig.getJasperDesign();
+		if(jd!=null) {
+			return jd.getLanguage();
+		}
+		else {
+			return null;
+		}
+	}
 }
