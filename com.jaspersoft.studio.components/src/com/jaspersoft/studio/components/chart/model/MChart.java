@@ -459,7 +459,6 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignChart jrElement = (JRDesignChart) getValue();
-
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION)){
 			EdgeEnum position = jrElement.getTitlePositionValue();
 			return titlePositionD.getEnumValue(position != null ? position : EdgeEnum.TOP);
@@ -467,26 +466,6 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION)){
 			EdgeEnum position = jrElement.getLegendPositionValue();
 			return legendPositionD.getEnumValue(position != null ? position : EdgeEnum.BOTTOM);
-		}
-		if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1,
-					false);
-		if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE))
-			return jrElement.getRenderType();
-		if (id.equals(JRBaseChart.PROPERTY_THEME))
-			return jrElement.getTheme();
-		if (id.equals(JRDesignChart.PROPERTY_EVALUATION_GROUP)) {
-			if (jrElement.getEvaluationGroup() != null)
-				return jrElement.getEvaluationGroup().getName();
-			return ""; //$NON-NLS-1$
-		}
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-			if (propertyDTO == null) {
-				propertyDTO = new ParameterDTO();
-				propertyDTO.setJasperDesign(getJasperDesign());
-				propertyDTO.setValue(jrElement.getHyperlinkParameters());
-			}
-			return propertyDTO;
 		}
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(JRStyleResolver.getTitleColor(jrElement));
@@ -498,57 +477,11 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			return Colors.getSWTRGB4AWTGBColor(JRStyleResolver.getLegendBackgroundColor(jrElement));
 		if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
 			return jrElement.getShowLegend() != null ? jrElement.getShowLegend() : true;
-
-		if (id.equals(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS))
-			return jrElement.getCustomizerClass();
-
-		// hyperlink --------------------------------------
-		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
-			return jrElement.getLinkTarget();
-		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
-			return jrElement.getLinkType();
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION))
-			return ExprUtil.getExpression(jrElement
-					.getHyperlinkAnchorExpression());
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION))
-			return ExprUtil.getExpression(jrElement
-					.getHyperlinkPageExpression());
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
-			return ExprUtil.getExpression(jrElement
-					.getHyperlinkReferenceExpression());
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
-			return ExprUtil.getExpression(jrElement
-					.getHyperlinkTooltipExpression());
-
-		if (id.equals(PLOTPROPERTY)) { //$NON-NLS-1$
-			if (mChartPlot == null) {
-				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
-				setChildListener(mChartPlot);
-			}
-			mChartPlot.setJasperConfiguration(getJasperConfiguration());
-			return mChartPlot;
-		}
 		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
 			tFont = MFontUtil.getMFont(tFont, jrElement.getTitleFont(),
 					jrElement.getStyle(), this);
 			return tFont;
 		}
-		if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_FONT)) {
-			stFont = MFontUtil.getMFont(stFont, jrElement.getSubtitleFont(),
-					jrElement.getStyle(), this);
-			return stFont;
-		}
-		if (id.equals(JRDesignChart.PROPERTY_LEGEND_FONT)) {
-			lFont = MFontUtil.getMFont(lFont, jrElement.getLegendFont(),
-					jrElement.getStyle(), this);
-			return lFont;
-		}
-
-		if (id.equals(JRDesignChart.PROPERTY_TITLE_EXPRESSION))
-			return ExprUtil.getExpression(jrElement.getTitleExpression());
-		if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION))
-			return ExprUtil.getExpression(jrElement.getSubtitleExpression());
-
 		return super.getPropertyActualValue(id);
 	}
 
@@ -726,21 +659,21 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		// plot initialisation
 		JRChartPlot plot = jrChart.getPlot();
 		if (plot instanceof JRDesignBar3DPlot) {
-			if (((JRDesignBar3DPlot) plot).getItemLabel() == null)
-				((JRDesignBar3DPlot) plot).setItemLabel(new JRDesignItemLabel(
-						null, jrChart));
+			JRDesignBar3DPlot jrPlot = (JRDesignBar3DPlot) plot;
+			if (jrPlot.getItemLabel() == null || !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
+				jrPlot.setItemLabel(new JRDesignItemLabel(null, jrChart));
 		} else if (plot instanceof JRDesignPiePlot) {
-			if (((JRDesignPiePlot) plot).getItemLabel() == null)
-				((JRDesignPiePlot) plot).setItemLabel(new JRDesignItemLabel(
-						null, jrChart));
+			JRDesignPiePlot jrPlot = (JRDesignPiePlot) plot;
+			if (jrPlot.getItemLabel() == null || !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
+				jrPlot.setItemLabel(new JRDesignItemLabel(null, jrChart));
 		} else if (plot instanceof JRDesignPie3DPlot) {
-			if (((JRDesignPie3DPlot) plot).getItemLabel() == null)
-				((JRDesignPie3DPlot) plot).setItemLabel(new JRDesignItemLabel(
-						null, jrChart));
+			JRDesignPie3DPlot jrPlot = (JRDesignPie3DPlot) plot;
+			if (jrPlot.getItemLabel() == null || !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
+				jrPlot.setItemLabel(new JRDesignItemLabel(null, jrChart));
 		} else if (plot instanceof JRDesignBarPlot) {
-			if (((JRDesignBarPlot) plot).getItemLabel() == null)
-				((JRDesignBarPlot) plot).setItemLabel(new JRDesignItemLabel(
-						null, jrChart));
+			JRDesignBarPlot jrPlot = (JRDesignBarPlot) plot;
+			if (jrPlot.getItemLabel() == null || !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
+				jrPlot.setItemLabel(new JRDesignItemLabel(null, jrChart));
 		} else if (plot instanceof JRDesignThermometerPlot) {
 			JRDesignThermometerPlot tplot = (JRDesignThermometerPlot) plot;
 			if (tplot.getHighRange() == null)

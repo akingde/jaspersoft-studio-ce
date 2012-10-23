@@ -64,7 +64,7 @@ public class SPButon extends ASPropertyWidget {
 	/**
 	 * Percentual factor for the increment\decrement
 	 */
-	private static Integer factor = 10;
+	public static Integer factor = 10;
 	
 	/**
 	 * Tooltip message for the increment button
@@ -94,6 +94,28 @@ public class SPButon extends ASPropertyWidget {
 	}
 	
 	/**
+	 * Return the font node
+	 * @return The MFont represented
+	 */
+	protected APropertyNode getFontValue(){
+		return fontValue;
+	}
+	
+	protected void createCommand(boolean increment){
+		Object fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
+		Integer newValue = 2;
+		if (fontSize != null && fontSize.toString().length()>0){
+			newValue = Integer.valueOf(fontSize.toString());
+			Integer plus = null;
+			if (increment) plus = Math.round((new Float(newValue) / 100)*factor)+1;
+			else plus =  Math.round((new Float(newValue) / 100)*-factor)-1;
+			if ((newValue+plus)>99) newValue = 99;
+			else if ((newValue+plus)>0) newValue += plus;
+			section.changeProperty(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString());
+		}
+	}
+	
+	/**
 	 * Create a single button into the toolbar
 	 * @param increment true if the button should be used for increment, false otherwise
 	 */
@@ -113,16 +135,7 @@ public class SPButon extends ASPropertyWidget {
 
 			@Override
 			public void handleEvent(Event event) {
-				Object fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
-				Integer newValue = 2;
-				if (fontSize != null && fontSize.toString().length()>0) 
-					newValue = Integer.valueOf(fontSize.toString());
-					Integer plus = null;
-					if (increment) plus = Math.round((new Float(newValue) / 100)*factor)+1;
-					else plus =  Math.round((new Float(newValue) / 100)*-factor)-1;
-					if ((newValue+plus)>99) newValue = 99;
-					else if ((newValue+plus)>0) newValue += plus;
-				section.changeProperty(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString());
+				createCommand(increment);
 			}
 
 		});

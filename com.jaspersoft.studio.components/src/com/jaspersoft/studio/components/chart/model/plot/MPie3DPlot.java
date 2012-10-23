@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.charts.JRPie3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
+import net.sf.jasperreports.charts.design.JRDesignPiePlot;
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -123,6 +124,10 @@ public class MPie3DPlot extends MChartPlot {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignPie3DPlot jrElement = (JRDesignPie3DPlot) getValue();
+		if (ilFont == null) {
+			ilFont = new MChartItemLabel(jrElement.getItemLabel());
+			setChildListener(ilFont);
+		}
 		if (id.equals(JRDesignPie3DPlot.PROPERTY_SHOW_LABELS))
 			return jrElement.getShowLabels();
 		if (id.equals(JRDesignPie3DPlot.PROPERTY_CIRCULAR))
@@ -133,15 +138,14 @@ public class MPie3DPlot extends MChartPlot {
 			return jrElement.getLabelFormat();
 		if (id.equals(JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR))
 			return jrElement.getDepthFactorDouble();
-		if (id.equals(JRDesignPie3DPlot.PROPERTY_ITEM_LABEL)) {
-			if (ilFont == null) {
-				ilFont = new MChartItemLabel(jrElement.getItemLabel());
-				setChildListener(ilFont);
-			}
+		if (id.equals(JRDesignPiePlot.PROPERTY_ITEM_LABEL)) {
 			return ilFont;
+		} else {
+			Object value = ilFont.getPropertyValue(id);
+			if (value == null) 
+				value = super.getPropertyValue(id);
+			return value;
 		}
-
-		return super.getPropertyValue(id);
 	}
 
 	private MChartItemLabel ilFont;
@@ -167,6 +171,7 @@ public class MPie3DPlot extends MChartPlot {
 		else if (id.equals(JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR))
 			jrElement.setDepthFactor((Double) value);
 		else
-			super.setPropertyValue(id, value);
+			ilFont.setPropertyValue(id, value);
+		super.setPropertyValue(id, value);
 	}
 }

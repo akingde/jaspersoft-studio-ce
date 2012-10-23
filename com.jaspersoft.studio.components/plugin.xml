@@ -561,6 +561,7 @@
                category="element"
                id="com.jaspersoft.studio.components.chart.plot"
                indented="true"
+               image="icons/color-swatch.png"
                label="Chart Plot">
          </propertyTab>
          <propertyTab

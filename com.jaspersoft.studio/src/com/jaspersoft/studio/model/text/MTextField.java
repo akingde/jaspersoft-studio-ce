@@ -185,6 +185,17 @@ public class MTextField extends MTextElement {
 	private MHyperLink mHyperLink;
 	private static JSSEnumPropertyDescriptor evaluationTimeD;
 
+	
+	@Override
+	public Object getPropertyActualValue(Object id){
+		JRDesignTextField jrElement = (JRDesignTextField) getValue();
+		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
+			return jrElement.isBlankWhenNull();
+		if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
+			return jrElement.getPattern();
+		return super.getPropertyActualValue(id);
+	}
+	
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();

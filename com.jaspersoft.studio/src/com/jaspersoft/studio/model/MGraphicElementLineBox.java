@@ -97,15 +97,6 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 	
 	@Override
 	public Object getPropertyActualValue(Object id) {
-		// pen
-		if (id.equals(LINE_BOX)) {
-			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
-			if (lineBox == null) {
-				lineBox = new MLineBox(jrGraphicElement.getLineBox());
-				setChildListener(lineBox);
-			}
-			return lineBox;
-		}
 		return super.getPropertyActualValue(id);
 	}
 

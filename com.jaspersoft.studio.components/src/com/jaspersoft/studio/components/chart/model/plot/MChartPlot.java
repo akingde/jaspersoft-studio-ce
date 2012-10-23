@@ -142,6 +142,22 @@ public class MChartPlot extends APropertyNode {
 
 		return null;
 	}
+	
+	public Object getPropertyActualValue(Object id) {
+		JRBaseChartPlot jrElement = (JRBaseChartPlot) getValue();
+		if (id.equals(JRBaseChartPlot.PROPERTY_BACKCOLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getBackcolor());
+		if (id.equals(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA)){
+			Float alpha = jrElement.getBackgroundAlphaFloat();
+			return alpha != null ? alpha : 1.0f;
+		}
+		if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA)){
+			Float alpha = jrElement.getForegroundAlphaFloat();
+			return alpha != null ? alpha : 1.0f;
+		}
+		return super.getPropertyActualValue(id);
+	}
+
 
 	/*
 	 * (non-Javadoc)

@@ -170,14 +170,14 @@ public class ComboButton extends Viewer {
                 case SWT.Resize:
                     clearCaches();
                     break;
-                case SWT.MouseDown:
-                    if (event.button == 1)
-                        handleMousePress();
-                    break;
                 case SWT.MouseUp:
                     if (event.button == 1)
-                        handleMouseRelease();
+                    	handleMousePress();//handleMouseRelease();
                     break;
+               /*case SWT.MouseDown:
+                  if (event.button == 1)
+                      handleMousePress();
+                  break;*/
                 case SWT.MouseEnter:
                     handleMouseEnter();
                     break;
@@ -221,6 +221,7 @@ public class ComboButton extends Viewer {
         setPressed(false);
     }
 
+    
     protected void handleMouseEnter() {
         if (!getControl().isEnabled())
             return;

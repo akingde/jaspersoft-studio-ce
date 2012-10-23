@@ -31,6 +31,9 @@ public class PiePlot extends APlot {
 	@Override
 	public void createControls(AbstractSection section, Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
+		
+		parent = section.getWidgetFactory().createSection(parent, "Labels",true, 2, 3);
+		
 		section.createWidget4Property(parent,
 				JRDesignPiePlot.PROPERTY_SHOW_LABELS);
 
@@ -42,7 +45,7 @@ public class PiePlot extends APlot {
 		section.createWidget4Property(parent,
 				JRDesignPiePlot.PROPERTY_LEGEND_LABEL_FORMAT);
 
-		parent = section.getWidgetFactory().createSection(parent, "Item Label",
+		parent = section.getWidgetFactory().createSection(parent, "Font color",
 				true, 4, 2);
 
 		section.createWidget4Property(parent,

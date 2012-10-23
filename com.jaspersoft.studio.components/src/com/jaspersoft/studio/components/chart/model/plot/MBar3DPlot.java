@@ -24,7 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.charts.JRBar3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignBar3DPlot;
-import net.sf.jasperreports.charts.design.JRDesignItemLabel;
+import net.sf.jasperreports.charts.design.JRDesignPiePlot;
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.swt.graphics.RGB;
@@ -267,6 +267,10 @@ public class MBar3DPlot extends MChartPlot {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignBar3DPlot jrElement = (JRDesignBar3DPlot) getValue();
+		if (ilFont == null) {
+			ilFont = new MChartItemLabel(jrElement.getItemLabel());
+			setChildListener(ilFont);
+		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement
 					.getOwnCategoryAxisLabelColor());
@@ -344,18 +348,14 @@ public class MBar3DPlot extends MChartPlot {
 					jrElement.getValueAxisTickLabelFont(), null, this);
 			return vtFont;
 		}
-		if (id.equals(JRDesignBar3DPlot.PROPERTY_ITEM_LABEL)) {
-			if (ilFont == null) {
-				if (jrElement.getItemLabel() == null)
-					jrElement.setItemLabel(new JRDesignItemLabel(null,
-							jrElement.getChart()));
-				ilFont = new MChartItemLabel(jrElement.getItemLabel());
-				setChildListener(ilFont);
-			}
+		if (id.equals(JRDesignPiePlot.PROPERTY_ITEM_LABEL)) {
 			return ilFont;
+		} else {
+			Object value = ilFont.getPropertyValue(id);
+			if (value == null) 
+				value = super.getPropertyValue(id);
+			return value;
 		}
-
-		return super.getPropertyValue(id);
 	}
 
 	private MFont clFont;
@@ -462,7 +462,8 @@ public class MBar3DPlot extends MChartPlot {
 			jrElement.setDomainAxisMinValueExpression(ExprUtil.setValues(
 					jrElement.getDomainAxisMinValueExpression(), value));
 		else
-			super.setPropertyValue(id, value);
+			ilFont.setPropertyValue(id, value);
+		super.setPropertyValue(id, value);
 
 	}
 }

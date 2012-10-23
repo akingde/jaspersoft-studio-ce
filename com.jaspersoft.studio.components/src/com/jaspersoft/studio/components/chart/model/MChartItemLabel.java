@@ -122,17 +122,17 @@ public class MChartItemLabel extends APropertyNode {
 	 * .lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignItemLabel jrElement = (JRDesignItemLabel) getValue();
-		if (id.equals(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR)
-				&& value instanceof RGB)
-			jrElement
-					.setBackgroundColor(Colors.getAWT4SWTRGBColor((RGB) value));
-		else if (id.equals(JRDesignItemLabel.PROPERTY_COLOR)
-				&& value instanceof RGB)
-			jrElement.setColor(Colors.getAWT4SWTRGBColor((RGB) value));
-		else if (id.equals(JRDesignItemLabel.PROPERTY_FONT)) {
-			jrElement.setFont(MFontUtil.setMFont(value));
-		}
+			JRDesignItemLabel jrElement = (JRDesignItemLabel) getValue();
+			if (id.equals(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR)
+					&& value instanceof RGB)
+				jrElement
+						.setBackgroundColor(Colors.getAWT4SWTRGBColor((RGB) value));
+			else if (id.equals(JRDesignItemLabel.PROPERTY_COLOR)
+					&& value instanceof RGB)
+				jrElement.setColor(Colors.getAWT4SWTRGBColor((RGB) value));
+			else if (id.equals(JRDesignItemLabel.PROPERTY_FONT)) {
+				jrElement.setFont(MFontUtil.setMFont(value));
+			}
 	}
 
 	public ImageDescriptor getImagePath() {

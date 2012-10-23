@@ -30,14 +30,14 @@ import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
 import com.jaspersoft.studio.components.chart.property.section.plot.PlotFactory;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
-import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
 /*
  * The location section on the location tab.
  * 
  * @author Chicu Veaceslav
  */
-public class ChartPlotSection extends AbstractSection {
+public class ChartPlotSection extends AbstractRealValueSection {
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -58,27 +58,27 @@ public class ChartPlotSection extends AbstractSection {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		group.setLayoutData(gd);
-		group.setLayout(new GridLayout(4, false));
+		group.setLayout(new GridLayout(3, false));
 
 		getWidgetFactory().createCLabel(group, "Backcolor");
 
-		createWidget4Property(group, JRBaseChartPlot.PROPERTY_BACKCOLOR, false);
-
-		getWidgetFactory().createCLabel(group, "Alpha");
-		createWidget4Property(group, JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA,
-				false);
-
-		gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		gd.horizontalSpan = 3;
-		createWidget4Property(group, JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA)
-				.getLabel().setLayoutData(gd);
+		createWidget4Property(group, JRBaseChartPlot.PROPERTY_BACKCOLOR, false).getControl().setLayoutData(gd);
+		
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		createWidget4Property(group, JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA).getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		createWidget4Property(group, JRBaseChartPlot.PROPERTY_SERIES_COLORS)
-				.getControl().setLayoutData(gd);
+		gd.horizontalSpan = 2;
+		createWidget4Property(group, JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA).getControl().setLayoutData(gd);
 
-		createWidget4Property(group, JRBaseChartPlot.PROPERTY_ORIENTATION);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		createWidget4Property(group, JRBaseChartPlot.PROPERTY_SERIES_COLORS).getControl().setLayoutData(gd);
+
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		createWidget4Property(group, JRBaseChartPlot.PROPERTY_ORIENTATION).getControl().setLayoutData(gd);;
 	}
 
 	@Override

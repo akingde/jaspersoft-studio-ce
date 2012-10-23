@@ -114,6 +114,10 @@ public class MPiePlot extends MChartPlot {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignPiePlot jrElement = (JRDesignPiePlot) getValue();
+		if (ilFont == null) {
+			ilFont = new MChartItemLabel(jrElement.getItemLabel());
+			setChildListener(ilFont);
+		}
 		if (id.equals(JRDesignPiePlot.PROPERTY_SHOW_LABELS))
 			return jrElement.getShowLabels();
 		if (id.equals(JRDesignPiePlot.PROPERTY_CIRCULAR))
@@ -123,14 +127,27 @@ public class MPiePlot extends MChartPlot {
 		if (id.equals(JRDesignPiePlot.PROPERTY_LABEL_FORMAT))
 			return jrElement.getLabelFormat();
 		if (id.equals(JRDesignPiePlot.PROPERTY_ITEM_LABEL)) {
-			if (ilFont == null) {
-				ilFont = new MChartItemLabel(jrElement.getItemLabel());
-				setChildListener(ilFont);
-			}
 			return ilFont;
+		} else {
+			Object value = ilFont.getPropertyValue(id);
+			if (value == null) 
+				value = super.getPropertyValue(id);
+			return value;
 		}
-
-		return super.getPropertyValue(id);
+	}
+	
+	@Override
+	public Object getPropertyActualValue(Object id) {
+		JRDesignPiePlot jrElement = (JRDesignPiePlot) getValue();
+		if (id.equals(JRDesignPiePlot.PROPERTY_SHOW_LABELS)){
+			Boolean value = jrElement.getShowLabels();
+			return value != null ? value : true;
+		}
+		if (id.equals(JRDesignPiePlot.PROPERTY_CIRCULAR)){
+			Boolean value = jrElement.getCircular();
+			return value != null ? value : true;
+		}
+		return super.getPropertyActualValue(id);
 	}
 
 	private MChartItemLabel ilFont;
@@ -153,7 +170,7 @@ public class MPiePlot extends MChartPlot {
 			jrElement.setLegendLabelFormat((String) value);
 		else if (id.equals(JRDesignPiePlot.PROPERTY_LABEL_FORMAT))
 			jrElement.setLabelFormat((String) value);
-		else
-			super.setPropertyValue(id, value);
+		else  ilFont.setPropertyValue(id, value);
+		super.setPropertyValue(id, value);
 	}
 }

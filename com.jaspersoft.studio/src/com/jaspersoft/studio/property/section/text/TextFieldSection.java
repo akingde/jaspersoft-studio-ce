@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
-import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
 
 /*
@@ -38,7 +38,7 @@ import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
  * 
  * @author Chicu Veaceslav
  */
-public class TextFieldSection extends AbstractSection {
+public class TextFieldSection extends AbstractRealValueSection {
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,

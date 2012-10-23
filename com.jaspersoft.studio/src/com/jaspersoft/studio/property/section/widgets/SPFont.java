@@ -173,11 +173,47 @@ public class SPFont extends ASPropertyWidget {
 		changeProperty(section, pDescriptor.getId(), pd.getId(), value);
 	}
 
+	/**
+	 * The increment\decrement font size button, adapted to the chart font structure
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class SPChartButtom extends SPButon{
+		
+		/**
+		 * The type of font represented (title, legend, subtitle)
+		 */
+		private String fontNameProperty;
+		
+		public SPChartButtom(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, APropertyNode fontValue, String fontNameProperty){
+			super(parent,section,pDescriptor, fontValue);
+			this.fontNameProperty = fontNameProperty;
+		}
+		
+		/**
+		 * The ovverrided version first change the font into a temp. mfont item, the use this object to 
+		 * replace the font size inside the chart model
+		 */
+		@Override
+		protected void createCommand(boolean increment){
+			Object fontSizeString = fontSize.getText(); 
+			Integer newValue = 2;
+			if (fontSizeString != null && fontSizeString.toString().length()>0){
+				newValue = Integer.valueOf(fontSizeString.toString());
+				Integer plus = null;
+				if (increment) plus = Math.round((new Float(newValue) / 100)*SPButon.factor)+1;
+				else plus =  Math.round((new Float(newValue) / 100)*-SPButon.factor)-1;
+				if ((newValue+plus)>99) newValue = 99;
+				else if ((newValue+plus)>0) newValue += plus;
+				section.changePropertyOn(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString(), mfont);
+				section.changePropertyOn(fontNameProperty, new MFont((JRFont) mfont.getValue()), parentNode);
+			}
+		}
+	}
 	
 	protected void createComponent(Composite parent) {
 		mfont = new MFont(new JRDesignFont(null));
-
-		group = section.getWidgetFactory().createSection(parent, pDescriptor.getDisplayName(), true, 2);
+		group = section.getWidgetFactory().createSection(parent, pDescriptor.getDisplayName(), true, 3);
 
 		final FontNamePropertyDescriptor pd = (FontNamePropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
@@ -208,10 +244,15 @@ public class SPFont extends ASPropertyWidget {
 			}
 		});
 		fontSize.setToolTipText(pd1.getDescription());
+		
+		/*
+		 *Button to increment\decrment the font size 
+		 */
+		new SPChartButtom(group, section, pd1,  mfont, pDescriptor.getId().toString());
 
 		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.WRAP | SWT.LEFT);
 		GridData gd = new GridData();
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 3;
 		toolBar.setLayoutData(gd);
 
 		boldButton = createItem(toolBar, JRBaseStyle.PROPERTY_BOLD, "icons/resources/edit-bold.png");

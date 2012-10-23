@@ -21,14 +21,12 @@ package com.jaspersoft.studio.model.text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.TabStop;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
-import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.type.LineSpacingEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -36,14 +34,11 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.tabstops.TabStopsPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 public class MParagraph extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -174,14 +169,8 @@ public class MParagraph extends APropertyNode {
 				return jrElement.getSpacingAfter();
 			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH))
 				return jrElement.getTabStopWidth();
-			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOPS)) {
-				TabStop[] tabStops = jrElement.getTabStops();
-				if (tabStops != null)
-					return Arrays.asList(tabStops);
-				return new ArrayList<TabStop>();
-			}
 		}
-		return null;
+		return super.getPropertyActualValue(id);
 	}
 
 	/*

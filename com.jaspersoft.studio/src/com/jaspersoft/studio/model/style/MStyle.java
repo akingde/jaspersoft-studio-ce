@@ -554,43 +554,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	public Object getPropertyActualValue(Object id) {
 		if (getValue() == null)
 			return null;
-		if (getValue() instanceof JRDesignStyle) {
-			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
-			if (id.equals(JRDesignStyle.PROPERTY_NAME))
-				return jrstyle.getName();
-			if (id.equals(JRDesignStyle.PROPERTY_DEFAULT))
-				return new Boolean(jrstyle.isDefault());
-			if (id.equals(JRDesignStyle.PROPERTY_PARENT_STYLE)) {
-				if (jrstyle.getStyleNameReference() != null)
-					return jrstyle.getStyleNameReference();
-				if (jrstyle.getStyle() != null)
-					return jrstyle.getStyle().getName();
-				return ""; //$NON-NLS-1$
-			}
-			if (id.equals(PARAGRAPH)) {
-				if (mParagraph == null) {
-					mParagraph = new MParagraph((JRBaseParagraph) jrstyle.getParagraph());
-					setChildListener(mParagraph);
-				}
-				return mParagraph;
-			}
-		}
-
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
-		if (id.equals(LINE_PEN)) {
-			if (linePen == null) {
-				linePen = new MLinePen(jrstyle.getLinePen());
-				setChildListener(linePen);
-			}
-			return linePen;
-		}
-		if (id.equals(LINE_BOX)) {
-			if (lineBox == null) {
-				lineBox = new MLineBox(jrstyle.getLineBox());
-				setChildListener(lineBox);
-			}
-			return lineBox;
-		}
 		if (id.equals(JRBaseStyle.PROPERTY_PATTERN))
 			return jrstyle.getPattern();
 		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
@@ -640,7 +604,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			if (val != null)
 				return val;
 		}
-		return null;
+		return super.getPropertyActualValue(id);
 	}
 
 	/*
