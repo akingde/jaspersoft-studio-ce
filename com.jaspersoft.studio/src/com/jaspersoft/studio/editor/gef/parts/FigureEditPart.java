@@ -34,7 +34,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.SnapToGrid;
-import org.eclipse.gef.tools.DragEditPartsTracker;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -46,10 +45,9 @@ import com.jaspersoft.studio.editor.gef.figures.borders.ElementLineBorder;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.SearchParentDragTracker;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
@@ -115,38 +113,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	 */
 	@Override
 	public org.eclipse.gef.DragTracker getDragTracker(org.eclipse.gef.Request request) {
-		return new DragEditPartsTracker(this){
-			/**
-			 * Take and edit part and search it's container
-			 * @param child
-			 * @return the container of the child, could be null
-			 */
-			private EditPart searchParent(EditPart child){
-				if (child != null){
-					//This use the model for the search because every EditPart in the report has the same father.
-					Object parentModel = ((APropertyNode)child.getModel()).getParent();
-					for(Object actualChild: child.getParent().getChildren()){
-						EditPart actualChildPart = (EditPart) actualChild;
-						if (parentModel == actualChildPart.getModel()){
-							return actualChildPart;
-						}
-					}
-				}
-				return null;
-			}
-			
-			/**
-			 * Called to get the destination edit part during a drag and drop, if the destination its not
-			 * a container the it parent is taken
-			 */
-			protected EditPart getTargetEditPart() {
-				EditPart target = super.getTargetEditPart();
-				EditPart parent = null;
-				if (!(target instanceof IContainer))
-					parent = searchParent(target);
-				return parent != null ? parent : target;
-			}
-		};
+		return new SearchParentDragTracker(this);
 	};
 
 	/*

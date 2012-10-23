@@ -23,7 +23,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -33,9 +32,11 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
+import org.eclipse.swt.graphics.Color;
 
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.HighlightBorder;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
@@ -46,9 +47,28 @@ import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.frame.MFrame;
 
 public class FrameFigureEditPart extends FigureEditPart implements IContainer {
+	
+	/**
+	 * Color of the feedback when an element is dragged into the frame
+	 */
+	public static Color addElementColor = ColorConstants.blue;
+	
+	/**
+	 * figure of the target feedback
+	 */
+	private RectangleFigure targetFeedback;
+	
 	@Override
 	public MFrame getModel() {
 		return (MFrame) super.getModel();
+	}
+	
+	/**
+	 * True if the frame figure has a target figure feedback set, otherwise false
+	 * @return
+	 */
+	public boolean hasTargetFeedBack(){
+		return targetFeedback != null;
 	}
 
 	/*
@@ -60,8 +80,6 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
-
-			private RectangleFigure targetFeedback;
 
 			@Override
 			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
@@ -96,7 +114,8 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 						}
 					} else {
 						CompoundCommand c = new CompoundCommand();
-
+						//Without this an element it's one point up when placed into a frame
+						rect.y++;
 						c.add(OutlineTreeEditPartFactory.getOrphanCommand(cmodel.getParent(), cmodel));
 						c.add(new CreateElementCommand((MFrame) getModel(), cmodel, rect, -1));
 						return c;
@@ -126,6 +145,7 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 				}
 			}
 
+
 			/**
 			 * Paint the figure to give the feedback, a blue border overlapping the band border
 			 * 
@@ -146,12 +166,7 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 					getFeedbackLayer().translateToRelative(rect);
 
 					targetFeedback.setBounds(rect.shrink(0, 1));
-					// Commented for back-compatibility in 3.6. 
-					// Replaced with the following line.
-					// targetFeedback.getBounds().setX(hostFigure.getBounds().x);
-					targetFeedback.getBounds().x = hostFigure.getBounds().x;
-					// targetFeedback.getBounds().setY(hostFigure.getBounds().y);
-					targetFeedback.setBorder(new LineBorder(ColorConstants.lightBlue, 3));
+					targetFeedback.setBorder(new HighlightBorder(addElementColor,2));
 					addFeedback(targetFeedback);
 				}
 				return targetFeedback;

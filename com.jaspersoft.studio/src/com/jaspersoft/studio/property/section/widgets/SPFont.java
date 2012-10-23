@@ -178,7 +178,7 @@ public class SPFont extends ASPropertyWidget {
 	 * @author Orlandin Marco
 	 *
 	 */
-	private class SPChartButtom extends SPButon{
+	private class SPChartButtom extends SPButton{
 		
 		/**
 		 * The type of font represented (title, legend, subtitle)
@@ -201,8 +201,8 @@ public class SPFont extends ASPropertyWidget {
 			if (fontSizeString != null && fontSizeString.toString().length()>0){
 				newValue = Integer.valueOf(fontSizeString.toString());
 				Integer plus = null;
-				if (increment) plus = Math.round((new Float(newValue) / 100)*SPButon.factor)+1;
-				else plus =  Math.round((new Float(newValue) / 100)*-SPButon.factor)-1;
+				if (increment) plus = Math.round((new Float(newValue) / 100)*SPButton.factor)+1;
+				else plus =  Math.round((new Float(newValue) / 100)*-SPButton.factor)-1;
 				if ((newValue+plus)>99) newValue = 99;
 				else if ((newValue+plus)>0) newValue += plus;
 				section.changePropertyOn(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString(), mfont);

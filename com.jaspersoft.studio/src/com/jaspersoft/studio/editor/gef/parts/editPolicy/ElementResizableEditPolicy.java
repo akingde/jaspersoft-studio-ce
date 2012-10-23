@@ -192,7 +192,7 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 	 * @since 3.7
 	 */
 	protected DragEditPartsTracker getDragTracker() {
-		return new DragEditPartsTracker(getHost());
+		return new SearchParentDragTracker(getHost());
 	}
 	
 	/**

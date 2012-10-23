@@ -25,7 +25,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
-import com.jaspersoft.studio.property.section.widgets.SPButon;
+import com.jaspersoft.studio.property.section.widgets.SPButton;
 
 /**
  * This class describe a toolbar with two buttons to increment and decrement the font 
@@ -55,7 +55,7 @@ public class ButtonPropertyDescriptor extends PropertyDescriptor implements IPro
 	 */
 	@Override
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPButon(parent, section, this, elementFont);
+		return new SPButton(parent, section, this, elementFont);
 	}
 
 }

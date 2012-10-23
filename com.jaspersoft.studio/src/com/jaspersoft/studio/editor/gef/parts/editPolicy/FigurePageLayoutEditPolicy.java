@@ -74,7 +74,7 @@ public class FigurePageLayoutEditPolicy extends PageLayoutEditPolicy {
 							getFeedbackLayer().translateToRelative(rect);
 
 							targetFeedback.setBounds(rect.shrink(4, 4));
-							targetFeedback.setBorder(new LineBorder(ColorConstants.lightBlue, 3));
+							targetFeedback.setBorder(new LineBorder(ColorConstants.lightBlue, 2));
 							addFeedback(targetFeedback);
 						}
 						return targetFeedback;

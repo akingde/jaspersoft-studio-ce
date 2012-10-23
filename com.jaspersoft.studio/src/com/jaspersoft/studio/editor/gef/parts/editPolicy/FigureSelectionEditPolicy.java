@@ -17,28 +17,27 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
 import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.FrameFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IRulerUpdatable;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 
 public class FigureSelectionEditPolicy extends SelectionEditPolicy {
+	
+	/**
+	 * Color of the feedback when the cursor is on the figure
+	 */
+	public static Color mouseEnterColor = ColorConstants.orange;
+	
 	@Override
 	protected void showSelection() {
 		EditPart host = getHost();
@@ -67,43 +66,31 @@ public class FigureSelectionEditPolicy extends SelectionEditPolicy {
 	}
 
 	/**
-	 * Print an internal border for the figure, half-transparent
-	 * @author Orlandin Marco
-	 *
+	 * If the figure is a frame and it has already a feedback, this one will not displayed
+	 * @param hostFigure
+	 * @return true if the target figure it's a frame that has a feedback, otherwise false
 	 */
-	private class HighlightBorder extends LineBorder{
-		public HighlightBorder(Color color, int width) {
-			super(color, width);
+	protected boolean hasAlreadyColoredBorder(EditPart hostFigure){
+		if (hostFigure instanceof FrameFigureEditPart){
+			boolean result = ((FrameFigureEditPart)hostFigure).hasTargetFeedBack();
+			return result;
 		}
-		
-		@Override
-		public void paint(IFigure figure, Graphics graphics, Insets insets) {
-			Graphics2D g = ((J2DGraphics)graphics).getGraphics2D();
-			tempRect.setBounds(getPaintRectangle(figure, insets));
-			if (getWidth() % 2 == 1) {
-				tempRect.width--;
-				tempRect.height--;
-			}
-			tempRect.width = tempRect.width - getWidth();
-			tempRect.height = tempRect.height - getWidth();
-			tempRect.shrink(getWidth() / 2, getWidth() / 2);
-			g.setStroke(new BasicStroke(getWidth()));
-			if (getColor() != null){
-				RGB colorRGB= getColor().getRGB();
-				g.setColor(new java.awt.Color(colorRGB.red, colorRGB.green, colorRGB.blue,128));
-			}
-			g.drawRect(tempRect.x,tempRect.y, tempRect.width, tempRect.height);
-		}
+		return false;
 	}
+
 	
 	@Override
 	public void showTargetFeedback(Request request) {
 		EditPart host = getHost();
 		if (host instanceof FigureEditPart && host.getSelected() == EditPart.SELECTED_NONE){
-			
-			((FigureEditPart) host).getFigure().setBorder(new HighlightBorder(ColorConstants.orange, 2));
+			//Check if the figure is a frame that already has a feedback
+			if (!hasAlreadyColoredBorder(((FigureEditPart) host))){
+				((FigureEditPart) host).getFigure().setBorder(new HighlightBorder(mouseEnterColor, 2));
+				super.showTargetFeedback(request);
+			} else {
+				eraseTargetFeedback(request);
+			}
 		}
-		super.showTargetFeedback(request);
 	}
 
 	@Override

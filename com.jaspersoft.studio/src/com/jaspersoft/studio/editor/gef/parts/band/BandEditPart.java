@@ -32,7 +32,6 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -69,6 +68,7 @@ import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.SnapToGeometryThreshold;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.HighlightBorder;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.JSSSnapFeedBackPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
@@ -335,13 +335,8 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 					getHostFigure().translateToAbsolute(rect);
 					getFeedbackLayer().translateToRelative(rect);
 
-					targetFeedback.setBounds(rect.shrink(0, 1));
-					// Commented for back-compatibility in 3.6.
-					// Replaced with the following line.
-					// targetFeedback.getBounds().setX(hostFigure.getBounds().x);
-					targetFeedback.getBounds().x = hostFigure.getBounds().x;
-					// targetFeedback.getBounds().setY(hostFigure.getBounds().y);
-					targetFeedback.setBorder(new LineBorder(ColorConstants.lightBlue, 1));
+					targetFeedback.setBounds(rect.shrink(0, 1));;
+					targetFeedback.setBorder(new HighlightBorder(ColorConstants.blue,2));
 					addFeedback(targetFeedback);
 				}
 				return targetFeedback;
