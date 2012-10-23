@@ -73,6 +73,7 @@ public class Messages extends NLS {
 	public static String common_description;
 	public static String common_down;
 	public static String common_driver_class;
+	public static String common_edit;
 	public static String common_elements;
 	public static String common_empty;
 	public static String common_error_creating_nested_text_editor;

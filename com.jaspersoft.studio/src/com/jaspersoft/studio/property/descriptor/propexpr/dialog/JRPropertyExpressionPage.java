@@ -17,21 +17,24 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.properties.dialog;
+package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRPropertyExpression;
+import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
@@ -40,6 +43,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -49,52 +53,84 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxCellEditor;
+import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertiesList;
+import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
+import com.jaspersoft.studio.property.descriptor.properties.dialog.TPropertyLabelProvider;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
+import com.jaspersoft.studio.swt.widgets.table.EditButton;
+import com.jaspersoft.studio.swt.widgets.table.IEditElement;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
-public class JRPropertyPage extends WizardPage {
+public class JRPropertyExpressionPage extends WizardPage {
+	private final class EditElement implements IEditElement<PropertyDTO> {
+		@Override
+		public void editElement(List<PropertyDTO> input, int pos) {
+			PropertyDTO v = (PropertyDTO) input.get(pos);
+			if (v == null)
+				return;
+			try {
+				v = (PropertyDTO) v.clone();
+				JRPropertyDialog dialog = new JRPropertyDialog(Display.getDefault().getActiveShell());
 
-	private JRPropertiesMap value;
+				dialog.setValue(v);
+				if (dialog.open() == Window.OK)
+					input.set(pos, v);
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private PropertyExpressionsDTO value;
 	private Table table;
 	private TableViewer tableViewer;
 	private List<PropertyDTO> defaultProperties;
+	private EditButton<PropertyDTO> editButton;
 
-	public JRPropertiesMap getValue() {
-		return value;
+	public PropertyExpressionsDTO getValue() {
+		return new PropertyExpressionsDTO(value.getPropExpressions(), value.getPropMap(), value.getPnode());
 	}
 
 	@Override
 	public void dispose() {
 		// clear all properties
-		value = new JRPropertiesMap();
 		List<PropertyDTO> props = (List<PropertyDTO>) tableViewer.getInput();
+		List<JRPropertyExpression> pexpr = new ArrayList<JRPropertyExpression>();
+		for (String str : value.getPropMap().getPropertyNames())
+			value.getPropMap().removeProperty(str);
+		value.setPropExpressions(null);
 		for (PropertyDTO p : props) {
-			if (p.getProperty() != null && !p.getProperty().equals("")) //$NON-NLS-1$
-				value.setProperty(p.getProperty(), p.getValue().toString());
+			if (p.getValue() instanceof JRExpression) {
+				JRDesignPropertyExpression jrpexp = new JRDesignPropertyExpression();
+				jrpexp.setName(p.getProperty());
+				jrpexp.setValueExpression((JRExpression) p.getValue());
+				pexpr.add(jrpexp);
+			} else if (p.getValue() instanceof String) {
+				value.getPropMap().setProperty(p.getProperty(), (String) p.getValue());
+			}
 		}
+		if (pexpr != null && !pexpr.isEmpty())
+			value.setPropExpressions(pexpr.toArray(new JRPropertyExpression[pexpr.size()]));
 		super.dispose();
 	}
 
-	public void setValue(JRPropertiesMap value) {
+	public void setValue(PropertyExpressionsDTO value) {
 		this.value = value;
-		if (value == null) {
-			value = new JRPropertiesMap();
-		}
 		if (table != null)
 			fillTable(table);
 	}
 
-	protected JRPropertyPage(String pageName) {
+	protected JRPropertyExpressionPage(String pageName) {
 		super(pageName);
 		setTitle(Messages.common_properties);
 		setDescription(Messages.JRPropertyPage_description);
 	}
 
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(2, false);
 		composite.setLayout(layout);
@@ -118,11 +154,13 @@ public class JRPropertyPage extends WizardPage {
 				while (getName(input, name, i) == null)
 					i++;
 				name += "_" + i; //$NON-NLS-1$
-
-				PropertyDTO p = new PropertyDTO();
-				p.setProperty(name);
-				p.setValue("NEW_VALUE"); //$NON-NLS-1$
-				return p;
+				PropertyDTO v = new PropertyDTO(name, "NEW_VALUE");
+				v.setPnode(value.getPnode());
+				JRPropertyDialog dialog = new JRPropertyDialog(Display.getDefault().getActiveShell());
+				dialog.setValue(v);
+				if (dialog.open() == Window.OK)
+					return v;
+				return null;
 			}
 
 			private String getName(List<?> input, String name, int i) {
@@ -137,6 +175,8 @@ public class JRPropertyPage extends WizardPage {
 			}
 		});
 
+		editButton = new EditButton<PropertyDTO>();
+		editButton.createEditButtons(bGroup, tableViewer, new EditElement());
 		new DeleteButton().createDeleteButton(bGroup, tableViewer);
 		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
 	}
@@ -144,11 +184,26 @@ public class JRPropertyPage extends WizardPage {
 	private void buildTable(Composite composite) {
 		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
+		table.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				editButton.push();
+			}
+		});
 
 		tableViewer = new TableViewer(table);
 		tableViewer.setContentProvider(new ListContentProvider());
 		tableViewer.setLabelProvider(new TPropertyLabelProvider());
-		attachCellEditors(tableViewer, table);
+		// attachCellEditors(tableViewer, table);
 
 		setColumnToolTip();
 
@@ -172,9 +227,8 @@ public class JRPropertyPage extends WizardPage {
 		table.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				if (e.item instanceof TableItem) {
+				if (e.item instanceof TableItem)
 					setMessage(getDescription(((TableItem) e.item)));
-				}
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -182,71 +236,22 @@ public class JRPropertyPage extends WizardPage {
 		});
 	}
 
-	private void attachCellEditors(final TableViewer viewer, Composite parent) {
-		viewer.setCellModifier(new ICellModifier() {
-			public boolean canModify(Object element, String property) {
-				if (property.equals("VALUE")) //$NON-NLS-1$
-					return true;
-				if (property.equals("NAME")) //$NON-NLS-1$
-					return true;
-				return false;
-			}
-
-			public Object getValue(Object element, String property) {
-				PropertyDTO prop = (PropertyDTO) element;
-				if ("VALUE".equals(property)) //$NON-NLS-1$
-					return prop.getValue();
-
-				if ("NAME".equals(property)) { //$NON-NLS-1$
-					return prop.getProperty();
-				}
-				return ""; //$NON-NLS-1$
-			}
-
-			public void modify(Object element, String property, Object value) {
-				TableItem tableItem = (TableItem) element;
-				PropertyDTO data = (PropertyDTO) tableItem.getData();
-				if ("VALUE".equals(property)) { //$NON-NLS-1$
-					data.setValue((String) value);
-				} else if ("NAME".equals(property)) { //$NON-NLS-1$
-					String str = (String) value;
-					if (str == null || str.trim().equals("")) { //$NON-NLS-1$
-						setErrorMessage(Messages.JRPropertyPage_error_message_property_must_not_be_empty);
-						setPageComplete(false);
-						return;
-					}
-					List<PropertyDTO> plist = (List<PropertyDTO>) tableViewer.getInput();
-					for (PropertyDTO p : plist) {
-						if (p != data && p.getProperty() != null && p.getProperty().equals(str)) {
-							setErrorMessage(Messages.common_error_message_unique_properties);
-							setPageComplete(false);
-							return;
-						}
-					}
-					data.setProperty(str);
-				}
-				setErrorMessage(null);
-				setMessage(getDescription(tableItem));
-				setPageComplete(true);
-				tableViewer.update(element, new String[] { property });
-				tableViewer.refresh();
-			}
-		});
-
-		viewer.setCellEditors(new CellEditor[] { new RWComboBoxCellEditor(parent, getDefaultPropertyItems()),
-				new TextCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
 	private void fillTable(Table table) {
 		List<PropertyDTO> props = new ArrayList<PropertyDTO>();
-		String[] names = value.getPropertyNames();
-		for (int i = 0; i < names.length; i++) {
-			PropertyDTO p = new PropertyDTO();
-			p.setProperty(names[i]);
-			p.setValue(value.getProperty(names[i]));
-			props.add(p);
-		}
+		if (value.getPropExpressions() != null)
+			for (JRPropertyExpression pe : value.getPropExpressions())
+				if (pe != null) {
+					PropertyDTO dto = new PropertyDTO(pe.getName(), pe.getValueExpression());
+					dto.setPnode(value.getPnode());
+					props.add(dto);
+				}
+		JRPropertiesMap pmap = value.getPropMap();
+		if (pmap != null)
+			for (String pe : pmap.getPropertyNames()) {
+				PropertyDTO dto = new PropertyDTO(pe, pmap.getProperty(pe));
+				dto.setPnode(value.getPnode());
+				props.add(dto);
+			}
 		tableViewer.setInput(props);
 	}
 
@@ -320,27 +325,6 @@ public class JRPropertyPage extends WizardPage {
 		table.addListener(SWT.MouseMove, tableListener);
 		table.addListener(SWT.MouseHover, tableListener);
 	}
-
-	// private String[] getPropertyItems(String[] items, String dto) {
-	// List<PropertyDTO> props = (List<PropertyDTO>) tableViewer.getInput();
-	// Set<String> set = new HashSet<String>();
-	// for (PropertyDTO p : props)
-	// if (!dto.equals(p.getProperty()))
-	// set.add(p.getProperty());
-	// List<String> l = new ArrayList<String>();
-	// boolean isDTO = false;
-	// String[] names = getDefaultPropertyItems();
-	// for (int i = 0; i < names.length; i++) {
-	// if (!set.contains(names[i]))
-	// l.add(names[i]);
-	// if (dto.equals(names[i])) {
-	// isDTO = true;
-	// }
-	// }
-	//		l.add(0, !isDTO ? "" : dto); //$NON-NLS-1$
-	// // default - exclude existing
-	// return l.toArray(new String[l.size()]);
-	// }
 
 	private String[] getDefaultPropertyItems() {
 		defaultProperties = getDefaultProperties();

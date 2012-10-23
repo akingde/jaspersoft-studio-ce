@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.base.JRBasePen;
@@ -57,7 +58,8 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
@@ -452,15 +454,15 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		printWhenExprD.setCategory(Messages.MGraphicElement_print_when);
 		desc.add(printWhenExprD);
 
-		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(
+		JPropertyExpressionsDescriptor propertiesD = new JPropertyExpressionsDescriptor(
 				JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, Messages.MGraphicElement_property_expressions);
 		propertiesD.setDescription(Messages.MGraphicElement_property_expressions_description);
 		desc.add(propertiesD);
 
-		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
-				Messages.common_properties);
-		propertiesMapD.setDescription(Messages.common_properties);
-		desc.add(propertiesMapD);
+		// JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
+		// Messages.common_properties);
+		// propertiesMapD.setDescription(Messages.common_properties);
+		// desc.add(propertiesMapD);
 
 		forecolorD.setCategory(Messages.common_graphic);
 		backcolorD.setCategory(Messages.common_graphic);
@@ -485,7 +487,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	private RWComboBoxPropertyDescriptor styleD;
 	private RComboBoxPropertyDescriptor groupChangesD;
 	private static JSSEnumPropertyDescriptor positionTypeD;
-	//private static JSSEnumPropertyDescriptor opaqueD;
+	// private static JSSEnumPropertyDescriptor opaqueD;
 	private static JSSEnumPropertyDescriptor opaqueD;
 	private static JSSEnumPropertyDescriptor stretchTypeD;
 
@@ -513,12 +515,17 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				return jrElement.getPrintWhenGroupChanges().getName();
 			return ""; //$NON-NLS-1$
 		}
+		JRPropertiesMap propertiesMap = jrElement.getPropertiesMap();
+		if (propertiesMap != null)
+			propertiesMap = propertiesMap.cloneProperties();
 		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
-			// jrElement.getPropertyExpressions();
-			// jrElement.getPropertiesMap()
-			// FIXME: jrElement.getPropertyExpression(); same field
-			return jrElement.getPropertiesMap();
+			JRPropertyExpression[] propertyExpressions = jrElement.getPropertyExpressions();
+			if (propertyExpressions != null)
+				propertyExpressions = propertyExpressions.clone();
+			return new PropertyExpressionsDTO(propertyExpressions, propertiesMap, this);
 		}
+		if (id.equals(PROPERTY_MAP))
+			return propertiesMap;
 		if (id.equals(JRDesignElement.PROPERTY_HEIGHT))
 			return new Integer(jrElement.getHeight());
 		if (id.equals(JRDesignElement.PROPERTY_WIDTH))
@@ -550,11 +557,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return new Boolean(jrElement.isPrintInFirstWholeBand());
 		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS))
 			return new Boolean(jrElement.isPrintWhenDetailOverflows());
-
-		if (id.equals(PROPERTY_MAP)) {
-			// to avoid duplication I remove it first
-			return jrElement.getPropertiesMap().cloneProperties();
-		}
 
 		return null;
 	}
@@ -604,29 +606,38 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				jrElement.setPrintWhenGroupChanges(group);
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
-			JRPropertiesMap v = (JRPropertiesMap) value;
-			JRPropertiesMap propertiesMap = jrElement.getPropertiesMap();
-			String[] names = propertiesMap.getPropertyNames();
-			for (int i = 0; i < names.length; i++) {
-				propertiesMap.removeProperty(names[i]);
+			if (value instanceof PropertyExpressionsDTO) {
+				PropertyExpressionsDTO dto = (PropertyExpressionsDTO) value;
+				JRPropertyExpression[] v = dto.getPropExpressions();
+				JRPropertyExpression[] expr = jrElement.getPropertyExpressions();
+				if (expr != null)
+					for (JRPropertyExpression ex : expr)
+						jrElement.removePropertyExpression(ex);
+				if (v != null)
+					for (JRPropertyExpression p : v)
+						jrElement.addPropertyExpression(p);
+				// now change properties
+				JRPropertiesMap vmap = dto.getPropMap();
+				String[] names = jrElement.getPropertiesMap().getPropertyNames();
+				for (int i = 0; i < names.length; i++) {
+					jrElement.getPropertiesMap().removeProperty(names[i]);
+				}
+				if (vmap != null) {
+					names = vmap.getPropertyNames();
+					for (int i = 0; i < names.length; i++)
+						jrElement.getPropertiesMap().setProperty(names[i], vmap.getProperty(names[i]));
+					this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
+				}
 			}
-			names = v.getPropertyNames();
-			for (int i = 0; i < names.length; i++)
-				propertiesMap.setProperty(names[i], v.getProperty(names[i]));
-			this.getPropertyChangeSupport().firePropertyChange(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, false, true);
-		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT)){
-				jrElement.setHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));
-		}
-		else if (id.equals(JRDesignElement.PROPERTY_WIDTH)){
-				jrElement.setWidth((Integer) Misc.nvl(value, Integer.valueOf(0)));
-		}
-		else if (id.equals(JRDesignElement.PROPERTY_X)) {
+		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT)) {
+			jrElement.setHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));
+		} else if (id.equals(JRDesignElement.PROPERTY_WIDTH)) {
+			jrElement.setWidth((Integer) Misc.nvl(value, Integer.valueOf(0)));
+		} else if (id.equals(JRDesignElement.PROPERTY_X)) {
 			jrElement.setX((Integer) Misc.nvl(value, Integer.valueOf(0)));
-		}
-		else if (id.equals(JRDesignElement.PROPERTY_Y)){
+		} else if (id.equals(JRDesignElement.PROPERTY_Y)) {
 			jrElement.setY((Integer) Misc.nvl(value, Integer.valueOf(0)));
-		}
-		else
+		} else
 		// colors
 		if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR)) {
 			jrElement.setForecolor(Colors.getAWT4SWTRGBColor((RGB) value));

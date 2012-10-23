@@ -45,6 +45,8 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertySourceProvider;
 
 import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.figure.CellFigure;
@@ -82,6 +84,9 @@ public class TableCellEditPart extends FigureEditPart implements
 		IContainerPart, IContainer {
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
+		if (key == IPropertySourceProvider.class
+				|| key == IPropertySource.class)
+			return super.getAdapter(key);
 		return getParent().getAdapter(key);
 	}
 

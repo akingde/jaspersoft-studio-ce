@@ -666,6 +666,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
  com.jaspersoft.studio.property.descriptor.pen;uses:="org.eclipse.jface.viewers,org.eclipse.swt.widgets,com.jaspersoft.studio.property.descriptor.text",
  com.jaspersoft.studio.property.descriptor.properties;uses:="org.eclipse.jface.viewers,org.eclipse.swt.widgets,com.jaspersoft.studio.property.descriptor.text",
  com.jaspersoft.studio.property.descriptor.properties.dialog;uses:="org.eclipse.jface.wizard,org.eclipse.swt.widgets,net.sf.jasperreports.engine",
+ com.jaspersoft.studio.property.descriptor.propexpr,
  com.jaspersoft.studio.property.descriptor.resource;
   uses:="org.eclipse.jface.viewers,
    org.eclipse.swt.widgets,

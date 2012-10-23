@@ -36,80 +36,77 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.properties.dialog;
+package com.jaspersoft.studio.swt.widgets.table;
 
-import com.jaspersoft.studio.model.ANode;
+import java.util.ArrayList;
+import java.util.List;
 
-/*
- * @author Chicu Veaceslav
- */
-public class PropertyDTO implements Cloneable {
-	private ANode pnode;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 
-	public ANode getPnode() {
-		return pnode;
+import com.jaspersoft.studio.messages.Messages;
+
+public class EditButton<T> {
+
+	private Button editB;
+	private EditListener listener;
+
+	private final class EditListener extends SelectionAdapter {
+
+		private TableViewer tableViewer;
+		private IEditElement<T> editElement;
+
+		private EditListener(TableViewer tableViewer, IEditElement<T> newElement) {
+			this.tableViewer = tableViewer;
+			this.editElement = newElement;
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
+
+			List<T> inlist = (List<T>) tableViewer.getInput();
+			if (inlist == null) {
+				inlist = new ArrayList<T>();
+				tableViewer.setInput(inlist);
+			}
+			int index = -1;
+			if (!s.isEmpty())
+				index = inlist.indexOf(s.getFirstElement());
+			else
+				return;
+			editElement.editElement(inlist, index);
+
+			tableViewer.refresh();
+			tableViewer.setSelection(s);
+			tableViewer.reveal(s.getFirstElement());
+		}
+
 	}
 
-	public void setPnode(ANode pnode) {
-		this.pnode = pnode;
+	public void createEditButtons(Composite composite, TableViewer tableViewer, IEditElement<T> editElement) {
+		editB = new Button(composite, SWT.PUSH);
+		editB.setText(Messages.common_edit);
+		editB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		listener = new EditListener(tableViewer, editElement);
+		editB.addSelectionListener(listener);
 	}
 
-	public PropertyDTO() {
-		super();
+	public void push() {
+		listener.widgetSelected(null);
 	}
 
-	public PropertyDTO(String property, String description, Object defValue) {
-		super();
-		this.property = property;
-		this.description = description;
-		this.defValue = defValue;
+	public void setButtonText(String text) {
+		editB.setText(text);
 	}
 
-	public PropertyDTO(String property, Object value) {
-		super();
-		this.property = property;
-		this.value = value;
-	}
-
-	private String property;
-	private String description;
-	private Object defValue;
-	private Object value;
-
-	public Object getValue() {
-		return value;
-	}
-
-	public void setValue(Object value) {
-		this.value = value;
-	}
-
-	public String getProperty() {
-		return property;
-	}
-
-	public void setProperty(String property) {
-		this.property = property;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Object getDefValue() {
-		return defValue;
-	}
-
-	public void setDefValue(String defValue) {
-		this.defValue = defValue;
-	}
-
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public void setEnabled(boolean enable) {
+		editB.setEnabled(enable);
 	}
 }

@@ -30,6 +30,7 @@ import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -64,7 +65,8 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -273,12 +275,20 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 				Messages.MColumn_column_width);
 		desc.add(wD);
 
-		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(
-				MGraphicElement.PROPERTY_MAP,
-				com.jaspersoft.studio.messages.Messages.common_properties);
-		propertiesMapD
-				.setDescription(com.jaspersoft.studio.messages.Messages.common_properties);
-		desc.add(propertiesMapD);
+		// JPropertiesPropertyDescriptor propertiesMapD = new
+		// JPropertiesPropertyDescriptor(
+		// MGraphicElement.PROPERTY_MAP,
+		// com.jaspersoft.studio.messages.Messages.common_properties);
+		// propertiesMapD
+		// .setDescription(com.jaspersoft.studio.messages.Messages.common_properties);
+		// desc.add(propertiesMapD);
+
+		JPropertyExpressionsDescriptor propertiesD = new JPropertyExpressionsDescriptor(
+				JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS,
+				com.jaspersoft.studio.messages.Messages.MGraphicElement_property_expressions);
+		propertiesD
+				.setDescription(com.jaspersoft.studio.messages.Messages.MGraphicElement_property_expressions_description);
+		desc.add(propertiesD);
 
 		printWhenExprD.setCategory(Messages.MColumn_column_properties_category);
 		wD.setCategory(Messages.MColumn_column_properties_category);
@@ -300,11 +310,19 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		if (id.equals(DesignCell.PROPERTY_HEIGHT))
 			return getMTable().getTableManager().getYhcolumn(type, grName,
 					jrElement).height;
-		if (id.equals(MGraphicElement.PROPERTY_MAP)) {
-			// to avoid duplication I remove it first
-			JRPropertiesMap pmap = jrElement.getPropertiesMap();
-			return pmap;
+		JRPropertiesMap propertiesMap = jrElement.getPropertiesMap();
+		if (propertiesMap != null)
+			propertiesMap = propertiesMap.cloneProperties();
+		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+			JRPropertyExpression[] propertyExpressions = jrElement
+					.getPropertyExpressions();
+			if (propertyExpressions != null)
+				propertyExpressions = propertyExpressions.clone();
+			return new PropertyExpressionsDTO(propertyExpressions,
+					propertiesMap, this);
 		}
+		if (id.equals(MGraphicElement.PROPERTY_MAP))
+			return propertiesMap;
 		return null;
 	}
 
@@ -378,6 +396,34 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 						v.getProperty(names[i]));
 			this.getPropertyChangeSupport().firePropertyChange(
 					MGraphicElement.PROPERTY_MAP, false, true);
+		} else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+			if (value instanceof PropertyExpressionsDTO) {
+				PropertyExpressionsDTO dto = (PropertyExpressionsDTO) value;
+				JRPropertyExpression[] v = dto.getPropExpressions();
+				JRPropertyExpression[] expr = jrElement
+						.getPropertyExpressions();
+				if (expr != null)
+					for (JRPropertyExpression ex : expr)
+						jrElement.removePropertyExpression(ex);
+				if (v != null)
+					for (JRPropertyExpression p : v)
+						jrElement.addPropertyExpression(p);
+				// now change properties
+				JRPropertiesMap vmap = dto.getPropMap();
+				String[] names = jrElement.getPropertiesMap()
+						.getPropertyNames();
+				for (int i = 0; i < names.length; i++) {
+					jrElement.getPropertiesMap().removeProperty(names[i]);
+				}
+				if (vmap != null) {
+					names = vmap.getPropertyNames();
+					for (int i = 0; i < names.length; i++)
+						jrElement.getPropertiesMap().setProperty(names[i],
+								vmap.getProperty(names[i]));
+					this.getPropertyChangeSupport().firePropertyChange(
+							MGraphicElement.PROPERTY_MAP, false, true);
+				}
+			}
 		}
 	}
 
