@@ -95,6 +95,7 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 
 	// The data model
 	private java.util.List<String[]> rows;
+	private JasperReportsConfiguration jConfig;
 
 	/**
 	 * Create the composite.
@@ -694,9 +695,9 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 
 		if (textExcelFileName.getText().length() > 0) {
 			DataAdapterDescriptor da = getDataAdapter();
-
-			JasperReportsConfiguration jConfig = new JasperReportsConfiguration(
-					DefaultJasperReportsContext.getInstance(),null);
+			if (jConfig == null)
+				jConfig = new JasperReportsConfiguration(
+						DefaultJasperReportsContext.getInstance(), null);
 			DataAdapterService das = DataAdapterServiceUtil
 					.getInstance(jConfig).getService(da.getDataAdapter());
 			jConfig.setJasperDesign(new JasperDesign());
@@ -714,6 +715,13 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 			setTableSelection(-1);
 			btnDelete.setEnabled(true);
 		}
+	}
+
+	@Override
+	public void dispose() {
+		if (jConfig != null)
+			jConfig.dispose();
+		super.dispose();
 	}
 
 	/**

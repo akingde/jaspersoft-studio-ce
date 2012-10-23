@@ -280,6 +280,13 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
 	}
 
+	@Override
+	public void dispose() {
+		if (jrContext != null)
+			jrContext.dispose();
+		super.dispose();
+	}
+
 	/** The model. */
 	private INode model = null;
 

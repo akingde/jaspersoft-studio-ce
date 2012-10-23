@@ -151,6 +151,8 @@ public abstract class ABasicEditor extends EditorPart {
 		partListener = null;
 		if (resourceListener != null)
 			((IFileEditorInput) getEditorInput()).getFile().getWorkspace().removeResourceChangeListener(resourceListener);
+		if (jrContext != null)
+			jrContext.dispose();
 		super.dispose();
 	}
 

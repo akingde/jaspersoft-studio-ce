@@ -35,32 +35,33 @@ import com.jaspersoft.studio.model.datasource.xml.XMLNode;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Editor composite for the Xpath query language.
- * This is supposed to used by {@link XMLDataAdapterDescriptor}.
+ * Editor composite for the Xpath query language. This is supposed to used by
+ * {@link XMLDataAdapterDescriptor}.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
-public class XMLWizardDataEditorComposite extends	ATreeWizardDataEditorComposite {
+public class XMLWizardDataEditorComposite extends
+		ATreeWizardDataEditorComposite {
 
-	private static final int JOB_DELAY=300;
+	private static final int JOB_DELAY = 300;
 	private XMLDocumentManager documentManager;
 	private DecorateTreeViewerJob decorateJob;
 	private NodeBoldStyledLabelProvider<XMLNode> treeLabelProvider;
 	private XPathTreeViewerContentProvider treeContentProvider;
-	
+
 	public XMLWizardDataEditorComposite(Composite parent, WizardPage page,
 			DataAdapterDescriptor dataAdapterDescriptor) {
 		super(parent, page, dataAdapterDescriptor);
 	}
-	
+
 	@Override
 	protected void init() {
 		super.init();
-		this.documentManager=new XMLDocumentManager();
-		this.decorateJob=new DecorateTreeViewerJob();
-		this.treeLabelProvider=new NodeBoldStyledLabelProvider<XMLNode>();
-		this.treeContentProvider=new XPathTreeViewerContentProvider();
+		this.documentManager = new XMLDocumentManager();
+		this.decorateJob = new DecorateTreeViewerJob();
+		this.treeLabelProvider = new NodeBoldStyledLabelProvider<XMLNode>();
+		this.treeContentProvider = new XPathTreeViewerContentProvider();
 	}
 
 	@Override
@@ -75,31 +76,36 @@ public class XMLWizardDataEditorComposite extends	ATreeWizardDataEditorComposite
 
 	@Override
 	protected void refreshTreeViewerContent(final DataAdapterDescriptor da) {
-		if(da!=null && da.getDataAdapter() instanceof XmlDataAdapter) {
+		if (da != null && da.getDataAdapter() instanceof XmlDataAdapter) {
 			treeViewer.setInput(XMLTreeCustomStatus.LOADING_XML);
 			Display.getCurrent().asyncExec(new Runnable() {
 				@Override
 				public void run() {
+					JasperReportsConfiguration jConfig = new JasperReportsConfiguration(
+							DefaultJasperReportsContext.getInstance(), null);
 					try {
 						documentManager.setDocument(getXMLDocument(da));
-						documentManager.setJasperConfiguration(new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(),null));
-						treeViewer.setInput(documentManager.getXMLDocumentModel());
+						documentManager.setJasperConfiguration(jConfig);
+						treeViewer.setInput(documentManager
+								.getXMLDocumentModel());
 						treeViewer.expandToLevel(2);
 						decorateTreeUsingQueryText();
 					} catch (Exception e) {
 						getStatusBar().showError(e);
 						treeViewer.getTree().removeAll();
-						treeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
-					}					
+						treeViewer
+								.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
+					} finally {
+						jConfig.dispose();
+					}
 				}
 			});
-		}
-		else{
+		} else {
 			treeViewer.getTree().removeAll();
 			treeViewer.setInput(XMLTreeCustomStatus.FILE_NOT_FOUND);
 		}
 	}
-	
+
 	@Override
 	protected void createTreeViewer(Composite parent) {
 		super.createTreeViewer(parent);
@@ -107,65 +113,69 @@ public class XMLWizardDataEditorComposite extends	ATreeWizardDataEditorComposite
 	}
 
 	/*
-	 * Adds support for generating the Xpath query expression,
-	 * using the current selected node as input.
+	 * Adds support for generating the Xpath query expression, using the current
+	 * selected node as input.
 	 */
 	private void addDoubleClickSupport() {
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
 				TreeSelection s = (TreeSelection) treeViewer.getSelection();
-				if(s.getFirstElement() instanceof XMLNode){
-					XMLNode xmlNode=(XMLNode) s.getFirstElement();
-					String xPathExpression = documentManager.getXPathExpression(null,xmlNode);
-					queryTextArea.setText((xPathExpression!=null) ? xPathExpression : "");  //$NON-NLS-1$
+				if (s.getFirstElement() instanceof XMLNode) {
+					XMLNode xmlNode = (XMLNode) s.getFirstElement();
+					String xPathExpression = documentManager
+							.getXPathExpression(null, xmlNode);
+					queryTextArea
+							.setText((xPathExpression != null) ? xPathExpression
+									: ""); //$NON-NLS-1$
 				}
 			}
 		});
 	}
 
-	
 	@Override
 	protected void decorateTreeUsingQueryText() {
-		if(documentManager.isDocumentSet()){
+		if (documentManager.isDocumentSet()) {
 			decorateJob.cancel();
 			decorateJob.schedule(JOB_DELAY);
 		}
 	}
-	
-	/*
-	 * Job that is responsible to update the treeviewer presentation 
-	 * depending on the nodes selected by the XPath query.
-	 */
-	private final class DecorateTreeViewerJob extends WorkbenchJob{
 
-		public DecorateTreeViewerJob(){
+	/*
+	 * Job that is responsible to update the treeviewer presentation depending
+	 * on the nodes selected by the XPath query.
+	 */
+	private final class DecorateTreeViewerJob extends WorkbenchJob {
+
+		public DecorateTreeViewerJob() {
 			super(Messages.XPathWizardDataEditorComposite_RefreshJobTitle);
 			setSystem(true);
 		}
-		
+
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			if(!isDisposed()){
-				monitor.beginTask(Messages.XPathWizardDataEditorComposite_TaskName, IProgressMonitor.UNKNOWN);
-				String query=queryTextArea.getText();
-				treeLabelProvider.setSelectedNodes(documentManager.getSelectableNodes(query));
+			if (!isDisposed()) {
+				monitor.beginTask(
+						Messages.XPathWizardDataEditorComposite_TaskName,
+						IProgressMonitor.UNKNOWN);
+				String query = queryTextArea.getText();
+				treeLabelProvider.setSelectedNodes(documentManager
+						.getSelectableNodes(query));
 				treeViewer.refresh();
 				monitor.done();
 				return Status.OK_STATUS;
-			}
-			else {
+			} else {
 				return Status.CANCEL_STATUS;
 			}
 		}
-		
+
 	}
-	
+
 	@Override
 	public void dispose() {
-		if(decorateJob!=null){
+		if (decorateJob != null) {
 			decorateJob.cancel();
-			decorateJob=null;
+			decorateJob = null;
 		}
 		super.dispose();
 	}
@@ -177,7 +187,7 @@ public class XMLWizardDataEditorComposite extends	ATreeWizardDataEditorComposite
 
 	/**
 	 * Get the W3C DOM {@link Document} representation for the XML information
-	 * inside the 
+	 * inside the
 	 * 
 	 * @param da
 	 * @return
@@ -185,10 +195,11 @@ public class XMLWizardDataEditorComposite extends	ATreeWizardDataEditorComposite
 	 * @throws IOException
 	 * @throws ParserConfigurationException
 	 */
-	protected Document getXMLDocument(final DataAdapterDescriptor da) 
-			throws SAXException, IOException, ParserConfigurationException{
-		String fileName = ((XmlDataAdapter)da.getDataAdapter()).getFileName();
+	protected Document getXMLDocument(final DataAdapterDescriptor da)
+			throws SAXException, IOException, ParserConfigurationException {
+		String fileName = ((XmlDataAdapter) da.getDataAdapter()).getFileName();
 		File in = new File(fileName);
-		return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
+		return DocumentBuilderFactory.newInstance().newDocumentBuilder()
+				.parse(in);
 	}
 }

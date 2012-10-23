@@ -213,6 +213,13 @@ public class DataAdapterEditorPart extends ABasicEditor {
 	}
 
 	@Override
+	public void dispose() {
+		if (jrContext != null)
+			jrContext.dispose();
+		super.dispose();
+	}
+
+	@Override
 	public void setFocus() {
 		nameComposite.setFocus();
 	}

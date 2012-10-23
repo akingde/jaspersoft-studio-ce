@@ -319,6 +319,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void dispose() {
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 		setModel(null);
+		if (jrContext != null)
+			jrContext.dispose();
 		super.dispose();
 	}
 

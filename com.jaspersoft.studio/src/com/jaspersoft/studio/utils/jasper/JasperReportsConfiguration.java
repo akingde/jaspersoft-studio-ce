@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.utils.jasper;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,8 +79,16 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			}
 		}
 	}
-	
 
+	private class ClasspathListener implements PropertyChangeListener {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent arg0) {
+			fill = true;
+		}
+	}
+
+	private ClasspathListener classpathlistener;
 	private PreferenceListener preferenceListener;
 	public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
 	private IPreferencesService service;
@@ -105,10 +115,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			contexts = new IScopeContext[] { new ProjectScope(project), INSTANCE_SCOPE };
 			try {
 				if (project.getNature(JavaCore.NATURE_ID) != null) {
-					ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(project), this.getClass().getClassLoader());
+					javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), this.getClass().getClassLoader());
+					ClassLoader cl = javaclassloader;
 					cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
 					cl = new CompositeClassloader(cl, getClass().getClassLoader());
 					setClassLoader(cl);
+					classpathlistener = new ClasspathListener();
+					javaclassloader.addClasspathListener(classpathlistener);
 				}
 			} catch (CoreException e) {
 				e.printStackTrace();
@@ -120,6 +133,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 		preferenceListener = new PreferenceListener();
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
+	}
+
+	public void dispose() {
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().removePropertyChangeListener(preferenceListener);
+		if (javaclassloader != null)
+			javaclassloader.removeClasspathListener(classpathlistener);
 	}
 
 	private void initFileResolver(IFile file) {
@@ -320,6 +339,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
 	private boolean fill = true;
 	private List<FontFamily> lst;
+	private JavaProjectClassLoader javaclassloader;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -336,12 +356,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 					if (fonts != null && !fonts.isEmpty())
 						lst.addAll(fonts);
 				}
-				fill = false;
 
 				List<FontFamily> slist = (List<FontFamily>) ExtensionsEnvironment.getExtensionsRegistry().getExtensions(
 						extensionType);
 				if (slist != null)
 					lst.addAll(slist);
+				fill = false;
 			}
 			return (List<T>) lst;
 		}
