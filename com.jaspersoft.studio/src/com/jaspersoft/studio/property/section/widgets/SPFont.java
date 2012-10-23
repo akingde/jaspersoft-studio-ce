@@ -217,7 +217,7 @@ public class SPFont extends ASPropertyWidget {
 
 		final FontNamePropertyDescriptor pd = (FontNamePropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
-		fontName = new ComboMenuViewer(group, ComboMenuViewer.NO_IMAGE, "SampleSample");
+		fontName = new ComboMenuViewer(group, ComboMenuViewer.NO_IMAGE, "SampleSampleSample");
 		fontName.setToolTipText(pd.getDescription());
 		fontName.addSelectionListener(new ComboItemAction() {
 			@Override
@@ -229,7 +229,10 @@ public class SPFont extends ASPropertyWidget {
 		final RWComboBoxPropertyDescriptor pd1 = (RWComboBoxPropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE);
 
+		GridData fontSizeGridData = new GridData();
+		fontSizeGridData.widthHint = 15;
 		fontSize = section.getWidgetFactory().createCombo(group, SWT.FLAT);
+		fontSize.setLayoutData(fontSizeGridData);
 		fontSize.setItems(pd1.getItems());
 		fontSize.addModifyListener(new ModifyListener() {
 			private int time = 0;

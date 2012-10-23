@@ -49,7 +49,9 @@ public class FontSection extends AbstractRealValueSection {
 
 		createWidget4Property(group, JRBaseStyle.PROPERTY_FONT_NAME, false);
 
-		createWidget4Property(group, JRBaseStyle.PROPERTY_FONT_SIZE, false);
+		GridData fontSizeData = new GridData();
+		fontSizeData.widthHint = 15;
+		createWidget4Property(group, JRBaseStyle.PROPERTY_FONT_SIZE, false).getControl().setLayoutData(fontSizeData);
 		
 		createWidget4Property(group, MFont.FONT_INCREMENT, false);
 		

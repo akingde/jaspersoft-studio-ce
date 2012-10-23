@@ -167,7 +167,7 @@ public class SPFontNameCombo extends ASPropertyWidget {
 	@Override
 	protected void createComponent(Composite parent) {
 			if (combo == null){
-				combo = new ComboMenuViewer(parent, ComboMenuViewer.NO_IMAGE, "SampleSample");
+				combo = new ComboMenuViewer(parent, ComboMenuViewer.NO_IMAGE, "SampleSampleSample");
 			}
 	}
 
