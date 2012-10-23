@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Hadoop Hive driver
 Bundle-SymbolicName: com.jaspersoft.studio.data.hive;singleton:=true
-Bundle-Version: 1.3.1
+Bundle-Version: 1.3.2
 Bundle-Activator: com.jaspersoft.studio.data.hive.Activator
 Bundle-Vendor: Jaspersoft Corporation
-Require-Bundle: com.jaspersoft.studio.data;bundle-version="1.3.1";visibility:=reexport,
+Require-Bundle: com.jaspersoft.studio.data;bundle-version="1.3.2";visibility:=reexport,
  org.slf4j.api;bundle-version="1.6.4"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
