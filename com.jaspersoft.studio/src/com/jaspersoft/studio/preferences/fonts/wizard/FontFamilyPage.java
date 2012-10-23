@@ -163,7 +163,11 @@ public class FontFamilyPage extends WizardPage {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				String pdfencod = pdfenc.getText();
-				fontFamily.setPdfEncoding(pdfencod.isEmpty() ? null : pdfencod);
+				if (pdfencod.isEmpty())
+					pdfencod = null;
+				else
+					pdfencod = ModelUtils.getPDFEncoding2key(pdfencod);
+				fontFamily.setPdfEncoding(pdfencod);
 			}
 		});
 
@@ -202,15 +206,23 @@ public class FontFamilyPage extends WizardPage {
 				if (selected != null) {
 					if (type.equals(NORMAL)) {
 						fontFamily.setNormal(selected);
+						if (fontFamily.getNormalFace() != null)
+							fontFamily.setNormalPdfFont(fontFamily.getNormalFace().getName());
 						txt.setText(fontFamily.getNormalFace().getName());
 					} else if (type.equals(BOLD)) {
 						fontFamily.setBold(selected);
+						if (fontFamily.getBoldFace() != null)
+							fontFamily.setBoldItalicPdfFont(fontFamily.getBoldFace().getName());
 						txt.setText(fontFamily.getBoldFace().getName());
 					} else if (type.equals(ITALIC)) {
 						fontFamily.setItalic(selected);
+						if (fontFamily.getItalicFace() != null)
+							fontFamily.setItalicPdfFont(fontFamily.getItalicFace().getName());
 						txt.setText(fontFamily.getItalicFace().getName());
 					} else if (type.equals(BOLDITALIC)) {
 						fontFamily.setBoldItalic(selected);
+						if (fontFamily.getBoldItalicFace() != null)
+							fontFamily.setBoldItalic(fontFamily.getBoldItalicFace().getName());
 						txt.setText(fontFamily.getBoldItalicFace().getName());
 					}
 				}

@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
+import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
 import net.sf.jasperreports.repo.FileRepositoryService;
 import net.sf.jasperreports.repo.PersistenceServiceFactory;
@@ -76,6 +77,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			}
 		}
 	}
+	
 
 	private PreferenceListener preferenceListener;
 	public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
@@ -319,6 +321,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	private boolean fill = true;
 	private List<FontFamily> lst;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getExtensions(Class<T> extensionType) {
 		if (extensionType == FontFamily.class) {
@@ -334,6 +337,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 						lst.addAll(fonts);
 				}
 				fill = false;
+
+				List<FontFamily> slist = (List<FontFamily>) ExtensionsEnvironment.getExtensionsRegistry().getExtensions(
+						extensionType);
+				if (slist != null)
+					lst.addAll(slist);
 			}
 			return (List<T>) lst;
 		}
