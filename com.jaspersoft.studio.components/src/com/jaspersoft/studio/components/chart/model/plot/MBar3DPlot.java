@@ -256,6 +256,24 @@ public class MBar3DPlot extends MChartPlot {
 		desc.add(yoffsetD);
 
 	}
+	
+	@Override
+	public Object getPropertyActualValue(Object id) {
+		JRDesignBar3DPlot jrElement = (JRDesignBar3DPlot) getValue();
+		if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisLabelColor());
+		if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisTickLabelColor());
+		if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisLineColor());
+		if (id.equals(JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisLabelColor());
+		if (id.equals(JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisTickLabelColor());
+		if (id.equals(JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LINE_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisLineColor());
+		else return super.getPropertyActualValue(id);
+	};
 
 	/*
 	 * (non-Javadoc)

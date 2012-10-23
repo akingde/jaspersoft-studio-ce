@@ -257,6 +257,24 @@ public class MBarPlot extends MChartPlot {
 		desc.add(catAxisTickLabelRotation);
 
 	}
+	
+	@Override
+	public Object getPropertyActualValue(Object id) {
+		JRDesignBarPlot jrElement = (JRDesignBarPlot) getValue();
+		if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisLabelColor());
+		if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisTickLabelColor());
+		if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisLineColor());
+		if (id.equals(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisLabelColor());
+		if (id.equals(JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisTickLabelColor());
+		if (id.equals(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LINE_COLOR))
+			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisLineColor());
+		else return super.getPropertyActualValue(id);
+	};
 
 	/*
 	 * (non-Javadoc)

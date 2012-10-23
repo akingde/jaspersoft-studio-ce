@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.base.JRBaseTextField;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
@@ -160,8 +161,8 @@ public class MTextField extends MTextElement {
 		desc.add(patternD);
 
 		JRExpressionPropertyDescriptor pexprD = new JRExpressionPropertyDescriptor(
-				JRDesignTextField.PROPERTY_PATTERN_EXPRESSION, "Pattern Expression");
-		pexprD.setDescription("Pattern expression");
+				JRDesignTextField.PROPERTY_PATTERN_EXPRESSION, "Pattern Expression"); //$NON-NLS-1$
+		pexprD.setDescription("Pattern expression"); //$NON-NLS-1$
 		desc.add(pexprD);
 
 		if (mHyperLink == null)
@@ -332,6 +333,7 @@ public class MTextField extends MTextElement {
 		jrDesignTextField.setY(0);
 		jrDesignTextField.setWidth(getDefaultWidth());
 		jrDesignTextField.setHeight(getDefaultHeight());
+		jrDesignTextField.setExpression(new JRDesignExpression("\"".concat(Messages.MTextField_common_text_field).concat("\""))); 
 		return jrDesignTextField;
 	}
 

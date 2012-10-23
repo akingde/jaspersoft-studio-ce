@@ -935,6 +935,7 @@ public class Messages extends NLS {
 	public static String MTextElement_text_properties_category;
 	public static String MTextElement_vertical_alignment_description;
 	public static String MTextField_blank_when_null_description;
+	public static String MTextField_common_text_field;
 	public static String MTextField_evaluation_group;
 	public static String MTextField_evaluation_group_description;
 	public static String MTextField_evaluation_time_description;
