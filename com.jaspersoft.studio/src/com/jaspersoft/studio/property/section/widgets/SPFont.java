@@ -233,8 +233,8 @@ public class SPFont extends ASPropertyWidget {
 		
 		Composite fontSizeLayout = new Composite(group, SWT.NONE);
 		GridData fontSizeData = new GridData();
-		fontSizeData.widthHint = 80;
-		fontSizeData.minimumWidth = 80;
+		fontSizeData.widthHint = 65;
+		fontSizeData.minimumWidth = 65;
 		fontSizeLayout.setLayout(new GridLayout(1,false));
 		fontSizeLayout.setLayoutData(fontSizeData);
 		fontSize = section.getWidgetFactory().createCombo(fontSizeLayout, SWT.FLAT);

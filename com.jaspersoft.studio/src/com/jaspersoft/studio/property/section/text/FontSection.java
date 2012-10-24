@@ -26,16 +26,13 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 
-import com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 /*
  * The location section on the location tab.
@@ -58,8 +55,8 @@ public class FontSection extends AbstractRealValueSection {
 
 		Composite testLayout = new Composite(group, SWT.NONE);
 		GridData fontSizeData = new GridData();
-		fontSizeData.widthHint = 80;
-		fontSizeData.minimumWidth = 80;
+		fontSizeData.widthHint = 65;
+		fontSizeData.minimumWidth = 65;
 		testLayout.setLayout(new GridLayout(1,false));
 		testLayout.setLayoutData(fontSizeData);
 		createWidget4Property(testLayout, JRBaseStyle.PROPERTY_FONT_SIZE, false).getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
