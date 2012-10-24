@@ -35,6 +35,7 @@ import org.eclipse.gef.handles.HandleBounds;
 
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
+import com.jaspersoft.studio.editor.java2d.J2DScaledGraphics;
 
 /*
  * The Class GenericFigure.
@@ -70,6 +71,15 @@ public class ComponentFigure extends RectangleFigure {
 			setSize(jrElement.getWidth(), jrElement.getHeight());
 	}
 
+	public static Graphics2D getG2D(Graphics graphics) {
+		Graphics2D graphics2d = null;
+		if (graphics instanceof J2DGraphics)
+			graphics2d = ((J2DGraphics) graphics).getGraphics2D();
+		else if (graphics instanceof J2DScaledGraphics)
+			graphics2d = ((J2DScaledGraphics) graphics).getGraphics2D();
+		return graphics2d;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -77,24 +87,26 @@ public class ComponentFigure extends RectangleFigure {
 	 */
 	@Override
 	public void paint(Graphics graphics) {
-		Graphics2D graphics2d = ((J2DGraphics) graphics).getGraphics2D();
-
 		Rectangle b = (this instanceof HandleBounds) ? ((HandleBounds) this).getHandleBounds() : this.getBounds();
 		try {
-			graphics2d.translate(b.x, b.y);
+			graphics.translate(b.x, b.y);
+			Graphics2D graphics2d = getG2D(graphics);
+			if (graphics2d != null) {
+				if (drawVisitor != null) {
+					drawVisitor.setGraphics2D(graphics2d);
 
-			if (drawVisitor != null) {
-				drawVisitor.setGraphics2D(graphics2d);
-
-				draw(drawVisitor, jrElement);
-			} else
-				graphics2d.drawRect(b.x, b.y, b.width, b.height);
+					draw(drawVisitor, jrElement);
+				} else
+					graphics2d.drawRect(b.x, b.y, b.width, b.height);
+			} else {
+				System.out.println("not a 2d");
+			}
 		} catch (Exception e) {
 			// when a font is missing exception is thrown by DrawVisitor
 			// FIXME: maybe draw something, else?
 			e.printStackTrace();
 		} finally {
-			graphics2d.translate(-b.x, -b.y);
+			graphics.translate(-b.x, -b.y);
 		}
 		paintBorder(graphics);
 		paintDecorators(graphics);

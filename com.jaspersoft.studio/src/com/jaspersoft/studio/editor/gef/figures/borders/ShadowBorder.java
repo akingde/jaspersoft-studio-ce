@@ -31,9 +31,9 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.gef.handles.HandleBounds;
 
+import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.util.RoundGradientPaint;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 /*
  * The Class ShadowBorder.
@@ -57,13 +57,13 @@ public class ShadowBorder extends AbstractBorder {
 	 */
 	public void paint(IFigure figure, Graphics graphics, Insets insets) {
 
-		if (graphics instanceof J2DGraphics) {
-			Graphics2D gr = ((J2DGraphics) graphics).getGraphics2D();
+		Graphics2D g = ComponentFigure.getG2D(graphics);
+		if (g != null) {
 			org.eclipse.draw2d.geometry.Rectangle bounds = figure.getBounds();
 			if (figure instanceof HandleBounds)
 				bounds = ((HandleBounds) figure).getHandleBounds();
 
-			paintShadowBorder(gr, bounds.x - insets.left, bounds.y - insets.top, bounds.width + insets.right + insets.left,
+			paintShadowBorder(g, bounds.x - insets.left, bounds.y - insets.top, bounds.width + insets.right + insets.left,
 					bounds.height + insets.top + insets.bottom);
 		}
 

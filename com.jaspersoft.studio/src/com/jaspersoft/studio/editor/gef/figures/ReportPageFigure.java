@@ -31,7 +31,6 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 
 /*
@@ -101,8 +100,8 @@ public class ReportPageFigure extends APageFigure {
 
 			Point bottomLeft = new Point(topLeft.x, clientArea.y + pageHeight);
 			Point bottomRight = new Point(topRight.x, clientArea.y + pageHeight);
-			if (g instanceof J2DGraphics) {
-				Graphics2D graphics2d = ((J2DGraphics) g).getGraphics2D();
+			Graphics2D graphics2d = ComponentFigure.getG2D(g);
+			if (graphics2d != null) {
 				Stroke oldStroke = graphics2d.getStroke();
 
 				paintGrid(g, rectangle);

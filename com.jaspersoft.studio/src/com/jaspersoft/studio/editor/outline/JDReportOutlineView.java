@@ -27,8 +27,6 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.Viewport;
-import org.eclipse.draw2d.parts.ScrollableThumbnail;
-import org.eclipse.draw2d.parts.Thumbnail;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
@@ -68,6 +66,9 @@ import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.dnd.JSSTemplateTransferDropTargetListener;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
+import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
+import com.jaspersoft.studio.editor.java2d.figure.ScrollableThumbnail;
+import com.jaspersoft.studio.editor.java2d.figure.Thumbnail;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
@@ -355,7 +356,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * Initialize overview.
 	 */
 	protected void initializeOverview() {
-		LightweightSystem lws = new LightweightSystem(overview);
+		LightweightSystem lws = new J2DLightweightSystem(overview);
 		RootEditPart rep = editor.getGraphicalViewer().getRootEditPart();
 		if (rep instanceof MainDesignerRootEditPart) {
 			ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) rep;
@@ -373,6 +374,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 			};
 			editor.getEditor().addDisposeListener(disposeListener);
 		}
+		lws.setControl(overview);
 	}
 
 	/**

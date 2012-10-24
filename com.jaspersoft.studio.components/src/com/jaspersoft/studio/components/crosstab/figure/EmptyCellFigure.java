@@ -31,9 +31,9 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
+import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 import com.jaspersoft.studio.editor.gef.texture.EmptyTexture;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 public class EmptyCellFigure extends FrameFigure {
 
@@ -70,10 +70,11 @@ public class EmptyCellFigure extends FrameFigure {
 		Rectangle b = (this instanceof HandleBounds) ? ((HandleBounds) this)
 				.getHandleBounds() : this.getBounds();
 
-		Graphics2D g = ((J2DGraphics) graphics).getGraphics2D();
-		g.setPaint(tp);
-		g.fillRect(b.x, b.y, b.width - 1, b.height - 1);
-
+		Graphics2D g = ComponentFigure.getG2D(graphics);
+		if (g != null) {
+			g.setPaint(tp);
+			g.fillRect(b.x, b.y, b.width - 1, b.height - 1);
+		}
 		paintBorder(graphics);
 	}
 

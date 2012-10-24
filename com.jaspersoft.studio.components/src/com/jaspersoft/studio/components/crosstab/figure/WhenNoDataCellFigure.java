@@ -27,9 +27,9 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
+import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.util.FigureTextWriter;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 public class WhenNoDataCellFigure extends CellFigure {
 	private static final String HINT = "If the crosstab will not contain any data, this cell will be printed instead.";
@@ -47,8 +47,8 @@ public class WhenNoDataCellFigure extends CellFigure {
 		graphics.fillRectangle(b.x, b.y, b.width, b.height);
 
 		super.paint(graphics);
-		if (graphics instanceof J2DGraphics) {
-			Graphics2D g = ((J2DGraphics) graphics).getGraphics2D();
+		Graphics2D g = ComponentFigure.getG2D(graphics);
+		if (g != null) {
 			twriter.painText(g, this);
 
 			Font currfont = g.getFont();

@@ -76,7 +76,7 @@ import org.eclipse.swt.widgets.Display;
  * 
  * @version $Revision: 1.3.4.3.2.2 $
  */
-public class J2DGraphics extends Graphics {
+public class J2DScaledGraphics extends ScaledGraphics {
 
 	/** The Constant hints. */
 	private static final Map<Key, Object> hints = new HashMap<Key, Object>();
@@ -221,12 +221,12 @@ public class J2DGraphics extends Graphics {
 		 */
 		public State() {
 			// this.g = J2DGraphics.this._g2d;
-			this.xor = J2DGraphics.this._xor;
-			this.lineStyle = J2DGraphics.this._lineStyle;
-			this.lineWidth = J2DGraphics.this._lineWidth;
-			this.bg = J2DGraphics.this._bg;
-			this.fg = J2DGraphics.this._fg;
-			this.f = J2DGraphics.this._font;
+			this.xor = J2DScaledGraphics.this._xor;
+			this.lineStyle = J2DScaledGraphics.this._lineStyle;
+			this.lineWidth = J2DScaledGraphics.this._lineWidth;
+			this.bg = J2DScaledGraphics.this._bg;
+			this.fg = J2DScaledGraphics.this._fg;
+			this.f = J2DScaledGraphics.this._font;
 			this.clip = _g2d.getClip();
 			this.t = _g2d.getTransform();
 		}
@@ -240,19 +240,19 @@ public class J2DGraphics extends Graphics {
 			// Graphics2D old = J2DGraphics.this._g2d;
 			// J2DGraphics.this._g2d = this.g; //(Graphics2D) this.g.create();
 			// old.dispose();
-			J2DGraphics.this._xor = this.xor;
-			J2DGraphics.this._lineStyle = this.lineStyle;
-			J2DGraphics.this._lineWidth = this.lineWidth;
-			J2DGraphics.this._bg = this.bg;
-			J2DGraphics.this._fg = this.fg;
-			J2DGraphics.this.updateStroke();
-			J2DGraphics.this._awtFg = null;
-			J2DGraphics.this._awtBg = null;
-			J2DGraphics.this.updateColors();
-			J2DGraphics.this._font = this.f;
-			J2DGraphics.this.updateFont();
-			J2DGraphics.this._g2d.setTransform(this.t);
-			J2DGraphics.this._g2d.setClip(this.clip);
+			J2DScaledGraphics.this._xor = this.xor;
+			J2DScaledGraphics.this._lineStyle = this.lineStyle;
+			J2DScaledGraphics.this._lineWidth = this.lineWidth;
+			J2DScaledGraphics.this._bg = this.bg;
+			J2DScaledGraphics.this._fg = this.fg;
+			J2DScaledGraphics.this.updateStroke();
+			J2DScaledGraphics.this._awtFg = null;
+			J2DScaledGraphics.this._awtBg = null;
+			J2DScaledGraphics.this.updateColors();
+			J2DScaledGraphics.this._font = this.f;
+			J2DScaledGraphics.this.updateFont();
+			J2DScaledGraphics.this._g2d.setTransform(this.t);
+			J2DScaledGraphics.this._g2d.setClip(this.clip);
 			return this;
 		}
 
@@ -274,8 +274,8 @@ public class J2DGraphics extends Graphics {
 	 * @param g2d
 	 *          the g2d
 	 */
-	public J2DGraphics(GC gc, Graphics2D g2d) {
-		super();
+	public J2DScaledGraphics(Graphics graphics, GC gc, Graphics2D g2d) {
+		super(graphics);
 		if (gc != null) {
 			_dpi = gc.getDevice().getDPI().x / 72.0;
 			this.gc = gc;

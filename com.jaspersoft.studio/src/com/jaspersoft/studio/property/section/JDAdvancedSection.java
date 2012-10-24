@@ -100,11 +100,14 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	public void aboutToBeShown() {
 		if (getElement() != null)
 			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
-		IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
-		actionBars.getToolBarManager().removeAll();
-		page.makeContributions(actionBars.getMenuManager(), actionBars.getToolBarManager(),
-				actionBars.getStatusLineManager());
-		actionBars.updateActionBars();
+		if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {
+			IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
+			if (actionBars != null)
+				actionBars.getToolBarManager().removeAll();
+			page.makeContributions(actionBars.getMenuManager(), actionBars.getToolBarManager(),
+					actionBars.getStatusLineManager());
+			actionBars.updateActionBars();
+		}
 	}
 
 	/**
@@ -113,10 +116,13 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	public void aboutToBeHidden() {
 		if (getElement() != null)
 			getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
-		IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
-		actionBars.getToolBarManager().removeAll();
-		actionBars.updateActionBars();
-
+		if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {
+			IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
+			if (actionBars != null) {
+				actionBars.getToolBarManager().removeAll();
+				actionBars.updateActionBars();
+			}
+		}
 	}
 
 	/**

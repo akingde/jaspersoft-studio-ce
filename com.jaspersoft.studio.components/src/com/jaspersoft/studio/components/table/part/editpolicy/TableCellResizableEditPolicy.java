@@ -47,10 +47,10 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.column.command.MoveColumnCommand;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
+import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.handles.CellMoveHandle;
 import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle2;
 import com.jaspersoft.studio.editor.gef.util.GEFUtil;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 /*
  * The Class TableCellResizableEditPolicy.
@@ -137,8 +137,8 @@ public class TableCellResizableEditPolicy extends ResizableEditPolicy {
 		if (request.getType().equals(REQ_RESIZE) && sizeDelta.width == 0
 				&& sizeDelta.height == 0)
 			return;
-		PrecisionRectangle rdelta = new PrecisionRectangle(
-				new Rectangle(moveDelta, sizeDelta));
+		PrecisionRectangle rdelta = new PrecisionRectangle(new Rectangle(
+				moveDelta, sizeDelta));
 
 		FeedbackFigure feedback = (FeedbackFigure) getDragSourceFeedbackFigure();
 		IFigure hfig = getHostFigure();
@@ -254,48 +254,56 @@ public class TableCellResizableEditPolicy extends ResizableEditPolicy {
 			PrecisionRectangle b = new PrecisionRectangle(getBounds().getCopy());
 			if (request.getType().equals(REQ_RESIZE)) {
 				super.paintFigure(g);
-				Graphics2D gr = ((J2DGraphics) g).getGraphics2D();
-				gr.fillRect(b.x, b.y, b.width, b.height);
-				AlphaComposite ac = AlphaComposite.getInstance(
-						AlphaComposite.SRC_OVER, 1f);
-				gr.setComposite(ac);
+				Graphics2D gr = ComponentFigure.getG2D(g);
+				if (gr != null) {
+					gr.fillRect(b.x, b.y, b.width, b.height);
+					AlphaComposite ac = AlphaComposite.getInstance(
+							AlphaComposite.SRC_OVER, 1f);
+					gr.setComposite(ac);
 
-				gr.fillOval(b.x + (b.width) / 2 - 3, b.y - 3, 7, 7);
-				gr.fillOval(b.x + (b.width) / 2 - 3, b.y + b.height - 4, 7, 7);
+					gr.fillOval(b.x + (b.width) / 2 - 3, b.y - 3, 7, 7);
+					gr.fillOval(b.x + (b.width) / 2 - 3, b.y + b.height - 4, 7,
+							7);
 
-				gr.drawLine(b.x + (b.width) / 2, b.y, b.x + (b.width) / 2, b.y
-						+ b.height - 2);
+					gr.drawLine(b.x + (b.width) / 2, b.y, b.x + (b.width) / 2,
+							b.y + b.height - 2);
+				}
 			} else if (request.getType().equals(REQ_MOVE)) {
 				double zoom = GEFUtil.getZoom(b, getHostFigure());
 
-				Graphics2D gr = ((J2DGraphics) g).getGraphics2D();
-				gr.setColor(Color.gray);
-				AlphaComposite ac = AlphaComposite.getInstance(
-						AlphaComposite.SRC_OVER, 0.1f);
-				gr.setComposite(ac);
+				Graphics2D gr = ComponentFigure.getG2D(g);
+				if (gr != null) {
+					gr.setColor(Color.gray);
+					AlphaComposite ac = AlphaComposite.getInstance(
+							AlphaComposite.SRC_OVER, 0.1f);
+					gr.setComposite(ac);
 
-				int h = TableCellEditPart.Y_OFFSET;
-				b.y = b.y + (int) Math.floor(h * zoom) - h - 3;
-				int height = b.height - (int) Math.floor(h * zoom);
+					int h = TableCellEditPart.Y_OFFSET;
+					b.y = b.y + (int) Math.floor(h * zoom) - h - 3;
+					int height = b.height - (int) Math.floor(h * zoom);
 
-				gr.fillRect(b.x, b.y, b.width, height - b.y);
+					gr.fillRect(b.x, b.y, b.width, height - b.y);
 
-				// draw handle representation
-				ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f);
-				gr.setComposite(ac);
-				gr.fillRect(b.x, b.y, b.width, h);
-				gr.fillRect(b.x, height + 3, b.width, h);
+					// draw handle representation
+					ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+							0.8f);
+					gr.setComposite(ac);
+					gr.fillRect(b.x, b.y, b.width, h);
+					gr.fillRect(b.x, height + 3, b.width, h);
 
-				// move placer feedback
-				gr.setStroke(new BasicStroke(2.0f));
-				ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
-				gr.setComposite(ac);
-				gr.setColor(Color.red);
+					// move placer feedback
+					gr.setStroke(new BasicStroke(2.0f));
+					ac = AlphaComposite
+							.getInstance(AlphaComposite.SRC_OVER, 1f);
+					gr.setComposite(ac);
+					gr.setColor(Color.red);
 
-				PrecisionRectangle r = new PrecisionRectangle(new Rectangle(x1, y1, x1, y2));
-				getHostFigure().translateToAbsolute(r);
-				getFeedbackLayer().translateToRelative(r);
-				gr.drawLine(r.x, r.y, r.x, r.height);
+					PrecisionRectangle r = new PrecisionRectangle(
+							new Rectangle(x1, y1, x1, y2));
+					getHostFigure().translateToAbsolute(r);
+					getFeedbackLayer().translateToRelative(r);
+					gr.drawLine(r.x, r.y, r.x, r.height);
+				}
 			}
 		}
 	}

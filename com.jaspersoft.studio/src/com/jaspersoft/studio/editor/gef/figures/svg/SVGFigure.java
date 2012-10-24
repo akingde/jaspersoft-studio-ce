@@ -1,16 +1,15 @@
 /**
  * Copyright (c) 2008 Borland Software Corporation
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
+ * All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse
+ * Public License v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *    Dmitry Stadnik - initial API and implementation
+ * 
+ * Contributors: Dmitry Stadnik - initial API and implementation
  */
 package com.jaspersoft.studio.editor.gef.figures.svg;
 
+import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -34,15 +33,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 /**
  * Figure that support SVG element rendering.
  * <p>
  * 
- * NOTE: the code was taken from the GMF framework and was slightly modified
- * in order to be used inside JSS. Right now it extends {@link JRComponentFigure}.
+ * NOTE: the code was taken from the GMF framework and was slightly modified in order to be used inside JSS. Right now
+ * it extends {@link JRComponentFigure}.
  * 
  */
 public class SVGFigure extends JRComponentFigure {
@@ -52,7 +51,7 @@ public class SVGFigure extends JRComponentFigure {
 	private SimpleImageTranscoder transcoder;
 
 	private static WeakHashMap<String, Document> documentsMap = new WeakHashMap<String, Document>();
-	
+
 	public final String getURI() {
 		return uri;
 	}
@@ -81,7 +80,7 @@ public class SVGFigure extends JRComponentFigure {
 		try {
 			Document document;
 			if (documentsMap.containsKey(uri))
-				 document = documentsMap.get(uri);
+				document = documentsMap.get(uri);
 			else {
 				document = factory.createDocument(uri);
 				documentsMap.put(uri, document);
@@ -93,7 +92,6 @@ public class SVGFigure extends JRComponentFigure {
 		}
 	}
 
-	
 	protected final Document getDocument() {
 		if (failedToLoadDocument) {
 			return null;
@@ -154,7 +152,7 @@ public class SVGFigure extends JRComponentFigure {
 
 	@Override
 	public void paint(Graphics graphics) {
-//		super.paintFigure(graphics);
+		// super.paintFigure(graphics);
 		Document document = getDocument();
 		if (document == null) {
 			return;
@@ -165,14 +163,15 @@ public class SVGFigure extends JRComponentFigure {
 		BufferedImage awtImage = transcoder.getBufferedImage();
 		if (awtImage != null) {
 			int imgWidth = awtImage.getWidth(null);
-			int imgHeight = awtImage.getHeight(null);				
-			// Delegate the painting to the AWT Graphics2D
-			((J2DGraphics)graphics).getGraphics2D().setColor(java.awt.Color.WHITE);
-			((J2DGraphics)graphics).getGraphics2D().fillRect(r.x,r.y, r.x+r.width, r.y+r.height);
-			((J2DGraphics)graphics).getGraphics2D().drawImage(awtImage,
-					r.x,r.y, r.x+r.width, r.y+r.height, 
-					0, 0, imgWidth, imgHeight, null);
-			paintBorder(graphics);						
+			int imgHeight = awtImage.getHeight(null);
+			Graphics2D g = ComponentFigure.getG2D(graphics);
+			if (g != null) {
+				// Delegate the painting to the AWT Graphics2D
+				g.setColor(java.awt.Color.WHITE);
+				g.fillRect(r.x, r.y, r.x + r.width, r.y + r.height);
+				g.drawImage(awtImage, r.x, r.y, r.x + r.width, r.y + r.height, 0, 0, imgWidth, imgHeight, null);
+			}
+			paintBorder(graphics);
 		}
 	}
 

@@ -51,6 +51,11 @@ public final class J2DLightweightSystem extends LightweightSystem {
 
 	private J2DGraphicsSource gsSource;
 
+	public J2DLightweightSystem(Canvas c) {
+		super(c);
+		setUpdateManager(new J2DUpdateManager());
+	}
+
 	/**
 	 * Instantiates a new j2 d lightweight system.
 	 */

@@ -33,7 +33,6 @@ import org.eclipse.swt.graphics.Color;
 
 import com.jaspersoft.studio.editor.gef.texture.EmptyTexture;
 import com.jaspersoft.studio.editor.gef.util.FigureTextWriter;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 import com.jaspersoft.studio.utils.SWTResourceManager;
 
@@ -127,8 +126,8 @@ public class BandFigure extends RectangleFigure {
 		graphics.setBackgroundColor(marginsColor);
 
 		graphics.setAlpha(128);
-		if (graphics instanceof J2DGraphics) {
-			Graphics2D g = ((J2DGraphics) graphics).getGraphics2D();
+		Graphics2D g = ComponentFigure.getG2D(graphics);
+		if (g != null) {
 			Stroke oldStroke = g.getStroke();
 			g.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, graphics.getAbsoluteScale()));
 

@@ -43,9 +43,9 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.components.crosstab.part.ACrosstabCellEditPart;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
+import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.handles.CellMoveHandle;
 import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle2;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 /*
  * The Class BandResizableEditPolicy.
@@ -111,8 +111,8 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 		if (request.getType().equals(REQ_RESIZE) && sizeDelta.width == 0
 				&& sizeDelta.height == 0)
 			return;
-		PrecisionRectangle rdelta = new PrecisionRectangle(
-				new Rectangle(moveDelta, sizeDelta));
+		PrecisionRectangle rdelta = new PrecisionRectangle(new Rectangle(
+				moveDelta, sizeDelta));
 
 		FeedbackFigure feedback = (FeedbackFigure) getDragSourceFeedbackFigure();
 		IFigure hfig = getHostFigure();
@@ -169,17 +169,20 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 			PrecisionRectangle b = new PrecisionRectangle(getBounds().getCopy());
 			if (request.getType().equals(REQ_RESIZE)) {
 				super.paintFigure(g);
-				Graphics2D gr = ((J2DGraphics) g).getGraphics2D();
-				gr.fillRect(b.x, b.y, b.width, b.height);
-				AlphaComposite ac = AlphaComposite.getInstance(
-						AlphaComposite.SRC_OVER, 1f);
-				gr.setComposite(ac);
+				Graphics2D gr = ComponentFigure.getG2D(g);
+				if (gr != null) {
+					gr.fillRect(b.x, b.y, b.width, b.height);
+					AlphaComposite ac = AlphaComposite.getInstance(
+							AlphaComposite.SRC_OVER, 1f);
+					gr.setComposite(ac);
 
-				gr.fillOval(b.x + (b.width) / 2 - 3, b.y - 3, 7, 7);
-				gr.fillOval(b.x + (b.width) / 2 - 3, b.y + b.height - 4, 7, 7);
+					gr.fillOval(b.x + (b.width) / 2 - 3, b.y - 3, 7, 7);
+					gr.fillOval(b.x + (b.width) / 2 - 3, b.y + b.height - 4, 7,
+							7);
 
-				gr.drawLine(b.x + (b.width) / 2, b.y, b.x + (b.width) / 2, b.y
-						+ b.height - 2);
+					gr.drawLine(b.x + (b.width) / 2, b.y, b.x + (b.width) / 2,
+							b.y + b.height - 2);
+				}
 			}
 		}
 	}

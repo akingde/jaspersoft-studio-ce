@@ -1,18 +1,13 @@
 /*******************************************************************************
- * ---------------------------------------------------------------------
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com.
+ * --------------------------------------------------------------------- Copyright (C) 2005 - 2012 Jaspersoft
+ * Corporation. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  * ---------------------------------------------------------------------
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.graphic;
@@ -27,41 +22,41 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
+import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.style.MStyle;
 
 /**
- * Widget that contains the method to represent the border of an element and permit 
- * to view or edit their properties
+ * Widget that contains the method to represent the border of an element and permit to view or edit their properties
+ * 
  * @author Marco Orlandin
- *
+ * 
  */
 class LineBoxRectangle extends RectangleFigure {
-	
+
 	/**
 	 * The drawer of the border
 	 */
 	private LineBoxDrawer bd;
-	
+
 	/**
 	 * The section of the element
 	 */
 	private BordersSection section;
-	
-	public LineBoxRectangle(LineBoxDrawer drawer, BordersSection section){
+
+	public LineBoxRectangle(LineBoxDrawer drawer, BordersSection section) {
 		bd = drawer;
 		this.section = section;
 	}
-	
+
 	/**
 	 * Request the painting of the border
 	 */
 	@Override
 	public void paint(Graphics graphics) {
 		try {
-			if (graphics instanceof J2DGraphics) {
-				Graphics2D graphics2d = ((J2DGraphics) graphics).getGraphics2D();
+			Graphics2D g = ComponentFigure.getG2D(graphics);
+			if (g != null) {
 
 				Rectangle b = getBounds();
 
@@ -71,10 +66,10 @@ class LineBoxRectangle extends RectangleFigure {
 				pe.setWidth(b.width - 20);
 				pe.setHeight(b.height - 20);
 				if (section.getElement() instanceof ILineBox && section.getElement() != null)
-					bd.drawBox(graphics2d, ((ILineBox) section.getElement()).getBoxContainer().getLineBox(), pe);
-				else if (section.getElement() instanceof MStyle){
-					MStyle styleModel = (MStyle)section.getElement();
-					bd.drawBox(graphics2d, ((JRStyle)styleModel.getValue()).getLineBox(), pe);
+					bd.drawBox(g, ((ILineBox) section.getElement()).getBoxContainer().getLineBox(), pe);
+				else if (section.getElement() instanceof MStyle) {
+					MStyle styleModel = (MStyle) section.getElement();
+					bd.drawBox(g, ((JRStyle) styleModel.getValue()).getLineBox(), pe);
 				}
 			} else {
 				graphics.drawRectangle(0, 0, 100, 100);
