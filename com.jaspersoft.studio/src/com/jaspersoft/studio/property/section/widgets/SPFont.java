@@ -33,6 +33,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -229,10 +230,15 @@ public class SPFont extends ASPropertyWidget {
 		final RWComboBoxPropertyDescriptor pd1 = (RWComboBoxPropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE);
 
-		GridData fontSizeGridData = new GridData();
-		fontSizeGridData.widthHint = 15;
-		fontSize = section.getWidgetFactory().createCombo(group, SWT.FLAT);
-		fontSize.setLayoutData(fontSizeGridData);
+		
+		Composite fontSizeLayout = new Composite(group, SWT.NONE);
+		GridData fontSizeData = new GridData();
+		fontSizeData.widthHint = 80;
+		fontSizeData.minimumWidth = 80;
+		fontSizeLayout.setLayout(new GridLayout(1,false));
+		fontSizeLayout.setLayoutData(fontSizeData);
+		fontSize = section.getWidgetFactory().createCombo(fontSizeLayout, SWT.FLAT);
+		fontSize.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		fontSize.setItems(pd1.getItems());
 		fontSize.addModifyListener(new ModifyListener() {
 			private int time = 0;
