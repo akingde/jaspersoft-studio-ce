@@ -35,9 +35,11 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MListOfValues;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 import com.jaspersoft.studio.utils.Misc;
@@ -83,7 +85,7 @@ public class SelectorLov {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				RepositoryDialog rd = new RepositoryDialog(Display.getDefault()
-						.getActiveShell(), parent.getRoot()) {
+						.getActiveShell(), ServerManager.getMServerProfileCopy((MServerProfile)parent.getRoot())) {
 
 					@Override
 					public boolean isResourceCompatible(MResource r) {

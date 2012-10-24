@@ -41,10 +41,12 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.utils.UIUtils;
 
@@ -80,8 +82,9 @@ public class RDReferencePage extends AResourcePage {
 
 			public void widgetSelected(SelectionEvent e) {
 				Shell shell = Display.getDefault().getActiveShell();
-				RepositoryDialog rd = new RepositoryDialog(shell, parent
-						.getRoot()) {
+				RepositoryDialog rd = 
+						new RepositoryDialog(shell, 
+						ServerManager.getMServerProfileCopy((MServerProfile)parent.getRoot())) {
 
 					@Override
 					public boolean isResourceCompatible(MResource r) {
