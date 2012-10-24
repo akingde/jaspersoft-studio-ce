@@ -38,9 +38,11 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.MListOfValues;
 import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 
 public class InputControlSection extends ASection {
@@ -102,7 +104,8 @@ public class InputControlSection extends ASection {
 
 			public void widgetSelected(SelectionEvent e) {
 				Shell shell = Display.getDefault().getActiveShell();
-				RepositoryDialog rd = new RepositoryDialog(shell, res.getRoot()) {
+				RepositoryDialog rd = new RepositoryDialog(shell, 
+						ServerManager.getMServerProfileCopy((MServerProfile)res.getRoot())) {
 
 					@Override
 					public boolean isResourceCompatible(MResource r) {
