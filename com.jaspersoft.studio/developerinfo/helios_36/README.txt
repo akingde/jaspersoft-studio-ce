@@ -34,3 +34,8 @@ Plus an @Override annotation was removed because the method was not still declar
 
 7. Introduced the package com.jaspersoft.studio.utils.compatibility inside the plugin
 com.jaspersoft.studio. See references to classes inside it.
+
+8. Added ElementResizableEditPolicy::createSelectionHandles() that override the one from ResizableEditPolicy.
+Eclipse 3.6 has also this method, but it dosen't call some methods that are instead called from the version 
+in eclipse 3.7+. So this override take method as it's defined in eclipse 3.7+, so in the newer version there
+will not differences from the original, and in the 3.6 there is the same behavior of the 3.7+.
