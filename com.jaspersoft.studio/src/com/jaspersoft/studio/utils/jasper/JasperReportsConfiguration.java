@@ -38,6 +38,7 @@ import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
+import net.sf.jasperreports.extensions.DefaultExtensionsRegistry;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
 import net.sf.jasperreports.repo.FileRepositoryService;
@@ -85,6 +86,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		@Override
 		public void propertyChange(PropertyChangeEvent arg0) {
 			fill = true;
+			DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
+			ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
+			ExtensionsEnvironment.setThreadExtensionsRegistry(extensionsRegistry);
 		}
 	}
 
@@ -102,30 +106,31 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	}
 
 	public void init(IFile file) {
+		service = Platform.getPreferencesService();
+		qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
 		IProject project = null;
 		if (file != null) {
 			put(IEditorContributor.KEY_FILE, file);
 			project = file.getProject();
-			initFileResolver(file);
-		}
-		service = Platform.getPreferencesService();
-		qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
-		if (project != null) {
-			lookupOrders = new String[] { ProjectScope.SCOPE, InstanceScope.SCOPE };
-			contexts = new IScopeContext[] { new ProjectScope(project), INSTANCE_SCOPE };
-			try {
-				if (project.getNature(JavaCore.NATURE_ID) != null) {
-					javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), this.getClass().getClassLoader());
-					ClassLoader cl = javaclassloader;
-					cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
-					cl = new CompositeClassloader(cl, getClass().getClassLoader());
-					setClassLoader(cl);
-					classpathlistener = new ClasspathListener();
-					javaclassloader.addClasspathListener(classpathlistener);
+			if (project != null) {
+				lookupOrders = new String[] { ProjectScope.SCOPE, InstanceScope.SCOPE };
+				contexts = new IScopeContext[] { new ProjectScope(project), INSTANCE_SCOPE };
+				try {
+					if (project.getNature(JavaCore.NATURE_ID) != null) {
+						javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), this.getClass()
+								.getClassLoader());
+						ClassLoader cl = javaclassloader;
+						cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
+						cl = new CompositeClassloader(cl, getClass().getClassLoader());
+						setClassLoader(cl);
+						classpathlistener = new ClasspathListener();
+						javaclassloader.addClasspathListener(classpathlistener);
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
 				}
-			} catch (CoreException e) {
-				e.printStackTrace();
 			}
+			initFileResolver(file);
 		} else {
 			lookupOrders = new String[] { InstanceScope.SCOPE };
 			contexts = new IScopeContext[] { INSTANCE_SCOPE };
@@ -344,27 +349,35 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getExtensions(Class<T> extensionType) {
-		if (extensionType == FontFamily.class) {
-			if (lst == null)
-				lst = new ArrayList<FontFamily>();
-			if (fill) {
-				String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
-				if (strprop != null) {
-					lst.clear();
-					List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(this,
-							new ByteArrayInputStream(strprop.getBytes()));
-					if (fonts != null && !fonts.isEmpty())
-						lst.addAll(fonts);
-				}
+		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+		try {
+			if (classLoader != null)
+				Thread.currentThread().setContextClassLoader(classLoader);
+			if (extensionType == FontFamily.class) {
+				if (lst == null)
+					lst = new ArrayList<FontFamily>();
+				if (fill) {
+					String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
+					if (strprop != null) {
+						lst.clear();
+						List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(this,
+								new ByteArrayInputStream(strprop.getBytes()));
+						if (fonts != null && !fonts.isEmpty())
+							lst.addAll(fonts);
+					}
 
-				List<FontFamily> slist = (List<FontFamily>) ExtensionsEnvironment.getExtensionsRegistry().getExtensions(
-						extensionType);
-				if (slist != null)
-					lst.addAll(slist);
-				fill = false;
+					List<FontFamily> superlist = (List<FontFamily>) super.getExtensions(extensionType);
+					if (superlist != null)
+						lst.addAll(superlist);
+
+					fill = false;
+				}
+				return (List<T>) lst;
 			}
-			return (List<T>) lst;
+
+			return super.getExtensions(extensionType);
+		} finally {
+			Thread.currentThread().setContextClassLoader(oldCL);
 		}
-		return super.getExtensions(extensionType);
 	}
 }
