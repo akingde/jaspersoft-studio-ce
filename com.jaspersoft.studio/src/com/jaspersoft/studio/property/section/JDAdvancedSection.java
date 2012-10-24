@@ -58,11 +58,6 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 		data.top = new FormAttachment(0, 0);
 		data.bottom = new FormAttachment(100, 0);
 		page.getControl().setLayoutData(data);
-		this.atabbedPropertySheetPage = atabbedPropertySheetPage;
-		IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
-		page.makeContributions(actionBars.getMenuManager(), actionBars.getToolBarManager(),
-				actionBars.getStatusLineManager());
-		actionBars.updateActionBars();
 	}
 
 	TabbedPropertySheetPage atabbedPropertySheetPage;
@@ -106,6 +101,9 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 		if (getElement() != null)
 			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
 		IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
+		actionBars.getToolBarManager().removeAll();
+		page.makeContributions(actionBars.getMenuManager(), actionBars.getToolBarManager(),
+				actionBars.getStatusLineManager());
 		actionBars.updateActionBars();
 	}
 
@@ -115,6 +113,10 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	public void aboutToBeHidden() {
 		if (getElement() != null)
 			getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
+		IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
+		actionBars.getToolBarManager().removeAll();
+		actionBars.updateActionBars();
+
 	}
 
 	/**
