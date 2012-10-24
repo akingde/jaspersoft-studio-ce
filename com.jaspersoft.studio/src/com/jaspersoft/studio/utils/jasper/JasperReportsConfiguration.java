@@ -259,16 +259,18 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				e.printStackTrace();
 			}
 		}
-		String val = props.getProperty(key);
-		if (val == null)
-			val = props.getProperty(PROPERTY_JRPROPERTY_PREFIX + key);
+		String val = super.getProperty(key);
 		if (val == null)
 			val = service.getString(qualifier, key, null, contexts);
 		if (val == null)
 			val = service.getString(qualifier, PROPERTY_JRPROPERTY_PREFIX + key, null, contexts);
-
 		if (val == null)
-			return super.getProperty(key);
+			val = props.getProperty(key);
+		if (val == null)
+			val = props.getProperty(PROPERTY_JRPROPERTY_PREFIX + key);
+
+		// if (val == null)
+		// return super.getProperty(key);
 		return val;
 	}
 

@@ -110,7 +110,7 @@ public class ServerProfileWizard extends Wizard {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				MessageDialog.openInformation(getShell(),
-						"Connection to JasperServer", "Successfull");
+						"Connection to JasperServer", "Successful");
 			}
 		});
 	}
