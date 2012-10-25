@@ -75,7 +75,7 @@ public class JSFileResolver extends SimpleFileResolver {
 
 	@Override
 	public File resolveFile(String fileName) {
-		if(c == null)
+		if (c == null)
 			init();
 		if (c != null && fileName.startsWith("repo:")) {
 			File f = map.get(fileName);
@@ -108,9 +108,12 @@ public class JSFileResolver extends SimpleFileResolver {
 
 					// find the resource...
 					for (ResourceDescriptor r : reportUnitResources) {
+						if (r.getName() == null
+								|| !r.getName().equals(objectUri))
+							continue;
 						if (r.getIsReference())
 							r = ReferenceResolver.resolveReference(c, r, null);
-						if (r.getName().equals(objectUri) && isFileResource(r)) {
+						if (isFileResource(r)) {
 							f = File.createTempFile("jrsfr", r.getName());
 							c.get(r, f);
 							break;
