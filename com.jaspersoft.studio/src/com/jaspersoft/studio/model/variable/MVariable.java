@@ -45,6 +45,7 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescrip
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -122,7 +123,16 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, Messages.common_name, false);
+		nameD.setDescription(Messages.MVariableSystem_name_description);
+		desc.add(nameD);
+
+		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,
+				Messages.common_value_class_name);
+		classD.setDescription(Messages.MVariableSystem_value_class_name_description);
+		desc.add(classD);
+
+		defaultsMap.put(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
 
 		resetGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_GROUP, Messages.common_reset_group,
 				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$

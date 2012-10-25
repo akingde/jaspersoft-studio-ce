@@ -145,12 +145,11 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME,
-				Messages.common_name);
+				Messages.common_name, true);
 		nameD.setDescription(Messages.MVariableSystem_name_description);
 		desc.add(nameD);
 
-		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,
-				Messages.common_value_class_name);
+		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,Messages.common_value_class_name, true);
 		classD.setDescription(Messages.MVariableSystem_value_class_name_description);
 		desc.add(classD);
 

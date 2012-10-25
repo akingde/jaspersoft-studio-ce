@@ -48,8 +48,25 @@ import com.jaspersoft.studio.property.section.widgets.SPClassType;
 
 public class NClassTypePropertyDescriptor extends ClassTypePropertyDescriptor implements IPropertyDescriptorWidget {
 
+	/**
+	 *  Field to check if the widget should be read only
+	 */
+	private boolean readOnly;
+	
 	public NClassTypePropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
+		readOnly = false;
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param displayName
+	 * @param readOnly readOnly true if the widget must be read only, false otherwise
+	 */
+	public NClassTypePropertyDescriptor(Object id, String displayName, boolean readOnly) {
+		super(id, displayName);
+		this.readOnly = readOnly;
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
@@ -60,6 +77,8 @@ public class NClassTypePropertyDescriptor extends ClassTypePropertyDescriptor im
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPClassType(parent, section, this);
+		ASPropertyWidget classNameWidget = new SPClassType(parent, section, this);
+		classNameWidget.setReadOnly(readOnly);
+		return classNameWidget;
 	}
 }

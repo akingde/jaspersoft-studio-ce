@@ -32,11 +32,31 @@ import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPText;
 
 public class JSSTextPropertyDescriptor extends TextPropertyDescriptor implements IPropertyDescriptorWidget {
+	
+	/**
+	 * Field to check if the widget should be read only
+	 */
+	private boolean readOnly;
+	
 	public JSSTextPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
+		readOnly = false;
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param displayName
+	 * @param readOnly true if the widget must be read only, false otherwise
+	 */
+	public JSSTextPropertyDescriptor(Object id, String displayName, boolean readOnly) {
+		super(id, displayName);
+		this.readOnly = readOnly;
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPText(parent, section, this);
+		ASPropertyWidget textWidget = new SPText(parent, section, this);
+		textWidget.setReadOnly(readOnly);
+		return textWidget;
 	}
 }
