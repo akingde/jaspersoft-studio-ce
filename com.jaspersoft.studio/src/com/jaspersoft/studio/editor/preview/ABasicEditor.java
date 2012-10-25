@@ -190,39 +190,7 @@ public abstract class ABasicEditor extends EditorPart {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		IFile file = null;
 		if (input instanceof FileStoreEditorInput) {
-			try {
-				FileStoreEditorInput fsei = (FileStoreEditorInput) input;
-
-				IPath location = new Path(fsei.getURI().getPath());
-
-				// Create a new temporary project object and open it.
-				IProject project = null;
-				for (IProject prj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-					if (prj.isOpen()) {
-						if (project == null)
-							project = prj;
-						else
-
-						if (prj.getNature(JasperReportsNature.NATURE_ID) != null)
-							project = prj;
-
-					}
-				}
-				if (project == null)
-					ResourcesPlugin.getWorkspace().getRoot().getProject(JrxmlEditor.DEFAULT_PROJECT);
-				// Create a project if one doesn't exist and open it.
-				if (!project.exists())
-					project.create(null);
-				if (!project.isOpen())
-					project.open(null);
-
-				file = project.getFile(location.lastSegment());
-				file.createLink(location, IResource.REPLACE, null);
-
-				input = new FileEditorInput(file);
-			} catch (CoreException e) {
-				throw new PartInitException(e.getMessage(), e);
-			}
+			input = JrxmlEditor.checkAndConvertEditorInput(input);
 			init(site, input);
 			return;
 		} else if (input instanceof IFileEditorInput) {

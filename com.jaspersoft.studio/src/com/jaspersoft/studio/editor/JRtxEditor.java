@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 
-import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRTemplate;
@@ -38,15 +37,12 @@ import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -60,7 +56,6 @@ import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.SaveAsDialog;
-import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -77,7 +72,6 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
-import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
@@ -196,41 +190,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		if (input instanceof FileStoreEditorInput) {
-			try {
-				FileStoreEditorInput fsei = (FileStoreEditorInput) input;
-
-				IPath location = new Path(fsei.getURI().getPath());
-
-				// Create a new temporary project object and open it.
-				IProject project = null;
-				for (IProject prj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-					if (prj.isOpen()) {
-						if (project == null)
-							project = prj;
-						else
-
-						if (prj.getNature(JasperReportsNature.NATURE_ID) != null)
-							project = prj;
-
-					}
-				}
-				if (project == null)
-					ResourcesPlugin.getWorkspace().getRoot().getProject(JrxmlEditor.DEFAULT_PROJECT);
-				// Create a project if one doesn't exist and open it.
-				if (!project.exists())
-					project.create(null);
-				if (!project.isOpen())
-					project.open(null);
-
-				IFile file = project.getFile(location.lastSegment());
-				file.createLink(location, IResource.REPLACE, null);
-
-				input = new FileEditorInput(file);
-			} catch (CoreException e) {
-				throw new PartInitException(e.getMessage(), e);
-			}
-		}
+		input = JrxmlEditor.checkAndConvertEditorInput(input);
 		super.init(site, input);
 		setSite(site);
 		setPartName(input.getName());

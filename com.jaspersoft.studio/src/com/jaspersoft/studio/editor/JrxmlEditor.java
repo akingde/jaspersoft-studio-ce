@@ -28,6 +28,7 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
+import net.sf.jasperreports.eclipse.wizard.project.JRProjectWizard;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -457,36 +458,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		// FIXME: THIS IS NOT THE RIGHT PLACE TO LOAD MODEL, WE SHOULD LOAD FROM
 		// TEXT EDITOR TO AVOID 2 TIME READING THE FILE
-		if (editorInput instanceof FileStoreEditorInput) {
-			try {
-				FileStoreEditorInput fsei = (FileStoreEditorInput) editorInput;
-				IPath location = new Path(fsei.getURI().getPath());
-				// Create a new temporary project object and open it.
-				IProject project = null;
-				for (IProject prj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-					if (prj.isOpen()) {
-						if (project == null)
-							project = prj;
-						else if (prj.getNature(JasperReportsNature.NATURE_ID) != null)
-							project = prj;
-					}
-				}
-				if (project == null)
-					project = ResourcesPlugin.getWorkspace().getRoot().getProject(DEFAULT_PROJECT);
-				// Create a project if one doesn't exist and open it.
-				if (!project.exists())
-					project.create(null);
-				if (!project.isOpen())
-					project.open(null);
-
-				IFile file = project.getFile(location.lastSegment());
-				file.createLink(location, IResource.REPLACE, null);
-
-				editorInput = new FileEditorInput(file);
-			} catch (CoreException e) {
-				throw new PartInitException(e.getMessage(), e);
-			}
-		}
+		editorInput = checkAndConvertEditorInput(editorInput);
 		super.init(site, editorInput);
 		setPartName(editorInput.getName());
 		InputStream in = null;
@@ -535,6 +507,44 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					throw new PartInitException("error closing input stream", e); //$NON-NLS-1$
 				}
 		}
+	}
+
+	public static IEditorInput checkAndConvertEditorInput(IEditorInput editorInput) throws PartInitException {
+		if (editorInput instanceof FileStoreEditorInput) {
+			try {
+				FileStoreEditorInput fsei = (FileStoreEditorInput) editorInput;
+				IPath location = new Path(fsei.getURI().getPath());
+				// Create a new temporary project object and open it.
+				IProject project = null;
+				for (IProject prj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+					if (prj.isOpen()) {
+						if (project == null)
+							project = prj;
+						else if (prj.getNature(JasperReportsNature.NATURE_ID) != null)
+							project = prj;
+						if (project != null && project.getName().equals(DEFAULT_PROJECT))
+							break;
+					}
+				}
+				if (project == null)
+					project = ResourcesPlugin.getWorkspace().getRoot().getProject(DEFAULT_PROJECT);
+				// Create a project if one doesn't exist and open it.
+				if (!project.exists()) {
+					project.create(null);
+					JRProjectWizard.createJRProject(null, project);
+				}
+				if (!project.isOpen())
+					project.open(null);
+
+				IFile file = project.getFile(location.lastSegment());
+				file.createLink(location, IResource.REPLACE, null);
+
+				editorInput = new FileEditorInput(file);
+			} catch (CoreException e) {
+				throw new PartInitException(e.getMessage(), e);
+			}
+		}
+		return editorInput;
 	}
 
 	public void addFileResolver(FileResolver resolver) {
