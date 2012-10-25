@@ -58,17 +58,10 @@ public class NClassTypePropertyDescriptor extends ClassTypePropertyDescriptor im
 		readOnly = false;
 	}
 	
-	/**
-	 * 
-	 * @param id
-	 * @param displayName
-	 * @param readOnly readOnly true if the widget must be read only, false otherwise
-	 */
-	public NClassTypePropertyDescriptor(Object id, String displayName, boolean readOnly) {
-		super(id, displayName);
-		this.readOnly = readOnly;
+	public void setReadOnly(boolean value){
+		readOnly = value;
 	}
-
+	
 	public CellEditor createPropertyEditor(Composite parent) {
 		CellEditor editor = new ClassTypeCellEditor(parent);
 		editor.setValidator(NClassTypeCellEditorValidator.instance());

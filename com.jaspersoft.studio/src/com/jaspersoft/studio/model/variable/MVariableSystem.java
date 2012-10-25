@@ -135,7 +135,7 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-
+	
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -143,13 +143,19 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME,
-				Messages.common_name, true);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap){
+		createPropertyDescriptors(desc, defaultsMap, true); 
+	}
+
+
+	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap, boolean readOnly) {
+		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME,Messages.common_name);
+		nameD.setReadOnly(readOnly);
 		nameD.setDescription(Messages.MVariableSystem_name_description);
 		desc.add(nameD);
 
-		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,Messages.common_value_class_name, true);
+		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,Messages.common_value_class_name);
+		classD.setReadOnly(readOnly);
 		classD.setDescription(Messages.MVariableSystem_value_class_name_description);
 		desc.add(classD);
 
