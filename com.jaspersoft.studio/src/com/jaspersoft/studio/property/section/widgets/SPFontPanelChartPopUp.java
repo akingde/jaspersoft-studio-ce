@@ -32,7 +32,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -47,18 +46,22 @@ import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
+import com.jaspersoft.studio.property.combomenu.ComboItem;
+import com.jaspersoft.studio.property.combomenu.ComboItemAction;
+import com.jaspersoft.studio.property.combomenu.ComboItemSeparator;
+import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
- * This class implement the subsection into the cart property tab, for the font name is used a 
- * standard combo.
+ * This class implement the subsection into the chart property tab using the font combo for the 
+ * font name
  * @author Chicu Veaceslav & Orlandin Marco
  *
  */
-public class SPFont extends ASPropertyWidget {
+public class SPFontPanelChartPopUp extends ASPropertyWidget {
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
@@ -77,7 +80,7 @@ public class SPFont extends ASPropertyWidget {
 	/**
 	 * The combo popup with the font names
 	 */
-	private Combo fontName;
+	private ComboMenuViewer fontName;
 	
 	/**
 	 * The combo with the font size
@@ -123,13 +126,8 @@ public class SPFont extends ASPropertyWidget {
 	 * Composite where the control will be placed
 	 */
 	private Composite group;
-	
-	/**
-	 * String used in the combobox to print a separator
-	 */
-	private static String separator = "__________________";
 
-	public SPFont(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPFontPanelChartPopUp(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 		preferenceListener = new PreferenceListener();
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
@@ -143,24 +141,26 @@ public class SPFont extends ASPropertyWidget {
 	}
 
 	/**
-	 * Convert a list of array of string into a single array of string, ready to be inserted into 
-	 * a combo 
+	 * Convert a list of array of string into a List of ComboItem, ready to be inserted into 
+	 * a combo popup
 	 * @param fontsList List of array of fonts, between every array will be inserted a separator
 	 * @return List of combo item
 	 */
-	private String[] stringToItems(List<String[]> fontsList){
-		List<String> itemsList = new ArrayList<String>();
+	private List<ComboItem> stringToItems(List<String[]> fontsList){
+		int i = 0;
+		List<ComboItem> itemsList = new ArrayList<ComboItem>();
 		for(int index = 0; index<fontsList.size(); index++){
 			String[] fonts = fontsList.get(index);
 			for(String element : fonts){
-				itemsList.add(element);
+				itemsList.add(new ComboItem(element, true,  SPFontNamePopUp.createFontImage(element), i, element,  element));
+				i++;
 			}
 			if (index+1 != fontsList.size() && fonts.length>0){
-				itemsList.add(separator);;
+				itemsList.add(new ComboItemSeparator(i));
+				i++;
 			}
 		}
-		String[] result = new String[itemsList.size()];
-		return itemsList.toArray(result);
+		return itemsList;
 	}
 	
 
@@ -213,48 +213,21 @@ public class SPFont extends ASPropertyWidget {
 		}
 	}
 	
-	/**
-	 * Given a combo and and a string return the index of the string in the combo
-	 * @param combo
-	 * @param searchedString
-	 * @return the index of the string in the combo, or 0 if the string is not found
-	 */
-	private int indexOf(Combo combo, String searchedString){
-		String[] elements = combo.getItems();
-		for (int i = 0; i < elements.length; i++) {
-			if (elements[i].equals(searchedString)) {
-				return i;
-			}
-		}
-		return 0;
-	}
-	
 	protected void createComponent(Composite parent) {
 		mfont = new MFont(new JRDesignFont(null));
 		group = section.getWidgetFactory().createSection(parent, pDescriptor.getDisplayName(), true, 3);
 
 		final FontNamePropertyDescriptor pd = (FontNamePropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
-		fontName = new Combo(group, SWT.NONE);
+		fontName = new ComboMenuViewer(group, ComboMenuViewer.NO_IMAGE, "SampleSampleSample");
 		fontName.setToolTipText(pd.getDescription());
-		fontName.addModifyListener(new ModifyListener() {
-			
-			private int time = 0;
-
-			public void modifyText(ModifyEvent e) {
-				if (e.time - time > 100) {
-					String value = fontName.getText();
-					if (!value.equals(separator))
-						propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME, value, pd);		
-					else 
-						fontName.select(indexOf(fontName, (String)mfont.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_NAME)));
-					int stringLength = fontName.getText().length();
-					fontName.setSelection(new Point(stringLength, stringLength));
-				}
-				time = e.time;
+		fontName.addSelectionListener(new ComboItemAction() {
+			@Override
+			public void exec() {
+				propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME, fontName.getSelectionValue() != null ? fontName.getSelectionValue().toString() : null, pd);			
 			}
 		});
-		
+
 		final RWComboBoxPropertyDescriptor pd1 = (RWComboBoxPropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE);
 
@@ -276,8 +249,6 @@ public class SPFont extends ASPropertyWidget {
 					String value = fontSize.getText();
 					if (IntegerCellEditorValidator.instance().isValid(value) == null)
 						changeProperty(section, pDescriptor.getId(), pd1.getId(), value);
-					int stringLength = fontSize.getText().length();
-					fontSize.setSelection(new Point(stringLength, stringLength));
 				}
 				time = e.time;
 			}
@@ -348,9 +319,14 @@ public class SPFont extends ASPropertyWidget {
 			fontName.setText(strfontname);
 			
 			String strfontsize =  Integer.toString(JRStyleResolver.getFontSize(fontValue)); 
+			String[] items = fontSize.getItems();
 			fontSize.setText(strfontsize != null ? strfontsize : ""); 
-			fontSize.select(indexOf(fontSize, strfontsize));
-
+			for (int i = 0; i < items.length; i++) {
+				if (items[i].equals(strfontsize)) {
+					fontSize.select(i);
+					break;
+				}
+			}
 
 			Boolean b = JRStyleResolver.isBold(fontValue); 
 			boldButton.setSelection(b != null ? b.booleanValue() : false);

@@ -23,24 +23,20 @@ import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.combomenu.ComboItem;
-import com.jaspersoft.studio.property.combomenu.ComboItemAction;
-import com.jaspersoft.studio.property.combomenu.ComboItemSeparator;
-import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
- * A combo popup menu that could be used to represent a font
+ * A combo menu that could be used to represent a font
  * @author Orlandin Marco
  *
  */
@@ -49,109 +45,87 @@ public class SPFontNameCombo extends ASPropertyWidget {
 	/**
 	 * The combo popup
 	 */
-	protected ComboMenuViewer combo;
+	protected Combo combo;
 	
 	/**
 	 * True if the combo popup was already initialized with the data, false otherwise
 	 */
 	protected boolean dataSetted;
 	
+	/**
+	 * String used in the combobox to print a separator
+	 */
+	private static String separator = "__________________";
+	
 	public SPFontNameCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 		dataSetted = false;
 	}
 	
+
 	/**
-	 * Create a sample image for a font. when an image is created it is cashed, so future request for that sample 
-	 * doesn't Require the image recreation.
-	 * @param fontName name of the font for the requested sample
-	 * @return image of the sample
+	 * Convert a list of array of string into a single array of string, ready to be inserted into 
+	 * a combo 
+	 * @param fontsList List of array of fonts, between every array will be inserted a separator
+	 * @return List of combo item
 	 */
-	/*public static Image createFontImage(final String fontName){
-    Display display = Display.getCurrent();
-    Color TRANSPARENT_COLOR = display.getSystemColor(SWT.COLOR_WHITE);
-    Color DRAWING_COLOR = display.getSystemColor(SWT.COLOR_BLACK);
-    Image stringImage = ResourceManager.getImage(fontName);
-    if (stringImage == null){
-	    PaletteData paletteData = new PaletteData( new RGB[]{
-	    	   TRANSPARENT_COLOR.getRGB(),
-	    	   DRAWING_COLOR.getRGB()
-	    	   });
-	    	 
-	    ImageData imageData = new ImageData( 55, 15, 4, paletteData);
-	    imageData.transparentPixel = 0; // index of the palette
-	    stringImage = new Image( display, imageData);
-	    ResourceManager.addImage(fontName, stringImage);
-    }
-    GC stringGc = new GC(stringImage);
-    stringGc.setForeground(DRAWING_COLOR);
-    stringGc.setBackground(TRANSPARENT_COLOR);
-    
-    stringGc.setFont(ResourceManager.getFont(fontName, 10, 0));
-  
-    stringGc.drawText("Sample", 0, 0,SWT.DRAW_TRANSPARENT);
-
-    stringGc.dispose();
-    return stringImage;
-	}*/
-	
-	private static Image getBaseImage(){
-		Image backGround = ResourceManager.getImage("baseFontBackGroundImage");
-    if (backGround == null){
-    	backGround = new Image(null, 55, 15);
-    	ResourceManager.addImage("baseFontBackGroundImage", backGround);
-    }
-    return backGround;
+	private String[] stringToItems(List<String[]> fontsList){
+		List<String> itemsList = new ArrayList<String>();
+		for(int index = 0; index<fontsList.size(); index++){
+			String[] fonts = fontsList.get(index);
+			for(String element : fonts){
+				itemsList.add(element);
+			}
+			if (index+1 != fontsList.size() && fonts.length>0){
+				itemsList.add(separator);;
+			}
+		}
+		String[] result = new String[itemsList.size()];
+		return itemsList.toArray(result);
 	}
 	
-	public static Image createFontImage(final String fontName){
-		Image stringImage = ResourceManager.getImage(fontName);
-		//Check if the image is cached
-    if (stringImage == null){
-	    ImageData imageData = getBaseImage().getImageData();
-	    imageData.transparentPixel = imageData.getPixel(0, 0);
-	    stringImage = new Image(null, imageData);
-	    GC stringGc = new GC(stringImage);
-	    stringGc.setFont(ResourceManager.getFont(fontName, 10, 0));
-	    stringGc.setTextAntialias(SWT.ON);
-	    stringGc.drawText("Sample", 0, 0,SWT.DRAW_TRANSPARENT);
-	    stringGc.dispose();
-	    ResourceManager.addImage(fontName, stringImage);
-    }
-    return stringImage;
+	/**
+	 * Given a combo and and a string return the index of the string in the combo
+	 * @param combo
+	 * @param searchedString
+	 * @return the index of the string in the combo, or 0 if the string is not found
+	 */
+	private int indexOf(Combo combo, String searchedString){
+		String[] elements = combo.getItems();
+		for (int i = 0; i < elements.length; i++) {
+			if (elements[i].equals(searchedString)) {
+				return i;
+			}
+		}
+		return 0;
 	}
-
+	
 
 	/** 
 	 * Set the data of the combo popup, and if it wasn't initialized the fonts will be added
 	 */
 	@Override
-	public void setData(APropertyNode pnode, Object b) {
+	public void setData(final APropertyNode pnode, Object b) {
 		if (pnode != null) {
 			if (!dataSetted){
 				List<String[]> fontsList = ModelUtils.getFontNames(pnode.getJasperConfiguration());
-				List<ComboItem> itemsList = new ArrayList<ComboItem>();
-				int i = 0;
-				for(int index = 0; index<fontsList.size(); index++){
-					String[] fonts = fontsList.get(index);
-					for(String element : fonts){
-						itemsList.add(new ComboItem(element, true,  createFontImage(element), i, element,  element));
-						i++;
-					}
-					if (index+1 != fontsList.size() && fonts.length>0){
-						itemsList.add(new ComboItemSeparator(i));
-						i++;
-					}
-				}
-				combo.setItems(itemsList);
-				combo.addSelectionListener(new ComboItemAction() {
-						/**
-						 * The action to execute when an entry is selected
-						 */
-						@Override
-						public void exec() {
-								propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME, combo.getSelectionValue() != null ? combo.getSelectionValue().toString() : null);			
+				combo.setItems(stringToItems(fontsList));
+				combo.addModifyListener(new ModifyListener() {
+					
+					private int time = 0;
+
+					public void modifyText(ModifyEvent e) {
+						if (e.time - time > 100) {
+							String value = combo.getText();
+							if (!value.equals(separator))
+								propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME, combo.getText());
+							else 
+								combo.select(indexOf(combo, (String)pnode.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_NAME)));
+							int stringLength = combo.getText().length();
+							combo.setSelection(new Point(stringLength, stringLength));
 						}
+						time = e.time;
+					}
 				});
 				dataSetted = true;
 			}
@@ -167,13 +141,13 @@ public class SPFontNameCombo extends ASPropertyWidget {
 	@Override
 	protected void createComponent(Composite parent) {
 			if (combo == null){
-				combo = new ComboMenuViewer(parent, ComboMenuViewer.NO_IMAGE, "SampleSampleSample");
+				combo = new Combo(parent, SWT.NONE);
 			}
 	}
 
 	@Override
 	public Control getControl() {
-		return combo != null ? combo.getControl() : null;
+		return combo;
 	}
 
 }
