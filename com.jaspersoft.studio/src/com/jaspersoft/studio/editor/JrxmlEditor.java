@@ -35,6 +35,7 @@ import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
+import org.eclipse.core.internal.resources.ResourceException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -517,6 +518,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			jrContext.setJasperDesign(jd);
 			setModel(ReportFactory.createReport(jrContext));
 		} catch (JRException e) {
+			setModel(null);
+			handleJRException(editorInput, e, false);
+		} catch (ResourceException e) {
 			setModel(null);
 			handleJRException(editorInput, e, false);
 		} catch (Exception e) {

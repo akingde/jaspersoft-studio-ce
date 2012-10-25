@@ -117,11 +117,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				contexts = new IScopeContext[] { new ProjectScope(project), INSTANCE_SCOPE };
 				try {
 					if (project.getNature(JavaCore.NATURE_ID) != null) {
-						javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), this.getClass()
-								.getClassLoader());
+						ClassLoader tcl = Thread.currentThread().getContextClassLoader();
+						javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), tcl);
 						ClassLoader cl = javaclassloader;
 						cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
-						cl = new CompositeClassloader(cl, getClass().getClassLoader());
+						cl = new CompositeClassloader(cl, this.getClass().getClassLoader());
 						setClassLoader(cl);
 						classpathlistener = new ClasspathListener();
 						javaclassloader.addClasspathListener(classpathlistener);
