@@ -361,7 +361,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		desc.add(strikeThroughD);
 
 		CheckBoxPropertyDescriptor defaultD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_DEFAULT,
-				Messages.MStyle_default_style, NullEnum.INHERITED);
+				Messages.MStyle_default_style, NullEnum.NOTNULL);
 		defaultD.setDescription(Messages.MStyle_default_style_description);
 		desc.add(defaultD);
 
@@ -622,8 +622,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
 				jrstyle.setPattern((String) value);
 			else if (id.equals(JRDesignStyle.PROPERTY_DEFAULT)) {
+				//getJasperDesign().resetDefaultStyle();
+				JRDesignStyle style = (JRDesignStyle)getJasperDesign().getDefaultStyle();
+				if (style != null)
+					style.setDefault(false);
 				jrstyle.setDefault(((Boolean) value).booleanValue());
-				getJasperDesign().resetDefaultStyle();
+				getJasperDesign().setDefaultStyle(jrstyle);
 			} else if (id.equals(JRDesignStyle.PROPERTY_PARENT_STYLE)) {
 				if (!value.equals("")) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);

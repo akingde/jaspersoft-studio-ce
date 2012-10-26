@@ -101,7 +101,7 @@ public class SPEvaluationTime extends ASPropertyWidget {
 			dataset = jasperDesign.getMainDataset();
 
 		setData((Integer) pnode.getPropertyValue(pDescriptor.getId()),
-				(String) pnode.getPropertyValue(gDescriptor.getId()), SPIncrementType.getItems(dataset));
+				(String) pnode.getPropertyValue(gDescriptor.getId()), SPEvaluationTime.getItems(dataset));
 
 	}
 

@@ -64,11 +64,12 @@ import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.FrameFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.SnapToGeometryThreshold;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredRectangle;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.HighlightBorder;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.JSSSnapFeedBackPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
@@ -324,9 +325,8 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 							return null;
 				}
 				if (targetFeedback == null) {
-					targetFeedback = new RectangleFigure();
+					targetFeedback = new ColoredRectangle(FrameFigureEditPart.addElementColor,2.0f);
 					targetFeedback.setFill(false);
-
 					IFigure hostFigure = getHostFigure();
 					Rectangle bounds = hostFigure.getBounds();
 					if (hostFigure instanceof HandleBounds)
@@ -335,8 +335,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 					getHostFigure().translateToAbsolute(rect);
 					getFeedbackLayer().translateToRelative(rect);
 
-					targetFeedback.setBounds(rect.shrink(0, 1));;
-					targetFeedback.setBorder(new HighlightBorder(ColorConstants.blue,2));
+					targetFeedback.setBounds(rect);
 					addFeedback(targetFeedback);
 				}
 				return targetFeedback;

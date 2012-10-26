@@ -19,9 +19,10 @@
  */
 package com.jaspersoft.studio.editor.gef.parts;
 
+import java.awt.Color;
+
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
@@ -32,11 +33,10 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
-import org.eclipse.swt.graphics.Color;
 
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.HighlightBorder;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredRectangle;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
@@ -51,7 +51,7 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 	/**
 	 * Color of the feedback when an element is dragged into the frame
 	 */
-	public static Color addElementColor = ColorConstants.blue;
+	public static Color addElementColor = new Color(Color.blue.getRed(), Color.blue.getGreen(), Color.blue.getBlue(), 128);
 	
 	/**
 	 * figure of the target feedback
@@ -154,7 +154,7 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 			 */
 			protected IFigure getLayoutTargetFeedback(Request request) {
 				if (targetFeedback == null) {
-					targetFeedback = new RectangleFigure();
+					targetFeedback = new ColoredRectangle(addElementColor,2.0f);
 					targetFeedback.setFill(false);
 
 					IFigure hostFigure = getHostFigure();
@@ -165,8 +165,7 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 					getHostFigure().translateToAbsolute(rect);
 					getFeedbackLayer().translateToRelative(rect);
 
-					targetFeedback.setBounds(rect.shrink(0, 1));
-					targetFeedback.setBorder(new HighlightBorder(addElementColor,2));
+					targetFeedback.setBounds(rect);
 					addFeedback(targetFeedback);
 				}
 				return targetFeedback;

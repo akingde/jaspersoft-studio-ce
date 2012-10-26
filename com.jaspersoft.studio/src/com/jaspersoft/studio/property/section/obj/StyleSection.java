@@ -26,6 +26,7 @@ package com.jaspersoft.studio.property.section.obj;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -45,10 +46,12 @@ public class StyleSection extends AbstractRealValueSection {
 
 		createWidget4Property(parent, JRDesignStyle.PROPERTY_PARENT_STYLE);
 
-		createWidget4Property(parent, JRDesignStyle.PROPERTY_BLANK_WHEN_NULL);
-
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
 		if (!(getElement() instanceof MConditionalStyle))
-			createWidget4Property(parent, JRDesignStyle.PROPERTY_DEFAULT);
+			createWidget4Property(parent, JRDesignStyle.PROPERTY_DEFAULT, false).getControl().setLayoutData(gd);
+		
+		createWidget4Property(parent, JRDesignStyle.PROPERTY_BLANK_WHEN_NULL);
 
 		createWidget4Property(parent, JRDesignStyle.PROPERTY_PATTERN);
 

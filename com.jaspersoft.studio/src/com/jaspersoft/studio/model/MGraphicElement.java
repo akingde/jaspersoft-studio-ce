@@ -53,6 +53,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.checkbox.NullCheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
@@ -410,8 +411,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		//opaqueD.setCategory(Messages.common_graphic);
 		//desc.add(opaqueD);
 		
-		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(
-				JRBaseStyle.PROPERTY_MODE, Messages.common_opaque);
+		NullCheckBoxPropertyDescriptor opaqueDBool = new NullCheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.common_opaque);
 		opaqueDBool.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueDBool);
 

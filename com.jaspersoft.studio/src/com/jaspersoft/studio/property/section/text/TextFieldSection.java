@@ -56,10 +56,11 @@ public class TextFieldSection extends AbstractRealValueSection {
 		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
 		widgets.put(pd.getId(), new SPEvaluationTime(parent, this, pd, gpd));
 
-		createWidget4Property(parent, JRDesignStyle.PROPERTY_BLANK_WHEN_NULL);
-
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
+		
+		createWidget4Property(parent, JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,false).getControl().setLayoutData(gd);
+
 		createWidget4Property(parent, JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, false).getControl().setLayoutData(gd);
 
 		createWidget4Property(parent, JRDesignStyle.PROPERTY_PATTERN);

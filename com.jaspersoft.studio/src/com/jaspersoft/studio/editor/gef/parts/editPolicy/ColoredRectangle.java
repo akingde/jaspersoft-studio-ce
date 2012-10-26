@@ -18,46 +18,46 @@
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
+import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 
 /**
- * Print an internal border for the figure, half-transparent
- * 
+ * Rectangle figure with colored border, used show a color feedback on some 
+ * elements
  * @author Orlandin Marco
- * 
+ *
  */
-public class HighlightBorder extends LineBorder {
-	public HighlightBorder(Color color, int width) {
-		super(color, width);
+public class ColoredRectangle extends RectangleFigure{
+	
+	private Color borderColor;
+	
+	private float borderWidth;
+	
+	public ColoredRectangle(Color borderColor, float borderWidth){
+		this.borderColor = borderColor;
+		this.borderWidth = borderWidth;
+	}
+	
+	protected void outlineShape(Graphics graphics) {
+		Graphics2D g = ComponentFigure.getG2D(graphics);
+		float lineInset = Math.max(1.0f, getLineWidthFloat()) / 2.0f;
+		int inset1 = (int) Math.floor(lineInset);
+		int inset2 = (int) Math.ceil(lineInset);
+
+		Rectangle r = Rectangle.SINGLETON.setBounds(getBounds());
+		r.x += inset1;
+		r.y += inset1;
+		r.width -= inset1 + inset2;
+		r.height -= inset1 + inset2;
+		g.setStroke(new BasicStroke(borderWidth));
+		g.setColor(borderColor);
+		g.drawRect(r.x,r.y,r.width,r.height);
 	}
 
-	@Override
-	public void paint(IFigure figure, Graphics graphics, Insets insets) {
-		Graphics2D g = ComponentFigure.getG2D(graphics);
-		if (g != null) {
-			tempRect.setBounds(getPaintRectangle(figure, insets));
-			if (getWidth() % 2 == 1) {
-				tempRect.width--;
-				tempRect.height--;
-			}
-			tempRect.width = tempRect.width - getWidth();
-			tempRect.height = tempRect.height - getWidth();
-			tempRect.shrink(getWidth() / 2, getWidth() / 2);
-			g.setStroke(new BasicStroke(getWidth()));
-			if (getColor() != null) {
-				RGB colorRGB = getColor().getRGB();
-				g.setColor(new java.awt.Color(colorRGB.red, colorRGB.green, colorRGB.blue, 128));
-			}
-			g.drawRect(tempRect.x, tempRect.y, tempRect.width, tempRect.height);
-		}
-	}
 }
