@@ -42,8 +42,6 @@ import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.TreePath;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.cheatsheets.ICheatSheetAction;
@@ -101,19 +99,15 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 				wizard.bindTestButton(dialog);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
-					newDataAdapter = wizard.getServerProfile();
+					mservprof = wizard.getServerProfile();
 					MServerProfile newprofile = new MServerProfile(
-							(MServers) n, newDataAdapter.getValue());
-					for (INode cn : newDataAdapter.getChildren())
+							(MServers) n, mservprof.getValue());
+					for (INode cn : mservprof.getChildren())
 						newprofile.addChild((ANode) cn);
-					newprofile.setWsClient(newDataAdapter.getWsClient());
+					newprofile.setWsClient(mservprof.getWsClient());
 					ServerManager.addServerProfile(newprofile);
 
-					treeViewer.refresh(true);
-					TreeSelection s = (TreeSelection) treeViewer.getSelection();
-					TreePath[] p = s.getPaths();
-					if (p.length > 0)
-						treeViewer.expandToLevel(p[0], 1);
+					EditServerAction.fillServerProfile(newprofile, treeViewer);
 				}
 				break;
 			}
@@ -121,10 +115,10 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 
 	}
 
-	private MServerProfile newDataAdapter;
+	private MServerProfile mservprof;
 
 	public MServerProfile getNewServer() {
-		return newDataAdapter;
+		return mservprof;
 	}
 
 	public void run(String[] params, ICheatSheetManager manager) {

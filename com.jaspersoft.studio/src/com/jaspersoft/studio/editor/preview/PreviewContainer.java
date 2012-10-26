@@ -42,6 +42,8 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -266,6 +268,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			getLeftContainer().setEnabled(true);
 			leftToolbar.setEnabled(true);
 		}
+		isDirty = false;
 	}
 
 	public void showParameters(boolean showprm) {
@@ -292,6 +295,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
 				getReportControler().setJrContext(jConfig);
 				setupDataAdapter();
+
 				if (isDirty() || getJasperPrint() == null)
 					runReport(dataAdapterDesc);
 				isDirty = false;

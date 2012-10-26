@@ -160,7 +160,7 @@ public class JrxmlPublishAction extends AContributorAction {
 			mrunit = new MReportUnit(parent, rd);
 		} else if (mrunit.getParent() == null)
 			mrunit.setParent(parent, -1);
-		MJrxml jrxml = new MJrxml(mrunit, getMainReport(jd), 0);
+		MJrxml jrxml = new MJrxml(mrunit, getMainReport(mrunit, jd), 0);
 		File file = FileUtils.createTempFile("jrsres", ".jrxml"); //$NON-NLS-1$ //$NON-NLS-2$
 		String version = ServerManager.getVersion(mrunit);
 		FileUtils.writeFile(file,
@@ -169,6 +169,7 @@ public class JrxmlPublishAction extends AContributorAction {
 		mrunit.setFile(file);
 		mrunit.getValue().getChildren().add(jrxml.getValue());
 		mrunit.setValue(save(monitor, mrunit));
+		jrxml.setValue(save(monitor, jrxml));
 
 		List<MResource> files = jrConfig.get(KEY_PUBLISH2JSS_DATA,
 				new ArrayList<MResource>());
@@ -191,12 +192,44 @@ public class JrxmlPublishAction extends AContributorAction {
 		try {
 			return WSClientHelper.saveResource(f, monitor, false);
 		} catch (Exception e) {
-			f.getValue().setIsNew(false);
-			return WSClientHelper.saveResource(f, monitor, false);
+			if (f.getValue().getIsNew()) {
+				f.getValue().setIsNew(false);
+				return WSClientHelper.saveResource(f, monitor, false);
+			}
+			throw e;
 		}
 	}
 
-	private ResourceDescriptor getMainReport(JasperDesign jd) {
+	private ResourceDescriptor getMainReport(MReportUnit mrunit, JasperDesign jd) {
+		String jrxmln = jd.getProperty(JrxmlExporter.PROP_REPORTRESOURCE);
+		if (jrxmln != null) {
+			String unit = mrunit.getValue().getUriString() + "_files/";
+			if (unit != null && jrxmln.startsWith(unit)
+					&& jrxmln.length() > unit.length()
+					&& jrxmln.substring(unit.length()).indexOf('/') < 0) {
+				MServerProfile sp = (MServerProfile) mrunit.getRoot();
+				if (sp != null) {
+					ResourceDescriptor rd = new ResourceDescriptor();
+					rd.setName(jrxmln.substring(unit.length()));
+					rd.setLabel(jrxmln.substring(unit.length()));
+					rd.setUriString(jrxmln);
+					rd.setParentFolder(unit + "_files/" + rd.getName());
+					rd.setIsNew(true);
+					rd.setWsType(ResourceDescriptor.TYPE_JRXML);
+					rd.setIsReference(false);
+					rd.setHasData(true);
+					try {
+						rd = sp.getWsClient().get(rd, null);
+						rd.setHasData(true);
+						if (rd != null)
+							return rd;
+					} catch (Exception e) {
+						e.printStackTrace();// maybe ask something?
+						return rd;
+					}
+				}
+			}
+		}
 		ResourceDescriptor mainr = new ResourceDescriptor();
 		mainr.setName(Messages.JrxmlPublishAction_defaultresourcename);
 		mainr.setLabel(Messages.JrxmlPublishAction_defaultresourcelabel);

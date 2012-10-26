@@ -42,6 +42,12 @@
  */
 package com.jaspersoft.studio.server.action.server;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreePath;
@@ -53,6 +59,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.model.MDummy;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.ServerProfileWizard;
@@ -86,8 +94,8 @@ public class EditServerAction extends Action {
 		Object obj = ((TreeSelection) treeViewer.getSelection())
 				.getFirstElement();
 		if (obj instanceof MServerProfile) {
-			MServerProfile dataAdapter = (MServerProfile) obj;
-			ServerProfile sp = dataAdapter.getValue();
+			final MServerProfile mspold = (MServerProfile) obj;
+			ServerProfile sp = mspold.getValue();
 			try {
 				ServerProfileWizard wizard = new ServerProfileWizard(
 						new MServerProfile(null, (ServerProfile) sp.clone()));
@@ -96,24 +104,61 @@ public class EditServerAction extends Action {
 				wizard.bindTestButton(dialog);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
+					MServerProfile msprof = wizard.getServerProfile();
+					mspold.setValue(msprof.getValue());
+					mspold.setWsClient(msprof.getWsClient());
+					mspold.removeChildren();
+					for (INode cn : msprof.getChildren())
+						mspold.addChild((ANode) cn);
+					ServerManager.saveServerProfile(mspold);
+					fillServerProfile(mspold, treeViewer);
 
-					MServerProfile modifiedDataAdapter = wizard
-							.getServerProfile();
-					dataAdapter.setValue(modifiedDataAdapter.getValue());
-					dataAdapter.setWsClient(modifiedDataAdapter.getWsClient());
-					dataAdapter.removeChildren();
-					for (INode cn : modifiedDataAdapter.getChildren())
-						dataAdapter.addChild((ANode) cn);
-					ServerManager.saveServerProfile(dataAdapter);
-
-					treeViewer.refresh(true);
-					TreeSelection s = (TreeSelection) treeViewer.getSelection();
-					TreePath[] p = s.getPaths();
-					treeViewer.expandToLevel(p[0], 1);
 				}
 			} catch (CloneNotSupportedException e) {
 				UIUtils.showError(e);
 			}
 		}
+	}
+
+	public static void fillServerProfile(final MServerProfile mspold,
+			final TreeViewer treeViewer) {
+		Job job = new Job("Connect To JasperReports Server") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					monitor.beginTask("Connecting to the server",
+							IProgressMonitor.UNKNOWN);
+					mspold.removeChildren();
+					new MDummy(mspold);
+					showSelection();
+					WSClientHelper.connectGetData(mspold, monitor);
+					showSelection();
+				} catch (InvocationTargetException e) {
+					UIUtils.showError(e);
+					return Status.CANCEL_STATUS;
+				} catch (Exception e) {
+					UIUtils.showError(e);
+					return Status.CANCEL_STATUS;
+				}
+				return Status.OK_STATUS;
+			}
+
+			private void showSelection() {
+				Display.getDefault().syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						treeViewer.refresh(true);
+						TreeSelection s = (TreeSelection) treeViewer
+								.getSelection();
+						TreePath[] p = s.getPaths();
+						treeViewer.expandToLevel(p[0], 1);
+					}
+				});
+			}
+		};
+		job.setSystem(false);
+		job.schedule();
 	}
 }

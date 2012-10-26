@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.editor;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,6 +64,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -235,6 +238,17 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		setPageText(index, Messages.JrxmlEditor_preview);
 
 		xmlEditor.getDocumentProvider().addElementStateListener(new StateListener());
+
+		// IPropertyListener l = new IPropertyListener() {
+		//
+		// @Override
+		// public void propertyChanged(Object source, int propId) {
+		// if(p)
+		// previewEditor.setDirty(true);
+		// }
+		// };
+		// reportContainer.addPropertyListener(l);
+		// xmlEditor.addPropertyListener(l);
 	}
 
 	/**
@@ -663,7 +677,14 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					// stop running reports
 					previewEditor.getReportControler().stop();
 				}
-				reportContainer.getActiveEditor().getSite().getSelectionProvider().setSelection(tmpselection);
+				// getSite().getSelectionProvider().setSelection(tmpselection);
+				Display.getDefault().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						reportContainer.getActiveEditor().getSite().getSelectionProvider().setSelection(tmpselection);
+					}
+				});
 				break;
 			case PAGE_XMLEDITOR:
 				if (reportContainer.isDirty())
@@ -676,8 +697,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					} catch (Exception e) {
 						handleJRException(getEditorInput(), e, false);
 					}
-				else if (reportContainer.isDirty())
+				else if (reportContainer.isDirty()) {
+					isRefresh = true;
 					model2xml();
+					isRefresh = false;
+				}
 				model2preview();
 				break;
 			}
@@ -685,7 +709,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		super.pageChange(newPageIndex);
 		updateContentOutline(getActivePage());
 		activePage = newPageIndex;
-		previewEditor.setDirty(false);
 	}
 
 	private ISelection tmpselection;

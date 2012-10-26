@@ -236,7 +236,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			dataset = (JRDesignDataset) jd.getMainDataset();
 		if (dataset != null) {
 			MDataset nDataset = new MDataset(parent, dataset, 1);
-			ReportFactory.createDataset(nDataset, dataset, false);
+			ReportFactory.createDataset(nDataset, dataset, true);
 		}
 		if (dr != null)
 			dr.getEventSupport().addPropertyChangeListener(dslistner);

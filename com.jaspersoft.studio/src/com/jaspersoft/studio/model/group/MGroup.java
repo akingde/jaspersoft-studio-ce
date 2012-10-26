@@ -23,8 +23,10 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.base.JRBaseGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.type.FooterPositionEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -35,8 +37,12 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -113,6 +119,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor positionD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -146,6 +153,41 @@ public class MGroup extends APropertyNode implements ICopyable {
 				Messages.common_expression);
 		expressionD.setDescription(Messages.MGroup_expression_description);
 		desc.add(expressionD);
+
+		IntegerPropertyDescriptor minhD = new IntegerPropertyDescriptor(JRBaseGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE,
+				"Min Height To Start New Page");
+		minhD.setDescription("Min Height To Start New Page");
+		desc.add(minhD);
+
+		CheckBoxPropertyDescriptor stNewColD = new CheckBoxPropertyDescriptor(JRBaseGroup.PROPERTY_START_NEW_COLUMN,
+				"Start New Column");
+		stNewColD.setDescription("Start new column for new group");
+		desc.add(stNewColD);
+
+		CheckBoxPropertyDescriptor stNewPageD = new CheckBoxPropertyDescriptor(JRBaseGroup.PROPERTY_START_NEW_PAGE,
+				"Start New Page");
+		stNewPageD.setDescription("Start new page for new group");
+		desc.add(stNewPageD);
+
+		CheckBoxPropertyDescriptor rPageNumD = new CheckBoxPropertyDescriptor(JRBaseGroup.PROPERTY_RESET_PAGE_NUMBER,
+				"Reset Page Number");
+		rPageNumD.setDescription("Reset page number.");
+		desc.add(rPageNumD);
+
+		CheckBoxPropertyDescriptor rHeadEPD = new CheckBoxPropertyDescriptor(
+				JRBaseGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, "Reprint Header On Each Page");
+		rHeadEPD.setDescription("Reprint header on each page.");
+		desc.add(rHeadEPD);
+
+		CheckBoxPropertyDescriptor keepToD = new CheckBoxPropertyDescriptor(JRBaseGroup.PROPERTY_KEEP_TOGETHER,
+				"Keep Together");
+		keepToD.setDescription("Keep together.");
+		desc.add(keepToD);
+
+		positionD = new JSSEnumPropertyDescriptor(JRBaseGroup.PROPERTY_FOOTER_POSITION, "Footer Position",
+				FooterPositionEnum.class, NullEnum.NOTNULL);
+		positionD.setDescription("Footer position.");
+		desc.add(positionD);
 	}
 
 	/*
@@ -157,9 +199,24 @@ public class MGroup extends APropertyNode implements ICopyable {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
 		if (id.equals(JRDesignGroup.PROPERTY_NAME))
 			return jrGroup.getName();
-		if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION)) {
+		if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION))
 			return ExprUtil.getExpression(jrGroup.getExpression());
-		}
+		if (id.equals(JRBaseGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE))
+			return jrGroup.getMinHeightToStartNewPage();
+
+		if (id.equals(JRBaseGroup.PROPERTY_START_NEW_COLUMN))
+			return jrGroup.isStartNewColumn();
+		if (id.equals(JRBaseGroup.PROPERTY_START_NEW_PAGE))
+			return jrGroup.isStartNewPage();
+		if (id.equals(JRBaseGroup.PROPERTY_RESET_PAGE_NUMBER))
+			return jrGroup.isResetPageNumber();
+		if (id.equals(JRBaseGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE))
+			return jrGroup.isReprintHeaderOnEachPage();
+		if (id.equals(JRBaseGroup.PROPERTY_KEEP_TOGETHER))
+			return jrGroup.isKeepTogether();
+		if (id.equals(JRBaseGroup.PROPERTY_FOOTER_POSITION))
+			return positionD.getEnumValue(jrGroup.getFooterPositionValue());
+
 		return null;
 	}
 
@@ -174,6 +231,23 @@ public class MGroup extends APropertyNode implements ICopyable {
 			jrGroup.setName((String) value);
 		else if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION))
 			jrGroup.setExpression(ExprUtil.setValues(jrGroup.getExpression(), value, null));
+		else if (id.equals(JRBaseGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE)) {
+			int minH = 0;
+			if (value != null)
+				minH = Math.max(0, (Integer) value);
+			jrGroup.setMinHeightToStartNewPage(minH);
+		} else if (id.equals(JRDesignGroup.PROPERTY_START_NEW_COLUMN))
+			jrGroup.setStartNewColumn((Boolean) value);
+		else if (id.equals(JRDesignGroup.PROPERTY_START_NEW_PAGE))
+			jrGroup.setStartNewPage((Boolean) value);
+		else if (id.equals(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER))
+			jrGroup.setResetPageNumber((Boolean) value);
+		else if (id.equals(JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE))
+			jrGroup.setReprintHeaderOnEachPage((Boolean) value);
+		else if (id.equals(JRDesignGroup.PROPERTY_KEEP_TOGETHER))
+			jrGroup.setKeepTogether((Boolean) value);
+		else if (id.equals(JRDesignGroup.PROPERTY_FOOTER_POSITION))
+			jrGroup.setFooterPosition((FooterPositionEnum) positionD.getEnumValue(value));
 	}
 
 	/**

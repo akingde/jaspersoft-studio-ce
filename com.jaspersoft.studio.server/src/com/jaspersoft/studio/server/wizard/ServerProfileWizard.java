@@ -62,21 +62,6 @@ public class ServerProfileWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		Job job = new Job("Connect To JasperReports Server") {
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					return connect(false, monitor);
-				} catch (InvocationTargetException e) {
-					UIUtils.showError(e);
-				}
-				return Status.CANCEL_STATUS;
-			}
-		};
-		job.setSystem(true);
-		job.schedule();
-
 		return true;
 	}
 

@@ -222,7 +222,7 @@ public class TableComponentFactory implements IComponentFactory {
 				dataset = (JRDesignDataset) jd.getMainDataset();
 			if (dataset != null) {
 				MDataset nDataset = new MDataset(parent, dataset, 1);
-				ReportFactory.createDataset(nDataset, dataset, false);
+				ReportFactory.createDataset(nDataset, dataset, true);
 			}
 
 			dr.getEventSupport().addPropertyChangeListener(dslistner);
