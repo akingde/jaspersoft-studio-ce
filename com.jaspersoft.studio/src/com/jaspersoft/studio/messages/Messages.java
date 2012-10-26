@@ -1114,7 +1114,10 @@ public class Messages extends NLS {
 	public static String ReloadAction_reload;
 	public static String ReloadAction_reload_description;
 	public static String ReloadAction_reload_tool_tip;
+	public static String ReportControler_compilationerrors;
 	public static String ReportControler_exportertitle;
+	public static String ReportControler_generating;
+	public static String ReportControler_generatingerror;
 	public static String ReportControler_inputparameterstitle;
 	public static String ReportControler_msg_compiling;
 	public static String ReportControler_msg_fillparameters;

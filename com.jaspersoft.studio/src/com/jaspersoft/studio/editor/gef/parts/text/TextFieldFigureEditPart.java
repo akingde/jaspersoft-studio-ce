@@ -47,7 +47,7 @@ public class TextFieldFigureEditPart extends FigureEditPart {
 			JRExpressionEditor wizard = new JRExpressionEditor();
 			MTextField m = (MTextField) getModel();
 			wizard.setValue((JRDesignExpression) m.getPropertyValue(JRDesignTextField.PROPERTY_EXPRESSION));
-			ExpressionContext ec=ModelUtils.getElementExpressionContext((JRDesignTextField)m.getValue(), m);
+			ExpressionContext ec = ModelUtils.getElementExpressionContext((JRDesignTextField) m.getValue(), m);
 			wizard.setExpressionContext(ec);
 			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 			dialog.create();

@@ -48,7 +48,10 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.part.MultiPageEditorSite;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
@@ -186,7 +189,7 @@ public class ReportControler {
 	public void runReport() {
 		VSimpleErrorPreview errorView = pcontainer.getErrorView();
 		pcontainer.getRightContainer().switchView(null, errorView);
-		errorView.setMessage("Starting new report, please wait ...");
+		errorView.setMessage(Messages.ReportControler_generating);
 
 		c = pcontainer.getConsole();
 		c.showConsole();
@@ -204,6 +207,32 @@ public class ReportControler {
 	}
 
 	public void finishReport(final PreviewContainer pcontainer) {
+		if (compiler != null && ((JRErrorHandler) compiler.getErrorHandler()).isHasErrors())
+			finishNotCompiledReport();
+		else
+			finishCompiledReport(pcontainer);
+	}
+
+	private void finishNotCompiledReport() {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				pcontainer.setNotRunning(true);
+				if (pcontainer.getSite() instanceof MultiPageEditorSite) {
+					MultiPageEditorPart mpe = ((MultiPageEditorSite) pcontainer.getSite()).getMultiPageEditor();
+					IEditorPart[] editors = mpe.findEditors(mpe.getEditorInput());
+					if (editors != null && editors.length > 0) {
+						// Dialog, if not ..., it's not clear for the user that error happened
+						UIUtils.showInformation(Messages.ReportControler_compilationerrors);
+
+						mpe.setActiveEditor(editors[0]);
+					}
+				}
+			}
+		});
+	}
+
+	private void finishCompiledReport(final PreviewContainer pcontainer) {
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
@@ -317,8 +346,20 @@ public class ReportControler {
 			compiler.setErrorHandler(new JRErrorHandler(c));
 			compiler.setProject(file.getProject());
 		}
+		((JRErrorHandler) compiler.getErrorHandler()).reset();
 		JasperReport jasperReport = compiler.compileReport(jrContext, jd);// JasperCompileManager.getInstance(jrContext).compile(jd);
 		stats.endCount(ST_COMPILATIONTIME);
+		if (((JRErrorHandler) compiler.getErrorHandler()).isHasErrors()) {
+			Display.getDefault().syncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					VSimpleErrorPreview errorView = pcontainer.getErrorView();
+					pcontainer.getRightContainer().switchView(null, errorView);
+					errorView.setMessage(Messages.ReportControler_compilationerrors);
+				}
+			});
+		}
 		return jasperReport;
 	}
 
@@ -492,7 +533,7 @@ public class ReportControler {
 			public void run() {
 				VSimpleErrorPreview errorView = pcontainer.getErrorView();
 				pcontainer.getRightContainer().switchView(null, errorView);
-				errorView.setMessage("Error generating report.");
+				errorView.setMessage(Messages.ReportControler_generatingerror);
 			}
 		});
 	}
