@@ -24,15 +24,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.messages.Messages;
 
 public class ResourceDescriptorPage extends WizardPage {
-	private MResource resource;
 
 	public ResourceDescriptorPage() {
-		super("resource");
-		setTitle("Resource");
-		setDescription("JasperServer resource");
+		super(Messages.ResourceDescriptorPage_id);
+		setTitle(Messages.ResourceDescriptorPage_title);
+		setDescription(Messages.ResourceDescriptorPage_description);
 	}
 
 	public void createControl(Composite parent) {

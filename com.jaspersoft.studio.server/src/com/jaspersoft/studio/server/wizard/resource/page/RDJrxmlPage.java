@@ -20,18 +20,19 @@
 package com.jaspersoft.studio.server.wizard.resource.page;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MJrxml;
 
 public class RDJrxmlPage extends AFileResourcePage {
 
 	public RDJrxmlPage(ANode parent, MJrxml resource) {
-		super("rdresourcebundle", parent, resource);
-		setTitle("Report File");
-		setDescription("Report file");
+		super(Messages.RDJrxmlPage_id, parent, resource);
+		setTitle(Messages.RDJrxmlPage_title);
+		setDescription(Messages.RDJrxmlPage_desc);
 	}
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.jrxml" };
+		return new String[] { "*.jrxml" }; //$NON-NLS-1$
 	}
 }

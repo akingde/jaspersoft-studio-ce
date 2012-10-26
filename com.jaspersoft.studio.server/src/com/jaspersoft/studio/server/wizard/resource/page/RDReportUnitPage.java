@@ -34,15 +34,16 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class RDReportUnitPage extends AResourcePage {
 
 	public RDReportUnitPage(ANode parent, MReportUnit resource) {
-		super("rdreportunit", parent, resource);
-		setTitle("Report Unit");
-		setDescription("Report Unit");
+		super(Messages.RDReportUnitPage_id, parent, resource);
+		setTitle(Messages.RDReportUnitPage_title);
+		setDescription(Messages.RDReportUnitPage_desc);
 	}
 
 	@Override
@@ -57,7 +58,7 @@ public class RDReportUnitPage extends AResourcePage {
 
 	protected void createReportUnit(TabFolder tabFolder) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("Report Unit");
+		item.setText(Messages.RDReportUnitPage_reportunit);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
@@ -70,54 +71,54 @@ public class RDReportUnitPage extends AResourcePage {
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
 
-		UIUtils.createLabel(composite, "JSP For Report View");
+		UIUtils.createLabel(composite, Messages.RDReportUnitPage_jspforrepview);
 
 		Text jspview = new Text(composite, SWT.BORDER);
 		jspview.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		jspview.setToolTipText("within /WEB-INF/jsp, leave blank for default");
+		jspview.setToolTipText(Messages.RDReportUnitPage_within);
 
 		ReportProxy v = getProxy(res.getValue());
 		bindingContext.bindValue(
 				SWTObservables.observeText(jspview, SWT.Modify),
-				PojoObservables.observeValue(v, "jspView"));
+				PojoObservables.observeValue(v, "jspView")); //$NON-NLS-1$
 
 		res.getChildren();
 	}
 
 	protected void createReportUnitControls(TabFolder tabFolder) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("Input Controls");
+		item.setText(Messages.RDReportUnitPage_inputcontrols);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		item.setControl(composite);
 
-		UIUtils.createLabel(composite, "Controls Layout");
+		UIUtils.createLabel(composite, Messages.RDReportUnitPage_controlslayout);
 
 		Combo cictype = new Combo(composite, SWT.BORDER);
-		cictype.setItems(new String[] { "Popup screen", "Separate page",
-				"Top of page", "In page" });
+		cictype.setItems(new String[] { Messages.RDReportUnitPage_popupscreen, Messages.RDReportUnitPage_separatepage,
+				Messages.RDReportUnitPage_topofpage, Messages.RDReportUnitPage_inpage });
 
-		UIUtils.createLabel(composite, "");
+		UIUtils.createLabel(composite, ""); //$NON-NLS-1$
 
 		Button ispromp = new Button(composite, SWT.CHECK);
-		ispromp.setText("Always Prompt");
+		ispromp.setText(Messages.RDReportUnitPage_alwaysprompt);
 		ispromp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "JSP To Run InputControls");
+		UIUtils.createLabel(composite, Messages.RDReportUnitPage_jsptoruninputcontrol);
 
 		Text jspic = new Text(composite, SWT.BORDER);
 		jspic.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		jspic.setToolTipText("within /WEB-INF/jsp, leave blank for default");
+		jspic.setToolTipText(Messages.RDReportUnitPage_withintooltip);
 
 		ReportProxy v = getProxy(res.getValue());
 		bindingContext.bindValue(
 				SWTObservables.observeSingleSelectionIndex(cictype),
-				PojoObservables.observeValue(v, "layoutControl"));
+				PojoObservables.observeValue(v, "layoutControl")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(jspic, SWT.Modify),
-				PojoObservables.observeValue(v, "jspIC"));
+				PojoObservables.observeValue(v, "jspIC")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(ispromp),
-				PojoObservables.observeValue(v, "allowPrompt"));
+				PojoObservables.observeValue(v, "allowPrompt")); //$NON-NLS-1$
 
 		res.getChildren();
 	}

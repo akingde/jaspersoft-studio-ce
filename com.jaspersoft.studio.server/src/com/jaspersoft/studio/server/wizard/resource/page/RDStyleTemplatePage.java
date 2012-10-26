@@ -1,6 +1,7 @@
 package com.jaspersoft.studio.server.wizard.resource.page;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 
 /**
@@ -13,14 +14,14 @@ import com.jaspersoft.studio.server.model.AFileResource;
 public class RDStyleTemplatePage extends AFileResourcePage {
 
 	public RDStyleTemplatePage(ANode parent, AFileResource resource) {
-		super("rdstyletemplate", parent, resource);
-		setTitle("Style Template file");
-		setDescription("Style Template resource");
+		super(Messages.RDStyleTemplatePage_id, parent, resource);
+		setTitle(Messages.RDStyleTemplatePage_title);
+		setDescription(Messages.RDStyleTemplatePage_desc);
 	}
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.jrtx"};
+		return new String[] { "*.jrtx"}; //$NON-NLS-1$
 	}
 
 }

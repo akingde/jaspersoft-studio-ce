@@ -39,15 +39,16 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class RDInputControlPage extends AResourcePage {
 
 	public RDInputControlPage(ANode parent, MInputControl resource) {
-		super("rdinputcontrol", parent, resource);
-		setTitle("Input Control");
-		setDescription("Input Control");
+		super(Messages.RDInputControlPage_id, parent, resource);
+		setTitle(Messages.RDInputControlPage_title);
+		setDescription(Messages.RDInputControlPage_desc);
 	}
 
 	@Override
@@ -58,7 +59,7 @@ public class RDInputControlPage extends AResourcePage {
 
 	protected void createDatasourceTab(TabFolder tabFolder) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("Input Control");
+		item.setText(Messages.RDInputControlPage_inputcontroltableitem);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
@@ -72,24 +73,24 @@ public class RDInputControlPage extends AResourcePage {
 		cmp.setBackground(parent.getBackground());
 
 		Button bmand = new Button(cmp, SWT.CHECK);
-		bmand.setText("Mandatory");
+		bmand.setText(Messages.RDInputControlPage_mandatory);
 
 		Button bread = new Button(cmp, SWT.CHECK);
-		bread.setText("Read Only");
+		bread.setText(Messages.RDInputControlPage_readonly);
 
 		Button bvisible = new Button(cmp, SWT.CHECK);
-		bvisible.setText("Visible");
+		bvisible.setText(Messages.RDInputControlPage_visible);
 
-		UIUtils.createLabel(composite, "Type");
+		UIUtils.createLabel(composite, Messages.RDInputControlPage_type);
 
 		final Combo ctype = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
-		ctype.setItems(new String[] { "Boolean", "Single Value",
-				"Single Select List of Values",
-				"Single Select List of Values (Radio)",
-				"Multi Select List of Values",
-				"Multi Select List of Values (Checkbox)",
-				"Single Select Query", "Single Select Query (Radio)",
-				"Multi Select Query", "Multi Select Query (Checkbox)" });
+		ctype.setItems(new String[] { "Boolean", "Single Value", //$NON-NLS-1$ //$NON-NLS-2$
+				Messages.RDInputControlPage_singlselectlistofvalues,
+				Messages.RDInputControlPage_singleselectlovradio,
+				Messages.RDInputControlPage_multiselectlov,
+				Messages.RDInputControlPage_multiselectlovradio,
+				Messages.RDInputControlPage_singlselectquery, Messages.RDInputControlPage_singleselectqueryradio,
+				Messages.RDInputControlPage_multiselectquery, Messages.RDInputControlPage_multiselectquerycheckbox });
 
 		stackComposite = new Composite(composite, SWT.NONE);
 		final StackLayout stackLayout = new StackLayout();
@@ -117,14 +118,14 @@ public class RDInputControlPage extends AResourcePage {
 
 		bindingContext.bindValue(SWTObservables
 				.observeSingleSelectionIndex(ctype), PojoObservables
-				.observeValue(getProxy(res.getValue()), "controlType"));
+				.observeValue(getProxy(res.getValue()), "controlType")); //$NON-NLS-1$
 
 		bindingContext.bindValue(SWTObservables.observeSelection(bmand),
-				PojoObservables.observeValue(res.getValue(), "mandatory"));
+				PojoObservables.observeValue(res.getValue(), "mandatory")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(bread),
-				PojoObservables.observeValue(res.getValue(), "readOnly"));
+				PojoObservables.observeValue(res.getValue(), "readOnly")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(bvisible),
-				PojoObservables.observeValue(res.getValue(), "visible"));
+				PojoObservables.observeValue(res.getValue(), "visible")); //$NON-NLS-1$
 
 		handleTypeChanged(ctype, stackLayout);
 	}
@@ -150,7 +151,7 @@ public class RDInputControlPage extends AResourcePage {
 
 	protected void createSingleValue(Composite composite) {
 		csinglevalue = new Group(composite, SWT.NONE);
-		csinglevalue.setText("Data Type");
+		csinglevalue.setText(Messages.RDInputControlPage_datatype);
 		csinglevalue.setLayout(new GridLayout(3, false));
 
 		new SelectorDataType().createControls(csinglevalue, parent, res);
@@ -158,7 +159,7 @@ public class RDInputControlPage extends AResourcePage {
 
 	protected void createLOV(Composite composite) {
 		clov = new Group(composite, SWT.NONE);
-		clov.setText("List Of Values");
+		clov.setText(Messages.RDInputControlPage_lov);
 		clov.setLayout(new GridLayout(3, false));
 
 		new SelectorLov().createControls(clov, parent, res);
@@ -168,7 +169,7 @@ public class RDInputControlPage extends AResourcePage {
 		cquery = new TabFolder(composite, SWT.NONE);
 
 		TabItem item = new TabItem(cquery, SWT.NONE);
-		item.setText("Query Resource");
+		item.setText(Messages.RDInputControlPage_queryresource);
 
 		Composite cmp = new Composite(cquery, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
@@ -177,13 +178,13 @@ public class RDInputControlPage extends AResourcePage {
 		new SelectorQuery().createControls(cmp, parent, res);
 
 		item = new TabItem(cquery, SWT.NONE);
-		item.setText("Value && Visible Columns");
+		item.setText(Messages.RDInputControlPage_valueandvisiblecolumns);
 
 		cmp = new Composite(cquery, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
 		item.setControl(cmp);
 
-		UIUtils.createLabel(cmp, "Value Column");
+		UIUtils.createLabel(cmp, Messages.RDInputControlPage_valuecolumn);
 
 		Text tvalue = new Text(cmp, SWT.BORDER);
 		tvalue.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -198,7 +199,7 @@ public class RDInputControlPage extends AResourcePage {
 
 		bindingContext.bindValue(
 				SWTObservables.observeText(tvalue, SWT.Modify), PojoObservables
-						.observeValue(res.getValue(), "queryValueColumn"));
+						.observeValue(res.getValue(), "queryValueColumn")); //$NON-NLS-1$
 	}
 
 	@Override

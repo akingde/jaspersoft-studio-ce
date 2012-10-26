@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.server.wizard.resource.page;
 
+import java.text.MessageFormat;
+
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -66,7 +68,14 @@ public class AddResourcePage extends WizardPage {
 	public AddResourcePage(ANode parent) {
 		super("addresource"); //$NON-NLS-1$
 		setTitle(Messages.AddResourcePage_Title);
-		setDescription(Messages.AddResourcePage_Description);
+		String title = ANode.getIconDescriptor().getTitle();
+		if (parent instanceof MServerProfile)
+			title = MServerProfile.getIconDescriptor().getTitle();
+		else if (parent instanceof MResource)
+			title = ((MResource) parent).getThisIconDescriptor().getTitle();
+		setDescription(MessageFormat.format(
+				Messages.AddResourcePage_Description, title,
+				parent.getDisplayText()));
 		this.parent = parent;
 	}
 

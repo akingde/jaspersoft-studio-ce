@@ -81,14 +81,17 @@ public abstract class AResourcePage extends WizardPage {
 		UIUtils.createLabel(composite, Messages.AResourcePage_parentfolder);
 		Text tparent = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		tparent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		tparent.setEnabled(false);
 
 		UIUtils.createLabel(composite, Messages.AResourcePage_type);
 		Text ttype = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		ttype.setEnabled(false);
 
 		UIUtils.createLabel(composite, Messages.AResourcePage_creationdate);
 		Text tcdate = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		tcdate.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		tcdate.setEnabled(false);
 
 		UIUtils.createSeparator(composite, 2);
 
@@ -116,13 +119,15 @@ public abstract class AResourcePage extends WizardPage {
 		bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE),
 				PojoObservables.observeValue(rd, "wsType")); //$NON-NLS-1$
 
-		bindingContext.bindValue(SWTObservables.observeText(tid, SWT.Modify),
+		bindingContext.bindValue(
+				SWTObservables.observeText(tid, SWT.Modify),
 				PojoObservables.observeValue(rd, "name"), //$NON-NLS-1$
 				new UpdateValueStrategy()
 						.setAfterConvertValidator(new IDStringValidator()),
 				null);
 
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
+		bindingContext.bindValue(
+				SWTObservables.observeText(tname, SWT.Modify),
 				PojoObservables.observeValue(rd, "label"), //$NON-NLS-1$
 				new UpdateValueStrategy()
 						.setAfterConvertValidator(new EmptyStringValidator()),

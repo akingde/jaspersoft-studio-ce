@@ -20,14 +20,15 @@
 package com.jaspersoft.studio.server.wizard.resource.page;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MFolder;
 
 public class RDFolderPage extends AResourcePage {
 
 	public RDFolderPage(ANode parent, MFolder resource) {
-		super("rdfolder", parent, resource);
-		setTitle("Folder");
-		setDescription("JasperServer folder resource");
+		super(Messages.RDFolderPage_id, parent, resource);
+		setTitle(Messages.RDFolderPage_title);
+		setDescription(Messages.RDFolderPage_desc);
 	}
 
 }

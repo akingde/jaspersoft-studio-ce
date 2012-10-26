@@ -33,15 +33,16 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MDataType;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class RDDataTypePage extends AResourcePage {
 
 	public RDDataTypePage(ANode parent, MDataType resource) {
-		super("rddatatype", parent, resource);
-		setTitle("Data Type");
-		setDescription("Data Type");
+		super(Messages.RDDataTypePage_id, parent, resource);
+		setTitle(Messages.RDDataTypePage_title);
+		setDescription(Messages.RDDataTypePage_desc);
 	}
 
 	@Override
@@ -52,59 +53,59 @@ public class RDDataTypePage extends AResourcePage {
 
 	protected void createReferenceTab(TabFolder tabFolder) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("Data Type");
+		item.setText(Messages.RDDataTypePage_datatype);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		item.setControl(composite);
 
-		UIUtils.createLabel(composite, "Data Type");
+		UIUtils.createLabel(composite, Messages.RDDataTypePage_datatype);
 
 		Combo ttype = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
-		ttype.setItems(new String[] { "Text", "Number", "Date", "Date/time" });
+		ttype.setItems(new String[] { Messages.RDDataTypePage_text, Messages.RDDataTypePage_number, Messages.RDDataTypePage_date, Messages.RDDataTypePage_datetime });
 
-		UIUtils.createLabel(composite, "Pattern");
+		UIUtils.createLabel(composite, Messages.RDDataTypePage_pattern);
 
 		Text tpattern = new Text(composite, SWT.BORDER);
 		tpattern.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "Min Value");
+		UIUtils.createLabel(composite, Messages.RDDataTypePage_minvalue);
 
 		Text tmin = new Text(composite, SWT.BORDER);
 		tmin.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "");
+		UIUtils.createLabel(composite, ""); //$NON-NLS-1$
 
 		Button bmin = new Button(composite, SWT.CHECK);
-		bmin.setText("Is Strict Minimum");
+		bmin.setText(Messages.RDDataTypePage_strictmin);
 		bmin.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "Max Value");
+		UIUtils.createLabel(composite, Messages.RDDataTypePage_maxvalue);
 
 		Text tmax = new Text(composite, SWT.BORDER);
 		tmax.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "");
+		UIUtils.createLabel(composite, ""); //$NON-NLS-1$
 
 		Button bmax = new Button(composite, SWT.CHECK);
-		bmax.setText("Is Strict Maximum");
+		bmax.setText(Messages.RDDataTypePage_strictmax);
 		bmax.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		bindingContext.bindValue(
 				SWTObservables.observeText(tpattern, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "pattern"));
+				PojoObservables.observeValue(res.getValue(), "pattern")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tmin, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "minValue"));
+				PojoObservables.observeValue(res.getValue(), "minValue")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tmax, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "maxValue"));
+				PojoObservables.observeValue(res.getValue(), "maxValue")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(bmin),
-				PojoObservables.observeValue(res.getValue(), "strictMin"));
+				PojoObservables.observeValue(res.getValue(), "strictMin")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(bmax),
-				PojoObservables.observeValue(res.getValue(), "strictMax"));
+				PojoObservables.observeValue(res.getValue(), "strictMax")); //$NON-NLS-1$
 
 		bindingContext.bindValue(SWTObservables
 				.observeSingleSelectionIndex(ttype), PojoObservables
-				.observeValue(getProxy(res.getValue()), "dataType"));
+				.observeValue(getProxy(res.getValue()), "dataType")); //$NON-NLS-1$
 	}
 
 	private ShiftProxy getProxy(ResourceDescriptor rd) {

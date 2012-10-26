@@ -41,6 +41,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 public class JrxmlExporter extends AExporter {
 	public static final String PROP_SERVERURL = "ireport.jasperserver.url";
 	public static final String PROP_REPORTUNIT = "ireport.jasperserver.reportUnit";
+	public static final String PROP_REPORTRESOURCE = "ireport.jasperserver.report.resource";
 
 	@Override
 	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname)
@@ -80,10 +81,12 @@ public class JrxmlExporter extends AExporter {
 	}
 
 	protected void setPropReportUnit(MResource res, JasperDesign jd) {
+		jd.setProperty(PROP_REPORTRESOURCE, res.getValue().getUriString());
 		MReportUnit repunit = res.getReportUnit();
 		if (repunit != null) {
 			ResourceDescriptor runit = repunit.getValue();
-			jd.setProperty(PROP_REPORTUNIT, runit.getUriString());
+			if (runit != null)
+				jd.setProperty(PROP_REPORTUNIT, runit.getUriString());
 		} else
 			jd.getPropertiesMap().removeProperty(PROP_REPORTUNIT);
 	}

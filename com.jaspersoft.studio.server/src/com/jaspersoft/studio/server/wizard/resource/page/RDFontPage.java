@@ -20,18 +20,19 @@
 package com.jaspersoft.studio.server.wizard.resource.page;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MRFont;
 
 public class RDFontPage extends AFileResourcePage {
 
 	public RDFontPage(ANode parent, MRFont resource) {
-		super("rdfont", parent, resource);
-		setTitle("Font");
-		setDescription("Font resource");
+		super(Messages.RDFontPage_id, parent, resource);
+		setTitle(Messages.RDFontPage_title);
+		setDescription(Messages.RDFontPage_desc);
 	}
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.ttf", "*.TTF" };
+		return new String[] { "*.ttf", "*.TTF" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }

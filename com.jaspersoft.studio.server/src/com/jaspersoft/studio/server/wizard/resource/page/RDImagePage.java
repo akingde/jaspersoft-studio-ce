@@ -38,15 +38,16 @@ import org.eclipse.swt.widgets.ScrollBar;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MRImage;
 
 public class RDImagePage extends AFileResourcePage {
 
 	public RDImagePage(ANode parent, MRImage resource) {
-		super("rdimage", parent, resource);
-		setTitle("Image");
-		setDescription("Image resource");
+		super(Messages.RDImagePage_id, parent, resource);
+		setTitle(Messages.RDImagePage_title);
+		setDescription(Messages.RDImagePage_desc);
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class RDImagePage extends AFileResourcePage {
 
 					gc.drawImage(img, origin.x, origin.y);
 				} else
-					e.gc.drawText("No image", 0, 0);
+					e.gc.drawText(Messages.RDImagePage_noimage, 0, 0);
 			}
 		});
 		final ScrollBar hBar = canvas.getHorizontalBar();
@@ -132,7 +133,7 @@ public class RDImagePage extends AFileResourcePage {
 				try {
 					File f = ((AFileResource) res).getFile();
 					if (f == null && !res.getValue().getIsNew()) {
-						f = File.createTempFile("jrsimgfile", ".png");
+						f = File.createTempFile("jrsimgfile", ".png"); //$NON-NLS-1$ //$NON-NLS-2$
 						f.deleteOnExit();
 						f.createNewFile();
 						WSClientHelper.getResource(res, res.getValue(), f);
@@ -152,6 +153,6 @@ public class RDImagePage extends AFileResourcePage {
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.png", "*.jpg", "*.jpeg", "*.gif" };
+		return new String[] { "*.png", "*.jpg", "*.jpeg", "*.gif" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 }

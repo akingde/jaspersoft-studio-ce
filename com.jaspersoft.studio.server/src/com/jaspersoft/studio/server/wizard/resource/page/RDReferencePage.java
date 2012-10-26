@@ -43,6 +43,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MResource;
@@ -53,9 +54,9 @@ import com.jaspersoft.studio.utils.UIUtils;
 public class RDReferencePage extends AResourcePage {
 
 	public RDReferencePage(ANode parent, MReference resource) {
-		super("rdreference", parent, resource);
-		setTitle("Reference");
-		setDescription("JasperServer reference");
+		super(Messages.RDReferencePage_id, parent, resource);
+		setTitle(Messages.RDReferencePage_title);
+		setDescription(Messages.RDReferencePage_desc);
 	}
 
 	@Override
@@ -66,13 +67,13 @@ public class RDReferencePage extends AResourcePage {
 
 	protected void createReferenceTab(TabFolder tabFolder) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("Reference");
+		item.setText(Messages.RDReferencePage_textreference);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 		item.setControl(composite);
 
-		UIUtils.createLabel(composite, "Referenced Descriptor");
+		UIUtils.createLabel(composite, Messages.RDReferencePage_referencedesc);
 
 		trefuri = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -82,9 +83,9 @@ public class RDReferencePage extends AResourcePage {
 
 			public void widgetSelected(SelectionEvent e) {
 				Shell shell = Display.getDefault().getActiveShell();
-				RepositoryDialog rd = 
-						new RepositoryDialog(shell, 
-						ServerManager.getMServerProfileCopy((MServerProfile)parent.getRoot())) {
+				RepositoryDialog rd = new RepositoryDialog(shell, ServerManager
+						.getMServerProfileCopy((MServerProfile) parent
+								.getRoot())) {
 
 					@Override
 					public boolean isResourceCompatible(MResource r) {
@@ -111,29 +112,32 @@ public class RDReferencePage extends AResourcePage {
 		gd.horizontalSpan = 3;
 		cmp.setLayoutData(gd);
 
-		UIUtils.createLabel(cmp, "Parent Folder");
+		UIUtils.createLabel(cmp, Messages.RDReferencePage_parentfolder);
 		tparent = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tparent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		tparent.setEnabled(false);
 
-		UIUtils.createLabel(cmp, "Type");
+		UIUtils.createLabel(cmp, Messages.RDReferencePage_type);
 		ttype = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		ttype.setEnabled(false);
 
-		UIUtils.createLabel(cmp, "Creation Date:");
+		UIUtils.createLabel(cmp, Messages.RDReferencePage_creationdate);
 		tcdate = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tcdate.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		tcdate.setEnabled(false);
 
 		UIUtils.createSeparator(cmp, 2);
 
-		UIUtils.createLabel(cmp, "ID");
+		UIUtils.createLabel(cmp, Messages.RDReferencePage_refid);
 		tid = new Text(cmp, SWT.BORDER);
 		tid.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(cmp, "Name");
+		UIUtils.createLabel(cmp, Messages.RDReferencePage_refname);
 		tname = new Text(cmp, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(cmp, "Description");
+		UIUtils.createLabel(cmp, Messages.RDReferencePage_refdesc);
 		tdesc = new Text(cmp, SWT.BORDER | SWT.MULTI | SWT.WRAP);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;
@@ -150,24 +154,24 @@ public class RDReferencePage extends AResourcePage {
 			b.dispose();
 		}
 		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE),
-				PojoObservables.observeValue(res.getValue(), "referenceUri"));
+				PojoObservables.observeValue(res.getValue(), "referenceUri")); //$NON-NLS-1$
 		if (ref != null) {
 			bindingContext.bindValue(
 					SWTObservables.observeText(tparent, SWT.NONE),
-					PojoObservables.observeValue(ref, "parentFolder"));
+					PojoObservables.observeValue(ref, "parentFolder")); //$NON-NLS-1$
 
 			bindingContext.bindValue(
 					SWTObservables.observeText(tcdate, SWT.NONE),
-					PojoObservables.observeValue(ref, "creationDate"));
+					PojoObservables.observeValue(ref, "creationDate")); //$NON-NLS-1$
 
 			bindingContext.bindValue(
 					SWTObservables.observeText(ttype, SWT.NONE),
-					PojoObservables.observeValue(ref, "wsType"));
+					PojoObservables.observeValue(ref, "wsType")); //$NON-NLS-1$
 
 			bindingContext
 					.bindValue(
 							SWTObservables.observeText(tid, SWT.Modify),
-							PojoObservables.observeValue(ref, "name"),
+							PojoObservables.observeValue(ref, "name"), //$NON-NLS-1$
 							new UpdateValueStrategy()
 									.setAfterConvertValidator(new EmptyStringValidator()),
 							null);
@@ -175,13 +179,13 @@ public class RDReferencePage extends AResourcePage {
 			bindingContext
 					.bindValue(
 							SWTObservables.observeText(tname, SWT.Modify),
-							PojoObservables.observeValue(ref, "label"),
+							PojoObservables.observeValue(ref, "label"), //$NON-NLS-1$
 							new UpdateValueStrategy()
 									.setAfterConvertValidator(new EmptyStringValidator()),
 							null);
 			bindingContext.bindValue(
 					SWTObservables.observeText(tdesc, SWT.Modify),
-					PojoObservables.observeValue(ref, "description"));
+					PojoObservables.observeValue(ref, "description")); //$NON-NLS-1$
 		}
 		bindingContext.updateTargets();
 	}

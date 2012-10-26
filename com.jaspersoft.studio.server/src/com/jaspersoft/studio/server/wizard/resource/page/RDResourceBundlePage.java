@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.utils.FileUtils;
@@ -38,14 +39,14 @@ public class RDResourceBundlePage extends AFileResourcePage {
 	private Text txt;
 
 	public RDResourceBundlePage(ANode parent, MResourceBundle resource) {
-		super("rdresourcebundle", parent, resource);
-		setTitle("Resource Bundle");
-		setDescription("Resource Bundle");
+		super(Messages.RDResourceBundlePage_id, parent, resource);
+		setTitle(Messages.RDResourceBundlePage_title);
+		setDescription(Messages.RDResourceBundlePage_desc);
 	}
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.properties" };
+		return new String[] { "*.properties" }; //$NON-NLS-1$
 	}
 
 	@Override
@@ -65,7 +66,7 @@ public class RDResourceBundlePage extends AFileResourcePage {
 				try {
 					File f = ((AFileResource) res).getFile();
 					if (f == null && !res.getValue().getIsNew()) {
-						f = File.createTempFile("jrsimgfile", ".properties");
+						f = File.createTempFile("jrsimgfile", ".properties"); //$NON-NLS-1$ //$NON-NLS-2$
 						f.deleteOnExit();
 						f.createNewFile();
 						WSClientHelper.getResource(res, res.getValue(), f);

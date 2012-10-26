@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -40,9 +41,9 @@ import com.jaspersoft.studio.utils.UIUtils;
 public class RDQueryPage extends AResourcePage {
 
 	public RDQueryPage(ANode parent, MRQuery resource) {
-		super("rdquery", parent, resource);
-		setTitle("Query");
-		setDescription("Query");
+		super(Messages.RDQueryPage_id, parent, resource);
+		setTitle(Messages.RDQueryPage_title);
+		setDescription(Messages.RDQueryPage_desc);
 	}
 
 	@Override
@@ -55,18 +56,18 @@ public class RDQueryPage extends AResourcePage {
 	public static void createDatasourceTab(DataBindingContext bindingContext,
 			TabFolder tabFolder, ResourceDescriptor r) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("Query");
+		item.setText(Messages.RDQueryPage_textquery);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		item.setControl(composite);
 
-		UIUtils.createLabel(composite, "Language");
+		UIUtils.createLabel(composite, Messages.RDQueryPage_language);
 
 		Combo clang = new Combo(composite, SWT.BORDER);
 		clang.setItems(ModelUtils.getQueryLanguages());
 
-		UIUtils.createLabel(composite, "Query");
+		UIUtils.createLabel(composite, Messages.RDQueryPage_query);
 
 		Text tsql = new Text(composite, SWT.BORDER | SWT.WRAP);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -75,9 +76,9 @@ public class RDQueryPage extends AResourcePage {
 		tsql.setLayoutData(gd);
 
 		bindingContext.bindValue(SWTObservables.observeText(clang),
-				PojoObservables.observeValue(getProxy(r), "language"));
+				PojoObservables.observeValue(getProxy(r), "language")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tsql, SWT.Modify),
-				PojoObservables.observeValue(r, "sql"));
+				PojoObservables.observeValue(r, "sql")); //$NON-NLS-1$
 	}
 
 	private static QProxy getProxy(ResourceDescriptor rd) {

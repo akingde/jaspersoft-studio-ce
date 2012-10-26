@@ -20,14 +20,15 @@
 package com.jaspersoft.studio.server.wizard.resource.page;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MUnknown;
 
 public class RDUnknownPage extends AResourcePage {
 
 	public RDUnknownPage(ANode parent, MUnknown resource) {
-		super("rdresource", parent, resource);
-		setTitle("Resource");
-		setDescription("JasperServer  resource");
+		super(Messages.RDUnknownPage_id, parent, resource);
+		setTitle(Messages.RDUnknownPage_title);
+		setDescription(Messages.RDUnknownPage_desc);
 	}
 
 }
