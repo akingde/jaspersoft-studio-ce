@@ -119,7 +119,8 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 	 * @see org.eclipse.ui.views.properties.tabbed.ISection#refresh()
 	 */
 	public void refresh() {
-		page.refresh();
+		if (page != null)
+			page.refresh();
 	}
 
 	/**
