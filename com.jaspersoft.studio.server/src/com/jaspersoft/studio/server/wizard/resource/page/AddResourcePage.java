@@ -184,5 +184,6 @@ public class AddResourcePage extends WizardPage {
 		new MRDatasourceDiagnostic(root,
 				MRDatasourceDiagnostic.createDescriptor(parent), -1);
 
+		Activator.getExtManager().createNewDatasource(root, parent);
 	}
 }

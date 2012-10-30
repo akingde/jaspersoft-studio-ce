@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapter;
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.hive.messages.Messages;
 
 /**
  * 
@@ -53,7 +54,7 @@ public class HiveDataAdapterComposite extends ADataAdapterComposite {
 		setLayout(new GridLayout(2, false));
 
 		Label urlLabel = new Label(this, SWT.NONE);
-		urlLabel.setText("JDBC URL");
+		urlLabel.setText(Messages.HiveDataAdapterComposite_labelurl);
 		urlLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
 				1, 1));
 
@@ -81,6 +82,6 @@ public class HiveDataAdapterComposite extends ADataAdapterComposite {
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		bindingContext.bindValue(
 				SWTObservables.observeText(urlField, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "url"));
+				PojoObservables.observeValue(dataAdapter, "url")); //$NON-NLS-1$
 	}
 }

@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.model.datasource;
+package com.jaspersoft.studio.data.mongodb.server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +26,20 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
+import com.jaspersoft.studio.data.mongodb.MongoDBIconDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
-import com.jaspersoft.studio.server.ServerIconDescriptor;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 
-public class MRDatasourceDiagnostic extends MRDatasourceCustom {
+public class MRDatasourceMongoDB extends MRDatasourceCustom {
 
-	public static final String CUSTOM_CLASS = "com.jaspersoft.jasperserver.api.logging.diagnostic.datasource.DiagnosticCustomDataSourceService";
+	public static final String PASSWORD = "password";
+	public static final String MONGO_URI = "mongoURI";
+	public static final String USERNAME = "username";
+	public static final String CUSTOM_CLASS = "com.jaspersoft.mongodb.jasperserver.MongoDbDataSourceService";
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MRDatasourceDiagnostic(ANode parent, ResourceDescriptor rd, int index) {
+	public MRDatasourceMongoDB(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
 	}
 
@@ -43,7 +47,7 @@ public class MRDatasourceDiagnostic extends MRDatasourceCustom {
 
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ServerIconDescriptor("datasource-diagnostic"); //$NON-NLS-1$
+			iconDescriptor = new MongoDBIconDescriptor("datasource-mongo"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -57,8 +61,11 @@ public class MRDatasourceDiagnostic extends MRDatasourceCustom {
 		ResourceProperty rp = new ResourceProperty(
 				MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
 		List<ResourceProperty> props = new ArrayList<ResourceProperty>();
-		props.add(new ResourceProperty("_cds_name",
-				"diagnosticCustomDataSource"));
+		props.add(new ResourceProperty(USERNAME, USERNAME));
+		props.add(new ResourceProperty(MONGO_URI,
+				"mongodb://hostname:27017/database"));
+		props.add(new ResourceProperty("_cds_name", "MongoDbDataSource"));
+		props.add(new ResourceProperty(PASSWORD, PASSWORD));
 		rp.setProperties(props);
 		rd.getProperties().add(rp);
 		rp = new ResourceProperty(

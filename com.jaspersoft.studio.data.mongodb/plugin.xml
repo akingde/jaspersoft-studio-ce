@@ -12,4 +12,10 @@
             language="MongoDbQuery">
       </queryDesigner>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.server.resources">
+      <resource
+            ClassFactory="com.jaspersoft.studio.data.mongodb.server.MongoResourceFactory">
+      </resource>
+   </extension>
 </plugin>

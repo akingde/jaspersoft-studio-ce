@@ -14,4 +14,6 @@ public interface IResourceFactory {
 	public IWizardPage getResourcePage(ANode parent, MResource resource);
 
 	public ANode createNewResource(MRoot root, ANode parent);
+
+	public ANode createNewDatasource(MRoot root, ANode parent);
 }

@@ -20,7 +20,6 @@
 package com.jaspersoft.studio.server;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.wizard.IWizardPage;
@@ -55,6 +54,7 @@ import com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
+import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDataAdapterPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDataTypePage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceBeanPage;
@@ -213,12 +213,11 @@ public class ResourceFactory {
 
 		if (resource.getWsType().equals(
 				ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
-			List<ResourceProperty> props = resource.getProperties();
-			for (ResourceProperty p : props) {
-				if (p.getName()
-						.equals(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS)
-						&& p.getValue().equals(
-								MRDatasourceDiagnostic.CUSTOM_CLASS))
+			ResourceProperty rp = ResourceDescriptorUtil.getProperty(
+					MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS,
+					resource.getProperties());
+			if (rp != null) {
+				if (rp.getValue().equals(MRDatasourceDiagnostic.CUSTOM_CLASS))
 					return new MRDatasourceDiagnostic(parent, resource, index);
 			}
 			return new MRDatasourceCustom(parent, resource, index);

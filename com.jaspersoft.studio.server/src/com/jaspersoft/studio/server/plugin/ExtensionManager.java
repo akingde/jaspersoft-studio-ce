@@ -107,12 +107,14 @@ public class ExtensionManager {
 	}
 
 	public ANode createNewResource(MRoot root, ANode parent) {
-		for (IResourceFactory r : resources) {
-			ANode mr = r.createNewResource(root, parent);
-			if (mr != null)
-				return mr;
-		}
+		for (IResourceFactory r : resources)
+			r.createNewResource(root, parent);
 		return null;
 	}
 
+	public ANode createNewDatasource(MRoot root, ANode parent) {
+		for (IResourceFactory r : resources)
+			r.createNewDatasource(root, parent);
+		return null;
+	}
 }

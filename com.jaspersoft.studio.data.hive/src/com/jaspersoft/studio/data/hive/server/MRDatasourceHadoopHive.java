@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.model.datasource;
+package com.jaspersoft.studio.data.hive.server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +26,18 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
+import com.jaspersoft.studio.data.hive.HiveIconDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
-import com.jaspersoft.studio.server.ServerIconDescriptor;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 
-public class MRDatasourceDiagnostic extends MRDatasourceCustom {
+public class MRDatasourceHadoopHive extends MRDatasourceCustom {
 
-	public static final String CUSTOM_CLASS = "com.jaspersoft.jasperserver.api.logging.diagnostic.datasource.DiagnosticCustomDataSourceService";
+	public static final String JDBC_URL = "jdbcURL";
+	public static final String CUSTOM_CLASS = "com.jaspersoft.hadoop.hive.jasperserver.HiveDataSourceService";
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MRDatasourceDiagnostic(ANode parent, ResourceDescriptor rd, int index) {
+	public MRDatasourceHadoopHive(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
 	}
 
@@ -43,7 +45,7 @@ public class MRDatasourceDiagnostic extends MRDatasourceCustom {
 
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ServerIconDescriptor("datasource-diagnostic"); //$NON-NLS-1$
+			iconDescriptor = new HiveIconDescriptor("datasource-hive"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -57,8 +59,9 @@ public class MRDatasourceDiagnostic extends MRDatasourceCustom {
 		ResourceProperty rp = new ResourceProperty(
 				MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
 		List<ResourceProperty> props = new ArrayList<ResourceProperty>();
-		props.add(new ResourceProperty("_cds_name",
-				"diagnosticCustomDataSource"));
+		props.add(new ResourceProperty(JDBC_URL,
+				"jdbc:hive://hostname:10000/default"));
+		props.add(new ResourceProperty("_cds_name", "HiveDataSource"));
 		rp.setProperties(props);
 		rd.getProperties().add(rp);
 		rp = new ResourceProperty(

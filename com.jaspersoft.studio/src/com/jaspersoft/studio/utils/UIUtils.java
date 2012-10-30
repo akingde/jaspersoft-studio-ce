@@ -191,6 +191,7 @@ public class UIUtils {
 			lbl.setLayoutData(rd);
 		} else if (parent.getLayout() instanceof GridLayout) {
 			GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+			gd.verticalIndent = 5;
 			if (span > 0)
 				gd.horizontalSpan = span;
 			lbl.setLayoutData(gd);

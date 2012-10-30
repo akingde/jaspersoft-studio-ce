@@ -12,5 +12,11 @@
             language="HiveQL">
       </queryDesigner>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.server.resources">
+      <resource
+            ClassFactory="com.jaspersoft.studio.data.hive.server.HiveResourceFactory">
+      </resource>
+   </extension>
 
 </plugin>

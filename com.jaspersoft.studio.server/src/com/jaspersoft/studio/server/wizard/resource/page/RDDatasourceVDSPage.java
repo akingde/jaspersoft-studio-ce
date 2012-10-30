@@ -67,6 +67,7 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourceVDSFilter;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.MoveT2TButtons;
@@ -296,11 +297,8 @@ public class RDDatasourceVDSPage extends AResourcePage {
 				name = refuri.substring(refuri.lastIndexOf("/") + 1); //$NON-NLS-1$
 			} else
 				name = rd.getName();
-			List<ResourceProperty> props = rd.getProperties();
-			for (ResourceProperty rp : props) {
-				if (rp.getName().equals("PROP_DATASOURCE_SUB_DS_ID")) //$NON-NLS-1$
-					alias = rp;
-			}
+			alias = ResourceDescriptorUtil.getProperty(
+					"PROP_DATASOURCE_SUB_DS_ID", rd.getProperties());
 		}
 
 		public ResourceDescriptor getResourceDescriptor() {
