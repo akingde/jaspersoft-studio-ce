@@ -52,6 +52,7 @@ public class Unit {
 	private static final Map<String,String> alias = new LinkedHashMap<String, String>();
 	static {
 		alias.put("pixel", PX);
+		alias.put("pixels", PX);
 		alias.put("px",PX);
 		alias.put(PX,PX);
 		

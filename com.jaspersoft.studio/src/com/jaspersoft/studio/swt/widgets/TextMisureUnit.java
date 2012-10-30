@@ -246,6 +246,8 @@ public class TextMisureUnit extends ASPropertyWidget {
 			}catch(NumberFormatException ex){
 				insertField.setBackground(ColorConstants.red);
 			}
+		} else {
+			insertField.setBackground(ColorConstants.red);
 		}
 	}
 
