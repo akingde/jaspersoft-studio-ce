@@ -22,17 +22,17 @@ package com.jaspersoft.studio.server.model.datasource;
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
-import com.jaspersoft.studio.server.model.MResource;
 
-public class MRDatasourceCustom extends MResource {
+public class MRDatasourceDiagnostic extends MRDatasourceCustom {
+
+	public static final String CUSTOM_CLASS = "com.jaspersoft.jasperserver.api.logging.diagnostic.datasource.DiagnosticCustomDataSourceService";
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	public static final String PROP_DATASOURCE_CUSTOM_PROPERTY_MAP = "PROP_DATASOURCE_CUSTOM_PROPERTY_MAP";
-	public static final String PROP_DATASOURCE_CUSTOM_SERVICE_CLASS = "PROP_DATASOURCE_CUSTOM_SERVICE_CLASS";
 
-	public MRDatasourceCustom(ANode parent, ResourceDescriptor rd, int index) {
+	public MRDatasourceDiagnostic(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
 	}
 
@@ -40,7 +40,7 @@ public class MRDatasourceCustom extends MResource {
 
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ServerIconDescriptor("datasource-custom"); //$NON-NLS-1$
+			iconDescriptor = new ServerIconDescriptor("datasource-diagnostic"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -50,8 +50,14 @@ public class MRDatasourceCustom extends MResource {
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
-		rd.setWsType(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM);
+		ResourceDescriptor rd = MRDatasourceCustom.createDescriptor(parent);
+		ResourceProperty rp = new ResourceProperty(
+				MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
+		rd.getProperties().add(rp);
+		rp = new ResourceProperty(
+				MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS,
+				CUSTOM_CLASS);
+		rd.getProperties().add(rp);
 		return rd;
 	}
 }

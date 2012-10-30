@@ -20,11 +20,13 @@
 package com.jaspersoft.studio.server;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.wizard.IWizardPage;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MDataAdapter;
 import com.jaspersoft.studio.server.model.MDataType;
@@ -48,6 +50,7 @@ import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.server.model.datasource.MRDatasource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceBean;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceDiagnostic;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
@@ -209,8 +212,17 @@ public class ResourceFactory {
 			return new MRDatasourceBean(parent, resource, index);
 
 		if (resource.getWsType().equals(
-				ResourceDescriptor.TYPE_DATASOURCE_CUSTOM))
+				ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
+			List<ResourceProperty> props = resource.getProperties();
+			for (ResourceProperty p : props) {
+				if (p.getName()
+						.equals(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS)
+						&& p.getValue().equals(
+								MRDatasourceDiagnostic.CUSTOM_CLASS))
+					return new MRDatasourceDiagnostic(parent, resource, index);
+			}
 			return new MRDatasourceCustom(parent, resource, index);
+		}
 
 		if (resource.getWsType()
 				.equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC))

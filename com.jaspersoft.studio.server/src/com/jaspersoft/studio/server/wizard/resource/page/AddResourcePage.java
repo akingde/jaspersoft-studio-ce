@@ -57,6 +57,7 @@ import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceBean;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceDiagnostic;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
@@ -180,5 +181,8 @@ public class AddResourcePage extends WizardPage {
 		new MRDatasourceCustom(root,
 				MRDatasourceCustom.createDescriptor(parent), -1);
 		new MRDatasourceVDS(root, MRDatasourceVDS.createDescriptor(parent), -1);
+		new MRDatasourceDiagnostic(root,
+				MRDatasourceDiagnostic.createDescriptor(parent), -1);
+
 	}
 }
