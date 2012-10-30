@@ -33,6 +33,7 @@ public class Unit {
 
 	public static final String MM = "mm";
 	public static final String CM = "cm";
+	public static final String METER = "m";
 	public static final String INCH = "inch";
 	public static final String PX = "pixel";
 
@@ -41,7 +42,37 @@ public class Unit {
 		units.put(PX, new BigDecimal(1));
 		units.put(MM, new BigDecimal(25.4));
 		units.put(CM, new BigDecimal(2.54));
+		units.put(METER, new BigDecimal(0.0254));
 		units.put(INCH, new BigDecimal(1));
+	}
+	
+	/**
+	 * Map of the alias of a unit, because there can be more ways to require a unit
+	 */
+	private static final Map<String,String> alias = new LinkedHashMap<String, String>();
+	static {
+		alias.put("pixel", PX);
+		alias.put("px",PX);
+		alias.put(PX,PX);
+		
+		alias.put("cm",CM);
+		alias.put("centimeter",CM);
+		alias.put("centimeters",CM);
+		alias.put(CM,CM);
+
+		alias.put("mm",MM);
+		alias.put("millimeter",MM);
+		alias.put("millimeters",MM);
+		alias.put(MM,MM);
+
+		alias.put("inches", INCH);
+		alias.put("inch", INCH);
+		alias.put("''", INCH);
+		alias.put(INCH,INCH);
+		
+		alias.put("meter", METER);
+		alias.put("m", METER);
+		alias.put(METER, METER);
 	}
 
 	// value in pixel
@@ -119,6 +150,10 @@ public class Unit {
 		if (unitsArrays == null)
 			unitsArrays = units.keySet().toArray(new String[units.keySet().size()]);
 		return unitsArrays;
+	}
+	
+	public static String getKeyFromAlias(String aliasValue){
+		return alias.get(aliasValue);
 	}
 
 	public static String[][] getUnits2() {
