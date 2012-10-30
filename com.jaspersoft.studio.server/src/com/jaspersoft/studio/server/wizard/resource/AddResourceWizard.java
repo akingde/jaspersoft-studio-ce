@@ -35,6 +35,7 @@ public class AddResourceWizard extends Wizard {
 	public AddResourceWizard(ANode parent) {
 		super();
 		setWindowTitle(Messages.AddResourceWizard_windowtitle);
+		setNeedsProgressMonitor(true);
 		this.parent = parent;
 	}
 

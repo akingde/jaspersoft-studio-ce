@@ -27,43 +27,54 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
+import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.publish.wizard.DatasourceSelectionComposite;
 
-
 /**
- * This class allows to create a datasource selection panel and 
- * contains a list of static utility methods suitable for operations
- * on {@link ResourceDescriptor} elements and their datasource information associated. 
+ * This class allows to create a datasource selection panel and contains a list
+ * of static utility methods suitable for operations on
+ * {@link ResourceDescriptor} elements and their datasource information
+ * associated.
  */
 public class SelectorDatasource {
 
 	/**
-	 * Creates a tabitem containing the datasource composite widget that 
-	 * allows to edit the datasource information associated to a specific resource.
+	 * Creates a tabitem containing the datasource composite widget that allows
+	 * to edit the datasource information associated to a specific resource.
 	 * 
-	 * @param tabFolder the parent tabfolder for the new item
-	 * @param parent the anode that will contain information regarding the remote JasperServer 
-	 * @param res the resource which datasource information must be modified
+	 * @param tabFolder
+	 *            the parent tabfolder for the new item
+	 * @param parent
+	 *            the anode that will contain information regarding the remote
+	 *            JasperServer
+	 * @param res
+	 *            the resource which datasource information must be modified
 	 */
 	public void createDatasource(TabFolder tabFolder, final ANode parent,
 			final MResource res) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
 		item.setText(Messages.SelectorDatasource_TabTitle);
 
-		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(tabFolder, SWT.NONE);
+		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(
+				tabFolder, SWT.NONE);
 		dsSelectionCmp.configurePage(parent, res);
-		item.setControl(dsSelectionCmp);		
+		item.setControl(dsSelectionCmp);
 
 	}
 
 	/**
-	 * Replaces the datasource a previously existing datasource associated to a 
+	 * Replaces the datasource a previously existing datasource associated to a
 	 * specified resource.
 	 * 
-	 * @param res the resource element 
-	 * @param rd the resource descriptor representing the new datasource information
+	 * @param res
+	 *            the resource element
+	 * @param rd
+	 *            the resource descriptor representing the new datasource
+	 *            information
 	 */
-	public static void replaceDatasource(final MResource res, ResourceDescriptor rd) {
+	public static void replaceDatasource(final MResource res,
+			ResourceDescriptor rd) {
 		ResourceDescriptor rdel = getDatasource(res.getValue());
 		if (rdel != null) {
 			int index = res.getValue().getChildren().indexOf(rdel);
@@ -74,12 +85,13 @@ public class SelectorDatasource {
 	}
 
 	/**
-	 * Gets, if it exists, the datasource information associated to 
-	 * the specified {@link ResourceDescriptor} element.
-	 *  
-	 * @param ru the input resource descriptor
-	 * @return the resource descriptor representing the datasource associated if found,
-	 * 			<code>null</code> otherwise
+	 * Gets, if it exists, the datasource information associated to the
+	 * specified {@link ResourceDescriptor} element.
+	 * 
+	 * @param ru
+	 *            the input resource descriptor
+	 * @return the resource descriptor representing the datasource associated if
+	 *         found, <code>null</code> otherwise
 	 */
 	public static ResourceDescriptor getDatasource(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
@@ -94,7 +106,8 @@ public class SelectorDatasource {
 	/**
 	 * Clones the input {@link ResourceDescriptor} instance.
 	 * 
-	 * @param rd the resource descriptor to clone
+	 * @param rd
+	 *            the resource descriptor to clone
 	 * @return the cloned resource descriptor
 	 */
 	public static ResourceDescriptor cloneResource(ResourceDescriptor rd) {
@@ -122,11 +135,13 @@ public class SelectorDatasource {
 	}
 
 	/**
-	 * Copies the information from a source {@link ResourceDescriptor}
-	 * to a target one.
+	 * Copies the information from a source {@link ResourceDescriptor} to a
+	 * target one.
 	 * 
-	 * @param rd the source target descriptor
-	 * @param rnew the target resource descriptor
+	 * @param rd
+	 *            the source target descriptor
+	 * @param rnew
+	 *            the target resource descriptor
 	 */
 	public static void copyDSFields(ResourceDescriptor rd,
 			ResourceDescriptor rnew) {
@@ -142,28 +157,20 @@ public class SelectorDatasource {
 	}
 
 	/**
-	 * Checks if the specified {@link ResourceDescriptor} element is a datasource.
+	 * Checks if the specified {@link ResourceDescriptor} element is a
+	 * datasource.
 	 * 
-	 * @param r the resource to check
-	 * @return <code>true</code> if the resource is a datasource, <code>false</code> otherwise
+	 * @param r
+	 *            the resource to check
+	 * @return <code>true</code> if the resource is a datasource,
+	 *         <code>false</code> otherwise
 	 */
 	public static boolean isDatasource(ResourceDescriptor r) {
-		return r.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE)
-				|| r.getWsType()
-						.equals(ResourceDescriptor.TYPE_DATASOURCE_BEAN)
-				|| r.getWsType().equals(
-						ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)
-				|| r.getWsType()
-						.equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC)
-				|| r.getWsType()
-						.equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI)
-				|| r.getWsType().equals("Domain") //$NON-NLS-1$
-				|| (r.getWsType().equals("custom") //$NON-NLS-1$
-						&& r.getResourcePropertyValue("PROP_RESOURCE_TYPE") != null && r //$NON-NLS-1$
-						.getResourcePropertyValue("PROP_RESOURCE_TYPE") //$NON-NLS-1$
-						.equals("com.jaspersoft.jasperserver.api.metadata.jasperreports.domain.CustomReportDataSource")); //$NON-NLS-1$
+		return datasourceFilter.isDatasource(r);
 	}
-	
+
+	private static IDatasourceFilter datasourceFilter = new DatasourcesAllFilter();
+
 	/**
 	 * Enumeration representing the type of datasource.
 	 */

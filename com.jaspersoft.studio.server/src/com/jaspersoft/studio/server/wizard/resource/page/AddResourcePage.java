@@ -45,10 +45,6 @@ import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MJar;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MListOfValues;
-import com.jaspersoft.studio.server.model.MRDatasourceBean;
-import com.jaspersoft.studio.server.model.MRDatasourceCustom;
-import com.jaspersoft.studio.server.model.MRDatasourceJDBC;
-import com.jaspersoft.studio.server.model.MRDatasourceJNDI;
 import com.jaspersoft.studio.server.model.MRFont;
 import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MRQuery;
@@ -59,6 +55,11 @@ import com.jaspersoft.studio.server.model.MReportUnitOptions;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MXmlFile;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceBean;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class AddResourcePage extends WizardPage {
@@ -178,5 +179,6 @@ public class AddResourcePage extends WizardPage {
 				-1);
 		new MRDatasourceCustom(root,
 				MRDatasourceCustom.createDescriptor(parent), -1);
+		new MRDatasourceVDS(root, MRDatasourceVDS.createDescriptor(parent), -1);
 	}
 }

@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.apache.axis.AxisProperties;
 import org.apache.axis.components.net.DefaultCommonsHTTPClientProperties;
@@ -45,6 +46,7 @@ import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.page.SelectorDatasource;
@@ -241,7 +243,7 @@ public class WSClientHelper {
 
 			MReportUnit mru = res.getReportUnit();
 			WSClient cli = sp.getWsClient();
-			System.out.println("saving: " + rd.getUriString());
+//			System.out.println("saving: " + rd.getUriString());
 			if (mru != null && res != mru) {
 				String ruuri = mru.getValue().getUriString();
 
@@ -383,4 +385,62 @@ public class WSClientHelper {
 		return null;
 	}
 
+	public static List<ResourceDescriptor> getDatasourceList(WSClient c,
+			IDatasourceFilter f) throws Exception {
+		List<ResourceDescriptor> list = c.listDatasources();
+		if (f != null) {
+			List<ResourceDescriptor> toremove = new ArrayList<ResourceDescriptor>();
+			for (ResourceDescriptor rd : list)
+				if (!f.isDatasource(rd))
+					toremove.add(rd);
+			list.removeAll(toremove);
+		}
+		return list;
+	}
+
+	public static MServerProfile getDatasourceListTree(MServerProfile sp,
+			IDatasourceFilter f) throws Exception {
+		List<ResourceDescriptor> list = getDatasourceList(sp.getWsClient(), f);
+		sp.removeChildren();
+		for (ResourceDescriptor r : list)
+			addDataSource(sp, r);
+		return sp;
+	}
+
+	private static void addDataSource(MServerProfile sp, ResourceDescriptor r) {
+		String url = r.getUriString();
+		StringTokenizer st = new StringTokenizer(url, "/");
+		String turl = "/";
+		ANode parent = sp;
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			String sf = turl + token;
+			if (sf.equals(url)) {
+				ResourceFactory.getResource(parent, r, -1);
+				break;
+			}
+			MResource child = null;
+			for (INode node : parent.getChildren()) {
+				if (node instanceof MResource) {
+					MResource mr = (MResource) node;
+					if (mr.getValue().getUriString().equals(sf)) {
+						child = mr;
+						break;
+					}
+				}
+			}
+			if (child == null) {
+				ResourceDescriptor rd = new ResourceDescriptor();
+				rd.setName(token);
+				rd.setLabel(token);
+				rd.setUriString(sf);
+				rd.setWsType(ResourceDescriptor.TYPE_FOLDER);
+				child = ResourceFactory.getResource(parent, rd, -1);
+				child.removeChildren();
+			}
+			parent = child;
+			turl = sf + "/";
+		}
+
+	}
 }

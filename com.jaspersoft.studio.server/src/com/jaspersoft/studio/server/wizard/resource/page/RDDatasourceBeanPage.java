@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MRDatasourceBean;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceBean;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class RDDatasourceBeanPage extends AResourcePage {

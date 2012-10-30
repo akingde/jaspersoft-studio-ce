@@ -69,20 +69,26 @@ public class UIUtils {
 	}
 
 	public static void showError(final String message, final Throwable t) {
+		t.printStackTrace();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 
-				IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(),
-						OperationStatus.NOTHING_TO_REDO, message, t);
-				new ExceptionDetailsErrorDialog(Display.getDefault().getActiveShell(), Messages.common_exception,
-						Messages.common_exception_detail, status, IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR) {
-					protected void setShellStyle(int newShellStyle) {
-						super.setShellStyle(newShellStyle | SWT.SHEET);
-					};
-				}.open();
+				showErrorDialog(message, t);
 			}
+
 		});
-		t.printStackTrace();
+
+	}
+
+	public static void showErrorDialog(final String message, final Throwable t) {
+		IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(),
+				OperationStatus.NOTHING_TO_REDO, message, t);
+		new ExceptionDetailsErrorDialog(Display.getDefault().getActiveShell(), Messages.common_exception,
+				Messages.common_exception_detail, status, IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR) {
+			protected void setShellStyle(int newShellStyle) {
+				super.setShellStyle(newShellStyle | SWT.SHEET);
+			};
+		}.open();
 	}
 
 	public static void showWarning(final String message) {
@@ -397,30 +403,35 @@ public class UIUtils {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Customizes a {@link GalleryItem} in order to enrich with a "standard" image plus
-	 * a "selected" image with a custom shadow.
+	 * Customizes a {@link GalleryItem} in order to enrich with a "standard" image plus a "selected" image with a custom
+	 * shadow.
 	 * <p>
 	 * 
 	 * Cache maps are used for performance purposes.
 	 * 
-	 * @param item the gallery item to modify
-	 * @param pluginID the ID of the plugin, where the image is located
-	 * @param imagePath the plugin-relative path of the image
-	 * @param selectedImagesCache a cache of selected images
-	 * @param standardImagesCache a cache of standard images
+	 * @param item
+	 *          the gallery item to modify
+	 * @param pluginID
+	 *          the ID of the plugin, where the image is located
+	 * @param imagePath
+	 *          the plugin-relative path of the image
+	 * @param selectedImagesCache
+	 *          a cache of selected images
+	 * @param standardImagesCache
+	 *          a cache of standard images
 	 */
-	public static void setGallyeryItemImageInfo(
-			GalleryItem item, String pluginID, String imagePath,
-			Map<String, Image> selectedImagesCache, Map<String, Image> standardImagesCache){
-		Image selectedImg=selectedImagesCache.get(imagePath);
-		Image standardImg=standardImagesCache.get(imagePath);
-		if(selectedImg==null || standardImg==null){
+	public static void setGallyeryItemImageInfo(GalleryItem item, String pluginID, String imagePath,
+			Map<String, Image> selectedImagesCache, Map<String, Image> standardImagesCache) {
+		Image selectedImg = selectedImagesCache.get(imagePath);
+		Image standardImg = standardImagesCache.get(imagePath);
+		if (selectedImg == null || standardImg == null) {
 			Image itemImage = ResourceManager.getPluginImage(pluginID, imagePath);
 			// Add viewer required effects to the images shown...
-			selectedImg =new Image(itemImage.getDevice(), SWTImageEffects.extendArea(itemImage.getImageData(), 20, null));
-			standardImg=new Image(itemImage.getDevice(), Glow.glow(itemImage.getImageData(), ResourceManager.getColor(SWT.COLOR_GRAY), 20, 0, 255));
+			selectedImg = new Image(itemImage.getDevice(), SWTImageEffects.extendArea(itemImage.getImageData(), 20, null));
+			standardImg = new Image(itemImage.getDevice(), Glow.glow(itemImage.getImageData(),
+					ResourceManager.getColor(SWT.COLOR_GRAY), 20, 0, 255));
 			// Cache images
 			standardImagesCache.put(imagePath, standardImg);
 			selectedImagesCache.put(imagePath, selectedImg);
@@ -429,6 +440,5 @@ public class UIUtils {
 		item.setStandardImage(standardImg);
 		item.setImage(standardImg);
 	}
-	
 
 }

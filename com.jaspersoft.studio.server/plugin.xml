@@ -51,7 +51,7 @@
                id="com.jaspersoft.studio.server.properties.DatasourceSection"
                tab="com.jaspersoft.studio.server.ResourceDescriptor.Properties">
             <input
-                  type="com.jaspersoft.studio.server.model.MRDatasource">
+                  type="com.jaspersoft.studio.server.model.datasource.MRDatasource">
             </input>
          </propertySection>
          <propertySection
@@ -59,7 +59,7 @@
                id="com.jaspersoft.studio.server.properties.DatasourceBean"
                tab="com.jaspersoft.studio.server.ResourceDescriptor.Properties">
             <input
-                  type="com.jaspersoft.studio.server.model.MRDatasourceBean">
+                  type="com.jaspersoft.studio.server.model.datasource.MRDatasourceBean">
             </input>
          </propertySection>
          <propertySection
@@ -67,7 +67,7 @@
                id="com.jaspersoft.studio.server.properties.DatasourceCustom"
                tab="com.jaspersoft.studio.server.ResourceDescriptor.Properties">
             <input
-                  type="com.jaspersoft.studio.server.model.MRDatasourceCustom">
+                  type="com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom">
             </input>
          </propertySection>
          <propertySection
@@ -75,7 +75,7 @@
                id="com.jaspersoft.studio.server.properties.DatasourceJNDI"
                tab="com.jaspersoft.studio.server.ResourceDescriptor.Properties">
             <input
-                  type="com.jaspersoft.studio.server.model.MRDatasourceJNDI">
+                  type="com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI">
             </input>
          </propertySection>
          <propertySection
@@ -83,7 +83,7 @@
                id="com.jaspersoft.studio.server.properties.DatasourceJDBC"
                tab="com.jaspersoft.studio.server.ResourceDescriptor.Properties">
             <input
-                  type="com.jaspersoft.studio.server.model.MRDatasourceJDBC">
+                  type="com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC">
             </input>
          </propertySection>
          <propertySection

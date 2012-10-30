@@ -34,11 +34,6 @@ import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MJar;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MListOfValues;
-import com.jaspersoft.studio.server.model.MRDatasource;
-import com.jaspersoft.studio.server.model.MRDatasourceBean;
-import com.jaspersoft.studio.server.model.MRDatasourceCustom;
-import com.jaspersoft.studio.server.model.MRDatasourceJDBC;
-import com.jaspersoft.studio.server.model.MRDatasourceJNDI;
 import com.jaspersoft.studio.server.model.MRFont;
 import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MRQuery;
@@ -50,6 +45,12 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
 import com.jaspersoft.studio.server.model.MXmlFile;
+import com.jaspersoft.studio.server.model.datasource.MRDatasource;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceBean;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDataAdapterPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDataTypePage;
@@ -57,6 +58,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceBeanPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceJDBCPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceJNDIPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourcePage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceVDSPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDFolderPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDFontPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDImagePage;
@@ -97,6 +99,9 @@ public class ResourceFactory {
 					page = new RDJrxmlPage(parent, (MJrxml) resource);
 				else if (resource instanceof MReference)
 					page = new RDReferencePage(parent, (MReference) resource);
+				else if (resource instanceof MRDatasourceVDS)
+					page = new RDDatasourceVDSPage(parent,
+							(MRDatasourceVDS) resource);
 				else if (resource instanceof MRDatasourceJNDI)
 					page = new RDDatasourceJNDIPage(parent,
 							(MRDatasourceJNDI) resource);
@@ -130,9 +135,11 @@ public class ResourceFactory {
 				else if (resource instanceof MUnknown)
 					page = new RDUnknownPage(parent, (MUnknown) resource);
 				else if (resource instanceof MRStyleTemplate)
-					page = new RDStyleTemplatePage(parent, (MRStyleTemplate) resource);
+					page = new RDStyleTemplatePage(parent,
+							(MRStyleTemplate) resource);
 				else if (resource instanceof MDataAdapter)
-					page = new RDDataAdapterPage(parent,(MDataAdapter)resource);
+					page = new RDDataAdapterPage(parent,
+							(MDataAdapter) resource);
 			}
 			if (page != null)
 				pagemap.put(resource.getClass(), page);
@@ -208,6 +215,8 @@ public class ResourceFactory {
 		if (resource.getWsType()
 				.equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC))
 			return new MRDatasourceJDBC(parent, resource, index);
+		if (resource.getWsType().equals(MRDatasourceVDS.TYPE_DATASOURCE_VDS))
+			return new MRDatasourceVDS(parent, resource, index);
 		if (resource.getWsType()
 				.equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI))
 			return new MRDatasourceJNDI(parent, resource, index);

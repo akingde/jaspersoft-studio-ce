@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.model;
+package com.jaspersoft.studio.server.model.datasource;
 
 import net.sf.jasperreports.engine.JRConstants;
 
@@ -25,11 +25,12 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
+import com.jaspersoft.studio.server.model.MResource;
 
-public class MRDatasourceJDBC extends MResource {
+public class MRDatasourceBean extends MResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MRDatasourceJDBC(ANode parent, ResourceDescriptor rd, int index) {
+	public MRDatasourceBean(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
 	}
 
@@ -37,7 +38,7 @@ public class MRDatasourceJDBC extends MResource {
 
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ServerIconDescriptor("datasource-jdbc"); //$NON-NLS-1$
+			iconDescriptor = new ServerIconDescriptor("datasource-bean"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -48,7 +49,7 @@ public class MRDatasourceJDBC extends MResource {
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
-		rd.setWsType(ResourceDescriptor.TYPE_DATASOURCE_JDBC);
+		rd.setWsType(ResourceDescriptor.TYPE_DATASOURCE_BEAN);
 		return rd;
 	}
 }

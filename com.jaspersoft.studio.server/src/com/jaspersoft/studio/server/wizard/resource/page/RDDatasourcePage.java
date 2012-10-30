@@ -21,8 +21,8 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MRDatasource;
-import com.jaspersoft.studio.server.model.MRDatasourceCustom;
+import com.jaspersoft.studio.server.model.datasource.MRDatasource;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 
 public class RDDatasourcePage extends AResourcePage {
 

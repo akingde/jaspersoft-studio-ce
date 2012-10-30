@@ -83,6 +83,10 @@ public class Messages extends NLS {
 	public static String RDDatasourcePage_desc;
 	public static String RDDatasourcePage_id;
 	public static String RDDatasourcePage_title;
+	public static String RDDatasourceVDSPage_desc;
+	public static String RDDatasourceVDSPage_dsalias;
+	public static String RDDatasourceVDSPage_dsname;
+	public static String RDDatasourceVDSPage_title;
 	public static String RDDataTypePage_datatype;
 	public static String RDDataTypePage_date;
 	public static String RDDataTypePage_datetime;
