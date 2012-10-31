@@ -421,9 +421,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			// to avoid duplication I remove it first
 			return (JRPropertiesMap) jrDesign.getPropertiesMap().cloneProperties();
 		}
-		if (mDataset == null) 
-			createDataset(jrDesign);
-		return mDataset.getPropertyValue(id);
+		return null;
 	}
 
 	/*
@@ -503,12 +501,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			for (int i = 0; i < names.length; i++)
 				jrDesign.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
 			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
-		} else {
-			if (mDataset == null) {
-				createDataset(jrDesign);
-			}
-			mDataset.setPropertyValue(id, value);
-		}
+		} 
 	}
 
 	/*

@@ -970,6 +970,24 @@
                   type="com.jaspersoft.studio.model.MReport">
             </input>
          </propertySection>
+         <propertySection
+        	   afterSection="com.jaspersoft.studio.editor.JrxmlEditor.report.ReportSection"
+               class="com.jaspersoft.studio.model.dataset.descriptor.MainDatasetSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.report.MainDatasetSection"
+               tab="com.jaspersoft.studio.propertyTab.report">
+            <input
+                  type="com.jaspersoft.studio.model.MReport">
+            </input>
+         </propertySection>
+         <propertySection
+        	   afterSection="com.jaspersoft.studio.editor.JrxmlEditor.report.MainDatasetSection"
+               class="com.jaspersoft.studio.property.section.report.PageFormatSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.report.PageFormatSection"
+               tab="com.jaspersoft.studio.propertyTab.report">
+            <input
+                  type="com.jaspersoft.studio.model.MReport">
+            </input>
+         </propertySection>
           <propertySection
                class="com.jaspersoft.studio.property.section.obj.StylesListSection"
                id="com.jaspersoft.studio.property.section.obj.StylesListSection"
