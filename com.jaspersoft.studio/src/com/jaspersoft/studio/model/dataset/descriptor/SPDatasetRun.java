@@ -19,9 +19,6 @@
  */
 package com.jaspersoft.studio.model.dataset.descriptor;
 
-import java.sql.Connection;
-
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -91,7 +88,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 			@Override
 			protected void setDatasource(String exTxt) {
 				if (datasetrun != null) {
-					
+
 					super.setDatasource(exTxt);
 					JRDesignExpression jde = (JRDesignExpression) datasetrun.getDataSourceExpression();
 					changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, jde);
@@ -101,7 +98,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 			@Override
 			protected void setConnection(String exTxt) {
 				if (datasetrun != null) {
-					
+
 					super.setConnection(exTxt);
 					JRDesignExpression jde = (JRDesignExpression) datasetrun.getConnectionExpression();
 					changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, jde);

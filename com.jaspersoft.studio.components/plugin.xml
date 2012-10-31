@@ -522,6 +522,14 @@
                   type="com.jaspersoft.studio.components.crosstab.model.measure.MMeasure">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.map.property.MapDatasetSection"
+               id="com.jaspersoft.studio.components.map.property.MapDatasetSection"
+               tab="com.jaspersoft.studio.editor.section.DATASET">
+            <input
+                  type="com.jaspersoft.studio.components.map.model.MMap">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension

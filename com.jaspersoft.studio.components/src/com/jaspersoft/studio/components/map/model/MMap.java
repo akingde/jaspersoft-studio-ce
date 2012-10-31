@@ -23,10 +23,18 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.map.MapComponent;
+import net.sf.jasperreports.components.map.MarkerDataset;
 import net.sf.jasperreports.components.map.StandardMapComponent;
+import net.sf.jasperreports.components.map.StandardMarkerDataset;
+import net.sf.jasperreports.components.map.type.MapImageTypeEnum;
+import net.sf.jasperreports.components.map.type.MapScaleEnum;
+import net.sf.jasperreports.components.map.type.MapTypeEnum;
+import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
@@ -40,11 +48,14 @@ import com.jaspersoft.studio.components.map.MapNodeIconDescriptor;
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
@@ -171,23 +182,75 @@ public class MMap extends MGraphicElement {
 				.setDescription(Messages.MMap_evaluation_group_description);
 		desc.add(evaluationGroupNameD);
 
+		mapTypeD = new JSSEnumPropertyDescriptor(
+				StandardMapComponent.PROPERTY_MAP_TYPE, "Map Type",
+				MapTypeEnum.class, NullEnum.NOTNULL);
+		mapTypeD.setDescription("Map type.");
+		desc.add(mapTypeD);
+
+		mapScaleD = new JSSEnumPropertyDescriptor(
+				StandardMapComponent.PROPERTY_MAP_SCALE, "Map Scale",
+				MapScaleEnum.class, NullEnum.NOTNULL);
+		mapScaleD.setDescription("Scale.");
+		desc.add(mapScaleD);
+
+		imageTypeD = new JSSEnumPropertyDescriptor(
+				StandardMapComponent.PROPERTY_IMAGE_TYPE, "Image Type",
+				MapImageTypeEnum.class, NullEnum.NOTNULL);
+		imageTypeD.setDescription("Image type.");
+		desc.add(imageTypeD);
+
+		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(
+				StandardMarkerDataset.PROPERTY_DATASET_RUN,
+				"Marker Dataset Run", true);
+		datasetRunD.setDescription("Marker Dataset Run");
+		desc.add(datasetRunD);
+
+		datasetRunD.setCategory(Messages.MMap_common_map_properties);
+		mapTypeD.setCategory(Messages.MMap_common_map_properties);
+		mapScaleD.setCategory(Messages.MMap_common_map_properties);
+		imageTypeD.setCategory(Messages.MMap_common_map_properties);
 		evaluationTimeD.setCategory(Messages.MMap_common_map_properties);
 		evaluationGroupNameD.setCategory(Messages.MMap_common_map_properties);
 		latitudeExprD.setCategory(Messages.MMap_common_map_properties);
 		longitudeExprD.setCategory(Messages.MMap_common_map_properties);
 		zoomExprD.setCategory(Messages.MMap_common_map_properties);
 
+		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE,
+				MapTypeEnum.ROADMAP);
+		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE,
+				MapScaleEnum.ONE);
+		defaultsMap.put(StandardMapComponent.PROPERTY_IMAGE_TYPE,
+				MapImageTypeEnum.PNG);
 		defaultsMap.put(StandardMapComponent.PROPERTY_EVALUATION_TIME,
 				EvaluationTimeEnum.NOW);
 		defaultsMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION,
 				MapComponent.DEFAULT_ZOOM);
 	}
 
+	private MDatasetRun mDatasetRun;
+
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		StandardMapComponent component = (StandardMapComponent) jrElement
 				.getComponent();
+		MarkerDataset markerdataset = component.getMarkerDataset();
+
+		if (id.equals(StandardMarkerDataset.PROPERTY_DATASET_RUN)) {
+			JRDatasetRun j = null;
+			if (markerdataset != null)
+				markerdataset.getDatasetRun();
+			if (j == null)
+				j = new JRDesignDatasetRun();
+			if (mDatasetRun != null)
+				mDatasetRun.setValue(j);
+			else {
+				mDatasetRun = new MDatasetRun(j, getJasperDesign());
+				setChildListener(mDatasetRun);
+			}
+			return mDatasetRun;
+		}
 
 		if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME))
 			return EnumHelper.getValue(component.getEvaluationTime(), 1, false);
@@ -200,32 +263,60 @@ public class MMap extends MGraphicElement {
 			return ExprUtil.getExpression(component.getLatitudeExpression());
 		if (id.equals(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION))
 			return ExprUtil.getExpression(component.getZoomExpression());
+
+		if (id.equals(StandardMapComponent.PROPERTY_MAP_TYPE))
+			return mapTypeD.getEnumValue(component.getMapType());
+		if (id.equals(StandardMapComponent.PROPERTY_MAP_SCALE))
+			return mapScaleD.getEnumValue(component.getMapScale());
+		if (id.equals(StandardMapComponent.PROPERTY_IMAGE_TYPE))
+			return imageTypeD.getEnumValue(component.getImageType());
+
 		return super.getPropertyValue(id);
 	}
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		StandardMapComponent jrList = (StandardMapComponent) jrElement
+		StandardMapComponent component = (StandardMapComponent) jrElement
 				.getComponent();
 
-		if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME))
-			jrList.setEvaluationTime((EvaluationTimeEnum) EnumHelper
+		MarkerDataset markerdataset = component.getMarkerDataset();
+
+		if (id.equals(StandardMarkerDataset.PROPERTY_DATASET_RUN)) {
+			MDatasetRun mdr = (MDatasetRun) value;
+			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
+			StandardMarkerDataset sMarkerDataset = (StandardMarkerDataset) markerdataset;
+			if (sMarkerDataset == null) {
+				sMarkerDataset = new StandardMarkerDataset();
+				component.setMarkerDataset(sMarkerDataset);
+			}
+			if (dr.getDatasetName() != null)
+				sMarkerDataset.setDatasetRun(dr);
+			else
+				sMarkerDataset.setDatasetRun(null);
+		} else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME))
+			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper
 					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
 		else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_GROUP))
-			jrList.setEvaluationGroup((String) value);
+			component.setEvaluationGroup((String) value);
 		else if (id.equals(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION)) {
-			jrList.setLongitudeExpression(ExprUtil.setValues(
-					jrList.getLongitudeExpression(), value, null));
+			component.setLongitudeExpression(ExprUtil.setValues(
+					component.getLongitudeExpression(), value, null));
 		} else if (id.equals(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION)) {
-			jrList.setLatitudeExpression(ExprUtil.setValues(
-					jrList.getLatitudeExpression(), value, null));
+			component.setLatitudeExpression(ExprUtil.setValues(
+					component.getLatitudeExpression(), value, null));
 
 		} else if (id.equals(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION)) {
-			jrList.setZoomExpression(ExprUtil.setValues(
-					jrList.getZoomExpression(), value, null));
-
-		} else
+			component.setZoomExpression(ExprUtil.setValues(
+					component.getZoomExpression(), value, null));
+		} else if (id.equals(StandardMapComponent.PROPERTY_MAP_TYPE))
+			component.setMapType((MapTypeEnum) mapTypeD.getEnumValue(value));
+		else if (id.equals(StandardMapComponent.PROPERTY_MAP_SCALE))
+			component.setMapScale((MapScaleEnum) mapScaleD.getEnumValue(value));
+		else if (id.equals(StandardMapComponent.PROPERTY_IMAGE_TYPE))
+			component.setImageType((MapImageTypeEnum) imageTypeD
+					.getEnumValue(value));
+		else
 			super.setPropertyValue(id, value);
 	}
 
@@ -237,6 +328,9 @@ public class MMap extends MGraphicElement {
 	}
 
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
+	private static JSSEnumPropertyDescriptor mapTypeD;
+	private static JSSEnumPropertyDescriptor imageTypeD;
+	private static JSSEnumPropertyDescriptor mapScaleD;
 
 	@Override
 	public void setValue(Object value) {
