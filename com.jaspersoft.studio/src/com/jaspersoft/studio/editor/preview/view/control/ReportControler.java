@@ -138,6 +138,11 @@ public class ReportControler {
 	}
 
 	private void setParameters() {
+		jasperParameters = resetParameters(jasperParameters, jrContext);
+	}
+
+	public static Map<String, Object> resetParameters(Map<String, Object> jasperParameters,
+			JasperReportsConfiguration jrContext) {
 		if (jasperParameters == null)
 			jasperParameters = new HashMap<String, Object>();
 		else {
@@ -146,6 +151,10 @@ public class ReportControler {
 			for (JRParameter p : prm) {
 				Object obj = jasperParameters.get(p.getName());
 				if (p.getName().endsWith(JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX))
+					continue;
+				if (p.getName().equals(JRParameter.REPORT_DATA_SOURCE))
+					continue;
+				if (p.getName().equals(JRParameter.REPORT_CONNECTION))
 					continue;
 				try {
 					if (obj != null && p.getValueClass().isAssignableFrom(obj.getClass()))
@@ -157,6 +166,7 @@ public class ReportControler {
 			jasperParameters.putAll(map);
 		}
 		jrContext.setJRParameters(jasperParameters);
+		return jasperParameters;
 	}
 
 	public LinkedHashMap<String, APreview> createControls(Composite composite) {

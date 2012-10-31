@@ -249,6 +249,7 @@ public class DataPreviewTable implements DatasetReaderListener{
 						clonedDS.addField(f);
 					} catch (JRException e) {
 						// Do not care, duplication should never happen.
+						e.printStackTrace();
 					}
 				}
 				dataReader.setDesignDataset(clonedDS);

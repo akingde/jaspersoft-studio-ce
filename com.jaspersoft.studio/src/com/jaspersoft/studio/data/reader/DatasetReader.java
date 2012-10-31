@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
@@ -41,6 +42,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
+import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -156,7 +159,9 @@ public class DatasetReader {
 			JasperReport jrobj = JasperCompileManager.compileReport(dataJD);
 
 			// 7. Prepare parameters
-			HashMap<String, Object> hm = new HashMap<String, Object>();
+			Map<String, Object> hm = new HashMap<String, Object>();
+			hm = ReportControler.resetParameters(hm, jConfig);
+
 			hm.put(DataPreviewScriptlet.PARAM_COLUMNS, columns);
 			hm.put(DataPreviewScriptlet.PARAM_LISTENERS, listeners);
 			if (maxRecords > 0)
@@ -169,6 +174,8 @@ public class DatasetReader {
 			}
 
 			// 8. Contribute parameters from the data adapter
+			if (dataAdapterDesc != null)
+				jConfig.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());
 			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(dataAdapterDesc.getDataAdapter());
 			das.contributeParameters(hm);
 
@@ -176,6 +183,7 @@ public class DatasetReader {
 			JasperFillManager.getInstance(jConfig).fill(jrobj, hm);
 
 		} catch (DataPreviewInterruptedException e) {
+			e.printStackTrace();
 			// DO NOTHING
 			// This exception should occur only when
 			// a stop on the reading has been invoked.
