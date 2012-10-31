@@ -44,6 +44,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
@@ -154,7 +155,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 		expressionD.setDescription(Messages.MGroup_expression_description);
 		desc.add(expressionD);
 
-		IntegerPropertyDescriptor minhD = new IntegerPropertyDescriptor(JRBaseGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE,
+		PixelPropertyDescriptor minhD = new PixelPropertyDescriptor(JRBaseGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE,
 				"Min Height To Start New Page");
 		minhD.setDescription("Min Height To Start New Page");
 		desc.add(minhD);

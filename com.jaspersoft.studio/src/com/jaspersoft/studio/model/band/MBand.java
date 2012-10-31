@@ -59,6 +59,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
 /*
@@ -220,7 +221,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT,
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT,
 				Messages.common_height);
 		heightD.setDescription(Messages.MBand_height_description);
 		desc.add(heightD);

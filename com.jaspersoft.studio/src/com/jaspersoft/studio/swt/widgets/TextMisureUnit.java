@@ -171,10 +171,10 @@ public class TextMisureUnit extends ASPropertyWidget {
 		unitsMap = new HashMap<String, MeasureUnit>();
 		MeasureUnit[] units = new MeasureUnit[5];
 		//Adding the measure unit for pixel
-		units[0] = new MeasureUnit(Unit.PX, "pixels",0);
+		units[0] = new MeasureUnit(Unit.PX, "px",0);
 		unitsMap.put(Unit.PX, units[0]);
 		//Adding the measure unit for inch
-		units[1] = new MeasureUnit(Unit.INCH, "inches",2);
+		units[1] = new MeasureUnit(Unit.INCH, "inch",2);
 		unitsMap.put(Unit.INCH, units[1]);
 		//Adding the meausre unit for centimeter
 		units[2] = new MeasureUnit(Unit.CM, "cm",2);
@@ -259,7 +259,7 @@ public class TextMisureUnit extends ASPropertyWidget {
 		MeasureUnit defaultMeasure = unitsMap.get(defaultValue);
 		double dValue = (new Unit(Double.parseDouble(value), Unit.PX)).getValue(defaultMeasure.getKeyName());
 		insertField.setBackground(null);
-		insertField.setText(truncateDouble(dValue,defaultMeasure.getPrecision()).concat(defaultValue));
+		insertField.setText(truncateDouble(dValue,defaultMeasure.getPrecision()).concat(defaultMeasure.getUnitName()));
 	}
 
 	/**

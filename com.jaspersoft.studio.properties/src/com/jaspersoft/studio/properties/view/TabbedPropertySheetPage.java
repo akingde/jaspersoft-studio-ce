@@ -340,7 +340,7 @@ public class TabbedPropertySheetPage extends Page implements
 					}
 					activePropertySheet = false;
 				}
-				return;
+				//return; //this return was commented to permit the properties panel to refresh
 			}
 		}
 		if (!activePropertySheet && currentTab != null) {

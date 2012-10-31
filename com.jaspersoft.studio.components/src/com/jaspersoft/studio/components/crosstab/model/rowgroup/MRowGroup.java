@@ -44,6 +44,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -141,7 +142,7 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 				.setDescription(Messages.MRowGroup_row_position_description);
 		desc.add(columnPositionD);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(
+		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(
 				JRDesignCrosstabRowGroup.PROPERTY_WIDTH, Messages.common_width);
 		widthD.setDescription(Messages.MRowGroup_width_description);
 		desc.add(widthD);

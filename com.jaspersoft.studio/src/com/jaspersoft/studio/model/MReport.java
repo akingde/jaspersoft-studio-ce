@@ -70,6 +70,7 @@ import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyD
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
@@ -196,7 +197,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		desc.add(datasetD);
 
 		// -------------------
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_HEIGHT,
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JasperDesign.PROPERTY_PAGE_HEIGHT,
 				Messages.MReport_page_height);
 		heightD.setDescription(Messages.MReport_page_height_description);
 		heightD.setCategory(Messages.MReport_report_page_category);

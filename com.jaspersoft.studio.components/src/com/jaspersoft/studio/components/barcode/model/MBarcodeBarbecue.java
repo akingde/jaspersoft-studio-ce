@@ -46,6 +46,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 /*
  * The Class MBarcode.
@@ -165,13 +166,13 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(
+		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(
 				StandardBarbecueComponent.PROPERTY_BAR_WIDTH,
 				Messages.MBarcodeBarbecue_bar_width);
 		widthD.setDescription(Messages.MBarcodeBarbecue_bar_width_description);
 		desc.add(widthD);
 
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(
 				StandardBarbecueComponent.PROPERTY_BAR_HEIGTH,
 				Messages.MBarcodeBarbecue_bar_height);
 		heightD.setDescription(Messages.MBarcodeBarbecue_bar_height_description);

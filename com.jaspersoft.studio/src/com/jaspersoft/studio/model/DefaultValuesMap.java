@@ -49,6 +49,7 @@ import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.LineStylePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 /**
  * This class store statically the default values of many element
@@ -152,31 +153,31 @@ public class DefaultValuesMap {
 			@Override
 			public IPropertyDescriptor getPropertyDescriptor(Object id) {
 				if (id.equals(JRBaseLineBox.PROPERTY_PADDING)){
-					IntegerPropertyDescriptor paddingD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_PADDING,
+					PixelPropertyDescriptor paddingD = new PixelPropertyDescriptor(JRBaseLineBox.PROPERTY_PADDING,
 							Messages.common_padding);
 					paddingD.setCategory(Messages.common_padding);
 					paddingD.setDescription(Messages.MLineBox_padding_description);
 					return paddingD;
 				} else if (id.equals(JRBaseLineBox.PROPERTY_LEFT_PADDING)){
-					IntegerPropertyDescriptor paddingLeftD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_LEFT_PADDING,
+					PixelPropertyDescriptor paddingLeftD = new PixelPropertyDescriptor(JRBaseLineBox.PROPERTY_LEFT_PADDING,
 							Messages.MLineBox_left_padding);
 					paddingLeftD.setCategory(Messages.common_padding);
 					paddingLeftD.setDescription(Messages.MLineBox_left_padding_description);
 					return paddingLeftD;
 				} else if (id.equals(JRBaseLineBox.PROPERTY_RIGHT_PADDING)){
-					IntegerPropertyDescriptor paddingRightD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_RIGHT_PADDING,
+					PixelPropertyDescriptor paddingRightD = new PixelPropertyDescriptor(JRBaseLineBox.PROPERTY_RIGHT_PADDING,
 							Messages.MLineBox_right_padding);
 					paddingRightD.setCategory(Messages.common_padding);
 					paddingRightD.setDescription(Messages.MLineBox_right_padding_description);
 					return paddingRightD;
 				} else if (id.equals(JRBaseLineBox.PROPERTY_TOP_PADDING)){
-					IntegerPropertyDescriptor paddingTopD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_TOP_PADDING,
+					PixelPropertyDescriptor paddingTopD = new PixelPropertyDescriptor(JRBaseLineBox.PROPERTY_TOP_PADDING,
 							Messages.MLineBox_top_padding);
 					paddingTopD.setCategory(Messages.common_padding);
 					paddingTopD.setDescription(Messages.MLineBox_top_padding_description);
 					return paddingTopD;
 				} else if (id.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)){
-					IntegerPropertyDescriptor paddingBottomD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_BOTTOM_PADDING,
+					PixelPropertyDescriptor paddingBottomD = new PixelPropertyDescriptor(JRBaseLineBox.PROPERTY_BOTTOM_PADDING,
 							Messages.MLineBox_bottom_padding);
 					paddingBottomD.setDescription(Messages.MLineBox_bottom_padding_description);
 					return paddingBottomD;

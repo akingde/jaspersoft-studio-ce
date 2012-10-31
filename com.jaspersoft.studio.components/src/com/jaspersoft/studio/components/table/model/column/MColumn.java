@@ -68,6 +68,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class MColumn extends APropertyNode implements IPastable, IContainer,
@@ -270,7 +271,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 				.setDescription(Messages.MColumn_print_when_expression_description);
 		desc.add(printWhenExprD);
 
-		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(
+		PixelPropertyDescriptor wD = new PixelPropertyDescriptor(
 				StandardBaseColumn.PROPERTY_WIDTH,
 				Messages.MColumn_column_width);
 		desc.add(wD);

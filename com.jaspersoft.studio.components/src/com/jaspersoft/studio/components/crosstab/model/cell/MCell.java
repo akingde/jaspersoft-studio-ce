@@ -71,6 +71,7 @@ import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyD
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
 public class MCell extends APropertyNode implements IGraphicElement, IPastable,
@@ -232,11 +233,11 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		styleD.setDescription(Messages.MCell_parent_style_description);
 		desc.add(styleD);
 
-		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(
+		PixelPropertyDescriptor wD = new PixelPropertyDescriptor(
 				JRDesignCrosstabCell.PROPERTY_WIDTH, Messages.common_width);
 		desc.add(wD);
 
-		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(
+		PixelPropertyDescriptor hD = new PixelPropertyDescriptor(
 				JRDesignCrosstabCell.PROPERTY_HEIGHT, Messages.common_height);
 		desc.add(hD);
 

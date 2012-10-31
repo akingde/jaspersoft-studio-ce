@@ -72,6 +72,7 @@ public class Unit {
 		alias.put(INCH,INCH);
 		
 		alias.put("meter", METER);
+		alias.put("meters", METER);
 		alias.put("m", METER);
 		alias.put(METER, METER);
 	}

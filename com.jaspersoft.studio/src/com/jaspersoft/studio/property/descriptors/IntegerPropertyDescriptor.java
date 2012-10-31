@@ -29,7 +29,7 @@ import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
-import com.jaspersoft.studio.swt.widgets.TextMisureUnit;
+import com.jaspersoft.studio.property.section.widgets.SPNumber;
 
 /*
  * The Class IntegerPropertyDescriptor.
@@ -89,10 +89,10 @@ public class IntegerPropertyDescriptor extends TextPropertyDescriptor implements
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		//SPNumber spNumber = new SPNumber(parent, section, this);
-		//spNumber.setNumType(Integer.class);
-		//return spNumber;
-		TextMisureUnit spNumber = new TextMisureUnit(parent, section, this);
+		SPNumber spNumber = new SPNumber(parent, section, this);
+		spNumber.setNumType(Integer.class);
 		return spNumber;
+		//TextMisureUnit spNumber = new TextMisureUnit(parent, section, this);
+		//return spNumber;
 	}
 }

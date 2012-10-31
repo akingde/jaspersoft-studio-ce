@@ -36,6 +36,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -82,7 +83,7 @@ public class MGroupBand extends MGroup implements IPropertySource {
 		footerPositionD.setDescription(Messages.MGroupBand_footer_position_description);
 		desc.add(footerPositionD);
 
-		IntegerPropertyDescriptor minHeightD = new IntegerPropertyDescriptor(
+		PixelPropertyDescriptor minHeightD = new PixelPropertyDescriptor(
 				JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, Messages.MGroupBand_min_height_to_start_new_page);
 		minHeightD.setDescription(Messages.MGroupBand_min_height_to_start_new_page_description);
 		desc.add(minHeightD);

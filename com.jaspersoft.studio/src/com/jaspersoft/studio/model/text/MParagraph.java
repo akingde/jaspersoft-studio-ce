@@ -39,6 +39,7 @@ import com.jaspersoft.studio.property.descriptor.tabstops.TabStopsPropertyDescri
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 public class MParagraph extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -80,32 +81,32 @@ public class MParagraph extends APropertyNode {
 		lineSpacingSize.setDescription("Line spacing size.");
 		desc.add(lineSpacingSize);
 
-		IntegerPropertyDescriptor firstLineIdent = new IntegerPropertyDescriptor(
+		PixelPropertyDescriptor firstLineIdent = new PixelPropertyDescriptor(
 				JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT, "First Line Indent");
 		firstLineIdent.setDescription("First line identation size in pixel.");
 		desc.add(firstLineIdent);
 
-		IntegerPropertyDescriptor leftIdent = new IntegerPropertyDescriptor(JRBaseParagraph.PROPERTY_LEFT_INDENT,
+		PixelPropertyDescriptor leftIdent = new PixelPropertyDescriptor(JRBaseParagraph.PROPERTY_LEFT_INDENT,
 				"Left Indent");
 		leftIdent.setDescription("Left identation size in pixel.");
 		desc.add(leftIdent);
 
-		IntegerPropertyDescriptor rightIdent = new IntegerPropertyDescriptor(JRBaseParagraph.PROPERTY_RIGHT_INDENT,
+		PixelPropertyDescriptor rightIdent = new PixelPropertyDescriptor(JRBaseParagraph.PROPERTY_RIGHT_INDENT,
 				"Right Indent");
 		rightIdent.setDescription("Right identation size in pixel.");
 		desc.add(rightIdent);
 
-		IntegerPropertyDescriptor spacingBefore = new IntegerPropertyDescriptor(JRBaseParagraph.PROPERTY_SPACING_BEFORE,
+		PixelPropertyDescriptor spacingBefore = new PixelPropertyDescriptor(JRBaseParagraph.PROPERTY_SPACING_BEFORE,
 				"Spacing Before");
 		spacingBefore.setDescription("Spacing before paragraph in pixel.");
 		desc.add(spacingBefore);
 
-		IntegerPropertyDescriptor spacingAfter = new IntegerPropertyDescriptor(JRBaseParagraph.PROPERTY_SPACING_AFTER,
+		PixelPropertyDescriptor spacingAfter = new PixelPropertyDescriptor(JRBaseParagraph.PROPERTY_SPACING_AFTER,
 				"Spacing After");
 		spacingAfter.setDescription("Spacing after paragraph in pixel.");
 		desc.add(spacingAfter);
 
-		IntegerPropertyDescriptor tabStopWidth = new IntegerPropertyDescriptor(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH,
+		PixelPropertyDescriptor tabStopWidth = new PixelPropertyDescriptor(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH,
 				"Tab Stop Width");
 		tabStopWidth.setDescription("Tab stop width in pixel.");
 		desc.add(tabStopWidth);

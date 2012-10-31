@@ -62,9 +62,9 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -373,24 +373,24 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(keyD);
 
 		// bounds
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT,
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT,
 				Messages.common_height);
 		heightD.setCategory(Messages.common_size);
 		heightD.setDescription(Messages.MGraphicElement_height_description);
 		desc.add(heightD);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH,
+		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH,
 				Messages.MGraphicElement_width);
 		widthD.setCategory(Messages.common_size);
 		widthD.setDescription(Messages.MGraphicElement_width_description);
 		desc.add(widthD);
 
-		IntegerPropertyDescriptor xD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_X, Messages.common_left);
+		PixelPropertyDescriptor xD = new PixelPropertyDescriptor(JRBaseElement.PROPERTY_X, Messages.common_left);
 		xD.setCategory(Messages.MGraphicElement_location_category);
 		xD.setDescription(Messages.MGraphicElement_left_description);
 		desc.add(xD);
 
-		IntegerPropertyDescriptor yD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_Y, Messages.common_top);
+		PixelPropertyDescriptor yD = new PixelPropertyDescriptor(JRDesignElement.PROPERTY_Y, Messages.common_top);
 		yD.setCategory(Messages.MGraphicElement_location_category);
 		yD.setDescription(Messages.MGraphicElement_top_description);
 		desc.add(yD);
