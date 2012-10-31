@@ -1,7 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl;
 
@@ -32,8 +29,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl#getMethodInvocations <em>Method Invocations</em>}</li>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl#getObjectExpression <em>Object Expression</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl#getMethodInvocations <em>Method Invocations</em>}</li>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl#getArrayIndexes <em>Array Indexes</em>}</li>
  * </ul>
  * </p>
@@ -43,16 +40,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class MethodsExpressionImpl extends JasperReportsExpressionImpl implements MethodsExpression
 {
   /**
-   * The cached value of the '{@link #getMethodInvocations() <em>Method Invocations</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMethodInvocations()
-   * @generated
-   * @ordered
-   */
-  protected EList<MethodInvocation> methodInvocations;
-
-  /**
    * The cached value of the '{@link #getObjectExpression() <em>Object Expression</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -61,6 +48,16 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
    * @ordered
    */
   protected JasperReportsExpression objectExpression;
+
+  /**
+   * The cached value of the '{@link #getMethodInvocations() <em>Method Invocations</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMethodInvocations()
+   * @generated
+   * @ordered
+   */
+  protected EList<MethodInvocation> methodInvocations;
 
   /**
    * The cached value of the '{@link #getArrayIndexes() <em>Array Indexes</em>}' containment reference list.
@@ -91,20 +88,6 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
   protected EClass eStaticClass()
   {
     return JavaJRExpressionPackage.Literals.METHODS_EXPRESSION;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EList<MethodInvocation> getMethodInvocations()
-  {
-    if (methodInvocations == null)
-    {
-      methodInvocations = new EObjectContainmentEList<MethodInvocation>(MethodInvocation.class, this, JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS);
-    }
-    return methodInvocations;
   }
 
   /**
@@ -160,6 +143,20 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<MethodInvocation> getMethodInvocations()
+  {
+    if (methodInvocations == null)
+    {
+      methodInvocations = new EObjectContainmentEList<MethodInvocation>(MethodInvocation.class, this, JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS);
+    }
+    return methodInvocations;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EList<JasperReportsExpression> getArrayIndexes()
   {
     if (arrayIndexes == null)
@@ -179,10 +176,10 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
   {
     switch (featureID)
     {
-      case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
-        return ((InternalEList<?>)getMethodInvocations()).basicRemove(otherEnd, msgs);
       case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
         return basicSetObjectExpression(null, msgs);
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
+        return ((InternalEList<?>)getMethodInvocations()).basicRemove(otherEnd, msgs);
       case JavaJRExpressionPackage.METHODS_EXPRESSION__ARRAY_INDEXES:
         return ((InternalEList<?>)getArrayIndexes()).basicRemove(otherEnd, msgs);
     }
@@ -199,10 +196,10 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
   {
     switch (featureID)
     {
-      case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
-        return getMethodInvocations();
       case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
         return getObjectExpression();
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
+        return getMethodInvocations();
       case JavaJRExpressionPackage.METHODS_EXPRESSION__ARRAY_INDEXES:
         return getArrayIndexes();
     }
@@ -220,12 +217,12 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
   {
     switch (featureID)
     {
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
+        setObjectExpression((JasperReportsExpression)newValue);
+        return;
       case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
         getMethodInvocations().clear();
         getMethodInvocations().addAll((Collection<? extends MethodInvocation>)newValue);
-        return;
-      case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
-        setObjectExpression((JasperReportsExpression)newValue);
         return;
       case JavaJRExpressionPackage.METHODS_EXPRESSION__ARRAY_INDEXES:
         getArrayIndexes().clear();
@@ -245,11 +242,11 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
   {
     switch (featureID)
     {
-      case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
-        getMethodInvocations().clear();
-        return;
       case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
         setObjectExpression((JasperReportsExpression)null);
+        return;
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
+        getMethodInvocations().clear();
         return;
       case JavaJRExpressionPackage.METHODS_EXPRESSION__ARRAY_INDEXES:
         getArrayIndexes().clear();
@@ -268,10 +265,10 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
   {
     switch (featureID)
     {
-      case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
-        return methodInvocations != null && !methodInvocations.isEmpty();
       case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
         return objectExpression != null;
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
+        return methodInvocations != null && !methodInvocations.isEmpty();
       case JavaJRExpressionPackage.METHODS_EXPRESSION__ARRAY_INDEXES:
         return arrayIndexes != null && !arrayIndexes.isEmpty();
     }

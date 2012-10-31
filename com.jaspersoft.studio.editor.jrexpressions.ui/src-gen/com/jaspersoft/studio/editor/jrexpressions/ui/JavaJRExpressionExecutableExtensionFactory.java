@@ -8,6 +8,8 @@ import org.osgi.framework.Bundle;
 
 import com.google.inject.Injector;
 
+import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+
 /**
  * This class was generated. Customizations should only happen in a newly
  * introduced subclass. 
@@ -16,12 +18,12 @@ public class JavaJRExpressionExecutableExtensionFactory extends AbstractGuiceAwa
 
 	@Override
 	protected Bundle getBundle() {
-		return com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator.getInstance().getBundle();
+		return JRExpressionsActivator.getInstance().getBundle();
 	}
 	
 	@Override
 	protected Injector getInjector() {
-		return com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator.getInstance().getInjector("com.jaspersoft.studio.editor.jrexpressions.JavaJRExpression");
+		return JRExpressionsActivator.getInstance().getInjector(JRExpressionsActivator.COM_JASPERSOFT_STUDIO_EDITOR_JREXPRESSIONS_JAVAJREXPRESSION);
 	}
 	
 }

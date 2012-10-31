@@ -1,7 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression;
 
@@ -666,22 +663,22 @@ public interface JavaJRExpressionPackage extends EPackage
   int METHODS_EXPRESSION = 18;
 
   /**
-   * The feature id for the '<em><b>Method Invocations</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int METHODS_EXPRESSION__METHOD_INVOCATIONS = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
    * The feature id for the '<em><b>Object Expression</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int METHODS_EXPRESSION__OBJECT_EXPRESSION = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 1;
+  int METHODS_EXPRESSION__OBJECT_EXPRESSION = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Method Invocations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int METHODS_EXPRESSION__METHOD_INVOCATIONS = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Array Indexes</b></em>' containment reference list.
@@ -1555,17 +1552,6 @@ public interface JavaJRExpressionPackage extends EPackage
   EClass getMethodsExpression();
 
   /**
-   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getMethodInvocations <em>Method Invocations</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Method Invocations</em>'.
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getMethodInvocations()
-   * @see #getMethodsExpression()
-   * @generated
-   */
-  EReference getMethodsExpression_MethodInvocations();
-
-  /**
    * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getObjectExpression <em>Object Expression</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1575,6 +1561,17 @@ public interface JavaJRExpressionPackage extends EPackage
    * @generated
    */
   EReference getMethodsExpression_ObjectExpression();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getMethodInvocations <em>Method Invocations</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Method Invocations</em>'.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getMethodInvocations()
+   * @see #getMethodsExpression()
+   * @generated
+   */
+  EReference getMethodsExpression_MethodInvocations();
 
   /**
    * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getArrayIndexes <em>Array Indexes</em>}'.
@@ -2299,20 +2296,20 @@ public interface JavaJRExpressionPackage extends EPackage
     EClass METHODS_EXPRESSION = eINSTANCE.getMethodsExpression();
 
     /**
-     * The meta object literal for the '<em><b>Method Invocations</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference METHODS_EXPRESSION__METHOD_INVOCATIONS = eINSTANCE.getMethodsExpression_MethodInvocations();
-
-    /**
      * The meta object literal for the '<em><b>Object Expression</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference METHODS_EXPRESSION__OBJECT_EXPRESSION = eINSTANCE.getMethodsExpression_ObjectExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Method Invocations</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference METHODS_EXPRESSION__METHOD_INVOCATIONS = eINSTANCE.getMethodsExpression_MethodInvocations();
 
     /**
      * The meta object literal for the '<em><b>Array Indexes</b></em>' containment reference list feature.

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<genmodel:GenModel xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.jaspersoft.studio.editor.jrexpressions/src-gen"
     editDirectory="/com.jaspersoft.studio.editor.jrexpressions.edit/src" editorDirectory="/com.jaspersoft.studio.editor.jrexpressions.editor/src"
     modelPluginID="com.jaspersoft.studio.editor.jrexpressions" forceOverwrite="true"
     modelName="JavaJRExpression" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="com.jaspersoft.studio.editor.jrexpressions.edit"
-    editorPluginID="com.jaspersoft.studio.editor.jrexpressions.editor" usedGenPackages="../../../../../../../org.eclipse.xtext.common.types/model/JavaVMTypes.genmodel#//types">
+    editorPluginID="com.jaspersoft.studio.editor.jrexpressions.editor" runtimeVersion="2.8"
+    usedGenPackages="../../../../../../../org.eclipse.xtext.common.types/model/JavaVMTypes.genmodel#//types">
   <genPackages prefix="JavaJRExpression" basePackage="com.jaspersoft.studio.editor.jrexpressions"
       disposableProviderFactory="true" ecorePackage="JavaJRExpression.ecore#/">
     <genClasses ecoreClass="JavaJRExpression.ecore#//JRExpressionModel">
@@ -73,8 +73,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//JRVariableObj/bracedIdentifier"/>
     </genClasses>
     <genClasses ecoreClass="JavaJRExpression.ecore#//MethodsExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//MethodsExpression/methodInvocations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//MethodsExpression/objectExpression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//MethodsExpression/methodInvocations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//MethodsExpression/arrayIndexes"/>
     </genClasses>
     <genClasses ecoreClass="JavaJRExpression.ecore#//IntLiteral">
