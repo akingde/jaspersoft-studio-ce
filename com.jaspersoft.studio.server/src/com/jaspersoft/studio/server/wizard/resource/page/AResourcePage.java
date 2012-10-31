@@ -29,6 +29,8 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -96,11 +98,11 @@ public abstract class AResourcePage extends WizardPage {
 		UIUtils.createSeparator(composite, 2);
 
 		UIUtils.createLabel(composite, Messages.AResourcePage_id);
-		Text tid = new Text(composite, SWT.BORDER);
+		final Text tid = new Text(composite, SWT.BORDER);
 		tid.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		UIUtils.createLabel(composite, Messages.AResourcePage_name);
-		Text tname = new Text(composite, SWT.BORDER);
+		final Text tname = new Text(composite, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		UIUtils.createLabel(composite, Messages.AResourcePage_description);
@@ -109,7 +111,7 @@ public abstract class AResourcePage extends WizardPage {
 		gd.minimumHeight = 100;
 		tdesc.setLayoutData(gd);
 
-		ResourceDescriptor rd = res.getValue();
+		final ResourceDescriptor rd = res.getValue();
 		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE),
 				PojoObservables.observeValue(rd, "parentFolder")); //$NON-NLS-1$
 
@@ -136,8 +138,16 @@ public abstract class AResourcePage extends WizardPage {
 				PojoObservables.observeValue(rd, "description")); //$NON-NLS-1$
 
 		tid.setEditable(rd.getIsNew());
-		if (rd.getIsNew())
+		if (rd.getIsNew()) {
 			rd.setLabel(rd.getName());
+			tid.addModifyListener(new ModifyListener() {
+
+				@Override
+				public void modifyText(ModifyEvent e) {
+					tname.setText(tid.getText());
+				}
+			});
+		}
 		bindingContext.updateTargets();
 		bindingContext.updateModels();
 	}
