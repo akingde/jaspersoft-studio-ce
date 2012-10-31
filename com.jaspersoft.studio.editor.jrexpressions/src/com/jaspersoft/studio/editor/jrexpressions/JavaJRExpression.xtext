@@ -60,12 +60,12 @@ UnaryExpressionNotPlusMinus returns JasperReportsExpression:
 
 PrimaryExpression returns JasperReportsExpression:
 	ParExpression
-	| (=>MethodsExpression)
 	| LiteralExpression 
-	| (=>ArrayCreator)
-	| (=>ObjectCreation)
+	| ArrayCreator 
+	| ObjectCreation
 	| (=>BaseJRExpression)	// Look for a base jrexpression, avoiding a sort of "dangling else problem". 
-						// MethodsExpression in fact uses BaseJRExpression resulting in potential ambiguity
+							// MethodsExpression in fact uses BaseJRExpression resulting in potential ambiguity
+	| MethodsExpression 
 	| {TypeClass} (type=Type | void?='void') '.' 'class' 
 	; 
 
@@ -87,9 +87,8 @@ JRVariableObj returns JasperReportsExpression:
 MethodsExpression returns JasperReportsExpression:
 	// arrayIndexes feature allows MethodExpression to support arrays
 	{MethodsExpression} 
-	((objectExpression=(BaseJRExpression | ObjectCreation)) | 
-		methodInvocations+=MethodInvocation) ('.' methodInvocations+=MethodInvocation)* 
-	('[' arrayIndexes+=IntLiteral ']')*
+	(methodInvocations+=MethodInvocation	('.' methodInvocations+=MethodInvocation)* |
+	objectExpression=BaseJRExpression ('.' methodInvocations+=MethodInvocation)+) ('[' arrayIndexes+=IntLiteral ']')*
 ;
 
 LiteralExpression returns JasperReportsExpression:

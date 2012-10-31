@@ -7,8 +7,6 @@ package com.jaspersoft.studio.editor.jrexpressions.services;
 import com.google.inject.Singleton;
 import com.google.inject.Inject;
 
-import java.util.List;
-
 import org.eclipse.xtext.*;
 import org.eclipse.xtext.service.GrammarProvider;
 import org.eclipse.xtext.service.AbstractElementFinder.*;
@@ -563,11 +561,11 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "PrimaryExpression");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final RuleCall cParExpressionParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
-		private final RuleCall cMethodsExpressionParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
-		private final RuleCall cLiteralExpressionParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
-		private final RuleCall cArrayCreatorParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
-		private final RuleCall cObjectCreationParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
-		private final RuleCall cBaseJRExpressionParserRuleCall_5 = (RuleCall)cAlternatives.eContents().get(5);
+		private final RuleCall cLiteralExpressionParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+		private final RuleCall cArrayCreatorParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
+		private final RuleCall cObjectCreationParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
+		private final RuleCall cBaseJRExpressionParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
+		private final RuleCall cMethodsExpressionParserRuleCall_5 = (RuleCall)cAlternatives.eContents().get(5);
 		private final Group cGroup_6 = (Group)cAlternatives.eContents().get(6);
 		private final Action cTypeClassAction_6_0 = (Action)cGroup_6.eContents().get(0);
 		private final Alternatives cAlternatives_6_1 = (Alternatives)cGroup_6.eContents().get(1);
@@ -581,33 +579,33 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 		//PrimaryExpression returns JasperReportsExpression:
 		//	ParExpression // Look for a base jrexpression, avoiding a sort of "dangling else problem". 
 		//	// MethodsExpression in fact uses BaseJRExpression resulting in potential ambiguity
-		//	| => MethodsExpression | LiteralExpression | => ArrayCreator | => ObjectCreation | => BaseJRExpression | {TypeClass}
-		//	(type=Type | void?="void") "." "class";
+		//	| LiteralExpression | ArrayCreator | ObjectCreation | => BaseJRExpression | MethodsExpression | {TypeClass} (type=Type
+		//	| void?="void") "." "class";
 		public ParserRule getRule() { return rule; }
 
 		//ParExpression // Look for a base jrexpression, avoiding a sort of "dangling else problem". 
 		//// MethodsExpression in fact uses BaseJRExpression resulting in potential ambiguity
-		//| => MethodsExpression | LiteralExpression | => ArrayCreator | => ObjectCreation | => BaseJRExpression | {TypeClass}
-		//(type=Type | void?="void") "." "class"
+		//| LiteralExpression | ArrayCreator | ObjectCreation | => BaseJRExpression | MethodsExpression | {TypeClass} (type=Type |
+		//void?="void") "." "class"
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//ParExpression
 		public RuleCall getParExpressionParserRuleCall_0() { return cParExpressionParserRuleCall_0; }
 
-		//=> MethodsExpression
-		public RuleCall getMethodsExpressionParserRuleCall_1() { return cMethodsExpressionParserRuleCall_1; }
-
 		//LiteralExpression
-		public RuleCall getLiteralExpressionParserRuleCall_2() { return cLiteralExpressionParserRuleCall_2; }
+		public RuleCall getLiteralExpressionParserRuleCall_1() { return cLiteralExpressionParserRuleCall_1; }
 
-		//=> ArrayCreator
-		public RuleCall getArrayCreatorParserRuleCall_3() { return cArrayCreatorParserRuleCall_3; }
+		//ArrayCreator
+		public RuleCall getArrayCreatorParserRuleCall_2() { return cArrayCreatorParserRuleCall_2; }
 
-		//=> ObjectCreation
-		public RuleCall getObjectCreationParserRuleCall_4() { return cObjectCreationParserRuleCall_4; }
+		//ObjectCreation
+		public RuleCall getObjectCreationParserRuleCall_3() { return cObjectCreationParserRuleCall_3; }
 
 		//=> BaseJRExpression
-		public RuleCall getBaseJRExpressionParserRuleCall_5() { return cBaseJRExpressionParserRuleCall_5; }
+		public RuleCall getBaseJRExpressionParserRuleCall_4() { return cBaseJRExpressionParserRuleCall_4; }
+
+		//MethodsExpression
+		public RuleCall getMethodsExpressionParserRuleCall_5() { return cMethodsExpressionParserRuleCall_5; }
 
 		//{TypeClass} (type=Type | void?="void") "." "class"
 		public Group getGroup_6() { return cGroup_6; }
@@ -750,83 +748,100 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Action cMethodsExpressionAction_0 = (Action)cGroup.eContents().get(0);
 		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
-		private final Assignment cObjectExpressionAssignment_1_0 = (Assignment)cAlternatives_1.eContents().get(0);
-		private final Alternatives cObjectExpressionAlternatives_1_0_0 = (Alternatives)cObjectExpressionAssignment_1_0.eContents().get(0);
-		private final RuleCall cObjectExpressionBaseJRExpressionParserRuleCall_1_0_0_0 = (RuleCall)cObjectExpressionAlternatives_1_0_0.eContents().get(0);
-		private final RuleCall cObjectExpressionObjectCreationParserRuleCall_1_0_0_1 = (RuleCall)cObjectExpressionAlternatives_1_0_0.eContents().get(1);
-		private final Assignment cMethodInvocationsAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
-		private final RuleCall cMethodInvocationsMethodInvocationParserRuleCall_1_1_0 = (RuleCall)cMethodInvocationsAssignment_1_1.eContents().get(0);
+		private final Group cGroup_1_0 = (Group)cAlternatives_1.eContents().get(0);
+		private final Assignment cMethodInvocationsAssignment_1_0_0 = (Assignment)cGroup_1_0.eContents().get(0);
+		private final RuleCall cMethodInvocationsMethodInvocationParserRuleCall_1_0_0_0 = (RuleCall)cMethodInvocationsAssignment_1_0_0.eContents().get(0);
+		private final Group cGroup_1_0_1 = (Group)cGroup_1_0.eContents().get(1);
+		private final Keyword cFullStopKeyword_1_0_1_0 = (Keyword)cGroup_1_0_1.eContents().get(0);
+		private final Assignment cMethodInvocationsAssignment_1_0_1_1 = (Assignment)cGroup_1_0_1.eContents().get(1);
+		private final RuleCall cMethodInvocationsMethodInvocationParserRuleCall_1_0_1_1_0 = (RuleCall)cMethodInvocationsAssignment_1_0_1_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cAlternatives_1.eContents().get(1);
+		private final Assignment cObjectExpressionAssignment_1_1_0 = (Assignment)cGroup_1_1.eContents().get(0);
+		private final RuleCall cObjectExpressionBaseJRExpressionParserRuleCall_1_1_0_0 = (RuleCall)cObjectExpressionAssignment_1_1_0.eContents().get(0);
+		private final Group cGroup_1_1_1 = (Group)cGroup_1_1.eContents().get(1);
+		private final Keyword cFullStopKeyword_1_1_1_0 = (Keyword)cGroup_1_1_1.eContents().get(0);
+		private final Assignment cMethodInvocationsAssignment_1_1_1_1 = (Assignment)cGroup_1_1_1.eContents().get(1);
+		private final RuleCall cMethodInvocationsMethodInvocationParserRuleCall_1_1_1_1_0 = (RuleCall)cMethodInvocationsAssignment_1_1_1_1.eContents().get(0);
 		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
-		private final Keyword cFullStopKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
-		private final Assignment cMethodInvocationsAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final RuleCall cMethodInvocationsMethodInvocationParserRuleCall_2_1_0 = (RuleCall)cMethodInvocationsAssignment_2_1.eContents().get(0);
-		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
-		private final Keyword cLeftSquareBracketKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
-		private final Assignment cArrayIndexesAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
-		private final RuleCall cArrayIndexesIntLiteralParserRuleCall_3_1_0 = (RuleCall)cArrayIndexesAssignment_3_1.eContents().get(0);
-		private final Keyword cRightSquareBracketKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
+		private final Keyword cLeftSquareBracketKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Assignment cArrayIndexesAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cArrayIndexesIntLiteralParserRuleCall_2_1_0 = (RuleCall)cArrayIndexesAssignment_2_1.eContents().get(0);
+		private final Keyword cRightSquareBracketKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
 		
 		//MethodsExpression returns JasperReportsExpression: // arrayIndexes feature allows MethodExpression to support arrays
-		//	{MethodsExpression} (objectExpression=(BaseJRExpression | ObjectCreation) | methodInvocations+=MethodInvocation) ("."
-		//	methodInvocations+=MethodInvocation)* ("[" arrayIndexes+=IntLiteral "]")*;
+		//	{MethodsExpression} (methodInvocations+=MethodInvocation ("." methodInvocations+=MethodInvocation)* |
+		//	objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+) ("[" arrayIndexes+=IntLiteral "]")*;
 		public ParserRule getRule() { return rule; }
 
 		//// arrayIndexes feature allows MethodExpression to support arrays
-		//{MethodsExpression} (objectExpression=(BaseJRExpression | ObjectCreation) | methodInvocations+=MethodInvocation) ("."
-		//methodInvocations+=MethodInvocation)* ("[" arrayIndexes+=IntLiteral "]")*
+		//{MethodsExpression} (methodInvocations+=MethodInvocation ("." methodInvocations+=MethodInvocation)* |
+		//objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+) ("[" arrayIndexes+=IntLiteral "]")*
 		public Group getGroup() { return cGroup; }
 
 		//// arrayIndexes feature allows MethodExpression to support arrays
 		//{MethodsExpression}
 		public Action getMethodsExpressionAction_0() { return cMethodsExpressionAction_0; }
 
-		//objectExpression=(BaseJRExpression | ObjectCreation) | methodInvocations+=MethodInvocation
+		//methodInvocations+=MethodInvocation ("." methodInvocations+=MethodInvocation)* | objectExpression=BaseJRExpression ("."
+		//methodInvocations+=MethodInvocation)+
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
-		//objectExpression=(BaseJRExpression | ObjectCreation)
-		public Assignment getObjectExpressionAssignment_1_0() { return cObjectExpressionAssignment_1_0; }
-
-		//BaseJRExpression | ObjectCreation
-		public Alternatives getObjectExpressionAlternatives_1_0_0() { return cObjectExpressionAlternatives_1_0_0; }
-
-		//BaseJRExpression
-		public RuleCall getObjectExpressionBaseJRExpressionParserRuleCall_1_0_0_0() { return cObjectExpressionBaseJRExpressionParserRuleCall_1_0_0_0; }
-
-		//ObjectCreation
-		public RuleCall getObjectExpressionObjectCreationParserRuleCall_1_0_0_1() { return cObjectExpressionObjectCreationParserRuleCall_1_0_0_1; }
+		//methodInvocations+=MethodInvocation ("." methodInvocations+=MethodInvocation)*
+		public Group getGroup_1_0() { return cGroup_1_0; }
 
 		//methodInvocations+=MethodInvocation
-		public Assignment getMethodInvocationsAssignment_1_1() { return cMethodInvocationsAssignment_1_1; }
+		public Assignment getMethodInvocationsAssignment_1_0_0() { return cMethodInvocationsAssignment_1_0_0; }
 
 		//MethodInvocation
-		public RuleCall getMethodInvocationsMethodInvocationParserRuleCall_1_1_0() { return cMethodInvocationsMethodInvocationParserRuleCall_1_1_0; }
+		public RuleCall getMethodInvocationsMethodInvocationParserRuleCall_1_0_0_0() { return cMethodInvocationsMethodInvocationParserRuleCall_1_0_0_0; }
 
 		//("." methodInvocations+=MethodInvocation)*
-		public Group getGroup_2() { return cGroup_2; }
+		public Group getGroup_1_0_1() { return cGroup_1_0_1; }
 
 		//"."
-		public Keyword getFullStopKeyword_2_0() { return cFullStopKeyword_2_0; }
+		public Keyword getFullStopKeyword_1_0_1_0() { return cFullStopKeyword_1_0_1_0; }
 
 		//methodInvocations+=MethodInvocation
-		public Assignment getMethodInvocationsAssignment_2_1() { return cMethodInvocationsAssignment_2_1; }
+		public Assignment getMethodInvocationsAssignment_1_0_1_1() { return cMethodInvocationsAssignment_1_0_1_1; }
 
 		//MethodInvocation
-		public RuleCall getMethodInvocationsMethodInvocationParserRuleCall_2_1_0() { return cMethodInvocationsMethodInvocationParserRuleCall_2_1_0; }
+		public RuleCall getMethodInvocationsMethodInvocationParserRuleCall_1_0_1_1_0() { return cMethodInvocationsMethodInvocationParserRuleCall_1_0_1_1_0; }
+
+		//objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//objectExpression=BaseJRExpression
+		public Assignment getObjectExpressionAssignment_1_1_0() { return cObjectExpressionAssignment_1_1_0; }
+
+		//BaseJRExpression
+		public RuleCall getObjectExpressionBaseJRExpressionParserRuleCall_1_1_0_0() { return cObjectExpressionBaseJRExpressionParserRuleCall_1_1_0_0; }
+
+		//("." methodInvocations+=MethodInvocation)+
+		public Group getGroup_1_1_1() { return cGroup_1_1_1; }
+
+		//"."
+		public Keyword getFullStopKeyword_1_1_1_0() { return cFullStopKeyword_1_1_1_0; }
+
+		//methodInvocations+=MethodInvocation
+		public Assignment getMethodInvocationsAssignment_1_1_1_1() { return cMethodInvocationsAssignment_1_1_1_1; }
+
+		//MethodInvocation
+		public RuleCall getMethodInvocationsMethodInvocationParserRuleCall_1_1_1_1_0() { return cMethodInvocationsMethodInvocationParserRuleCall_1_1_1_1_0; }
 
 		//("[" arrayIndexes+=IntLiteral "]")*
-		public Group getGroup_3() { return cGroup_3; }
+		public Group getGroup_2() { return cGroup_2; }
 
 		//"["
-		public Keyword getLeftSquareBracketKeyword_3_0() { return cLeftSquareBracketKeyword_3_0; }
+		public Keyword getLeftSquareBracketKeyword_2_0() { return cLeftSquareBracketKeyword_2_0; }
 
 		//arrayIndexes+=IntLiteral
-		public Assignment getArrayIndexesAssignment_3_1() { return cArrayIndexesAssignment_3_1; }
+		public Assignment getArrayIndexesAssignment_2_1() { return cArrayIndexesAssignment_2_1; }
 
 		//IntLiteral
-		public RuleCall getArrayIndexesIntLiteralParserRuleCall_3_1_0() { return cArrayIndexesIntLiteralParserRuleCall_3_1_0; }
+		public RuleCall getArrayIndexesIntLiteralParserRuleCall_2_1_0() { return cArrayIndexesIntLiteralParserRuleCall_2_1_0; }
 
 		//"]"
-		public Keyword getRightSquareBracketKeyword_3_2() { return cRightSquareBracketKeyword_3_2; }
+		public Keyword getRightSquareBracketKeyword_2_2() { return cRightSquareBracketKeyword_2_2; }
 	}
 
 	public class LiteralExpressionElements extends AbstractParserRuleElementFinder {
@@ -1835,36 +1850,19 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	private TerminalRule tBRACED_IDENTIFIER;
 	private TerminalRule tExpObjIdentifier;
 	
-	private final Grammar grammar;
+	private final GrammarProvider grammarProvider;
 
 	private TerminalsGrammarAccess gaTerminals;
 
 	@Inject
 	public JavaJRExpressionGrammarAccess(GrammarProvider grammarProvider,
 		TerminalsGrammarAccess gaTerminals) {
-		this.grammar = internalFindGrammar(grammarProvider);
+		this.grammarProvider = grammarProvider;
 		this.gaTerminals = gaTerminals;
 	}
 	
-	protected Grammar internalFindGrammar(GrammarProvider grammarProvider) {
-		Grammar grammar = grammarProvider.getGrammar(this);
-		while (grammar != null) {
-			if ("com.jaspersoft.studio.editor.jrexpressions.JavaJRExpression".equals(grammar.getName())) {
-				return grammar;
-			}
-			List<Grammar> grammars = grammar.getUsedGrammars();
-			if (!grammars.isEmpty()) {
-				grammar = grammars.iterator().next();
-			} else {
-				return null;
-			}
-		}
-		return grammar;
-	}
-	
-	
-	public Grammar getGrammar() {
-		return grammar;
+	public Grammar getGrammar() {	
+		return grammarProvider.getGrammar(this);
 	}
 	
 
@@ -2000,8 +1998,8 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	//PrimaryExpression returns JasperReportsExpression:
 	//	ParExpression // Look for a base jrexpression, avoiding a sort of "dangling else problem". 
 	//	// MethodsExpression in fact uses BaseJRExpression resulting in potential ambiguity
-	//	| => MethodsExpression | LiteralExpression | => ArrayCreator | => ObjectCreation | => BaseJRExpression | {TypeClass}
-	//	(type=Type | void?="void") "." "class";
+	//	| LiteralExpression | ArrayCreator | ObjectCreation | => BaseJRExpression | MethodsExpression | {TypeClass} (type=Type
+	//	| void?="void") "." "class";
 	public PrimaryExpressionElements getPrimaryExpressionAccess() {
 		return (pPrimaryExpression != null) ? pPrimaryExpression : (pPrimaryExpression = new PrimaryExpressionElements());
 	}
@@ -2051,8 +2049,8 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	}
 
 	//MethodsExpression returns JasperReportsExpression: // arrayIndexes feature allows MethodExpression to support arrays
-	//	{MethodsExpression} (objectExpression=(BaseJRExpression | ObjectCreation) | methodInvocations+=MethodInvocation) ("."
-	//	methodInvocations+=MethodInvocation)* ("[" arrayIndexes+=IntLiteral "]")*;
+	//	{MethodsExpression} (methodInvocations+=MethodInvocation ("." methodInvocations+=MethodInvocation)* |
+	//	objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+) ("[" arrayIndexes+=IntLiteral "]")*;
 	public MethodsExpressionElements getMethodsExpressionAccess() {
 		return (pMethodsExpression != null) ? pMethodsExpression : (pMethodsExpression = new MethodsExpressionElements());
 	}
