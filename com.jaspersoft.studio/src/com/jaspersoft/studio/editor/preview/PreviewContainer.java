@@ -268,7 +268,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			getLeftContainer().setEnabled(true);
 			leftToolbar.setEnabled(true);
 		}
-		isDirty = false;
+		isRunDirty = false;
 	}
 
 	public void showParameters(boolean showprm) {
@@ -287,6 +287,12 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return reportControler;
 	}
 
+	protected boolean isRunDirty = true;
+
+	public void setRunDirty(boolean isRunDirty) {
+		this.isRunDirty = isRunDirty;
+	}
+
 	public void setJasperDesign(final JasperReportsConfiguration jConfig) {
 		Display.getDefault().asyncExec(new Runnable() {
 
@@ -296,9 +302,9 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				getReportControler().setJrContext(jConfig);
 				setupDataAdapter();
 
-				if (isDirty() || getJasperPrint() == null)
+				if (isRunDirty || getJasperPrint() == null)
 					runReport(dataAdapterDesc);
-				isDirty = false;
+				isRunDirty = false;
 			}
 		});
 	}

@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.editor;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +62,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -158,8 +155,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 
 		public void setDirty(boolean dirty) {
-			if (!isRefresh)
+			if (!isRefresh) {
 				this.isDirty = dirty;
+				if (dirty)
+					isRunDirty = true;
+			}
 		}
 
 	}
