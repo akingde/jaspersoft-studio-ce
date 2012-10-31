@@ -341,6 +341,13 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		defaultsMap.put(JasperDesign.PROPERTY_IGNORE_PAGINATION, Boolean.FALSE);
 	}
 
+	
+	private void createDataset(JasperDesign jrDesign){
+		mDataset = new MDataset(this, (JRDesignDataset) jrDesign.getMainDataset());
+		mDataset.setJasperConfiguration(getJasperConfiguration());
+		setChildListener(mDataset);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -366,9 +373,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 
 		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET)) {
 			if (mDataset == null) {
-				mDataset = new MDataset(this, (JRDesignDataset) jrDesign.getMainDataset());
-				mDataset.setJasperConfiguration(getJasperConfiguration());
-				setChildListener(mDataset);
+				createDataset(jrDesign);
 			}
 			return mDataset;
 		}
@@ -416,7 +421,9 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			// to avoid duplication I remove it first
 			return (JRPropertiesMap) jrDesign.getPropertiesMap().cloneProperties();
 		}
-		return null;
+		if (mDataset == null) 
+			createDataset(jrDesign);
+		return mDataset.getPropertyValue(id);
 	}
 
 	/*
@@ -496,6 +503,11 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			for (int i = 0; i < names.length; i++)
 				jrDesign.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
 			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
+		} else {
+			if (mDataset == null) {
+				createDataset(jrDesign);
+			}
+			mDataset.setPropertyValue(id, value);
 		}
 	}
 
