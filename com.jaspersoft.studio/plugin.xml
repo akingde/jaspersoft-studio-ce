@@ -583,7 +583,7 @@
                afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Map"
-               image="icons/resources/map-16.png"
+               image="icons/map.png"
                label="%elementMap">
          </propertyTab>
        	 <propertyTab

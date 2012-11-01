@@ -525,7 +525,7 @@
          <propertySection
                class="com.jaspersoft.studio.components.map.property.MapDatasetSection"
                id="com.jaspersoft.studio.components.map.property.MapDatasetSection"
-               tab="com.jaspersoft.studio.editor.section.DATASET">
+               tab="com.jaspersoft.studio.components.map">
             <input
                   type="com.jaspersoft.studio.components.map.model.MMap">
             </input>
@@ -611,6 +611,13 @@
                id="com.jaspersoft.studio.components.cell"
                image="icons/cell-16.png"
                label="Cell">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Map"
+               category="element"
+               id="com.jaspersoft.studio.components.map"
+               image="icons/map-16.png"
+               label="Markers">
          </propertyTab>
       </propertyTabs>
    </extension>

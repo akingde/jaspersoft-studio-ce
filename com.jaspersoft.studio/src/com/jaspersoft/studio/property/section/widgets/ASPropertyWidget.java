@@ -92,6 +92,8 @@ public abstract class ASPropertyWidget {
 		IWorkbenchPage page = win.getActivePage();
 
 		IWorkbenchPart part = page.getActivePart();
+		if (part == null)
+			return null;
 		IWorkbenchPartSite site = part.getSite();
 		IActionBars actionBars = null;
 		if (site instanceof IEditorSite)
