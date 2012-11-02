@@ -371,9 +371,22 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			model2xml(version);
 		} else {
 			try { // just go thru the model, to look what happend with our markers
-				xml2model();
 				resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+				xml2model();
 			} catch (Exception e) {
+				if (e instanceof JRException && e.getCause() instanceof SAXParseException) {
+					SAXParseException se = (SAXParseException) e.getCause();
+					try {
+						// resource.deleteMarkers(JasperReportsBuilder.MARKER_TYPE, includeSubtypes, depth)
+						IMarker marker = resource.createMarker(JasperReportsBuilder.MARKER_TYPE);
+						marker.setAttribute(IMarker.MESSAGE, se.getMessage());
+						marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+						marker.setAttribute(IMarker.USER_EDITABLE, false);
+						marker.setAttribute(IMarker.LINE_NUMBER, se.getLineNumber());
+						marker.setAttribute(IMarker.CHAR_END, se.getColumnNumber());
+					} catch (CoreException ce) {
+					}
+				}
 				xmlEditor.doSave(monitor);
 				return;
 			}

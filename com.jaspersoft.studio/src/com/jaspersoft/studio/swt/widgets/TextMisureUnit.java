@@ -302,7 +302,7 @@ public class TextMisureUnit extends ASPropertyWidget {
 		if (unitsMap == null) {
 			CreateDefaultUnits();
 		}
-		insertField = new Text(parent, SWT.BORDER);
+		insertField = section.getWidgetFactory().createText(parent, "", SWT.NONE);
 		insertField.addFocusListener(new LostFocusListener());
 		insertField.addKeyListener(new KeyListener() {
 			@Override
