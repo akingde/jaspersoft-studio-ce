@@ -60,6 +60,9 @@ public class MapSection extends AbstractSection {
 		createWidget4Property(parent,
 				StandardMapComponent.PROPERTY_ZOOM_EXPRESSION);
 
+		createWidget4Property(parent,
+				StandardMapComponent.PROPERTY_LANGUAGE_EXPRESSION);
+
 		createWidget4Property(parent, StandardMapComponent.PROPERTY_MAP_TYPE);
 
 		createWidget4Property(parent, StandardMapComponent.PROPERTY_MAP_SCALE);

@@ -29,7 +29,6 @@ import net.sf.jasperreports.components.map.StandardMarkerDataset;
 import net.sf.jasperreports.components.map.type.MapImageTypeEnum;
 import net.sf.jasperreports.components.map.type.MapScaleEnum;
 import net.sf.jasperreports.components.map.type.MapTypeEnum;
-import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.component.ComponentKey;
@@ -167,6 +166,12 @@ public class MMap extends MGraphicElement {
 		zoomExprD.setDescription(Messages.MMap_zoom_description);
 		desc.add(zoomExprD);
 
+		JRExpressionPropertyDescriptor langExprD = new JRExpressionPropertyDescriptor(
+				StandardMapComponent.PROPERTY_LANGUAGE_EXPRESSION,
+				"Language Expression");
+		langExprD.setDescription("Language Expression");
+		desc.add(langExprD);
+
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
 				StandardMapComponent.PROPERTY_EVALUATION_TIME,
 				Messages.MMap_evaluation_time, EnumHelper.getEnumNames(
@@ -206,6 +211,7 @@ public class MMap extends MGraphicElement {
 		datasetRunD.setDescription("Marker Dataset Run");
 		desc.add(datasetRunD);
 
+		langExprD.setCategory(Messages.MMap_common_map_properties);
 		datasetRunD.setCategory(Messages.MMap_common_map_properties);
 		mapTypeD.setCategory(Messages.MMap_common_map_properties);
 		mapScaleD.setCategory(Messages.MMap_common_map_properties);
@@ -257,6 +263,8 @@ public class MMap extends MGraphicElement {
 		if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_GROUP))
 			return component.getEvaluationGroup();
 
+		if (id.equals(StandardMapComponent.PROPERTY_LANGUAGE_EXPRESSION))
+			return ExprUtil.getExpression(component.getLanguageExpression());
 		if (id.equals(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION))
 			return ExprUtil.getExpression(component.getLongitudeExpression());
 		if (id.equals(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION))
@@ -305,7 +313,9 @@ public class MMap extends MGraphicElement {
 		} else if (id.equals(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION)) {
 			component.setLatitudeExpression(ExprUtil.setValues(
 					component.getLatitudeExpression(), value, null));
-
+		} else if (id.equals(StandardMapComponent.PROPERTY_LANGUAGE_EXPRESSION)) {
+			component.setLanguageExpression(ExprUtil.setValues(
+					component.getLanguageExpression(), value, null));
 		} else if (id.equals(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION)) {
 			component.setZoomExpression(ExprUtil.setValues(
 					component.getZoomExpression(), value, null));
