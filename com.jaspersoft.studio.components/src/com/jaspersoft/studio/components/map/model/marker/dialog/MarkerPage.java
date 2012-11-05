@@ -171,7 +171,7 @@ public class MarkerPage extends WizardPage {
 
 		tableViewer = new TableViewer(table);
 		tableViewer.setContentProvider(new ListContentProvider());
-		tableViewer.setLabelProvider(new TPropertyLabelProvider());
+		tableViewer.setLabelProvider(new TMarkerLabelProvider());
 		// attachCellEditors(tableViewer, table);
 
 		TableColumn[] column = new TableColumn[3];
@@ -189,9 +189,9 @@ public class MarkerPage extends WizardPage {
 			column[i].pack();
 
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(60, true));
-		tlayout.addColumnData(new ColumnWeightData(20, true));
-		tlayout.addColumnData(new ColumnWeightData(20, true));
+		tlayout.addColumnData(new ColumnWeightData(40, true));
+		tlayout.addColumnData(new ColumnWeightData(35, true));
+		tlayout.addColumnData(new ColumnWeightData(35, true));
 		table.setLayout(tlayout);
 	}
 

@@ -177,7 +177,7 @@ public class JRPropertyDialog extends Dialog {
 				evalue.setExpression((JRDesignExpression) value.getValue());
 			} else {
 				buseexpr.setSelection(false);
-				tvalue.setText((String) value.getValue());
+				tvalue.setText(Misc.nvl((String) value.getValue()));
 			}
 		}
 	}

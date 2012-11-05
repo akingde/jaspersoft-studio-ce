@@ -21,6 +21,7 @@ package com.jaspersoft.studio.components.map.property;
 
 import net.sf.jasperreports.components.map.StandardMarkerDataset;
 
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -35,8 +36,10 @@ public class MapDatasetSection extends AbstractSection {
 
 		parent.setLayout(new GridLayout(2, false));
 
-		// createWidget4Property(parent,
-		// StandardTable.PROPERTY_WHEN_NO_DATA_TYPE);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		createWidget4Property(parent, StandardMarkerDataset.PROPERTY_MARKER,
+				false).getControl().setLayoutData(gd);
 
 		Composite group = getWidgetFactory().createSection(parent,
 				"Dataset Run", true, 2, 2);

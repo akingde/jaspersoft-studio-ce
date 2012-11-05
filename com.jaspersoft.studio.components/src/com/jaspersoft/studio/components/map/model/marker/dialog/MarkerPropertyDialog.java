@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.components.map.model.marker.dialog;
 
+import net.sf.jasperreports.components.map.StandardMarkerProperty;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -13,43 +14,43 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertiesList;
-import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.ModelUtils;
 
-public class PropertyDialog extends Dialog {
-	private PropertyDTO value;
+public class MarkerPropertyDialog extends Dialog {
+	private StandardMarkerProperty value;
 	private Composite vexp;
 	private Composite vcmp;
 	private StackLayout stackLayout;
 	private Text tvalue;
 	private Button buseexpr;
 	private WTextExpression evalue;
-	private Combo cprop;
+	private Text cprop;
+	private ExpressionContext expContext;
 
-	protected PropertyDialog(Shell parentShell) {
+	protected MarkerPropertyDialog(Shell parentShell) {
 		super(parentShell);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
+	 * @see
+	 * org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
+	 * .Shell)
 	 */
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Marker Dialog");
+		newShell.setText("Marker Property Dialog");
 	}
 
 	@Override
@@ -60,7 +61,9 @@ public class PropertyDialog extends Dialog {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
+	 * @see
+	 * org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets
+	 * .Composite)
 	 */
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
@@ -68,21 +71,14 @@ public class PropertyDialog extends Dialog {
 		Label label = new Label(composite, SWT.NONE);
 		label.setText("Property Name");
 
-		cprop = new Combo(composite, SWT.BORDER);
-		cprop.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-		cprop.setItems(PropertiesList.getPropertiesNames());
+		cprop = new Text(composite, SWT.BORDER);
+		cprop.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+				| GridData.HORIZONTAL_ALIGN_FILL));
 		cprop.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				String newtext = cprop.getText();
-				value.setProperty(newtext);
-				PropertyDTO dto = PropertiesList.getDTO(value.getProperty());
-				if (dto != null) {
-					value.setValue(dto.getDefValue());
-					tvalue.setText((String) dto.getDefValue());
-					buseexpr.setSelection(false);
-				}
+				value.setName(cprop.getText());
 			}
 		});
 
@@ -111,7 +107,7 @@ public class PropertyDialog extends Dialog {
 				stackLayout.topControl = buseexpr.getSelection() ? vexp : vcmp;
 				cmp.layout();
 				if (buseexpr.getSelection())
-					value.setValue(evalue.getExpression());
+					value.setValueExpression(evalue.getExpression());
 				else
 					value.setValue(tvalue.getText());
 			}
@@ -133,11 +129,12 @@ public class PropertyDialog extends Dialog {
 		label.setText("Value Expression");
 
 		evalue = new WTextExpression(composite, SWT.NONE, 1);
-		evalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+		evalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+				| GridData.HORIZONTAL_ALIGN_FILL));
 		evalue.addModifyListener(new ExpressionModifiedListener() {
 			@Override
 			public void expressionModified(ExpressionModifiedEvent event) {
-				value.setValue(evalue.getExpression());
+				value.setValueExpression(evalue.getExpression());
 			}
 		});
 
@@ -152,7 +149,8 @@ public class PropertyDialog extends Dialog {
 		label.setText("Value");
 
 		tvalue = new Text(composite, SWT.BORDER);
-		tvalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+		tvalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+				| GridData.HORIZONTAL_ALIGN_FILL));
 		tvalue.setText("< type value here >");
 		tvalue.addModifyListener(new ModifyListener() {
 
@@ -164,20 +162,23 @@ public class PropertyDialog extends Dialog {
 		return composite;
 	}
 
-	public void setValue(PropertyDTO value) {
+	public void setValue(StandardMarkerProperty value,
+			ExpressionContext expContext) {
 		this.value = value;
+		this.expContext = expContext;
 	}
 
-	private void fillValue(PropertyDTO value) {
-		evalue.setExpressionContext(ModelUtils.getElementExpressionContext(null, value.getPnode()));
-		cprop.setText(Misc.nvl(value.getProperty()));
+	private void fillValue(StandardMarkerProperty value) {
+		evalue.setExpressionContext(expContext);
+		cprop.setText(Misc.nvl(value.getName()));
 		if (value.getValue() != null) {
-			if (value.getValue() instanceof JRExpression) {
+			if (value.getValueExpression() instanceof JRExpression) {
 				buseexpr.setSelection(true);
-				evalue.setExpression((JRDesignExpression) value.getValue());
+				evalue.setExpression((JRDesignExpression) value
+						.getValueExpression());
 			} else {
 				buseexpr.setSelection(false);
-				tvalue.setText((String) value.getValue());
+				tvalue.setText(Misc.nvl(value.getValue()));
 			}
 		}
 	}
