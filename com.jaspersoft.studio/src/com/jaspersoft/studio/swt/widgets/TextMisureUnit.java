@@ -224,7 +224,7 @@ public class TextMisureUnit extends ASPropertyWidget {
 	private void updateValue() {
 		String text = insertField.getText();
 		String key = getMeasureUnit(text);
-		MeasureUnit defaultUnit = unitsMap.get(defaultValue);
+		MeasureUnit defaultUnit = unitsMap.get(Unit.getKeyFromAlias(defaultValue));
 		String value;
 		MeasureUnit unit;
 		if (key == null){
@@ -256,7 +256,7 @@ public class TextMisureUnit extends ASPropertyWidget {
 	 * @param value the value to set, must be in pixel
 	 */
 	public void setText(String value) {
-		MeasureUnit defaultMeasure = unitsMap.get(defaultValue);
+		MeasureUnit defaultMeasure = unitsMap.get(Unit.getKeyFromAlias(defaultValue));
 		double dValue = (new Unit(Double.parseDouble(value), Unit.PX)).getValue(defaultMeasure.getKeyName());
 		insertField.setBackground(null);
 		insertField.setText(truncateDouble(dValue,defaultMeasure.getPrecision()).concat(defaultMeasure.getUnitName()));
