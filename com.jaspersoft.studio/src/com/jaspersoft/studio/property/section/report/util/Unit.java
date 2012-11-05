@@ -25,6 +25,7 @@ package com.jaspersoft.studio.property.section.report.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -154,8 +155,33 @@ public class Unit {
 		return unitsArrays;
 	}
 	
+	/**
+	 * Given an alias return its value
+	 * @param aliasValue the alias
+	 * @return the key value, or null if the alias is not recognized
+	 */
 	public static String getKeyFromAlias(String aliasValue){
 		return alias.get(aliasValue);
+	}
+	
+	/**
+	 * Add a new alias to the map
+	 * @param aliasName the alias name
+	 * @param key the key corresponding to the alias
+	 */
+	public static void addAlias(String aliasName, String key){
+		alias.put(aliasName, key);
+	}
+	
+	/**
+	 * Return a list of all the alias
+	 * @return list of the alias names, useful for the autocomplete
+	 */
+	public static String[] getAliasList(){
+		ArrayList<String> result = new ArrayList<String>();
+		for(String key : alias.keySet())
+			result.add(key);
+		return result.toArray(new String[result.size()]);
 	}
 
 	public static String[][] getUnits2() {

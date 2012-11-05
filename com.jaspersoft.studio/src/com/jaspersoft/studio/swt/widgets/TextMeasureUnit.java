@@ -19,18 +19,30 @@ package com.jaspersoft.studio.swt.widgets;
 
 import java.util.HashMap;
 
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.jface.fieldassist.AutoCompleteField;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -48,14 +60,28 @@ import com.jaspersoft.studio.utils.UIUtils;
  * @author Orlandin Marco
  *
  */
-public class TextMisureUnit extends ASPropertyWidget {
-
+public class TextMeasureUnit extends ASPropertyWidget {
 
 	/**
 	 * Hash map the bind a measure unit, by its key, to a series of method 
 	 * to convert and handle that measure
 	 */
 	private static HashMap<String, MeasureUnit> unitsMap = null;
+	
+	/**
+	 * Property name used to save the measure unit in the jrxml
+	 */
+	protected static String LOCAL_MESURE_UNIT = "local_mesure_unit";
+	
+	/**
+	 * Ordered list of measure units supported
+	 */
+	private static MeasureUnit[] units;
+	
+	/**
+	 * String added to the autocomplete
+	 */
+	private static String[] autocompleteValues;
 
 	/**
 	 * The text field
@@ -66,17 +92,122 @@ public class TextMisureUnit extends ASPropertyWidget {
 	 * The key of the default measure unit
 	 */
 	private String defaultValue;
+	
+	/**
+	 * Popup menu shown to change the measure unit
+	 */
+	private Menu popUpMenu;
+	
+	/**
+	 * Key of the local measure unit
+	 */
+	private String localValue;
+	
+	/**
+	 * Set if use or not a local measure unit for every element
+	 */
+	private boolean isLocalPersistent = true;
+	
+	/**
+	 * Used to store the last text set into the Textfield, needed to prevent that 
+	 * the lost focus event do multiple update
+	 */
+	private String lastSetValue;
 
 	private class LostFocusListener implements FocusListener {
 
 		@Override
 		public void focusLost(FocusEvent e) {
-			updateValue();
+			//Focus lost, do the change only if the text is changed
+			if (!lastSetValue.equals(insertField.getText()))
+				updateValue();
 		}
 
 		@Override
 		public void focusGained(FocusEvent e) {}
 	}
+	
+	/**
+	 * Listener that handle the double click on the Text, made the contextual menu appears
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class MouseClickListener implements MouseListener{
+
+		@Override
+		public void mouseDoubleClick(MouseEvent e) {
+			String measureUnitAlias = insertField.getSelectionText().trim().toLowerCase();
+			String measureUnitName = Unit.getKeyFromAlias(measureUnitAlias);
+			if (measureUnitName != null){
+				openPopupMenu();
+			}
+		}
+
+		@Override
+		public void mouseDown(MouseEvent e) {}
+
+		@Override
+		public void mouseUp(MouseEvent e) {}
+		
+	}
+	
+	/**
+	 * Action to execute when a new measure unit is selected from a popup combo
+	 * @author Orlandin Marco
+	 *
+	 */
+  private class MenuAction implements SelectionListener{
+
+  	/**
+  	 * Key of the unit represented by this listener
+  	 */
+  	private String value;
+  	
+  	public MenuAction(String value){
+  		this.value = value;
+  	}
+  	
+  	/**
+  	 * When a new measure unit is selected a new local is set and the conversion is 
+  	 * done
+  	 */
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			String pixelValue = getText();
+			setLocalValue(value);
+			setText(pixelValue);
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {}
+  	
+  }
+  
+  /**
+   * Read the measure unit and hel to autocomplete
+   * @author Orlandin Marco
+   *
+   */
+  private class AutoCompleteMeasure extends TextContentAdapter{
+  	public String getControlContents(Control control) {
+  		String text = insertField.getText().trim().toLowerCase();
+  		String measureUnit = getMeasureUnit(text);
+  		if (insertField.getCaretPosition() == text.length() && measureUnit != null)
+  			return  measureUnit;
+  		else 
+  			return "";
+  	}
+  	
+  	public void setControlContents(Control control, String text,int cursorPosition) {
+  		String textField = insertField.getText().trim().toLowerCase();
+  		String key = getMeasureUnit(textField);
+  		String value = textField.substring(0, textField.indexOf(key));
+  		((Text) control).setText(value.concat(text));
+  		((Text) control).setSelection(cursorPosition, cursorPosition);
+  		
+  	}
+  }
+
 
 	/**
 	 * Class that offer the method to convert and handle a measure unit 
@@ -160,8 +291,23 @@ public class TextMisureUnit extends ASPropertyWidget {
 		}
 	}
 
-	public TextMisureUnit(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	
+	public TextMeasureUnit(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		this(parent, section, pDescriptor,true);
+	}
+	
+	/**
+	 * 
+	 * @param parent
+	 * @param section
+	 * @param pDescriptor
+	 * @param persistentLocal if the the local measure unit will be store into the jrxml and saved, otherwise the visualization will 
+	 * be reseted to the default measure unit everytime the element properties are shown.
+	 */
+	public TextMeasureUnit(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, boolean persistentLocal) {
 		super(parent, section, pDescriptor);
+		this.isLocalPersistent = persistentLocal;
+		localValue = getLocalValue();
 	}
 
 	/**
@@ -169,7 +315,7 @@ public class TextMisureUnit extends ASPropertyWidget {
 	 */
 	private void CreateDefaultUnits() {
 		unitsMap = new HashMap<String, MeasureUnit>();
-		MeasureUnit[] units = new MeasureUnit[5];
+		units = new MeasureUnit[5];
 		//Adding the measure unit for pixel
 		units[0] = new MeasureUnit(Unit.PX, "px",0);
 		unitsMap.put(Unit.PX, units[0]);
@@ -185,6 +331,8 @@ public class TextMisureUnit extends ASPropertyWidget {
 		//Adding the measure unit for meters
 		units[4] = new MeasureUnit(Unit.METER, "m",2);
 		unitsMap.put(Unit.METER, units[4]);
+		
+		autocompleteValues = new String[]{"centimeters","millimeters","inches","meters","pixels"};//Unit.getAliasList();
 	}
 	
 	/**
@@ -222,19 +370,20 @@ public class TextMisureUnit extends ASPropertyWidget {
 	 * is converted to pixel, and in the textbox is displayed as default type
 	 */
 	private void updateValue() {
-		String text = insertField.getText();
+		String text = insertField.getText().trim().toLowerCase();
 		String key = getMeasureUnit(text);
-		MeasureUnit defaultUnit = unitsMap.get(Unit.getKeyFromAlias(defaultValue));
+		MeasureUnit defaultUnit = getDefaultMeasure();
 		String value;
 		MeasureUnit unit;
 		if (key == null){
-			unit = unitsMap.get(Unit.getKeyFromAlias(defaultValue));
+			unit = defaultUnit;
 			value = text;
 		} else {
 			unit = unitsMap.get(Unit.getKeyFromAlias(key));
 			value = text.substring(0, text.indexOf(key));
 		}
 		if (unit != null) {
+			setLocalValue(unit.getKeyName());
 			String convertedValue = unit.doConversionFromThis(defaultUnit, value);
 			insertField.setText(convertedValue.concat(defaultUnit.getKeyName()));
 			try{
@@ -250,16 +399,28 @@ public class TextMisureUnit extends ASPropertyWidget {
 			insertField.setBackground(ColorConstants.red);
 		}
 	}
+	
+	/**
+	 * Return the default measure unit, that can be a local value if it's present
+	 * or the global default value
+	 * @return
+	 */
+	protected MeasureUnit getDefaultMeasure(){
+		if (localValue != null && unitsMap.containsKey(localValue))
+			return unitsMap.get(localValue);
+		else return	unitsMap.get(Unit.getKeyFromAlias(defaultValue));
+	}
 
 	/**
 	 * Set the value into the textfield, it's converted from pixel to the default measure unit
 	 * @param value the value to set, must be in pixel
 	 */
 	public void setText(String value) {
-		MeasureUnit defaultMeasure = unitsMap.get(Unit.getKeyFromAlias(defaultValue));
+		MeasureUnit defaultMeasure = getDefaultMeasure();
 		double dValue = (new Unit(Double.parseDouble(value), Unit.PX)).getValue(defaultMeasure.getKeyName());
 		insertField.setBackground(null);
-		insertField.setText(truncateDouble(dValue,defaultMeasure.getPrecision()).concat(defaultMeasure.getUnitName()));
+		insertField.setText(truncateDouble(dValue,defaultMeasure.getPrecision()).concat(" ".concat(defaultMeasure.getUnitName())));
+		lastSetValue = insertField.getText();
 	}
 
 	/**
@@ -296,6 +457,75 @@ public class TextMisureUnit extends ASPropertyWidget {
 			insertField.setLayoutData(rd);
 		}
 	}
+	
+
+	/**
+	 * Open the popoup menu inside the menumanger and place it under the combobox
+	 * 
+	 * @param menuManager
+	 */
+	protected void openPopupMenu() {
+		if (popUpMenu == null)
+			createPopupMenu();
+		if (!popUpMenu.isDisposed()) {
+			if (popUpMenu.isVisible()) {
+				popUpMenu.setVisible(false);
+			} else {
+				locatePopupMenu();
+				popUpMenu.setVisible(true);
+			}
+		}
+	}
+  
+  /**
+   * Set the menu in the right location
+   * @param menu
+   */
+  protected void locatePopupMenu() {
+      Rectangle r;
+      if (getControl() instanceof Composite) {
+          r = ((Composite) getControl()).getClientArea();
+      } else {
+          r = getControl().getBounds();
+          r.x = r.y = 0;
+      }
+      Point loc = getControl().toDisplay(r.x, r.y);
+      loc.y += r.height;
+      popUpMenu.setLocation(loc);
+  }
+  
+  /**
+   * Create the popup menu
+   */
+	protected void createPopupMenu() {
+		popUpMenu = new Menu(insertField);
+		// Add the new elements
+		for (int i=0; i<units.length; i++) {
+			MeasureUnit key = units[i];
+			MenuItem item = new MenuItem(popUpMenu, SWT.PUSH);
+			item.setText(key.getUnitName());
+			item.addSelectionListener(new MenuAction(key.getKeyName()));
+		}
+	}
+	
+	/**
+	 * Read from the jrelement the local value of the measure unit
+	 * @return the key of a local measure unit
+	 */
+	private String getLocalValue(){
+		Object node = section.getElement().getValue();
+		if ((node instanceof JRPropertiesHolder) && isLocalPersistent){
+			return ((JRPropertiesHolder)node).getPropertiesMap().getProperty(LOCAL_MESURE_UNIT.concat(pDescriptor.getId().toString()));
+		} else return null;
+	}
+	
+	private void setLocalValue(String newLocal){
+		localValue = newLocal;
+		Object node = section.getElement().getValue();
+		if ((node instanceof JRPropertiesHolder) && isLocalPersistent){
+			((JRPropertiesHolder)node).getPropertiesMap().setProperty(LOCAL_MESURE_UNIT.concat(pDescriptor.getId().toString()), newLocal);
+		}
+	}
 
 	@Override
 	protected void createComponent(Composite parent) {
@@ -306,16 +536,19 @@ public class TextMisureUnit extends ASPropertyWidget {
 		insertField.addFocusListener(new LostFocusListener());
 		insertField.addKeyListener(new KeyListener() {
 			@Override
-			public void keyReleased(KeyEvent e) {}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyReleased(KeyEvent e) {
 				if (e.keyCode == SWT.CR)
 					updateValue();
 			}
-		});
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
 
+			}
+		});
+		insertField.addMouseListener(new MouseClickListener());
 		insertField.setToolTipText(pDescriptor.getDescription());
+		new AutoCompleteField(insertField, new AutoCompleteMeasure(), autocompleteValues);
 		setWidth(parent, 10);
 	}
 
