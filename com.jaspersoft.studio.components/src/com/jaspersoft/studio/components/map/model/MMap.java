@@ -19,10 +19,12 @@
  */
 package com.jaspersoft.studio.components.map.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.map.MapComponent;
+import net.sf.jasperreports.components.map.Marker;
 import net.sf.jasperreports.components.map.MarkerDataset;
 import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.components.map.StandardMarkerDataset;
@@ -45,6 +47,8 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.map.MapNodeIconDescriptor;
 import com.jaspersoft.studio.components.map.messages.Messages;
+import com.jaspersoft.studio.components.map.model.marker.MarkerDescriptor;
+import com.jaspersoft.studio.components.map.model.marker.MarkersDTO;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
@@ -211,6 +215,12 @@ public class MMap extends MGraphicElement {
 		datasetRunD.setDescription("Marker Dataset Run");
 		desc.add(datasetRunD);
 
+		MarkerDescriptor markersD = new MarkerDescriptor(
+				StandardMarkerDataset.PROPERTY_MARKER, "Markers");
+		markersD.setDescription("Markers");
+		desc.add(markersD);
+
+		markersD.setCategory(Messages.MMap_common_map_properties);
 		langExprD.setCategory(Messages.MMap_common_map_properties);
 		datasetRunD.setCategory(Messages.MMap_common_map_properties);
 		mapTypeD.setCategory(Messages.MMap_common_map_properties);
@@ -243,6 +253,14 @@ public class MMap extends MGraphicElement {
 				.getComponent();
 		MarkerDataset markerdataset = component.getMarkerDataset();
 
+		if (id.equals(StandardMarkerDataset.PROPERTY_MARKER)) {
+			List<Marker> markers = null;
+			if (markerdataset != null)
+				markers = markerdataset.getMarkers();
+			if (markers == null)
+				markers = new ArrayList<Marker>();
+			return new MarkersDTO(markers, this);
+		}
 		if (id.equals(StandardMarkerDataset.PROPERTY_DATASET_RUN)) {
 			JRDatasetRun j = null;
 			if (markerdataset != null)
@@ -288,20 +306,31 @@ public class MMap extends MGraphicElement {
 		StandardMapComponent component = (StandardMapComponent) jrElement
 				.getComponent();
 
-		MarkerDataset markerdataset = component.getMarkerDataset();
-
+		StandardMarkerDataset markerdataset = (StandardMarkerDataset) component
+				.getMarkerDataset();
+		if (id.equals(StandardMarkerDataset.PROPERTY_MARKER)) {
+			if (value instanceof MarkersDTO) {
+				if (markerdataset == null) {
+					markerdataset = new StandardMarkerDataset();
+					component.setMarkerDataset(markerdataset);
+				}
+				markerdataset.getMarkers().clear();
+				MarkersDTO mdto = (MarkersDTO) value;
+				if (mdto.getMarkers() != null)
+					markerdataset.getMarkers().addAll(mdto.getMarkers());
+			}
+		}
 		if (id.equals(StandardMarkerDataset.PROPERTY_DATASET_RUN)) {
 			MDatasetRun mdr = (MDatasetRun) value;
 			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
-			StandardMarkerDataset sMarkerDataset = (StandardMarkerDataset) markerdataset;
-			if (sMarkerDataset == null) {
-				sMarkerDataset = new StandardMarkerDataset();
-				component.setMarkerDataset(sMarkerDataset);
+			if (markerdataset == null) {
+				markerdataset = new StandardMarkerDataset();
+				component.setMarkerDataset(markerdataset);
 			}
 			if (dr.getDatasetName() != null)
-				sMarkerDataset.setDatasetRun(dr);
+				markerdataset.setDatasetRun(dr);
 			else
-				sMarkerDataset.setDatasetRun(null);
+				markerdataset.setDatasetRun(null);
 		} else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME))
 			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper
 					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));

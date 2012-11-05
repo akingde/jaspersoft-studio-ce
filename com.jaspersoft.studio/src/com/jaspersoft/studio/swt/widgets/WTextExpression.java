@@ -88,7 +88,7 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	/** Number of lines for the text expression widget */
 	public static final int TEXT_LINE_NUMBERS = 3;
 
-	private static final String BUTTON_ICON_PATH = "icons/resources/expressionedit-16.png"; //$NON-NLS-1$
+	public static final String BUTTON_ICON_PATH = "icons/resources/expressionedit-16.png"; //$NON-NLS-1$
 	private int customTextLinesNumber = -1;
 	private ExpressionContext expContext;
 	private int oldpos = 0;
