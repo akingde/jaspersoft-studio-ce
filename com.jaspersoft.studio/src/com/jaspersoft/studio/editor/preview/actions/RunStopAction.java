@@ -48,7 +48,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.preview.PreviewContainer;
+import com.jaspersoft.studio.editor.preview.IRunReport;
+import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.messages.Messages;
 
 public class RunStopAction extends Action implements IMenuCreator {
@@ -56,9 +57,9 @@ public class RunStopAction extends Action implements IMenuCreator {
 	public static final String MODERUN_JIVE = "RUNJIVE";
 
 	public static final String ID = "PREVIEWRELOADACTION"; //$NON-NLS-1$
-	private PreviewContainer editor;
+	private PreviewJRPrint editor;
 
-	public RunStopAction(PreviewContainer editor) {
+	public RunStopAction(PreviewJRPrint editor) {
 		super();
 		this.editor = editor;
 		setId(ID);
@@ -76,7 +77,8 @@ public class RunStopAction extends Action implements IMenuCreator {
 
 	@Override
 	public void run() {
-		editor.runReport(null);
+		if (editor instanceof IRunReport)
+			((IRunReport) editor).runReport();
 	}
 
 	private Menu listMenu;
@@ -96,7 +98,8 @@ public class RunStopAction extends Action implements IMenuCreator {
 			public void widgetSelected(SelectionEvent e) {
 				MenuItem menuItem = (MenuItem) e.getSource();
 				menuItem.setSelection(true);
-				editor.setMode((String) menuItem.getData("run.key"));
+				if (editor instanceof IRunReport)
+					((IRunReport) editor).setMode((String) menuItem.getData("run.key"));
 				run();
 			}
 		};

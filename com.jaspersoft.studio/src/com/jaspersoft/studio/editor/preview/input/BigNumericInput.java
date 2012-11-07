@@ -185,6 +185,8 @@ public class BigNumericInput extends ADataInput {
 			return ((Short) n1).compareTo((Short) n2);
 		} else if (param.getValueClass().equals(Byte.class)) {
 			return ((Byte) n1).compareTo((Byte) n2);
+		} else if (param.getValueClass().equals(BigDecimal.class)) {
+			return ((BigDecimal) n1).compareTo((BigDecimal) n2);
 		}
 		return 0;
 	}
@@ -204,6 +206,8 @@ public class BigNumericInput extends ADataInput {
 			return new Short(number);
 		} else if (param.getValueClass().equals(Byte.class)) {
 			return new Byte(number);
+		} else if (param.getValueClass().equals(BigDecimal.class)) {
+			return new BigDecimal(number);
 		}
 		return null;
 	}

@@ -42,8 +42,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.ISaveablePart;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -65,7 +63,7 @@ import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunnable {
+public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunnable, IParametrable, IRunReport {
 
 	public PreviewContainer() {
 		super(true);
@@ -341,6 +339,11 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	public JiveViewer getJiveViewer() {
 		return jiveViewer;
+	}
+
+	@Override
+	public void runReport() {
+		runReport(null);
 	}
 
 }

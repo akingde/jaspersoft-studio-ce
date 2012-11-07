@@ -55,7 +55,9 @@ import org.eclipse.ui.part.MultiPageEditorSite;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
+import com.jaspersoft.studio.editor.preview.IParametrable;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
+import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
 import com.jaspersoft.studio.editor.preview.input.BigNumericInput;
 import com.jaspersoft.studio.editor.preview.input.BooleanInput;
@@ -221,7 +223,7 @@ public class ReportControler {
 		if (compiler != null && ((JRErrorHandler) compiler.getErrorHandler()).isHasErrors())
 			finishNotCompiledReport();
 		else
-			finishCompiledReport(pcontainer);
+			finishCompiledReport(c, prmInput, pcontainer);
 	}
 
 	private void finishNotCompiledReport() {
@@ -243,7 +245,7 @@ public class ReportControler {
 		});
 	}
 
-	private void finishCompiledReport(final PreviewContainer pcontainer) {
+	public static void finishCompiledReport(final Console c, final AVParameters prmInput, final PreviewJRPrint pcontainer) {
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
@@ -259,8 +261,8 @@ public class ReportControler {
 					prmInput.setFocus();
 					prmInput.setDirty(true);
 				}
-				if (pcontainer.isHideParameters())
-					pcontainer.showParameters(notprmfiled);
+				if (pcontainer.isHideParameters() && pcontainer instanceof IParametrable)
+					((IParametrable) pcontainer).showParameters(notprmfiled);
 			}
 		});
 	}
@@ -291,9 +293,8 @@ public class ReportControler {
 					JasperReport jasperReport = compileJasperDesign(file, jd);
 
 					if (jasperReport != null) {
-						if (!prmInput.checkFieldsFilled()) {
+						if (!prmInput.checkFieldsFilled())
 							return Status.CANCEL_STATUS;
-						}
 
 						setupDataAdapter(pcontainer);
 						if (pcontainer.getMode().equals(RunStopAction.MODERUN_JIVE)) {
@@ -312,7 +313,7 @@ public class ReportControler {
 						}
 					}
 				} catch (final Throwable e) {
-					showRunReport(pcontainer, e);
+					showRunReport(c, pcontainer, e);
 				} finally {
 					Thread.currentThread().setContextClassLoader(oldLoader);
 					monitor.done();
@@ -428,7 +429,7 @@ public class ReportControler {
 			pcontainer.setJasperPrint(stats, null);
 		} catch (Throwable e) {
 			handleFillException(e);
-			showRunReport(pcontainer, e);
+			showRunReport(c, pcontainer, e);
 		} finally {
 			pmonitor.done();
 		}
@@ -540,7 +541,7 @@ public class ReportControler {
 		});
 	}
 
-	private void showRunReport(final PreviewContainer pcontainer, final Throwable e) {
+	public static void showRunReport(Console c, final PreviewJRPrint pcontainer, final Throwable e) {
 		c.addError(e);
 		Display.getDefault().syncExec(new Runnable() {
 

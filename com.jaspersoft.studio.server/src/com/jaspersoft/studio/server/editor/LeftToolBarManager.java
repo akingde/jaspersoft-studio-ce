@@ -22,9 +22,6 @@ package com.jaspersoft.studio.server.editor;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.editor.preview.actions.ViewExecutionInfoAction;
-import com.jaspersoft.studio.editor.preview.actions.ViewParametersAction;
-
 public class LeftToolBarManager extends
 		com.jaspersoft.studio.editor.preview.toolbar.LeftToolBarManager {
 
@@ -32,18 +29,8 @@ public class LeftToolBarManager extends
 		super(container, parent);
 	}
 
-	private ViewParametersAction vprmAction;
-	private ViewExecutionInfoAction vexecAction;
-
 	protected void fillToolbar(IToolBarManager tbManager) {
-		ReportUnitEditor pvcont = (ReportUnitEditor) container;
-		if (vprmAction == null)
-			vprmAction = new ViewParametersAction(pvcont.getLeftContainer());
-		tbManager.add(vprmAction);
-
-		if (vexecAction == null)
-			vexecAction = new ViewExecutionInfoAction(pvcont);
-		tbManager.add(vexecAction);
+		LeftToolBarManager.addPin(container, tbManager);
 	}
 
 }

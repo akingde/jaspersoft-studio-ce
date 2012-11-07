@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.editor.preview.view.control;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,94 +26,19 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
-import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
-import com.jaspersoft.studio.editor.preview.view.APreview;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.ExpressionUtil;
-import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class VParameters extends APreview {
-
-	protected Composite composite;
-	protected ScrolledComposite scompo;
+public class VParameters extends AVParameters {
 
 	public VParameters(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
 	}
-
-	public void setFocus() {
-		for (Control c : composite.getChildren()) {
-			if ((c.getStyle() & SWT.NO_FOCUS) == 0) {
-				c.setFocus();
-				break;
-			}
-		}
-	}
-
-	@Override
-	protected Control createControl(final Composite parent) {
-		scompo = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
-		scompo.setExpandHorizontal(true);
-		scompo.setExpandVertical(true);
-		scompo.setAlwaysShowScrollBars(false);
-		scompo.setMinSize(parent.getSize());
-
-		composite = new Composite(scompo, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.marginWidth = 2;
-		layout.marginRight = 6;
-		layout.marginBottom = 20;
-		composite.setLayout(layout);
-		composite.setBackground(parent.getBackground());
-		composite.setBackgroundMode(SWT.INHERIT_FORCE);
-		scompo.setContent(composite);
-		composite.addControlListener(new ControlListener() {
-
-			@Override
-			public void controlResized(ControlEvent e) {
-				int w = scompo.getClientArea().width;
-				Point csize = composite.computeSize(w, SWT.DEFAULT, true);
-
-				composite.setSize(w, Math.max(csize.y, composite.getSize().y));
-				composite.layout();
-				scompo.setMinHeight(composite.getSize().y);
-
-				// setScrollbarMinHeight();
-			}
-
-			@Override
-			public void controlMoved(ControlEvent e) {
-
-			}
-		});
-		return scompo;
-	}
-
-	private void setScrollbarMinHeight() {
-		scompo.setMinHeight(composite.getSize().y + 10);
-	}
-
-	@Override
-	public void setEnabled(boolean enabled) {
-		scompo.setEnabled(enabled);
-	}
-
-	private boolean showEmptyParametersWarning = true;
 
 	public void createInputControls(List<JRParameter> prompts, Map<String, Object> params) {
 		this.params = params;
@@ -144,11 +68,6 @@ public class VParameters extends APreview {
 		showEmptyParametersWarning = false;
 	}
 
-	public void setDirty(boolean dirty) {
-		for (IDataInput di : incontrols.values())
-			di.setDirty(dirty);
-	}
-
 	public void setupDefaultValues() {
 		JRDataset mDataset = jContext.getJasperDesign().getMainDataset();
 		for (String pname : incontrols.keySet()) {
@@ -172,7 +91,7 @@ public class VParameters extends APreview {
 	}
 
 	private Map<String, Object> params;
-	private Map<String, IDataInput> incontrols = new HashMap<String, IDataInput>();
+
 	private List<JRParameter> prompts;
 
 	public boolean checkFieldsFilled() {
@@ -201,31 +120,13 @@ public class VParameters extends APreview {
 			if (in.isForType(pres.getValueClass())) {
 				in = in.getInstance();
 				incontrols.put(p.getName(), in);
-				if (!first) {
-					Label lblsep = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL | SWT.SHADOW_NONE);
-					lblsep.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-				}
-				if (!in.isLabeled()) {
-					Label lbl = new Label(sectionClient, SWT.WRAP);
-					lbl.setText(Messages.getString(pres.getLabel()));
-					lbl.setToolTipText(createToolTip(pres));
-					GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-					gd.horizontalIndent = 8;
-					lbl.setLayoutData(gd);
-					UIUtils.setBold(lbl);
-				}
+				createVerticalSeprator(first);
+				createLabel(sectionClient, pres, in);
 				in.createInput(sectionClient, pres, params);
 				return true;
 			}
 		}
 		return false;
-	}
-
-	public static String createToolTip(IParameter param) {
-		String desc = Misc.nvl(param.getDescription());
-		if (param.getValueClass() != null)
-			desc += "\nThe class type is:" + param.getValueClass().getCanonicalName();
-		return desc;
 	}
 
 }

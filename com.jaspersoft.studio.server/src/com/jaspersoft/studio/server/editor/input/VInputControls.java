@@ -26,23 +26,18 @@ package com.jaspersoft.studio.server.editor.input;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
-import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.control.AVParameters;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
 import com.jaspersoft.studio.server.editor.input.query.QueryInput;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class VInputControls extends APreview {
+public class VInputControls extends AVParameters {
 
 	public static List<IDataInput> inputs = new ArrayList<IDataInput>();
 	static {
@@ -52,32 +47,10 @@ public class VInputControls extends APreview {
 		inputs.add(new QueryInput());
 	}
 
-	protected Composite composite;
-	protected ScrolledComposite scompo;
 	private InputControlsManager icm;
 
 	public VInputControls(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
-	}
-
-	@Override
-	protected Control createControl(Composite parent) {
-		scompo = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
-		scompo.setExpandHorizontal(true);
-		scompo.setExpandVertical(true);
-		scompo.setMinWidth(100);
-
-		composite = new Composite(scompo, SWT.NONE);
-		composite.setLayout(new GridLayout(1, false));
-		composite.setBackground(parent.getBackground());
-
-		scompo.setContent(composite);
-		return scompo;
-	}
-
-	@Override
-	public void setEnabled(boolean enabled) {
-		scompo.setEnabled(enabled);
 	}
 
 	public void createInputControls(InputControlsManager icm) {
@@ -87,14 +60,30 @@ public class VInputControls extends APreview {
 		icm.getControls().clear();
 		for (Control c : composite.getChildren())
 			c.dispose();
-
+		boolean first = true;
 		for (ResourceDescriptor p : icm.getInputControls())
 			if (p.isVisible()) {
-				createInput(composite, p, icm);
+				try {
+					boolean created = createInput(composite, p, icm, first);
+					if (first && created)
+						first = false;
+				} catch (Exception e) {
+					if (!(e instanceof ClassNotFoundException))
+						e.printStackTrace();
+				}
 			}
 
-		scompo.setMinSize(composite.getSize());
 		composite.pack();
+		setScrollbarMinHeight();
+		if (showEmptyParametersWarning) {
+			setupDefaultValues();
+			setDirty(false);
+		}
+		showEmptyParametersWarning = false;
+	}
+
+	public void setupDefaultValues() {
+		// we should set default values
 	}
 
 	public boolean checkFieldsFilled() {
@@ -107,24 +96,23 @@ public class VInputControls extends APreview {
 		return true;
 	}
 
-	protected void createInput(Composite sectionClient, ResourceDescriptor p,
-			InputControlsManager icm) {
+	protected boolean createInput(Composite sectionClient,
+			ResourceDescriptor p, InputControlsManager icm, boolean first) {
 		PResourceDescriptor pres = new PResourceDescriptor(p, icm);
 		Class<?> vclass = pres.getValueClass();
 		if (vclass != null)
 			for (IDataInput in : inputs) {
 				if (in.isForType(vclass)) {
 					in = in.getInstance();
-					if (!in.isLabeled()) {
-						Label lbl = new Label(sectionClient, SWT.NONE);
-						lbl.setText(Messages.getString(pres.getLabel()));
-						lbl.setBackground(lbl.getParent().getBackground());
-					}
+					incontrols.put(p.getName(), in);
+					createVerticalSeprator(first);
+					createLabel(sectionClient, pres, in);
 					in.createInput(sectionClient, pres, icm.getParameters());
 					in.addChangeListener(icm.getPropertyChangeListener());
 					icm.getControls().add(in);
-					break;
+					return true;
 				}
 			}
+		return false;
 	}
 }

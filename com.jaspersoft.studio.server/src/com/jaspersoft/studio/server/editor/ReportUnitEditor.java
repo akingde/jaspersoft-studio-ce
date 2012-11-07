@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.server.editor;
 
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
@@ -26,18 +27,23 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 
+import com.jaspersoft.studio.editor.preview.IParametrable;
+import com.jaspersoft.studio.editor.preview.IRunReport;
 import com.jaspersoft.studio.editor.preview.MultiPageContainer;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.util.StringInput;
+import com.jaspersoft.studio.server.editor.action.RunStopAction;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.FileUtils;
 
-public class ReportUnitEditor extends PreviewJRPrint {
+public class ReportUnitEditor extends PreviewJRPrint implements IRunReport,
+		IParametrable {
 	public static final String ID = "com.jaspersoft.studio.server.editor.ReportUnitEditor";
 	private String reportUnitURI;
 
@@ -122,6 +128,15 @@ public class ReportUnitEditor extends PreviewJRPrint {
 		cleftcompo.setLayoutData(new GridData(GridData.FILL_BOTH));
 		cleftcompo.setLayout(new StackLayout());
 
+		Composite bottom = new Composite(leftComposite, SWT.NONE);
+		bottom.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
+		bottom.setLayout(new GridLayout(2, false));
+
+		ToolBar tb = new ToolBar(bottom, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
+		ToolBarManager tbm = new ToolBarManager(tb);
+		tbm.add(new RunStopAction(this));
+		tbm.update(true);
+
 		getLeftContainer().populate(cleftcompo,
 				getReportControler().createControls(cleftcompo, jrContext));
 		getLeftContainer().switchView(null, ReportRunControler.FORM_PARAMETERS);
@@ -168,5 +183,11 @@ public class ReportUnitEditor extends PreviewJRPrint {
 		if (reportControler == null)
 			reportControler = new ReportRunControler(this);
 		return reportControler;
+	}
+
+	@Override
+	public void setMode(String mode) {
+		// TODO Auto-generated method stub
+
 	}
 }

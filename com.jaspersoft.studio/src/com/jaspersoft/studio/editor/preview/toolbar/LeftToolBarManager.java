@@ -92,6 +92,10 @@ public class LeftToolBarManager extends ATopToolBarManager {
 			vexpAction = new ViewExporterAction(pvcont.getLeftContainer());
 		tbManager.add(vexpAction);
 
+		addPin(container, tbManager);
+	}
+
+	public static void addPin(final PreviewJRPrint container, IToolBarManager tbManager) {
 		ToolItemContribution titem = new ToolItemContribution("id", SWT.CHECK); //$NON-NLS-1$
 		tbManager.add(titem);
 

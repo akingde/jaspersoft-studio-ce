@@ -30,6 +30,9 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Composite;
@@ -41,6 +44,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.VSimpleErrorPreview;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
 import com.jaspersoft.studio.server.editor.input.VInputControls;
@@ -129,7 +133,13 @@ public class ReportRunControler {
 	private Statistics stats;
 
 	public void runReport() {
+		VSimpleErrorPreview errorView = pcontainer.getErrorView();
+		pcontainer.getRightContainer().switchView(null, errorView);
+		errorView
+				.setMessage(com.jaspersoft.studio.messages.Messages.ReportControler_generating);
+
 		c = pcontainer.getConsole();
+		c.showConsole();
 		c.clearConsole();
 		pcontainer.setJasperPrint(null, null);
 
@@ -139,76 +149,52 @@ public class ReportRunControler {
 
 		pcontainer.setNotRunning(false);
 
-		ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
-				.getDefault().getActiveShell());
-		try {
-			pm.run(true, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
-					try {
-						if (prmInput.checkFieldsFilled()) {
-							Map<String, FileContent> files = WSClientHelper
-									.runReportUnit(reportUnit,
-											icm.getParameters());
-							for (String key : files.keySet()) {
-								FileContent fc = (FileContent) files.get(key);
-								if (key.equals("jasperPrint")) { //$NON-NLS-1$
-									final File f = File.createTempFile(
-											"jrprint", ".jrprint"); //$NON-NLS-1$ //$NON-NLS-2$
-									f.deleteOnExit();
-									f.createNewFile();
-									FileOutputStream htmlFile = new FileOutputStream(
-											f);
-									htmlFile.write(fc.getData());
-									htmlFile.close();
+		Job job = new Job(
+				com.jaspersoft.studio.messages.Messages.PreviewEditor_preview_a
+						+ ": " + reportUnit + com.jaspersoft.studio.messages.Messages.PreviewEditor_preview_b) { //$NON-NLS-1$ 
 
-									Object obj = JRLoader.loadObject(f);
-									if (obj instanceof JasperPrint)
-										pcontainer.setJasperPrint(stats,
-												(JasperPrint) obj);
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					if (!prmInput.checkFieldsFilled())
+						return Status.CANCEL_STATUS;
 
-									break;
-								}
-							}
+					Map<String, FileContent> files = WSClientHelper
+							.runReportUnit(reportUnit, icm.getParameters());
+					for (String key : files.keySet()) {
+						FileContent fc = (FileContent) files.get(key);
+						if (key.equals("jasperPrint")) { //$NON-NLS-1$
+							final File f = File.createTempFile(
+									"jrprint", ".jrprint"); //$NON-NLS-1$ //$NON-NLS-2$
+							f.deleteOnExit();
+							f.createNewFile();
+							FileOutputStream htmlFile = new FileOutputStream(f);
+							htmlFile.write(fc.getData());
+							htmlFile.close();
+
+							Object obj = JRLoader.loadObject(f);
+							if (obj instanceof JasperPrint)
+								pcontainer.setJasperPrint(stats,
+										(JasperPrint) obj);
+
+							break;
 						}
-					} catch (Throwable e) {
-						throw new InvocationTargetException(e);
-					} finally {
-						monitor.done();
-						finishReport();
 					}
+				} catch (Throwable e) {
+					ReportControler.showRunReport(c, pcontainer, e);
+				} finally {
+					monitor.done();
+					finishReport();
 				}
+				return Status.OK_STATUS;
+			}
 
-			});
-		} catch (InvocationTargetException e) {
-			UIUtils.showError(e.getCause());
-		} catch (InterruptedException e) {
-			UIUtils.showError(e);
-		}
+		};
+		job.setPriority(Job.LONG);
+		job.schedule();
 	}
 
 	public void finishReport() {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			public void run() {
-				c.addMessage(Messages.ReportRunControler_statsend);
-				stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
-				c.addMessage(String.format(
-						Messages.ReportRunControler_totaltime,
-						(double) (stats
-								.getDuration(ReportControler.ST_REPORTEXECUTIONTIME) / 1000)));
-				pcontainer.setNotRunning(true);
-
-				boolean notprmfiled = !prmInput.checkFieldsFilled();
-				if (notprmfiled) {
-					c.addMessage(Messages.ReportRunControler_inputparamwarnmessage);
-					UIUtils.showWarning(Messages.ReportRunControler_inputparamwarnmessage);
-				}
-				pcontainer.showParameters(notprmfiled);
-				if (pcontainer.getJasperPrint() != null)
-					c.addMessage(String.format(Messages.ReportRunControler_numberofpages,
-							pcontainer.getJasperPrint().getPages().size()));
-			}
-		});
+		ReportControler.finishCompiledReport(c, prmInput, pcontainer);
 	}
 }
