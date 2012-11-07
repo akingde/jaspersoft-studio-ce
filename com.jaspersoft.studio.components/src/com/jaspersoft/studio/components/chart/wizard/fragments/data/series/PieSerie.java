@@ -31,9 +31,15 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class PieSerie implements ISeriesFactory<JRPieSeries> {
 
-	public Object createSerie() {
+	public JRDesignPieSeries createSerie() {
+		return createSerie(new JRDesignExpression("\"SERIE 1\""));
+	}
+
+	@Override
+	public JRDesignPieSeries createSerie(JRDesignExpression expr) {
 		JRDesignPieSeries f = new JRDesignPieSeries();
-		f.setKeyExpression(new JRDesignExpression());
+		f.setKeyExpression(expr);
+		f.setValueExpression(new JRDesignExpression("new Double(0)"));
 		return f;
 	}
 

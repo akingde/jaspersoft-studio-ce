@@ -26,6 +26,8 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.chart.model.dataset.MChartDataset;
 import com.jaspersoft.studio.components.chart.model.series.xyzseries.MXYZSeries;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.XyzSerie;
+
 /*
  * link nodes & together.
  * 
@@ -42,13 +44,14 @@ public class CreateXYZSeriesCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateXYZSeriesCommand(MChartDataset destNode, MXYZSeries srcNode, int newIndex) {
+	public CreateXYZSeriesCommand(MChartDataset destNode, MXYZSeries srcNode,
+			int newIndex) {
 		super();
 		this.jrElement = (JRDesignXyzSeries) srcNode.getValue();
 		this.jrDataset = (JRDesignXyzDataset) destNode.getValue();
@@ -61,7 +64,7 @@ public class CreateXYZSeriesCommand extends Command {
 	protected void createObject() {
 		if (jrElement == null) {
 			// here put a wizard
-			jrElement = new JRDesignXyzSeries();
+			jrElement = new XyzSerie().createSerie();
 		}
 	}
 

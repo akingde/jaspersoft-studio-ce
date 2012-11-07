@@ -26,6 +26,8 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.chart.model.dataset.MChartDataset;
 import com.jaspersoft.studio.components.chart.model.series.category.MCategorySeries;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.CategorySerie;
+
 /*
  * link nodes & together.
  * 
@@ -42,13 +44,14 @@ public class CreateCategorySeriesCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateCategorySeriesCommand(MChartDataset destNode, MCategorySeries srcNode, int newIndex) {
+	public CreateCategorySeriesCommand(MChartDataset destNode,
+			MCategorySeries srcNode, int newIndex) {
 		super();
 		this.jrElement = (JRDesignCategorySeries) srcNode.getValue();
 		this.jrDataset = (JRDesignCategoryDataset) destNode.getValue();
@@ -61,7 +64,7 @@ public class CreateCategorySeriesCommand extends Command {
 	protected void createObject() {
 		if (jrElement == null) {
 			// here put a wizard
-			jrElement = new JRDesignCategorySeries();
+			jrElement = new CategorySerie().createSerie();
 		}
 	}
 

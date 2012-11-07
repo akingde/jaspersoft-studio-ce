@@ -21,6 +21,9 @@ package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -28,6 +31,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -43,13 +47,15 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.ISeri
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
+import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
-public class SeriesDialog extends FormDialog implements IExpressionContextSetter{
+public class SeriesDialog extends FormDialog implements
+		IExpressionContextSetter {
 	private final class TLabelProvider extends LabelProvider implements
 			ITableLabelProvider {
 
@@ -86,7 +92,8 @@ public class SeriesDialog extends FormDialog implements IExpressionContextSetter
 
 		buildTable(mform.getForm().getBody());
 
-		Composite bGroup = new Composite(mform.getForm().getBody(), SWT.NONE);
+		final Composite bGroup = new Composite(mform.getForm().getBody(),
+				SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		bGroup.setBackground(mform.getForm().getBody().getBackground());
@@ -95,7 +102,15 @@ public class SeriesDialog extends FormDialog implements IExpressionContextSetter
 				new INewElement() {
 
 					public Object newElement(List<?> input, int pos) {
-						return serie.createSerie();
+						JRExpressionEditor wizard = new JRExpressionEditor();
+						wizard.setValue(new JRDesignExpression());
+						wizard.setExpressionContext(expContext);
+						WizardDialog dialog = new WizardDialog(bGroup
+								.getShell(), wizard);
+						dialog.create();
+						if (dialog.open() == Dialog.OK)
+							return serie.createSerie(wizard.getValue());
+						return null;
 					}
 
 				});
@@ -174,6 +189,6 @@ public class SeriesDialog extends FormDialog implements IExpressionContextSetter
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {
-		this.expContext=expContext;
+		this.expContext = expContext;
 	}
 }

@@ -23,11 +23,13 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.charts.JRCategorySeries;
 import net.sf.jasperreports.charts.design.JRDesignBar3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignBarPlot;
 import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
-import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
 import net.sf.jasperreports.charts.design.JRDesignDataRange;
+import net.sf.jasperreports.charts.design.JRDesignGanttDataset;
+import net.sf.jasperreports.charts.design.JRDesignGanttSeries;
 import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
 import net.sf.jasperreports.charts.design.JRDesignItemLabel;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
@@ -37,9 +39,16 @@ import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 import net.sf.jasperreports.charts.design.JRDesignPiePlot;
 import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
+import net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset;
+import net.sf.jasperreports.charts.design.JRDesignTimePeriodSeries;
+import net.sf.jasperreports.charts.design.JRDesignTimeSeries;
+import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
 import net.sf.jasperreports.charts.design.JRDesignValueDataset;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import net.sf.jasperreports.charts.design.JRDesignXyDataset;
+import net.sf.jasperreports.charts.design.JRDesignXySeries;
+import net.sf.jasperreports.charts.design.JRDesignXyzDataset;
+import net.sf.jasperreports.charts.design.JRDesignXyzSeries;
 import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.charts.type.ValueLocationEnum;
 import net.sf.jasperreports.engine.JRChart;
@@ -73,6 +82,13 @@ import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
 import com.jaspersoft.studio.components.chart.model.plot.PlotFactory;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.util.ChartHelper;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.CategorySerie;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.GanttSeries;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.PieSerie;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.TimePeriodSerie;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.TimeSerie;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.XySerie;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.XyzSerie;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -454,29 +470,35 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 
 		return super.getPropertyValue(id);
 	}
-	
-	
+
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignChart jrElement = (JRDesignChart) getValue();
-		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION)){
+		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION)) {
 			EdgeEnum position = jrElement.getTitlePositionValue();
-			return titlePositionD.getEnumValue(position != null ? position : EdgeEnum.TOP);
+			return titlePositionD.getEnumValue(position != null ? position
+					: EdgeEnum.TOP);
 		}
-		if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION)){
+		if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION)) {
 			EdgeEnum position = jrElement.getLegendPositionValue();
-			return legendPositionD.getEnumValue(position != null ? position : EdgeEnum.BOTTOM);
+			return legendPositionD.getEnumValue(position != null ? position
+					: EdgeEnum.BOTTOM);
 		}
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(JRStyleResolver.getTitleColor(jrElement));
+			return Colors.getSWTRGB4AWTGBColor(JRStyleResolver
+					.getTitleColor(jrElement));
 		if (id.equals(JRBaseChart.PROPERTY_SUBTITLE_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(JRStyleResolver.getSubtitleColor(jrElement));
+			return Colors.getSWTRGB4AWTGBColor(JRStyleResolver
+					.getSubtitleColor(jrElement));
 		if (id.equals(JRBaseChart.PROPERTY_LEGEND_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(JRStyleResolver.getLegendColor(jrElement));
+			return Colors.getSWTRGB4AWTGBColor(JRStyleResolver
+					.getLegendColor(jrElement));
 		if (id.equals(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(JRStyleResolver.getLegendBackgroundColor(jrElement));
+			return Colors.getSWTRGB4AWTGBColor(JRStyleResolver
+					.getLegendBackgroundColor(jrElement));
 		if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
-			return jrElement.getShowLegend() != null ? jrElement.getShowLegend() : true;
+			return jrElement.getShowLegend() != null ? jrElement
+					.getShowLegend() : true;
 		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
 			tFont = MFontUtil.getMFont(tFont, jrElement.getTitleFont(),
 					jrElement.getStyle(), this);
@@ -636,18 +658,10 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 						new JRDesignExpression(), "new Date()"));
 			jds.setSeriesExpression(new JRDesignExpression("\"CHANGE_ME\""));
 		} else if (jrChart.getDataset() instanceof JRDesignPieDataset) {
-			JRDesignPieSeries pieSeries = new JRDesignPieSeries();
-			pieSeries.setKeyExpression(new JRDesignExpression("\"CHANGE_ME\""));
-			pieSeries
-					.setValueExpression(new JRDesignExpression("new Double(0)"));
+			JRDesignPieSeries pieSeries = new PieSerie().createSerie();
 			((JRDesignPieDataset) jrChart.getDataset()).addPieSeries(pieSeries);
 		} else if (jrChart.getDataset() instanceof JRDesignCategoryDataset) {
-			JRDesignCategorySeries catSeries = new JRDesignCategorySeries();
-			catSeries.setSeriesExpression(new JRDesignExpression("\"SERIE1\""));
-			catSeries.setCategoryExpression(new JRDesignExpression(
-					"new Double(0)"));
-			catSeries
-					.setValueExpression(new JRDesignExpression("new Double(0)"));
+			JRCategorySeries catSeries = new CategorySerie().createSerie();
 			((JRDesignCategoryDataset) jrChart.getDataset())
 					.addCategorySeries(catSeries);
 		} else if (jrChart.getDataset() instanceof JRDesignValueDataset) {
@@ -655,24 +669,47 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 					.getDataset();
 			valueDataset.setValueExpression(new JRDesignExpression(
 					"\"CHANGE_ME\""));
+		} else if (jrChart.getDataset() instanceof JRDesignXyDataset) {
+			JRDesignXySeries series = new XySerie().createSerie();
+			((JRDesignXyDataset) jrChart.getDataset()).addXySeries(series);
+		} else if (jrChart.getDataset() instanceof JRDesignXyzDataset) {
+			JRDesignXyzSeries series = new XyzSerie().createSerie();
+			((JRDesignXyzDataset) jrChart.getDataset()).addXyzSeries(series);
+		} else if (jrChart.getDataset() instanceof JRDesignTimeSeriesDataset) {
+			JRDesignTimeSeries series = new TimeSerie().createSerie();
+			((JRDesignTimeSeriesDataset) jrChart.getDataset())
+					.addTimeSeries(series);
+		} else if (jrChart.getDataset() instanceof JRDesignTimePeriodDataset) {
+			JRDesignTimePeriodSeries series = new TimePeriodSerie()
+					.createSerie();
+			((JRDesignTimePeriodDataset) jrChart.getDataset())
+					.addTimePeriodSeries(series);
+		} else if (jrChart.getDataset() instanceof JRDesignGanttDataset) {
+			JRDesignGanttSeries series = new GanttSeries().createSerie();
+			((JRDesignGanttDataset) jrChart.getDataset())
+					.addGanttSeries(series);
 		}
 		// plot initialisation
 		JRChartPlot plot = jrChart.getPlot();
 		if (plot instanceof JRDesignBar3DPlot) {
 			JRDesignBar3DPlot jrPlot = (JRDesignBar3DPlot) plot;
-			if (jrPlot.getItemLabel() == null || !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
+			if (jrPlot.getItemLabel() == null
+					|| !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
 				jrPlot.setItemLabel(new JRDesignItemLabel(null, jrChart));
 		} else if (plot instanceof JRDesignPiePlot) {
 			JRDesignPiePlot jrPlot = (JRDesignPiePlot) plot;
-			if (jrPlot.getItemLabel() == null || !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
+			if (jrPlot.getItemLabel() == null
+					|| !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
 				jrPlot.setItemLabel(new JRDesignItemLabel(null, jrChart));
 		} else if (plot instanceof JRDesignPie3DPlot) {
 			JRDesignPie3DPlot jrPlot = (JRDesignPie3DPlot) plot;
-			if (jrPlot.getItemLabel() == null || !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
+			if (jrPlot.getItemLabel() == null
+					|| !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
 				jrPlot.setItemLabel(new JRDesignItemLabel(null, jrChart));
 		} else if (plot instanceof JRDesignBarPlot) {
 			JRDesignBarPlot jrPlot = (JRDesignBarPlot) plot;
-			if (jrPlot.getItemLabel() == null || !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
+			if (jrPlot.getItemLabel() == null
+					|| !(jrPlot.getItemLabel() instanceof JRDesignItemLabel))
 				jrPlot.setItemLabel(new JRDesignItemLabel(null, jrChart));
 		} else if (plot instanceof JRDesignThermometerPlot) {
 			JRDesignThermometerPlot tplot = (JRDesignThermometerPlot) plot;

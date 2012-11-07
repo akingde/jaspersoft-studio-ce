@@ -26,6 +26,8 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.chart.model.dataset.MChartDataset;
 import com.jaspersoft.studio.components.chart.model.series.gantt.MGanttSeries;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.GanttSeries;
+
 /*
  * link nodes & together.
  * 
@@ -42,13 +44,14 @@ public class CreateGanttSeriesCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateGanttSeriesCommand(MChartDataset destNode, MGanttSeries srcNode, int newIndex) {
+	public CreateGanttSeriesCommand(MChartDataset destNode,
+			MGanttSeries srcNode, int newIndex) {
 		super();
 		this.jrElement = (JRDesignGanttSeries) srcNode.getValue();
 		this.jrDataset = (JRDesignGanttDataset) destNode.getValue();
@@ -61,7 +64,7 @@ public class CreateGanttSeriesCommand extends Command {
 	protected void createObject() {
 		if (jrElement == null) {
 			// here put a wizard
-			jrElement = new JRDesignGanttSeries();
+			jrElement = new GanttSeries().createSerie();
 		}
 	}
 

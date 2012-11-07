@@ -31,9 +31,16 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class TimeSerie implements ISeriesFactory<JRTimeSeries> {
 
-	public Object createSerie() {
+	public JRDesignTimeSeries createSerie() {
+		return createSerie(new JRDesignExpression("\"SERIE 1\""));
+	}
+
+	@Override
+	public JRDesignTimeSeries createSerie(JRDesignExpression expr) {
 		JRDesignTimeSeries f = new JRDesignTimeSeries();
-		f.setSeriesExpression(new JRDesignExpression());
+		f.setSeriesExpression(expr);
+		f.setTimePeriodExpression(new JRDesignExpression("new Double(0)"));
+		f.setValueExpression(new JRDesignExpression("new Double(0)"));
 		return f;
 	}
 

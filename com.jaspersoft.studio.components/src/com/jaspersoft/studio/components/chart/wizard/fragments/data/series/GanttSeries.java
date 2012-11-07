@@ -31,9 +31,18 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class GanttSeries implements ISeriesFactory<JRGanttSeries> {
 
-	public Object createSerie() {
+	public JRDesignGanttSeries createSerie() {
+		return createSerie(new JRDesignExpression("\"SERIE 1\""));
+	}
+
+	@Override
+	public JRDesignGanttSeries createSerie(JRDesignExpression expr) {
 		JRDesignGanttSeries f = new JRDesignGanttSeries();
-		f.setSeriesExpression(new JRDesignExpression());
+		f.setSeriesExpression(expr);
+		f.setPercentExpression(new JRDesignExpression("new Double(0)"));
+		f.setStartDateExpression(new JRDesignExpression("new java.util.Date()"));
+		f.setEndDateExpression(new JRDesignExpression("new java.util.Date()"));
+		f.setTaskExpression(new JRDesignExpression("\"Task\""));
 		return f;
 	}
 

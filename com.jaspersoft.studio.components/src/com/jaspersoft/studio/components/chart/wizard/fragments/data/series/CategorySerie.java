@@ -31,9 +31,16 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 
-	public Object createSerie() {
+	public JRDesignCategorySeries createSerie() {
+		return createSerie(new JRDesignExpression("\"SERIE 1\""));
+	}
+
+	@Override
+	public JRDesignCategorySeries createSerie(JRDesignExpression expr) {
 		JRDesignCategorySeries f = new JRDesignCategorySeries();
-		f.setSeriesExpression(new JRDesignExpression());
+		f.setSeriesExpression(expr);
+		f.setCategoryExpression(new JRDesignExpression("new Double(0)"));
+		f.setValueExpression(new JRDesignExpression("new Double(0)"));
 		return f;
 	}
 

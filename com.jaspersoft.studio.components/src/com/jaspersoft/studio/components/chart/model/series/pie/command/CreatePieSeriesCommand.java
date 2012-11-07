@@ -26,6 +26,8 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.chart.model.dataset.MChartDataset;
 import com.jaspersoft.studio.components.chart.model.series.pie.MPieSeries;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.PieSerie;
+
 /*
  * link nodes & together.
  * 
@@ -42,13 +44,14 @@ public class CreatePieSeriesCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreatePieSeriesCommand(MChartDataset destNode, MPieSeries srcNode, int newIndex) {
+	public CreatePieSeriesCommand(MChartDataset destNode, MPieSeries srcNode,
+			int newIndex) {
 		super();
 		this.jrElement = (JRDesignPieSeries) srcNode.getValue();
 		this.jrDataset = (JRDesignPieDataset) destNode.getValue();
@@ -61,7 +64,7 @@ public class CreatePieSeriesCommand extends Command {
 	protected void createObject() {
 		if (jrElement == null) {
 			// here put a wizard
-			jrElement = new JRDesignPieSeries();
+			jrElement = new PieSerie().createSerie();
 		}
 	}
 

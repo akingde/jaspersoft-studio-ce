@@ -21,8 +21,12 @@ package com.jaspersoft.studio.components.chart.wizard.fragments.data.series;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+
 public interface ISeriesFactory<T> {
 	public Object createSerie();
+
+	public Object createSerie(JRDesignExpression expr);
 
 	public String getColumnText(Object element, int columnIndex);
 

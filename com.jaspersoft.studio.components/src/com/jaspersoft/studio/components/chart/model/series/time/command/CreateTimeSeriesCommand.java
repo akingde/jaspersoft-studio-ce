@@ -26,6 +26,8 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.chart.model.dataset.MChartDataset;
 import com.jaspersoft.studio.components.chart.model.series.time.MTimeSeries;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.TimeSerie;
+
 /*
  * link nodes & together.
  * 
@@ -42,13 +44,14 @@ public class CreateTimeSeriesCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateTimeSeriesCommand(MChartDataset destNode, MTimeSeries srcNode, int newIndex) {
+	public CreateTimeSeriesCommand(MChartDataset destNode, MTimeSeries srcNode,
+			int newIndex) {
 		super();
 		this.jrElement = (JRDesignTimeSeries) srcNode.getValue();
 		this.jrDataset = (JRDesignTimeSeriesDataset) destNode.getValue();
@@ -61,7 +64,7 @@ public class CreateTimeSeriesCommand extends Command {
 	protected void createObject() {
 		if (jrElement == null) {
 			// here put a wizard
-			jrElement = new JRDesignTimeSeries();
+			jrElement = new TimeSerie().createSerie();
 		}
 	}
 
