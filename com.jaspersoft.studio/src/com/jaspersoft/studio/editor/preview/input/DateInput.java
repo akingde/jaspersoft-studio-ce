@@ -218,7 +218,7 @@ public class DateInput extends ADataInput {
 			public void widgetSelected(SelectionEvent e) {
 				Date sdate = date.getSelection();
 				Date d = sdate != null ? new java.sql.Date(sdate.getTime()) : null;
-				updateModel(isNumeric ? d.getTime() : d);
+				updateModel(isNumeric && d != null ? d.getTime() : d);
 			}
 		};
 		date.addSelectionListener(listener);
