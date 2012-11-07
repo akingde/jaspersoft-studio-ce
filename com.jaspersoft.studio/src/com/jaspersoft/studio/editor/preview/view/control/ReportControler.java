@@ -72,6 +72,7 @@ import com.jaspersoft.studio.editor.preview.stats.RecordCountScriptletFactory;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
+import com.jaspersoft.studio.editor.preview.view.report.html.JiveViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
@@ -340,7 +341,10 @@ public class ReportControler {
 					Context.putContext(randomUUID.toString(), prm);
 
 					String url = JettyUtil.getURL(file, randomUUID.toString(), jrContext);
-					pcontainer.getJiveViewer().setURL(url);
+					JiveViewer jiveViewer = pcontainer.getJiveViewer();
+					jiveViewer.setURL(url);
+					pcontainer.getRightContainer().switchView(null, jiveViewer);
+
 				} catch (Exception e) {
 					UIUtils.showError(e);
 				}
