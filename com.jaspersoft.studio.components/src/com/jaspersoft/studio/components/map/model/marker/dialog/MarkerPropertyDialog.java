@@ -162,13 +162,18 @@ public class MarkerPropertyDialog extends Dialog {
 		return composite;
 	}
 
+	private boolean isMandatory = false;
+
 	public void setValue(StandardMarkerProperty value,
-			ExpressionContext expContext) {
+			ExpressionContext expContext, boolean isMandatory) {
 		this.value = value;
 		this.expContext = expContext;
+		this.isMandatory = isMandatory;
 	}
 
 	private void fillValue(StandardMarkerProperty value) {
+		if (isMandatory)
+			cprop.setEnabled(false);
 		evalue.setExpressionContext(expContext);
 		cprop.setText(Misc.nvl(value.getName()));
 		if (value.getValue() != null) {

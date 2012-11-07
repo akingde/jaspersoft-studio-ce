@@ -21,6 +21,8 @@ package com.jaspersoft.studio.swt.widgets.table;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -51,6 +53,8 @@ public class DeleteButton {
 			if (!s.isEmpty()) {
 				List<?> inlist = (List<?>) tableViewer.getInput();
 				for (Object obj : s.toArray()) {
+					if (!canRemove(obj))
+						continue;
 					int ind = inlist.indexOf(obj);
 					inlist.remove(obj);
 					if (ind < inlist.size())
@@ -63,14 +67,41 @@ public class DeleteButton {
 		}
 	}
 
-	public void createDeleteButton(Composite composite, TableViewer tableViewer) {
+	protected boolean canRemove(Object obj) {
+		return true;
+	}
+
+	public void createDeleteButton(Composite composite, final TableViewer tableViewer) {
 		delB = new Button(composite, SWT.PUSH);
 		delB.setText(Messages.common_delete);
 		delB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delB.addSelectionListener(new DeleteListener(tableViewer));
+		setEnabledState(tableViewer);
+		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				setEnabledState(tableViewer);
+			}
+		});
 	}
 
 	public void setEnabled(boolean enabled) {
 		delB.setEnabled(enabled);
+	}
+
+	private void setEnabledState(final TableViewer tableViewer) {
+		boolean enable = true;
+		StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
+		if (!s.isEmpty()) {
+			for (Object obj : s.toArray()) {
+				if (!canRemove(obj)) {
+					enable = false;
+					break;
+				}
+			}
+		} else
+			enable = true;
+		delB.setEnabled(enable);
 	}
 }
