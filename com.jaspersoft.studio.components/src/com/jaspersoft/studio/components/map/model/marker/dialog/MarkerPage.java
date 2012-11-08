@@ -121,11 +121,8 @@ public class MarkerPage extends WizardPage {
 				new INewElement() {
 
 					public Object newElement(List<?> input, int pos) {
-						String name = "Marker 1"; //$NON-NLS-1$
-
 						ArrayList<MarkerProperty> props = new ArrayList<MarkerProperty>();
-						props.add(new StandardMarkerProperty(
-								Marker.PROPERTY_title, name, null));
+
 						props.add(new StandardMarkerProperty(
 								Marker.PROPERTY_latitude, "0", null));
 						props.add(new StandardMarkerProperty(
@@ -174,24 +171,21 @@ public class MarkerPage extends WizardPage {
 		tableViewer.setLabelProvider(new TMarkerLabelProvider());
 		// attachCellEditors(tableViewer, table);
 
-		TableColumn[] column = new TableColumn[3];
+		TableColumn[] column = new TableColumn[2];
+
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Title");
+		column[0].setText("Latitude");
 
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Latitude");
-
-		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText("Longitude");
+		column[1].setText("Longitude");
 
 		fillTable(table);
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
 
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(40, true));
-		tlayout.addColumnData(new ColumnWeightData(35, true));
-		tlayout.addColumnData(new ColumnWeightData(35, true));
+		tlayout.addColumnData(new ColumnWeightData(50, true));
+		tlayout.addColumnData(new ColumnWeightData(50, true));
 		table.setLayout(tlayout);
 	}
 

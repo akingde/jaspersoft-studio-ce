@@ -53,8 +53,7 @@ public class MarkerDialog extends Dialog {
 	}
 
 	private boolean isPropertyMandatory(MarkerProperty mprop) {
-		return mprop.getName().equals(Marker.PROPERTY_title)
-				|| mprop.getName().equals(Marker.PROPERTY_longitude)
+		return mprop.getName().equals(Marker.PROPERTY_longitude)
 				|| mprop.getName().equals(Marker.PROPERTY_latitude);
 	}
 
@@ -137,8 +136,7 @@ public class MarkerDialog extends Dialog {
 			protected boolean canRemove(Object obj) {
 				if (obj instanceof MarkerProperty) {
 					String name = ((MarkerProperty) obj).getName();
-					if (name.equals(Marker.PROPERTY_title)
-							|| name.equals(Marker.PROPERTY_longitude)
+					if (name.equals(Marker.PROPERTY_longitude)
 							|| name.equals(Marker.PROPERTY_latitude))
 						return false;
 				}

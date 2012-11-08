@@ -20,17 +20,12 @@ public class TMarkerLabelProvider extends LabelProvider implements
 		Marker dto = (Marker) element;
 		List<MarkerProperty> prp = dto.getProperties();
 		switch (columnIndex) {
-		case 0:
-			for (MarkerProperty mp : prp)
-				if (mp.getName().equals(Marker.PROPERTY_title))
-					return getValue(mp);
-			return "No Title";
-		case 2:
+		case 1:
 			for (MarkerProperty mp : prp)
 				if (mp.getName().equals(Marker.PROPERTY_longitude))
 					return getValue(mp);
 			return "null";
-		case 1:
+		case 0:
 			for (MarkerProperty mp : prp)
 				if (mp.getName().equals(Marker.PROPERTY_latitude))
 					return getValue(mp);
