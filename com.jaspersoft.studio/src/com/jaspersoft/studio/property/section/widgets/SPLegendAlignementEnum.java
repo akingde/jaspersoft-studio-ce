@@ -50,6 +50,7 @@ public class SPLegendAlignementEnum extends ASPropertyWidget{
 	public SPLegendAlignementEnum(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent,section,pDescriptor);
 		createComponent(parent, section, pDescriptor.getId().toString());
+		combo.setToolTipText(pDescriptor.getDescription());
 	}
 	
 	/**

@@ -120,8 +120,6 @@ public class ComboButton extends Viewer {
 	 */
 	private List<IOpenListener> openListeners = null;
 	
-	private ComboMenuViewer associatedMenu;
-
 	/**
 	 * Caches:
 	 */
@@ -150,9 +148,8 @@ public class ComboButton extends Viewer {
 	 * @param biggerString
 	 *          the most big string that will be represented, used to give the element a right size
 	 */
-	public ComboButton(Composite parent, int style, final String biggerString, ComboMenuViewer associatedMenu) {
+	public ComboButton(Composite parent, int style, final String biggerString) {
 		this.style = checkStyle(style, NORMAL, NORMAL, NO_TEXT, NO_IMAGE) | checkStyle(style, SWT.NONE, NO_ARROWS);
-		this.associatedMenu = associatedMenu;
 		this.control = new Canvas(parent, SWT.DOUBLE_BUFFERED) {
 			public Point computeSize(int wHint, int hHint, boolean changed) {
 				checkWidget();
@@ -251,7 +248,6 @@ public class ComboButton extends Viewer {
 			return;
 			setHovered(false);
 			//setPressed(true);
-			getControl().setFocus();
 			fireOpen();
 	}
 
@@ -653,7 +649,7 @@ public class ComboButton extends Viewer {
 		GC gc = new GC(getControl().getDisplay());
 		try {
 			gc.setFont(getControl().getFont());
-			size = gc.stringExtent(text.concat(" "));
+			size = gc.stringExtent(text.concat("  "));
 		} finally {
 			gc.dispose();
 		}

@@ -27,8 +27,8 @@ import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -184,14 +184,14 @@ public class ComboMenuViewer  {
      * @see #FILTERED
      */
     public ComboMenuViewer(Composite parent, int style, String biggerString) {
-        dropDownHandle = new ComboButton(parent, style, biggerString,this);
+        dropDownHandle = new ComboButton(parent, style, biggerString);
         listeners = new ArrayList<ComboItemAction>();
         dropDownHandle.addOpenListener(new IOpenListener() {
             public void open(OpenEvent event) {
                 openPopup();
             }
         });
-        dropDownHandle.getControl().addFocusListener(new FocusListener() {
+        /*dropDownHandle.getControl().addFocusListener(new FocusListener() {
 					
 					@Override
 					public void focusLost(FocusEvent e) {
@@ -200,7 +200,7 @@ public class ComboMenuViewer  {
 					
 					@Override
 					public void focusGained(FocusEvent e) {}
-				});
+				});*/
     }
     
     /**
@@ -335,6 +335,20 @@ public class ComboMenuViewer  {
      */
     protected Menu createPopupMenu() {
     		Menu newMenu = new Menu(getControl());
+    		newMenu.addMenuListener(new MenuListener() {
+					
+					@Override
+					public void menuShown(MenuEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void menuHidden(MenuEvent e) {
+		        dropDownHandle.getControl().getParent().getParent().setFocus();
+						
+					}
+				});
         refreshPopupMenu(newMenu);
         return newMenu;
     }
