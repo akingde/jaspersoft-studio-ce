@@ -127,9 +127,9 @@ public class MarkerPage extends WizardPage {
 						props.add(new StandardMarkerProperty(
 								Marker.PROPERTY_title, name, null));
 						props.add(new StandardMarkerProperty(
-								Marker.PROPERTY_longitude, "0", null));
-						props.add(new StandardMarkerProperty(
 								Marker.PROPERTY_latitude, "0", null));
+						props.add(new StandardMarkerProperty(
+								Marker.PROPERTY_longitude, "0", null));
 
 						StandardMarker v = new StandardMarker(props);
 						MarkerDialog dialog = new MarkerDialog(Display
@@ -179,10 +179,10 @@ public class MarkerPage extends WizardPage {
 		column[0].setText("Title");
 
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Longitude");
+		column[1].setText("Latitude");
 
 		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText("Latitude");
+		column[2].setText("Longitude");
 
 		fillTable(table);
 		for (int i = 0, n = column.length; i < n; i++)

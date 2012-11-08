@@ -7,22 +7,17 @@ import net.sf.jasperreports.components.map.Marker;
 import net.sf.jasperreports.components.map.MarkerProperty;
 import net.sf.jasperreports.components.map.StandardMarker;
 import net.sf.jasperreports.components.map.StandardMarkerProperty;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -30,10 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
-import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
 import com.jaspersoft.studio.swt.widgets.table.IEditElement;
@@ -183,23 +175,19 @@ public class MarkerDialog extends Dialog {
 		tableViewer.setContentProvider(new ListContentProvider());
 		tableViewer.setLabelProvider(new TMarkerPropertyLabelProvider());
 
-		TableColumn[] column = new TableColumn[3];
+		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
 		column[0].setText("Name");
 
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Value");
-
-		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText("Expression");
+		column[1].setText("Value/Expression");
 
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
 
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(30, true));
-		tlayout.addColumnData(new ColumnWeightData(35, true));
-		tlayout.addColumnData(new ColumnWeightData(35, true));
+		tlayout.addColumnData(new ColumnWeightData(45, true));
+		tlayout.addColumnData(new ColumnWeightData(55, true));
 		table.setLayout(tlayout);
 	}
 
@@ -218,37 +206,4 @@ public class MarkerDialog extends Dialog {
 		tableViewer.setInput(mprops);
 	}
 
-	private void addExpression(Composite composite, final String property) {
-		Button btnEditExpression = new Button(composite, SWT.FLAT);
-		btnEditExpression.setImage(JaspersoftStudioPlugin
-				.getImage(WTextExpression.BUTTON_ICON_PATH));
-		btnEditExpression.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				for (MarkerProperty smp : value.getProperties()) {
-					if (smp.getName().equals(property)) {
-						JRDesignExpression expression = (JRDesignExpression) smp
-								.getValueExpression();
-
-						JRExpressionEditor wizard = new JRExpressionEditor();
-						wizard.setValue(expression);
-						wizard.setExpressionContext(expContext);
-						WizardDialog dialog = new WizardDialog(Display
-								.getDefault().getActiveShell(), wizard);
-						dialog.create();
-						if (dialog.open() == Dialog.OK) {
-							JRDesignExpression value = wizard.getValue();
-							((StandardMarkerProperty) smp)
-									.setValueExpression(value);
-						}
-
-					}
-				}
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
-		});
-	}
 }

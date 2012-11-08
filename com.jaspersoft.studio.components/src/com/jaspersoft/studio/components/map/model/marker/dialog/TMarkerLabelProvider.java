@@ -25,12 +25,12 @@ public class TMarkerLabelProvider extends LabelProvider implements
 				if (mp.getName().equals(Marker.PROPERTY_title))
 					return getValue(mp);
 			return "No Title";
-		case 1:
+		case 2:
 			for (MarkerProperty mp : prp)
 				if (mp.getName().equals(Marker.PROPERTY_longitude))
 					return getValue(mp);
 			return "null";
-		case 2:
+		case 1:
 			for (MarkerProperty mp : prp)
 				if (mp.getName().equals(Marker.PROPERTY_latitude))
 					return getValue(mp);
@@ -39,11 +39,12 @@ public class TMarkerLabelProvider extends LabelProvider implements
 		return ""; //$NON-NLS-1$
 	}
 
-	private String getValue(MarkerProperty mp) {
-		if (mp.getValue() != null)
-			return mp.getValue();
+	public static String getValue(MarkerProperty mp) {
 		if (mp.getValueExpression() != null)
 			return mp.getValueExpression().getText();
+		if (mp.getValue() != null)
+			return mp.getValue();
+
 		return "null";
 	}
 }

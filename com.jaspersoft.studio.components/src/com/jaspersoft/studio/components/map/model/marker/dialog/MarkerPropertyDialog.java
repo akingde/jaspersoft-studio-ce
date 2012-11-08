@@ -1,7 +1,6 @@
 package com.jaspersoft.studio.components.map.model.marker.dialog;
 
 import net.sf.jasperreports.components.map.StandardMarkerProperty;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -88,28 +87,23 @@ public class MarkerPropertyDialog extends Dialog {
 		gd.horizontalSpan = 2;
 		buseexpr.setLayoutData(gd);
 
-		final Composite cmp = new Composite(composite, SWT.NONE);
+		stackComposite = new Composite(composite, SWT.NONE);
 		stackLayout = new StackLayout();
-		cmp.setLayout(stackLayout);
+		stackComposite.setLayout(stackLayout);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
-		cmp.setLayoutData(gd);
+		stackComposite.setLayoutData(gd);
 
-		vcmp = createValueControl(cmp);
+		vcmp = createValueControl(stackComposite);
 
-		vexp = createValueExpressionControl(cmp);
+		vexp = createValueExpressionControl(stackComposite);
 
 		stackLayout.topControl = vcmp;
 		buseexpr.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				stackLayout.topControl = buseexpr.getSelection() ? vexp : vcmp;
-				cmp.layout();
-				if (buseexpr.getSelection())
-					value.setValueExpression(evalue.getExpression());
-				else
-					value.setValue(tvalue.getText());
+				changeValueOrExpression();
 			}
 
 			@Override
@@ -134,7 +128,8 @@ public class MarkerPropertyDialog extends Dialog {
 		evalue.addModifyListener(new ExpressionModifiedListener() {
 			@Override
 			public void expressionModified(ExpressionModifiedEvent event) {
-				value.setValueExpression(evalue.getExpression());
+				if (!isRefresh)
+					value.setValueExpression(evalue.getExpression());
 			}
 		});
 
@@ -156,7 +151,10 @@ public class MarkerPropertyDialog extends Dialog {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				value.setValue(tvalue.getText());
+				if (!isRefresh) {
+					value.setValue(tvalue.getText());
+					value.setValueExpression(null);
+				}
 			}
 		});
 		return composite;
@@ -171,21 +169,34 @@ public class MarkerPropertyDialog extends Dialog {
 		this.isMandatory = isMandatory;
 	}
 
+	private boolean isRefresh = false;
+	private Composite stackComposite;
+
 	private void fillValue(StandardMarkerProperty value) {
+		isRefresh = true;
 		if (isMandatory)
 			cprop.setEnabled(false);
 		evalue.setExpressionContext(expContext);
 		cprop.setText(Misc.nvl(value.getName()));
-		if (value.getValue() != null) {
-			if (value.getValueExpression() instanceof JRExpression) {
-				buseexpr.setSelection(true);
-				evalue.setExpression((JRDesignExpression) value
-						.getValueExpression());
-			} else {
-				buseexpr.setSelection(false);
-				tvalue.setText(Misc.nvl(value.getValue()));
-			}
+		if (value.getValueExpression() != null) {
+			buseexpr.setSelection(true);
+			evalue.setExpression((JRDesignExpression) value
+					.getValueExpression());
+		} else {
+			buseexpr.setSelection(false);
+			tvalue.setText(Misc.nvl(value.getValue()));
 		}
+		changeValueOrExpression();
+		isRefresh = false;
+	}
+
+	public void changeValueOrExpression() {
+		stackLayout.topControl = buseexpr.getSelection() ? vexp : vcmp;
+		stackComposite.layout();
+		if (buseexpr.getSelection())
+			value.setValueExpression(evalue.getExpression());
+		else
+			value.setValue(tvalue.getText());
 	}
 
 }

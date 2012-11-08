@@ -16,21 +16,13 @@ public class TMarkerPropertyLabelProvider extends LabelProvider implements
 	}
 
 	public String getColumnText(Object element, int columnIndex) {
-		MarkerProperty dto = (MarkerProperty) element;
+		MarkerProperty mp = (MarkerProperty) element;
 		switch (columnIndex) {
 		case 0:
-			return Misc.nvl(dto.getName());
+			return Misc.nvl(mp.getName());
 		case 1:
-			return Misc.nvl(dto.getValue());
-		case 2:
-			return getValue(dto);
+			return TMarkerLabelProvider.getValue(mp);
 		}
 		return ""; //$NON-NLS-1$
-	}
-
-	private String getValue(MarkerProperty mp) {
-		if (mp.getValueExpression() != null)
-			return Misc.nvl(mp.getValueExpression().getText());
-		return "";
 	}
 }
