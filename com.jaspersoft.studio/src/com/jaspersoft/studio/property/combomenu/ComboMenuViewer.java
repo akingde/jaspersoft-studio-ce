@@ -306,6 +306,14 @@ public class ComboMenuViewer  {
     protected void openPopup() {
     	if (popupMenu == null) {
     		popupMenu = createPopupMenu();
+    		/*popupMenu.addListener(SWT., new Listener() {
+					
+					@Override
+					public void handleEvent(Event event) {
+						System.out.println("bubba2");
+						
+					}
+				});*/
       }
       if (popupMenu != null) {
       	openPopupMenu(popupMenu);

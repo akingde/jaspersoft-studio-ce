@@ -64,31 +64,64 @@ public class ComboButton extends Viewer {
     protected static final int ARROWS_SPACING = 2;
     protected static final String ELLIPSIS = "..."; //$NON-NLS-1$
 
+    /**
+     * Composite where the control will be placed
+     */
     private Composite control;
 
+    /**
+     * Style bit for the control
+     */
     private int style;
 
+    /**
+     * Text displayed in the combo button
+     */
     private String text = null;
 
+    /**
+     * Image displayed in the combo button
+     */
     private Image image = null;
 
+    /**
+     * Color of the text foreground
+     */
     private Color textForeground = null;
 
+    /**
+     * Color og the text background
+     */
     private Color textBackground = null;
 
+    /**
+     * Flag to check if the mouse pointer is over the control
+     */
     private boolean hovered = false;
 
+    /**
+     * Flag to check if the mouse pointer is out of the control
+     */
     private boolean pressed = false;
 
     private boolean forceFocus = false;
 
+    /**
+     * Size of the text
+     */
     private Point textSize = null;
 
+    /**
+     * Size of the image
+     */
     private Point imageSize = null;
 
+    /**
+     * Listeners associated to the click event
+     */
     private List<IOpenListener> openListeners = null;
 
-    /*
+    /**
      * Caches:
      */
     private Point cachedTextSize = null;
@@ -141,9 +174,6 @@ public class ComboButton extends Viewer {
                     if (imageSize.x != 0 && textSize.x != 0) {
                         width += IMAGE_TEXT_SPACING;
                     }
-//                    if (hasArrows && (imageSize.x != 0 || textSize.x != 0)) {
-//                        width += CONTENT_ARROW_SPACING;
-//                    }
                 }
 
                 int minHeight = MARGIN * 2 + Math.max(imageSize.y, textSize.y)
@@ -160,6 +190,11 @@ public class ComboButton extends Viewer {
         hookControl(control);
     }
 
+    /**
+     * Hook to the control the principal events: paint, mouse up, mouse enter and exit (for 
+     * hovering the control), key down, and focus in and focus out.
+     * @param control
+     */
     protected void hookControl(Control control) {
         Listener listener = new Listener() {
             public void handleEvent(Event event) {
@@ -172,12 +207,8 @@ public class ComboButton extends Viewer {
                     break;
                 case SWT.MouseUp:
                     if (event.button == 1)
-                    	handleMousePress();//handleMouseRelease();
+                    	handleMousePress();
                     break;
-               /*case SWT.MouseDown:
-                  if (event.button == 1)
-                      handleMousePress();
-                  break;*/
                 case SWT.MouseEnter:
                     handleMouseEnter();
                     break;
@@ -206,40 +237,61 @@ public class ComboButton extends Viewer {
         control.addListener(SWT.FocusOut, listener);
     }
 
+    /**
+     * Handle for the mouse press, if the menu is closed an open action 
+     * will be fired for every listener, otherwise it will be considered as 
+     * a focus out
+     */
     protected void handleMousePress() {
         if (!getControl().isEnabled())
             return;
-        setHovered(true);
-        setPressed(true);
-        getControl().setFocus();
-        fireOpen();
+        if (!pressed){
+	        setHovered(true);
+	        setPressed(true);
+	        getControl().setFocus();
+	        fireOpen();
+        } else handleFocusOut();
     }
 
+    /**
+     * When the mouse button is released the pressed state will be updated
+     */
     protected void handleMouseRelease() {
         if (!getControl().isEnabled())
             return;
         setPressed(false);
     }
 
-    
+    /**
+     * Color the control on mouse enter
+     */
     protected void handleMouseEnter() {
         if (!getControl().isEnabled())
             return;
         setHovered(true);
     }
 
+    /**
+     * decolor the control on mouse enter
+     */
     protected void handleMouseExit() {
         if (!getControl().isEnabled())
             return;
         setHovered(false);
     }
 
+    /**
+     * Refresh the control when focused
+     */
     protected void handleFocusIn() {
         if (!getControl().isEnabled())
             return;
         refreshControl();
     }
 
+    /**
+     * Refresh the control when unfocused
+     */
     protected void handleFocusOut() {
         if (!getControl().isEnabled())
             return;
@@ -247,17 +299,30 @@ public class ComboButton extends Viewer {
         refreshControl();
     }
 
+    /**
+     * Actually unused
+     * @param e
+     */
     protected void handleKeyPress(Event e) {
         if (!getControl().isEnabled())
             return;
     }
 
+    /**
+     * Add a new listener to run when the open action is 
+     * fired
+     * @param listener
+     */
     public void addOpenListener(IOpenListener listener) {
         if (openListeners == null)
             openListeners = new ArrayList<IOpenListener>();
         openListeners.add(listener);
     }
 
+    /**
+     * Remove a previous added listener
+     * @param listener
+     */
     public void removeOpenListener(IOpenListener listener) {
         if (openListeners == null)
             return;
@@ -276,22 +341,40 @@ public class ComboButton extends Viewer {
         }
     }
 
+    /**
+     * Fire the open on all the listeners
+     */
     protected void fireOpen() {
         fireOpen(new OpenEvent(this, getSelection()));
     }
 
+    /**
+     * Return the Canvas where the control i painted
+     */
     public Control getControl() {
         return control;
     }
 
+    /**
+     * Return the style
+     * @return
+     */
     protected int getStyle() {
         return style;
     }
 
+    /**
+     * Return the text into the control
+     * @return
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Return the image into the button
+     * @return
+     */
     public Image getImage() {
         return image;
     }
