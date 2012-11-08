@@ -1,21 +1,4 @@
-/*******************************************************************************
- * ---------------------------------------------------------------------
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com.
- * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
- * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
- * ---------------------------------------------------------------------
- ******************************************************************************/
-package com.jaspersoft.studio.editor.gef.decorator.pdf;
+package com.jaspersoft.studio.editor.gef.decorator.xls;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -33,6 +16,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.editor.action.xls.XLSAction;
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextDecoratorInterface;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation;
@@ -41,13 +25,12 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 
 /**
- * Draw the selected PDF 508 attributes on an element. it also provide an interface to became a text 
+ * Decorator for the XSL action, it also provide an interface to became a text 
  * contributor
- * 
  * @author Orlandin Marco
- * 
+ *
  */
-public class PDFDecorator implements IDecorator, TextDecoratorInterface {
+public class XLSDecorator implements IDecorator, TextDecoratorInterface {
 
 	/**
 	 * Left upper corner image
@@ -67,20 +50,29 @@ public class PDFDecorator implements IDecorator, TextDecoratorInterface {
 	/**
 	 * Color of the text
 	 */
-	private static Color JSS_TEXT_COLOR = new Color(195, 47, 193);
+	private static Color JSS_TEXT_COLOR = new Color(198, 29, 29);
+	
+	/**
+	 * Pair of id-value used by the decorator
+	 */
+	String[] tags;
+
 
 	/**
 	 * Constructor, load the images if the weren't loaded before
 	 */
-	public PDFDecorator() {
+	public XLSDecorator() {
 		if (startImageAwt == null || endImageAwt == null) {
-			startImageAwt = new javax.swing.ImageIcon(PDFDecorator.class.getResource("/icons/resources/corner1.png"));
-			endImageAwt = new javax.swing.ImageIcon(PDFDecorator.class.getResource("/icons/resources/corner2.png"));
+			startImageAwt = new javax.swing.ImageIcon(XLSDecorator.class.getResource("/icons/resources/corner1.png"));
+			endImageAwt = new javax.swing.ImageIcon(XLSDecorator.class.getResource("/icons/resources/corner2.png"));
 		}
+		tags = new String[] { XLSAction.FIT_COL_ID, "FitCol", XLSAction.FIT_ROW_ID, "FitRow", XLSAction.AUTOFILTER_ID,
+				"AutoFilter", XLSAction.BREAK_AFTER_ROW_ID, "BreakAfter", XLSAction.BREAK_BEFORE_ROW_ID, "BreakBefore",
+				XLSAction.CELL_HIDDEN_ID, "Hidden", XLSAction.CELL_LOCKED_ID, "Locked" };
 	}
 
 	/**
-	 * Print on the element it's selected pdf tags
+	 * Print on the element it's selected xsl tags
 	 */
 	@Override
 	public void paint(Graphics graphics, ComponentFigure fig) {
@@ -100,20 +92,14 @@ public class PDFDecorator implements IDecorator, TextDecoratorInterface {
 				boolean drawstart = false;
 				boolean drawend = false;
 
-				String[] tags = { "net.sf.jasperreports.export.pdf.tag.h1", "H1", "net.sf.jasperreports.export.pdf.tag.h2",
-						"H2", "net.sf.jasperreports.export.pdf.tag.h3", "H3", "net.sf.jasperreports.export.pdf.tag.table", "TBL",
-						"net.sf.jasperreports.export.pdf.tag.tr", "TR", "net.sf.jasperreports.export.pdf.tag.th", "TH",
-						"net.sf.jasperreports.export.pdf.tag.td", "TD" };
-
 				JRPropertiesMap v = fig.getJrElement().getPropertiesMap();
 				for (int i = 0; i < tags.length; i += 2) {
 					String prop = tags[i];
 					String label = tags[i + 1];
 					tagValue = v.getProperty(prop);
 					if (tagValue != null) {
-						if (tagValue.equals("full")) {
+						if (tagValue.equals("true")) {
 							drawstart = true;
-							drawend = true;
 							fullString += label + " ";
 						} else if (tagValue.equals("start")) {
 							drawstart = true;
@@ -219,22 +205,17 @@ public class PDFDecorator implements IDecorator, TextDecoratorInterface {
 		String fullString = "";
 		String endString = "";
 
-		String[] tags = { "net.sf.jasperreports.export.pdf.tag.h1", "H1", "net.sf.jasperreports.export.pdf.tag.h2",
-				"H2", "net.sf.jasperreports.export.pdf.tag.h3", "H3", "net.sf.jasperreports.export.pdf.tag.table", "TBL",
-				"net.sf.jasperreports.export.pdf.tag.tr", "TR", "net.sf.jasperreports.export.pdf.tag.th", "TH",
-				"net.sf.jasperreports.export.pdf.tag.td", "TD" };
-
 		for (int i = 0; i < tags.length; i += 2) {
 			String prop = tags[i];
 			String label = tags[i + 1];
 			tagValue = mapProperties.getProperty(prop);
 			if (tagValue != null) {
-				if (tagValue.equals("full")) {
-					fullString += label + " ";
+				if (tagValue.equals("true")) {
+					endString += label + " ";
 				} else if (tagValue.equals("start")) {
-					startString += label + " ";
+					startString += label.concat("Start") + " ";
 				} else if (tagValue.equals("end")) {
-					endString = label + " " + endString;
+					endString = label.concat("End") + " " + endString;
 				}
 			}
 

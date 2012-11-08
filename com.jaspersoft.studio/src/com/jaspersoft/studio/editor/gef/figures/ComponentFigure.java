@@ -148,6 +148,17 @@ public class ComponentFigure extends RectangleFigure {
 			decorators = new ArrayList<IDecorator>();
 		decorators.add(decorator);
 	}
+	
+	/**
+	 * Add a decorator to the decorators list, but only if it isn't 
+	 * already present
+	 * @param decorator the decorator to add
+	 */
+	public void addDecoratorOnce(IDecorator decorator){
+		if (decorators == null)
+			decorators = new ArrayList<IDecorator>();
+		if (!decorators.contains(decorator)) decorators.add(decorator);
+	}
 
 	public void removeDecorator(IDecorator decorator) {
 		if (decorators != null)

@@ -34,29 +34,26 @@ import com.jaspersoft.studio.editor.action.pdf.PdfActionTableDetail;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionTableHeader;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionTableRow;
 import com.jaspersoft.studio.editor.action.pdf.Position;
-import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
-import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 
-public class PDF508ElementDecorator implements IElementDecorator {
+public class PDF508ElementDecorator extends TextElementDecorator {
 
-	private IDecorator decorator = new PDFDecorator();
+	private PDFDecorator decorator = new PDFDecorator();
 	private List<String> actionIDs;
 
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
-		fig.removeDecorator(decorator);
-		// check if we should show this decorator
-		// J2DScrollingGraphicalViewer
-
+		super.setupFigure(fig, editPart);
+		getDecorator().removeDecorator(decorator);
 		if ((Boolean) editPart.getViewer().getProperty(ShowPDFTagsAction.ID)) {
-			fig.addDecorator(decorator);
-		} // else editPart.getViewer().getContents().refresh();
+			getDecorator().addDecorator(decorator);
+		}
 	}
-
+	
 	@Override
 	public RetargetAction[] buildMenuActions() {
 		return new RetargetAction[] { new RetargetAction(ShowPDFTagsAction.ID, Messages.ShowPDFTagsAction_title,
@@ -196,7 +193,6 @@ public class PDF508ElementDecorator implements IElementDecorator {
 		registerTableRow(registry, part, selectionActions);
 		registerTableHeader(registry, part, selectionActions);
 		registerTableDetail(registry, part, selectionActions);
-		// TODO add pdf actions here
 	}
 
 	@Override

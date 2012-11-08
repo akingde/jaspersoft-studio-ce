@@ -1209,6 +1209,9 @@
        <decorator
              ClassFactory="com.jaspersoft.studio.editor.gef.decorator.pdf.PDF508ElementDecorator">
        </decorator>
+       <decorator
+             ClassFactory="com.jaspersoft.studio.editor.gef.decorator.xls.XLSElementDecorator">
+       </decorator>
     </extension>
     <extension
           point="com.jaspersoft.studio.postsetvalue">

@@ -335,18 +335,15 @@ public class ComboMenuViewer  {
      */
     protected Menu createPopupMenu() {
     		Menu newMenu = new Menu(getControl());
+    		//When the menu is hidden i remove the focus from it, so the hover events continue to work
     		newMenu.addMenuListener(new MenuListener() {
 					
 					@Override
-					public void menuShown(MenuEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
+					public void menuShown(MenuEvent e) {}
 					
 					@Override
 					public void menuHidden(MenuEvent e) {
 		        dropDownHandle.getControl().getParent().getParent().setFocus();
-						
 					}
 				});
         refreshPopupMenu(newMenu);
