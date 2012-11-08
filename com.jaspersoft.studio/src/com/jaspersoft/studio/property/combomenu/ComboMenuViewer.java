@@ -184,7 +184,7 @@ public class ComboMenuViewer  {
      * @see #FILTERED
      */
     public ComboMenuViewer(Composite parent, int style, String biggerString) {
-        dropDownHandle = new ComboButton(parent, style, biggerString);
+        dropDownHandle = new ComboButton(parent, style, biggerString,this);
         listeners = new ArrayList<ComboItemAction>();
         dropDownHandle.addOpenListener(new IOpenListener() {
             public void open(OpenEvent event) {
@@ -306,14 +306,6 @@ public class ComboMenuViewer  {
     protected void openPopup() {
     	if (popupMenu == null) {
     		popupMenu = createPopupMenu();
-    		/*popupMenu.addListener(SWT., new Listener() {
-					
-					@Override
-					public void handleEvent(Event event) {
-						System.out.println("bubba2");
-						
-					}
-				});*/
       }
       if (popupMenu != null) {
       	openPopupMenu(popupMenu);
@@ -325,16 +317,17 @@ public class ComboMenuViewer  {
      * @param menuManager
      */
     protected void openPopupMenu(Menu menu) {
-       // Menu menu = menuManager.getMenu();
         if (menu != null && !menu.isDisposed()) {
             if (menu.isVisible()) {
                 menu.setVisible(false);
             } else {
-                locatePopupMenu(menu);           
+                locatePopupMenu(menu);
+              	setSelectionToMenu(menu);
                 menu.setVisible(true);
             }
         }
     }
+    
 
     /**
      * Create a new menumanger
@@ -417,7 +410,6 @@ public class ComboMenuViewer  {
      */
     protected void closePopup() {
         if (popupMenu != null) {
-            //Menu menu = popupMenu.getMenu();
             if (popupMenu != null && !popupMenu.isDisposed()) {
             	popupMenu.setVisible(false);
             }
@@ -426,7 +418,7 @@ public class ComboMenuViewer  {
     
 
     /**
-     * Set the actual item selected in the menu
+     * Set the actual item selected in the menu (the selected item has a bold like text)
      * @param menuManager
      */
     protected void setSelectionToMenu(Menu menu) {
