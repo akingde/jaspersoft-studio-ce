@@ -44,6 +44,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.VExporter;
 import com.jaspersoft.studio.editor.preview.view.control.VSimpleErrorPreview;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
@@ -117,7 +118,8 @@ public class ReportRunControler {
 			JasperReportsConfiguration jContext) {
 		viewmap = new LinkedHashMap<String, APreview>();
 		viewmap.put(FORM_PARAMETERS, new VInputControls(composite, jContext));
-
+		viewmap.put(ReportControler.FORM_EXPORTER, new VExporter(composite,
+				jContext));
 		return viewmap;
 	}
 

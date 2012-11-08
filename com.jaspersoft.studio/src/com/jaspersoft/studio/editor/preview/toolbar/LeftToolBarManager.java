@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.preview.IParametrable;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.actions.ViewExporterAction;
@@ -88,14 +89,18 @@ public class LeftToolBarManager extends ATopToolBarManager {
 		// if (vexecAction == null)
 		// vexecAction = new ViewExecutionInfoAction(pvcont);
 		// tbManager.add(vexecAction);
-		if (vexpAction == null)
-			vexpAction = new ViewExporterAction(pvcont.getLeftContainer());
-		tbManager.add(vexpAction);
+		addExporterSettings(tbManager, pvcont);
 
 		addPin(container, tbManager);
 	}
 
-	public static void addPin(final PreviewJRPrint container, IToolBarManager tbManager) {
+	protected void addExporterSettings(IToolBarManager tbManager, IParametrable pvcont) {
+		if (vexpAction == null)
+			vexpAction = new ViewExporterAction(pvcont.getLeftContainer());
+		tbManager.add(vexpAction);
+	}
+
+	public void addPin(final PreviewJRPrint container, IToolBarManager tbManager) {
 		ToolItemContribution titem = new ToolItemContribution("id", SWT.CHECK); //$NON-NLS-1$
 		tbManager.add(titem);
 

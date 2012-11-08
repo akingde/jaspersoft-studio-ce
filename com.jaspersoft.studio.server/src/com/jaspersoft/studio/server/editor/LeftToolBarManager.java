@@ -22,6 +22,8 @@ package com.jaspersoft.studio.server.editor;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.server.editor.action.ViewParametersAction;
+
 public class LeftToolBarManager extends
 		com.jaspersoft.studio.editor.preview.toolbar.LeftToolBarManager {
 
@@ -29,8 +31,17 @@ public class LeftToolBarManager extends
 		super(container, parent);
 	}
 
+	private ViewParametersAction vprmAction;
+
 	protected void fillToolbar(IToolBarManager tbManager) {
-		LeftToolBarManager.addPin(container, tbManager);
+		ReportUnitEditor pvcont = (ReportUnitEditor) container;
+		if (vprmAction == null)
+			vprmAction = new ViewParametersAction(pvcont.getLeftContainer());
+		tbManager.add(vprmAction);
+
+		addExporterSettings(tbManager, pvcont);
+
+		addPin(container, tbManager);
 	}
 
 }
