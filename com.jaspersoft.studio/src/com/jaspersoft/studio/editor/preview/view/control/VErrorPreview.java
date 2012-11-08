@@ -69,6 +69,7 @@ public class VErrorPreview extends APreview {
 	private Label compilationTime;
 	private Label fillingTime;
 	private Label exportTime;
+	private Label execTime;
 	private Label totalPages;
 	private Label fillSize;
 	private Label recordCount;
@@ -243,6 +244,13 @@ public class VErrorPreview extends APreview {
 		UIUtils.setBold(fillingTime);
 		new Label(statComposite, SWT.NONE).setText("sec");
 
+		new Label(statComposite, SWT.NONE).setText("Report Execution Time");
+
+		execTime = new Label(statComposite, SWT.BOLD);
+		execTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		UIUtils.setBold(execTime);
+		new Label(statComposite, SWT.NONE).setText("sec");
+
 		new Label(statComposite, SWT.NONE).setText("Export Time");
 
 		exportTime = new Label(statComposite, SWT.BOLD);
@@ -279,9 +287,10 @@ public class VErrorPreview extends APreview {
 			compilationTime.setText("" + stats.getDuration(ReportControler.ST_COMPILATIONTIME) / 1000);
 			fillingTime.setText("" + stats.getDuration(ReportControler.ST_FILLINGTIME) / 1000);
 			exportTime.setText("" + stats.getDuration(ReportControler.ST_EXPORTTIME) / 1000);
+			execTime.setText("" + stats.getDuration(ReportControler.ST_REPORTEXECUTIONTIME) / 1000);
 
 			totalPages.setText(Misc.nvl(stats.getValue(ReportControler.ST_PAGECOUNT), "0"));
-			recordCount.setText(Misc.nvl(stats.getValue(ReportControler.ST_RECORDCOUNTER), "0"));
+			recordCount.setText(Misc.nvl(stats.getValue(ReportControler.ST_RECORDCOUNTER), "-"));
 			fillSize.setText(Misc.nvl(stats.getValue(ReportControler.ST_REPORTSIZE), "0"));
 			statAction.run();
 		} else {

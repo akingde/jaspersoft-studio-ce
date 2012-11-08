@@ -163,6 +163,7 @@ public class ReportRunControler {
 
 					Map<String, FileContent> files = WSClientHelper
 							.runReportUnit(reportUnit, icm.getParameters());
+					stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
 					for (String key : files.keySet()) {
 						FileContent fc = (FileContent) files.get(key);
 						if (key.equals("jasperPrint")) { //$NON-NLS-1$
@@ -173,11 +174,16 @@ public class ReportRunControler {
 							FileOutputStream htmlFile = new FileOutputStream(f);
 							htmlFile.write(fc.getData());
 							htmlFile.close();
-
+							stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
+							stats.setValue(ReportControler.ST_REPORTSIZE,
+									f.length());
 							Object obj = JRLoader.loadObject(f);
-							if (obj instanceof JasperPrint)
+							if (obj instanceof JasperPrint) {
+								stats.setValue(ReportControler.ST_PAGECOUNT,
+										((JasperPrint) obj).getPages().size());
 								pcontainer.setJasperPrint(stats,
 										(JasperPrint) obj);
+							}
 
 							break;
 						}
