@@ -416,7 +416,7 @@ public class MMap extends MGraphicElement {
 		designMap.setComponent(component);
 		designMap
 				.setComponentKey(new ComponentKey(
-						"http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
+						"http://jasperreports.sourceforge.net/jasperreports/components", "c", //$NON-NLS-1$ //$NON-NLS-2$
 						"map")); //$NON-NLS-1$
 		return designMap;
 	}
