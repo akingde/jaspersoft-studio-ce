@@ -27,6 +27,8 @@ import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -189,6 +191,16 @@ public class ComboMenuViewer  {
                 openPopup();
             }
         });
+        dropDownHandle.getControl().addFocusListener(new FocusListener() {
+					
+					@Override
+					public void focusLost(FocusEvent e) {
+						closePopup();
+					}
+					
+					@Override
+					public void focusGained(FocusEvent e) {}
+				});
     }
     
     /**
@@ -403,6 +415,7 @@ public class ComboMenuViewer  {
             }
         }
     }
+    
 
     /**
      * Set the actual item selected in the menu
