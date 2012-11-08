@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -72,8 +73,11 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 		return composite;
 	}
 
+	private IToolBarManager tmanager;
+
 	@Override
 	public void contribute2ToolBar(IToolBarManager tmanager) {
+		this.tmanager = tmanager;
 		tmanager.add(new FirstPageAction(rptviewer));
 		tmanager.add(new PreviousPageAction(rptviewer));
 		tmanager.add(new PageNumberContributionItem(rptviewer));
@@ -97,11 +101,19 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 
 	public void setJRPRint(Statistics stats, JasperPrint jrprint) {
 		int ind = Math.max(0, rptviewer.getPageIndex());
-		// if (this.jrprint == null || this.jrprint != jrprint) {
+		if (jrprint != null) {
+			ind = Math.max(ind, jrprint.getPages().size());
+
+		}
+//		if (tmanager != null) {
+//			contribute2ToolBar(tmanager);
+//			tmanager.update(true);
+//			((ToolBarManager) tmanager).getControl().pack();
+//		}
 		rptviewer.setDocument(jrprint);
 		rptviewer.setPageIndex(ind);
-		// rptviewer.gotoFirstPage();
-		// }
+		rptviewer.gotoFirstPage();
+
 		this.jrprint = jrprint;
 	}
 

@@ -177,7 +177,17 @@ public class PreviewJRPrint extends ABasicEditor {
 	}
 
 	public APreview getDefaultViewer() {
-		return getRightContainer().getViewer(getDefaultViewerKey());
+		final APreview viewer = getRightContainer().getViewer(getDefaultViewerKey());
+		Display.getDefault().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				if (topToolBarManager != null)
+					topToolBarManager.contributeItems(viewer);
+			}
+		});
+
+		return viewer;
 	}
 
 	private MultiPageContainer rightContainer;
@@ -188,6 +198,7 @@ public class PreviewJRPrint extends ABasicEditor {
 				public void switchView(Statistics stats, String key) {
 					currentViewer = key;
 					APreview view = pmap.get(key);
+					topToolBarManager.contributeItems(view);
 					if (!switchRightView(view, stats, this))
 						return;
 					super.switchView(stats, key);

@@ -446,7 +446,7 @@ public class ReportControler {
 		}
 
 		@Override
-		public void pageGenerated(JasperPrint arg0, final int page) {
+		public void pageGenerated(final JasperPrint arg0, final int page) {
 			this.jrPrint = arg0;
 			if (page == 0) {
 				Display.getDefault().syncExec(new Runnable() {
