@@ -40,6 +40,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
+import net.sf.jasperreports.engine.util.JRCloneUtils;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
@@ -75,6 +76,31 @@ public class MMap extends MGraphicElement {
 
 	public MMap(ANode parent, JRDesignComponentElement jrObject, int newIndex) {
 		super(parent, jrObject, newIndex);
+		listenMap();
+	}
+
+	@Override
+	public void setParent(ANode parent, int newIndex) {
+		super.setParent(parent, newIndex);
+		if (parent == null) {
+			unlistenMap();
+		}
+	}
+
+	private void listenMap() {
+		StandardMapComponent m = getMapComponent();
+		if (m != null && m.getMarkerDataset() != null) {
+			((StandardMarkerDataset) m.getMarkerDataset()).getEventSupport()
+					.addPropertyChangeListener(this);
+		}
+	}
+
+	private void unlistenMap() {
+		StandardMapComponent m = getMapComponent();
+		if (m != null && m.getMarkerDataset() != null) {
+			((StandardMarkerDataset) m.getMarkerDataset()).getEventSupport()
+					.removePropertyChangeListener(this);
+		}
 	}
 
 	/** The icon descriptor. */
@@ -248,25 +274,29 @@ public class MMap extends MGraphicElement {
 
 	@Override
 	public Object getPropertyValue(Object id) {
-		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		StandardMapComponent component = (StandardMapComponent) jrElement
-				.getComponent();
-		MarkerDataset markerdataset = component.getMarkerDataset();
+		StandardMapComponent component = getMapComponent();
 
 		if (id.equals(StandardMarkerDataset.PROPERTY_MARKER)) {
+			MarkerDataset markerdataset = component.getMarkerDataset();
 			List<Marker> markers = null;
 			if (markerdataset != null)
 				markers = markerdataset.getMarkers();
 			if (markers == null)
 				markers = new ArrayList<Marker>();
+			else {
+				markers = JRCloneUtils.cloneList(markers);
+			}
 			return new MarkersDTO(markers, this);
 		}
 		if (id.equals(StandardMarkerDataset.PROPERTY_DATASET_RUN)) {
+			MarkerDataset markerdataset = component.getMarkerDataset();
 			JRDatasetRun j = null;
 			if (markerdataset != null)
 				j = markerdataset.getDatasetRun();
 			if (j == null)
 				j = new JRDesignDatasetRun();
+			else
+				j = (JRDatasetRun) j.clone();
 			if (mDatasetRun != null)
 				mDatasetRun.setValue(j);
 			else {
@@ -302,9 +332,7 @@ public class MMap extends MGraphicElement {
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		StandardMapComponent component = (StandardMapComponent) jrElement
-				.getComponent();
+		StandardMapComponent component = getMapComponent();
 
 		StandardMarkerDataset markerdataset = (StandardMarkerDataset) component
 				.getMarkerDataset();
@@ -313,19 +341,27 @@ public class MMap extends MGraphicElement {
 				if (markerdataset == null) {
 					markerdataset = new StandardMarkerDataset();
 					component.setMarkerDataset(markerdataset);
+					listenMap();
 				}
-				markerdataset.getMarkers().clear();
+				List<Marker> markers = markerdataset.getMarkers();
+				if (!markers.isEmpty()) {
+					Marker[] marray = markers
+							.toArray(new Marker[markers.size()]);
+					for (Marker m : marray)
+						markerdataset.removeMarker(m);
+				}
 				MarkersDTO mdto = (MarkersDTO) value;
 				if (mdto.getMarkers() != null)
-					markerdataset.getMarkers().addAll(mdto.getMarkers());
+					for (Marker m : mdto.getMarkers())
+						markerdataset.addMarker(m);
 			}
-		}
-		if (id.equals(StandardMarkerDataset.PROPERTY_DATASET_RUN)) {
+		} else if (id.equals(StandardMarkerDataset.PROPERTY_DATASET_RUN)) {
 			MDatasetRun mdr = (MDatasetRun) value;
 			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
 			if (markerdataset == null) {
 				markerdataset = new StandardMarkerDataset();
 				component.setMarkerDataset(markerdataset);
+				listenMap();
 			}
 			if (dr.getDatasetName() != null)
 				markerdataset.setDatasetRun(dr);
@@ -359,6 +395,13 @@ public class MMap extends MGraphicElement {
 			super.setPropertyValue(id, value);
 	}
 
+	private StandardMapComponent getMapComponent() {
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		if (jrElement == null)
+			return null;
+		return (StandardMapComponent) jrElement.getComponent();
+	}
+
 	@Override
 	protected void setGroupItems(String[] items) {
 		super.setGroupItems(items);
@@ -378,12 +421,14 @@ public class MMap extends MGraphicElement {
 			if (obj instanceof JRChangeEventsSupport)
 				((JRChangeEventsSupport) obj).getEventSupport()
 						.removePropertyChangeListener(this);
+			unlistenMap();
 		}
 		if (value != null) {
 			Object obj = getComponent(value);
 			if (value instanceof JRChangeEventsSupport)
 				((JRChangeEventsSupport) obj).getEventSupport()
 						.addPropertyChangeListener(this);
+			listenMap();
 		}
 		super.setValue(value);
 	}

@@ -50,18 +50,17 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 	public MGraphicElementLineBox(ANode parent, JRDesignElement jrLine, int newIndex) {
 		super(parent, jrLine, newIndex);
 	}
-	
+
 	@Override
-	public HashMap<String,Object> getStylesDescriptors() {
+	public HashMap<String, Object> getStylesDescriptors() {
 		HashMap<String, Object> result = super.getStylesDescriptors();
 		if (getValue() == null)
 			return result;
 		MLineBox element = (MLineBox) getPropertyValue(LINE_BOX);
-		//result.putAll(element.getStylesDescriptors());
+		// result.putAll(element.getStylesDescriptors());
 		result.put(LINE_BOX, element);
 		return result;
 	}
-	
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
@@ -92,12 +91,6 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 			return lineBox;
 		}
 		return super.getPropertyValue(id);
-	}
-	
-	
-	@Override
-	public Object getPropertyActualValue(Object id) {
-		return super.getPropertyActualValue(id);
 	}
 
 	public JRBoxContainer getBoxContainer() {

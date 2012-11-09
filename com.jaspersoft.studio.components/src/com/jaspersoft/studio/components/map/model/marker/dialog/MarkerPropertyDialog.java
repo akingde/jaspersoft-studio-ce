@@ -146,7 +146,6 @@ public class MarkerPropertyDialog extends Dialog {
 		tvalue = new Text(composite, SWT.BORDER);
 		tvalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
 				| GridData.HORIZONTAL_ALIGN_FILL));
-		tvalue.setText("< type value here >");
 		tvalue.addModifyListener(new ModifyListener() {
 
 			@Override

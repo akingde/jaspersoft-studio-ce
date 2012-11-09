@@ -424,7 +424,7 @@
          <propertySection
                class="com.jaspersoft.studio.components.map.property.MapSection"
                id="com.jaspersoft.studio.components.map.property.MapSection"
-               tab="com.jaspersoft.studio.editor.JrxmlEditor.Map">
+               tab="com.jaspersoft.studio.components.Map">
             <input
                   type="com.jaspersoft.studio.components.map.model.MMap">
             </input>
@@ -613,7 +613,14 @@
                label="Cell">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Map"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               category="element"
+               id="com.jaspersoft.studio.components.Map"
+               image="icons/map.png"
+               label="%elementMap">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.components.Map"
                category="element"
                id="com.jaspersoft.studio.components.map"
                image="icons/map-16.png"
