@@ -264,7 +264,7 @@ public class MMap extends MGraphicElement {
 		if (id.equals(StandardMarkerDataset.PROPERTY_DATASET_RUN)) {
 			JRDatasetRun j = null;
 			if (markerdataset != null)
-				markerdataset.getDatasetRun();
+				j = markerdataset.getDatasetRun();
 			if (j == null)
 				j = new JRDesignDatasetRun();
 			if (mDatasetRun != null)
