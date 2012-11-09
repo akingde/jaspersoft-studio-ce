@@ -301,7 +301,10 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 			//ti.setText(d.getName());
 
 			// Since we are not showing icons, we append the data adapter type to the name
-			dataAdaptersCombo.add(dataAdapterDescriptor.getName() + " - " + factory.getLabel()   ); //$NON-NLS-1$
+			String label = dataAdapterDescriptor.getName();
+			if(factory != null)
+				label += " - " + factory.getLabel();
+			dataAdaptersCombo.add(label   ); //$NON-NLS-1$
 		}
 		
 
