@@ -322,10 +322,6 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 				Policy.getLog().log(status);
 			}
 		}
-		JasperReportsConfiguration jConfig = (JasperReportsConfiguration) getSettings().get(JASPERREPORTS_CONFIGURATION);
-		if (jConfig != null)
-			jConfig.dispose();
-		getSettings().remove(JASPERREPORTS_CONFIGURATION);
 		super.dispose();
 	}
 

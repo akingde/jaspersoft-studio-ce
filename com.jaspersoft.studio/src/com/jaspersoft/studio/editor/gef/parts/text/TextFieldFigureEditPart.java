@@ -29,6 +29,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.text.MTextField;
@@ -44,21 +45,29 @@ public class TextFieldFigureEditPart extends FigureEditPart {
 	@Override
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
-			JRExpressionEditor wizard = new JRExpressionEditor();
-			MTextField m = (MTextField) getModel();
-			wizard.setValue((JRDesignExpression) m.getPropertyValue(JRDesignTextField.PROPERTY_EXPRESSION));
-			ExpressionContext ec = ModelUtils.getElementExpressionContext((JRDesignTextField) m.getValue(), m);
-			wizard.setExpressionContext(ec);
-			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-			dialog.create();
-			if (dialog.open() == Dialog.OK) {
-				SetValueCommand cmd = new SetValueCommand();
-				cmd.setTarget((IPropertySource) getModel());
-				cmd.setPropertyId(JRDesignTextField.PROPERTY_EXPRESSION);
-				cmd.setPropertyValue(wizard.getValue());
-				getViewer().getEditDomain().getCommandStack().execute(cmd);
-			}
+			JaspersoftStudioPlugin.getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					MTextField m = (MTextField) getModel();
+					wizard.setValue((JRDesignExpression) m.getPropertyValue(JRDesignTextField.PROPERTY_EXPRESSION));
+					ExpressionContext ec = ModelUtils.getElementExpressionContext((JRDesignTextField) m.getValue(), m);
+					wizard.setExpressionContext(ec);
+
+					WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+					dialog.create();
+					if (dialog.open() == Dialog.OK) {
+						SetValueCommand cmd = new SetValueCommand();
+						cmd.setTarget((IPropertySource) getModel());
+						cmd.setPropertyId(JRDesignTextField.PROPERTY_EXPRESSION);
+						cmd.setPropertyValue(wizard.getValue());
+						getViewer().getEditDomain().getCommandStack().execute(cmd);
+					}
+				}
+			});
 		} else
 			super.performRequest(req);
 	}
+
 }

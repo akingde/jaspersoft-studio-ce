@@ -56,22 +56,24 @@ import com.jaspersoft.studio.utils.UIUtils;
  * and button, or on the their left.
  * <p>
  * 
- * <b>ADDITIONAL NOTE</b>: the widget has a default internal layout of type {@link FormLayout}. 
+ * <b>ADDITIONAL NOTE</b>: the widget has a default internal layout of type {@link FormLayout}.
  * <p>
  * 
- * <b>EXPRESSION MODIFICATIONS</b>: to add custom behavior when an expression is modified/set you can either create
- * a sub-class of the {@link WTextExpression} one, overriding the {@link #setExpression(JRDesignExpression)} method:
+ * <b>EXPRESSION MODIFICATIONS</b>: to add custom behavior when an expression is modified/set you can either create a
+ * sub-class of the {@link WTextExpression} one, overriding the {@link #setExpression(JRDesignExpression)} method:
+ * 
  * <pre>
- * 	// ...	
- *	WTextExpression myExpression = new WTextExpression(container, SWT.NONE, "My expression", WTextExpression.LABEL_ON_TOP){
- *		&#64;Override
- *		public void setExpression(JRDesignExpression exp) {
- *			super.setExpression(exp);
- *			// YOUR CUSTOM CODE HERE...
- *		}
- *	};
- *	// ...
+ * // ...
+ * WTextExpression myExpression = new WTextExpression(container, SWT.NONE, &quot;My expression&quot;, WTextExpression.LABEL_ON_TOP) {
+ * 	&#064;Override
+ * 	public void setExpression(JRDesignExpression exp) {
+ * 		super.setExpression(exp);
+ * 		// YOUR CUSTOM CODE HERE...
+ * 	}
+ * };
+ * // ...
  * </pre>
+ * 
  * or adding a new {@link ExpressionModifiedListener} via {@link #addModifyListener(ExpressionModifiedListener)} method.
  * 
  * @author mrabbi
@@ -99,7 +101,7 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	private Text textExpression;
 	private Button btnEditExpression;
 	private Label label;
-	
+
 	// Expression modify listeners
 	private List<ExpressionModifiedListener> listeners = new ArrayList<ExpressionModifiedListener>();
 
@@ -176,16 +178,15 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		this.customTextLinesNumber = linesNum;
 		setLayout(new FormLayout());
 
-		if(textLabel!=null && (showMode==LABEL_ON_LEFT || showMode == LABEL_ON_TOP)){
+		if (textLabel != null && (showMode == LABEL_ON_LEFT || showMode == LABEL_ON_TOP)) {
 			// Create the needed label
 			label = new Label(this, SWT.NONE);
 			label.setText(textLabel);
-		}
-		else{
-			showMode=LABEL_NONE;
+		} else {
+			showMode = LABEL_NONE;
 		}
 
-		textExpression = new Text(this, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);	
+		textExpression = new Text(this, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		textExpression.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -209,7 +210,7 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 				JRExpressionEditor wizard = new JRExpressionEditor();
 				wizard.setValue(expression);
 				wizard.setExpressionContext(expContext);
-				WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+				WizardDialog dialog = new WizardDialog(getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
 					JRDesignExpression value = wizard.getValue();
@@ -221,7 +222,7 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 				widgetSelected(e);
 			}
 		});
-		
+
 		configureWidgetsLayoutData(showMode);
 
 	}
@@ -230,11 +231,11 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	 * Sets the layout data information for the custom widget controls.
 	 */
 	private void configureWidgetsLayoutData(int showMode) {
-		int heightHint = UIUtils.getCharHeight(textExpression); 
+		int heightHint = UIUtils.getCharHeight(textExpression);
 		if (showMode == LABEL_ON_LEFT) {
 			// Configuration with label on left
 			FormData fd_label = new FormData();
-			fd_label.top = new FormAttachment(0,3);
+			fd_label.top = new FormAttachment(0, 3);
 			fd_label.left = new FormAttachment(0);
 			label.setLayoutData(fd_label);
 
@@ -242,37 +243,35 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 			fd_btnEditExpression.top = new FormAttachment(0);
 			fd_btnEditExpression.right = new FormAttachment(100);
 			btnEditExpression.setLayoutData(fd_btnEditExpression);
-			
+
 			FormData fd_textExpression = new FormData();
 			fd_textExpression.bottom = new FormAttachment(100);
-			fd_textExpression.top = new FormAttachment(label,-3,SWT.TOP);
-			fd_textExpression.right = new FormAttachment(btnEditExpression, -5,SWT.LEFT);
+			fd_textExpression.top = new FormAttachment(label, -3, SWT.TOP);
+			fd_textExpression.right = new FormAttachment(btnEditExpression, -5, SWT.LEFT);
 			fd_textExpression.left = new FormAttachment(label, 5);
 			fd_textExpression.height = heightHint;
 			textExpression.setLayoutData(fd_textExpression);
-		}
-		else if (showMode == LABEL_ON_TOP) {
+		} else if (showMode == LABEL_ON_TOP) {
 			// Configuration with label on top
 			FormData fd_label = new FormData();
 			fd_label.left = new FormAttachment(0);
 			fd_label.right = new FormAttachment(100);
 			fd_label.top = new FormAttachment(0);
 			label.setLayoutData(fd_label);
-			
+
 			FormData fd_btnEditExpression = new FormData();
-			fd_btnEditExpression.top = new FormAttachment(label,5);
+			fd_btnEditExpression.top = new FormAttachment(label, 5);
 			fd_btnEditExpression.right = new FormAttachment(label, 0, SWT.RIGHT);
 			btnEditExpression.setLayoutData(fd_btnEditExpression);
-			
+
 			FormData fd_textExpression = new FormData();
-			fd_textExpression.top = new FormAttachment(label,5);
+			fd_textExpression.top = new FormAttachment(label, 5);
 			fd_textExpression.right = new FormAttachment(btnEditExpression, -5);
 			fd_textExpression.bottom = new FormAttachment(100);
 			fd_textExpression.left = new FormAttachment(0);
 			fd_textExpression.height = heightHint;
 			textExpression.setLayoutData(fd_textExpression);
-		} 
-		else {
+		} else {
 			// Standard configuration
 			FormData fd_textExpression = new FormData();
 			fd_textExpression.bottom = new FormAttachment(100);
@@ -281,7 +280,7 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 			fd_textExpression.right = new FormAttachment(btnEditExpression, -5);
 			fd_textExpression.height = heightHint;
 			textExpression.setLayoutData(fd_textExpression);
-			
+
 			FormData fd_btnEditExpression = new FormData();
 			fd_btnEditExpression.right = new FormAttachment(100);
 			fd_btnEditExpression.top = new FormAttachment(0);
@@ -314,7 +313,7 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 
 		// Notifies the listeners of the new expression
 		fireModifyEvent();
-		
+
 		isRefreshing = false;
 	}
 
@@ -361,7 +360,10 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.jaspersoft.studio.editor.expression.IExpressionContextSetter#setExpressionContext(com.jaspersoft.studio.editor.expression.ExpressionContext)
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.editor.expression.IExpressionContextSetter#setExpressionContext(com.jaspersoft.studio.editor
+	 * .expression.ExpressionContext)
 	 */
 	public void setExpressionContext(ExpressionContext expContext) {
 		this.expContext = expContext;
@@ -370,30 +372,33 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	/**
 	 * Adds a new listener that will be notified of any expression change/notification.
 	 * 
-	 * @param ml the new {@link ExpressionModifiedListener} to add
+	 * @param ml
+	 *          the new {@link ExpressionModifiedListener} to add
 	 */
 	public void addModifyListener(ExpressionModifiedListener ml) {
 		listeners.add(ml);
 	}
-	
+
 	/**
 	 * Removes an {@link ExpressionModifiedListener} instance.
 	 * 
-	 * @param ml the {@link ExpressionModifiedListener} instance to be removed
+	 * @param ml
+	 *          the {@link ExpressionModifiedListener} instance to be removed
 	 */
 	public void removeModifyListener(ExpressionModifiedListener ml) {
 		listeners.remove(ml);
 	}
-	public Text getTextControl(){
+
+	public Text getTextControl() {
 		return textExpression;
 	}
 
-	/* 
-	 * Notifies the listeners of the expression change. 
+	/*
+	 * Notifies the listeners of the expression change.
 	 */
 	private void fireModifyEvent() {
 		ExpressionModifiedEvent event = new ExpressionModifiedEvent(this);
-		event.modifiedExpression=this.expression;
+		event.modifiedExpression = this.expression;
 		for (ExpressionModifiedListener ml : listeners)
 			ml.expressionModified(event);
 	}
@@ -402,12 +407,12 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	public void dispose() {
 		// Remove modify listeners
 		Object[] listenersArray = listeners.toArray();
-		for(Object l : listenersArray){
-			removeModifyListener((ExpressionModifiedListener)l);
+		for (Object l : listenersArray) {
+			removeModifyListener((ExpressionModifiedListener) l);
 		}
 		listeners.clear();
-		listeners=null;
+		listeners = null;
 		super.dispose();
 	}
-		
+
 }

@@ -21,13 +21,21 @@ package com.jaspersoft.studio;
 
 import java.io.IOException;
 
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -168,6 +176,7 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 		}
 		return decoratorManager;
 	}
+
 	private static DriversManager driversManager;
 
 	public static DriversManager getDriversManager() {
@@ -177,6 +186,7 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 		}
 		return driversManager;
 	}
+
 	private static PostSetValueManager postSetValueManager;
 
 	public static PostSetValueManager getPostSetValueManager() {
@@ -200,7 +210,7 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 		Assert.isNotNull(path);
 		return FileLocator.toFileURL(getBundle().getEntry(path)).getPath();
 	}
-	
+
 	public void log(int severity, String message, Throwable t) {
 		IStatus status = new Status(severity, PLUGIN_ID, 0, message, t);
 		getLog().log(status);
@@ -210,5 +220,36 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 		log(IStatus.ERROR, message, t);
 	}
 
+	public static Shell getShell() {
+		Shell shell = null;
+
+		IWorkbenchWindow window = JasperReportsPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
+
+		if (window != null) {
+			shell = window.getShell();
+		} else {
+			shell = getDisplay().getActiveShell();
+		}
+
+		return shell;
+	}
+
+	public static Display getDisplay() {
+		// If we are in the UI Thread use that
+		if (Display.getCurrent() != null) {
+			return Display.getCurrent();
+		}
+
+		if (PlatformUI.isWorkbenchRunning()) {
+			return PlatformUI.getWorkbench().getDisplay();
+		}
+
+		if (Display.getDefault() != null)
+			return Display.getDefault();
+
+		// Invalid thread access if it is not the UI Thread
+		// and the workbench is not created.
+		throw new SWTError(SWT.ERROR_THREAD_INVALID_ACCESS);
+	}
 
 }

@@ -60,19 +60,17 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 
 		removeListeners();
 
+		datasourceExpressionBox.setEnabled(false);
+		connectionExpressionBox.setEnabled(false);
+
+		radioUseParentConnection.setSelection(false);
+		radioUseConnectionExpression.setSelection(false);
+		radioUseDatasourceExpression.setSelection(false);
+		radioUseEmptyDatasource.setSelection(false);
+		radioNoConnection.setSelection(false);
+		connectionExpressionBox.setExpression(null);
+		datasourceExpressionBox.setExpression(null);
 		if (datasetrun != null) {
-
-			datasourceExpressionBox.setEnabled(false);
-			connectionExpressionBox.setEnabled(false);
-
-			radioUseParentConnection.setSelection(false);
-			radioUseConnectionExpression.setSelection(false);
-			radioUseDatasourceExpression.setSelection(false);
-			radioUseEmptyDatasource.setSelection(false);
-			radioNoConnection.setSelection(false);
-			connectionExpressionBox.setExpression(null);
-			datasourceExpressionBox.setExpression(null);
-
 			if (datasetrun.getConnectionExpression() != null) {
 				connectionExpressionBox.setExpression((JRDesignExpression) datasetrun.getConnectionExpression());
 				boolean isReportConnection = datasetrun.getConnectionExpression().getText().equals("$P{REPORT_CONNECTION}");
@@ -89,7 +87,9 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 			} else {
 				radioNoConnection.setSelection(true);
 			}
-
+		} else {
+			connectionExpressionBox.setExpression(null);
+			datasourceExpressionBox.setExpression(null);
 		}
 		addListeners();
 	}

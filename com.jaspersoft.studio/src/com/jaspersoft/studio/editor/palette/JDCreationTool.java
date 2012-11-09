@@ -35,11 +35,12 @@ public final class JDCreationTool extends CreationTool {
 			if (((DialogEnabledCommand) currCommand).openDialog() == Dialog.CANCEL) {
 				return;
 			}
+
+			// we have to execute on the same command, because between getCurrentCommand , mouse events call setCurrentCommand
+			if (currCommand != null && currCommand.canExecute())
+				executeCommand(currCommand);
+			setCurrentCommand(null);
 		}
-		// we have to execute on the same command, because between getCurrentCommand , mouse events call setCurrentCommand
-		if (currCommand != null && currCommand.canExecute())
-			executeCommand(currCommand);
-		setCurrentCommand(null);
 		super.performCreation(button);
 	}
 
