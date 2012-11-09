@@ -372,7 +372,8 @@ public class ImageCreationDialog extends Dialog {
 			try {
 				IFileStore imgFileStore = EFS.getStore(file.getLocationURI());
 				loadImagePreview(file.getLocation().toOSString(), imgFileStore);
-				imageExpressionText=file.getLocation().toOSString();
+			//Change the standard separator with an universal one
+				imageExpressionText=file.getLocation().toOSString().replace(System.getProperty("file.separator").charAt(0), '/');
 			} catch (CoreException e) {
 				UIUtils.showError(e);
 			}
