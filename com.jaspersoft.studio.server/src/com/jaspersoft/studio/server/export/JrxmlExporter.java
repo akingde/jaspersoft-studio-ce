@@ -81,7 +81,8 @@ public class JrxmlExporter extends AExporter {
 	}
 
 	protected void setPropReportUnit(MResource res, JasperDesign jd) {
-		jd.setProperty(PROP_REPORTRESOURCE, res.getValue().getUriString());
+		if (!res.getValue().isMainReport())
+			jd.setProperty(PROP_REPORTRESOURCE, res.getValue().getUriString());
 		MReportUnit repunit = res.getReportUnit();
 		if (repunit != null) {
 			ResourceDescriptor runit = repunit.getValue();

@@ -163,6 +163,16 @@ public class JrxmlPublishAction extends AContributorAction {
 		MJrxml jrxml = new MJrxml(mrunit, getMainReport(mrunit, jd), 0);
 		File file = FileUtils.createTempFile("jrsres", ".jrxml"); //$NON-NLS-1$ //$NON-NLS-2$
 		String version = ServerManager.getVersion(mrunit);
+
+		List<MResource> files = jrConfig.get(KEY_PUBLISH2JSS_DATA,
+				new ArrayList<MResource>());
+		for (MResource f : files) {
+			PublishOptions popt = f.getPublishOptions();
+			if (popt.isOverwrite() && popt.getjExpression() != null)
+				popt.getjExpression().setText(popt.getExpression());
+			if (monitor.isCanceled())
+				return Status.CANCEL_STATUS;
+		}
 		FileUtils.writeFile(file,
 				JRXmlWriterHelper.writeReport(null, jd, version));
 		jrxml.setFile(file);
@@ -171,15 +181,10 @@ public class JrxmlPublishAction extends AContributorAction {
 		mrunit.setValue(save(monitor, mrunit));
 		jrxml.setValue(save(monitor, jrxml));
 
-		List<MResource> files = jrConfig.get(KEY_PUBLISH2JSS_DATA,
-				new ArrayList<MResource>());
 		for (MResource f : files) {
 			PublishOptions popt = f.getPublishOptions();
-			if (popt.isOverwrite()) {
-				if (popt.getjExpression() != null)
-					popt.getjExpression().setText(popt.getExpression());
+			if (popt.isOverwrite())
 				save(monitor, f);
-			}
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;
 		}
