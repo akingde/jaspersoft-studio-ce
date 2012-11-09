@@ -30,6 +30,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -109,7 +110,15 @@ public class SPDatasetRun extends ASPropertyWidget {
 		gd.horizontalSpan = 2;
 		dsRunWidget.getControl().setLayoutData(gd);
 
-		params = section.getWidgetFactory().createButton(parent, "Parameters", SWT.PUSH | SWT.FLAT);
+		Composite c = section.getWidgetFactory().createComposite(parent);
+		GridLayout layout = new GridLayout(2, false);
+		layout.marginHeight = 0;
+		c.setLayout(layout);
+		gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
+		gd.horizontalSpan = 2;
+		c.setLayoutData(gd);
+
+		params = section.getWidgetFactory().createButton(c, "Parameters", SWT.PUSH | SWT.FLAT);
 		params.addSelectionListener(new SelectionAdapter() {
 
 			private ParameterDTO prmDTO;
@@ -136,7 +145,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 
 		});
 
-		paramMap = section.getWidgetFactory().createButton(parent, "Parameters Map", SWT.PUSH | SWT.FLAT);
+		paramMap = section.getWidgetFactory().createButton(c, "Parameters Map", SWT.PUSH | SWT.FLAT);
 		paramMap.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
