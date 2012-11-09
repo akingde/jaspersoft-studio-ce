@@ -552,7 +552,8 @@ public class ImageCreationDialog extends Dialog {
 					String imagePath = txtFilesystemPath.getText();
 					IFileStore imgFileStore = EFS.getLocalFileSystem().getStore(new Path(imagePath));
 					loadImagePreview(imagePath, imgFileStore);
-					imageExpressionText=imagePath;
+					//Change the standard separator with an universal one
+					imageExpressionText=imagePath.replace(System.getProperty("file.separator").charAt(0), '/');
 				}
 				else if (btnUrlRemote.getSelection()) {
 					// URL
