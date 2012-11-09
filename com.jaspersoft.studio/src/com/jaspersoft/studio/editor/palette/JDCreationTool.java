@@ -36,6 +36,7 @@ public final class JDCreationTool extends CreationTool {
 				return;
 			}
 		}
+		// we have to execute on the same command, because between getCurrentCommand , mouse events call setCurrentCommand
 		if (currCommand != null && currCommand.canExecute())
 			executeCommand(currCommand);
 		setCurrentCommand(null);
