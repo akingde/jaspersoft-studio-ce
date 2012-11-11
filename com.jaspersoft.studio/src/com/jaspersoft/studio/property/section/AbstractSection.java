@@ -85,34 +85,16 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	public ASPropertyWidget createWidget4Property(Composite composite, Object property, boolean showLabel) {
-		if (getElement() != null) {
-			IPropertyDescriptor[] pds = getElement().getPropertyDescriptors();
-			for (IPropertyDescriptor pd : pds) {
-				if (pd.getId().equals(property)) {
-					CLabel label = null;
-					if (showLabel)
-						label = getWidgetFactory().createCLabel(composite, pd.getDisplayName(), SWT.NONE);
-					ASPropertyWidget widget = SPWidgetFactory.createWidget(composite, this, pd);
-					if (widget != null) {
-						widget.setLabel(label);
-						widgets.put(pd.getId(), widget);
-						return widget;
-					}
-					break;
-				}
-			}
-		}
-		return null;
+		return createWidget4Property(getElement(), composite, property, showLabel);
 	}
-	
-	public ASPropertyWidget createWidget4Property(APropertyNode element, Composite composite, Object property, boolean showLabel) {
+
+	public ASPropertyWidget createWidget4Property(APropertyNode element, Composite composite, Object property,
+			boolean showLabel) {
 		if (element != null) {
 			IPropertyDescriptor[] pds = element.getPropertyDescriptors();
 			for (IPropertyDescriptor pd : pds) {
 				if (pd.getId().equals(property)) {
-					CLabel label = null;
-					if (showLabel)
-						label = getWidgetFactory().createCLabel(composite, pd.getDisplayName(), SWT.NONE);
+					CLabel label = createLabel(composite, showLabel, pd);
 					ASPropertyWidget widget = SPWidgetFactory.createWidget(composite, this, pd);
 					if (widget != null) {
 						widget.setLabel(label);
@@ -126,6 +108,14 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return null;
 	}
 
+	private CLabel createLabel(Composite composite, boolean showLabel, IPropertyDescriptor pd) {
+		CLabel label = null;
+		if (showLabel) {
+			label = getWidgetFactory().createCLabel(composite, pd.getDisplayName(), SWT.NONE);
+			label.setToolTipText(pd.getDescription());
+		}
+		return label;
+	}
 
 	public IPropertyDescriptor getPropertyDesriptor(Object property) {
 		if (getElement() != null) {
@@ -138,7 +128,6 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 		return null;
 	}
-
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#setInput(org.eclipse.ui.IWorkbenchPart,

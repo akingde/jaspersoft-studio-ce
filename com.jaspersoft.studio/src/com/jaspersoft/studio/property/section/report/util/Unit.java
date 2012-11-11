@@ -70,6 +70,7 @@ public class Unit {
 		alias.put("inches", INCH);
 		alias.put("inch", INCH);
 		alias.put("''", INCH);
+		alias.put("\"", INCH);
 		alias.put(INCH,INCH);
 		
 		alias.put("meter", METER);

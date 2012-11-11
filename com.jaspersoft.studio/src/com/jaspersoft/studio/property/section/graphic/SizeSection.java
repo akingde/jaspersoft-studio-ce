@@ -21,7 +21,7 @@ package com.jaspersoft.studio.property.section.graphic;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
@@ -35,7 +35,7 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
  * @author Chicu Veaceslav
  */
 public class SizeSection extends AbstractRealValueSection {
-	
+
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
@@ -45,11 +45,15 @@ public class SizeSection extends AbstractRealValueSection {
 
 		parent = getWidgetFactory().createSection(parent, "Size", true, 4);
 
-		getWidgetFactory().createCLabel(parent, "w", SWT.RIGHT).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		createWidget4Property(parent, JRDesignElement.PROPERTY_WIDTH, false);
+		ASPropertyWidget hw = createWidget4Property(parent, JRDesignElement.PROPERTY_WIDTH);
+		CLabel lbl = hw.getLabel();
+		lbl.setText("w");
+		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
-		getWidgetFactory().createCLabel(parent, "h", SWT.RIGHT).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		createWidget4Property(parent, JRDesignElement.PROPERTY_HEIGHT, false);
+		hw = createWidget4Property(parent, JRDesignElement.PROPERTY_HEIGHT);
+		lbl = hw.getLabel();
+		lbl.setText("h");
+		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
 		ASPropertyWidget w = createWidget4Property(parent, JRDesignElement.PROPERTY_STRETCH_TYPE);
 		GridData gd = new GridData();
