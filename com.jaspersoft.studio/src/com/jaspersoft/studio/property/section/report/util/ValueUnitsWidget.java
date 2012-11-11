@@ -19,6 +19,9 @@
  */
 package com.jaspersoft.studio.property.section.report.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -102,28 +105,53 @@ public class ValueUnitsWidget {
 	private void setSpinerValue(String u) {
 		digits = u.equals(Unit.PX) ? 0 : 4;
 
+		removeListeners();
 		val.setDigits(digits);
 		val.setMinimum(0);
 		val.setMaximum(max);
 		val.setIncrement(1);
-		val.removeSelectionListener(spinerSelection);
 		val.setSelection((int) Math.round(unit.getValue(u) * Math.pow(10, digits)));
-		val.addSelectionListener(spinerSelection);
+		addListeners();
 	}
 
+	private void removeListeners() {
+		val.removeModifyListener(spinerModify);
+		for (ModifyListener ml : mlisteners)
+			val.removeModifyListener(ml);
+		val.removeSelectionListener(spinerSelection);
+		for (SelectionListener sl : slisteners)
+			val.removeSelectionListener(sl);
+	}
+
+	private void addListeners() {
+		val.addSelectionListener(spinerSelection);
+		for (SelectionListener sl : slisteners)
+			val.addSelectionListener(sl);
+		val.addModifyListener(spinerModify);
+		for (ModifyListener ml : mlisteners)
+			val.addModifyListener(ml);
+	}
+
+	private List<SelectionListener> slisteners = new ArrayList<SelectionListener>();
+	private List<ModifyListener> mlisteners = new ArrayList<ModifyListener>();
+
 	public void addSelectionListener(SelectionListener listener) {
+		slisteners.add(listener);
 		val.addSelectionListener(listener);
 	}
 
 	public void removeSelectionListener(ModifyListener listener) {
+		slisteners.remove(listener);
 		val.removeModifyListener(listener);
 	}
 
 	public void addModifyListener(ModifyListener listener) {
+		mlisteners.add(listener);
 		val.addModifyListener(listener);
 	}
 
 	public void removeModifyListener(SelectionListener listener) {
+		mlisteners.remove(listener);
 		val.removeSelectionListener(listener);
 	}
 
