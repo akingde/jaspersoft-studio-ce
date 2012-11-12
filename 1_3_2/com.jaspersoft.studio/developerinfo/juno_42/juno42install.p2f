@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?p2f version='1.0.0'?>
+<p2f version='1.0.0'>
+  <ius size='9'>
+    <iu id='com.wdev91.eclipse.copyright.feature.feature.group' name='Copyright Wizard' version='1.4.0'>
+      <repositories size='1'>
+        <repository location='http://www.wdev91.com/update/'/>
+      </repositories>
+    </iu>
+    <iu id='epp.package.rcp' name='Eclipse for RCP and RAP Developers' version='1.5.0.20120614-1633'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.platform.sdk' name='Eclipse Platform SDK' version='4.2.0.I20120608-1400'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+        <repository location='http://download.eclipse.org/eclipse/updates/4.2'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.sdk.ide' name='Eclipse SDK' version='4.2.0.I20120608-1400'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+        <repository location='http://download.eclipse.org/eclipse/updates/4.2'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.gef.sdk.feature.group' name='Graphical Editing Framework GEF SDK' version='3.8.0.201206112118'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.nebula.feature.feature.group' name='Nebula Widgets' version='1.0.0.201208281846'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/technology/nebula/snapshot'/>
+      </repositories>
+    </iu>    
+    <iu id='org.apache.xalan' name='Xalan-Java' version='2.7.1.v201005080400'>
+      <repositories size='3'>
+        <repository location='http://download.eclipse.org/releases/indigo'/>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='de.itemis.xtext.utils.jface.feature.group' name='Xtext JFace Integration (XJI)' version='1.0.0.201205141449'>
+      <repositories size='1'>
+        <repository location='http://updates.yakindu.com/indigo/milestones/'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.xtext.sdk.feature.group' name='Xtext SDK' version='2.3.0.v201206120633'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/'/>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+      </repositories>
+    </iu>
+  </ius>
+</p2f>
