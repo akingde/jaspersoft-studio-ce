@@ -66,7 +66,6 @@ public class SPLineStyleEnum {
 	 */
 	public void createComponent(Composite parent, final AbstractSection section, final String property) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
 		RowLayout layout = new RowLayout();
 		layout.marginLeft = 0;
 		composite.setLayout(layout);
