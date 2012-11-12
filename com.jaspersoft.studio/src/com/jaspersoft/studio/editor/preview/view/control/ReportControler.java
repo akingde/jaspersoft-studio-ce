@@ -278,7 +278,6 @@ public class ReportControler {
 			protected IStatus run(IProgressMonitor monitor) {
 				ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 				try {
-					jrContext.init((IFile) jrContext.get(IEditorContributor.KEY_FILE));
 					Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
 					setParameters();
 
