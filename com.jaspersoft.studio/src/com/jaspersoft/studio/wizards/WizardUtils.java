@@ -1,0 +1,128 @@
+package com.jaspersoft.studio.wizards;
+
+import java.util.List;
+import java.util.Map;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+
+import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetNewPage;
+
+
+/**
+ * Utilities to create objects from wizard settings
+ * 
+ * @author gtoffoli
+ *
+ */
+public class WizardUtils {
+
+	/**
+	 * Create a new JRDesignDataset by looking into the settings for the following
+	 * information (keys), which are all optional:<br>
+	 * <ul> 
+	 * <li>WizardDatasetNewPage.DATASET_NAME Name of the dataset.</li>
+	 * <li>WizardDatasetNewPage.DATASET_EMPTY If true returns an empty dataset.</li>
+	 * <li>WizardDatasetNewPage.DATASET_FIELDS The fields of the dataset.</li>
+	 * <li>WizardDatasetNewPage.GROUP_FIELDS A List of JRDesignFields to be used as grouping fields.</li>
+	 * </ul>
+	 * 
+	 * @param isMain - True if this is a main dataset, false otherwise.
+	 * @param settings - a Map<String, Object> populated the objects useful to create the dataset
+	 * @return JRDesignDataset
+	 */
+	@SuppressWarnings("unchecked")
+	public static JRDesignDataset createDataset(boolean isMain, Map<String,Object> settings)
+	{
+		
+		// Create a new dataset
+			JRDesignDataset dataset = new JRDesignDataset(isMain);
+			JRDesignQuery query = new JRDesignQuery();
+			dataset.setQuery(query);
+			
+			// Get values from the settings...
+			if (settings != null)
+			{
+				
+				if (settings.containsKey( WizardDatasetNewPage.DATASET_NAME ))
+				{
+					dataset.setName( (String)settings.get(WizardDatasetNewPage.DATASET_NAME));
+				}
+				
+				// If the user specified to use an empty dataset, return the dataset as it is...
+				if (settings.containsKey( WizardDatasetNewPage.DATASET_EMPTY))
+				{
+					Boolean b = (Boolean)settings.get(WizardDatasetNewPage.DATASET_EMPTY);
+					if (b.booleanValue() == true)
+					{
+						return dataset;
+					}
+				}
+				
+				if (settings.containsKey( WizardDataSourcePage.DATASET_QUERY_LANGUAGE))
+				{
+					query.setLanguage( (String)settings.get(WizardDataSourcePage.DATASET_QUERY_LANGUAGE) );
+				}
+				
+				
+				if (settings.containsKey( WizardDataSourcePage.DATASET_QUERY_TEXT))
+				{
+					query.setText((String)settings.get(WizardDataSourcePage.DATASET_QUERY_TEXT) );
+				}
+				
+				
+			  // Check for fields...
+				if (settings.containsKey( WizardDataSourcePage.DATASET_FIELDS))
+				{
+					List<JRDesignField> fields = (List<JRDesignField>)(settings.get(WizardDataSourcePage.DATASET_FIELDS));
+					for (JRDesignField f : fields)
+					{
+						try {
+							dataset.addField(f);
+						} catch (JRException ex) { 
+							// Let's ignore exceptions here, the worst case would be a duplicated fields name not getting
+							// in the dataset, situation that should be checked upfront, not now.
+							ex.printStackTrace();
+						}
+					}
+					
+					
+					// If there are fields, there may be groups also...
+					if (settings.containsKey( WizardDataSourcePage.GROUP_FIELDS))
+					{
+						List<JRDesignField> groupFields = (List<JRDesignField>)(settings.get(WizardDataSourcePage.GROUP_FIELDS));
+						for (JRDesignField f : groupFields)
+						{
+							try {
+									String name = ((JRField) f).getName();
+									
+									JRDesignGroup group = new JRDesignGroup();
+									group.setName( name );
+									
+									JRDesignExpression jre = new JRDesignExpression();
+									jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+									group.setExpression(jre);
+									
+									dataset.addGroup(group);
+									
+							} catch (JRException ex) { 
+								// Let's ignore exceptions here, the worst case would be a duplicated group name not getting
+								// in the dataset, situation that should be checked upfront, not now.
+								ex.printStackTrace();
+							}
+						}
+					}
+					
+				}
+			}
+			
+			return dataset;
+	}
+	
+}

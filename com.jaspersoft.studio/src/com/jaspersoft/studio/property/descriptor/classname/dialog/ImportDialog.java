@@ -1,0 +1,203 @@
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
+ * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of Jaspersoft Open Studio.
+ *
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.jaspersoft.studio.property.descriptor.classname.dialog;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.eclipse.jdt.core.search.SearchEngine;
+import org.eclipse.jdt.internal.core.JavaElement;
+import org.eclipse.jdt.ui.IJavaElementSearchConstants;
+import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.dialogs.SelectionDialog;
+
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
+import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
+import com.jaspersoft.studio.swt.widgets.table.INewElement;
+import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
+import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.utils.UIUtils;
+
+public class ImportDialog extends Dialog {
+	private String value;
+	private TableViewer tableViewer;
+	private List<String> imports;
+
+	public ImportDialog(Shell parentShell, String value) {
+		super(parentShell);
+		this.value = value;
+	}
+
+	public String getImports() {
+		value = "";
+		for (String str : imports) {
+			value += str + ";";
+		}
+
+		return value;
+	}
+
+	/**
+	 * Configure Shell attributes like setText
+	 */
+	@Override
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		shell.setText("Java Import");
+	}
+
+	@Override
+	protected Control createDialogArea(Composite parent) {
+		// Control control = super.createDialogArea(parent);
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(2, false));
+
+		buildTable(composite);
+
+		Composite bGroup = new Composite(composite, SWT.NONE);
+		bGroup.setLayout(new GridLayout(1, false));
+		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		bGroup.setBackground(parent.getBackground());
+
+		NewButton bnew = new NewButton();
+		bnew.createNewButtons(bGroup, tableViewer, new INewElement() {
+
+			public Object newElement(List<?> input, int pos) {
+				String[] results = null;
+				SelectionDialog dialog = JavaUI.createPackageDialog(getShell(), new ProgressMonitorDialog(getShell()),
+						SearchEngine.createWorkspaceScope(), true, true, null);
+				dialog.setTitle("Import Packages");
+				if (dialog.open() == Dialog.OK) {
+					Object[] objects = dialog.getResult();
+					if (objects != null && objects.length > 0) {
+						results = new String[objects.length];
+						for (int i = 0; i < objects.length; i++) {
+							JavaElement jpf = (JavaElement) objects[i];
+							results[i] = jpf.getElementName() + ".*"; //$NON-NLS-1$
+						}
+					}
+				}
+				return results;
+			}
+		});
+		bnew.setButtonText("Add Package");
+
+		bnew = new NewButton();
+		bnew.createNewButtons(bGroup, tableViewer, new INewElement() {
+
+			public Object newElement(List<?> input, int pos) {
+				try {
+					String[] results = null;
+					IJavaSearchScope searchScope = SearchEngine.createWorkspaceScope();
+					SelectionDialog dialog = JavaUI.createTypeDialog(getShell(), new ProgressMonitorDialog(getShell()),
+							searchScope, IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, true);
+					dialog.setTitle(Messages.ClassTypeCellEditor_open_type);
+					dialog.setMessage(Messages.ClassTypeCellEditor_dialog_message);
+					if (dialog.open() == Window.OK) {
+						Object[] objects = dialog.getResult();
+						if (objects != null && objects.length > 0) {
+							results = new String[objects.length];
+							for (int i = 0; i < objects.length; i++) {
+								if (objects[i] instanceof IType) {
+									IType bt = (IType) objects[i];
+									results[i] = bt.getFullyQualifiedName();
+								}
+							}
+						}
+						return results;
+					}
+				} catch (JavaModelException e) {
+					UIUtils.showError(e);
+				}
+				return null;
+			}
+		});
+		bnew.setButtonText("Add Class");
+
+		DeleteButton bdel = new DeleteButton();
+		bdel.createDeleteButton(bGroup, tableViewer);
+
+		imports = new ArrayList<String>();
+		StringTokenizer st = new StringTokenizer(value, ";"); //$NON-NLS-1$
+		while (st.hasMoreTokens())
+			imports.add(st.nextToken());
+
+		tableViewer.setInput(imports);
+
+		return composite;
+	}
+
+	private void buildTable(Composite composite) {
+		Table table = new Table(composite, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.minimumHeight = 400;
+		gd.minimumWidth = 400;
+		table.setLayoutData(gd);
+		table.setHeaderVisible(false);
+		table.setLinesVisible(true);
+
+		tableViewer = new TableViewer(table);
+		attachContentProvider(tableViewer);
+		attachLabelProvider(tableViewer);
+
+		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100));
+		table.setLayout(tlayout);
+
+		TableColumn[] column = new TableColumn[1];
+		column[0] = new TableColumn(table, SWT.NONE);
+
+		for (int i = 0, n = column.length; i < n; i++)
+			column[i].pack();
+
+	}
+
+	private void attachLabelProvider(TableViewer viewer) {
+		viewer.setLabelProvider(new TableLabelProvider());
+	}
+
+	private void attachContentProvider(TableViewer viewer) {
+		viewer.setContentProvider(new ListContentProvider());
+	}
+}
