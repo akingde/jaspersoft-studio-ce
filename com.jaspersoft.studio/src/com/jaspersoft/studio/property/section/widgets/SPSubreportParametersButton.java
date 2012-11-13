@@ -90,7 +90,7 @@ public class SPSubreportParametersButton extends ASPropertyWidget {
 				WizardDialog dialog = new WizardDialog(JaspersoftStudioPlugin.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK)
-					setData(msubreport, wizard.getValue());
+					section.changeProperty(pDescriptor.getId(), wizard.getValue());
 			}
 		});
 	}

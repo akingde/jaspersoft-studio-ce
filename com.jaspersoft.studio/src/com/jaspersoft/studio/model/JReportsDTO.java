@@ -19,12 +19,17 @@
  */
 package com.jaspersoft.studio.model;
 
+import java.util.List;
+
+import net.sf.jasperreports.engine.JRSubreportReturnValue;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
+
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JReportsDTO {
 	private JasperReportsConfiguration jConfig;
-	private Object value;
-	private Object prop1;
+	private List<JRSubreportReturnValue> value;
+	private JRDesignSubreport prop1;
 
 	public void setjConfig(JasperReportsConfiguration jConfig) {
 		this.jConfig = jConfig;
@@ -34,19 +39,19 @@ public class JReportsDTO {
 		return jConfig;
 	}
 
-	public Object getProp1() {
+	public JRDesignSubreport getProp1() {
 		return prop1;
 	}
 
-	public void setProp1(Object prop1) {
+	public void setProp1(JRDesignSubreport prop1) {
 		this.prop1 = prop1;
 	}
 
-	public Object getValue() {
+	public List<JRSubreportReturnValue> getValue() {
 		return value;
 	}
 
-	public void setValue(Object value) {
+	public void setValue(List<JRSubreportReturnValue> value) {
 		this.value = value;
 	}
 

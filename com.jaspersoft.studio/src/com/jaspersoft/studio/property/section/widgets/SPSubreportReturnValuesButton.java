@@ -85,11 +85,15 @@ public class SPSubreportReturnValuesButton extends ASPropertyWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				RVPropertyEditor wizard = new RVPropertyEditor();
-				wizard.setValue(dto);
+				JReportsDTO value = new JReportsDTO();
+				value.setjConfig(dto.getjConfig());
+				value.setProp1(dto.getProp1());
+				value.setValue(dto.getValue());
+				wizard.setValue(value);
 				WizardDialog dialog = new WizardDialog(JaspersoftStudioPlugin.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK)
-					setData(msubreport, wizard.getValue());
+					section.changeProperty(pDescriptor.getId(), wizard.getValue());
 			}
 		});
 	}

@@ -32,6 +32,7 @@ import net.sf.jasperreports.engine.base.JRBaseSubreport;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRCloneUtils;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -191,14 +192,14 @@ public class MSubreport extends MGraphicElement {
 		if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getDataSourceExpression());
 		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS))
-			return jrElement.getParameters();
+			return JRCloneUtils.cloneArray(jrElement.getParameters());
 		if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES)) {
 			if (returnValuesDTO == null) {
 				returnValuesDTO = new JReportsDTO();
 				returnValuesDTO.setjConfig(getJasperConfiguration());
 				returnValuesDTO.setProp1(jrElement);
 			}
-			returnValuesDTO.setValue(jrElement.getReturnValuesList());
+			returnValuesDTO.setValue(JRCloneUtils.cloneList(jrElement.getReturnValuesList()));
 			return returnValuesDTO;
 
 		}

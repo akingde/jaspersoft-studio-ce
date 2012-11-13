@@ -25,18 +25,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSubreport;
+import net.sf.jasperreports.engine.JRSubreportReturnValue;
 import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignSubreportReturnValue;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.repo.ReportResource;
 import net.sf.jasperreports.repo.RepositoryUtil;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -102,31 +100,31 @@ public class RVPropertyPage extends WizardPage {
 
 	public void setDto(JReportsDTO dto) {
 		this.dto = dto;
-		value = (List<JRDesignSubreportReturnValue>) dto.getValue();
+		value = dto.getValue();
 		toVariables = null;
 	}
 
-	private List<JRDesignSubreportReturnValue> value;
+	private List<JRSubreportReturnValue> value;
 	private Table table;
 	private TableViewer tableViewer;
 	private String[] toVariables;
 
 	// private TableCursor cursor;
 
-	public List<JRDesignSubreportReturnValue> getValue() {
+	public List<JRSubreportReturnValue> getValue() {
 		return value;
 	}
 
 	@Override
 	public void dispose() {
-		value = (List<JRDesignSubreportReturnValue>) tableViewer.getInput();
+		value = (List<JRSubreportReturnValue>) tableViewer.getInput();
 		super.dispose();
 	}
 
-	public void setValue(List<JRDesignSubreportReturnValue> value) {
+	public void setValue(List<JRSubreportReturnValue> value) {
 		this.value = value;
 		if (value == null) {
-			value = new ArrayList<JRDesignSubreportReturnValue>();
+			value = new ArrayList<JRSubreportReturnValue>();
 		}
 		if (table != null)
 			fillTable(table);
@@ -366,16 +364,16 @@ public class RVPropertyPage extends WizardPage {
 				String path = sr.getExpression().getText();
 				path = path.replace("\"", ""); //$NON-NLS-1$ //$NON-NLS-2$ 
 				InputStream in = RepositoryUtil.getInstance(dto.getjConfig()).getInputStreamFromLocation(path);
-				
+
 				InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
 
 				JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
-				
-//				ReportResource resource = RepositoryUtil.getInstance(dto.getjConfig()).getResourceFromLocation(path,
-//						ReportResource.class);
-//				if (resource == null)
-//					throw new JRException("Report not found at : " + path);
-//				JasperReport jr = resource.getReport();
+
+				// ReportResource resource = RepositoryUtil.getInstance(dto.getjConfig()).getResourceFromLocation(path,
+				// ReportResource.class);
+				// if (resource == null)
+				// throw new JRException("Report not found at : " + path);
+				// JasperReport jr = resource.getReport();
 
 				JRParameter[] prms = jd.getParameters();
 				for (JRParameter p : prms)
@@ -387,8 +385,8 @@ public class RVPropertyPage extends WizardPage {
 	}
 
 	private void fillTable(Table table) {
-		List<JRDesignSubreportReturnValue> props = new ArrayList<JRDesignSubreportReturnValue>();
-		for (JRDesignSubreportReturnValue v : value)
+		List<JRSubreportReturnValue> props = new ArrayList<JRSubreportReturnValue>();
+		for (JRSubreportReturnValue v : value)
 			props.add(v);
 		tableViewer.setInput(props);
 		getSubreport();
