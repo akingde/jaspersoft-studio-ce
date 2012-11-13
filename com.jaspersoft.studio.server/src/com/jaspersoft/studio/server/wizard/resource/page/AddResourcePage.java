@@ -135,8 +135,7 @@ public class AddResourcePage extends WizardPage {
 
 				new MDataType(root, MDataType.createDescriptor(parent), -1);
 				new MRQuery(root, MRQuery.createDescriptor(parent), -1);
-				new MReportUnitOptions(root,
-						MReportUnitOptions.createDescriptor(parent), -1);
+
 				new MDataType(root, MDataType.createDescriptor(parent), -1);
 			}
 
@@ -154,6 +153,11 @@ public class AddResourcePage extends WizardPage {
 					-1);
 			new MXmlFile(root, MXmlFile.createDescriptor(parent), -1);
 			new MDataAdapter(root, MDataAdapter.createDescriptor(parent), -1);
+			if (parent instanceof MReportUnit) {
+				new MReportUnitOptions(root,
+						MReportUnitOptions
+								.createDescriptor((MReportUnit) parent), -1);
+			}
 
 			Activator.getExtManager().createNewResource(root, parent);
 

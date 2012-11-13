@@ -28,6 +28,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -75,7 +76,8 @@ public class SelectorJrxml {
 		brRepo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				setEnabled(0);
+				if (brRepo.getSelection())
+					setEnabled(0, false);
 			}
 		});
 
@@ -87,12 +89,15 @@ public class SelectorJrxml {
 		bRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// N.B: remember we need to pass a fresh new MServerProfile info in order
-				// to avoid problem of refreshing (children/parent relationship changes)
+				// N.B: remember we need to pass a fresh new MServerProfile info
+				// in order
+				// to avoid problem of refreshing (children/parent relationship
+				// changes)
 				// due to tree viewer node expansion...
-				RepositoryDialog rd = new RepositoryDialog(
-						Display.getDefault().getActiveShell(), 
-						ServerManager.getMServerProfileCopy((MServerProfile)parent.getRoot())) {
+				RepositoryDialog rd = new RepositoryDialog(Display.getDefault()
+						.getActiveShell(), ServerManager
+						.getMServerProfileCopy((MServerProfile) parent
+								.getRoot())) {
 					@Override
 					public boolean isResourceCompatible(MResource r) {
 						return r instanceof MJrxml;
@@ -108,11 +113,13 @@ public class SelectorJrxml {
 							ref.setIsReference(true);
 							ref.setMainReport(true);
 							ref.setReferenceUri(ref.getUriString());
-							ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() +  "_files");
+							ref.setParentFolder(runit.getParentFolder() + "/"
+									+ runit.getName() + "_files");
 							ref.setWsType(ResourceDescriptor.TYPE_JRXML);
 							ref.setUriString(ref.getParentFolder() + "/"
 									+ ref.getName());
 							replaceMainReport(res, ref);
+							fireSelectionChanged();
 
 							jsRefDS.setText(ref.getUriString());
 						} catch (Exception e1) {
@@ -131,7 +138,8 @@ public class SelectorJrxml {
 		brLocal.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				setEnabled(1);
+				if (brLocal.getSelection())
+					setEnabled(1, false);
 			}
 		});
 
@@ -159,22 +167,33 @@ public class SelectorJrxml {
 					jrxmlDescriptor.setHasData(true);
 
 					replaceMainReport(res, jrxmlDescriptor);
+					fireSelectionChanged();
 
-					File selectedFile = new File(((IFile) wizard
-							.getFirstResult()).getLocationURI());
-					((AFileResource) res).setFile(selectedFile);
-					
-					jsLocDS.setText(selectedFile.getAbsolutePath());
+					resfile = new File(((IFile) wizard.getFirstResult())
+							.getLocationURI());
+					((AFileResource) res).setFile(resfile);
+
+					jsLocDS.setText(resfile.getAbsolutePath());
 				}
 			}
 		});
 		ResourceDescriptor r = getMainReport(res.getValue());
 		if (r != null) {
-			if (r.getIsReference())
-				setEnabled(0);
-			else
-				setEnabled(1);
-		}
+			if (r.getIsReference()) {
+				rrepo = r;
+				setEnabled(0, true);
+			} else {
+				rlocal = r;
+				setEnabled(1, true);
+			}
+		} else
+			setEnabled(1, true);
+	}
+
+	private SelectionListener listener;
+
+	public void addSelectionListener(SelectionListener listener) {
+		this.listener = listener;
 	}
 
 	public static void replaceMainReport(final MResource res,
@@ -185,10 +204,11 @@ public class SelectorJrxml {
 			if (index >= 0)
 				res.getValue().getChildren().remove(index);
 		}
-		res.getValue().getChildren().add(rd);
+		if (rd != null)
+			res.getValue().getChildren().add(rd);
 	}
 
-	private static ResourceDescriptor getMainReport(ResourceDescriptor ru) {
+	public static ResourceDescriptor getMainReport(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
 			if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML)
@@ -199,7 +219,11 @@ public class SelectorJrxml {
 		return null;
 	}
 
-	private void setEnabled(int pos) {
+	private ResourceDescriptor rlocal;
+	private ResourceDescriptor rrepo;
+	private File resfile;
+
+	private void setEnabled(int pos, boolean init) {
 		bRef.setEnabled(false);
 		jsRefDS.setEnabled(false);
 
@@ -213,23 +237,46 @@ public class SelectorJrxml {
 		jsLocDS.setText("");
 
 		ResourceDescriptor r = getMainReport(res.getValue());
+		AFileResource aFileResource = (AFileResource) res;
+		File file = aFileResource.getFile();
 		switch (pos) {
 		case 0:
+			if (!init) {
+				rlocal = r;
+				resfile = file;
+				replaceMainReport(res, rrepo);
+				aFileResource.setFile(null);
+			}
 			bRef.setEnabled(true);
 			brRepo.setSelection(true);
 			jsRefDS.setEnabled(true);
-			if (r != null)
-				jsRefDS.setText(Misc.nvl(r.getReferenceUri()));
+			if (rrepo != null)
+				jsRefDS.setText(Misc.nvl(rrepo.getReferenceUri()));
 			break;
 		case 1:
+			if (!init) {
+				rrepo = r;
+				replaceMainReport(res, rlocal);
+			}
+
 			brLocal.setSelection(true);
 			bLoc.setEnabled(true);
 			jsLocDS.setEnabled(true);
-			if (r != null)
-				jsLocDS.setText(Misc.nvl(r.getName()));
+			if (rlocal != null) {
+				if (resfile != null) {
+					jsLocDS.setText(resfile.getAbsolutePath());
+					aFileResource.setFile(resfile);
+				} else
+					jsLocDS.setText(Misc.nvl(rlocal.getName()));
+			}
 			break;
 		}
 
+	}
+
+	private void fireSelectionChanged() {
+		if (listener != null)
+			listener.widgetSelected(null);
 	}
 
 }

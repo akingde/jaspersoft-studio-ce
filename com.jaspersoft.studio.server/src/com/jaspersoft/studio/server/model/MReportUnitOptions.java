@@ -19,14 +19,21 @@
  */
 package com.jaspersoft.studio.server.model;
 
+import java.util.ArrayList;
+
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
 public class MReportUnitOptions extends MResource {
+	private static final String PROP_OPTIONS_NAME = "PROP_OPTIONS_NAME";
+	private static final String PROP_VALUES = "PROP_VALUES";
+	public static final String REPORT_OPTIONS_RESOURCE = "ReportOptionsResource";
+	public static final String PROP_RU_URI = "PROP_RU_URI";
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MReportUnitOptions(ANode parent, ResourceDescriptor rd, int index) {
@@ -42,13 +49,32 @@ public class MReportUnitOptions extends MResource {
 	}
 
 	@Override
+	public void setParent(ANode parent, int newIndex) {
+		if (parent instanceof MReportUnit)
+			parent = parent.getParent();
+		super.setParent(parent, newIndex);
+	}
+
+	@Override
 	public IIconDescriptor getThisIconDescriptor() {
 		return getIconDescriptor();
 	}
 
-	public static ResourceDescriptor createDescriptor(ANode parent) {
+	public static ResourceDescriptor createDescriptor(MReportUnit parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
-		rd.setWsType("ReportOptionsResource");
+		ResourceProperty rp = new ResourceProperty(PROP_RU_URI, parent
+				.getValue().getUriString());
+		rd.getProperties().add(rp);
+
+		rp = new ResourceProperty(PROP_OPTIONS_NAME, rd.getName());
+		rd.getProperties().add(rp);
+
+		rp = new ResourceProperty(PROP_VALUES);
+		rp.setProperties(new ArrayList<ResourceProperty>());
+		rd.getProperties().add(rp);
+
+		rd.setParentFolder(parent.getValue().getParentFolder());
+		rd.setWsType(REPORT_OPTIONS_RESOURCE);
 		return rd;
 	}
 }

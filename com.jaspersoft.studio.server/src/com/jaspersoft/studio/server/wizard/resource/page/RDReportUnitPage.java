@@ -22,6 +22,9 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -56,6 +59,13 @@ public class RDReportUnitPage extends AResourcePage {
 		createReportUnitControls(tabFolder);
 	}
 
+	@Override
+	public boolean isPageComplete() {
+		if (res != null)
+			return SelectorJrxml.getMainReport(res.getValue()) != null;
+		return false;
+	}
+
 	protected void createReportUnit(TabFolder tabFolder) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
 		item.setText(Messages.RDReportUnitPage_reportunit);
@@ -64,7 +74,14 @@ public class RDReportUnitPage extends AResourcePage {
 		composite.setLayout(new GridLayout(2, false));
 		item.setControl(composite);
 
-		new SelectorJrxml().createControls(composite, parent, res);
+		SelectorJrxml selectorJrxml = new SelectorJrxml();
+		selectorJrxml.createControls(composite, parent, res);
+		selectorJrxml.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				setPageComplete(isPageComplete());
+			}
+		});
 
 		Label lbl = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -96,8 +113,10 @@ public class RDReportUnitPage extends AResourcePage {
 		UIUtils.createLabel(composite, Messages.RDReportUnitPage_controlslayout);
 
 		Combo cictype = new Combo(composite, SWT.BORDER);
-		cictype.setItems(new String[] { Messages.RDReportUnitPage_popupscreen, Messages.RDReportUnitPage_separatepage,
-				Messages.RDReportUnitPage_topofpage, Messages.RDReportUnitPage_inpage });
+		cictype.setItems(new String[] { Messages.RDReportUnitPage_popupscreen,
+				Messages.RDReportUnitPage_separatepage,
+				Messages.RDReportUnitPage_topofpage,
+				Messages.RDReportUnitPage_inpage });
 
 		UIUtils.createLabel(composite, ""); //$NON-NLS-1$
 
@@ -105,7 +124,8 @@ public class RDReportUnitPage extends AResourcePage {
 		ispromp.setText(Messages.RDReportUnitPage_alwaysprompt);
 		ispromp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, Messages.RDReportUnitPage_jsptoruninputcontrol);
+		UIUtils.createLabel(composite,
+				Messages.RDReportUnitPage_jsptoruninputcontrol);
 
 		Text jspic = new Text(composite, SWT.BORDER);
 		jspic.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
