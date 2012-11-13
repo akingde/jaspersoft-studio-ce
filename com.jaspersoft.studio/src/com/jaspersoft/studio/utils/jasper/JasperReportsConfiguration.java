@@ -207,7 +207,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	}
 
 	public void setJasperDesign(JasperDesign jd) {
-		put(KEY_JASPERDESIGN, jd);
+		if (jd == null)
+			remove(KEY_JASPERDESIGN);
+		else
+			put(KEY_JASPERDESIGN, jd);
 	}
 
 	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";

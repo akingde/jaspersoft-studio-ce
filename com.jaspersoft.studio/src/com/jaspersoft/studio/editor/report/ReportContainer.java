@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConditionalStyle;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplateReference;
@@ -36,6 +37,7 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.repo.RepositoryUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -71,6 +73,7 @@ import com.jaspersoft.studio.properties.view.ITabbedPropertySheetPageContributor
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -368,8 +371,25 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 					JRDesignSubreport s = (JRDesignSubreport) obj;
 					if (s.getExpression() != null) {
 						String path = ExpressionUtil.eval(s.getExpression(), jrContext);
-						if (!SelectionHelper.openEditor((FileEditorInput) getEditorInput(), path)) {
-							SelectionHelper.openEditor((FileEditorInput) getEditorInput(), path.replaceAll(".jasper", ".jrxml"));
+						if (path != null) {
+							String fpath = path.replaceAll(".jasper", ".jrxml");
+							try {
+								RepositoryUtil.getInstance(jrContext).getBytesFromLocation(path.replaceAll(".jasper", ".jrxml"));
+
+							} catch (JRException e) {
+								e.printStackTrace();
+								try {
+									RepositoryUtil.getInstance(jrContext).getBytesFromLocation(path);
+									if (!UIUtils.showConfirmation("Subreport File",
+											String.format("File %s does not exists, do you want to open %s?", fpath, path)))
+										return;
+									fpath = path;
+								} catch (JRException e1) {
+									UIUtils.showError(e1);
+									return;
+								}
+							}
+							SelectionHelper.openEditor((FileEditorInput) getEditorInput(), fpath);
 						}
 					}
 				}
