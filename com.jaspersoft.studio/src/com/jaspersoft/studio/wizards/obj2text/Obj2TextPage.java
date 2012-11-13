@@ -77,7 +77,7 @@ public class Obj2TextPage extends WizardPage {
 
 			public void widgetSelected(SelectionEvent e) {
 				int sel = lst.getSelectionIndex();
-				calculation = CalculationEnum.getByValue((byte) sel);
+				calculation = CalculationEnum.getByName(names[sel]);
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {

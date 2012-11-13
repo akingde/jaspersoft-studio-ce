@@ -104,8 +104,8 @@ public class Tag {
 			if (Number.class.isAssignableFrom(tag.clazz))
 				names = EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL);
 			else
-				names = new String[] { CalculationEnum.COUNT.getName(), CalculationEnum.DISTINCT_COUNT.getName(),
-						CalculationEnum.NOTHING.getName() };
+				names = new String[] { CalculationEnum.NOTHING.getName(), CalculationEnum.COUNT.getName(),
+						CalculationEnum.DISTINCT_COUNT.getName() };
 			Obj2TextWizard wizard = new Obj2TextWizard(names);
 			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 			dialog.create();
