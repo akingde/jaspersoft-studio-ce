@@ -195,10 +195,10 @@ public class MSubreport extends MGraphicElement {
 		if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES)) {
 			if (returnValuesDTO == null) {
 				returnValuesDTO = new JReportsDTO();
-				returnValuesDTO.setJasperDesign(getJasperDesign());
-				returnValuesDTO.setValue(jrElement.getReturnValuesList());
+				returnValuesDTO.setjConfig(getJasperConfiguration());
 				returnValuesDTO.setProp1(jrElement);
 			}
+			returnValuesDTO.setValue(jrElement.getReturnValuesList());
 			return returnValuesDTO;
 
 		}
@@ -246,7 +246,9 @@ public class MSubreport extends MGraphicElement {
 			if (returnValuesDTO.getValue() instanceof List) {
 				@SuppressWarnings("unchecked")
 				List<JRSubreportReturnValue> list = (List<JRSubreportReturnValue>) returnValuesDTO.getValue();
-				jrElement.getReturnValuesList().clear();
+				JRSubreportReturnValue[] marray = list.toArray(new JRSubreportReturnValue[list.size()]);
+				for (JRSubreportReturnValue srv : marray)
+					jrElement.removeReturnValue(srv);
 				for (JRSubreportReturnValue j : list)
 					jrElement.addReturnValue(j);
 			}

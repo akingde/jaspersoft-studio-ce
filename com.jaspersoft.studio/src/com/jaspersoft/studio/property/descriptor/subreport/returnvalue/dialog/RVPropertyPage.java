@@ -19,8 +19,8 @@
  */
 package com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,16 +28,17 @@ import java.util.List;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSubreport;
+import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignSubreportReturnValue;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.CalculationEnum;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.repo.ReportResource;
+import net.sf.jasperreports.repo.RepositoryUtil;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -56,6 +57,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.JReportsDTO;
@@ -135,7 +137,6 @@ public class RVPropertyPage extends WizardPage {
 		super(pageName);
 		setTitle(Messages.RVPropertyPage_subreport_return_values);
 		setDescription(Messages.RVPropertyPage_description);
-
 	}
 
 	public void createControl(Composite parent) {
@@ -345,7 +346,8 @@ public class RVPropertyPage extends WizardPage {
 	public String[] getToVariables() {
 		if (toVariables == null) {
 			List<String> res = new ArrayList<String>();
-			for (Object o : dto.getJasperDesign().getVariablesList()) {
+			List<JRVariable> vlist = dto.getjConfig().getJasperDesign().getVariablesList();
+			for (Object o : vlist) {
 				JRDesignVariable jdVar = (JRDesignVariable) o;
 				if (!jdVar.isSystemDefined())
 					res.add(jdVar.getName());
@@ -362,22 +364,24 @@ public class RVPropertyPage extends WizardPage {
 			JRSubreport sr = (JRSubreport) dto.getProp1();
 			if (sr.getExpression() != null) {
 				String path = sr.getExpression().getText();
-				path = path.replace("\"", ""); //$NON-NLS-1$ //$NON-NLS-2$
-				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(path));
-				InputStream io = file.getContents();
-				JasperDesign jd = JRXmlLoader.load(io);
+				path = path.replace("\"", ""); //$NON-NLS-1$ //$NON-NLS-2$ 
+				InputStream in = RepositoryUtil.getInstance(dto.getjConfig()).getInputStreamFromLocation(path);
+				
+				InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
 
-				List<JRParameter> prms = jd.getParametersList();
-				for (JRParameter p : prms) {
+				JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
+				
+//				ReportResource resource = RepositoryUtil.getInstance(dto.getjConfig()).getResourceFromLocation(path,
+//						ReportResource.class);
+//				if (resource == null)
+//					throw new JRException("Report not found at : " + path);
+//				JasperReport jr = resource.getReport();
+
+				JRParameter[] prms = jd.getParameters();
+				for (JRParameter p : prms)
 					srcParamNames.add(p.getName());
-				}
-				io.close();
 			}
-		} catch (CoreException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JRException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
