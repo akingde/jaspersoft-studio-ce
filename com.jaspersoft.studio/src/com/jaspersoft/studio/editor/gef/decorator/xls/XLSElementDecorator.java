@@ -109,6 +109,33 @@ public class XLSElementDecorator extends TextElementDecorator {
 		selectionActions.add(action.getId());
 	}
 	
+	private void registerFreezeProperties(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
+		
+		IAction action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("Left"), XLSAction.FREEZE_COL_ID, "left","Left");
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("Right"), XLSAction.FREEZE_COL_ID, "right","Right");
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("None"), XLSAction.FREEZE_COL_ID, null, "None");
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+
+		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("Top"), XLSAction.FREEZE_ROW_ID, "top","Top");
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("Bottom"), XLSAction.FREEZE_ROW_ID, "bottom","Bottom");
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("None"), XLSAction.FREEZE_ROW_ID, null, "None");
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+	}
+	
 	@Override
 	public void registerActions(ActionRegistry registry, List<String> selectionActions, GraphicalViewer gviewer,
 			IWorkbenchPart part) {
@@ -119,6 +146,7 @@ public class XLSElementDecorator extends TextElementDecorator {
 		registerAutoFilter(registry, part, selectionActions);
 		registerBreak(registry, part, selectionActions);
 		registerCellProperties(registry, part, selectionActions);
+		registerFreezeProperties(registry, part, selectionActions);
 	}
 
 	@Override
@@ -133,12 +161,18 @@ public class XLSElementDecorator extends TextElementDecorator {
 		MenuManager fitMenu = new MenuManager("Fit");
 		MenuManager autoFilterMenu = new MenuManager("Autofilter");
 		MenuManager breakMenu = new MenuManager("Break");
+		MenuManager freezeMenu = new MenuManager("Freeze");
+		MenuManager freezeRowMenu = new MenuManager("Rows");
+		MenuManager freezeColMenu = new MenuManager("Columns");
 		MenuManager propertiesMenu = new MenuManager("Cell Properties");
 		
 		submenu.add(fitMenu);
 		submenu.add(autoFilterMenu);
 		submenu.add(breakMenu);
 		submenu.add(propertiesMenu);
+		freezeMenu.add(freezeRowMenu);
+		freezeMenu.add(freezeColMenu);
+		submenu.add(freezeMenu);
 
 		IAction action;
 		// Adding actions for the Fit
@@ -172,6 +206,21 @@ public class XLSElementDecorator extends TextElementDecorator {
 		propertiesMenu.add(action);
 		action = registry.getAction("XSL_Cell_None");
 		propertiesMenu.add(action);
+		
+		//Adding the freeze properties
+		action = registry.getAction(XLSAction.FREEZE_ROW_ID.concat("Top"));
+		freezeRowMenu.add(action);
+		action = registry.getAction(XLSAction.FREEZE_ROW_ID.concat("Bottom"));
+		freezeRowMenu.add(action);
+		action = registry.getAction(XLSAction.FREEZE_ROW_ID.concat("None"));
+		freezeRowMenu.add(action);
+		
+		action = registry.getAction(XLSAction.FREEZE_COL_ID.concat("Left"));
+		freezeColMenu.add(action);
+		action = registry.getAction(XLSAction.FREEZE_COL_ID.concat("Right"));
+		freezeColMenu.add(action);
+		action = registry.getAction(XLSAction.FREEZE_COL_ID.concat("None"));
+		freezeColMenu.add(action);
 
 		menu.add(submenu);
 	}

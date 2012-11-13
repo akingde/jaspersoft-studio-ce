@@ -180,6 +180,7 @@ public class ComboButton extends Viewer {
 				Rectangle trim = computeTrim(0, 0, width, height);
 				return new Point(trim.width, trim.height);
 			}
+
 		};
 		hookControl(control);
 	}
@@ -769,7 +770,7 @@ public class ComboButton extends Viewer {
 
 		gc.setAntialias(SWT.ON);
 		gc.setTextAntialias(SWT.ON);
-
+		
 		int x, y, w, h;
 		boolean focused = getControl().isFocusControl() || isForceFocus();
 		boolean hasBackgroundAndBorder = pressed || hovered || focused;

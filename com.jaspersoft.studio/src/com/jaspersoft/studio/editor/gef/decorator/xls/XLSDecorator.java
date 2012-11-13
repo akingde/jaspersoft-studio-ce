@@ -68,7 +68,7 @@ public class XLSDecorator implements IDecorator, TextDecoratorInterface {
 		}
 		tags = new String[] { XLSAction.FIT_COL_ID, "FitCol", XLSAction.FIT_ROW_ID, "FitRow", XLSAction.AUTOFILTER_ID,
 				"AutoFilter", XLSAction.BREAK_AFTER_ROW_ID, "BreakAfter", XLSAction.BREAK_BEFORE_ROW_ID, "BreakBefore",
-				XLSAction.CELL_HIDDEN_ID, "Hidden", XLSAction.CELL_LOCKED_ID, "Locked" };
+				XLSAction.CELL_HIDDEN_ID, "Hidden", XLSAction.CELL_LOCKED_ID, "Locked", XLSAction.FREEZE_COL_ID, "ColFreeze", XLSAction.FREEZE_ROW_ID, "RowFreeze" };
 	}
 
 	/**
@@ -210,13 +210,21 @@ public class XLSDecorator implements IDecorator, TextDecoratorInterface {
 			String label = tags[i + 1];
 			tagValue = mapProperties.getProperty(prop);
 			if (tagValue != null) {
-				if (tagValue.equals("true")) {
+				if (prop.equals(XLSAction.FREEZE_COL_ID)){
+					if (tagValue.equals("left"))
+						endString += label.concat("-Left") + " ";
+					else 	endString += label.concat("-Right") + " ";
+				} else if (prop.equals(XLSAction.FREEZE_ROW_ID)){
+					if (tagValue.equals("top"))
+						endString += label.concat("-Top") + " ";
+					else 	endString += label.concat("-Bottom") + " ";
+				} else if (tagValue.equals("true")) {
 					endString += label + " ";
 				} else if (tagValue.equals("start")) {
-					startString += label.concat("Start") + " ";
+					startString += label.concat("-Start") + " ";
 				} else if (tagValue.equals("end")) {
 					endString = label.concat("End") + " " + endString;
-				}
+				} 
 			}
 
 		}

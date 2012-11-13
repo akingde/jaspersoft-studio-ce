@@ -37,6 +37,10 @@ public class XLSAction extends SelectionAction{
 	
 	public static String AUTOFILTER_ID = "net.sf.jasperreports.export.xls.auto.filter";
 	
+	public static String FREEZE_ROW_ID = "net.sf.jasperreports.export.xls.freeze.row.edge";
+	
+	public static String FREEZE_COL_ID = "net.sf.jasperreports.export.xls.freeze.column.edge";
+	
 	private String value;
 	
 	private String attributeId;
