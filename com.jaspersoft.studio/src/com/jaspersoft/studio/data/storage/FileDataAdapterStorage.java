@@ -24,7 +24,6 @@ import java.io.InputStream;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
-import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
@@ -47,12 +46,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.widgets.Display;
 import org.exolab.castor.mapping.Mapping;
-import org.exolab.castor.mapping.MappingException;
-import org.exolab.castor.xml.MarshalException;
-import org.exolab.castor.xml.Unmarshaller;
-import org.exolab.castor.xml.ValidationException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;

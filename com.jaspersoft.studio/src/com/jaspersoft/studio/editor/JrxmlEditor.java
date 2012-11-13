@@ -65,6 +65,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
@@ -278,6 +279,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			createPage2();
 		} catch (PartInitException e) {
 			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
+		} catch (Throwable e) {
+			closeEditor();
 		}
 	}
 
@@ -520,8 +523,12 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			setModel(null);
 			handleJRException(editorInput, e, false);
 		} catch (ResourceException e) {
-			setModel(null);
-			handleJRException(editorInput, e, false);
+			if (e.getMessage().startsWith("File not found")) {
+				closeEditor();
+			} else {
+				setModel(null);
+				handleJRException(editorInput, e, false);
+			}
 		} catch (Exception e) {
 			setModel(null);
 			throw new PartInitException(e.getMessage(), e);
@@ -534,6 +541,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					throw new PartInitException("error closing input stream", e); //$NON-NLS-1$
 				}
 		}
+	}
+
+	private void closeEditor() {
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor(JrxmlEditor.this, false);
 	}
 
 	public static IEditorInput checkAndConvertEditorInput(IEditorInput editorInput) throws PartInitException {
@@ -691,7 +702,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					previewEditor.getReportControler().stop();
 				}
 				// getSite().getSelectionProvider().setSelection(tmpselection);
-				Display.getDefault().asyncExec(new Runnable() {
+				Display.getDefault().syncExec(new Runnable() {
 
 					@Override
 					public void run() {
