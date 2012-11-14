@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -29,10 +30,12 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.JRSubreportReturnValue;
 import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.base.JRBaseReport;
 import net.sf.jasperreports.engine.design.JRDesignSubreportReturnValue;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.CalculationEnum;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.repo.RepositoryUtil;
@@ -358,30 +361,66 @@ public class RVPropertyPage extends WizardPage {
 	private List<String> srcParamNames = new ArrayList<String>();
 
 	private void getSubreport() {
-		try {
-			JRSubreport sr = (JRSubreport) dto.getProp1();
-			if (sr.getExpression() != null) {
-				String path = sr.getExpression().getText();
-				path = path.replace("\"", ""); //$NON-NLS-1$ //$NON-NLS-2$ 
-				InputStream in = RepositoryUtil.getInstance(dto.getjConfig()).getInputStreamFromLocation(path);
+		JRSubreport sr = (JRSubreport) dto.getProp1();
+		if (sr.getExpression() != null) {
+			String path = sr.getExpression().getText();
+			path = path.replace("\"", ""); //$NON-NLS-1$ //$NON-NLS-2$
 
-				InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
+			JRBaseReport jd = getFromJRXML(path.replaceAll(".jasper", ".jrxml"));
+			if (jd == null)
+				jd = getFromJasper(path);
 
-				JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
-
-				// ReportResource resource = RepositoryUtil.getInstance(dto.getjConfig()).getResourceFromLocation(path,
-				// ReportResource.class);
-				// if (resource == null)
-				// throw new JRException("Report not found at : " + path);
-				// JasperReport jr = resource.getReport();
-
+			if (jd != null) {
 				JRParameter[] prms = jd.getParameters();
 				for (JRParameter p : prms)
 					srcParamNames.add(p.getName());
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+	}
+
+	private JRBaseReport getFromJasper(String path) {
+		InputStream in = null;
+		JRBaseReport jd = null;
+		try {
+			in = RepositoryUtil.getInstance(dto.getjConfig()).getInputStreamFromLocation(path);
+			if (in != null) {
+				Object obj = JRLoader.loadObject(in);
+				if (obj instanceof JasperReport)
+					jd = (JasperReport) obj;
+			}
+		} catch (Exception e) {
+			// e.printStackTrace();
+		} finally {
+			if (in != null)
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+		return jd;
+	}
+
+	private JRBaseReport getFromJRXML(String path) {
+		InputStream in = null;
+		JRBaseReport jd = null;
+		try {
+			in = RepositoryUtil.getInstance(dto.getjConfig()).getInputStreamFromLocation(path);
+			if (in != null) {
+				InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
+				jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
+			}
+		} catch (Exception e) {
+			// e.printStackTrace();
+		} finally {
+			if (in != null)
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+		return jd;
 	}
 
 	private void fillTable(Table table) {
