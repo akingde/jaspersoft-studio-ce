@@ -55,7 +55,7 @@ import com.jaspersoft.studio.property.section.report.util.PageSize;
 import com.jaspersoft.studio.property.section.report.util.UnitsWidget;
 import com.jaspersoft.studio.property.section.report.util.ValueUnitsWidget;
 
-final class PageFormatDialog extends FormDialog {
+public final class PageFormatDialog extends FormDialog {
 	private JasperDesign jd;
 	private MReport jnode;
 

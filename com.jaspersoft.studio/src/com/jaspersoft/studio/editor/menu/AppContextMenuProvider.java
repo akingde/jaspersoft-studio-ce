@@ -61,7 +61,8 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
-import com.jaspersoft.studio.property.section.report.PageFormatAction;
+import com.jaspersoft.studio.property.section.report.action.PageFormatAction;
+import com.jaspersoft.studio.property.section.report.action.PageRemoveMarginsAction;
 
 /*
  * The Class AppContextMenuProvider.
@@ -98,7 +99,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 	public void buildContextMenu(IMenuManager menu) {
 		// Add component actions group
 		menu.add(new Separator(IComponentFactory.GROUP_COMPONENT));
-		
+
 		GEFActionConstants.addStandardActionGroups(menu);
 
 		IAction action = getActionRegistry().getAction(ActionFactory.UNDO.getId());
@@ -338,6 +339,10 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 
 		action = getActionRegistry().getAction(PageFormatAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
+
+		action = getActionRegistry().getAction(PageRemoveMarginsAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 

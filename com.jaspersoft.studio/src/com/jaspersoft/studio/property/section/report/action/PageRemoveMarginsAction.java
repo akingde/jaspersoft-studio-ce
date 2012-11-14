@@ -17,22 +17,26 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.section.report;
+package com.jaspersoft.studio.property.section.report.action;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.design.JasperDesign;
+
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
-import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.property.SetValueCommand;
 
-public class PageFormatAction extends SelectionAction {
-	public static final String ID = "pageFormatAction"; //$NON-NLS-1$
+public class PageRemoveMarginsAction extends SelectionAction {
+	public static final String ID = "pageRemoveMarginsAction"; //$NON-NLS-1$
 
 	/**
 	 * Constructor
@@ -40,7 +44,7 @@ public class PageFormatAction extends SelectionAction {
 	 * @param diagramViewer
 	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
 	 */
-	public PageFormatAction(IWorkbenchPart part) {
+	public PageRemoveMarginsAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(false);
 	}
@@ -50,8 +54,8 @@ public class PageFormatAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Page Format ...");
-		setToolTipText("Page format");
+		setText("Remove Page Margins");
+		setToolTipText("Remove Page Margins");
 		setId(ID);
 		setEnabled(false);
 	}
@@ -61,11 +65,31 @@ public class PageFormatAction extends SelectionAction {
 	 */
 	public void run() {
 		ReportEditor part = (ReportEditor) getWorkbenchPart();
-		ANode n = (ANode) part.getModel().getChildren().get(0);
-		PageFormatDialog dlg = new PageFormatDialog(Display.getCurrent().getActiveShell(), n);
-		if (dlg.open() == Window.OK) {
-			part.getEditDomain().getCommandStack().execute(dlg.getCommand());
-		}
+		MReport n = (MReport) part.getModel().getChildren().get(0);
+		JasperDesign jd = n.getJasperDesign();
+
+		CompoundCommand c = new CompoundCommand(getText());
+		c.add(createResetCommand(n, JasperDesign.PROPERTY_LEFT_MARGIN, 0));
+		c.add(createResetCommand(n, JasperDesign.PROPERTY_RIGHT_MARGIN, 0));
+		c.add(createResetCommand(n, JasperDesign.PROPERTY_TOP_MARGIN, 0));
+		c.add(createResetCommand(n, JasperDesign.PROPERTY_BOTTOM_MARGIN, 0));
+
+		int w = jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin();
+		int h = jd.getPageHeight() - jd.getTopMargin() - jd.getBottomMargin();
+
+		c.add(createResetCommand(n, JasperDesign.PROPERTY_PAGE_WIDTH, w));
+		c.add(createResetCommand(n, JasperDesign.PROPERTY_PAGE_HEIGHT, h));
+
+		part.getEditDomain().getCommandStack().execute(c);
+
+	}
+
+	private Command createResetCommand(APropertyNode n, Object prop, int value) {
+		SetValueCommand cmd = new SetValueCommand();
+		cmd.setPropertyId(prop);
+		cmd.setPropertyValue(value);
+		cmd.setTarget(n);
+		return cmd;
 	}
 
 	@Override

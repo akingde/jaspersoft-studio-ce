@@ -60,7 +60,8 @@ import com.jaspersoft.studio.plugin.AContributorAction;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
-import com.jaspersoft.studio.property.section.report.PageFormatAction;
+import com.jaspersoft.studio.property.section.report.action.PageFormatAction;
+import com.jaspersoft.studio.property.section.report.action.PageRemoveMarginsAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -122,7 +123,7 @@ public class ReportEditor extends AbstractVisualEditor {
 	protected JDReportOutlineView getOutlineView() {
 		// if (outlinePage == null) {
 		TreeViewer viewer = new TreeViewer();
-		//viewer.setSelectionManager(new JSelectionManager());
+		// viewer.setSelectionManager(new JSelectionManager());
 		outlinePage = new JDReportOutlineView(this, viewer) {
 			protected void initActions(ActionRegistry registry, IActionBars bars) {
 				String id = DeleteGroupReportAction.ID;
@@ -162,6 +163,9 @@ public class ReportEditor extends AbstractVisualEditor {
 				bars.setGlobalActionHandler(id, registry.getAction(id));
 
 				id = PageFormatAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
+
+				id = PageRemoveMarginsAction.ID;
 				bars.setGlobalActionHandler(id, registry.getAction(id));
 
 				id = DatasetAction.ID;
@@ -234,6 +238,10 @@ public class ReportEditor extends AbstractVisualEditor {
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
+		action = new PageRemoveMarginsAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+
 		action = new DatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -255,11 +263,11 @@ public class ReportEditor extends AbstractVisualEditor {
 		toolbarManager.add(new Separator());
 		// Contributed actions
 		List<AContributorAction> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
-		for (AContributorAction a : contributedActions){
-			a.setJrConfig((JasperReportsConfiguration)getGraphicalViewer().getProperty("JRCONTEXT"));
+		for (AContributorAction a : contributedActions) {
+			a.setJrConfig((JasperReportsConfiguration) getGraphicalViewer().getProperty("JRCONTEXT"));
 			toolbarManager.add(a);
 		}
 		// Global "View" menu items
-		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));		
+		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));
 	}
 }
