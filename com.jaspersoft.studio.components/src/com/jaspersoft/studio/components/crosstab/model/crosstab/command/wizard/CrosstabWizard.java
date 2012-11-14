@@ -65,22 +65,19 @@ import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardPageChangeEvent;
 
 public class CrosstabWizard extends JSSWizard {
-	
-	
+
 	public static final String CROSSTAB_COLUMNS = "CROSSTAB_COLUMNS";
 	public static final String CROSSTAB_ROWS = "CROSSTAB_ROWS";
 	public static final String CROSSTAB_MEASURES = "CROSSTAB_MEASURES";
-	
-	
+
 	private WizardDatasetPage step1;
 	private WizardFieldsPage step2;
 	private WizardFieldsPage step3;
 	private CrosstabWizardMeasurePage step4;
-	
-	//private CrosstabWizardLayoutPage step6;
-	//private WizardConnectionPage step2;
-	
-	
+
+	// private CrosstabWizardLayoutPage step6;
+	// private WizardConnectionPage step2;
+
 	private MCrosstab crosstab;
 
 	public CrosstabWizard() {
@@ -109,18 +106,17 @@ public class CrosstabWizard extends JSSWizard {
 		addPage(step4);
 
 		// FIXME: Provide better layout page.
-		//step6 = new CrosstabWizardLayoutPage();
-		//addPage(step6);
-		//step6.setCrosstab(crosstab);
+		// step6 = new CrosstabWizardLayoutPage();
+		// addPage(step6);
+		// step6.setCrosstab(crosstab);
 	}
 
-	
 	/**
-	 * This method returns a dataset object
-	 * based on what has been selected in the first step
-	 * of the wizard (existing dataset, main dataset, new dataset, etc...)
+	 * This method returns a dataset object based on what has been selected in
+	 * the first step of the wizard (existing dataset, main dataset, new
+	 * dataset, etc...)
 	 * 
-	 *  @return JRDesignDataset
+	 * @return JRDesignDataset
 	 */
 	public JRDesignDataset getDataset() {
 		return step1.getSelectedDataset();
@@ -128,76 +124,77 @@ public class CrosstabWizard extends JSSWizard {
 
 	/**
 	 * The getNextPage implementations does nothing, since all the logic has
-	 * been moved inside each page, which has a special version created for
-	 * this wizard
+	 * been moved inside each page, which has a special version created for this
+	 * wizard
 	 * 
 	 * @see com.jaspersoft.studio.wizards.JSSWizard#getNextPage(org.eclipse.jface.wizard.IWizardPage)
 	 * @see com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabWizardColumnPage
-  	 * @see com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabWizardRowPage
+	 * @see com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabWizardRowPage
 	 * @see com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabWizardMeasurePage
-	 *
-	 * @param the current page.
-	 *
+	 * 
+	 * @param the
+	 *            current page.
+	 * 
 	 * @return the next page
 	 */
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		
+
 		// Nothing to do. If you change this method, please update the
 		// comment.
-		
+
 		return super.getNextPage(page);
 	}
 
 	private void setupColumns() {
 		List<Object> m;
-		
+
 		// FIXME: this stuff must be rewritten due to the way we collect the
 		// set of fields...
-//		
-//		if (step4.getFields() != null && step3.getInFields() != null) {
-//			m = new ArrayList<Object>();
-//			for (Object f : step3.getInFields()) {
-//				JRDesignCrosstabColumnGroup cg = (JRDesignCrosstabColumnGroup) f;
-//				boolean skip = false;
-//				for (Object obj : step4.getFields()) {
-//					JRDesignCrosstabRowGroup rg = (JRDesignCrosstabRowGroup) obj;
-//					if (cg.getBucket().getExpression().getText()
-//							.equals(rg.getBucket().getExpression().getText())) {
-//						skip = true;
-//						break;
-//					}
-//				}
-//				if (!skip)
-//					m.add(cg);
-//			}
-//			step3.setFields(m);
-//		}
+		//
+		// if (step4.getFields() != null && step3.getInFields() != null) {
+		// m = new ArrayList<Object>();
+		// for (Object f : step3.getInFields()) {
+		// JRDesignCrosstabColumnGroup cg = (JRDesignCrosstabColumnGroup) f;
+		// boolean skip = false;
+		// for (Object obj : step4.getFields()) {
+		// JRDesignCrosstabRowGroup rg = (JRDesignCrosstabRowGroup) obj;
+		// if (cg.getBucket().getExpression().getText()
+		// .equals(rg.getBucket().getExpression().getText())) {
+		// skip = true;
+		// break;
+		// }
+		// }
+		// if (!skip)
+		// m.add(cg);
+		// }
+		// step3.setFields(m);
+		// }
 	}
 
 	private void setupRows() {
 		List<Object> m;
-		
+
 		// FIXME: this stuff must be rewritten due to the way we collect the
 		// set of fields...
-//		if (step3.getFields() != null && step4.getInFields() != null) {
-//			m = new ArrayList<Object>();
-//			for (Object f : step4.getInFields()) {
-//				JRDesignCrosstabRowGroup cg = (JRDesignCrosstabRowGroup) f;
-//				boolean skip = false;
-//				for (Object obj : step3.getFields()) {
-//					JRDesignCrosstabColumnGroup rg = (JRDesignCrosstabColumnGroup) obj;
-//					if (cg.getBucket().getExpression().getText()
-//							.equals(rg.getBucket().getExpression().getText())) {
-//						skip = true;
-//						break;
-//					}
-//				}
-//				if (!skip)
-//					m.add(cg);
-//			}
-//			step4.setFields(m);
-//		}
+		// if (step3.getFields() != null && step4.getInFields() != null) {
+		// m = new ArrayList<Object>();
+		// for (Object f : step4.getInFields()) {
+		// JRDesignCrosstabRowGroup cg = (JRDesignCrosstabRowGroup) f;
+		// boolean skip = false;
+		// for (Object obj : step3.getFields()) {
+		// JRDesignCrosstabColumnGroup rg = (JRDesignCrosstabColumnGroup) obj;
+		// if (cg.getBucket().getExpression().getText()
+		// .equals(rg.getBucket().getExpression().getText())) {
+		// skip = true;
+		// break;
+		// }
+		// }
+		// if (!skip)
+		// m.add(cg);
+		// }
+		// step4.setFields(m);
+		// }
 	}
 
 	@SuppressWarnings("unchecked")
@@ -205,25 +202,27 @@ public class CrosstabWizard extends JSSWizard {
 
 		JRDesignCrosstab jdc = (JRDesignCrosstab) crosstab.getValue();
 		JRDesignDataset dataset = getDataset();
-		
-		if(dataset.isMainDataset()){
+
+		if (dataset.isMainDataset()) {
 			// main dataset selected => dataset run is null
-			((JRDesignCrosstabDataset)jdc.getDataset()).setDatasetRun(null);
-		}
-		else{
-			JRDesignDatasetRun datasetRun = (JRDesignDatasetRun) jdc.getDataset().getDatasetRun();
-			if (datasetRun == null)
-			{
+			((JRDesignCrosstabDataset) jdc.getDataset()).setDatasetRun(null);
+		} else {
+			JRDesignDatasetRun datasetRun = (JRDesignDatasetRun) jdc
+					.getDataset().getDatasetRun();
+			if (datasetRun == null) {
 				datasetRun = new JRDesignDatasetRun();
-				((JRDesignCrosstabDataset)jdc.getDataset()).setDatasetRun(datasetRun);
+				((JRDesignCrosstabDataset) jdc.getDataset())
+						.setDatasetRun(datasetRun);
 			}
 			datasetRun.setDatasetName(dataset.getName());
-			datasetRun.setConnectionExpression( ExprUtil.createExpression("$P{REPORT_CONNECTION}","java.sql.Connection") );
+			datasetRun.setConnectionExpression(ExprUtil.createExpression(
+					"$P{REPORT_CONNECTION}", "java.sql.Connection"));
 		}
-		
+
 		// Add measures...
-		List<Object> measures = (List<Object>) getSettings().get( CROSSTAB_MEASURES );
-		if(measures!=null){
+		List<Object> measures = (List<Object>) getSettings().get(
+				CROSSTAB_MEASURES);
+		if (measures != null) {
 			for (Object obj : measures) {
 				try {
 					jdc.addMeasure((JRDesignCrosstabMeasure) obj);
@@ -232,31 +231,35 @@ public class CrosstabWizard extends JSSWizard {
 				}
 			}
 		}
-		
+
 		// Add measures...
-		List<Object> columnGroups = (List<Object>) getSettings().get( CROSSTAB_COLUMNS);
-		if(columnGroups!=null){
+		List<Object> columnGroups = (List<Object>) getSettings().get(
+				CROSSTAB_COLUMNS);
+		if (columnGroups != null) {
 			for (Object obj : columnGroups) {
 				try {
-					CreateColumnCommand.addColumnGroup(jdc, (JRDesignCrosstabColumnGroup) obj, -1);
+					CreateColumnCommand.addColumnGroup(jdc,
+							(JRDesignCrosstabColumnGroup) obj, -1);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		
+
 		// Add measures...
-		List<Object> rowGroups = (List<Object>) getSettings().get( CROSSTAB_ROWS );
-		if(rowGroups!=null){
+		List<Object> rowGroups = (List<Object>) getSettings()
+				.get(CROSSTAB_ROWS);
+		if (rowGroups != null) {
 			for (Object obj : rowGroups) {
 				try {
-					CreateRowCommand.addRowGroup(jdc, (JRDesignCrosstabRowGroup) obj, -1);
+					CreateRowCommand.addRowGroup(jdc,
+							(JRDesignCrosstabRowGroup) obj, -1);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		
+
 		setupColumnGroups(jdc);
 		setupRowGroups(jdc);
 		createDetailCells(jdc);
@@ -349,13 +352,14 @@ public class CrosstabWizard extends JSSWizard {
 			txt = "$V{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 			vclass = fi.getValueClassName();
 		}
-		
-		//CrosstabTotalPositionEnum total = step6.isAddRowTotal() ? CrosstabTotalPositionEnum.END
-		//		: CrosstabTotalPositionEnum.NONE;
-		
-		
+
+		// CrosstabTotalPositionEnum total = step6.isAddRowTotal() ?
+		// CrosstabTotalPositionEnum.END
+		// : CrosstabTotalPositionEnum.NONE;
+
 		JRDesignCrosstabRowGroup rowGroup = CreateRowCommand.createRowGroup(
-				getConfig().getJasperDesign(), jdc, name, CrosstabTotalPositionEnum.END);
+				getConfig().getJasperDesign(), jdc, name,
+				CrosstabTotalPositionEnum.END);
 
 		((JRDesignExpression) rowGroup.getBucket().getExpression())
 				.setText(txt);
@@ -367,7 +371,7 @@ public class CrosstabWizard extends JSSWizard {
 	private JRDesignCrosstabColumnGroup createColumnGroups(
 			JRDesignCrosstab jdc, Object f) {
 		String name = ""; //$NON-NLS-1$
-		String txt = "";  //$NON-NLS-1$
+		String txt = ""; //$NON-NLS-1$
 		String vclass = "";
 		if (f instanceof JRField) {
 			JRField fi = (JRField) f;
@@ -385,14 +389,19 @@ public class CrosstabWizard extends JSSWizard {
 			txt = "$V{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 			vclass = fi.getValueClassName();
 		}
-		
-		//CrosstabTotalPositionEnum total = step6.isAddColTotal() ? CrosstabTotalPositionEnum.END
-		//		: CrosstabTotalPositionEnum.NONE;
-		
-		JRDesignCrosstabColumnGroup colGroup = CreateColumnCommand.createColumnGroup(getConfig().getJasperDesign(), jdc, name, CrosstabTotalPositionEnum.END);
-		
-		((JRDesignExpression) colGroup.getBucket().getExpression()).setText(txt);
-		((JRDesignCrosstabBucket) colGroup.getBucket()).setValueClassName(vclass);
+
+		// CrosstabTotalPositionEnum total = step6.isAddColTotal() ?
+		// CrosstabTotalPositionEnum.END
+		// : CrosstabTotalPositionEnum.NONE;
+
+		JRDesignCrosstabColumnGroup colGroup = CreateColumnCommand
+				.createColumnGroup(getConfig().getJasperDesign(), jdc, name,
+						CrosstabTotalPositionEnum.END);
+
+		((JRDesignExpression) colGroup.getBucket().getExpression())
+				.setText(txt);
+		((JRDesignCrosstabBucket) colGroup.getBucket())
+				.setValueClassName(vclass);
 
 		return colGroup;
 	}
@@ -445,9 +454,11 @@ public class CrosstabWizard extends JSSWizard {
 	private ReportObjects measures;
 
 	/**
-	 * This inner class is used to cache set of objects based in the selected data source.
+	 * This inner class is used to cache set of objects based in the selected
+	 * data source.
+	 * 
 	 * @author gtoffoli
-	 *
+	 * 
 	 */
 	private class ReportObjects {
 		private List<Object> reportObects;
@@ -481,141 +492,140 @@ public class CrosstabWizard extends JSSWizard {
 		JRDesignExpression exp = (JRDesignExpression) bucket.getExpression();
 		if (function == AgregationFunctionEnum.UNIQUE)
 			exp.setText(oldExpText);
-		else if (function == AgregationFunctionEnum.YEAR)
+		else if (function == AgregationFunctionEnum.YEAR) {
 			exp.setText("new SimpleDateFormat(\"yyyy\").format(" + oldExpText
 					+ ")");
-		else if (function == AgregationFunctionEnum.MONTH)
+			bucket.setValueClassName(String.class.getName());
+		} else if (function == AgregationFunctionEnum.MONTH) {
 			exp.setText("new SimpleDateFormat(\"yyyy-MM\").format("
 					+ oldExpText + ")");
-		else if (function == AgregationFunctionEnum.WEEK)
+			bucket.setValueClassName(String.class.getName());
+		} else if (function == AgregationFunctionEnum.WEEK) {
 			exp.setText("new SimpleDateFormat(\"yyyy-ww\").format("
 					+ oldExpText + ")");
-		else if (function == AgregationFunctionEnum.DAY)
+			bucket.setValueClassName(String.class.getName());
+		} else if (function == AgregationFunctionEnum.DAY) {
 			exp.setText("new SimpleDateFormat(\"yyyy-MM-dd\").format("
 					+ oldExpText + ")");
+			bucket.setValueClassName(String.class.getName());
+		}
 		bucket.setExpression(exp);
 	}
 
-
 	/**
 	 * 
-	 * Return a list of JRCrosstabColumnGroup to be used
-	 * from a CrosstabWizardColumnPage
-	 *
-	 *  @param CrosstabWizard
-	 *
-	 *  @return void
+	 * Return a list of JRCrosstabColumnGroup to be used from a
+	 * CrosstabWizardColumnPage
+	 * 
+	 * @param CrosstabWizard
+	 * 
+	 * @return void
 	 */
-	public List<Object> getAvailableColumnGroups()
-	{
+	public List<Object> getAvailableColumnGroups() {
 		List<Object> objects = new ArrayList<Object>();
 		JRDesignDataset ds = getDataset();
-		if (ds == null) return objects;
-				
+		if (ds == null)
+			return objects;
+
 		String dsname = ds.getName();
-		if (ds.isMainDataset()) dsname = "_MAIN_DATASET"; //$NON-NLS-1$
+		if (ds.isMainDataset())
+			dsname = "_MAIN_DATASET"; //$NON-NLS-1$
 		if (colGroups == null || !colGroups.getDsname().equals(dsname)) {
 			colGroups = new ReportObjects(
-					ModelUtils.getReportObjects4Datasource(ds),dsname);
+					ModelUtils.getReportObjects4Datasource(ds), dsname);
 		}
-		
-		if (colGroups != null)
-		{
+
+		if (colGroups != null) {
 			JRDesignCrosstab jdc = (JRDesignCrosstab) crosstab.getValue();
-			for (Object f : colGroups.getReportObects())
-			{
+			for (Object f : colGroups.getReportObects()) {
 				objects.add(createColumnGroups(jdc, f));
 			}
 		}
 		return objects;
 	}
-	
-	
+
 	/**
 	 * 
-	 * Return a list of JRCrosstabRowGroup to be used
-	 * from a CrosstabWizardColumnPage
-	 *
-	 *  @param CrosstabWizard
-	 *
-	 *  @return void
+	 * Return a list of JRCrosstabRowGroup to be used from a
+	 * CrosstabWizardColumnPage
+	 * 
+	 * @param CrosstabWizard
+	 * 
+	 * @return void
 	 */
-	public List<Object> getAvailableRowGroups()
-	{
+	public List<Object> getAvailableRowGroups() {
 		List<Object> objects = new ArrayList<Object>();
 		JRDesignDataset ds = getDataset();
-		if (ds == null) return objects;
-				
+		if (ds == null)
+			return objects;
+
 		String dsname = ds.getName();
-		if (ds.isMainDataset()) dsname = "_MAIN_DATASET"; //$NON-NLS-1$
+		if (ds.isMainDataset())
+			dsname = "_MAIN_DATASET"; //$NON-NLS-1$
 		if (rowGroups == null || !rowGroups.getDsname().equals(dsname)) {
 			rowGroups = new ReportObjects(
-					ModelUtils.getReportObjects4Datasource(ds),dsname);
+					ModelUtils.getReportObjects4Datasource(ds), dsname);
 		}
-		
-		if (rowGroups != null)
-		{
+
+		if (rowGroups != null) {
 			JRDesignCrosstab jdc = (JRDesignCrosstab) crosstab.getValue();
-			for (Object f : rowGroups.getReportObects())
-			{
+			for (Object f : rowGroups.getReportObects()) {
 				objects.add(createRowGroups(jdc, f));
 			}
 		}
 		return objects;
 	}
-	
+
 	/**
 	 * 
-	 * Return a list of JRCrosstabRowGroup to be used
-	 * from a CrosstabWizardColumnPage
-	 *
-	 *  @param CrosstabWizard
-	 *
-	 *  @return void
+	 * Return a list of JRCrosstabRowGroup to be used from a
+	 * CrosstabWizardColumnPage
+	 * 
+	 * @param CrosstabWizard
+	 * 
+	 * @return void
 	 */
-	public List<Object> getAvailableMeasures()
-	{
+	public List<Object> getAvailableMeasures() {
 		List<Object> objects = new ArrayList<Object>();
 		JRDesignDataset ds = getDataset();
-		if (ds == null) return objects;
-				
+		if (ds == null)
+			return objects;
+
 		String dsname = ds.getName();
-		if (ds.isMainDataset()) dsname = "_MAIN_DATASET"; //$NON-NLS-1$
+		if (ds.isMainDataset())
+			dsname = "_MAIN_DATASET"; //$NON-NLS-1$
 		if (measures == null || !measures.getDsname().equals(dsname)) {
 			measures = new ReportObjects(
-					ModelUtils.getReportObjects4Datasource(ds),dsname);
+					ModelUtils.getReportObjects4Datasource(ds), dsname);
 		}
-		
-		if (measures != null)
-		{
-			JRDesignCrosstab jdc = (JRDesignCrosstab)crosstab.getValue();
-			for (Object f : measures.getReportObects())
-			{
+
+		if (measures != null) {
+			JRDesignCrosstab jdc = (JRDesignCrosstab) crosstab.getValue();
+			for (Object f : measures.getReportObects()) {
 				objects.add(createMesures(jdc, f));
 			}
 		}
 		return objects;
 	}
 
-	
 	/**
-	 * If the structure of a new dataset changes, we need to recalculate
-	 * all the object to propose as column/row groups and measures.
+	 * If the structure of a new dataset changes, we need to recalculate all the
+	 * object to propose as column/row groups and measures.
 	 * 
-	 * This method is a callback from pages that call fireChangeEvent()
-	 * and are attached to this wizard or a children wizard.
+	 * This method is a callback from pages that call fireChangeEvent() and are
+	 * attached to this wizard or a children wizard.
 	 * 
-	 * Pages can be recognized by page name, we are interested in listening
-	 * to the "tablepage" page.
+	 * Pages can be recognized by page name, we are interested in listening to
+	 * the "tablepage" page.
 	 * 
 	 * @see com.jaspersoft.studio.wizards.JSSWizard#pageChanged(com.jaspersoft.studio.wizards.JSSWizardPageChangeEvent)
-	 *
+	 * 
 	 * @return
 	 */
 	@Override
 	public void pageChanged(JSSWizardPageChangeEvent event) {
 		super.pageChanged(event);
-		
+
 		if (event.getPage().getName().equals("tablepage")) //$NON-NLS-1$
 		{
 			colGroups = null;
@@ -623,7 +633,5 @@ public class CrosstabWizard extends JSSWizard {
 			measures = null;
 		}
 	}
-	
-	
-	
+
 }
