@@ -473,7 +473,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			}
 			if (id.equals(PARAGRAPH)) {
 				if (mParagraph == null) {
-					mParagraph = new MParagraph((JRBaseParagraph) jrstyle.getParagraph());
+					mParagraph = new MParagraph(this, (JRBaseParagraph) jrstyle.getParagraph());
 					setChildListener(mParagraph);
 				}
 				return mParagraph;

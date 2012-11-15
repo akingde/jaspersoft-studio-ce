@@ -144,7 +144,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 
 		if (id.equals(PARAGRAPH)) {
 			if (mParagraph == null) {
-				mParagraph = new MParagraph((JRBaseParagraph) jrElement.getParagraph());
+				mParagraph = new MParagraph(this, (JRBaseParagraph) jrElement.getParagraph());
 				setChildListener(mParagraph);
 			}
 			return mParagraph;
@@ -176,7 +176,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 
 		if (id.equals(PARAGRAPH)) {
 			if (mParagraph == null) {
-				mParagraph = new MParagraph((JRBaseParagraph) jrElement.getParagraph());
+				mParagraph = new MParagraph(this,(JRBaseParagraph) jrElement.getParagraph());
 				setChildListener(mParagraph);
 			}
 			return mParagraph;
