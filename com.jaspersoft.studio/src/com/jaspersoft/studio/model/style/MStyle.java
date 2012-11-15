@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.model.style;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -190,18 +191,15 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			JasperDesign jasperDesign = getJasperDesign();
 			if (jasperDesign != null) {
 				JRStyle[] styles = jasperDesign.getStyles();
-				String[] items = new String[styles.length];
-				if (items.length > 0) {
-					items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""; //$NON-NLS-1$
-					int offset = 1;
-					for (int j = 0; j < styles.length; j++) {
-						if (jrElement != styles[j])
-							items[j + offset] = styles[j].getName();
-						else
-							offset = 0;
+				ArrayList<String> stylesList = new ArrayList<String>();
+				if (styles.length > 0) {
+					stylesList.add(jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""); //$NON-NLS-1$
+					for (JRStyle style : styles) {
+						if (jrElement != style)
+							stylesList.add(style.getName());
 					}
 				}
-				styleD.setItems(items);
+				styleD.setItems(stylesList.toArray(new String[stylesList.size()]));
 			}
 		}
 	}
