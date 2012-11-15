@@ -336,9 +336,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		if (groupChangesD != null)
 			groupChangesD.setItems(items);
 	}
-	
+
 	@Override
-	public HashMap<String,Object> getStylesDescriptors() {
+	public HashMap<String, Object> getStylesDescriptors() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		if (getValue() == null)
 			return result;
@@ -407,11 +407,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 		opaqueD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.common_opaque, ModeEnum.class,
 				NullEnum.INHERITED);
-		//opaqueD.setDescription(Messages.MGraphicElement_opaque_description);
-		//opaqueD.setCategory(Messages.common_graphic);
-		//desc.add(opaqueD);
-		
-		NullCheckBoxPropertyDescriptor opaqueDBool = new NullCheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.common_opaque);
+		// opaqueD.setDescription(Messages.MGraphicElement_opaque_description);
+		// opaqueD.setCategory(Messages.common_graphic);
+		// desc.add(opaqueD);
+
+		NullCheckBoxPropertyDescriptor opaqueDBool = new NullCheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
+				Messages.common_opaque);
 		opaqueDBool.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueDBool);
 
@@ -540,9 +541,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getOwnForecolor());
 		// opacity
-		if (id.equals(JRBaseStyle.PROPERTY_MODE)){
-				ModeEnum modeValue = jrElement.getOwnModeValue();
-				return modeValue != null ? modeValue.equals(ModeEnum.TRANSPARENT) : null;
+		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
+			ModeEnum modeValue = jrElement.getOwnModeValue();
+			return modeValue != null ? modeValue.equals(ModeEnum.TRANSPARENT) : null;
 		}
 		if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
 			return positionTypeD.getEnumValue(jrElement.getPositionTypeValue());
@@ -560,7 +561,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 		return null;
 	}
-	
+
 	public Object getPropertyActualValue(Object id) {
 		JRDesignElement jrElement = (JRDesignElement) getValue();
 		if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR))
@@ -619,9 +620,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				// now change properties
 				JRPropertiesMap vmap = dto.getPropMap();
 				String[] names = jrElement.getPropertiesMap().getPropertyNames();
-				for (int i = 0; i < names.length; i++) {
+				for (int i = 0; i < names.length; i++)
 					jrElement.getPropertiesMap().removeProperty(names[i]);
-				}
 				if (vmap != null) {
 					names = vmap.getPropertyNames();
 					for (int i = 0; i < names.length; i++)
@@ -646,9 +646,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		} else
 		// opacity
 		if (id.equals(JRBaseStyle.PROPERTY_MODE))
-			if (value == null) jrElement.setMode(null);
-			else if ((Boolean)value) jrElement.setMode(ModeEnum.TRANSPARENT);
-			else jrElement.setMode(ModeEnum.OPAQUE);
+			if (value == null)
+				jrElement.setMode(null);
+			else if ((Boolean) value)
+				jrElement.setMode(ModeEnum.TRANSPARENT);
+			else
+				jrElement.setMode(ModeEnum.OPAQUE);
 		else if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
 			jrElement.setPositionType((PositionTypeEnum) positionTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))

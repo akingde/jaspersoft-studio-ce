@@ -22,6 +22,7 @@ package com.jaspersoft.studio.property.section.report;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.OrientationEnum;
 
@@ -47,21 +48,24 @@ import org.eclipse.ui.forms.IManagedForm;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.report.util.PageSize;
 import com.jaspersoft.studio.property.section.report.util.UnitsWidget;
 import com.jaspersoft.studio.property.section.report.util.ValueUnitsWidget;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public final class PageFormatDialog extends FormDialog {
 	private JasperDesign jd;
+	private JasperReportsConfiguration jConfig;
 	private MReport jnode;
 
 	public PageFormatDialog(Shell shell, ANode node) {
 		super(shell);
-
+		jConfig = node.getJasperConfiguration();
 		jnode = (MReport) node.getRoot();
 		this.jd = node.getJasperDesign();
 	}
@@ -94,8 +98,7 @@ public final class PageFormatDialog extends FormDialog {
 
 		setJasperDesign(jd);
 
-		uw.setUnit(jnode.getJasperConfiguration().getProperty(DesignerPreferencePage.P_PAGE_DEFAULT_UNITS));
-		setAllUnits();
+		setTBounds();
 	}
 
 	private void createColumns(Composite composite) {
@@ -113,10 +116,10 @@ public final class PageFormatDialog extends FormDialog {
 		gd.horizontalSpan = 2;
 		cols.setLayoutData(gd);
 
-		cwidth = new ValueUnitsWidget();
+		cwidth = new ValueUnitsWidget(jConfig);
 		cwidth.createComponent(bright, Messages.PageFormatDialog_5, Messages.PageFormatDialog_6);
 
-		space = new ValueUnitsWidget();
+		space = new ValueUnitsWidget(jConfig);
 		space.createComponent(bright, Messages.PageFormatDialog_7, Messages.PageFormatDialog_8);
 
 		uvWidgets.add(cwidth);
@@ -170,16 +173,16 @@ public final class PageFormatDialog extends FormDialog {
 		bleft.setLayout(new GridLayout(3, false));
 		bleft.setBackgroundMode(SWT.INHERIT_FORCE);
 
-		tmargin = new ValueUnitsWidget();
+		tmargin = new ValueUnitsWidget(jConfig);
 		tmargin.createComponent(bleft, Messages.PageFormatDialog_10, Messages.PageFormatDialog_11);
 
-		bmargin = new ValueUnitsWidget();
+		bmargin = new ValueUnitsWidget(jConfig);
 		bmargin.createComponent(bleft, Messages.PageFormatDialog_12, Messages.PageFormatDialog_13);
 
-		lmargin = new ValueUnitsWidget();
+		lmargin = new ValueUnitsWidget(jConfig);
 		lmargin.createComponent(bleft, Messages.PageFormatDialog_14, Messages.PageFormatDialog_15);
 
-		rmargin = new ValueUnitsWidget();
+		rmargin = new ValueUnitsWidget(jConfig);
 		rmargin.createComponent(bleft, Messages.PageFormatDialog_16, Messages.PageFormatDialog_17);
 
 		uvWidgets.add(tmargin);
@@ -267,10 +270,10 @@ public final class PageFormatDialog extends FormDialog {
 		gd.horizontalSpan = 2;
 		pformat.setLayoutData(gd);
 
-		pwidth = new ValueUnitsWidget();
+		pwidth = new ValueUnitsWidget(jConfig);
 		pwidth.createComponent(tleft, Messages.PageFormatDialog_22, Messages.PageFormatDialog_23);
 
-		pheigh = new ValueUnitsWidget();
+		pheigh = new ValueUnitsWidget(jConfig);
 		pheigh.createComponent(tleft, Messages.PageFormatDialog_24, Messages.PageFormatDialog_25);
 
 		uvWidgets.add(pwidth);
@@ -320,8 +323,9 @@ public final class PageFormatDialog extends FormDialog {
 	}
 
 	private void setAllUnits() {
+		String unit = uw.getUnit();
 		for (ValueUnitsWidget vuw : uvWidgets)
-			vuw.setUnit(uw.getUnit());
+			vuw.setUnit(unit);
 	}
 
 	private List<ValueUnitsWidget> uvWidgets = new ArrayList<ValueUnitsWidget>();
@@ -366,6 +370,20 @@ public final class PageFormatDialog extends FormDialog {
 		else if (jd.getOrientationValue().equals(OrientationEnum.PORTRAIT))
 			portrait.setSelection(true);
 		ignoreEvents = false;
+
+		String defunit = MReport.getMeasureUnit(jConfig, jd);
+		uw.setUnit(defunit);
+
+		pheigh.setUnit(PHolderUtil.getUnit(jd, JasperDesign.PROPERTY_PAGE_HEIGHT, defunit));
+		pwidth.setUnit(PHolderUtil.getUnit(jd, JasperDesign.PROPERTY_PAGE_WIDTH, defunit));
+
+		tmargin.setUnit(PHolderUtil.getUnit(jd, JasperDesign.PROPERTY_TOP_MARGIN, defunit));
+		bmargin.setUnit(PHolderUtil.getUnit(jd, JasperDesign.PROPERTY_BOTTOM_MARGIN, defunit));
+		lmargin.setUnit(PHolderUtil.getUnit(jd, JasperDesign.PROPERTY_LEFT_MARGIN, defunit));
+		rmargin.setUnit(PHolderUtil.getUnit(jd, JasperDesign.PROPERTY_RIGHT_MARGIN, defunit));
+
+		cwidth.setUnit(PHolderUtil.getUnit(jd, JasperDesign.PROPERTY_COLUMN_WIDTH, defunit));
+		space.setUnit(PHolderUtil.getUnit(jd, JasperDesign.PROPERTY_COLUMN_SPACING, defunit));
 	}
 
 	@Override
@@ -405,6 +423,24 @@ public final class PageFormatDialog extends FormDialog {
 			command.add(createCommand(JasperDesign.PROPERTY_ORIENTATION, OrientationEnum.PORTRAIT));
 		else if (jd.getOrientationValue().equals(OrientationEnum.PORTRAIT) && !portrait.getSelection())
 			command.add(createCommand(JasperDesign.PROPERTY_ORIENTATION, OrientationEnum.LANDSCAPE));
+
+		boolean changes = false;
+		JRPropertiesMap pmap = jd.getPropertiesMap().cloneProperties();
+		String defunit = uw.getUnit();
+		changes = PHolderUtil.setProperty(changes, pmap, "", defunit, null);
+
+		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_PAGE_HEIGHT, pheigh.getUnit(), defunit);
+		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_PAGE_WIDTH, pwidth.getUnit(), defunit);
+
+		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_TOP_MARGIN, tmargin.getUnit(), defunit);
+		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_BOTTOM_MARGIN, bmargin.getUnit(), defunit);
+		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_LEFT_MARGIN, lmargin.getUnit(), defunit);
+		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_RIGHT_MARGIN, rmargin.getUnit(), defunit);
+
+		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_COLUMN_WIDTH, cwidth.getUnit(), defunit);
+		changes = PHolderUtil.setProperty(changes, pmap, JasperDesign.PROPERTY_COLUMN_SPACING, space.getUnit(), defunit);
+		if (changes)
+			command.add(createCommand(MGraphicElement.PROPERTY_MAP, pmap));
 	}
 
 	private Command createCommand(String property, Object value) {

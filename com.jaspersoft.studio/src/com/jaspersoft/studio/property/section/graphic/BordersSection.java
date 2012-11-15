@@ -248,7 +248,7 @@ public class BordersSection extends AbstractSection {
 			for (APropertyNode m : getElements()) {
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
-				c = changeProperty(JRBaseLineBox.PROPERTY_PADDING, new Integer(paddingLeft.getSelection()), lb);
+				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, new Integer(paddingLeft.getSelection()), lb);
 				if (c != null)
 							cc.add(c);
 			}
@@ -257,7 +257,7 @@ public class BordersSection extends AbstractSection {
 			for (APropertyNode m : getElements()) {
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
-				c = changeProperty(JRBaseLineBox.PROPERTY_PADDING, null, lb);
+				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, null, lb);
 				if (c != null)
 							cc.add(c);
 			}
@@ -519,12 +519,12 @@ public class BordersSection extends AbstractSection {
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 				//If the checkbox is set i need to set the general padding, otherwise it must be null
 				if (checkBoxPadding.getSelection()){
-					c = changeProperty(JRBaseLineBox.PROPERTY_PADDING, newValue, lb);
+					c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, newValue, lb);
 				} else {
-					c = changeProperty(JRBaseLineBox.PROPERTY_PADDING, null, lb);
+					c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, null, lb);
 					if (c != null)
 						cc.add(c);
-					c = changeProperty(property, newValue, lb);
+					c = getChangePropertyCommand(property, newValue, lb);
 				}
 				if (c != null)
 					cc.add(c);
@@ -550,25 +550,25 @@ public class BordersSection extends AbstractSection {
 				boolean areAllUnselected = bd.areAllUnslected(); 
 				if (areAllUnselected || bd.isBottomSelected()){
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
-					c = changeProperty(property, newValue, lp);
+					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
 						cc.add(c);
 				}
 				if(areAllUnselected || bd.isTopSelected()){
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
-					c = changeProperty(property, newValue, lp);
+					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
 						cc.add(c);
 				}
 				if(areAllUnselected || bd.isLeftSelected()){
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
-					c = changeProperty(property, newValue, lp);
+					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
 						cc.add(c);
 				}
 				if(areAllUnselected || bd.isRightSelected()){
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
-					c = changeProperty(property, newValue, lp);
+					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
 						cc.add(c);
 				}

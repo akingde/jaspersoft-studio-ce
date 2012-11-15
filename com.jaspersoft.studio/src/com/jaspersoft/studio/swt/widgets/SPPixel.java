@@ -12,11 +12,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
@@ -39,13 +43,16 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.report.util.Unit;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * This class implement a Textfield where display a number with a measure unit. The number and the measure unit can be
@@ -54,7 +61,7 @@ import com.jaspersoft.studio.utils.UIUtils;
  * @author Orlandin Marco
  * 
  */
-public class TextMeasureUnit extends ASPropertyWidget {
+public class SPPixel extends ASPropertyWidget {
 
 	/**
 	 * Hash map the bind a measure unit, by its key, to a series of method to convert and handle that measure
@@ -285,11 +292,13 @@ public class TextMeasureUnit extends ASPropertyWidget {
 		public String doConversionFromThis(MeasureUnit targetUnit, String value) {
 			if (this.getKeyName().equals(targetUnit.getKeyName()))
 				return value;
-			return String.valueOf((new Unit(Double.parseDouble(value), keyName)).getValue(targetUnit.getKeyName()));
+			return String.valueOf((new Unit(Double.parseDouble(value), keyName, jConfig)).getValue(targetUnit.getKeyName()));
 		}
 	}
 
-	public TextMeasureUnit(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	private JasperReportsConfiguration jConfig;
+
+	public SPPixel(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		this(parent, section, pDescriptor, true);
 	}
 
@@ -302,11 +311,11 @@ public class TextMeasureUnit extends ASPropertyWidget {
 	 *          if the the local measure unit will be store into the jrxml and saved, otherwise the visualization will be
 	 *          reseted to the default measure unit everytime the element properties are shown.
 	 */
-	public TextMeasureUnit(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor,
-			boolean persistentLocal) {
+	public SPPixel(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, boolean persistentLocal) {
 		super(parent, section, pDescriptor);
 		this.isLocalPersistent = persistentLocal;
 		localValue = getLocalValue();
+		jConfig = section.getElement().getJasperConfiguration();
 	}
 
 	/**
@@ -393,7 +402,23 @@ public class TextMeasureUnit extends ASPropertyWidget {
 			insertField.setText(convertedValue.concat(defaultUnit.getKeyName()));
 			try {
 				Integer newValue = Integer.parseInt(getText());
-				if (!section.changeProperty(pDescriptor.getId(), newValue)) {
+				// let's look at our units
+				String dunit = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
+				List<Command> commands = new ArrayList<Command>();
+				for (APropertyNode pnode : section.getElements()) {
+					if (pnode.getValue() != null && pnode.getValue() instanceof JRPropertiesHolder) {
+						JRPropertiesMap pmap = (JRPropertiesMap) pnode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+						if (pmap != null
+								&& PHolderUtil.setProperty(false, pmap, (String) pDescriptor.getId(), unit.getUnitName(), dunit)) {
+							SetValueCommand cmd = new SetValueCommand();
+							cmd.setTarget(pnode);
+							cmd.setPropertyId(MGraphicElement.PROPERTY_MAP);
+							cmd.setPropertyValue(pmap);
+							commands.add(cmd);
+						}
+					}
+				}
+				if (!section.changeProperty(pDescriptor.getId(), newValue, commands)) {
 					setData(section.getElement(), newValue);
 				}
 				insertField.setBackground(null);
@@ -425,12 +450,15 @@ public class TextMeasureUnit extends ASPropertyWidget {
 	 */
 	public void setText(String value) {
 		MeasureUnit defaultMeasure = getDefaultMeasure();
-		double dValue = (new Unit(Double.parseDouble(value), Unit.PX)).getValue(defaultMeasure.getKeyName());
+		setUUnit(value, Unit.PX);
+		double dValue = uunit.getValue(defaultMeasure.getKeyName());
 		insertField.setBackground(null);
 		insertField.setText(truncateDouble(dValue, defaultMeasure.getPrecision()).concat(
 				" ".concat(defaultMeasure.getUnitName())));
 		lastSetValue = insertField.getText();
 	}
+
+	private Unit uunit;
 
 	/**
 	 * Return the value in the textfield, it's returned as pixel
@@ -443,10 +471,18 @@ public class TextMeasureUnit extends ASPropertyWidget {
 		MeasureUnit unit = unitsMap.get(Unit.getKeyFromAlias(key));
 		if (unit != null) {
 			String value = text.substring(0, text.indexOf(key));
-			Double dValue = (new Unit(Double.parseDouble(value), unit.getKeyName())).getValue(Unit.PX);
+			setUUnit(value, unit.getKeyName());
+			Double dValue = uunit.getValue(Unit.PX);
 			return String.valueOf(dValue.longValue());
 		}
 		return null;
+	}
+
+	private void setUUnit(String value, String u) {
+		if (uunit == null)
+			uunit = new Unit(Double.parseDouble(value), u, jConfig);
+		else
+			uunit.setValue(Double.parseDouble(value), u);
 	}
 
 	/**
@@ -586,8 +622,11 @@ public class TextMeasureUnit extends ASPropertyWidget {
 
 	@Override
 	public void setData(APropertyNode pnode, Object value) {
-		defaultValue = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-				.getString(DesignerPreferencePage.P_PAGE_DEFAULT_UNITS);
+		defaultValue = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
+		if (pnode.getValue() instanceof JRPropertiesHolder)
+			defaultValue = PHolderUtil.getUnit((JRPropertiesHolder) pnode.getValue(), pDescriptor.getId().toString(),
+					defaultValue);
+
 		Number n = (Number) value;
 		setDataNumber(n);
 	}

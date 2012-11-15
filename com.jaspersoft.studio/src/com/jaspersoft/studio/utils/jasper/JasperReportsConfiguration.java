@@ -308,7 +308,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	public Integer getPropertyInteger(String key) {
 		String p = getProperty(key);
 		if (p != null)
-			return Integer.getInteger(p);
+			return Integer.valueOf(p);
 		return null;
 	}
 
@@ -322,7 +322,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	public Long getPropertyLong(String key) {
 		String p = getProperty(key);
 		if (p != null)
-			return Long.getLong(p);
+			return Long.valueOf(p);
 		return null;
 	}
 

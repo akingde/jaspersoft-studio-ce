@@ -247,15 +247,22 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	protected boolean isRefreshing = false;
 
 	public boolean changeProperty(Object property, Object newValue) {
+		return changeProperty(property, newValue, null);
+	}
+
+	public boolean changeProperty(Object property, Object newValue, List<Command> commands) {
 		if (!isRefreshing && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
 			CompoundCommand cc = new CompoundCommand("Set " + property);
 			for (APropertyNode n : elements) {
-				Command c = changeProperty(property, newValue, n);
+				Command c = getChangePropertyCommand(property, newValue, n);
 				if (c != null)
 					cc.add(c);
 			}
 			if (!cc.getCommands().isEmpty()) {
+				if (commands != null)
+					for (Command c : commands)
+						cc.add(c);
 				cs.execute(cc);
 				return true;
 			}
@@ -264,18 +271,26 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	public void changePropertyOn(Object property, Object newValue, APropertyNode n) {
+		changePropertyOn(property, newValue, n, null);
+	}
+
+	public void changePropertyOn(Object property, Object newValue, APropertyNode n, List<Command> commands) {
 		if (!isRefreshing && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
 			CompoundCommand cc = new CompoundCommand("Set " + property);
-			Command c = changeProperty(property, newValue, n);
+			Command c = getChangePropertyCommand(property, newValue, n);
 			if (c != null)
 				cc.add(c);
-			if (!cc.getCommands().isEmpty())
+			if (!cc.getCommands().isEmpty()) {
+				if (commands != null)
+					for (Command c1 : commands)
+						cc.add(c1);
 				cs.execute(cc);
+			}
 		}
 	}
 
-	protected Command changeProperty(Object property, Object newValue, APropertyNode n) {
+	protected Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
 		Object oldValue = n.getPropertyValue(property);
 		if (((oldValue == null && newValue != null) || (oldValue != null && newValue == null) || (newValue != null && !newValue
 				.equals(oldValue))) && getEditDomain() != null) {

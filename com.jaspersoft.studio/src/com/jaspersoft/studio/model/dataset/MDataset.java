@@ -224,6 +224,8 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignDataset jrDataset = (JRDesignDataset) getValue();
+		if (jrDataset == null)
+			return null;
 		if (id.equals(JRDesignDataset.PROPERTY_NAME))
 			return jrDataset.getName();
 

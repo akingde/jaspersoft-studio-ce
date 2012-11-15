@@ -187,7 +187,7 @@ public class StylesListSection extends AbstractSection {
 			if (executeCommand) {
 				CommandStack cs = getEditDomain().getCommandStack();
 				CompoundCommand cc = new CompoundCommand("Set " + property); //$NON-NLS-1$
-				Command c = changeProperty(property, null, targetElement);
+				Command c = getChangePropertyCommand(property, null, targetElement);
 				if (c != null)
 					cc.add(c);
 				if (!cc.getCommands().isEmpty()) {

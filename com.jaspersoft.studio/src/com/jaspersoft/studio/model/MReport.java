@@ -61,6 +61,7 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationPropertyDescriptor;
@@ -72,6 +73,7 @@ import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
 import com.jaspersoft.studio.utils.Misc;
@@ -162,7 +164,6 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
 
 	private MDataset mDataset;
 
@@ -341,13 +342,12 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		defaultsMap.put(JasperDesign.PROPERTY_IGNORE_PAGINATION, Boolean.FALSE);
 	}
 
-	
-	private void createDataset(JasperDesign jrDesign){
+	private void createDataset(JasperDesign jrDesign) {
 		mDataset = new MDataset(this, (JRDesignDataset) jrDesign.getMainDataset());
 		mDataset.setJasperConfiguration(getJasperConfiguration());
 		setChildListener(mDataset);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -498,10 +498,11 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			for (int i = 0; i < names.length; i++)
 				jrDesign.getPropertiesMap().removeProperty(names[i]);
 			names = v.getPropertyNames();
-			for (int i = 0; i < names.length; i++)
-				jrDesign.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
+
+			for (String str : v.getPropertyNames())
+				jrDesign.setProperty(str, v.getProperty(str));
 			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
-		} 
+		}
 	}
 
 	/*
@@ -930,4 +931,9 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		parameters.put(key, value);
 	}
 
+	public static String getMeasureUnit(JasperReportsConfiguration jConfig, JasperDesign jd) {
+		String defunit = jConfig.getProperty(DesignerPreferencePage.P_PAGE_DEFAULT_UNITS);
+		defunit = PHolderUtil.getUnit(jd, "", defunit);
+		return defunit;
+	}
 }

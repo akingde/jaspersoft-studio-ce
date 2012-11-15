@@ -33,6 +33,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 public class ValueUnitsWidget {
 
 	private final class SpinerSelectionListener implements SelectionListener {
@@ -54,18 +56,17 @@ public class ValueUnitsWidget {
 		}
 	}
 
-	private Unit unit = new Unit(0, Unit.PX);
+	public ValueUnitsWidget(JasperReportsConfiguration jConfig) {
+		unit = new Unit(0, Unit.PX, jConfig);
+	}
+
+	private Unit unit;
 	private int max = Integer.MAX_VALUE;
 	private int digits = 0;
 	private Combo unitc;
 	private Spinner val;
 	private SpinerSelectionListener spinerSelection;
 	private SpinerModifyListener spinerModify;
-
-	public void setMax(int max) {
-		this.max = max;
-		val.setMaximum(max);
-	}
 
 	public void createComponent(Composite parent, String label, String toolTip) {
 		Label lbl = new Label(parent, SWT.NONE);
@@ -102,13 +103,24 @@ public class ValueUnitsWidget {
 		setSpinerValue(unit.getUnit());
 	}
 
+	public void setMax(int max) {
+		removeListeners();
+		this.max = max;
+		setSpinnerMax(max);
+		addListeners();
+	}
+
+	private void setSpinnerMax(int max) {
+		val.setMaximum((int) Math.round(unit.pixel2unit(max) * Math.pow(10, digits)));
+	}
+
 	private void setSpinerValue(String u) {
 		digits = u.equals(Unit.PX) ? 0 : 4;
 
 		removeListeners();
 		val.setDigits(digits);
 		val.setMinimum(0);
-		val.setMaximum(max);
+		setSpinnerMax(max);
 		val.setIncrement(1);
 		val.setSelection((int) Math.round(unit.getValue(u) * Math.pow(10, digits)));
 		addListeners();
@@ -164,6 +176,10 @@ public class ValueUnitsWidget {
 
 	public int getValue() {
 		return unit.getPxValue();
+	}
+
+	public String getUnit() {
+		return unit.getUnit();
 	}
 
 	public void setValue(int px) {

@@ -37,7 +37,7 @@ public class Misc {
 		return nvl(obj, "");
 	}
 
-	public static Object nvl(Object obj, Object def) {
+	public static <T> T nvl(T obj, T def) {
 		if (obj == null)
 			return def;
 		else

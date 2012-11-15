@@ -27,7 +27,7 @@ import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
-import com.jaspersoft.studio.swt.widgets.TextMeasureUnit;
+import com.jaspersoft.studio.swt.widgets.SPPixel;
 
 /**
  * 
@@ -87,7 +87,7 @@ public class PixelPropertyDescriptor extends TextPropertyDescriptor implements I
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		TextMeasureUnit spNumber = new TextMeasureUnit(parent, section, this);
+		SPPixel spNumber = new SPPixel(parent, section, this);
 		return spNumber;
 	}
 }
