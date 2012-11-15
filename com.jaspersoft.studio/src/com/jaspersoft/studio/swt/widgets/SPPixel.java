@@ -436,10 +436,14 @@ public class SPPixel extends ASPropertyWidget {
 	 * @return
 	 */
 	protected MeasureUnit getDefaultMeasure() {
-		if (localValue != null && unitsMap.containsKey(localValue))
-			return unitsMap.get(localValue);
-		else
-			return unitsMap.get(Unit.getKeyFromAlias(defaultValue));
+		MeasureUnit mu = null;
+		if (localValue != null && unitsMap.containsKey(localValue)) {
+			mu = unitsMap.get(localValue);
+		} else
+			mu = unitsMap.get(Unit.getKeyFromAlias(defaultValue));
+		if (mu == null)
+			mu = units[0];
+		return mu;
 	}
 
 	/**
