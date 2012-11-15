@@ -24,10 +24,12 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.type.JREnum;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -51,7 +53,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.DefaultValuesMap;
 import com.jaspersoft.studio.model.INode;
@@ -59,7 +63,9 @@ import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -85,12 +91,12 @@ public class StylesListSection extends AbstractSection {
 	 * Image show to remove an attribute
 	 */
 
-	private static Image image = ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/remove-16.png");
+	private static Image image = ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/remove-16.png"); //$NON-NLS-1$
 
 	/**
 	 * Map of all the styles, where the name of the style is it's key
 	 */
-	private HashMap<String, MStyle> styleMaps;
+	private HashMap<String, StyleContainer> styleMaps;
 
 	/**
 	 * List of attributes overridden by others of an upper level in the hierarchy (the hierarchy is element-styles-default
@@ -175,7 +181,17 @@ public class StylesListSection extends AbstractSection {
 		 */
 		public void mouseUp(MouseEvent e) {
 			boolean executeCommand = true;
-			if (!isTargetMain) {
+			if (!targetElement.isEditable()){
+				MessageBox messageBox = new MessageBox(e.widget.getDisplay().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				messageBox.setText(Messages.StylesListSection_NotEditable_Title);
+				messageBox.setMessage(Messages.StylesListSection_NotEditable_Message);
+				int response = messageBox.open();
+				executeCommand = false;
+				if (response == SWT.YES){
+					StyleContainer styleReference = styleMaps.get(((JRStyle)targetElement.getValue()).getName());
+					EditableFigureEditPart.openEditor(styleReference.getTemplateValue(), ((DefaultEditDomain)getEditDomain()).getEditorPart(), styleReference.getTemplate());
+				}
+			} else if (!isTargetMain) {
 				MessageBox messageBox = new MessageBox(e.widget.getDisplay().getActiveShell(), SWT.ICON_WARNING | SWT.YES
 						| SWT.NO);
 				messageBox.setText(Messages.StylesListSection_Warining_Box_Title);
@@ -207,6 +223,83 @@ public class StylesListSection extends AbstractSection {
 
 		public void mouseDoubleClick(MouseEvent e) {
 
+		}
+	}
+	
+	/**
+	 * This class encapsulate a style and eventually its external reference, used to handle easly the 
+	 * external styles
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class StyleContainer{
+		
+		/**
+		 * The style
+		 */
+		private MStyle style;
+		
+		/**
+		 * True if the style come from an external reference
+		 */
+		private boolean external;
+		
+		/**
+		 * A reference to the external reference
+		 */
+		private MStyleTemplate externalTemplate;
+		
+		/**
+		 * Encapsulate a local style
+		 * @param style the style model
+		 */
+		public StyleContainer(MStyle style){
+			external = false;
+			externalTemplate = null;
+			this.style = style;
+		}
+		
+		/**
+		 * Encapsulate an external style with its container
+		 * @param style the style
+		 * @param reference the container
+		 */
+		public StyleContainer(MStyle style, MStyleTemplate reference){
+			external = true;
+			externalTemplate = reference;
+			this.style = style;
+		}
+		
+		/**
+		 * Return if the style is external
+		 * @return true if the style it's external, false otherwise
+		 */
+		public boolean isExternal(){
+			return external;
+		}
+		
+		/**
+		 * Return the style
+		 * @return the model of the style
+		 */
+		public MStyle getStyle(){
+			return style;
+		}
+		
+		/**
+		 * Return the template
+		 * @return the template of the style
+		 */
+		public MStyleTemplate getTemplate(){
+			return externalTemplate;
+		}
+		
+		/**
+		 * Return the value of the template
+		 * @return the JRElement of the template
+		 */
+		public JRDesignReportTemplate getTemplateValue(){
+			return (JRDesignReportTemplate) externalTemplate.getValue();
 		}
 	}
 
@@ -274,6 +367,7 @@ public class StylesListSection extends AbstractSection {
 		}
 
 	}
+	
 
 	/**
 	 * Build the hierarchy of styles of an element
@@ -286,12 +380,17 @@ public class StylesListSection extends AbstractSection {
 	private LinkedList<MStyle> buildStylesGerarchy(APropertyNode element) {
 		LinkedList<MStyle> result = new LinkedList<MStyle>();
 		Object styleName = element.getPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE);
-		JRStyle style = element.getJasperDesign().getStylesMap().get(styleName);
-		if (style != null) {
-			do {
-				result.addLast(styleMaps.get(style.getName()));
-				style = style.getStyle();
-			} while (style != null);
+		StyleContainer styleContainer = styleMaps.get(styleName.toString());
+		if (styleContainer != null){
+			MStyle styleModel = styleContainer.getStyle();
+			result.addLast(styleModel);
+			JRStyle nextStyle =  ((JRStyle)styleModel.getValue()).getStyle();
+			while (nextStyle != null){
+				styleModel = styleMaps.get(nextStyle.getName()).getStyle();
+				result.addLast(styleModel);
+				nextStyle =  ((JRStyle)styleModel.getValue()).getStyle();
+			}
+
 		}
 		return result;
 	}
@@ -569,7 +668,7 @@ public class StylesListSection extends AbstractSection {
 	 * @param value
 	 *          text to put into the label
 	 */
-	private void printTitle(Composite parent, String value) {
+	private Label printTitle(Composite parent, String value) {
 		Label label = new Label(parent, SWT.NONE);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = SWT.FILL;
@@ -580,6 +679,7 @@ public class StylesListSection extends AbstractSection {
 		label.setLayoutData(gridData);
 		label.setBackground(new Color(null, 240, 240, 240));
 		label.setText(" " + value); //$NON-NLS-1$
+		return label;
 	}
 
 	/**
@@ -629,7 +729,24 @@ public class StylesListSection extends AbstractSection {
 	private void printStyleAttribute(Composite parent, APropertyNode element, String titleValue, String keyPrefix,
 			HashMap<String, Object> localElementAttributes, boolean addHandler) {
 		if (titleValue != null) {
-			printTitle(parent, titleValue);
+			Label titleLabel = printTitle(parent, titleValue);
+			final StyleContainer styleReference = styleMaps.get(((JRStyle)element.getValue()).getName());
+			if (styleReference.isExternal()){
+				//If the style is external i made its editor open by double clicking on the style title
+				titleLabel.setText(titleLabel.getText().concat(Messages.StylesListSection_NotEditable_Visual_Marker));
+				titleLabel.addMouseListener(new MouseListener() {
+					@Override
+					public void mouseUp(MouseEvent e) {}
+					
+					@Override
+					public void mouseDown(MouseEvent e) {}
+					
+					@Override
+					public void mouseDoubleClick(MouseEvent e) {
+						EditableFigureEditPart.openEditor(styleReference.getTemplateValue(), ((DefaultEditDomain)getEditDomain()).getEditorPart(), styleReference.getTemplate());
+					}
+				});
+			}
 		}
 		GridData sameSizeGridData = new GridData();
 		sameSizeGridData.verticalAlignment = SWT.CENTER;
@@ -674,27 +791,45 @@ public class StylesListSection extends AbstractSection {
 					Messages.StylesListSection_Inherited_From_Default_Style.concat(defaultStyle.getPropertyValue(
 							JRDesignStyle.PROPERTY_NAME).toString()), "", elementAttributes, true); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	
+	/**
+	 * Add the external list to the styles map, but only those with a different name from the one already added
+	 * @param stylesList
+	 */
+	private void recursiveReadStyles(List<INode> stylesList, MStyleTemplate parentReference){
+		for(INode style : stylesList){
+			if (style instanceof MStyle) {
+				MStyle element = (MStyle) style;
+				String name = element.getPropertyValue(JRDesignStyle.PROPERTY_NAME).toString();
+				if (!styleMaps.containsKey(name)) styleMaps.put(name, new StyleContainer(element,parentReference));
+			} else if (style instanceof MStyleTemplate){
+				recursiveReadStyles(style.getChildren(), (MStyleTemplate)style);
+			}
+		}
+	}
 
 	/**
 	 * Initialize the map of the styles
 	 */
 	private void initStyleMaps() {
-		styleMaps = new HashMap<String, MStyle>();
+		styleMaps = new HashMap<String, StyleContainer>();
 		ovverridenAttributes = new HashSet<String>();
 		if (leftStringColor == null) {
 			leftStringColor = new Color(null, 42, 96, 213);
 		}
 		List<INode> list = getStylesRoot(element).getChildren();
-		Iterator<INode> it = list.iterator();
-		while (it.hasNext()) {
-			INode n = it.next();
-			if (n instanceof MStyle) {
-				MStyle element = (MStyle) n;
-				styleMaps.put(element.getPropertyValue(JRDesignStyle.PROPERTY_NAME).toString(), element);
+		List<INode> externalList = new ArrayList<INode>();
+		for(INode style : list){
+			if (style instanceof MStyle) {
+				MStyle element = (MStyle) style;
+				styleMaps.put(element.getPropertyValue(JRDesignStyle.PROPERTY_NAME).toString(), new StyleContainer(element));
 				if ((Boolean) element.getPropertyValue(JRDesignStyle.PROPERTY_DEFAULT))
 					defaultStyle = element;
+			} else if (style instanceof MStyleTemplate){
+				externalList.add(style);
 			}
 		}
+		recursiveReadStyles(externalList, null);
 	}
 
 	/**
@@ -744,7 +879,7 @@ public class StylesListSection extends AbstractSection {
 	public void aboutToBeHidden() {
 		if (getElement() != null) {
 			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
-			MStyles styles = getStylesRoot(element);
+			ANode styles = getStylesRoot(element);
 			//check in case the selected element was deleted
 			if (styles != null){
 				for (INode style : styles.getChildren()) {
@@ -845,7 +980,7 @@ public class StylesListSection extends AbstractSection {
 		printStyles(styles, parent);
 		printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(element));
 		ovverridenAttributes = null;
-		styleMaps = null;
+		//styleMaps = null;
 		parent.layout();
 		isRefreshing = false;
 	}
@@ -856,14 +991,14 @@ public class StylesListSection extends AbstractSection {
 	 * @param element
 	 * @return reference to the father of all the styles
 	 */
-	private MStyles getStylesRoot(APropertyNode element) {
+	private ANode getStylesRoot(APropertyNode element) {
 		List<INode> children = element.getRoot().getChildren();
 		Iterator<INode> it = children.iterator();
-		MStyles stylesClass = null;
+		ANode stylesClass = null;
 		while (it.hasNext() && stylesClass == null) {
 			INode childElement = it.next();
-			if (childElement instanceof MStyles)
-				stylesClass = (MStyles) childElement;
+			if (childElement instanceof MStyles || childElement instanceof MStylesTemplate)
+				stylesClass = (ANode)childElement;
 			// The root is a subreport or a table, i need to move into an upper level
 			if (childElement instanceof MPage) {
 				children = childElement.getChildren();
@@ -896,6 +1031,6 @@ public class StylesListSection extends AbstractSection {
 		printStyles(styles, parent);
 		printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(element));
 		ovverridenAttributes = null;
-		styleMaps = null;
+		//styleMaps = null;
 	}
 }

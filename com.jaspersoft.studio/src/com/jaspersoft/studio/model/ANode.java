@@ -30,6 +30,7 @@ import java.util.Set;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRRuntimeException;
+import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
@@ -41,6 +42,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
@@ -406,6 +408,12 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 			if (o instanceof FigureEditPart)
 				return (EditPart) o;
 		}
+		return null;
+	}
+	
+	public JRSimpleTemplate getStylesTemplate(){
+		for(INode node : getRoot().getChildren())
+			if (node instanceof MStylesTemplate) return (JRSimpleTemplate)node.getValue();
 		return null;
 	}
 

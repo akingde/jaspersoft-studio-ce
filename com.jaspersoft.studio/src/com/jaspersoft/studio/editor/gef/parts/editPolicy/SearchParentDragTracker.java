@@ -20,7 +20,7 @@ package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.tools.DragEditPartsTracker;
 
-import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 
 /**
@@ -44,7 +44,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker{
 	private EditPart searchParent(EditPart child){
 		if (child != null){
 			//This use the model for the search because every EditPart in the report has the same father.
-			Object parentModel = ((APropertyNode)child.getModel()).getParent();
+			Object parentModel = ((ANode)child.getModel()).getParent();
 			for(Object actualChild: child.getParent().getChildren()){
 				EditPart actualChildPart = (EditPart) actualChild;
 				if (parentModel == actualChildPart.getModel()){

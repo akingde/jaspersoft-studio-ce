@@ -111,11 +111,11 @@ public class XLSElementDecorator extends TextElementDecorator {
 	
 	private void registerFreezeProperties(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
 		
-		IAction action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("Left"), XLSAction.FREEZE_COL_ID, "left","Left");
+		IAction action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("Left"), XLSAction.FREEZE_COL_ID, "Left","Left");
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		
-		action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("Right"), XLSAction.FREEZE_COL_ID, "right","Right");
+		action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("Right"), XLSAction.FREEZE_COL_ID, "Right","Right");
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		
@@ -123,11 +123,11 @@ public class XLSElementDecorator extends TextElementDecorator {
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("Top"), XLSAction.FREEZE_ROW_ID, "top","Top");
+		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("Top"), XLSAction.FREEZE_ROW_ID, "Top","Top");
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		
-		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("Bottom"), XLSAction.FREEZE_ROW_ID, "bottom","Bottom");
+		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("Bottom"), XLSAction.FREEZE_ROW_ID, "Bottom","Bottom");
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		

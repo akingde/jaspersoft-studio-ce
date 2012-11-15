@@ -211,11 +211,11 @@ public class XLSDecorator implements IDecorator, TextDecoratorInterface {
 			tagValue = mapProperties.getProperty(prop);
 			if (tagValue != null) {
 				if (prop.equals(XLSAction.FREEZE_COL_ID)){
-					if (tagValue.equals("left"))
+					if (tagValue.equals("Left"))
 						endString += label.concat("-Left") + " ";
 					else 	endString += label.concat("-Right") + " ";
 				} else if (prop.equals(XLSAction.FREEZE_ROW_ID)){
-					if (tagValue.equals("top"))
+					if (tagValue.equals("Top"))
 						endString += label.concat("-Top") + " ";
 					else 	endString += label.concat("-Bottom") + " ";
 				} else if (tagValue.equals("true")) {

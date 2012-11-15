@@ -589,10 +589,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
 						jrElement.setStyle(style);
-						// jrElement.setStyleNameReference(null);
+						jrElement.setStyleNameReference(null);
 					} else {
 						jrElement.setStyleNameReference((String) value);
-						// jrElement.setStyle(null);
+						//The local style is set to null so the external one will be used
+						jrElement.setStyle(null);
 					}
 				}
 			} else {
