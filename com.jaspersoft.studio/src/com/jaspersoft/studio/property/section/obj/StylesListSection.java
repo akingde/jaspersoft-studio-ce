@@ -46,6 +46,7 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -69,6 +70,7 @@ import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.GridDataUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.ResourceManager;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -446,8 +448,9 @@ public class StylesListSection extends AbstractSection {
 			boolean addLine, String toolTip) {
 		String stringValue = getHexFromRGB(colorValue);
 		Composite nameComp = new Composite(parent, SWT.NONE);
-		nameComp.setLayout(new RowLayout());
-		nameComp.setLayoutData(gData);
+		RowLayout layout = new RowLayout();
+		nameComp.setLayout(layout);
+		nameComp.setLayoutData(GridDataUtil.clone(gData));
 
 		Label imageLabel = new Label(nameComp, SWT.NONE);
 		imageLabel.setImage(image);
@@ -463,7 +466,7 @@ public class StylesListSection extends AbstractSection {
 		Composite valueComp = new Composite(parent, SWT.NONE);
 		RowLayout inLineLayout = new RowLayout();
 		valueComp.setLayout(inLineLayout);
-		valueComp.setLayoutData(gData);
+		valueComp.setLayoutData(GridDataUtil.clone(gData));
 
 		StyledText valueText = new StyledText(valueComp, SWT.NONE);
 		valueText.addPaintListener(new PaintListener() {
@@ -479,6 +482,9 @@ public class StylesListSection extends AbstractSection {
 		valueText.setAlignment(SWT.LEFT);
 		valueText.setEditable(false);
 		valueText.setEnabled(true);
+		RowData valueText_RD = new RowData();
+		valueText_RD.height=15;
+		valueText.setLayoutData(valueText_RD);
 		if (addLine) {
 			strikeStyledText(valueText);
 			strikeStyledText(label);
