@@ -1,7 +1,6 @@
 package com.jaspersoft.templates;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JasperDesign;

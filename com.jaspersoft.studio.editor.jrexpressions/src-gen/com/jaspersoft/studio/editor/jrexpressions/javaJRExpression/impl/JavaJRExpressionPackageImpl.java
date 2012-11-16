@@ -5,6 +5,13 @@
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+import org.eclipse.xtext.common.types.TypesPackage;
+
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Arguments;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ArrayCreator;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ArrayInitializer;
@@ -38,15 +45,6 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StringLiteral
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TestExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Type;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass;
-
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.impl.EPackageImpl;
-
-import org.eclipse.xtext.common.types.TypesPackage;
 
 /**
  * <!-- begin-user-doc -->

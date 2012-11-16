@@ -3,9 +3,9 @@
 */
 package com.jaspersoft.studio.editor.jrexpressions.parser.antlr;
 
-import com.google.inject.Inject;
-
 import org.eclipse.xtext.parser.antlr.XtextTokenStream;
+
+import com.google.inject.Inject;
 import com.jaspersoft.studio.editor.jrexpressions.services.JavaJRExpressionGrammarAccess;
 
 public class JavaJRExpressionParser extends org.eclipse.xtext.parser.antlr.AbstractAntlrParser {

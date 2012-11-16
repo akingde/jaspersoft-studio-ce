@@ -1,9 +1,8 @@
 package com.jaspersoft.studio.editor.jrexpressions.validation;
 
-import net.sf.jasperreports.expressions.functions.util.FunctionsLibraryUtil;
-
 import org.eclipse.xtext.validation.Check;
 
+import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;

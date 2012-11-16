@@ -36,7 +36,6 @@ import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
-import net.sf.jasperreports.expressions.functions.util.FunctionsLibraryUtil;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.ui.IEditorPart;

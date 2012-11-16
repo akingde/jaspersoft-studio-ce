@@ -5,19 +5,16 @@
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl;
 
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage;
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmLowerBound;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.xtext.common.types.JvmTypeReference;
+
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmLowerBound;
 
 /**
  * <!-- begin-user-doc -->

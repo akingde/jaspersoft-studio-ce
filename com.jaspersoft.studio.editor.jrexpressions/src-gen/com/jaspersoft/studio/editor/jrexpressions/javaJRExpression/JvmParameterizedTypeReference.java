@@ -6,7 +6,6 @@
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 

@@ -9,7 +9,6 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.expressions.functions.CategoryKeys;
-import net.sf.jasperreports.expressions.functions.util.FunctionsLibraryUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -43,6 +42,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionContextUtils;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorComposite;
 import com.jaspersoft.studio.editor.expression.ExpressionStatus;
+import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionStatusChangeListener;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem;
@@ -123,6 +123,8 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 
 		subSashForm.setWeights(new int[] { 25, 75 });
 		mainSashForm.setWeights(new int[] { 20, 80 });
+		
+		FunctionsLibraryUtil.reloadLibraryIfNeeded();
 		
 		this.updatePanelJob=new UpdatePanelJob();
 	}

@@ -1,7 +1,7 @@
 package com.jaspersoft.studio.editor.gef.decorator.text;
 
-import java.text.AttributedString;
 import java.text.AttributedCharacterIterator.Attribute;
+import java.text.AttributedString;
 
 /**
  * Define a text that need to be painted on the figure

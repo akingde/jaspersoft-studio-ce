@@ -1,7 +1,6 @@
 package com.jaspersoft.studio.editor.jrexpressions.util;
 
-import net.sf.jasperreports.expressions.functions.util.FunctionsLibraryUtil;
-
+import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;

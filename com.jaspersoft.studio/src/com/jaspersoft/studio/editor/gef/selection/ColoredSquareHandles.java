@@ -29,7 +29,6 @@ import org.eclipse.gef.handles.SquareHandle;
 import org.eclipse.swt.graphics.Cursor;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 

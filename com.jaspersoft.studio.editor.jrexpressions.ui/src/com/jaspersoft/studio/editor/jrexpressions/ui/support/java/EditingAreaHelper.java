@@ -3,8 +3,6 @@ package com.jaspersoft.studio.editor.jrexpressions.ui.support.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.expressions.functions.util.FunctionsLibraryUtil;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.xtext.Keyword;
@@ -13,6 +11,7 @@ import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
 
+import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Arguments;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ExpressionList;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;

@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.ScaledGraphics;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
