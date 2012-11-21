@@ -58,6 +58,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.swt.events.ChangeEvent;
 import com.jaspersoft.studio.swt.events.ChangeListener;
+import com.jaspersoft.studio.utils.GridDataUtil;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class MoveT2TButtons {
@@ -174,7 +175,7 @@ public class MoveT2TButtons {
 
 	public void createButtons(Composite composite, ColumnViewer leftTView, TableViewer rightTView) {
 		Button addField = new Button(composite, SWT.PUSH);
-		int chw = UIUtils.getCharWidth(addField) * 5;
+		int chw = UIUtils.getCharWidth(addField) * 7;
 		addField.setText(" > "); //$NON-NLS-1$
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = chw;
@@ -183,17 +184,17 @@ public class MoveT2TButtons {
 
 		Button addFields = new Button(composite, SWT.PUSH);
 		addFields.setText(">>"); //$NON-NLS-1$
-		addFields.setLayoutData(gd);
+		addFields.setLayoutData(GridDataUtil.clone(gd));
 		addFields.addSelectionListener(new MoveAllListener(leftTView, rightTView));
 
 		Button delField = new Button(composite, SWT.PUSH);
 		delField.setText(" < "); //$NON-NLS-1$
-		delField.setLayoutData(gd);
+		delField.setLayoutData(GridDataUtil.clone(gd));
 		delField.addSelectionListener(new MoveListener(rightTView, leftTView));
 
 		Button delFields = new Button(composite, SWT.PUSH);
 		delFields.setText("<<"); //$NON-NLS-1$
-		delFields.setLayoutData(gd);
+		delFields.setLayoutData(GridDataUtil.clone(gd));
 		delFields.addSelectionListener(new MoveAllListener(rightTView, leftTView));
 
 		// Add the doubleclick selection to the table viewers
@@ -204,7 +205,7 @@ public class MoveT2TButtons {
 	public void createButtonsShort(Composite composite, ColumnViewer leftTView, TableViewer rightTView,
 			boolean doubleClick) {
 		Button addField = new Button(composite, SWT.PUSH);
-		int chw = UIUtils.getCharWidth(addField) * 5;
+		int chw = UIUtils.getCharWidth(addField) * 7;
 		addField.setText(">"); //$NON-NLS-1$
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = chw;
@@ -213,7 +214,7 @@ public class MoveT2TButtons {
 
 		Button delField = new Button(composite, SWT.PUSH);
 		delField.setText("<"); //$NON-NLS-1$
-		delField.setLayoutData(gd);
+		delField.setLayoutData(GridDataUtil.clone(gd));
 		delField.addSelectionListener(new MoveListener(rightTView, leftTView));
 		if (doubleClick) {
 			// Add the doubleclick selection to the table viewers
