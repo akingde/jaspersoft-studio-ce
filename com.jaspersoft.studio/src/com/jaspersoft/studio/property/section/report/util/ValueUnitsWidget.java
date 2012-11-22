@@ -120,7 +120,7 @@ public class ValueUnitsWidget {
 		removeListeners();
 		val.setDigits(digits);
 		val.setMinimum(0);
-		setSpinnerMax(max);
+		setSpinnerMax(Math.max(max, unit.getPxValue()));
 		val.setIncrement(1);
 		val.setSelection((int) Math.round(unit.getValue(u) * Math.pow(10, digits)));
 		addListeners();
