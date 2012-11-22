@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="ASCII"?>
+<!--
+  Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+  http://www.jaspersoft.com
+  
+  Unless you have purchased a commercial license agreement from Jaspersoft, 
+  the following license terms apply:
+  
+  This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+  
+  Contributors:
+      Jaspersoft Studio Team - initial API and implementation
+-->
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:xtext="http://www.eclipse.org/2008/Xtext">
   <xtext:Grammar name="com.jaspersoft.studio.editor.jrexpressions.JavaJRExpression" usedGrammars="/1">
     <metamodelDeclarations xsi:type="xtext:GeneratedMetamodel" name="javaJRExpression">
