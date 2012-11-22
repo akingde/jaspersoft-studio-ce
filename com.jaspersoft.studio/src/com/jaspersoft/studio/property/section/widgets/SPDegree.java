@@ -19,6 +19,9 @@
  */
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
 import org.eclipse.swt.SWT;
@@ -27,6 +30,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.mihalis.opal.angles.AngleSlider;
 
@@ -53,7 +57,44 @@ public class SPDegree extends SPNumber {
 		layout.center = true;
 		composite.setLayout(layout);
 
-		angleSlider = new AngleSlider(composite, SWT.NONE);
+		angleSlider = new AngleSlider(composite, SWT.NONE) {
+			public void setSelection(final int selection) {
+				checkWidget();
+				if (selection < 0 || selection > 360) {
+					SWT.error(SWT.ERROR_CANNOT_SET_SELECTION);
+				}
+				Field f;
+				try {
+					// FIXME ugly hack, should remove this
+					f = AngleSlider.class.getDeclaredField("selection");
+					f.setAccessible(true); // solution
+					f.set(this, selection);
+					// this.selection = selection;
+					Event event = new Event();
+					event.widget = this;
+
+					// FIXME ugly hack, should remove this
+					Method method = AngleSlider.class.getDeclaredMethod("fireSelectionListeners", Event.class);
+					method.setAccessible(true);
+					method.invoke(this, event);
+					// fireSelectionListeners(event);
+					redraw();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (NoSuchFieldException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+
+		};
 		angleSlider.setToolTipText(pDescriptor.getDescription());
 		angleSlider.addSelectionListener(new SelectionAdapter() {
 
