@@ -15,6 +15,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.resource;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -71,21 +76,56 @@ public class AddResourceWizard extends Wizard {
 	}
 
 	private ResourceFactory rfactory = new ResourceFactory();
+	private Map<Class<? extends MResource>, IWizardPage> pagemap = new HashMap<Class<? extends MResource>, IWizardPage>();
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == page0) {
 			MResource r = page0.getResource();
 			if (r != null) {
-				IWizardPage rpage = rfactory.getResourcePage(parent, r);
+				int size = getPageCount();
+				Field f;
+				try {
+					f = Wizard.class.getDeclaredField("pages");
+					f.setAccessible(true); // FIXME, REALLY UGLY :( BUT IT'S
+											// FASTER
+					List<IWizardPage> wpages = (List<IWizardPage>) f.get(this);
+					for (int i = 1; i < size; i++) {
+						wpages.remove(i);
+					}
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (NoSuchFieldException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+
+				IWizardPage rpage = pagemap.get(r.getClass());
+				if (rpage == null) {
+					rpage = rfactory.getResourcePage(parent, r);
+					if (rpage != null)
+						pagemap.put(r.getClass(), rpage);
+				}
 				if (rpage != null) {
+
 					if (getPage(rpage.getName()) == null)
 						addPage(rpage);
 					return rpage;
 				}
+				return null;
 			}
 		}
 		return super.getNextPage(page);
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		for (IWizardPage p : pagemap.values())
+			p.dispose();
 	}
 
 	private ANode parent;
