@@ -875,7 +875,9 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			pmap.getEventSupport().addPropertyChangeListener(this);
 
 			((JRDesignSection) jasperDesign.getDetailSection()).getEventSupport().addPropertyChangeListener(this);
-			mDataset = null;
+			//mDataset = null;
+			if (mDataset != null)
+				mDataset.setValue(jrDesignDataset);
 		}
 		super.setValue(value);
 	}
