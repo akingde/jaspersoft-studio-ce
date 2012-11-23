@@ -20,6 +20,7 @@ import java.text.MessageFormat;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
@@ -99,11 +100,12 @@ public class AddResourcePage extends WizardPage {
 				Object obj = ts.getFirstElement();
 				if (obj != null && obj instanceof MResource) {
 					resource = (MResource) obj;
-					getWizard().getContainer().updateButtons();
 				}
 			}
 		});
 		setControl(treeViewer.getControl());
+		treeViewer.setSelection(new TreeSelection(new TreePath(
+				new Object[] { resource })), true);
 	}
 
 	private boolean dsonly = false;
@@ -164,13 +166,13 @@ public class AddResourcePage extends WizardPage {
 		for (INode n : root.getChildren()) {
 			((MResource) n).setEditMode(true);
 		}
-
+		if (root.getChildren() != null && !root.getChildren().isEmpty())
+			resource = (MResource) root.getChildren().get(0);
 		return root;
 	}
 
 	protected void createReportUnit(MRoot root) {
-		new MReportUnit(root, MReportUnit.createDescriptor(parent),
-				-1);
+		new MReportUnit(root, MReportUnit.createDescriptor(parent), -1);
 	}
 
 	protected void createDatasources(MRoot root) {
@@ -188,9 +190,9 @@ public class AddResourcePage extends WizardPage {
 
 		Activator.getExtManager().createNewDatasource(root, parent);
 	}
-	
+
 	@Override
 	public boolean canFlipToNextPage() {
-		return resource!=null;
+		return resource != null;
 	}
 }
