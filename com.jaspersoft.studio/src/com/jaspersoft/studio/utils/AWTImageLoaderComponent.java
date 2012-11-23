@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com.
+ * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
  * the following license terms apply:
@@ -11,7 +11,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- *     Massimo Rabbi (mrabbi@users.sourceforge.net) - initial API and implementation
+ *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
