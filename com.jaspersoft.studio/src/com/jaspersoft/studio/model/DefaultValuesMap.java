@@ -1,7 +1,6 @@
 /*******************************************************************************
- * ---------------------------------------------------------------------
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
  * the following license terms apply:
@@ -13,7 +12,6 @@
  * 
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
- * ---------------------------------------------------------------------
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
