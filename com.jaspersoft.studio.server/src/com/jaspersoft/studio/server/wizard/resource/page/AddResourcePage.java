@@ -97,8 +97,10 @@ public class AddResourcePage extends WizardPage {
 			public void selectionChanged(SelectionChangedEvent event) {
 				TreeSelection ts = (TreeSelection) event.getSelection();
 				Object obj = ts.getFirstElement();
-				if (obj != null && obj instanceof MResource)
+				if (obj != null && obj instanceof MResource) {
 					resource = (MResource) obj;
+					getWizard().getContainer().updateButtons();
+				}
 			}
 		});
 		setControl(treeViewer.getControl());
@@ -167,7 +169,7 @@ public class AddResourcePage extends WizardPage {
 	}
 
 	protected void createReportUnit(MRoot root) {
-		resource = new MReportUnit(root, MReportUnit.createDescriptor(parent),
+		new MReportUnit(root, MReportUnit.createDescriptor(parent),
 				-1);
 	}
 
@@ -185,5 +187,10 @@ public class AddResourcePage extends WizardPage {
 				MRDatasourceDiagnostic.createDescriptor(parent), -1);
 
 		Activator.getExtManager().createNewDatasource(root, parent);
+	}
+	
+	@Override
+	public boolean canFlipToNextPage() {
+		return resource!=null;
 	}
 }

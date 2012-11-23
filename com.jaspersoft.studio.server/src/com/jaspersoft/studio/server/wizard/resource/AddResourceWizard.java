@@ -110,7 +110,6 @@ public class AddResourceWizard extends Wizard {
 						pagemap.put(r.getClass(), rpage);
 				}
 				if (rpage != null) {
-
 					if (getPage(rpage.getName()) == null)
 						addPage(rpage);
 					return rpage;
@@ -139,4 +138,9 @@ public class AddResourceWizard extends Wizard {
 		return true;
 	}
 
+	@Override
+	public boolean canFinish() {
+		if(getContainer().getCurrentPage() == page0) return false;
+		return super.canFinish();
+	}
 }
