@@ -147,6 +147,10 @@ a:hover		{text-decoration:underline}
 	background-position: 0 -104px;
 	}
 
+.tutorial {
+	background-position: 0 -138px;
+	}
+	
 .snIcons {
 	position:absolute;
 	top:-6px;
