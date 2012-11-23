@@ -11,7 +11,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- *     Massimo Rabbi (mrabbi@users.sourceforge.net) - initial API and implementation
+ *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.swt.events;
 
