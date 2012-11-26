@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Data Adapters
 Bundle-SymbolicName: com.jaspersoft.studio.data;singleton:=true
-Bundle-Version: 1.3.2
+Bundle-Version: 1.3.3
 Bundle-Activator: com.jaspersoft.studio.data.Activator
 Bundle-Vendor: Jaspersoft Corporation
-Require-Bundle: com.jaspersoft.studio;bundle-version="1.3.2";visibility:=reexport,
+Require-Bundle: com.jaspersoft.studio;bundle-version="1.3.3";visibility:=reexport,
  org.apache.commons.pool;bundle-version="1.6.0";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

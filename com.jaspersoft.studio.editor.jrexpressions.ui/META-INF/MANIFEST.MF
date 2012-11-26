@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.jaspersoft.studio.editor.jrexpressions.ui
 Bundle-Vendor: Jaspersoft Corporation
-Bundle-Version: 1.3.2
+Bundle-Version: 1.3.3
 Bundle-SymbolicName: com.jaspersoft.studio.editor.jrexpressions.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: com.jaspersoft.studio.editor.jrexpressions;bundle-version="1.3.2",
+Require-Bundle: com.jaspersoft.studio.editor.jrexpressions;bundle-version="1.3.3",
  org.eclipse.xtext.ui;bundle-version="2.2.1",
  org.eclipse.xtext.ui.shared;bundle-version="2.2.1",
  org.eclipse.xtext.builder;bundle-version="2.2.1",
