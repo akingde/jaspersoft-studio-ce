@@ -21,7 +21,6 @@ import java.util.List;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
@@ -187,7 +186,7 @@ public abstract class PdfActionAbstact extends SelectionAction {
 	 */
 	private Command createAlignmentCommand() {
 		List<?> editparts = getSelectedObjects();
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof GraphicalEditPart)){
+		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart)){
 			return null;
 		} 
 		CompoundCommand command = new CompoundCommand();
