@@ -63,7 +63,6 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
-import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 

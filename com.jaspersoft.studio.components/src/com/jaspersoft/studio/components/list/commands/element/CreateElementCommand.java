@@ -21,6 +21,7 @@ import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -28,12 +29,15 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
@@ -52,6 +56,7 @@ public class CreateElementCommand extends Command {
 
 	private int index;
 	private JRPropertiesHolder[] pholder;
+	private MList destNode;
 
 	/**
 	 * Instantiates a new creates the element command.
@@ -66,6 +71,7 @@ public class CreateElementCommand extends Command {
 	public CreateElementCommand(MList destNode, MGraphicElement srcNode,
 			Rectangle position, int index) {
 		super();
+		this.destNode = destNode;
 		this.srcNode = srcNode;
 		if (srcNode != null)
 			jrElement = (JRDesignElement) srcNode.getValue();
@@ -104,8 +110,22 @@ public class CreateElementCommand extends Command {
 
 		DesignListContents contents = (DesignListContents) listcomponent
 				.getContents();
-		contents.setHeight(jrElement.getHeight());
-		contents.setWidth(jrElement.getWidth());
+		int h = jrElement.getY() + jrElement.getHeight();
+		if (contents.getHeight() < h) {
+			SetValueCommand cmd = new SetValueCommand();
+			cmd.setTarget((IPropertySource) destNode);
+			cmd.setPropertyId(MList.PREFIX + DesignListContents.PROPERTY_HEIGHT);
+			cmd.setPropertyValue(h);
+			addCommand(cmd);
+		}
+		int w = jrElement.getX() + jrElement.getWidth();
+		if (contents.getWidth() < w) {
+			SetValueCommand cmd = new SetValueCommand();
+			cmd.setTarget((IPropertySource) destNode);
+			cmd.setPropertyId(MList.PREFIX + DesignListContents.PROPERTY_WIDTH);
+			cmd.setPropertyValue(w);
+			addCommand(cmd);
+		}
 	}
 
 	public void setJrGroup(StandardListComponent jrGroup) {
@@ -138,6 +158,20 @@ public class CreateElementCommand extends Command {
 			SelectionHelper.setSelection(jrElement, false);
 			firstTime = false;
 		}
+		executeCommands();
+	}
+
+	private CompoundCommand commands;
+
+	protected void addCommand(Command command) {
+		if (commands == null)
+			commands = new CompoundCommand();
+		commands.add(command);
+	}
+
+	protected void executeCommands() {
+		if (commands != null)
+			commands.execute();
 	}
 
 	private Map<JRElement, Rectangle> map;
@@ -163,6 +197,8 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		if (commands != null)
+			commands.undo();
 		for (JRElement el : map.keySet()) {
 			JRDesignElement del = (JRDesignElement) el;
 			Rectangle r = map.get(el);

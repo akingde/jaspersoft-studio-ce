@@ -331,7 +331,6 @@ public class MList extends MGraphicElement implements IPastable,
 	public void setValue(Object value) {
 		if (getValue() != null) {
 			JRDesignComponentElement jrcomp = (JRDesignComponentElement) getValue();
-			jrcomp.getEventSupport().removePropertyChangeListener(this);
 			JRElementGroup elementGroup = getJRElementGroup(jrcomp);
 			if (elementGroup instanceof JRChangeEventsSupport)
 				((JRChangeEventsSupport) elementGroup).getEventSupport()
@@ -339,7 +338,6 @@ public class MList extends MGraphicElement implements IPastable,
 		}
 		if (value != null) {
 			JRDesignComponentElement jrcomp = (JRDesignComponentElement) value;
-			jrcomp.getEventSupport().addPropertyChangeListener(this);
 			JRElementGroup elementGroup = getJRElementGroup(jrcomp);
 			if (elementGroup instanceof JRChangeEventsSupport)
 				((JRChangeEventsSupport) elementGroup).getEventSupport()
