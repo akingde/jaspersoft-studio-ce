@@ -456,5 +456,6 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 			jConfig = getModel().getJasperConfiguration();
 		String mcolor = jConfig.getProperty(DesignerPreferencePage.P_CONTAINER_MARGIN_COLOR, "");
 		bfigure.setMarginsColor(SWTResourceManager.getColor(StringConverter.asRGB(mcolor, DEFAULTCOLOR)));
+		bfigure.repaint();
 	}
 }
