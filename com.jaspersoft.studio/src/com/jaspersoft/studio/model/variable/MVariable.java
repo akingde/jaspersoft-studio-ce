@@ -169,7 +169,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		defaultsMap.put(JRDesignVariable.PROPERTY_INCREMENT_TYPE, EnumHelper.getValue(IncrementTypeEnum.NONE, 1, false));
 	}
 	
-	public ExpressionContext getContext(){
+	public ExpressionContext getExpressionContext(){
 		JRDesignDataset dataSet = getDataSet();
 		JasperReportsConfiguration conf = getJasperConfiguration();
 		if (dataSet != null && conf != null) return new ExpressionContext(dataSet, conf);
@@ -328,4 +328,11 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		return false;
 	}
 
+	@Override
+	public Object getAdapter(Class adapter) {
+		if(ExpressionContext.class.equals(adapter)){
+			return getExpressionContext();
+		}
+		return super.getAdapter(adapter);
+	}
 }

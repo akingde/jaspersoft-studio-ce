@@ -31,7 +31,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
@@ -81,8 +80,14 @@ public class SPExpression extends AHistorySPropertyWidget implements IExpression
 		if (pnode.getValue() instanceof JRDesignElement) {
 			designEl = (JRDesignElement) pnode.getValue();
 		}
-		if (pnode instanceof MVariable) expr.setExpressionContext(((MVariable)pnode).getContext());
-		else expr.setExpressionContext(ModelUtils.getElementExpressionContext(designEl, pnode));
+		// Try to get an expression context for the node if any
+		Object expContextAdapter = pnode.getAdapter(ExpressionContext.class);
+		if(expContextAdapter!=null){
+			expr.setExpressionContext((ExpressionContext)expContextAdapter);
+		}
+		else{
+			expr.setExpressionContext(ModelUtils.getElementExpressionContext(designEl, pnode));
+		}
 	}
 
 	public void setEnabled(boolean enabled) {
