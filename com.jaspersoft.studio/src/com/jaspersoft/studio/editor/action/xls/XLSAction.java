@@ -23,6 +23,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.action.pdf.PropertiesList;
@@ -59,18 +60,61 @@ public class XLSAction extends SelectionAction{
 	
 	private String attributeId;
 	
+	private String[] attributeToRemove;
+	
 	public 	XLSAction(IWorkbenchPart part,String actionId, String value, String actionName){
 		this(part,actionId,actionId,value,actionName);
 	}
 	
 	public 	XLSAction(IWorkbenchPart part,String actionId, String attributeId, String value, String actionName){
-		super(part);
+		super(part, IAction.AS_CHECK_BOX);
 		setId(actionId);
 		this.attributeId = attributeId;
 		this.value = value;
 		//the property need to be registered
 		PropertiesList.AddItem(actionId);
 		setText(actionName);
+		attributeToRemove = null;
+	}
+	
+	/**
+	 * Uses the attribute to remove parameter to define the attribute that should be removed when the attributeId is set. This is 
+	 * done to define attribute mutually exclusives with the others
+	 */
+	public 	XLSAction(IWorkbenchPart part,String actionId, String attributeId, String value, String actionName, String[] attributeToRemove){
+		this(part,actionId,actionId,value,actionName);
+		this.attributeToRemove = attributeToRemove;
+	}
+	
+	public boolean isChecked() {
+		List<?> editparts = getSelectedObjects();
+		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart)){
+			return false;
+		} 
+		for (int i = 0; i < editparts.size(); i++) {
+			EditPart editpart = (EditPart) editparts.get(i);
+			if (editpart.getModel() instanceof MGraphicElement){
+				MGraphicElement model = (MGraphicElement)editpart.getModel();
+				JRPropertiesMap v = (JRPropertiesMap)model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+				if (v == null) return false;
+				else {
+					 Object oldValue = v.getProperty(attributeId);
+					 if (oldValue == null || !oldValue.equals(value)) return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Remove from the property map all the attributes in the attributeToRemove array
+	 * @param map
+	 */
+	private void removeAttributes(JRPropertiesMap map){
+		if (attributeToRemove != null){
+			for(String attributeName : attributeToRemove)
+				map.removeProperty(attributeName);
+		}
 	}
 	
 	/**
@@ -83,12 +127,17 @@ public class XLSAction extends SelectionAction{
 		cmd.setTarget(model);
 		cmd.setPropertyId(MGraphicElement.PROPERTY_MAP);
 		JRPropertiesMap v = (JRPropertiesMap)model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+		Object oldValue = null;
 		if (v == null){
 			v = new JRPropertiesMap();
 		} else {
+			oldValue = v.getProperty(attributeId);
 			v.removeProperty(attributeId);
 		}
-		if (value != null) v.setProperty(attributeId, value);
+		if (value != null  && !value.equals(oldValue)) {
+			v.setProperty(attributeId, value);
+			removeAttributes(v);
+		}
 		cmd.setPropertyValue(v);
 		return cmd;
 	}

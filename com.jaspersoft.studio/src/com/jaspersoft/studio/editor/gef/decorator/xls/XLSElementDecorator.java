@@ -92,13 +92,11 @@ public class XLSElementDecorator extends TextElementDecorator {
 	}
 	
 	private void registerBreak(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
-		IAction action = new XLSActionList(part, XLSAction.BREAK_AFTER_ROW_ID, new String[]{XLSAction.BREAK_AFTER_ROW_ID, XLSAction.BREAK_BEFORE_ROW_ID}, 
-																						new String[]{"true", null},"Break After Row" );
+		IAction action = new XLSAction(part, XLSAction.BREAK_AFTER_ROW_ID, XLSAction.BREAK_AFTER_ROW_ID, "true","Break After Row", new String[]{XLSAction.BREAK_BEFORE_ROW_ID});
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSActionList(part, XLSAction.BREAK_BEFORE_ROW_ID, new String[]{XLSAction.BREAK_AFTER_ROW_ID, XLSAction.BREAK_BEFORE_ROW_ID}, 
-																						new String[]{null, "true"},"Break Before Row" );
+		action = new XLSAction(part, XLSAction.BREAK_BEFORE_ROW_ID, XLSAction.BREAK_BEFORE_ROW_ID, "true", "Break Before Row", new String[]{XLSAction.BREAK_AFTER_ROW_ID});
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 

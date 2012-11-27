@@ -24,6 +24,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -69,7 +70,7 @@ public abstract class PdfActionAbstact extends SelectionAction {
 	 * 					Id of the action when click on None
 	 */
 	public 	PdfActionAbstact(IWorkbenchPart part,Position action_position, String ID_Full, String ID_Start, String ID_End, String ID_None){
-		super(part);
+		super(part, IAction.AS_CHECK_BOX);
 		this.action_position = action_position;
 		this.ID_Full = ID_Full;
 		this.ID_Start = ID_Start;
@@ -79,6 +80,29 @@ public abstract class PdfActionAbstact extends SelectionAction {
 		PropertiesList.AddItem(GetPropertyName());
 		initUI();
 	}
+	
+	public boolean isChecked() {
+		List<?> editparts = getSelectedObjects();
+		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart)){
+			return false;
+		} 
+		String attributeId = GetPropertyName();
+		String value = GetPropertyValue();
+		for (int i = 0; i < editparts.size(); i++) {
+			EditPart editpart = (EditPart) editparts.get(i);
+			if (editpart.getModel() instanceof MGraphicElement){
+				MGraphicElement model = (MGraphicElement)editpart.getModel();
+				JRPropertiesMap v = (JRPropertiesMap)model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+				if (v == null) return false;
+				else {
+					 Object oldValue = v.getProperty(attributeId);
+					 if (oldValue == null || !oldValue.equals(value)) return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	
 	/**
 	 * Remove every precedent PDF attribute from the models attributes map.
@@ -167,13 +191,15 @@ public abstract class PdfActionAbstact extends SelectionAction {
 		cmd.setPropertyId(MGraphicElement.PROPERTY_MAP);
 		String name = GetPropertyName();
 		JRPropertiesMap v = (JRPropertiesMap)model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+		Object oldValue = null;
 		if (v == null){
 			v = new JRPropertiesMap();
 		} else {
+			oldValue = v.getProperty(name);
 			v.removeProperty(name);
 		}
 		String value = GetPropertyValue();
-		v.setProperty(name, value);
+		if (value != null  && !value.equals(oldValue)) v.setProperty(name, value);
 		cmd.setPropertyValue(v);
 		return cmd;
 	}

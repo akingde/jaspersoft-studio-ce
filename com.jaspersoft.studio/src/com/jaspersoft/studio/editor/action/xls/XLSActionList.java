@@ -23,6 +23,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.action.pdf.PropertiesList;
@@ -46,26 +47,55 @@ public class XLSActionList extends SelectionAction {
 	 * Ids of the attributes to set
 	 */
 	private String[] attributeIds;
+	
+	private int actionCheckId;
 
 	public XLSActionList(IWorkbenchPart part, String actionId, String[] attributeIds, String value, String actionName) {
-		super(part);
-		this.attributeIds = attributeIds;
-		setId(actionId);
-		initializeValuesArray(value, attributeIds.length);
-		// the property need to be registered
-		PropertiesList.AddItem(actionId);
-		setText(actionName);
+		this(part, actionId, attributeIds, initializeValuesArray(value, attributeIds.length), actionName);
 	}
 	
 	public XLSActionList(IWorkbenchPart part, String actionId, String[] attributeIds, String[] values, String actionName) {
 		super(part);
 		this.attributeIds = attributeIds;
-		this.values = values;
 		setId(actionId);
 		// the property need to be registered
 		PropertiesList.AddItem(actionId);
 		setText(actionName);
+		this.values = values;
+		actionCheckId = -1;
 	}
+	
+	public XLSActionList(IWorkbenchPart part, String actionId, String[] attributeIds, String[] values, String actionName, int actionCheckId) {
+		super(part, IAction.AS_CHECK_BOX);
+		this.attributeIds = attributeIds;
+		setId(actionId);
+		PropertiesList.AddItem(actionId);
+		setText(actionName);
+		this.values = values;
+		this.actionCheckId = actionCheckId;
+	}
+	
+	public boolean isChecked() {
+		List<?> editparts = getSelectedObjects();
+		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart) || actionCheckId == -1){
+			return false;
+		} 
+		String attributeId = attributeIds[actionCheckId];
+		for (int i = 0; i < editparts.size(); i++) {
+			EditPart editpart = (EditPart) editparts.get(i);
+			if (editpart.getModel() instanceof MGraphicElement){
+				MGraphicElement model = (MGraphicElement)editpart.getModel();
+				JRPropertiesMap v = (JRPropertiesMap)model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+				if (v == null) return false;
+				else {
+					 Object oldValue = v.getProperty(attributeId);
+					 if (oldValue == null || !oldValue.equals(values[actionCheckId])) return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	
 	
 	/**
@@ -73,10 +103,11 @@ public class XLSActionList extends SelectionAction {
 	 * @param value the value to put into the array
 	 * @param lenght the lenght of the array
 	 */
-	private void initializeValuesArray(String value, int lenght){
-		values = new String[lenght];
+	private static String[] initializeValuesArray(String value, int lenght){
+		String[] result = new String[lenght];
 		for(int i=0; i<lenght; i++)
-			values[i] = value;
+			result[i] = value;
+		return result;
 	}
 
 	/**
