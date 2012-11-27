@@ -48,6 +48,7 @@ public class SeriesXySection extends AbstractSection {
 				JRDesignXySeries.PROPERTY_LABEL_EXPRESSION);
 		createWidget4Property(parent,
 				JRDesignXySeries.PROPERTY_SERIES_EXPRESSION);
+		createWidget4Property(parent, JRDesignXySeries.PROPERTY_AUTO_SORT);
 	}
 
 }

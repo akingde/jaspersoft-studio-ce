@@ -33,6 +33,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
@@ -125,6 +126,12 @@ public class MXYSeries extends APropertyNode {
 				.setDescription(Messages.MXYSeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
 
+		CheckBoxPropertyDescriptor printRVAlueD = new CheckBoxPropertyDescriptor(
+				JRDesignXySeries.PROPERTY_AUTO_SORT, "Auto Sort");
+		printRVAlueD.setDescription("Auto sort");
+		desc.add(printRVAlueD);
+
+		defaultsMap.put(JRDesignXySeries.PROPERTY_AUTO_SORT, Boolean.TRUE);
 		defaultsMap.put(JRDesignXySeries.PROPERTY_X_VALUE_EXPRESSION, null);
 		defaultsMap.put(JRDesignXySeries.PROPERTY_Y_VALUE_EXPRESSION, null);
 		defaultsMap.put(JRDesignXySeries.PROPERTY_LABEL_EXPRESSION, null);
@@ -145,6 +152,9 @@ public class MXYSeries extends APropertyNode {
 			setChildListener(mHyperLink);
 			return mHyperLink;
 		}
+		if (id.equals(JRDesignXySeries.PROPERTY_AUTO_SORT))
+			return jrElement.getAutoSort() == null ? true : jrElement
+					.getAutoSort();
 		if (id.equals(JRDesignXySeries.PROPERTY_X_VALUE_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getXValueExpression());
 		if (id.equals(JRDesignXySeries.PROPERTY_Y_VALUE_EXPRESSION))
@@ -159,7 +169,9 @@ public class MXYSeries extends APropertyNode {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignXySeries jrElement = (JRDesignXySeries) getValue();
 
-		if (id.equals(JRDesignXySeries.PROPERTY_X_VALUE_EXPRESSION))
+		if (id.equals(JRDesignXySeries.PROPERTY_AUTO_SORT))
+			jrElement.setAutoSort((Boolean) value);
+		else if (id.equals(JRDesignXySeries.PROPERTY_X_VALUE_EXPRESSION))
 			jrElement.setXValueExpression(ExprUtil.setValues(
 					jrElement.getXValueExpression(), value));
 		else if (id.equals(JRDesignXySeries.PROPERTY_Y_VALUE_EXPRESSION))
