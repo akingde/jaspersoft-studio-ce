@@ -26,11 +26,11 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.editor.gef.texture.EmptyTexture;
 import com.jaspersoft.studio.editor.gef.util.FigureTextWriter;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
-import com.jaspersoft.studio.utils.SWTResourceManager;
 
 /*
  * The Class BandFigure.

@@ -23,8 +23,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
-
-import com.jaspersoft.studio.utils.ResourceManager;
+import org.eclipse.wb.swt.ResourceManager;
 
 /**
  * Custom renderer for a gallery item.

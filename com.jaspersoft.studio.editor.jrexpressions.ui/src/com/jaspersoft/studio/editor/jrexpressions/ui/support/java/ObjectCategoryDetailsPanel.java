@@ -56,6 +56,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.editor.expression.CrosstabTotalVariable;
 import com.jaspersoft.studio.editor.expression.ExpObject;
@@ -68,7 +69,6 @@ import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectItemStyledLab
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.TreeArrayContentProvider;
 import com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage;
 import com.jaspersoft.studio.utils.RecentExpressions;
-import com.jaspersoft.studio.utils.ResourceManager;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**

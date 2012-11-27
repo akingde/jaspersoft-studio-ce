@@ -25,13 +25,13 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboItemAction;
 import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * This class define a position selector as a popoup combo menu

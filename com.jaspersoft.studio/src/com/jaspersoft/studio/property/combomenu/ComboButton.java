@@ -39,8 +39,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-
-import com.jaspersoft.studio.utils.ResourceManager;
+import org.eclipse.wb.swt.ResourceManager;
 
 public class ComboButton extends Viewer {
 

@@ -30,6 +30,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
@@ -38,7 +39,6 @@ import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSPopupPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 public class MLinePen extends APropertyNode implements IPropertySource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

@@ -25,9 +25,9 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.TextStyle;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * Styled label provider that can highlight in bold the actual specified nodes. 

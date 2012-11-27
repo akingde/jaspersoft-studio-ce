@@ -24,13 +24,13 @@ import net.sf.jasperreports.engine.type.LineStyleEnum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboItemAction;
 import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * Reperesent the lineStyle of an element as a combo popup element.

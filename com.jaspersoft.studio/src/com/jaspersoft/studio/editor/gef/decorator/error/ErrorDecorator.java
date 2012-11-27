@@ -25,12 +25,12 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * Design a border and a warning icon on an element that is out of bounds

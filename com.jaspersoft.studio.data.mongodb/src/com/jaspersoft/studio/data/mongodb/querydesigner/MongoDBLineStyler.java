@@ -25,8 +25,7 @@ import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
-
-import com.jaspersoft.studio.utils.ResourceManager;
+import org.eclipse.wb.swt.ResourceManager;
 
 /**
  * This class provides the style information for the MongoDB query text (JSON based) line being drawn.

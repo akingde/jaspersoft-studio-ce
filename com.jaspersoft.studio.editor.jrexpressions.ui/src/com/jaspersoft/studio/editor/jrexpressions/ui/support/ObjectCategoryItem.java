@@ -16,10 +16,10 @@
 package com.jaspersoft.studio.editor.jrexpressions.ui.support;
 
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.java.JavaExpressionEditorComposite;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * The object item representing an available category of elements 

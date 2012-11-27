@@ -26,6 +26,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
@@ -37,7 +38,6 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.dataset.MDataset;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 public class DatasetAction extends SelectionAction {
 	public static final String ID = "datasetAction"; //$NON-NLS-1$

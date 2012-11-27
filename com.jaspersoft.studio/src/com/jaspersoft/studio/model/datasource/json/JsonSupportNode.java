@@ -21,10 +21,10 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 public class JsonSupportNode extends ANode {
 

@@ -18,9 +18,9 @@ package com.jaspersoft.studio.model.datasource.xml;
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * ANode representing an XML document attribute node.

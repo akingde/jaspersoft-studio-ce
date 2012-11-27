@@ -34,8 +34,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-
-import com.jaspersoft.studio.properties.util.SWTResourceManager;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
  * A FormToolkit customized for use by tabbed property sheet page.

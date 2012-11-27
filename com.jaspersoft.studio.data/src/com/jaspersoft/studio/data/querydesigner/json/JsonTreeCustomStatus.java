@@ -16,11 +16,11 @@
 package com.jaspersoft.studio.data.querydesigner.json;
 
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.designer.tree.NodeBoldStyledLabelProvider.CustomStyleStatus;
 import com.jaspersoft.studio.data.messages.Messages;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * Enumeration for custom states of the treeviewer containing

@@ -20,7 +20,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.part.EditorPart;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;

@@ -16,9 +16,9 @@
 package com.jaspersoft.studio.utils.compatibility;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * This class "replaces" the {@link org.eclipse.gef.SharedImages} one.

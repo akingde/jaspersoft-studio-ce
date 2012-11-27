@@ -36,11 +36,11 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Scale;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.templates.JrxmlTemplateBundle;
 import com.jaspersoft.studio.templates.StudioTemplateManager;
-import com.jaspersoft.studio.utils.ResourceManager;
 import com.jaspersoft.studio.utils.SWTImageEffects;
 import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
 import com.jaspersoft.templates.TemplateBundle;

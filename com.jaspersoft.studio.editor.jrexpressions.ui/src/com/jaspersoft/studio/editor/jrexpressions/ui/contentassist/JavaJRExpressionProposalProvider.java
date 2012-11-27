@@ -28,6 +28,7 @@ import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
@@ -37,7 +38,6 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionContextUtils;
 import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
-import com.jaspersoft.studio.utils.ResourceManager;
 /**
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on how to customize content assistant
  */

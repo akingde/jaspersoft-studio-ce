@@ -32,10 +32,10 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.ResourceManager;
 import com.jaspersoft.templates.TemplateEngine;
 
 /**

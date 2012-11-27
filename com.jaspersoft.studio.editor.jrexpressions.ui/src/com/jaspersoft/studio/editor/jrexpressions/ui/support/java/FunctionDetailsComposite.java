@@ -39,11 +39,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionEvent;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.ResourceManager;
 import com.jaspersoft.studio.utils.UIUtils;
 
 /**

@@ -40,6 +40,7 @@ import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.compatibility.dialog.VersionCombo;
@@ -48,7 +49,6 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.validator.URLValidator;
-import com.jaspersoft.studio.utils.SWTResourceManager;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class ServerProfilePage extends WizardPage {
