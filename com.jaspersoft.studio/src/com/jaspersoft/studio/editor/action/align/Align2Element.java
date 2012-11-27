@@ -38,16 +38,17 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.messages.Messages;
 
 /**
- * This class copy an alignment action to add the primary element checking, to take it as reference
- * to move all the other selected elements
+ * This class copy an alignment action to add the primary element checking, to take it as reference to move all the
+ * other selected elements
  * 
  * @author Orlandin Marco
- *
+ * 
  */
-public class Align2Element extends SelectionAction {
+public class Align2Element extends SelectionAction implements IGlobalAction {
 
 	/**
 	 * Indicates that the bottom edges should be aligned.
@@ -78,7 +79,7 @@ public class Align2Element extends SelectionAction {
 	 * Indicates that the top edges should be aligned.
 	 */
 	public static final String ID_ALIGN_TOP = GEFActionConstants.ALIGN_TOP;
-	
+
 	/**
 	 * The type of alignment
 	 */
@@ -90,8 +91,7 @@ public class Align2Element extends SelectionAction {
 	private List<?> operationSet;
 
 	/**
-	 * Constructs an AlignmentAction with the given part and alignment ID. The
-	 * alignment ID must by one of:
+	 * Constructs an AlignmentAction with the given part and alignment ID. The alignment ID must by one of:
 	 * <UL>
 	 * <LI>GEFActionConstants.ALIGN_LEFT
 	 * <LI>GEFActionConstants.ALIGN_RIGHT
@@ -102,9 +102,9 @@ public class Align2Element extends SelectionAction {
 	 * </UL>
 	 * 
 	 * @param part
-	 *            the workbench part used to obtain context
+	 *          the workbench part used to obtain context
 	 * @param align
-	 *            the aligment ID.
+	 *          the aligment ID.
 	 */
 	public Align2Element(IWorkbenchPart part, int align) {
 		super(part);
@@ -113,19 +113,19 @@ public class Align2Element extends SelectionAction {
 	}
 
 	/**
-	 * Returns the alignment rectangle to which all selected parts should be
-	 * aligned. The rectangle coordinate are the same of the primary element
+	 * Returns the alignment rectangle to which all selected parts should be aligned. The rectangle coordinate are the
+	 * same of the primary element
 	 * 
 	 * @param request
-	 *            the alignment Request
-	 * @param primary           
-	 *   					the object used as primary during the alignment
+	 *          the alignment Request
+	 * @param primary
+	 *          the object used as primary during the alignment
 	 * @return the alignment rectangle
 	 */
 	protected Rectangle calculateAlignmentRectangle(List<?> editparts, Object primary) {
 		if (editparts == null || editparts.isEmpty())
 			return null;
-		GraphicalEditPart part = (GraphicalEditPart)primary;
+		GraphicalEditPart part = (GraphicalEditPart) primary;
 		Rectangle rect = new PrecisionRectangle(part.getFigure().getBounds());
 		part.getFigure().translateToAbsolute(rect);
 		return rect;
@@ -144,17 +144,18 @@ public class Align2Element extends SelectionAction {
 
 	/**
 	 * Create the alignment command for the selected elements
+	 * 
 	 * @return the alignment command
 	 */
 	private Command createAlignmentCommand() {
 		AlignmentRequest request = new AlignmentRequest(RequestConstants.REQ_ALIGN);
-		//Validation of selected elements and choose of the primary
-		Pair<List<?>,Object> editPartsAndPrimary =  getOperationSet(request);
+		// Validation of selected elements and choose of the primary
+		Pair<List<?>, Object> editPartsAndPrimary = getOperationSet(request);
 		List<?> editparts = editPartsAndPrimary.first();
 		Object primary = editPartsAndPrimary.second();
-		request.setAlignmentRectangle(calculateAlignmentRectangle(editparts,primary));
+		request.setAlignmentRectangle(calculateAlignmentRectangle(editparts, primary));
 		request.setAlignment(alignment);
-		
+
 		if (editparts.size() < 2)
 			return null;
 
@@ -174,58 +175,57 @@ public class Align2Element extends SelectionAction {
 		operationSet = Collections.EMPTY_LIST;
 		super.dispose();
 	}
-	
+
 	/**
-	 * Return the primary object of the selections, or the last object if 
-	 * none of them is the primary
-	 * @param editparts List of selected objects
+	 * Return the primary object of the selections, or the last object if none of them is the primary
+	 * 
+	 * @param editparts
+	 *          List of selected objects
 	 * @return The primary object or a substitute if itsn't present
 	 */
-	protected Object getPrimary(List<?> editparts){
-		//editparts must be already checked to be sure that the list is not void
+	protected Object getPrimary(List<?> editparts) {
+		// editparts must be already checked to be sure that the list is not void
 		Iterator<?> it = editparts.iterator();
 		boolean primaryFound = false;
 		EditPart actualPart = null;
-		while(it.hasNext() && !primaryFound){
+		while (it.hasNext() && !primaryFound) {
 			actualPart = (EditPart) it.next();
-			if (actualPart.getSelected() == EditPart.SELECTED_PRIMARY){
+			if (actualPart.getSelected() == EditPart.SELECTED_PRIMARY) {
 				primaryFound = true;
 			}
 		}
 		return actualPart;
 	}
 
-
 	/**
-	 * Returns the list of editparts which will participate in alignment and 
-	 * the primary object used to calculate the position
+	 * Returns the list of editparts which will participate in alignment and the primary object used to calculate the
+	 * position
 	 * 
 	 * @param request
-	 *            the alignment request
-	 * @return A pair of element: a list of the editparts that take part in the selection
-	 * and an edit part to take a reference to set the position of all the others
+	 *          the alignment request
+	 * @return A pair of element: a list of the editparts that take part in the selection and an edit part to take a
+	 *         reference to set the position of all the others
 	 */
-	protected Pair<List<?>,Object> getOperationSet(Request request) {
-		if (operationSet != null){
+	protected Pair<List<?>, Object> getOperationSet(Request request) {
+		if (operationSet != null) {
 			Object primary = getPrimary(operationSet);
-			return new  Pair<List<?>,Object>(operationSet, primary);
+			return new Pair<List<?>, Object>(operationSet, primary);
 		}
 		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
-		if (editparts.isEmpty()
-				|| !(editparts.get(0) instanceof GraphicalEditPart))
-			return new Pair<List<?>,Object>(Collections.EMPTY_LIST,null);
-		Object primary = getPrimary(editparts);//editparts.get(editparts.size() - 1);
+		if (editparts.isEmpty() || !(editparts.get(0) instanceof GraphicalEditPart))
+			return new Pair<List<?>, Object>(Collections.EMPTY_LIST, null);
+		Object primary = getPrimary(editparts);// editparts.get(editparts.size() - 1);
 		editparts = ToolUtilities.getSelectionWithoutDependants(editparts);
 		ToolUtilities.filterEditPartsUnderstanding(editparts, request);
 		if (editparts.size() < 2 || !editparts.contains(primary))
-			return  new Pair<List<?>,Object>(Collections.EMPTY_LIST,null);
+			return new Pair<List<?>, Object>(Collections.EMPTY_LIST, null);
 		EditPart parent = ((EditPart) editparts.get(0)).getParent();
 		for (int i = 1; i < editparts.size(); i++) {
 			EditPart part = (EditPart) editparts.get(i);
 			if (part.getParent() != parent)
-				return  new Pair<List<?>,Object>(Collections.EMPTY_LIST,null);
+				return new Pair<List<?>, Object>(Collections.EMPTY_LIST, null);
 		}
-		return new  Pair<List<?>,Object>(editparts, primary);
+		return new Pair<List<?>, Object>(editparts, primary);
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class Align2Element extends SelectionAction {
 			setToolTipText(Messages.Align2Element_Align_To_Left_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-left.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-left.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-left.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.RIGHT:
@@ -248,7 +248,7 @@ public class Align2Element extends SelectionAction {
 			setToolTipText(Messages.Align2Element_Align_To_Right_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-right.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-right.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-right.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.TOP:
@@ -257,7 +257,7 @@ public class Align2Element extends SelectionAction {
 			setToolTipText(Messages.Align2Element_Align_To_Top_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-top.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-top.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-top.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.BOTTOM:
@@ -266,7 +266,7 @@ public class Align2Element extends SelectionAction {
 			setToolTipText(Messages.Align2Element_Align_To_Bottom_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-bottom.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-bottom.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-bottom.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.CENTER:
@@ -275,7 +275,7 @@ public class Align2Element extends SelectionAction {
 			setToolTipText(Messages.Align2Element_Align_To_Center_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-center.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-center.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-center.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.MIDDLE:
@@ -284,7 +284,7 @@ public class Align2Element extends SelectionAction {
 			setToolTipText(Messages.Align2Element_Align_To_Middle_tooltip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-middle.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-middle.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-middle.gif")); //$NON-NLS-1$ 
 			break;
 		}
 	}

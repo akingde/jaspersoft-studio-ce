@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.report;
 
@@ -91,6 +86,10 @@ import com.jaspersoft.studio.editor.action.snap.ShowGridAction;
 import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
+import com.jaspersoft.studio.editor.action.text.BoldAction;
+import com.jaspersoft.studio.editor.action.text.ItalicAction;
+import com.jaspersoft.studio.editor.action.text.StrikethroughAction;
+import com.jaspersoft.studio.editor.action.text.UnderlineAction;
 import com.jaspersoft.studio.editor.dnd.JSSTemplateTransferDropTargetListener;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerComposite;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
@@ -118,25 +117,26 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 	/**
 	 * Class that extend a default domain and give the possibility to check if a keyboard key is held down
+	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
-	public static class KeyPressedEventDomain extends DefaultEditDomain{
-		
+	public static class KeyPressedEventDomain extends DefaultEditDomain {
+
 		/**
 		 * Map to keeping track if a key is held down
 		 */
 		private HashMap<Integer, Boolean> keyMap;
-		
+
 		/**
 		 * 
 		 * @param editorPart
 		 */
-		public KeyPressedEventDomain(IEditorPart editorPart){
+		public KeyPressedEventDomain(IEditorPart editorPart) {
 			super(editorPart);
 			keyMap = new HashMap<Integer, Boolean>();
 		}
-		
+
 		/**
 		 * Register in the map that a key is pressed, marking it as hold down
 		 */
@@ -145,7 +145,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 			super.keyDown(keyEvent, viewer);
 			keyMap.put(keyEvent.keyCode, true);
 		}
-		
+
 		/**
 		 * Register in the map that a key is released, marking it as not hold down
 		 */
@@ -154,18 +154,20 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 			super.keyDown(keyEvent, viewer);
 			keyMap.put(keyEvent.keyCode, false);
 		}
-		
+
 		/**
 		 * Check if a key is held down or not
-		 * @param keyCode an SWT keycode
+		 * 
+		 * @param keyCode
+		 *          an SWT keycode
 		 * @return true if the key is held down, otherwise false
 		 */
-		public Boolean isPressed(Integer keyCode){
+		public Boolean isPressed(Integer keyCode) {
 			Boolean value = keyMap.get(keyCode);
 			return value != null ? value : false;
 		}
 	}
-	
+
 	public Image getPartImage() {
 		return partImage;
 	}
@@ -448,6 +450,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	protected void initializeEditor() {
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		graphicalViewer.addDropTargetListener(new JSSTemplateTransferDropTargetListener(graphicalViewer));
+		getEditorSite().getActionBarContributor();
 	}
 
 	/*
@@ -533,9 +536,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	protected void createActions() {
 		super.createActions();
 		ActionRegistry registry = getActionRegistry();
-		IAction action;
-
-		action = new CutAction(this);
+		IAction action = new CutAction(this);
 		registry.registerAction(action);
 		List<String> selectionActions = getSelectionActions();
 		selectionActions.add(action.getId());
@@ -672,6 +673,21 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
+		action = new BoldAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+
+		action = new ItalicAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+
+		action = new UnderlineAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+
+		action = new StrikethroughAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
 	}
 
 	protected void createEditorActions(ActionRegistry registry) {

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.utils.jasper;
 
@@ -21,13 +16,16 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
@@ -72,7 +70,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			String property = event.getProperty();
 			if (property.equals(FontsPreferencePage.FPP_FONT_LIST)
 					|| property.equals(PropertyListFieldEditor.NET_SF_JASPERREPORTS_JRPROPERTIES)) {
-				fill = true;
+				refreshFonts = true;
+				refreshBundles = true;
 			}
 		}
 	}
@@ -81,10 +80,14 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent arg0) {
-			fill = true;
-			DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
-			ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
-			ExtensionsEnvironment.setThreadExtensionsRegistry(extensionsRegistry);
+			refreshFonts = true;
+			refreshBundles = true;
+			try {
+				DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
+				ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
+				ExtensionsEnvironment.setThreadExtensionsRegistry(extensionsRegistry);
+			} catch (Throwable e) {
+			}
 		}
 	}
 
@@ -251,7 +254,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	public String getProperty(String key) {
 		if (props == null)
 			props = new Properties();
-		if (fill) {
+		if (refreshFonts) {
 			try {
 				props = FileUtils.load(service.getString(qualifier, "net.sf.jasperreports.JRPROPERTIES", null, contexts));
 			} catch (IOException e) {
@@ -343,21 +346,24 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		return p;
 	}
 
-	private boolean fill = true;
+	private boolean refreshFonts = true;
+	private boolean refreshBundles = true;
 	private List<FontFamily> lst;
 	private JavaProjectClassLoader javaclassloader;
+	private List<ComponentsBundle> bundles;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getExtensions(Class<T> extensionType) {
 		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+		List<T> result = null;
 		try {
 			if (classLoader != null)
 				Thread.currentThread().setContextClassLoader(classLoader);
 			if (extensionType == FontFamily.class) {
 				if (lst == null)
 					lst = new ArrayList<FontFamily>();
-				if (fill) {
+				if (refreshFonts) {
 					String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
 					if (strprop != null) {
 						lst.clear();
@@ -371,14 +377,24 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 					if (superlist != null)
 						lst.addAll(superlist);
 
-					fill = false;
+					refreshFonts = false;
 				}
-				return (List<T>) lst;
+				result = (List<T>) lst;
+			} else if (extensionType == ComponentsBundle.class) {
+				if (bundles == null || refreshBundles) {
+					bundles = super.getExtensions(ComponentsBundle.class);
+					// remove all duplicates
+					Set<ComponentsBundle> components = new LinkedHashSet<ComponentsBundle>(bundles);
+					bundles = new ArrayList<ComponentsBundle>(components);
+					refreshBundles = false;
+				}
+				result = (List<T>) bundles;
+			} else {
+				result = super.getExtensions(extensionType);
 			}
-
-			return super.getExtensions(extensionType);
 		} finally {
 			Thread.currentThread().setContextClassLoader(oldCL);
 		}
+		return result;
 	}
 }

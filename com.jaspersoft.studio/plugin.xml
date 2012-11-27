@@ -37,6 +37,8 @@
 <extension-point id="hyperlinkTypes" name="Hyperlink Types" schema="schema/hyperlinkTypes.exsd"/>
 <extension-point id="editorLifecycle" name="Editor Lifecycle" schema="schema/editor.exsd"/>
 <extension-point id="expressionEditorSupport" name="JRExpression Editor Support" schema="schema/expressionEditorSupport.exsd"/>
+<extension-point id="toolitemsets" name="Tolitems sets" schema="schema/toolitemsets.exsd"/>
+<extension-point id="toolitems" name="Toolitems" schema="schema/toolitems.exsd"/>
 
 
    <extension
@@ -1254,6 +1256,16 @@
        </key>
     </extension>
     <extension
+          point="org.eclipse.core.contenttype.contentTypes">
+       <content-type
+             describer="com.jaspersoft.studio.data.DataAdapterDescriber"
+             file-extensions="xml"
+             id="com.jaspersoft.studio.data.dataAdapter"
+             name="DataAdapter File"
+             priority="high">
+       </content-type>
+    </extension>
+    <extension
           id="com.jaspersoft.studio.menus.filenew"
           point="org.eclipse.ui.menus">
        <menuContribution
@@ -1335,13 +1347,147 @@
        </menuContribution>
     </extension>
     <extension
-          point="org.eclipse.core.contenttype.contentTypes">
-       <content-type
-             describer="com.jaspersoft.studio.data.DataAdapterDescriber"
-             file-extensions="xml"
-             id="com.jaspersoft.studio.data.dataAdapter"
-             name="DataAdapter File"
-             priority="high">
-       </content-type>
+          point="com.jaspersoft.studio.toolitems">
+       <toolitems
+             ActionID="bring_forward"
+             icon="icons/eclipseapps/elcl16/bring_forward.gif"
+             id="com.jaspersoft.studio.graphic.bringforward"
+             label="Bring Forward"
+             tooltip="Bring Forward">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="bring_back"
+             icon="icons/eclipseapps/elcl16/send_to_back.gif"
+             id="com.jaspersoft.studio.graphic.bringback"
+             label="Send To Back"
+             tooltip="Send To Back">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="bring_front"
+             icon="icons/eclipseapps/elcl16/bring_to_front.gif"
+             id="com.jaspersoft.studio.graphic.bringfront"
+             label="Bring To Front"
+             tooltip="Bring To Front">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="bring_backward"
+             icon="icons/eclipseapps/elcl16/send_backward.gif"
+             id="com.jaspersoft.studio.graphic.bringbackward"
+             label="Send Backward"
+             tooltip="Send Backward">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="com.jaspersoft.studio.editor.action.text.bold"
+             icon="icons/resources/eclipse/font-bold.gif"
+             id="com.jaspersoft.studio.editor.action.text.bold"
+             label="Bold"
+             tooltip="Set font to Bold">
+          <selectedObject
+                class="com.jaspersoft.studio.model.text.MTextElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="com.jaspersoft.studio.editor.action.text.italic"
+             icon="icons/resources/eclipse/font-italic.gif"
+             id="com.jaspersoft.studio.editor.action.text.italic"
+             label="Bold"
+             tooltip="Set font to Italic">
+          <selectedObject
+                class="com.jaspersoft.studio.model.text.MTextElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="com.jaspersoft.studio.editor.action.text.underline"
+             icon="icons/resources/eclipse/font-underline.gif"
+             id="com.jaspersoft.studio.editor.action.text.underline"
+             label="Underline"
+             tooltip="Set font to underline">
+          <selectedObject
+                class="com.jaspersoft.studio.model.text.MTextElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="com.jaspersoft.studio.editor.action.text.strike"
+             icon="icons/resources/edit-strike.png"
+             id="com.jaspersoft.studio.editor.action.text.strike"
+             label="Strikethrough"
+             tooltip="Set font to strikethrough">
+          <selectedObject
+                class="com.jaspersoft.studio.model.text.MTextElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             contributionItemClass="com.jaspersoft.studio.editor.action.text.FontNameComboContributionItem"
+             id="com.jaspersoft.studio.editor.action.text.fontname"
+             tooltip="Font Name">
+          <selectedObject
+                class="com.jaspersoft.studio.model.text.MTextElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             contributionItemClass="com.jaspersoft.studio.editor.action.text.FontSizeComboContributionItem"
+             id="com.jaspersoft.studio.editor.action.text.fontsize"
+             tooltip="Font Size">
+          <selectedObject
+                class="com.jaspersoft.studio.model.text.MTextElement">
+          </selectedObject>
+       </toolitems>
+    </extension>
+    <extension
+          point="com.jaspersoft.studio.toolitemsets">
+       <toolitemsets
+             description="Actions to manage elements order"
+             id="com.jaspersoft.studio.graphic.bring"
+             name="Element Order"
+             toolbaruri="com.jaspersoft.studio.graphic.bring"
+             visibility="true">
+          <toolitem
+                toolitemID="com.jaspersoft.studio.graphic.bringforward"></toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.graphic.bringfront">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.graphic.bringback">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.graphic.bringbackward">
+          </toolitem>
+       </toolitemsets>
+       <toolitemsets
+             description="Text Element properties"
+             id="com.jaspersoft.studio.graphic.text"
+             name="Text Properties"
+             toolbaruri="com.jaspersoft.studio.graphic.text"
+             visibility="true">
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.text.fontname">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.text.fontsize">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.text.bold"></toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.text.italic">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.text.underline">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.text.strike">
+          </toolitem>
+       </toolitemsets>
     </extension>
 </plugin>

@@ -36,6 +36,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
+import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.property.PostSetValueManager;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -171,6 +172,16 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 			decoratorManager.init();
 		}
 		return decoratorManager;
+	}
+
+	private static ToolItemsManager toolItemsManager;
+
+	public static ToolItemsManager getToolItemsManager() {
+		if (toolItemsManager == null) {
+			toolItemsManager = new ToolItemsManager();
+			toolItemsManager.init();
+		}
+		return toolItemsManager;
 	}
 
 	private static DriversManager driversManager;

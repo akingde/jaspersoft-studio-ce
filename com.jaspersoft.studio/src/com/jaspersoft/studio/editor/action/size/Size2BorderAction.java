@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.size;
 
@@ -33,11 +28,12 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.editor.gef.commands.ResizeCommand;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 
-public class Size2BorderAction extends SelectionAction {
+public class Size2BorderAction extends SelectionAction implements IGlobalAction {
 
 	/**
 	 * Indicates that the bottom edges should be aligned.
@@ -160,7 +156,7 @@ public class Size2BorderAction extends SelectionAction {
 			setToolTipText(Messages.Size2BorderAction_fit_width_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif")); //$NON-NLS-1$ 
 			break;
 
 		case HEIGHT:
@@ -169,7 +165,7 @@ public class Size2BorderAction extends SelectionAction {
 			setToolTipText(Messages.Size2BorderAction_fit_height_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_height.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/eclipseapps/size_to_control_height.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/eclipseapps/size_to_control_height.gif")); //$NON-NLS-1$ 
 			break;
 
 		case BOTH:
@@ -177,7 +173,7 @@ public class Size2BorderAction extends SelectionAction {
 			setText(Messages.Size2BorderAction_fit_both);
 			setToolTipText(Messages.Size2BorderAction_fit_both_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control.gif")); //$NON-NLS-1$
-			setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control.gif")); //$NON-NLS-1$ 
 			break;
 		}
 	}

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
@@ -283,6 +278,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	public IEditorPart getActiveEditor() {
 		return super.getActiveEditor();
+	}
+
+	public IEditorPart getActiveEditor2() {
+		IEditorPart iep = getActiveEditor();
+		if (iep instanceof ReportContainer)
+			return ((ReportContainer) iep).getActiveEditor();
+		return iep;
 	}
 
 	@Override
@@ -685,19 +687,19 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				tmpselection = reportContainer.getActiveEditor().getSite().getSelectionProvider().getSelection();
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
-				if (activePage == PAGE_XMLEDITOR && !xmlFresh)
+				if (activePage == PAGE_XMLEDITOR && !xmlFresh) {
 					try {
 						xml2model();
 					} catch (Exception e) {
 						handleJRException(getEditorInput(), e, false);
 					}
-				if (activePage != PAGE_PREVIEW)
 					updateVisualView();
-				else {
+				} else if (activePage == PAGE_DESIGNER) {
+					updateVisualView();
+				} else {
 					// stop running reports
 					previewEditor.getReportControler().stop();
 				}
-				// getSite().getSelectionProvider().setSelection(tmpselection);
 				Display.getDefault().syncExec(new Runnable() {
 
 					@Override

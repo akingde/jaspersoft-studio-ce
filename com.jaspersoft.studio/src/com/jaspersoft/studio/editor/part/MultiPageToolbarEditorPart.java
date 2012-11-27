@@ -1098,7 +1098,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		pageChangeListeners.remove(listener);
 	}
 
-	private void firePageChanged(final PageChangedEvent event) {
+	public void firePageChanged(final PageChangedEvent event) {
 		Object[] listeners = pageChangeListeners.getListeners();
 		for (int i = 0; i < listeners.length; ++i) {
 			final IPageChangedListener l = (IPageChangedListener) listeners[i];
@@ -1108,5 +1108,9 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 				}
 			});
 		}
+	}
+	
+	public INestable getActiveServiceLocator() {
+		return activeServiceLocator;
 	}
 }

@@ -1,21 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.gef.GraphicalViewer;
@@ -27,16 +23,21 @@ import org.eclipse.gef.ui.actions.RedoRetargetAction;
 import org.eclipse.gef.ui.actions.UndoRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomInRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomOutRetargetAction;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.editors.text.TextEditorActionContributor;
@@ -44,12 +45,14 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
+import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
 
 /*
@@ -87,39 +90,27 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 *          the bars
 	 */
 	public void init(IActionBars bars) {
-		buildActions();
+		buildActions(bars);
 		declareGlobalActionKeys();
 		super.init(bars);
+		getPage().addPartListener(partListener);
 	}
+
+	private PartListener partListener = new PartListener();
 
 	/**
 	 * Builds the actions.
 	 * 
 	 * @see org.eclipse.gef.ui.actions.ActionBarContributor#buildActions()
 	 */
-	protected void buildActions() {
+	protected void buildActions(IActionBars bars) {
 		addRetargetAction(new UndoRetargetAction());
 		addRetargetAction(new RedoRetargetAction());
 		addRetargetAction(new DeleteRetargetAction());
 
-		// addRetargetAction(new RetargetAction(BringToFrontAction.ID, "Bring To Front"));
-		// addRetargetAction(new RetargetAction(BringForwardAction.ID, "Bring Forward"));
-		// addRetargetAction(new RetargetAction(BringBackwardAction.ID, "Bring Backward"));
-		// addRetargetAction(new RetargetAction(BringToBackAction.ID, "Bring To Back"));
-		//
-		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.LEFT));
-		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.CENTER));
-		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.RIGHT));
-		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.TOP));
-		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.MIDDLE));
-		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.BOTTOM));
-
 		addRetargetAction(new ZoomInRetargetAction());
 		addRetargetAction(new ZoomOutRetargetAction());
 
-		// addRetargetAction(new MatchWidthRetargetAction());
-		// addRetargetAction(new MatchHeightRetargetAction());
-		// GEFMessages.ToggleRulerVisibility_Label
 		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY,
 				Messages.JrxmlEditorContributor_show_ruler, IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SnapToGuidesAction.ID, Messages.common_snap_to_guides, IAction.AS_CHECK_BOX));
@@ -142,7 +133,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * @param action
 	 *          The action to add
 	 */
-	protected void addRetargetAction(RetargetAction action) {
+	public void addRetargetAction(RetargetAction action) {
 		addAction(action);
 		retargetActions.add(action);
 		getPage().addPartListener(action);
@@ -151,10 +142,9 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 
 	private List<String> glRetargetAction = new ArrayList<String>();
 
-	protected void addGlobaRetargetAction(Action action) {
-		addAction(action);
+	protected void addGlobaRetargetAction(RetargetAction action) {
+		addRetargetAction(action);
 		glRetargetAction.add(action.getId());
-		addGlobalActionKey(action.getId());
 	}
 
 	/**
@@ -210,6 +200,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		return getActionRegistry().getAction(id);
 	}
 
+	private IEditorPart lastEditor;
+
 	/**
 	 * Sets the page to active status.
 	 * 
@@ -217,12 +209,21 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 *          The active editor
 	 */
 	public void setActivePage(IEditorPart activeEditor) {
+		ISelectionProvider selectionProvider = activeEditor.getSite().getSelectionProvider();
+		ISelection selection = selectionProvider != null ? selectionProvider.getSelection() : null;
+
+		if (lastEditor != null) {
+			if (!(activeEditor instanceof ReportContainer || activeEditor instanceof AbstractVisualEditor))
+				selectionListener.clearBars(selection);
+			if (lastEditor.getSite().getSelectionProvider() != null && selectionListener != null)
+				lastEditor.getSite().getSelectionProvider().removeSelectionChangedListener(selectionListener);
+		}
 		IActionBars bars = getActionBars();
 		removeZoom(bars.getToolBarManager());
 		bars.clearGlobalActionHandlers();
 
 		addGlobal(bars);
-		if (activeEditor instanceof ITextEditor) {
+		if (activeEditor instanceof XMLEditor) {
 			if (textEditorContributor == null) {
 				textEditorContributor = new TextEditorActionContributor();
 				textEditorContributor.init(bars, activeEditor.getSite().getPage());
@@ -231,7 +232,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		} else if (activeEditor instanceof ReportContainer || activeEditor instanceof AbstractVisualEditor) {
 			// NO LONGER AVAILABLE IN GLOBAL TOOLBAR SINCE
 			// THEY WILL BE VISIBLE IN THE ReportContainer toolbar.
-//			addZoom(bars.getToolBarManager());
+			// addZoom(bars.getToolBarManager());
 			if (activeEditor instanceof AbstractVisualEditor) {
 				GraphicalViewer graphicalViewer = ((AbstractVisualEditor) activeEditor).getGraphicalViewer();
 				ZoomManager property = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());
@@ -239,13 +240,106 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 					zoomCombo.setZoomManager(property);
 			}
 			ActionRegistry registry = (ActionRegistry) activeEditor.getAdapter(ActionRegistry.class);
-			if (registry != null)
-				for (String id : globalActionKeys) {
+			if (registry != null) {
+				for (String id : globalActionKeys)
 					bars.setGlobalActionHandler(id, registry.getAction(id));
+				for (Iterator<IAction> it = registry.getActions(); it.hasNext();) {
+					IAction action = it.next();
+					if (action instanceof IGlobalAction)
+						bars.setGlobalActionHandler(action.getId(), action);
 				}
+			}
+			selectionProvider.addSelectionChangedListener(getSelectionChangeListener(registry));
+			selectionListener.contributeToContextBars(selection);
 		}
 		bars.updateActionBars();
+		lastEditor = activeEditor;
 	}
+
+	public IEditorPart getLastEditor() {
+		return lastEditor;
+	}
+
+	private ISelectionChangedListener getSelectionChangeListener(ActionRegistry registry) {
+		if (selectionListener == null)
+			selectionListener = new SelectionListener();
+		selectionListener.setRegistry(registry);
+		return selectionListener;
+	}
+
+	private final class PartListener implements IPartListener2 {
+		@Override
+		public void partActivated(IWorkbenchPartReference partRef) {
+			// System.out.println("partActivated " + partRef.getId());
+			IEditorPart activeEditor = partRef.getPage().getActiveEditor();
+			if (activeEditor instanceof JrxmlEditor) {
+				activeEditor = ((JrxmlEditor) activeEditor).getActiveEditor();
+			}
+			setActivePage(activeEditor);
+		}
+
+		@Override
+		public void partBroughtToTop(IWorkbenchPartReference partRef) {
+			// setActivePage(partRef.getPage().getActiveEditor());
+			// System.out.println("partBroughtToTop " + partRef.getId());
+		}
+
+		@Override
+		public void partClosed(IWorkbenchPartReference partRef) {
+			// System.out.println("partClosed " + partRef.getId());
+		}
+
+		@Override
+		public void partDeactivated(IWorkbenchPartReference partRef) {
+			// System.out.println("partDeactivated " + partRef.getId());
+		}
+
+		@Override
+		public void partOpened(IWorkbenchPartReference partRef) {
+			// System.out.println("partOpened " + partRef.getId());
+		}
+
+		@Override
+		public void partHidden(IWorkbenchPartReference partRef) {
+			// System.out.println("partHidden " + partRef.getId());
+		}
+
+		@Override
+		public void partVisible(IWorkbenchPartReference partRef) {
+			// System.out.println("partVisible " + partRef.getId());
+		}
+
+		@Override
+		public void partInputChanged(IWorkbenchPartReference partRef) {
+			// TODO Auto-generated method stub
+
+		}
+	}
+
+	private class SelectionListener implements ISelectionChangedListener {
+		private JrxmlSelectionContributor selectionContributor = new JrxmlSelectionContributor(JrxmlEditorContributor.this);
+
+		public void setRegistry(ActionRegistry registry) {
+			selectionContributor.setRegistry(registry);
+		}
+
+		public void clearBars(ISelection selection) {
+			selectionContributor.cleanBars(getActionBars(), selection);
+		}
+
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			contributeToContextBars(event.getSelection());
+		}
+
+		public void contributeToContextBars(ISelection selection) {
+			if (selection.isEmpty())
+				return;
+			selectionContributor.contributeToContextBars(getActionBars(), selection);
+		}
+	}
+
+	private SelectionListener selectionListener;
 
 	/**
 	 * Returns the action registed with the given text editor.
@@ -270,19 +364,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	public void contributeToToolBar(IToolBarManager tbm) {
 		tbm.add(getAction(ActionFactory.UNDO.getId()));
 		tbm.add(getAction(ActionFactory.REDO.getId()));
-
-		// tbm.add(new Separator());
-		// tbm.add(getAction(GEFActionConstants.ALIGN_LEFT));
-		// tbm.add(getAction(GEFActionConstants.ALIGN_CENTER));
-		// tbm.add(getAction(GEFActionConstants.ALIGN_RIGHT));
-		// tbm.add(new Separator());
-		// tbm.add(getAction(GEFActionConstants.ALIGN_TOP));
-		// tbm.add(getAction(GEFActionConstants.ALIGN_MIDDLE));
-		// tbm.add(getAction(GEFActionConstants.ALIGN_BOTTOM));
-		//
-		// tbm.add(new Separator());
-		// tbm.add(getAction(GEFActionConstants.MATCH_WIDTH));
-		// tbm.add(getAction(GEFActionConstants.MATCH_HEIGHT));
 		tbm.add(new Separator());
 
 		addZoom(tbm);
@@ -310,10 +391,10 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		IToolBarManager tbm = bars.getToolBarManager();
 		for (String s : glRetargetAction) {
 			tbm.remove(s);
-			IAction action = getAction(s);
-			bars.setGlobalActionHandler(s, action);
-			tbm.add(action);
+			// bars.setGlobalActionHandler(s, getAction(s));
+			tbm.add(getAction(s));
 		}
+		tbm.update(true);
 	}
 
 	private void removeGlobal(IToolBarManager tbm) {
@@ -373,8 +454,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * @see org.eclipse.ui.part.EditorActionBarContributor#dispose()
 	 */
 	public void dispose() {
-		for (int i = 0; i < retargetActions.size(); i++) {
-			RetargetAction action = retargetActions.get(i);
+		getPage().removePartListener(partListener);
+		for (RetargetAction action : retargetActions) {
 			getPage().removePartListener(action);
 			action.dispose();
 		}

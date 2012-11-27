@@ -59,10 +59,10 @@ public class SPDegree extends SPNumber {
 				if (selection < 0 || selection > 360) {
 					SWT.error(SWT.ERROR_CANNOT_SET_SELECTION);
 				}
-				Field f;
+
 				try {
 					// FIXME ugly hack, should remove this
-					f = AngleSlider.class.getDeclaredField("selection");
+					Field f = AngleSlider.class.getDeclaredField("selection");
 					f.setAccessible(true); // solution
 					f.set(this, selection);
 					// this.selection = selection;

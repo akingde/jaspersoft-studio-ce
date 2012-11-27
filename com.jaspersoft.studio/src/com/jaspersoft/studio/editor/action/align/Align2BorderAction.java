@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.align;
 
@@ -35,11 +30,12 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.editor.gef.commands.AlignCommand;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 
-public class Align2BorderAction extends SelectionAction {
+public class Align2BorderAction extends SelectionAction implements IGlobalAction {
 
 	/**
 	 * Indicates that the bottom edges should be aligned.
@@ -107,10 +103,16 @@ public class Align2BorderAction extends SelectionAction {
 		List<?> editparts = getOperationSet(request);
 		if (editparts == null || editparts.isEmpty())
 			return null;
-		GraphicalEditPart part = (GraphicalEditPart) editparts.get(editparts.size() - 1);
-		Rectangle rect = new PrecisionRectangle(part.getFigure().getBounds());
-		part.getFigure().translateToAbsolute(rect);
-		return rect;
+		EditPart part = (EditPart) editparts.get(editparts.size() - 1);
+		if (part instanceof GraphicalEditPart) {
+			Rectangle rect = new PrecisionRectangle(((GraphicalEditPart) part).getFigure().getBounds());
+			((GraphicalEditPart) part).getFigure().translateToAbsolute(rect);
+			return rect;
+		} else if (part.getModel() instanceof MGraphicElement) {
+			MGraphicElement m = (MGraphicElement) part.getModel();
+			return m.getBounds();
+		}
+		return null;
 	}
 
 	/**
@@ -162,7 +164,7 @@ public class Align2BorderAction extends SelectionAction {
 		if (operationSet != null)
 			return operationSet;
 		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof GraphicalEditPart))
+		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart))
 			return Collections.EMPTY_LIST;
 		Object primary = editparts.get(editparts.size() - 1);
 		editparts = ToolUtilities.getSelectionWithoutDependants(editparts);
@@ -189,16 +191,15 @@ public class Align2BorderAction extends SelectionAction {
 			setToolTipText(Messages.Align2BorderAction_align_to_left_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-left.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-left.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-left.gif")); //$NON-NLS-1$ 
 			break;
-
 		case PositionConstants.RIGHT:
 			setId(ID_ALIGN_RIGHT);
 			setText(Messages.Align2BorderAction_align_to_right);
 			setToolTipText(Messages.Align2BorderAction_align_to_right_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-right.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-right.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-right.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.TOP:
@@ -207,7 +208,7 @@ public class Align2BorderAction extends SelectionAction {
 			setToolTipText(Messages.Align2BorderAction_align_to_top_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-top.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-top.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-top.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.BOTTOM:
@@ -216,7 +217,7 @@ public class Align2BorderAction extends SelectionAction {
 			setToolTipText(Messages.Align2BorderAction_align_to_bottom_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-bottom.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-bottom.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-bottom.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.CENTER:
@@ -225,7 +226,7 @@ public class Align2BorderAction extends SelectionAction {
 			setToolTipText(Messages.Align2BorderAction_align_to_center_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-center.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-center.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-center.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.MIDDLE:
@@ -234,7 +235,7 @@ public class Align2BorderAction extends SelectionAction {
 			setToolTipText(Messages.Align2BorderAction_align_to_middle_tool_tip);
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-middle.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-middle.gif")); //$NON-NLS-1$
+					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-middle.gif")); //$NON-NLS-1$ 
 			break;
 		}
 	}

@@ -1,21 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -129,35 +125,10 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		super.init(pageSite);
 		ActionRegistry registry = editor.getActionRegistry();
 		IActionBars bars = pageSite.getActionBars();
-		String id = ActionFactory.UNDO.getId();
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = ActionFactory.REDO.getId();
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = ActionFactory.CUT.getId();
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = ActionFactory.COPY.getId();
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = ActionFactory.PASTE.getId();
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = ActionFactory.DELETE.getId();
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		initActions(registry, bars);
-
-		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
-		List<String> lst = m.getActionIDs();
-		for (String ids : lst) {
-			id = ids;
-			bars.setGlobalActionHandler(id, registry.getAction(id));
+		for (Iterator<IAction> it = registry.getActions(); it.hasNext();) {
+			IAction ia = it.next();
+			bars.setGlobalActionHandler(ia.getId(), ia);
 		}
-
-		id = ShowPropertyViewAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
 
 		bars.updateActionBars();
 	}
