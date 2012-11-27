@@ -27,11 +27,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * A button that when clicked open the edit query dialog
@@ -90,7 +90,7 @@ public class SPSubreportParametersButton extends ASPropertyWidget {
 			public void widgetSelected(SelectionEvent e) {
 				SubreportPropertyEditor wizard = new SubreportPropertyEditor();
 				wizard.setValue(dto);
-				WizardDialog dialog = new WizardDialog(JaspersoftStudioPlugin.getShell(), wizard);
+				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK)
 					section.changeProperty(pDescriptor.getId(), wizard.getValue());

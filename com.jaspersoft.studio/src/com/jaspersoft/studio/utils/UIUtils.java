@@ -20,6 +20,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import net.sf.jasperreports.eclipse.ui.util.ExceptionDetailsErrorDialog;
 
 import org.eclipse.core.commands.operations.OperationStatus;
@@ -36,6 +37,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Drawable;
@@ -53,8 +55,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -446,4 +450,55 @@ public class UIUtils {
 		item.setImage(standardImg);
 	}
 
+	/**
+	 * Gets a valid {@link Shell} instance trying the following steps:
+	 * <ol>
+	 * 	<li>get shell from the current active workbench window;</li>
+	 *  <li>get active shell from the display instance returned by {@link #getDisplay()};</li>
+	 * </ol>
+	 * 
+	 * @return a valid {@link Shell} instance
+	 */
+	public static Shell getShell() {
+		Shell shell = null;
+
+		IWorkbenchWindow window = JasperReportsPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
+
+		if (window != null) {
+			shell = window.getShell();
+		} else {
+			shell = getDisplay().getActiveShell();
+		}
+
+		return shell;
+	}
+
+	/**
+	 * Gets a valid {@link Display} instance trying the following steps:
+	 * <ol>
+	 * 	<li>get the current display from the UI thread if any;</li>
+	 * 	<li>get the display from the running workbench;</li>
+	 *  <li>get a default display instance;</li>
+	 * </ol>
+	 * 
+	 * @return a valid {@link Display} instance
+	 */
+	public static Display getDisplay() {
+		// If we are in the UI Thread use that
+		if (Display.getCurrent() != null) {
+			return Display.getCurrent();
+		}
+
+		if (PlatformUI.isWorkbenchRunning()) {
+			return PlatformUI.getWorkbench().getDisplay();
+		}
+
+		if (Display.getDefault() != null)
+			return Display.getDefault();
+
+		// Invalid thread access if it is not the UI Thread
+		// and the workbench is not created.
+		throw new SWTError(SWT.ERROR_THREAD_INVALID_ACCESS);
+	}
+	
 }
