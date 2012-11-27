@@ -180,7 +180,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	public JrxmlEditor() {
 		super();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
+				IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 	}
 
 	/**
@@ -361,11 +362,16 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			ExpressionEditorSupportUtil.updateFunctionsLibraryImports(getJasperDesign());
 		}
 
-		final IFile resource = ((IFileEditorInput) getEditorInput()).getFile();
+		final IFile resource = getCurrentFile();
 		try {
+			if (!resource.exists())
+				resource.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
+
 			resource.setCharset("UTF-8", monitor);
-		} catch (CoreException e1) {
-			UIUtils.showError(e1);
+		} catch (CoreException e) {
+			UIUtils.showError(e);
+		} catch (UnsupportedEncodingException e) {
+			UIUtils.showError(e);
 		}
 		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor) {
 			version = JRXmlWriterHelper.getVersion(resource, jrContext, true);
@@ -415,6 +421,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		});
 
 		// doSaveEditors(monitor);
+	}
+
+	private IFile getCurrentFile() {
+		return ((IFileEditorInput) getEditorInput()).getFile();
 	}
 
 	private void doSaveEditors(final IProgressMonitor monitor) {
@@ -820,7 +830,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *          the event
 	 */
 	public void resourceChanged(final IResourceChangeEvent event) {
-		if (event.getType() == IResourceChangeEvent.PRE_CLOSE) {
+		switch (event.getType()) {
+		case IResourceChangeEvent.PRE_CLOSE:
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					IWorkbenchPage[] pages = getSite().getWorkbenchWindow().getPages();
@@ -832,9 +843,20 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					}
 				}
 			});
-		}
-		if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
-			event.getDelta().getKind();
+			break;
+		case IResourceChangeEvent.PRE_DELETE:
+			break;
+		case IResourceChangeEvent.POST_CHANGE:
+			try {
+				DeltaVisitor visitor = new DeltaVisitor(this);
+				event.getDelta().accept(visitor);
+			} catch (CoreException e) {
+				UIUtils.showError(e);
+			}
+			break;
+		case IResourceChangeEvent.PRE_BUILD:
+		case IResourceChangeEvent.POST_BUILD:
+			break;
 		}
 	}
 

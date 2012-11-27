@@ -209,7 +209,9 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 *          The active editor
 	 */
 	public void setActivePage(IEditorPart activeEditor) {
-		ISelectionProvider selectionProvider = activeEditor.getSite().getSelectionProvider();
+		ISelectionProvider selectionProvider = null;
+		if (activeEditor != null && activeEditor.getSite() != null)
+			selectionProvider = activeEditor.getSite().getSelectionProvider();
 		ISelection selection = selectionProvider != null ? selectionProvider.getSelection() : null;
 
 		if (lastEditor != null) {

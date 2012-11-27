@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
@@ -76,7 +71,8 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 
 	public JRtxEditor() {
 		super();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
+				IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 	}
 
 	@Override
@@ -128,7 +124,10 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 		} catch (final Exception e) {
 			UIUtils.showError(e);
 		}
+	}
 
+	private IFile getCurrentFile() {
+		return ((IFileEditorInput) getEditorInput()).getFile();
 	}
 
 	/**
@@ -138,7 +137,8 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 	 *          the event
 	 */
 	public void resourceChanged(final IResourceChangeEvent event) {
-		if (event.getType() == IResourceChangeEvent.PRE_CLOSE) {
+		switch (event.getType()) {
+		case IResourceChangeEvent.PRE_CLOSE:
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					IWorkbenchPage[] pages = getSite().getWorkbenchWindow().getPages();
@@ -150,9 +150,20 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 					}
 				}
 			});
-		}
-		if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
-			event.getDelta().getKind();
+			break;
+		case IResourceChangeEvent.PRE_DELETE:
+			break;
+		case IResourceChangeEvent.POST_CHANGE:
+			try {
+				DeltaVisitor visitor = new DeltaVisitor(this);
+				event.getDelta().accept(visitor);
+			} catch (CoreException e) {
+				UIUtils.showError(e);
+			}
+			break;
+		case IResourceChangeEvent.PRE_BUILD:
+		case IResourceChangeEvent.POST_BUILD:
+			break;
 		}
 	}
 
