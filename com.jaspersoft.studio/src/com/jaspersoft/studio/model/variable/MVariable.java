@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.type.ResetTypeEnum;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
@@ -43,6 +44,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class MVariable.
@@ -165,6 +167,13 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		defaultsMap.put(JRDesignVariable.PROPERTY_CALCULATION, EnumHelper.getValue(CalculationEnum.NOTHING, 0, false));
 		defaultsMap.put(JRDesignVariable.PROPERTY_RESET_TYPE, EnumHelper.getValue(ResetTypeEnum.REPORT, 1, false));
 		defaultsMap.put(JRDesignVariable.PROPERTY_INCREMENT_TYPE, EnumHelper.getValue(IncrementTypeEnum.NONE, 1, false));
+	}
+	
+	public ExpressionContext getContext(){
+		JRDesignDataset dataSet = getDataSet();
+		JasperReportsConfiguration conf = getJasperConfiguration();
+		if (dataSet != null && conf != null) return new ExpressionContext(dataSet, conf);
+		return null;
 	}
 
 	private RWComboBoxPropertyDescriptor resetGroupD;

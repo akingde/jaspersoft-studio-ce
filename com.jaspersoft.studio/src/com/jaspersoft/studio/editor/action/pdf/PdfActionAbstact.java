@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.pdf;
 
-import java.util.Iterator;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -103,20 +102,6 @@ public abstract class PdfActionAbstact extends SelectionAction {
 		return true;
 	}
 
-	
-	/**
-	 * Remove every precedent PDF attribute from the models attributes map.
-	 * Actualy not used
-	 * @param v the map of the attributes for a model
-	 */
-	private void CleanOldElements(JRPropertiesMap v){
-		Iterator<String> iterator = PropertiesList.GetIterator();
-		while (iterator.hasNext()){
-			String elementToRemove = iterator.next(); 
-			v.removeProperty(elementToRemove);
-		}
-	}
-	
 	
 	/**
 	 * Create the contextual menu with the label
