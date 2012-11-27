@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview;
 
@@ -20,14 +15,10 @@ import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceDeltaVisitor;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -37,9 +28,10 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.EditorPart;
-import org.eclipse.ui.part.FileEditorInput;
 
+import com.jaspersoft.studio.editor.DeltaVisitor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class ABasicEditor extends EditorPart {
@@ -53,51 +45,23 @@ public abstract class ABasicEditor extends EditorPart {
 		}
 	}
 
-	class ResourceTracker implements IResourceChangeListener, IResourceDeltaVisitor {
-		public void resourceChanged(IResourceChangeEvent event) {
-			IResourceDelta delta = event.getDelta();
-			try {
-				if (delta != null)
-					delta.accept(this);
-			} catch (CoreException exception) {
-				// What should be done here?
-			}
-		}
-
-		public boolean visit(IResourceDelta delta) {
-			if (delta == null || !delta.getResource().equals(((IFileEditorInput) getEditorInput()).getFile()))
-				return true;
-			Display display = getSite().getShell().getDisplay();
-			if (delta.getKind() == IResourceDelta.REMOVED) {
-				if ((IResourceDelta.MOVED_TO & delta.getFlags()) == 0) { // if the file was deleted
-					// NOTE: The case where an open, unsaved file is deleted is being handled by the
-					// PartListener added to the Workbench in the initialize() method.
-					display.asyncExec(new Runnable() {
-						public void run() {
-							if (!isDirty())
-								getSite().getPage().closeEditor(ABasicEditor.this, false);
-						}
-					});
-				} else { // else if it was moved or renamed
-					final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getMovedToPath());
-					display.asyncExec(new Runnable() {
-						public void run() {
-							setInput(new FileEditorInput(newFile));
-						}
-					});
+	class ResourceTracker implements IResourceChangeListener {
+		public void resourceChanged(final IResourceChangeEvent event) {
+			switch (event.getType()) {
+			case IResourceChangeEvent.PRE_DELETE:
+				break;
+			case IResourceChangeEvent.POST_CHANGE:
+				try {
+					DeltaVisitor visitor = new DeltaVisitor(ABasicEditor.this);
+					event.getDelta().accept(visitor);
+				} catch (CoreException e) {
+					UIUtils.showError(e);
 				}
-			} else if (delta.getKind() == IResourceDelta.CHANGED) {
-				// the file was overwritten somehow (could have been replaced by another
-				// version in the respository)
-				final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getFullPath());
-				display.asyncExec(new Runnable() {
-					public void run() {
-						setInput(new FileEditorInput(newFile));
-					}
-				});
-
+				break;
+			case IResourceChangeEvent.PRE_BUILD:
+			case IResourceChangeEvent.POST_BUILD:
+				break;
 			}
-			return false;
 		}
 	}
 
@@ -163,7 +127,8 @@ public abstract class ABasicEditor extends EditorPart {
 		if (resourceListener != null && getEditorInput() != null) {
 			if (getEditorInput() instanceof IFileEditorInput) {
 				IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-				file.getWorkspace().addResourceChangeListener(resourceListener);
+				file.getWorkspace().addResourceChangeListener(resourceListener,
+						IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 				setPartName(file.getName());
 			} else if (getEditorInput() instanceof FileStoreEditorInput) {
 			}
