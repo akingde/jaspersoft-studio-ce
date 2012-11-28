@@ -47,7 +47,7 @@ public class MUPCA extends MBarcode4j {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		UPCAComponent component = new UPCAComponent();
 		JRDesignExpression exp = new JRDesignExpression();
-		exp.setText("\"123456789\""); //$NON-NLS-1$
+		exp.setText("\"12345678901\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
 		el.setComponentKey(new ComponentKey(

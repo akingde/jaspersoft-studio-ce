@@ -41,7 +41,7 @@ public class MUSPSIntelligent extends MFourStateBarcode {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		USPSIntelligentMailComponent component = new USPSIntelligentMailComponent();
 		JRDesignExpression exp = new JRDesignExpression();
-		exp.setText("\"123456789\""); //$NON-NLS-1$
+		exp.setText("\"12345678901234567890\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
 		el.setComponentKey(new ComponentKey(

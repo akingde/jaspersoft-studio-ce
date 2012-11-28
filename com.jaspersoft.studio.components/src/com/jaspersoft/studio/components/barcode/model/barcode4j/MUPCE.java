@@ -47,7 +47,7 @@ public class MUPCE extends MBarcode4j {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		UPCEComponent component = new UPCEComponent();
 		JRDesignExpression exp = new JRDesignExpression();
-		exp.setText("\"123456789\""); //$NON-NLS-1$
+		exp.setText("\"1234567\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
 		el.setComponentKey(new ComponentKey(

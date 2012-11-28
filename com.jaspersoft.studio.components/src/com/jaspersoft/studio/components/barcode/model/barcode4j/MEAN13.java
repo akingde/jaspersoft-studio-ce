@@ -47,7 +47,7 @@ public class MEAN13 extends MBarcode4j {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		EAN13Component component = new EAN13Component();
 		JRDesignExpression exp = new JRDesignExpression();
-		exp.setText("\"123456789\""); //$NON-NLS-1$
+		exp.setText("\"123456789012\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
 		el.setComponentKey(new ComponentKey(

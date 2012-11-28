@@ -48,7 +48,7 @@ public class MEAN128 extends MBarcode4j {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		EAN128Component component = new EAN128Component();
 		JRDesignExpression exp = new JRDesignExpression();
-		exp.setText("\"123456789\""); //$NON-NLS-1$
+		exp.setText("12345678901234567890");
 		component.setCodeExpression(exp);
 		el.setComponent(component);
 		el.setComponentKey(new ComponentKey(
