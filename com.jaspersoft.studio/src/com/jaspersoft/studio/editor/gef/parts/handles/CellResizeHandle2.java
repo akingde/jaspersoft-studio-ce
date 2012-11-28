@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.handles;
 
@@ -19,6 +14,9 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.ResizeHandle;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.wb.swt.SWTResourceManager;
+
+import com.jaspersoft.studio.editor.gef.parts.IPrefEditPart;
 
 /*
  * The Class BandResizeHandle2.
@@ -40,6 +38,13 @@ public class CellResizeHandle2 extends ResizeHandle {
 		super(owner, direction);
 		setLocator(new CellResizeHandleLocator2(owner, direction));
 		setPreferredSize(2, 2);
+	}
+
+	@Override
+	protected Color getBorderColor() {
+		if (getOwner() instanceof IPrefEditPart)
+			return ((IPrefEditPart) getOwner()).getMarginColor();
+		return SWTResourceManager.getColor(IPrefEditPart.DEFAULT_MARGINCOLOR);
 	}
 
 	/*

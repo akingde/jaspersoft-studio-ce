@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts;
 
@@ -65,9 +60,14 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE))
-				setPrefsBorder(getFigure());
+			handlePreferenceChanged(event);
 		}
+
+	}
+
+	protected void handlePreferenceChanged(org.eclipse.jface.util.PropertyChangeEvent event) {
+		if (event.getProperty().equals(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE))
+			setPrefsBorder(getFigure());
 	}
 
 	@Override
@@ -79,7 +79,8 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 
 	@Override
 	public void deactivate() {
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().removePropertyChangeListener(preferenceListener);
+		if (preferenceListener != null)
+			JaspersoftStudioPlugin.getInstance().getPreferenceStore().removePropertyChangeListener(preferenceListener);
 		super.deactivate();
 	}
 
@@ -100,12 +101,11 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		setupFigure(rect);
 		return rect;
 	}
-	
 
 	/**
-	 * Instead of the default drag tracker an overridden one is returned, in this way we can control the edit 
-	 * part targeted from a drag & drop operation, and if the target is isn't an IContainer then it's parent is returned 
-	 * Change by Orlandin Marco
+	 * Instead of the default drag tracker an overridden one is returned, in this way we can control the edit part
+	 * targeted from a drag & drop operation, and if the target is isn't an IContainer then it's parent is returned Change
+	 * by Orlandin Marco
 	 */
 	@Override
 	public org.eclipse.gef.DragTracker getDragTracker(org.eclipse.gef.Request request) {
@@ -137,7 +137,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		rect.repaint();
 	}
 
-	private JasperReportsConfiguration jConfig;
+	protected JasperReportsConfiguration jConfig;
 
 	public void setPrefsBorder(IFigure rect) {
 		if (jConfig == null)
@@ -148,6 +148,8 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 			rect.setBorder(new ElementLineBorder(ColorConstants.black));
 		else
 			rect.setBorder(new CornerBorder(ColorConstants.black, 5));
+
+		rect.repaint();
 	}
 
 	/**

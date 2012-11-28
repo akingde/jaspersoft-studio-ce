@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.band;
 
@@ -50,19 +45,15 @@ import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.rulers.RulerProvider;
-import org.eclipse.jface.resource.StringConverter;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.eclipse.wb.swt.SWTResourceManager;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.FrameFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
+import com.jaspersoft.studio.editor.gef.parts.PrefFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.SnapToGeometryThreshold;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredRectangle;
@@ -80,7 +71,6 @@ import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -90,37 +80,15 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav, Giulio Toffoli
  */
-public class BandEditPart extends FigureEditPart implements PropertyChangeListener, IContainerPart, IContainer,
+public class BandEditPart extends PrefFigureEditPart implements PropertyChangeListener, IContainerPart, IContainer,
 		IDatasetDialogSupport {
 
-	private BandPreferenceListener prefChangelistener;
-	private JasperReportsConfiguration jConfig;
-	public static final RGB DEFAULTCOLOR = new RGB(170, 168, 255);
-
-	/*
-	 * Preferences listener for band preferences/properties.
-	 */
-	private final class BandPreferenceListener implements IPropertyChangeListener {
-		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES)) {
-				setBandNameShowing(getFigure());
-			} else if (event.getProperty().equals(DesignerPreferencePage.P_CONTAINER_MARGIN_COLOR)) {
-				setBandMarginColor(getFigure());
-			}
-		}
-	}
-
 	@Override
-	public void activate() {
-		super.activate();
-		prefChangelistener = new BandPreferenceListener();
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(prefChangelistener);
-	}
-
-	@Override
-	public void deactivate() {
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().removePropertyChangeListener(prefChangelistener);
-		super.deactivate();
+	protected void handlePreferenceChanged(org.eclipse.jface.util.PropertyChangeEvent event) {
+		if (event.getProperty().equals(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES)) {
+			setBandNameShowing(getFigure());
+		} else
+			super.handlePreferenceChanged(event);
 	}
 
 	@Override
@@ -194,8 +162,10 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		BandFigure rect = new BandFigure(drawColumns);
 		rect.setForegroundColor(ColorConstants.blue);
 		setupBandFigure(rect);
+
+		figure = rect;
 		setBandNameShowing(rect);
-		setBandMarginColor(rect);
+		setMarginColor();
 		return rect;
 	}
 
@@ -321,7 +291,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 							return null;
 				}
 				if (targetFeedback == null) {
-					targetFeedback = new ColoredRectangle(FrameFigureEditPart.addElementColor,2.0f);
+					targetFeedback = new ColoredRectangle(FrameFigureEditPart.addElementColor, 2.0f);
 					targetFeedback.setFill(false);
 					IFigure hostFigure = getHostFigure();
 					Rectangle bounds = hostFigure.getBounds();
@@ -447,15 +417,10 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	}
 
 	public Dimension getContaierSize() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private void setBandMarginColor(BandFigure bfigure) {
-		if (jConfig == null)
-			jConfig = getModel().getJasperConfiguration();
-		String mcolor = jConfig.getProperty(DesignerPreferencePage.P_CONTAINER_MARGIN_COLOR, "");
-		bfigure.setMarginsColor(SWTResourceManager.getColor(StringConverter.asRGB(mcolor, DEFAULTCOLOR)));
-		bfigure.repaint();
+	protected void setupMarginColor() {
+		((BandFigure) figure).setMarginsColor(getMarginColor());
 	}
 }

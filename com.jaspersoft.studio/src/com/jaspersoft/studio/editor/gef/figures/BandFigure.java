@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.figures;
 
@@ -36,7 +31,7 @@ import com.jaspersoft.studio.editor.java2d.J2DUtils;
  * The Class BandFigure.
  */
 public class BandFigure extends RectangleFigure {
-	public static Color marginsColor = SWTResourceManager.getColor(170, 168, 255);
+	public Color marginsColor = SWTResourceManager.getColor(170, 168, 255);
 	private int columnNumber = 1;
 	private int columnSpacing = 0;
 	private int columnWidth = 0;
@@ -48,12 +43,12 @@ public class BandFigure extends RectangleFigure {
 
 	private FigureTextWriter twriter = new FigureTextWriter();
 
-	public static Color getMarginsColor() {
+	public Color getMarginsColor() {
 		return marginsColor;
 	}
 
-	public static void setMarginsColor(Color marginsColor) {
-		BandFigure.marginsColor = marginsColor;
+	public void setMarginsColor(Color marginsColor) {
+		this.marginsColor = marginsColor;
 	}
 
 	public int getColumnNumber() {

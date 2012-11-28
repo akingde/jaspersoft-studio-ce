@@ -29,14 +29,15 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.part.editpolicy.CrosstabCellMoveEditPolicy;
 import com.jaspersoft.studio.components.crosstab.part.editpolicy.CrosstabCellResizableEditPolicy;
-import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
+import com.jaspersoft.studio.editor.gef.parts.PrefFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.IContainer;
 
-public abstract class ACrosstabCellEditPart extends FigureEditPart implements
-		IContainerPart, IContainer {
+public abstract class ACrosstabCellEditPart extends PrefFigureEditPart
+		implements IContainerPart, IContainer {
+
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
 		return getParent().getAdapter(key);

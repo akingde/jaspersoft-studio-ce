@@ -58,6 +58,7 @@ import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
+import com.jaspersoft.studio.editor.gef.parts.PrefFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
@@ -76,8 +77,9 @@ import com.jaspersoft.studio.model.MPage;
  * @author Chicu Veaceslav, Giulio Toffoli
  * 
  */
-public class TableCellEditPart extends FigureEditPart implements
+public class TableCellEditPart extends PrefFigureEditPart implements
 		IContainerPart, IContainer {
+
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
 		if (key == IPropertySourceProvider.class
