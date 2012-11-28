@@ -80,7 +80,7 @@ public class MongoDbDataAdapterFactory implements DataAdapterFactory {
      */
     public Image getIcon(int size) {
         if (size == 16) {
-            return Activator.getImage(Activator.ICON_NAME);
+            return Activator.getDefault().getImage(Activator.ICON_NAME);
         }
         return null;
     }
