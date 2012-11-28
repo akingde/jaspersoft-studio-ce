@@ -214,10 +214,10 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			selectionProvider = activeEditor.getSite().getSelectionProvider();
 		ISelection selection = selectionProvider != null ? selectionProvider.getSelection() : null;
 
-		if (lastEditor != null) {
+		if (lastEditor != null && selectionListener != null) {
 			if (!(activeEditor instanceof ReportContainer || activeEditor instanceof AbstractVisualEditor))
 				selectionListener.clearBars(selection);
-			if (lastEditor.getSite().getSelectionProvider() != null && selectionListener != null)
+			if (lastEditor.getSite().getSelectionProvider() != null)
 				lastEditor.getSite().getSelectionProvider().removeSelectionChangedListener(selectionListener);
 		}
 		IActionBars bars = getActionBars();
