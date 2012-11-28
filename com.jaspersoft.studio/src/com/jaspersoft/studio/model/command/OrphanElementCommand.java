@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.command;
 
@@ -20,12 +15,14 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
+
 /*
  * The Class OrphanElementCommand.
  * 
@@ -41,6 +38,7 @@ public class OrphanElementCommand extends Command {
 
 	/** The jr group. */
 	private JRElementGroup jrGroup;
+	private Point location;
 
 	/**
 	 * Instantiates a new orphan element command.
@@ -66,6 +64,7 @@ public class OrphanElementCommand extends Command {
 	 */
 	@Override
 	public void execute() {
+		location = new Point(jrElement.getX(), jrElement.getY());
 		index = jrGroup.getChildren().indexOf(jrElement);
 		if (jrGroup instanceof JRDesignElementGroup)
 			((JRDesignElementGroup) jrGroup).removeElement(jrElement);
@@ -80,6 +79,8 @@ public class OrphanElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		jrElement.setX(location.x);
+		jrElement.setY(location.y);
 		if (jrGroup instanceof JRDesignElementGroup) {
 			if (index > ((JRDesignElementGroup) jrGroup).getChildren().size())
 				((JRDesignElementGroup) jrGroup).addElement(jrElement);
