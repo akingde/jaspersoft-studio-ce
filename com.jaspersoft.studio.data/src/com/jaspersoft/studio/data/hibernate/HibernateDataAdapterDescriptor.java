@@ -55,7 +55,7 @@ public class HibernateDataAdapterDescriptor extends DataAdapterDescriptor implem
 	@Override
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/hibernate.png"); //$NON-NLS-1$
+			return Activator.getDefault().getImage("icons/hibernate.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

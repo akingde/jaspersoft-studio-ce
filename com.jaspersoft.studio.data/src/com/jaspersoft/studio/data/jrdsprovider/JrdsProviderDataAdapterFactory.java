@@ -52,7 +52,7 @@ public class JrdsProviderDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/bean-green.png");
+			return Activator.getDefault().getImage("icons/bean-green.png");
 		}
 		return null;
 	}

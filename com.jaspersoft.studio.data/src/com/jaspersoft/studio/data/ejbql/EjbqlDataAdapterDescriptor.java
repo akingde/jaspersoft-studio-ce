@@ -55,7 +55,7 @@ public class EjbqlDataAdapterDescriptor extends DataAdapterDescriptor implements
 	@Override
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/bean.png"); //$NON-NLS-1$
+			return Activator.getDefault().getImage("icons/bean.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

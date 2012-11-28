@@ -56,7 +56,7 @@ public class XLSDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/document-excel.png");
+			return Activator.getDefault().getImage("icons/document-excel.png");
 		}
 		return null;
 	}

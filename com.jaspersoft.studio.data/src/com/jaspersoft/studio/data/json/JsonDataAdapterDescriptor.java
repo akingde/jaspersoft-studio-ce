@@ -67,7 +67,7 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements 
 	@Override
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/json.png");
+			return Activator.getDefault().getImage("icons/json.png");
 		}
 		return null;
 	}

@@ -56,7 +56,7 @@ public class XMLDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/blue-document-code.png");
+			return Activator.getDefault().getImage("icons/blue-document-code.png");
 		}
 		return null;
 	}

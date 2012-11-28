@@ -83,9 +83,8 @@ public class CSVDataAdapterDescriptor extends DataAdapterDescriptor implements
 	 */
 	@Override
 	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
 		if (size == 16) {
-			return Activator.getImage("icons/document-excel-csv.png");
+			return Activator.getDefault().getImage("icons/document-excel-csv.png");
 		}
 		return null;
 	}

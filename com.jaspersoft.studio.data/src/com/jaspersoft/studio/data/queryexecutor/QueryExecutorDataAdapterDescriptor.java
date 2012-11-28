@@ -54,7 +54,7 @@ public class QueryExecutorDataAdapterDescriptor extends DataAdapterDescriptor {
 	@Override
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/receipt.png");
+			return Activator.getDefault().getImage("icons/receipt.png");
 		}
 		return null;
 	}

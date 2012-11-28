@@ -57,7 +57,7 @@ public class BeanDataAdapterDescriptor extends DataAdapterDescriptor {
 	@Override
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/beans.png");
+			return Activator.getDefault().getImage("icons/beans.png");
 		}
 		return null;
 	}

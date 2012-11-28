@@ -72,7 +72,7 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor imp
 		// TODO Auto-generated method stub
 		if (size == 16)
 		{
-			return  Activator.getImage("icons/blue-document-code.png"); //$NON-NLS-1$
+			return  Activator.getDefault().getImage("icons/blue-document-code.png"); //$NON-NLS-1$
 		}
 		return null;
 	}
