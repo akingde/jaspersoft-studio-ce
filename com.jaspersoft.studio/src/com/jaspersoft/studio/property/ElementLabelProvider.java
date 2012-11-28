@@ -85,7 +85,7 @@ public class ElementLabelProvider extends LabelProvider {
 			}
 		}
 		if (icon != null)
-			return JaspersoftStudioPlugin.getImage(icon.getIcon16());
+			return JaspersoftStudioPlugin.getInstance().getImage(icon.getIcon16());
 		return null;
 	}
 

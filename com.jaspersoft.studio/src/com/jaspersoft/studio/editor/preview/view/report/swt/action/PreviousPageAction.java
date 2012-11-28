@@ -24,8 +24,8 @@ public class PreviousPageAction extends AReportAction {
 		super(rviewer);
 		setText("Previous Page"); //$NON-NLS-1$
 		setToolTipText("Go to previous page"); //$NON-NLS-1$
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/nav/previous.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/nav/previousd.gif"));
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/previous.gif"));
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/previousd.gif"));
 	}
 
 	public boolean isActionEnabled() {

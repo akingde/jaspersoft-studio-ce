@@ -94,7 +94,7 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 				for (DataAdapterDescriptor d : s.getDataAdapterDescriptors()) {
 					MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
 					m1.setText(d.getName());
-					m1.setImage(JaspersoftStudioPlugin.getImage(d.getIcon16()));
+					m1.setImage(JaspersoftStudioPlugin.getInstance().getImage(d.getIcon16()));
 					m1.addSelectionListener(listener);
 					m1.setData("da.key", d);
 				}

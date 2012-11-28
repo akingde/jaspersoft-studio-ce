@@ -209,8 +209,9 @@ public class MSortField extends APropertyNode implements ICopyable {
 		typeD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_TYPE, "Type", SortFieldTypeEnum.class,
 				NullEnum.NOTNULL) {
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				Image[] images = new Image[] { JaspersoftStudioPlugin.getImage("icons/resources/fields-sort-16.png"),
-						JaspersoftStudioPlugin.getImage("icons/resources/variables-sort-16.png") };
+				Image[] images = new Image[] { 
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/fields-sort-16.png"),
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/variables-sort-16.png") };
 				return new SPToolBarEnum(parent, section, this, images, false);
 			}
 		};
@@ -220,8 +221,9 @@ public class MSortField extends APropertyNode implements ICopyable {
 		orderD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER, Messages.common_order,
 				SortOrderEnum.class, NullEnum.NOTNULL) {
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				Image[] images = new Image[] { JaspersoftStudioPlugin.getImage("icons/resources/sort-number-column.png"),
-						JaspersoftStudioPlugin.getImage("icons/resources/sort-number-descending.png") };
+				Image[] images = new Image[] { 
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/sort-number-column.png"),
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/sort-number-descending.png") };
 				return new SPToolBarEnum(parent, section, this, images, false);
 			}
 		};

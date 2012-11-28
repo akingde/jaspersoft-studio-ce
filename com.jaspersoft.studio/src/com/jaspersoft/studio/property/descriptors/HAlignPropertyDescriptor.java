@@ -33,10 +33,11 @@ public class HAlignPropertyDescriptor extends JSSEnumPropertyDescriptor {
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		Image[] images = new Image[] { JaspersoftStudioPlugin.getImage("icons/resources/eclipse/left_align.gif"),
-				JaspersoftStudioPlugin.getImage("icons/resources/eclipse/center_align.gif"),
-				JaspersoftStudioPlugin.getImage("icons/resources/eclipse/right_align.gif"),
-				JaspersoftStudioPlugin.getImage("icons/resources/eclipse/justified_align.gif") };
+		Image[] images = new Image[] { 
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/left_align.gif"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/center_align.gif"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/right_align.gif"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/justified_align.gif") };
 		return new SPToolBarEnum(parent, section, this, images, false);
 	}
 }

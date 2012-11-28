@@ -24,8 +24,10 @@ public class FirstPageAction extends AReportAction {
 		super(rviewer);
 		setText("First Page"); //$NON-NLS-1$
 		setToolTipText("Go to first page"); //$NON-NLS-1$
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/nav/first.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/nav/firstd.gif"));
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/first.gif"));
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/firstd.gif"));
 	}
 
 	public boolean isActionEnabled() {

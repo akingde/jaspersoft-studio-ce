@@ -27,8 +27,10 @@ public class ZoomFitPageWidthAction extends AReportAction {
 
 		setText("Fit Width"); //$NON-NLS-1$
 		setToolTipText("Zoom fit to page width"); //$NON-NLS-1$
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/zoomfitwidth.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/zoomfitwidthd.gif"));
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomfitwidth.gif"));
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomfitwidthd.gif"));
 		update();
 	}
 

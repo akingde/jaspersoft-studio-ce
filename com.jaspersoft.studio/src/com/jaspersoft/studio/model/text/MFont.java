@@ -114,7 +114,7 @@ public class MFont extends APropertyNode {
 				NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/edit-bold.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-bold.png"));
 			}
 		};
 		boldD.setDescription(Messages.MFont_bold_description);
@@ -124,7 +124,7 @@ public class MFont extends APropertyNode {
 				Messages.common_italic, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/edit-italic.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-italic.png"));
 			}
 		};
 		italicD.setDescription(Messages.MFont_italic_description);
@@ -135,7 +135,7 @@ public class MFont extends APropertyNode {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this,
-						JaspersoftStudioPlugin.getImage("icons/resources/edit-underline.png"));
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-underline.png"));
 			}
 		};
 		underlineD.setDescription(Messages.MFont_underline_description);
@@ -146,7 +146,7 @@ public class MFont extends APropertyNode {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this,
-						JaspersoftStudioPlugin.getImage("icons/resources/edit-strike.png"));
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-strike.png"));
 			}
 		};
 		strikeTroughD.setDescription(Messages.MFont_strike_trough_description);

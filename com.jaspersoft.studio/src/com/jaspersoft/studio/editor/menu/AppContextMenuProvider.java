@@ -190,7 +190,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 
 		// position actions
 		MenuManager submenu = new MenuManager(Messages.AppContextMenuProvider_order,
-				JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"), BringToFrontAction.ID); //$NON-NLS-1$
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"), BringToFrontAction.ID); //$NON-NLS-1$
 
 		action = getActionRegistry().getAction(BringToFrontAction.ID);
 		if (action.isEnabled())
@@ -244,7 +244,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 
 		// Alignment Actions
 		submenu = new MenuManager(Messages.AppContextMenuProvider_align_to_container,
-				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-left.gif"), //$NON-NLS-1$
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/align-band-left.gif"), //$NON-NLS-1$
 				Align2BorderAction.ID_ALIGN_LEFT);
 
 		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_LEFT);
@@ -295,7 +295,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		// ------------------------------
 
 		submenu = new MenuManager(Messages.AppContextMenuProvider_size_to_container,
-				JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"), //$NON-NLS-1$
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"), //$NON-NLS-1$
 				Size2BorderAction.ID_SIZE_WIDTH);
 
 		action = getActionRegistry().getAction(Size2BorderAction.ID_SIZE_WIDTH);
@@ -321,7 +321,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		if (action.isEnabled())
 			menu.add(action);
 
-		submenu = new MenuManager("Arrange In Container", JaspersoftStudioPlugin.getImageDescriptor("icons/layout-6.png"), //$NON-NLS-1$
+		submenu = new MenuManager("Arrange In Container", 
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/layout-6.png"), //$NON-NLS-1$
 				LayoutAction.ID);
 
 		LayoutManager.addMenu(submenu, getActionRegistry());

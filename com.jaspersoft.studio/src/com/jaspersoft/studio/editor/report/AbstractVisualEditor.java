@@ -111,7 +111,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable,
 		IGraphicalEditor {
-	private Image partImage = JaspersoftStudioPlugin.getImage(MReport.getIconDescriptor().getIcon16());
+	private Image partImage = JaspersoftStudioPlugin.getInstance().getImage(MReport.getIconDescriptor().getIcon16());
 	private FlyoutPreferences palettePreferences;
 	private JasperReportsConfiguration jrContext;
 

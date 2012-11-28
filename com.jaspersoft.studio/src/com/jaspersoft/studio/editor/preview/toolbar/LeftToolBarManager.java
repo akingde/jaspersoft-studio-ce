@@ -104,7 +104,7 @@ public class LeftToolBarManager extends ATopToolBarManager {
 
 		final ToolItem item = titem.getToolItem();
 
-		item.setImage(JaspersoftStudioPlugin.getImage("icons/eclipseicons/pin.png")); //$NON-NLS-1$
+		item.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseicons/pin.png")); //$NON-NLS-1$
 		item.setToolTipText(Messages.LeftToolBarManager_pintooltip);
 		item.setSelection(!container.isHideParameters());
 		item.addSelectionListener(new SelectionAdapter() {

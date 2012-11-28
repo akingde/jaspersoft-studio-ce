@@ -105,8 +105,10 @@ public class BringToBackAction extends SelectionAction implements IGlobalAction 
 		setText(Messages.BringToBackAction_send_to_back);
 		setToolTipText(Messages.BringToBackAction_send_to_back_tool_tip);
 		setId(BringToBackAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 }

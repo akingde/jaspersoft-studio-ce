@@ -51,9 +51,9 @@ public class PaletteGroup {
 
 	public void setImage(String image) {
 		if (image != null && !image.trim().isEmpty())
-			setImage(JaspersoftStudioPlugin.getImageDescriptor(image));
+			setImage(JaspersoftStudioPlugin.getInstance().getImageDescriptor(image));
 		else
-			setImage(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/elementgroup-16.png"));
+			setImage(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/elementgroup-16.png"));
 	}
 
 	public String getAfterGroup() {

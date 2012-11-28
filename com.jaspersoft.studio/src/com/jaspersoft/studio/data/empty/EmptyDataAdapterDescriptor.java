@@ -44,7 +44,7 @@ public class EmptyDataAdapterDescriptor extends DataAdapterDescriptor {
 
 	@Override
 	public Image getIcon(int size) {
-		return JaspersoftStudioPlugin.getImage("icons/battery-empty.png");
+		return JaspersoftStudioPlugin.getInstance().getImage("icons/battery-empty.png");
 	}
 
 	@Override

@@ -154,26 +154,30 @@ public class Size2BorderAction extends SelectionAction implements IGlobalAction 
 			setId(ID_SIZE_WIDTH);
 			setText(Messages.Size2BorderAction_fit_width);
 			setToolTipText(Messages.Size2BorderAction_fit_width_tool_tip);
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif")); //$NON-NLS-1$
-			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif")); //$NON-NLS-1$ 
+			setImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/size_to_control_width.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/size_to_control_width.gif")); //$NON-NLS-1$ 
 			break;
 
 		case HEIGHT:
 			setId(ID_SIZE_HEIGHT);
 			setText(Messages.Size2BorderAction_fit_height);
 			setToolTipText(Messages.Size2BorderAction_fit_height_tool_tip);
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_height.gif")); //$NON-NLS-1$
-			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/eclipseapps/size_to_control_height.gif")); //$NON-NLS-1$ 
+			setImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/size_to_control_height.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/size_to_control_height.gif")); //$NON-NLS-1$ 
 			break;
 
 		case BOTH:
 			setId(ID_SIZE_BOTH);
 			setText(Messages.Size2BorderAction_fit_both);
 			setToolTipText(Messages.Size2BorderAction_fit_both_tool_tip);
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control.gif")); //$NON-NLS-1$
-			setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control.gif")); //$NON-NLS-1$ 
+			setImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/size_to_control.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/size_to_control.gif")); //$NON-NLS-1$ 
 			break;
 		}
 	}

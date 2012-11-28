@@ -32,10 +32,10 @@ public class RunStopAction extends Action {
 		setText(Messages.RunStopAction_runreport);
 		setDescription(Messages.RunStopAction_runreport_desc);
 		setToolTipText(Messages.RunStopAction_runreport_desc);
-		setImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
 	}
 
 	@Override

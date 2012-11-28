@@ -39,7 +39,7 @@ public class ColorLabelProvider extends LabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		if (element == null)
-			return JaspersoftStudioPlugin.getImage("icons/resources/nocolor.png");
+			return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/nocolor.png");
 		if (element instanceof RGB) {
 			RGB rgb = (RGB) element;
 			RGB black = new RGB(0, 0, 0);
@@ -64,7 +64,7 @@ public class ColorLabelProvider extends LabelProvider {
 	
 	public Image getImage(Object element, int width, int height) {
 		if (element == null)
-			return JaspersoftStudioPlugin.getImage("icons/resources/nocolor.png");
+			return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/nocolor.png");
 		if (element instanceof RGB) {
 			RGB rgb = (RGB) element;
 			RGB black = new RGB(0, 0, 0);

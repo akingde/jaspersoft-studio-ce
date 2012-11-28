@@ -48,7 +48,7 @@ public class ClasspathComponent {
 		public Image getColumnImage(Object element, int columnIndex) {
 			File file = (File) element;
 			if (!file.exists())
-				return JaspersoftStudioPlugin.getImage("icons/resources/eclipse/obj16/error_tsk.gif");
+				return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/error_tsk.gif");
 			return null;
 		}
 

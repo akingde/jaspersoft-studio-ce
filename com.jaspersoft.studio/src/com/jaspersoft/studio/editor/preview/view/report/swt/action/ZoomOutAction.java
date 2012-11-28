@@ -25,8 +25,10 @@ public class ZoomOutAction extends AReportAction {
 
 		setText("Zoom Out"); //$NON-NLS-1$
 		setToolTipText("Zoom out"); //$NON-NLS-1$
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/zoomout-16.png"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/zoomout-16.png"));
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomout-16.png"));
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomout-16.png"));
 	}
 
 	@Override

@@ -21,7 +21,8 @@ import com.jaspersoft.studio.editor.preview.MultiPageContainer;
 public class ViewExporterAction extends ASwitchAction {
 	public ViewExporterAction(MultiPageContainer container) {
 		super(container, "Exporter Parameters");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/equalizer--arrow.png")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/equalizer--arrow.png")); //$NON-NLS-1$
 		setToolTipText("Set exporter parameters");
 	}
 }

@@ -57,7 +57,7 @@ public class TableEditor extends AbstractVisualEditor {
 	public TableEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
 		setPartName(Messages.TableEditor_table);
-		setPartImage(JaspersoftStudioPlugin.getImage(MTable.getIconDescriptor()
+		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MTable.getIconDescriptor()
 				.getIcon16()));
 	}
 

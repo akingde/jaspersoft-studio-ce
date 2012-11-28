@@ -258,8 +258,9 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 				OrientationEnum.class, NullEnum.NOTNULL) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				Image[] images = new Image[] { JaspersoftStudioPlugin.getImage("icons/resources/portrait16.png"),
-						JaspersoftStudioPlugin.getImage("icons/resources/landscape16.png") };
+				Image[] images = new Image[] { 
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/portrait16.png"),
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/landscape16.png") };
 				return new SPToolBarEnum(parent, section, this, images);
 			}
 		};

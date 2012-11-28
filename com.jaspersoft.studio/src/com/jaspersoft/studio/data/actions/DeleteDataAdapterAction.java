@@ -39,8 +39,10 @@ public class DeleteDataAdapterAction extends Action {
 		setText("Delete DataAdapter");
 		setDescription("Delete DataAdapter");
 		setToolTipText("Delete DataAdapter");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE)); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE)); //$NON-NLS-1
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE)); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE)); //$NON-NLS-1
 
 	}
 

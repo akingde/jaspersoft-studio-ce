@@ -202,7 +202,7 @@ public class VErrorPreview extends APreview {
 		errorViewer.setLabelProvider(new TableLabelProvider() {
 			@Override
 			public Image getColumnImage(Object element, int columnIndex) {
-				return JaspersoftStudioPlugin.getImage("icons/resources/eclipse/obj16/error_tsk.gif");
+				return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/error_tsk.gif");
 			}
 		});
 

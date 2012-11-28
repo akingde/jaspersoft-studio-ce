@@ -106,8 +106,10 @@ public class BringForwardAction extends SelectionAction implements IGlobalAction
 		setText(Messages.BringForwardAction_bring_forward);
 		setToolTipText(Messages.BringForwardAction_bring_forward_tool_tip);
 		setId(BringForwardAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/bring_forward.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/dlcl16/bring_forward.gif")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/bring_forward.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/dlcl16/bring_forward.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 }

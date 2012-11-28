@@ -48,7 +48,7 @@ public class EmptyDataAdapterFactory implements DataAdapterFactory {
 	public Image getIcon(int size) { 
 		if (size == 16)
 		{
-			return  JaspersoftStudioPlugin.getImage("icons/battery-empty.png");
+			return  JaspersoftStudioPlugin.getInstance().getImage("icons/battery-empty.png");
 		}
 		return null;
 	}

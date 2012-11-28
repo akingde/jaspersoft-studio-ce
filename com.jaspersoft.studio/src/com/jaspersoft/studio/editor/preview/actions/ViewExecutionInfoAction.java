@@ -27,7 +27,8 @@ public class ViewExecutionInfoAction extends Action {
 	public ViewExecutionInfoAction(PreviewJRPrint rcontainer) {
 		super();
 		this.rcontainer = rcontainer;
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/information-white.png")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/information-white.png")); //$NON-NLS-1$
 		setToolTipText(Messages.ViewExecutionInfoAction_tooltip);
 	}
 

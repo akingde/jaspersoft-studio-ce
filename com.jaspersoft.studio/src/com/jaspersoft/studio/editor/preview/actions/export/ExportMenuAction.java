@@ -28,9 +28,10 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class ExportMenuAction extends AReportViewerAction implements IMenuCreator {
 
-	private static final ImageDescriptor ICON = JaspersoftStudioPlugin.getImageDescriptor("icons/resources/save.GIF"); //$NON-NLS-1$
-	private static final ImageDescriptor DISABLED_ICON = JaspersoftStudioPlugin
-			.getImageDescriptor("icons/resources/save.GIF"); //$NON-NLS-1$
+	private static final ImageDescriptor ICON = 
+			JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/save.GIF"); //$NON-NLS-1$
+	private static final ImageDescriptor DISABLED_ICON = 
+			JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/save.GIF"); //$NON-NLS-1$
 
 	private MenuManager menuManager = new MenuManager();
 	private Menu menu;

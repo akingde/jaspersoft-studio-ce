@@ -43,8 +43,10 @@ public class RunStopAction extends Action implements IMenuCreator {
 		setMenuCreator(this);
 		setDescription(Messages.RunStopAction_runreport_desc);
 		setToolTipText(Messages.RunStopAction_runreport_desc);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -83,13 +85,13 @@ public class RunStopAction extends Action implements IMenuCreator {
 
 		MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
 		m1.setText("Run Report");
-		m1.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/start_task.gif"));
+		m1.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/start_task.gif"));
 		m1.addSelectionListener(listener);
 		m1.setData("run.key", MODERUN_LOCAL);
 
 		m1 = new MenuItem(listMenu, SWT.RADIO);
 		m1.setText("Run Interactive Report (Jive)");
-		m1.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/start_task.gif"));
+		m1.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/start_task.gif"));
 		m1.addSelectionListener(listener);
 		m1.setData("run.key", MODERUN_JIVE);
 

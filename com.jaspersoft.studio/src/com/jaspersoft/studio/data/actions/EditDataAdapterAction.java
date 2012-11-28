@@ -40,8 +40,10 @@ public class EditDataAdapterAction extends Action {
 		setText("Edit DataAdapter");
 		setDescription("Edit DataAdapter");
 		setToolTipText("Edit DataAdapter");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1
 	}
 
 	@Override

@@ -73,7 +73,7 @@ public class PaddingSection extends AbstractSection {
 		label.setLayoutData(gd);
 
 		CLabel l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_frame.gif")); //$NON-NLS-1$
+		l.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/border_frame.gif")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		allPadding = new Spinner(composite, SWT.BORDER);
@@ -86,7 +86,7 @@ public class PaddingSection extends AbstractSection {
 		});
 
 		l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_top.gif")); //$NON-NLS-1$
+		l.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/border_top.gif")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		topPadding = new Spinner(composite, SWT.BORDER);
@@ -99,7 +99,7 @@ public class PaddingSection extends AbstractSection {
 		});
 
 		l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_bottom.png")); //$NON-NLS-1$
+		l.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/border_bottom.png")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		bottomPadding = new Spinner(composite, SWT.BORDER);
@@ -112,7 +112,7 @@ public class PaddingSection extends AbstractSection {
 		});
 
 		l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_left.gif")); //$NON-NLS-1$
+		l.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/border_left.gif")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		leftPadding = new Spinner(composite, SWT.BORDER);
@@ -125,7 +125,7 @@ public class PaddingSection extends AbstractSection {
 		});
 
 		l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_right.gif")); //$NON-NLS-1$
+		l.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/border_right.gif")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		rightPadding = new Spinner(composite, SWT.BORDER);

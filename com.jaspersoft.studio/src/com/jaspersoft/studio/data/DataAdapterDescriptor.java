@@ -75,7 +75,7 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor {
 	 * Return an Image. By default this method returns a simple database icon
 	 */
 	public Image getIcon(int size) {
-		return JaspersoftStudioPlugin.getImage("icons/database.png");
+		return JaspersoftStudioPlugin.getInstance().getImage("icons/database.png");
 	}
 
 	/**
@@ -111,7 +111,7 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor {
 		if (icon != null) {
 			return ImageDescriptor.createFromImage(getIcon(16));
 		} else {
-			return ImageDescriptor.createFromImage(JaspersoftStudioPlugin.getImage("icons/database.png"));
+			return ImageDescriptor.createFromImage(JaspersoftStudioPlugin.getInstance().getImage("icons/database.png"));
 		}
 	}
 
@@ -125,7 +125,7 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor {
 		if (icon != null) {
 			return ImageDescriptor.createFromImage(getIcon(16));
 		} else {
-			return ImageDescriptor.createFromImage(JaspersoftStudioPlugin.getImage("icons/database.png"));
+			return ImageDescriptor.createFromImage(JaspersoftStudioPlugin.getInstance().getImage("icons/database.png"));
 		}
 	}
 }

@@ -27,8 +27,10 @@ public class ZoomActualSizeAction extends AReportAction {
 
 		setText("Actual Size"); //$NON-NLS-1$
 		setToolTipText("Zoom actual size"); //$NON-NLS-1$
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/zoomactual.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/zoomactuald.gif"));
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomactual.gif"));
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomactuald.gif"));
 		update();
 	}
 

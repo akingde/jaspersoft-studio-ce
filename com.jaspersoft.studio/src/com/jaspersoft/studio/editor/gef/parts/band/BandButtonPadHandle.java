@@ -98,7 +98,7 @@ public class BandButtonPadHandle extends AbstractHandle {
 		gridLayout.horizontalSpacing=10;
 		this.setLayoutManager(gridLayout);
 		
-		ImageFigure btn1=new ImageFigure(JaspersoftStudioPlugin.getImage("/icons/resources/eclipse/etool16/delete_edit.gif"));
+		ImageFigure btn1=new ImageFigure(JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/eclipse/etool16/delete_edit.gif"));
 		btn1.setToolTip(new Label("Delete band"));
 		btn1.addMouseListener(new MouseListener() {
 			public void mousePressed(MouseEvent me) {

@@ -214,7 +214,8 @@ public class JrxmlSelectionContributor {
 		if (ti.getTooltip() != null)
 			action.setToolTipText(ti.getTooltip());
 		if (ti.getIcon() != null)
-			action.setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(ti.getIcon()));
+			action.setImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor(ti.getIcon()));
 		addAction(cbm2, ts.getToolbarUri(), action);
 	}
 

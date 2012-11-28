@@ -39,10 +39,10 @@ public class RunReportUnitAction extends Action {
 		setText("Run Report Unit");
 		setDescription("Run Report Unit");
 		setToolTipText("Run the report unit");
-		setImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 

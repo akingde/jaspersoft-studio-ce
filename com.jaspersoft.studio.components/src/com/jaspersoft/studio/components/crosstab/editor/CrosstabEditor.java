@@ -54,7 +54,7 @@ public class CrosstabEditor extends AbstractVisualEditor {
 	public CrosstabEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
 		setPartName(Messages.CrosstabEditor_crosstab);
-		setPartImage(JaspersoftStudioPlugin.getImage(MCrosstab
+		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MCrosstab
 				.getIconDescriptor().getIcon16()));
 	}
 

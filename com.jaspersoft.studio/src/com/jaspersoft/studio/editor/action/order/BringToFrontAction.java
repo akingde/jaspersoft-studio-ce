@@ -108,9 +108,10 @@ public class BringToFrontAction extends SelectionAction implements IGlobalAction
 		setText(Messages.BringToFrontAction_bring_to_front);
 		setToolTipText(Messages.BringToFrontAction_bring_to_front_tool_tip);
 		setId(BringToFrontAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/resources/formatting/bring_to_front.gif")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/formatting/bring_to_front.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 }

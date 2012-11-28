@@ -33,10 +33,11 @@ public class RotationPropertyDescriptor extends JSSEnumPropertyDescriptor {
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		Image[] images = new Image[] { JaspersoftStudioPlugin.getImage("icons/resources/text-direction-none.png"),
-				JaspersoftStudioPlugin.getImage("icons/resources/text-direction-left.png"),
-				JaspersoftStudioPlugin.getImage("icons/resources/text-direction-right.png"),
-				JaspersoftStudioPlugin.getImage("icons/resources/text-direction-updown.png") };
+		Image[] images = new Image[] { 
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/text-direction-none.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/text-direction-left.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/text-direction-right.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/text-direction-updown.png") };
 		return new SPToolBarEnum(parent, section, this, images, false);
 	}
 }

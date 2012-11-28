@@ -79,8 +79,10 @@ public class ShowPropertyViewAction extends SelectionAction {
 		setText(Messages.ShowPropertyViewAction_show_properties);
 		setToolTipText(Messages.ShowPropertyViewAction_show_properties_tool_tip);
 		setId(ShowPropertyViewAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 

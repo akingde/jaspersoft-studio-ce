@@ -48,7 +48,7 @@ public class ListEditor extends AbstractVisualEditor {
 	public ListEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
 		setPartName(Messages.common_list);
-		setPartImage(JaspersoftStudioPlugin.getImage(MList.getIconDescriptor()
+		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MList.getIconDescriptor()
 				.getIcon16()));
 	}
 

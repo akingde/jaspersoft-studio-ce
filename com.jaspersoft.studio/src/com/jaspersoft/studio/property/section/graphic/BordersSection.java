@@ -413,7 +413,7 @@ public class BordersSection extends AbstractSection {
 				lineColor.setColor(beforeSelectionColor);
 			}
 		});
-		noneBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/border.png")); //$NON-NLS-1$
+		noneBorder.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/border.png")); //$NON-NLS-1$
 		noneBorder.setToolTipText(Messages.BordersSection_No_Borders);
 		
 		allBorder = new ToolItem(toolBar, SWT.PUSH);
@@ -434,7 +434,7 @@ public class BordersSection extends AbstractSection {
 				bd.unselectAll();
 			}
 		});
-		allBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/border-outside.png")); //$NON-NLS-1$
+		allBorder.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/border-outside.png")); //$NON-NLS-1$
 		allBorder.setToolTipText(Messages.BordersSection_all_borders_tool_tip);
 		
 		leftRightBorder = new ToolItem(toolBar, SWT.PUSH);
@@ -467,7 +467,7 @@ public class BordersSection extends AbstractSection {
 				lineStyle.setData((Integer)beforeSelectionStyle);
 			}
 		});
-		leftRightBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/border-right-left.png")); //$NON-NLS-1$
+		leftRightBorder.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/border-right-left.png")); //$NON-NLS-1$
 		leftRightBorder.setToolTipText(Messages.BordersSection_Left_Right_Borders);
 		
 		upDownBorder = new ToolItem(toolBar, SWT.PUSH);
@@ -500,7 +500,7 @@ public class BordersSection extends AbstractSection {
 				lineStyle.setData((Integer)beforeSelectionStyle);
 			}
 		});
-		upDownBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/border-top-bottom.png")); //$NON-NLS-1$
+		upDownBorder.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/border-top-bottom.png")); //$NON-NLS-1$
 		upDownBorder.setToolTipText(Messages.BordersSection_Top_Bottom_Borders);
 	}
 	

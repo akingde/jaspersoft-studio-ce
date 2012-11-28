@@ -198,7 +198,7 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		});
 
 		btnEditExpression = new Button(this, SWT.FLAT);
-		btnEditExpression.setImage(JaspersoftStudioPlugin.getImage(BUTTON_ICON_PATH));
+		btnEditExpression.setImage(JaspersoftStudioPlugin.getInstance().getImage(BUTTON_ICON_PATH));
 		btnEditExpression.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {

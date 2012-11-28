@@ -25,8 +25,10 @@ public class ZoomInAction extends AReportAction {
 
 		setText("Zoom In"); //$NON-NLS-1$
 		setToolTipText("Zoom in"); //$NON-NLS-1$
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/zoomin-16.png"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/zoomin-16.png"));
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomin-16.png"));
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomin-16.png"));
 	}
 
 	@Override

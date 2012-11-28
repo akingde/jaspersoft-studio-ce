@@ -24,8 +24,10 @@ public class NextPageAction extends AReportAction {
 		super(rviewer);
 		setText("Next Page"); //$NON-NLS-1$
 		setToolTipText("Go to next page"); //$NON-NLS-1$
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/nav/next.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/nav/nextd.gif"));
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/next.gif"));
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/nextd.gif"));
 	}
 
 	public boolean isActionEnabled() {

@@ -106,8 +106,8 @@ public class WColorPicker extends Composite{
 		ToolBar toolBar=new ToolBar(this, SWT.NONE);
 		toolBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		buttonColorChoser = new ToolItem(toolBar, SWT.FLAT);
-		buttonColorChoser.setImage(JaspersoftStudioPlugin.getImage(BUTTON_ICON_LOCATION));
-		buttonColorChoser.setDisabledImage(JaspersoftStudioPlugin.getImage(BUTTON_DISABLED_ICON_LOCATION));
+		buttonColorChoser.setImage(JaspersoftStudioPlugin.getInstance().getImage(BUTTON_ICON_LOCATION));
+		buttonColorChoser.setDisabledImage(JaspersoftStudioPlugin.getInstance().getImage(BUTTON_DISABLED_ICON_LOCATION));
 		buttonColorChoser.addSelectionListener(new SelectionListener() {
 		
 			public void widgetSelected(SelectionEvent e) {

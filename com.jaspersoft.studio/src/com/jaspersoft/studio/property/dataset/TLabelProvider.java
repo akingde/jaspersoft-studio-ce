@@ -37,11 +37,11 @@ public class TLabelProvider extends LabelProvider implements ITableLabelProvider
 		switch (columnIndex) {
 		case 0:
 			if (element instanceof JRDesignField)
-				return JaspersoftStudioPlugin.getImage(MField.getIconDescriptor().getIcon16());
+				return JaspersoftStudioPlugin.getInstance().getImage(MField.getIconDescriptor().getIcon16());
 			if (element instanceof JRDesignParameter)
-				return JaspersoftStudioPlugin.getImage(MParameter.getIconDescriptor().getIcon16());
+				return JaspersoftStudioPlugin.getInstance().getImage(MParameter.getIconDescriptor().getIcon16());
 			if (element instanceof JRDesignVariable)
-				return JaspersoftStudioPlugin.getImage(MVariable.getIconDescriptor().getIcon16());
+				return JaspersoftStudioPlugin.getInstance().getImage(MVariable.getIconDescriptor().getIcon16());
 		}
 		return null;
 	}

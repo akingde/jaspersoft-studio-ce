@@ -87,7 +87,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 		ANode node = (ANode) getModel();
 		if (node != null) {
 			if (node.getImagePath() != null) {
-				Image image = JaspersoftStudioPlugin.getImage(node.getImagePath());
+				Image image = JaspersoftStudioPlugin.getInstance().getImage(node.getImagePath());
 				if (image != null) {
 					if (node.getBackground() != null)
 						image.setBackground(node.getBackground());

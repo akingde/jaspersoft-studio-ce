@@ -34,10 +34,10 @@ public class VAlignPropertyDescriptor extends JSSEnumPropertyDescriptor {
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 		Image[] images = new Image[] {
-				JaspersoftStudioPlugin.getImage("icons/resources/formatting/edit-vertical-alignment-top.png"),
-				JaspersoftStudioPlugin.getImage("icons/resources/formatting/edit-vertical-alignment-middle.png"),
-				JaspersoftStudioPlugin.getImage("icons/resources/formatting/edit-vertical-alignment.png"),
-				JaspersoftStudioPlugin.getImage("icons/resources/formatting/edit-vertical-alignment-middle.png"), };
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-top.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-middle.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-middle.png"), };
 		return new SPToolBarEnum(parent, section, this, images, false);
 	}
 }

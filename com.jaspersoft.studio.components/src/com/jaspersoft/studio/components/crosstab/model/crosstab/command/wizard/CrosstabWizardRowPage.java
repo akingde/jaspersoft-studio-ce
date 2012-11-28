@@ -61,13 +61,13 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 			switch (columnIndex) {
 			case 0:
 				if (oldExpText.startsWith("$F{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getImage(MField
+					return JaspersoftStudioPlugin.getInstance().getImage(MField
 							.getIconDescriptor().getIcon16());
 				if (oldExpText.startsWith("$P{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getImage(MParameter
+					return JaspersoftStudioPlugin.getInstance().getImage(MParameter
 							.getIconDescriptor().getIcon16());
 				if (oldExpText.startsWith("$V{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getImage(MVariable
+					return JaspersoftStudioPlugin.getInstance().getImage(MVariable
 							.getIconDescriptor().getIcon16());
 			}
 			return null;

@@ -39,10 +39,10 @@ public class DuplicateServerAction extends Action {
 		setText("Duplicate JasperServer Connection");
 		setDescription("Duplicate JasperServer Connection");
 		setToolTipText("Duplicate JasperServer connection");
-		setImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
 	}
 
 	@Override

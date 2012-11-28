@@ -25,9 +25,10 @@ public class MatchSizeAction extends MatchHeightAction implements IGlobalAction 
 	public MatchSizeAction(IWorkbenchPart part) {
 		super(part);
 		setText(Messages.MatchSizeAction_match_size);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/match-size.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/resources/eclipse/disabled/match-size.gif")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/match-size.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/disabled/match-size.gif")); //$NON-NLS-1$
 		setToolTipText(Messages.MatchSizeAction_match_size_tool_tip);
 		setId(ID);
 	}

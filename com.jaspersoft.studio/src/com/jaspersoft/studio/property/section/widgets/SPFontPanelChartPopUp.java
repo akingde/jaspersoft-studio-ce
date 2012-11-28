@@ -288,7 +288,7 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget {
 				changeProperty(section, pDescriptor.getId(), ipd.getId(), new Boolean(item.getSelection()));
 			}
 		});
-		item.setImage(JaspersoftStudioPlugin.getImage(image)); //$NON-NLS-1$
+		item.setImage(JaspersoftStudioPlugin.getInstance().getImage(image)); //$NON-NLS-1$
 		item.setToolTipText(ipd.getDescription());
 		return item;
 	}

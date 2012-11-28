@@ -15,23 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio;
 
-import java.io.IOException;
+import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 
-import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.property.PostSetValueManager;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.DriversManager;
 
 /*
@@ -41,7 +32,7 @@ import com.jaspersoft.studio.utils.jasper.DriversManager;
  * 
  * @version $Id: JasperCompileManager.java 1229 2006-04-19 13:27:35 +0300 (Wed, 19 Apr 2006) teodord $
  */
-public class JaspersoftStudioPlugin extends AbstractUIPlugin {
+public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 
 	public static final String PLUGIN_ID = "com.jaspersoft.studio"; //$NON-NLS-1$
 	public static final String COMPONENTS_ID = "com.jaspersoft.studio.components"; //$NON-NLS-1$
@@ -85,65 +76,6 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 		plugin = null;
-	}
-
-	/**
-	 * Gets the image.
-	 * 
-	 * @param descriptor
-	 *          the descriptor
-	 * @return the image
-	 */
-	public static Image getImage(ImageDescriptor descriptor) {
-		if (descriptor == null)
-			descriptor = ModelUtils.getImageDescriptor("icons/report.png"); //$NON-NLS-1$
-		ImageRegistry imageRegistry = getInstance().getImageRegistry();
-		Image image = imageRegistry.get(descriptor.toString());
-		if (image == null) {
-			image = descriptor.createImage();
-			if (image != null)
-				imageRegistry.put(descriptor.toString(), image);
-			else
-				image = imageRegistry.get("icons/report.png"); //$NON-NLS-1$
-		}
-		return image;
-	}
-
-	/**
-	 * Gets the image.
-	 * 
-	 * @param path
-	 *          the path
-	 * @return the image
-	 */
-	public static Image getImage(String path) {
-		ImageDescriptor descriptor = null;
-		if (path != null)
-			descriptor = JaspersoftStudioPlugin.getImageDescriptor(path);
-		return getImage(descriptor);
-	}
-
-	/**
-	 * Returns an image descriptor for the image file at the given plug-in relative path.
-	 * 
-	 * @param path
-	 *          the path
-	 * @return the image descriptor
-	 */
-	public static ImageDescriptor getImageDescriptor(String path) {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(UNIQUE_ID, path);
-	}
-
-	/** The Constant UNIQUE_ID. */
-	private static final String UNIQUE_ID = "com.jaspersoft.studio"; //$NON-NLS-1$
-
-	/**
-	 * Gets the unique identifier.
-	 * 
-	 * @return the unique identifier
-	 */
-	public static String getUniqueIdentifier() {
-		return UNIQUE_ID;
 	}
 
 	private static ExtensionManager extensionManager;
@@ -196,27 +128,16 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 		return postSetValueManager;
 	}
 
+	@Override
+	public String getPluginID() {
+		return PLUGIN_ID;
+	}
+
 	/**
-	 * Get the full path name for a resource located inside the plug-in.
-	 * 
-	 * @param path
-	 *          the path of the internal resource
-	 * @return the string corresponding to the full path
-	 * @throws IOException
-	 *           if a problem occurs during conversion
+	 * @return the unique plug-in identifier
 	 */
-	public String getFileLocation(String path) throws IOException {
-		Assert.isNotNull(path);
-		return FileLocator.toFileURL(getBundle().getEntry(path)).getPath();
-	}
-
-	public void log(int severity, String message, Throwable t) {
-		IStatus status = new Status(severity, PLUGIN_ID, 0, message, t);
-		getLog().log(status);
-	}
-
-	public void logError(String message, Throwable t) {
-		log(IStatus.ERROR, message, t);
+	public static String getUniqueIdentifier() {
+		return PLUGIN_ID;
 	}
 
 }

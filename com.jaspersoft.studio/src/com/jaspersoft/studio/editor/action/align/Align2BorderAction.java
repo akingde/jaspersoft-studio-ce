@@ -189,53 +189,59 @@ public class Align2BorderAction extends SelectionAction implements IGlobalAction
 			setId(ID_ALIGN_LEFT);
 			setText(Messages.Align2BorderAction_align_to_left);
 			setToolTipText(Messages.Align2BorderAction_align_to_left_tool_tip);
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-left.gif")); //$NON-NLS-1$
-			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-left.gif")); //$NON-NLS-1$ 
+			setImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/align-band-left.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/disabled/align-band-left.gif")); //$NON-NLS-1$ 
 			break;
 		case PositionConstants.RIGHT:
 			setId(ID_ALIGN_RIGHT);
 			setText(Messages.Align2BorderAction_align_to_right);
 			setToolTipText(Messages.Align2BorderAction_align_to_right_tool_tip);
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-right.gif")); //$NON-NLS-1$
-			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-right.gif")); //$NON-NLS-1$ 
+			setImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/align-band-right.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/disabled/align-band-right.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.TOP:
 			setId(ID_ALIGN_TOP);
 			setText(Messages.Align2BorderAction_align_to_top);
 			setToolTipText(Messages.Align2BorderAction_align_to_top_tool_tip);
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-top.gif")); //$NON-NLS-1$
-			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-top.gif")); //$NON-NLS-1$ 
+			setImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/align-band-top.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/disabled/align-band-top.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.BOTTOM:
 			setId(ID_ALIGN_BOTTOM);
 			setText(Messages.Align2BorderAction_align_to_bottom);
 			setToolTipText(Messages.Align2BorderAction_align_to_bottom_tool_tip);
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-bottom.gif")); //$NON-NLS-1$
-			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-bottom.gif")); //$NON-NLS-1$ 
+			setImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/align-band-bottom.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/disabled/align-band-bottom.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.CENTER:
 			setId(ID_ALIGN_CENTER);
 			setText(Messages.Align2BorderAction_align_to_center);
 			setToolTipText(Messages.Align2BorderAction_align_to_center_tool_tip);
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-center.gif")); //$NON-NLS-1$
-			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-center.gif")); //$NON-NLS-1$ 
+			setImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/align-band-center.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/disabled/align-band-center.gif")); //$NON-NLS-1$ 
 			break;
 
 		case PositionConstants.MIDDLE:
 			setId(ID_ALIGN_MIDDLE);
 			setText(Messages.Align2BorderAction_align_to_middle);
 			setToolTipText(Messages.Align2BorderAction_align_to_middle_tool_tip);
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-middle.gif")); //$NON-NLS-1$
-			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-middle.gif")); //$NON-NLS-1$ 
+			setImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/align-band-middle.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(
+					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/disabled/align-band-middle.gif")); //$NON-NLS-1$ 
 			break;
 		}
 	}

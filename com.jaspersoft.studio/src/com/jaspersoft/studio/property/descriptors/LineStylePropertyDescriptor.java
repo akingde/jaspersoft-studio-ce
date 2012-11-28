@@ -33,10 +33,11 @@ public class LineStylePropertyDescriptor extends JSSEnumPropertyDescriptor {
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		Image[] images = new Image[] { JaspersoftStudioPlugin.getImage("icons/resources/line-solid.png"),
-				JaspersoftStudioPlugin.getImage("icons/resources/line-dashed.png"),
-				JaspersoftStudioPlugin.getImage("icons/resources/line-dotted.png"),
-				JaspersoftStudioPlugin.getImage("icons/resources/line-double.png"), };
+		Image[] images = new Image[] { 
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/line-solid.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/line-dashed.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/line-dotted.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/line-double.png"), };
 		return new SPToolBarEnum(parent, section, this, images, false);
 	}
 }

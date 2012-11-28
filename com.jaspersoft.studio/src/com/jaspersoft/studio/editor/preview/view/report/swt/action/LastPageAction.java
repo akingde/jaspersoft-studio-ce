@@ -24,8 +24,10 @@ public class LastPageAction extends AReportAction {
 		super(rviewer);
 		setText("Last Page"); //$NON-NLS-1$
 		setToolTipText("Go to last page"); //$NON-NLS-1$
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/nav/last.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/nav/lastd.gif"));
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/last.gif"));
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/lastd.gif"));
 	}
 
 	public boolean isActionEnabled() {

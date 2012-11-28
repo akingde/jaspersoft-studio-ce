@@ -42,22 +42,22 @@ public class PageMarginSection extends AbstractSection {
 		Composite group = getWidgetFactory().createSection(parent, Messages.PageMarginSection_margin, true, 2);
 
 		CLabel l = getWidgetFactory().createCLabel(group, "", SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_top.gif")); //$NON-NLS-1$
+		l.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/border_top.gif")); //$NON-NLS-1$
 
 		createWidget4Property(group, JasperDesign.PROPERTY_TOP_MARGIN, false);
 
 		l = getWidgetFactory().createCLabel(group, "", SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_bottom.png")); //$NON-NLS-1$ 
+		l.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/border_bottom.png")); //$NON-NLS-1$ 
 
 		createWidget4Property(group, JasperDesign.PROPERTY_BOTTOM_MARGIN, false);
 
 		l = getWidgetFactory().createCLabel(group, "", SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_left.gif")); //$NON-NLS-1$ 
+		l.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/border_left.gif")); //$NON-NLS-1$ 
 
 		createWidget4Property(group, JasperDesign.PROPERTY_LEFT_MARGIN, false);
 
 		l = getWidgetFactory().createCLabel(group, "", SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_right.gif")); //$NON-NLS-1$ 
+		l.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/border_right.gif")); //$NON-NLS-1$ 
 
 		createWidget4Property(group, JasperDesign.PROPERTY_RIGHT_MARGIN, false);
 	}

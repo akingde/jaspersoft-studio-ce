@@ -33,8 +33,9 @@ public class OpaqueModePropertyDescriptor extends JSSEnumPropertyDescriptor {
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		Image[] images = new Image[] { JaspersoftStudioPlugin.getImage("icons/resources/color-opaque.png"),
-				JaspersoftStudioPlugin.getImage("icons/resources/color-transparent.png") };
+		Image[] images = new Image[] { 
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/color-opaque.png"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/color-transparent.png") };
 		return new SPToolBarEnum(parent, section, this, images, false);
 	}
 }

@@ -74,7 +74,7 @@ public class ReportTreeLabelProvider extends CellLabelProvider {
 		ImageDescriptor imagePath = ((INode) element).getImagePath();
 		if (imagePath == null)
 			return null;
-		return JaspersoftStudioPlugin.getImage(imagePath);
+		return JaspersoftStudioPlugin.getInstance().getImage(imagePath);
 	}
 
 	/*

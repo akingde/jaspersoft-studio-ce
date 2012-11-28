@@ -39,8 +39,10 @@ public class DuplicateDataAdapterAction extends Action {
 		setText("Duplicate DataAdapter");
 		setDescription("Duplicate DataAdapter");
 		setToolTipText("Duplicate DataAdapter");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
 	}
 
 	@Override

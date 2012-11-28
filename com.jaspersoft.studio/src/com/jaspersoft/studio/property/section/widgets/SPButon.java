@@ -84,9 +84,9 @@ public class SPButon extends ASPropertyWidget {
 	public SPButon(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, APropertyNode fontValue){
 		super(parent, section, pDescriptor);
 		messageIncrement = Messages.SPButon_Size_Increment.concat(factor.toString());
-		imageValueIncrement = JaspersoftStudioPlugin.getImage("/icons/resources/edit-size-up.png"); 
+		imageValueIncrement = JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/edit-size-up.png"); 
 		messageDecrement = Messages.SPButon_Size_Decrement.concat(factor.toString());
-		imageValueDecrement = JaspersoftStudioPlugin.getImage("/icons/resources/edit-size-down.png"); 
+		imageValueDecrement = JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/edit-size-down.png"); 
 		this.fontValue = fontValue;
 		createComponent(parent);
 	}

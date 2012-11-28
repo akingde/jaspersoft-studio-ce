@@ -316,7 +316,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/bold.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage("icons/resources/bold.png"));
 			}
 		};
 		boldD.setDescription(Messages.MFont_bold_description);
@@ -326,7 +326,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				Messages.common_italic, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/italic.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage("icons/resources/italic.png"));
 			}
 		};
 		italicD.setDescription(Messages.MFont_italic_description);
@@ -337,7 +337,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this,
-						JaspersoftStudioPlugin.getImage("icons/resources/underline.png"));
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/underline.png"));
 			}
 		};
 		underlineD.setDescription(Messages.MFont_underline_description);
@@ -348,7 +348,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this,
-						JaspersoftStudioPlugin.getImage("icons/resources/strikethrought.png"));
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/strikethrought.png"));
 			}
 		};
 		strikeThroughD.setDescription(Messages.MFont_strike_trough_description);

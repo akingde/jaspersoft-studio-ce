@@ -41,10 +41,10 @@ public class RefreshResourcesAction extends Action {
 		setId(ActionFactory.REFRESH.getId());
 		setText("Refresh");
 		setToolTipText(Messages.common_delete);
-		setImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/eclipseicons/reload.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/eclipseicons/reloaddgif"));
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseicons/reload.gif"));
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseicons/reload.gif"));
 		this.treeViewer = treeViewer;
 	}
 

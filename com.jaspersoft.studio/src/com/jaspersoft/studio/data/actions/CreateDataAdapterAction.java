@@ -49,8 +49,10 @@ public class CreateDataAdapterAction extends Action implements ICheatSheetAction
 		setText("Create DataAdapter");
 		setDescription("Create DataAdapter");
 		setToolTipText("Create DataAdapter");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.png")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.png")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/data_source_add.png")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/data_source_add.png")); //$NON-NLS-1$
 	}
 
 	@Override

@@ -110,8 +110,10 @@ public class BringBackwardAction extends SelectionAction implements IGlobalActio
 		setText(Messages.BringBackwardAction_send_backward);
 		setToolTipText(Messages.BringBackwardAction_send_backward_tool_tip);
 		setId(BringBackwardAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_backward.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_backward.gif")); //$NON-NLS-1$
+		setImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/send_backward.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/send_backward.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 

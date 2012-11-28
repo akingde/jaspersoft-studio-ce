@@ -75,11 +75,11 @@ public class CheckBoxLabelProvider extends LabelProvider {
 	public Image getCellEditorImage(Boolean value) {
 		Image image = null;
 		if (value == null)
-			image = JaspersoftStudioPlugin.getImage("icons/CheckboxCellEditorHelper-null.16x16.png"); //$NON-NLS-1$
+			image = JaspersoftStudioPlugin.getInstance().getImage("icons/CheckboxCellEditorHelper-null.16x16.png"); //$NON-NLS-1$
 		else if (value.booleanValue())
-			image = JaspersoftStudioPlugin.getImage("icons/CheckboxCellEditorHelper-checked.16x16.png"); //$NON-NLS-1$
+			image = JaspersoftStudioPlugin.getInstance().getImage("icons/CheckboxCellEditorHelper-checked.16x16.png"); //$NON-NLS-1$
 		else
-			image = JaspersoftStudioPlugin.getImage("icons/CheckboxCellEditorHelper-unchecked.16x16.png"); //$NON-NLS-1$
+			image = JaspersoftStudioPlugin.getInstance().getImage("icons/CheckboxCellEditorHelper-unchecked.16x16.png"); //$NON-NLS-1$
 		return image;
 	}
 }

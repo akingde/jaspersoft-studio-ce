@@ -184,8 +184,8 @@ public class SortFieldSection {
 			switch (columnIndex) {
 			case 0:
 				if (((JRSortField) element).getType().equals(SortFieldTypeEnum.FIELD))
-					return JaspersoftStudioPlugin.getImage(MField.getIconDescriptor().getIcon16());
-				return JaspersoftStudioPlugin.getImage(MVariable.getIconDescriptor().getIcon16());
+					return JaspersoftStudioPlugin.getInstance().getImage(MField.getIconDescriptor().getIcon16());
+				return JaspersoftStudioPlugin.getInstance().getImage(MVariable.getIconDescriptor().getIcon16());
 			}
 			return null;
 		}

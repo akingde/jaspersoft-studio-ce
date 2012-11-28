@@ -234,7 +234,7 @@ public abstract class DataQueryAdapters {
 		comp.setBackgroundMode(SWT.INHERIT_FORCE);
 
 		Label lbl = new Label(comp, SWT.NONE);
-		lbl.setImage(JaspersoftStudioPlugin.getImage(MDataAdapters.getIconDescriptor().getIcon16()));
+		lbl.setImage(JaspersoftStudioPlugin.getInstance().getImage(MDataAdapters.getIconDescriptor().getIcon16()));
 
 		final ToolBar tb = new ToolBar(comp, SWT.FLAT | SWT.RIGHT);
 		tb.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
