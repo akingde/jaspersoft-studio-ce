@@ -56,7 +56,7 @@ public abstract class AResourceSection extends ASection {
 
 		bexport = new Button(cmp, SWT.PUSH);
 		bexport.setText("Download File");
-		bexport.setImage(Activator.getImage("icons/drive-download.png"));
+		bexport.setImage(Activator.getDefault().getImage("icons/drive-download.png"));
 		bexport.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -101,7 +101,7 @@ public abstract class AResourceSection extends ASection {
 
 		bimport = new Button(cmp, SWT.PUSH);
 		bimport.setText("Upload File");
-		bimport.setImage(Activator.getImage("icons/drive-upload.png"));
+		bimport.setImage(Activator.getDefault().getImage("icons/drive-upload.png"));
 		bimport.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {

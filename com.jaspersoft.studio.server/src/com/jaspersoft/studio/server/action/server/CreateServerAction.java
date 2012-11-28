@@ -49,8 +49,8 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 		setText("Create JasperServer Connection");
 		setDescription("Create JasperServer connection");
 		setToolTipText("Create JasperServer connection");
-		setImageDescriptor(Activator
-				.getImageDescriptor("icons/server--plus.png")); //$NON-NLS-1$
+		setImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/server--plus.png")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 

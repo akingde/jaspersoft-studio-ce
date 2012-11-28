@@ -37,8 +37,8 @@ public class DeleteServerAction extends Action {
 		setText(Messages.common_delete);
 		setDescription("Delete JasperServer Connection");
 		setToolTipText("Delete JasperServer connection");
-		setImageDescriptor(Activator
-				.getImageDescriptor("icons/server--minus.png")); //$NON-NLS-1$
+		setImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/server--minus.png")); //$NON-NLS-1$
 	}
 
 	@Override

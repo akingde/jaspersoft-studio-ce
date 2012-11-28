@@ -66,7 +66,7 @@ public abstract class AFileResourcePage extends AResourcePage {
 
 		Button bexport = new Button(composite, SWT.PUSH | SWT.LEFT);
 		bexport.setText(Messages.AFileResourcePage_downloadfilebutton);
-		bexport.setImage(Activator.getImage("icons/drive-download.png")); //$NON-NLS-1$
+		bexport.setImage(Activator.getDefault().getImage("icons/drive-download.png")); //$NON-NLS-1$
 		bexport.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -83,7 +83,7 @@ public abstract class AFileResourcePage extends AResourcePage {
 
 		Button bimport = new Button(composite, SWT.PUSH | SWT.LEFT);
 		bimport.setText(Messages.AFileResourcePage_uploadfile);
-		bimport.setImage(Activator.getImage("icons/drive-upload.png")); //$NON-NLS-1$
+		bimport.setImage(Activator.getDefault().getImage("icons/drive-upload.png")); //$NON-NLS-1$
 		bimport.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {

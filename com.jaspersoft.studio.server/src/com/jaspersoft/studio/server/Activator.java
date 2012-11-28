@@ -15,10 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
+
 import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
@@ -26,7 +24,7 @@ import com.jaspersoft.studio.server.plugin.ExtensionManager;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractJRUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.jaspersoft.studio.server"; //$NON-NLS-1$
@@ -73,37 +71,6 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	/**
-	 * Returns an image descriptor for the image file at the given plug-in
-	 * relative path
-	 * 
-	 * @param path
-	 *            the path
-	 * @return the image descriptor
-	 */
-	public static ImageDescriptor getImageDescriptor(String path) {
-		return imageDescriptorFromPlugin(PLUGIN_ID, path);
-	}
-
-	public static Image getImage(String path) {
-		ImageDescriptor descriptor = getImageDescriptor(path);
-
-		return getImage(descriptor);
-	}
-
-	public static Image getImage(ImageDescriptor descriptor) {
-		ImageRegistry imageRegistry = getDefault().getImageRegistry();
-		Image image = imageRegistry.get(descriptor.toString());
-		if (image == null) {
-			image = descriptor.createImage();
-			if (image != null)
-				imageRegistry.put(descriptor.toString(), image);
-			else
-				image = imageRegistry.get("icons/unknown.png"); //$NON-NLS-1$
-		}
-		return image;
-	}
-
 	private static ExtensionManager extensionManager;
 
 	public static ExtensionManager getExtManager() {
@@ -112,5 +79,10 @@ public class Activator extends AbstractUIPlugin {
 			extensionManager.init();
 		}
 		return extensionManager;
+	}
+
+	@Override
+	public String getPluginID() {
+		return PLUGIN_ID;
 	}
 }

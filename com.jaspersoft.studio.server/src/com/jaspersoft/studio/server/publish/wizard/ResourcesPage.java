@@ -143,7 +143,7 @@ public class ResourcesPage extends WizardPage {
 			MResource fr = (MResource) element;
 			switch (columnIndex) {
 			case 0:
-				return Activator.getImage(fr.getThisIconDescriptor()
+				return Activator.getDefault().getImage(fr.getThisIconDescriptor()
 						.getIcon16());
 			case 1:
 				return chLabelProvider.getCellEditorImage(fr

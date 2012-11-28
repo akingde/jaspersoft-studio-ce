@@ -27,7 +27,7 @@ public class MDummy extends ANode {
 	}
 
 	public ImageDescriptor getImagePath() {
-		return Activator.getImageDescriptor("icons/hourglass.png");
+		return Activator.getDefault().getImageDescriptor("icons/hourglass.png");
 	}
 
 	public String getDisplayText() {

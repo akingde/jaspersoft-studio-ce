@@ -73,8 +73,8 @@ public class JrxmlPublishAction extends AContributorAction {
 	public JrxmlPublishAction() {
 		super(ID, Messages.JrxmlPublishAction_title);
 		setToolTipText(Messages.JrxmlPublishAction_tooltip);
-		ImageDescriptor icon16 = Activator
-				.getImageDescriptor("icons/server--upload.png"); //$NON-NLS-1$
+		ImageDescriptor icon16 = 
+				Activator.getDefault().getImageDescriptor("icons/server--upload.png"); //$NON-NLS-1$
 		setImageDescriptor(icon16);
 		setDisabledImageDescriptor(icon16);
 	}

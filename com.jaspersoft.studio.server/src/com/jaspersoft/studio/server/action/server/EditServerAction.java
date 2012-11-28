@@ -51,8 +51,8 @@ public class EditServerAction extends Action {
 		setText("Edit JasperServer Connection");
 		setDescription("Edit JasperServer Connection");
 		setToolTipText("Edit JasperServer Connection");
-		setImageDescriptor(Activator
-				.getImageDescriptor("icons/server--pencil.png")); //$NON-NLS-1$
+		setImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/server--pencil.png")); //$NON-NLS-1$
 	}
 
 	@Override
