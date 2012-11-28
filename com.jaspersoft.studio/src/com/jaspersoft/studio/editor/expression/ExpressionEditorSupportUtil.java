@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.editor.expression;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +38,7 @@ import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Utility methods that allow the user to work with the expression editor "world".
@@ -145,10 +147,11 @@ public class ExpressionEditorSupportUtil {
 	 * to correctly use the functions library inside the expressions.
 	 * 
 	 * @param jd the jasper design object to be enriched
+	 * @param jrContext the JasperReports context associated
 	 */
-	public static void addFunctionsLibraryImports(JasperDesign jd){
+	public static void addFunctionsLibraryImports(JasperDesign jd, JasperReportsConfiguration jrContext){
 		Assert.isNotNull(jd);
-		List<JRExpression> collectedExpressions = JRExpressionCollector.collectExpressions(jd);
+		Collection<JRExpression> collectedExpressions = JRExpressionCollector.collector(jrContext, jd).getReportExpressions();
 		List<String> libraryClasses = getStaticImportsForExpressions(collectedExpressions);
 		for(String clazzName : libraryClasses){
 			jd.addImport("static " + clazzName + ".*");
@@ -180,10 +183,11 @@ public class ExpressionEditorSupportUtil {
 	 * to the jasper design, otherwise they are removed.
 	 * 
 	 * @param jasperDesign the jasper design to modify
+	 * @param jrContext the JasperReports context associated
 	 * 
 	 * @see ExpressionEditorPreferencePage#P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS 
 	 */
-	public static void updateFunctionsLibraryImports(JasperDesign jasperDesign) {
+	public static void updateFunctionsLibraryImports(JasperDesign jasperDesign, JasperReportsConfiguration jrContext) {
 		Assert.isNotNull(jasperDesign);
 		// Always remove previously set functions library imports
 		ExpressionEditorSupportUtil.removeFunctionsLibraryImports(jasperDesign);
@@ -191,7 +195,7 @@ public class ExpressionEditorSupportUtil {
 		boolean useImports = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(
 				ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS);
 		if(useImports){
-			ExpressionEditorSupportUtil.addFunctionsLibraryImports(jasperDesign);
+			ExpressionEditorSupportUtil.addFunctionsLibraryImports(jasperDesign,jrContext);
 		}
 	}
 	
@@ -199,10 +203,10 @@ public class ExpressionEditorSupportUtil {
 	 * Retrieves a list of needed static imports for expression functions depending 
 	 * on the specified list of {@link JRExpression}.
 	 * 
-	 * @param expressions a list of expressions from which to extract the needed static imports
+	 * @param expressions a collection of expressions from which to extract the needed static imports
 	 * @return a list of static imports that should be added to the main report
 	 */
-	public static List<String> getStaticImportsForExpressions(List<JRExpression> expressions){
+	public static List<String> getStaticImportsForExpressions(Collection<JRExpression> expressions){
 		Set<String> importsSet=new HashSet<String>();
 		for (JRExpression jre : expressions){
 			List<JRExprFunctionBean> functions = FunctionsLibraryUtil.findFunctions(jre);

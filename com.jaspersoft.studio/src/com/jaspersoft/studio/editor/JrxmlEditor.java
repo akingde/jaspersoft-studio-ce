@@ -359,7 +359,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		// This allow for example to "fix" the report, depending on the preference setting,
 		// also when simply saving the JRXML file without having edited an expression.
 		if (getJasperDesign() != null) {
-			ExpressionEditorSupportUtil.updateFunctionsLibraryImports(getJasperDesign());
+			ExpressionEditorSupportUtil.updateFunctionsLibraryImports(getJasperDesign(), jrContext);
 		}
 
 		final IFile resource = getCurrentFile();
