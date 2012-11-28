@@ -15,16 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.hive;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
+
 import org.osgi.framework.BundleContext;
 
 /*
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractJRUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.jaspersoft.studio.data.hive"; //$NON-NLS-1$
@@ -73,18 +71,8 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	public static Image getImage(String path) {
-		ImageRegistry imageRegistry = getDefault().getImageRegistry();
-		Image image = imageRegistry.get(path);
-		if (image == null) {
-			ImageDescriptor descriptor = AbstractUIPlugin
-					.imageDescriptorFromPlugin(PLUGIN_ID, path);
-			if (descriptor != null) {
-				image = descriptor.createImage();
-				if (image != null)
-					imageRegistry.put(path, image);
-			}
-		}
-		return image;
+	@Override
+	public String getPluginID() {
+		return PLUGIN_ID;
 	}
 }

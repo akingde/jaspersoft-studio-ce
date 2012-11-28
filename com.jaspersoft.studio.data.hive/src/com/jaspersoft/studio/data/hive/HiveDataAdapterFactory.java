@@ -80,7 +80,7 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/hive.png");
+			return Activator.getDefault().getImage("icons/hive.png");
 		}
 		return null;
 	}

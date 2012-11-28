@@ -61,7 +61,7 @@ public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements
 	@Override
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getImage("icons/hive.png");
+			return Activator.getDefault().getImage("icons/hive.png");
 		}
 		return null;
 	}
