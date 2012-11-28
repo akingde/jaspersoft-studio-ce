@@ -89,8 +89,8 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 	protected CrosstabWizardMeasurePage() {
 		super("crosstabmeasurepage"); //$NON-NLS-1$
 		setTitle(Messages.CrosstabWizardMeasurePage_measures);
-		setImageDescriptor(Activator
-				.getImageDescriptor("icons/wizard_details.png"));//$NON-NLS-1$
+		setImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/wizard_details.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardMeasurePage_description);
 		setPageComplete(false);
 	}

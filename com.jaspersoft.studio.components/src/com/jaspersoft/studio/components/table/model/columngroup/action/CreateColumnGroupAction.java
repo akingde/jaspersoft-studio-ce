@@ -63,10 +63,10 @@ public class CreateColumnGroupAction extends ACreateAction {
 		setText(Messages.CreateColumnAction_create_column_group);
 		setToolTipText(Messages.CreateColumnAction_create_column_group_tool_tip);
 		setId(CreateColumnGroupAction.ID);
-		setImageDescriptor(Activator
-				.getImageDescriptor("icons/table-join-row.png"));
-		setDisabledImageDescriptor(Activator
-				.getImageDescriptor("icons/table-join-row.png"));
+		setImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/table-join-row.png"));
+		setDisabledImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/table-join-row.png"));
 		setEnabled(false);
 	}
 

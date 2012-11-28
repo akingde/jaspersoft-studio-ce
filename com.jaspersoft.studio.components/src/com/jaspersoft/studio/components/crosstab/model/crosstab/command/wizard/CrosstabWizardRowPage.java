@@ -100,8 +100,8 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 	protected CrosstabWizardRowPage(String pagename) {
 		super(pagename);
 		setTitle(Messages.CrosstabWizardRowPage_rows);
-		setImageDescriptor(Activator
-				.getImageDescriptor("icons/wizard_rows.png"));//$NON-NLS-1$
+		setImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/wizard_rows.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardRowPage_description);
 		setPageComplete(false);
 	}

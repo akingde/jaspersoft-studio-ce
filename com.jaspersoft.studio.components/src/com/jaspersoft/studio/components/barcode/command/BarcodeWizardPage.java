@@ -207,8 +207,8 @@ public class BarcodeWizardPage extends WizardPage {
 		for (int i = 0; i < items.length; i++) {
 			TableItem ti = new TableItem(table, SWT.NONE);
 			ti.setText(items[i]);
-			ti.setImage(Activator
-					.getImage("/icons/resources/" + items[i] + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
+			ti.setImage(
+					Activator.getDefault().getImage("/icons/resources/" + items[i] + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		table.setRedraw(true);
@@ -225,8 +225,8 @@ public class BarcodeWizardPage extends WizardPage {
 		for (int i = 0; i < items.length; i++) {
 			TableItem ti = new TableItem(table, SWT.NONE);
 			ti.setText(items[i]);
-			ti.setImage(Activator
-					.getImage("/icons/resources/" + items[i] + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
+			ti.setImage(
+					Activator.getDefault().getImage("/icons/resources/" + items[i] + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		table.setRedraw(true);

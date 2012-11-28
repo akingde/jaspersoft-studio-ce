@@ -57,10 +57,10 @@ public class CreateColumnBeforeAction extends ACreateAction {
 		setText(Messages.CreateColumnBeforeAction_title);
 		setToolTipText(Messages.CreateColumnBeforeAction_desc);
 		setId(CreateColumnBeforeAction.ID);
-		setImageDescriptor(Activator
-				.getImageDescriptor("icons/table-insert-column.png")); //$NON-NLS-1$
-		setDisabledImageDescriptor(Activator
-				.getImageDescriptor("icons/table-insert-column.png")); //$NON-NLS-1$
+		setImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/table-insert-column.png")); //$NON-NLS-1$
+		setDisabledImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/table-insert-column.png")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 

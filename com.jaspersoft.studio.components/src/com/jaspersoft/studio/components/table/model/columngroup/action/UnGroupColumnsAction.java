@@ -60,10 +60,10 @@ public class UnGroupColumnsAction extends SelectionAction {
 		setText("Ungroup Columns");
 		setToolTipText("Ungroup columns");
 		setId(UnGroupColumnsAction.ID);
-		setImageDescriptor(Activator
-				.getImageDescriptor("icons/table-split-row.png"));
-		setDisabledImageDescriptor(Activator
-				.getImageDescriptor("icons/table-split-row.png"));
+		setImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/table-split-row.png"));
+		setDisabledImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/table-split-row.png"));
 		setEnabled(false);
 	}
 

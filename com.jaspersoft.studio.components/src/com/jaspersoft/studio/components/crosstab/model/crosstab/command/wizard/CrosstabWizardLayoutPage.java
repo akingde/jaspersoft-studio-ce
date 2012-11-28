@@ -53,7 +53,8 @@ public class CrosstabWizardLayoutPage extends WizardPage {
 	protected CrosstabWizardLayoutPage() {
 		super("crosstablayoutpage"); //$NON-NLS-1$
 		setTitle(Messages.CrosstabWizardLayoutPage_layout);
-		setImageDescriptor(Activator.getImageDescriptor("icons/wizard_preview.png"));//$NON-NLS-1$
+		setImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/wizard_preview.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardLayoutPage_description);
 	}
 

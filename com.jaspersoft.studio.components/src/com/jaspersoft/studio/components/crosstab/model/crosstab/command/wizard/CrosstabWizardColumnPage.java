@@ -107,8 +107,8 @@ public class CrosstabWizardColumnPage extends WizardFieldsPage {
 	protected CrosstabWizardColumnPage(String pagename) {
 		super(pagename);
 		setTitle(Messages.CrosstabWizardColumnPage_columns);
-		setImageDescriptor(Activator
-				.getImageDescriptor("icons/wizard_columns.png"));//$NON-NLS-1$
+		setImageDescriptor(
+				Activator.getDefault().getImageDescriptor("icons/wizard_columns.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardColumnPage_description);
 		setPageComplete(false);
 	}

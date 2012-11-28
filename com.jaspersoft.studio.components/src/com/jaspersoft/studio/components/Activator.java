@@ -15,16 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
+
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractJRUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.jaspersoft.studio.components"; //$NON-NLS-1$
@@ -66,35 +64,9 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
-	/**
-	 * Gets the image.
-	 * 
-	 * @param descriptor
-	 *          the descriptor
-	 * @return the image
-	 */
-	public static Image getImage(String path) {
-		ImageRegistry imageRegistry = getDefault().getImageRegistry();
-		Image image = imageRegistry.get(path);
-		if (image == null) {
-			ImageDescriptor imageDescriptor = getImageDescriptor(path);
-			if (imageDescriptor != null)
-				image = imageDescriptor.createImage();
-			if (image != null)
-				imageRegistry.put(path, image);
-			else
-				image = imageRegistry.get("icons/barcode.png"); //$NON-NLS-1$
-		}
-		return image;
-	}
-	/**
-	 * Returns an image descriptor for the image file at the given
-	 * plug-in relative path
-	 *
-	 * @param path the path
-	 * @return the image descriptor
-	 */
-	public static ImageDescriptor getImageDescriptor(String path) {
-		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+
+	@Override
+	public String getPluginID() {
+		return PLUGIN_ID;
 	}
 }
