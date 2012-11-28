@@ -98,7 +98,10 @@ public abstract class APropertyComboContributionItem extends ContributionItem im
 	protected abstract void setComboItems();
 
 	protected void setComboText(Object value) {
-		combo.setText(Misc.nvl(value, getDefaultValue()).toString());
+		if (combo.isDisposed())
+			model.getPropertyChangeSupport().removePropertyChangeListener(modelListener);
+		else
+			combo.setText(Misc.nvl(value, getDefaultValue()).toString());
 	}
 
 	protected abstract Object getDefaultValue();
