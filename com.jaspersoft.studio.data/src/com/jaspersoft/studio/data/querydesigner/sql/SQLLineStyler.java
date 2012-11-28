@@ -29,7 +29,8 @@ import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.wb.swt.ResourceManager;
+
+import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
  * This class provides the style information for the SQL text line being drawn.
