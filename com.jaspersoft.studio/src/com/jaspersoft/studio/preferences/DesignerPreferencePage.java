@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
@@ -30,6 +25,9 @@ import com.jaspersoft.studio.property.section.report.util.Unit;
  * 
  */
 public class DesignerPreferencePage extends FieldEditorOverlayPage {
+
+	public static final String DEFAULT_BORDERSTYLE = "shadow";
+	public static final String DEFAULT_MARGINCOLOR = "170,168,255";
 
 	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.DesignerPreferencePage.property";
 
@@ -54,11 +52,9 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				Messages.DesignerPreferencePage_element_design_border_style,
 				new String[][] {
 						{ Messages.DesignerPreferencePage_corners, "corners" }, { Messages.common_rectangle, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-1$ //$NON-NLS-2$
-		addField(new ComboFieldEditor(
-				P_PAGE_DESIGN_BORDER_STYLE,
-				Messages.DesignerPreferencePage_page_border_style,
-				new String[][] {
-						{ Messages.DesignerPreferencePage_fancy_shadow, "shadow" }, { Messages.DesignerPreferencePage_simple_shadow, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-1$ //$NON-NLS-2$
+		addField(new ComboFieldEditor(P_PAGE_DESIGN_BORDER_STYLE, Messages.DesignerPreferencePage_page_border_style,
+				new String[][] { { Messages.DesignerPreferencePage_fancy_shadow, DEFAULT_BORDERSTYLE },
+						{ Messages.DesignerPreferencePage_simple_shadow, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-1$ //$NON-NLS-2$
 
 		addField(new ComboFieldEditor(P_PAGE_DEFAULT_UNITS, Messages.DesignerPreferencePage_unit, Unit.getUnits2(),
 				getFieldEditorParent()));
@@ -77,11 +73,11 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		store.setDefault(P_PAGE_DESIGN_BORDER_STYLE, "shadow"); //$NON-NLS-1$
+		store.setDefault(P_PAGE_DESIGN_BORDER_STYLE, DEFAULT_BORDERSTYLE); //$NON-NLS-1$
 		store.setDefault(P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
-		store.setDefault(P_PAGE_DEFAULT_UNITS, "px"); //$NON-NLS-1$
+		store.setDefault(P_PAGE_DEFAULT_UNITS, "px"); //$NON-NLS-1$=
+		store.setDefault(P_CONTAINER_MARGIN_COLOR, DEFAULT_MARGINCOLOR); //$NON-NLS-1$
 		store.setDefault(P_SHOW_REPORT_BAND_NAMES, true); //$NON-NLS-1$
-		store.setDefault(P_CONTAINER_MARGIN_COLOR, "170,168,255"); //$NON-NLS-1$
 	}
 
 	@Override

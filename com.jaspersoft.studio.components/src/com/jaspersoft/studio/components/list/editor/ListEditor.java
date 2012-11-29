@@ -48,8 +48,8 @@ public class ListEditor extends AbstractVisualEditor {
 	public ListEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
 		setPartName(Messages.common_list);
-		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MList.getIconDescriptor()
-				.getIcon16()));
+		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(
+				MList.getIconDescriptor().getIcon16()));
 	}
 
 	/*
@@ -80,10 +80,8 @@ public class ListEditor extends AbstractVisualEditor {
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,
 				provider);
 
-		Boolean isRulerVisible = JaspersoftStudioPlugin
-				.getInstance()
-				.getPreferenceStore()
-				.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
+		Boolean isRulerVisible = jrContext
+				.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
 				isRulerVisible);
@@ -96,22 +94,22 @@ public class ListEditor extends AbstractVisualEditor {
 	@Override
 	protected void createEditorActions(ActionRegistry registry) {
 		super.createEditorActions(registry);
-		
+
 		@SuppressWarnings("unchecked")
 		List<String> selectionActions = getSelectionActions();
-		
+
 		IAction action = new DatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
-	
+
 	@Override
 	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
 		toolbarManager.add(getActionRegistry().getAction(DatasetAction.ID));
 		toolbarManager.add(new Separator());
 		super.contributeItemsToEditorTopToolbar(toolbarManager);
 	}
-	
+
 	@Override
 	protected List<String> getIgnorePalleteElements() {
 		List<String> lst = new ArrayList<String>();

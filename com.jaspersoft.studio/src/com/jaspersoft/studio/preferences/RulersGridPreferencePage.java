@@ -1,21 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
@@ -28,11 +24,13 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+
 /*
  * 
  */
 public class RulersGridPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
+	public static final String DEFAULT_GRIDCOLOR = "192,192,192";
 	public static final String P_PAGE_RULERGRID_SHOWRULER = "pageRulerGrid_SHOWRULER"; //$NON-NLS-1$
 	public static final String P_PAGE_RULERGRID_SNAPTOGUIDES = "pageRulerGrid_SNAPTOGUIDES"; //$NON-NLS-1$
 	public static final String P_PAGE_RULERGRID_SHOWGRID = "pageRulerGrid_SHOWGRID"; //$NON-NLS-1$
@@ -40,6 +38,7 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 	public static final String P_PAGE_RULERGRID_SNAPTOGEOMETRY = "pageRulerGrid_SNAPTOGEOMETRY"; //$NON-NLS-1$
 	public static final String P_PAGE_RULERGRID_GRIDSPACEX = "pageRulerGrid_GRIDSPACEX"; //$NON-NLS-1$
 	public static final String P_PAGE_RULERGRID_GRIDSPACEY = "pageRulerGrid_GRIDSPACEY"; //$NON-NLS-1$
+	public static final String P_PAGE_GRID_COLOR = "gridColor"; //$NON-NLS-1$
 
 	public RulersGridPreferencePage() {
 		super(GRID);
@@ -83,6 +82,8 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 		spaceY.setValidRange(2, 100);
 		addField(spaceY);
 
+		addField(new ColorFieldEditor(P_PAGE_GRID_COLOR, "Grid Color", group));
+
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
@@ -94,6 +95,7 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 		store.setDefault(P_PAGE_RULERGRID_SNAPTOGEOMETRY, new Boolean(true));
 		store.setDefault(P_PAGE_RULERGRID_GRIDSPACEX, new Integer(10));
 		store.setDefault(P_PAGE_RULERGRID_GRIDSPACEY, new Integer(10));
+		store.setDefault(P_PAGE_GRID_COLOR, DEFAULT_GRIDCOLOR); //$NON-NLS-1$
 	}
 
 	/*

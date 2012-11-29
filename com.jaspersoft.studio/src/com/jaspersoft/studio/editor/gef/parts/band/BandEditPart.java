@@ -53,7 +53,7 @@ import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.FrameFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
-import com.jaspersoft.studio.editor.gef.parts.PrefFigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.APrefFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.SnapToGeometryThreshold;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredRectangle;
@@ -80,7 +80,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav, Giulio Toffoli
  */
-public class BandEditPart extends PrefFigureEditPart implements PropertyChangeListener, IContainerPart, IContainer,
+public class BandEditPart extends APrefFigureEditPart implements PropertyChangeListener, IContainerPart, IContainer,
 		IDatasetDialogSupport {
 
 	@Override
@@ -414,6 +414,7 @@ public class BandEditPart extends PrefFigureEditPart implements PropertyChangeLi
 			jConfig = getModel().getJasperConfiguration();
 		boolean showBandName = jConfig.getPropertyBoolean(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES, true);
 		figure.setShowBandName(showBandName);
+		refreshVisuals();
 	}
 
 	public Dimension getContaierSize() {

@@ -30,12 +30,12 @@ import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.part.editpolicy.CrosstabCellMoveEditPolicy;
 import com.jaspersoft.studio.components.crosstab.part.editpolicy.CrosstabCellResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
-import com.jaspersoft.studio.editor.gef.parts.PrefFigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.APrefFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.IContainer;
 
-public abstract class ACrosstabCellEditPart extends PrefFigureEditPart
+public abstract class ACrosstabCellEditPart extends APrefFigureEditPart
 		implements IContainerPart, IContainer {
 
 	@Override

@@ -38,9 +38,8 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.EmptyCellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.WhenNoDataCellFigure;
@@ -62,7 +61,6 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -252,35 +250,16 @@ public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
 		return null;
 	}
 
-	private JasperReportsConfiguration jConfig;
-	private CellPreferenceListener prefChangelistener;
-
-	private final class CellPreferenceListener implements
-			IPropertyChangeListener {
-		public void propertyChange(
-				org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(
-					DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES)) {
-				setBandNameShowing(getFigure());
-			} else if (event.getProperty().equals(
-					DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE))
-				setPrefsBorder(getFigure());
-		}
-	}
-
 	@Override
-	public void activate() {
-		super.activate();
-		prefChangelistener = new CellPreferenceListener();
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-				.addPropertyChangeListener(prefChangelistener);
-	}
-
-	@Override
-	public void deactivate() {
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-				.removePropertyChangeListener(prefChangelistener);
-		super.deactivate();
+	protected void handlePreferenceChanged(PropertyChangeEvent event) {
+		if (event.getProperty().equals(
+				DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES))
+			setBandNameShowing(getFigure());
+		else if (event.getProperty().equals(
+				DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE))
+			setPrefsBorder(getFigure());
+		else
+			super.handlePreferenceChanged(event);
 	}
 
 	@Override

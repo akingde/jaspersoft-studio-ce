@@ -7,7 +7,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 
-public abstract class PrefFigureEditPart extends FigureEditPart implements IPrefEditPart {
+public abstract class APrefFigureEditPart extends FigureEditPart implements IPrefEditPart {
 	@Override
 	protected IFigure createFigure() {
 		figure = super.createFigure();
@@ -21,7 +21,8 @@ public abstract class PrefFigureEditPart extends FigureEditPart implements IPref
 		// DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES)) {
 		// setBandNameShowing(getFigure());
 		// } else
-		if (event.getProperty().equals(DesignerPreferencePage.P_CONTAINER_MARGIN_COLOR)) {
+		String p = event.getProperty();
+		if (p.equals(DesignerPreferencePage.P_CONTAINER_MARGIN_COLOR)) {
 			setMarginColor();
 		} else
 			super.handlePreferenceChanged(event);
@@ -37,8 +38,9 @@ public abstract class PrefFigureEditPart extends FigureEditPart implements IPref
 	protected void setMarginColor() {
 		if (jConfig == null)
 			jConfig = getModel().getJasperConfiguration();
-		String mcolor = jConfig.getProperty(DesignerPreferencePage.P_CONTAINER_MARGIN_COLOR, "");
-		marginColor = SWTResourceManager.getColor(StringConverter.asRGB(mcolor, IPrefEditPart.DEFAULT_MARGINCOLOR));
+		String mcolor = jConfig.getProperty(DesignerPreferencePage.P_CONTAINER_MARGIN_COLOR,
+				DesignerPreferencePage.DEFAULT_MARGINCOLOR);
+		marginColor = SWTResourceManager.getColor(StringConverter.asRGB(mcolor));
 		if (figure != null) {
 			setupMarginColor();
 			refreshVisuals();

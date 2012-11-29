@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts;
 
@@ -39,7 +34,10 @@ import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.rulers.RulerProvider;
+import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
@@ -57,6 +55,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -70,8 +69,15 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE))
+			String p = event.getProperty();
+			if (p.equals(DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE))
 				setPrefsBorder(getFigure());
+			else if (p.equals(RulersGridPreferencePage.P_PAGE_GRID_COLOR)
+					|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWGRID)
+					|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEY)
+					|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX)) {
+				refreshGridLayer();
+			}
 		}
 	}
 
@@ -113,13 +119,13 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	public void activate() {
 		super.activate();
 		preferenceListener = new PreferenceListener();
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
+		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 	}
 
 	@Override
 	public void deactivate() {
 		if (preferenceListener != null)
-			JaspersoftStudioPlugin.getInstance().getPreferenceStore().removePropertyChangeListener(preferenceListener);
+			JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 		super.deactivate();
 	}
 
@@ -128,9 +134,10 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	protected void setPrefsBorder(IFigure rect) {
 		if (jConfig == null)
 			jConfig = ((APropertyNode) getModel()).getJasperConfiguration();
-		String pref = jConfig.getProperty(DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE, "shadow"); //$NON-NLS-1$
+		String pref = jConfig.getProperty(DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE,
+				DesignerPreferencePage.DEFAULT_BORDERSTYLE); //$NON-NLS-1$
 
-		if (pref.equals("shadow")) //$NON-NLS-1$
+		if (pref.equals(DesignerPreferencePage.DEFAULT_BORDERSTYLE)) //$NON-NLS-1$
 			rect.setBorder(new ShadowBorder());
 		else
 			rect.setBorder(new SimpleShadowBorder());
@@ -153,6 +160,12 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		grid.setOrigin((Point) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ORIGIN));
 		grid.setSpacing((Dimension) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_SPACING));
 		grid.setVisible(visible);
+		if (jConfig != null) {
+			String mcolor = jConfig.getProperty(RulersGridPreferencePage.P_PAGE_GRID_COLOR,
+					RulersGridPreferencePage.DEFAULT_GRIDCOLOR);
+			Color fg = SWTResourceManager.getColor(StringConverter.asRGB(mcolor));
+			grid.setForegroundColor(fg);
+		}
 		getFigure().repaint();
 	}
 

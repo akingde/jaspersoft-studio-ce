@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.util;
 
@@ -21,7 +16,6 @@ import java.util.List;
 import org.eclipse.core.internal.resources.ProjectPreferences;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.QualifiedName;
@@ -172,7 +166,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 			// Cache the page id
 			pageId = JaspersoftStudioPlugin.getUniqueIdentifier();// getPageId();
 			// Create an overlay preference store and fill it with properties
-			overlayStore = new ScopedPreferenceStore(new ProjectScope((IProject) getElement()), pageId);
+			overlayStore = JaspersoftStudioPlugin.getInstance().getPreferenceStore((IProject) getElement(), pageId);
 			// overlayStore = new PropertyStore((IResource) getElement(), super.getPreferenceStore(), pageId);
 			// Set overlay store as current preference store
 			PreferenceInitializer.initDefaultProperties(overlayStore);

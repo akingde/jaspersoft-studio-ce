@@ -57,8 +57,8 @@ public class TableEditor extends AbstractVisualEditor {
 	public TableEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
 		setPartName(Messages.TableEditor_table);
-		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MTable.getIconDescriptor()
-				.getIcon16()));
+		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(
+				MTable.getIconDescriptor().getIcon16()));
 	}
 
 	/*
@@ -89,10 +89,8 @@ public class TableEditor extends AbstractVisualEditor {
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,
 				provider);
 
-		Boolean isRulerVisible = JaspersoftStudioPlugin
-				.getInstance()
-				.getPreferenceStore()
-				.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
+		Boolean isRulerVisible = jrContext
+				.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
 				isRulerVisible);
@@ -148,7 +146,7 @@ public class TableEditor extends AbstractVisualEditor {
 		action = new DeleteColumnCellAction(this);
 		registry.registerAction(action);
 		selectionActions.add(DeleteColumnCellAction.ID);
-		
+
 		action = new DatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());

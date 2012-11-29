@@ -136,11 +136,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		}
 		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 		preferenceListener = new PreferenceListener();
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
+		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 	}
 
 	public void dispose() {
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().removePropertyChangeListener(preferenceListener);
+		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 		if (javaclassloader != null)
 			javaclassloader.removeClasspathListener(classpathlistener);
 	}

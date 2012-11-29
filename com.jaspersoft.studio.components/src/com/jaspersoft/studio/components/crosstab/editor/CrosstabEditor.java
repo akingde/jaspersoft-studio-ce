@@ -86,10 +86,7 @@ public class CrosstabEditor extends AbstractVisualEditor {
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,
 				provider);
 
-		Boolean isRulerVisible = JaspersoftStudioPlugin
-				.getInstance()
-				.getPreferenceStore()
-				.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
+		Boolean isRulerVisible = jrContext.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
 				isRulerVisible);

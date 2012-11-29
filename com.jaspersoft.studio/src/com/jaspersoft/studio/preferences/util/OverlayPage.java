@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.util;
 
+import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
@@ -41,6 +43,8 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 
 public abstract class OverlayPage extends PropertyPage {
 
@@ -142,7 +146,7 @@ public abstract class OverlayPage extends PropertyPage {
 			// Cache the page id
 			pageId = getPageId();
 			// Create an overlay preference store and fill it with properties
-			overlayStore = new ScopedPreferenceStore(new ProjectScope((IProject) getElement()), pageId);
+			overlayStore = JaspersoftStudioPlugin.getInstance().getPreferenceStore( (IProject) getElement() , pageId);
 			// Set overlay store as current preference store
 		}
 		super.createControl(parent);

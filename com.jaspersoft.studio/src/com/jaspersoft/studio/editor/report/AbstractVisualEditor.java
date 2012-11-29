@@ -53,7 +53,6 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -113,7 +112,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		IGraphicalEditor {
 	private Image partImage = JaspersoftStudioPlugin.getInstance().getImage(MReport.getIconDescriptor().getIcon16());
 	private FlyoutPreferences palettePreferences;
-	private JasperReportsConfiguration jrContext;
+	protected JasperReportsConfiguration jrContext;
 
 	/**
 	 * Class that extend a default domain and give the possibility to check if a keyboard key is held down
@@ -316,14 +315,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	protected void createAdditionalActions() {
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		// Show Grid Action
-		IPreferenceStore prefs = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-		Boolean isGridVisible = prefs.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWGRID);
-		Boolean isSnapToGuides = prefs.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGUIDES);
-		Boolean isSnapToGrid = prefs.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGRID);
-		Boolean isSnapToGeometry = prefs.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGEOMETRY);
+		Boolean isGridVisible = jrContext.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWGRID, true);
+		Boolean isSnapToGuides = jrContext.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGUIDES, true);
+		Boolean isSnapToGrid = jrContext.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGRID, true);
+		Boolean isSnapToGeometry = jrContext.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGEOMETRY,
+				true);
 
-		int gspaceX = prefs.getInt(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX);
-		int gspaceY = prefs.getInt(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEY);
+		int gspaceX = jrContext.getPropertyInteger(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX, 10);
+		int gspaceY = jrContext.getPropertyInteger(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEY, 10);
 
 		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_ENABLED, isSnapToGrid.booleanValue());
 		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE, isGridVisible.booleanValue());
