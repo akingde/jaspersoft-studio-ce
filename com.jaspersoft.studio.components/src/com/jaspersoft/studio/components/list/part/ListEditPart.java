@@ -17,8 +17,10 @@ package com.jaspersoft.studio.components.list.part;
 
 import java.util.Collection;
 
+import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -29,6 +31,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.CreateRequest;
 
 import com.jaspersoft.studio.components.list.ListComponentFactory;
+import com.jaspersoft.studio.components.list.figure.ListFigure;
 import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
@@ -41,8 +44,48 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 
+/**
+ * 
+ * @author Chicu Veaceslav & Orlandin Marco
+ *
+ */
 public class ListEditPart extends EditableFigureEditPart {
 
+	/**
+	 * Create a ListFigure and initialize it. The listfigure is the type of 
+	 * the figure of this edit part
+	 */
+	protected IFigure createFigure() {
+		ListFigure rect = new ListFigure();
+		setupListFigure(rect);
+		setPrefsBorder(rect);
+		setupFigure(rect);
+		figure = rect;
+		return rect;
+	}
+	
+	/**
+	 * Set in the list figure the size of the cell
+	 * @param rect a list figure
+	 */
+	protected void setupListFigure(IFigure rect) {
+		MList model = (MList)getModel();
+		int listHeight = (Integer)(model.getPropertyValue(MList.PREFIX + DesignListContents.PROPERTY_HEIGHT));
+		int listWidth = (Integer)(model.getPropertyValue(MList.PREFIX + DesignListContents.PROPERTY_WIDTH));
+		ListFigure lfig = (ListFigure) rect;
+		lfig.setCellHeight(listHeight);
+		lfig.setCellWidth(listWidth);
+	}
+	
+	/**
+	 * Reset the size of the cell in the list figure and refresh the element
+	 */
+	@Override
+	public void refreshVisuals() {
+		setupListFigure(getFigure());
+		super.refreshVisuals();
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

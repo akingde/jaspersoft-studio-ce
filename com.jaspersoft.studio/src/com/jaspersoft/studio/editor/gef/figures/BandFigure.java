@@ -11,9 +11,11 @@
 package com.jaspersoft.studio.editor.gef.figures;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.TexturePaint;
+import java.awt.image.BufferedImage;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.FreeformLayout;
@@ -23,6 +25,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.jaspersoft.studio.editor.gef.decorator.pdf.PDFDecorator;
 import com.jaspersoft.studio.editor.gef.texture.EmptyTexture;
 import com.jaspersoft.studio.editor.gef.util.FigureTextWriter;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
@@ -40,6 +43,11 @@ public class BandFigure extends RectangleFigure {
 	private int marginRight = 0;
 
 	private boolean drawColumn = false;
+	
+	/**
+	 * Paint used to color the restricted area
+	 */
+	private static TexturePaint restrictedAreaTexture = null; 
 
 	private FigureTextWriter twriter = new FigureTextWriter();
 
@@ -101,6 +109,24 @@ public class BandFigure extends RectangleFigure {
 		this.drawColumn = drawColumn;
 		createTexture();
 	}
+	
+	/**
+	 * Method used to get the paint for the restricted area (all columns after the first). The paint is 
+	 * cached in a static variable. If the variable is null the the paint has to be loaded from an image 
+	 * file 
+	 * @return Paint used to color a restricted area (all columns after the first)
+	 */
+  private  static TexturePaint getRestrictedAreaTexture()
+  {
+      if ( restrictedAreaTexture == null )
+      {
+              Image img2 = (new javax.swing.ImageIcon(PDFDecorator.class.getResource("/icons/resources/restricted_area.png"))).getImage();
+              BufferedImage img = new BufferedImage(14, 14, BufferedImage.TYPE_INT_ARGB);
+              img.getGraphics().drawImage(img2, 0, 0, null);
+              restrictedAreaTexture = new TexturePaint( img, new java.awt.Rectangle(0,0, 14, 14) );
+      }
+      return restrictedAreaTexture;
+  }
 
 	/*
 	 * (non-Javadoc)
@@ -130,8 +156,14 @@ public class BandFigure extends RectangleFigure {
 			if (drawColumn) {
 				int x = marginLeft + ReportPageFigure.PAGE_BORDER.left;
 				for (int i = 0; i < columnNumber; i++) {
-					if (i > 0)
+					if (i > 0){
 						g.drawLine(x, b.y, x, b.y + b.height + 1);
+						//Color the restricted area
+						Paint oldPaint = g.getPaint();
+						g.setPaint(getRestrictedAreaTexture());
+						g.fillRect(x, b.y, columnWidth, b.y + b.height + 1);
+						g.setPaint(oldPaint);
+					}
 
 					x += columnWidth;
 					if (i < columnNumber - 1) {
