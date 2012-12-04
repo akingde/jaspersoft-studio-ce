@@ -191,8 +191,10 @@ public class ExpressionEditorSupportUtil {
 		// Always remove previously set functions library imports
 		ExpressionEditorSupportUtil.removeFunctionsLibraryImports(jasperDesign);
 		// Add the imports needed for the functions library, if preference is set
-		boolean useImports = jrContext
-				.getPropertyBoolean(ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS);
+		// FIXME - Temporary fix until Slavic solve the preference store issue...
+		boolean useImports =  JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(
+				ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS);
+		
 		if (useImports) {
 			ExpressionEditorSupportUtil.addFunctionsLibraryImports(jasperDesign, jrContext);
 		}
