@@ -44,20 +44,23 @@ public abstract class ABooleanPropertyAction extends SelectionAction {
 
 	public void run() {
 		execute(getCommand());
+		setChecked(!isChecked());
 	}
 
 	private Command getCommand() {
 		List<?> editparts = getSelectedObjects();
 		if (editparts.isEmpty())
 			return null;
+		boolean checked = !isChecked();
 		CompoundCommand cc = new CompoundCommand(getText());
 		for (Object obj : editparts) {
 			if (obj instanceof EditPart)
 				obj = ((EditPart) obj).getModel();
 
-			if (checkSelection(obj))
-				cc.add(createCommand(obj, !isChecked()));
-			else
+			if (checkSelection(obj)) {
+
+				cc.add(createCommand(obj, checked));
+			} else
 				return null;
 		}
 		return cc;
@@ -85,7 +88,6 @@ public abstract class ABooleanPropertyAction extends SelectionAction {
 		public void propertyChange(PropertyChangeEvent evt) {
 			refresh();
 		}
-
 	}
 
 	private ModelListener modelListener = new ModelListener();
