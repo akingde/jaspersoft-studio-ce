@@ -152,7 +152,7 @@ public final class PageFormatDialog extends FormDialog {
 			space.setValue(mspace); 
 		space.setMax(maxspace);
 
-		int cw = (int) Math.ceil((double) (pagespace - nrcolspace * space.getValue()) / (cols.getSelection()));
+		int cw = (int) Math.floor((double) (pagespace - nrcolspace * space.getValue()) / (cols.getSelection()));
 		if (!ignoreEvents)
 			cwidth.setValue(cw);
 		cwidth.setMax(cw);
