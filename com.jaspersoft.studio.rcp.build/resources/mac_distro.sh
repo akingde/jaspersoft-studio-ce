@@ -28,11 +28,12 @@
 #tar -czvf jss-package-template.tgz jaspersoftstudio.dmg.sparsebundle
 
 # Distro creation from template ---------------------------
-
 hdiutil detach "/Volumnes/Jaspersoft Studio"
 tar -xzvf jss-package-template.tgz
 tar -xzvf JaspersoftStudio-macosx.cocoa.x86_64.zip
 hdiutil mount jaspersoftstudio.dmg.sparsebundle
+
+#Signing the application
 
 # Copy all the files
 cp -Rf jaspersoftstudio/*  "/Volumes/Jaspersoft Studio/Jaspersoft Studio/"
