@@ -25,7 +25,13 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
 
+import org.eclipse.core.internal.preferences.DefaultPreferences;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.ui.IEditorPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -191,10 +197,9 @@ public class ExpressionEditorSupportUtil {
 		// Always remove previously set functions library imports
 		ExpressionEditorSupportUtil.removeFunctionsLibraryImports(jasperDesign);
 		// Add the imports needed for the functions library, if preference is set
-		// FIXME - Temporary fix until Slavic solve the preference store issue...
-		boolean useImports =  JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(
-				ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS);
-		
+
+		boolean useImports = jrContext
+				.getPropertyBoolean(ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS);
 		if (useImports) {
 			ExpressionEditorSupportUtil.addFunctionsLibraryImports(jasperDesign, jrContext);
 		}

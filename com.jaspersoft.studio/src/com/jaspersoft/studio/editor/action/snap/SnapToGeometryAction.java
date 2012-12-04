@@ -10,27 +10,23 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.snap;
 
+import org.eclipse.gef.ui.actions.GEFActionConstants;
+
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class SnapToGridAction extends ACheckResourcePrefAction {
-	public static String ID = "ID_SNAP_TO_GRID"; //$NON-NLS-1$
+public class SnapToGeometryAction extends ACheckResourcePrefAction {
 
-	/**
-	 * Constructor
-	 * 
-	 * @param diagramViewer
-	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
-	 */
-	public SnapToGridAction(JasperReportsConfiguration jrConfig) {
-		super(Messages.common_snap_to_grid, jrConfig);
-		setToolTipText(Messages.SnapToGridAction_snap_to_grid_tool_tip);
-		setId(ID);
+	public SnapToGeometryAction(JasperReportsConfiguration jrConfig) {
+		super(Messages.common_snap_to_guides, jrConfig);
+		setText("Snap To Geometry");
+		setToolTipText("Snap To Geometry");
+		setId(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY);
 	}
 
 	@Override
 	protected String getProperty() {
-		return RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGRID;
+		return RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGEOMETRY;
 	}
 }

@@ -37,8 +37,6 @@ import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.MatchHeightAction;
 import org.eclipse.gef.ui.actions.MatchWidthAction;
-import org.eclipse.gef.ui.actions.ToggleRulerVisibilityAction;
-import org.eclipse.gef.ui.actions.ToggleSnapToGeometryAction;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
@@ -82,7 +80,9 @@ import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
 import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
 import com.jaspersoft.studio.editor.action.snap.ShowGridAction;
+import com.jaspersoft.studio.editor.action.snap.ShowRullersAction;
 import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
+import com.jaspersoft.studio.editor.action.snap.SnapToGeometryAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.action.text.BoldAction;
@@ -331,24 +331,24 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		graphicalViewer.setProperty(SnapToGuidesAction.ID, isSnapToGuides);
 		graphicalViewer.setProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED, isSnapToGeometry.booleanValue());
 
-		IAction showGrid = new ShowGridAction(graphicalViewer);
+		IAction showGrid = new ShowGridAction(jrContext);
 		getActionRegistry().registerAction(showGrid);
 
-		SnapToGridAction snapGridAction = new SnapToGridAction(graphicalViewer);
+		SnapToGridAction snapGridAction = new SnapToGridAction(jrContext);
 		getActionRegistry().registerAction(snapGridAction);
 
-		SizeGridAction sizeGridAction = new SizeGridAction(graphicalViewer);
+		SizeGridAction sizeGridAction = new SizeGridAction(jrContext);
 		getActionRegistry().registerAction(sizeGridAction);
 
 		// snap to geometry
-		IAction snapAction = new ToggleSnapToGeometryAction(graphicalViewer);
+		IAction snapAction = new SnapToGeometryAction(jrContext);
 		getActionRegistry().registerAction(snapAction);
 
-		snapAction = new SnapToGuidesAction(graphicalViewer);
+		snapAction = new SnapToGuidesAction(jrContext);
 		getActionRegistry().registerAction(snapAction);
 
 		// show rullers
-		IAction showRulers = new ToggleRulerVisibilityAction(graphicalViewer);
+		IAction showRulers = new ShowRullersAction(jrContext);
 		getActionRegistry().registerAction(showRulers);
 		// zoom manager actions
 		ZoomManager zoomManager = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());

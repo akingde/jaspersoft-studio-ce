@@ -24,6 +24,7 @@ import java.util.Set;
 
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
+import net.sf.jasperreports.eclipse.util.ResourceScope;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -41,6 +42,7 @@ import net.sf.jasperreports.repo.RepositoryService;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
@@ -112,8 +114,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			put(IEditorContributor.KEY_FILE, file);
 			project = file.getProject();
 			if (project != null) {
-				lookupOrders = new String[] { ProjectScope.SCOPE, InstanceScope.SCOPE };
-				contexts = new IScopeContext[] { new ProjectScope(project), INSTANCE_SCOPE };
+				lookupOrders = new String[] { ResourceScope.SCOPE, ProjectScope.SCOPE, InstanceScope.SCOPE };
+				contexts = new IScopeContext[] { new ResourceScope(file), new ProjectScope(project), INSTANCE_SCOPE };
 				try {
 					if (project.getNature(JavaCore.NATURE_ID) != null) {
 						ClassLoader tcl = Thread.currentThread().getContextClassLoader();
@@ -266,6 +268,24 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			val = service.getString(qualifier, key, null, contexts);
 		if (val == null)
 			val = service.getString(qualifier, PROPERTY_JRPROPERTY_PREFIX + key, null, contexts);
+		if (val == null) {
+			IResource file = (IResource) get(IEditorContributor.KEY_FILE);
+			if (file != null) {
+				String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier).getString(key);
+				val = t != null && t.isEmpty() ? null : t;
+				if (val == null) {
+					IResource project = file.getProject();
+					if (project != null) {
+						t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(project, qualifier).getString(key);
+						val = t != null && t.isEmpty() ? null : t;
+					}
+				}
+			}
+		}
+		if (val == null) {
+			String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(key);
+			val = t != null && t.isEmpty() ? null : t;
+		}
 		if (val == null)
 			val = props.getProperty(key);
 		if (val == null)

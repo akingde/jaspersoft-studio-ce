@@ -1,24 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.snap;
 
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.SnapToGrid;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -32,16 +24,16 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class SizeGridAction extends Action {
+public class SizeGridAction extends AResourcePreferenceAction {
 	private final class SizeDialog extends FormDialog {
 		private int w;
 		private int h;
 
 		private SizeDialog(Shell shell, Dimension d) {
 			super(shell);
-
-			setText(Messages.SizeGridAction_grid_editor);
 			w = d.width;
 			h = d.height;
 		}
@@ -94,7 +86,6 @@ public class SizeGridAction extends Action {
 	}
 
 	public static final String ID = "sizegridaction"; //$NON-NLS-1$
-	private GraphicalViewer diagramViewer;
 
 	/**
 	 * Constructor
@@ -102,27 +93,25 @@ public class SizeGridAction extends Action {
 	 * @param diagramViewer
 	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
 	 */
-	public SizeGridAction(GraphicalViewer diagramViewer) {
-		super(Messages.SizeGridAction_set_grid_size);
-		this.diagramViewer = diagramViewer;
+	public SizeGridAction(JasperReportsConfiguration jrConfig) {
+		super(jrConfig);
+		setText(Messages.SizeGridAction_set_grid_size);
 		setToolTipText(Messages.SizeGridAction_set_grid_size_tool_tip);
 		setId(ID);
-		setActionDefinitionId(ID);
 	}
 
-	/**
-	 * @see org.eclipse.jface.action.IAction#run()
-	 */
 	@Override
-	public void run() {
-		Dimension dp = (Dimension) diagramViewer.getProperty(SnapToGrid.PROPERTY_GRID_SPACING);
-		if (dp == null)
-			dp = new Dimension(10, 10);
-		final Dimension d = dp;
+	protected void doRun() throws Exception {
+		int x = getStore().getInt(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX);
+		int y = getStore().getInt(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEY);
 
-		SizeDialog dlg = new SizeDialog(Display.getDefault().getActiveShell(), d);
+		SizeDialog dlg = new SizeDialog(Display.getDefault().getActiveShell(), new Dimension(x, y));
 		if (dlg.open() == Window.OK) {
-			diagramViewer.setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(dlg.getWidth(), dlg.getHeight()));
+			store.setValue(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX, dlg.getWidth());
+			store.setValue(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEY, dlg.getHeight());
+
+			store.save();
 		}
 	}
+
 }

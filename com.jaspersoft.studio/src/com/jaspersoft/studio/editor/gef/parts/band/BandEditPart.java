@@ -35,7 +35,6 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
@@ -44,10 +43,8 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.ui.views.properties.IPropertySource;
 
-import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.APrefFigureEditPart;
@@ -68,6 +65,7 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -174,21 +172,20 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 	public Object getAdapter(Class key) {
 		if (key == SnapToHelper.class) {
 			List<SnapToHelper> snapStrategies = new ArrayList<SnapToHelper>();
-			Boolean val = (Boolean) getViewer().getProperty(RulerProvider.PROPERTY_RULER_VISIBILITY);
-			Boolean stg = (Boolean) getViewer().getProperty(SnapToGuidesAction.ID);
-			if (val != null && val.booleanValue() && stg != null && stg.booleanValue())
+			Boolean val = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER, Boolean.TRUE);
+			Boolean stg = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGUIDES, Boolean.TRUE);
+			if (val.booleanValue() && stg != null && stg.booleanValue())
 				snapStrategies.add(new SnapToGuides(this));
-			val = (Boolean) getViewer().getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED);
-			if (val != null && val.booleanValue()) {
+			val = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGEOMETRY, Boolean.TRUE);
+			if (val.booleanValue()) {
 
 				SnapToGeometryThreshold snapper = new SnapToGeometryThreshold(this);
 				snapper.setThreshold(2.0);
 				snapStrategies.add(snapper);
 			}
-			val = (Boolean) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ENABLED);
-			if (val != null && val.booleanValue()) {
+			val = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGRID, Boolean.TRUE);
+			if (val.booleanValue())
 				snapStrategies.add(new SnapToGrid(this));
-			}
 
 			if (snapStrategies.size() == 0)
 				return null;

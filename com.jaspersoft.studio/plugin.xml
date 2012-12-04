@@ -199,6 +199,13 @@
       </perspectiveExtension>
    </extension>
    <extension
+         point="org.eclipse.core.runtime.preferences">
+      <scope
+            class="net.sf.jasperreports.eclipse.util.ResourcePreferences"
+            name="resource">
+      </scope>
+   </extension>
+   <extension
          id="com.jaspersoft.studio.preferences"
          name="Jaspersoft Studio Preferences"
          point="org.eclipse.ui.preferencePages">
@@ -309,124 +316,169 @@
          name="Jaspersoft Studio Properties"
          point="org.eclipse.ui.propertyPages">
       <page
-            adaptable="true"
             class="com.jaspersoft.studio.preferences.StudioPreferencePage"
             id="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
-            name="Jaspersoft Studio"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="Jaspersoft Studio">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
             class="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
-            name="Exporters"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="Exporters">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
             class="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage.property"
-            name="PDF Exporter"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="PDF Exporter">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
             class="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage.property"
-            name="HTML Exporter"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="HTML Exporter">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
             class="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage.property"
-            name="CSV Exporter"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="CSV Exporter">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
             class="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage.property"
-            name="CSV Metadata Exporter"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="CSV Metadata Exporter">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
             class="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage.property"
-            name="Text Exporter"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="Text Exporter">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
             class="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage.property"
-            name="Excel Exporter"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="Excel Exporter">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
             class="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage.property"
-            name="XML Exporter"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="XML Exporter">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
             class="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage.property"
-            name="DOCX Exporter"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="DOCX Exporter">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
             class="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage.property"
-            name="G2D Exporter"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="G2D Exporter">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
             class="com.jaspersoft.studio.preferences.PropertiesPreferencePage"
             id="com.jaspersoft.studio.preferences.PropertiesPreferencePage.property"
-            name="Properties"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="Properties">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-      		adaptable="true"
             category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
             class="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             id="com.jaspersoft.studio.preferences.DesignerPreferencePage.property"
             name="Report Designer"
-            objectClass="org.eclipse.core.resources.IProject"
             >
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>       
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
             class="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
             id="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage.property"
-            name="Virtualizer"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="Virtualizer">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
       <page
-            adaptable="true"
             category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
             class="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
             id="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage.property"
-            name="Fonts"
-            objectClass="org.eclipse.core.resources.IProject">
+            name="Fonts">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.project">
+            </reference>
+         </enabledWhen>
       </page>
       <page
             id="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage.property" 
@@ -438,6 +490,17 @@
 	                  type="org.eclipse.core.resources.IProject">
 	            </adapt>
             </enabledWhen>
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.RulersGridPreferencePage"
+            id="com.jaspersoft.studio.preferences.RulersGridPreferencePage.property"
+            name="Rulers And Grid Preferences">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
    </extension>
    <extension
@@ -1489,5 +1552,29 @@
                 toolitemID="com.jaspersoft.studio.editor.action.text.strike">
           </toolitem>
        </toolitemsets>
+    </extension>
+    <extension
+          point="org.eclipse.core.expressions.definitions">
+       <definition
+             id="com.jaspersoft.studio.projectorjrxml">
+          <or>
+             <instanceof
+                   value="org.eclipse.core.resources.IProject">
+             </instanceof> 
+                <adapt
+                      type="org.eclipse.core.resources.IFile">
+                   <test
+                         property="org.eclipse.core.resources.name"
+                         value="*.jrxml">
+                   </test>
+                </adapt> 
+          </or>
+       </definition>
+       <definition
+             id="com.jaspersoft.studio.project">
+          <instanceof
+                value="org.eclipse.core.resources.IProject">
+          </instanceof>
+       </definition>
     </extension>
 </plugin>

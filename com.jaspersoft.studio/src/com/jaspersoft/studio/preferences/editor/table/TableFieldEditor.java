@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.editor.table;
 
@@ -676,11 +671,16 @@ public abstract class TableFieldEditor extends FieldEditor {
 	public void setEnabled(boolean enabled, Composite parent) {
 		super.setEnabled(enabled, parent);
 		getTableControl(parent).setEnabled(enabled);
-		addButton.setEnabled(enabled);
-		duplicateButton.setEnabled(enabled);
-		removeButton.setEnabled(enabled);
-		upButton.setEnabled(enabled);
-		downButton.setEnabled(enabled);
+		if (addButton != null)
+			addButton.setEnabled(enabled);
+		if (duplicateButton != null)
+			duplicateButton.setEnabled(enabled);
+		if (removeButton != null)
+			removeButton.setEnabled(enabled);
+		if (upButton != null)
+			upButton.setEnabled(enabled);
+		if (downButton != null)
+			downButton.setEnabled(enabled);
 	}
 
 }

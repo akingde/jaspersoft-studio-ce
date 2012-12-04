@@ -27,7 +27,6 @@ import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
@@ -40,7 +39,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
@@ -72,7 +70,10 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 			String p = event.getProperty();
 			if (p.equals(DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE))
 				setPrefsBorder(getFigure());
-			else if (p.equals(RulersGridPreferencePage.P_PAGE_GRID_COLOR)
+			if (p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER)) {
+				Boolean val = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER, Boolean.TRUE);
+				getViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, val);
+			} else if (p.equals(RulersGridPreferencePage.P_PAGE_GRID_COLOR)
 					|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWGRID)
 					|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEY)
 					|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX)) {
@@ -86,21 +87,19 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	public Object getAdapter(Class key) {
 		if (key == SnapToHelper.class) {
 			List<SnapToHelper> snapStrategies = new ArrayList<SnapToHelper>();
-			Boolean val = (Boolean) getViewer().getProperty(RulerProvider.PROPERTY_RULER_VISIBILITY);
-			Boolean stg = (Boolean) getViewer().getProperty(SnapToGuidesAction.ID);
-			if (val != null && val.booleanValue() && stg != null && stg.booleanValue())
+			Boolean val = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER, Boolean.TRUE);
+			Boolean stg = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGUIDES, Boolean.TRUE);
+			if (val.booleanValue() && stg != null && stg.booleanValue())
 				snapStrategies.add(new SnapToGuides(this));
-			val = (Boolean) getViewer().getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED);
-			if (val != null && val.booleanValue()) {
-
+			val = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGEOMETRY, Boolean.TRUE);
+			if (val.booleanValue()) {
 				SnapToGeometryThreshold snapper = new SnapToGeometryThreshold(this);
 				snapper.setThreshold(6.0);
 				snapStrategies.add(snapper);
 			}
-			val = (Boolean) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ENABLED);
-			if (val != null && val.booleanValue()) {
+			val = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGRID, Boolean.TRUE);
+			if (val.booleanValue())
 				snapStrategies.add(new SnapToGrid(this));
-			}
 
 			if (snapStrategies.size() == 0)
 				return null;
@@ -152,15 +151,17 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * changed on the viewer.
 	 */
 	protected void refreshGridLayer() {
-		boolean visible = false;
-		GridLayer grid = ((APageFigure) getFigure()).getGrid();
-		Boolean val = (Boolean) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_VISIBLE);
-		if (val != null)
-			visible = val.booleanValue();
-		grid.setOrigin((Point) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ORIGIN));
-		grid.setSpacing((Dimension) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_SPACING));
-		grid.setVisible(visible);
 		if (jConfig != null) {
+			boolean visible = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWGRID, true);
+			GridLayer grid = ((APageFigure) getFigure()).getGrid();
+			grid.setOrigin((Point) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ORIGIN));
+
+			int x = jConfig.getPropertyInteger(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX, 10);
+			int y = jConfig.getPropertyInteger(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEY, 10);
+
+			grid.setSpacing(new Dimension(x, y));
+			grid.setVisible(visible);
+
 			String mcolor = jConfig.getProperty(RulersGridPreferencePage.P_PAGE_GRID_COLOR,
 					RulersGridPreferencePage.DEFAULT_GRIDCOLOR);
 			Color fg = SWTResourceManager.getColor(StringConverter.asRGB(mcolor));
@@ -189,8 +190,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	private PropertyChangeListener gridListener = new PropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent evt) {
 			String property = evt.getPropertyName();
-			if (property.equals(SnapToGrid.PROPERTY_GRID_ORIGIN) || property.equals(SnapToGrid.PROPERTY_GRID_SPACING)
-					|| property.equals(SnapToGrid.PROPERTY_GRID_VISIBLE))
+			if (property.equals(SnapToGrid.PROPERTY_GRID_ORIGIN))
 				refreshGridLayer();
 		}
 	};
@@ -302,7 +302,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 */
 	protected List<Object> getModelChildren() {
 		final List<Object> list = new ArrayList<Object>();
-		new ModelVisitor(getPage()) {
+		new ModelVisitor<Object>(getPage()) {
 
 			@Override
 			public boolean visit(INode n) {

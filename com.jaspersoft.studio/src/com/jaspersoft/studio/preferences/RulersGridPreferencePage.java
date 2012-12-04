@@ -12,23 +12,23 @@ package com.jaspersoft.studio.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 /*
  * 
  */
-public class RulersGridPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class RulersGridPreferencePage extends FieldEditorOverlayPage {
 
 	public static final String DEFAULT_GRIDCOLOR = "192,192,192";
 	public static final String P_PAGE_RULERGRID_SHOWRULER = "pageRulerGrid_SHOWRULER"; //$NON-NLS-1$
@@ -50,7 +50,8 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 	 *
 	 */
 	public void createFieldEditors() {
-		Group group = new Group(getFieldEditorParent(), SWT.NONE);
+		Composite fieldEditorParent = getFieldEditorParent();
+		Group group = new Group(fieldEditorParent, SWT.NONE);
 		group.setText(Messages.RulersGridPreferencePage_ruler_options);
 		group.setLayout(new GridLayout(2, false));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -61,7 +62,7 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 		addField(new BooleanFieldEditor(P_PAGE_RULERGRID_SHOWRULER, Messages.RulersGridPreferencePage_show_rulers, group));
 		addField(new BooleanFieldEditor(P_PAGE_RULERGRID_SNAPTOGUIDES, Messages.common_snap_to_guides, group));
 
-		group = new Group(getFieldEditorParent(), SWT.NONE);
+		group = new Group(fieldEditorParent, SWT.NONE);
 		group.setText(Messages.RulersGridPreferencePage_grid_options);
 		group.setLayout(new GridLayout(2, false));
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -74,12 +75,12 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 		addField(new BooleanFieldEditor(P_PAGE_RULERGRID_SNAPTOGEOMETRY, Messages.common_snap_to_geometry, group));
 		IntegerFieldEditor spaceX = new IntegerFieldEditor(P_PAGE_RULERGRID_GRIDSPACEX,
 				Messages.RulersGridPreferencePage_grid_spacing_x, group);
-		spaceX.setValidRange(2, 100);
+		spaceX.setValidRange(1, 500);
 		addField(spaceX);
 
 		IntegerFieldEditor spaceY = new IntegerFieldEditor(P_PAGE_RULERGRID_GRIDSPACEY,
 				Messages.RulersGridPreferencePage_grid_spacing_y, group);
-		spaceY.setValidRange(2, 100);
+		spaceY.setValidRange(1, 500);
 		addField(spaceY);
 
 		addField(new ColorFieldEditor(P_PAGE_GRID_COLOR, "Grid Color", group));
@@ -106,4 +107,10 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 	public void init(IWorkbench workbench) {
 	}
 
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.RulersGridPreferencePage.property";
+
+	@Override
+	protected String getPageId() {
+		return PAGE_ID;
+	}
 }

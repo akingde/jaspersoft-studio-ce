@@ -13,7 +13,10 @@ package com.jaspersoft.studio.preferences.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.util.ResourcePreferences;
+
 import org.eclipse.core.internal.resources.ProjectPreferences;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -29,6 +32,7 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -38,8 +42,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbenchPropertyPage;
+import org.eclipse.ui.internal.dialogs.PropertyDialog;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.service.prefs.BackingStoreException;
 
@@ -49,10 +55,11 @@ import com.jaspersoft.studio.preferences.PreferenceInitializer;
 
 public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage implements IWorkbenchPropertyPage,
 		IWorkbenchPreferencePage {
-	public static final String USEPROJECTSETTINGS = "useProjectSettings"; //$NON-NLS-1$
+	public static final String RESOURCE = "resource";
 
-	private static final String FALSE = "false"; //$NON-NLS-1$
-	private static final String TRUE = "true"; //$NON-NLS-1$
+	private static final String PROJECT = "project";
+
+	public static final String USERESOURCESETTINGS = "useResourceSettings"; //$NON-NLS-1$
 
 	// Stores all created field editors
 	private List<FieldEditor> editors = new ArrayList<FieldEditor>();
@@ -61,7 +68,8 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	private IAdaptable element;
 
 	// Additional buttons for property pages
-	private Button useWorkspaceSettingsButton, useProjectSettingsButton, configureButton;
+	private Button useWorkspaceSettingsButton, useProjectSettingsButton, useResourceSettingsButton, confWkspButton,
+			confPrjButton;
 
 	// Overlay preference store for property pages
 	private ScopedPreferenceStore overlayStore;
@@ -71,6 +79,8 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 
 	// Cache for page id
 	private String pageId;
+
+	private Composite selectionComposite;
 
 	/**
 	 * Constructor
@@ -143,6 +153,10 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		return getElement() != null;
 	}
 
+	public boolean isResourcePage() {
+		return getElement() instanceof IFile;
+	}
+
 	/**
 	 * We override the addField method. This allows us to store each field editor added by subclasses in a list for later
 	 * processing.
@@ -166,7 +180,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 			// Cache the page id
 			pageId = JaspersoftStudioPlugin.getUniqueIdentifier();// getPageId();
 			// Create an overlay preference store and fill it with properties
-			overlayStore = JaspersoftStudioPlugin.getInstance().getPreferenceStore((IProject) getElement(), pageId);
+			overlayStore = JaspersoftStudioPlugin.getInstance().getPreferenceStore((IResource) getElement(), pageId);
 			// overlayStore = new PropertyStore((IResource) getElement(), super.getPreferenceStore(), pageId);
 			// Set overlay store as current preference store
 			PreferenceInitializer.initDefaultProperties(overlayStore);
@@ -196,32 +210,61 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 *          - the parent composite
 	 */
 	private void createSelectionGroup(Composite parent) {
-		Composite comp = new Composite(parent, SWT.NONE);
+		selectionComposite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
-		comp.setLayout(layout);
-		comp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Composite radioGroup = new Composite(comp, SWT.NONE);
-		radioGroup.setLayout(new GridLayout());
-		radioGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		useWorkspaceSettingsButton = createRadioButton(radioGroup, Messages.FieldEditorOverlayPage_2);
-		useProjectSettingsButton = createRadioButton(radioGroup, Messages.FieldEditorOverlayPage_3);
-		configureButton = new Button(comp, SWT.PUSH);
-		configureButton.setText(Messages.FieldEditorOverlayPage_4);
-		configureButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				configureWorkspaceSettings();
-			}
-		});
+		selectionComposite.setLayout(layout);
+
+		useWorkspaceSettingsButton = createRadioButton(selectionComposite, Messages.FieldEditorOverlayPage_2);
+		if (isPropertyPage()) {
+			confWkspButton = new Button(selectionComposite, SWT.PUSH);
+			confWkspButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			confWkspButton.setText(Messages.FieldEditorOverlayPage_4);
+			confWkspButton.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					configureWorkspaceSettings(null);
+				}
+			});
+		}
+		useProjectSettingsButton = createRadioButton(selectionComposite, Messages.FieldEditorOverlayPage_3);
+		if (isResourcePage()) {
+
+			confPrjButton = new Button(selectionComposite, SWT.PUSH);
+			confPrjButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			confPrjButton.setText("Configure Project Settings");
+			confPrjButton.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					configureWorkspaceSettings(((IFile) element).getProject());
+				}
+			});
+
+			useResourceSettingsButton = createRadioButton(selectionComposite, "Use File Settings");
+		}
+
 		// Set workspace/project radio buttons
 		try {
-			String use = ((IResource) getElement()).getPersistentProperty(new QualifiedName(pageId, USEPROJECTSETTINGS));
-			if (TRUE.equals(use)) {
+			useWorkspaceSettingsButton.setSelection(false);
+			useProjectSettingsButton.setSelection(false);
+			if (useResourceSettingsButton != null)
+				useResourceSettingsButton.setSelection(false);
+
+			confWkspButton.setEnabled(false);
+			if (confPrjButton != null)
+				confPrjButton.setEnabled(false);
+
+			String use = ((IResource) getElement()).getPersistentProperty(new QualifiedName(pageId, USERESOURCESETTINGS));
+			if (PROJECT.equals(use)) {
 				useProjectSettingsButton.setSelection(true);
-				configureButton.setEnabled(false);
-			} else
+				if (confPrjButton != null)
+					confPrjButton.setEnabled(false);
+			} else if (RESOURCE.equals(use)) {
+				if (useResourceSettingsButton != null)
+					useResourceSettingsButton.setSelection(true);
+			} else {
 				useWorkspaceSettingsButton.setSelection(true);
+				confWkspButton.setEnabled(true);
+			}
 		} catch (CoreException e) {
 			useWorkspaceSettingsButton.setSelection(true);
 		}
@@ -241,7 +284,9 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		button.setText(label);
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				configureButton.setEnabled(button == useWorkspaceSettingsButton);
+				confWkspButton.setEnabled(button == useWorkspaceSettingsButton);
+				if (confPrjButton != null)
+					confPrjButton.setEnabled(button == useProjectSettingsButton);
 				updateFieldEditors();
 			}
 		});
@@ -264,7 +309,13 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 */
 	private void updateFieldEditors() {
 		// We iterate through all field editors
-		boolean enabled = useProjectSettingsButton.getSelection();
+
+		boolean enabled = false;
+		if (isResourcePage())
+			enabled = useResourceSettingsButton.getSelection();
+		else if (isPropertyPage())
+			enabled = useProjectSettingsButton.getSelection();
+
 		updateFieldEditors(enabled);
 	}
 
@@ -276,13 +327,15 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 */
 	protected void updateFieldEditors(boolean enabled) {
 		Composite parent = getFieldEditorParent();
-		for (FieldEditor editor : editors) {
-			try {
-				editor.setEnabled(enabled, parent);
-			} catch (Exception e) {
-				e.printStackTrace();
-				// TODO find the right parent, in EditorField we don't have an way to know the parent
-			}
+
+		enableComposite(parent, enabled);
+	}
+
+	private void enableComposite(Composite parent, boolean enabled) {
+		for (Control c : parent.getChildren()) {
+			c.setEnabled(enabled);
+			if (c instanceof Composite)
+				enableComposite((Composite) c, enabled);
 		}
 	}
 
@@ -294,27 +347,32 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 */
 	public boolean performOk() {
 		boolean result = super.performOk();
-		if (result) {
-			if (isPropertyPage()) {
-				IResource resource = (IResource) getElement();
-				try {
-					String value = (useProjectSettingsButton.getSelection()) ? TRUE : FALSE;
-					resource.setPersistentProperty(new QualifiedName(pageId, USEPROJECTSETTINGS), value);
+		if (result && isPropertyPage()) {
+			IResource resource = (IResource) getElement();
+			try {
+				String value = "workspace";
+				if (useProjectSettingsButton.getSelection())
+					value = PROJECT;
+				if (useResourceSettingsButton != null && useResourceSettingsButton.getSelection())
+					value = RESOURCE;
+				resource.setPersistentProperty(new QualifiedName(pageId, USERESOURCESETTINGS), value);
 
-					if (!useProjectSettingsButton.getSelection()) {
-						for (IEclipsePreferences ep : overlayStore.getPreferenceNodes(true)) {
-							try {
-								if (ep instanceof ProjectPreferences) {
-									ep.clear();
-									ep.flush();
-								}
-							} catch (BackingStoreException e) {
-								e.printStackTrace();
-							}
+				for (IEclipsePreferences ep : overlayStore.getPreferenceNodes(true)) {
+					try {
+						if (useResourceSettingsButton != null && !useResourceSettingsButton.getSelection()
+								&& ep instanceof ResourcePreferences) {
+							ep.clear();
 						}
+						if (!useProjectSettingsButton.getSelection() && ep instanceof ProjectPreferences) {
+							ep.clear();
+						}
+						ep.flush();
+					} catch (BackingStoreException e) {
+						e.printStackTrace();
 					}
-				} catch (CoreException e) {
 				}
+			} catch (CoreException e) {
+				e.printStackTrace();
 			}
 		}
 		return result;
@@ -330,7 +388,11 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		if (isPropertyPage()) {
 			useWorkspaceSettingsButton.setSelection(true);
 			useProjectSettingsButton.setSelection(false);
-			configureButton.setEnabled(true);
+			if (useResourceSettingsButton != null)
+				useResourceSettingsButton.setSelection(false);
+			confWkspButton.setEnabled(true);
+			if (confPrjButton != null)
+				confPrjButton.setEnabled(false);
 			updateFieldEditors();
 		}
 		super.performDefaults();
@@ -341,14 +403,15 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 * 
 	 * @see com.bdaum.SpellChecker.preferences.SpellCheckerPreferencePage#configureWorkspaceSettings()
 	 */
-	protected void configureWorkspaceSettings() {
+	protected void configureWorkspaceSettings(IProject project) {
 		try {
 			// create a new instance of the current class
-			IPreferencePage page = (IPreferencePage) this.getClass().newInstance();
+			FieldEditorOverlayPage page = (FieldEditorOverlayPage) this.getClass().newInstance();
 			page.setTitle(getTitle());
 			page.setImageDescriptor(image);
+			page.setElement(project);
 			// and show it
-			showPreferencePage(pageId, page);
+			showPreferencePage(pageId, page, project);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -364,11 +427,13 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 * @param page
 	 *          - the preference page
 	 */
-	protected void showPreferencePage(String id, IPreferencePage page) {
+	protected void showPreferencePage(String id, IPreferencePage page, final IProject project) {
 		final IPreferenceNode targetNode = new PreferenceNode(id, page);
 		PreferenceManager manager = new PreferenceManager();
 		manager.addToRoot(targetNode);
-		final PreferenceDialog dialog = new PreferenceDialog(getControl().getShell(), manager);
+		Shell shell = getControl().getShell();
+		final PreferenceDialog dialog = project == null ? new PreferenceDialog(shell, manager) : new PropertyDialog(shell,
+				manager, new StructuredSelection(project));
 		BusyIndicator.showWhile(getControl().getDisplay(), new Runnable() {
 			public void run() {
 				dialog.create();
@@ -377,5 +442,4 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 			}
 		});
 	}
-
 }
