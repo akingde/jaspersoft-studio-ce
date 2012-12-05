@@ -56,7 +56,7 @@ public class CellResizeHandle2 extends ResizeHandle {
 	protected Color getFillColor() {
 		if (getOwner().getFigure().getBounds().height == 0)
 			return ColorConstants.red;
-		return ColorConstants.blue;// super.getFillColor();
+		return getBorderColor();// super.getFillColor();
 	}
 
 }
