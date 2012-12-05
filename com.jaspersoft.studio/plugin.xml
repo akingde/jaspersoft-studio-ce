@@ -199,13 +199,6 @@
       </perspectiveExtension>
    </extension>
    <extension
-         point="org.eclipse.core.runtime.preferences">
-      <scope
-            class="net.sf.jasperreports.eclipse.util.ResourcePreferences"
-            name="resource">
-      </scope>
-   </extension>
-   <extension
          id="com.jaspersoft.studio.preferences"
          name="Jaspersoft Studio Preferences"
          point="org.eclipse.ui.preferencePages">
@@ -508,6 +501,13 @@
       <initializer
             class="com.jaspersoft.studio.preferences.PreferenceInitializer">
       </initializer>
+      <initializer
+            class="com.jaspersoft.studio.editor.gef.decorator.DecoratorPreferenceInitializer">
+      </initializer>
+      <scope
+            class="net.sf.jasperreports.eclipse.util.ResourcePreferences"
+            name="resource">
+      </scope>
    </extension>
    <extension
          id="com.jaspersoft.designer.property"

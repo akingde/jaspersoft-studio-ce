@@ -114,6 +114,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	private FlyoutPreferences palettePreferences;
 	protected JasperReportsConfiguration jrContext;
 
+	public JasperReportsConfiguration getJrContext() {
+		return jrContext;
+	}
+
 	/**
 	 * Class that extend a default domain and give the possibility to check if a keyboard key is held down
 	 * 

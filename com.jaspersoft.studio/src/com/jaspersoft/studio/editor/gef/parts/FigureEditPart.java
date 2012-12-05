@@ -68,6 +68,8 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	protected void handlePreferenceChanged(org.eclipse.jface.util.PropertyChangeEvent event) {
 		if (event.getProperty().equals(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE))
 			setPrefsBorder(getFigure());
+		else
+			refreshVisuals();
 	}
 
 	@Override
@@ -138,6 +140,10 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	}
 
 	protected JasperReportsConfiguration jConfig;
+
+	public JasperReportsConfiguration getjConfig() {
+		return jConfig;
+	}
 
 	public void setPrefsBorder(IFigure rect) {
 		if (jConfig == null)

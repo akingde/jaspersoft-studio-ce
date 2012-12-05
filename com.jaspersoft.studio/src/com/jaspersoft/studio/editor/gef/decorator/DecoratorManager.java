@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator;
 
@@ -27,12 +22,12 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.RetargetAction;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 
 public class DecoratorManager {
 	public void init() {
@@ -57,7 +52,7 @@ public class DecoratorManager {
 	}
 
 	public void registerActions(ActionRegistry registry, List<String> selectionActions, GraphicalViewer gviewer,
-			IWorkbenchPart part) {
+			AbstractVisualEditor part) {
 		for (IElementDecorator f : nodeFactory)
 			f.registerActions(registry, selectionActions, gviewer, part);
 	}
@@ -78,10 +73,10 @@ public class DecoratorManager {
 		for (IElementDecorator f : nodeFactory)
 			f.contribute2Menu(registry, menuManager);
 	}
-	
-	public List<String> getActionIDs(){
-		List<String> ids=new ArrayList<String>();
-		for (IElementDecorator f : nodeFactory){
+
+	public List<String> getActionIDs() {
+		List<String> ids = new ArrayList<String>();
+		for (IElementDecorator f : nodeFactory) {
 			ids.addAll(f.getActionIDs());
 		}
 		return ids;

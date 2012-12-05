@@ -27,6 +27,7 @@ import org.eclipse.ui.actions.RetargetAction;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 
 /**
  * @author slavic
@@ -50,7 +51,7 @@ public interface IElementDecorator {
 	 * @param part
 	 */
 	public void registerActions(ActionRegistry registry, List<String> selectionActions, GraphicalViewer gviewer,
-			IWorkbenchPart part);
+			AbstractVisualEditor part);
 
 	/**
 	 * decide and add action to context menu, right click on an element

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.pdf;
 
@@ -40,6 +35,7 @@ import com.jaspersoft.studio.editor.action.pdf.Position;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 
@@ -52,11 +48,11 @@ public class PDF508ElementDecorator extends TextElementDecorator {
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		super.setupFigure(fig, editPart);
 		getDecorator().removeDecorator(decorator);
-		if ((Boolean) editPart.getViewer().getProperty(ShowPDFTagsAction.ID)) {
+		if (editPart.getjConfig().getPropertyBoolean(ShowPDFTagsAction.ID, false)) {
 			getDecorator().addDecorator(decorator);
 		}
 	}
-	
+
 	@Override
 	public RetargetAction[] buildMenuActions() {
 		return new RetargetAction[] { new RetargetAction(ShowPDFTagsAction.ID, Messages.ShowPDFTagsAction_title,
@@ -187,9 +183,9 @@ public class PDF508ElementDecorator extends TextElementDecorator {
 
 	@Override
 	public void registerActions(ActionRegistry registry, List<String> selectionActions, GraphicalViewer gviewer,
-			IWorkbenchPart part) {
+			AbstractVisualEditor part) {
 		gviewer.setProperty(ShowPDFTagsAction.ID, true);
-		IAction action = new ShowPDFTagsAction(gviewer);
+		IAction action = new ShowPDFTagsAction(gviewer, part.getJrContext());
 		registry.registerAction(action);
 		registerHeading(registry, part, selectionActions);
 		registerTable(registry, part, selectionActions);

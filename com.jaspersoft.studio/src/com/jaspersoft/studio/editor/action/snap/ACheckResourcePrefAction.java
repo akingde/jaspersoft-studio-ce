@@ -18,8 +18,7 @@ public abstract class ACheckResourcePrefAction extends AResourcePreferenceAction
 	 * @see org.eclipse.jface.action.IAction#isChecked()
 	 */
 	public boolean isChecked() {
-		return jrConfig.getPropertyBoolean(getProperty());
-//		return store.getBoolean(getProperty());
+		return jrConfig.getPropertyBoolean(getProperty(), false);
 	};
 
 	@Override

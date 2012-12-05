@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.error;
 
@@ -29,13 +24,13 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.RetargetAction;
 
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -53,7 +48,8 @@ public class PositionErrorDecorator implements IElementDecorator {
 		// It will remove the type ErrorDecorator from the list because equals is override in ErrorDecorator
 		fig.removeDecorator(decorator);
 		// check if we should show this decorator
-		if ((Boolean) editPart.getViewer().getProperty(ShowErrorsAction.ID)) {
+
+		if (editPart.getjConfig().getPropertyBoolean(ShowErrorsAction.ID, false)) {
 			if (decorator == null) {
 				decorator = new ErrorDecorator();
 			}
@@ -113,10 +109,9 @@ public class PositionErrorDecorator implements IElementDecorator {
 
 	@Override
 	public void registerActions(ActionRegistry registry, List<String> selectionActions, GraphicalViewer gviewer,
-			IWorkbenchPart part) {
-
+			AbstractVisualEditor part) {
 		gviewer.setProperty(ShowErrorsAction.ID, true);
-		IAction action = new ShowErrorsAction(gviewer);
+		IAction action = new ShowErrorsAction(gviewer, part.getJrContext());
 		registry.registerAction(action);
 	}
 

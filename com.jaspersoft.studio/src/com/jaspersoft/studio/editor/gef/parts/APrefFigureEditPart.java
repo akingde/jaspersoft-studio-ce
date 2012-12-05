@@ -17,10 +17,6 @@ public abstract class APrefFigureEditPart extends FigureEditPart implements IPre
 
 	@Override
 	protected void handlePreferenceChanged(org.eclipse.jface.util.PropertyChangeEvent event) {
-		// if (event.getProperty().equals(
-		// DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES)) {
-		// setBandNameShowing(getFigure());
-		// } else
 		String p = event.getProperty();
 		if (p.equals(DesignerPreferencePage.P_CONTAINER_MARGIN_COLOR)) {
 			setMarginColor();
