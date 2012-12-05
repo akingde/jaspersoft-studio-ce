@@ -95,7 +95,9 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 					"jdbc:vertica://{0}:5433/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition(
 					"Hadoop Hive", "org.apache.hadoop.hive.jdbc.HiveDriver", //$NON-NLS-1$ //$NON-NLS-2$
-					"jdbc:hive://{0}:10000/default", "default", "localhost") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					"jdbc:hive://{0}:10000/default"),//$NON-NLS-1$
+			new JDBCDriverDefinition("Vertica", "com.vertica.jdbc.Driver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:vertica://{0}:5433/{1}") }; //$NON-NLS-1$ 
 
 	public JDBCDriverDefinition[] getDefinitions() {
 		return jdbcDefinitions;
