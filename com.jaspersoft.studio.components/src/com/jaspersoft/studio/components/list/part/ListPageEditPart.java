@@ -26,7 +26,8 @@ import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 
-public class ListPageEditPart extends PageEditPart implements IDatasetDialogSupport {
+public class ListPageEditPart extends PageEditPart implements
+		IDatasetDialogSupport {
 
 	@Override
 	protected APageFigure newPageFigure() {
@@ -37,6 +38,7 @@ public class ListPageEditPart extends PageEditPart implements IDatasetDialogSupp
 	protected void setupPageFigure(APageFigure figure2) {
 		updateContainerSize();
 		((ContainerPageFigure) figure2).setContainerSize(getContaierSize());
+		setupPagePreferences(figure2);
 	}
 
 	private Dimension containerSize;

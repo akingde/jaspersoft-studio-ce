@@ -38,6 +38,7 @@ public class CrosstabPageEditPart extends PageEditPart implements
 	protected void setupPageFigure(APageFigure figure2) {
 		updateContainerSize();
 		((ContainerPageFigure) figure2).setContainerSize(getContaierSize());
+		setupPagePreferences(figure2);
 	}
 
 	private Dimension containerSize;

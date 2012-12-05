@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.figures;
 
@@ -40,7 +35,11 @@ public class ReportPageFigure extends APageFigure {
 	private int bandsHeight = 0;
 	protected JasperDesign jrDesign = null;
 	/** The bands vertical lines color */
-	protected static Color bandColor = null;
+	protected Color printMarginColor = new Color(170, 168, 255);
+
+	public void setPrintMarginColor(Color printMarginColor) {
+		this.printMarginColor = printMarginColor;
+	}
 
 	/**
 	 * Instantiates a new page figure.
@@ -53,9 +52,6 @@ public class ReportPageFigure extends APageFigure {
 	public ReportPageFigure(JasperDesign jd, boolean viewMargins) {
 		super(viewMargins);
 		this.jrDesign = jd;
-		if (bandColor == null) {
-			bandColor = new Color(170, 168, 255);
-		}
 	}
 
 	/**
@@ -89,6 +85,7 @@ public class ReportPageFigure extends APageFigure {
 			// int bottomMargin = jrDesign.getBottomMargin();
 
 			Rectangle rectangle = new Rectangle(clientArea.x, clientArea.y, pageWidth, pageHeight);
+			g.setBackgroundColor(pageBackground);
 			g.fillRectangle(rectangle);
 
 			Point topLeft = new Point(clientArea.x + leftMargin, clientArea.y);
@@ -102,7 +99,7 @@ public class ReportPageFigure extends APageFigure {
 
 				paintGrid(g, rectangle);
 
-				graphics2d.setColor(bandColor);
+				graphics2d.setColor(printMarginColor);
 
 				graphics2d.setStroke(new BasicStroke(0.5f));
 				graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(graphics2d.getStroke(), g.getAbsoluteScale()));

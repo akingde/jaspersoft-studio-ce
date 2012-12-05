@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts;
 
@@ -28,6 +23,8 @@ import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToGrid;
+import org.eclipse.jface.resource.StringConverter;
+import org.eclipse.swt.graphics.RGB;
 
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
@@ -38,6 +35,7 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -46,17 +44,16 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class ReportPageEditPart extends PageEditPart implements PropertyChangeListener,IDatasetDialogSupport {
+public class ReportPageEditPart extends PageEditPart implements PropertyChangeListener, IDatasetDialogSupport {
 
 	protected APageFigure newPageFigure() {
 		return new ReportPageFigure(getJasperDesign(), true);
 	}
-	
+
 	@Override
 	public DragTracker getDragTracker(Request request) {
 		return new SameBandEditPartsTracker(this);
 	}
-	
 
 	/**
 	 * Setup page figure.
@@ -75,8 +72,20 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 		int w = jd.getPageWidth() + 20;
 		int h = designHeight + 10;
 
-		((ReportPageFigure) figure2).setBandsHeight(designHeight);
+		ReportPageFigure rpFig = (ReportPageFigure) figure2;
+		rpFig.setBandsHeight(designHeight);
+
+		setupPagePreferences(figure2);
 		figure2.setSize(w, h);
+	}
+
+	@Override
+	protected void setupPagePreferences(APageFigure figure2) {
+		String mcolor = jConfig.getProperty(DesignerPreferencePage.P_PAGE_MARGIN_COLOR,
+				DesignerPreferencePage.DEFAULT_MARGINCOLOR);
+		RGB rgb = StringConverter.asRGB(mcolor);
+		((ReportPageFigure) figure2).setPrintMarginColor(new java.awt.Color(rgb.red, rgb.green, rgb.blue));
+		super.setupPagePreferences(figure2);
 	}
 
 	public void updateRullers() {

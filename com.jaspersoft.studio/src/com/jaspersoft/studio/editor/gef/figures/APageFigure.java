@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.figures;
 
@@ -23,6 +18,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
+import com.jaspersoft.studio.utils.SWTResourceManager;
 
 /*
  * The Class PageFigure.
@@ -30,7 +26,7 @@ import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
  * @author Chicu Veaceslav
  */
 public abstract class APageFigure extends FreeformLayeredPane implements HandleBounds {
-
+	protected org.eclipse.swt.graphics.Color pageBackground = SWTResourceManager.getColor(255, 255, 255);
 	/** The view margins. */
 	protected boolean viewMargins = true;
 
@@ -51,6 +47,10 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	 */
 	public APageFigure(boolean viewMargins) {
 		this.viewMargins = viewMargins;
+	}
+
+	public void setPageBackground(org.eclipse.swt.graphics.Color pageBackground) {
+		this.pageBackground = pageBackground;
 	}
 
 	/**
@@ -84,6 +84,7 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 			// int bottomMargin = PAGE_BORDER.bottom;
 
 			Rectangle rectangle = new Rectangle(clientArea.x, clientArea.y, pageWidth, pageHeight);
+			g.setBackgroundColor(pageBackground);
 			g.fillRectangle(rectangle);
 
 			// Point topLeft = new Point(clientArea.x + leftMargin, clientArea.y);

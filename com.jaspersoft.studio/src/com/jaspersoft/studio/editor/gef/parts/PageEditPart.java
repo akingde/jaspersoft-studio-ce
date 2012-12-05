@@ -67,19 +67,24 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			String p = event.getProperty();
-			if (p.equals(DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE))
-				setPrefsBorder(getFigure());
-			if (p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER)) {
-				Boolean val = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER, Boolean.TRUE);
-				getViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, val);
-			} else if (p.equals(RulersGridPreferencePage.P_PAGE_GRID_COLOR)
-					|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWGRID)
-					|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEY)
-					|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX)) {
-				refreshGridLayer();
-			}
+			handlePreferencesChanged(event);
 		}
+	}
+
+	protected void handlePreferencesChanged(org.eclipse.jface.util.PropertyChangeEvent event) {
+		String p = event.getProperty();
+		if (p.equals(DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE))
+			setPrefsBorder(getFigure());
+		if (p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER)) {
+			Boolean val = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER, Boolean.TRUE);
+			getViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, val);
+		} else if (p.equals(RulersGridPreferencePage.P_PAGE_GRID_COLOR)
+				|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWGRID)
+				|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEY)
+				|| p.equals(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX)) {
+			refreshGridLayer();
+		} else
+			refreshVisuals();
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -128,7 +133,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		super.deactivate();
 	}
 
-	private JasperReportsConfiguration jConfig;
+	protected JasperReportsConfiguration jConfig;
 
 	protected void setPrefsBorder(IFigure rect) {
 		if (jConfig == null)
@@ -269,6 +274,14 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 
 		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
 				new Point(APageFigure.PAGE_BORDER.left, APageFigure.PAGE_BORDER.top));
+
+		setupPagePreferences(figure2);
+	}
+
+	protected void setupPagePreferences(APageFigure figure2) {
+		String mcolor = jConfig.getProperty(DesignerPreferencePage.P_PAGE_BACKGROUND,
+				DesignerPreferencePage.DEFAULT_PAGE_BACKGROUND);
+		((APageFigure) figure2).setPageBackground(SWTResourceManager.getColor(StringConverter.asRGB(mcolor)));
 	}
 
 	public void updateRullers() {
