@@ -16,9 +16,9 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
-import com.jaspersoft.studio.utils.SWTResourceManager;
 
 /*
  * The Class PageFigure.
