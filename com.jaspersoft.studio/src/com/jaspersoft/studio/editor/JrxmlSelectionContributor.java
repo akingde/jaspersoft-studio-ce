@@ -35,6 +35,8 @@ import com.jaspersoft.studio.editor.toolitems.ISelectionContributionItem;
 import com.jaspersoft.studio.editor.toolitems.ToolItem;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsSet;
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JrxmlSelectionContributor {
 	private ActionRegistry registry;
@@ -143,6 +145,18 @@ public class JrxmlSelectionContributor {
 		return isSame;
 	}
 
+	private boolean isToolbarVisible(ToolItemsSet ts) {
+		if (sobjects != null && !sobjects.isEmpty()) {
+			Object obj = sobjects.get(0);
+			if (obj instanceof APropertyNode) {
+				JasperReportsConfiguration jConfig = ((APropertyNode) obj).getJasperConfiguration();
+				if (jConfig != null)
+					return jConfig.getPropertyBoolean(ts.getId(), true);
+			}
+		}
+		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(ts.getId());
+	}
+
 	public void contributeToContextCoolBar(IActionBars bars, ICoolBarManager coolBarManager, ISelection selection) {
 		IEditorPart lastEditor = editorContributor.getLastEditor();
 		if (lastEditor instanceof ReportContainer)
@@ -152,7 +166,7 @@ public class JrxmlSelectionContributor {
 
 			ToolItemsManager tm = JaspersoftStudioPlugin.getToolItemsManager();
 			for (ToolItemsSet ts : tm.getSets()) {
-				if (!ts.isVisibility())
+				if (!isToolbarVisible(ts))
 					continue;
 				if (ts.getToolbarUri() != null) {
 					for (ToolItem ti : ts.getToolItems()) {
@@ -214,8 +228,7 @@ public class JrxmlSelectionContributor {
 		if (ti.getTooltip() != null)
 			action.setToolTipText(ti.getTooltip());
 		if (ti.getIcon() != null)
-			action.setImageDescriptor(
-					JaspersoftStudioPlugin.getInstance().getImageDescriptor(ti.getIcon()));
+			action.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(ti.getIcon()));
 		addAction(cbm2, ts.getToolbarUri(), action);
 	}
 

@@ -56,8 +56,7 @@ public class ToolItemsManager {
 					tis.addToolItems(ti);
 			}
 			sets.add(tis);
-		}
-		System.out.print("");
+		} 
 	}
 
 	private List<ToolItemsSet> sets = new ArrayList<ToolItemsSet>();

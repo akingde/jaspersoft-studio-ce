@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage;
@@ -60,6 +61,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		StudioPreferencePage.getDefaults(store);
 		VirtualizerPreferencePage.getDefaults(store);
+		ToolItemsPreferencePage.getDefaults(store);
 	}
 
 }
