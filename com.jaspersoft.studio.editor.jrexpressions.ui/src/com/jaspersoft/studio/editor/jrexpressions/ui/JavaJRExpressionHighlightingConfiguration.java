@@ -29,10 +29,10 @@ import org.eclipse.xtext.ui.editor.utils.TextStyle;
  */
 public class JavaJRExpressionHighlightingConfiguration extends DefaultHighlightingConfiguration {
 
-	public static final String FIELD_TOKEN="Field";
-	public static final String PARAM_TOKEN="Parameter";
-	public static final String VARIABLE_TOKEN="Variable";
-	public static final String FUNCTION_METHOD="Library function";
+	public static final String FIELD_TOKEN="Field"; //$NON-NLS-1$
+	public static final String PARAM_TOKEN="Parameter"; //$NON-NLS-1$
+	public static final String VARIABLE_TOKEN="Variable"; //$NON-NLS-1$
+	public static final String FUNCTION_METHOD="Library function"; //$NON-NLS-1$
 	
 	@Override
 	public void configure(IHighlightingConfigurationAcceptor acceptor) {

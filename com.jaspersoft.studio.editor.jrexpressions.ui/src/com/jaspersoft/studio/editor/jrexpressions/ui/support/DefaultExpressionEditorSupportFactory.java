@@ -28,6 +28,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionEditorSupport;
 import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
+import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 
 /**
  * This is the default support factory for the {@link JRExpression} editor,
@@ -51,17 +52,17 @@ public class DefaultExpressionEditorSupportFactory implements IExpressionEditorS
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				JRExpressionsUIPlugin.PLUGIN_ID, "jrexpressionLanguage"); //$NON-NLS-1$
 		for(IConfigurationElement el : config){
-			if(language.equals(el.getAttribute("languageName"))){
+			if(language.equals(el.getAttribute("languageName"))){ //$NON-NLS-1$
 				Object supportClazz=null;
 				try{
-					supportClazz=el.createExecutableExtension("class");
+					supportClazz=el.createExecutableExtension("class"); //$NON-NLS-1$
 					if(supportClazz instanceof ExpressionEditorSupport){
 						return (ExpressionEditorSupport) supportClazz;
 					}
 				}
 				catch(CoreException ex){
 					JRExpressionsActivator.getInstance().getLog().log(
-							new Status(IStatus.ERROR, JRExpressionsUIPlugin.PLUGIN_ID, "An error occurred while trying to create the new class.", ex));
+							new Status(IStatus.ERROR, JRExpressionsUIPlugin.PLUGIN_ID, Messages.DefaultExpressionEditorSupportFactory_NewClassCreationError, ex));
 				}
 			}
 		}

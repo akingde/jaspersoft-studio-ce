@@ -51,14 +51,14 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 	
 	static {
 		// Styling info
-		JFaceResources.getColorRegistry().put("PARAMETER_RED_COLOR", new RGB(190, 39, 39));
-		JFaceResources.getColorRegistry().put("VARIABLE_BLUE_COLOR", new RGB(41, 41, 255));
-		JFaceResources.getColorRegistry().put("FIELD_GREEN_COLOR", new RGB(39, 144, 39));
-		JFaceResources.getColorRegistry().put("GRAY_CLASS_TYPE", new RGB(143, 143, 143));
-		PARAMETER_STYLER=StyledString.createColorRegistryStyler("PARAMETER_RED_COLOR", null);
-		VARIABLE_STYLER=StyledString.createColorRegistryStyler("VARIABLE_BLUE_COLOR", null);
-		FIELD_STYLER=StyledString.createColorRegistryStyler("FIELD_GREEN_COLOR", null);
-		CLASSTYPE_STYLER=StyledString.createColorRegistryStyler("GRAY_CLASS_TYPE", null);
+		JFaceResources.getColorRegistry().put("PARAMETER_RED_COLOR", new RGB(190, 39, 39)); //$NON-NLS-1$
+		JFaceResources.getColorRegistry().put("VARIABLE_BLUE_COLOR", new RGB(41, 41, 255)); //$NON-NLS-1$
+		JFaceResources.getColorRegistry().put("FIELD_GREEN_COLOR", new RGB(39, 144, 39)); //$NON-NLS-1$
+		JFaceResources.getColorRegistry().put("GRAY_CLASS_TYPE", new RGB(143, 143, 143)); //$NON-NLS-1$
+		PARAMETER_STYLER=StyledString.createColorRegistryStyler("PARAMETER_RED_COLOR", null); //$NON-NLS-1$
+		VARIABLE_STYLER=StyledString.createColorRegistryStyler("VARIABLE_BLUE_COLOR", null); //$NON-NLS-1$
+		FIELD_STYLER=StyledString.createColorRegistryStyler("FIELD_GREEN_COLOR", null); //$NON-NLS-1$
+		CLASSTYPE_STYLER=StyledString.createColorRegistryStyler("GRAY_CLASS_TYPE", null); //$NON-NLS-1$
 	}
 	
 	@Override
@@ -71,18 +71,18 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 			String classType = obj.getClassType();
 			if(obj.getType()==ExpObject.TYPE_PARAM){
 				text.append(name);
-				text.append(" Parameter ", PARAMETER_STYLER);						
-				text.append(classType.substring(classType.lastIndexOf(".")+1), CLASSTYPE_STYLER);
+				text.append(" Parameter ", PARAMETER_STYLER);						 //$NON-NLS-1$
+				text.append(classType.substring(classType.lastIndexOf(".")+1), CLASSTYPE_STYLER); //$NON-NLS-1$
 			}
 			else if (obj.getType()==ExpObject.TYPE_VARIABLE){
 				text.append(name);
-				text.append(" Variable ", VARIABLE_STYLER );						
-				text.append(classType.substring(classType.lastIndexOf(".")+1), CLASSTYPE_STYLER);
+				text.append(" Variable ", VARIABLE_STYLER );						 //$NON-NLS-1$
+				text.append(classType.substring(classType.lastIndexOf(".")+1), CLASSTYPE_STYLER); //$NON-NLS-1$
 			}
 			else if (obj.getType()==ExpObject.TYPE_FIELD){
 				text.append(name);
-				text.append(" Field ", FIELD_STYLER);						
-				text.append(classType.substring(classType.lastIndexOf(".")+1), CLASSTYPE_STYLER);					
+				text.append(" Field ", FIELD_STYLER);						 //$NON-NLS-1$
+				text.append(classType.substring(classType.lastIndexOf(".")+1), CLASSTYPE_STYLER);					 //$NON-NLS-1$
 			}
 		}
 		else if (element instanceof JRExprFunctionBean){
@@ -94,7 +94,7 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 					textStyle.font=boldFont;
 				}
 			});
-			text.append(" returns ");
+			text.append(" returns "); //$NON-NLS-1$
 			String canonicalName = funct.getReturnType().getCanonicalName();
 			text.append(canonicalName, CLASSTYPE_STYLER);
 		}
@@ -103,7 +103,7 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 					Category.USER_DEFINED_EXPRESSIONS.equals(currentCategory)){
 				if(((String) element).length()>80){
 					text.append(element.toString().substring(0, Math.min(80, ((String) element).length())));
-					text.append("...");
+					text.append("..."); //$NON-NLS-1$
 				}
 				else{
 					text.append(element.toString());

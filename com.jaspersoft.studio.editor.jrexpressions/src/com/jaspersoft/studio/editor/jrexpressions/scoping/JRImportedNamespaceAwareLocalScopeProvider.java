@@ -43,35 +43,35 @@ public class JRImportedNamespaceAwareLocalScopeProvider extends	ImportedNamespac
 		    jrImports=new ArrayList<ImportNormalizer>();
 		    // import net.sf.jasperreports.engine.*
 		    jrImports.add(new ImportNormalizer(
-		  	      QualifiedName.create("net","sf","jasperreports","engine"),
+		  	      QualifiedName.create("net","sf","jasperreports","engine"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		  	      true, ignoreCase));
 		    // import net.sf.jasperreports.engine.fill.*
 		    jrImports.add(new ImportNormalizer(
-		  	      QualifiedName.create("net","sf","jasperreports","engine","fill"),
+		  	      QualifiedName.create("net","sf","jasperreports","engine","fill"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		  	      true, ignoreCase));
 		    // import java.lang.*
 		    jrImports.add(new ImportNormalizer(
-		  	      QualifiedName.create("java","lang"),
+		  	      QualifiedName.create("java","lang"), //$NON-NLS-1$ //$NON-NLS-2$
 		  	      true, ignoreCase));
 		    // import java.util.*
 		    jrImports.add(new ImportNormalizer(
-		      QualifiedName.create("java","util"),
+		      QualifiedName.create("java","util"), //$NON-NLS-1$ //$NON-NLS-2$
 		      true, ignoreCase));
 		    // import java.math.*
 		    jrImports.add(new ImportNormalizer(
-		  	      QualifiedName.create("java","math"),
+		  	      QualifiedName.create("java","math"), //$NON-NLS-1$ //$NON-NLS-2$
 		  	      true, ignoreCase));
 		    // import java.text.*
 		    jrImports.add(new ImportNormalizer(
-		  	      QualifiedName.create("java","text"),
+		  	      QualifiedName.create("java","text"), //$NON-NLS-1$ //$NON-NLS-2$
 		  	      true, ignoreCase));
 		    // import java.io.*
 		    jrImports.add(new ImportNormalizer(
-		  	      QualifiedName.create("java","io"),
+		  	      QualifiedName.create("java","io"), //$NON-NLS-1$ //$NON-NLS-2$
 		  	      true, ignoreCase));
 		    // import java.net.*
 		    jrImports.add(new ImportNormalizer(
-		  	      QualifiedName.create("java","net"),
+		  	      QualifiedName.create("java","net"), //$NON-NLS-1$ //$NON-NLS-2$
 		  	      true, ignoreCase));
 		}
 	    return jrImports;

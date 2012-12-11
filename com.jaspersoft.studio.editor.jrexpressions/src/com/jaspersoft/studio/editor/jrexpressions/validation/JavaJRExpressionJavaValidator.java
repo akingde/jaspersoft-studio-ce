@@ -35,6 +35,7 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpress
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation;
+import com.jaspersoft.studio.editor.jrexpressions.messages.Messages;
  
 /**
  * Expression validator class for Java JasperReports expressions.
@@ -55,7 +56,7 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 		// Need to check because it could be a ObjectCreation expression.
 		if(method.eContainer() instanceof ObjectCreation){
 			if(FunctionsLibraryUtil.existsFunction(name.getMethodName())){
-				error("Function library methods can not be used as constructor", name,
+				error(Messages.JavaJRExpressionJavaValidator_FunctionLibraryAsConstructorError, name,
 						JavaJRExpressionPackage.Literals.FULL_METHOD_NAME__METHOD_NAME, JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME);				
 			}
 		}
@@ -67,7 +68,7 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 					method.equals(expression.getMethodInvocations().get(0))){
 				// Look in the function library
 				if(!FunctionsLibraryUtil.existsFunction(name.getMethodName())){
-					error("The specified function was not found in the contributed library", name,
+					error(Messages.JavaJRExpressionJavaValidator_FunctionNotFoundError, name,
 							JavaJRExpressionPackage.Literals.FULL_METHOD_NAME__METHOD_NAME, JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME);
 				}
 //				else{
@@ -90,9 +91,9 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 		ExpressionContext currExpContext = ExpressionEditorSupportUtil.safeGetCurrentExpressionContext();
 		List<JRField> allFields = ExpressionContextUtils.getAllFields(currExpContext);
 		for(JRField f : allFields){
-			if(("{" + f.getName() + "}").equals(field.getBracedIdentifier())) return;
+			if(("{" + f.getName() + "}").equals(field.getBracedIdentifier())) return; //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		error("The specified field can not be found in the current expression context", field,
+		error(Messages.JavaJRExpressionJavaValidator_FieldNotFoundInContextError, field,
 				JavaJRExpressionPackage.Literals.JR_FIELD_OBJ__BRACED_IDENTIFIER, JavaJRExpressionPackage.JR_FIELD_OBJ__BRACED_IDENTIFIER);				
 	}
 
@@ -106,9 +107,9 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 		ExpressionContext currExpContext = ExpressionEditorSupportUtil.safeGetCurrentExpressionContext();
 		List<JRVariable> allVariables = ExpressionContextUtils.getAllVariables(currExpContext);
 		for(JRVariable v : allVariables){
-			if(("{" + v.getName() + "}").equals(variable.getBracedIdentifier())) return;
+			if(("{" + v.getName() + "}").equals(variable.getBracedIdentifier())) return; //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		error("The specified variable can not be found in the current expression context", variable,
+		error(Messages.JavaJRExpressionJavaValidator_VariableNotFoundInContextError, variable,
 				JavaJRExpressionPackage.Literals.JR_VARIABLE_OBJ__BRACED_IDENTIFIER, JavaJRExpressionPackage.JR_VARIABLE_OBJ__BRACED_IDENTIFIER);				
 	}
 	
@@ -122,9 +123,9 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 		ExpressionContext currExpContext = ExpressionEditorSupportUtil.safeGetCurrentExpressionContext();
 		List<JRParameter> allParameters = ExpressionContextUtils.getAllParameters(currExpContext);
 		for(JRParameter p : allParameters){
-			if(("{" + p.getName() + "}").equals(parameter.getBracedIdentifier())) return;
+			if(("{" + p.getName() + "}").equals(parameter.getBracedIdentifier())) return; //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		error("The specified parameter can not be found in the current expression context", parameter,
+		error(Messages.JavaJRExpressionJavaValidator_ParameterNotFoundInContextError, parameter,
 				JavaJRExpressionPackage.Literals.JR_PARAMETER_OBJ__BRACED_IDENTIFIER, JavaJRExpressionPackage.JR_PARAMETER_OBJ__BRACED_IDENTIFIER);				
 	}
 }

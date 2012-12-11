@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
+import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionEvent;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -118,7 +119,7 @@ public class FunctionDetailsComposite extends Composite {
 		Label returnTypeText = new Label(parent, SWT.WRAP);
 		returnTypeText.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true,
 				false));
-		returnTypeText.setText("This function returns an object of type:");
+		returnTypeText.setText(Messages.FunctionDetailsComposite_ReturnTypeText);
 
 		Label returnType = new Label(parent, SWT.NONE);
 		returnType.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false));
@@ -157,17 +158,17 @@ public class FunctionDetailsComposite extends Composite {
 
 				String paramLblText = p.getName();
 				if (numEl > 1) {
-					paramLblText += " " + i;
+					paramLblText += " " + i; //$NON-NLS-1$
 				}
 				if (i == 1 && !p.isOptional()) {
-					paramLblText += " *";
+					paramLblText += " *"; //$NON-NLS-1$
 				}
 				paramLbl.setText(paramLblText);
 
 				CLabel enterFunctionLbl = new CLabel(childCmp, SWT.NONE);
 				enterFunctionLbl.setImage(ResourceManager.getPluginImage(
 						JRExpressionsUIPlugin.PLUGIN_ID,
-						"/resources/icons/enterfunction.gif"));
+						"/resources/icons/enterfunction.gif")); //$NON-NLS-1$
 				GridData enterFunctGD = new GridData(SWT.LEFT, SWT.CENTER,
 						false, false);
 				enterFunctGD.horizontalIndent = 5;
@@ -175,12 +176,12 @@ public class FunctionDetailsComposite extends Composite {
 				enterFunctionLbl.setCursor(ResourceManager
 						.getCursor(SWT.CURSOR_HAND));
 				enterFunctionLbl
-						.setToolTipText("Enter complex expression for the argument");
+						.setToolTipText(Messages.FunctionDetailsComposite_ComplexExprTooltip);
 
 				final Text paramValue = new Text(childCmp, SWT.BORDER
 						| SWT.BORDER_SOLID);
-				paramValue.setData("PARAM_RELATIVE_POSITION", i);
-				paramValue.setData("PARAM_INDEX", paramIndex);
+				paramValue.setData("PARAM_RELATIVE_POSITION", i); //$NON-NLS-1$
+				paramValue.setData("PARAM_INDEX", paramIndex); //$NON-NLS-1$
 				final GridData pValueGD = new GridData(SWT.LEFT, SWT.CENTER,
 						true, false);
 				pValueGD.widthHint = 150;
@@ -289,7 +290,7 @@ public class FunctionDetailsComposite extends Composite {
 	 */
 	private void selectFunctionArgument(Text widget) {
 		// the position of the parameter we want to select
-		Integer positionToSelect = (Integer) widget.getData("PARAM_INDEX");
+		Integer positionToSelect = (Integer) widget.getData("PARAM_INDEX"); //$NON-NLS-1$
 		// the position of the last non-empty parameter
 		Integer lastNonEmptyPosition = 0;
 		// the list of texts contained in widgets representing the function parameters 
@@ -302,7 +303,7 @@ public class FunctionDetailsComposite extends Composite {
 				String currParamText = ((Text) children[i]).getText().trim();
 				parametersTexts.add(currParamText);
 				if (!currParamText.isEmpty()) {
-					lastNonEmptyPosition = (Integer) children[i].getData("PARAM_INDEX");
+					lastNonEmptyPosition = (Integer) children[i].getData("PARAM_INDEX"); //$NON-NLS-1$
 				}
 			}
 		}

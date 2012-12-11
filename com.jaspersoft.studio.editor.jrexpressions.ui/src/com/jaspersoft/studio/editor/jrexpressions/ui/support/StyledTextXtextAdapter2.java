@@ -25,6 +25,7 @@ import com.google.inject.Injector;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
+import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 
 import de.itemis.xtext.utils.jface.viewers.StyledTextXtextAdapter;
 
@@ -75,13 +76,13 @@ public class StyledTextXtextAdapter2 extends StyledTextXtextAdapter {
 			// invoking the method via Reflection API.
 			// N.B: This way of using reflection is a "violation" of OOP basis but
 			// it is also a trick that works fine.
-			Method declaredMethod = TextViewer.class.getDeclaredMethod("ignoreAutoEditStrategies",boolean.class);
+			Method declaredMethod = TextViewer.class.getDeclaredMethod("ignoreAutoEditStrategies",boolean.class); //$NON-NLS-1$
 			declaredMethod.setAccessible(true);
 			declaredMethod.invoke(getXtextSourceviewer(), ignore);
 		} catch (Exception e) {
 			JRExpressionsActivator.getInstance().getLog().log(
 					new Status(IStatus.ERROR, JRExpressionsUIPlugin.PLUGIN_ID, 
-							"Unable to enable/disable auto edit strategies for Xtext source viewer.", e));
+							Messages.StyledTextXtextAdapter2_AutoEditStrategiesError, e));
 		}
 	}
 }

@@ -33,13 +33,13 @@ import com.jaspersoft.studio.editor.jrexpressions.ui.support.java.JavaExpression
  */
 public class ObjectCategoryItem {
 
-	public static final String ICON_FOLDER_FIELDS = "/resources/icons/fields-16.png";
-	public static final String ICON_FOLDER_PARAMETERS = "/resources/icons/parameters-16.png";
-	public static final String ICON_FOLDER_VARIABLES = "/resources/icons/variables-16.png";
-	public static final String ICON_FOLDER = "/resources/icons/folder.png";
+	public static final String ICON_FOLDER_FIELDS = "/resources/icons/fields-16.png"; //$NON-NLS-1$
+	public static final String ICON_FOLDER_PARAMETERS = "/resources/icons/parameters-16.png"; //$NON-NLS-1$
+	public static final String ICON_FOLDER_VARIABLES = "/resources/icons/variables-16.png"; //$NON-NLS-1$
+	public static final String ICON_FOLDER = "/resources/icons/folder.png"; //$NON-NLS-1$
 	public static final String ICON_FOLDER_RECENT_EXPRESSIONS = ICON_FOLDER;
 	public static final String ICON_FOLDER_FORMULAS = ICON_FOLDER;
-	public static final String ICON_CROSSTAB = "/resources/icons/crosstab-16.png";
+	public static final String ICON_CROSSTAB = "/resources/icons/crosstab-16.png"; //$NON-NLS-1$
 
 	// Attributes
 	private String displayName = null;
@@ -123,14 +123,14 @@ public class ObjectCategoryItem {
 	 * @see JavaExpressionEditorComposite Example of usage
 	 */
 	public enum Category {
-		PARAMETERS("Parameters",ICON_FOLDER_PARAMETERS),
-		FIELDS("Fields", ICON_FOLDER_FIELDS),
-		VARIABLES("Variables", ICON_FOLDER_VARIABLES),
-		BUILT_IN_FUNCTIONS("Built-in Functions", ICON_FOLDER),
-		FUNCTION_CATEGORY("Sub-category",ICON_FOLDER),
-		USER_DEFINED_EXPRESSIONS("User Defined Expressions", ICON_FOLDER),
-		RECENT_EXPRESSIONS("Recent Expressions", ICON_FOLDER),
-		CROSSTAB("Crosstab", ICON_CROSSTAB);
+		PARAMETERS("Parameters",ICON_FOLDER_PARAMETERS), //$NON-NLS-1$
+		FIELDS("Fields", ICON_FOLDER_FIELDS), //$NON-NLS-1$
+		VARIABLES("Variables", ICON_FOLDER_VARIABLES), //$NON-NLS-1$
+		BUILT_IN_FUNCTIONS("Built-in Functions", ICON_FOLDER), //$NON-NLS-1$
+		FUNCTION_CATEGORY("Sub-category",ICON_FOLDER), //$NON-NLS-1$
+		USER_DEFINED_EXPRESSIONS("User Defined Expressions", ICON_FOLDER), //$NON-NLS-1$
+		RECENT_EXPRESSIONS("Recent Expressions", ICON_FOLDER), //$NON-NLS-1$
+		CROSSTAB("Crosstab", ICON_CROSSTAB); //$NON-NLS-1$
 		
 		private String dislayName;
 		private String iconPath;

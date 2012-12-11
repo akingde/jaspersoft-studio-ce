@@ -309,12 +309,12 @@ public class ExpEditorDialog extends Dialog {
 			        GrammarElementTitleSwitch testSwitch=new GrammarElementTitleSwitch();
 			        String result = testSwitch.doSwitch(grammarElement);
 					String nodetext = ((INode) element).getText();
-					nodetext=nodetext.replace("\n", "\\n");
+					nodetext=nodetext.replace("\n", "\\n"); //$NON-NLS-1$ //$NON-NLS-2$
 					if(result != null){
-						return result + " | [" + nodetext + "]";
+						return result + " | [" + nodetext + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					else{
-						return "[" + nodetext + "]";
+						return "[" + nodetext + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				}
 				return super.getText(element);

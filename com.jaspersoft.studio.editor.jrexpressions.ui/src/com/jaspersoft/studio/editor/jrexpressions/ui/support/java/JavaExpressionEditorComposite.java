@@ -60,6 +60,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionStatus;
 import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionStatusChangeListener;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionEvent;
@@ -241,7 +242,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 
 	@Override
 	public JRExpression getExpression() {
-		if ("".equals(currentWidgetText)) {
+		if ("".equals(currentWidgetText)) { //$NON-NLS-1$
 			expression = null;
 		} else {
 			expression = new JRDesignExpression(currentWidgetText);
@@ -253,7 +254,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	public void setExpression(JRExpression expression) {
 		this.expression = (JRDesignExpression) expression;
 		if (this.expression == null) {
-			editorArea.setText("");
+			editorArea.setText(""); //$NON-NLS-1$
 		} else {
 			editorArea.setText(expression.getText());
 		}
@@ -298,11 +299,11 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 				i++;
 				String crosstabKey = crosstab.getKey();
 				if (crosstabKey == null)
-					crosstabKey = "";
+					crosstabKey = ""; //$NON-NLS-1$
 
 				ObjectCategoryItem tmpCrossTabItem = new ObjectCategoryItem(
 						Category.CROSSTAB, Category.CROSSTAB.getDisplayName()
-								+ " (" + i + ") " + crosstabKey);
+								+ " (" + i + ") " + crosstabKey); //$NON-NLS-1$ //$NON-NLS-2$
 				tmpCrossTabItem.setData(crosstab);
 				rootCategories.add(tmpCrossTabItem);
 			}
@@ -369,14 +370,14 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	private class UpdatePanelJob extends WorkbenchJob {
 		
 		public UpdatePanelJob(){
-			super("Refresh panel job");
+			super(Messages.JavaExpressionEditorComposite_JobName);
 			setSystem(true);
 		}
 		
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			if(!isDisposed()){
-				monitor.beginTask("Refreshing...", IProgressMonitor.UNKNOWN);
+				monitor.beginTask(Messages.JavaExpressionEditorComposite_TaskName, IProgressMonitor.UNKNOWN);
 				synchCurrentFunctionDetails();
 				updateExpressionStatus();
 				monitor.done();
@@ -396,7 +397,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	 * the control is created, otherwise it is simply set as top control.
 	 */
 	private void updateDetailsPanel(ObjectCategoryItem selItem) {
-		String key = selItem.getCategory().getDisplayName() + "_"
+		String key = selItem.getCategory().getDisplayName() + "_" //$NON-NLS-1$
 				+ selItem.getDisplayName();
 		ObjectCategoryDetailsPanel currentControl = detailPanels.get(key);
 		if (currentControl == null) {
@@ -483,11 +484,11 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	 * Check and update the status of the current expression being edited.
 	 */
 	private void updateExpressionStatus() {
-		if (editorArea.getText().equals("")) {
+		if (editorArea.getText().equals("")) { //$NON-NLS-1$
 			// Do not care about empty expression(s)
 			ExpressionStatus exprStatus = ExpressionStatus.INFO;
 			exprStatus
-					.setShortDescription("The current expression has no validation issues.");
+					.setShortDescription(Messages.JavaExpressionEditorComposite_NoValidationIssuesInfo);
 			notifyExpressionStatusChanged(exprStatus);
 			return;
 		}
@@ -499,12 +500,12 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 				exprStatus.getMessages().add(vi.getMessage());
 			}
 			exprStatus
-					.setShortDescription("The current expression is not valid. Please verify it!");
+					.setShortDescription(Messages.JavaExpressionEditorComposite_ExpressionInvalidError);
 			notifyExpressionStatusChanged(exprStatus);
 		} else {
 			ExpressionStatus exprStatus = ExpressionStatus.INFO;
 			exprStatus
-					.setShortDescription("The current expression has no validation issues.");
+					.setShortDescription(Messages.JavaExpressionEditorComposite_NoValidationIssuesInfo);
 			notifyExpressionStatusChanged(exprStatus);
 		}
 	}

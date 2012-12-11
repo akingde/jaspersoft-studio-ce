@@ -63,6 +63,7 @@ import com.jaspersoft.studio.editor.expression.ExpObject;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
+import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectItemStyledLabelProvider;
@@ -159,7 +160,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				else if (selObject instanceof JRExprFunctionBean){
 					// Functions
 					editingAreaInfo.setUpdate(true);
-					editingAreaInfo.insertAtCurrentLocation(((JRExprFunctionBean) selObject).getName()+"( )",false);
+					editingAreaInfo.insertAtCurrentLocation(((JRExprFunctionBean) selObject).getName()+"( )",false); //$NON-NLS-1$
 					editingAreaInfo.setUpdate(false);
 					showFunctionDetailsPanel();
 				}
@@ -176,7 +177,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		buttonsToolbar.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, false));
 		hideBuiltinParams = new ToolItem(buttonsToolbar, SWT.CHECK);
 		hideBuiltinParams.setImage(
-				ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/filter-parameters.png"));
+				ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/filter-parameters.png")); //$NON-NLS-1$
 		hideBuiltinParams.setEnabled(false);
 		hideBuiltinParams.addSelectionListener(new SelectionAdapter() {
 			 
@@ -186,10 +187,10 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				refreshPanelUI(selItem);
 			}
 		});
-		hideBuiltinParams.setToolTipText("Hide built-in parameters");
+		hideBuiltinParams.setToolTipText("Hide built-in parameters"); //$NON-NLS-1$
 		hideBuiltinVariables = new ToolItem(buttonsToolbar, SWT.CHECK);
 		hideBuiltinVariables.setImage(
-				ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/filter-variables.png"));
+				ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/filter-variables.png")); //$NON-NLS-1$
 		hideBuiltinVariables.setEnabled(false);
 		hideBuiltinVariables.addSelectionListener(new SelectionAdapter() {
 			 
@@ -199,7 +200,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				refreshPanelUI(selItem);
 			}
 		});
-		hideBuiltinVariables.setToolTipText("Hide built-in variables");
+		hideBuiltinVariables.setToolTipText(Messages.ObjectCategoryDetailsPanel_HideBuiltinVars);
 		
 		additionalDetailsCmp=new Composite(panelSashForm, SWT.NONE);
 		additionalDetailsCmp.setLayoutData(layoutData);
@@ -394,7 +395,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 							String detailStr=(String)selElement;
 							editingAreaInfo.setUpdate(true);
 							editingAreaInfo.insertAtCurrentLocation(
-									((ExpObject)categoryContentSel).getExpression() + "." +
+									((ExpObject)categoryContentSel).getExpression() + "." + //$NON-NLS-1$
 									detailStr.substring(0,detailStr.lastIndexOf(')')+1),false);
 							editingAreaInfo.setUpdate(false);
 						}
@@ -471,39 +472,39 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	 */
 	private String getPrintableTypeName(String type) {
 		if (type == null)
-			return "void";
+			return "void"; //$NON-NLS-1$
 
-		if (type.endsWith(";"))
+		if (type.endsWith(";")) //$NON-NLS-1$
 			type = type.substring(0, type.length() - 1);
 
-		while (type.startsWith("[")) {
-			type = type.substring(1) + "[]";
-			if (type.startsWith("["))
+		while (type.startsWith("[")) { //$NON-NLS-1$
+			type = type.substring(1) + "[]"; //$NON-NLS-1$
+			if (type.startsWith("[")) //$NON-NLS-1$
 				continue;
-			if (type.startsWith("L"))
+			if (type.startsWith("L")) //$NON-NLS-1$
 				type = type.substring(1);
-			if (type.startsWith("Z"))
-				type = "boolean" + type.substring(1);
-			if (type.startsWith("B"))
-				type = "byte" + type.substring(1);
-			if (type.startsWith("C"))
-				type = "char" + type.substring(1);
-			if (type.startsWith("D"))
-				type = "double" + type.substring(1);
-			if (type.startsWith("F"))
-				type = "float" + type.substring(1);
-			if (type.startsWith("I"))
-				type = "int" + type.substring(1);
-			if (type.startsWith("J"))
-				type = "long" + type.substring(1);
-			if (type.startsWith("S"))
-				type = "short" + type.substring(1);
+			if (type.startsWith("Z")) //$NON-NLS-1$
+				type = "boolean" + type.substring(1); //$NON-NLS-1$
+			if (type.startsWith("B")) //$NON-NLS-1$
+				type = "byte" + type.substring(1); //$NON-NLS-1$
+			if (type.startsWith("C")) //$NON-NLS-1$
+				type = "char" + type.substring(1); //$NON-NLS-1$
+			if (type.startsWith("D")) //$NON-NLS-1$
+				type = "double" + type.substring(1); //$NON-NLS-1$
+			if (type.startsWith("F")) //$NON-NLS-1$
+				type = "float" + type.substring(1); //$NON-NLS-1$
+			if (type.startsWith("I")) //$NON-NLS-1$
+				type = "int" + type.substring(1); //$NON-NLS-1$
+			if (type.startsWith("J")) //$NON-NLS-1$
+				type = "long" + type.substring(1); //$NON-NLS-1$
+			if (type.startsWith("S")) //$NON-NLS-1$
+				type = "short" + type.substring(1); //$NON-NLS-1$
 		}
 
-		if (type.startsWith("java.lang.")) {
-			type = type.substring("java.lang.".length());
-			if (type.indexOf(".") > 0) {
-				type = "java.lang." + type;
+		if (type.startsWith("java.lang.")) { //$NON-NLS-1$
+			type = type.substring("java.lang.".length()); //$NON-NLS-1$
+			if (type.indexOf(".") > 0) { //$NON-NLS-1$
+				type = "java.lang." + type; //$NON-NLS-1$
 			}
 		}
 		return type;
@@ -515,10 +516,10 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	private String getItemKey(Object selItem) {
 		String key = selItem.toString();
 		if(selItem instanceof ExpObject){
-			key=((ExpObject) selItem).getName()+"_"+((ExpObject) selItem).getClassType();
+			key=((ExpObject) selItem).getName()+"_"+((ExpObject) selItem).getClassType(); //$NON-NLS-1$
 		}
 		else if(selItem instanceof JRExprFunctionBean){
-			key=((JRExprFunctionBean) selItem).getName()+"_"+((JRExprFunctionBean) selItem).getClass().getCanonicalName();
+			key=((JRExprFunctionBean) selItem).getName()+"_"+((JRExprFunctionBean) selItem).getClass().getCanonicalName(); //$NON-NLS-1$
 		}
 		return key;
 	}
@@ -540,23 +541,23 @@ public class ObjectCategoryDetailsPanel extends Composite {
 			Method[] methods = loadClass.getMethods();
 			for (int i = 0; i < methods.length; ++i) {
 				if ((methods[i].getModifiers() & java.lang.reflect.Modifier.PUBLIC) != 0) {
-					String method_firm = methods[i].getName() + "(";
+					String method_firm = methods[i].getName() + "("; //$NON-NLS-1$
 					Class<?>[] params = methods[i].getParameterTypes();
 					int j = 0;
 					for (j = 0; j < params.length; ++j) {
 
 						if (j > 0)
-							method_firm += ", ";
+							method_firm += ", "; //$NON-NLS-1$
 						else
-							method_firm += " ";
+							method_firm += " "; //$NON-NLS-1$
 						method_firm += getPrintableTypeName(params[j].getName());
 					}
 					if (j > 0)
-						method_firm += " ";
-					method_firm += ") ";
+						method_firm += " "; //$NON-NLS-1$
+					method_firm += ") "; //$NON-NLS-1$
 
 					String rname = methods[i].getReturnType().getName();
-					if (rname.equals("void"))
+					if (rname.equals("void")) //$NON-NLS-1$
 						continue; // we have to return something always!
 					method_firm += getPrintableTypeName(rname);
 					methodFirms.add(method_firm);

@@ -31,7 +31,7 @@ import com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage;
 public class JRExpressionsUIPlugin extends JRExpressionsActivator {
 
 	/** Plug-in identifier */
-	public static final String PLUGIN_ID = "com.jaspersoft.studio.editor.jrexpressions.ui";
+	public static final String PLUGIN_ID = "com.jaspersoft.studio.editor.jrexpressions.ui"; //$NON-NLS-1$
 
 	@Override
 	public void start(BundleContext context) throws Exception {

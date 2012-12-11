@@ -83,7 +83,7 @@ public class EditingAreaHelper {
 			MethodInvocation methodInv=(MethodInvocation)args.eContainer();
 			ICompositeNode methodInvNode = NodeModelUtils.findActualNodeFor(methodInv);
 			// Avoid malformed method invocation
-			if(methodInvNode!=null && methodInvNode.getText().endsWith(")")){
+			if(methodInvNode!=null && methodInvNode.getText().endsWith(")")){ //$NON-NLS-1$
 				FullMethodName fullyQualifiedMethodName = methodInv.getFullyQualifiedMethodName();
 				if(fullyQualifiedMethodName!=null){
 					String methodName = fullyQualifiedMethodName.getMethodName();
@@ -118,7 +118,7 @@ public class EditingAreaHelper {
 					for (INode child : expressionsLst.getChildren()){
 						if(child.getOffset()<actualNodeOffset && 
 							child.getGrammarElement() instanceof Keyword && 
-							",".equals(((Keyword)child.getGrammarElement()).getValue())){
+							",".equals(((Keyword)child.getGrammarElement()).getValue())){ //$NON-NLS-1$
 								argumentPos++;
 						}
 					}
@@ -172,7 +172,7 @@ public class EditingAreaHelper {
 					List<Integer> commasOffsets=new ArrayList<Integer>();									
 					for(INode c : NodeModelUtils.findActualNodeFor(exprLst).getChildren()){
 						if(c.getGrammarElement() instanceof Keyword && 
-								",".equals(((Keyword)c.getGrammarElement()).getValue())){
+								",".equals(((Keyword)c.getGrammarElement()).getValue())){ //$NON-NLS-1$
 							commasOffsets.add(c.getOffset());
 						}
 					}
@@ -247,7 +247,7 @@ public class EditingAreaHelper {
 				JasperReportsExpression firstExpr = args.getExprLst().getExpressions().get(0);
 				if(firstExpr instanceof MethodsExpression){
 					ICompositeNode methodsExprNode = NodeModelUtils.findActualNodeFor(firstExpr);
-					if(!methodsExprNode.getText().endsWith(")")){
+					if(!methodsExprNode.getText().endsWith(")")){ //$NON-NLS-1$
 						// error found: so let's set the 
 						argsStart=methodsExprNode.getTotalEndOffset()-1;
 					}
@@ -261,7 +261,7 @@ public class EditingAreaHelper {
 			int positionStart=-1;
 			int positionEnd=-1;
 			textArea.setSelection(argsStart+1,argsEnd-1);
-			StringBuffer sb=new StringBuffer("");
+			StringBuffer sb=new StringBuffer(""); //$NON-NLS-1$
 			for (int i=0;i<lastPosition-1;i++){
 				String paramTxt = parametersTexts.get(i);
 				int paramTxtLength = paramTxt.length();
@@ -273,9 +273,9 @@ public class EditingAreaHelper {
 				}
 				sb.append(paramTxt);
 				if(paramTxtLength==0){
-					sb.append(" ");
+					sb.append(" "); //$NON-NLS-1$
 				}
-				sb.append(",");
+				sb.append(","); //$NON-NLS-1$
 			}
 			String lastParamTxt=parametersTexts.get(lastPosition-1);
 			int lastParamTextLength=lastParamTxt.length();
@@ -284,7 +284,7 @@ public class EditingAreaHelper {
 				positionEnd=positionStart+Math.max(lastParamTextLength,1); 
 			}
 			if(lastParamTextLength==0){
-				sb.append(" ");
+				sb.append(" "); //$NON-NLS-1$
 			}
 			sb.append(lastParamTxt);
 			textArea.insert(sb.toString());

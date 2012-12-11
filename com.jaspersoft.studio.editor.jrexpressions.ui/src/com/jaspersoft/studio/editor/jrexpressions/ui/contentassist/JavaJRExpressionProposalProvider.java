@@ -50,7 +50,7 @@ public class JavaJRExpressionProposalProvider extends AbstractJavaJRExpressionPr
 			List<JRField> allFields = ExpressionContextUtils.getAllFields(exprContext);
 			for(JRField field : allFields){
 				acceptor.accept(createCompletionProposal(
-						"$F{" + field.getName() + "}", "$F{" + field.getName() + "}", getFieldIconImg(), context));  
+						"$F{" + field.getName() + "}", "$F{" + field.getName() + "}", getFieldIconImg(), context));   //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			}
 		}
 	}
@@ -62,7 +62,7 @@ public class JavaJRExpressionProposalProvider extends AbstractJavaJRExpressionPr
 			List<JRVariable> allVariables = ExpressionContextUtils.getAllVariables(exprContext);
 			for(JRVariable var : allVariables){
 				acceptor.accept(createCompletionProposal(
-						"$V{" + var.getName() + "}", "$V{" + var.getName() + "}", getVariableIconImg(), context));  
+						"$V{" + var.getName() + "}", "$V{" + var.getName() + "}", getVariableIconImg(), context));   //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			}
 		}
 	}
@@ -74,7 +74,7 @@ public class JavaJRExpressionProposalProvider extends AbstractJavaJRExpressionPr
 			List<JRParameter> allParameters = ExpressionContextUtils.getAllParameters(exprContext);
 			for(JRParameter param : allParameters){
 				acceptor.accept(createCompletionProposal(
-						"$P{" + param.getName() + "}", "$P{" + param.getName() + "}", getParameterIconImg(), context));  
+						"$P{" + param.getName() + "}", "$P{" + param.getName() + "}", getParameterIconImg(), context));   //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			}
 		}
 	}
@@ -94,28 +94,28 @@ public class JavaJRExpressionProposalProvider extends AbstractJavaJRExpressionPr
 	 * Get JRParameter icon image.
 	 */
 	private Image getParameterIconImg(){
-		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/parameters-16.png");
+		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/parameters-16.png"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Get JRVariable icon image.
 	 */
 	private Image getVariableIconImg(){
-		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/variables-16.png");
+		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/variables-16.png"); //$NON-NLS-1$
 	}
 
 	/*
 	 * Get JRField icon image.
 	 */
 	private Image getFieldIconImg(){
-		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/fields-16.png");
+		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/fields-16.png"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Get the icon image for a proposed function.
 	 */
 	private Image getMethodNameIconImg(){
-		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/methodName.gif");
+		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/methodName.gif"); //$NON-NLS-1$
 	}
 	
 }
