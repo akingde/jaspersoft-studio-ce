@@ -24,6 +24,7 @@ import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage;
+import com.jaspersoft.studio.preferences.theme.ThemesPreferencePage;
 import com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage;
 
 /*
@@ -62,6 +63,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		StudioPreferencePage.getDefaults(store);
 		VirtualizerPreferencePage.getDefaults(store);
 		ToolItemsPreferencePage.getDefaults(store);
+
+		ThemesPreferencePage.getDefaults(store);
 	}
 
 }

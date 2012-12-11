@@ -343,11 +343,15 @@ public class Messages extends NLS {
 	public static String DeleteGroupReportAction_delete_group;
 	public static String DeleteGroupReportAction_delete_group_tool_tip;
 	public static String DeleteGuideCommand_delete_guide;
+	public static String DesignerPreferencePage_common_bandmargincolor;
 	public static String DesignerPreferencePage_corners;
 	public static String DesignerPreferencePage_description;
 	public static String DesignerPreferencePage_element_design_border_style;
+	public static String DesignerPreferencePage_elementbordercolor;
 	public static String DesignerPreferencePage_fancy_shadow;
 	public static String DesignerPreferencePage_page_border_style;
+	public static String DesignerPreferencePage_pagebackground;
+	public static String DesignerPreferencePage_pageprintmargincolor;
 	public static String DesignerPreferencePage_show_band_names;
 	public static String DesignerPreferencePage_simple_shadow;
 	public static String DesignerPreferencePage_unit;
@@ -1140,6 +1144,7 @@ public class Messages extends NLS {
 	public static String ReportTemplatesWizardPage_title;
 	public static String ResetValueCommand_restore_default_value;
 	public static String ResourceCellEditor_open_resource;
+	public static String RulersGridPreferencePage_common_gridcolor;
 	public static String RulersGridPreferencePage_description;
 	public static String RulersGridPreferencePage_grid_options;
 	public static String RulersGridPreferencePage_grid_spacing_x;

@@ -1,20 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
@@ -24,10 +20,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
-import com.jaspersoft.studio.preferences.PreferenceInitializer;
-import com.jaspersoft.studio.preferences.util.JRContextPrefStore;
+import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VExporter extends APreview {
@@ -37,8 +33,10 @@ public class VExporter extends APreview {
 
 	public VExporter(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
-		pfstore = new JRContextPrefStore(jContext);
-		PreferenceInitializer.initDefaultProperties(pfstore);
+		pfstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore(
+				(IFile) jContext.get(IEditorContributor.KEY_FILE), JaspersoftStudioPlugin.getUniqueIdentifier());
+		// pfstore = new JRContextPrefStore(jContext);
+		// PreferenceInitializer.initDefaultProperties(pfstore);
 	}
 
 	@Override
@@ -74,6 +72,7 @@ public class VExporter extends APreview {
 		if (preview != null && preview instanceof IPreferencePage) {
 			page = ((IPreferencePage) preview).getPreferencePage();
 			if (page != null) {
+
 				page.setPreferenceStore(pfstore);
 				page.createControl(composite);
 				Control pageControl = page.getControl();

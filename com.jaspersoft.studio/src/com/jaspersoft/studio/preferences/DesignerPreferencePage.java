@@ -26,11 +26,13 @@ import com.jaspersoft.studio.property.section.report.util.Unit;
  */
 public class DesignerPreferencePage extends FieldEditorOverlayPage {
 
-	public static final String DEFAULT_BORDERSTYLE = "shadow";
-	public static final String DEFAULT_MARGINCOLOR = "170,168,255";
-	public static final String DEFAULT_PAGE_BACKGROUND = "255,255,255";
+	public static final String DEFAULT_BORDERSTYLE = "shadow"; //$NON-NLS-1$
+	public static final String DEFAULT_MARGINCOLOR = "170,168,255"; //$NON-NLS-1$
+	public static final String DEFAULT_PAGE_BACKGROUND = "255,255,255"; //$NON-NLS-1$
 
-	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.DesignerPreferencePage.property";
+	public static final String DEFAULT_ELEMENT_DESIGN_BORDER_COLOR = "0,0,0"; //$NON-NLS-1$
+
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.DesignerPreferencePage.property"; //$NON-NLS-1$
 
 	public static final String P_ELEMENT_DESIGN_BORDER_STYLE = "elementDesignBorderStyle"; //$NON-NLS-1$
 	public static final String P_PAGE_DESIGN_BORDER_STYLE = "pageDesignBorderStyle"; //$NON-NLS-1$
@@ -39,6 +41,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_CONTAINER_MARGIN_COLOR = "containerMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_MARGIN_COLOR = "pageMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_BACKGROUND = "pageBackground"; //$NON-NLS-1$
+
+	public static final String P_ELEMENT_DESIGN_BORDER_COLOR = "elementDesignBorderColor"; //$NON-NLS-1$
 
 	public DesignerPreferencePage() {
 		super(GRID);
@@ -55,6 +59,9 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				Messages.DesignerPreferencePage_element_design_border_style,
 				new String[][] {
 						{ Messages.DesignerPreferencePage_corners, "corners" }, { Messages.common_rectangle, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-1$ //$NON-NLS-2$
+		addField(new ColorFieldEditor(P_ELEMENT_DESIGN_BORDER_COLOR, Messages.DesignerPreferencePage_elementbordercolor,
+				getFieldEditorParent()));
+
 		addField(new ComboFieldEditor(P_PAGE_DESIGN_BORDER_STYLE, Messages.DesignerPreferencePage_page_border_style,
 				new String[][] { { Messages.DesignerPreferencePage_fancy_shadow, DEFAULT_BORDERSTYLE },
 						{ Messages.DesignerPreferencePage_simple_shadow, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-1$ //$NON-NLS-2$
@@ -64,9 +71,12 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 
 		addField(new BooleanFieldEditor(P_SHOW_REPORT_BAND_NAMES, Messages.DesignerPreferencePage_show_band_names,
 				getFieldEditorParent()));
-		addField(new ColorFieldEditor(P_CONTAINER_MARGIN_COLOR, "Band Margin Color", getFieldEditorParent()));
-		addField(new ColorFieldEditor(P_PAGE_MARGIN_COLOR, "Page Print Margin Color", getFieldEditorParent()));
-		addField(new ColorFieldEditor(P_PAGE_BACKGROUND, "Page Background", getFieldEditorParent()));
+		addField(new ColorFieldEditor(P_CONTAINER_MARGIN_COLOR, Messages.DesignerPreferencePage_common_bandmargincolor,
+				getFieldEditorParent()));
+		addField(new ColorFieldEditor(P_PAGE_MARGIN_COLOR, Messages.DesignerPreferencePage_pageprintmargincolor,
+				getFieldEditorParent()));
+		addField(new ColorFieldEditor(P_PAGE_BACKGROUND, Messages.DesignerPreferencePage_pagebackground,
+				getFieldEditorParent()));
 	}
 
 	/*
@@ -79,6 +89,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(P_PAGE_DESIGN_BORDER_STYLE, DEFAULT_BORDERSTYLE); //$NON-NLS-1$
+		store.setDefault(P_ELEMENT_DESIGN_BORDER_COLOR, DEFAULT_ELEMENT_DESIGN_BORDER_COLOR); //$NON-NLS-1$
 		store.setDefault(P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
 		store.setDefault(P_PAGE_DEFAULT_UNITS, "px"); //$NON-NLS-1$=
 		store.setDefault(P_CONTAINER_MARGIN_COLOR, DEFAULT_MARGINCOLOR); //$NON-NLS-1$

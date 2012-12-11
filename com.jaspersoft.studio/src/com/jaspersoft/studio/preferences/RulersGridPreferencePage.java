@@ -30,7 +30,7 @@ import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
  */
 public class RulersGridPreferencePage extends FieldEditorOverlayPage {
 
-	public static final String DEFAULT_GRIDCOLOR = "192,192,192";
+	public static final String DEFAULT_GRIDCOLOR = "192,192,192"; //$NON-NLS-1$
 	public static final String P_PAGE_RULERGRID_SHOWRULER = "pageRulerGrid_SHOWRULER"; //$NON-NLS-1$
 	public static final String P_PAGE_RULERGRID_SNAPTOGUIDES = "pageRulerGrid_SNAPTOGUIDES"; //$NON-NLS-1$
 	public static final String P_PAGE_RULERGRID_SHOWGRID = "pageRulerGrid_SHOWGRID"; //$NON-NLS-1$
@@ -83,7 +83,7 @@ public class RulersGridPreferencePage extends FieldEditorOverlayPage {
 		spaceY.setValidRange(1, 500);
 		addField(spaceY);
 
-		addField(new ColorFieldEditor(P_PAGE_GRID_COLOR, "Grid Color", group));
+		addField(new ColorFieldEditor(P_PAGE_GRID_COLOR, Messages.RulersGridPreferencePage_common_gridcolor, group));
 
 	}
 
@@ -107,7 +107,7 @@ public class RulersGridPreferencePage extends FieldEditorOverlayPage {
 	public void init(IWorkbench workbench) {
 	}
 
-	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.RulersGridPreferencePage.property";
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.RulersGridPreferencePage.property"; //$NON-NLS-1$
 
 	@Override
 	protected String getPageId() {

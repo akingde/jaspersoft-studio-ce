@@ -84,9 +84,8 @@ public class AddResourceWizard extends Wizard {
 			MResource r = page0.getResource();
 			if (r != null) {
 				int size = getPageCount();
-				Field f;
 				try {
-					f = Wizard.class.getDeclaredField("pages");
+					Field f = Wizard.class.getDeclaredField("pages");
 					f.setAccessible(true); // FIXME, REALLY UGLY :( BUT IT'S
 											// FASTER
 					List<IWizardPage> wpages = (List<IWizardPage>) f.get(this);
@@ -140,7 +139,8 @@ public class AddResourceWizard extends Wizard {
 
 	@Override
 	public boolean canFinish() {
-		if(getContainer().getCurrentPage() == page0) return false;
+		if (getContainer().getCurrentPage() == page0)
+			return false;
 		return super.canFinish();
 	}
 }

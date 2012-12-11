@@ -215,6 +215,12 @@
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.theme.ThemesPreferencePage"
+            id="com.jaspersoft.studio.preferences.theme.ThemesPreferencePage"
+            name="Report Designer Themes">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
             class="com.jaspersoft.studio.preferences.RulersGridPreferencePage"
             id="com.jaspersoft.studio.preferences.GridRulerPreferencePage"
             name="Rulers And Grid">
@@ -451,6 +457,17 @@
             id="com.jaspersoft.studio.preferences.DesignerPreferencePage.property"
             name="Report Designer"
             >
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.theme.ThemesPreferencePage"
+            id="com.jaspersoft.studio.preferences.theme.ThemesPreferencePage.property"
+            name="Report Designer Themes">
          <enabledWhen>
             <reference
                   definitionId="com.jaspersoft.studio.projectorjrxml">

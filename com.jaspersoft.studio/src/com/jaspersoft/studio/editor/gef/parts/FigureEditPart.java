@@ -16,7 +16,6 @@ import java.beans.PropertyChangeListener;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Shape;
@@ -25,7 +24,10 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.SnapToGrid;
+import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
@@ -66,7 +68,9 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	}
 
 	protected void handlePreferenceChanged(org.eclipse.jface.util.PropertyChangeEvent event) {
-		if (event.getProperty().equals(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE))
+		String p = event.getProperty();
+		if (p.equals(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE)
+				|| p.equals(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_COLOR))
 			setPrefsBorder(getFigure());
 		else
 			refreshVisuals();
@@ -149,11 +153,14 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		if (jConfig == null)
 			jConfig = ((ANode) getModel()).getJasperConfiguration();
 		String pref = jConfig.getProperty(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
+		String mcolor = jConfig.getProperty(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_COLOR,
+				DesignerPreferencePage.DEFAULT_ELEMENT_DESIGN_BORDER_COLOR);
+		Color fg = SWTResourceManager.getColor(StringConverter.asRGB(mcolor));
 
 		if (pref.equals("rectangle")) //$NON-NLS-1$
-			rect.setBorder(new ElementLineBorder(ColorConstants.black));
+			rect.setBorder(new ElementLineBorder(fg));
 		else
-			rect.setBorder(new CornerBorder(ColorConstants.black, 5));
+			rect.setBorder(new CornerBorder(fg, 5));
 
 		rect.repaint();
 	}
