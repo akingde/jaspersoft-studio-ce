@@ -1718,9 +1718,59 @@ rule__BooleanLiteral__Alternatives_1
 )
 
     |(
-{ before(grammarAccess.getBooleanLiteralAccess().getIsTrueAssignment_1_1()); }
-(rule__BooleanLiteral__IsTrueAssignment_1_1)
-{ after(grammarAccess.getBooleanLiteralAccess().getIsTrueAssignment_1_1()); }
+{ before(grammarAccess.getBooleanLiteralAccess().getJavaLangBooleanFALSEKeyword_1_1()); }
+
+	'java.lang.Boolean.FALSE' 
+
+{ after(grammarAccess.getBooleanLiteralAccess().getJavaLangBooleanFALSEKeyword_1_1()); }
+)
+
+    |(
+{ before(grammarAccess.getBooleanLiteralAccess().getBooleanFALSEKeyword_1_2()); }
+
+	'Boolean.FALSE' 
+
+{ after(grammarAccess.getBooleanLiteralAccess().getBooleanFALSEKeyword_1_2()); }
+)
+
+    |(
+{ before(grammarAccess.getBooleanLiteralAccess().getIsTrueAssignment_1_3()); }
+(rule__BooleanLiteral__IsTrueAssignment_1_3)
+{ after(grammarAccess.getBooleanLiteralAccess().getIsTrueAssignment_1_3()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__BooleanLiteral__IsTrueAlternatives_1_3_0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_3_0_0()); }
+
+	'true' 
+
+{ after(grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_3_0_0()); }
+)
+
+    |(
+{ before(grammarAccess.getBooleanLiteralAccess().getIsTrueJavaLangBooleanTRUEKeyword_1_3_0_1()); }
+
+	'java.lang.Boolean.TRUE' 
+
+{ after(grammarAccess.getBooleanLiteralAccess().getIsTrueJavaLangBooleanTRUEKeyword_1_3_0_1()); }
+)
+
+    |(
+{ before(grammarAccess.getBooleanLiteralAccess().getIsTrueBooleanTRUEKeyword_1_3_0_2()); }
+
+	'Boolean.TRUE' 
+
+{ after(grammarAccess.getBooleanLiteralAccess().getIsTrueBooleanTRUEKeyword_1_3_0_2()); }
 )
 
 ;
@@ -8031,22 +8081,15 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__BooleanLiteral__IsTrueAssignment_1_1
+rule__BooleanLiteral__IsTrueAssignment_1_3
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_1_0()); }
-(
-{ before(grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_1_0()); }
-
-	'true' 
-
-{ after(grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_1_0()); }
-)
-
-{ after(grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_1_0()); }
+{ before(grammarAccess.getBooleanLiteralAccess().getIsTrueAlternatives_1_3_0()); }
+(rule__BooleanLiteral__IsTrueAlternatives_1_3_0)
+{ after(grammarAccess.getBooleanLiteralAccess().getIsTrueAlternatives_1_3_0()); }
 )
 
 ;

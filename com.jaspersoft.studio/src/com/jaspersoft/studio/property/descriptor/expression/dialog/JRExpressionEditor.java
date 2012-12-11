@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 
 public class JRExpressionEditor extends Wizard {
@@ -66,4 +67,12 @@ public class JRExpressionEditor extends Wizard {
 		return true;
 	}
 
+	@Override
+	public void dispose() {
+		super.dispose();
+		// Remove any expression context reference
+		ExpressionEditorSupportUtil.setCurrentExpressionContext(null);
+	}
+	
+	
 }

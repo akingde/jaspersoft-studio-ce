@@ -67,6 +67,8 @@ public class JRExpressionPage extends WizardPage {
 	
 	public void setExpressionContext(ExpressionContext exprContext){
 		this.exprContext=exprContext;
+		// Update the current expression context reference
+		ExpressionEditorSupportUtil.setCurrentExpressionContext(this.exprContext);
 	}
 
 	protected JRExpressionPage(String pageName) {

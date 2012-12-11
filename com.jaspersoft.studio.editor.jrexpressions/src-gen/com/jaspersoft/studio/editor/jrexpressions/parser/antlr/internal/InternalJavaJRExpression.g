@@ -1806,19 +1806,56 @@ ruleBooleanLiteral returns [EObject current=null]
     	newLeafNode(otherlv_1, grammarAccess.getBooleanLiteralAccess().getFalseKeyword_1_0());
     }
 
+    |	otherlv_2='java.lang.Boolean.FALSE' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getBooleanLiteralAccess().getJavaLangBooleanFALSEKeyword_1_1());
+    }
+
+    |	otherlv_3='Boolean.FALSE' 
+    {
+    	newLeafNode(otherlv_3, grammarAccess.getBooleanLiteralAccess().getBooleanFALSEKeyword_1_2());
+    }
+
     |(
 (
-		lv_isTrue_2_0=	'true' 
+(
+		lv_isTrue_4_1=	'true' 
     {
-        newLeafNode(lv_isTrue_2_0, grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_1_0());
+        newLeafNode(lv_isTrue_4_1, grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_3_0_0());
     }
  
 	    {
 	        if ($current==null) {
 	            $current = createModelElement(grammarAccess.getBooleanLiteralRule());
 	        }
-       		setWithLastConsumed($current, "isTrue", true, "true");
+       		setWithLastConsumed($current, "isTrue", true, null);
 	    }
+
+    |		lv_isTrue_4_2=	'java.lang.Boolean.TRUE' 
+    {
+        newLeafNode(lv_isTrue_4_2, grammarAccess.getBooleanLiteralAccess().getIsTrueJavaLangBooleanTRUEKeyword_1_3_0_1());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getBooleanLiteralRule());
+	        }
+       		setWithLastConsumed($current, "isTrue", true, null);
+	    }
+
+    |		lv_isTrue_4_3=	'Boolean.TRUE' 
+    {
+        newLeafNode(lv_isTrue_4_3, grammarAccess.getBooleanLiteralAccess().getIsTrueBooleanTRUEKeyword_1_3_0_2());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getBooleanLiteralRule());
+	        }
+       		setWithLastConsumed($current, "isTrue", true, null);
+	    }
+
+)
 
 )
 )))

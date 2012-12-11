@@ -15,10 +15,22 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.jrexpressions.validation;
 
+import java.util.List;
+
+import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRVariable;
+
 import org.eclipse.xtext.validation.Check;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionContextUtils;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRFieldObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRParameterObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRVariableObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
@@ -32,6 +44,11 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreatio
  */
 public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaValidator {
 
+	/**
+	 * Performs some validation checks on a potential library function. 
+	 * 
+	 * @param name the {@link FullMethodName} that could contain the function
+	 */
 	@Check
 	public void checkLibraryFunctionName(FullMethodName name) {
 		MethodInvocation method=(MethodInvocation)name.eContainer();
@@ -62,5 +79,52 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 			}
 		}
 	}
+	
+	/**
+	 * Checks if the field name is suitable for the current expression context.
+	 * 
+	 * @param field the field to validate
+	 */
+	@Check
+	public void checkFieldName(JRFieldObj field){
+		ExpressionContext currExpContext = ExpressionEditorSupportUtil.safeGetCurrentExpressionContext();
+		List<JRField> allFields = ExpressionContextUtils.getAllFields(currExpContext);
+		for(JRField f : allFields){
+			if(("{" + f.getName() + "}").equals(field.getBracedIdentifier())) return;
+		}
+		error("The specified field can not be found in the current expression context", field,
+				JavaJRExpressionPackage.Literals.JR_FIELD_OBJ__BRACED_IDENTIFIER, JavaJRExpressionPackage.JR_FIELD_OBJ__BRACED_IDENTIFIER);				
+	}
 
+	/**
+	 * Checks if the variable name is suitable for the current expression context.
+	 * 
+	 * @param variable the variable to validate
+	 */
+	@Check
+	public void checkVariableName(JRVariableObj variable){
+		ExpressionContext currExpContext = ExpressionEditorSupportUtil.safeGetCurrentExpressionContext();
+		List<JRVariable> allVariables = ExpressionContextUtils.getAllVariables(currExpContext);
+		for(JRVariable v : allVariables){
+			if(("{" + v.getName() + "}").equals(variable.getBracedIdentifier())) return;
+		}
+		error("The specified variable can not be found in the current expression context", variable,
+				JavaJRExpressionPackage.Literals.JR_VARIABLE_OBJ__BRACED_IDENTIFIER, JavaJRExpressionPackage.JR_VARIABLE_OBJ__BRACED_IDENTIFIER);				
+	}
+	
+	/**
+	 * Checks if the parameter name is suitable for the current expression context.
+	 * 
+	 * @param parameter the parameter to validate
+	 */
+	@Check
+	public void checkParameterName(JRParameterObj parameter){
+		ExpressionContext currExpContext = ExpressionEditorSupportUtil.safeGetCurrentExpressionContext();
+		List<JRParameter> allParameters = ExpressionContextUtils.getAllParameters(currExpContext);
+		for(JRParameter p : allParameters){
+			if(("{" + p.getName() + "}").equals(parameter.getBracedIdentifier())) return;
+		}
+		error("The specified parameter can not be found in the current expression context", parameter,
+				JavaJRExpressionPackage.Literals.JR_PARAMETER_OBJ__BRACED_IDENTIFIER, JavaJRExpressionPackage.JR_PARAMETER_OBJ__BRACED_IDENTIFIER);				
+	}
 }

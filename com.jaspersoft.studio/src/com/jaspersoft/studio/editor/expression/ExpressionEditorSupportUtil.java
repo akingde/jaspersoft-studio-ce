@@ -25,13 +25,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
 
-import org.eclipse.core.internal.preferences.DefaultPreferences;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.ui.IEditorPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -51,7 +45,8 @@ public class ExpressionEditorSupportUtil {
 
 	private static final IExpressionEditorSupportFactory supportFactory;
 	private static final Map<String, ExpressionEditorSupport> editorSupports;
-
+	private static ExpressionContext currentContext;
+	
 	static {
 		supportFactory = JaspersoftStudioPlugin.getExtensionManager().getExpressionEditorSupportFactory();
 		editorSupports = new HashMap<String, ExpressionEditorSupport>(3); // java, groovy, javascript are languages that
@@ -224,4 +219,38 @@ public class ExpressionEditorSupportUtil {
 		return Arrays.asList(importsSet.toArray(new String[] {}));
 	}
 
+	/**
+	 * Sets the current expression context that is currently used in the Expression Editor UI.
+	 * <p>
+	 * 
+	 * Should be reset to <code>null</null> when the editor UI is closed.
+	 * 
+	 * @param exprContext
+	 *          the current expression context to set
+	 */
+	public static void setCurrentExpressionContext(ExpressionContext exprContext) {
+		currentContext = exprContext;
+	}
+	
+	/**
+	 * @return the current expression context if any, <code>null</code> otherwise
+	 */
+	public static ExpressionContext getCurrentExpressionContext() {
+		return currentContext;
+	}
+
+	/**
+	 * @return the current expression context if any is set, otherwise tries to return the default expression context for
+	 *         the currently opened report
+	 */
+	public static ExpressionContext safeGetCurrentExpressionContext() {
+		ExpressionContext expContext = getCurrentExpressionContext();
+		if(expContext==null){
+			return getReportExpressionContext();
+		}
+		else {
+			return expContext;
+		}
+	}
+	
 }

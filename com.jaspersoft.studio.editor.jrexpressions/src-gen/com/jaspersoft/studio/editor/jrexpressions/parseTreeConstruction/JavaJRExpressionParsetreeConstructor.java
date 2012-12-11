@@ -5556,11 +5556,13 @@ protected class StringLiteral_ValueAssignment_1 extends AssignmentToken  {
 /************ begin Rule BooleanLiteral ****************
  *
  * BooleanLiteral returns JasperReportsExpression:
- * 	{BooleanLiteral} ("false" | isTrue?="true");
+ * 	{BooleanLiteral} ("false" | "java.lang.Boolean.FALSE" | "Boolean.FALSE" | isTrue?=("true" | "java.lang.Boolean.TRUE" |
+ * 	"Boolean.TRUE"));
  *
  **/
 
-// {BooleanLiteral} ("false" | isTrue?="true")
+// {BooleanLiteral} ("false" | "java.lang.Boolean.FALSE" | "Boolean.FALSE" | isTrue?=("true" | "java.lang.Boolean.TRUE" |
+// "Boolean.TRUE"))
 protected class BooleanLiteral_Group extends GroupToken {
 	
 	public BooleanLiteral_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -5615,7 +5617,7 @@ protected class BooleanLiteral_BooleanLiteralAction_0 extends ActionToken  {
 	}
 }
 
-// "false" | isTrue?="true"
+// "false" | "java.lang.Boolean.FALSE" | "Boolean.FALSE" | isTrue?=("true" | "java.lang.Boolean.TRUE" | "Boolean.TRUE")
 protected class BooleanLiteral_Alternatives_1 extends AlternativesToken {
 
 	public BooleanLiteral_Alternatives_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -5631,7 +5633,7 @@ protected class BooleanLiteral_Alternatives_1 extends AlternativesToken {
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
 			case 0: return new BooleanLiteral_FalseKeyword_1_0(lastRuleCallOrigin, this, 0, inst);
-			case 1: return new BooleanLiteral_IsTrueAssignment_1_1(lastRuleCallOrigin, this, 1, inst);
+			case 1: return new BooleanLiteral_IsTrueAssignment_1_3(lastRuleCallOrigin, this, 1, inst);
 			default: return null;
 		}	
 	}
@@ -5660,16 +5662,16 @@ protected class BooleanLiteral_FalseKeyword_1_0 extends KeywordToken  {
 
 }
 
-// isTrue?="true"
-protected class BooleanLiteral_IsTrueAssignment_1_1 extends AssignmentToken  {
+// isTrue?=("true" | "java.lang.Boolean.TRUE" | "Boolean.TRUE")
+protected class BooleanLiteral_IsTrueAssignment_1_3 extends AssignmentToken  {
 	
-	public BooleanLiteral_IsTrueAssignment_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public BooleanLiteral_IsTrueAssignment_1_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getBooleanLiteralAccess().getIsTrueAssignment_1_1();
+		return grammarAccess.getBooleanLiteralAccess().getIsTrueAssignment_1_3();
 	}
 
     @Override
@@ -5686,7 +5688,17 @@ protected class BooleanLiteral_IsTrueAssignment_1_1 extends AssignmentToken  {
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("isTrue");
 		if(Boolean.TRUE.equals(value)) { // org::eclipse::xtext::impl::KeywordImpl
 			type = AssignmentType.KEYWORD;
-			element = grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_1_0();
+			element = grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_3_0_0();
+			return obj;
+		}
+		if(Boolean.TRUE.equals(value)) { // org::eclipse::xtext::impl::KeywordImpl
+			type = AssignmentType.KEYWORD;
+			element = grammarAccess.getBooleanLiteralAccess().getIsTrueJavaLangBooleanTRUEKeyword_1_3_0_1();
+			return obj;
+		}
+		if(Boolean.TRUE.equals(value)) { // org::eclipse::xtext::impl::KeywordImpl
+			type = AssignmentType.KEYWORD;
+			element = grammarAccess.getBooleanLiteralAccess().getIsTrueBooleanTRUEKeyword_1_3_0_2();
 			return obj;
 		}
 		return null;

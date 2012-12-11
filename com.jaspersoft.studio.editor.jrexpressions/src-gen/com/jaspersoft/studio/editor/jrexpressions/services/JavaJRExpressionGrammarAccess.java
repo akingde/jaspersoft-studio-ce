@@ -19,6 +19,8 @@
 
 package com.jaspersoft.studio.editor.jrexpressions.services;
 
+import java.util.List;
+
 import org.eclipse.xtext.Action;
 import org.eclipse.xtext.Alternatives;
 import org.eclipse.xtext.Assignment;
@@ -1062,30 +1064,52 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 		private final Action cBooleanLiteralAction_0 = (Action)cGroup.eContents().get(0);
 		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
 		private final Keyword cFalseKeyword_1_0 = (Keyword)cAlternatives_1.eContents().get(0);
-		private final Assignment cIsTrueAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
-		private final Keyword cIsTrueTrueKeyword_1_1_0 = (Keyword)cIsTrueAssignment_1_1.eContents().get(0);
+		private final Keyword cJavaLangBooleanFALSEKeyword_1_1 = (Keyword)cAlternatives_1.eContents().get(1);
+		private final Keyword cBooleanFALSEKeyword_1_2 = (Keyword)cAlternatives_1.eContents().get(2);
+		private final Assignment cIsTrueAssignment_1_3 = (Assignment)cAlternatives_1.eContents().get(3);
+		private final Alternatives cIsTrueAlternatives_1_3_0 = (Alternatives)cIsTrueAssignment_1_3.eContents().get(0);
+		private final Keyword cIsTrueTrueKeyword_1_3_0_0 = (Keyword)cIsTrueAlternatives_1_3_0.eContents().get(0);
+		private final Keyword cIsTrueJavaLangBooleanTRUEKeyword_1_3_0_1 = (Keyword)cIsTrueAlternatives_1_3_0.eContents().get(1);
+		private final Keyword cIsTrueBooleanTRUEKeyword_1_3_0_2 = (Keyword)cIsTrueAlternatives_1_3_0.eContents().get(2);
 		
 		//BooleanLiteral returns JasperReportsExpression:
-		//	{BooleanLiteral} ("false" | isTrue?="true");
+		//	{BooleanLiteral} ("false" | "java.lang.Boolean.FALSE" | "Boolean.FALSE" | isTrue?=("true" | "java.lang.Boolean.TRUE" |
+		//	"Boolean.TRUE"));
 		public ParserRule getRule() { return rule; }
 
-		//{BooleanLiteral} ("false" | isTrue?="true")
+		//{BooleanLiteral} ("false" | "java.lang.Boolean.FALSE" | "Boolean.FALSE" | isTrue?=("true" | "java.lang.Boolean.TRUE" |
+		//"Boolean.TRUE"))
 		public Group getGroup() { return cGroup; }
 
 		//{BooleanLiteral}
 		public Action getBooleanLiteralAction_0() { return cBooleanLiteralAction_0; }
 
-		//"false" | isTrue?="true"
+		//"false" | "java.lang.Boolean.FALSE" | "Boolean.FALSE" | isTrue?=("true" | "java.lang.Boolean.TRUE" | "Boolean.TRUE")
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
 		//"false"
 		public Keyword getFalseKeyword_1_0() { return cFalseKeyword_1_0; }
 
-		//isTrue?="true"
-		public Assignment getIsTrueAssignment_1_1() { return cIsTrueAssignment_1_1; }
+		//"java.lang.Boolean.FALSE"
+		public Keyword getJavaLangBooleanFALSEKeyword_1_1() { return cJavaLangBooleanFALSEKeyword_1_1; }
+
+		//"Boolean.FALSE"
+		public Keyword getBooleanFALSEKeyword_1_2() { return cBooleanFALSEKeyword_1_2; }
+
+		//isTrue?=("true" | "java.lang.Boolean.TRUE" | "Boolean.TRUE")
+		public Assignment getIsTrueAssignment_1_3() { return cIsTrueAssignment_1_3; }
+
+		//"true" | "java.lang.Boolean.TRUE" | "Boolean.TRUE"
+		public Alternatives getIsTrueAlternatives_1_3_0() { return cIsTrueAlternatives_1_3_0; }
 
 		//"true"
-		public Keyword getIsTrueTrueKeyword_1_1_0() { return cIsTrueTrueKeyword_1_1_0; }
+		public Keyword getIsTrueTrueKeyword_1_3_0_0() { return cIsTrueTrueKeyword_1_3_0_0; }
+
+		//"java.lang.Boolean.TRUE"
+		public Keyword getIsTrueJavaLangBooleanTRUEKeyword_1_3_0_1() { return cIsTrueJavaLangBooleanTRUEKeyword_1_3_0_1; }
+
+		//"Boolean.TRUE"
+		public Keyword getIsTrueBooleanTRUEKeyword_1_3_0_2() { return cIsTrueBooleanTRUEKeyword_1_3_0_2; }
 	}
 
 	public class NullLiteralElements extends AbstractParserRuleElementFinder {
@@ -1874,19 +1898,36 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	private TerminalRule tBRACED_IDENTIFIER;
 	private TerminalRule tExpObjIdentifier;
 	
-	private final GrammarProvider grammarProvider;
+	private final Grammar grammar;
 
 	private TerminalsGrammarAccess gaTerminals;
 
 	@Inject
 	public JavaJRExpressionGrammarAccess(GrammarProvider grammarProvider,
 		TerminalsGrammarAccess gaTerminals) {
-		this.grammarProvider = grammarProvider;
+		this.grammar = internalFindGrammar(grammarProvider);
 		this.gaTerminals = gaTerminals;
 	}
 	
-	public Grammar getGrammar() {	
-		return grammarProvider.getGrammar(this);
+	protected Grammar internalFindGrammar(GrammarProvider grammarProvider) {
+		Grammar grammar = grammarProvider.getGrammar(this);
+		while (grammar != null) {
+			if ("com.jaspersoft.studio.editor.jrexpressions.JavaJRExpression".equals(grammar.getName())) {
+				return grammar;
+			}
+			List<Grammar> grammars = grammar.getUsedGrammars();
+			if (!grammars.isEmpty()) {
+				grammar = grammars.iterator().next();
+			} else {
+				return null;
+			}
+		}
+		return grammar;
+	}
+	
+	
+	public Grammar getGrammar() {
+		return grammar;
 	}
 	
 
@@ -2154,7 +2195,8 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	}
 
 	//BooleanLiteral returns JasperReportsExpression:
-	//	{BooleanLiteral} ("false" | isTrue?="true");
+	//	{BooleanLiteral} ("false" | "java.lang.Boolean.FALSE" | "Boolean.FALSE" | isTrue?=("true" | "java.lang.Boolean.TRUE" |
+	//	"Boolean.TRUE"));
 	public BooleanLiteralElements getBooleanLiteralAccess() {
 		return (pBooleanLiteral != null) ? pBooleanLiteral : (pBooleanLiteral = new BooleanLiteralElements());
 	}

@@ -62,6 +62,7 @@ public class JavaJRExpressionParser extends AbstractContentAssistParser {
 					put(grammarAccess.getMethodsExpressionAccess().getAlternatives_1(), "rule__MethodsExpression__Alternatives_1");
 					put(grammarAccess.getLiteralExpressionAccess().getAlternatives(), "rule__LiteralExpression__Alternatives");
 					put(grammarAccess.getBooleanLiteralAccess().getAlternatives_1(), "rule__BooleanLiteral__Alternatives_1");
+					put(grammarAccess.getBooleanLiteralAccess().getIsTrueAlternatives_1_3_0(), "rule__BooleanLiteral__IsTrueAlternatives_1_3_0");
 					put(grammarAccess.getTypeAccess().getAlternatives_1(), "rule__Type__Alternatives_1");
 					put(grammarAccess.getArrayCreatorAccess().getAlternatives_3(), "rule__ArrayCreator__Alternatives_3");
 					put(grammarAccess.getJvmArgumentTypeReferenceAccess().getAlternatives(), "rule__JvmArgumentTypeReference__Alternatives");
@@ -181,7 +182,7 @@ public class JavaJRExpressionParser extends AbstractContentAssistParser {
 					put(grammarAccess.getDoubleLiteralAccess().getValueAssignment_1(), "rule__DoubleLiteral__ValueAssignment_1");
 					put(grammarAccess.getCharLiteralAccess().getValueAssignment_1(), "rule__CharLiteral__ValueAssignment_1");
 					put(grammarAccess.getStringLiteralAccess().getValueAssignment_1(), "rule__StringLiteral__ValueAssignment_1");
-					put(grammarAccess.getBooleanLiteralAccess().getIsTrueAssignment_1_1(), "rule__BooleanLiteral__IsTrueAssignment_1_1");
+					put(grammarAccess.getBooleanLiteralAccess().getIsTrueAssignment_1_3(), "rule__BooleanLiteral__IsTrueAssignment_1_3");
 					put(grammarAccess.getCastedExpressionAccess().getCastTypeAssignment_2(), "rule__CastedExpression__CastTypeAssignment_2");
 					put(grammarAccess.getCastedExpressionAccess().getCastedExprAssignment_4(), "rule__CastedExpression__CastedExprAssignment_4");
 					put(grammarAccess.getTypeAccess().getPrimitiveTypeAssignment_1_0(), "rule__Type__PrimitiveTypeAssignment_1_0");

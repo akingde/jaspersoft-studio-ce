@@ -127,7 +127,10 @@ StringLiteral returns JasperReportsExpression:
 ;
 
 BooleanLiteral returns JasperReportsExpression:
-	{BooleanLiteral} ('false' | isTrue?='true')
+	{BooleanLiteral} (
+		'false' | 'java.lang.Boolean.FALSE' | 'Boolean.FALSE' | 
+		isTrue?=('true' | 'java.lang.Boolean.TRUE' | 'Boolean.TRUE')
+	)
 ;
 
 NullLiteral  returns JasperReportsExpression:

@@ -151,6 +151,28 @@
     </extension>
 
 
+    <!-- marker definitions for com.jaspersoft.studio.editor.jrexpressions.JavaJRExpression -->
+    <extension
+            id="javajrexpression.check.fast"
+            name="JavaJRExpression Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.fast"/>
+        <persistent value="true"/>
+    </extension>
+    <extension
+            id="javajrexpression.check.normal"
+            name="JavaJRExpression Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.normal"/>
+        <persistent value="true"/>
+    </extension>
+    <extension
+            id="javajrexpression.check.expensive"
+            name="JavaJRExpression Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.expensive"/>
+        <persistent value="true"/>
+    </extension>
 
    <extension
          point="org.eclipse.xtext.builder.participant">
@@ -216,12 +238,33 @@
 			</command>
 		</menuContribution>
 	</extension>
-   <!-- quickfix marker resolution generator -->
-   <extension
-         point="org.eclipse.ui.ide.markerResolution">
-      <markerResolutionGenerator
-            class="com.jaspersoft.studio.editor.jrexpressions.ui.JavaJRExpressionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator">
-      </markerResolutionGenerator>
-   </extension>
+    <!-- quickfix marker resolution generator for com.jaspersoft.studio.editor.jrexpressions.JavaJRExpression -->
+    <extension
+            point="org.eclipse.ui.ide.markerResolution">
+        <markerResolutionGenerator
+            class="com.jaspersoft.studio.editor.jrexpressions.ui.JavaJRExpressionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="com.jaspersoft.studio.editor.jrexpressions.ui.javajrexpression.check.fast">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="com.jaspersoft.studio.editor.jrexpressions.ui.JavaJRExpressionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="com.jaspersoft.studio.editor.jrexpressions.ui.javajrexpression.check.normal">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="com.jaspersoft.studio.editor.jrexpressions.ui.JavaJRExpressionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="com.jaspersoft.studio.editor.jrexpressions.ui.javajrexpression.check.expensive">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+    </extension>
 
 </plugin>

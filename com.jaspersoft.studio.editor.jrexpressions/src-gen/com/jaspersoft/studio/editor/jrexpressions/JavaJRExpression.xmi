@@ -532,8 +532,14 @@
         </elements>
         <elements xsi:type="xtext:Alternatives">
           <elements xsi:type="xtext:Keyword" value="false"/>
+          <elements xsi:type="xtext:Keyword" value="java.lang.Boolean.FALSE"/>
+          <elements xsi:type="xtext:Keyword" value="Boolean.FALSE"/>
           <elements xsi:type="xtext:Assignment" feature="isTrue" operator="?=">
-            <terminal xsi:type="xtext:Keyword" value="true"/>
+            <terminal xsi:type="xtext:Alternatives">
+              <elements xsi:type="xtext:Keyword" value="true"/>
+              <elements xsi:type="xtext:Keyword" value="java.lang.Boolean.TRUE"/>
+              <elements xsi:type="xtext:Keyword" value="Boolean.TRUE"/>
+            </terminal>
           </elements>
         </elements>
       </alternatives>
