@@ -22,6 +22,8 @@ public class Messages extends NLS {
 	public static String DefaultExpressionEditorSupportFactory_NewClassCreationError;
 	public static String FunctionDetailsComposite_ComplexExprTooltip;
 	public static String FunctionDetailsComposite_ReturnTypeText;
+	public static String JavaExpressionEditorComposite_BackCompatibilitySection;
+	public static String JavaExpressionEditorComposite_ClassTypeDialogTitle;
 	public static String JavaExpressionEditorComposite_ExpressionInvalidError;
 	public static String JavaExpressionEditorComposite_JobName;
 	public static String JavaExpressionEditorComposite_NoValidationIssuesInfo;

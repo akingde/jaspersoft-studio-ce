@@ -43,12 +43,16 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.progress.WorkbenchJob;
 import org.eclipse.xtext.validation.Issue;
 
@@ -68,6 +72,7 @@ import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelec
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectsNavigatorContentProvider;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectsNavigatorLabelProvider;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.StyledTextXtextAdapter2;
+import com.jaspersoft.studio.swt.widgets.ClassType;
 
 /**
  * Standard implementation of the main editing area for JasperReports
@@ -95,18 +100,21 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	private Composite objectCategoryDetailsCmp;
 	private StackLayout detailsPanelStackLayout;
 	private List<IExpressionStatusChangeListener> statusChangeListeners;
+	private ClassType valueType;
 
 	// Support data structures and classes
 	private static final int UPDATE_DELAY=300;
 	private UpdatePanelJob updatePanelJob;
 	private EditingAreaHelper editingAreaInfo;
 	private String currentWidgetText;
+	private String valueClassName;
 	// Cache map of the detail panels
 	private Map<String, ObjectCategoryDetailsPanel> detailPanels;
 	private ObjectCategoryItem builtinFunctionsItem;
 	private ObjectCategoryItem parametersCategoryItem;
 	private ObjectCategoryItem fieldsCategoryItem;
 	private ObjectCategoryItem variablesCategoryItem;
+
 
 	/**
 	 * Creates the expression editor composite.
@@ -140,9 +148,40 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		subSashForm.setWeights(new int[] { 25, 75 });
 		mainSashForm.setWeights(new int[] { 20, 80 });
 		
+		createBackCompatibilitySection();
+		
 		FunctionsLibraryUtil.reloadLibraryIfNeeded();
 		
 		this.updatePanelJob=new UpdatePanelJob();
+	}
+
+	/*
+	 * Creates an expandable section with some back-compatibility option.
+	 * Right now only the ability to set ValueClassName information (for old JR versions) makes sense.
+	 */
+	private void createBackCompatibilitySection() {
+		Section backCompatibilitySection = new Section(this, ExpandableComposite.TREE_NODE);
+		GridData backCompSectionGD = new GridData(SWT.FILL,SWT.FILL,true,false);
+		backCompSectionGD.verticalIndent=10;
+		backCompatibilitySection.setLayoutData(backCompSectionGD);
+		backCompatibilitySection.setLayout(new FillLayout());
+		backCompatibilitySection.setText(Messages.JavaExpressionEditorComposite_BackCompatibilitySection);
+		Composite composite = new Composite(backCompatibilitySection, SWT.NONE);
+		composite.setLayout(new GridLayout(2, false));
+		Label lbl1 = new Label(composite, SWT.NONE);
+		lbl1.setText("Value Class Name"); //$NON-NLS-1$
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		lbl1.setLayoutData(gd);
+
+		valueType = new ClassType(composite, Messages.JavaExpressionEditorComposite_ClassTypeDialogTitle);
+		valueType.addListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				valueClassName = valueType.getClassType();
+			}
+		});
+		backCompatibilitySection.setClient(composite);
 	}
 
 	/*
@@ -246,6 +285,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 			expression = null;
 		} else {
 			expression = new JRDesignExpression(currentWidgetText);
+			expression.setValueClassName(valueClassName);
 		}
 		return expression;
 	}
@@ -255,8 +295,10 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		this.expression = (JRDesignExpression) expression;
 		if (this.expression == null) {
 			editorArea.setText(""); //$NON-NLS-1$
+			valueType.setClassType(null);
 		} else {
 			editorArea.setText(expression.getText());
+			valueType.setClassType(this.expression.getValueClassName());
 		}
 		updateExpressionStatus();
 	}
