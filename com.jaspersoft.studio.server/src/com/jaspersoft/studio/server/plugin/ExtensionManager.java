@@ -93,9 +93,9 @@ public class ExtensionManager {
 		return null;
 	}
 
-	public IWizardPage getResourcePage(ANode parent, MResource resource) {
+	public IWizardPage[] getResourcePage(ANode parent, MResource resource) {
 		for (IResourceFactory r : resources) {
-			IWizardPage mr = r.getResourcePage(parent, resource);
+			IWizardPage[] mr = r.getResourcePage(parent, resource);
 			if (mr != null)
 				return mr;
 		}

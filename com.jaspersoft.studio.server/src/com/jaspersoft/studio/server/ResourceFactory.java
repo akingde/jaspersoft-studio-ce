@@ -51,94 +51,138 @@ import com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
-import com.jaspersoft.studio.server.wizard.resource.page.RDDataAdapterPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDDataTypePage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceBeanPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceJDBCPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceJNDIPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourcePage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceVDSPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDFolderPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDFontPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDImagePage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDInputControlPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDJarPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDJrxmlPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDLovPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDQueryPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDReferencePage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitOptionsPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDResourceBundlePage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDStyleTemplatePage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDUnknownPage;
-import com.jaspersoft.studio.server.wizard.resource.page.RDXmlFile;
+import com.jaspersoft.studio.server.wizard.resource.APageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.DataTypePageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.FontPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.ImagePageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.InputControlPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.JarPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.JrxmlPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.LovPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.QueryPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.ReferencePageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.ResourceBundlePageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.StyleTemplatePageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.XmlPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.datasource.DataAdapterPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceBeanPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceJDBCPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceJndiPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceVDSPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitContent;
+import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitDatasourceContent;
+import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitInputControlContent;
+import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitOptionsContent;
+import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitQueryContent;
 
 public class ResourceFactory {
 
-	private Map<Class<? extends MResource>, IWizardPage> pagemap = new HashMap<Class<? extends MResource>, IWizardPage>();
+	private Map<Class<? extends MResource>, IWizardPage[]> pagemap = new HashMap<Class<? extends MResource>, IWizardPage[]>();
 
-	public IWizardPage getResourcePage(ANode parent, MResource resource) {
-		IWizardPage page = pagemap.get(resource.getClass());
+	public IWizardPage[] getResourcePage(ANode parent, MResource resource) {
+		IWizardPage[] page = pagemap.get(resource.getClass());
 		if (page == null) {
 			page = Activator.getExtManager().getResourcePage(parent, resource);
 			if (page == null) {
-				if (resource instanceof MFolder)
-					page = new RDFolderPage(parent, (MFolder) resource);
-				else if (resource instanceof MRImage)
-					page = new RDImagePage(parent, (MRImage) resource);
+				if (resource instanceof MRImage)
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new ImagePageContent(parent, resource));
 				else if (resource instanceof MRFont)
-					page = new RDFontPage(parent, (MRFont) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new FontPageContent(parent, resource));
 				else if (resource instanceof MJar)
-					page = new RDJarPage(parent, (MJar) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new JarPageContent(parent, resource));
 				else if (resource instanceof MResourceBundle)
-					page = new RDResourceBundlePage(parent,
-							(MResourceBundle) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new ResourceBundlePageContent(parent, resource));
 				else if (resource instanceof MJrxml)
-					page = new RDJrxmlPage(parent, (MJrxml) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new JrxmlPageContent(parent, resource));
 				else if (resource instanceof MReference)
-					page = new RDReferencePage(parent, (MReference) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new ReferencePageContent(parent, resource));
 				else if (resource instanceof MRDatasourceVDS)
-					page = new RDDatasourceVDSPage(parent,
-							(MRDatasourceVDS) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new DatasourceVDSPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceJNDI)
-					page = new RDDatasourceJNDIPage(parent,
-							(MRDatasourceJNDI) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new DatasourceJndiPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceJDBC)
-					page = new RDDatasourceJDBCPage(parent,
-							(MRDatasourceJDBC) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new DatasourceJDBCPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceBean)
-					page = new RDDatasourceBeanPage(parent,
-							(MRDatasourceBean) resource);
-				else if (resource instanceof MRDatasourceCustom)
-					page = new RDDatasourcePage(parent,
-							(MRDatasourceCustom) resource);
-				else if (resource instanceof MRDatasource)
-					page = new RDDatasourcePage(parent, (MRDatasource) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new DatasourceBeanPageContent(parent, resource));
+				else if (resource instanceof MRDatasourceCustom
+						|| resource instanceof MRDatasource
+						|| resource instanceof MFolder)
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource));
 				else if (resource instanceof MReportUnit)
-					page = new RDReportUnitPage(parent, (MReportUnit) resource);
+					if (ReportUnitQueryContent.hasTypeQuery(resource))
+						page = APageContent.getPages(resource,
+								new ResourcePageContent(parent, resource),
+								new ReportUnitContent(parent, resource),
+								new ReportUnitDatasourceContent(parent,
+										resource), new ReportUnitQueryContent(
+										parent, resource),
+								new ReportUnitInputControlContent(parent,
+										resource));
+					else
+						page = APageContent.getPages(resource,
+								new ResourcePageContent(parent, resource),
+								new ReportUnitContent(parent, resource),
+								new ReportUnitDatasourceContent(parent,
+										resource),
+								new ReportUnitInputControlContent(parent,
+										resource));
 				else if (resource instanceof MInputControl)
-					page = new RDInputControlPage(parent,
-							(MInputControl) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new InputControlPageContent(parent, resource));
 				else if (resource instanceof MDataType)
-					page = new RDDataTypePage(parent, (MDataType) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new DataTypePageContent(parent, resource));
 				else if (resource instanceof MRQuery)
-					page = new RDQueryPage(parent, (MRQuery) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new QueryPageContent(parent, resource));
 				else if (resource instanceof MListOfValues)
-					page = new RDLovPage(parent, (MListOfValues) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new LovPageContent(parent, resource));
 				else if (resource instanceof MReportUnitOptions)
-					page = new RDReportUnitOptionsPage(parent,
-							(MReportUnitOptions) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new ReportUnitOptionsContent(parent, resource));
 				else if (resource instanceof MXmlFile)
-					page = new RDXmlFile(parent, (MXmlFile) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new XmlPageContent(parent, resource));
 				else if (resource instanceof MUnknown)
-					page = new RDUnknownPage(parent, (MUnknown) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource));
 				else if (resource instanceof MRStyleTemplate)
-					page = new RDStyleTemplatePage(parent,
-							(MRStyleTemplate) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new StyleTemplatePageContent(parent, resource));
 				else if (resource instanceof MDataAdapter)
-					page = new RDDataAdapterPage(parent,
-							(MDataAdapter) resource);
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new DataAdapterPageContent(parent, resource));
 			}
 			if (page != null)
 				pagemap.put(resource.getClass(), page);

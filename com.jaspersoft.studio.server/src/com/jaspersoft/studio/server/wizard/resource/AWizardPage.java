@@ -13,22 +13,24 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.plugin;
+package com.jaspersoft.studio.server.wizard.resource;
 
-import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.wizard.IWizardContainer;
+import org.eclipse.jface.wizard.WizardPage;
 
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.server.model.MResource;
+public abstract class AWizardPage extends WizardPage {
 
-public interface IResourceFactory {
-	public MResource getResource(ANode parent, ResourceDescriptor resource,
-			int index);
+	public AWizardPage(String pageName, String title, ImageDescriptor titleImage) {
+		super(pageName, title, titleImage);
+	}
 
-	public IWizardPage[] getResourcePage(ANode parent, MResource resource);
+	public AWizardPage(String pageName) {
+		super(pageName);
+	}
 
-	public ANode createNewResource(MRoot root, ANode parent);
-
-	public ANode createNewDatasource(MRoot root, ANode parent);
+	@Override
+	public IWizardContainer getContainer() {
+		return super.getContainer();
+	}
 }

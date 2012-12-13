@@ -13,41 +13,39 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.wizard.resource;
+package com.jaspersoft.studio.server.wizard.resource.page.datasource;
 
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.core.databinding.DataBindingContext;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.wizard.resource.page.AFileResourcePageContent;
 
-public class ResourceWizard extends Wizard {
+public class DataAdapterPageContent extends AFileResourcePageContent {
 
-	public ResourceWizard(ANode parent, MResource resource) {
-		super();
-		setWindowTitle(Messages.ResourceWizard_windowtitle);
-		this.resource = resource;
-		this.parent = parent;
+	public DataAdapterPageContent(ANode parent, MResource resource,
+			DataBindingContext bindingContext) {
+		super(parent, resource, bindingContext);
 	}
 
-	private ResourceFactory rfactory = new ResourceFactory();
-
-	@Override
-	public void addPages() {
-		IWizardPage[] pages = rfactory.getResourcePage(parent, resource);
-		for (IWizardPage p : pages)
-			addPage(p);
+	public DataAdapterPageContent(ANode parent, MResource resource) {
+		super(parent, resource);
 	}
 
-	private ANode parent;
-
-	private MResource resource;
+	@Override
+	public String getPageName() {
+		return "com.jaspersoft.studio.server.page.dataadapter";
+	}
 
 	@Override
-	public boolean performFinish() {
-		return true;
+	public String getName() {
+		return Messages.RDDataAdapterPage_Title;
+	}
+
+	@Override
+	protected String[] getFilter() {
+		return new String[] { "*.xml" }; //$NON-NLS-1$
 	}
 
 }

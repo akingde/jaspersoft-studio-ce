@@ -13,22 +13,31 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.plugin;
+package com.jaspersoft.studio.server.wizard.resource;
 
-import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.databinding.wizard.WizardPageSupport;
+import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.server.model.MResource;
+public class NewResourcePage extends AWizardPage {
+	private APageContent rcontent;
 
-public interface IResourceFactory {
-	public MResource getResource(ANode parent, ResourceDescriptor resource,
-			int index);
+	public NewResourcePage(APageContent rcontent) {
+		super(rcontent.getPageName());
+		this.rcontent = rcontent;
+		rcontent.setPage(this);
+		setTitle(rcontent.getName());
+		setDescription(rcontent.getName());
+	}
 
-	public IWizardPage[] getResourcePage(ANode parent, MResource resource);
+	public void createControl(Composite parent) {
+		setControl(rcontent.createContent(parent));
 
-	public ANode createNewResource(MRoot root, ANode parent);
+		WizardPageSupport.create(this, rcontent.getBindingContext());
+	}
 
-	public ANode createNewDatasource(MRoot root, ANode parent);
+	@Override
+	public void dispose() {
+		rcontent.dispose();
+		super.dispose();
+	}
 }

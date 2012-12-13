@@ -13,41 +13,38 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.wizard.resource;
+package com.jaspersoft.studio.server.wizard.resource.page;
 
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.core.databinding.DataBindingContext;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 
-public class ResourceWizard extends Wizard {
+public class JarPageContent extends AFileResourcePageContent {
 
-	public ResourceWizard(ANode parent, MResource resource) {
-		super();
-		setWindowTitle(Messages.ResourceWizard_windowtitle);
-		this.resource = resource;
-		this.parent = parent;
+	public JarPageContent(ANode parent, MResource resource,
+			DataBindingContext bindingContext) {
+		super(parent, resource, bindingContext);
 	}
 
-	private ResourceFactory rfactory = new ResourceFactory();
-
-	@Override
-	public void addPages() {
-		IWizardPage[] pages = rfactory.getResourcePage(parent, resource);
-		for (IWizardPage p : pages)
-			addPage(p);
+	public JarPageContent(ANode parent, MResource resource) {
+		super(parent, resource);
 	}
 
-	private ANode parent;
-
-	private MResource resource;
+	@Override
+	public String getPageName() {
+		return "com.jaspersoft.studio.server.page.jar";
+	}
 
 	@Override
-	public boolean performFinish() {
-		return true;
+	public String getName() {
+		return Messages.RDJarPage_title;
+	}
+
+	@Override
+	protected String[] getFilter() {
+		return new String[] { "*.zip", "*.jar" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }

@@ -45,7 +45,7 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
-import com.jaspersoft.studio.server.wizard.resource.page.SelectorDatasource;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
 public class WSClientHelper {
 	private static Map<WSClient, ServerProfile> clients = new HashMap<WSClient, ServerProfile>();

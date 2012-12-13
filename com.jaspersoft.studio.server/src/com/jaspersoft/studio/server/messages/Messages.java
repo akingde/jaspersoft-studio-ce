@@ -50,6 +50,7 @@ public class Messages extends NLS {
 	public static String JrxmlPublishAction_jobname;
 	public static String JrxmlPublishAction_title;
 	public static String JrxmlPublishAction_tooltip;
+	public static String LovPageContent_lov;
 	public static String Publish2ServerWizard_MonitorName;
 	public static String Publish2ServerWizard_Title;
 	public static String RDDataAdapterPage_Description;

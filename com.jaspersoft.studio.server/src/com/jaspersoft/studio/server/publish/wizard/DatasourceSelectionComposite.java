@@ -39,7 +39,7 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.wizard.resource.AddResourceWizard;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
-import com.jaspersoft.studio.server.wizard.resource.page.SelectorDatasource;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtils;
 

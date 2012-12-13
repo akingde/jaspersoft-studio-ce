@@ -25,6 +25,8 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.plugin.IResourceFactory;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
+import com.jaspersoft.studio.server.wizard.resource.APageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 
 public class MongoResourceFactory implements IResourceFactory {
 
@@ -42,10 +44,11 @@ public class MongoResourceFactory implements IResourceFactory {
 		return null;
 	}
 
-	public IWizardPage getResourcePage(ANode parent, MResource resource) {
+	public IWizardPage[] getResourcePage(ANode parent, MResource resource) {
 		if (resource instanceof MRDatasourceMongoDB)
-			return new RDDatasourceMongoDBPage(parent,
-					(MRDatasourceMongoDB) resource);
+			return APageContent.getPages(resource, new ResourcePageContent(
+					parent, resource), new DatasourceMongoDBPageContent(parent,
+					resource));
 		return null;
 	}
 
