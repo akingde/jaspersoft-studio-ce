@@ -61,14 +61,14 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 			switch (columnIndex) {
 			case 0:
 				if (txt.startsWith("$F{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getInstance().getImage(MField
-							.getIconDescriptor().getIcon16());
+					return JaspersoftStudioPlugin.getInstance().getImage(
+							MField.getIconDescriptor().getIcon16());
 				if (txt.startsWith("$P{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getInstance().getImage(MParameter
-							.getIconDescriptor().getIcon16());
+					return JaspersoftStudioPlugin.getInstance().getImage(
+							MParameter.getIconDescriptor().getIcon16());
 				if (txt.startsWith("$V{")) //$NON-NLS-1$
-					return JaspersoftStudioPlugin.getInstance().getImage(MVariable
-							.getIconDescriptor().getIcon16());
+					return JaspersoftStudioPlugin.getInstance().getImage(
+							MVariable.getIconDescriptor().getIcon16());
 			}
 			return null;
 		}
@@ -80,6 +80,8 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 			case 0:
 				return txt.substring(3, txt.length() - 1);
 			case 1:
+				if (m == null || m.getCalculationValue() == null)
+					return "";
 				return m.getCalculationValue().getName();
 			}
 			return ""; //$NON-NLS-1$
@@ -89,8 +91,8 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 	protected CrosstabWizardMeasurePage() {
 		super("crosstabmeasurepage"); //$NON-NLS-1$
 		setTitle(Messages.CrosstabWizardMeasurePage_measures);
-		setImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/wizard_details.png"));//$NON-NLS-1$
+		setImageDescriptor(Activator.getDefault().getImageDescriptor(
+				"icons/wizard_details.png"));//$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardMeasurePage_description);
 		setPageComplete(false);
 	}
@@ -187,71 +189,67 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 				calcCombo });
 		viewer.setColumnProperties(new String[] { F_NAME, F_CALCULATION }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
-	
-	
+
 	/**
-	 * This procedure initialize the dialog page with the list of available objects.
-	 * This implementation looks for object set in the map as DISCOVERED_FIELDS.
+	 * This procedure initialize the dialog page with the list of available
+	 * objects. This implementation looks for object set in the map as
+	 * DISCOVERED_FIELDS.
 	 * 
 	 */
 	public void loadSettings() {
-		
-		if (getSettings() == null) return;
-		
-		if (getWizard() instanceof CrosstabWizard)
-		{
-			setAvailableFields(((CrosstabWizard)getWizard()).getAvailableMeasures());
-		}
-		else
-		{
+
+		if (getSettings() == null)
+			return;
+
+		if (getWizard() instanceof CrosstabWizard) {
+			setAvailableFields(((CrosstabWizard) getWizard())
+					.getAvailableMeasures());
+		} else {
 			setAvailableFields(null);
 		}
 	}
-	
-	
+
 	/**
-	 * Every time a new selection occurs, the selected fields are stored in the settings map
-	 * with the key WizardDataSourcePage.DATASET_FIELDS
+	 * Every time a new selection occurs, the selected fields are stored in the
+	 * settings map with the key WizardDataSourcePage.DATASET_FIELDS
 	 */
-	public void storeSettings()
-	{
-		if (getWizard() instanceof JSSWizard &&
-				getWizard() != null)
-			{
-				Map<String, Object> settings = ((JSSWizard)getWizard()).getSettings();
-			
-				if (settings == null) return;
-				
-				settings.put(CrosstabWizard.CROSSTAB_MEASURES,  getSelectedFields() ); 
-				setPageComplete(!(getSelectedFields()==null || getSelectedFields().isEmpty()));
-			}
-		
+	public void storeSettings() {
+		if (getWizard() instanceof JSSWizard && getWizard() != null) {
+			Map<String, Object> settings = ((JSSWizard) getWizard())
+					.getSettings();
+
+			if (settings == null)
+				return;
+
+			settings.put(CrosstabWizard.CROSSTAB_MEASURES, getSelectedFields());
+			setPageComplete(!(getSelectedFields() == null || getSelectedFields()
+					.isEmpty()));
+		}
+
 	}
-	
-	
+
 	/**
-	 * This function checks if a particular right element is in the provided list, 
-	 * and which is the matching element in that list.
+	 * This function checks if a particular right element is in the provided
+	 * list, and which is the matching element in that list.
 	 * 
-	 * This implementation is based on the string value returned by
-	 * left and right getText label providers on column 0
+	 * This implementation is based on the string value returned by left and
+	 * right getText label providers on column 0
 	 * 
 	 * @param object
 	 * @param fields
 	 * @return
 	 */
 	protected Object findElement(Object object, List<?> fields) {
-		
-		String objName = ((TMeasureLabelProvider)rightTView.getLabelProvider()).getColumnText(object, 0);
-		for (Object obj : fields)
-		{
-			if (((TMeasureLabelProvider)leftTView.getLabelProvider()).getColumnText(obj,0).equals(objName))
-			{
+
+		String objName = ((TMeasureLabelProvider) rightTView.getLabelProvider())
+				.getColumnText(object, 0);
+		for (Object obj : fields) {
+			if (((TMeasureLabelProvider) leftTView.getLabelProvider())
+					.getColumnText(obj, 0).equals(objName)) {
 				return obj;
 			}
 		}
 		return null;
 	}
-	
+
 }
