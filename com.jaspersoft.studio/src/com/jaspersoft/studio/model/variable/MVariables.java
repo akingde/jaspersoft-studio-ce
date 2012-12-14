@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.variable;
 
@@ -33,6 +28,7 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+
 /*
  * The Class MVariables.
  * 
@@ -70,6 +66,11 @@ public class MVariables extends ANode implements IPastable, IContainerEditPart {
 		setValue(jrDataset);
 	}
 
+	@Override
+	public JRDesignDataset getValue() {
+		return (JRDesignDataset) super.getValue();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -77,7 +78,6 @@ public class MVariables extends ANode implements IPastable, IContainerEditPart {
 	 */
 	@Override
 	public Color getBackground() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -97,7 +97,6 @@ public class MVariables extends ANode implements IPastable, IContainerEditPart {
 	 */
 	@Override
 	public Font getFont() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -108,7 +107,6 @@ public class MVariables extends ANode implements IPastable, IContainerEditPart {
 	 */
 	@Override
 	public Color getForeground() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

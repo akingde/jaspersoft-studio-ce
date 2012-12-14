@@ -126,7 +126,8 @@ public class SetValueCommand extends Command {
 		getTarget().setPropertyValue(propertyName, propertyValue);
 
 		if (commands == null)
-			commands = JaspersoftStudioPlugin.getPostSetValueManager().postSetValue(target, propertyName, propertyValue);
+			commands = JaspersoftStudioPlugin.getPostSetValueManager().postSetValue(target, propertyName, propertyValue,
+					undoValue);
 		if (commands != null)
 			for (Command c : commands)
 				c.execute();

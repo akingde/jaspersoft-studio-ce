@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter.command;
 
@@ -20,26 +15,19 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
-import org.eclipse.gef.commands.Command;
-
+import com.jaspersoft.studio.model.command.ADatasetObjectDeleteCommand;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameters;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * /* link nodes & together.
  * 
  * @author Chicu Veaceslav
  */
-public class DeleteParameterCommand extends Command {
+public class DeleteParameterCommand extends ADatasetObjectDeleteCommand {
 
-	/** The jr dataset. */
-	private JRDesignDataset jrDataset;
-
-	/** The jr parameter. */
 	private JRDesignParameter jrParameter;
-
-	/** The element position. */
-	private int elementPosition = 0;
 
 	/**
 	 * Instantiates a new delete parameter command.
@@ -49,16 +37,22 @@ public class DeleteParameterCommand extends Command {
 	 * @param srcNode
 	 *          the src node
 	 */
-	public DeleteParameterCommand(MParameters destNode, MParameter srcNode) {
-		super();
-		this.jrDataset = (JRDesignDataset) destNode.getValue();
-		this.jrParameter = (JRDesignParameter) srcNode.getValue();
+	public DeleteParameterCommand(MParameters<JRDesignDataset> destNode, MParameter srcNode) {
+		this(srcNode.getJasperConfiguration(), destNode.getValue(), srcNode.getValue());
 	}
 
-	public DeleteParameterCommand(JRDesignDataset jrDataset, JRParameter jrParameter) {
+	/**
+	 * @param jContext
+	 * @param jrDataset
+	 * @param jrParameter
+	 */
+	public DeleteParameterCommand(JasperReportsConfiguration jContext, JRDesignDataset jrDataset, JRParameter jrParameter) {
 		super();
+		this.jContext = jContext;
+		jd = jContext.getJasperDesign();
 		this.jrDataset = jrDataset;
 		this.jrParameter = (JRDesignParameter) jrParameter;
+		objectName = "$P{" + jrParameter.getName() + "}";
 	}
 
 	/*
@@ -68,6 +62,8 @@ public class DeleteParameterCommand extends Command {
 	 */
 	@Override
 	public void execute() {
+		if (!checkExpressions())
+			return;
 		elementPosition = jrDataset.getParametersList().indexOf(jrParameter);
 		jrDataset.removeParameter(jrParameter);
 	}
@@ -91,6 +87,8 @@ public class DeleteParameterCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		if (canceled == null || canceled)
+			return;
 		try {
 			if (elementPosition < 0 || elementPosition > jrDataset.getParametersList().size())
 				jrDataset.addParameter(jrParameter);

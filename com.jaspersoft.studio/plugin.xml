@@ -1320,6 +1320,9 @@
        <postsetvalue
              ClassFactory="com.jaspersoft.studio.model.frame.PostSetSizeFrame">
        </postsetvalue>
+       <postsetvalue
+             ClassFactory="com.jaspersoft.studio.model.command.PostDatasetObjectSet">
+       </postsetvalue>
     </extension>
     <extension point="org.eclipse.ui.commands">
 	  <command

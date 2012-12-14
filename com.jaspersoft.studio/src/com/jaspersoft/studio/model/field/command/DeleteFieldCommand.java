@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.field.command;
 
@@ -21,28 +16,20 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 
-import org.eclipse.gef.commands.Command;
-
+import com.jaspersoft.studio.model.command.ADatasetObjectDeleteCommand;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * /* link nodes & together.
  * 
  * @author Chicu Veaceslav
  */
-public class DeleteFieldCommand extends Command {
-
-	/** The jr dataset. */
-	private JRDesignDataset jrDataset;
-
-	/** The jr field. */
+public class DeleteFieldCommand extends ADatasetObjectDeleteCommand {
 	private JRDesignField jrField;
 	private JRSortField jrSortField;
 	private int oldSortFieldindex = 0;
-
-	/** The element position. */
-	private int elementPosition = 0;
 
 	/**
 	 * Instantiates a new delete field command.
@@ -53,15 +40,16 @@ public class DeleteFieldCommand extends Command {
 	 *          the src node
 	 */
 	public DeleteFieldCommand(MFields destNode, MField srcNode) {
-		super();
-		this.jrDataset = (JRDesignDataset) destNode.getValue();
-		this.jrField = (JRDesignField) srcNode.getValue();
+		this(srcNode.getJasperConfiguration(), destNode.getValue(), srcNode.getValue());
 	}
 
-	public DeleteFieldCommand(JRDesignDataset destNode, JRDesignField srcNode) {
+	public DeleteFieldCommand(JasperReportsConfiguration jContext, JRDesignDataset destNode, JRDesignField srcNode) {
 		super();
+		this.jContext = jContext;
+		jd = jContext.getJasperDesign();
 		this.jrDataset = destNode;
 		this.jrField = srcNode;
+		objectName = "$F{" + jrField.getName() + "}";
 	}
 
 	/*
@@ -71,6 +59,8 @@ public class DeleteFieldCommand extends Command {
 	 */
 	@Override
 	public void execute() {
+		if (!checkExpressions())
+			return;
 		elementPosition = jrDataset.getFieldsList().indexOf(jrField);
 		jrDataset.removeField(jrField);
 
@@ -106,6 +96,8 @@ public class DeleteFieldCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		if (canceled == null || canceled)
+			return;
 		try {
 			if (elementPosition < 0 || elementPosition > jrDataset.getFieldsList().size())
 				jrDataset.addField(jrField);

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.variable.command;
 
@@ -21,28 +16,21 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 
-import org.eclipse.gef.commands.Command;
-
+import com.jaspersoft.studio.model.command.ADatasetObjectDeleteCommand;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariables;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * /* link nodes & together.
  * 
  * @author Chicu Veaceslav
  */
-public class DeleteVariableCommand extends Command {
+public class DeleteVariableCommand extends ADatasetObjectDeleteCommand {
 
-	/** The jr dataset. */
-	private JRDesignDataset jrDataset;
-
-	/** The jr variable. */
 	private JRDesignVariable jrVariable;
 	private JRSortField jrSortField;
 	private int oldSortFieldindex = 0;
-
-	/** The element position. */
-	private int elementPosition = 0;
 
 	/**
 	 * Instantiates a new delete variable command.
@@ -53,9 +41,16 @@ public class DeleteVariableCommand extends Command {
 	 *          the src node
 	 */
 	public DeleteVariableCommand(MVariables destNode, MVariable srcNode) {
+		this(srcNode.getJasperConfiguration(), destNode.getValue(), srcNode.getValue());
+	}
+
+	public DeleteVariableCommand(JasperReportsConfiguration jContext, JRDesignDataset destNode, JRDesignVariable srcNode) {
 		super();
-		this.jrDataset = (JRDesignDataset) destNode.getValue();
-		this.jrVariable = (JRDesignVariable) srcNode.getValue();
+		this.jContext = jContext;
+		jd = jContext.getJasperDesign();
+		this.jrDataset = destNode;
+		this.jrVariable = srcNode;
+		objectName = "$V{" + jrVariable.getName() + "}";
 	}
 
 	/*
@@ -65,6 +60,8 @@ public class DeleteVariableCommand extends Command {
 	 */
 	@Override
 	public void execute() {
+		if (!checkExpressions())
+			return;
 		elementPosition = jrDataset.getVariablesList().indexOf(jrVariable);
 		jrDataset.removeVariable(jrVariable);
 
@@ -100,6 +97,8 @@ public class DeleteVariableCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		if (canceled == null || canceled)
+			return;
 		try {
 			if (elementPosition < 0 || elementPosition > jrDataset.getVariablesList().size())
 				jrDataset.addVariable(jrVariable);

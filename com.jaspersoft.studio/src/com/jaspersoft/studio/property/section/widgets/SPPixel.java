@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.swt.widgets;
+package com.jaspersoft.studio.property.section.widgets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +53,6 @@ import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.report.util.Unit;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 

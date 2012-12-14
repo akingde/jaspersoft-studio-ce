@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.field;
 
@@ -19,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -32,6 +28,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
@@ -81,6 +79,11 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	public MField(ANode parent, JRDesignField jfRield, int newIndex) {
 		super(parent, newIndex);
 		setValue(jfRield);
+	}
+
+	@Override
+	public JRDesignField getValue() {
+		return (JRDesignField) super.getValue();
 	}
 
 	/*
@@ -223,4 +226,15 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		return false;
 	}
 
+	public JRDataset getJRDataset() {
+		ANode n = getParent();
+		while (n != null) {
+			if (n instanceof MDataset)
+				return ((MDataset) n).getValue();
+			if (n instanceof MReport)
+				return ((MReport) n).getValue().getMainDataset();
+			n = n.getParent();
+		}
+		return null;
+	}
 }

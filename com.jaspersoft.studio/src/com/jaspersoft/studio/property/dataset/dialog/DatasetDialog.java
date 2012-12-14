@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
@@ -145,8 +140,8 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		sf.setWeights(new int[] { 450, 250 });
 
 		JasperDesign jd = mdataset.getJasperDesign();
-		if(jd==null){
-			jd=mdataset.getMreport().getJasperDesign();
+		if (jd == null) {
+			jd = mdataset.getMreport().getJasperDesign();
 		}
 		setDataset(jd, newdataset);
 	}
@@ -216,11 +211,11 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 		Composite sectionClient = toolkit.createComposite(tabFolder);
 		FillLayout fLayout = new FillLayout();
-		fLayout.marginHeight=5;
-		fLayout.marginWidth=5;
+		fLayout.marginHeight = 5;
+		fLayout.marginWidth = 5;
 		sectionClient.setLayout(fLayout);
 
-		filterExpression=new WTextExpression(sectionClient, SWT.NONE);
+		filterExpression = new WTextExpression(sectionClient, SWT.NONE);
 		filterExpression.setBackground(sectionClient.getBackground());
 		JRDesignDataset designDataset = mdataset.getValue();
 		if (designDataset != null) {
@@ -228,7 +223,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		} else {
 			filterExpression.setExpressionContext(ExpressionEditorSupportUtil.getReportExpressionContext());
 		}
-		filterExpression.setExpression((JRDesignExpression)newdataset.getFilterExpression());
+		filterExpression.setExpression((JRDesignExpression) newdataset.getFilterExpression());
 
 		bptab.setControl(sectionClient);
 	}
@@ -280,7 +275,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		List<JRField> dsfields = ds.getFieldsList();
 		List<JRDesignField> fields = ftable.getFields();
 		for (JRField f : dsfields)
-			command.add(new DeleteFieldCommand(ds, (JRDesignField) f));
+			command.add(new DeleteFieldCommand(jConfig, ds, (JRDesignField) f));
 		for (JRDesignField newf : fields)
 			command.add(new CreateFieldCommand(ds, newf, -1));
 
@@ -294,7 +289,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		List<JRParameter> dssparameters = ds.getParametersList();
 		List<JRParameter> sparams = newdataset.getParametersList();
 		for (JRParameter f : dssparameters)
-			command.add(new DeleteParameterCommand(ds, f));
+			command.add(new DeleteParameterCommand(jConfig, ds, f));
 		for (JRParameter newf : sparams)
 			command.add(new CreateParameterCommand(ds, newf, -1));
 	}

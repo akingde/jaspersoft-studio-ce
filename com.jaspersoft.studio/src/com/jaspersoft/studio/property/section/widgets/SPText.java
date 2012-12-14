@@ -1,25 +1,20 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
@@ -54,9 +49,21 @@ public class SPText extends AHistorySPropertyWidget {
 	protected void createComponent(Composite parent) {
 		ftext = section.getWidgetFactory().createText(parent, "", SWT.NONE);
 		autocomplete = new AutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
-		ftext.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				handleTextChanged(section, pDescriptor.getId(), ftext.getText());
+		// ftext.addModifyListener(new ModifyListener() {
+		// public void modifyText(ModifyEvent e) {
+		// handleTextChanged(section, pDescriptor.getId(), ftext.getText());
+		// }
+		// });
+		ftext.addKeyListener(new KeyListener() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.keyCode == SWT.CR)
+					handleTextChanged(section, pDescriptor.getId(), ftext.getText());
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
 			}
 		});
 		ftext.setToolTipText(pDescriptor.getDescription());
@@ -75,6 +82,12 @@ public class SPText extends AHistorySPropertyWidget {
 			rd.widthHint = w;
 			ftext.setLayoutData(rd);
 		}
+	}
+
+	@Override
+	protected void handleFocusLost() {
+		handleTextChanged(section, pDescriptor.getId(), ftext.getText());
+		super.handleFocusLost();
 	}
 
 	protected void handleTextChanged(final AbstractSection section, final Object property, String text) {

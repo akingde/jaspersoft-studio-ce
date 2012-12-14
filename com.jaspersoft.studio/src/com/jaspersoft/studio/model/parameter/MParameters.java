@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter;
 
@@ -30,7 +25,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
  * 
  * @author Chicu Veaceslav
  */
-public class MParameters extends MCollection {
+public class MParameters<T> extends MCollection {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -49,8 +44,13 @@ public class MParameters extends MCollection {
 	/** The descriptors. */
 	protected static IPropertyDescriptor[] descriptors;
 
-	public MParameters(ANode parent, Object value, String property) {
+	public MParameters(ANode parent, T value, String property) {
 		super(parent, value, property);
+	}
+
+	@Override
+	public T getValue() {
+		return (T) super.getValue();
 	}
 
 	/*

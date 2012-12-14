@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property;
 
@@ -96,7 +91,8 @@ public class ResetValueCommand extends Command {
 	public void redo() {
 		target.resetPropertyValue(propertyName);
 		if (commands == null)
-			commands = JaspersoftStudioPlugin.getPostSetValueManager().postSetValue(target, propertyName, undoValue);
+			commands = JaspersoftStudioPlugin.getPostSetValueManager().postSetValue(target, propertyName,
+					target.getPropertyValue(propertyName), undoValue);
 		if (commands != null)
 			for (Command c : commands)
 				c.execute();

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property;
 
@@ -43,10 +38,10 @@ public class PostSetValueManager {
 
 	private List<IPostSetValue> nodeFactory = new ArrayList<IPostSetValue>();
 
-	public List<Command> postSetValue(IPropertySource target, Object prop, Object value) {
+	public List<Command> postSetValue(IPropertySource target, Object prop, Object newValue, Object oldValue) {
 		List<Command> cmd = null;
 		for (IPostSetValue psv : nodeFactory) {
-			Command postSetValue = psv.postSetValue(target, prop, value);
+			Command postSetValue = psv.postSetValue(target, prop, newValue, oldValue);
 			if (postSetValue != null) {
 				if (cmd == null)
 					cmd = new ArrayList<Command>();

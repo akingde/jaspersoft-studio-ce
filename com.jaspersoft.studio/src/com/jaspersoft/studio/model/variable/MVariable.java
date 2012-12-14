@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.variable;
 
@@ -19,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
@@ -33,6 +29,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -91,6 +88,11 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	 */
 	public MVariable(ANode parent, JRDesignVariable jrVariable, int newIndex) {
 		super(parent, jrVariable, newIndex);
+	}
+
+	@Override
+	public JRDesignVariable getValue() {
+		return (JRDesignVariable) super.getValue();
 	}
 
 	private IPropertyDescriptor[] descriptors;
@@ -168,11 +170,12 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		defaultsMap.put(JRDesignVariable.PROPERTY_RESET_TYPE, EnumHelper.getValue(ResetTypeEnum.REPORT, 1, false));
 		defaultsMap.put(JRDesignVariable.PROPERTY_INCREMENT_TYPE, EnumHelper.getValue(IncrementTypeEnum.NONE, 1, false));
 	}
-	
-	public ExpressionContext getExpressionContext(){
+
+	public ExpressionContext getExpressionContext() {
 		JRDesignDataset dataSet = getDataSet();
 		JasperReportsConfiguration conf = getJasperConfiguration();
-		if (dataSet != null && conf != null) return new ExpressionContext(dataSet, conf);
+		if (dataSet != null && conf != null)
+			return new ExpressionContext(dataSet, conf);
 		return null;
 	}
 
@@ -330,9 +333,21 @@ public class MVariable extends MVariableSystem implements ICopyable {
 
 	@Override
 	public Object getAdapter(Class adapter) {
-		if(ExpressionContext.class.equals(adapter)){
+		if (ExpressionContext.class.equals(adapter)) {
 			return getExpressionContext();
 		}
 		return super.getAdapter(adapter);
+	}
+
+	public JRDataset getJRDataset() {
+		ANode n = getParent();
+		while (n != null) {
+			if (n instanceof MDataset)
+				return ((MDataset) n).getValue();
+			if (n instanceof MReport)
+				return ((MReport) n).getValue().getMainDataset();
+			n = n.getParent();
+		}
+		return null;
 	}
 }

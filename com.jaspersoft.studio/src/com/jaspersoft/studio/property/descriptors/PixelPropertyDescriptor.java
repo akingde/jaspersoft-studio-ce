@@ -25,7 +25,7 @@ import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
-import com.jaspersoft.studio.swt.widgets.SPPixel;
+import com.jaspersoft.studio.property.section.widgets.SPPixel;
 
 /**
  * 

@@ -32,7 +32,6 @@ import com.jaspersoft.studio.components.table.ColumnCell;
 import com.jaspersoft.studio.components.table.Guide;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.MTable;
-import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
@@ -43,7 +42,7 @@ public class PostSetSizeCell implements IPostSetValue {
 
 	@Override
 	public Command postSetValue(IPropertySource target, Object prop,
-			Object value) {
+			Object newValue, Object oldValue) {
 		if (target instanceof MColumn
 				&& (prop.equals(StandardBaseColumn.PROPERTY_WIDTH) || prop
 						.equals(DesignCell.PROPERTY_HEIGHT))) {

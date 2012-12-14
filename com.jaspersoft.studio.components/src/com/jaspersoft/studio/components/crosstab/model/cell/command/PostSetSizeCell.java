@@ -34,7 +34,7 @@ public class PostSetSizeCell implements IPostSetValue {
 
 	@Override
 	public Command postSetValue(IPropertySource target, Object prop,
-			Object value) {
+			Object newValue, Object oldValue) {
 		if (target instanceof MCell
 				&& (prop.equals(JRDesignCrosstabCell.PROPERTY_WIDTH) || prop
 						.equals(JRDesignCrosstabCell.PROPERTY_HEIGHT))) {
