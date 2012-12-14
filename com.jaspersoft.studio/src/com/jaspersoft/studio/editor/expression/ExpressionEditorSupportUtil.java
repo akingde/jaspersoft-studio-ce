@@ -149,7 +149,7 @@ public class ExpressionEditorSupportUtil {
 	public static void addFunctionsLibraryImports(JasperDesign jd, JasperReportsConfiguration jrContext) {
 		Assert.isNotNull(jd);
 		Collection<JRExpression> collectedExpressions = JRExpressionCollector.collector(jrContext, jd)
-				.getReportExpressions();
+				.getExpressions();
 		List<String> libraryClasses = getStaticImportsForExpressions(collectedExpressions);
 		for (String clazzName : libraryClasses) {
 			jd.addImport("static " + clazzName + ".*");

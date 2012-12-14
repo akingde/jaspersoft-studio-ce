@@ -358,11 +358,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		// It's better to put the check here instead on the JRExpressionEditor dialog close.
 		// This allow for example to "fix" the report, depending on the preference setting,
 		// also when simply saving the JRXML file without having edited an expression.
-		if (getJasperDesign() != null) {
-			ExpressionEditorSupportUtil.updateFunctionsLibraryImports(getJasperDesign(), jrContext);
-		}
+		JasperDesign jd = getJasperDesign();
+		if (jd != null)
+			ExpressionEditorSupportUtil.updateFunctionsLibraryImports(jd, jrContext);
 
-		final IFile resource = getCurrentFile();
+		IFile resource = getCurrentFile();
 		try {
 			if (!resource.exists())
 				resource.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
@@ -525,8 +525,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			// a.setJrConfig(jrContext);
 			// ((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
 			// }
-			jrContext.setJasperDesign(jd);
-			setModel(ReportFactory.createReport(jrContext));
+			if (!isRefresh) {
+				jrContext.setJasperDesign(jd);
+				setModel(ReportFactory.createReport(jrContext));
+			}
 		} catch (JRException e) {
 			setModel(null);
 			handleJRException(editorInput, e, false);
