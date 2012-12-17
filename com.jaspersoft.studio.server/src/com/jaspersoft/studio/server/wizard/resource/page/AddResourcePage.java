@@ -42,6 +42,8 @@ import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MJar;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MListOfValues;
+import com.jaspersoft.studio.server.model.MRAccessGrantSchema;
+import com.jaspersoft.studio.server.model.MRDashboard;
 import com.jaspersoft.studio.server.model.MRFont;
 import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MRQuery;
@@ -58,6 +60,10 @@ import com.jaspersoft.studio.server.model.datasource.MRDatasourceDiagnostic;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
+import com.jaspersoft.studio.server.model.datasource.MRMondrianSchema;
+import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
+import com.jaspersoft.studio.server.model.datasource.MROlapUnit;
+import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class AddResourcePage extends WizardPage {
@@ -153,6 +159,18 @@ public class AddResourcePage extends WizardPage {
 					-1);
 			new MXmlFile(root, MXmlFile.createDescriptor(parent), -1);
 			new MDataAdapter(root, MDataAdapter.createDescriptor(parent), -1);
+
+			new MRDashboard(root, MRDashboard.createDescriptor(parent), -1);
+			new MRMondrianSchema(root,
+					MRMondrianSchema.createDescriptor(parent), -1);
+			new MROlapMondrianConnection(root,
+					MROlapMondrianConnection.createDescriptor(parent), -1);
+			new MROlapXmlaConnection(root,
+					MROlapXmlaConnection.createDescriptor(parent), -1);
+			new MROlapUnit(root, MROlapUnit.createDescriptor(parent), -1);
+			new MRAccessGrantSchema(root,
+					MRAccessGrantSchema.createDescriptor(parent), -1);
+
 			if (parent instanceof MReportUnit) {
 				new MReportUnitOptions(root,
 						MReportUnitOptions

@@ -31,6 +31,9 @@ import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MJar;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MListOfValues;
+import com.jaspersoft.studio.server.model.MRAccessGrantSchema;
+import com.jaspersoft.studio.server.model.MRCSS;
+import com.jaspersoft.studio.server.model.MRDashboard;
 import com.jaspersoft.studio.server.model.MRFont;
 import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MRQuery;
@@ -49,9 +52,14 @@ import com.jaspersoft.studio.server.model.datasource.MRDatasourceDiagnostic;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
+import com.jaspersoft.studio.server.model.datasource.MRMondrianSchema;
+import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
+import com.jaspersoft.studio.server.model.datasource.MROlapUnit;
+import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.CSSPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.DataTypePageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.FontPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.ImagePageContent;
@@ -70,6 +78,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceBe
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceJDBCPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceJndiPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceVDSPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.olap.OLAPXmlaPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitDatasourceContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitInputControlContent;
@@ -89,6 +98,11 @@ public class ResourceFactory {
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),
 							new ImagePageContent(parent, resource));
+				else if (resource instanceof MRCSS)
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new CSSPageContent(parent, resource));
+
 				else if (resource instanceof MRFont)
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),
@@ -183,6 +197,21 @@ public class ResourceFactory {
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),
 							new DataAdapterPageContent(parent, resource));
+
+				if (resource instanceof MRDashboard)
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource));
+				if (resource instanceof MRMondrianSchema
+						|| resource instanceof MRAccessGrantSchema
+						|| resource instanceof MROlapUnit
+						|| resource instanceof MROlapMondrianConnection)
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource));
+				if (resource instanceof MROlapXmlaConnection)
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new OLAPXmlaPageContent(parent, resource));
+
 			}
 			if (page != null)
 				pagemap.put(resource.getClass(), page);
@@ -196,63 +225,61 @@ public class ResourceFactory {
 		MResource m = extManager.getResource(parent, resource, index);
 		if (m != null)
 			return m;
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
+		String wstype = resource.getWsType();
+		if (wstype.equals(ResourceDescriptor.TYPE_FOLDER)) {
 			MFolder folder = new MFolder(parent, resource, index);
 			new MDummy(folder);
 			return folder;
 		}
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+		if (wstype.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
 			return new MInputControl(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_JRXML))
+		if (wstype.equals(ResourceDescriptor.TYPE_JRXML))
 			return new MJrxml(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_IMAGE))
+		if (wstype.equals(ResourceDescriptor.TYPE_IMAGE))
 			return new MRImage(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
+		if (wstype.equals(ResourceDescriptor.TYPE_REFERENCE))
 			return new MReference(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
+		if (wstype.equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 			MReportUnit runit = new MReportUnit(parent, resource, index);
 			new MDummy(runit);
 			return runit;
 		}
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_LOV))
+		if (wstype.equals(ResourceDescriptor.TYPE_LOV))
 			return new MListOfValues(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_UNKNOW))
+		if (wstype.equals(ResourceDescriptor.TYPE_UNKNOW))
 			return new MUnknown(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_CLASS_JAR))
+		if (wstype.equals(ResourceDescriptor.TYPE_CLASS_JAR))
 			return new MJar(parent, resource, index);
 
-		if (resource.getWsType()
-				.equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE))
+		if (wstype.equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE))
 			return new MResourceBundle(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_QUERY))
+		if (wstype.equals(ResourceDescriptor.TYPE_QUERY))
 			return new MRQuery(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE))
+		if (wstype.equals(ResourceDescriptor.TYPE_DATA_TYPE))
 			return new MDataType(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_FONT))
+		if (wstype.equals(ResourceDescriptor.TYPE_FONT))
 			return new MRFont(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
+		if (wstype.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
 			return new MRStyleTemplate(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE))
+		if (wstype.equals(ResourceDescriptor.TYPE_DATASOURCE))
 			return new MRDatasource(parent, resource, index);
 
-		if (resource.getWsType()
-				.equals(ResourceDescriptor.TYPE_DATASOURCE_BEAN))
+		if (wstype.equals(ResourceDescriptor.TYPE_DATASOURCE_BEAN))
 			return new MRDatasourceBean(parent, resource, index);
 
-		if (resource.getWsType().equals(
-				ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
+		if (wstype.equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
 			ResourceProperty rp = ResourceDescriptorUtil.getProperty(
 					MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS,
 					resource.getProperties());
@@ -263,20 +290,33 @@ public class ResourceFactory {
 			return new MRDatasourceCustom(parent, resource, index);
 		}
 
-		if (resource.getWsType()
-				.equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC))
+		if (wstype.equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC))
 			return new MRDatasourceJDBC(parent, resource, index);
-		if (resource.getWsType().equals(MRDatasourceVDS.TYPE_DATASOURCE_VDS))
+		if (wstype.equals(MRDatasourceVDS.TYPE_DATASOURCE_VDS))
 			return new MRDatasourceVDS(parent, resource, index);
-		if (resource.getWsType()
-				.equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI))
+		if (wstype.equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI))
 			return new MRDatasourceJNDI(parent, resource, index);
 
-		if (resource.getWsType().equals("ReportOptionsResource"))
+		if (wstype.equals("ReportOptionsResource"))
 			return new MReportUnitOptions(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_XML_FILE))
+		if (wstype.equals(ResourceDescriptor.TYPE_XML_FILE))
 			return new MXmlFile(parent, resource, index);
+
+		if (wstype.equals(ResourceDescriptor.TYPE_DASHBOARDUNIT))
+			return new MRDashboard(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
+			return new MRMondrianSchema(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION))
+			return new MROlapMondrianConnection(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION))
+			return new MROlapXmlaConnection(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_OLAPUNIT))
+			return new MROlapUnit(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA))
+			return new MRAccessGrantSchema(parent, resource, index);
+		// if (wstype.equals(MRCSS.WSTYPE_CSS))
+		// return new MRCSS(parent, resource, index);
 
 		return new MUnknown(parent, resource, index);
 	}
