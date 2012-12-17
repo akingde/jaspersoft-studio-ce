@@ -23,7 +23,15 @@ public class Messages extends NLS {
 	public static String ApplicationActionBarAdvisor_help;
 	public static String ApplicationActionBarAdvisor_window;
 	public static String ApplicationWorkbenchWindowAdvisor_jasper_open_studio;
+	public static String InstallNewSoftwareHandler_TaskName;
+	public static String P2Util_ErrorMessage;
+	public static String PreloadingRepositoryHandler_ErrorMessage;
+	public static String PreloadingRepositoryHandler_ErrorStatusMessage;
+	public static String PreloadingRepositoryHandler_SoftwareUpdatesTitle;
 	public static String Startup_jss_project;
+	public static String UpdateHandler_NoUpdatesMessage;
+	public static String UpdateHandler_NoUpdatesTitle;
+	public static String UpdateHandler_TaskName;
 	public static String VersionUpdateDialog_0;
 	public static String VersionUpdateDialog_1;
 	static {

@@ -360,4 +360,71 @@
             pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.JavaSearchPage">
       </activityPatternBinding>
    </extension>
+   
+   <!-- P2 Update/Install stuff -->
+   <extension 
+   		id="preferences" point="org.eclipse.core.runtime.preferences" name="%preferences">
+		<initializer class="com.jaspersoft.studio.rcp.p2.PreferenceInitializer"/>
+   </extension>
+   <extension
+     point="org.eclipse.ui.installationPages">
+      <page
+        name="%installedSoftwarePage"
+        class="org.eclipse.equinox.p2.ui.InstalledSoftwarePage"
+        id="com.jaspersoft.studio.rcp.pages.InstalledSoftwarePage">
+      </page>
+      <page
+        name="%installHistoryPage"
+        class="org.eclipse.equinox.p2.ui.RevertProfilePage"
+        id="com.jaspersoft.studio.rcp.pages.RevertProfilePage">
+      </page>
+   </extension>   
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            name="%Update.command"
+            id="com.jaspersoft.studio.rcp.command.update">
+      </command>
+      <!--
+      <command
+            name="%Install.command"
+            id="com.jaspersoft.studio.rcp.command.install">
+      </command>
+      -->
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="com.jaspersoft.studio.rcp.command.update"
+            class="com.jaspersoft.studio.rcp.p2.UpdateHandler">
+      </handler>
+      <!--
+      <handler
+            commandId="com.jaspersoft.studio.rcp.command.install"
+            class="com.jaspersoft.studio.rcp.p2.InstallNewSoftwareHandler">
+      </handler>
+      -->
+   </extension>
+     <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:help">
+            <command
+                  commandId="com.jaspersoft.studio.rcp.command.update"
+            	  mnemonic="%Update.command.mnemonic"
+                  id="com.jaspersoft.studio.rcp.menu.update">
+            </command>
+                        
+      </menuContribution>
+      <!--
+      <menuContribution
+            locationURI="menu:help">
+            <command
+                  commandId="com.jaspersoft.studio.rcp.command.install"
+            	  mnemonic="%Install.command.mnemonic"
+                  id="com.jaspersoft.studio.rcp.menu.install">
+            </command>
+      </menuContribution>
+      -->
+   </extension>
 </plugin>

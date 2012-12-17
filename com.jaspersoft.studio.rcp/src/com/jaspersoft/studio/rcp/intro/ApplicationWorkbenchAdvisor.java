@@ -35,6 +35,7 @@ import org.osgi.framework.Bundle;
 
 import com.jaspersoft.studio.ReportDesignPerspective;
 import com.jaspersoft.studio.rcp.OpenDocumentEventProcessor;
+import com.jaspersoft.studio.rcp.p2.P2Util;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -103,8 +104,8 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	@Override
 	public void preStartup() {
 		super.preStartup();
-
 		IDE.registerAdapters();
+		P2Util.setRepositories();
 	}
 
 	/**

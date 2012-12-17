@@ -17,7 +17,13 @@ package com.jaspersoft.studio.rcp;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 
+import org.eclipse.equinox.p2.ui.Policy;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+
+import com.jaspersoft.studio.rcp.p2.JSSP2Policy;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -29,6 +35,11 @@ public class Activator extends AbstractJRUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
+	
+	// Stuff for JSS P2 Policy
+	private ServiceRegistration<?> p2PolicyRegistration;
+	private JSSP2Policy policy;
+	private IPropertyChangeListener preferenceListener;
 	
 	/**
 	 * The constructor
@@ -42,8 +53,10 @@ public class Activator extends AbstractJRUIPlugin {
 	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
-		super.start(context);
 		plugin = this;
+		// Register the p2 UI policy
+		registerP2Policy(context);
+		getPreferenceStore().addPropertyChangeListener(getPreferenceListener());
 	}
 
 	/*
@@ -53,6 +66,11 @@ public class Activator extends AbstractJRUIPlugin {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		// Unregister the UI policy
+		p2PolicyRegistration.unregister();
+		p2PolicyRegistration = null;
+		getPreferenceStore().removePropertyChangeListener(preferenceListener);
+		preferenceListener = null;
 		super.stop(context);
 	}
 
@@ -69,4 +87,25 @@ public class Activator extends AbstractJRUIPlugin {
 	public String getPluginID() {
 		return PLUGIN_ID;
 	}
+	
+	/*
+	 * Registers the P2 policy.
+	 */
+	private void registerP2Policy(BundleContext context) {
+		policy = new JSSP2Policy();
+		policy.updateForPreferences();
+		p2PolicyRegistration = context.registerService(Policy.class.getName(), policy, null);
+	}
+	
+	private IPropertyChangeListener getPreferenceListener() {
+		if (preferenceListener == null) {
+			preferenceListener = new IPropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent event) {
+					policy.updateForPreferences();
+				}
+			};
+		}
+		return preferenceListener;
+	}
+
 }
