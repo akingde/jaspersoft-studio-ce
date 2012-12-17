@@ -169,7 +169,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		Composite composite = new Composite(backCompatibilitySection, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		Label lbl1 = new Label(composite, SWT.NONE);
-		lbl1.setText("Value Class Name"); //$NON-NLS-1$
+		lbl1.setText(Messages.JavaExpressionEditorComposite_ValueClassMessage); 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		lbl1.setLayoutData(gd);
