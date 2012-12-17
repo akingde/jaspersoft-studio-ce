@@ -1,5 +1,4 @@
 <project default="buildAndPackageConsole">
-	<property file="build.properties" />
 	<property name="baseLocation" value="${eclipse.home}" />
 	<!-- by default, check for deltapack co-located with eclipse -->
 	<property name="deltapack" value="${eclipse.home}/deltapack/eclipse" />
@@ -7,6 +6,7 @@
 	<property name="builder" value="${basedir}" />
 	<property name="pluginPath" value="${basedir}/..${path.separator}${deltapack}" />
 	<property name="buildTempFolder" value="${buildDirectory}" />
+	<property file="build.properties" />
 		
 	<!-- ================================= 
           target: buildAndPackageConsole
