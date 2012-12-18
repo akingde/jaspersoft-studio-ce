@@ -102,7 +102,7 @@
 		<nsisant script="${basedir}/resources/JaspersoftStudioInstaller.nsi">
 			<define name="PRDUCT_ARCH" value="x86" />
 			<define name="PRODUCT_VERSION" value="${jss.version}" />
-			<define name="PRODUCT_WEB_SITE" value="http://www.jasperforge.org/projects/jaspersoftstudio" />
+			<define name="PRODUCT_WEB_SITE" value="http://community.jaspersoft.com/project/jaspersoft-studio" />
 			<define name="INSTALLER_FILES_DIR" value="${zipdir.win32.x86}/jaspersoftstudio" />
 			<define name="OUTPUT_FILE_NAME" value="${dist}/${jss.win32.x86.installer}" />
 		</nsisant>
@@ -142,7 +142,7 @@
 		<nsisant script="${basedir}/resources/JaspersoftStudioInstaller64.nsi">
 			<define name="PRDUCT_ARCH" value="x86_64" />
 			<define name="PRODUCT_VERSION" value="${jss.version}" />
-			<define name="PRODUCT_WEB_SITE" value="http://www.jasperforge.org/projects/jaspersoftstudio" />
+			<define name="PRODUCT_WEB_SITE" value="http://community.jaspersoft.com/project/jaspersoft-studio" />
 			<define name="INSTALLER_FILES_DIR" value="${zipdir.win32.x86_64}/jaspersoftstudio" />
 			<define name="OUTPUT_FILE_NAME" value="${dist}/${jss.win32.x86_64.installer}" />
 		</nsisant>
@@ -185,7 +185,7 @@ exit 0;</echo>
 				section="editors" 
 				postinst="${dist}/debian/postinst" 
 				architecture="${architecture}"
-				homepage="http://jasperforge.org/projects/jaspersoftstudio/"
+				homepage="community.jaspersoft.com/project/jaspersoft-studio/"
 				depends="openjdk-6-jre">
 				<version upstream="${jss.version}" debian="" />
 			    <maintainer name="Jaspersoft Studio Team" email="giulio@jaspersoft.com"/>

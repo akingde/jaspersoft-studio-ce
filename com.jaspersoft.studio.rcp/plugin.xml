@@ -73,7 +73,7 @@
          </property>
          <property
                name="aboutText"
-               value="Jaspersoft Studio - Visual Designer for JasperReports. &#x0A;Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://jasperforge.org/projects/jaspersoftstudio  &#x0A;&#x0A;Special thanks to all people who support this software.">
+               value="Jaspersoft Studio - Visual Designer for JasperReports. &#x0A;Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://community.jaspersoft.com/project/jaspersoft-studio  &#x0A;&#x0A;Special thanks to all people who support this software.">
          </property>
          <property
                name="aboutImage"
@@ -117,19 +117,19 @@
       </action>
       <action
             name="jaspersoftsite"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org">
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com">
       </action>
       <action
             name="jaspersoftsitestudio"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org/projects/jaspersoftstudio">
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/project/jaspersoft-studio">
       </action>
       <action
             name="jaspersoftsitestudiobugtracker"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org/projects/jaspersoftstudio/tracker/">
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/project/jaspersoft-studio/tracker/">
       </action>
       <action
             name="jaspersoftsitestudioforum"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org/projects/jaspersoftstudio/forum/">
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/project/jaspersoft-studio/answers/">
       </action>
       <action
             name="jaspersoftfacebook"
@@ -171,7 +171,7 @@
          </property>
          <property
                name="aboutText"
-               value="Jaspersoft Studio - Visual Designer for JasperReports. &#x0A;Copyright (C) 2010 - 2011 Jaspersoft Corporation. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://jasperforge.org/projects/jaspersoftstudio  &#x0A;&#x0A;Special thanks to all people who support this software.">
+               value="Jaspersoft Studio - Visual Designer for JasperReports. &#x0A;Copyright (C) 2010 - 2011 Jaspersoft Corporation. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://community.jaspersoft.com/project/jaspersoft-studio  &#x0A;&#x0A;Special thanks to all people who support this software.">
          </property>
          <property
                name="aboutImage"

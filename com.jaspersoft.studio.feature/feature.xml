@@ -8,7 +8,7 @@
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32">
 
-   <description url="http://jasperforge.org/projects/jaspersoftstudio">
+   <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
       Eclipse-based JasperReports Designer
    </description>
 
@@ -22,7 +22,7 @@
 
    <url>
       <update label="Jaspersoft Studio site" url="http://jasperstudio.sf.net/updates"/>
-      <discovery label="Jaspersoft Studio" url="http://jasperforge.org/projects/jaspersoftstudio"/>
+      <discovery label="Jaspersoft Studio" url="http://community.jaspersoft.com/project/jaspersoft-studio"/>
    </url>
 
    <includes

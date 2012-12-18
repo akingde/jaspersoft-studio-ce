@@ -5,7 +5,7 @@
 ;!define PRODUCT_VERSION "0.0.0"
 ;!define INSTALLER_FILES_DIR ""
 !define PRODUCT_PUBLISHER "Jaspersoft Corp."
-;!define PRODUCT_WEB_SITE "http://www.jasperforge.org/projects/jaspersoftstudio"
+;!define PRODUCT_WEB_SITE "http://community.jaspersoft.com/project/jaspersoft-studio"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"

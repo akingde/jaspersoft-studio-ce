@@ -8,7 +8,7 @@
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32">
 
-   <description url="http://jasperforge.org/projects/jaspersoftstudio">
+   <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
       Expression Editor for the Eclipse-based JasperReports Designer
    </description>
 

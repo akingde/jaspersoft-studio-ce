@@ -4,8 +4,7 @@ These instructions are meant to be used by the community in order to improve thi
 and help the Jaspersoft Studio Team.
 
 Please refer to the following links to obtain more info: 
-Project forum: http://jasperforge.org/plugins/espforum/browse.php?group_id=400&forumid=254
-Project tracker: http://jasperforge.org/projects/jaspersoftstudio/tracker/myview
+Project community site: http://community.jaspersoft.com/project/jaspersoft-studio
 
 Also use the forum to discuss about this topic and the tracker to submit bugs/patches that can
 be useful to improve the code.
