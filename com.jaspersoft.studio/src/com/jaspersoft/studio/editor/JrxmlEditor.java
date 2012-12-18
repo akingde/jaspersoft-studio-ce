@@ -199,6 +199,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		int index = addPage(reportContainer, getEditorInput());
 		setPageText(index, Messages.JrxmlEditor_design);
 	}
+	
+	public ReportContainer getReportContainer(){
+		return reportContainer;
+	}
 
 	/**
 	 * Creates page 0 of the multi-page editor, which contains a text editor.
