@@ -24,6 +24,8 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
 import com.jaspersoft.studio.plugin.IEditorContributor;
+import com.jaspersoft.studio.preferences.PreferenceInitializer;
+import com.jaspersoft.studio.preferences.util.JRContextPrefStore;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VExporter extends APreview {
@@ -33,10 +35,15 @@ public class VExporter extends APreview {
 
 	public VExporter(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
-		pfstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore(
-				(IFile) jContext.get(IEditorContributor.KEY_FILE), JaspersoftStudioPlugin.getUniqueIdentifier());
-		// pfstore = new JRContextPrefStore(jContext);
-		// PreferenceInitializer.initDefaultProperties(pfstore);
+
+		IFile file = (IFile) jContext.get(IEditorContributor.KEY_FILE);
+		if (file != null)
+			pfstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file,
+					JaspersoftStudioPlugin.getUniqueIdentifier());
+		else {
+			pfstore = new JRContextPrefStore(jContext);
+			PreferenceInitializer.initDefaultProperties(pfstore);
+		}
 	}
 
 	@Override
