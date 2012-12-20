@@ -280,8 +280,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			}
 		}
 		//If the parameter value is null or equal to the default value read the report properties value
-		if (val == null || val.equals(defaultValue))
-			val = getJasperDesign().getProperty(key); 
+		if (val == null || val.equals(defaultValue)){
+			JasperDesign jd = getJasperDesign();
+			if (jd != null) val = jd.getProperty(key); 
+		}
 		//If even the report properties is null read it from the context
 		if (val == null)		
 				val = super.getProperty(key);
