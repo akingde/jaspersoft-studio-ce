@@ -324,7 +324,6 @@ public class SPFont extends ASPropertyWidget {
 
 			String strfontsize = Integer.toString(JRStyleResolver.getFontSize(fontValue));
 			fontSize.setText(strfontsize != null ? strfontsize : "");
-			fontSize.select(indexOf(fontSize, strfontsize));
 
 			Boolean b = JRStyleResolver.isBold(fontValue);
 			boldButton.setSelection(b != null ? b.booleanValue() : false);

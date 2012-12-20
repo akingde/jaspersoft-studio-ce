@@ -60,7 +60,7 @@ public class SPButton extends ASPropertyWidget {
 	private Image imageValueDecrement;
 	
 	/**
-	 * Percentual factor for the increment\decrement
+	 * % factor for the increment\decrement
 	 */
 	public static Integer factor = 10;
 	
@@ -91,16 +91,12 @@ public class SPButton extends ASPropertyWidget {
 		createComponent(parent);
 	}
 	
-	/**
-	 * Return the font node
-	 * @return The MFont represented
-	 */
-	protected APropertyNode getFontValue(){
-		return fontValue;
-	}
 	
 	protected void createCommand(boolean increment){
-		Object fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
+		//Object fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
+		Object fontSize = section.getElement().getPropertyValue(JRBaseFont.PROPERTY_FONT_SIZE);
+		if (fontSize.equals(""))
+			fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
 		Integer newValue = 2;
 		if (fontSize != null && fontSize.toString().length()>0){
 			newValue = Integer.valueOf(fontSize.toString());
