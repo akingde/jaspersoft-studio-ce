@@ -642,6 +642,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (!mute)
 			UIUtils.showError(e);
 		try {
+			isRefresh = true;
 			int lineNumber = 0;
 			if (e.getCause() instanceof SAXParseException) {
 				SAXParseException saxe = (SAXParseException) e.getCause();
@@ -656,7 +657,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			marker.setAttribute(IMarker.TRANSIENT, true);
 			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 			marker.setAttribute(IMarker.USER_EDITABLE, false);
-
+			isRefresh = false;
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					gotoMarker(marker);
@@ -836,6 +837,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *          the event
 	 */
 	public void resourceChanged(final IResourceChangeEvent event) {
+		if (isRefresh)
+			return;
 		switch (event.getType()) {
 		case IResourceChangeEvent.PRE_CLOSE:
 			Display.getDefault().asyncExec(new Runnable() {
