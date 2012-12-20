@@ -271,6 +271,11 @@ public class Messages extends NLS {
 	public static String CreateStyleTemplateAction_create_style_template_tool_tip;
 	public static String CreateVariableAction_create_variable;
 	public static String CreateVariableAction_create_variable_tool_tip;
+	public static String CSVElementDecorator_CreateColumn;
+	public static String CSVElementDecorator_CSVMenuLabel;
+	public static String CSVElementDecorator_ShowDecorationLabel;
+	public static String CSVElementDecorator_UseAsFieldDelimiter;
+	public static String CSVElementDecorator_UseAsRecordDelimiter;
 	public static String CSVExporterPreferencePage_3;
 	public static String CSVExporterPreferencePage_4;
 	public static String CSVExporterPreferencePage_5;

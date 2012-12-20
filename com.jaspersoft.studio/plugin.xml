@@ -1311,6 +1311,9 @@
        <decorator
              ClassFactory="com.jaspersoft.studio.editor.gef.decorator.xls.XLSElementDecorator">
        </decorator>
+       <decorator
+             ClassFactory="com.jaspersoft.studio.editor.gef.decorator.csv.CSVElementDecorator">
+       </decorator>
     </extension>
     <extension
           point="com.jaspersoft.studio.postsetvalue">

@@ -38,7 +38,6 @@ public class ExportAsCsvAction extends AbstractExportAction {
 	@Override
 	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
 		JRCsvExporter exp = new JRCsvExporter(jContext);
-
 		exp.setParameter(JRCsvExporterParameter.FIELD_DELIMITER,
 				jContext.getProperty(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER));
 		exp.setParameter(JRCsvExporterParameter.RECORD_DELIMITER,
