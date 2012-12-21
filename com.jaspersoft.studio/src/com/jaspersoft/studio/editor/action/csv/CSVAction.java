@@ -48,6 +48,8 @@ public class CSVAction extends SelectionAction{
 	
 	public static String RECORD_DELIMITER = "net.sf.jasperreports.export.csv.record.delimiter";
 	
+	public static String COL_NAMES = "net.sf.jasperreports.export.csv.column.names";
+	
 	protected String value;
 	
 	protected String attributeId;
