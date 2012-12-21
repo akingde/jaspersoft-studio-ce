@@ -56,7 +56,6 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.FileUtils;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
@@ -102,6 +101,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	private String[] lookupOrders;
 	private IScopeContext[] contexts;
 
+	/**
+	 * @param parent
+	 * @param file
+	 */
 	public JasperReportsConfiguration(JasperReportsContext parent, IFile file) {
 		super(parent);
 		init(file);
@@ -264,34 +267,25 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				e.printStackTrace();
 			}
 		}
-		String defaultValue = PropertiesHelper.DPROP.getProperty(key);
-		String val = null;
-		//Read the parameter value
-		IResource file = (IResource) get(IEditorContributor.KEY_FILE);
-		if (file != null) {
-			String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier).getString(key);
-			val = t != null && t.isEmpty() ? null : t;
-			if (val == null) {
-				IResource project = file.getProject();
-				if (project != null) {
-					t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(project, qualifier).getString(key);
-					val = t != null && t.isEmpty() ? null : t;
-				}
-			}
-		}
-		//If the parameter value is null or equal to the default value read the report properties value
-		if (val == null || val.equals(defaultValue)){
-			JasperDesign jd = getJasperDesign();
-			if (jd != null) val = jd.getProperty(key); 
-		}
-		//If even the report properties is null read it from the context
-		if (val == null)		
-				val = super.getProperty(key);
-		//If it is still null read from the default
+		String val = super.getProperty(key);
 		if (val == null)
 			val = service.getString(qualifier, key, null, contexts);
 		if (val == null)
 			val = service.getString(qualifier, PROPERTY_JRPROPERTY_PREFIX + key, null, contexts);
+		if (val == null) {
+			IResource file = (IResource) get(IEditorContributor.KEY_FILE);
+			if (file != null) {
+				String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier).getString(key);
+				val = t != null && t.isEmpty() ? null : t;
+				if (val == null) {
+					IResource project = file.getProject();
+					if (project != null) {
+						t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(project, qualifier).getString(key);
+						val = t != null && t.isEmpty() ? null : t;
+					}
+				}
+			}
+		}
 		if (val == null) {
 			String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(key);
 			val = t != null && t.isEmpty() ? null : t;
