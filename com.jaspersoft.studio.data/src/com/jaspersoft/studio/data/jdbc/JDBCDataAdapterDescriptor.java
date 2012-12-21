@@ -74,7 +74,7 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 		return null;
 	}
 
-	private IFieldsProvider fprovider;
+	protected IFieldsProvider fprovider;
 
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JasperReportsConfiguration jConfig, JRDataset jDataset)
@@ -83,32 +83,33 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 		return fprovider.getFields(con, jConfig, jDataset);
 	}
 
-	private void getFieldProvider() {
+	protected void getFieldProvider() {
 		if (fprovider == null)
 			fprovider = new JDBCFieldsProvider();
 	}
-
-	
 
 	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		getFieldProvider();
 		return fprovider.supportsGetFieldsOperation(jConfig);
 	}
 
-	
 	/**
 	 * 
-	 * @see com.jaspersoft.studio.data.IWizardDataEditorProvider#createDataEditorComposite(java.awt.Composite, org.eclipse.jface.wizard.WizardPage)
-	 *
-	 * @param Composite parent - the parent composite
-	 * @param WizardPage page - the page used to show the composite, it can be used to access the nested Wizard (probably JSSWizard)
-	 *
+	 * @see com.jaspersoft.studio.data.IWizardDataEditorProvider#createDataEditorComposite(java.awt.Composite,
+	 *      org.eclipse.jface.wizard.WizardPage)
+	 * 
+	 * @param Composite
+	 *            parent - the parent composite
+	 * @param WizardPage
+	 *            page - the page used to show the composite, it can be used to
+	 *            access the nested Wizard (probably JSSWizard)
+	 * 
 	 * @return an editor composite extending AWizardDataEditorComposite
 	 */
 	@Override
 	public AWizardDataEditorComposite createDataEditorComposite(
 			Composite parent, WizardPage page) {
-		
+
 		return new JDBCWizardDataEditorComposite(parent, page, this);
 	}
 }

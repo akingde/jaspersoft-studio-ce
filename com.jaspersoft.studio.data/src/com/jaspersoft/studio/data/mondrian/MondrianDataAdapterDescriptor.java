@@ -35,4 +35,10 @@ public class MondrianDataAdapterDescriptor extends JDBCDataAdapterDescriptor {
 		return new MondrianDataAdapterEditor();
 	}
 
+	@Override
+	protected void getFieldProvider() {
+		if (fprovider == null)
+			fprovider = new MondrianFieldsProvider();
+	}
+
 }
