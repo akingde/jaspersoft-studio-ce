@@ -68,7 +68,12 @@ public abstract class ABooleanPropertyAction extends SelectionAction {
 
 	protected abstract Object getPropertyName();
 
-	protected abstract boolean getBooleanValue(Object obj);
+	protected boolean getBooleanValue(Object obj) {
+		Object res = ((APropertyNode) obj).getPropertyActualValue(getPropertyName());
+		if (res instanceof Boolean)
+			return (Boolean) res;
+		return false;
+	}
 
 	protected abstract boolean checkSelection(Object obj);
 

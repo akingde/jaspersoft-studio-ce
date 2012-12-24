@@ -79,7 +79,7 @@ public abstract class APropertyComboContributionItem extends ContributionItem im
 						model.getPropertyChangeSupport().addPropertyChangeListener(modelListener);
 						setComboItems();
 						fontsareset = true;
-						fontSize = mtext.getPropertyValue(getPropertyName());
+						fontSize = mtext.getPropertyActualValue(getPropertyName());
 					} else {
 						Object fsize = mtext.getPropertyValue(getPropertyName());
 						if (fsize == null || !fsize.equals(fontSize)) {
