@@ -26,6 +26,7 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.swt.graphics.RGB;
 
+import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.band.SameBandEditPartsTracker;
@@ -127,7 +128,8 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 					continue;
 				}
 				sList.add(node);
-			}
+			} else if (node instanceof MCallout)
+				sList.add(node);
 		}
 		list.addAll(sList);
 		return list;

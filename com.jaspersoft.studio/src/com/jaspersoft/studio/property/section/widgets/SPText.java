@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
@@ -47,7 +48,10 @@ public class SPText extends AHistorySPropertyWidget {
 	}
 
 	protected void createComponent(Composite parent) {
-		ftext = section.getWidgetFactory().createText(parent, "", SWT.NONE);
+		int style = SWT.NONE;
+		if (pDescriptor instanceof JSSTextPropertyDescriptor)
+			style = ((JSSTextPropertyDescriptor) pDescriptor).getStyle();
+		ftext = section.getWidgetFactory().createText(parent, "", style);
 		autocomplete = new AutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
 		// ftext.addModifyListener(new ModifyListener() {
 		// public void modifyText(ModifyEvent e) {

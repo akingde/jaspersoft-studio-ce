@@ -39,6 +39,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
@@ -320,6 +321,8 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 			@Override
 			public boolean visit(INode n) {
 				if (n instanceof IGraphicElement && n.getValue() != null)
+					list.add(n);
+				else if (n instanceof MCallout)
 					list.add(n);
 				return true;
 			}

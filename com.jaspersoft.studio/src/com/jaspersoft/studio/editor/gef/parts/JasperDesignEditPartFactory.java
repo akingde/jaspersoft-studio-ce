@@ -27,6 +27,8 @@ import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.EditPartViewer;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.callout.CalloutEditPart;
+import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.text.StaticTextFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.text.TextFieldFigureEditPart;
@@ -112,7 +114,8 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 
 			} else if (model instanceof IGraphicElement) {
 				editPart = new FigureEditPart();
-			}
+			} else if (model instanceof MCallout)
+				editPart = new CalloutEditPart();
 		}
 		if (editPart != null) {
 			editPart.setModel(model);

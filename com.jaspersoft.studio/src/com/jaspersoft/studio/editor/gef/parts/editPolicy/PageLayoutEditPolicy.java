@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
@@ -21,8 +16,10 @@ import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -38,6 +35,9 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.rulers.RulerProvider;
 
+import com.jaspersoft.studio.callout.CalloutEditPart;
+import com.jaspersoft.studio.callout.CalloutFigure;
+import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
@@ -152,6 +152,14 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		return getConstraintFor(rect);
 	}
 
+	@Override
+	protected Point getLayoutOrigin() {
+		IFigure container = getLayoutContainer();
+		if (!(container.getLayoutManager() instanceof XYLayout))
+			return container.getParent().getClientArea().getLocation();
+		return super.getLayoutOrigin();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -173,7 +181,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 					int w = rparent.width / objs.size();
 					int rest = rparent.width - w * objs.size();
 					copyconstraint.setLocation(rparent.x + ReportPageFigure.PAGE_BORDER.left, copyconstraint.getLocation().y);
-					// Commented for back-compatibility in 3.6. 
+					// Commented for back-compatibility in 3.6.
 					// Replaced with the following line.
 					// copyconstraint.setWidth(w + rest);
 					copyconstraint.width = w + rest;
@@ -182,7 +190,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 						if (cmd != null) {
 							ccmd.add(cmd);
 							copyconstraint.translate(w + rest, 0);
-							// Commented for back-compatibility in 3.6. 
+							// Commented for back-compatibility in 3.6.
 							// Replaced with the following line.
 							// copyconstraint.setWidth(w);
 							copyconstraint.width = w;
@@ -217,20 +225,21 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 				return false;
 		return true;
 	}
-	
+
 	/**
 	 * Take and edit part and search it's container
+	 * 
 	 * @param child
 	 * @return the container of the child, could be null
 	 */
-	private IGraphicElement searchParent(ANode child){
-		if (child != null){
-			//This use the model for the search because every EditPart in the report has the same father.
+	private IGraphicElement searchParent(ANode child) {
+		if (child != null) {
+			// This use the model for the search because every EditPart in the report has the same father.
 			Object parentModel = child.getParent();
-			for(Object actualChild: getHost().getParent().getChildren()){
+			for (Object actualChild : getHost().getParent().getChildren()) {
 				EditPart actualChildPart = (EditPart) actualChild;
-				if (parentModel == actualChildPart.getModel()){
-					return (IGraphicElement)actualChildPart.getModel();
+				if (parentModel == actualChildPart.getModel()) {
+					return (IGraphicElement) actualChildPart.getModel();
 				}
 			}
 		}
@@ -238,9 +247,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	/**
-	 * Edited by Orlandin Marco: added the search of the container element in case the the parent node is 
-	 * not a container. Doing this is necessary to permit to user to placing and element up another even if 
-	 * the second is not a container.
+	 * Edited by Orlandin Marco: added the search of the container element in case the the parent node is not a container.
+	 * Doing this is necessary to permit to user to placing and element up another even if the second is not a container.
 	 * 
 	 * @param parent
 	 * @param obj
@@ -274,14 +282,14 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 					int x = constraint.x - band.getBounds().x;
 					int y = constraint.y - band.getBounds().y;
 					constraint.setLocation(x, y);
-				} else if (parent instanceof MGraphicElement){
-					//Parent is a graphical element, check if it's a container
-					if (!(parent instanceof IContainer)){
-							IGraphicElement container = searchParent(parent);
-							int x = constraint.x - container.getBounds().x;
-							int y = constraint.y - container.getBounds().y;
-							constraint.setLocation(x, y);
-							parent = (ANode)container;
+				} else if (parent instanceof MGraphicElement) {
+					// Parent is a graphical element, check if it's a container
+					if (!(parent instanceof IContainer)) {
+						IGraphicElement container = searchParent(parent);
+						int x = constraint.x - container.getBounds().x;
+						int y = constraint.y - container.getBounds().y;
+						constraint.setLocation(x, y);
+						parent = (ANode) container;
 					}
 				}
 			}
@@ -302,10 +310,11 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		// if (child instanceof IContainerPart) {
 		// return ((IContainerPart) child).createChangeConstraintCommand(child, constraint);
 		// }
+		if (child instanceof CalloutEditPart)
+			return new CalloutSetConstraintCommand(((CalloutEditPart) child).getModel(), adaptConstraint(constraint));
 
 		SetConstraintCommand cmd = new SetConstraintCommand();
 		cmd.setContext((ANode) getHost().getModel(), (ANode) child.getModel(), adaptConstraint(constraint));
-
 		return cmd;
 	}
 
@@ -381,6 +390,9 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			return ((IContainerPart) child).getEditPolicy();
 		}
 		if (child instanceof FigureEditPart) {
+			return new ElementResizableEditPolicy();
+		}
+		if (child instanceof CalloutFigure) {
 			return new ElementResizableEditPolicy();
 		}
 		return super.createChildEditPolicy(child);

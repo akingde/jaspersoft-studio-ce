@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.text;
 
@@ -22,6 +17,10 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 
 public class NTextPropertyDescriptor extends JSSTextPropertyDescriptor {
+
+	public NTextPropertyDescriptor(Object id, String displayName, int style) {
+		super(id, displayName, style);
+	}
 
 	public NTextPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);

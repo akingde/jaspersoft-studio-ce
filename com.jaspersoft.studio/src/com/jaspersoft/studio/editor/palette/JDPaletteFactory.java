@@ -29,6 +29,7 @@ import org.eclipse.gef.palette.SelectionToolEntry;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MBreak;
 import com.jaspersoft.studio.model.MEllipse;
@@ -163,6 +164,8 @@ public class JDPaletteFactory {
 	public static PaletteDrawer createElements(PaletteRoot paletteRoot, List<String> ignore, PaletteGroup p,
 			Map<String, List<PaletteEntry>> map) {
 		PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
+
+		drawer.add(createJDEntry(MCallout.getIconDescriptor(), MCallout.class));
 
 		drawer.add(createJDEntry(MTextField.getIconDescriptor(), MTextField.class));
 		drawer.add(createJDEntry(MStaticText.getIconDescriptor(), MStaticText.class));

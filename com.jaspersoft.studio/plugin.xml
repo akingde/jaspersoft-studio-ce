@@ -718,6 +718,12 @@
                image="icons/resources/scriptlet-16.png"
                label="Scriptlet">
          </propertyTab>
+         <propertyTab
+               category="element"
+               id="com.jaspersoft.studio.callou.CALLOUT"
+               image="icons/callout-16.png"
+               label="Callout">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -1224,6 +1230,14 @@
                tab="com.jaspersoft.studio.editor.section.SCRIPTLET">
             <input
                   type="com.jaspersoft.studio.model.scriptlet.MSystemScriptlet">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.callout.CalloutSection"
+               id="com.jaspersoft.studio.callout.CalloutSection"
+               tab="com.jaspersoft.studio.callou.CALLOUT">
+            <input
+                  type="com.jaspersoft.studio.callout.MCallout">
             </input>
          </propertySection>
       </propertySections>
