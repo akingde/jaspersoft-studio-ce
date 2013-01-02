@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -70,7 +70,7 @@ public class CSVDecorator implements TextDecoratorInterface {
 			startImageAwt = new javax.swing.ImageIcon(CSVDecorator.class.getResource("/icons/resources/corner1.png"));
 			endImageAwt = new javax.swing.ImageIcon(CSVDecorator.class.getResource("/icons/resources/corner2.png"));
 		}
-		tags = new String[] {CSVAction.COL_NAME, "isCol ", CSVAction.COL_DATA, "isDataOf ", CSVAction.FIELD_DELIMITER, "isFieldDelimiter", CSVAction.RECORD_DELIMITER, "isRecordDelimiter"};
+		tags = new String[] {CSVAction.COL_NAME, "isCol ", CSVAction.COL_DATA, "isCol ", CSVAction.FIELD_DELIMITER, "isFieldDelimiter", CSVAction.RECORD_DELIMITER, "isRecordDelimiter"};
 	}
 
 

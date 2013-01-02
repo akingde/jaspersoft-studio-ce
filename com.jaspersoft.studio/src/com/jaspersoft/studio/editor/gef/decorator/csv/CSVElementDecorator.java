@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.csv;
 
@@ -31,13 +26,15 @@ import org.eclipse.ui.actions.RetargetAction;
 
 import com.jaspersoft.studio.editor.action.csv.CSVAction;
 import com.jaspersoft.studio.editor.action.csv.CSVColDataAction;
+import com.jaspersoft.studio.editor.action.csv.CSVColOrderAction;
 import com.jaspersoft.studio.editor.action.csv.CSVRootAction;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.text.MTextElement;
 
 /**
  * Define the action related to the CSV export, it extends a TextElementDecorator to print the textual tag on the
@@ -79,11 +76,19 @@ public class CSVElementDecorator extends TextElementDecorator {
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		
-		action = new CSVRootAction(part, CSVAction.RECORD_DELIMITER, "true", Messages.CSVElementDecorator_UseAsRecordDelimiter); //$NON-NLS-1$
+		action = new CSVColOrderAction(part, "Change the columns order");
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		
-		action = new CSVRootAction(part, CSVAction.FIELD_DELIMITER, "true", Messages.CSVElementDecorator_UseAsFieldDelimiter); //$NON-NLS-1$
+		action = new CSVRootAction(part, CSVAction.RECORD_DELIMITER, Messages.CSVElementDecorator_UseAsRecordDelimiter); //$NON-NLS-1$
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new CSVRootAction(part, CSVAction.FIELD_DELIMITER, Messages.CSVElementDecorator_UseAsFieldDelimiter); //$NON-NLS-1$
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new CSVAction(part, CSVAction.WRITE_HEADER, "Print the columns header"); //$NON-NLS-1$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
@@ -103,22 +108,29 @@ public class CSVElementDecorator extends TextElementDecorator {
 		IStructuredSelection sel = (IStructuredSelection) viewer.getSelection();
 		if (sel.getFirstElement() instanceof EditPart) {
 			EditPart ep = (EditPart) sel.getFirstElement();
-			if (!(ep.getModel() instanceof MGraphicElement))
-				return;
+			if (ep.getModel() instanceof MTextElement){
+				MenuManager submenu = new MenuManager(Messages.CSVElementDecorator_CSVMenuLabel);
+				IAction action;
+				action = registry.getAction(CSVAction.COL_DATA);
+				submenu.add(action);
+				action = registry.getAction(CSVAction.COL_NAMES);
+				submenu.add(action);
+				menu.add(submenu);
+			}
+			if (ep.getModel() instanceof MReport){
+				MenuManager submenu = new MenuManager(Messages.CSVElementDecorator_CSVMenuLabel);
+				IAction action;
+				action = registry.getAction(CSVAction.FIELD_DELIMITER);
+				submenu.add(action);
+				action = registry.getAction(CSVAction.RECORD_DELIMITER);
+				submenu.add(action);
+				action = registry.getAction(CSVAction.COL_NAMES);
+				submenu.add(action);
+				action = registry.getAction(CSVAction.WRITE_HEADER);
+				submenu.add(action);
+				menu.add(submenu);
+			}
 		}
-		MenuManager submenu = new MenuManager(Messages.CSVElementDecorator_CSVMenuLabel);
-
-		IAction action;
-		// Adding actions for the Fit
-		action = registry.getAction(CSVAction.COL_DATA);
-		submenu.add(action);
-		action = registry.getAction(CSVAction.FIELD_DELIMITER);
-		submenu.add(action);
-		action = registry.getAction(CSVAction.RECORD_DELIMITER);
-		submenu.add(action);
-
-
-		menu.add(submenu);
 	}
 
 	@Override

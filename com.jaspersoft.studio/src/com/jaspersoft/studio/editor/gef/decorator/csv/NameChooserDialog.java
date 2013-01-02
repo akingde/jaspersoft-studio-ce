@@ -25,14 +25,49 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 
+/**
+ * A simple dialog to ask a string value to the user
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class NameChooserDialog extends Dialog {
+	
+	/**
+	 * The textfield where the string is typed
+	 */
 	private Text columnName;
+	
+	/**
+	 * Contain the value of inserted in the textfield after the button "ok" is pressed. 
+	 * This field is used because after the button ok is pressed then all the widget in the dialog 
+	 * are automatically disposed, and so the content of the text field need to be saved here
+	 */
 	private String choosenName;
 	
-	public NameChooserDialog(Shell parentShell) {
+	/**
+	 * title of the dialog
+	 */
+	private String dialogName;
+	
+	
+	public NameChooserDialog(Shell parentShell, String dialogName) {
 		super(parentShell);
-		choosenName = null;
+		choosenName = "";
+		this.dialogName = dialogName;
 	}
+	
+	/**
+	 * Build the dialog with a title and an initial value for the text field
+	 * @param parentShell
+	 * @param dialogName
+	 * @param textInitialValue
+	 */
+	public NameChooserDialog(Shell parentShell, String dialogName, String textInitialValue) {
+		this(parentShell, dialogName);
+		choosenName = textInitialValue;
+	}
+	
 	
 	@Override
 	protected void configureShell(Shell newShell) {
@@ -44,9 +79,13 @@ public class NameChooserDialog extends Dialog {
 	 * @return the title for the dialog
 	 */
 	protected String getDialogTitle(){
-		return "Choose a name for this column";
+		return dialogName;
 	}
 	
+	/**
+	 * Return the value in the text field after the button ok is pressed, or the value used 
+	 * to initialize the textfield before the button ok is pressed
+	 */
 	public String getName(){
 		return choosenName;
 	}
@@ -63,7 +102,10 @@ public class NameChooserDialog extends Dialog {
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		columnName = new Text(container, SWT.BORDER);
-		columnName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
+		columnName.setText(choosenName);
+		GridData textData = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
+		textData.widthHint = 200;
+		columnName.setLayoutData(textData);
 		
 		return area;
 	}

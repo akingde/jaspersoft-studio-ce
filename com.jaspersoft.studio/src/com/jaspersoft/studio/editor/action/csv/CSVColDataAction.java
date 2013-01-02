@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -15,91 +15,70 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.csv;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.base.JRBaseStaticText;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.gef.decorator.csv.NameChooserDialog;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextElement;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
- * This class implement a CSV action that create a new column in the CSV. This action to 
- * be performed need that half of the element selected are of the type static text. This because
- * the value of these text will be used as the column header
+ * This class implement a CSV action that create a new column in the CSV. This action can be performed 
+ * only on textual elements (Textfield and static text). When a column is created it is asked using a dialog 
+ * the column name. The order of the column in the CSV will be the same order of creation, anyway this can be changed
+ * using an appropriate action
  * 
  * @author Orlandin Marco
  *
  */
 public class CSVColDataAction extends CSVAction {
 	
+		/**
+		 * Create the action with id @CSVAction.COL_DATA
+		 * @param part
+		 * @param actionName the textual description of the action
+		 */
 		public CSVColDataAction(IWorkbenchPart part, String actionName){
-			super(part, CSVAction.COL_DATA, null, actionName);
+			super(part, CSVAction.COL_DATA, actionName);
 		}
 	
-	
+			
 	/**
-	 * Create the command for the selected action, the static text elements will be use to create the column header and the 
-	 * other elements will be used data to fill the columns
-	 * @param model Model of the selected item
-	 * @return the command to execute
+	 * Create the commands to transform a textual element into a csv column of value
+	 * @param columnName Name of the column where this element will be placed
+	 * @param columnValue the element that will became a column in the csv
+	 * @param commandStack the stack of commands where the command to add the required attributes are added
+	 * @return the commands to execute
 	 */
 	public void createCommand(String columnName, APropertyNode columnValue, CompoundCommand commandStack){
 		SetValueCommand setColDataCommand = new SetValueCommand();
-		//SetValueCommand setColNameCommand = new SetValueCommand();
-		//Creation of the column name command
-		//setColNameCommand.setTarget(columnName);
-		//setColNameCommand.setPropertyId(MGraphicElement.PROPERTY_MAP);
 		setColDataCommand.setTarget(columnValue);
 		setColDataCommand.setPropertyId(MGraphicElement.PROPERTY_MAP);
-		/*JRPropertiesMap colNameMap = (JRPropertiesMap)columnName.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-		boolean hasColName = false;	
-		if (colNameMap == null){
-			colNameMap = new JRPropertiesMap();
-		} else {
-			hasColName = colNameMap.containsProperty(CSVAction.COL_NAME);
-			colNameMap.removeProperty(CSVAction.COL_NAME);
-		}*/
-		//Read the column value map
 		JRPropertiesMap colDataMap = (JRPropertiesMap)columnValue.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-		boolean hasColData = false;	
-		if (colDataMap == null){
-			colDataMap = new JRPropertiesMap();
-		} else {
-			hasColData = colDataMap.containsProperty(CSVAction.COL_DATA);
-			colDataMap.removeProperty(CSVAction.COL_DATA);
-			colDataMap.removeProperty(CSVAction.COL_NAME);
-		}
-		//Set the header and the data only if one of the was not set before
-		if (!(hasColData)) {
-			//String colNameText = columnName.getPropertyValue(JRBaseStaticText.PROPERTY_TEXT).toString();
-			colDataMap.setProperty(CSVAction.COL_DATA, null);
-			colDataMap.setProperty(CSVAction.COL_NAME, columnName);
-			//colNameMap.setProperty(CSVAction.COL_NAME, colNameText);
-		}
-		//setColNameCommand.setPropertyValue(colNameMap);
+		if (colDataMap == null)	colDataMap = new JRPropertiesMap();
+		//Set the column name and the data attribute for this element
+		colDataMap.setProperty(CSVAction.COL_DATA, null);
+		colDataMap.setProperty(CSVAction.COL_NAME, columnName);
 		setColDataCommand.setPropertyValue(colDataMap);
-		//commandStack.add(setColNameCommand);
 		if (setColDataCommand.canExecute()){
+			//If the set of the element attributes can be executed than the name of the columns is added on the report root
 			commandStack.add(setColDataCommand);
 			JRPropertiesMap rootMap = (JRPropertiesMap)((APropertyNode)columnValue.getRoot()).getPropertyValue(MGraphicElement.PROPERTY_MAP);
 			if (rootMap == null)
 				rootMap = new JRPropertiesMap();
 			String colNames = rootMap.getProperty(CSVAction.COL_NAMES);
 			if (colNames == null) colNames = columnName;
-			else colNames.concat(","+columnName);
+			else if (!colNameAlreadyPresent(columnName, colNames)) colNames = colNames.concat(","+columnName); //$NON-NLS-1$
 			SetValueCommand setRootNames = new SetValueCommand();
 			//the property is set on the root
 			setRootNames.setTarget((APropertyNode)columnValue.getRoot());
@@ -111,59 +90,110 @@ public class CSVColDataAction extends CSVAction {
 	}
 	
 	/**
-	 * Performs the create action on the selected objects.
+	 * Remove the attributes that made a textual element a column in the csv. The column name is also removed from the list of 
+	 * column in the root of the document
+	 * @param selectedElement the element from where the csv column attributes are removed
+	 * @param commandStack the stack of commands where the command to remove the attributes are added
+	 */
+	private void removeProperty(APropertyNode selectedElement, CompoundCommand commandStack){
+		JRPropertiesMap colDataMap = (JRPropertiesMap)selectedElement.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+		if (colDataMap == null)
+			colDataMap = new JRPropertiesMap();
+		String colName = colDataMap.getProperty(CSVAction.COL_NAME);
+		colDataMap.removeProperty(CSVAction.COL_DATA);
+		colDataMap.removeProperty(CSVAction.COL_NAME);
+		SetValueCommand setColDataCommand = new SetValueCommand();
+		setColDataCommand.setTarget(selectedElement);
+		setColDataCommand.setPropertyId(MGraphicElement.PROPERTY_MAP);
+		setColDataCommand.setPropertyValue(colDataMap);
+		commandStack.add(setColDataCommand);
+		if (colName != null){
+			JRPropertiesMap rootMap = (JRPropertiesMap)((APropertyNode)selectedElement.getRoot()).getPropertyValue(MGraphicElement.PROPERTY_MAP);
+			if (rootMap == null) rootMap = new JRPropertiesMap();
+			
+			String colNames = rootMap.getProperty(CSVAction.COL_NAMES);
+      if (colNames != null){
+				SetValueCommand setRootNames = new SetValueCommand();
+				setRootNames.setTarget((APropertyNode)selectedElement.getRoot());
+				rootMap.setProperty(CSVAction.COL_NAMES, removeColName(colName, colNames));
+				setRootNames.setPropertyId(MGraphicElement.PROPERTY_MAP);
+				setRootNames.setPropertyValue(rootMap);
+				commandStack.add(setRootNames);
+			}
+		}
+	}
+	
+	/**
+	 * Check if the name for a column was already present in the list of the column names
+	 * @param name value that is searched in the list
+	 * @param colNames list of column names, comma separated
+	 * @return true if name is present in colNames, otherwise false
+	 */
+	private boolean colNameAlreadyPresent(String name, String colNames){
+		if ((name.equals(colNames))
+				|| (colNames.contains(","+name+",")) //$NON-NLS-1$ //$NON-NLS-2$
+					|| (colNames.startsWith(name+",")) //$NON-NLS-1$
+						|| (colNames.endsWith(","+name))) //$NON-NLS-1$
+								return true;
+		return false;
+	}
+	
+	/**
+	 * Remove a name from the list of all the column names
+	 * @param name value to remove
+	 * @param colNames list of column names, comma separated
+	 * @return columnNames without the element removed
+	 */
+	private String removeColName(String name, String colNames){
+		if (colNames.startsWith(name+",")) return colNames.substring(name.length()+1); //$NON-NLS-1$
+		if (colNames.endsWith(","+name)) return colNames.substring(0,colNames.length()-name.length()-1); //$NON-NLS-1$
+		int colIndex = colNames.indexOf(","+name+","); //$NON-NLS-1$ //$NON-NLS-2$
+		return colNames.substring(0, colIndex+1) + colNames.substring(colIndex+name.length()+2);
+	}
+	
+	/**
+	 * If an element is already a column than the property is removed from it, otherwise it will became a csw column with a column name
+	 * defined by the user
 	 */
 	@Override
 	public void run() {
-		NameChooserDialog dialog = new NameChooserDialog(Display.getCurrent().getActiveShell());
-		int dialogResult = dialog.open();
-		if (dialogResult == NameChooserDialog.OK)
-			execute(createAlignmentCommand(dialog.getName()));
+		if (isChecked()) execute(createAlignmentCommand("")); //$NON-NLS-1$
+		else {
+			NameChooserDialog dialog = new NameChooserDialog(Display.getCurrent().getActiveShell(),Messages.CSVColDataAction_InsertColNameDialog);
+			int dialogResult = dialog.open();
+			if (dialogResult == NameChooserDialog.OK)
+				execute(createAlignmentCommand(dialog.getName()));
+		}
 	}
 	
-	
+	@Override
 	public boolean isChecked() {
 		List<?> editparts = getSelectedObjects();
 		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart)){
 			return false;
 		}
-		ArrayList<MStaticText> columnNames = new ArrayList<MStaticText>();
-		ArrayList<APropertyNode> columnValues = new ArrayList<APropertyNode>();
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MGraphicElement){
-				MGraphicElement model = (MGraphicElement)editpart.getModel();
-				if (model instanceof MStaticText)
-					columnNames.add((MStaticText)model);
-				else 
-					columnValues.add(model);
-			}
-		}
-		if (columnNames.size() != columnValues.size()) return false;
-		for(int i=0; i<columnNames.size(); i++){
-			MStaticText columnName = columnNames.get(i);
-			APropertyNode columnValue = columnValues.get(i);
-			JRPropertiesMap colNameMap = (JRPropertiesMap)columnName.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-			JRPropertiesMap colDataMap = (JRPropertiesMap)columnValue.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-			boolean hasColName = false;
-			if (colNameMap != null) hasColName = colNameMap.containsProperty(CSVAction.COL_NAME);
-			boolean hasColData = false; 
-			if (colDataMap != null) hasColData = colDataMap.containsProperty(CSVAction.COL_DATA);
-			if (!(hasColData && hasColName)) return false;
+			if (editpart.getModel() instanceof MTextElement){
+				MTextElement model = (MTextElement)editpart.getModel();
+				JRPropertiesMap colDataMap = (JRPropertiesMap)model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+				boolean hasColData = colDataMap.containsProperty(CSVAction.COL_DATA);
+				if (!hasColData) return false;
+			} else return false;
 		}
 		return true;
 	}
 	
 	@Override
 	protected Command createAlignmentCommand() {
-		return createAlignmentCommand("");
+		return createAlignmentCommand(""); //$NON-NLS-1$
 	}
 
 	
 	/**
-	 * Returns the list of editparts which will participate in PDF Editing.
+	 * Create the commands necessary to transform a textual element into a csv column or to remove it 
+	 * is it is already a csv column
 	 * 
-	 * @return the list of parts which will be aligned
 	 */
 	protected Command createAlignmentCommand(String columnName) {
 		List<?> editparts = getSelectedObjects();
@@ -175,7 +205,8 @@ public class CSVColDataAction extends CSVAction {
 		EditPart editpart = (EditPart) editparts.get(0);
 		if (editpart.getModel() instanceof MTextElement){
 			APropertyNode columnValue = (APropertyNode)editpart.getModel();
-			createCommand(columnName, columnValue, command);
+			if (isChecked()) removeProperty(columnValue, command);
+			else createCommand(columnName, columnValue, command);
 		}
 		return command;
 	}

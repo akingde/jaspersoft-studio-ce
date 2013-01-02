@@ -235,6 +235,7 @@ public class Messages extends NLS {
 	public static String ColorsSection_transparency;
 	public static String ColorsSection_transparency_tool_tip;
 	public static String ColorStyledText_LineColor_ToolTip;
+	public static String ColumnsOrderDialog_ColumOrderDialog;
 	public static String CreateBandAction_create_band;
 	public static String CreateBandAction_create_band_tool_tip;
 	public static String CreateConditionalStyleAction_create_conditional_style;
@@ -271,6 +272,7 @@ public class Messages extends NLS {
 	public static String CreateStyleTemplateAction_create_style_template_tool_tip;
 	public static String CreateVariableAction_create_variable;
 	public static String CreateVariableAction_create_variable_tool_tip;
+	public static String CSVColDataAction_InsertColNameDialog;
 	public static String CSVElementDecorator_CreateColumn;
 	public static String CSVElementDecorator_CSVMenuLabel;
 	public static String CSVElementDecorator_ShowDecorationLabel;
@@ -280,6 +282,9 @@ public class Messages extends NLS {
 	public static String CSVExporterPreferencePage_4;
 	public static String CSVExporterPreferencePage_5;
 	public static String CSVExporterPreferencePage_title;
+	public static String CSVRootAction_FieldDelimiterDialog;
+	public static String CSVRootAction_GeneralDialog;
+	public static String CSVRootAction_RecordDelimiterDialog;
 	public static String CurrencyPattern_description;
 	public static String CustomPattern_description;
 	public static String CustomPattern_Formats;

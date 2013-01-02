@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -18,7 +18,6 @@ package com.jaspersoft.studio.editor.action.csv;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.JRStaticText;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -33,7 +32,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
- * Action used to set an CSV attribute
+ * Base action to set the CSV attributes that can be represented with a true or false value
  * @author Orlandin Marco
  *
  */
@@ -50,21 +49,14 @@ public class CSVAction extends SelectionAction{
 	
 	public static String COL_NAMES = "net.sf.jasperreports.export.csv.column.names";
 	
-	protected String value;
-	
-	protected String attributeId;
+	public static String WRITE_HEADER = "net.sf.jasperreports.export.csv.write.header";
 	
 	private String[] attributeToRemove;
 	
-	public CSVAction(IWorkbenchPart part,String actionId, String value, String actionName){
-		this(part,actionId,actionId,value,actionName);
-	}
-	
-	public CSVAction(IWorkbenchPart part,String actionId, String attributeId, String value, String actionName){
+
+	public CSVAction(IWorkbenchPart part,String actionId, String actionName){
 		super(part, IAction.AS_CHECK_BOX);
 		setId(actionId);
-		this.attributeId = attributeId;
-		this.value = value;
 		//the property need to be registered
 		PropertiesList.AddItem(actionId);
 		setText(actionName);
@@ -73,36 +65,49 @@ public class CSVAction extends SelectionAction{
 	
 	/**
 	 * Uses the attribute to remove parameter to define the attribute that should be removed when the attributeId is set. This is 
-	 * done to define attribute mutually exclusives with the others
+	 * done to define attribute mutually exclusive with the others
 	 */
-	public 	CSVAction(IWorkbenchPart part,String actionId, String attributeId, String value, String actionName, String[] attributeToRemove){
-		this(part,actionId,actionId,value,actionName);
+	public 	CSVAction(IWorkbenchPart part,String actionId, String actionName, String[] attributeToRemove){
+		this(part,actionId,actionName);
 		this.attributeToRemove = attributeToRemove;
 	}
 	
-	public boolean isChecked() {
+	/**
+	 * Take the selected nodes and use the first of them to reach the root of the report
+	 * @return the root of the report (typically an MReport), or null is the root is unreachable
+	 */
+	protected APropertyNode getRoot(){
 		List<?> editparts = getSelectedObjects();
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart)){
-			return false;
+		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart) || editparts.size()>1){
+			return null;
 		} 
-		for (int i = 0; i < editparts.size(); i++) {
-			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MGraphicElement){
-				MGraphicElement model = (MGraphicElement)editpart.getModel();
-				JRPropertiesMap v = (JRPropertiesMap)model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-				if (v == null) return false;
-				else {
-					 Object oldValue = v.getProperty(attributeId);
-					 if (oldValue == null || !oldValue.equals(value)) return false;
-				}
-			}
+		EditPart editpart = (EditPart) editparts.get(0);
+		if (editpart.getModel() instanceof APropertyNode){
+			APropertyNode columnValue = (APropertyNode)editpart.getModel();
+			return (APropertyNode)columnValue.getRoot();
+		}
+		return null;
+	}
+	
+	/**
+	 * Check if the attribute associated to the id of the action has value true and then return true, 
+	 * otherwise (so if even if the attribute is undefined) return null.
+	 */
+	public boolean isChecked() {
+		APropertyNode model = getRoot();
+		if (model == null) return false;
+		JRPropertiesMap v = (JRPropertiesMap)model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+		if (v == null) return false;
+		else {
+			 Object oldValue = v.getProperty(getId());
+			 if (oldValue == null || oldValue.equals("false")) return false;
 		}
 		return true;
 	}
 
 	/**
 	 * Remove from the property map all the attributes in the attributeToRemove array
-	 * @param map
+	 * @param map location from where the attributes are removed
 	 */
 	protected void removeAttributes(JRPropertiesMap map){
 		if (attributeToRemove != null){
@@ -112,7 +117,8 @@ public class CSVAction extends SelectionAction{
 	}
 	
 	/**
-	 * Create the command for the selected action
+	 * Create the command for the selected action. Try to set the specified attribute id with the value true on the root element. 
+	 * If the attirbute it is already present with the value true then it is removed
 	 * @param model Model of the selected item
 	 * @return the command to execute
 	 */
@@ -121,18 +127,11 @@ public class CSVAction extends SelectionAction{
 		cmd.setTarget(model);
 		cmd.setPropertyId(MGraphicElement.PROPERTY_MAP);
 		JRPropertiesMap v = (JRPropertiesMap)model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-		Object oldValue = null;
-		
-		if (v == null){
-			v = new JRPropertiesMap();
-		} else {
-			oldValue = v.getProperty(attributeId);
-			v.removeProperty(attributeId);
-		}
-		JRStaticText textElement = (JRStaticText)model.getValue(); 
-		value = textElement.getText();
-		if (value != null  && !value.equals(oldValue)) {
-			v.setProperty(attributeId, value);
+		if (v == null) v = new JRPropertiesMap();
+		if (v.containsProperty(getId())) 
+			v.removeProperty(getId());
+		else {
+			v.setProperty(getId(), "true");
 			removeAttributes(v);
 		}
 		cmd.setPropertyValue(v);
@@ -148,29 +147,24 @@ public class CSVAction extends SelectionAction{
 	}
 	
 	/**
- * Returns the list of editparts which will participate in PDF Editing.
- * 
- * @return the list of parts which will be aligned
- */
+	 * Returns a container with the command for the editing of the action id attribute. 
+	 * See {@createCommand} method to have more information
+	 * 
+	 * @return a stack of commands that contain only the command to change a single attribute on 
+	 * the root of the document. If the root is not found the stack will be empty
+	 */
 	protected Command createAlignmentCommand() {
-		List<?> editparts = getSelectedObjects();
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart)){
-			return null;
-		} 
 		CompoundCommand command = new CompoundCommand();
 		command.setDebugLabel(getText());
-		for (int i = 0; i < editparts.size(); i++) {
-			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof APropertyNode){
-				APropertyNode model = (APropertyNode)editpart.getModel(); 
-				if (model.getValue() instanceof JRStaticText)
-					command.add(createCommand(model));
-			}
-		}
+		APropertyNode model = getRoot();
+		if (model != null)
+			command.add(createCommand(model));
 		return command;
 	}
 
-
+	/**
+	 * Return true if the command can be executed
+	 */
 	@Override
 	protected boolean calculateEnabled() {
 		Command cmd = createAlignmentCommand();
