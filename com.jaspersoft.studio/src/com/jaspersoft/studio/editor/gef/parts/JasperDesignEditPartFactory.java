@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -29,6 +29,8 @@ import org.eclipse.gef.EditPartViewer;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.MCallout;
+import com.jaspersoft.studio.callout.pin.MPin;
+import com.jaspersoft.studio.callout.pin.PinEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.text.StaticTextFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.text.TextFieldFigureEditPart;
@@ -95,27 +97,29 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 					editPart = new ReportPageEditPart();
 				else
 					editPart = new PageEditPart();
-			} else if (model instanceof MPage) {
+			} else if (model instanceof MPage)
 				editPart = new PageEditPart();
-			} else if (model instanceof MReport) {
+			else if (model instanceof MReport)
 				editPart = new ReportPageEditPart();
-			} else if (model instanceof MBand) {
+			else if (model instanceof MBand)
 				editPart = new BandEditPart();
-			} else if (model instanceof MStaticText) {
+			else if (model instanceof MStaticText)
 				editPart = new StaticTextFigureEditPart();
-			} else if (model instanceof MTextField) {
+			else if (model instanceof MTextField)
 				editPart = new TextFieldFigureEditPart();
-			} else if (model instanceof MSubreport) {
+			else if (model instanceof MSubreport)
 				editPart = new SubreportFigureEditPart();
-			} else if (model instanceof MImage) {
+			else if (model instanceof MImage)
 				editPart = new ImageFigureEditPart();
-			} else if (model instanceof MFrame) {
+			else if (model instanceof MFrame)
 				editPart = new FrameFigureEditPart();
 
-			} else if (model instanceof IGraphicElement) {
-				editPart = new FigureEditPart();
-			} else if (model instanceof MCallout)
+			else if (model instanceof MCallout)
 				editPart = new CalloutEditPart();
+			else if (model instanceof MPin)
+				editPart = new PinEditPart();
+			else if (model instanceof IGraphicElement)
+				editPart = new FigureEditPart();
 		}
 		if (editPart != null) {
 			editPart.setModel(model);

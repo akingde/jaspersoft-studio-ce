@@ -1,12 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: Jaspersoft Studio Team - initial API and implementation
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.report;
 
@@ -64,6 +69,7 @@ import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
@@ -689,6 +695,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		selectionActions.add(action.getId());
 
 		action = new StrikethroughAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+
+		action = new CreatePinAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}

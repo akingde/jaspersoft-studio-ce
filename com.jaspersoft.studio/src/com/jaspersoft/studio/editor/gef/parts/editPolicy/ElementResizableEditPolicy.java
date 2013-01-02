@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -49,11 +49,11 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 	public ElementResizableEditPolicy() {
 		super();
 	}
-	
+
 	/**
-	 * This method override the ResizableEditPolicy createSelectionHandle(). It's identical to
-	 * 3.7 and later methods, but different from previous versions. In this way the behavior of this 
-	 * handle under eclipse 3.6 and eclipse 3.7+ is uniformed
+	 * This method override the ResizableEditPolicy createSelectionHandle(). It's identical to 3.7 and later methods, but
+	 * different from previous versions. In this way the behavior of this handle under eclipse 3.6 and eclipse 3.7+ is
+	 * uniformed
 	 */
 	@Override
 	protected List createSelectionHandles() {
@@ -75,7 +75,7 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 		createResizeHandle(list, PositionConstants.NORTH_EAST);
 		return list;
 	}
-	
+
 	/**
 	 * Shows or updates feedback for a change bounds request.
 	 * 
@@ -83,6 +83,7 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 	 *          the request
 	 */
 	protected void showChangeBoundsFeedback(ChangeBoundsRequest request) {
+
 		IFigure feedback = getDragSourceFeedbackFigure();
 
 		PrecisionRectangle rect = new PrecisionRectangle(getInitialFeedbackBounds().getCopy());
@@ -121,34 +122,29 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 		feedback.setBounds(rect.resize(-scaleW, -scaleH));
 	}
 
-	
 	protected void createMoveHandle(List handles) {
 		if (isDragAllowed()) {
 			// display 'move' handle to allow dragging
-			ResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(),
-					handles, getDragTracker(), Cursors.SIZEALL);
+			ResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(), handles, getDragTracker(), Cursors.SIZEALL);
 		} else {
 			// display 'move' handle only to indicate selection
-			ResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(),
-					handles, getSelectTracker(), SharedCursors.ARROW);
+			ResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(), handles, getSelectTracker(), SharedCursors.ARROW);
 		}
 	}
-	
+
 	protected void createDragHandle(List handles, int direction) {
 		if (isDragAllowed()) {
 			// display 'resize' handles to allow dragging (drag tracker)
-			NonResizableHandleKit
-					.addHandle((GraphicalEditPart) getHost(), handles,
-							direction, getDragTracker(), SharedCursors.SIZEALL);
+			NonResizableHandleKit.addHandle((GraphicalEditPart) getHost(), handles, direction, getDragTracker(),
+					SharedCursors.SIZEALL);
 		} else {
 			// display 'resize' handles to indicate selection only (selection
 			// tracker)
-			NonResizableHandleKit
-					.addHandle((GraphicalEditPart) getHost(), handles,
-							direction, getSelectTracker(), SharedCursors.ARROW);
+			NonResizableHandleKit.addHandle((GraphicalEditPart) getHost(), handles, direction, getSelectTracker(),
+					SharedCursors.ARROW);
 		}
 	}
-	
+
 	protected void createResizeHandle(List handles, int direction) {
 		if ((getResizeDirections() & direction) == direction) {
 			ColoredSquareHandles handle = new ColoredSquareHandles((GraphicalEditPart) getHost(), direction);
@@ -174,13 +170,14 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 		// FigureUtilities.makeGhostShape(r);
 		r.setLineStyle(Graphics.LINE_DOT);
 		r.setForegroundColor(ColorConstants.black);
-		r.setBounds(getInitialFeedbackBounds().resize(-1, -1));// new Rectangle(ifb.x, ifb.y, ifb.width -100, ifb.height));
+		r.setBounds(getInitialFeedbackBounds().resize(-1, -1));// new Rectangle(ifb.x, ifb.y, ifb.width -100,
+																														// ifb.height));
 		addFeedback(r);
 		return r;
 	}
-	
+
 	// ==== BACK COMPATIBILITY METHODS ==== //
-	
+
 	/**
 	 * Returns a drag tracker to use by a resize handle.
 	 * 
@@ -190,7 +187,7 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 	protected DragEditPartsTracker getDragTracker() {
 		return new SearchParentDragTracker(getHost());
 	}
-	
+
 	/**
 	 * Returns a selection tracker to use by a selection handle.
 	 * 
@@ -200,13 +197,12 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 	protected SelectEditPartTracker getSelectTracker() {
 		return new SelectEditPartTracker(getHost());
 	}
-	
+
 	/**
-	 * Returns a resize tracker for the given direction to be used by a resize
-	 * handle.
+	 * Returns a resize tracker for the given direction to be used by a resize handle.
 	 * 
 	 * @param direction
-	 *            the resize direction for the {@link ResizeTracker}.
+	 *          the resize direction for the {@link ResizeTracker}.
 	 * @return a new {@link ResizeTracker}
 	 * @since 3.7
 	 */
@@ -215,5 +211,5 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 	}
 
 	// =================================== //
-	
+
 }

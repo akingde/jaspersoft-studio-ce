@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -32,6 +32,8 @@ import org.eclipse.gef.handles.SquareHandle;
 import org.eclipse.swt.graphics.Cursor;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 
@@ -154,8 +156,8 @@ public class ColoredSquareHandles extends ResizeHandle {
 	 * @return the color of the handle
 	 */
 	protected Color[] getFillColorAwt() {
-		MGraphicElement element = (MGraphicElement) getOwner().getModel();
-		Rectangle bound1 = element.getBounds();
+		ANode element = (ANode) getOwner().getModel();
+		Rectangle bound1 = ((IGraphicElement) element).getBounds();
 		int index1 = element.getParent().getChildren().indexOf(element);
 		List<INode> brothers = element.getParent().getChildren();
 		Iterator<INode> it = brothers.iterator();

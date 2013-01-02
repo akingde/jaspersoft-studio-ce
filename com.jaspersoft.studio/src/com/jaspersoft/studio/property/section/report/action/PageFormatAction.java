@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -60,9 +60,8 @@ public class PageFormatAction extends SelectionAction {
 		ReportEditor part = (ReportEditor) getWorkbenchPart();
 		ANode n = (ANode) part.getModel().getChildren().get(0);
 		PageFormatDialog dlg = new PageFormatDialog(Display.getCurrent().getActiveShell(), n);
-		if (dlg.open() == Window.OK) {
-			part.getEditDomain().getCommandStack().execute(dlg.getCommand());
-		}
+		if (dlg.open() == Window.OK)
+			execute(dlg.getCommand());
 	}
 
 	@Override

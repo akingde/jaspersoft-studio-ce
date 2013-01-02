@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -101,9 +101,7 @@ public class PasteAction extends SelectionAction {
 
 	@Override
 	public void run() {
-		Command command = createPasteCommand(getSelectedObjects());
-		if (command != null && command.canExecute())
-			execute(command);
+		execute(createPasteCommand(getSelectedObjects()));
 	}
 
 }

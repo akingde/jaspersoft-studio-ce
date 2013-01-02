@@ -1,12 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: Jaspersoft Studio Team - initial API and implementation
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline;
 
@@ -33,6 +38,8 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.callout.command.CreateCalloutCommand;
 import com.jaspersoft.studio.callout.command.DeleteCalloutCommand;
+import com.jaspersoft.studio.callout.pin.MPin;
+import com.jaspersoft.studio.callout.pin.command.DeletePinCommand;
 import com.jaspersoft.studio.editor.outline.part.ContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableTreeEditPart;
@@ -146,7 +153,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 */
 	public EditPart createEditPart(EditPart context, Object model) {
 		EditPart editPart = null;
-		if (model instanceof MCallout)
+		if (model instanceof MCallout || model instanceof MPin)
 			return null;
 		if (model instanceof IDragable) {
 			if (model instanceof IContainerEditPart)
@@ -185,6 +192,8 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 
 		if (child instanceof MCallout)
 			return new DeleteCalloutCommand(parent, (MCallout) child);
+		if (child instanceof MPin)
+			return new DeletePinCommand((MCallout) child.getParent(), (MPin) child);
 
 		if (child instanceof MGraphicElement && !(parent instanceof MPage)) {
 			return new DeleteElementCommand(parent, (MGraphicElement) child);

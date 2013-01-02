@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -76,8 +76,7 @@ public class PageRemoveMarginsAction extends SelectionAction {
 		c.add(createResetCommand(n, JasperDesign.PROPERTY_PAGE_WIDTH, w));
 		c.add(createResetCommand(n, JasperDesign.PROPERTY_PAGE_HEIGHT, h));
 
-		part.getEditDomain().getCommandStack().execute(c);
-
+		execute(c);
 	}
 
 	private Command createResetCommand(APropertyNode n, Object prop, int value) {

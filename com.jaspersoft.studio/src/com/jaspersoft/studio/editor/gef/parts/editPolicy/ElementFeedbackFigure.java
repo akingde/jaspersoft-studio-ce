@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -66,7 +66,7 @@ public class ElementFeedbackFigure extends RectangleFigure {
 		gr.fillRect(clientArea.x - 30, clientArea.y - 30, clientArea.width + 60, clientArea.height + 60);
 		gr.setPaint(oldPaint);
 
-		if (clientArea.width < 20 || clientArea.height < 20)
+		if (clientArea.width < 20 || clientArea.height < 20 || text.isEmpty())
 			return;
 
 		// draw more than a rectangle

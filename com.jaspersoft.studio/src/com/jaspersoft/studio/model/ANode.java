@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -37,6 +37,8 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
+import com.jaspersoft.studio.callout.CalloutEditPart;
+import com.jaspersoft.studio.callout.pin.PinEditPart;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -401,15 +403,16 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 
 	public EditPart getFigureEditPart() {
 		for (Object o : propertyChangeSupport.getPropertyChangeListeners()) {
-			if (o instanceof FigureEditPart)
+			if (o instanceof FigureEditPart || o instanceof CalloutEditPart || o instanceof PinEditPart)
 				return (EditPart) o;
 		}
 		return null;
 	}
-	
-	public JRSimpleTemplate getStylesTemplate(){
-		for(INode node : getRoot().getChildren())
-			if (node instanceof MStylesTemplate) return (JRSimpleTemplate)node.getValue();
+
+	public JRSimpleTemplate getStylesTemplate() {
+		for (INode node : getRoot().getChildren())
+			if (node instanceof MStylesTemplate)
+				return (JRSimpleTemplate) node.getValue();
 		return null;
 	}
 
@@ -488,10 +491,12 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
-	public Object getAdapter(Class adapter){
-		if(adapter==ANode.class || adapter==INode.class) return this;
+	public Object getAdapter(Class adapter) {
+		if (adapter == ANode.class || adapter == INode.class)
+			return this;
 		return null;
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -139,7 +139,7 @@ public class RoundedPolygon {
 	}
 	
 	/**
-	 * Calculate the curving point for a rounded corner, using bézer curves
+	 * Calculate the curving point for a rounded corner, using bï¿½zer curves
 	 * @param p1 start point
 	 * @param p2 end point
 	 * @return curving point

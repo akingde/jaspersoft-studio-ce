@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -30,6 +30,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.CreateRequest;
 
+import com.jaspersoft.studio.callout.CalloutEditPart;
+import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
+import com.jaspersoft.studio.callout.pin.PinEditPart;
+import com.jaspersoft.studio.callout.pin.command.PinSetConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MStyle;
@@ -95,6 +99,11 @@ public class FigurePageLayoutEditPolicy extends PageLayoutEditPolicy {
 
 	@Override
 	protected Command createAddCommand(EditPart child, Object constraint) {
+		if (child instanceof CalloutEditPart) {
+			return new CalloutSetConstraintCommand(((CalloutEditPart) child).getModel(), adaptConstraint(constraint));
+		} else if (child instanceof PinEditPart) {
+			return new PinSetConstraintCommand(((PinEditPart) child).getModel(), adaptConstraint(constraint));
+		}
 		return null;
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -29,6 +29,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
@@ -164,6 +165,10 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
+		action = getActionRegistry().getAction(CreatePinAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
+
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<String> lst = m.getActionIDs();
 		for (String ids : lst) {
@@ -189,8 +194,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 		// position actions
-		MenuManager submenu = new MenuManager(Messages.AppContextMenuProvider_order,
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"), BringToFrontAction.ID); //$NON-NLS-1$
+		MenuManager submenu = new MenuManager(Messages.AppContextMenuProvider_order, JaspersoftStudioPlugin.getInstance()
+				.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"), BringToFrontAction.ID); //$NON-NLS-1$
 
 		action = getActionRegistry().getAction(BringToFrontAction.ID);
 		if (action.isEnabled())
@@ -243,8 +248,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.add(submenu);
 
 		// Alignment Actions
-		submenu = new MenuManager(Messages.AppContextMenuProvider_align_to_container,
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/align-band-left.gif"), //$NON-NLS-1$
+		submenu = new MenuManager(Messages.AppContextMenuProvider_align_to_container, JaspersoftStudioPlugin.getInstance()
+				.getImageDescriptor("icons/resources/eclipse/align-band-left.gif"), //$NON-NLS-1$
 				Align2BorderAction.ID_ALIGN_LEFT);
 
 		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_LEFT);
@@ -294,8 +299,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.add(submenu);
 		// ------------------------------
 
-		submenu = new MenuManager(Messages.AppContextMenuProvider_size_to_container,
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"), //$NON-NLS-1$
+		submenu = new MenuManager(Messages.AppContextMenuProvider_size_to_container, JaspersoftStudioPlugin.getInstance()
+				.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"), //$NON-NLS-1$
 				Size2BorderAction.ID_SIZE_WIDTH);
 
 		action = getActionRegistry().getAction(Size2BorderAction.ID_SIZE_WIDTH);
@@ -321,8 +326,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		if (action.isEnabled())
 			menu.add(action);
 
-		submenu = new MenuManager("Arrange In Container", 
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/layout-6.png"), //$NON-NLS-1$
+		submenu = new MenuManager("Arrange In Container", JaspersoftStudioPlugin.getInstance().getImageDescriptor(
+				"icons/layout-6.png"), //$NON-NLS-1$
 				LayoutAction.ID);
 
 		LayoutManager.addMenu(submenu, getActionRegistry());

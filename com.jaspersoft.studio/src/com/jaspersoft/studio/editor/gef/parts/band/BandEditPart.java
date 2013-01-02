@@ -1,12 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: Jaspersoft Studio Team - initial API and implementation
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.band;
 
@@ -45,6 +50,10 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.callout.CalloutEditPart;
+import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
+import com.jaspersoft.studio.callout.pin.PinEditPart;
+import com.jaspersoft.studio.callout.pin.command.PinSetConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.APrefFigureEditPart;
@@ -241,6 +250,10 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 								cmodel.getValue()), -1));
 						return c;
 					}
+				} else if (child instanceof CalloutEditPart) {
+					return new CalloutSetConstraintCommand(((CalloutEditPart) child).getModel(), adaptConstraint(constraint));
+				} else if (child instanceof PinEditPart) {
+					return new PinSetConstraintCommand(((PinEditPart) child).getModel(), adaptConstraint(constraint));
 				}
 				return null;
 			}

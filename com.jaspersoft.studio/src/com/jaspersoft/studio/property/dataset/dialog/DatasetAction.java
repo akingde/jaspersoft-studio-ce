@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -73,26 +73,25 @@ public class DatasetAction extends SelectionAction {
 		try {
 			final AbstractVisualEditor part = (AbstractVisualEditor) getWorkbenchPart();
 			MDataset mdataset = null;
-			if(part instanceof ReportEditor){
+			if (part instanceof ReportEditor) {
 				MReport mreport = (MReport) part.getModel().getChildren().get(0);
 				// First check if any MDataset element is selected
 				mdataset = getSelectedMDataset();
-				if(mdataset==null){
+				if (mdataset == null) {
 					// if we return the main dataset element
 					mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
 				}
-			}
-			else {
+			} else {
 				// Handle custom editors for elements like table, crosstab and list
 				// FIXME - Now this solution works because list/crosstab/table editors will
 				// have only one child MDataset element. Once this will be no longer valid,
 				// the code below must be changed
-				if(part.getModel().getChildren().size()>0){
+				if (part.getModel().getChildren().size() > 0) {
 					INode firstChild = part.getModel().getChildren().get(0);
-					if(firstChild instanceof MPage){
-						for(INode c : firstChild.getChildren()){
-							if(c instanceof MDataset){
-								mdataset = (MDataset)c;
+					if (firstChild instanceof MPage) {
+						for (INode c : firstChild.getChildren()) {
+							if (c instanceof MDataset) {
+								mdataset = (MDataset) c;
 								break;
 							}
 						}
@@ -118,7 +117,7 @@ public class DatasetAction extends SelectionAction {
 				Display.getCurrent().asyncExec(new Runnable() {
 
 					public void run() {
-						part.getEditDomain().getCommandStack().execute(dlg.getCommand());
+						execute(dlg.getCommand());
 					}
 				});
 			}
@@ -132,32 +131,31 @@ public class DatasetAction extends SelectionAction {
 		List<Object> selection = getSelectedObjects();
 		if (!selection.isEmpty() && selection.size() == 1) {
 			Object obj = selection.get(0);
-			if(obj instanceof IDatasetDialogSupport){
+			if (obj instanceof IDatasetDialogSupport) {
 				return true;
 			}
 			if (obj instanceof EditPart) {
 				if (((EditPart) obj).getModel() instanceof MDataset || ((EditPart) obj).getModel() instanceof MBand
-						|| ((EditPart) obj).getModel() instanceof MReport || ((EditPart)obj).getParent() instanceof PageEditPart)
+						|| ((EditPart) obj).getModel() instanceof MReport || ((EditPart) obj).getParent() instanceof PageEditPart)
 					return true;
 			}
 		}
 
 		return false;
 	}
-	
+
 	/*
 	 * Returns the currently selected MDataset object (i.e: in the Outline) if any.
 	 */
-	private MDataset getSelectedMDataset(){
+	private MDataset getSelectedMDataset() {
 		List<Object> selection = getSelectedObjects();
 		if (!selection.isEmpty() && selection.size() == 1) {
 			Object obj = selection.get(0);
-			if (obj instanceof EditPart && 
-					((EditPart) obj).getModel() instanceof MDataset){
+			if (obj instanceof EditPart && ((EditPart) obj).getModel() instanceof MDataset) {
 				return (MDataset) ((EditPart) obj).getModel();
 			}
 		}
 		return null;
 	}
-	
+
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -30,12 +30,12 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 
 public class FigureSelectionEditPolicy extends SelectionEditPolicy {
-	
+
 	/**
 	 * Color of the feedback when the cursor is on the figure
 	 */
 	public static Color mouseEnterColor = ColorConstants.orange;
-	
+
 	@Override
 	protected void showSelection() {
 		EditPart host = getHost();
@@ -65,24 +65,22 @@ public class FigureSelectionEditPolicy extends SelectionEditPolicy {
 
 	/**
 	 * If the figure is a frame and it has already a feedback, this one will not displayed
+	 * 
 	 * @param hostFigure
 	 * @return true if the target figure it's a frame that has a feedback, otherwise false
 	 */
-	protected boolean hasAlreadyColoredBorder(EditPart hostFigure){
-		if (hostFigure instanceof FrameFigureEditPart){
-			boolean result = ((FrameFigureEditPart)hostFigure).hasTargetFeedBack();
-			return result;
-		}
+	protected boolean hasAlreadyColoredBorder(EditPart hostFigure) {
+		if (hostFigure instanceof FrameFigureEditPart)
+			return ((FrameFigureEditPart) hostFigure).hasTargetFeedBack();
 		return false;
 	}
 
-	
 	@Override
 	public void showTargetFeedback(Request request) {
 		EditPart host = getHost();
-		if (host instanceof FigureEditPart && host.getSelected() == EditPart.SELECTED_NONE){
-			//Check if the figure is a frame that already has a feedback
-			if (!hasAlreadyColoredBorder(((FigureEditPart) host))){
+		if (host instanceof FigureEditPart && host.getSelected() == EditPart.SELECTED_NONE) {
+			// Check if the figure is a frame that already has a feedback
+			if (!hasAlreadyColoredBorder(((FigureEditPart) host))) {
 				((FigureEditPart) host).getFigure().setBorder(new HighlightBorder(mouseEnterColor, 2));
 				super.showTargetFeedback(request);
 			} else {

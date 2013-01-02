@@ -1,12 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: Jaspersoft Studio Team - initial API and implementation
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts;
 
@@ -39,7 +44,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.MCallout;
+import com.jaspersoft.studio.callout.pin.PinEditPart;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
@@ -167,6 +174,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 
 			grid.setSpacing(new Dimension(x, y));
 			grid.setVisible(visible);
+			getViewer().setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(x, y));
 
 			String mcolor = jConfig.getProperty(RulersGridPreferencePage.P_PAGE_GRID_COLOR,
 					RulersGridPreferencePage.DEFAULT_GRIDCOLOR);
@@ -320,10 +328,13 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof IGraphicElement && n.getValue() != null)
+				if (n instanceof MCallout) {
 					list.add(n);
-				else if (n instanceof MCallout)
+					for (INode node : n.getChildren())
+						list.add(node);
+				} else if (n instanceof IGraphicElement && n.getValue() != null)
 					list.add(n);
+
 				return true;
 			}
 		};
@@ -341,10 +352,11 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 			IFigure layer = getLayer(MainDesignerRootEditPart.SECTIONS_LAYER);
 			if (layer != null)
 				layer.add(((AbstractGraphicalEditPart) childEditPart).getFigure());
-		} else if (childEditPart instanceof FigureEditPart) {
+		} else if (childEditPart instanceof FigureEditPart || childEditPart instanceof CalloutEditPart
+				|| childEditPart instanceof PinEditPart) {
 			IFigure layer = getLayer(MainDesignerRootEditPart.ELEMENTS_LAYER);
 			if (layer != null)
-				layer.add(((FigureEditPart) childEditPart).getFigure());
+				layer.add(((AJDEditPart) childEditPart).getFigure());
 		}
 		super.addChildVisual(childEditPart, index);
 	}
