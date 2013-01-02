@@ -1561,6 +1561,16 @@
                 class="com.jaspersoft.studio.model.text.MTextElement">
           </selectedObject>
        </toolitems>
+       <toolitems
+             ActionID="com.jaspersoft.studio.callout.action.CreatePinAction"
+             icon="icons/pin-16.png"
+             id="com.jaspersoft.studio.callout.action.CreatePinAction"
+             label="Create Pin"
+             tooltip="Create pin for selected callout">
+          <selectedObject
+                class="com.jaspersoft.studio.callout.MCallout">
+          </selectedObject>
+       </toolitems>
     </extension>
     <extension
           point="com.jaspersoft.studio.toolitemsets">
@@ -1605,6 +1615,15 @@
           <toolitem
                 toolitemID="com.jaspersoft.studio.editor.action.text.strike">
           </toolitem>
+       </toolitemsets>
+       <toolitemsets
+             description="Create Report Objects Actions"
+             id="com.jaspersoft.studio.create"
+             name="Create Objects"
+             toolbaruri="com.jaspersoft.studio.create"
+             visibility="true">
+          <toolitem
+                toolitemID="com.jaspersoft.studio.callout.action.CreatePinAction"></toolitem>
        </toolitemsets>
     </extension>
     <extension
