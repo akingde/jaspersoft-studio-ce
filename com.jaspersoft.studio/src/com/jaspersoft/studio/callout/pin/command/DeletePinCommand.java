@@ -13,45 +13,37 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.callout.command;
+package com.jaspersoft.studio.callout.pin.command;
 
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.callout.MCallout;
-import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.callout.pin.MPin;
 
-public class CreateCalloutCommand extends Command {
-	private Rectangle location;
-	private ANode parent;
-	private MCallout mcallout;
+public class DeletePinCommand extends Command {
+	private MCallout parent;
+	private MPin mpin;
 
-	public CreateCalloutCommand(ANode parent, MCallout child, Rectangle location, int newIndex) {
-		super("Create Callout");
-		this.location = location;
-		this.parent = (ANode) parent.getRoot();
+	public DeletePinCommand(MCallout parent, MPin child) {
+		super("Delete Pin");
+		this.parent = parent;
+		this.mpin = child;
 	}
 
 	@Override
 	public void execute() {
-		if (location.width <= 0)
-			location.width = 200;
-		if (location.height <= 0)
-			location.height = 200;
-
-		if (mcallout == null)
-			mcallout = MCallout.createCallout(parent, location);
-		else {
-			mcallout.setParent(parent, -1);
-			mcallout.setPropertyValue(JRDesignElement.PROPERTY_X, mcallout.getPropertyValue(JRDesignElement.PROPERTY_X));
-		}
+		parent.removePinConnection(mpin.getSourceConnections());
+		parent.removeChild(mpin);
+		parent.removeChild(mpin.getSourceConnections());
+		parent.setPropertyValue("", "");
 	}
 
 	@Override
 	public void undo() {
-		mcallout.deleteCallout();
+		parent.addPinConnection(mpin.getSourceConnections());
+		mpin.setParent(parent, -1);
+		parent.addChild(mpin.getSourceConnections());
+		parent.setPropertyValue("", "");
 	}
 
 	@Override

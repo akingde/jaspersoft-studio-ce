@@ -13,45 +13,50 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.callout.command;
+package com.jaspersoft.studio.callout.pin.command;
 
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.callout.MCallout;
-import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.callout.pin.MPin;
+import com.jaspersoft.studio.callout.pin.MPinConnection;
 
-public class CreateCalloutCommand extends Command {
+public class CreatePinCommand extends Command {
 	private Rectangle location;
-	private ANode parent;
-	private MCallout mcallout;
+	private MCallout parent;
+	private MPin mpin;
 
-	public CreateCalloutCommand(ANode parent, MCallout child, Rectangle location, int newIndex) {
-		super("Create Callout");
+	public CreatePinCommand(MCallout parent, Rectangle location) {
+		super("Create Pin");
 		this.location = location;
-		this.parent = (ANode) parent.getRoot();
+		this.parent = parent;
 	}
 
 	@Override
 	public void execute() {
-		if (location.width <= 0)
-			location.width = 200;
-		if (location.height <= 0)
-			location.height = 200;
-
-		if (mcallout == null)
-			mcallout = MCallout.createCallout(parent, location);
+		if (mpin == null)
+			createObject();
 		else {
-			mcallout.setParent(parent, -1);
-			mcallout.setPropertyValue(JRDesignElement.PROPERTY_X, mcallout.getPropertyValue(JRDesignElement.PROPERTY_X));
+			parent.addPinConnection(mpin.getSourceConnections());
+			mpin.setParent(parent, -1);
+			parent.addChild(mpin.getSourceConnections());
 		}
+		parent.setPropertyValue("", "");
+	}
+
+	private void createObject() {
+		mpin = new MPin(parent, new Point(location.x, location.y));
+		new MPinConnection(parent, mpin);
 	}
 
 	@Override
 	public void undo() {
-		mcallout.deleteCallout();
+		parent.removePinConnection(mpin.getSourceConnections());
+		parent.removeChild(mpin);
+		parent.removeChild(mpin.getSourceConnections());
+		parent.setPropertyValue("", "");
 	}
 
 	@Override

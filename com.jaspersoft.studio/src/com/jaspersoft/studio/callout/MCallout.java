@@ -1,12 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: Jaspersoft Studio Team - initial API and implementation
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.callout;
 
@@ -36,9 +41,13 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.jaspersoft.studio.callout.pin.MPin;
+import com.jaspersoft.studio.callout.pin.MPinConnection;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -52,7 +61,7 @@ import com.jaspersoft.studio.utils.Misc;
  * @author sanda zaharia
  * 
  */
-public class MCallout extends APropertyNode {
+public class MCallout extends APropertyNode implements IGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public static final String PROP_CALLOUT = "ireport.callouts";
@@ -84,6 +93,7 @@ public class MCallout extends APropertyNode {
 			properties.remove("callouts." + i + ".bounds");
 			properties.remove("callouts." + i + ".pins");
 			properties.remove("callouts." + i + ".text");
+			properties.remove("callouts." + i + ".pins");
 
 			jd.setProperty(PROP_CALLOUT, FileUtils.getPropertyAsString(properties));
 
@@ -245,16 +255,33 @@ public class MCallout extends APropertyNode {
 		b = properties.getProperty("callouts." + i + ".bg");
 		if (b != null)
 			bg = getColor(b, bg);
-		pinlist.clear();
+
+		removeChildren();
 		String pins = properties.getProperty("callouts." + i + ".pins");
 		if (pins != null) {
-			String[] ps = pins.split(";");
+			String[] ps = pins.trim().split(";");
 			for (String pin : ps) {
 				String[] p = pin.split(",");
-				pinlist.add(new Point(getInt(p[0]), getInt(p[1])));
+
+				MPin mpin = new MPin(this, new Point(getInt(p[0]), getInt(p[1])));
+				new MPinConnection(this, mpin);
 			}
 		}
 		text = Misc.nvl(properties.getProperty("callouts." + i + ".text"), text);
+	}
+
+	private List<MPinConnection> pinConnections = new ArrayList<MPinConnection>();
+
+	public void addPinConnection(MPinConnection conn) {
+		pinConnections.add(conn);
+	}
+
+	public void removePinConnection(MPinConnection conn) {
+		pinConnections.remove(conn);
+	}
+
+	public List<MPinConnection> getTargetConnections() {
+		return pinConnections;
 	}
 
 	private Color getColor(String str, Color def) {
@@ -284,7 +311,6 @@ public class MCallout extends APropertyNode {
 	private Color bg = ColorConstants.yellow;
 
 	private String text = System.getProperty("user.name") + " " + (new SimpleDateFormat()).format(new Date());
-	private List<Point> pinlist = new ArrayList<Point>();
 	private Properties properties;
 
 	@Override
@@ -331,7 +357,42 @@ public class MCallout extends APropertyNode {
 		properties.setProperty("callouts." + i + ".bg", StringConverter.asString(bg.getRGB()));
 		properties.setProperty("callouts." + i + ".fg", StringConverter.asString(fg.getRGB()));
 
+		String pins = "";
+		List<INode> children = getChildren();
+		for (INode ch : children) {
+			if (ch instanceof MPin) {
+				MPin pin = (MPin) ch;
+				if (!pins.isEmpty())
+					pins += ";";
+				pins += pin.getPropertyValue(JRDesignElement.PROPERTY_X) + ","
+						+ pin.getPropertyValue(JRDesignElement.PROPERTY_Y);
+			}
+		}
+		if (!pins.isEmpty())
+			properties.setProperty("callouts." + i + ".pins", pins);
+
 		getJasperDesign().setProperty(PROP_CALLOUT, FileUtils.getPropertyAsString(properties).replace("\n", "\\n"));
 
 	}
+
+	@Override
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, w, h);
+	}
+
+	@Override
+	public int getDefaultWidth() {
+		return 0;
+	}
+
+	@Override
+	public int getDefaultHeight() {
+		return 0;
+	}
+
+	@Override
+	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
+		return null;
+	}
+
 }

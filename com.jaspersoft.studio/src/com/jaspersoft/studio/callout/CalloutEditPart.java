@@ -1,15 +1,35 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
 package com.jaspersoft.studio.callout;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
+import org.eclipse.draw2d.ChopboxAnchor;
+import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
+import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -21,21 +41,19 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.callout.pin.PinConnectorEditPart;
 import com.jaspersoft.studio.editor.gef.figures.FigureFactory;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.SearchParentDragTracker;
 import com.jaspersoft.studio.editor.gef.parts.text.LabelCellEditorLocator;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.SWTResourceManager;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class CalloutEditPart extends AJDEditPart implements PropertyChangeListener {
+public class CalloutEditPart extends AJDEditPart implements PropertyChangeListener, NodeEditPart {
 
 	private PreferenceListener preferenceListener;
 
@@ -77,6 +95,7 @@ public class CalloutEditPart extends AJDEditPart implements PropertyChangeListen
 		ANode model = getModel();
 		IFigure rect = FigureFactory.createFigure(model);
 		setupFigure(rect);
+		m_anchor = new ChopboxAnchor(rect);
 		return rect;
 	}
 
@@ -115,14 +134,11 @@ public class CalloutEditPart extends AJDEditPart implements PropertyChangeListen
 			}
 		});
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
-		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FigureSelectionEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FigurePageLayoutEditPolicy());
 	}
 
 	private CalloutEditManager manager;
 
 	public void performRequest(Request request) {
-
 		if (request.getType() == RequestConstants.REQ_OPEN) {
 			if (manager == null) {
 				manager = new CalloutEditManager(this, new LabelCellEditorLocator(getFigure()));
@@ -180,6 +196,8 @@ public class CalloutEditPart extends AJDEditPart implements PropertyChangeListen
 		return (MCallout) super.getModel();
 	}
 
+	private ChopboxAnchor m_anchor;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -187,23 +205,45 @@ public class CalloutEditPart extends AJDEditPart implements PropertyChangeListen
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh();
-		refreshC(getModel());
 		refreshVisuals();
 	}
 
-	/**
-	 * Refresh c.
-	 * 
-	 * @param n
-	 *          the n
-	 */
-	private void refreshC(ANode n) {
-		if (n.getChildren() != null)
-			for (INode node : n.getChildren()) {
-				EditPart ep = (EditPart) getViewer().getEditPartRegistry().get(node);
-				refreshVisuals();
-				refreshC((ANode) node);
-			}
+	@Override
+	protected ConnectionEditPart createConnection(Object model) {
+		PinConnectorEditPart connectPart = (PinConnectorEditPart) getRoot().getViewer().getEditPartRegistry().get(model);
+		if (connectPart == null) {
+			connectPart = new PinConnectorEditPart();
+			connectPart.setModel(model);
+		}
+		return connectPart;
+	}
+
+	@Override
+	protected List getModelTargetConnections() {
+		List sourceConnections = new ArrayList();
+		sourceConnections.addAll(getModel().getTargetConnections());
+
+		return sourceConnections;
+	}
+
+	@Override
+	public ConnectionAnchor getSourceConnectionAnchor(ConnectionEditPart connection) {
+		return m_anchor;
+	}
+
+	@Override
+	public ConnectionAnchor getTargetConnectionAnchor(ConnectionEditPart connection) {
+		return m_anchor;
+	}
+
+	@Override
+	public ConnectionAnchor getSourceConnectionAnchor(Request request) {
+		return null;
+	}
+
+	@Override
+	public ConnectionAnchor getTargetConnectionAnchor(Request request) {
+		return null;
 	}
 
 }
