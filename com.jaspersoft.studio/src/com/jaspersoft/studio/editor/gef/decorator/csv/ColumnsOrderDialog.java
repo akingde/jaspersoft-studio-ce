@@ -127,8 +127,9 @@ public class ColumnsOrderDialog extends Dialog {
 	 */
 	public ColumnsOrderDialog(Shell parentShell, String columnNames) {
 		super(parentShell);
-		this.columnNames = columnNames.split(","); //$NON-NLS-1$
-		result = ""; //$NON-NLS-1$
+		if (columnNames != null) this.columnNames = columnNames.split(","); 
+		else this.columnNames = new String[0];
+		result = ""; 
 		if (upImage == null || downImage == null) {
 			upImage = ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/arrow-curve-up.png"); //$NON-NLS-1$
 			downImage =  ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/arrow-curve-down.png"); //$NON-NLS-1$
@@ -241,6 +242,17 @@ public class ColumnsOrderDialog extends Dialog {
 		downButton.addSelectionListener(new ButtonPress(false));
 		return area;
 	}
+	
+	/**
+	 * Ovveride of the createButton method, disable the ok button when it is created if the 
+	 * list of columns is void (so if there aren't columns)
+	 */
+	@Override
+	protected Button createButton(Composite parent, int id, String label, boolean defaultButton) {
+		Button createdButton = super.createButton(parent, id, label, defaultButton);
+		if (id == Dialog.OK && columnNames.length==0) createdButton.setEnabled(false);
+		return createdButton;
+	};
 	
 	/**
 	 * return the chosen column order
