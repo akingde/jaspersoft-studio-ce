@@ -58,7 +58,11 @@ public class JSFileResolver extends SimpleFileResolver {
 	private void init() {
 		serverUri = jDesign.getProperty(JrxmlExporter.PROP_SERVERURL);
 		if (serverUri != null)
-			c = ServerManager.getServer(serverUri);
+			try {
+				c = ServerManager.getServer(serverUri, null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		runitUri = jDesign.getProperty(JrxmlExporter.PROP_REPORTUNIT);
 	}
 

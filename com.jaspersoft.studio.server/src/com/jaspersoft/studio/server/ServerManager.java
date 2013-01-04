@@ -25,6 +25,7 @@ import net.sf.jasperreports.data.XmlUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
@@ -61,6 +62,15 @@ public class ServerManager {
 		for (MServerProfile ms : serverProfiles)
 			servers.add(ms.getValue());
 		return servers;
+	}
+
+	public static String[] getServers() {
+		List<ServerProfile> serverList = getServerList();
+		String[] res = new String[serverList.size()];
+		for (int i = 0; i < res.length; i++)
+			res[i] = serverList.get(i).getName();
+
+		return res;
 	}
 
 	public static PropertyChangeSupport getPropertyChangeSupport() {
@@ -179,10 +189,15 @@ public class ServerManager {
 		return null;
 	}
 
-	public static WSClient getServer(String url) {
+	public static WSClient getServer(String url, IProgressMonitor monitor)
+			throws Exception {
 		for (MServerProfile sp : serverProfiles) {
-			if (sp.getValue().getUrl().equals(url))
-				return sp.getWsClient();
+			if (sp.getValue().getUrl().equals(url)) {
+				WSClient wsClient = sp.getWsClient();
+				if (wsClient == null)
+					wsClient = WSClientHelper.connect(sp, monitor);
+				return wsClient;
+			}
 		}
 		return null;
 	}
@@ -193,6 +208,16 @@ public class ServerManager {
 				return sp;
 		}
 		return null;
+	}
+
+	public static int getServerIndexByUrl(String url) {
+		int i = 0;
+		for (MServerProfile sp : serverProfiles) {
+			if (sp.getValue().getUrl().equals(url))
+				return i;
+			i++;
+		}
+		return -1;
 	}
 
 	public static String getKey(MResource res) {
@@ -214,29 +239,33 @@ public class ServerManager {
 		}
 		return JRXmlWriterHelper.LAST_VERSION;
 	}
-	
+
 	/**
 	 * Tries to create a copy of the specified {@link MServerProfile} instance.
 	 * <p>
-	 * Re-use the {@link ServerProfile} information of the original node.
-	 * Can be used for example as input when creating a new treeviewer
-	 * for repository exploring. 
-	 *  
-	 * @param original the {@link MServerProfile} instance to copy
-	 * @return a copy of the original {@link MServerProfile} instance 
+	 * Re-use the {@link ServerProfile} information of the original node. Can be
+	 * used for example as input when creating a new treeviewer for repository
+	 * exploring.
+	 * 
+	 * @param original
+	 *            the {@link MServerProfile} instance to copy
+	 * @return a copy of the original {@link MServerProfile} instance
 	 */
-	public static MServerProfile getMServerProfileCopy(MServerProfile original){
-		ServerProfile spFound=null;
-		for(ServerProfile sp : getServerList()){
-			if(sp.equals(original.getValue())){
-				spFound=sp;
+	public static MServerProfile getMServerProfileCopy(MServerProfile original) {
+		ServerProfile spFound = null;
+		for (ServerProfile sp : getServerList()) {
+			if (sp.equals(original.getValue())) {
+				spFound = sp;
 				break;
 			}
 		}
-		if(spFound==null)return null;
-		MServerProfile newServerProfile=new MServerProfile(new MRoot(null, null),spFound);
+		if (spFound == null)
+			return null;
+		MServerProfile newServerProfile = new MServerProfile(new MRoot(null,
+				null), spFound);
 		try {
-			WSClientHelper.connectGetData(newServerProfile, new NullProgressMonitor());
+			WSClientHelper.connectGetData(newServerProfile,
+					new NullProgressMonitor());
 		} catch (Exception e) {
 			UIUtils.showError(Messages.ServerManager_ErrorMessage1, e);
 		}
