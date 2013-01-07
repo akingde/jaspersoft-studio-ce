@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -127,7 +128,11 @@ public class MPage extends APropertyNode implements IGraphicElement, IContainerE
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
-
+		JasperDesign jrDesign = (JasperDesign) getValue();
+		if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+			// to avoid duplication I remove it first
+			return (JRPropertiesMap) jrDesign.getPropertiesMap().cloneProperties();
+		}
 		return null;
 	}
 
@@ -137,7 +142,18 @@ public class MPage extends APropertyNode implements IGraphicElement, IContainerE
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
+		JasperDesign jrDesign = (JasperDesign) getValue();
+		if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+			JRPropertiesMap v = (JRPropertiesMap) value;
+			String[] names = jrDesign.getPropertiesMap().getPropertyNames();
+			for (int i = 0; i < names.length; i++)
+				jrDesign.getPropertiesMap().removeProperty(names[i]);
+			names = v.getPropertyNames();
 
+			for (String str : v.getPropertyNames())
+				jrDesign.setProperty(str, v.getProperty(str));
+			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
+		}
 	}
 
 	/*

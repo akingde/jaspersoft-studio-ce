@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -73,7 +73,7 @@ public class CSVColDataAction extends CSVAction {
 		if (setColDataCommand.canExecute()){
 			//If the set of the element attributes can be executed than the name of the columns is added on the report root
 			commandStack.add(setColDataCommand);
-			JRPropertiesMap rootMap = (JRPropertiesMap)((APropertyNode)columnValue.getRoot()).getPropertyValue(MGraphicElement.PROPERTY_MAP);
+			JRPropertiesMap rootMap = (JRPropertiesMap)getRoot().getPropertyValue(MGraphicElement.PROPERTY_MAP);
 			if (rootMap == null)
 				rootMap = new JRPropertiesMap();
 			String colNames = rootMap.getProperty(CSVAction.COL_NAMES);
@@ -81,7 +81,7 @@ public class CSVColDataAction extends CSVAction {
 			else if (!colNameAlreadyPresent(columnName, colNames)) colNames = colNames.concat(","+columnName); //$NON-NLS-1$
 			SetValueCommand setRootNames = new SetValueCommand();
 			//the property is set on the root
-			setRootNames.setTarget((APropertyNode)columnValue.getRoot());
+			setRootNames.setTarget(getRoot());
 			rootMap.setProperty(CSVAction.COL_NAMES, colNames);
 			setRootNames.setPropertyId(MGraphicElement.PROPERTY_MAP);
 			setRootNames.setPropertyValue(rootMap);
@@ -108,14 +108,17 @@ public class CSVColDataAction extends CSVAction {
 		setColDataCommand.setPropertyValue(colDataMap);
 		commandStack.add(setColDataCommand);
 		if (colName != null){
-			JRPropertiesMap rootMap = (JRPropertiesMap)((APropertyNode)selectedElement.getRoot()).getPropertyValue(MGraphicElement.PROPERTY_MAP);
+			JRPropertiesMap rootMap = (JRPropertiesMap)getRoot().getPropertyValue(MGraphicElement.PROPERTY_MAP);
 			if (rootMap == null) rootMap = new JRPropertiesMap();
 			
 			String colNames = rootMap.getProperty(CSVAction.COL_NAMES);
       if (colNames != null){
 				SetValueCommand setRootNames = new SetValueCommand();
-				setRootNames.setTarget((APropertyNode)selectedElement.getRoot());
-				rootMap.setProperty(CSVAction.COL_NAMES, removeColName(colName, colNames));
+				setRootNames.setTarget(getRoot());
+				String newColNames = removeColName(colName, colNames);
+				//If there arent columns the property is removed
+				if (newColNames == null) rootMap.removeProperty(CSVAction.COL_NAMES);
+				else rootMap.setProperty(CSVAction.COL_NAMES, newColNames);
 				setRootNames.setPropertyId(MGraphicElement.PROPERTY_MAP);
 				setRootNames.setPropertyValue(rootMap);
 				commandStack.add(setRootNames);
@@ -142,9 +145,11 @@ public class CSVColDataAction extends CSVAction {
 	 * Remove a name from the list of all the column names
 	 * @param name value to remove
 	 * @param colNames list of column names, comma separated
-	 * @return columnNames without the element removed
+	 * @return columnNames without the element removed, or null if the element removed was the only 
+	 * one column
 	 */
 	private String removeColName(String name, String colNames){
+		if (colNames.equals(name)) return null;
 		if (colNames.startsWith(name+",")) return colNames.substring(name.length()+1); //$NON-NLS-1$
 		if (colNames.endsWith(","+name)) return colNames.substring(0,colNames.length()-name.length()-1); //$NON-NLS-1$
 		int colIndex = colNames.indexOf(","+name+","); //$NON-NLS-1$ //$NON-NLS-2$

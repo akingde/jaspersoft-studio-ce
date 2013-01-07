@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -29,6 +29,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.editor.action.pdf.PropertiesList;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
@@ -73,8 +74,11 @@ public class CSVAction extends SelectionAction{
 	}
 	
 	/**
-	 * Take the selected nodes and use the first of them to reach the root of the report
-	 * @return the root of the report (typically an MReport), or null is the root is unreachable
+	 * Take the selected nodes and use the first of them to reach the root of the report. The root could be and 
+	 * MReport if we are in the main editor or an MRoot if we are editing an element in its own editor (table, list and crosstab).
+	 * In this last case we need to reach the MPage of the subeditor and from there it is possible read and write the properties 
+	 * of the root.
+	 * @return the root of the report (typically an MReport or a MPage), or null is the root is unreachable
 	 */
 	protected APropertyNode getRoot(){
 		List<?> editparts = getSelectedObjects();
@@ -84,10 +88,16 @@ public class CSVAction extends SelectionAction{
 		EditPart editpart = (EditPart) editparts.get(0);
 		if (editpart.getModel() instanceof APropertyNode){
 			APropertyNode columnValue = (APropertyNode)editpart.getModel();
+			if (columnValue.getRoot() instanceof MRoot) {
+				//Return the MPage
+				return (APropertyNode)columnValue.getRoot().getChildren().get(0);
+			}
 			return (APropertyNode)columnValue.getRoot();
 		}
 		return null;
 	}
+	
+	
 	
 	/**
 	 * Check if the attribute associated to the id of the action has value true and then return true, 
