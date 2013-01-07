@@ -1,21 +1,18 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
@@ -53,8 +50,10 @@ import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.command.CreateFieldCommand;
 import com.jaspersoft.studio.model.field.command.DeleteFieldCommand;
+import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.command.CreateParameterCommand;
 import com.jaspersoft.studio.model.parameter.command.DeleteParameterCommand;
 import com.jaspersoft.studio.model.sortfield.command.CreateSortFieldCommand;
@@ -68,12 +67,26 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	private MDataset mdataset;
 	// private MReport mreport;
 	private JasperReportsConfiguration jConfig;
+	private Map<JRField, JRField> mapfields;
+	private Map<JRParameter, JRParameter> mapparam;
 
 	public DatasetDialog(Shell shell, MDataset mdataset, JasperReportsConfiguration jConfig) {
 		super(shell);
 		this.mdataset = mdataset;
 		this.jConfig = jConfig;
 		newdataset = (JRDesignDataset) ((JRDesignDataset) mdataset.getValue()).clone();
+
+		mapfields = new HashMap<JRField, JRField>();
+		List<JRField> newFieldsList = newdataset.getFieldsList();
+		List<JRField> oldFieldsList = mdataset.getValue().getFieldsList();
+		for (int i = 0; i < oldFieldsList.size(); i++)
+			mapfields.put(oldFieldsList.get(i), newFieldsList.get(i));
+
+		mapparam = new HashMap<JRParameter, JRParameter>();
+		List<JRParameter> newParamList = newdataset.getParametersList();
+		List<JRParameter> oldParamList = mdataset.getValue().getParametersList();
+		for (int i = 0; i < oldParamList.size(); i++)
+			mapparam.put(oldParamList.get(i), newParamList.get(i));
 	}
 
 	@Override
@@ -277,12 +290,43 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		command.add(setValueCommand(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, fexprtext, mdataset));
 		command.add(setValueCommand(MDataset.PROPERTY_MAP, newdataset.getPropertiesMap(), mdataset));
 
-		List<JRField> dsfields = ds.getFieldsList();
-		List<JRDesignField> fields = ftable.getFields();
-		for (JRField f : dsfields)
-			command.add(new DeleteFieldCommand(jConfig, ds, (JRDesignField) f));
-		for (JRDesignField newf : fields)
-			command.add(new CreateFieldCommand(ds, newf, -1));
+		List<JRField> oldfields = ds.getFieldsList();
+		List<JRDesignField> newfields = ftable.getFields();
+		for (JRField f : oldfields) {
+			Boolean canceled = null;
+			for (JRDesignField newf : newfields)
+				if (newf.getName().equals(f.getName()) || mapfields.get(f) == newf) {
+					canceled = Boolean.TRUE;
+					break;
+				}
+			if (canceled == null)
+				command.add(new DeleteFieldCommand(jConfig, ds, (JRDesignField) f, canceled));
+		}
+		for (JRDesignField newf : newfields) {
+			boolean notexists = true;
+			for (JRField f : oldfields) {
+				if (newf.getName().equals(f.getName())) {
+					MField mfield = mdataset.getField(newf.getName());
+					if (mfield != null) {
+						addSetValueCommand(command, JRDesignField.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mfield);
+						addSetValueCommand(command, JRDesignField.PROPERTY_DESCRIPTION, newf.getDescription(), mfield);
+					}
+					notexists = false;
+				} else if (mapfields.containsValue(newf)) {
+					MField mfield = mdataset.getField(f.getName());
+					if (mfield != null) {
+						command.add(setValueCommand(JRDesignField.PROPERTY_NAME, newf.getName(), mfield));
+						addSetValueCommand(command, JRDesignField.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mfield);
+						addSetValueCommand(command, JRDesignField.PROPERTY_DESCRIPTION, newf.getDescription(), mfield);
+					}
+					notexists = false;
+				}
+				if (!notexists)
+					break;
+			}
+			if (notexists)
+				command.add(new CreateFieldCommand(ds, newf, -1));
+		}
 
 		List<JRSortField> dssfields = ds.getSortFieldsList();
 		List<JRDesignSortField> sfields = sftable.getFields();
@@ -291,12 +335,63 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		for (JRDesignSortField newf : sfields)
 			command.add(new CreateSortFieldCommand(ds, newf, -1));
 
-		List<JRParameter> dssparameters = ds.getParametersList();
-		List<JRParameter> sparams = newdataset.getParametersList();
-		for (JRParameter f : dssparameters)
-			command.add(new DeleteParameterCommand(jConfig, ds, f));
-		for (JRParameter newf : sparams)
-			command.add(new CreateParameterCommand(ds, newf, -1));
+		List<JRParameter> oldparams = ds.getParametersList();
+		List<JRParameter> newparams = newdataset.getParametersList();
+		for (JRParameter f : oldparams) {
+			if (f.isSystemDefined())
+				continue;
+			Boolean canceled = null;
+			for (JRParameter newf : newparams)
+				if (newf.getName().equals(f.getName()) || mapparam.get(f) == newf) {
+					canceled = Boolean.TRUE;
+					break;
+				}
+			if (canceled == null)
+				command.add(new DeleteParameterCommand(jConfig, ds, f, canceled));
+		}
+		for (JRParameter newf : newparams) {
+			if (newf.isSystemDefined())
+				continue;
+			boolean notexists = true;
+			for (JRParameter f : oldparams) {
+				if (newf.getName().equals(f.getName())) {
+					MParameter mparam = mdataset.getParamater(newf.getName());
+					if (mparam != null) {
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_DESCRIPTION, newf.getDescription(), mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION,
+								newf.getDefaultValueExpression(), mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_FOR_PROMPTING, newf.isForPrompting(), mparam);
+					}
+					notexists = false;
+				} else if (mapparam.containsValue(newf)) {
+					MParameter mparam = mdataset.getParamater(f.getName());
+					if (mparam != null) {
+						command.add(setValueCommand(JRDesignParameter.PROPERTY_NAME, newf.getName(), mparam));
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_DESCRIPTION, newf.getDescription(), mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION,
+								newf.getDefaultValueExpression(), mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_FOR_PROMPTING, newf.isForPrompting(), mparam);
+					}
+					notexists = false;
+				}
+				if (!notexists)
+					break;
+			}
+			if (notexists)
+				command.add(new CreateParameterCommand(ds, newf, -1));
+		}
+	}
+
+	private void addSetValueCommand(CompoundCommand cc, String property, Object value, IPropertySource target) {
+		if (value != null && !value.equals(target.getPropertyValue(property))) {
+			SetValueCommand cmd = new SetValueCommand();
+			cmd.setTarget(target);
+			cmd.setPropertyId(property);
+			cmd.setPropertyValue(value);
+			cc.add(cmd);
+		}
 	}
 
 	private Command setValueCommand(String property, Object value, IPropertySource target) {

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset;
 
@@ -36,6 +31,10 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.field.MFields;
+import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -321,4 +320,31 @@ public class MDataset extends APropertyNode implements ICopyable {
 		return false;
 	}
 
+	public MParameter getParamater(String name) {
+		for (INode n : getChildren()) {
+			if (n instanceof MParameters) {
+				for (INode nf : n.getChildren()) {
+					MParameter mfield = (MParameter) nf;
+					if (mfield.getValue().getName().equals(name))
+						return mfield;
+				}
+				break;
+			}
+		}
+		return null;
+	}
+
+	public MField getField(String name) {
+		for (INode n : getChildren()) {
+			if (n instanceof MFields) {
+				for (INode nf : n.getChildren()) {
+					MField mfield = (MField) nf;
+					if (mfield.getValue().getName().equals(name))
+						return mfield;
+				}
+				break;
+			}
+		}
+		return null;
+	}
 }
