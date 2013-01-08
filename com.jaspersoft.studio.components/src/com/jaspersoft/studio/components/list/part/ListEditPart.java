@@ -30,6 +30,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.CreateRequest;
 
+import com.jaspersoft.studio.callout.CalloutEditPart;
+import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
+import com.jaspersoft.studio.callout.pin.PinEditPart;
+import com.jaspersoft.studio.callout.pin.command.PinSetConstraintCommand;
 import com.jaspersoft.studio.components.list.ListComponentFactory;
 import com.jaspersoft.studio.components.list.figure.ListFigure;
 import com.jaspersoft.studio.components.list.model.MList;
@@ -47,13 +51,13 @@ import com.jaspersoft.studio.model.command.CreateElementCommand;
 /**
  * 
  * @author Chicu Veaceslav & Orlandin Marco
- *
+ * 
  */
 public class ListEditPart extends EditableFigureEditPart {
 
 	/**
-	 * Create a ListFigure and initialize it. The listfigure is the type of 
-	 * the figure of this edit part
+	 * Create a ListFigure and initialize it. The listfigure is the type of the
+	 * figure of this edit part
 	 */
 	protected IFigure createFigure() {
 		ListFigure rect = new ListFigure();
@@ -63,20 +67,24 @@ public class ListEditPart extends EditableFigureEditPart {
 		figure = rect;
 		return rect;
 	}
-	
+
 	/**
 	 * Set in the list figure the size of the cell
-	 * @param rect a list figure
+	 * 
+	 * @param rect
+	 *            a list figure
 	 */
 	protected void setupListFigure(IFigure rect) {
-		MList model = (MList)getModel();
-		int listHeight = (Integer)(model.getPropertyValue(MList.PREFIX + DesignListContents.PROPERTY_HEIGHT));
-		int listWidth = (Integer)(model.getPropertyValue(MList.PREFIX + DesignListContents.PROPERTY_WIDTH));
+		MList model = (MList) getModel();
+		int listHeight = (Integer) (model.getPropertyValue(MList.PREFIX
+				+ DesignListContents.PROPERTY_HEIGHT));
+		int listWidth = (Integer) (model.getPropertyValue(MList.PREFIX
+				+ DesignListContents.PROPERTY_WIDTH));
 		ListFigure lfig = (ListFigure) rect;
 		lfig.setCellHeight(listHeight);
 		lfig.setCellWidth(listWidth);
 	}
-	
+
 	/**
 	 * Reset the size of the cell in the list figure and refresh the element
 	 */
@@ -85,7 +93,7 @@ public class ListEditPart extends EditableFigureEditPart {
 		setupListFigure(getFigure());
 		super.refreshVisuals();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -162,6 +170,15 @@ public class ListEditPart extends EditableFigureEditPart {
 										(MList) getModel(), cmodel, rect, -1));
 								return c;
 							}
+						} else if (child instanceof CalloutEditPart) {
+							return new CalloutSetConstraintCommand(
+									((CalloutEditPart) child).getModel(),
+									adaptConstraint(constraint));
+						} else if (child instanceof PinEditPart) {
+							return new PinSetConstraintCommand(
+									((PinEditPart) child).getModel(),
+									adaptConstraint(constraint));
+
 						} else {
 							return super.createChangeConstraintCommand(child,
 									constraint);

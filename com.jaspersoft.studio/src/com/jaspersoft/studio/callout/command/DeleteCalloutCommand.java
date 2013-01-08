@@ -1,21 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.callout.command;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 
 import org.eclipse.gef.commands.Command;
 
@@ -28,7 +24,7 @@ public class DeleteCalloutCommand extends Command {
 
 	public DeleteCalloutCommand(ANode parent, MCallout child) {
 		super("Delete Callout");
-		this.parent = (ANode) parent.getRoot();
+		this.parent = CreateCalloutCommand.getPropertyHolder((ANode) parent.getRoot());
 		this.mcallout = child;
 	}
 
@@ -41,6 +37,8 @@ public class DeleteCalloutCommand extends Command {
 	public void undo() {
 		mcallout.setParent(parent, -1);
 		mcallout.setPropertyValue(JRDesignElement.PROPERTY_X, mcallout.getPropertyValue(JRDesignElement.PROPERTY_X));
+		parent.getPropertyChangeSupport()
+				.fireIndexedPropertyChange(JRDesignElementGroup.PROPERTY_CHILDREN, -1, true, false);
 	}
 
 	@Override

@@ -44,6 +44,10 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 
+import com.jaspersoft.studio.callout.CalloutEditPart;
+import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
+import com.jaspersoft.studio.callout.pin.PinEditPart;
+import com.jaspersoft.studio.callout.pin.command.PinSetConstraintCommand;
 import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.figure.CellFigure;
 import com.jaspersoft.studio.components.table.figure.EmptyCellFigure;
@@ -56,9 +60,9 @@ import com.jaspersoft.studio.components.table.part.editpolicy.TableCellMoveEditP
 import com.jaspersoft.studio.components.table.part.editpolicy.TableCellResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
+import com.jaspersoft.studio.editor.gef.parts.APrefFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
-import com.jaspersoft.studio.editor.gef.parts.APrefFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
@@ -205,6 +209,13 @@ public class TableCellEditPart extends APrefFigureEditPart implements
 						return super.createChangeConstraintCommand(child,
 								constraint);
 					}
+				} else if (child instanceof CalloutEditPart) {
+					return new CalloutSetConstraintCommand(
+							((CalloutEditPart) child).getModel(),
+							adaptConstraint(constraint));
+				} else if (child instanceof PinEditPart) {
+					return new PinSetConstraintCommand(((PinEditPart) child)
+							.getModel(), adaptConstraint(constraint));
 				}
 				return null;
 			}

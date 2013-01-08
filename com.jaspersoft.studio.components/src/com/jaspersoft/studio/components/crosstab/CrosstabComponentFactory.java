@@ -48,6 +48,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
+import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.components.crosstab.editor.CrosstabEditor;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.CrosstabFigure;
@@ -179,6 +180,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				((JRDesignCrosstabDataset) st.getDataset()).getEventSupport()
 						.addPropertyChangeListener(dslistner);
 
+				MCallout.createCallouts(mCrosstab);
 			}
 			return mCrosstab;
 		}

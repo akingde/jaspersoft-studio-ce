@@ -39,6 +39,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.components.list.commands.element.CreateListElement4ObjectCommand;
 import com.jaspersoft.studio.components.list.editor.ListEditor;
 import com.jaspersoft.studio.components.list.figure.ListFigure;
@@ -95,6 +96,8 @@ public class ListComponentFactory implements IComponentFactory {
 				setDataset(parent, jd, st, dslistner);
 
 				st.getEventSupport().addPropertyChangeListener(dslistner);
+
+				MCallout.createCallouts(mlist);
 			}
 			return mlist;
 		}

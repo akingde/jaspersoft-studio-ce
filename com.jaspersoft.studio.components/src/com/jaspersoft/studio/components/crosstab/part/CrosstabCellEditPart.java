@@ -38,6 +38,10 @@ import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
+import com.jaspersoft.studio.callout.CalloutEditPart;
+import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
+import com.jaspersoft.studio.callout.pin.PinEditPart;
+import com.jaspersoft.studio.callout.pin.command.PinSetConstraintCommand;
 import com.jaspersoft.studio.components.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
@@ -182,6 +186,13 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 								rect, -1));
 						return c;
 					}
+				} else if (child instanceof CalloutEditPart) {
+					return new CalloutSetConstraintCommand(
+							((CalloutEditPart) child).getModel(),
+							adaptConstraint(constraint));
+				} else if (child instanceof PinEditPart) {
+					return new PinSetConstraintCommand(((PinEditPart) child)
+							.getModel(), adaptConstraint(constraint));
 				}
 				return null;
 			}

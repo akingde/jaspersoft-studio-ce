@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -28,6 +23,7 @@ import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -81,7 +77,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class MReport extends APropertyNode implements IGraphicElement, IContainerEditPart {
+public class MReport extends APropertyNode implements IGraphicElement, IContainerEditPart, IContainerLayout {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 
@@ -258,8 +254,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 				OrientationEnum.class, NullEnum.NOTNULL) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				Image[] images = new Image[] { 
-						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/portrait16.png"),
+				Image[] images = new Image[] { JaspersoftStudioPlugin.getInstance().getImage("icons/resources/portrait16.png"),
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/landscape16.png") };
 				return new SPToolBarEnum(parent, section, this, images);
 			}
@@ -872,7 +867,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			pmap.getEventSupport().addPropertyChangeListener(this);
 
 			((JRDesignSection) jasperDesign.getDetailSection()).getEventSupport().addPropertyChangeListener(this);
-			//mDataset = null;
+			// mDataset = null;
 			if (mDataset != null)
 				mDataset.setValue(jrDesignDataset);
 		}
@@ -934,5 +929,10 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		String defunit = jConfig.getProperty(DesignerPreferencePage.P_PAGE_DEFAULT_UNITS);
 		defunit = PHolderUtil.getUnit(jd, "", defunit);
 		return defunit;
+	}
+
+	@Override
+	public JRPropertiesHolder[] getPropertyHolder() {
+		return new JRPropertiesHolder[] { getValue() };
 	}
 }

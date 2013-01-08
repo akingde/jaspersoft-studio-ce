@@ -21,6 +21,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -41,6 +42,7 @@ import com.jaspersoft.studio.callout.pin.MPinConnection;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -79,9 +81,9 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 	}
 
 	public void deleteCallout() {
-		if (getParent() != null) {
-			JasperDesign jd = getJasperDesign();
-			properties = getProperities(getParent());
+		ANode parent = getParent();
+		if (parent != null) {
+			properties = getProperities(parent);
 
 			removeChild(this);
 
@@ -90,7 +92,8 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 			properties.remove("callouts." + i + ".text");
 			properties.remove("callouts." + i + ".pins");
 
-			jd.setProperty(PROP_CALLOUT, FileUtils.getPropertyAsString(properties));
+			getPropertiesHolder(parent).getPropertiesMap().setProperty(PROP_CALLOUT,
+					FileUtils.getPropertyAsString(properties));
 
 			getPropertyChangeSupport().fireIndexedPropertyChange(JRDesignElementGroup.PROPERTY_CHILDREN, -1, true, false);
 		}
@@ -112,13 +115,18 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 		mCallout.setPropertyValue(JRDesignElement.PROPERTY_Y, location.y);
 		mCallout.setPropertyValue(JRDesignElement.PROPERTY_WIDTH, location.width);
 		mCallout.setPropertyValue(JRDesignElement.PROPERTY_HEIGHT, location.height);
+
+		parent.getPropertyChangeSupport()
+				.fireIndexedPropertyChange(JRDesignElementGroup.PROPERTY_CHILDREN, -1, true, false);
 		return mCallout;
 	}
 
 	public static Properties getProperities(ANode parent) {
 		try {
-			JasperDesign jd = parent.getJasperDesign();
-			String pcallout = jd.getProperty(MCallout.PROP_CALLOUT);
+			// JasperDesign jd = parent.getJasperDesign();
+			// String pcallout = jd.getProperty(MCallout.PROP_CALLOUT);
+			JRPropertiesHolder pholder = getPropertiesHolder(parent);
+			String pcallout = pholder.getPropertiesMap().getProperty(MCallout.PROP_CALLOUT);
 			if (pcallout != null) {
 				pcallout = pcallout.replaceAll("callouts.", "\ncallouts.");
 				return FileUtils.load(pcallout);
@@ -127,6 +135,18 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 			e.printStackTrace();
 		}
 		return new Properties();
+	}
+
+	private static JRPropertiesHolder getPropertiesHolder(ANode parent) {
+		JRPropertiesHolder pholder = null;
+		if (parent instanceof IContainerLayout) {
+			JRPropertiesHolder[] pholders = ((IContainerLayout) parent).getPropertyHolder();
+			if (pholders != null)
+				pholder = pholders[pholders.length - 1];
+		}
+		if (pholder == null)
+			pholder = parent.getJasperDesign();
+		return pholder;
 	}
 
 	public static void createCallouts(ANode parent) {
@@ -366,7 +386,8 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 		if (!pins.isEmpty())
 			properties.setProperty("callouts." + i + ".pins", pins);
 
-		getJasperDesign().setProperty(PROP_CALLOUT, FileUtils.getPropertyAsString(properties).replace("\n", "\\n"));
+		getPropertiesHolder(getParent()).getPropertiesMap().setProperty(PROP_CALLOUT,
+				FileUtils.getPropertyAsString(properties).replace("\n", "\\n"));
 
 	}
 
