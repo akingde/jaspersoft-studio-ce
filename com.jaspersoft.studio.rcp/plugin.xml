@@ -112,6 +112,10 @@
             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenCheatSheetAction&amp;csid=com.jaspersoft.studio.cheatsheets.designreport">
       </action>
       <action
+            name="cheatshnewchar"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenCheatSheetAction&amp;csid=com.jaspersoft.studio.cheatsheets.createchart">
+      </action>
+      <action
             name="cheatshpreview"
             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenCheatSheetAction&amp;csid=com.jaspersoft.studio.cheatsheets.runreport">
       </action>

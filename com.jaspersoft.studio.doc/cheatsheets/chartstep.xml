@@ -11,6 +11,9 @@
       <description>
          Drag and Drop the chart element from the &quot;Palette&quot; into the &quot;Summary&quot; band, then wizard of the chart will appear.
       </description>
+      <command
+            required="false"
+            serialization="com.jaspersoft.studio.commands.NewChartWizard"/>
    </item>
    <item
          title="Select the type of chart">
