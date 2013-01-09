@@ -62,7 +62,7 @@ public class WizardFieldsPage extends JSSWizardPage {
 	
 		inFields = new ArrayList<Object>();
 		outFields = new ArrayList<Object>();
-	
+		contextName = "SelectFieldsWizardPage";
 	}
 
 	/**

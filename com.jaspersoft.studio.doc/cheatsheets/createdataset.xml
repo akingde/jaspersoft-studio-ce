@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet
+      title="Creating a dataset with Jaspersoft Studio">
+   <intro>
+      <description>
+         Every report has a main dataset defined during its creation but some times we need fileds that are not returned by the query of  the main dataset or the fields needed could also be in a different datasource. For this reason we can use the element &quot;Dataset&quot;: this element permit to define many dataset inside the report, each one with its fields and datasource. Obviously every dataset is indipendent from the others, so its fields are separated from the ones of the main dataset, and also from the ones of the other datasets.
+      </description>
+   </intro>
+   <item
+         title="Open a Report">
+      <description>
+         With the report opened go into the Outline tab.
+      </description>
+   </item>
+   <item
+         title="Start the dataset creation">
+      <description>
+         In the Outline there all the elements defined in the report disposed as a tree, right click on the root node and select &quot;Create Dataset&quot;. The root node is the first one and it has the name of the report.
+      </description>
+   </item>
+   <item
+         skip="false"
+         title="Define the name">
+      <description>
+         Insert a name for the dataset and hit &quot;Next&quot;.
+      </description>
+   </item>
+   <item
+         title="Choose the data adapter">
+      <description>
+         Select the example  data adapter &quot;Sample DB - Database JDBC connection&quot; and use the query &quot;&quot;select count(*), SHIPCITY from orders group by SHIPCITY&quot;, then hit &quot;Next&quot;.
+      </description>
+   </item>
+   <item
+         title="Add the fields to the dataset">
+      <description>
+         At this point two fields will be discovered, add them to the dataset by double clicking on it or using the button &quot;&gt;&gt;&quot;, and then hit &quot;Finish&quot;.
+      </description>
+   </item>
+</cheatsheet>

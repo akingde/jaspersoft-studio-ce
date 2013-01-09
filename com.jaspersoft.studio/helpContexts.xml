@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<contexts>
+      <context id="NewReportStep1">
+        <description>Here you can select a template for the new report. A template defines the initial graphical layout of a report and from this dialog, in just a few clicks, you can create a very simple blank layout, or a much more complex one, with image, text, number of pages and so on. Select the template by clicking on it, the hit the button "Next" to continue with the creation.</description>
+        <topic href="http://community.jaspersoft.com/wiki/designing-report-jaspersoft-studio"  label="Designing a report with JasperSoft Studio"/> 
+ 	  </context>
+      <context id="NewReportStep2">
+        <description>In this step you need to select the folder in the workspace where you want to put the report, and name for the report source file (a file with extension jrxml). When finished hit "Next". 
+To create a new folder where save the report exit from this wizard, open the menu "File", select "New" and select the item "JasperReport Project". If this item is not available select "Other..." and a new window will appear. Here there is a search bar where you can type "JasperReport Project", in this way the item you need to click will be shown under the search bar, select it and hit "Ok". At this point follow the wizard for the creation of a new folder and when it is finished restart the creation of the report and you will find the just created folder in the folders list.</description>
+        <topic href="http://community.jaspersoft.com/wiki/designing-report-jaspersoft-studio"  label="Designing a report with JasperSoft Studio"/> 
+ 	  </context>
+ 	  <context id="SelectDatasetWizardPage">
+        <description>In this page you can define a datasource, the location from which the data is taken to fill the report. First of all, you need to select a data adapter, that is essentially a connection to a data source (like and XML file or an SQL database). You can select a data adapter already created from the combo box or hit the "New" button to create a new one.
+Depending from the data adapter selected you can provide a query to identify the filed that will be extracted from the data source and that can be used in the report.</description>
+        <topic href="http://community.jaspersoft.com/wiki/designing-report-jaspersoft-studio"  label="Designing a report with JasperSoft Studio"/> 
+ 	  </context>
+ 	  <context id="SelectFieldsWizardPage">
+        <description>In this page of the wizard there are two lists: On the left there are all the discovered fields from the provided data source, and on the right the ones that will be added to the report. At first the right list is empty, but we can move one or more elements from the left list to the right one using the buttons between the two lists or by double clicking on the field. You don't need to add all fields now because them can be added later, simply by editing the datasource.</description>
+        <topic href="http://community.jaspersoft.com/wiki/designing-report-jaspersoft-studio"  label="Designing a report with JasperSoft Studio"/> 
+ 	  </context>
+ 	  <context id="SelectGroupsWizardPage">
+        <description>In this page of the wizard you can define Groups, that allows to organize the records of a report with a better structure. A group is defined through an expression, so it can contain fields and variables, JasperRepors evaluates this expression and puts in the same group all the elements that have the same final result of the expression. When the result change then a new group is started.</description>
+        <topic href="http://community.jaspersoft.com/wiki/designing-report-jaspersoft-studio"  label="Designing a report with JasperSoft Studio"/> 
+        <topic href="http://community.jaspersoft.com/wiki/groups"  label="Groups in JasperSoft Studio"/> 
+ 	  </context>
+</contexts>

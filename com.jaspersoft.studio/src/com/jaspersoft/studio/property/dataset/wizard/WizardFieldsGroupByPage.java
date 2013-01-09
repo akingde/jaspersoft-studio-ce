@@ -29,6 +29,7 @@ public class WizardFieldsGroupByPage extends WizardFieldsPage {
 		super("groupfields"); //$NON-NLS-1$
 		setTitle(Messages.WizardFieldsGroupByPage_group_by);
 		setDescription(Messages.WizardFieldsGroupByPage_description);
+		contextName = "SelectGroupsWizardPage";
 	}
 
 

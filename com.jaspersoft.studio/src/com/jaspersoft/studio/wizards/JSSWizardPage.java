@@ -21,13 +21,35 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.ui.PlatformUI;
 
-public abstract class JSSWizardPage extends WizardPage {
+public abstract class JSSWizardPage extends WizardPage implements ContextData {
 
+	protected String contextName;
+	
 	protected JSSWizardPage(String pageName) {
 		super(pageName);
+		contextName = null;
 	}
+	
+	
+	
+	@Override
+	protected void setControl(Control newControl) {
+		super.setControl(newControl);
+		newControl.addListener(SWT.Help, new Listener() {			
+			@Override
+			public void handleEvent(Event event) {
+				performHelp();	
+			}
+		});
+	};
 
 	@Override
 	public boolean canFlipToNextPage() {
@@ -37,6 +59,48 @@ public abstract class JSSWizardPage extends WizardPage {
 		return super.canFlipToNextPage();
 	}
 	
+	/**
+	 * Set the help data that should be seen in this step
+	 */
+	@Override
+	public void setHelpData(){
+		if (contextName != null){
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),"com.jaspersoft.studio".concat("."+contextName));
+		}
+	}
+	
+	/**
+	 * Set and show the help data if a context, that bind this wizard with the data, is provided
+	 */
+	@Override
+	public void performHelp() {
+		if (contextName != null){
+			PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio".concat("."+contextName));
+		}
+	};
+	
+	/**
+	 * When the user move from a page to another the help data of that page is set. This is done to show the correct help when the user move from 
+	 * a step to another while the help is opened
+	 */
+	@Override
+	public IWizardPage getNextPage() {
+		IWizardPage nextPage = super.getNextPage();
+		if (nextPage != null && nextPage instanceof ContextData) ((ContextData)nextPage).setHelpData();
+		return nextPage;
+	};
+	
+	
+	/**
+	 * When the user move from a page to another the help data of that page is set. This is done to show the correct help when the user move from 
+	 * a step to another while the help is opened
+	 */
+	@Override
+	public IWizardPage getPreviousPage() {
+		IWizardPage prevPage = super.getPreviousPage();
+		if (prevPage != null && prevPage instanceof ContextData) ((ContextData)prevPage).setHelpData();
+		return prevPage;
+	};
 
 	/**
 	 * Returns a settings object to store informations to be used between wizard state.

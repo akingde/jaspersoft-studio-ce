@@ -30,13 +30,19 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.templates.TemplateBundle;
 
-public class NewFileCreationWizard extends WizardNewFileCreationPage {
+public class NewFileCreationWizard extends WizardNewFileCreationPage implements ContextData {
 
 	IStructuredSelection currentSelection = null;
 
@@ -56,6 +62,57 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage {
 		setFileExtension("jrxml");//$NON-NLS-1$
 	}
 
+	/**
+	 * Set and show the help data 
+	 */
+	@Override
+	public void performHelp() {
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio.NewReportStep2");
+	}
+	
+	/**
+	 * Set the help data that should be seen in this step
+	 */
+	@Override
+	public void setHelpData(){
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),"com.jaspersoft.studio.NewReportStep2");
+	}
+	
+	/**
+	 * When the user move from a page to another the help data of that page is set. This is done to show the correct help when the user move from 
+	 * a step to another while the help is opened
+	 */
+	@Override
+	public IWizardPage getNextPage() {
+		IWizardPage nextPage = super.getNextPage();
+		if (nextPage != null && nextPage instanceof ContextData) ((ContextData)nextPage).setHelpData();
+		return nextPage;
+	};
+	
+	
+	/**
+	 * When the user move from a page to another the help data of that page is set. This is done to show the correct help when the user move from 
+	 * a step to another while the help is opened
+	 */
+	@Override
+	public IWizardPage getPreviousPage() {
+		IWizardPage prevPage = super.getPreviousPage();
+		if (prevPage != null && prevPage instanceof ContextData) ((ContextData)prevPage).setHelpData();
+		return prevPage;
+	};
+
+	
+	@Override
+	protected void setControl(Control newControl) {
+		super.setControl(newControl);
+		newControl.addListener(SWT.Help, new Listener() {			
+			@Override
+			public void handleEvent(Event event) {
+				performHelp();	
+			}
+		});
+	};
+	
 	/**
 	 * Add an extra check to validate if the directory inside the project exists or not. We don't want to create a new
 	 * directory for the user...

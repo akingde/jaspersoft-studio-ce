@@ -116,6 +116,7 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		setTitle(Messages.WizardDataSourcePage_datasource);
 		setImageDescriptor(MDatasources.getIconDescriptor().getIcon32());
 		setDescription(Messages.WizardDataSourcePage_description);
+		contextName = "SelectDatasetWizardPage";
 	}
 
 	/**
@@ -131,7 +132,7 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
 		setControl(composite);
-
+	
 		
 		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
