@@ -56,6 +56,7 @@ import com.jaspersoft.studio.data.actions.CreateDataAdapterAction;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.MDatasources;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardRunnablePage;
 
@@ -116,7 +117,7 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		setTitle(Messages.WizardDataSourcePage_datasource);
 		setImageDescriptor(MDatasources.getIconDescriptor().getIcon32());
 		setDescription(Messages.WizardDataSourcePage_description);
-		contextName = "SelectDatasetWizardPage";
+		contextName = ContextHelpIDs.wizardSelectDataset;
 	}
 
 	/**

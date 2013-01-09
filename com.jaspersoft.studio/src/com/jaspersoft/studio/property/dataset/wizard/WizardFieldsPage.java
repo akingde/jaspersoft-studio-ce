@@ -37,6 +37,7 @@ import com.jaspersoft.studio.swt.events.ChangeListener;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.MoveT2TButtons;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
@@ -62,7 +63,7 @@ public class WizardFieldsPage extends JSSWizardPage {
 	
 		inFields = new ArrayList<Object>();
 		outFields = new ArrayList<Object>();
-		contextName = "SelectFieldsWizardPage";
+		contextName = ContextHelpIDs.wizardSelectFields;
 	}
 
 	/**

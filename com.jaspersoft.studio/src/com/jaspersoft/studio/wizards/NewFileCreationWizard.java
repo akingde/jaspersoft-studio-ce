@@ -67,7 +67,7 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	 */
 	@Override
 	public void performHelp() {
-		PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio.NewReportStep2");
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.wizardNewFile);
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	 */
 	@Override
 	public void setHelpData(){
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),"com.jaspersoft.studio.NewReportStep2");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.wizardNewFile);
 	}
 	
 	/**

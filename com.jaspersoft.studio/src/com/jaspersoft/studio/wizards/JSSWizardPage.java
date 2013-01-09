@@ -65,7 +65,7 @@ public abstract class JSSWizardPage extends WizardPage implements ContextData {
 	@Override
 	public void setHelpData(){
 		if (contextName != null){
-			PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),"com.jaspersoft.studio".concat("."+contextName));
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),contextName);
 		}
 	}
 	
@@ -75,7 +75,7 @@ public abstract class JSSWizardPage extends WizardPage implements ContextData {
 	@Override
 	public void performHelp() {
 		if (contextName != null){
-			PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio".concat("."+contextName));
+			PlatformUI.getWorkbench().getHelpSystem().displayHelp(contextName);
 		}
 	};
 	

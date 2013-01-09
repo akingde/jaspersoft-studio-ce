@@ -1650,7 +1650,4 @@
           </instanceof>
        </definition>
     </extension>
-    <extension point="org.eclipse.help.contexts">
-      <contexts file="helpContexts.xml" plugin="com.jaspersoft.studio"/>
-   </extension>
 </plugin>

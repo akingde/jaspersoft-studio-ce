@@ -1,11 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <contexts>
-   <context id="dataAdapters_wizard_list">
-      <description>Hello here is our help for data adapters!!!</description>
-      <topic href="html/jasperserver/wizard.html" label="Create a JasperServer connection" />
-   </context>
-   <context id="jaspersoftserver">
-      <description>Hello here is our help for jasperserver</description>
-      <topic href="html/jasperserver/wizard.html" label="Create a JasperServer connection" />
-   </context>
+	<context id="dataAdapters_wizard_list">
+		<description>Hello here is our help for data adapters!!!</description>
+		<topic href="html/jasperserver/wizard.html" label="Create a JasperServer connection" />
+	</context>
+	<context id="jaspersoftserver">
+		<description>Hello here is our help for jasperserver</description>
+		<topic href="html/jasperserver/wizard.html" label="Create a JasperServer connection" />
+	</context>
+	<context id="select_template">
+		<description>Here you can select a template for the new report, to define its base layout. Select the template by clicking on it, then hit the button "Next" to proceed.</description>
+		<topic
+			href="http://community.jaspersoft.com/node/801267"
+			label="Designing a report with JasperSoft Studio" />
+	</context>
+	<context id="select_name">
+		<description>Here you can select the folder in the workspace where you want to put the report, and name for the report itself, then hit the button "Next" to proceed.</description>
+		<topic
+			href="http://community.jaspersoft.com/node/801267"
+			label="Designing a report with JasperSoft Studio" />
+		<topic
+			href="http://community.jaspersoft.com/node/801267#Create_a_Project_Folder"
+			label="Create a Project Folder" />
+	</context>
+	<context id="select_dataset">
+		<description>Here you can define a datasource, the location from which the data is taken to fill the report. A datasource is composed by a data adapter, that is a connection to a resource (like and XML file or an SQL database), and eventually a query to identify fields that will be extracted from the resource.
+		</description>
+		<topic
+			href="http://community.jaspersoft.com/node/801267"
+			label="Designing a report with JasperSoft Studio" />
+		<topic href="http://community.jaspersoft.com/node/801415" label="Using XML datasources"/>
+		<topic href="http://community.jaspersoft.com/node/801346" label="Creating Charts and Datasets"/>
+	</context>
+	<context id="select_fields">
+		<description>Here you can select which fields, discovered in the data adapter, will be added to the report. Fields that are not added now can be added later, simply by editing the datasource.</description>
+		<topic
+			href="http://community.jaspersoft.com/node/801267"
+			label="Designing a report with JasperSoft Studio" />
+	</context>
+	<context id="select_groups">
+		<description>Here you can choose which from the added fields will became groups</description>
+		<topic
+			href="http://community.jaspersoft.com/node/801267"
+			label="Designing a report with JasperSoft Studio" />
+		<topic href="http://community.jaspersoft.com/wiki/groups" label="Groups in JasperSoft Studio" />
+	</context>
 </contexts>

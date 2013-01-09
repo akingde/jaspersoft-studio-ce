@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 public class WizardFieldsGroupByPage extends WizardFieldsPage {
@@ -29,7 +30,7 @@ public class WizardFieldsGroupByPage extends WizardFieldsPage {
 		super("groupfields"); //$NON-NLS-1$
 		setTitle(Messages.WizardFieldsGroupByPage_group_by);
 		setDescription(Messages.WizardFieldsGroupByPage_description);
-		contextName = "SelectGroupsWizardPage";
+		contextName = ContextHelpIDs.wizardSelectGroup;
 	}
 
 
