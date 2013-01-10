@@ -1,66 +1,128 @@
-<html>
-<body>
+<html><head><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Report Templates (jrxml) Editor</title><meta content="DocBook XSL Stylesheets V1.78.0" name="generator"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="N40003"></a>Report Templates (jrxml) Editor</h2></div></div><hr></div>
+	
 
+	<div class="section"><div class="titlepage"></div>
 
-	<p>This is the place where reports are build, and run. There are
-		two ways to build a report using a WYSIWYG editor or source editor for
-		.jxml file, the last one is for advanced users. In preview we can see
-		our report filled with data from datasource and save the results in
-		different formats.</p>
-	<h2>Design mode WYSIWYG editor.</h2>
-	<p>Most used editor, in Jaspersoft Studio. This editor is used
-		together with Outline View, Properties View, Palette and Problems
-		View. Some complex JasperReports components like List, Table, Crosstab
-		have their own editor, to open it just double click on the element in
-		the designer or outline view. There are some buttons on the toolbar to
-		control zoom, publish reports to a Jaspersoft Server, open query
-		editor or change settings related to rulers, grid, decorators. To add
-		elements to the page drag and drop them from the palette or it's
-		possible to drag and drop Fields, Properties or Variables from outline
-		view directly to the report. Use context menu to delete, arrange,
-		resize, align, set PDF properties of the elements. It's possible to
-		use keyboard to manipulate elements on the canvas: DEL to delete an
-		element, arrows to select elements, &ldquo;.&rdquo; (point) will
-		select an operation like riseze left, right, up, down, or move.</p>
-	<p>
-		<img src="jrxml_design.png" />
-	</p>
-	<h2>Source mode.</h2>
-	<p>This is a simple text editor with xml syntax highlighting. We
-		can use it in combination with Outline view where all xml nodes are
-		visible and clicking on a node will show position to the corresponding
-		line in text editor.</p>
-	<p>Jrxml errors are shown in the left vertical band of the editor
-		in front of the problematic line, users can see all the errors in
-		Problems view, clicking on an error will position the cursor to the
-		error line in the editor.</p>
-	<p>
-		<img src="jrxml_source.png" />
-	</p>
-	<p>&nbsp;</p>
-	<h2>Preview mode.</h2>
-	<p>The goal of this view is to for prompt user input parameters,
-		help configure some settings, select a DataAdapter, see generated
-		report in different formats, save report to a file. There are three
-		main parts to do that:</p>
-	<ul>
-		<li>
-			<p>toolbar with buttons to select DataAdapter, run report button
-				and a menu to select the preview mode like java, html, csv, etc.</p>
-		</li>
-		<li>
-			<p>on the right we have a preview for each format, for html this
-				will be an embedded browser, for Java we'll have some additional
-				controls like page navigation, zoom.</p>
-		</li>
-		<li>
-			<p>The right part, contains several pages: input controls,
-				biult-in controls, sort fields, exporter preferences</p>
-		</li>
-	</ul>
-	<p>
-		<img src="jrxml_preview.png" />
-	</p>
+		<p>
+			This is the place where reports are build, and run. There are
+			two ways to build a report using a WYSIWYG editor or source editor for
+			<code class="filename">.jrxml</code>
+			file, the last one is for advanced users. In preview we can see
+			our report filled with data from datasource and save the results in
+			different formats.
+		</p>
+		<div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="N40015"></a>Design mode WYSIWYG editor.</h4></div></div></div>
+			
+			<p>
+				Most used editor, in Jaspersoft Studio. This editor is used
+				together with
+				<span class="emphasis"><em>Outline View</em></span>
+				,
+				<span class="emphasis"><em>Properties View</em></span>
+				,
+				<span class="emphasis"><em>Palette</em></span>
+				and
+				<span class="emphasis"><em>Problems
+					View
+				</em></span>
+				. Some complex JasperReports components like List, Table,
+				Crosstab
+				have their own editor, to open it just double click on the element in
+				the designer or outline view. There
+				are some buttons on the
+				toolbar to
+				control zoom, publish reports to a Jaspersoft
+				Server,
+				open query
+				editor or change settings related to rulers, grid, decorators. To add
+				elements to the page drag and
+				drop them from the palette
+				or it's
+				possible to drag and drop Fields, Properties
+				or
+				Variables from outline
+				view directly to the report. Use context menu to delete, arrange,
+				resize, align, set PDF
+				properties of the elements. It's
+				possible to
+				use keyboard to manipulate elements on
+				the
+				canvas: <span class="keycap"><strong>DEL</strong></span> to delete an
+				element, arrows to select elements, <span class="keycap"><strong>.</strong></span>
+				(point) will
+				select an operation like resize
+				left, right, up, down, or move.
+			</p>
+			<div class="figure"><a name="N4002F"></a><p class="title"><b>Figure&nbsp;1.&nbsp;Design mode</b></p><div class="figure-contents">
+				
+				<div class="screenshot">
+					<div class="mediaobject"><img src="jrxml_design.png" alt="Design mode"></div>
+				</div>
+			</div></div><br class="figure-break">
+		</div>
+		<div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="N40043"></a>Source mode.</h4></div></div></div>
+			
+			<p>
+				This is a simple text editor with xml syntax highlighting. We
+				can use it in combination with Outline view where all xml nodes are
+				visible and clicking on a node will show position to the
+				corresponding
+				line in text editor.
+			</p>
+			<p>
+				Jrxml errors are shown in the left vertical band of the editor
+				in front of the problematic line, users can see all the errors in
+				Problems view, clicking on an error will position the cursor to
+				the
+				error line in the editor.
+			</p>
+			<div class="figure"><a name="N4004E"></a><p class="title"><b>Figure&nbsp;2.&nbsp;Source mode</b></p><div class="figure-contents">
+				
+				<div class="screenshot">
+					<div class="mediaobject"><img src="jrxml_source.png" alt="Source mode"></div>
+				</div>
+			</div></div><br class="figure-break">
+		</div>
+		<div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="N40062"></a>Preview mode.</h4></div></div></div>
+			
+			<p>
+				The goal of this view is to for prompt user input parameters,
+				help configure some settings, select a DataAdapter, see generated
+				report in different formats, save report to a file. There are
+				three
+				main parts to do that:
+			</p>
+			<p>
+				Jrxml errors are shown in the left vertical band of the editor
+				in front of the problematic line, users can see all the errors in
+				Problems view, clicking on an error will position the cursor to
+				the
+				error line in the editor.
+			</p>
+			<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: opencircle; "><li class="listitem" style="list-style-type: circle">
+					<p>
+						toolbar with buttons to select DataAdapter, run report button
+						and a menu to select the preview mode like java, html, csv, etc.
+					</p>
+				</li><li class="listitem" style="list-style-type: circle">
+					<p>
+						on the right we have a preview for each format, for html this
+						will be an embedded browser, for Java we'll have some additional
+						controls like page navigation, zoom.
+					</p>
+				</li><li class="listitem" style="list-style-type: circle">
+					<p>
+						The right part, contains several pages: input controls,
+						biult-in controls, sort fields, exporter preferences
+					</p>
+				</li></ul></div>
+			<div class="figure"><a name="N40083"></a><p class="title"><b>Figure&nbsp;3.&nbsp;Preview mode</b></p><div class="figure-contents">
+				
+				<div class="screenshot">
+					<div class="mediaobject"><img src="jrxml_preview.png" alt="Preview mode"></div>
+				</div>
+			</div></div><br class="figure-break">
+		</div>
+	</div>
 
-</body>
-</html>
+</div></body></html>
