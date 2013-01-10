@@ -185,7 +185,7 @@ exit 0;</echo>
 				section="editors" 
 				postinst="${dist}/debian/postinst" 
 				architecture="${architecture}"
-				homepage="community.jaspersoft.com/project/jaspersoft-studio/"
+				homepage="http://community.jaspersoft.com/project/jaspersoft-studio"
 				depends="openjdk-6-jre">
 				<version upstream="${jss.version}" debian="" />
 			    <maintainer name="Jaspersoft Studio Team" email="giulio@jaspersoft.com"/>
