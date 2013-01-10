@@ -51,6 +51,7 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IContributedContentsView;
 import org.eclipse.ui.part.Page;
@@ -345,7 +346,8 @@ public class TabbedPropertySheetPage extends Page implements
 					}
 					activePropertySheet = false;
 				}
-				//return; //this return was commented to permit the properties panel to refresh
+				// return; //this return was commented to permit the properties
+				// panel to refresh
 			}
 		}
 		if (!activePropertySheet && currentTab != null) {
@@ -362,6 +364,13 @@ public class TabbedPropertySheetPage extends Page implements
 		widgetFactory = new TabbedPropertySheetWidgetFactory();
 		tabbedPropertyComposite = new TabbedPropertyComposite(parent,
 				widgetFactory, hasTitleBar);
+
+		PlatformUI
+				.getWorkbench()
+				.getHelpSystem()
+				.setHelp(tabbedPropertyComposite,
+						"com.jaspersoft.studio.doc.view_properties");
+
 		widgetFactory.paintBordersFor(tabbedPropertyComposite);
 		tabbedPropertyComposite.setLayout(new FormLayout());
 		FormData formData = new FormData();
@@ -941,7 +950,7 @@ public class TabbedPropertySheetPage extends Page implements
 			 * selection has the same contributor id as current, so leave
 			 * existing registry.
 			 */
-//			return;
+			// return;
 		}
 
 		/**
