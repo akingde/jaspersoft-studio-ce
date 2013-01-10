@@ -74,9 +74,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//BinaryExpression/op"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//BinaryExpression/right"/>
     </genClasses>
-    <genClasses ecoreClass="JavaJRExpression.ecore#//TypeClass">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//TypeClass/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//TypeClass/void"/>
+    <genClasses ecoreClass="JavaJRExpression.ecore#//StaticField">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//StaticField/prefixQMN"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//StaticField/dots"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//StaticField/fieldName"/>
     </genClasses>
     <genClasses ecoreClass="JavaJRExpression.ecore#//JRFieldObj">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//JRFieldObj/bracedIdentifier"/>
@@ -88,6 +89,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//JRVariableObj/bracedIdentifier"/>
     </genClasses>
     <genClasses ecoreClass="JavaJRExpression.ecore#//MethodsExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//MethodsExpression/includeObjectInstatiation"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//MethodsExpression/methodInvocations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//MethodsExpression/objectExpression"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//MethodsExpression/arrayIndexes"/>
@@ -122,9 +124,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//ArrayCreator/type"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//ArrayCreator/size"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//ArrayCreator/initialization"/>
-    </genClasses>
-    <genClasses ecoreClass="JavaJRExpression.ecore#//ObjectCreation">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//ObjectCreation/constructorInvocation"/>
     </genClasses>
     <genClasses ecoreClass="JavaJRExpression.ecore#//JvmGenericArrayTypeReference">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//JvmGenericArrayTypeReference/componentType"/>

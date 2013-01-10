@@ -14,9 +14,6 @@
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 /**
- * <copyright>
- * </copyright>
- *
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression;
 

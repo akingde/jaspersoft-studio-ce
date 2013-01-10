@@ -34,7 +34,6 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRVariableObj
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation;
 import com.jaspersoft.studio.editor.jrexpressions.messages.Messages;
  
 /**
@@ -52,31 +51,28 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 	 */
 	@Check
 	public void checkLibraryFunctionName(FullMethodName name) {
-		MethodInvocation method=(MethodInvocation)name.eContainer();
-		// Need to check because it could be a ObjectCreation expression.
-		if(method.eContainer() instanceof ObjectCreation){
-			if(FunctionsLibraryUtil.existsFunction(name.getMethodName())){
-				error(Messages.JavaJRExpressionJavaValidator_FunctionLibraryAsConstructorError, name,
-						JavaJRExpressionPackage.Literals.FULL_METHOD_NAME__METHOD_NAME, JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME);				
-			}
-		}
-		else if(method.eContainer() instanceof MethodsExpression){
-			MethodsExpression expression=(MethodsExpression) method.eContainer();
-			// TODO - Improve this check --> SEE also the method JRExpressionsModelUtil.isFunctionLibrary(name)		
-			// For sake of simplicity assume the library functions are the first method invocation
-			if(expression.getObjectExpression()==null && 
-					method.equals(expression.getMethodInvocations().get(0))){
-				// Look in the function library
-				if(!FunctionsLibraryUtil.existsFunction(name.getMethodName())){
-					error(Messages.JavaJRExpressionJavaValidator_FunctionNotFoundError, name,
-							JavaJRExpressionPackage.Literals.FULL_METHOD_NAME__METHOD_NAME, JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME);
+		if(name.eContainer() instanceof MethodInvocation){
+			MethodInvocation method=(MethodInvocation)name.eContainer();
+			if(method.eContainer() instanceof MethodsExpression){
+				MethodsExpression expression=(MethodsExpression) method.eContainer();
+				// TODO - Improve this check --> SEE also the method JRExpressionsModelUtil.isFunctionLibrary(name)		
+				// For sake of simplicity assume the library functions are the first method invocation
+				if(!expression.isIncludeObjectInstatiation() && (name.getPrefixQMN()==null || name.getPrefixQMN().size()==0)) {
+					if(expression.getObjectExpression()==null && 
+							method.equals(expression.getMethodInvocations().get(0))){
+						// Look in the function library
+						if(!FunctionsLibraryUtil.existsFunction(name.getMethodName())){
+							error(Messages.JavaJRExpressionJavaValidator_FunctionNotFoundError, name,
+									JavaJRExpressionPackage.Literals.FULL_METHOD_NAME__METHOD_NAME, JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME);
+						}
+		//				else{
+		//					// TODO - Check for parameters
+		//					// We should add the verification for the number of parameters.
+		//					// Keep in mind that the JRExprFunctionBean contains a list of 
+		//					// parameters, and each of them can be multi/optional.
+		//				}
+					}
 				}
-//				else{
-//					// TODO - Check for parameters
-//					// We should add the verification for the number of parameters.
-//					// Keep in mind that the JRExprFunctionBean contains a list of 
-//					// parameters, and each of them can be multi/optional.
-//				}
 			}
 		}
 	}

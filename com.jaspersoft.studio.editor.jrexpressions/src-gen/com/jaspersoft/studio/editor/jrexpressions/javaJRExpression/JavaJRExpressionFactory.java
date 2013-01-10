@@ -14,9 +14,6 @@
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 /**
- * <copyright>
- * </copyright>
- *
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression;
 
@@ -167,13 +164,13 @@ public interface JavaJRExpressionFactory extends EFactory
   BinaryExpression createBinaryExpression();
 
   /**
-   * Returns a new object of class '<em>Type Class</em>'.
+   * Returns a new object of class '<em>Static Field</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Type Class</em>'.
+   * @return a new object of class '<em>Static Field</em>'.
    * @generated
    */
-  TypeClass createTypeClass();
+  StaticField createStaticField();
 
   /**
    * Returns a new object of class '<em>JR Field Obj</em>'.
@@ -300,15 +297,6 @@ public interface JavaJRExpressionFactory extends EFactory
    * @generated
    */
   ArrayCreator createArrayCreator();
-
-  /**
-   * Returns a new object of class '<em>Object Creation</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Object Creation</em>'.
-   * @generated
-   */
-  ObjectCreation createObjectCreation();
 
   /**
    * Returns a new object of class '<em>Jvm Generic Array Type Reference</em>'.

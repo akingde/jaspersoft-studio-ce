@@ -18,7 +18,7 @@ package com.jaspersoft.studio.editor.jrexpressions.messages;
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "com.jaspersoft.studio.editor.jrexpressions.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "com.jaspersoft.studio.editor.jrexpressions.messages.messages"; //$NON-NLS-1$
 	public static String JavaJRExpressionJavaValidator_FieldNotFoundInContextError;
 	public static String JavaJRExpressionJavaValidator_FunctionLibraryAsConstructorError;
 	public static String JavaJRExpressionJavaValidator_FunctionNotFoundError;

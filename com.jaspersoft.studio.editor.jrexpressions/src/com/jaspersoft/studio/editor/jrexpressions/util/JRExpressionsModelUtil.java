@@ -37,20 +37,24 @@ public class JRExpressionsModelUtil {
 	 * @return <code>true</code> if the function name is a library valid one, <code>false</code> otherwise
 	 */
 	public static boolean isFunctionLibrary(FullMethodName name){
-		MethodInvocation method=(MethodInvocation)name.eContainer();
-		// Need to check because it could be an ObjectCreation expression.
-		if(method.eContainer() instanceof MethodsExpression){
-			MethodsExpression expression=(MethodsExpression) method.eContainer();
-			// TODO - Improve this check		
-			// For sake of simplicity assume the library functions are the first method invocation
-			if(expression.getObjectExpression()==null && 
-					method.equals(expression.getMethodInvocations().get(0))){
-				// Look in the function library
-				if(!FunctionsLibraryUtil.existsFunction(name.getMethodName())){
-					return false;
-				}
-				else{
-					return true;
+		if(name.eContainer() instanceof MethodInvocation){
+			MethodInvocation method=(MethodInvocation)name.eContainer();
+			// Need to check because it could be an ObjectCreation expression.
+			if(method.eContainer() instanceof MethodsExpression){
+				MethodsExpression expression=(MethodsExpression) method.eContainer();
+				// TODO - Improve this check		
+				// For sake of simplicity assume the library functions are the first method invocation
+				if(!expression.isIncludeObjectInstatiation() && (name.getPrefixQMN()==null || name.getPrefixQMN().size()==0)) {
+					if(expression.getObjectExpression()==null && 
+							method.equals(expression.getMethodInvocations().get(0))){
+						// Look in the function library
+						if(!FunctionsLibraryUtil.existsFunction(name.getMethodName())){
+							return false;
+						}
+						else{
+							return true;
+						}
+					}
 				}
 			}
 		}

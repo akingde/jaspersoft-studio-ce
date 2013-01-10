@@ -14,9 +14,6 @@
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 /**
- * <copyright>
- * </copyright>
- *
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression;
 
@@ -549,41 +546,50 @@ public interface JavaJRExpressionPackage extends EPackage
   int BINARY_EXPRESSION_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 3;
 
   /**
-   * The meta object id for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.TypeClassImpl <em>Type Class</em>}' class.
+   * The meta object id for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.StaticFieldImpl <em>Static Field</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.TypeClassImpl
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getTypeClass()
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.StaticFieldImpl
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getStaticField()
    * @generated
    */
-  int TYPE_CLASS = 14;
+  int STATIC_FIELD = 14;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Prefix QMN</b></em>' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TYPE_CLASS__TYPE = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 0;
+  int STATIC_FIELD__PREFIX_QMN = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Void</b></em>' attribute.
+   * The feature id for the '<em><b>Dots</b></em>' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TYPE_CLASS__VOID = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 1;
+  int STATIC_FIELD__DOTS = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>Type Class</em>' class.
+   * The feature id for the '<em><b>Field Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TYPE_CLASS_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 2;
+  int STATIC_FIELD__FIELD_NAME = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 2;
+
+  /**
+   * The number of structural features of the '<em>Static Field</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATIC_FIELD_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JRFieldObjImpl <em>JR Field Obj</em>}' class.
@@ -680,13 +686,22 @@ public interface JavaJRExpressionPackage extends EPackage
   int METHODS_EXPRESSION = 18;
 
   /**
+   * The feature id for the '<em><b>Include Object Instatiation</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int METHODS_EXPRESSION__INCLUDE_OBJECT_INSTATIATION = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Method Invocations</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int METHODS_EXPRESSION__METHOD_INVOCATIONS = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 0;
+  int METHODS_EXPRESSION__METHOD_INVOCATIONS = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Object Expression</b></em>' containment reference.
@@ -695,7 +710,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @generated
    * @ordered
    */
-  int METHODS_EXPRESSION__OBJECT_EXPRESSION = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 1;
+  int METHODS_EXPRESSION__OBJECT_EXPRESSION = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Array Indexes</b></em>' containment reference list.
@@ -704,7 +719,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @generated
    * @ordered
    */
-  int METHODS_EXPRESSION__ARRAY_INDEXES = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 2;
+  int METHODS_EXPRESSION__ARRAY_INDEXES = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>Methods Expression</em>' class.
@@ -713,7 +728,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @generated
    * @ordered
    */
-  int METHODS_EXPRESSION_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 3;
+  int METHODS_EXPRESSION_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 4;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.IntLiteralImpl <em>Int Literal</em>}' class.
@@ -1014,34 +1029,6 @@ public interface JavaJRExpressionPackage extends EPackage
   int ARRAY_CREATOR_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 3;
 
   /**
-   * The meta object id for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.ObjectCreationImpl <em>Object Creation</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.ObjectCreationImpl
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getObjectCreation()
-   * @generated
-   */
-  int OBJECT_CREATION = 29;
-
-  /**
-   * The feature id for the '<em><b>Constructor Invocation</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int OBJECT_CREATION__CONSTRUCTOR_INVOCATION = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>Object Creation</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int OBJECT_CREATION_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
    * The meta object id for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JvmGenericArrayTypeReferenceImpl <em>Jvm Generic Array Type Reference</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1049,7 +1036,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getJvmGenericArrayTypeReference()
    * @generated
    */
-  int JVM_GENERIC_ARRAY_TYPE_REFERENCE = 30;
+  int JVM_GENERIC_ARRAY_TYPE_REFERENCE = 29;
 
   /**
    * The feature id for the '<em><b>Component Type</b></em>' containment reference.
@@ -1464,36 +1451,47 @@ public interface JavaJRExpressionPackage extends EPackage
   EReference getBinaryExpression_Right();
 
   /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass <em>Type Class</em>}'.
+   * Returns the meta object for class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField <em>Static Field</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Type Class</em>'.
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass
+   * @return the meta object for class '<em>Static Field</em>'.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField
    * @generated
    */
-  EClass getTypeClass();
+  EClass getStaticField();
 
   /**
-   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass#getType <em>Type</em>}'.
+   * Returns the meta object for the attribute list '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField#getPrefixQMN <em>Prefix QMN</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass#getType()
-   * @see #getTypeClass()
+   * @return the meta object for the attribute list '<em>Prefix QMN</em>'.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField#getPrefixQMN()
+   * @see #getStaticField()
    * @generated
    */
-  EReference getTypeClass_Type();
+  EAttribute getStaticField_PrefixQMN();
 
   /**
-   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass#isVoid <em>Void</em>}'.
+   * Returns the meta object for the attribute list '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField#getDots <em>Dots</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Void</em>'.
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass#isVoid()
-   * @see #getTypeClass()
+   * @return the meta object for the attribute list '<em>Dots</em>'.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField#getDots()
+   * @see #getStaticField()
    * @generated
    */
-  EAttribute getTypeClass_Void();
+  EAttribute getStaticField_Dots();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField#getFieldName <em>Field Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Field Name</em>'.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField#getFieldName()
+   * @see #getStaticField()
+   * @generated
+   */
+  EAttribute getStaticField_FieldName();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRFieldObj <em>JR Field Obj</em>}'.
@@ -1567,6 +1565,17 @@ public interface JavaJRExpressionPackage extends EPackage
    * @generated
    */
   EClass getMethodsExpression();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#isIncludeObjectInstatiation <em>Include Object Instatiation</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Include Object Instatiation</em>'.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#isIncludeObjectInstatiation()
+   * @see #getMethodsExpression()
+   * @generated
+   */
+  EAttribute getMethodsExpression_IncludeObjectInstatiation();
 
   /**
    * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getMethodInvocations <em>Method Invocations</em>}'.
@@ -1832,27 +1841,6 @@ public interface JavaJRExpressionPackage extends EPackage
    * @generated
    */
   EReference getArrayCreator_Initialization();
-
-  /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation <em>Object Creation</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Object Creation</em>'.
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation
-   * @generated
-   */
-  EClass getObjectCreation();
-
-  /**
-   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation#getConstructorInvocation <em>Constructor Invocation</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Constructor Invocation</em>'.
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation#getConstructorInvocation()
-   * @see #getObjectCreation()
-   * @generated
-   */
-  EReference getObjectCreation_ConstructorInvocation();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmGenericArrayTypeReference <em>Jvm Generic Array Type Reference</em>}'.
@@ -2223,30 +2211,38 @@ public interface JavaJRExpressionPackage extends EPackage
     EReference BINARY_EXPRESSION__RIGHT = eINSTANCE.getBinaryExpression_Right();
 
     /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.TypeClassImpl <em>Type Class</em>}' class.
+     * The meta object literal for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.StaticFieldImpl <em>Static Field</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.TypeClassImpl
-     * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getTypeClass()
+     * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.StaticFieldImpl
+     * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getStaticField()
      * @generated
      */
-    EClass TYPE_CLASS = eINSTANCE.getTypeClass();
+    EClass STATIC_FIELD = eINSTANCE.getStaticField();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Prefix QMN</b></em>' attribute list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference TYPE_CLASS__TYPE = eINSTANCE.getTypeClass_Type();
+    EAttribute STATIC_FIELD__PREFIX_QMN = eINSTANCE.getStaticField_PrefixQMN();
 
     /**
-     * The meta object literal for the '<em><b>Void</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Dots</b></em>' attribute list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute TYPE_CLASS__VOID = eINSTANCE.getTypeClass_Void();
+    EAttribute STATIC_FIELD__DOTS = eINSTANCE.getStaticField_Dots();
+
+    /**
+     * The meta object literal for the '<em><b>Field Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute STATIC_FIELD__FIELD_NAME = eINSTANCE.getStaticField_FieldName();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JRFieldObjImpl <em>JR Field Obj</em>}' class.
@@ -2311,6 +2307,14 @@ public interface JavaJRExpressionPackage extends EPackage
      * @generated
      */
     EClass METHODS_EXPRESSION = eINSTANCE.getMethodsExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Include Object Instatiation</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute METHODS_EXPRESSION__INCLUDE_OBJECT_INSTATIATION = eINSTANCE.getMethodsExpression_IncludeObjectInstatiation();
 
     /**
      * The meta object literal for the '<em><b>Method Invocations</b></em>' containment reference list feature.
@@ -2531,24 +2535,6 @@ public interface JavaJRExpressionPackage extends EPackage
      * @generated
      */
     EReference ARRAY_CREATOR__INITIALIZATION = eINSTANCE.getArrayCreator_Initialization();
-
-    /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.ObjectCreationImpl <em>Object Creation</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.ObjectCreationImpl
-     * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getObjectCreation()
-     * @generated
-     */
-    EClass OBJECT_CREATION = eINSTANCE.getObjectCreation();
-
-    /**
-     * The meta object literal for the '<em><b>Constructor Invocation</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference OBJECT_CREATION__CONSTRUCTOR_INVOCATION = eINSTANCE.getObjectCreation_ConstructorInvocation();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JvmGenericArrayTypeReferenceImpl <em>Jvm Generic Array Type Reference</em>}' class.

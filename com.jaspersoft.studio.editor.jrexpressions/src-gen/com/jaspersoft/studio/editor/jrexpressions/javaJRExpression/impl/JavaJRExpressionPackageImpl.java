@@ -14,9 +14,6 @@
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 /**
- * <copyright>
- * </copyright>
- *
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl;
 
@@ -55,11 +52,10 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.LongLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.NullLiteral;
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StringLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TestExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Type;
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass;
 
 /**
  * <!-- begin-user-doc -->
@@ -172,7 +168,7 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass typeClassEClass = null;
+  private EClass staticFieldEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -271,13 +267,6 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * @generated
    */
   private EClass arrayCreatorEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass objectCreationEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -727,9 +716,9 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getTypeClass()
+  public EClass getStaticField()
   {
-    return typeClassEClass;
+    return staticFieldEClass;
   }
 
   /**
@@ -737,9 +726,9 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getTypeClass_Type()
+  public EAttribute getStaticField_PrefixQMN()
   {
-    return (EReference)typeClassEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)staticFieldEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -747,9 +736,19 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getTypeClass_Void()
+  public EAttribute getStaticField_Dots()
   {
-    return (EAttribute)typeClassEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)staticFieldEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getStaticField_FieldName()
+  {
+    return (EAttribute)staticFieldEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -827,9 +826,9 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMethodsExpression_MethodInvocations()
+  public EAttribute getMethodsExpression_IncludeObjectInstatiation()
   {
-    return (EReference)methodsExpressionEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)methodsExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -837,7 +836,7 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMethodsExpression_ObjectExpression()
+  public EReference getMethodsExpression_MethodInvocations()
   {
     return (EReference)methodsExpressionEClass.getEStructuralFeatures().get(1);
   }
@@ -847,9 +846,19 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMethodsExpression_ArrayIndexes()
+  public EReference getMethodsExpression_ObjectExpression()
   {
     return (EReference)methodsExpressionEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMethodsExpression_ArrayIndexes()
+  {
+    return (EReference)methodsExpressionEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1077,26 +1086,6 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getObjectCreation()
-  {
-    return objectCreationEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getObjectCreation_ConstructorInvocation()
-  {
-    return (EReference)objectCreationEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getJvmGenericArrayTypeReference()
   {
     return jvmGenericArrayTypeReferenceEClass;
@@ -1193,9 +1182,10 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     createEAttribute(binaryExpressionEClass, BINARY_EXPRESSION__OP);
     createEReference(binaryExpressionEClass, BINARY_EXPRESSION__RIGHT);
 
-    typeClassEClass = createEClass(TYPE_CLASS);
-    createEReference(typeClassEClass, TYPE_CLASS__TYPE);
-    createEAttribute(typeClassEClass, TYPE_CLASS__VOID);
+    staticFieldEClass = createEClass(STATIC_FIELD);
+    createEAttribute(staticFieldEClass, STATIC_FIELD__PREFIX_QMN);
+    createEAttribute(staticFieldEClass, STATIC_FIELD__DOTS);
+    createEAttribute(staticFieldEClass, STATIC_FIELD__FIELD_NAME);
 
     jrFieldObjEClass = createEClass(JR_FIELD_OBJ);
     createEAttribute(jrFieldObjEClass, JR_FIELD_OBJ__BRACED_IDENTIFIER);
@@ -1207,6 +1197,7 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     createEAttribute(jrVariableObjEClass, JR_VARIABLE_OBJ__BRACED_IDENTIFIER);
 
     methodsExpressionEClass = createEClass(METHODS_EXPRESSION);
+    createEAttribute(methodsExpressionEClass, METHODS_EXPRESSION__INCLUDE_OBJECT_INSTATIATION);
     createEReference(methodsExpressionEClass, METHODS_EXPRESSION__METHOD_INVOCATIONS);
     createEReference(methodsExpressionEClass, METHODS_EXPRESSION__OBJECT_EXPRESSION);
     createEReference(methodsExpressionEClass, METHODS_EXPRESSION__ARRAY_INDEXES);
@@ -1242,9 +1233,6 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     createEReference(arrayCreatorEClass, ARRAY_CREATOR__TYPE);
     createEReference(arrayCreatorEClass, ARRAY_CREATOR__SIZE);
     createEReference(arrayCreatorEClass, ARRAY_CREATOR__INITIALIZATION);
-
-    objectCreationEClass = createEClass(OBJECT_CREATION);
-    createEReference(objectCreationEClass, OBJECT_CREATION__CONSTRUCTOR_INVOCATION);
 
     jvmGenericArrayTypeReferenceEClass = createEClass(JVM_GENERIC_ARRAY_TYPE_REFERENCE);
     createEReference(jvmGenericArrayTypeReferenceEClass, JVM_GENERIC_ARRAY_TYPE_REFERENCE__COMPONENT_TYPE);
@@ -1286,7 +1274,7 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     jvmWildcardTypeReferenceEClass.getESuperTypes().add(theTypesPackage.getJvmTypeReference());
     testExpressionEClass.getESuperTypes().add(this.getJasperReportsExpression());
     binaryExpressionEClass.getESuperTypes().add(this.getJasperReportsExpression());
-    typeClassEClass.getESuperTypes().add(this.getJasperReportsExpression());
+    staticFieldEClass.getESuperTypes().add(this.getJasperReportsExpression());
     jrFieldObjEClass.getESuperTypes().add(this.getJasperReportsExpression());
     jrParameterObjEClass.getESuperTypes().add(this.getJasperReportsExpression());
     jrVariableObjEClass.getESuperTypes().add(this.getJasperReportsExpression());
@@ -1301,7 +1289,6 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     nullLiteralEClass.getESuperTypes().add(this.getJasperReportsExpression());
     castedExpressionEClass.getESuperTypes().add(this.getJasperReportsExpression());
     arrayCreatorEClass.getESuperTypes().add(this.getJasperReportsExpression());
-    objectCreationEClass.getESuperTypes().add(this.getJasperReportsExpression());
     jvmGenericArrayTypeReferenceEClass.getESuperTypes().add(theTypesPackage.getJvmTypeReference());
 
     // Initialize classes and features; add operations and parameters
@@ -1356,9 +1343,10 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     initEAttribute(getBinaryExpression_Op(), ecorePackage.getEString(), "op", null, 0, 1, BinaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getBinaryExpression_Right(), ecorePackage.getEObject(), null, "right", null, 0, 1, BinaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(typeClassEClass, TypeClass.class, "TypeClass", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getTypeClass_Type(), this.getType(), null, "type", null, 0, 1, TypeClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTypeClass_Void(), ecorePackage.getEBoolean(), "void", null, 0, 1, TypeClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(staticFieldEClass, StaticField.class, "StaticField", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getStaticField_PrefixQMN(), ecorePackage.getEString(), "prefixQMN", null, 0, -1, StaticField.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getStaticField_Dots(), ecorePackage.getEString(), "dots", null, 0, -1, StaticField.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getStaticField_FieldName(), ecorePackage.getEString(), "fieldName", null, 0, 1, StaticField.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(jrFieldObjEClass, JRFieldObj.class, "JRFieldObj", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getJRFieldObj_BracedIdentifier(), ecorePackage.getEString(), "bracedIdentifier", null, 0, 1, JRFieldObj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1370,6 +1358,7 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     initEAttribute(getJRVariableObj_BracedIdentifier(), ecorePackage.getEString(), "bracedIdentifier", null, 0, 1, JRVariableObj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(methodsExpressionEClass, MethodsExpression.class, "MethodsExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getMethodsExpression_IncludeObjectInstatiation(), ecorePackage.getEBoolean(), "includeObjectInstatiation", null, 0, 1, MethodsExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMethodsExpression_MethodInvocations(), this.getMethodInvocation(), null, "methodInvocations", null, 0, -1, MethodsExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMethodsExpression_ObjectExpression(), this.getJasperReportsExpression(), null, "objectExpression", null, 0, 1, MethodsExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMethodsExpression_ArrayIndexes(), this.getJasperReportsExpression(), null, "arrayIndexes", null, 0, -1, MethodsExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1405,9 +1394,6 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     initEReference(getArrayCreator_Type(), this.getType(), null, "type", null, 0, 1, ArrayCreator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getArrayCreator_Size(), this.getJasperReportsExpression(), null, "size", null, 0, -1, ArrayCreator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getArrayCreator_Initialization(), this.getArrayInitializer(), null, "initialization", null, 0, 1, ArrayCreator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(objectCreationEClass, ObjectCreation.class, "ObjectCreation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getObjectCreation_ConstructorInvocation(), this.getMethodInvocation(), null, "constructorInvocation", null, 0, 1, ObjectCreation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(jvmGenericArrayTypeReferenceEClass, JvmGenericArrayTypeReference.class, "JvmGenericArrayTypeReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getJvmGenericArrayTypeReference_ComponentType(), this.getJvmParameterizedTypeReference(), null, "componentType", null, 0, 1, JvmGenericArrayTypeReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

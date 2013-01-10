@@ -14,9 +14,6 @@
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 /**
- * <copyright>
- * </copyright>
- *
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression;
 
@@ -30,6 +27,7 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#isIncludeObjectInstatiation <em>Include Object Instatiation</em>}</li>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getMethodInvocations <em>Method Invocations</em>}</li>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getObjectExpression <em>Object Expression</em>}</li>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getArrayIndexes <em>Array Indexes</em>}</li>
@@ -42,6 +40,32 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface MethodsExpression extends JasperReportsExpression
 {
+  /**
+   * Returns the value of the '<em><b>Include Object Instatiation</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Include Object Instatiation</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Include Object Instatiation</em>' attribute.
+   * @see #setIncludeObjectInstatiation(boolean)
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage#getMethodsExpression_IncludeObjectInstatiation()
+   * @model
+   * @generated
+   */
+  boolean isIncludeObjectInstatiation();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#isIncludeObjectInstatiation <em>Include Object Instatiation</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Include Object Instatiation</em>' attribute.
+   * @see #isIncludeObjectInstatiation()
+   * @generated
+   */
+  void setIncludeObjectInstatiation(boolean value);
+
   /**
    * Returns the value of the '<em><b>Method Invocations</b></em>' containment reference list.
    * The list contents are of type {@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation}.

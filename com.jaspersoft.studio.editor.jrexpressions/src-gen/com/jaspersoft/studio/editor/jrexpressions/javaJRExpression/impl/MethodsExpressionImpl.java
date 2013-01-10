@@ -14,9 +14,6 @@
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 /**
- * <copyright>
- * </copyright>
- *
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl;
 
@@ -43,6 +40,7 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpres
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl#isIncludeObjectInstatiation <em>Include Object Instatiation</em>}</li>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl#getMethodInvocations <em>Method Invocations</em>}</li>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl#getObjectExpression <em>Object Expression</em>}</li>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl#getArrayIndexes <em>Array Indexes</em>}</li>
@@ -53,6 +51,26 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpres
  */
 public class MethodsExpressionImpl extends JasperReportsExpressionImpl implements MethodsExpression
 {
+  /**
+   * The default value of the '{@link #isIncludeObjectInstatiation() <em>Include Object Instatiation</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIncludeObjectInstatiation()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean INCLUDE_OBJECT_INSTATIATION_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isIncludeObjectInstatiation() <em>Include Object Instatiation</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIncludeObjectInstatiation()
+   * @generated
+   * @ordered
+   */
+  protected boolean includeObjectInstatiation = INCLUDE_OBJECT_INSTATIATION_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getMethodInvocations() <em>Method Invocations</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -102,6 +120,29 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
   protected EClass eStaticClass()
   {
     return JavaJRExpressionPackage.Literals.METHODS_EXPRESSION;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isIncludeObjectInstatiation()
+  {
+    return includeObjectInstatiation;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setIncludeObjectInstatiation(boolean newIncludeObjectInstatiation)
+  {
+    boolean oldIncludeObjectInstatiation = includeObjectInstatiation;
+    includeObjectInstatiation = newIncludeObjectInstatiation;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, JavaJRExpressionPackage.METHODS_EXPRESSION__INCLUDE_OBJECT_INSTATIATION, oldIncludeObjectInstatiation, includeObjectInstatiation));
   }
 
   /**
@@ -210,6 +251,8 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
   {
     switch (featureID)
     {
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__INCLUDE_OBJECT_INSTATIATION:
+        return isIncludeObjectInstatiation();
       case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
         return getMethodInvocations();
       case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
@@ -231,6 +274,9 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
   {
     switch (featureID)
     {
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__INCLUDE_OBJECT_INSTATIATION:
+        setIncludeObjectInstatiation((Boolean)newValue);
+        return;
       case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
         getMethodInvocations().clear();
         getMethodInvocations().addAll((Collection<? extends MethodInvocation>)newValue);
@@ -256,6 +302,9 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
   {
     switch (featureID)
     {
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__INCLUDE_OBJECT_INSTATIATION:
+        setIncludeObjectInstatiation(INCLUDE_OBJECT_INSTATIATION_EDEFAULT);
+        return;
       case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
         getMethodInvocations().clear();
         return;
@@ -279,6 +328,8 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
   {
     switch (featureID)
     {
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__INCLUDE_OBJECT_INSTATIATION:
+        return includeObjectInstatiation != INCLUDE_OBJECT_INSTATIATION_EDEFAULT;
       case JavaJRExpressionPackage.METHODS_EXPRESSION__METHOD_INVOCATIONS:
         return methodInvocations != null && !methodInvocations.isEmpty();
       case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
@@ -287,6 +338,23 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
         return arrayIndexes != null && !arrayIndexes.isEmpty();
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (includeObjectInstatiation: ");
+    result.append(includeObjectInstatiation);
+    result.append(')');
+    return result.toString();
   }
 
 } //MethodsExpressionImpl

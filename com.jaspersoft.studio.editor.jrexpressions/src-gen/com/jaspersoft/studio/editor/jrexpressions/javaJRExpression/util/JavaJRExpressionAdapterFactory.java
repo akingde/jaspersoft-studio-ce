@@ -14,9 +14,6 @@
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 /**
- * <copyright>
- * </copyright>
- *
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.util;
 
@@ -53,11 +50,10 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.LongLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.NullLiteral;
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StringLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TestExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Type;
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass;
 
 /**
  * <!-- begin-user-doc -->
@@ -193,9 +189,9 @@ public class JavaJRExpressionAdapterFactory extends AdapterFactoryImpl
         return createBinaryExpressionAdapter();
       }
       @Override
-      public Adapter caseTypeClass(TypeClass object)
+      public Adapter caseStaticField(StaticField object)
       {
-        return createTypeClassAdapter();
+        return createStaticFieldAdapter();
       }
       @Override
       public Adapter caseJRFieldObj(JRFieldObj object)
@@ -266,11 +262,6 @@ public class JavaJRExpressionAdapterFactory extends AdapterFactoryImpl
       public Adapter caseArrayCreator(ArrayCreator object)
       {
         return createArrayCreatorAdapter();
-      }
-      @Override
-      public Adapter caseObjectCreation(ObjectCreation object)
-      {
-        return createObjectCreationAdapter();
       }
       @Override
       public Adapter caseJvmGenericArrayTypeReference(JvmGenericArrayTypeReference object)
@@ -515,16 +506,16 @@ public class JavaJRExpressionAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass <em>Type Class</em>}'.
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField <em>Static Field</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField
    * @generated
    */
-  public Adapter createTypeClassAdapter()
+  public Adapter createStaticFieldAdapter()
   {
     return null;
   }
@@ -735,21 +726,6 @@ public class JavaJRExpressionAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createArrayCreatorAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation <em>Object Creation</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation
-   * @generated
-   */
-  public Adapter createObjectCreationAdapter()
   {
     return null;
   }

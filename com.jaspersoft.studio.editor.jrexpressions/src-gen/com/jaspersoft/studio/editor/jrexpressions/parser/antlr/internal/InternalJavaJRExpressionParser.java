@@ -34,10 +34,9 @@ import com.jaspersoft.studio.editor.jrexpressions.services.JavaJRExpressionGramm
 @SuppressWarnings("all")
 public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_BRACED_IDENTIFIER", "RULE_INT", "RULE_LONG", "RULE_FLOAT", "RULE_DOUBLE", "RULE_CHAR", "RULE_STRING", "RULE_ID", "RULE_INTEGERNUMBER", "RULE_LONGSUFFIX", "RULE_NONINTEGERNUMBER", "RULE_FLOATSUFFIX", "RULE_DOUBLESUFFIX", "RULE_ESCAPESEQUENCE", "RULE_HEXPREFIX", "RULE_HEXDIGIT", "RULE_EXPONENT", "RULE_EXPOBJIDENTIFIER", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'?'", "':'", "'||'", "'&&'", "'=='", "'!='", "'instanceof'", "'+'", "'-'", "'*'", "'/'", "'%'", "'~'", "'!'", "'void'", "'.'", "'class'", "'$F'", "'$P'", "'$V'", "'['", "']'", "'false'", "'java.lang.Boolean.FALSE'", "'Boolean.FALSE'", "'true'", "'java.lang.Boolean.TRUE'", "'Boolean.TRUE'", "'null'", "'('", "')'", "'new'", "'{'", "'}'", "','", "'<'", "'>'", "'extends'", "'super'", "'boolean'", "'char'", "'byte'", "'short'", "'int'", "'long'", "'float'", "'double'", "'<='", "'>='"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_BRACED_IDENTIFIER", "RULE_INT", "RULE_LONG", "RULE_FLOAT", "RULE_DOUBLE", "RULE_CHAR", "RULE_STRING", "RULE_ID", "RULE_INTEGERNUMBER", "RULE_LONGSUFFIX", "RULE_NONINTEGERNUMBER", "RULE_FLOATSUFFIX", "RULE_DOUBLESUFFIX", "RULE_ESCAPESEQUENCE", "RULE_HEXPREFIX", "RULE_HEXDIGIT", "RULE_EXPONENT", "RULE_EXPOBJIDENTIFIER", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'?'", "':'", "'||'", "'&&'", "'=='", "'!='", "'instanceof'", "'+'", "'-'", "'*'", "'/'", "'%'", "'~'", "'!'", "'.'", "'$F'", "'$P'", "'$V'", "'new'", "'['", "']'", "'false'", "'true'", "'null'", "'('", "')'", "'{'", "'}'", "','", "'<'", "'>'", "'extends'", "'super'", "'boolean'", "'char'", "'byte'", "'short'", "'int'", "'long'", "'float'", "'double'", "'<='", "'>='"
     };
     public static final int T__68=68;
-    public static final int T__69=69;
     public static final int RULE_ID=11;
     public static final int T__66=66;
     public static final int T__67=67;
@@ -93,12 +92,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
     public static final int T__31=31;
     public static final int RULE_STRING=10;
     public static final int T__32=32;
-    public static final int T__71=71;
     public static final int T__33=33;
-    public static final int T__72=72;
     public static final int T__34=34;
     public static final int T__35=35;
-    public static final int T__70=70;
     public static final int T__36=36;
     public static final int T__37=37;
     public static final int T__38=38;
@@ -106,8 +102,6 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
     public static final int T__39=39;
     public static final int RULE_INTEGERNUMBER=12;
     public static final int RULE_WS=24;
-    public static final int T__74=74;
-    public static final int T__73=73;
 
     // delegates
     // delegators
@@ -205,7 +199,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             int alt1=2;
             int LA1_0 = input.LA(1);
 
-            if ( ((LA1_0>=RULE_INT && LA1_0<=RULE_ID)||(LA1_0>=33 && LA1_0<=34)||(LA1_0>=38 && LA1_0<=40)||(LA1_0>=43 && LA1_0<=45)||(LA1_0>=48 && LA1_0<=55)||LA1_0==57||(LA1_0>=65 && LA1_0<=72)) ) {
+            if ( ((LA1_0>=RULE_INT && LA1_0<=RULE_ID)||(LA1_0>=33 && LA1_0<=34)||(LA1_0>=38 && LA1_0<=39)||(LA1_0>=41 && LA1_0<=44)||(LA1_0>=47 && LA1_0<=50)) ) {
                 alt1=1;
             }
             switch (alt1) {
@@ -1570,7 +1564,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             do {
                 int alt8=2;
                 switch ( input.LA(1) ) {
-                case 73:
+                case 67:
                     {
                     int LA8_2 = input.LA(2);
 
@@ -1581,7 +1575,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
                     }
                     break;
-                case 61:
+                case 55:
                     {
                     int LA8_3 = input.LA(2);
 
@@ -1592,7 +1586,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
                     }
                     break;
-                case 74:
+                case 68:
                     {
                     int LA8_4 = input.LA(2);
 
@@ -1603,7 +1597,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
                     }
                     break;
-                case 62:
+                case 56:
                     {
                     int LA8_5 = input.LA(2);
 
@@ -2416,27 +2410,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             case RULE_ID:
             case 38:
             case 39:
-            case 40:
+            case 41:
+            case 42:
             case 43:
             case 44:
-            case 45:
+            case 47:
             case 48:
             case 49:
             case 50:
-            case 51:
-            case 52:
-            case 53:
-            case 54:
-            case 55:
-            case 57:
-            case 65:
-            case 66:
-            case 67:
-            case 68:
-            case 69:
-            case 70:
-            case 71:
-            case 72:
                 {
                 alt13=3;
                 }
@@ -2809,38 +2790,33 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "rulePrimaryExpression"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:964:1: rulePrimaryExpression returns [EObject current=null] : (this_ParExpression_0= ruleParExpression | this_LiteralExpression_1= ruleLiteralExpression | this_ArrayCreator_2= ruleArrayCreator | this_ObjectCreation_3= ruleObjectCreation | ( ( ruleBaseJRExpression )=>this_BaseJRExpression_4= ruleBaseJRExpression ) | this_MethodsExpression_5= ruleMethodsExpression | ( () ( ( (lv_type_7_0= ruleType ) ) | ( (lv_void_8_0= 'void' ) ) ) otherlv_9= '.' otherlv_10= 'class' ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:964:1: rulePrimaryExpression returns [EObject current=null] : (this_ParExpression_0= ruleParExpression | this_LiteralExpression_1= ruleLiteralExpression | this_ArrayCreator_2= ruleArrayCreator | ( ( ruleBaseJRExpression )=>this_BaseJRExpression_3= ruleBaseJRExpression ) | this_MethodsExpression_4= ruleMethodsExpression | this_StaticField_5= ruleStaticField ) ;
     public final EObject rulePrimaryExpression() throws RecognitionException {
         EObject current = null;
 
-        Token lv_void_8_0=null;
-        Token otherlv_9=null;
-        Token otherlv_10=null;
         EObject this_ParExpression_0 = null;
 
         EObject this_LiteralExpression_1 = null;
 
         EObject this_ArrayCreator_2 = null;
 
-        EObject this_ObjectCreation_3 = null;
+        EObject this_BaseJRExpression_3 = null;
 
-        EObject this_BaseJRExpression_4 = null;
+        EObject this_MethodsExpression_4 = null;
 
-        EObject this_MethodsExpression_5 = null;
-
-        EObject lv_type_7_0 = null;
+        EObject this_StaticField_5 = null;
 
 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:967:28: ( (this_ParExpression_0= ruleParExpression | this_LiteralExpression_1= ruleLiteralExpression | this_ArrayCreator_2= ruleArrayCreator | this_ObjectCreation_3= ruleObjectCreation | ( ( ruleBaseJRExpression )=>this_BaseJRExpression_4= ruleBaseJRExpression ) | this_MethodsExpression_5= ruleMethodsExpression | ( () ( ( (lv_type_7_0= ruleType ) ) | ( (lv_void_8_0= 'void' ) ) ) otherlv_9= '.' otherlv_10= 'class' ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:968:1: (this_ParExpression_0= ruleParExpression | this_LiteralExpression_1= ruleLiteralExpression | this_ArrayCreator_2= ruleArrayCreator | this_ObjectCreation_3= ruleObjectCreation | ( ( ruleBaseJRExpression )=>this_BaseJRExpression_4= ruleBaseJRExpression ) | this_MethodsExpression_5= ruleMethodsExpression | ( () ( ( (lv_type_7_0= ruleType ) ) | ( (lv_void_8_0= 'void' ) ) ) otherlv_9= '.' otherlv_10= 'class' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:967:28: ( (this_ParExpression_0= ruleParExpression | this_LiteralExpression_1= ruleLiteralExpression | this_ArrayCreator_2= ruleArrayCreator | ( ( ruleBaseJRExpression )=>this_BaseJRExpression_3= ruleBaseJRExpression ) | this_MethodsExpression_4= ruleMethodsExpression | this_StaticField_5= ruleStaticField ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:968:1: (this_ParExpression_0= ruleParExpression | this_LiteralExpression_1= ruleLiteralExpression | this_ArrayCreator_2= ruleArrayCreator | ( ( ruleBaseJRExpression )=>this_BaseJRExpression_3= ruleBaseJRExpression ) | this_MethodsExpression_4= ruleMethodsExpression | this_StaticField_5= ruleStaticField )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:968:1: (this_ParExpression_0= ruleParExpression | this_LiteralExpression_1= ruleLiteralExpression | this_ArrayCreator_2= ruleArrayCreator | this_ObjectCreation_3= ruleObjectCreation | ( ( ruleBaseJRExpression )=>this_BaseJRExpression_4= ruleBaseJRExpression ) | this_MethodsExpression_5= ruleMethodsExpression | ( () ( ( (lv_type_7_0= ruleType ) ) | ( (lv_void_8_0= 'void' ) ) ) otherlv_9= '.' otherlv_10= 'class' ) )
-            int alt16=7;
-            alt16 = dfa16.predict(input);
-            switch (alt16) {
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:968:1: (this_ParExpression_0= ruleParExpression | this_LiteralExpression_1= ruleLiteralExpression | this_ArrayCreator_2= ruleArrayCreator | ( ( ruleBaseJRExpression )=>this_BaseJRExpression_3= ruleBaseJRExpression ) | this_MethodsExpression_4= ruleMethodsExpression | this_StaticField_5= ruleStaticField )
+            int alt15=6;
+            alt15 = dfa15.predict(input);
+            switch (alt15) {
                 case 1 :
                     // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:969:5: this_ParExpression_0= ruleParExpression
                     {
@@ -2908,205 +2884,74 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 4 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:999:5: this_ObjectCreation_3= ruleObjectCreation
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:998:6: ( ( ruleBaseJRExpression )=>this_BaseJRExpression_3= ruleBaseJRExpression )
+                    {
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:998:6: ( ( ruleBaseJRExpression )=>this_BaseJRExpression_3= ruleBaseJRExpression )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:998:7: ( ruleBaseJRExpression )=>this_BaseJRExpression_3= ruleBaseJRExpression
                     {
                     if ( state.backtracking==0 ) {
                        
-                              newCompositeNode(grammarAccess.getPrimaryExpressionAccess().getObjectCreationParserRuleCall_3()); 
+                              newCompositeNode(grammarAccess.getPrimaryExpressionAccess().getBaseJRExpressionParserRuleCall_3()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleObjectCreation_in_rulePrimaryExpression2423);
-                    this_ObjectCreation_3=ruleObjectCreation();
+                    pushFollow(FOLLOW_ruleBaseJRExpression_in_rulePrimaryExpression2429);
+                    this_BaseJRExpression_3=ruleBaseJRExpression();
 
                     state._fsp--;
                     if (state.failed) return current;
                     if ( state.backtracking==0 ) {
                        
-                              current = this_ObjectCreation_3; 
+                              current = this_BaseJRExpression_3; 
                               afterParserOrEnumRuleCall();
                           
                     }
+
+                    }
+
 
                     }
                     break;
                 case 5 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1008:6: ( ( ruleBaseJRExpression )=>this_BaseJRExpression_4= ruleBaseJRExpression )
-                    {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1008:6: ( ( ruleBaseJRExpression )=>this_BaseJRExpression_4= ruleBaseJRExpression )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1008:7: ( ruleBaseJRExpression )=>this_BaseJRExpression_4= ruleBaseJRExpression
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1009:5: this_MethodsExpression_4= ruleMethodsExpression
                     {
                     if ( state.backtracking==0 ) {
                        
-                              newCompositeNode(grammarAccess.getPrimaryExpressionAccess().getBaseJRExpressionParserRuleCall_4()); 
+                              newCompositeNode(grammarAccess.getPrimaryExpressionAccess().getMethodsExpressionParserRuleCall_4()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleBaseJRExpression_in_rulePrimaryExpression2456);
-                    this_BaseJRExpression_4=ruleBaseJRExpression();
+                    pushFollow(FOLLOW_ruleMethodsExpression_in_rulePrimaryExpression2457);
+                    this_MethodsExpression_4=ruleMethodsExpression();
 
                     state._fsp--;
                     if (state.failed) return current;
                     if ( state.backtracking==0 ) {
                        
-                              current = this_BaseJRExpression_4; 
+                              current = this_MethodsExpression_4; 
                               afterParserOrEnumRuleCall();
                           
                     }
-
-                    }
-
 
                     }
                     break;
                 case 6 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1019:5: this_MethodsExpression_5= ruleMethodsExpression
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1019:5: this_StaticField_5= ruleStaticField
                     {
                     if ( state.backtracking==0 ) {
                        
-                              newCompositeNode(grammarAccess.getPrimaryExpressionAccess().getMethodsExpressionParserRuleCall_5()); 
+                              newCompositeNode(grammarAccess.getPrimaryExpressionAccess().getStaticFieldParserRuleCall_5()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleMethodsExpression_in_rulePrimaryExpression2484);
-                    this_MethodsExpression_5=ruleMethodsExpression();
+                    pushFollow(FOLLOW_ruleStaticField_in_rulePrimaryExpression2484);
+                    this_StaticField_5=ruleStaticField();
 
                     state._fsp--;
                     if (state.failed) return current;
                     if ( state.backtracking==0 ) {
                        
-                              current = this_MethodsExpression_5; 
+                              current = this_StaticField_5; 
                               afterParserOrEnumRuleCall();
                           
                     }
-
-                    }
-                    break;
-                case 7 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1028:6: ( () ( ( (lv_type_7_0= ruleType ) ) | ( (lv_void_8_0= 'void' ) ) ) otherlv_9= '.' otherlv_10= 'class' )
-                    {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1028:6: ( () ( ( (lv_type_7_0= ruleType ) ) | ( (lv_void_8_0= 'void' ) ) ) otherlv_9= '.' otherlv_10= 'class' )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1028:7: () ( ( (lv_type_7_0= ruleType ) ) | ( (lv_void_8_0= 'void' ) ) ) otherlv_9= '.' otherlv_10= 'class'
-                    {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1028:7: ()
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1029:5: 
-                    {
-                    if ( state.backtracking==0 ) {
-
-                              current = forceCreateModelElement(
-                                  grammarAccess.getPrimaryExpressionAccess().getTypeClassAction_6_0(),
-                                  current);
-                          
-                    }
-
-                    }
-
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1034:2: ( ( (lv_type_7_0= ruleType ) ) | ( (lv_void_8_0= 'void' ) ) )
-                    int alt15=2;
-                    int LA15_0 = input.LA(1);
-
-                    if ( (LA15_0==RULE_ID||(LA15_0>=65 && LA15_0<=72)) ) {
-                        alt15=1;
-                    }
-                    else if ( (LA15_0==40) ) {
-                        alt15=2;
-                    }
-                    else {
-                        if (state.backtracking>0) {state.failed=true; return current;}
-                        NoViableAltException nvae =
-                            new NoViableAltException("", 15, 0, input);
-
-                        throw nvae;
-                    }
-                    switch (alt15) {
-                        case 1 :
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1034:3: ( (lv_type_7_0= ruleType ) )
-                            {
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1034:3: ( (lv_type_7_0= ruleType ) )
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1035:1: (lv_type_7_0= ruleType )
-                            {
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1035:1: (lv_type_7_0= ruleType )
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1036:3: lv_type_7_0= ruleType
-                            {
-                            if ( state.backtracking==0 ) {
-                               
-                              	        newCompositeNode(grammarAccess.getPrimaryExpressionAccess().getTypeTypeParserRuleCall_6_1_0_0()); 
-                              	    
-                            }
-                            pushFollow(FOLLOW_ruleType_in_rulePrimaryExpression2521);
-                            lv_type_7_0=ruleType();
-
-                            state._fsp--;
-                            if (state.failed) return current;
-                            if ( state.backtracking==0 ) {
-
-                              	        if (current==null) {
-                              	            current = createModelElementForParent(grammarAccess.getPrimaryExpressionRule());
-                              	        }
-                                     		set(
-                                     			current, 
-                                     			"type",
-                                      		lv_type_7_0, 
-                                      		"Type");
-                              	        afterParserOrEnumRuleCall();
-                              	    
-                            }
-
-                            }
-
-
-                            }
-
-
-                            }
-                            break;
-                        case 2 :
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1053:6: ( (lv_void_8_0= 'void' ) )
-                            {
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1053:6: ( (lv_void_8_0= 'void' ) )
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1054:1: (lv_void_8_0= 'void' )
-                            {
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1054:1: (lv_void_8_0= 'void' )
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1055:3: lv_void_8_0= 'void'
-                            {
-                            lv_void_8_0=(Token)match(input,40,FOLLOW_40_in_rulePrimaryExpression2545); if (state.failed) return current;
-                            if ( state.backtracking==0 ) {
-
-                                      newLeafNode(lv_void_8_0, grammarAccess.getPrimaryExpressionAccess().getVoidVoidKeyword_6_1_1_0());
-                                  
-                            }
-                            if ( state.backtracking==0 ) {
-
-                              	        if (current==null) {
-                              	            current = createModelElement(grammarAccess.getPrimaryExpressionRule());
-                              	        }
-                                     		setWithLastConsumed(current, "void", true, "void");
-                              	    
-                            }
-
-                            }
-
-
-                            }
-
-
-                            }
-                            break;
-
-                    }
-
-                    otherlv_9=(Token)match(input,41,FOLLOW_41_in_rulePrimaryExpression2571); if (state.failed) return current;
-                    if ( state.backtracking==0 ) {
-
-                          	newLeafNode(otherlv_9, grammarAccess.getPrimaryExpressionAccess().getFullStopKeyword_6_2());
-                          
-                    }
-                    otherlv_10=(Token)match(input,42,FOLLOW_42_in_rulePrimaryExpression2583); if (state.failed) return current;
-                    if ( state.backtracking==0 ) {
-
-                          	newLeafNode(otherlv_10, grammarAccess.getPrimaryExpressionAccess().getClassKeyword_6_3());
-                          
-                    }
-
-                    }
-
 
                     }
                     break;
@@ -3132,8 +2977,229 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
     // $ANTLR end "rulePrimaryExpression"
 
 
+    // $ANTLR start "entryRuleStaticField"
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1035:1: entryRuleStaticField returns [EObject current=null] : iv_ruleStaticField= ruleStaticField EOF ;
+    public final EObject entryRuleStaticField() throws RecognitionException {
+        EObject current = null;
+
+        EObject iv_ruleStaticField = null;
+
+
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1036:2: (iv_ruleStaticField= ruleStaticField EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1037:2: iv_ruleStaticField= ruleStaticField EOF
+            {
+            if ( state.backtracking==0 ) {
+               newCompositeNode(grammarAccess.getStaticFieldRule()); 
+            }
+            pushFollow(FOLLOW_ruleStaticField_in_entryRuleStaticField2519);
+            iv_ruleStaticField=ruleStaticField();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+               current =iv_ruleStaticField; 
+            }
+            match(input,EOF,FOLLOW_EOF_in_entryRuleStaticField2529); if (state.failed) return current;
+
+            }
+
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "entryRuleStaticField"
+
+
+    // $ANTLR start "ruleStaticField"
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1044:1: ruleStaticField returns [EObject current=null] : ( () ( ( (lv_prefixQMN_1_0= ruleValidID ) ) ( (lv_dots_2_0= '.' ) ) )* ( (lv_fieldName_3_0= ruleValidID ) ) ) ;
+    public final EObject ruleStaticField() throws RecognitionException {
+        EObject current = null;
+
+        Token lv_dots_2_0=null;
+        AntlrDatatypeRuleToken lv_prefixQMN_1_0 = null;
+
+        AntlrDatatypeRuleToken lv_fieldName_3_0 = null;
+
+
+         enterRule(); 
+            
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1047:28: ( ( () ( ( (lv_prefixQMN_1_0= ruleValidID ) ) ( (lv_dots_2_0= '.' ) ) )* ( (lv_fieldName_3_0= ruleValidID ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1048:1: ( () ( ( (lv_prefixQMN_1_0= ruleValidID ) ) ( (lv_dots_2_0= '.' ) ) )* ( (lv_fieldName_3_0= ruleValidID ) ) )
+            {
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1048:1: ( () ( ( (lv_prefixQMN_1_0= ruleValidID ) ) ( (lv_dots_2_0= '.' ) ) )* ( (lv_fieldName_3_0= ruleValidID ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1048:2: () ( ( (lv_prefixQMN_1_0= ruleValidID ) ) ( (lv_dots_2_0= '.' ) ) )* ( (lv_fieldName_3_0= ruleValidID ) )
+            {
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1048:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1049:5: 
+            {
+            if ( state.backtracking==0 ) {
+
+                      current = forceCreateModelElement(
+                          grammarAccess.getStaticFieldAccess().getStaticFieldAction_0(),
+                          current);
+                  
+            }
+
+            }
+
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1054:2: ( ( (lv_prefixQMN_1_0= ruleValidID ) ) ( (lv_dots_2_0= '.' ) ) )*
+            loop16:
+            do {
+                int alt16=2;
+                int LA16_0 = input.LA(1);
+
+                if ( (LA16_0==RULE_ID) ) {
+                    int LA16_1 = input.LA(2);
+
+                    if ( (LA16_1==40) ) {
+                        alt16=1;
+                    }
+
+
+                }
+
+
+                switch (alt16) {
+            	case 1 :
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1054:3: ( (lv_prefixQMN_1_0= ruleValidID ) ) ( (lv_dots_2_0= '.' ) )
+            	    {
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1054:3: ( (lv_prefixQMN_1_0= ruleValidID ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1055:1: (lv_prefixQMN_1_0= ruleValidID )
+            	    {
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1055:1: (lv_prefixQMN_1_0= ruleValidID )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1056:3: lv_prefixQMN_1_0= ruleValidID
+            	    {
+            	    if ( state.backtracking==0 ) {
+            	       
+            	      	        newCompositeNode(grammarAccess.getStaticFieldAccess().getPrefixQMNValidIDParserRuleCall_1_0_0()); 
+            	      	    
+            	    }
+            	    pushFollow(FOLLOW_ruleValidID_in_ruleStaticField2585);
+            	    lv_prefixQMN_1_0=ruleValidID();
+
+            	    state._fsp--;
+            	    if (state.failed) return current;
+            	    if ( state.backtracking==0 ) {
+
+            	      	        if (current==null) {
+            	      	            current = createModelElementForParent(grammarAccess.getStaticFieldRule());
+            	      	        }
+            	             		add(
+            	             			current, 
+            	             			"prefixQMN",
+            	              		lv_prefixQMN_1_0, 
+            	              		"ValidID");
+            	      	        afterParserOrEnumRuleCall();
+            	      	    
+            	    }
+
+            	    }
+
+
+            	    }
+
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1072:2: ( (lv_dots_2_0= '.' ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1073:1: (lv_dots_2_0= '.' )
+            	    {
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1073:1: (lv_dots_2_0= '.' )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1074:3: lv_dots_2_0= '.'
+            	    {
+            	    lv_dots_2_0=(Token)match(input,40,FOLLOW_40_in_ruleStaticField2603); if (state.failed) return current;
+            	    if ( state.backtracking==0 ) {
+
+            	              newLeafNode(lv_dots_2_0, grammarAccess.getStaticFieldAccess().getDotsFullStopKeyword_1_1_0());
+            	          
+            	    }
+            	    if ( state.backtracking==0 ) {
+
+            	      	        if (current==null) {
+            	      	            current = createModelElement(grammarAccess.getStaticFieldRule());
+            	      	        }
+            	             		addWithLastConsumed(current, "dots", lv_dots_2_0, ".");
+            	      	    
+            	    }
+
+            	    }
+
+
+            	    }
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop16;
+                }
+            } while (true);
+
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1087:4: ( (lv_fieldName_3_0= ruleValidID ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1088:1: (lv_fieldName_3_0= ruleValidID )
+            {
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1088:1: (lv_fieldName_3_0= ruleValidID )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1089:3: lv_fieldName_3_0= ruleValidID
+            {
+            if ( state.backtracking==0 ) {
+               
+              	        newCompositeNode(grammarAccess.getStaticFieldAccess().getFieldNameValidIDParserRuleCall_2_0()); 
+              	    
+            }
+            pushFollow(FOLLOW_ruleValidID_in_ruleStaticField2639);
+            lv_fieldName_3_0=ruleValidID();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+
+              	        if (current==null) {
+              	            current = createModelElementForParent(grammarAccess.getStaticFieldRule());
+              	        }
+                     		set(
+                     			current, 
+                     			"fieldName",
+                      		lv_fieldName_3_0, 
+                      		"ValidID");
+              	        afterParserOrEnumRuleCall();
+              	    
+            }
+
+            }
+
+
+            }
+
+
+            }
+
+
+            }
+
+            if ( state.backtracking==0 ) {
+               leaveRule(); 
+            }
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "ruleStaticField"
+
+
     // $ANTLR start "entryRuleBaseJRExpression"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1084:1: entryRuleBaseJRExpression returns [EObject current=null] : iv_ruleBaseJRExpression= ruleBaseJRExpression EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1113:1: entryRuleBaseJRExpression returns [EObject current=null] : iv_ruleBaseJRExpression= ruleBaseJRExpression EOF ;
     public final EObject entryRuleBaseJRExpression() throws RecognitionException {
         EObject current = null;
 
@@ -3141,13 +3207,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1085:2: (iv_ruleBaseJRExpression= ruleBaseJRExpression EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1086:2: iv_ruleBaseJRExpression= ruleBaseJRExpression EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1114:2: (iv_ruleBaseJRExpression= ruleBaseJRExpression EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1115:2: iv_ruleBaseJRExpression= ruleBaseJRExpression EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getBaseJRExpressionRule()); 
             }
-            pushFollow(FOLLOW_ruleBaseJRExpression_in_entryRuleBaseJRExpression2620);
+            pushFollow(FOLLOW_ruleBaseJRExpression_in_entryRuleBaseJRExpression2675);
             iv_ruleBaseJRExpression=ruleBaseJRExpression();
 
             state._fsp--;
@@ -3155,7 +3221,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleBaseJRExpression; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleBaseJRExpression2630); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleBaseJRExpression2685); if (state.failed) return current;
 
             }
 
@@ -3173,7 +3239,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleBaseJRExpression"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1093:1: ruleBaseJRExpression returns [EObject current=null] : (this_JRFieldObj_0= ruleJRFieldObj | this_JRParameterObj_1= ruleJRParameterObj | this_JRVariableObj_2= ruleJRVariableObj ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1122:1: ruleBaseJRExpression returns [EObject current=null] : (this_JRFieldObj_0= ruleJRFieldObj | this_JRParameterObj_1= ruleJRParameterObj | this_JRVariableObj_2= ruleJRVariableObj ) ;
     public final EObject ruleBaseJRExpression() throws RecognitionException {
         EObject current = null;
 
@@ -3187,23 +3253,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1096:28: ( (this_JRFieldObj_0= ruleJRFieldObj | this_JRParameterObj_1= ruleJRParameterObj | this_JRVariableObj_2= ruleJRVariableObj ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1097:1: (this_JRFieldObj_0= ruleJRFieldObj | this_JRParameterObj_1= ruleJRParameterObj | this_JRVariableObj_2= ruleJRVariableObj )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1125:28: ( (this_JRFieldObj_0= ruleJRFieldObj | this_JRParameterObj_1= ruleJRParameterObj | this_JRVariableObj_2= ruleJRVariableObj ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1126:1: (this_JRFieldObj_0= ruleJRFieldObj | this_JRParameterObj_1= ruleJRParameterObj | this_JRVariableObj_2= ruleJRVariableObj )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1097:1: (this_JRFieldObj_0= ruleJRFieldObj | this_JRParameterObj_1= ruleJRParameterObj | this_JRVariableObj_2= ruleJRVariableObj )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1126:1: (this_JRFieldObj_0= ruleJRFieldObj | this_JRParameterObj_1= ruleJRParameterObj | this_JRVariableObj_2= ruleJRVariableObj )
             int alt17=3;
             switch ( input.LA(1) ) {
-            case 43:
+            case 41:
                 {
                 alt17=1;
                 }
                 break;
-            case 44:
+            case 42:
                 {
                 alt17=2;
                 }
                 break;
-            case 45:
+            case 43:
                 {
                 alt17=3;
                 }
@@ -3218,14 +3284,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             switch (alt17) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1098:5: this_JRFieldObj_0= ruleJRFieldObj
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1127:5: this_JRFieldObj_0= ruleJRFieldObj
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getBaseJRExpressionAccess().getJRFieldObjParserRuleCall_0()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleJRFieldObj_in_ruleBaseJRExpression2677);
+                    pushFollow(FOLLOW_ruleJRFieldObj_in_ruleBaseJRExpression2732);
                     this_JRFieldObj_0=ruleJRFieldObj();
 
                     state._fsp--;
@@ -3240,14 +3306,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1108:5: this_JRParameterObj_1= ruleJRParameterObj
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1137:5: this_JRParameterObj_1= ruleJRParameterObj
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getBaseJRExpressionAccess().getJRParameterObjParserRuleCall_1()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleJRParameterObj_in_ruleBaseJRExpression2704);
+                    pushFollow(FOLLOW_ruleJRParameterObj_in_ruleBaseJRExpression2759);
                     this_JRParameterObj_1=ruleJRParameterObj();
 
                     state._fsp--;
@@ -3262,14 +3328,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 3 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1118:5: this_JRVariableObj_2= ruleJRVariableObj
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1147:5: this_JRVariableObj_2= ruleJRVariableObj
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getBaseJRExpressionAccess().getJRVariableObjParserRuleCall_2()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleJRVariableObj_in_ruleBaseJRExpression2731);
+                    pushFollow(FOLLOW_ruleJRVariableObj_in_ruleBaseJRExpression2786);
                     this_JRVariableObj_2=ruleJRVariableObj();
 
                     state._fsp--;
@@ -3306,7 +3372,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleJRFieldObj"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1134:1: entryRuleJRFieldObj returns [EObject current=null] : iv_ruleJRFieldObj= ruleJRFieldObj EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1163:1: entryRuleJRFieldObj returns [EObject current=null] : iv_ruleJRFieldObj= ruleJRFieldObj EOF ;
     public final EObject entryRuleJRFieldObj() throws RecognitionException {
         EObject current = null;
 
@@ -3314,13 +3380,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1135:2: (iv_ruleJRFieldObj= ruleJRFieldObj EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1136:2: iv_ruleJRFieldObj= ruleJRFieldObj EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1164:2: (iv_ruleJRFieldObj= ruleJRFieldObj EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1165:2: iv_ruleJRFieldObj= ruleJRFieldObj EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getJRFieldObjRule()); 
             }
-            pushFollow(FOLLOW_ruleJRFieldObj_in_entryRuleJRFieldObj2766);
+            pushFollow(FOLLOW_ruleJRFieldObj_in_entryRuleJRFieldObj2821);
             iv_ruleJRFieldObj=ruleJRFieldObj();
 
             state._fsp--;
@@ -3328,7 +3394,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleJRFieldObj; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleJRFieldObj2776); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleJRFieldObj2831); if (state.failed) return current;
 
             }
 
@@ -3346,7 +3412,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleJRFieldObj"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1143:1: ruleJRFieldObj returns [EObject current=null] : ( () otherlv_1= '$F' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1172:1: ruleJRFieldObj returns [EObject current=null] : ( () otherlv_1= '$F' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) ;
     public final EObject ruleJRFieldObj() throws RecognitionException {
         EObject current = null;
 
@@ -3356,14 +3422,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1146:28: ( ( () otherlv_1= '$F' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1147:1: ( () otherlv_1= '$F' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1175:28: ( ( () otherlv_1= '$F' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1176:1: ( () otherlv_1= '$F' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1147:1: ( () otherlv_1= '$F' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1147:2: () otherlv_1= '$F' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1176:1: ( () otherlv_1= '$F' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1176:2: () otherlv_1= '$F' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1147:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1148:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1176:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1177:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -3375,19 +3441,19 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,43,FOLLOW_43_in_ruleJRFieldObj2822); if (state.failed) return current;
+            otherlv_1=(Token)match(input,41,FOLLOW_41_in_ruleJRFieldObj2877); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getJRFieldObjAccess().getFKeyword_1());
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1157:1: ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1158:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1186:1: ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1187:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1158:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1159:3: lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1187:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1188:3: lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER
             {
-            lv_bracedIdentifier_2_0=(Token)match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRFieldObj2839); if (state.failed) return current;
+            lv_bracedIdentifier_2_0=(Token)match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRFieldObj2894); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_bracedIdentifier_2_0, grammarAccess.getJRFieldObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); 
@@ -3434,7 +3500,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleJRParameterObj"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1183:1: entryRuleJRParameterObj returns [EObject current=null] : iv_ruleJRParameterObj= ruleJRParameterObj EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1212:1: entryRuleJRParameterObj returns [EObject current=null] : iv_ruleJRParameterObj= ruleJRParameterObj EOF ;
     public final EObject entryRuleJRParameterObj() throws RecognitionException {
         EObject current = null;
 
@@ -3442,13 +3508,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1184:2: (iv_ruleJRParameterObj= ruleJRParameterObj EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1185:2: iv_ruleJRParameterObj= ruleJRParameterObj EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1213:2: (iv_ruleJRParameterObj= ruleJRParameterObj EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1214:2: iv_ruleJRParameterObj= ruleJRParameterObj EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getJRParameterObjRule()); 
             }
-            pushFollow(FOLLOW_ruleJRParameterObj_in_entryRuleJRParameterObj2880);
+            pushFollow(FOLLOW_ruleJRParameterObj_in_entryRuleJRParameterObj2935);
             iv_ruleJRParameterObj=ruleJRParameterObj();
 
             state._fsp--;
@@ -3456,7 +3522,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleJRParameterObj; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleJRParameterObj2890); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleJRParameterObj2945); if (state.failed) return current;
 
             }
 
@@ -3474,7 +3540,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleJRParameterObj"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1192:1: ruleJRParameterObj returns [EObject current=null] : ( () otherlv_1= '$P' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1221:1: ruleJRParameterObj returns [EObject current=null] : ( () otherlv_1= '$P' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) ;
     public final EObject ruleJRParameterObj() throws RecognitionException {
         EObject current = null;
 
@@ -3484,14 +3550,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1195:28: ( ( () otherlv_1= '$P' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1196:1: ( () otherlv_1= '$P' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1224:28: ( ( () otherlv_1= '$P' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1225:1: ( () otherlv_1= '$P' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1196:1: ( () otherlv_1= '$P' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1196:2: () otherlv_1= '$P' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1225:1: ( () otherlv_1= '$P' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1225:2: () otherlv_1= '$P' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1196:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1197:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1225:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1226:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -3503,19 +3569,19 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,44,FOLLOW_44_in_ruleJRParameterObj2936); if (state.failed) return current;
+            otherlv_1=(Token)match(input,42,FOLLOW_42_in_ruleJRParameterObj2991); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getJRParameterObjAccess().getPKeyword_1());
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1206:1: ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1207:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1235:1: ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1236:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1207:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1208:3: lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1236:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1237:3: lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER
             {
-            lv_bracedIdentifier_2_0=(Token)match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRParameterObj2953); if (state.failed) return current;
+            lv_bracedIdentifier_2_0=(Token)match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRParameterObj3008); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_bracedIdentifier_2_0, grammarAccess.getJRParameterObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); 
@@ -3562,7 +3628,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleJRVariableObj"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1232:1: entryRuleJRVariableObj returns [EObject current=null] : iv_ruleJRVariableObj= ruleJRVariableObj EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1261:1: entryRuleJRVariableObj returns [EObject current=null] : iv_ruleJRVariableObj= ruleJRVariableObj EOF ;
     public final EObject entryRuleJRVariableObj() throws RecognitionException {
         EObject current = null;
 
@@ -3570,13 +3636,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1233:2: (iv_ruleJRVariableObj= ruleJRVariableObj EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1234:2: iv_ruleJRVariableObj= ruleJRVariableObj EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1262:2: (iv_ruleJRVariableObj= ruleJRVariableObj EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1263:2: iv_ruleJRVariableObj= ruleJRVariableObj EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getJRVariableObjRule()); 
             }
-            pushFollow(FOLLOW_ruleJRVariableObj_in_entryRuleJRVariableObj2994);
+            pushFollow(FOLLOW_ruleJRVariableObj_in_entryRuleJRVariableObj3049);
             iv_ruleJRVariableObj=ruleJRVariableObj();
 
             state._fsp--;
@@ -3584,7 +3650,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleJRVariableObj; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleJRVariableObj3004); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleJRVariableObj3059); if (state.failed) return current;
 
             }
 
@@ -3602,7 +3668,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleJRVariableObj"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1241:1: ruleJRVariableObj returns [EObject current=null] : ( () otherlv_1= '$V' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1270:1: ruleJRVariableObj returns [EObject current=null] : ( () otherlv_1= '$V' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) ;
     public final EObject ruleJRVariableObj() throws RecognitionException {
         EObject current = null;
 
@@ -3612,14 +3678,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1244:28: ( ( () otherlv_1= '$V' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1245:1: ( () otherlv_1= '$V' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1273:28: ( ( () otherlv_1= '$V' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1274:1: ( () otherlv_1= '$V' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1245:1: ( () otherlv_1= '$V' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1245:2: () otherlv_1= '$V' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1274:1: ( () otherlv_1= '$V' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1274:2: () otherlv_1= '$V' ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1245:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1246:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1274:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1275:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -3631,19 +3697,19 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,45,FOLLOW_45_in_ruleJRVariableObj3050); if (state.failed) return current;
+            otherlv_1=(Token)match(input,43,FOLLOW_43_in_ruleJRVariableObj3105); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getJRVariableObjAccess().getVKeyword_1());
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1255:1: ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1256:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1284:1: ( (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1285:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1256:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1257:3: lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1285:1: (lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1286:3: lv_bracedIdentifier_2_0= RULE_BRACED_IDENTIFIER
             {
-            lv_bracedIdentifier_2_0=(Token)match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRVariableObj3067); if (state.failed) return current;
+            lv_bracedIdentifier_2_0=(Token)match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRVariableObj3122); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_bracedIdentifier_2_0, grammarAccess.getJRVariableObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); 
@@ -3690,7 +3756,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleMethodsExpression"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1281:1: entryRuleMethodsExpression returns [EObject current=null] : iv_ruleMethodsExpression= ruleMethodsExpression EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1310:1: entryRuleMethodsExpression returns [EObject current=null] : iv_ruleMethodsExpression= ruleMethodsExpression EOF ;
     public final EObject entryRuleMethodsExpression() throws RecognitionException {
         EObject current = null;
 
@@ -3698,13 +3764,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1282:2: (iv_ruleMethodsExpression= ruleMethodsExpression EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1283:2: iv_ruleMethodsExpression= ruleMethodsExpression EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1311:2: (iv_ruleMethodsExpression= ruleMethodsExpression EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1312:2: iv_ruleMethodsExpression= ruleMethodsExpression EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMethodsExpressionRule()); 
             }
-            pushFollow(FOLLOW_ruleMethodsExpression_in_entryRuleMethodsExpression3108);
+            pushFollow(FOLLOW_ruleMethodsExpression_in_entryRuleMethodsExpression3163);
             iv_ruleMethodsExpression=ruleMethodsExpression();
 
             state._fsp--;
@@ -3712,7 +3778,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleMethodsExpression; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMethodsExpression3118); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMethodsExpression3173); if (state.failed) return current;
 
             }
 
@@ -3730,36 +3796,39 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleMethodsExpression"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1290:1: ruleMethodsExpression returns [EObject current=null] : ( () ( ( ( (lv_methodInvocations_1_0= ruleMethodInvocation ) ) (otherlv_2= '.' ( (lv_methodInvocations_3_0= ruleMethodInvocation ) ) )* ) | ( ( (lv_objectExpression_4_0= ruleBaseJRExpression ) ) (otherlv_5= '.' ( (lv_methodInvocations_6_0= ruleMethodInvocation ) ) )+ ) ) (otherlv_7= '[' ( (lv_arrayIndexes_8_0= ruleIntLiteral ) ) otherlv_9= ']' )* ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1319:1: ruleMethodsExpression returns [EObject current=null] : ( () ( ( ( (lv_includeObjectInstatiation_1_0= 'new' ) )? ( (lv_methodInvocations_2_0= ruleMethodInvocation ) ) (otherlv_3= '.' ( (lv_methodInvocations_4_0= ruleMethodInvocation ) ) )* ) | ( ( ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) ) ) (otherlv_6= '.' ( (lv_methodInvocations_7_0= ruleMethodInvocation ) ) )+ ) ) (otherlv_8= '[' ( (lv_arrayIndexes_9_0= ruleIntLiteral ) ) otherlv_10= ']' )* ) ;
     public final EObject ruleMethodsExpression() throws RecognitionException {
         EObject current = null;
 
-        Token otherlv_2=null;
-        Token otherlv_5=null;
-        Token otherlv_7=null;
-        Token otherlv_9=null;
-        EObject lv_methodInvocations_1_0 = null;
+        Token lv_includeObjectInstatiation_1_0=null;
+        Token otherlv_3=null;
+        Token otherlv_6=null;
+        Token otherlv_8=null;
+        Token otherlv_10=null;
+        EObject lv_methodInvocations_2_0 = null;
 
-        EObject lv_methodInvocations_3_0 = null;
+        EObject lv_methodInvocations_4_0 = null;
 
-        EObject lv_objectExpression_4_0 = null;
+        EObject lv_objectExpression_5_1 = null;
 
-        EObject lv_methodInvocations_6_0 = null;
+        EObject lv_objectExpression_5_2 = null;
 
-        EObject lv_arrayIndexes_8_0 = null;
+        EObject lv_methodInvocations_7_0 = null;
+
+        EObject lv_arrayIndexes_9_0 = null;
 
 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1293:28: ( ( () ( ( ( (lv_methodInvocations_1_0= ruleMethodInvocation ) ) (otherlv_2= '.' ( (lv_methodInvocations_3_0= ruleMethodInvocation ) ) )* ) | ( ( (lv_objectExpression_4_0= ruleBaseJRExpression ) ) (otherlv_5= '.' ( (lv_methodInvocations_6_0= ruleMethodInvocation ) ) )+ ) ) (otherlv_7= '[' ( (lv_arrayIndexes_8_0= ruleIntLiteral ) ) otherlv_9= ']' )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1294:1: ( () ( ( ( (lv_methodInvocations_1_0= ruleMethodInvocation ) ) (otherlv_2= '.' ( (lv_methodInvocations_3_0= ruleMethodInvocation ) ) )* ) | ( ( (lv_objectExpression_4_0= ruleBaseJRExpression ) ) (otherlv_5= '.' ( (lv_methodInvocations_6_0= ruleMethodInvocation ) ) )+ ) ) (otherlv_7= '[' ( (lv_arrayIndexes_8_0= ruleIntLiteral ) ) otherlv_9= ']' )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1322:28: ( ( () ( ( ( (lv_includeObjectInstatiation_1_0= 'new' ) )? ( (lv_methodInvocations_2_0= ruleMethodInvocation ) ) (otherlv_3= '.' ( (lv_methodInvocations_4_0= ruleMethodInvocation ) ) )* ) | ( ( ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) ) ) (otherlv_6= '.' ( (lv_methodInvocations_7_0= ruleMethodInvocation ) ) )+ ) ) (otherlv_8= '[' ( (lv_arrayIndexes_9_0= ruleIntLiteral ) ) otherlv_10= ']' )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1323:1: ( () ( ( ( (lv_includeObjectInstatiation_1_0= 'new' ) )? ( (lv_methodInvocations_2_0= ruleMethodInvocation ) ) (otherlv_3= '.' ( (lv_methodInvocations_4_0= ruleMethodInvocation ) ) )* ) | ( ( ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) ) ) (otherlv_6= '.' ( (lv_methodInvocations_7_0= ruleMethodInvocation ) ) )+ ) ) (otherlv_8= '[' ( (lv_arrayIndexes_9_0= ruleIntLiteral ) ) otherlv_10= ']' )* )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1294:1: ( () ( ( ( (lv_methodInvocations_1_0= ruleMethodInvocation ) ) (otherlv_2= '.' ( (lv_methodInvocations_3_0= ruleMethodInvocation ) ) )* ) | ( ( (lv_objectExpression_4_0= ruleBaseJRExpression ) ) (otherlv_5= '.' ( (lv_methodInvocations_6_0= ruleMethodInvocation ) ) )+ ) ) (otherlv_7= '[' ( (lv_arrayIndexes_8_0= ruleIntLiteral ) ) otherlv_9= ']' )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1294:2: () ( ( ( (lv_methodInvocations_1_0= ruleMethodInvocation ) ) (otherlv_2= '.' ( (lv_methodInvocations_3_0= ruleMethodInvocation ) ) )* ) | ( ( (lv_objectExpression_4_0= ruleBaseJRExpression ) ) (otherlv_5= '.' ( (lv_methodInvocations_6_0= ruleMethodInvocation ) ) )+ ) ) (otherlv_7= '[' ( (lv_arrayIndexes_8_0= ruleIntLiteral ) ) otherlv_9= ']' )*
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1323:1: ( () ( ( ( (lv_includeObjectInstatiation_1_0= 'new' ) )? ( (lv_methodInvocations_2_0= ruleMethodInvocation ) ) (otherlv_3= '.' ( (lv_methodInvocations_4_0= ruleMethodInvocation ) ) )* ) | ( ( ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) ) ) (otherlv_6= '.' ( (lv_methodInvocations_7_0= ruleMethodInvocation ) ) )+ ) ) (otherlv_8= '[' ( (lv_arrayIndexes_9_0= ruleIntLiteral ) ) otherlv_10= ']' )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1323:2: () ( ( ( (lv_includeObjectInstatiation_1_0= 'new' ) )? ( (lv_methodInvocations_2_0= ruleMethodInvocation ) ) (otherlv_3= '.' ( (lv_methodInvocations_4_0= ruleMethodInvocation ) ) )* ) | ( ( ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) ) ) (otherlv_6= '.' ( (lv_methodInvocations_7_0= ruleMethodInvocation ) ) )+ ) ) (otherlv_8= '[' ( (lv_arrayIndexes_9_0= ruleIntLiteral ) ) otherlv_10= ']' )*
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1294:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1295:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1323:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1324:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -3771,43 +3840,80 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1300:2: ( ( ( (lv_methodInvocations_1_0= ruleMethodInvocation ) ) (otherlv_2= '.' ( (lv_methodInvocations_3_0= ruleMethodInvocation ) ) )* ) | ( ( (lv_objectExpression_4_0= ruleBaseJRExpression ) ) (otherlv_5= '.' ( (lv_methodInvocations_6_0= ruleMethodInvocation ) ) )+ ) )
-            int alt20=2;
-            int LA20_0 = input.LA(1);
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1329:2: ( ( ( (lv_includeObjectInstatiation_1_0= 'new' ) )? ( (lv_methodInvocations_2_0= ruleMethodInvocation ) ) (otherlv_3= '.' ( (lv_methodInvocations_4_0= ruleMethodInvocation ) ) )* ) | ( ( ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) ) ) (otherlv_6= '.' ( (lv_methodInvocations_7_0= ruleMethodInvocation ) ) )+ ) )
+            int alt22=2;
+            int LA22_0 = input.LA(1);
 
-            if ( (LA20_0==RULE_ID) ) {
-                alt20=1;
+            if ( (LA22_0==RULE_ID||LA22_0==44) ) {
+                alt22=1;
             }
-            else if ( ((LA20_0>=43 && LA20_0<=45)) ) {
-                alt20=2;
+            else if ( (LA22_0==RULE_STRING||(LA22_0>=41 && LA22_0<=43)) ) {
+                alt22=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 20, 0, input);
+                    new NoViableAltException("", 22, 0, input);
 
                 throw nvae;
             }
-            switch (alt20) {
+            switch (alt22) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1300:3: ( ( (lv_methodInvocations_1_0= ruleMethodInvocation ) ) (otherlv_2= '.' ( (lv_methodInvocations_3_0= ruleMethodInvocation ) ) )* )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1329:3: ( ( (lv_includeObjectInstatiation_1_0= 'new' ) )? ( (lv_methodInvocations_2_0= ruleMethodInvocation ) ) (otherlv_3= '.' ( (lv_methodInvocations_4_0= ruleMethodInvocation ) ) )* )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1300:3: ( ( (lv_methodInvocations_1_0= ruleMethodInvocation ) ) (otherlv_2= '.' ( (lv_methodInvocations_3_0= ruleMethodInvocation ) ) )* )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1300:4: ( (lv_methodInvocations_1_0= ruleMethodInvocation ) ) (otherlv_2= '.' ( (lv_methodInvocations_3_0= ruleMethodInvocation ) ) )*
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1329:3: ( ( (lv_includeObjectInstatiation_1_0= 'new' ) )? ( (lv_methodInvocations_2_0= ruleMethodInvocation ) ) (otherlv_3= '.' ( (lv_methodInvocations_4_0= ruleMethodInvocation ) ) )* )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1329:4: ( (lv_includeObjectInstatiation_1_0= 'new' ) )? ( (lv_methodInvocations_2_0= ruleMethodInvocation ) ) (otherlv_3= '.' ( (lv_methodInvocations_4_0= ruleMethodInvocation ) ) )*
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1300:4: ( (lv_methodInvocations_1_0= ruleMethodInvocation ) )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1301:1: (lv_methodInvocations_1_0= ruleMethodInvocation )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1329:4: ( (lv_includeObjectInstatiation_1_0= 'new' ) )?
+                    int alt18=2;
+                    int LA18_0 = input.LA(1);
+
+                    if ( (LA18_0==44) ) {
+                        alt18=1;
+                    }
+                    switch (alt18) {
+                        case 1 :
+                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1330:1: (lv_includeObjectInstatiation_1_0= 'new' )
+                            {
+                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1330:1: (lv_includeObjectInstatiation_1_0= 'new' )
+                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1331:3: lv_includeObjectInstatiation_1_0= 'new'
+                            {
+                            lv_includeObjectInstatiation_1_0=(Token)match(input,44,FOLLOW_44_in_ruleMethodsExpression3227); if (state.failed) return current;
+                            if ( state.backtracking==0 ) {
+
+                                      newLeafNode(lv_includeObjectInstatiation_1_0, grammarAccess.getMethodsExpressionAccess().getIncludeObjectInstatiationNewKeyword_1_0_0_0());
+                                  
+                            }
+                            if ( state.backtracking==0 ) {
+
+                              	        if (current==null) {
+                              	            current = createModelElement(grammarAccess.getMethodsExpressionRule());
+                              	        }
+                                     		setWithLastConsumed(current, "includeObjectInstatiation", true, "new");
+                              	    
+                            }
+
+                            }
+
+
+                            }
+                            break;
+
+                    }
+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1344:3: ( (lv_methodInvocations_2_0= ruleMethodInvocation ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1345:1: (lv_methodInvocations_2_0= ruleMethodInvocation )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1301:1: (lv_methodInvocations_1_0= ruleMethodInvocation )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1302:3: lv_methodInvocations_1_0= ruleMethodInvocation
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1345:1: (lv_methodInvocations_2_0= ruleMethodInvocation )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1346:3: lv_methodInvocations_2_0= ruleMethodInvocation
                     {
                     if ( state.backtracking==0 ) {
                        
-                      	        newCompositeNode(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsMethodInvocationParserRuleCall_1_0_0_0()); 
+                      	        newCompositeNode(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsMethodInvocationParserRuleCall_1_0_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3175);
-                    lv_methodInvocations_1_0=ruleMethodInvocation();
+                    pushFollow(FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3262);
+                    lv_methodInvocations_2_0=ruleMethodInvocation();
 
                     state._fsp--;
                     if (state.failed) return current;
@@ -3819,7 +3925,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                              		add(
                              			current, 
                              			"methodInvocations",
-                              		lv_methodInvocations_1_0, 
+                              		lv_methodInvocations_2_0, 
                               		"MethodInvocation");
                       	        afterParserOrEnumRuleCall();
                       	    
@@ -3830,40 +3936,40 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1318:2: (otherlv_2= '.' ( (lv_methodInvocations_3_0= ruleMethodInvocation ) ) )*
-                    loop18:
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1362:2: (otherlv_3= '.' ( (lv_methodInvocations_4_0= ruleMethodInvocation ) ) )*
+                    loop19:
                     do {
-                        int alt18=2;
-                        int LA18_0 = input.LA(1);
+                        int alt19=2;
+                        int LA19_0 = input.LA(1);
 
-                        if ( (LA18_0==41) ) {
-                            alt18=1;
+                        if ( (LA19_0==40) ) {
+                            alt19=1;
                         }
 
 
-                        switch (alt18) {
+                        switch (alt19) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1318:4: otherlv_2= '.' ( (lv_methodInvocations_3_0= ruleMethodInvocation ) )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1362:4: otherlv_3= '.' ( (lv_methodInvocations_4_0= ruleMethodInvocation ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,41,FOLLOW_41_in_ruleMethodsExpression3188); if (state.failed) return current;
+                    	    otherlv_3=(Token)match(input,40,FOLLOW_40_in_ruleMethodsExpression3275); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
-                    	          	newLeafNode(otherlv_2, grammarAccess.getMethodsExpressionAccess().getFullStopKeyword_1_0_1_0());
+                    	          	newLeafNode(otherlv_3, grammarAccess.getMethodsExpressionAccess().getFullStopKeyword_1_0_2_0());
                     	          
                     	    }
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1322:1: ( (lv_methodInvocations_3_0= ruleMethodInvocation ) )
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1323:1: (lv_methodInvocations_3_0= ruleMethodInvocation )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1366:1: ( (lv_methodInvocations_4_0= ruleMethodInvocation ) )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1367:1: (lv_methodInvocations_4_0= ruleMethodInvocation )
                     	    {
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1323:1: (lv_methodInvocations_3_0= ruleMethodInvocation )
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1324:3: lv_methodInvocations_3_0= ruleMethodInvocation
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1367:1: (lv_methodInvocations_4_0= ruleMethodInvocation )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1368:3: lv_methodInvocations_4_0= ruleMethodInvocation
                     	    {
                     	    if ( state.backtracking==0 ) {
                     	       
-                    	      	        newCompositeNode(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsMethodInvocationParserRuleCall_1_0_1_1_0()); 
+                    	      	        newCompositeNode(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsMethodInvocationParserRuleCall_1_0_2_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3209);
-                    	    lv_methodInvocations_3_0=ruleMethodInvocation();
+                    	    pushFollow(FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3296);
+                    	    lv_methodInvocations_4_0=ruleMethodInvocation();
 
                     	    state._fsp--;
                     	    if (state.failed) return current;
@@ -3875,7 +3981,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     	             		add(
                     	             			current, 
                     	             			"methodInvocations",
-                    	              		lv_methodInvocations_3_0, 
+                    	              		lv_methodInvocations_4_0, 
                     	              		"MethodInvocation");
                     	      	        afterParserOrEnumRuleCall();
                     	      	    
@@ -3891,7 +3997,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     	    break;
 
                     	default :
-                    	    break loop18;
+                    	    break loop19;
                         }
                     } while (true);
 
@@ -3902,81 +4008,137 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1341:6: ( ( (lv_objectExpression_4_0= ruleBaseJRExpression ) ) (otherlv_5= '.' ( (lv_methodInvocations_6_0= ruleMethodInvocation ) ) )+ )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1385:6: ( ( ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) ) ) (otherlv_6= '.' ( (lv_methodInvocations_7_0= ruleMethodInvocation ) ) )+ )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1341:6: ( ( (lv_objectExpression_4_0= ruleBaseJRExpression ) ) (otherlv_5= '.' ( (lv_methodInvocations_6_0= ruleMethodInvocation ) ) )+ )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1341:7: ( (lv_objectExpression_4_0= ruleBaseJRExpression ) ) (otherlv_5= '.' ( (lv_methodInvocations_6_0= ruleMethodInvocation ) ) )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1385:6: ( ( ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) ) ) (otherlv_6= '.' ( (lv_methodInvocations_7_0= ruleMethodInvocation ) ) )+ )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1385:7: ( ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) ) ) (otherlv_6= '.' ( (lv_methodInvocations_7_0= ruleMethodInvocation ) ) )+
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1341:7: ( (lv_objectExpression_4_0= ruleBaseJRExpression ) )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1342:1: (lv_objectExpression_4_0= ruleBaseJRExpression )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1385:7: ( ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1386:1: ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1342:1: (lv_objectExpression_4_0= ruleBaseJRExpression )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1343:3: lv_objectExpression_4_0= ruleBaseJRExpression
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1386:1: ( (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1387:1: (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral )
                     {
-                    if ( state.backtracking==0 ) {
-                       
-                      	        newCompositeNode(grammarAccess.getMethodsExpressionAccess().getObjectExpressionBaseJRExpressionParserRuleCall_1_1_0_0()); 
-                      	    
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1387:1: (lv_objectExpression_5_1= ruleBaseJRExpression | lv_objectExpression_5_2= ruleStringLiteral )
+                    int alt20=2;
+                    int LA20_0 = input.LA(1);
+
+                    if ( ((LA20_0>=41 && LA20_0<=43)) ) {
+                        alt20=1;
                     }
-                    pushFollow(FOLLOW_ruleBaseJRExpression_in_ruleMethodsExpression3240);
-                    lv_objectExpression_4_0=ruleBaseJRExpression();
+                    else if ( (LA20_0==RULE_STRING) ) {
+                        alt20=2;
+                    }
+                    else {
+                        if (state.backtracking>0) {state.failed=true; return current;}
+                        NoViableAltException nvae =
+                            new NoViableAltException("", 20, 0, input);
 
-                    state._fsp--;
-                    if (state.failed) return current;
-                    if ( state.backtracking==0 ) {
+                        throw nvae;
+                    }
+                    switch (alt20) {
+                        case 1 :
+                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1388:3: lv_objectExpression_5_1= ruleBaseJRExpression
+                            {
+                            if ( state.backtracking==0 ) {
+                               
+                              	        newCompositeNode(grammarAccess.getMethodsExpressionAccess().getObjectExpressionBaseJRExpressionParserRuleCall_1_1_0_0_0()); 
+                              	    
+                            }
+                            pushFollow(FOLLOW_ruleBaseJRExpression_in_ruleMethodsExpression3329);
+                            lv_objectExpression_5_1=ruleBaseJRExpression();
 
-                      	        if (current==null) {
-                      	            current = createModelElementForParent(grammarAccess.getMethodsExpressionRule());
-                      	        }
-                             		set(
-                             			current, 
-                             			"objectExpression",
-                              		lv_objectExpression_4_0, 
-                              		"BaseJRExpression");
-                      	        afterParserOrEnumRuleCall();
-                      	    
+                            state._fsp--;
+                            if (state.failed) return current;
+                            if ( state.backtracking==0 ) {
+
+                              	        if (current==null) {
+                              	            current = createModelElementForParent(grammarAccess.getMethodsExpressionRule());
+                              	        }
+                                     		set(
+                                     			current, 
+                                     			"objectExpression",
+                                      		lv_objectExpression_5_1, 
+                                      		"BaseJRExpression");
+                              	        afterParserOrEnumRuleCall();
+                              	    
+                            }
+
+                            }
+                            break;
+                        case 2 :
+                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1403:8: lv_objectExpression_5_2= ruleStringLiteral
+                            {
+                            if ( state.backtracking==0 ) {
+                               
+                              	        newCompositeNode(grammarAccess.getMethodsExpressionAccess().getObjectExpressionStringLiteralParserRuleCall_1_1_0_0_1()); 
+                              	    
+                            }
+                            pushFollow(FOLLOW_ruleStringLiteral_in_ruleMethodsExpression3348);
+                            lv_objectExpression_5_2=ruleStringLiteral();
+
+                            state._fsp--;
+                            if (state.failed) return current;
+                            if ( state.backtracking==0 ) {
+
+                              	        if (current==null) {
+                              	            current = createModelElementForParent(grammarAccess.getMethodsExpressionRule());
+                              	        }
+                                     		set(
+                                     			current, 
+                                     			"objectExpression",
+                                      		lv_objectExpression_5_2, 
+                                      		"StringLiteral");
+                              	        afterParserOrEnumRuleCall();
+                              	    
+                            }
+
+                            }
+                            break;
+
                     }
 
-                    }
-
 
                     }
 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1359:2: (otherlv_5= '.' ( (lv_methodInvocations_6_0= ruleMethodInvocation ) ) )+
-                    int cnt19=0;
-                    loop19:
+
+                    }
+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1421:2: (otherlv_6= '.' ( (lv_methodInvocations_7_0= ruleMethodInvocation ) ) )+
+                    int cnt21=0;
+                    loop21:
                     do {
-                        int alt19=2;
-                        int LA19_0 = input.LA(1);
+                        int alt21=2;
+                        int LA21_0 = input.LA(1);
 
-                        if ( (LA19_0==41) ) {
-                            alt19=1;
+                        if ( (LA21_0==40) ) {
+                            alt21=1;
                         }
 
 
-                        switch (alt19) {
+                        switch (alt21) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1359:4: otherlv_5= '.' ( (lv_methodInvocations_6_0= ruleMethodInvocation ) )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1421:4: otherlv_6= '.' ( (lv_methodInvocations_7_0= ruleMethodInvocation ) )
                     	    {
-                    	    otherlv_5=(Token)match(input,41,FOLLOW_41_in_ruleMethodsExpression3253); if (state.failed) return current;
+                    	    otherlv_6=(Token)match(input,40,FOLLOW_40_in_ruleMethodsExpression3364); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
-                    	          	newLeafNode(otherlv_5, grammarAccess.getMethodsExpressionAccess().getFullStopKeyword_1_1_1_0());
+                    	          	newLeafNode(otherlv_6, grammarAccess.getMethodsExpressionAccess().getFullStopKeyword_1_1_1_0());
                     	          
                     	    }
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1363:1: ( (lv_methodInvocations_6_0= ruleMethodInvocation ) )
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1364:1: (lv_methodInvocations_6_0= ruleMethodInvocation )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1425:1: ( (lv_methodInvocations_7_0= ruleMethodInvocation ) )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1426:1: (lv_methodInvocations_7_0= ruleMethodInvocation )
                     	    {
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1364:1: (lv_methodInvocations_6_0= ruleMethodInvocation )
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1365:3: lv_methodInvocations_6_0= ruleMethodInvocation
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1426:1: (lv_methodInvocations_7_0= ruleMethodInvocation )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1427:3: lv_methodInvocations_7_0= ruleMethodInvocation
                     	    {
                     	    if ( state.backtracking==0 ) {
                     	       
                     	      	        newCompositeNode(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsMethodInvocationParserRuleCall_1_1_1_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3274);
-                    	    lv_methodInvocations_6_0=ruleMethodInvocation();
+                    	    pushFollow(FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3385);
+                    	    lv_methodInvocations_7_0=ruleMethodInvocation();
 
                     	    state._fsp--;
                     	    if (state.failed) return current;
@@ -3988,7 +4150,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     	             		add(
                     	             			current, 
                     	             			"methodInvocations",
-                    	              		lv_methodInvocations_6_0, 
+                    	              		lv_methodInvocations_7_0, 
                     	              		"MethodInvocation");
                     	      	        afterParserOrEnumRuleCall();
                     	      	    
@@ -4004,13 +4166,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     	    break;
 
                     	default :
-                    	    if ( cnt19 >= 1 ) break loop19;
+                    	    if ( cnt21 >= 1 ) break loop21;
                     	    if (state.backtracking>0) {state.failed=true; return current;}
                                 EarlyExitException eee =
-                                    new EarlyExitException(19, input);
+                                    new EarlyExitException(21, input);
                                 throw eee;
                         }
-                        cnt19++;
+                        cnt21++;
                     } while (true);
 
 
@@ -4022,40 +4184,40 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1381:6: (otherlv_7= '[' ( (lv_arrayIndexes_8_0= ruleIntLiteral ) ) otherlv_9= ']' )*
-            loop21:
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1443:6: (otherlv_8= '[' ( (lv_arrayIndexes_9_0= ruleIntLiteral ) ) otherlv_10= ']' )*
+            loop23:
             do {
-                int alt21=2;
-                int LA21_0 = input.LA(1);
+                int alt23=2;
+                int LA23_0 = input.LA(1);
 
-                if ( (LA21_0==46) ) {
-                    alt21=1;
+                if ( (LA23_0==45) ) {
+                    alt23=1;
                 }
 
 
-                switch (alt21) {
+                switch (alt23) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1381:8: otherlv_7= '[' ( (lv_arrayIndexes_8_0= ruleIntLiteral ) ) otherlv_9= ']'
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1443:8: otherlv_8= '[' ( (lv_arrayIndexes_9_0= ruleIntLiteral ) ) otherlv_10= ']'
             	    {
-            	    otherlv_7=(Token)match(input,46,FOLLOW_46_in_ruleMethodsExpression3291); if (state.failed) return current;
+            	    otherlv_8=(Token)match(input,45,FOLLOW_45_in_ruleMethodsExpression3402); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
-            	          	newLeafNode(otherlv_7, grammarAccess.getMethodsExpressionAccess().getLeftSquareBracketKeyword_2_0());
+            	          	newLeafNode(otherlv_8, grammarAccess.getMethodsExpressionAccess().getLeftSquareBracketKeyword_2_0());
             	          
             	    }
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1385:1: ( (lv_arrayIndexes_8_0= ruleIntLiteral ) )
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1386:1: (lv_arrayIndexes_8_0= ruleIntLiteral )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1447:1: ( (lv_arrayIndexes_9_0= ruleIntLiteral ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1448:1: (lv_arrayIndexes_9_0= ruleIntLiteral )
             	    {
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1386:1: (lv_arrayIndexes_8_0= ruleIntLiteral )
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1387:3: lv_arrayIndexes_8_0= ruleIntLiteral
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1448:1: (lv_arrayIndexes_9_0= ruleIntLiteral )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1449:3: lv_arrayIndexes_9_0= ruleIntLiteral
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getMethodsExpressionAccess().getArrayIndexesIntLiteralParserRuleCall_2_1_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleIntLiteral_in_ruleMethodsExpression3312);
-            	    lv_arrayIndexes_8_0=ruleIntLiteral();
+            	    pushFollow(FOLLOW_ruleIntLiteral_in_ruleMethodsExpression3423);
+            	    lv_arrayIndexes_9_0=ruleIntLiteral();
 
             	    state._fsp--;
             	    if (state.failed) return current;
@@ -4067,7 +4229,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             	             		add(
             	             			current, 
             	             			"arrayIndexes",
-            	              		lv_arrayIndexes_8_0, 
+            	              		lv_arrayIndexes_9_0, 
             	              		"IntLiteral");
             	      	        afterParserOrEnumRuleCall();
             	      	    
@@ -4078,10 +4240,10 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             	    }
 
-            	    otherlv_9=(Token)match(input,47,FOLLOW_47_in_ruleMethodsExpression3324); if (state.failed) return current;
+            	    otherlv_10=(Token)match(input,46,FOLLOW_46_in_ruleMethodsExpression3435); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
-            	          	newLeafNode(otherlv_9, grammarAccess.getMethodsExpressionAccess().getRightSquareBracketKeyword_2_2());
+            	          	newLeafNode(otherlv_10, grammarAccess.getMethodsExpressionAccess().getRightSquareBracketKeyword_2_2());
             	          
             	    }
 
@@ -4089,7 +4251,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             	    break;
 
             	default :
-            	    break loop21;
+            	    break loop23;
                 }
             } while (true);
 
@@ -4116,7 +4278,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleLiteralExpression"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1415:1: entryRuleLiteralExpression returns [EObject current=null] : iv_ruleLiteralExpression= ruleLiteralExpression EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1477:1: entryRuleLiteralExpression returns [EObject current=null] : iv_ruleLiteralExpression= ruleLiteralExpression EOF ;
     public final EObject entryRuleLiteralExpression() throws RecognitionException {
         EObject current = null;
 
@@ -4124,13 +4286,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1416:2: (iv_ruleLiteralExpression= ruleLiteralExpression EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1417:2: iv_ruleLiteralExpression= ruleLiteralExpression EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1478:2: (iv_ruleLiteralExpression= ruleLiteralExpression EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1479:2: iv_ruleLiteralExpression= ruleLiteralExpression EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getLiteralExpressionRule()); 
             }
-            pushFollow(FOLLOW_ruleLiteralExpression_in_entryRuleLiteralExpression3362);
+            pushFollow(FOLLOW_ruleLiteralExpression_in_entryRuleLiteralExpression3473);
             iv_ruleLiteralExpression=ruleLiteralExpression();
 
             state._fsp--;
@@ -4138,7 +4300,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleLiteralExpression; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleLiteralExpression3372); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleLiteralExpression3483); if (state.failed) return current;
 
             }
 
@@ -4156,7 +4318,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleLiteralExpression"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1424:1: ruleLiteralExpression returns [EObject current=null] : (this_IntLiteral_0= ruleIntLiteral | this_LongLiteral_1= ruleLongLiteral | this_FloatLiteral_2= ruleFloatLiteral | this_DoubleLiteral_3= ruleDoubleLiteral | this_CharLiteral_4= ruleCharLiteral | this_StringLiteral_5= ruleStringLiteral | this_BooleanLiteral_6= ruleBooleanLiteral | this_NullLiteral_7= ruleNullLiteral ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1486:1: ruleLiteralExpression returns [EObject current=null] : (this_IntLiteral_0= ruleIntLiteral | this_LongLiteral_1= ruleLongLiteral | this_FloatLiteral_2= ruleFloatLiteral | this_DoubleLiteral_3= ruleDoubleLiteral | this_CharLiteral_4= ruleCharLiteral | this_StringLiteral_5= ruleStringLiteral | this_BooleanLiteral_6= ruleBooleanLiteral | this_NullLiteral_7= ruleNullLiteral ) ;
     public final EObject ruleLiteralExpression() throws RecognitionException {
         EObject current = null;
 
@@ -4180,75 +4342,71 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1427:28: ( (this_IntLiteral_0= ruleIntLiteral | this_LongLiteral_1= ruleLongLiteral | this_FloatLiteral_2= ruleFloatLiteral | this_DoubleLiteral_3= ruleDoubleLiteral | this_CharLiteral_4= ruleCharLiteral | this_StringLiteral_5= ruleStringLiteral | this_BooleanLiteral_6= ruleBooleanLiteral | this_NullLiteral_7= ruleNullLiteral ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1428:1: (this_IntLiteral_0= ruleIntLiteral | this_LongLiteral_1= ruleLongLiteral | this_FloatLiteral_2= ruleFloatLiteral | this_DoubleLiteral_3= ruleDoubleLiteral | this_CharLiteral_4= ruleCharLiteral | this_StringLiteral_5= ruleStringLiteral | this_BooleanLiteral_6= ruleBooleanLiteral | this_NullLiteral_7= ruleNullLiteral )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1489:28: ( (this_IntLiteral_0= ruleIntLiteral | this_LongLiteral_1= ruleLongLiteral | this_FloatLiteral_2= ruleFloatLiteral | this_DoubleLiteral_3= ruleDoubleLiteral | this_CharLiteral_4= ruleCharLiteral | this_StringLiteral_5= ruleStringLiteral | this_BooleanLiteral_6= ruleBooleanLiteral | this_NullLiteral_7= ruleNullLiteral ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1490:1: (this_IntLiteral_0= ruleIntLiteral | this_LongLiteral_1= ruleLongLiteral | this_FloatLiteral_2= ruleFloatLiteral | this_DoubleLiteral_3= ruleDoubleLiteral | this_CharLiteral_4= ruleCharLiteral | this_StringLiteral_5= ruleStringLiteral | this_BooleanLiteral_6= ruleBooleanLiteral | this_NullLiteral_7= ruleNullLiteral )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1428:1: (this_IntLiteral_0= ruleIntLiteral | this_LongLiteral_1= ruleLongLiteral | this_FloatLiteral_2= ruleFloatLiteral | this_DoubleLiteral_3= ruleDoubleLiteral | this_CharLiteral_4= ruleCharLiteral | this_StringLiteral_5= ruleStringLiteral | this_BooleanLiteral_6= ruleBooleanLiteral | this_NullLiteral_7= ruleNullLiteral )
-            int alt22=8;
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1490:1: (this_IntLiteral_0= ruleIntLiteral | this_LongLiteral_1= ruleLongLiteral | this_FloatLiteral_2= ruleFloatLiteral | this_DoubleLiteral_3= ruleDoubleLiteral | this_CharLiteral_4= ruleCharLiteral | this_StringLiteral_5= ruleStringLiteral | this_BooleanLiteral_6= ruleBooleanLiteral | this_NullLiteral_7= ruleNullLiteral )
+            int alt24=8;
             switch ( input.LA(1) ) {
             case RULE_INT:
                 {
-                alt22=1;
+                alt24=1;
                 }
                 break;
             case RULE_LONG:
                 {
-                alt22=2;
+                alt24=2;
                 }
                 break;
             case RULE_FLOAT:
                 {
-                alt22=3;
+                alt24=3;
                 }
                 break;
             case RULE_DOUBLE:
                 {
-                alt22=4;
+                alt24=4;
                 }
                 break;
             case RULE_CHAR:
                 {
-                alt22=5;
+                alt24=5;
                 }
                 break;
             case RULE_STRING:
                 {
-                alt22=6;
+                alt24=6;
                 }
                 break;
+            case 47:
             case 48:
-            case 49:
-            case 50:
-            case 51:
-            case 52:
-            case 53:
                 {
-                alt22=7;
+                alt24=7;
                 }
                 break;
-            case 54:
+            case 49:
                 {
-                alt22=8;
+                alt24=8;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 22, 0, input);
+                    new NoViableAltException("", 24, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt22) {
+            switch (alt24) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1429:5: this_IntLiteral_0= ruleIntLiteral
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1491:5: this_IntLiteral_0= ruleIntLiteral
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getLiteralExpressionAccess().getIntLiteralParserRuleCall_0()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleIntLiteral_in_ruleLiteralExpression3419);
+                    pushFollow(FOLLOW_ruleIntLiteral_in_ruleLiteralExpression3530);
                     this_IntLiteral_0=ruleIntLiteral();
 
                     state._fsp--;
@@ -4263,14 +4421,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1439:5: this_LongLiteral_1= ruleLongLiteral
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1501:5: this_LongLiteral_1= ruleLongLiteral
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getLiteralExpressionAccess().getLongLiteralParserRuleCall_1()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleLongLiteral_in_ruleLiteralExpression3446);
+                    pushFollow(FOLLOW_ruleLongLiteral_in_ruleLiteralExpression3557);
                     this_LongLiteral_1=ruleLongLiteral();
 
                     state._fsp--;
@@ -4285,14 +4443,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 3 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1449:5: this_FloatLiteral_2= ruleFloatLiteral
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1511:5: this_FloatLiteral_2= ruleFloatLiteral
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getLiteralExpressionAccess().getFloatLiteralParserRuleCall_2()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleFloatLiteral_in_ruleLiteralExpression3473);
+                    pushFollow(FOLLOW_ruleFloatLiteral_in_ruleLiteralExpression3584);
                     this_FloatLiteral_2=ruleFloatLiteral();
 
                     state._fsp--;
@@ -4307,14 +4465,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 4 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1459:5: this_DoubleLiteral_3= ruleDoubleLiteral
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1521:5: this_DoubleLiteral_3= ruleDoubleLiteral
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getLiteralExpressionAccess().getDoubleLiteralParserRuleCall_3()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleDoubleLiteral_in_ruleLiteralExpression3500);
+                    pushFollow(FOLLOW_ruleDoubleLiteral_in_ruleLiteralExpression3611);
                     this_DoubleLiteral_3=ruleDoubleLiteral();
 
                     state._fsp--;
@@ -4329,14 +4487,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 5 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1469:5: this_CharLiteral_4= ruleCharLiteral
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1531:5: this_CharLiteral_4= ruleCharLiteral
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getLiteralExpressionAccess().getCharLiteralParserRuleCall_4()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleCharLiteral_in_ruleLiteralExpression3527);
+                    pushFollow(FOLLOW_ruleCharLiteral_in_ruleLiteralExpression3638);
                     this_CharLiteral_4=ruleCharLiteral();
 
                     state._fsp--;
@@ -4351,14 +4509,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 6 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1479:5: this_StringLiteral_5= ruleStringLiteral
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1541:5: this_StringLiteral_5= ruleStringLiteral
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getLiteralExpressionAccess().getStringLiteralParserRuleCall_5()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleStringLiteral_in_ruleLiteralExpression3554);
+                    pushFollow(FOLLOW_ruleStringLiteral_in_ruleLiteralExpression3665);
                     this_StringLiteral_5=ruleStringLiteral();
 
                     state._fsp--;
@@ -4373,14 +4531,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 7 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1489:5: this_BooleanLiteral_6= ruleBooleanLiteral
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1551:5: this_BooleanLiteral_6= ruleBooleanLiteral
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getLiteralExpressionAccess().getBooleanLiteralParserRuleCall_6()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleBooleanLiteral_in_ruleLiteralExpression3581);
+                    pushFollow(FOLLOW_ruleBooleanLiteral_in_ruleLiteralExpression3692);
                     this_BooleanLiteral_6=ruleBooleanLiteral();
 
                     state._fsp--;
@@ -4395,14 +4553,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 8 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1499:5: this_NullLiteral_7= ruleNullLiteral
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1561:5: this_NullLiteral_7= ruleNullLiteral
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getLiteralExpressionAccess().getNullLiteralParserRuleCall_7()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleNullLiteral_in_ruleLiteralExpression3608);
+                    pushFollow(FOLLOW_ruleNullLiteral_in_ruleLiteralExpression3719);
                     this_NullLiteral_7=ruleNullLiteral();
 
                     state._fsp--;
@@ -4439,7 +4597,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleIntLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1515:1: entryRuleIntLiteral returns [EObject current=null] : iv_ruleIntLiteral= ruleIntLiteral EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1577:1: entryRuleIntLiteral returns [EObject current=null] : iv_ruleIntLiteral= ruleIntLiteral EOF ;
     public final EObject entryRuleIntLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -4447,13 +4605,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1516:2: (iv_ruleIntLiteral= ruleIntLiteral EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1517:2: iv_ruleIntLiteral= ruleIntLiteral EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1578:2: (iv_ruleIntLiteral= ruleIntLiteral EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1579:2: iv_ruleIntLiteral= ruleIntLiteral EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getIntLiteralRule()); 
             }
-            pushFollow(FOLLOW_ruleIntLiteral_in_entryRuleIntLiteral3643);
+            pushFollow(FOLLOW_ruleIntLiteral_in_entryRuleIntLiteral3754);
             iv_ruleIntLiteral=ruleIntLiteral();
 
             state._fsp--;
@@ -4461,7 +4619,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleIntLiteral; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleIntLiteral3653); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleIntLiteral3764); if (state.failed) return current;
 
             }
 
@@ -4479,7 +4637,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleIntLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1524:1: ruleIntLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_INT ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1586:1: ruleIntLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_INT ) ) ) ;
     public final EObject ruleIntLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -4488,14 +4646,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1527:28: ( ( () ( (lv_value_1_0= RULE_INT ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1528:1: ( () ( (lv_value_1_0= RULE_INT ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1589:28: ( ( () ( (lv_value_1_0= RULE_INT ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1590:1: ( () ( (lv_value_1_0= RULE_INT ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1528:1: ( () ( (lv_value_1_0= RULE_INT ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1528:2: () ( (lv_value_1_0= RULE_INT ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1590:1: ( () ( (lv_value_1_0= RULE_INT ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1590:2: () ( (lv_value_1_0= RULE_INT ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1528:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1529:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1590:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1591:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -4507,13 +4665,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1534:2: ( (lv_value_1_0= RULE_INT ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1535:1: (lv_value_1_0= RULE_INT )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1596:2: ( (lv_value_1_0= RULE_INT ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1597:1: (lv_value_1_0= RULE_INT )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1535:1: (lv_value_1_0= RULE_INT )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1536:3: lv_value_1_0= RULE_INT
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1597:1: (lv_value_1_0= RULE_INT )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1598:3: lv_value_1_0= RULE_INT
             {
-            lv_value_1_0=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleIntLiteral3704); if (state.failed) return current;
+            lv_value_1_0=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleIntLiteral3815); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_value_1_0, grammarAccess.getIntLiteralAccess().getValueINTTerminalRuleCall_1_0()); 
@@ -4560,7 +4718,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleLongLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1560:1: entryRuleLongLiteral returns [EObject current=null] : iv_ruleLongLiteral= ruleLongLiteral EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1622:1: entryRuleLongLiteral returns [EObject current=null] : iv_ruleLongLiteral= ruleLongLiteral EOF ;
     public final EObject entryRuleLongLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -4568,13 +4726,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1561:2: (iv_ruleLongLiteral= ruleLongLiteral EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1562:2: iv_ruleLongLiteral= ruleLongLiteral EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1623:2: (iv_ruleLongLiteral= ruleLongLiteral EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1624:2: iv_ruleLongLiteral= ruleLongLiteral EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getLongLiteralRule()); 
             }
-            pushFollow(FOLLOW_ruleLongLiteral_in_entryRuleLongLiteral3745);
+            pushFollow(FOLLOW_ruleLongLiteral_in_entryRuleLongLiteral3856);
             iv_ruleLongLiteral=ruleLongLiteral();
 
             state._fsp--;
@@ -4582,7 +4740,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleLongLiteral; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleLongLiteral3755); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleLongLiteral3866); if (state.failed) return current;
 
             }
 
@@ -4600,7 +4758,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleLongLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1569:1: ruleLongLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_LONG ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1631:1: ruleLongLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_LONG ) ) ) ;
     public final EObject ruleLongLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -4609,14 +4767,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1572:28: ( ( () ( (lv_value_1_0= RULE_LONG ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1573:1: ( () ( (lv_value_1_0= RULE_LONG ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1634:28: ( ( () ( (lv_value_1_0= RULE_LONG ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1635:1: ( () ( (lv_value_1_0= RULE_LONG ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1573:1: ( () ( (lv_value_1_0= RULE_LONG ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1573:2: () ( (lv_value_1_0= RULE_LONG ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1635:1: ( () ( (lv_value_1_0= RULE_LONG ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1635:2: () ( (lv_value_1_0= RULE_LONG ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1573:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1574:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1635:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1636:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -4628,13 +4786,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1579:2: ( (lv_value_1_0= RULE_LONG ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1580:1: (lv_value_1_0= RULE_LONG )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1641:2: ( (lv_value_1_0= RULE_LONG ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1642:1: (lv_value_1_0= RULE_LONG )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1580:1: (lv_value_1_0= RULE_LONG )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1581:3: lv_value_1_0= RULE_LONG
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1642:1: (lv_value_1_0= RULE_LONG )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1643:3: lv_value_1_0= RULE_LONG
             {
-            lv_value_1_0=(Token)match(input,RULE_LONG,FOLLOW_RULE_LONG_in_ruleLongLiteral3806); if (state.failed) return current;
+            lv_value_1_0=(Token)match(input,RULE_LONG,FOLLOW_RULE_LONG_in_ruleLongLiteral3917); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_value_1_0, grammarAccess.getLongLiteralAccess().getValueLONGTerminalRuleCall_1_0()); 
@@ -4681,7 +4839,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleFloatLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1605:1: entryRuleFloatLiteral returns [EObject current=null] : iv_ruleFloatLiteral= ruleFloatLiteral EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1667:1: entryRuleFloatLiteral returns [EObject current=null] : iv_ruleFloatLiteral= ruleFloatLiteral EOF ;
     public final EObject entryRuleFloatLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -4689,13 +4847,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1606:2: (iv_ruleFloatLiteral= ruleFloatLiteral EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1607:2: iv_ruleFloatLiteral= ruleFloatLiteral EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1668:2: (iv_ruleFloatLiteral= ruleFloatLiteral EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1669:2: iv_ruleFloatLiteral= ruleFloatLiteral EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getFloatLiteralRule()); 
             }
-            pushFollow(FOLLOW_ruleFloatLiteral_in_entryRuleFloatLiteral3847);
+            pushFollow(FOLLOW_ruleFloatLiteral_in_entryRuleFloatLiteral3958);
             iv_ruleFloatLiteral=ruleFloatLiteral();
 
             state._fsp--;
@@ -4703,7 +4861,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleFloatLiteral; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleFloatLiteral3857); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleFloatLiteral3968); if (state.failed) return current;
 
             }
 
@@ -4721,7 +4879,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleFloatLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1614:1: ruleFloatLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_FLOAT ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1676:1: ruleFloatLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_FLOAT ) ) ) ;
     public final EObject ruleFloatLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -4730,14 +4888,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1617:28: ( ( () ( (lv_value_1_0= RULE_FLOAT ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1618:1: ( () ( (lv_value_1_0= RULE_FLOAT ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1679:28: ( ( () ( (lv_value_1_0= RULE_FLOAT ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1680:1: ( () ( (lv_value_1_0= RULE_FLOAT ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1618:1: ( () ( (lv_value_1_0= RULE_FLOAT ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1618:2: () ( (lv_value_1_0= RULE_FLOAT ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1680:1: ( () ( (lv_value_1_0= RULE_FLOAT ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1680:2: () ( (lv_value_1_0= RULE_FLOAT ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1618:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1619:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1680:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1681:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -4749,13 +4907,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1624:2: ( (lv_value_1_0= RULE_FLOAT ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1625:1: (lv_value_1_0= RULE_FLOAT )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1686:2: ( (lv_value_1_0= RULE_FLOAT ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1687:1: (lv_value_1_0= RULE_FLOAT )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1625:1: (lv_value_1_0= RULE_FLOAT )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1626:3: lv_value_1_0= RULE_FLOAT
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1687:1: (lv_value_1_0= RULE_FLOAT )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1688:3: lv_value_1_0= RULE_FLOAT
             {
-            lv_value_1_0=(Token)match(input,RULE_FLOAT,FOLLOW_RULE_FLOAT_in_ruleFloatLiteral3908); if (state.failed) return current;
+            lv_value_1_0=(Token)match(input,RULE_FLOAT,FOLLOW_RULE_FLOAT_in_ruleFloatLiteral4019); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_value_1_0, grammarAccess.getFloatLiteralAccess().getValueFLOATTerminalRuleCall_1_0()); 
@@ -4802,7 +4960,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleDoubleLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1650:1: entryRuleDoubleLiteral returns [EObject current=null] : iv_ruleDoubleLiteral= ruleDoubleLiteral EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1712:1: entryRuleDoubleLiteral returns [EObject current=null] : iv_ruleDoubleLiteral= ruleDoubleLiteral EOF ;
     public final EObject entryRuleDoubleLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -4810,13 +4968,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1651:2: (iv_ruleDoubleLiteral= ruleDoubleLiteral EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1652:2: iv_ruleDoubleLiteral= ruleDoubleLiteral EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1713:2: (iv_ruleDoubleLiteral= ruleDoubleLiteral EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1714:2: iv_ruleDoubleLiteral= ruleDoubleLiteral EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getDoubleLiteralRule()); 
             }
-            pushFollow(FOLLOW_ruleDoubleLiteral_in_entryRuleDoubleLiteral3949);
+            pushFollow(FOLLOW_ruleDoubleLiteral_in_entryRuleDoubleLiteral4060);
             iv_ruleDoubleLiteral=ruleDoubleLiteral();
 
             state._fsp--;
@@ -4824,7 +4982,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleDoubleLiteral; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleDoubleLiteral3959); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleDoubleLiteral4070); if (state.failed) return current;
 
             }
 
@@ -4842,7 +5000,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleDoubleLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1659:1: ruleDoubleLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_DOUBLE ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1721:1: ruleDoubleLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_DOUBLE ) ) ) ;
     public final EObject ruleDoubleLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -4851,14 +5009,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1662:28: ( ( () ( (lv_value_1_0= RULE_DOUBLE ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1663:1: ( () ( (lv_value_1_0= RULE_DOUBLE ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1724:28: ( ( () ( (lv_value_1_0= RULE_DOUBLE ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1725:1: ( () ( (lv_value_1_0= RULE_DOUBLE ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1663:1: ( () ( (lv_value_1_0= RULE_DOUBLE ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1663:2: () ( (lv_value_1_0= RULE_DOUBLE ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1725:1: ( () ( (lv_value_1_0= RULE_DOUBLE ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1725:2: () ( (lv_value_1_0= RULE_DOUBLE ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1663:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1664:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1725:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1726:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -4870,13 +5028,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1669:2: ( (lv_value_1_0= RULE_DOUBLE ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1670:1: (lv_value_1_0= RULE_DOUBLE )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1731:2: ( (lv_value_1_0= RULE_DOUBLE ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1732:1: (lv_value_1_0= RULE_DOUBLE )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1670:1: (lv_value_1_0= RULE_DOUBLE )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1671:3: lv_value_1_0= RULE_DOUBLE
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1732:1: (lv_value_1_0= RULE_DOUBLE )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1733:3: lv_value_1_0= RULE_DOUBLE
             {
-            lv_value_1_0=(Token)match(input,RULE_DOUBLE,FOLLOW_RULE_DOUBLE_in_ruleDoubleLiteral4010); if (state.failed) return current;
+            lv_value_1_0=(Token)match(input,RULE_DOUBLE,FOLLOW_RULE_DOUBLE_in_ruleDoubleLiteral4121); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_value_1_0, grammarAccess.getDoubleLiteralAccess().getValueDOUBLETerminalRuleCall_1_0()); 
@@ -4923,7 +5081,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleCharLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1695:1: entryRuleCharLiteral returns [EObject current=null] : iv_ruleCharLiteral= ruleCharLiteral EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1757:1: entryRuleCharLiteral returns [EObject current=null] : iv_ruleCharLiteral= ruleCharLiteral EOF ;
     public final EObject entryRuleCharLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -4931,13 +5089,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1696:2: (iv_ruleCharLiteral= ruleCharLiteral EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1697:2: iv_ruleCharLiteral= ruleCharLiteral EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1758:2: (iv_ruleCharLiteral= ruleCharLiteral EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1759:2: iv_ruleCharLiteral= ruleCharLiteral EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getCharLiteralRule()); 
             }
-            pushFollow(FOLLOW_ruleCharLiteral_in_entryRuleCharLiteral4051);
+            pushFollow(FOLLOW_ruleCharLiteral_in_entryRuleCharLiteral4162);
             iv_ruleCharLiteral=ruleCharLiteral();
 
             state._fsp--;
@@ -4945,7 +5103,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleCharLiteral; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleCharLiteral4061); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleCharLiteral4172); if (state.failed) return current;
 
             }
 
@@ -4963,7 +5121,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleCharLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1704:1: ruleCharLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_CHAR ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1766:1: ruleCharLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_CHAR ) ) ) ;
     public final EObject ruleCharLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -4972,14 +5130,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1707:28: ( ( () ( (lv_value_1_0= RULE_CHAR ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1708:1: ( () ( (lv_value_1_0= RULE_CHAR ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1769:28: ( ( () ( (lv_value_1_0= RULE_CHAR ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1770:1: ( () ( (lv_value_1_0= RULE_CHAR ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1708:1: ( () ( (lv_value_1_0= RULE_CHAR ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1708:2: () ( (lv_value_1_0= RULE_CHAR ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1770:1: ( () ( (lv_value_1_0= RULE_CHAR ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1770:2: () ( (lv_value_1_0= RULE_CHAR ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1708:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1709:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1770:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1771:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -4991,13 +5149,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1714:2: ( (lv_value_1_0= RULE_CHAR ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1715:1: (lv_value_1_0= RULE_CHAR )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1776:2: ( (lv_value_1_0= RULE_CHAR ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1777:1: (lv_value_1_0= RULE_CHAR )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1715:1: (lv_value_1_0= RULE_CHAR )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1716:3: lv_value_1_0= RULE_CHAR
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1777:1: (lv_value_1_0= RULE_CHAR )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1778:3: lv_value_1_0= RULE_CHAR
             {
-            lv_value_1_0=(Token)match(input,RULE_CHAR,FOLLOW_RULE_CHAR_in_ruleCharLiteral4112); if (state.failed) return current;
+            lv_value_1_0=(Token)match(input,RULE_CHAR,FOLLOW_RULE_CHAR_in_ruleCharLiteral4223); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_value_1_0, grammarAccess.getCharLiteralAccess().getValueCHARTerminalRuleCall_1_0()); 
@@ -5044,7 +5202,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleStringLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1740:1: entryRuleStringLiteral returns [EObject current=null] : iv_ruleStringLiteral= ruleStringLiteral EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1802:1: entryRuleStringLiteral returns [EObject current=null] : iv_ruleStringLiteral= ruleStringLiteral EOF ;
     public final EObject entryRuleStringLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -5052,13 +5210,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1741:2: (iv_ruleStringLiteral= ruleStringLiteral EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1742:2: iv_ruleStringLiteral= ruleStringLiteral EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1803:2: (iv_ruleStringLiteral= ruleStringLiteral EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1804:2: iv_ruleStringLiteral= ruleStringLiteral EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getStringLiteralRule()); 
             }
-            pushFollow(FOLLOW_ruleStringLiteral_in_entryRuleStringLiteral4153);
+            pushFollow(FOLLOW_ruleStringLiteral_in_entryRuleStringLiteral4264);
             iv_ruleStringLiteral=ruleStringLiteral();
 
             state._fsp--;
@@ -5066,7 +5224,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleStringLiteral; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleStringLiteral4163); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleStringLiteral4274); if (state.failed) return current;
 
             }
 
@@ -5084,7 +5242,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleStringLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1749:1: ruleStringLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_STRING ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1811:1: ruleStringLiteral returns [EObject current=null] : ( () ( (lv_value_1_0= RULE_STRING ) ) ) ;
     public final EObject ruleStringLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -5093,14 +5251,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1752:28: ( ( () ( (lv_value_1_0= RULE_STRING ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1753:1: ( () ( (lv_value_1_0= RULE_STRING ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1814:28: ( ( () ( (lv_value_1_0= RULE_STRING ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1815:1: ( () ( (lv_value_1_0= RULE_STRING ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1753:1: ( () ( (lv_value_1_0= RULE_STRING ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1753:2: () ( (lv_value_1_0= RULE_STRING ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1815:1: ( () ( (lv_value_1_0= RULE_STRING ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1815:2: () ( (lv_value_1_0= RULE_STRING ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1753:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1754:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1815:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1816:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -5112,13 +5270,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1759:2: ( (lv_value_1_0= RULE_STRING ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1760:1: (lv_value_1_0= RULE_STRING )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1821:2: ( (lv_value_1_0= RULE_STRING ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1822:1: (lv_value_1_0= RULE_STRING )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1760:1: (lv_value_1_0= RULE_STRING )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1761:3: lv_value_1_0= RULE_STRING
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1822:1: (lv_value_1_0= RULE_STRING )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1823:3: lv_value_1_0= RULE_STRING
             {
-            lv_value_1_0=(Token)match(input,RULE_STRING,FOLLOW_RULE_STRING_in_ruleStringLiteral4214); if (state.failed) return current;
+            lv_value_1_0=(Token)match(input,RULE_STRING,FOLLOW_RULE_STRING_in_ruleStringLiteral4325); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_value_1_0, grammarAccess.getStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0()); 
@@ -5165,7 +5323,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleBooleanLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1785:1: entryRuleBooleanLiteral returns [EObject current=null] : iv_ruleBooleanLiteral= ruleBooleanLiteral EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1847:1: entryRuleBooleanLiteral returns [EObject current=null] : iv_ruleBooleanLiteral= ruleBooleanLiteral EOF ;
     public final EObject entryRuleBooleanLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -5173,13 +5331,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1786:2: (iv_ruleBooleanLiteral= ruleBooleanLiteral EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1787:2: iv_ruleBooleanLiteral= ruleBooleanLiteral EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1848:2: (iv_ruleBooleanLiteral= ruleBooleanLiteral EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1849:2: iv_ruleBooleanLiteral= ruleBooleanLiteral EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getBooleanLiteralRule()); 
             }
-            pushFollow(FOLLOW_ruleBooleanLiteral_in_entryRuleBooleanLiteral4255);
+            pushFollow(FOLLOW_ruleBooleanLiteral_in_entryRuleBooleanLiteral4366);
             iv_ruleBooleanLiteral=ruleBooleanLiteral();
 
             state._fsp--;
@@ -5187,7 +5345,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleBooleanLiteral; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleBooleanLiteral4265); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleBooleanLiteral4376); if (state.failed) return current;
 
             }
 
@@ -5205,28 +5363,24 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleBooleanLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1794:1: ruleBooleanLiteral returns [EObject current=null] : ( () (otherlv_1= 'false' | otherlv_2= 'java.lang.Boolean.FALSE' | otherlv_3= 'Boolean.FALSE' | ( ( (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' ) ) ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1856:1: ruleBooleanLiteral returns [EObject current=null] : ( () (otherlv_1= 'false' | ( (lv_isTrue_2_0= 'true' ) ) ) ) ;
     public final EObject ruleBooleanLiteral() throws RecognitionException {
         EObject current = null;
 
         Token otherlv_1=null;
-        Token otherlv_2=null;
-        Token otherlv_3=null;
-        Token lv_isTrue_4_1=null;
-        Token lv_isTrue_4_2=null;
-        Token lv_isTrue_4_3=null;
+        Token lv_isTrue_2_0=null;
 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1797:28: ( ( () (otherlv_1= 'false' | otherlv_2= 'java.lang.Boolean.FALSE' | otherlv_3= 'Boolean.FALSE' | ( ( (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' ) ) ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1798:1: ( () (otherlv_1= 'false' | otherlv_2= 'java.lang.Boolean.FALSE' | otherlv_3= 'Boolean.FALSE' | ( ( (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' ) ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1859:28: ( ( () (otherlv_1= 'false' | ( (lv_isTrue_2_0= 'true' ) ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1860:1: ( () (otherlv_1= 'false' | ( (lv_isTrue_2_0= 'true' ) ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1798:1: ( () (otherlv_1= 'false' | otherlv_2= 'java.lang.Boolean.FALSE' | otherlv_3= 'Boolean.FALSE' | ( ( (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' ) ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1798:2: () (otherlv_1= 'false' | otherlv_2= 'java.lang.Boolean.FALSE' | otherlv_3= 'Boolean.FALSE' | ( ( (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1860:1: ( () (otherlv_1= 'false' | ( (lv_isTrue_2_0= 'true' ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1860:2: () (otherlv_1= 'false' | ( (lv_isTrue_2_0= 'true' ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1798:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1799:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1860:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1861:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -5238,44 +5392,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1804:2: (otherlv_1= 'false' | otherlv_2= 'java.lang.Boolean.FALSE' | otherlv_3= 'Boolean.FALSE' | ( ( (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' ) ) ) )
-            int alt24=4;
-            switch ( input.LA(1) ) {
-            case 48:
-                {
-                alt24=1;
-                }
-                break;
-            case 49:
-                {
-                alt24=2;
-                }
-                break;
-            case 50:
-                {
-                alt24=3;
-                }
-                break;
-            case 51:
-            case 52:
-            case 53:
-                {
-                alt24=4;
-                }
-                break;
-            default:
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1866:2: (otherlv_1= 'false' | ( (lv_isTrue_2_0= 'true' ) ) )
+            int alt25=2;
+            int LA25_0 = input.LA(1);
+
+            if ( (LA25_0==47) ) {
+                alt25=1;
+            }
+            else if ( (LA25_0==48) ) {
+                alt25=2;
+            }
+            else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 24, 0, input);
+                    new NoViableAltException("", 25, 0, input);
 
                 throw nvae;
             }
-
-            switch (alt24) {
+            switch (alt25) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1804:4: otherlv_1= 'false'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1866:4: otherlv_1= 'false'
                     {
-                    otherlv_1=(Token)match(input,48,FOLLOW_48_in_ruleBooleanLiteral4312); if (state.failed) return current;
+                    otherlv_1=(Token)match(input,47,FOLLOW_47_in_ruleBooleanLiteral4423); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_1, grammarAccess.getBooleanLiteralAccess().getFalseKeyword_1_0());
@@ -5285,128 +5423,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1809:7: otherlv_2= 'java.lang.Boolean.FALSE'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1871:6: ( (lv_isTrue_2_0= 'true' ) )
                     {
-                    otherlv_2=(Token)match(input,49,FOLLOW_49_in_ruleBooleanLiteral4330); if (state.failed) return current;
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1871:6: ( (lv_isTrue_2_0= 'true' ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1872:1: (lv_isTrue_2_0= 'true' )
+                    {
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1872:1: (lv_isTrue_2_0= 'true' )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1873:3: lv_isTrue_2_0= 'true'
+                    {
+                    lv_isTrue_2_0=(Token)match(input,48,FOLLOW_48_in_ruleBooleanLiteral4447); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
-                          	newLeafNode(otherlv_2, grammarAccess.getBooleanLiteralAccess().getJavaLangBooleanFALSEKeyword_1_1());
+                              newLeafNode(lv_isTrue_2_0, grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_1_0());
                           
                     }
-
-                    }
-                    break;
-                case 3 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1814:7: otherlv_3= 'Boolean.FALSE'
-                    {
-                    otherlv_3=(Token)match(input,50,FOLLOW_50_in_ruleBooleanLiteral4348); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
-                          	newLeafNode(otherlv_3, grammarAccess.getBooleanLiteralAccess().getBooleanFALSEKeyword_1_2());
-                          
+                      	        if (current==null) {
+                      	            current = createModelElement(grammarAccess.getBooleanLiteralRule());
+                      	        }
+                             		setWithLastConsumed(current, "isTrue", true, "true");
+                      	    
                     }
-
-                    }
-                    break;
-                case 4 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1819:6: ( ( (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' ) ) )
-                    {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1819:6: ( ( (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' ) ) )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1820:1: ( (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' ) )
-                    {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1820:1: ( (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' ) )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1821:1: (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' )
-                    {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1821:1: (lv_isTrue_4_1= 'true' | lv_isTrue_4_2= 'java.lang.Boolean.TRUE' | lv_isTrue_4_3= 'Boolean.TRUE' )
-                    int alt23=3;
-                    switch ( input.LA(1) ) {
-                    case 51:
-                        {
-                        alt23=1;
-                        }
-                        break;
-                    case 52:
-                        {
-                        alt23=2;
-                        }
-                        break;
-                    case 53:
-                        {
-                        alt23=3;
-                        }
-                        break;
-                    default:
-                        if (state.backtracking>0) {state.failed=true; return current;}
-                        NoViableAltException nvae =
-                            new NoViableAltException("", 23, 0, input);
-
-                        throw nvae;
-                    }
-
-                    switch (alt23) {
-                        case 1 :
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1822:3: lv_isTrue_4_1= 'true'
-                            {
-                            lv_isTrue_4_1=(Token)match(input,51,FOLLOW_51_in_ruleBooleanLiteral4374); if (state.failed) return current;
-                            if ( state.backtracking==0 ) {
-
-                                      newLeafNode(lv_isTrue_4_1, grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_3_0_0());
-                                  
-                            }
-                            if ( state.backtracking==0 ) {
-
-                              	        if (current==null) {
-                              	            current = createModelElement(grammarAccess.getBooleanLiteralRule());
-                              	        }
-                                     		setWithLastConsumed(current, "isTrue", true, null);
-                              	    
-                            }
-
-                            }
-                            break;
-                        case 2 :
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1834:8: lv_isTrue_4_2= 'java.lang.Boolean.TRUE'
-                            {
-                            lv_isTrue_4_2=(Token)match(input,52,FOLLOW_52_in_ruleBooleanLiteral4403); if (state.failed) return current;
-                            if ( state.backtracking==0 ) {
-
-                                      newLeafNode(lv_isTrue_4_2, grammarAccess.getBooleanLiteralAccess().getIsTrueJavaLangBooleanTRUEKeyword_1_3_0_1());
-                                  
-                            }
-                            if ( state.backtracking==0 ) {
-
-                              	        if (current==null) {
-                              	            current = createModelElement(grammarAccess.getBooleanLiteralRule());
-                              	        }
-                                     		setWithLastConsumed(current, "isTrue", true, null);
-                              	    
-                            }
-
-                            }
-                            break;
-                        case 3 :
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1846:8: lv_isTrue_4_3= 'Boolean.TRUE'
-                            {
-                            lv_isTrue_4_3=(Token)match(input,53,FOLLOW_53_in_ruleBooleanLiteral4432); if (state.failed) return current;
-                            if ( state.backtracking==0 ) {
-
-                                      newLeafNode(lv_isTrue_4_3, grammarAccess.getBooleanLiteralAccess().getIsTrueBooleanTRUEKeyword_1_3_0_2());
-                                  
-                            }
-                            if ( state.backtracking==0 ) {
-
-                              	        if (current==null) {
-                              	            current = createModelElement(grammarAccess.getBooleanLiteralRule());
-                              	        }
-                                     		setWithLastConsumed(current, "isTrue", true, null);
-                              	    
-                            }
-
-                            }
-                            break;
-
-                    }
-
 
                     }
 
@@ -5442,7 +5480,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleNullLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1869:1: entryRuleNullLiteral returns [EObject current=null] : iv_ruleNullLiteral= ruleNullLiteral EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1894:1: entryRuleNullLiteral returns [EObject current=null] : iv_ruleNullLiteral= ruleNullLiteral EOF ;
     public final EObject entryRuleNullLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -5450,13 +5488,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1870:2: (iv_ruleNullLiteral= ruleNullLiteral EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1871:2: iv_ruleNullLiteral= ruleNullLiteral EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1895:2: (iv_ruleNullLiteral= ruleNullLiteral EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1896:2: iv_ruleNullLiteral= ruleNullLiteral EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getNullLiteralRule()); 
             }
-            pushFollow(FOLLOW_ruleNullLiteral_in_entryRuleNullLiteral4485);
+            pushFollow(FOLLOW_ruleNullLiteral_in_entryRuleNullLiteral4497);
             iv_ruleNullLiteral=ruleNullLiteral();
 
             state._fsp--;
@@ -5464,7 +5502,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleNullLiteral; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleNullLiteral4495); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleNullLiteral4507); if (state.failed) return current;
 
             }
 
@@ -5482,7 +5520,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleNullLiteral"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1878:1: ruleNullLiteral returns [EObject current=null] : ( () otherlv_1= 'null' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1903:1: ruleNullLiteral returns [EObject current=null] : ( () otherlv_1= 'null' ) ;
     public final EObject ruleNullLiteral() throws RecognitionException {
         EObject current = null;
 
@@ -5491,14 +5529,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1881:28: ( ( () otherlv_1= 'null' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1882:1: ( () otherlv_1= 'null' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1906:28: ( ( () otherlv_1= 'null' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1907:1: ( () otherlv_1= 'null' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1882:1: ( () otherlv_1= 'null' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1882:2: () otherlv_1= 'null'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1907:1: ( () otherlv_1= 'null' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1907:2: () otherlv_1= 'null'
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1882:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1883:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1907:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1908:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -5510,7 +5548,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,54,FOLLOW_54_in_ruleNullLiteral4541); if (state.failed) return current;
+            otherlv_1=(Token)match(input,49,FOLLOW_49_in_ruleNullLiteral4553); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getNullLiteralAccess().getNullKeyword_1());
@@ -5539,7 +5577,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleParExpression"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1900:1: entryRuleParExpression returns [EObject current=null] : iv_ruleParExpression= ruleParExpression EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1925:1: entryRuleParExpression returns [EObject current=null] : iv_ruleParExpression= ruleParExpression EOF ;
     public final EObject entryRuleParExpression() throws RecognitionException {
         EObject current = null;
 
@@ -5547,13 +5585,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1901:2: (iv_ruleParExpression= ruleParExpression EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1902:2: iv_ruleParExpression= ruleParExpression EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1926:2: (iv_ruleParExpression= ruleParExpression EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1927:2: iv_ruleParExpression= ruleParExpression EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getParExpressionRule()); 
             }
-            pushFollow(FOLLOW_ruleParExpression_in_entryRuleParExpression4577);
+            pushFollow(FOLLOW_ruleParExpression_in_entryRuleParExpression4589);
             iv_ruleParExpression=ruleParExpression();
 
             state._fsp--;
@@ -5561,7 +5599,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleParExpression; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleParExpression4587); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleParExpression4599); if (state.failed) return current;
 
             }
 
@@ -5579,7 +5617,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleParExpression"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1909:1: ruleParExpression returns [EObject current=null] : (otherlv_0= '(' this_JasperReportsExpression_1= ruleJasperReportsExpression otherlv_2= ')' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1934:1: ruleParExpression returns [EObject current=null] : (otherlv_0= '(' this_JasperReportsExpression_1= ruleJasperReportsExpression otherlv_2= ')' ) ;
     public final EObject ruleParExpression() throws RecognitionException {
         EObject current = null;
 
@@ -5591,13 +5629,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1912:28: ( (otherlv_0= '(' this_JasperReportsExpression_1= ruleJasperReportsExpression otherlv_2= ')' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1913:1: (otherlv_0= '(' this_JasperReportsExpression_1= ruleJasperReportsExpression otherlv_2= ')' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1937:28: ( (otherlv_0= '(' this_JasperReportsExpression_1= ruleJasperReportsExpression otherlv_2= ')' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1938:1: (otherlv_0= '(' this_JasperReportsExpression_1= ruleJasperReportsExpression otherlv_2= ')' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1913:1: (otherlv_0= '(' this_JasperReportsExpression_1= ruleJasperReportsExpression otherlv_2= ')' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1913:3: otherlv_0= '(' this_JasperReportsExpression_1= ruleJasperReportsExpression otherlv_2= ')'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1938:1: (otherlv_0= '(' this_JasperReportsExpression_1= ruleJasperReportsExpression otherlv_2= ')' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1938:3: otherlv_0= '(' this_JasperReportsExpression_1= ruleJasperReportsExpression otherlv_2= ')'
             {
-            otherlv_0=(Token)match(input,55,FOLLOW_55_in_ruleParExpression4624); if (state.failed) return current;
+            otherlv_0=(Token)match(input,50,FOLLOW_50_in_ruleParExpression4636); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getParExpressionAccess().getLeftParenthesisKeyword_0());
@@ -5608,7 +5646,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                       newCompositeNode(grammarAccess.getParExpressionAccess().getJasperReportsExpressionParserRuleCall_1()); 
                   
             }
-            pushFollow(FOLLOW_ruleJasperReportsExpression_in_ruleParExpression4646);
+            pushFollow(FOLLOW_ruleJasperReportsExpression_in_ruleParExpression4658);
             this_JasperReportsExpression_1=ruleJasperReportsExpression();
 
             state._fsp--;
@@ -5619,7 +5657,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                       afterParserOrEnumRuleCall();
                   
             }
-            otherlv_2=(Token)match(input,56,FOLLOW_56_in_ruleParExpression4657); if (state.failed) return current;
+            otherlv_2=(Token)match(input,51,FOLLOW_51_in_ruleParExpression4669); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_2, grammarAccess.getParExpressionAccess().getRightParenthesisKeyword_2());
@@ -5648,7 +5686,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleCastedExpression"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1938:1: entryRuleCastedExpression returns [EObject current=null] : iv_ruleCastedExpression= ruleCastedExpression EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1963:1: entryRuleCastedExpression returns [EObject current=null] : iv_ruleCastedExpression= ruleCastedExpression EOF ;
     public final EObject entryRuleCastedExpression() throws RecognitionException {
         EObject current = null;
 
@@ -5656,13 +5694,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1939:2: (iv_ruleCastedExpression= ruleCastedExpression EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1940:2: iv_ruleCastedExpression= ruleCastedExpression EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1964:2: (iv_ruleCastedExpression= ruleCastedExpression EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1965:2: iv_ruleCastedExpression= ruleCastedExpression EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getCastedExpressionRule()); 
             }
-            pushFollow(FOLLOW_ruleCastedExpression_in_entryRuleCastedExpression4693);
+            pushFollow(FOLLOW_ruleCastedExpression_in_entryRuleCastedExpression4705);
             iv_ruleCastedExpression=ruleCastedExpression();
 
             state._fsp--;
@@ -5670,7 +5708,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleCastedExpression; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleCastedExpression4703); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleCastedExpression4715); if (state.failed) return current;
 
             }
 
@@ -5688,7 +5726,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleCastedExpression"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1947:1: ruleCastedExpression returns [EObject current=null] : ( () otherlv_1= '(' ( (lv_castType_2_0= ruleType ) ) otherlv_3= ')' ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1972:1: ruleCastedExpression returns [EObject current=null] : ( () otherlv_1= '(' ( (lv_castType_2_0= ruleType ) ) otherlv_3= ')' ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) ) ) ;
     public final EObject ruleCastedExpression() throws RecognitionException {
         EObject current = null;
 
@@ -5702,14 +5740,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1950:28: ( ( () otherlv_1= '(' ( (lv_castType_2_0= ruleType ) ) otherlv_3= ')' ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1951:1: ( () otherlv_1= '(' ( (lv_castType_2_0= ruleType ) ) otherlv_3= ')' ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1975:28: ( ( () otherlv_1= '(' ( (lv_castType_2_0= ruleType ) ) otherlv_3= ')' ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1976:1: ( () otherlv_1= '(' ( (lv_castType_2_0= ruleType ) ) otherlv_3= ')' ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1951:1: ( () otherlv_1= '(' ( (lv_castType_2_0= ruleType ) ) otherlv_3= ')' ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1951:2: () otherlv_1= '(' ( (lv_castType_2_0= ruleType ) ) otherlv_3= ')' ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1976:1: ( () otherlv_1= '(' ( (lv_castType_2_0= ruleType ) ) otherlv_3= ')' ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1976:2: () otherlv_1= '(' ( (lv_castType_2_0= ruleType ) ) otherlv_3= ')' ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1951:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1952:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1976:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1977:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -5721,24 +5759,24 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,55,FOLLOW_55_in_ruleCastedExpression4749); if (state.failed) return current;
+            otherlv_1=(Token)match(input,50,FOLLOW_50_in_ruleCastedExpression4761); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getCastedExpressionAccess().getLeftParenthesisKeyword_1());
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1961:1: ( (lv_castType_2_0= ruleType ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1962:1: (lv_castType_2_0= ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1986:1: ( (lv_castType_2_0= ruleType ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1987:1: (lv_castType_2_0= ruleType )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1962:1: (lv_castType_2_0= ruleType )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1963:3: lv_castType_2_0= ruleType
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1987:1: (lv_castType_2_0= ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1988:3: lv_castType_2_0= ruleType
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getCastedExpressionAccess().getCastTypeTypeParserRuleCall_2_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleType_in_ruleCastedExpression4770);
+            pushFollow(FOLLOW_ruleType_in_ruleCastedExpression4782);
             lv_castType_2_0=ruleType();
 
             state._fsp--;
@@ -5762,24 +5800,24 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_3=(Token)match(input,56,FOLLOW_56_in_ruleCastedExpression4782); if (state.failed) return current;
+            otherlv_3=(Token)match(input,51,FOLLOW_51_in_ruleCastedExpression4794); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_3, grammarAccess.getCastedExpressionAccess().getRightParenthesisKeyword_3());
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1983:1: ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1984:1: (lv_castedExpr_4_0= ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2008:1: ( (lv_castedExpr_4_0= ruleJasperReportsExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2009:1: (lv_castedExpr_4_0= ruleJasperReportsExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1984:1: (lv_castedExpr_4_0= ruleJasperReportsExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1985:3: lv_castedExpr_4_0= ruleJasperReportsExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2009:1: (lv_castedExpr_4_0= ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2010:3: lv_castedExpr_4_0= ruleJasperReportsExpression
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getCastedExpressionAccess().getCastedExprJasperReportsExpressionParserRuleCall_4_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleJasperReportsExpression_in_ruleCastedExpression4803);
+            pushFollow(FOLLOW_ruleJasperReportsExpression_in_ruleCastedExpression4815);
             lv_castedExpr_4_0=ruleJasperReportsExpression();
 
             state._fsp--;
@@ -5826,7 +5864,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleType"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2009:1: entryRuleType returns [EObject current=null] : iv_ruleType= ruleType EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2034:1: entryRuleType returns [EObject current=null] : iv_ruleType= ruleType EOF ;
     public final EObject entryRuleType() throws RecognitionException {
         EObject current = null;
 
@@ -5834,13 +5872,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2010:2: (iv_ruleType= ruleType EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2011:2: iv_ruleType= ruleType EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2035:2: (iv_ruleType= ruleType EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2036:2: iv_ruleType= ruleType EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getTypeRule()); 
             }
-            pushFollow(FOLLOW_ruleType_in_entryRuleType4839);
+            pushFollow(FOLLOW_ruleType_in_entryRuleType4851);
             iv_ruleType=ruleType();
 
             state._fsp--;
@@ -5848,7 +5886,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleType; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleType4849); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleType4861); if (state.failed) return current;
 
             }
 
@@ -5866,7 +5904,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleType"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2018:1: ruleType returns [EObject current=null] : ( () ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2043:1: ruleType returns [EObject current=null] : ( () ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) ) ) ;
     public final EObject ruleType() throws RecognitionException {
         EObject current = null;
 
@@ -5878,14 +5916,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2021:28: ( ( () ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2022:1: ( () ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2046:28: ( ( () ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2047:1: ( () ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2022:1: ( () ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2022:2: () ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2047:1: ( () ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2047:2: () ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2022:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2023:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2047:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2048:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -5897,39 +5935,39 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2028:2: ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) )
-            int alt25=2;
-            int LA25_0 = input.LA(1);
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2053:2: ( ( (lv_primitiveType_1_0= rulePrimitiveType ) ) | ( (lv_jvmType_2_0= ruleJvmTypeReference ) ) )
+            int alt26=2;
+            int LA26_0 = input.LA(1);
 
-            if ( ((LA25_0>=65 && LA25_0<=72)) ) {
-                alt25=1;
+            if ( ((LA26_0>=59 && LA26_0<=66)) ) {
+                alt26=1;
             }
-            else if ( (LA25_0==RULE_ID) ) {
-                alt25=2;
+            else if ( (LA26_0==RULE_ID) ) {
+                alt26=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 25, 0, input);
+                    new NoViableAltException("", 26, 0, input);
 
                 throw nvae;
             }
-            switch (alt25) {
+            switch (alt26) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2028:3: ( (lv_primitiveType_1_0= rulePrimitiveType ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2053:3: ( (lv_primitiveType_1_0= rulePrimitiveType ) )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2028:3: ( (lv_primitiveType_1_0= rulePrimitiveType ) )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2029:1: (lv_primitiveType_1_0= rulePrimitiveType )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2053:3: ( (lv_primitiveType_1_0= rulePrimitiveType ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2054:1: (lv_primitiveType_1_0= rulePrimitiveType )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2029:1: (lv_primitiveType_1_0= rulePrimitiveType )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2030:3: lv_primitiveType_1_0= rulePrimitiveType
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2054:1: (lv_primitiveType_1_0= rulePrimitiveType )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2055:3: lv_primitiveType_1_0= rulePrimitiveType
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getTypeAccess().getPrimitiveTypePrimitiveTypeParserRuleCall_1_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_rulePrimitiveType_in_ruleType4905);
+                    pushFollow(FOLLOW_rulePrimitiveType_in_ruleType4917);
                     lv_primitiveType_1_0=rulePrimitiveType();
 
                     state._fsp--;
@@ -5957,20 +5995,20 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2047:6: ( (lv_jvmType_2_0= ruleJvmTypeReference ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2072:6: ( (lv_jvmType_2_0= ruleJvmTypeReference ) )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2047:6: ( (lv_jvmType_2_0= ruleJvmTypeReference ) )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2048:1: (lv_jvmType_2_0= ruleJvmTypeReference )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2072:6: ( (lv_jvmType_2_0= ruleJvmTypeReference ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2073:1: (lv_jvmType_2_0= ruleJvmTypeReference )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2048:1: (lv_jvmType_2_0= ruleJvmTypeReference )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2049:3: lv_jvmType_2_0= ruleJvmTypeReference
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2073:1: (lv_jvmType_2_0= ruleJvmTypeReference )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2074:3: lv_jvmType_2_0= ruleJvmTypeReference
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getTypeAccess().getJvmTypeJvmTypeReferenceParserRuleCall_1_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleJvmTypeReference_in_ruleType4932);
+                    pushFollow(FOLLOW_ruleJvmTypeReference_in_ruleType4944);
                     lv_jvmType_2_0=ruleJvmTypeReference();
 
                     state._fsp--;
@@ -6023,7 +6061,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleArrayCreator"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2073:1: entryRuleArrayCreator returns [EObject current=null] : iv_ruleArrayCreator= ruleArrayCreator EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2098:1: entryRuleArrayCreator returns [EObject current=null] : iv_ruleArrayCreator= ruleArrayCreator EOF ;
     public final EObject entryRuleArrayCreator() throws RecognitionException {
         EObject current = null;
 
@@ -6031,13 +6069,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2074:2: (iv_ruleArrayCreator= ruleArrayCreator EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2075:2: iv_ruleArrayCreator= ruleArrayCreator EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2099:2: (iv_ruleArrayCreator= ruleArrayCreator EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2100:2: iv_ruleArrayCreator= ruleArrayCreator EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getArrayCreatorRule()); 
             }
-            pushFollow(FOLLOW_ruleArrayCreator_in_entryRuleArrayCreator4969);
+            pushFollow(FOLLOW_ruleArrayCreator_in_entryRuleArrayCreator4981);
             iv_ruleArrayCreator=ruleArrayCreator();
 
             state._fsp--;
@@ -6045,7 +6083,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleArrayCreator; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleArrayCreator4979); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleArrayCreator4991); if (state.failed) return current;
 
             }
 
@@ -6063,7 +6101,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleArrayCreator"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2082:1: ruleArrayCreator returns [EObject current=null] : ( () otherlv_1= 'new' ( (lv_type_2_0= ruleType ) ) ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2107:1: ruleArrayCreator returns [EObject current=null] : ( () otherlv_1= 'new' ( (lv_type_2_0= ruleType ) ) ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) ) ) ;
     public final EObject ruleArrayCreator() throws RecognitionException {
         EObject current = null;
 
@@ -6082,14 +6120,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2085:28: ( ( () otherlv_1= 'new' ( (lv_type_2_0= ruleType ) ) ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2086:1: ( () otherlv_1= 'new' ( (lv_type_2_0= ruleType ) ) ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2110:28: ( ( () otherlv_1= 'new' ( (lv_type_2_0= ruleType ) ) ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2111:1: ( () otherlv_1= 'new' ( (lv_type_2_0= ruleType ) ) ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2086:1: ( () otherlv_1= 'new' ( (lv_type_2_0= ruleType ) ) ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2086:2: () otherlv_1= 'new' ( (lv_type_2_0= ruleType ) ) ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2111:1: ( () otherlv_1= 'new' ( (lv_type_2_0= ruleType ) ) ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2111:2: () otherlv_1= 'new' ( (lv_type_2_0= ruleType ) ) ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2086:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2087:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2111:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2112:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -6101,24 +6139,24 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,57,FOLLOW_57_in_ruleArrayCreator5025); if (state.failed) return current;
+            otherlv_1=(Token)match(input,44,FOLLOW_44_in_ruleArrayCreator5037); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getArrayCreatorAccess().getNewKeyword_1());
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2096:1: ( (lv_type_2_0= ruleType ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2097:1: (lv_type_2_0= ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2121:1: ( (lv_type_2_0= ruleType ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2122:1: (lv_type_2_0= ruleType )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2097:1: (lv_type_2_0= ruleType )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2098:3: lv_type_2_0= ruleType
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2122:1: (lv_type_2_0= ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2123:3: lv_type_2_0= ruleType
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getArrayCreatorAccess().getTypeTypeParserRuleCall_2_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleType_in_ruleArrayCreator5046);
+            pushFollow(FOLLOW_ruleType_in_ruleArrayCreator5058);
             lv_type_2_0=ruleType();
 
             state._fsp--;
@@ -6142,23 +6180,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2114:2: ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) )
-            int alt28=2;
-            int LA28_0 = input.LA(1);
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2139:2: ( (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+ | ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) ) )
+            int alt29=2;
+            int LA29_0 = input.LA(1);
 
-            if ( (LA28_0==46) ) {
-                int LA28_1 = input.LA(2);
+            if ( (LA29_0==45) ) {
+                int LA29_1 = input.LA(2);
 
-                if ( (LA28_1==RULE_INT) ) {
-                    alt28=1;
+                if ( (LA29_1==46) ) {
+                    alt29=2;
                 }
-                else if ( (LA28_1==47) ) {
-                    alt28=2;
+                else if ( (LA29_1==RULE_INT) ) {
+                    alt29=1;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return current;}
                     NoViableAltException nvae =
-                        new NoViableAltException("", 28, 1, input);
+                        new NoViableAltException("", 29, 1, input);
 
                     throw nvae;
                 }
@@ -6166,48 +6204,48 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 28, 0, input);
+                    new NoViableAltException("", 29, 0, input);
 
                 throw nvae;
             }
-            switch (alt28) {
+            switch (alt29) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2114:3: (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2139:3: (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2114:3: (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+
-                    int cnt26=0;
-                    loop26:
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2139:3: (otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']' )+
+                    int cnt27=0;
+                    loop27:
                     do {
-                        int alt26=2;
-                        int LA26_0 = input.LA(1);
+                        int alt27=2;
+                        int LA27_0 = input.LA(1);
 
-                        if ( (LA26_0==46) ) {
-                            alt26=1;
+                        if ( (LA27_0==45) ) {
+                            alt27=1;
                         }
 
 
-                        switch (alt26) {
+                        switch (alt27) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2114:5: otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']'
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2139:5: otherlv_3= '[' ( (lv_size_4_0= ruleIntLiteral ) ) otherlv_5= ']'
                     	    {
-                    	    otherlv_3=(Token)match(input,46,FOLLOW_46_in_ruleArrayCreator5060); if (state.failed) return current;
+                    	    otherlv_3=(Token)match(input,45,FOLLOW_45_in_ruleArrayCreator5072); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	          	newLeafNode(otherlv_3, grammarAccess.getArrayCreatorAccess().getLeftSquareBracketKeyword_3_0_0());
                     	          
                     	    }
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2118:1: ( (lv_size_4_0= ruleIntLiteral ) )
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2119:1: (lv_size_4_0= ruleIntLiteral )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2143:1: ( (lv_size_4_0= ruleIntLiteral ) )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2144:1: (lv_size_4_0= ruleIntLiteral )
                     	    {
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2119:1: (lv_size_4_0= ruleIntLiteral )
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2120:3: lv_size_4_0= ruleIntLiteral
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2144:1: (lv_size_4_0= ruleIntLiteral )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2145:3: lv_size_4_0= ruleIntLiteral
                     	    {
                     	    if ( state.backtracking==0 ) {
                     	       
                     	      	        newCompositeNode(grammarAccess.getArrayCreatorAccess().getSizeIntLiteralParserRuleCall_3_0_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleIntLiteral_in_ruleArrayCreator5081);
+                    	    pushFollow(FOLLOW_ruleIntLiteral_in_ruleArrayCreator5093);
                     	    lv_size_4_0=ruleIntLiteral();
 
                     	    state._fsp--;
@@ -6231,61 +6269,10 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
                     	    }
 
-                    	    otherlv_5=(Token)match(input,47,FOLLOW_47_in_ruleArrayCreator5093); if (state.failed) return current;
+                    	    otherlv_5=(Token)match(input,46,FOLLOW_46_in_ruleArrayCreator5105); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	          	newLeafNode(otherlv_5, grammarAccess.getArrayCreatorAccess().getRightSquareBracketKeyword_3_0_2());
-                    	          
-                    	    }
-
-                    	    }
-                    	    break;
-
-                    	default :
-                    	    if ( cnt26 >= 1 ) break loop26;
-                    	    if (state.backtracking>0) {state.failed=true; return current;}
-                                EarlyExitException eee =
-                                    new EarlyExitException(26, input);
-                                throw eee;
-                        }
-                        cnt26++;
-                    } while (true);
-
-
-                    }
-                    break;
-                case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2141:6: ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) )
-                    {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2141:6: ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2141:7: (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) )
-                    {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2141:7: (otherlv_6= '[' otherlv_7= ']' )+
-                    int cnt27=0;
-                    loop27:
-                    do {
-                        int alt27=2;
-                        int LA27_0 = input.LA(1);
-
-                        if ( (LA27_0==46) ) {
-                            alt27=1;
-                        }
-
-
-                        switch (alt27) {
-                    	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2141:9: otherlv_6= '[' otherlv_7= ']'
-                    	    {
-                    	    otherlv_6=(Token)match(input,46,FOLLOW_46_in_ruleArrayCreator5115); if (state.failed) return current;
-                    	    if ( state.backtracking==0 ) {
-
-                    	          	newLeafNode(otherlv_6, grammarAccess.getArrayCreatorAccess().getLeftSquareBracketKeyword_3_1_0_0());
-                    	          
-                    	    }
-                    	    otherlv_7=(Token)match(input,47,FOLLOW_47_in_ruleArrayCreator5127); if (state.failed) return current;
-                    	    if ( state.backtracking==0 ) {
-
-                    	          	newLeafNode(otherlv_7, grammarAccess.getArrayCreatorAccess().getRightSquareBracketKeyword_3_1_0_1());
                     	          
                     	    }
 
@@ -6302,18 +6289,69 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                         cnt27++;
                     } while (true);
 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2149:3: ( (lv_initialization_8_0= ruleArrayInitializer ) )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2150:1: (lv_initialization_8_0= ruleArrayInitializer )
+
+                    }
+                    break;
+                case 2 :
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2166:6: ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2150:1: (lv_initialization_8_0= ruleArrayInitializer )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2151:3: lv_initialization_8_0= ruleArrayInitializer
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2166:6: ( (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2166:7: (otherlv_6= '[' otherlv_7= ']' )+ ( (lv_initialization_8_0= ruleArrayInitializer ) )
+                    {
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2166:7: (otherlv_6= '[' otherlv_7= ']' )+
+                    int cnt28=0;
+                    loop28:
+                    do {
+                        int alt28=2;
+                        int LA28_0 = input.LA(1);
+
+                        if ( (LA28_0==45) ) {
+                            alt28=1;
+                        }
+
+
+                        switch (alt28) {
+                    	case 1 :
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2166:9: otherlv_6= '[' otherlv_7= ']'
+                    	    {
+                    	    otherlv_6=(Token)match(input,45,FOLLOW_45_in_ruleArrayCreator5127); if (state.failed) return current;
+                    	    if ( state.backtracking==0 ) {
+
+                    	          	newLeafNode(otherlv_6, grammarAccess.getArrayCreatorAccess().getLeftSquareBracketKeyword_3_1_0_0());
+                    	          
+                    	    }
+                    	    otherlv_7=(Token)match(input,46,FOLLOW_46_in_ruleArrayCreator5139); if (state.failed) return current;
+                    	    if ( state.backtracking==0 ) {
+
+                    	          	newLeafNode(otherlv_7, grammarAccess.getArrayCreatorAccess().getRightSquareBracketKeyword_3_1_0_1());
+                    	          
+                    	    }
+
+                    	    }
+                    	    break;
+
+                    	default :
+                    	    if ( cnt28 >= 1 ) break loop28;
+                    	    if (state.backtracking>0) {state.failed=true; return current;}
+                                EarlyExitException eee =
+                                    new EarlyExitException(28, input);
+                                throw eee;
+                        }
+                        cnt28++;
+                    } while (true);
+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2174:3: ( (lv_initialization_8_0= ruleArrayInitializer ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2175:1: (lv_initialization_8_0= ruleArrayInitializer )
+                    {
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2175:1: (lv_initialization_8_0= ruleArrayInitializer )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2176:3: lv_initialization_8_0= ruleArrayInitializer
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getArrayCreatorAccess().getInitializationArrayInitializerParserRuleCall_3_1_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleArrayInitializer_in_ruleArrayCreator5150);
+                    pushFollow(FOLLOW_ruleArrayInitializer_in_ruleArrayCreator5162);
                     lv_initialization_8_0=ruleArrayInitializer();
 
                     state._fsp--;
@@ -6369,7 +6407,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleArrayInitializer"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2175:1: entryRuleArrayInitializer returns [EObject current=null] : iv_ruleArrayInitializer= ruleArrayInitializer EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2200:1: entryRuleArrayInitializer returns [EObject current=null] : iv_ruleArrayInitializer= ruleArrayInitializer EOF ;
     public final EObject entryRuleArrayInitializer() throws RecognitionException {
         EObject current = null;
 
@@ -6377,13 +6415,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2176:2: (iv_ruleArrayInitializer= ruleArrayInitializer EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2177:2: iv_ruleArrayInitializer= ruleArrayInitializer EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2201:2: (iv_ruleArrayInitializer= ruleArrayInitializer EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2202:2: iv_ruleArrayInitializer= ruleArrayInitializer EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getArrayInitializerRule()); 
             }
-            pushFollow(FOLLOW_ruleArrayInitializer_in_entryRuleArrayInitializer5188);
+            pushFollow(FOLLOW_ruleArrayInitializer_in_entryRuleArrayInitializer5200);
             iv_ruleArrayInitializer=ruleArrayInitializer();
 
             state._fsp--;
@@ -6391,7 +6429,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleArrayInitializer; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleArrayInitializer5198); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleArrayInitializer5210); if (state.failed) return current;
 
             }
 
@@ -6409,7 +6447,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleArrayInitializer"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2184:1: ruleArrayInitializer returns [EObject current=null] : ( () otherlv_1= '{' ( (lv_initialization_2_0= ruleExpressionList ) )? otherlv_3= '}' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2209:1: ruleArrayInitializer returns [EObject current=null] : ( () otherlv_1= '{' ( (lv_initialization_2_0= ruleExpressionList ) )? otherlv_3= '}' ) ;
     public final EObject ruleArrayInitializer() throws RecognitionException {
         EObject current = null;
 
@@ -6421,14 +6459,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2187:28: ( ( () otherlv_1= '{' ( (lv_initialization_2_0= ruleExpressionList ) )? otherlv_3= '}' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2188:1: ( () otherlv_1= '{' ( (lv_initialization_2_0= ruleExpressionList ) )? otherlv_3= '}' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2212:28: ( ( () otherlv_1= '{' ( (lv_initialization_2_0= ruleExpressionList ) )? otherlv_3= '}' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2213:1: ( () otherlv_1= '{' ( (lv_initialization_2_0= ruleExpressionList ) )? otherlv_3= '}' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2188:1: ( () otherlv_1= '{' ( (lv_initialization_2_0= ruleExpressionList ) )? otherlv_3= '}' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2188:2: () otherlv_1= '{' ( (lv_initialization_2_0= ruleExpressionList ) )? otherlv_3= '}'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2213:1: ( () otherlv_1= '{' ( (lv_initialization_2_0= ruleExpressionList ) )? otherlv_3= '}' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2213:2: () otherlv_1= '{' ( (lv_initialization_2_0= ruleExpressionList ) )? otherlv_3= '}'
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2188:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2189:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2213:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2214:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -6440,32 +6478,32 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,58,FOLLOW_58_in_ruleArrayInitializer5244); if (state.failed) return current;
+            otherlv_1=(Token)match(input,52,FOLLOW_52_in_ruleArrayInitializer5256); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getArrayInitializerAccess().getLeftCurlyBracketKeyword_1());
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2198:1: ( (lv_initialization_2_0= ruleExpressionList ) )?
-            int alt29=2;
-            int LA29_0 = input.LA(1);
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2223:1: ( (lv_initialization_2_0= ruleExpressionList ) )?
+            int alt30=2;
+            int LA30_0 = input.LA(1);
 
-            if ( ((LA29_0>=RULE_INT && LA29_0<=RULE_ID)||(LA29_0>=33 && LA29_0<=34)||(LA29_0>=38 && LA29_0<=40)||(LA29_0>=43 && LA29_0<=45)||(LA29_0>=48 && LA29_0<=55)||LA29_0==57||(LA29_0>=65 && LA29_0<=72)) ) {
-                alt29=1;
+            if ( ((LA30_0>=RULE_INT && LA30_0<=RULE_ID)||(LA30_0>=33 && LA30_0<=34)||(LA30_0>=38 && LA30_0<=39)||(LA30_0>=41 && LA30_0<=44)||(LA30_0>=47 && LA30_0<=50)) ) {
+                alt30=1;
             }
-            switch (alt29) {
+            switch (alt30) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2199:1: (lv_initialization_2_0= ruleExpressionList )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2224:1: (lv_initialization_2_0= ruleExpressionList )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2199:1: (lv_initialization_2_0= ruleExpressionList )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2200:3: lv_initialization_2_0= ruleExpressionList
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2224:1: (lv_initialization_2_0= ruleExpressionList )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2225:3: lv_initialization_2_0= ruleExpressionList
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getArrayInitializerAccess().getInitializationExpressionListParserRuleCall_2_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleExpressionList_in_ruleArrayInitializer5265);
+                    pushFollow(FOLLOW_ruleExpressionList_in_ruleArrayInitializer5277);
                     lv_initialization_2_0=ruleExpressionList();
 
                     state._fsp--;
@@ -6492,7 +6530,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_3=(Token)match(input,59,FOLLOW_59_in_ruleArrayInitializer5278); if (state.failed) return current;
+            otherlv_3=(Token)match(input,53,FOLLOW_53_in_ruleArrayInitializer5290); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_3, grammarAccess.getArrayInitializerAccess().getRightCurlyBracketKeyword_3());
@@ -6520,142 +6558,8 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
     // $ANTLR end "ruleArrayInitializer"
 
 
-    // $ANTLR start "entryRuleObjectCreation"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2228:1: entryRuleObjectCreation returns [EObject current=null] : iv_ruleObjectCreation= ruleObjectCreation EOF ;
-    public final EObject entryRuleObjectCreation() throws RecognitionException {
-        EObject current = null;
-
-        EObject iv_ruleObjectCreation = null;
-
-
-        try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2229:2: (iv_ruleObjectCreation= ruleObjectCreation EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2230:2: iv_ruleObjectCreation= ruleObjectCreation EOF
-            {
-            if ( state.backtracking==0 ) {
-               newCompositeNode(grammarAccess.getObjectCreationRule()); 
-            }
-            pushFollow(FOLLOW_ruleObjectCreation_in_entryRuleObjectCreation5314);
-            iv_ruleObjectCreation=ruleObjectCreation();
-
-            state._fsp--;
-            if (state.failed) return current;
-            if ( state.backtracking==0 ) {
-               current =iv_ruleObjectCreation; 
-            }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleObjectCreation5324); if (state.failed) return current;
-
-            }
-
-        }
-         
-            catch (RecognitionException re) { 
-                recover(input,re); 
-                appendSkippedTokens();
-            } 
-        finally {
-        }
-        return current;
-    }
-    // $ANTLR end "entryRuleObjectCreation"
-
-
-    // $ANTLR start "ruleObjectCreation"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2237:1: ruleObjectCreation returns [EObject current=null] : ( () otherlv_1= 'new' ( (lv_constructorInvocation_2_0= ruleMethodInvocation ) ) ) ;
-    public final EObject ruleObjectCreation() throws RecognitionException {
-        EObject current = null;
-
-        Token otherlv_1=null;
-        EObject lv_constructorInvocation_2_0 = null;
-
-
-         enterRule(); 
-            
-        try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2240:28: ( ( () otherlv_1= 'new' ( (lv_constructorInvocation_2_0= ruleMethodInvocation ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2241:1: ( () otherlv_1= 'new' ( (lv_constructorInvocation_2_0= ruleMethodInvocation ) ) )
-            {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2241:1: ( () otherlv_1= 'new' ( (lv_constructorInvocation_2_0= ruleMethodInvocation ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2241:2: () otherlv_1= 'new' ( (lv_constructorInvocation_2_0= ruleMethodInvocation ) )
-            {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2241:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2242:5: 
-            {
-            if ( state.backtracking==0 ) {
-
-                      current = forceCreateModelElement(
-                          grammarAccess.getObjectCreationAccess().getObjectCreationAction_0(),
-                          current);
-                  
-            }
-
-            }
-
-            otherlv_1=(Token)match(input,57,FOLLOW_57_in_ruleObjectCreation5370); if (state.failed) return current;
-            if ( state.backtracking==0 ) {
-
-                  	newLeafNode(otherlv_1, grammarAccess.getObjectCreationAccess().getNewKeyword_1());
-                  
-            }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2251:1: ( (lv_constructorInvocation_2_0= ruleMethodInvocation ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2252:1: (lv_constructorInvocation_2_0= ruleMethodInvocation )
-            {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2252:1: (lv_constructorInvocation_2_0= ruleMethodInvocation )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2253:3: lv_constructorInvocation_2_0= ruleMethodInvocation
-            {
-            if ( state.backtracking==0 ) {
-               
-              	        newCompositeNode(grammarAccess.getObjectCreationAccess().getConstructorInvocationMethodInvocationParserRuleCall_2_0()); 
-              	    
-            }
-            pushFollow(FOLLOW_ruleMethodInvocation_in_ruleObjectCreation5391);
-            lv_constructorInvocation_2_0=ruleMethodInvocation();
-
-            state._fsp--;
-            if (state.failed) return current;
-            if ( state.backtracking==0 ) {
-
-              	        if (current==null) {
-              	            current = createModelElementForParent(grammarAccess.getObjectCreationRule());
-              	        }
-                     		set(
-                     			current, 
-                     			"constructorInvocation",
-                      		lv_constructorInvocation_2_0, 
-                      		"MethodInvocation");
-              	        afterParserOrEnumRuleCall();
-              	    
-            }
-
-            }
-
-
-            }
-
-
-            }
-
-
-            }
-
-            if ( state.backtracking==0 ) {
-               leaveRule(); 
-            }
-        }
-         
-            catch (RecognitionException re) { 
-                recover(input,re); 
-                appendSkippedTokens();
-            } 
-        finally {
-        }
-        return current;
-    }
-    // $ANTLR end "ruleObjectCreation"
-
-
     // $ANTLR start "entryRuleMethodInvocation"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2277:1: entryRuleMethodInvocation returns [EObject current=null] : iv_ruleMethodInvocation= ruleMethodInvocation EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2253:1: entryRuleMethodInvocation returns [EObject current=null] : iv_ruleMethodInvocation= ruleMethodInvocation EOF ;
     public final EObject entryRuleMethodInvocation() throws RecognitionException {
         EObject current = null;
 
@@ -6663,13 +6567,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2278:2: (iv_ruleMethodInvocation= ruleMethodInvocation EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2279:2: iv_ruleMethodInvocation= ruleMethodInvocation EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2254:2: (iv_ruleMethodInvocation= ruleMethodInvocation EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2255:2: iv_ruleMethodInvocation= ruleMethodInvocation EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMethodInvocationRule()); 
             }
-            pushFollow(FOLLOW_ruleMethodInvocation_in_entryRuleMethodInvocation5427);
+            pushFollow(FOLLOW_ruleMethodInvocation_in_entryRuleMethodInvocation5326);
             iv_ruleMethodInvocation=ruleMethodInvocation();
 
             state._fsp--;
@@ -6677,7 +6581,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleMethodInvocation; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMethodInvocation5437); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMethodInvocation5336); if (state.failed) return current;
 
             }
 
@@ -6695,7 +6599,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleMethodInvocation"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2286:1: ruleMethodInvocation returns [EObject current=null] : ( () ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) ) ( (lv_args_2_0= ruleArguments ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2262:1: ruleMethodInvocation returns [EObject current=null] : ( () ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) ) ( (lv_args_2_0= ruleArguments ) ) ) ;
     public final EObject ruleMethodInvocation() throws RecognitionException {
         EObject current = null;
 
@@ -6707,14 +6611,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2289:28: ( ( () ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) ) ( (lv_args_2_0= ruleArguments ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2290:1: ( () ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) ) ( (lv_args_2_0= ruleArguments ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2265:28: ( ( () ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) ) ( (lv_args_2_0= ruleArguments ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2266:1: ( () ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) ) ( (lv_args_2_0= ruleArguments ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2290:1: ( () ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) ) ( (lv_args_2_0= ruleArguments ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2290:2: () ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) ) ( (lv_args_2_0= ruleArguments ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2266:1: ( () ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) ) ( (lv_args_2_0= ruleArguments ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2266:2: () ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) ) ( (lv_args_2_0= ruleArguments ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2290:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2291:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2266:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2267:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -6726,18 +6630,18 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2296:2: ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2297:1: (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2272:2: ( (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2273:1: (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2297:1: (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2298:3: lv_fullyQualifiedMethodName_1_0= ruleFullMethodName
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2273:1: (lv_fullyQualifiedMethodName_1_0= ruleFullMethodName )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2274:3: lv_fullyQualifiedMethodName_1_0= ruleFullMethodName
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getMethodInvocationAccess().getFullyQualifiedMethodNameFullMethodNameParserRuleCall_1_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleFullMethodName_in_ruleMethodInvocation5492);
+            pushFollow(FOLLOW_ruleFullMethodName_in_ruleMethodInvocation5391);
             lv_fullyQualifiedMethodName_1_0=ruleFullMethodName();
 
             state._fsp--;
@@ -6761,18 +6665,18 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2314:2: ( (lv_args_2_0= ruleArguments ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2315:1: (lv_args_2_0= ruleArguments )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2290:2: ( (lv_args_2_0= ruleArguments ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2291:1: (lv_args_2_0= ruleArguments )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2315:1: (lv_args_2_0= ruleArguments )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2316:3: lv_args_2_0= ruleArguments
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2291:1: (lv_args_2_0= ruleArguments )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2292:3: lv_args_2_0= ruleArguments
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getMethodInvocationAccess().getArgsArgumentsParserRuleCall_2_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleArguments_in_ruleMethodInvocation5513);
+            pushFollow(FOLLOW_ruleArguments_in_ruleMethodInvocation5412);
             lv_args_2_0=ruleArguments();
 
             state._fsp--;
@@ -6819,7 +6723,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleFullMethodName"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2340:1: entryRuleFullMethodName returns [EObject current=null] : iv_ruleFullMethodName= ruleFullMethodName EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2316:1: entryRuleFullMethodName returns [EObject current=null] : iv_ruleFullMethodName= ruleFullMethodName EOF ;
     public final EObject entryRuleFullMethodName() throws RecognitionException {
         EObject current = null;
 
@@ -6827,13 +6731,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2341:2: (iv_ruleFullMethodName= ruleFullMethodName EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2342:2: iv_ruleFullMethodName= ruleFullMethodName EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2317:2: (iv_ruleFullMethodName= ruleFullMethodName EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2318:2: iv_ruleFullMethodName= ruleFullMethodName EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getFullMethodNameRule()); 
             }
-            pushFollow(FOLLOW_ruleFullMethodName_in_entryRuleFullMethodName5549);
+            pushFollow(FOLLOW_ruleFullMethodName_in_entryRuleFullMethodName5448);
             iv_ruleFullMethodName=ruleFullMethodName();
 
             state._fsp--;
@@ -6841,7 +6745,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleFullMethodName; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleFullMethodName5559); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleFullMethodName5458); if (state.failed) return current;
 
             }
 
@@ -6859,7 +6763,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleFullMethodName"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2349:1: ruleFullMethodName returns [EObject current=null] : ( ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )* ( (lv_methodName_2_0= ruleValidID ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2325:1: ruleFullMethodName returns [EObject current=null] : ( ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )* ( (lv_methodName_2_0= ruleValidID ) ) ) ;
     public final EObject ruleFullMethodName() throws RecognitionException {
         EObject current = null;
 
@@ -6872,45 +6776,45 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2352:28: ( ( ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )* ( (lv_methodName_2_0= ruleValidID ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2353:1: ( ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )* ( (lv_methodName_2_0= ruleValidID ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2328:28: ( ( ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )* ( (lv_methodName_2_0= ruleValidID ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2329:1: ( ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )* ( (lv_methodName_2_0= ruleValidID ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2353:1: ( ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )* ( (lv_methodName_2_0= ruleValidID ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2353:2: ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )* ( (lv_methodName_2_0= ruleValidID ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2329:1: ( ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )* ( (lv_methodName_2_0= ruleValidID ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2329:2: ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )* ( (lv_methodName_2_0= ruleValidID ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2353:2: ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )*
-            loop30:
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2329:2: ( ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) ) )*
+            loop31:
             do {
-                int alt30=2;
-                int LA30_0 = input.LA(1);
+                int alt31=2;
+                int LA31_0 = input.LA(1);
 
-                if ( (LA30_0==RULE_ID) ) {
-                    int LA30_1 = input.LA(2);
+                if ( (LA31_0==RULE_ID) ) {
+                    int LA31_1 = input.LA(2);
 
-                    if ( (LA30_1==41) ) {
-                        alt30=1;
+                    if ( (LA31_1==40) ) {
+                        alt31=1;
                     }
 
 
                 }
 
 
-                switch (alt30) {
+                switch (alt31) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2353:3: ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2329:3: ( (lv_prefixQMN_0_0= ruleValidID ) ) ( (lv_dots_1_0= '.' ) )
             	    {
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2353:3: ( (lv_prefixQMN_0_0= ruleValidID ) )
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2354:1: (lv_prefixQMN_0_0= ruleValidID )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2329:3: ( (lv_prefixQMN_0_0= ruleValidID ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2330:1: (lv_prefixQMN_0_0= ruleValidID )
             	    {
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2354:1: (lv_prefixQMN_0_0= ruleValidID )
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2355:3: lv_prefixQMN_0_0= ruleValidID
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2330:1: (lv_prefixQMN_0_0= ruleValidID )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2331:3: lv_prefixQMN_0_0= ruleValidID
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getFullMethodNameAccess().getPrefixQMNValidIDParserRuleCall_0_0_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleValidID_in_ruleFullMethodName5606);
+            	    pushFollow(FOLLOW_ruleValidID_in_ruleFullMethodName5505);
             	    lv_prefixQMN_0_0=ruleValidID();
 
             	    state._fsp--;
@@ -6934,13 +6838,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             	    }
 
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2371:2: ( (lv_dots_1_0= '.' ) )
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2372:1: (lv_dots_1_0= '.' )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2347:2: ( (lv_dots_1_0= '.' ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2348:1: (lv_dots_1_0= '.' )
             	    {
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2372:1: (lv_dots_1_0= '.' )
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2373:3: lv_dots_1_0= '.'
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2348:1: (lv_dots_1_0= '.' )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2349:3: lv_dots_1_0= '.'
             	    {
-            	    lv_dots_1_0=(Token)match(input,41,FOLLOW_41_in_ruleFullMethodName5624); if (state.failed) return current;
+            	    lv_dots_1_0=(Token)match(input,40,FOLLOW_40_in_ruleFullMethodName5523); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	              newLeafNode(lv_dots_1_0, grammarAccess.getFullMethodNameAccess().getDotsFullStopKeyword_0_1_0());
@@ -6965,22 +6869,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             	    break;
 
             	default :
-            	    break loop30;
+            	    break loop31;
                 }
             } while (true);
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2386:4: ( (lv_methodName_2_0= ruleValidID ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2387:1: (lv_methodName_2_0= ruleValidID )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2362:4: ( (lv_methodName_2_0= ruleValidID ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2363:1: (lv_methodName_2_0= ruleValidID )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2387:1: (lv_methodName_2_0= ruleValidID )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2388:3: lv_methodName_2_0= ruleValidID
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2363:1: (lv_methodName_2_0= ruleValidID )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2364:3: lv_methodName_2_0= ruleValidID
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getFullMethodNameAccess().getMethodNameValidIDParserRuleCall_1_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleValidID_in_ruleFullMethodName5660);
+            pushFollow(FOLLOW_ruleValidID_in_ruleFullMethodName5559);
             lv_methodName_2_0=ruleValidID();
 
             state._fsp--;
@@ -7027,7 +6931,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleArguments"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2412:1: entryRuleArguments returns [EObject current=null] : iv_ruleArguments= ruleArguments EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2388:1: entryRuleArguments returns [EObject current=null] : iv_ruleArguments= ruleArguments EOF ;
     public final EObject entryRuleArguments() throws RecognitionException {
         EObject current = null;
 
@@ -7035,13 +6939,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2413:2: (iv_ruleArguments= ruleArguments EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2414:2: iv_ruleArguments= ruleArguments EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2389:2: (iv_ruleArguments= ruleArguments EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2390:2: iv_ruleArguments= ruleArguments EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getArgumentsRule()); 
             }
-            pushFollow(FOLLOW_ruleArguments_in_entryRuleArguments5696);
+            pushFollow(FOLLOW_ruleArguments_in_entryRuleArguments5595);
             iv_ruleArguments=ruleArguments();
 
             state._fsp--;
@@ -7049,7 +6953,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleArguments; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleArguments5706); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleArguments5605); if (state.failed) return current;
 
             }
 
@@ -7067,7 +6971,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleArguments"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2421:1: ruleArguments returns [EObject current=null] : ( () otherlv_1= '(' ( (lv_exprLst_2_0= ruleExpressionList ) )? otherlv_3= ')' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2397:1: ruleArguments returns [EObject current=null] : ( () otherlv_1= '(' ( (lv_exprLst_2_0= ruleExpressionList ) )? otherlv_3= ')' ) ;
     public final EObject ruleArguments() throws RecognitionException {
         EObject current = null;
 
@@ -7079,14 +6983,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2424:28: ( ( () otherlv_1= '(' ( (lv_exprLst_2_0= ruleExpressionList ) )? otherlv_3= ')' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2425:1: ( () otherlv_1= '(' ( (lv_exprLst_2_0= ruleExpressionList ) )? otherlv_3= ')' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2400:28: ( ( () otherlv_1= '(' ( (lv_exprLst_2_0= ruleExpressionList ) )? otherlv_3= ')' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2401:1: ( () otherlv_1= '(' ( (lv_exprLst_2_0= ruleExpressionList ) )? otherlv_3= ')' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2425:1: ( () otherlv_1= '(' ( (lv_exprLst_2_0= ruleExpressionList ) )? otherlv_3= ')' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2425:2: () otherlv_1= '(' ( (lv_exprLst_2_0= ruleExpressionList ) )? otherlv_3= ')'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2401:1: ( () otherlv_1= '(' ( (lv_exprLst_2_0= ruleExpressionList ) )? otherlv_3= ')' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2401:2: () otherlv_1= '(' ( (lv_exprLst_2_0= ruleExpressionList ) )? otherlv_3= ')'
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2425:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2426:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2401:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2402:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -7098,32 +7002,32 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,55,FOLLOW_55_in_ruleArguments5752); if (state.failed) return current;
+            otherlv_1=(Token)match(input,50,FOLLOW_50_in_ruleArguments5651); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getArgumentsAccess().getLeftParenthesisKeyword_1());
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2435:1: ( (lv_exprLst_2_0= ruleExpressionList ) )?
-            int alt31=2;
-            int LA31_0 = input.LA(1);
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2411:1: ( (lv_exprLst_2_0= ruleExpressionList ) )?
+            int alt32=2;
+            int LA32_0 = input.LA(1);
 
-            if ( ((LA31_0>=RULE_INT && LA31_0<=RULE_ID)||(LA31_0>=33 && LA31_0<=34)||(LA31_0>=38 && LA31_0<=40)||(LA31_0>=43 && LA31_0<=45)||(LA31_0>=48 && LA31_0<=55)||LA31_0==57||(LA31_0>=65 && LA31_0<=72)) ) {
-                alt31=1;
+            if ( ((LA32_0>=RULE_INT && LA32_0<=RULE_ID)||(LA32_0>=33 && LA32_0<=34)||(LA32_0>=38 && LA32_0<=39)||(LA32_0>=41 && LA32_0<=44)||(LA32_0>=47 && LA32_0<=50)) ) {
+                alt32=1;
             }
-            switch (alt31) {
+            switch (alt32) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2436:1: (lv_exprLst_2_0= ruleExpressionList )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2412:1: (lv_exprLst_2_0= ruleExpressionList )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2436:1: (lv_exprLst_2_0= ruleExpressionList )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2437:3: lv_exprLst_2_0= ruleExpressionList
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2412:1: (lv_exprLst_2_0= ruleExpressionList )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2413:3: lv_exprLst_2_0= ruleExpressionList
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getArgumentsAccess().getExprLstExpressionListParserRuleCall_2_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleExpressionList_in_ruleArguments5773);
+                    pushFollow(FOLLOW_ruleExpressionList_in_ruleArguments5672);
                     lv_exprLst_2_0=ruleExpressionList();
 
                     state._fsp--;
@@ -7150,7 +7054,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_3=(Token)match(input,56,FOLLOW_56_in_ruleArguments5786); if (state.failed) return current;
+            otherlv_3=(Token)match(input,51,FOLLOW_51_in_ruleArguments5685); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_3, grammarAccess.getArgumentsAccess().getRightParenthesisKeyword_3());
@@ -7179,7 +7083,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleExpressionList"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2465:1: entryRuleExpressionList returns [EObject current=null] : iv_ruleExpressionList= ruleExpressionList EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2441:1: entryRuleExpressionList returns [EObject current=null] : iv_ruleExpressionList= ruleExpressionList EOF ;
     public final EObject entryRuleExpressionList() throws RecognitionException {
         EObject current = null;
 
@@ -7187,13 +7091,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2466:2: (iv_ruleExpressionList= ruleExpressionList EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2467:2: iv_ruleExpressionList= ruleExpressionList EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2442:2: (iv_ruleExpressionList= ruleExpressionList EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2443:2: iv_ruleExpressionList= ruleExpressionList EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getExpressionListRule()); 
             }
-            pushFollow(FOLLOW_ruleExpressionList_in_entryRuleExpressionList5822);
+            pushFollow(FOLLOW_ruleExpressionList_in_entryRuleExpressionList5721);
             iv_ruleExpressionList=ruleExpressionList();
 
             state._fsp--;
@@ -7201,7 +7105,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleExpressionList; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleExpressionList5832); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleExpressionList5731); if (state.failed) return current;
 
             }
 
@@ -7219,7 +7123,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleExpressionList"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2474:1: ruleExpressionList returns [EObject current=null] : ( ( (lv_expressions_0_0= ruleJasperReportsExpression ) ) ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )* ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2450:1: ruleExpressionList returns [EObject current=null] : ( ( (lv_expressions_0_0= ruleJasperReportsExpression ) ) ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )* ) ;
     public final EObject ruleExpressionList() throws RecognitionException {
         EObject current = null;
 
@@ -7232,24 +7136,24 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2477:28: ( ( ( (lv_expressions_0_0= ruleJasperReportsExpression ) ) ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2478:1: ( ( (lv_expressions_0_0= ruleJasperReportsExpression ) ) ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2453:28: ( ( ( (lv_expressions_0_0= ruleJasperReportsExpression ) ) ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2454:1: ( ( (lv_expressions_0_0= ruleJasperReportsExpression ) ) ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )* )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2478:1: ( ( (lv_expressions_0_0= ruleJasperReportsExpression ) ) ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2478:2: ( (lv_expressions_0_0= ruleJasperReportsExpression ) ) ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )*
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2454:1: ( ( (lv_expressions_0_0= ruleJasperReportsExpression ) ) ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2454:2: ( (lv_expressions_0_0= ruleJasperReportsExpression ) ) ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )*
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2478:2: ( (lv_expressions_0_0= ruleJasperReportsExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2479:1: (lv_expressions_0_0= ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2454:2: ( (lv_expressions_0_0= ruleJasperReportsExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2455:1: (lv_expressions_0_0= ruleJasperReportsExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2479:1: (lv_expressions_0_0= ruleJasperReportsExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2480:3: lv_expressions_0_0= ruleJasperReportsExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2455:1: (lv_expressions_0_0= ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2456:3: lv_expressions_0_0= ruleJasperReportsExpression
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getExpressionListAccess().getExpressionsJasperReportsExpressionParserRuleCall_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleJasperReportsExpression_in_ruleExpressionList5878);
+            pushFollow(FOLLOW_ruleJasperReportsExpression_in_ruleExpressionList5777);
             lv_expressions_0_0=ruleJasperReportsExpression();
 
             state._fsp--;
@@ -7273,28 +7177,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2496:2: ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )*
-            loop32:
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2472:2: ( ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) ) )*
+            loop33:
             do {
-                int alt32=2;
-                int LA32_0 = input.LA(1);
+                int alt33=2;
+                int LA33_0 = input.LA(1);
 
-                if ( (LA32_0==60) ) {
-                    alt32=1;
+                if ( (LA33_0==54) ) {
+                    alt33=1;
                 }
 
 
-                switch (alt32) {
+                switch (alt33) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2496:3: ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2472:3: ( (lv_commas_1_0= ',' ) ) ( (lv_expressions_2_0= ruleJasperReportsExpression ) )
             	    {
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2496:3: ( (lv_commas_1_0= ',' ) )
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2497:1: (lv_commas_1_0= ',' )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2472:3: ( (lv_commas_1_0= ',' ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2473:1: (lv_commas_1_0= ',' )
             	    {
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2497:1: (lv_commas_1_0= ',' )
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2498:3: lv_commas_1_0= ','
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2473:1: (lv_commas_1_0= ',' )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2474:3: lv_commas_1_0= ','
             	    {
-            	    lv_commas_1_0=(Token)match(input,60,FOLLOW_60_in_ruleExpressionList5897); if (state.failed) return current;
+            	    lv_commas_1_0=(Token)match(input,54,FOLLOW_54_in_ruleExpressionList5796); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	              newLeafNode(lv_commas_1_0, grammarAccess.getExpressionListAccess().getCommasCommaKeyword_1_0_0());
@@ -7314,18 +7218,18 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             	    }
 
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2511:2: ( (lv_expressions_2_0= ruleJasperReportsExpression ) )
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2512:1: (lv_expressions_2_0= ruleJasperReportsExpression )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2487:2: ( (lv_expressions_2_0= ruleJasperReportsExpression ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2488:1: (lv_expressions_2_0= ruleJasperReportsExpression )
             	    {
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2512:1: (lv_expressions_2_0= ruleJasperReportsExpression )
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2513:3: lv_expressions_2_0= ruleJasperReportsExpression
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2488:1: (lv_expressions_2_0= ruleJasperReportsExpression )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2489:3: lv_expressions_2_0= ruleJasperReportsExpression
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getExpressionListAccess().getExpressionsJasperReportsExpressionParserRuleCall_1_1_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleJasperReportsExpression_in_ruleExpressionList5931);
+            	    pushFollow(FOLLOW_ruleJasperReportsExpression_in_ruleExpressionList5830);
             	    lv_expressions_2_0=ruleJasperReportsExpression();
 
             	    state._fsp--;
@@ -7346,170 +7250,6 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             	    }
 
-
-            	    }
-
-
-            	    }
-            	    break;
-
-            	default :
-            	    break loop32;
-                }
-            } while (true);
-
-
-            }
-
-
-            }
-
-            if ( state.backtracking==0 ) {
-               leaveRule(); 
-            }
-        }
-         
-            catch (RecognitionException re) { 
-                recover(input,re); 
-                appendSkippedTokens();
-            } 
-        finally {
-        }
-        return current;
-    }
-    // $ANTLR end "ruleExpressionList"
-
-
-    // $ANTLR start "entryRuleJvmTypeReference"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2537:1: entryRuleJvmTypeReference returns [EObject current=null] : iv_ruleJvmTypeReference= ruleJvmTypeReference EOF ;
-    public final EObject entryRuleJvmTypeReference() throws RecognitionException {
-        EObject current = null;
-
-        EObject iv_ruleJvmTypeReference = null;
-
-
-        try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2538:2: (iv_ruleJvmTypeReference= ruleJvmTypeReference EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2539:2: iv_ruleJvmTypeReference= ruleJvmTypeReference EOF
-            {
-            if ( state.backtracking==0 ) {
-               newCompositeNode(grammarAccess.getJvmTypeReferenceRule()); 
-            }
-            pushFollow(FOLLOW_ruleJvmTypeReference_in_entryRuleJvmTypeReference5969);
-            iv_ruleJvmTypeReference=ruleJvmTypeReference();
-
-            state._fsp--;
-            if (state.failed) return current;
-            if ( state.backtracking==0 ) {
-               current =iv_ruleJvmTypeReference; 
-            }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmTypeReference5979); if (state.failed) return current;
-
-            }
-
-        }
-         
-            catch (RecognitionException re) { 
-                recover(input,re); 
-                appendSkippedTokens();
-            } 
-        finally {
-        }
-        return current;
-    }
-    // $ANTLR end "entryRuleJvmTypeReference"
-
-
-    // $ANTLR start "ruleJvmTypeReference"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2546:1: ruleJvmTypeReference returns [EObject current=null] : (this_JvmParameterizedTypeReference_0= ruleJvmParameterizedTypeReference ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )* ) ;
-    public final EObject ruleJvmTypeReference() throws RecognitionException {
-        EObject current = null;
-
-        Token otherlv_2=null;
-        Token otherlv_3=null;
-        EObject this_JvmParameterizedTypeReference_0 = null;
-
-
-         enterRule(); 
-            
-        try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2549:28: ( (this_JvmParameterizedTypeReference_0= ruleJvmParameterizedTypeReference ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2550:1: (this_JvmParameterizedTypeReference_0= ruleJvmParameterizedTypeReference ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )* )
-            {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2550:1: (this_JvmParameterizedTypeReference_0= ruleJvmParameterizedTypeReference ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2551:5: this_JvmParameterizedTypeReference_0= ruleJvmParameterizedTypeReference ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )*
-            {
-            if ( state.backtracking==0 ) {
-               
-                      newCompositeNode(grammarAccess.getJvmTypeReferenceAccess().getJvmParameterizedTypeReferenceParserRuleCall_0()); 
-                  
-            }
-            pushFollow(FOLLOW_ruleJvmParameterizedTypeReference_in_ruleJvmTypeReference6026);
-            this_JvmParameterizedTypeReference_0=ruleJvmParameterizedTypeReference();
-
-            state._fsp--;
-            if (state.failed) return current;
-            if ( state.backtracking==0 ) {
-               
-                      current = this_JvmParameterizedTypeReference_0; 
-                      afterParserOrEnumRuleCall();
-                  
-            }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2559:1: ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )*
-            loop33:
-            do {
-                int alt33=2;
-                int LA33_0 = input.LA(1);
-
-                if ( (LA33_0==46) ) {
-                    int LA33_2 = input.LA(2);
-
-                    if ( (LA33_2==47) ) {
-                        int LA33_3 = input.LA(3);
-
-                        if ( (synpred11_InternalJavaJRExpression()) ) {
-                            alt33=1;
-                        }
-
-
-                    }
-
-
-                }
-
-
-                switch (alt33) {
-            	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2559:2: ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' )
-            	    {
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2562:5: ( () otherlv_2= '[' otherlv_3= ']' )
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2562:6: () otherlv_2= '[' otherlv_3= ']'
-            	    {
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2562:6: ()
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2563:5: 
-            	    {
-            	    if ( state.backtracking==0 ) {
-
-            	              current = forceCreateModelElementAndSet(
-            	                  grammarAccess.getJvmTypeReferenceAccess().getJvmGenericArrayTypeReferenceComponentTypeAction_1_0_0(),
-            	                  current);
-            	          
-            	    }
-
-            	    }
-
-            	    otherlv_2=(Token)match(input,46,FOLLOW_46_in_ruleJvmTypeReference6064); if (state.failed) return current;
-            	    if ( state.backtracking==0 ) {
-
-            	          	newLeafNode(otherlv_2, grammarAccess.getJvmTypeReferenceAccess().getLeftSquareBracketKeyword_1_0_1());
-            	          
-            	    }
-            	    otherlv_3=(Token)match(input,47,FOLLOW_47_in_ruleJvmTypeReference6076); if (state.failed) return current;
-            	    if ( state.backtracking==0 ) {
-
-            	          	newLeafNode(otherlv_3, grammarAccess.getJvmTypeReferenceAccess().getRightSquareBracketKeyword_1_0_2());
-            	          
-            	    }
 
             	    }
 
@@ -7541,11 +7281,175 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
         }
         return current;
     }
+    // $ANTLR end "ruleExpressionList"
+
+
+    // $ANTLR start "entryRuleJvmTypeReference"
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2513:1: entryRuleJvmTypeReference returns [EObject current=null] : iv_ruleJvmTypeReference= ruleJvmTypeReference EOF ;
+    public final EObject entryRuleJvmTypeReference() throws RecognitionException {
+        EObject current = null;
+
+        EObject iv_ruleJvmTypeReference = null;
+
+
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2514:2: (iv_ruleJvmTypeReference= ruleJvmTypeReference EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2515:2: iv_ruleJvmTypeReference= ruleJvmTypeReference EOF
+            {
+            if ( state.backtracking==0 ) {
+               newCompositeNode(grammarAccess.getJvmTypeReferenceRule()); 
+            }
+            pushFollow(FOLLOW_ruleJvmTypeReference_in_entryRuleJvmTypeReference5868);
+            iv_ruleJvmTypeReference=ruleJvmTypeReference();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+               current =iv_ruleJvmTypeReference; 
+            }
+            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmTypeReference5878); if (state.failed) return current;
+
+            }
+
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "entryRuleJvmTypeReference"
+
+
+    // $ANTLR start "ruleJvmTypeReference"
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2522:1: ruleJvmTypeReference returns [EObject current=null] : (this_JvmParameterizedTypeReference_0= ruleJvmParameterizedTypeReference ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )* ) ;
+    public final EObject ruleJvmTypeReference() throws RecognitionException {
+        EObject current = null;
+
+        Token otherlv_2=null;
+        Token otherlv_3=null;
+        EObject this_JvmParameterizedTypeReference_0 = null;
+
+
+         enterRule(); 
+            
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2525:28: ( (this_JvmParameterizedTypeReference_0= ruleJvmParameterizedTypeReference ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2526:1: (this_JvmParameterizedTypeReference_0= ruleJvmParameterizedTypeReference ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )* )
+            {
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2526:1: (this_JvmParameterizedTypeReference_0= ruleJvmParameterizedTypeReference ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2527:5: this_JvmParameterizedTypeReference_0= ruleJvmParameterizedTypeReference ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )*
+            {
+            if ( state.backtracking==0 ) {
+               
+                      newCompositeNode(grammarAccess.getJvmTypeReferenceAccess().getJvmParameterizedTypeReferenceParserRuleCall_0()); 
+                  
+            }
+            pushFollow(FOLLOW_ruleJvmParameterizedTypeReference_in_ruleJvmTypeReference5925);
+            this_JvmParameterizedTypeReference_0=ruleJvmParameterizedTypeReference();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+               
+                      current = this_JvmParameterizedTypeReference_0; 
+                      afterParserOrEnumRuleCall();
+                  
+            }
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2535:1: ( ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' ) )*
+            loop34:
+            do {
+                int alt34=2;
+                int LA34_0 = input.LA(1);
+
+                if ( (LA34_0==45) ) {
+                    int LA34_2 = input.LA(2);
+
+                    if ( (LA34_2==46) ) {
+                        int LA34_3 = input.LA(3);
+
+                        if ( (synpred11_InternalJavaJRExpression()) ) {
+                            alt34=1;
+                        }
+
+
+                    }
+
+
+                }
+
+
+                switch (alt34) {
+            	case 1 :
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2535:2: ( ( () '[' ']' ) )=> ( () otherlv_2= '[' otherlv_3= ']' )
+            	    {
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2538:5: ( () otherlv_2= '[' otherlv_3= ']' )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2538:6: () otherlv_2= '[' otherlv_3= ']'
+            	    {
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2538:6: ()
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2539:5: 
+            	    {
+            	    if ( state.backtracking==0 ) {
+
+            	              current = forceCreateModelElementAndSet(
+            	                  grammarAccess.getJvmTypeReferenceAccess().getJvmGenericArrayTypeReferenceComponentTypeAction_1_0_0(),
+            	                  current);
+            	          
+            	    }
+
+            	    }
+
+            	    otherlv_2=(Token)match(input,45,FOLLOW_45_in_ruleJvmTypeReference5963); if (state.failed) return current;
+            	    if ( state.backtracking==0 ) {
+
+            	          	newLeafNode(otherlv_2, grammarAccess.getJvmTypeReferenceAccess().getLeftSquareBracketKeyword_1_0_1());
+            	          
+            	    }
+            	    otherlv_3=(Token)match(input,46,FOLLOW_46_in_ruleJvmTypeReference5975); if (state.failed) return current;
+            	    if ( state.backtracking==0 ) {
+
+            	          	newLeafNode(otherlv_3, grammarAccess.getJvmTypeReferenceAccess().getRightSquareBracketKeyword_1_0_2());
+            	          
+            	    }
+
+            	    }
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop34;
+                }
+            } while (true);
+
+
+            }
+
+
+            }
+
+            if ( state.backtracking==0 ) {
+               leaveRule(); 
+            }
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
     // $ANTLR end "ruleJvmTypeReference"
 
 
     // $ANTLR start "entryRuleJvmParameterizedTypeReference"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2584:1: entryRuleJvmParameterizedTypeReference returns [EObject current=null] : iv_ruleJvmParameterizedTypeReference= ruleJvmParameterizedTypeReference EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2560:1: entryRuleJvmParameterizedTypeReference returns [EObject current=null] : iv_ruleJvmParameterizedTypeReference= ruleJvmParameterizedTypeReference EOF ;
     public final EObject entryRuleJvmParameterizedTypeReference() throws RecognitionException {
         EObject current = null;
 
@@ -7553,13 +7457,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2585:2: (iv_ruleJvmParameterizedTypeReference= ruleJvmParameterizedTypeReference EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2586:2: iv_ruleJvmParameterizedTypeReference= ruleJvmParameterizedTypeReference EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2561:2: (iv_ruleJvmParameterizedTypeReference= ruleJvmParameterizedTypeReference EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2562:2: iv_ruleJvmParameterizedTypeReference= ruleJvmParameterizedTypeReference EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getJvmParameterizedTypeReferenceRule()); 
             }
-            pushFollow(FOLLOW_ruleJvmParameterizedTypeReference_in_entryRuleJvmParameterizedTypeReference6115);
+            pushFollow(FOLLOW_ruleJvmParameterizedTypeReference_in_entryRuleJvmParameterizedTypeReference6014);
             iv_ruleJvmParameterizedTypeReference=ruleJvmParameterizedTypeReference();
 
             state._fsp--;
@@ -7567,7 +7471,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleJvmParameterizedTypeReference; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmParameterizedTypeReference6125); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmParameterizedTypeReference6024); if (state.failed) return current;
 
             }
 
@@ -7585,7 +7489,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleJvmParameterizedTypeReference"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2593:1: ruleJvmParameterizedTypeReference returns [EObject current=null] : ( ( ( ruleQualifiedName ) ) ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )? ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2569:1: ruleJvmParameterizedTypeReference returns [EObject current=null] : ( ( ( ruleQualifiedName ) ) ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )? ) ;
     public final EObject ruleJvmParameterizedTypeReference() throws RecognitionException {
         EObject current = null;
 
@@ -7600,17 +7504,17 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2596:28: ( ( ( ( ruleQualifiedName ) ) ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )? ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2597:1: ( ( ( ruleQualifiedName ) ) ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2572:28: ( ( ( ( ruleQualifiedName ) ) ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )? ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2573:1: ( ( ( ruleQualifiedName ) ) ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )? )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2597:1: ( ( ( ruleQualifiedName ) ) ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )? )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2597:2: ( ( ruleQualifiedName ) ) ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )?
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2573:1: ( ( ( ruleQualifiedName ) ) ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2573:2: ( ( ruleQualifiedName ) ) ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )?
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2597:2: ( ( ruleQualifiedName ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2598:1: ( ruleQualifiedName )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2573:2: ( ( ruleQualifiedName ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2574:1: ( ruleQualifiedName )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2598:1: ( ruleQualifiedName )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2599:3: ruleQualifiedName
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2574:1: ( ruleQualifiedName )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2575:3: ruleQualifiedName
             {
             if ( state.backtracking==0 ) {
 
@@ -7624,7 +7528,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
               	        newCompositeNode(grammarAccess.getJvmParameterizedTypeReferenceAccess().getTypeJvmTypeCrossReference_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleQualifiedName_in_ruleJvmParameterizedTypeReference6173);
+            pushFollow(FOLLOW_ruleQualifiedName_in_ruleJvmParameterizedTypeReference6072);
             ruleQualifiedName();
 
             state._fsp--;
@@ -7640,17 +7544,17 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2612:2: ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )?
-            int alt35=2;
-            alt35 = dfa35.predict(input);
-            switch (alt35) {
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2588:2: ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )?
+            int alt36=2;
+            alt36 = dfa36.predict(input);
+            switch (alt36) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2612:3: ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2588:3: ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>'
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2612:3: ( ( '<' )=>otherlv_1= '<' )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2612:4: ( '<' )=>otherlv_1= '<'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2588:3: ( ( '<' )=>otherlv_1= '<' )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2588:4: ( '<' )=>otherlv_1= '<'
                     {
-                    otherlv_1=(Token)match(input,61,FOLLOW_61_in_ruleJvmParameterizedTypeReference6194); if (state.failed) return current;
+                    otherlv_1=(Token)match(input,55,FOLLOW_55_in_ruleJvmParameterizedTypeReference6093); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_1, grammarAccess.getJvmParameterizedTypeReferenceAccess().getLessThanSignKeyword_1_0());
@@ -7659,18 +7563,18 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2617:2: ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2618:1: (lv_arguments_2_0= ruleJvmArgumentTypeReference )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2593:2: ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2594:1: (lv_arguments_2_0= ruleJvmArgumentTypeReference )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2618:1: (lv_arguments_2_0= ruleJvmArgumentTypeReference )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2619:3: lv_arguments_2_0= ruleJvmArgumentTypeReference
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2594:1: (lv_arguments_2_0= ruleJvmArgumentTypeReference )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2595:3: lv_arguments_2_0= ruleJvmArgumentTypeReference
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getJvmParameterizedTypeReferenceAccess().getArgumentsJvmArgumentTypeReferenceParserRuleCall_1_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleJvmArgumentTypeReference_in_ruleJvmParameterizedTypeReference6216);
+                    pushFollow(FOLLOW_ruleJvmArgumentTypeReference_in_ruleJvmParameterizedTypeReference6115);
                     lv_arguments_2_0=ruleJvmArgumentTypeReference();
 
                     state._fsp--;
@@ -7694,39 +7598,39 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2635:2: (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )*
-                    loop34:
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2611:2: (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )*
+                    loop35:
                     do {
-                        int alt34=2;
-                        int LA34_0 = input.LA(1);
+                        int alt35=2;
+                        int LA35_0 = input.LA(1);
 
-                        if ( (LA34_0==60) ) {
-                            alt34=1;
+                        if ( (LA35_0==54) ) {
+                            alt35=1;
                         }
 
 
-                        switch (alt34) {
+                        switch (alt35) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2635:4: otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2611:4: otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) )
                     	    {
-                    	    otherlv_3=(Token)match(input,60,FOLLOW_60_in_ruleJvmParameterizedTypeReference6229); if (state.failed) return current;
+                    	    otherlv_3=(Token)match(input,54,FOLLOW_54_in_ruleJvmParameterizedTypeReference6128); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	          	newLeafNode(otherlv_3, grammarAccess.getJvmParameterizedTypeReferenceAccess().getCommaKeyword_1_2_0());
                     	          
                     	    }
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2639:1: ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) )
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2640:1: (lv_arguments_4_0= ruleJvmArgumentTypeReference )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2615:1: ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2616:1: (lv_arguments_4_0= ruleJvmArgumentTypeReference )
                     	    {
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2640:1: (lv_arguments_4_0= ruleJvmArgumentTypeReference )
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2641:3: lv_arguments_4_0= ruleJvmArgumentTypeReference
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2616:1: (lv_arguments_4_0= ruleJvmArgumentTypeReference )
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2617:3: lv_arguments_4_0= ruleJvmArgumentTypeReference
                     	    {
                     	    if ( state.backtracking==0 ) {
                     	       
                     	      	        newCompositeNode(grammarAccess.getJvmParameterizedTypeReferenceAccess().getArgumentsJvmArgumentTypeReferenceParserRuleCall_1_2_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleJvmArgumentTypeReference_in_ruleJvmParameterizedTypeReference6250);
+                    	    pushFollow(FOLLOW_ruleJvmArgumentTypeReference_in_ruleJvmParameterizedTypeReference6149);
                     	    lv_arguments_4_0=ruleJvmArgumentTypeReference();
 
                     	    state._fsp--;
@@ -7755,11 +7659,11 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     	    break;
 
                     	default :
-                    	    break loop34;
+                    	    break loop35;
                         }
                     } while (true);
 
-                    otherlv_5=(Token)match(input,62,FOLLOW_62_in_ruleJvmParameterizedTypeReference6264); if (state.failed) return current;
+                    otherlv_5=(Token)match(input,56,FOLLOW_56_in_ruleJvmParameterizedTypeReference6163); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_5, grammarAccess.getJvmParameterizedTypeReferenceAccess().getGreaterThanSignKeyword_1_3());
@@ -7794,7 +7698,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleJvmArgumentTypeReference"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2669:1: entryRuleJvmArgumentTypeReference returns [EObject current=null] : iv_ruleJvmArgumentTypeReference= ruleJvmArgumentTypeReference EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2645:1: entryRuleJvmArgumentTypeReference returns [EObject current=null] : iv_ruleJvmArgumentTypeReference= ruleJvmArgumentTypeReference EOF ;
     public final EObject entryRuleJvmArgumentTypeReference() throws RecognitionException {
         EObject current = null;
 
@@ -7802,13 +7706,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2670:2: (iv_ruleJvmArgumentTypeReference= ruleJvmArgumentTypeReference EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2671:2: iv_ruleJvmArgumentTypeReference= ruleJvmArgumentTypeReference EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2646:2: (iv_ruleJvmArgumentTypeReference= ruleJvmArgumentTypeReference EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2647:2: iv_ruleJvmArgumentTypeReference= ruleJvmArgumentTypeReference EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getJvmArgumentTypeReferenceRule()); 
             }
-            pushFollow(FOLLOW_ruleJvmArgumentTypeReference_in_entryRuleJvmArgumentTypeReference6302);
+            pushFollow(FOLLOW_ruleJvmArgumentTypeReference_in_entryRuleJvmArgumentTypeReference6201);
             iv_ruleJvmArgumentTypeReference=ruleJvmArgumentTypeReference();
 
             state._fsp--;
@@ -7816,7 +7720,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleJvmArgumentTypeReference; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmArgumentTypeReference6312); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmArgumentTypeReference6211); if (state.failed) return current;
 
             }
 
@@ -7834,7 +7738,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleJvmArgumentTypeReference"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2678:1: ruleJvmArgumentTypeReference returns [EObject current=null] : (this_JvmTypeReference_0= ruleJvmTypeReference | this_JvmWildcardTypeReference_1= ruleJvmWildcardTypeReference ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2654:1: ruleJvmArgumentTypeReference returns [EObject current=null] : (this_JvmTypeReference_0= ruleJvmTypeReference | this_JvmWildcardTypeReference_1= ruleJvmWildcardTypeReference ) ;
     public final EObject ruleJvmArgumentTypeReference() throws RecognitionException {
         EObject current = null;
 
@@ -7846,36 +7750,36 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2681:28: ( (this_JvmTypeReference_0= ruleJvmTypeReference | this_JvmWildcardTypeReference_1= ruleJvmWildcardTypeReference ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2682:1: (this_JvmTypeReference_0= ruleJvmTypeReference | this_JvmWildcardTypeReference_1= ruleJvmWildcardTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2657:28: ( (this_JvmTypeReference_0= ruleJvmTypeReference | this_JvmWildcardTypeReference_1= ruleJvmWildcardTypeReference ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2658:1: (this_JvmTypeReference_0= ruleJvmTypeReference | this_JvmWildcardTypeReference_1= ruleJvmWildcardTypeReference )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2682:1: (this_JvmTypeReference_0= ruleJvmTypeReference | this_JvmWildcardTypeReference_1= ruleJvmWildcardTypeReference )
-            int alt36=2;
-            int LA36_0 = input.LA(1);
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2658:1: (this_JvmTypeReference_0= ruleJvmTypeReference | this_JvmWildcardTypeReference_1= ruleJvmWildcardTypeReference )
+            int alt37=2;
+            int LA37_0 = input.LA(1);
 
-            if ( (LA36_0==RULE_ID) ) {
-                alt36=1;
+            if ( (LA37_0==RULE_ID) ) {
+                alt37=1;
             }
-            else if ( (LA36_0==26) ) {
-                alt36=2;
+            else if ( (LA37_0==26) ) {
+                alt37=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 36, 0, input);
+                    new NoViableAltException("", 37, 0, input);
 
                 throw nvae;
             }
-            switch (alt36) {
+            switch (alt37) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2683:5: this_JvmTypeReference_0= ruleJvmTypeReference
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2659:5: this_JvmTypeReference_0= ruleJvmTypeReference
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getJvmArgumentTypeReferenceAccess().getJvmTypeReferenceParserRuleCall_0()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleJvmTypeReference_in_ruleJvmArgumentTypeReference6359);
+                    pushFollow(FOLLOW_ruleJvmTypeReference_in_ruleJvmArgumentTypeReference6258);
                     this_JvmTypeReference_0=ruleJvmTypeReference();
 
                     state._fsp--;
@@ -7890,14 +7794,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2693:5: this_JvmWildcardTypeReference_1= ruleJvmWildcardTypeReference
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2669:5: this_JvmWildcardTypeReference_1= ruleJvmWildcardTypeReference
                     {
                     if ( state.backtracking==0 ) {
                        
                               newCompositeNode(grammarAccess.getJvmArgumentTypeReferenceAccess().getJvmWildcardTypeReferenceParserRuleCall_1()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleJvmWildcardTypeReference_in_ruleJvmArgumentTypeReference6386);
+                    pushFollow(FOLLOW_ruleJvmWildcardTypeReference_in_ruleJvmArgumentTypeReference6285);
                     this_JvmWildcardTypeReference_1=ruleJvmWildcardTypeReference();
 
                     state._fsp--;
@@ -7934,7 +7838,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleJvmWildcardTypeReference"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2709:1: entryRuleJvmWildcardTypeReference returns [EObject current=null] : iv_ruleJvmWildcardTypeReference= ruleJvmWildcardTypeReference EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2685:1: entryRuleJvmWildcardTypeReference returns [EObject current=null] : iv_ruleJvmWildcardTypeReference= ruleJvmWildcardTypeReference EOF ;
     public final EObject entryRuleJvmWildcardTypeReference() throws RecognitionException {
         EObject current = null;
 
@@ -7942,13 +7846,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2710:2: (iv_ruleJvmWildcardTypeReference= ruleJvmWildcardTypeReference EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2711:2: iv_ruleJvmWildcardTypeReference= ruleJvmWildcardTypeReference EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2686:2: (iv_ruleJvmWildcardTypeReference= ruleJvmWildcardTypeReference EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2687:2: iv_ruleJvmWildcardTypeReference= ruleJvmWildcardTypeReference EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getJvmWildcardTypeReferenceRule()); 
             }
-            pushFollow(FOLLOW_ruleJvmWildcardTypeReference_in_entryRuleJvmWildcardTypeReference6421);
+            pushFollow(FOLLOW_ruleJvmWildcardTypeReference_in_entryRuleJvmWildcardTypeReference6320);
             iv_ruleJvmWildcardTypeReference=ruleJvmWildcardTypeReference();
 
             state._fsp--;
@@ -7956,7 +7860,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleJvmWildcardTypeReference; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmWildcardTypeReference6431); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmWildcardTypeReference6330); if (state.failed) return current;
 
             }
 
@@ -7974,7 +7878,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleJvmWildcardTypeReference"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2718:1: ruleJvmWildcardTypeReference returns [EObject current=null] : ( () otherlv_1= '?' ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )? ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2694:1: ruleJvmWildcardTypeReference returns [EObject current=null] : ( () otherlv_1= '?' ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )? ) ;
     public final EObject ruleJvmWildcardTypeReference() throws RecognitionException {
         EObject current = null;
 
@@ -7987,14 +7891,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2721:28: ( ( () otherlv_1= '?' ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )? ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2722:1: ( () otherlv_1= '?' ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2697:28: ( ( () otherlv_1= '?' ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )? ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2698:1: ( () otherlv_1= '?' ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )? )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2722:1: ( () otherlv_1= '?' ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )? )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2722:2: () otherlv_1= '?' ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )?
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2698:1: ( () otherlv_1= '?' ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2698:2: () otherlv_1= '?' ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )?
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2722:2: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2723:5: 
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2698:2: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2699:5: 
             {
             if ( state.backtracking==0 ) {
 
@@ -8006,38 +7910,38 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,26,FOLLOW_26_in_ruleJvmWildcardTypeReference6477); if (state.failed) return current;
+            otherlv_1=(Token)match(input,26,FOLLOW_26_in_ruleJvmWildcardTypeReference6376); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getJvmWildcardTypeReferenceAccess().getQuestionMarkKeyword_1());
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2732:1: ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )?
-            int alt37=3;
-            int LA37_0 = input.LA(1);
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2708:1: ( ( (lv_constraints_2_0= ruleJvmUpperBound ) ) | ( (lv_constraints_3_0= ruleJvmLowerBound ) ) )?
+            int alt38=3;
+            int LA38_0 = input.LA(1);
 
-            if ( (LA37_0==63) ) {
-                alt37=1;
+            if ( (LA38_0==57) ) {
+                alt38=1;
             }
-            else if ( (LA37_0==64) ) {
-                alt37=2;
+            else if ( (LA38_0==58) ) {
+                alt38=2;
             }
-            switch (alt37) {
+            switch (alt38) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2732:2: ( (lv_constraints_2_0= ruleJvmUpperBound ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2708:2: ( (lv_constraints_2_0= ruleJvmUpperBound ) )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2732:2: ( (lv_constraints_2_0= ruleJvmUpperBound ) )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2733:1: (lv_constraints_2_0= ruleJvmUpperBound )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2708:2: ( (lv_constraints_2_0= ruleJvmUpperBound ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2709:1: (lv_constraints_2_0= ruleJvmUpperBound )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2733:1: (lv_constraints_2_0= ruleJvmUpperBound )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2734:3: lv_constraints_2_0= ruleJvmUpperBound
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2709:1: (lv_constraints_2_0= ruleJvmUpperBound )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2710:3: lv_constraints_2_0= ruleJvmUpperBound
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getJvmWildcardTypeReferenceAccess().getConstraintsJvmUpperBoundParserRuleCall_2_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleJvmUpperBound_in_ruleJvmWildcardTypeReference6499);
+                    pushFollow(FOLLOW_ruleJvmUpperBound_in_ruleJvmWildcardTypeReference6398);
                     lv_constraints_2_0=ruleJvmUpperBound();
 
                     state._fsp--;
@@ -8065,20 +7969,20 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2751:6: ( (lv_constraints_3_0= ruleJvmLowerBound ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2727:6: ( (lv_constraints_3_0= ruleJvmLowerBound ) )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2751:6: ( (lv_constraints_3_0= ruleJvmLowerBound ) )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2752:1: (lv_constraints_3_0= ruleJvmLowerBound )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2727:6: ( (lv_constraints_3_0= ruleJvmLowerBound ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2728:1: (lv_constraints_3_0= ruleJvmLowerBound )
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2752:1: (lv_constraints_3_0= ruleJvmLowerBound )
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2753:3: lv_constraints_3_0= ruleJvmLowerBound
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2728:1: (lv_constraints_3_0= ruleJvmLowerBound )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2729:3: lv_constraints_3_0= ruleJvmLowerBound
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getJvmWildcardTypeReferenceAccess().getConstraintsJvmLowerBoundParserRuleCall_2_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleJvmLowerBound_in_ruleJvmWildcardTypeReference6526);
+                    pushFollow(FOLLOW_ruleJvmLowerBound_in_ruleJvmWildcardTypeReference6425);
                     lv_constraints_3_0=ruleJvmLowerBound();
 
                     state._fsp--;
@@ -8131,7 +8035,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleJvmUpperBound"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2777:1: entryRuleJvmUpperBound returns [EObject current=null] : iv_ruleJvmUpperBound= ruleJvmUpperBound EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2753:1: entryRuleJvmUpperBound returns [EObject current=null] : iv_ruleJvmUpperBound= ruleJvmUpperBound EOF ;
     public final EObject entryRuleJvmUpperBound() throws RecognitionException {
         EObject current = null;
 
@@ -8139,13 +8043,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2778:2: (iv_ruleJvmUpperBound= ruleJvmUpperBound EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2779:2: iv_ruleJvmUpperBound= ruleJvmUpperBound EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2754:2: (iv_ruleJvmUpperBound= ruleJvmUpperBound EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2755:2: iv_ruleJvmUpperBound= ruleJvmUpperBound EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getJvmUpperBoundRule()); 
             }
-            pushFollow(FOLLOW_ruleJvmUpperBound_in_entryRuleJvmUpperBound6564);
+            pushFollow(FOLLOW_ruleJvmUpperBound_in_entryRuleJvmUpperBound6463);
             iv_ruleJvmUpperBound=ruleJvmUpperBound();
 
             state._fsp--;
@@ -8153,7 +8057,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleJvmUpperBound; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmUpperBound6574); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmUpperBound6473); if (state.failed) return current;
 
             }
 
@@ -8171,7 +8075,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleJvmUpperBound"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2786:1: ruleJvmUpperBound returns [EObject current=null] : (otherlv_0= 'extends' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2762:1: ruleJvmUpperBound returns [EObject current=null] : (otherlv_0= 'extends' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) ) ;
     public final EObject ruleJvmUpperBound() throws RecognitionException {
         EObject current = null;
 
@@ -8182,30 +8086,30 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2789:28: ( (otherlv_0= 'extends' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2790:1: (otherlv_0= 'extends' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2765:28: ( (otherlv_0= 'extends' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2766:1: (otherlv_0= 'extends' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2790:1: (otherlv_0= 'extends' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2790:3: otherlv_0= 'extends' ( (lv_typeReference_1_0= ruleJvmTypeReference ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2766:1: (otherlv_0= 'extends' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2766:3: otherlv_0= 'extends' ( (lv_typeReference_1_0= ruleJvmTypeReference ) )
             {
-            otherlv_0=(Token)match(input,63,FOLLOW_63_in_ruleJvmUpperBound6611); if (state.failed) return current;
+            otherlv_0=(Token)match(input,57,FOLLOW_57_in_ruleJvmUpperBound6510); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getJvmUpperBoundAccess().getExtendsKeyword_0());
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2794:1: ( (lv_typeReference_1_0= ruleJvmTypeReference ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2795:1: (lv_typeReference_1_0= ruleJvmTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2770:1: ( (lv_typeReference_1_0= ruleJvmTypeReference ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2771:1: (lv_typeReference_1_0= ruleJvmTypeReference )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2795:1: (lv_typeReference_1_0= ruleJvmTypeReference )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2796:3: lv_typeReference_1_0= ruleJvmTypeReference
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2771:1: (lv_typeReference_1_0= ruleJvmTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2772:3: lv_typeReference_1_0= ruleJvmTypeReference
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getJvmUpperBoundAccess().getTypeReferenceJvmTypeReferenceParserRuleCall_1_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleJvmTypeReference_in_ruleJvmUpperBound6632);
+            pushFollow(FOLLOW_ruleJvmTypeReference_in_ruleJvmUpperBound6531);
             lv_typeReference_1_0=ruleJvmTypeReference();
 
             state._fsp--;
@@ -8252,7 +8156,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleJvmLowerBound"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2820:1: entryRuleJvmLowerBound returns [EObject current=null] : iv_ruleJvmLowerBound= ruleJvmLowerBound EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2796:1: entryRuleJvmLowerBound returns [EObject current=null] : iv_ruleJvmLowerBound= ruleJvmLowerBound EOF ;
     public final EObject entryRuleJvmLowerBound() throws RecognitionException {
         EObject current = null;
 
@@ -8260,13 +8164,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2821:2: (iv_ruleJvmLowerBound= ruleJvmLowerBound EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2822:2: iv_ruleJvmLowerBound= ruleJvmLowerBound EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2797:2: (iv_ruleJvmLowerBound= ruleJvmLowerBound EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2798:2: iv_ruleJvmLowerBound= ruleJvmLowerBound EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getJvmLowerBoundRule()); 
             }
-            pushFollow(FOLLOW_ruleJvmLowerBound_in_entryRuleJvmLowerBound6668);
+            pushFollow(FOLLOW_ruleJvmLowerBound_in_entryRuleJvmLowerBound6567);
             iv_ruleJvmLowerBound=ruleJvmLowerBound();
 
             state._fsp--;
@@ -8274,7 +8178,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleJvmLowerBound; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmLowerBound6678); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleJvmLowerBound6577); if (state.failed) return current;
 
             }
 
@@ -8292,7 +8196,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleJvmLowerBound"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2829:1: ruleJvmLowerBound returns [EObject current=null] : (otherlv_0= 'super' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2805:1: ruleJvmLowerBound returns [EObject current=null] : (otherlv_0= 'super' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) ) ;
     public final EObject ruleJvmLowerBound() throws RecognitionException {
         EObject current = null;
 
@@ -8303,30 +8207,30 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2832:28: ( (otherlv_0= 'super' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2833:1: (otherlv_0= 'super' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2808:28: ( (otherlv_0= 'super' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2809:1: (otherlv_0= 'super' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2833:1: (otherlv_0= 'super' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2833:3: otherlv_0= 'super' ( (lv_typeReference_1_0= ruleJvmTypeReference ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2809:1: (otherlv_0= 'super' ( (lv_typeReference_1_0= ruleJvmTypeReference ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2809:3: otherlv_0= 'super' ( (lv_typeReference_1_0= ruleJvmTypeReference ) )
             {
-            otherlv_0=(Token)match(input,64,FOLLOW_64_in_ruleJvmLowerBound6715); if (state.failed) return current;
+            otherlv_0=(Token)match(input,58,FOLLOW_58_in_ruleJvmLowerBound6614); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getJvmLowerBoundAccess().getSuperKeyword_0());
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2837:1: ( (lv_typeReference_1_0= ruleJvmTypeReference ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2838:1: (lv_typeReference_1_0= ruleJvmTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2813:1: ( (lv_typeReference_1_0= ruleJvmTypeReference ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2814:1: (lv_typeReference_1_0= ruleJvmTypeReference )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2838:1: (lv_typeReference_1_0= ruleJvmTypeReference )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2839:3: lv_typeReference_1_0= ruleJvmTypeReference
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2814:1: (lv_typeReference_1_0= ruleJvmTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2815:3: lv_typeReference_1_0= ruleJvmTypeReference
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getJvmLowerBoundAccess().getTypeReferenceJvmTypeReferenceParserRuleCall_1_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleJvmTypeReference_in_ruleJvmLowerBound6736);
+            pushFollow(FOLLOW_ruleJvmTypeReference_in_ruleJvmLowerBound6635);
             lv_typeReference_1_0=ruleJvmTypeReference();
 
             state._fsp--;
@@ -8373,7 +8277,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRulePrimitiveType"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2863:1: entryRulePrimitiveType returns [String current=null] : iv_rulePrimitiveType= rulePrimitiveType EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2839:1: entryRulePrimitiveType returns [String current=null] : iv_rulePrimitiveType= rulePrimitiveType EOF ;
     public final String entryRulePrimitiveType() throws RecognitionException {
         String current = null;
 
@@ -8381,13 +8285,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2864:2: (iv_rulePrimitiveType= rulePrimitiveType EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2865:2: iv_rulePrimitiveType= rulePrimitiveType EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2840:2: (iv_rulePrimitiveType= rulePrimitiveType EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2841:2: iv_rulePrimitiveType= rulePrimitiveType EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getPrimitiveTypeRule()); 
             }
-            pushFollow(FOLLOW_rulePrimitiveType_in_entryRulePrimitiveType6773);
+            pushFollow(FOLLOW_rulePrimitiveType_in_entryRulePrimitiveType6672);
             iv_rulePrimitiveType=rulePrimitiveType();
 
             state._fsp--;
@@ -8395,7 +8299,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_rulePrimitiveType.getText(); 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRulePrimitiveType6784); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRulePrimitiveType6683); if (state.failed) return current;
 
             }
 
@@ -8413,7 +8317,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "rulePrimitiveType"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2872:1: rulePrimitiveType returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (kw= 'boolean' | kw= 'char' | kw= 'byte' | kw= 'short' | kw= 'int' | kw= 'long' | kw= 'float' | kw= 'double' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2848:1: rulePrimitiveType returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (kw= 'boolean' | kw= 'char' | kw= 'byte' | kw= 'short' | kw= 'int' | kw= 'long' | kw= 'float' | kw= 'double' ) ;
     public final AntlrDatatypeRuleToken rulePrimitiveType() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -8422,65 +8326,65 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2875:28: ( (kw= 'boolean' | kw= 'char' | kw= 'byte' | kw= 'short' | kw= 'int' | kw= 'long' | kw= 'float' | kw= 'double' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2876:1: (kw= 'boolean' | kw= 'char' | kw= 'byte' | kw= 'short' | kw= 'int' | kw= 'long' | kw= 'float' | kw= 'double' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2851:28: ( (kw= 'boolean' | kw= 'char' | kw= 'byte' | kw= 'short' | kw= 'int' | kw= 'long' | kw= 'float' | kw= 'double' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2852:1: (kw= 'boolean' | kw= 'char' | kw= 'byte' | kw= 'short' | kw= 'int' | kw= 'long' | kw= 'float' | kw= 'double' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2876:1: (kw= 'boolean' | kw= 'char' | kw= 'byte' | kw= 'short' | kw= 'int' | kw= 'long' | kw= 'float' | kw= 'double' )
-            int alt38=8;
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2852:1: (kw= 'boolean' | kw= 'char' | kw= 'byte' | kw= 'short' | kw= 'int' | kw= 'long' | kw= 'float' | kw= 'double' )
+            int alt39=8;
             switch ( input.LA(1) ) {
+            case 59:
+                {
+                alt39=1;
+                }
+                break;
+            case 60:
+                {
+                alt39=2;
+                }
+                break;
+            case 61:
+                {
+                alt39=3;
+                }
+                break;
+            case 62:
+                {
+                alt39=4;
+                }
+                break;
+            case 63:
+                {
+                alt39=5;
+                }
+                break;
+            case 64:
+                {
+                alt39=6;
+                }
+                break;
             case 65:
                 {
-                alt38=1;
+                alt39=7;
                 }
                 break;
             case 66:
                 {
-                alt38=2;
-                }
-                break;
-            case 67:
-                {
-                alt38=3;
-                }
-                break;
-            case 68:
-                {
-                alt38=4;
-                }
-                break;
-            case 69:
-                {
-                alt38=5;
-                }
-                break;
-            case 70:
-                {
-                alt38=6;
-                }
-                break;
-            case 71:
-                {
-                alt38=7;
-                }
-                break;
-            case 72:
-                {
-                alt38=8;
+                alt39=8;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 38, 0, input);
+                    new NoViableAltException("", 39, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt38) {
+            switch (alt39) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2877:2: kw= 'boolean'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2853:2: kw= 'boolean'
                     {
-                    kw=(Token)match(input,65,FOLLOW_65_in_rulePrimitiveType6822); if (state.failed) return current;
+                    kw=(Token)match(input,59,FOLLOW_59_in_rulePrimitiveType6721); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8491,9 +8395,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2884:2: kw= 'char'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2860:2: kw= 'char'
                     {
-                    kw=(Token)match(input,66,FOLLOW_66_in_rulePrimitiveType6841); if (state.failed) return current;
+                    kw=(Token)match(input,60,FOLLOW_60_in_rulePrimitiveType6740); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8504,9 +8408,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 3 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2891:2: kw= 'byte'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2867:2: kw= 'byte'
                     {
-                    kw=(Token)match(input,67,FOLLOW_67_in_rulePrimitiveType6860); if (state.failed) return current;
+                    kw=(Token)match(input,61,FOLLOW_61_in_rulePrimitiveType6759); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8517,9 +8421,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 4 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2898:2: kw= 'short'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2874:2: kw= 'short'
                     {
-                    kw=(Token)match(input,68,FOLLOW_68_in_rulePrimitiveType6879); if (state.failed) return current;
+                    kw=(Token)match(input,62,FOLLOW_62_in_rulePrimitiveType6778); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8530,9 +8434,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 5 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2905:2: kw= 'int'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2881:2: kw= 'int'
                     {
-                    kw=(Token)match(input,69,FOLLOW_69_in_rulePrimitiveType6898); if (state.failed) return current;
+                    kw=(Token)match(input,63,FOLLOW_63_in_rulePrimitiveType6797); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8543,9 +8447,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 6 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2912:2: kw= 'long'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2888:2: kw= 'long'
                     {
-                    kw=(Token)match(input,70,FOLLOW_70_in_rulePrimitiveType6917); if (state.failed) return current;
+                    kw=(Token)match(input,64,FOLLOW_64_in_rulePrimitiveType6816); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8556,9 +8460,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 7 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2919:2: kw= 'float'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2895:2: kw= 'float'
                     {
-                    kw=(Token)match(input,71,FOLLOW_71_in_rulePrimitiveType6936); if (state.failed) return current;
+                    kw=(Token)match(input,65,FOLLOW_65_in_rulePrimitiveType6835); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8569,9 +8473,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 8 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2926:2: kw= 'double'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2902:2: kw= 'double'
                     {
-                    kw=(Token)match(input,72,FOLLOW_72_in_rulePrimitiveType6955); if (state.failed) return current;
+                    kw=(Token)match(input,66,FOLLOW_66_in_rulePrimitiveType6854); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8604,7 +8508,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleRelationalOp"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2939:1: entryRuleRelationalOp returns [String current=null] : iv_ruleRelationalOp= ruleRelationalOp EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2915:1: entryRuleRelationalOp returns [String current=null] : iv_ruleRelationalOp= ruleRelationalOp EOF ;
     public final String entryRuleRelationalOp() throws RecognitionException {
         String current = null;
 
@@ -8612,13 +8516,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2940:2: (iv_ruleRelationalOp= ruleRelationalOp EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2941:2: iv_ruleRelationalOp= ruleRelationalOp EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2916:2: (iv_ruleRelationalOp= ruleRelationalOp EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2917:2: iv_ruleRelationalOp= ruleRelationalOp EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getRelationalOpRule()); 
             }
-            pushFollow(FOLLOW_ruleRelationalOp_in_entryRuleRelationalOp6996);
+            pushFollow(FOLLOW_ruleRelationalOp_in_entryRuleRelationalOp6895);
             iv_ruleRelationalOp=ruleRelationalOp();
 
             state._fsp--;
@@ -8626,7 +8530,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleRelationalOp.getText(); 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleRelationalOp7007); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleRelationalOp6906); if (state.failed) return current;
 
             }
 
@@ -8644,7 +8548,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleRelationalOp"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2948:1: ruleRelationalOp returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (kw= '<=' | kw= '<' | kw= '>=' | kw= '>' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2924:1: ruleRelationalOp returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (kw= '<=' | kw= '<' | kw= '>=' | kw= '>' ) ;
     public final AntlrDatatypeRuleToken ruleRelationalOp() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -8653,45 +8557,45 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2951:28: ( (kw= '<=' | kw= '<' | kw= '>=' | kw= '>' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2952:1: (kw= '<=' | kw= '<' | kw= '>=' | kw= '>' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2927:28: ( (kw= '<=' | kw= '<' | kw= '>=' | kw= '>' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2928:1: (kw= '<=' | kw= '<' | kw= '>=' | kw= '>' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2952:1: (kw= '<=' | kw= '<' | kw= '>=' | kw= '>' )
-            int alt39=4;
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2928:1: (kw= '<=' | kw= '<' | kw= '>=' | kw= '>' )
+            int alt40=4;
             switch ( input.LA(1) ) {
-            case 73:
+            case 67:
                 {
-                alt39=1;
+                alt40=1;
                 }
                 break;
-            case 61:
+            case 55:
                 {
-                alt39=2;
+                alt40=2;
                 }
                 break;
-            case 74:
+            case 68:
                 {
-                alt39=3;
+                alt40=3;
                 }
                 break;
-            case 62:
+            case 56:
                 {
-                alt39=4;
+                alt40=4;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 39, 0, input);
+                    new NoViableAltException("", 40, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt39) {
+            switch (alt40) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2953:2: kw= '<='
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2929:2: kw= '<='
                     {
-                    kw=(Token)match(input,73,FOLLOW_73_in_ruleRelationalOp7045); if (state.failed) return current;
+                    kw=(Token)match(input,67,FOLLOW_67_in_ruleRelationalOp6944); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8702,9 +8606,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2960:2: kw= '<'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2936:2: kw= '<'
                     {
-                    kw=(Token)match(input,61,FOLLOW_61_in_ruleRelationalOp7064); if (state.failed) return current;
+                    kw=(Token)match(input,55,FOLLOW_55_in_ruleRelationalOp6963); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8715,9 +8619,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 3 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2967:2: kw= '>='
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2943:2: kw= '>='
                     {
-                    kw=(Token)match(input,74,FOLLOW_74_in_ruleRelationalOp7083); if (state.failed) return current;
+                    kw=(Token)match(input,68,FOLLOW_68_in_ruleRelationalOp6982); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8728,9 +8632,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 4 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2974:2: kw= '>'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2950:2: kw= '>'
                     {
-                    kw=(Token)match(input,62,FOLLOW_62_in_ruleRelationalOp7102); if (state.failed) return current;
+                    kw=(Token)match(input,56,FOLLOW_56_in_ruleRelationalOp7001); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -8763,7 +8667,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleQualifiedName"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2987:1: entryRuleQualifiedName returns [String current=null] : iv_ruleQualifiedName= ruleQualifiedName EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2963:1: entryRuleQualifiedName returns [String current=null] : iv_ruleQualifiedName= ruleQualifiedName EOF ;
     public final String entryRuleQualifiedName() throws RecognitionException {
         String current = null;
 
@@ -8771,13 +8675,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2988:2: (iv_ruleQualifiedName= ruleQualifiedName EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2989:2: iv_ruleQualifiedName= ruleQualifiedName EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2964:2: (iv_ruleQualifiedName= ruleQualifiedName EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2965:2: iv_ruleQualifiedName= ruleQualifiedName EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getQualifiedNameRule()); 
             }
-            pushFollow(FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName7143);
+            pushFollow(FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName7042);
             iv_ruleQualifiedName=ruleQualifiedName();
 
             state._fsp--;
@@ -8785,7 +8689,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleQualifiedName.getText(); 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleQualifiedName7154); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleQualifiedName7053); if (state.failed) return current;
 
             }
 
@@ -8803,7 +8707,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleQualifiedName"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2996:1: ruleQualifiedName returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ValidID_0= ruleValidID (kw= '.' this_ValidID_2= ruleValidID )* ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2972:1: ruleQualifiedName returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ValidID_0= ruleValidID (kw= '.' this_ValidID_2= ruleValidID )* ) ;
     public final AntlrDatatypeRuleToken ruleQualifiedName() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -8816,18 +8720,18 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2999:28: ( (this_ValidID_0= ruleValidID (kw= '.' this_ValidID_2= ruleValidID )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3000:1: (this_ValidID_0= ruleValidID (kw= '.' this_ValidID_2= ruleValidID )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2975:28: ( (this_ValidID_0= ruleValidID (kw= '.' this_ValidID_2= ruleValidID )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2976:1: (this_ValidID_0= ruleValidID (kw= '.' this_ValidID_2= ruleValidID )* )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3000:1: (this_ValidID_0= ruleValidID (kw= '.' this_ValidID_2= ruleValidID )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3001:5: this_ValidID_0= ruleValidID (kw= '.' this_ValidID_2= ruleValidID )*
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2976:1: (this_ValidID_0= ruleValidID (kw= '.' this_ValidID_2= ruleValidID )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2977:5: this_ValidID_0= ruleValidID (kw= '.' this_ValidID_2= ruleValidID )*
             {
             if ( state.backtracking==0 ) {
                
                       newCompositeNode(grammarAccess.getQualifiedNameAccess().getValidIDParserRuleCall_0()); 
                   
             }
-            pushFollow(FOLLOW_ruleValidID_in_ruleQualifiedName7201);
+            pushFollow(FOLLOW_ruleValidID_in_ruleQualifiedName7100);
             this_ValidID_0=ruleValidID();
 
             state._fsp--;
@@ -8842,28 +8746,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                       afterParserOrEnumRuleCall();
                   
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3011:1: (kw= '.' this_ValidID_2= ruleValidID )*
-            loop40:
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2987:1: (kw= '.' this_ValidID_2= ruleValidID )*
+            loop41:
             do {
-                int alt40=2;
-                int LA40_0 = input.LA(1);
+                int alt41=2;
+                int LA41_0 = input.LA(1);
 
-                if ( (LA40_0==41) ) {
-                    int LA40_2 = input.LA(2);
-
-                    if ( (LA40_2==RULE_ID) ) {
-                        alt40=1;
-                    }
-
-
+                if ( (LA41_0==40) ) {
+                    alt41=1;
                 }
 
 
-                switch (alt40) {
+                switch (alt41) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3012:2: kw= '.' this_ValidID_2= ruleValidID
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2988:2: kw= '.' this_ValidID_2= ruleValidID
             	    {
-            	    kw=(Token)match(input,41,FOLLOW_41_in_ruleQualifiedName7220); if (state.failed) return current;
+            	    kw=(Token)match(input,40,FOLLOW_40_in_ruleQualifiedName7119); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	              current.merge(kw);
@@ -8875,7 +8773,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             	              newCompositeNode(grammarAccess.getQualifiedNameAccess().getValidIDParserRuleCall_1_1()); 
             	          
             	    }
-            	    pushFollow(FOLLOW_ruleValidID_in_ruleQualifiedName7242);
+            	    pushFollow(FOLLOW_ruleValidID_in_ruleQualifiedName7141);
             	    this_ValidID_2=ruleValidID();
 
             	    state._fsp--;
@@ -8895,7 +8793,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             	    break;
 
             	default :
-            	    break loop40;
+            	    break loop41;
                 }
             } while (true);
 
@@ -8922,7 +8820,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleValidID"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3036:1: entryRuleValidID returns [String current=null] : iv_ruleValidID= ruleValidID EOF ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3012:1: entryRuleValidID returns [String current=null] : iv_ruleValidID= ruleValidID EOF ;
     public final String entryRuleValidID() throws RecognitionException {
         String current = null;
 
@@ -8930,13 +8828,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3037:2: (iv_ruleValidID= ruleValidID EOF )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3038:2: iv_ruleValidID= ruleValidID EOF
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3013:2: (iv_ruleValidID= ruleValidID EOF )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3014:2: iv_ruleValidID= ruleValidID EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getValidIDRule()); 
             }
-            pushFollow(FOLLOW_ruleValidID_in_entryRuleValidID7290);
+            pushFollow(FOLLOW_ruleValidID_in_entryRuleValidID7189);
             iv_ruleValidID=ruleValidID();
 
             state._fsp--;
@@ -8944,7 +8842,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             if ( state.backtracking==0 ) {
                current =iv_ruleValidID.getText(); 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleValidID7301); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleValidID7200); if (state.failed) return current;
 
             }
 
@@ -8962,7 +8860,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleValidID"
-    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3045:1: ruleValidID returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : this_ID_0= RULE_ID ;
+    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3021:1: ruleValidID returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : this_ID_0= RULE_ID ;
     public final AntlrDatatypeRuleToken ruleValidID() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -8971,10 +8869,10 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3048:28: (this_ID_0= RULE_ID )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3049:5: this_ID_0= RULE_ID
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3024:28: (this_ID_0= RULE_ID )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3025:5: this_ID_0= RULE_ID
             {
-            this_ID_0=(Token)match(input,RULE_ID,FOLLOW_RULE_ID_in_ruleValidID7340); if (state.failed) return current;
+            this_ID_0=(Token)match(input,RULE_ID,FOLLOW_RULE_ID_in_ruleValidID7239); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               		current.merge(this_ID_0);
@@ -9311,10 +9209,10 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
     // $ANTLR start synpred10_InternalJavaJRExpression
     public final void synpred10_InternalJavaJRExpression_fragment() throws RecognitionException {   
-        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1008:7: ( ruleBaseJRExpression )
-        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1008:9: ruleBaseJRExpression
+        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:998:7: ( ruleBaseJRExpression )
+        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:998:9: ruleBaseJRExpression
         {
-        pushFollow(FOLLOW_ruleBaseJRExpression_in_synpred10_InternalJavaJRExpression2440);
+        pushFollow(FOLLOW_ruleBaseJRExpression_in_synpred10_InternalJavaJRExpression2413);
         ruleBaseJRExpression();
 
         state._fsp--;
@@ -9326,19 +9224,19 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
     // $ANTLR start synpred11_InternalJavaJRExpression
     public final void synpred11_InternalJavaJRExpression_fragment() throws RecognitionException {   
-        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2559:2: ( ( () '[' ']' ) )
-        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2559:3: ( () '[' ']' )
+        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2535:2: ( ( () '[' ']' ) )
+        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2535:3: ( () '[' ']' )
         {
-        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2559:3: ( () '[' ']' )
-        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2559:4: () '[' ']'
+        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2535:3: ( () '[' ']' )
+        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2535:4: () '[' ']'
         {
-        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2559:4: ()
-        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2560:1: 
+        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2535:4: ()
+        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2536:1: 
         {
         }
 
-        match(input,46,FOLLOW_46_in_synpred11_InternalJavaJRExpression6041); if (state.failed) return ;
-        match(input,47,FOLLOW_47_in_synpred11_InternalJavaJRExpression6045); if (state.failed) return ;
+        match(input,45,FOLLOW_45_in_synpred11_InternalJavaJRExpression5940); if (state.failed) return ;
+        match(input,46,FOLLOW_46_in_synpred11_InternalJavaJRExpression5944); if (state.failed) return ;
 
         }
 
@@ -9349,10 +9247,10 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
     // $ANTLR start synpred12_InternalJavaJRExpression
     public final void synpred12_InternalJavaJRExpression_fragment() throws RecognitionException {   
-        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2612:4: ( '<' )
-        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2612:6: '<'
+        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2588:4: ( '<' )
+        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:2588:6: '<'
         {
-        match(input,61,FOLLOW_61_in_synpred12_InternalJavaJRExpression6186); if (state.failed) return ;
+        match(input,55,FOLLOW_55_in_synpred12_InternalJavaJRExpression6085); if (state.failed) return ;
 
         }
     }
@@ -9531,39 +9429,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
 
 
     protected DFA14 dfa14 = new DFA14(this);
-    protected DFA16 dfa16 = new DFA16(this);
-    protected DFA35 dfa35 = new DFA35(this);
+    protected DFA15 dfa15 = new DFA15(this);
+    protected DFA36 dfa36 = new DFA36(this);
     static final String DFA14_eotS =
-        "\40\uffff";
+        "\23\uffff";
     static final String DFA14_eofS =
-        "\40\uffff";
+        "\23\uffff";
     static final String DFA14_minS =
-        "\1\5\2\uffff\1\0\34\uffff";
+        "\1\5\2\uffff\1\0\17\uffff";
     static final String DFA14_maxS =
-        "\1\110\2\uffff\1\0\34\uffff";
+        "\1\62\2\uffff\1\0\17\uffff";
     static final String DFA14_acceptS =
-        "\1\uffff\1\1\1\2\1\uffff\1\4\32\uffff\1\3";
+        "\1\uffff\1\1\1\2\1\uffff\1\4\15\uffff\1\3";
     static final String DFA14_specialS =
-        "\3\uffff\1\0\34\uffff}>";
+        "\3\uffff\1\0\17\uffff}>";
     static final String[] DFA14_transitionS = {
-            "\7\4\32\uffff\1\1\1\2\1\4\2\uffff\3\4\2\uffff\7\4\1\3\1\uffff"+
-            "\1\4\7\uffff\10\4",
+            "\7\4\32\uffff\1\1\1\2\1\uffff\4\4\2\uffff\3\4\1\3",
             "",
             "",
             "\1\uffff",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
             "",
             "",
             "",
@@ -9624,7 +9508,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
                         int index14_3 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred9_InternalJavaJRExpression()) ) {s = 31;}
+                        if ( (synpred9_InternalJavaJRExpression()) ) {s = 18;}
 
                         else if ( (true) ) {s = 4;}
 
@@ -9640,48 +9524,46 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             throw nvae;
         }
     }
-    static final String DFA16_eotS =
-        "\50\uffff";
-    static final String DFA16_eofS =
-        "\13\uffff\3\41\32\uffff";
-    static final String DFA16_minS =
-        "\1\5\2\uffff\1\13\3\4\1\51\2\uffff\1\51\3\32\1\uffff\1\13\1\uffff"+
-        "\1\13\24\uffff\2\51";
-    static final String DFA16_maxS =
-        "\1\110\2\uffff\1\110\3\4\1\75\2\uffff\1\75\3\112\1\uffff\1\52\1"+
-        "\uffff\1\13\24\uffff\2\75";
-    static final String DFA16_acceptS =
-        "\1\uffff\1\1\1\2\5\uffff\1\7\1\3\4\uffff\1\6\1\uffff\1\4\1\uffff"+
-        "\24\5\2\uffff";
-    static final String DFA16_specialS =
-        "\13\uffff\1\0\1\1\1\2\32\uffff}>";
-    static final String[] DFA16_transitionS = {
-            "\6\2\1\7\34\uffff\1\10\2\uffff\1\4\1\5\1\6\2\uffff\7\2\1\1\1"+
-            "\uffff\1\3\7\uffff\10\10",
+    static final String DFA15_eotS =
+        "\47\uffff";
+    static final String DFA15_eofS =
+        "\3\uffff\1\2\4\uffff\1\20\3\uffff\3\41\30\uffff";
+    static final String DFA15_minS =
+        "\1\5\2\uffff\1\32\1\13\3\4\1\32\2\uffff\1\50\3\32\1\13\1\uffff\1"+
+        "\13\24\uffff\1\50";
+    static final String DFA15_maxS =
+        "\1\62\2\uffff\1\104\1\102\3\4\1\104\2\uffff\1\67\3\104\1\13\1\uffff"+
+        "\1\13\24\uffff\1\67";
+    static final String DFA15_acceptS =
+        "\1\uffff\1\1\1\2\6\uffff\1\5\1\3\5\uffff\1\6\1\uffff\24\4\1\uffff";
+    static final String DFA15_specialS =
+        "\14\uffff\1\0\1\1\1\2\30\uffff}>";
+    static final String[] DFA15_transitionS = {
+            "\5\2\1\3\1\10\35\uffff\1\5\1\6\1\7\1\4\2\uffff\3\2\1\1",
             "",
             "",
-            "\1\12\65\uffff\10\11",
-            "\1\13",
+            "\14\2\2\uffff\1\11\12\uffff\1\2\1\uffff\4\2\12\uffff\2\2",
+            "\1\13\57\uffff\10\12",
             "\1\14",
             "\1\15",
-            "\1\17\4\uffff\1\10\10\uffff\1\16\5\uffff\1\10",
+            "\1\16",
+            "\14\20\2\uffff\1\17\11\uffff\1\11\1\20\1\uffff\4\20\12\uffff"+
+            "\2\20",
             "",
             "",
-            "\1\21\4\uffff\1\11\10\uffff\1\20\5\uffff\1\11",
+            "\1\21\4\uffff\1\12\4\uffff\1\11\4\uffff\1\12",
             "\1\40\1\42\1\37\1\36\1\34\1\35\1\33\1\25\1\26\1\22\1\23\1\24"+
-            "\3\uffff\1\16\16\uffff\1\43\2\uffff\1\45\1\44\1\30\1\32\12\uffff"+
+            "\2\uffff\1\11\12\uffff\1\43\1\uffff\1\45\1\44\1\30\1\32\12\uffff"+
             "\1\27\1\31",
             "\1\40\1\42\1\37\1\36\1\34\1\35\1\33\1\25\1\26\1\22\1\23\1\24"+
-            "\3\uffff\1\16\16\uffff\1\43\2\uffff\1\45\1\44\1\30\1\32\12\uffff"+
+            "\2\uffff\1\11\12\uffff\1\43\1\uffff\1\45\1\44\1\30\1\32\12\uffff"+
             "\1\27\1\31",
             "\1\40\1\42\1\37\1\36\1\34\1\35\1\33\1\25\1\26\1\22\1\23\1\24"+
-            "\3\uffff\1\16\16\uffff\1\43\2\uffff\1\45\1\44\1\30\1\32\12\uffff"+
+            "\2\uffff\1\11\12\uffff\1\43\1\uffff\1\45\1\44\1\30\1\32\12\uffff"+
             "\1\27\1\31",
+            "\1\10",
             "",
-            "\1\46\36\uffff\1\10",
-            "",
-            "\1\47",
-            "",
+            "\1\46",
             "",
             "",
             "",
@@ -9701,230 +9583,229 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             "",
             "",
             "",
-            "\1\17\4\uffff\1\10\10\uffff\1\16\5\uffff\1\10",
-            "\1\21\4\uffff\1\11\10\uffff\1\20\5\uffff\1\11"
+            "",
+            "\1\21\4\uffff\1\12\4\uffff\1\11\4\uffff\1\12"
     };
 
-    static final short[] DFA16_eot = DFA.unpackEncodedString(DFA16_eotS);
-    static final short[] DFA16_eof = DFA.unpackEncodedString(DFA16_eofS);
-    static final char[] DFA16_min = DFA.unpackEncodedStringToUnsignedChars(DFA16_minS);
-    static final char[] DFA16_max = DFA.unpackEncodedStringToUnsignedChars(DFA16_maxS);
-    static final short[] DFA16_accept = DFA.unpackEncodedString(DFA16_acceptS);
-    static final short[] DFA16_special = DFA.unpackEncodedString(DFA16_specialS);
-    static final short[][] DFA16_transition;
+    static final short[] DFA15_eot = DFA.unpackEncodedString(DFA15_eotS);
+    static final short[] DFA15_eof = DFA.unpackEncodedString(DFA15_eofS);
+    static final char[] DFA15_min = DFA.unpackEncodedStringToUnsignedChars(DFA15_minS);
+    static final char[] DFA15_max = DFA.unpackEncodedStringToUnsignedChars(DFA15_maxS);
+    static final short[] DFA15_accept = DFA.unpackEncodedString(DFA15_acceptS);
+    static final short[] DFA15_special = DFA.unpackEncodedString(DFA15_specialS);
+    static final short[][] DFA15_transition;
 
     static {
-        int numStates = DFA16_transitionS.length;
-        DFA16_transition = new short[numStates][];
+        int numStates = DFA15_transitionS.length;
+        DFA15_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA16_transition[i] = DFA.unpackEncodedString(DFA16_transitionS[i]);
+            DFA15_transition[i] = DFA.unpackEncodedString(DFA15_transitionS[i]);
         }
     }
 
-    class DFA16 extends DFA {
+    class DFA15 extends DFA {
 
-        public DFA16(BaseRecognizer recognizer) {
+        public DFA15(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 16;
-            this.eot = DFA16_eot;
-            this.eof = DFA16_eof;
-            this.min = DFA16_min;
-            this.max = DFA16_max;
-            this.accept = DFA16_accept;
-            this.special = DFA16_special;
-            this.transition = DFA16_transition;
+            this.decisionNumber = 15;
+            this.eot = DFA15_eot;
+            this.eof = DFA15_eof;
+            this.min = DFA15_min;
+            this.max = DFA15_max;
+            this.accept = DFA15_accept;
+            this.special = DFA15_special;
+            this.transition = DFA15_transition;
         }
         public String getDescription() {
-            return "968:1: (this_ParExpression_0= ruleParExpression | this_LiteralExpression_1= ruleLiteralExpression | this_ArrayCreator_2= ruleArrayCreator | this_ObjectCreation_3= ruleObjectCreation | ( ( ruleBaseJRExpression )=>this_BaseJRExpression_4= ruleBaseJRExpression ) | this_MethodsExpression_5= ruleMethodsExpression | ( () ( ( (lv_type_7_0= ruleType ) ) | ( (lv_void_8_0= 'void' ) ) ) otherlv_9= '.' otherlv_10= 'class' ) )";
+            return "968:1: (this_ParExpression_0= ruleParExpression | this_LiteralExpression_1= ruleLiteralExpression | this_ArrayCreator_2= ruleArrayCreator | ( ( ruleBaseJRExpression )=>this_BaseJRExpression_3= ruleBaseJRExpression ) | this_MethodsExpression_4= ruleMethodsExpression | this_StaticField_5= ruleStaticField )";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             TokenStream input = (TokenStream)_input;
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA16_11 = input.LA(1);
+                        int LA15_12 = input.LA(1);
 
                          
-                        int index16_11 = input.index();
+                        int index15_12 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (LA16_11==35) && (synpred10_InternalJavaJRExpression())) {s = 18;}
+                        if ( (LA15_12==40) ) {s = 9;}
 
-                        else if ( (LA16_11==36) && (synpred10_InternalJavaJRExpression())) {s = 19;}
+                        else if ( (LA15_12==35) && (synpred10_InternalJavaJRExpression())) {s = 18;}
 
-                        else if ( (LA16_11==37) && (synpred10_InternalJavaJRExpression())) {s = 20;}
+                        else if ( (LA15_12==36) && (synpred10_InternalJavaJRExpression())) {s = 19;}
 
-                        else if ( (LA16_11==33) && (synpred10_InternalJavaJRExpression())) {s = 21;}
+                        else if ( (LA15_12==37) && (synpred10_InternalJavaJRExpression())) {s = 20;}
 
-                        else if ( (LA16_11==34) && (synpred10_InternalJavaJRExpression())) {s = 22;}
+                        else if ( (LA15_12==33) && (synpred10_InternalJavaJRExpression())) {s = 21;}
 
-                        else if ( (LA16_11==73) && (synpred10_InternalJavaJRExpression())) {s = 23;}
+                        else if ( (LA15_12==34) && (synpred10_InternalJavaJRExpression())) {s = 22;}
 
-                        else if ( (LA16_11==61) && (synpred10_InternalJavaJRExpression())) {s = 24;}
+                        else if ( (LA15_12==67) && (synpred10_InternalJavaJRExpression())) {s = 23;}
 
-                        else if ( (LA16_11==74) && (synpred10_InternalJavaJRExpression())) {s = 25;}
+                        else if ( (LA15_12==55) && (synpred10_InternalJavaJRExpression())) {s = 24;}
 
-                        else if ( (LA16_11==62) && (synpred10_InternalJavaJRExpression())) {s = 26;}
+                        else if ( (LA15_12==68) && (synpred10_InternalJavaJRExpression())) {s = 25;}
 
-                        else if ( (LA16_11==32) && (synpred10_InternalJavaJRExpression())) {s = 27;}
+                        else if ( (LA15_12==56) && (synpred10_InternalJavaJRExpression())) {s = 26;}
 
-                        else if ( (LA16_11==30) && (synpred10_InternalJavaJRExpression())) {s = 28;}
+                        else if ( (LA15_12==32) && (synpred10_InternalJavaJRExpression())) {s = 27;}
 
-                        else if ( (LA16_11==31) && (synpred10_InternalJavaJRExpression())) {s = 29;}
+                        else if ( (LA15_12==30) && (synpred10_InternalJavaJRExpression())) {s = 28;}
 
-                        else if ( (LA16_11==29) && (synpred10_InternalJavaJRExpression())) {s = 30;}
+                        else if ( (LA15_12==31) && (synpred10_InternalJavaJRExpression())) {s = 29;}
 
-                        else if ( (LA16_11==28) && (synpred10_InternalJavaJRExpression())) {s = 31;}
+                        else if ( (LA15_12==29) && (synpred10_InternalJavaJRExpression())) {s = 30;}
 
-                        else if ( (LA16_11==26) && (synpred10_InternalJavaJRExpression())) {s = 32;}
+                        else if ( (LA15_12==28) && (synpred10_InternalJavaJRExpression())) {s = 31;}
 
-                        else if ( (LA16_11==EOF) && (synpred10_InternalJavaJRExpression())) {s = 33;}
+                        else if ( (LA15_12==26) && (synpred10_InternalJavaJRExpression())) {s = 32;}
 
-                        else if ( (LA16_11==27) && (synpred10_InternalJavaJRExpression())) {s = 34;}
+                        else if ( (LA15_12==EOF) && (synpred10_InternalJavaJRExpression())) {s = 33;}
 
-                        else if ( (LA16_11==56) && (synpred10_InternalJavaJRExpression())) {s = 35;}
+                        else if ( (LA15_12==27) && (synpred10_InternalJavaJRExpression())) {s = 34;}
 
-                        else if ( (LA16_11==60) && (synpred10_InternalJavaJRExpression())) {s = 36;}
+                        else if ( (LA15_12==51) && (synpred10_InternalJavaJRExpression())) {s = 35;}
 
-                        else if ( (LA16_11==59) && (synpred10_InternalJavaJRExpression())) {s = 37;}
+                        else if ( (LA15_12==54) && (synpred10_InternalJavaJRExpression())) {s = 36;}
 
-                        else if ( (LA16_11==41) ) {s = 14;}
+                        else if ( (LA15_12==53) && (synpred10_InternalJavaJRExpression())) {s = 37;}
 
                          
-                        input.seek(index16_11);
+                        input.seek(index15_12);
                         if ( s>=0 ) return s;
                         break;
                     case 1 : 
-                        int LA16_12 = input.LA(1);
+                        int LA15_13 = input.LA(1);
 
                          
-                        int index16_12 = input.index();
+                        int index15_13 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (LA16_12==41) ) {s = 14;}
+                        if ( (LA15_13==35) && (synpred10_InternalJavaJRExpression())) {s = 18;}
 
-                        else if ( (LA16_12==35) && (synpred10_InternalJavaJRExpression())) {s = 18;}
+                        else if ( (LA15_13==36) && (synpred10_InternalJavaJRExpression())) {s = 19;}
 
-                        else if ( (LA16_12==36) && (synpred10_InternalJavaJRExpression())) {s = 19;}
+                        else if ( (LA15_13==37) && (synpred10_InternalJavaJRExpression())) {s = 20;}
 
-                        else if ( (LA16_12==37) && (synpred10_InternalJavaJRExpression())) {s = 20;}
+                        else if ( (LA15_13==33) && (synpred10_InternalJavaJRExpression())) {s = 21;}
 
-                        else if ( (LA16_12==33) && (synpred10_InternalJavaJRExpression())) {s = 21;}
+                        else if ( (LA15_13==34) && (synpred10_InternalJavaJRExpression())) {s = 22;}
 
-                        else if ( (LA16_12==34) && (synpred10_InternalJavaJRExpression())) {s = 22;}
+                        else if ( (LA15_13==67) && (synpred10_InternalJavaJRExpression())) {s = 23;}
 
-                        else if ( (LA16_12==73) && (synpred10_InternalJavaJRExpression())) {s = 23;}
+                        else if ( (LA15_13==55) && (synpred10_InternalJavaJRExpression())) {s = 24;}
 
-                        else if ( (LA16_12==61) && (synpred10_InternalJavaJRExpression())) {s = 24;}
+                        else if ( (LA15_13==68) && (synpred10_InternalJavaJRExpression())) {s = 25;}
 
-                        else if ( (LA16_12==74) && (synpred10_InternalJavaJRExpression())) {s = 25;}
+                        else if ( (LA15_13==56) && (synpred10_InternalJavaJRExpression())) {s = 26;}
 
-                        else if ( (LA16_12==62) && (synpred10_InternalJavaJRExpression())) {s = 26;}
+                        else if ( (LA15_13==32) && (synpred10_InternalJavaJRExpression())) {s = 27;}
 
-                        else if ( (LA16_12==32) && (synpred10_InternalJavaJRExpression())) {s = 27;}
+                        else if ( (LA15_13==30) && (synpred10_InternalJavaJRExpression())) {s = 28;}
 
-                        else if ( (LA16_12==30) && (synpred10_InternalJavaJRExpression())) {s = 28;}
+                        else if ( (LA15_13==31) && (synpred10_InternalJavaJRExpression())) {s = 29;}
 
-                        else if ( (LA16_12==31) && (synpred10_InternalJavaJRExpression())) {s = 29;}
+                        else if ( (LA15_13==29) && (synpred10_InternalJavaJRExpression())) {s = 30;}
 
-                        else if ( (LA16_12==29) && (synpred10_InternalJavaJRExpression())) {s = 30;}
+                        else if ( (LA15_13==28) && (synpred10_InternalJavaJRExpression())) {s = 31;}
 
-                        else if ( (LA16_12==28) && (synpred10_InternalJavaJRExpression())) {s = 31;}
+                        else if ( (LA15_13==26) && (synpred10_InternalJavaJRExpression())) {s = 32;}
 
-                        else if ( (LA16_12==26) && (synpred10_InternalJavaJRExpression())) {s = 32;}
+                        else if ( (LA15_13==EOF) && (synpred10_InternalJavaJRExpression())) {s = 33;}
 
-                        else if ( (LA16_12==EOF) && (synpred10_InternalJavaJRExpression())) {s = 33;}
+                        else if ( (LA15_13==27) && (synpred10_InternalJavaJRExpression())) {s = 34;}
 
-                        else if ( (LA16_12==27) && (synpred10_InternalJavaJRExpression())) {s = 34;}
+                        else if ( (LA15_13==51) && (synpred10_InternalJavaJRExpression())) {s = 35;}
 
-                        else if ( (LA16_12==56) && (synpred10_InternalJavaJRExpression())) {s = 35;}
+                        else if ( (LA15_13==54) && (synpred10_InternalJavaJRExpression())) {s = 36;}
 
-                        else if ( (LA16_12==60) && (synpred10_InternalJavaJRExpression())) {s = 36;}
+                        else if ( (LA15_13==53) && (synpred10_InternalJavaJRExpression())) {s = 37;}
 
-                        else if ( (LA16_12==59) && (synpred10_InternalJavaJRExpression())) {s = 37;}
+                        else if ( (LA15_13==40) ) {s = 9;}
 
                          
-                        input.seek(index16_12);
+                        input.seek(index15_13);
                         if ( s>=0 ) return s;
                         break;
                     case 2 : 
-                        int LA16_13 = input.LA(1);
+                        int LA15_14 = input.LA(1);
 
                          
-                        int index16_13 = input.index();
+                        int index15_14 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (LA16_13==41) ) {s = 14;}
+                        if ( (LA15_14==40) ) {s = 9;}
 
-                        else if ( (LA16_13==35) && (synpred10_InternalJavaJRExpression())) {s = 18;}
+                        else if ( (LA15_14==35) && (synpred10_InternalJavaJRExpression())) {s = 18;}
 
-                        else if ( (LA16_13==36) && (synpred10_InternalJavaJRExpression())) {s = 19;}
+                        else if ( (LA15_14==36) && (synpred10_InternalJavaJRExpression())) {s = 19;}
 
-                        else if ( (LA16_13==37) && (synpred10_InternalJavaJRExpression())) {s = 20;}
+                        else if ( (LA15_14==37) && (synpred10_InternalJavaJRExpression())) {s = 20;}
 
-                        else if ( (LA16_13==33) && (synpred10_InternalJavaJRExpression())) {s = 21;}
+                        else if ( (LA15_14==33) && (synpred10_InternalJavaJRExpression())) {s = 21;}
 
-                        else if ( (LA16_13==34) && (synpred10_InternalJavaJRExpression())) {s = 22;}
+                        else if ( (LA15_14==34) && (synpred10_InternalJavaJRExpression())) {s = 22;}
 
-                        else if ( (LA16_13==73) && (synpred10_InternalJavaJRExpression())) {s = 23;}
+                        else if ( (LA15_14==67) && (synpred10_InternalJavaJRExpression())) {s = 23;}
 
-                        else if ( (LA16_13==61) && (synpred10_InternalJavaJRExpression())) {s = 24;}
+                        else if ( (LA15_14==55) && (synpred10_InternalJavaJRExpression())) {s = 24;}
 
-                        else if ( (LA16_13==74) && (synpred10_InternalJavaJRExpression())) {s = 25;}
+                        else if ( (LA15_14==68) && (synpred10_InternalJavaJRExpression())) {s = 25;}
 
-                        else if ( (LA16_13==62) && (synpred10_InternalJavaJRExpression())) {s = 26;}
+                        else if ( (LA15_14==56) && (synpred10_InternalJavaJRExpression())) {s = 26;}
 
-                        else if ( (LA16_13==32) && (synpred10_InternalJavaJRExpression())) {s = 27;}
+                        else if ( (LA15_14==32) && (synpred10_InternalJavaJRExpression())) {s = 27;}
 
-                        else if ( (LA16_13==30) && (synpred10_InternalJavaJRExpression())) {s = 28;}
+                        else if ( (LA15_14==30) && (synpred10_InternalJavaJRExpression())) {s = 28;}
 
-                        else if ( (LA16_13==31) && (synpred10_InternalJavaJRExpression())) {s = 29;}
+                        else if ( (LA15_14==31) && (synpred10_InternalJavaJRExpression())) {s = 29;}
 
-                        else if ( (LA16_13==29) && (synpred10_InternalJavaJRExpression())) {s = 30;}
+                        else if ( (LA15_14==29) && (synpred10_InternalJavaJRExpression())) {s = 30;}
 
-                        else if ( (LA16_13==28) && (synpred10_InternalJavaJRExpression())) {s = 31;}
+                        else if ( (LA15_14==28) && (synpred10_InternalJavaJRExpression())) {s = 31;}
 
-                        else if ( (LA16_13==26) && (synpred10_InternalJavaJRExpression())) {s = 32;}
+                        else if ( (LA15_14==26) && (synpred10_InternalJavaJRExpression())) {s = 32;}
 
-                        else if ( (LA16_13==EOF) && (synpred10_InternalJavaJRExpression())) {s = 33;}
+                        else if ( (LA15_14==EOF) && (synpred10_InternalJavaJRExpression())) {s = 33;}
 
-                        else if ( (LA16_13==27) && (synpred10_InternalJavaJRExpression())) {s = 34;}
+                        else if ( (LA15_14==27) && (synpred10_InternalJavaJRExpression())) {s = 34;}
 
-                        else if ( (LA16_13==56) && (synpred10_InternalJavaJRExpression())) {s = 35;}
+                        else if ( (LA15_14==51) && (synpred10_InternalJavaJRExpression())) {s = 35;}
 
-                        else if ( (LA16_13==60) && (synpred10_InternalJavaJRExpression())) {s = 36;}
+                        else if ( (LA15_14==54) && (synpred10_InternalJavaJRExpression())) {s = 36;}
 
-                        else if ( (LA16_13==59) && (synpred10_InternalJavaJRExpression())) {s = 37;}
+                        else if ( (LA15_14==53) && (synpred10_InternalJavaJRExpression())) {s = 37;}
 
                          
-                        input.seek(index16_13);
+                        input.seek(index15_14);
                         if ( s>=0 ) return s;
                         break;
             }
             if (state.backtracking>0) {state.failed=true; return -1;}
             NoViableAltException nvae =
-                new NoViableAltException(getDescription(), 16, _s, input);
+                new NoViableAltException(getDescription(), 15, _s, input);
             error(nvae);
             throw nvae;
         }
     }
-    static final String DFA35_eotS =
-        "\30\uffff";
-    static final String DFA35_eofS =
-        "\1\2\27\uffff";
-    static final String DFA35_minS =
-        "\1\32\1\0\26\uffff";
-    static final String DFA35_maxS =
-        "\1\112\1\0\26\uffff";
-    static final String DFA35_acceptS =
-        "\2\uffff\1\2\24\uffff\1\1";
-    static final String DFA35_specialS =
-        "\1\uffff\1\0\26\uffff}>";
-    static final String[] DFA35_transitionS = {
-            "\14\2\3\uffff\1\2\4\uffff\1\2\11\uffff\1\2\2\uffff\2\2\1\1\1"+
-            "\2\12\uffff\2\2",
+    static final String DFA36_eotS =
+        "\27\uffff";
+    static final String DFA36_eofS =
+        "\1\2\26\uffff";
+    static final String DFA36_minS =
+        "\1\32\1\0\25\uffff";
+    static final String DFA36_maxS =
+        "\1\104\1\0\25\uffff";
+    static final String DFA36_acceptS =
+        "\2\uffff\1\2\23\uffff\1\1";
+    static final String DFA36_specialS =
+        "\1\uffff\1\0\25\uffff}>";
+    static final String[] DFA36_transitionS = {
+            "\14\2\7\uffff\1\2\5\uffff\1\2\1\uffff\2\2\1\1\1\2\12\uffff\2"+
+            "\2",
             "\1\uffff",
-            "",
             "",
             "",
             "",
@@ -9948,61 +9829,61 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
             ""
     };
 
-    static final short[] DFA35_eot = DFA.unpackEncodedString(DFA35_eotS);
-    static final short[] DFA35_eof = DFA.unpackEncodedString(DFA35_eofS);
-    static final char[] DFA35_min = DFA.unpackEncodedStringToUnsignedChars(DFA35_minS);
-    static final char[] DFA35_max = DFA.unpackEncodedStringToUnsignedChars(DFA35_maxS);
-    static final short[] DFA35_accept = DFA.unpackEncodedString(DFA35_acceptS);
-    static final short[] DFA35_special = DFA.unpackEncodedString(DFA35_specialS);
-    static final short[][] DFA35_transition;
+    static final short[] DFA36_eot = DFA.unpackEncodedString(DFA36_eotS);
+    static final short[] DFA36_eof = DFA.unpackEncodedString(DFA36_eofS);
+    static final char[] DFA36_min = DFA.unpackEncodedStringToUnsignedChars(DFA36_minS);
+    static final char[] DFA36_max = DFA.unpackEncodedStringToUnsignedChars(DFA36_maxS);
+    static final short[] DFA36_accept = DFA.unpackEncodedString(DFA36_acceptS);
+    static final short[] DFA36_special = DFA.unpackEncodedString(DFA36_specialS);
+    static final short[][] DFA36_transition;
 
     static {
-        int numStates = DFA35_transitionS.length;
-        DFA35_transition = new short[numStates][];
+        int numStates = DFA36_transitionS.length;
+        DFA36_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA35_transition[i] = DFA.unpackEncodedString(DFA35_transitionS[i]);
+            DFA36_transition[i] = DFA.unpackEncodedString(DFA36_transitionS[i]);
         }
     }
 
-    class DFA35 extends DFA {
+    class DFA36 extends DFA {
 
-        public DFA35(BaseRecognizer recognizer) {
+        public DFA36(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 35;
-            this.eot = DFA35_eot;
-            this.eof = DFA35_eof;
-            this.min = DFA35_min;
-            this.max = DFA35_max;
-            this.accept = DFA35_accept;
-            this.special = DFA35_special;
-            this.transition = DFA35_transition;
+            this.decisionNumber = 36;
+            this.eot = DFA36_eot;
+            this.eof = DFA36_eof;
+            this.min = DFA36_min;
+            this.max = DFA36_max;
+            this.accept = DFA36_accept;
+            this.special = DFA36_special;
+            this.transition = DFA36_transition;
         }
         public String getDescription() {
-            return "2612:2: ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )?";
+            return "2588:2: ( ( ( '<' )=>otherlv_1= '<' ) ( (lv_arguments_2_0= ruleJvmArgumentTypeReference ) ) (otherlv_3= ',' ( (lv_arguments_4_0= ruleJvmArgumentTypeReference ) ) )* otherlv_5= '>' )?";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             TokenStream input = (TokenStream)_input;
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA35_1 = input.LA(1);
+                        int LA36_1 = input.LA(1);
 
                          
-                        int index35_1 = input.index();
+                        int index36_1 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred12_InternalJavaJRExpression()) ) {s = 23;}
+                        if ( (synpred12_InternalJavaJRExpression()) ) {s = 22;}
 
                         else if ( (true) ) {s = 2;}
 
                          
-                        input.seek(index35_1);
+                        input.seek(index36_1);
                         if ( s>=0 ) return s;
                         break;
             }
             if (state.backtracking>0) {state.failed=true; return -1;}
             NoViableAltException nvae =
-                new NoViableAltException(getDescription(), 35, _s, input);
+                new NoViableAltException(getDescription(), 36, _s, input);
             error(nvae);
             throw nvae;
         }
@@ -10018,61 +9899,61 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
     public static final BitSet FOLLOW_ruleConditionalExpression_in_entryRuleConditionalExpression256 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleConditionalExpression266 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleConditionalOrExpression_in_ruleConditionalExpression313 = new BitSet(new long[]{0x0000000004000002L});
-    public static final BitSet FOLLOW_26_in_ruleConditionalExpression348 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_26_in_ruleConditionalExpression348 = new BitSet(new long[]{0x00079EC600000FE0L});
     public static final BitSet FOLLOW_ruleJasperReportsExpression_in_ruleConditionalExpression371 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_27_in_ruleConditionalExpression383 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_27_in_ruleConditionalExpression383 = new BitSet(new long[]{0x00079EC600000FE0L});
     public static final BitSet FOLLOW_ruleJasperReportsExpression_in_ruleConditionalExpression404 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleConditionalOrExpression_in_entryRuleConditionalOrExpression442 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleConditionalOrExpression452 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleConditionalAndExpression_in_ruleConditionalOrExpression499 = new BitSet(new long[]{0x0000000010000002L});
-    public static final BitSet FOLLOW_28_in_ruleConditionalOrExpression550 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_28_in_ruleConditionalOrExpression550 = new BitSet(new long[]{0x00079EC600000FE0L});
     public static final BitSet FOLLOW_ruleConditionalAndExpression_in_ruleConditionalOrExpression586 = new BitSet(new long[]{0x0000000010000002L});
     public static final BitSet FOLLOW_ruleConditionalAndExpression_in_entryRuleConditionalAndExpression624 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleConditionalAndExpression634 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleEqualityExpression_in_ruleConditionalAndExpression681 = new BitSet(new long[]{0x0000000020000002L});
-    public static final BitSet FOLLOW_29_in_ruleConditionalAndExpression732 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_29_in_ruleConditionalAndExpression732 = new BitSet(new long[]{0x00079EC600000FE0L});
     public static final BitSet FOLLOW_ruleEqualityExpression_in_ruleConditionalAndExpression768 = new BitSet(new long[]{0x0000000020000002L});
     public static final BitSet FOLLOW_ruleEqualityExpression_in_entryRuleEqualityExpression806 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleEqualityExpression816 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleInstanceofExpression_in_ruleEqualityExpression863 = new BitSet(new long[]{0x00000000C0000002L});
-    public static final BitSet FOLLOW_30_in_ruleEqualityExpression935 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_31_in_ruleEqualityExpression964 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_30_in_ruleEqualityExpression935 = new BitSet(new long[]{0x00079EC600000FE0L});
+    public static final BitSet FOLLOW_31_in_ruleEqualityExpression964 = new BitSet(new long[]{0x00079EC600000FE0L});
     public static final BitSet FOLLOW_ruleInstanceofExpression_in_ruleEqualityExpression1003 = new BitSet(new long[]{0x00000000C0000002L});
     public static final BitSet FOLLOW_ruleInstanceofExpression_in_entryRuleInstanceofExpression1041 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleInstanceofExpression1051 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleRelationalExpression_in_ruleInstanceofExpression1098 = new BitSet(new long[]{0x0000000100000002L});
-    public static final BitSet FOLLOW_32_in_ruleInstanceofExpression1149 = new BitSet(new long[]{0x0000000000000800L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_32_in_ruleInstanceofExpression1149 = new BitSet(new long[]{0xF800000000000800L,0x0000000000000007L});
     public static final BitSet FOLLOW_ruleType_in_ruleInstanceofExpression1185 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleRelationalExpression_in_entryRuleRelationalExpression1223 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleRelationalExpression1233 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAdditiveExpression_in_ruleRelationalExpression1280 = new BitSet(new long[]{0x6000000000000002L,0x0000000000000600L});
-    public static final BitSet FOLLOW_ruleRelationalOp_in_ruleRelationalExpression1329 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleAdditiveExpression_in_ruleRelationalExpression1352 = new BitSet(new long[]{0x6000000000000002L,0x0000000000000600L});
+    public static final BitSet FOLLOW_ruleAdditiveExpression_in_ruleRelationalExpression1280 = new BitSet(new long[]{0x0180000000000002L,0x0000000000000018L});
+    public static final BitSet FOLLOW_ruleRelationalOp_in_ruleRelationalExpression1329 = new BitSet(new long[]{0x00079EC600000FE0L});
+    public static final BitSet FOLLOW_ruleAdditiveExpression_in_ruleRelationalExpression1352 = new BitSet(new long[]{0x0180000000000002L,0x0000000000000018L});
     public static final BitSet FOLLOW_ruleAdditiveExpression_in_entryRuleAdditiveExpression1390 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleAdditiveExpression1400 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleMultiplicativeExpression_in_ruleAdditiveExpression1447 = new BitSet(new long[]{0x0000000600000002L});
-    public static final BitSet FOLLOW_33_in_ruleAdditiveExpression1519 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_34_in_ruleAdditiveExpression1548 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_33_in_ruleAdditiveExpression1519 = new BitSet(new long[]{0x00079EC600000FE0L});
+    public static final BitSet FOLLOW_34_in_ruleAdditiveExpression1548 = new BitSet(new long[]{0x00079EC600000FE0L});
     public static final BitSet FOLLOW_ruleMultiplicativeExpression_in_ruleAdditiveExpression1587 = new BitSet(new long[]{0x0000000600000002L});
     public static final BitSet FOLLOW_ruleMultiplicativeExpression_in_entryRuleMultiplicativeExpression1625 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleMultiplicativeExpression1635 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_ruleMultiplicativeExpression1682 = new BitSet(new long[]{0x0000003800000002L});
-    public static final BitSet FOLLOW_35_in_ruleMultiplicativeExpression1768 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_36_in_ruleMultiplicativeExpression1797 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_37_in_ruleMultiplicativeExpression1826 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_35_in_ruleMultiplicativeExpression1768 = new BitSet(new long[]{0x00079EC600000FE0L});
+    public static final BitSet FOLLOW_36_in_ruleMultiplicativeExpression1797 = new BitSet(new long[]{0x00079EC600000FE0L});
+    public static final BitSet FOLLOW_37_in_ruleMultiplicativeExpression1826 = new BitSet(new long[]{0x00079EC600000FE0L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_ruleMultiplicativeExpression1865 = new BitSet(new long[]{0x0000003800000002L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_entryRuleUnaryExpression1903 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleUnaryExpression1913 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_33_in_ruleUnaryExpression1951 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_33_in_ruleUnaryExpression1951 = new BitSet(new long[]{0x00079EC600000FE0L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_ruleUnaryExpression1973 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_34_in_ruleUnaryExpression1992 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_34_in_ruleUnaryExpression1992 = new BitSet(new long[]{0x00079EC600000FE0L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_ruleUnaryExpression2014 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleUnaryExpressionNotPlusMinus_in_ruleUnaryExpression2042 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleUnaryExpressionNotPlusMinus_in_entryRuleUnaryExpressionNotPlusMinus2077 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleUnaryExpressionNotPlusMinus2087 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_38_in_ruleUnaryExpressionNotPlusMinus2125 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_38_in_ruleUnaryExpressionNotPlusMinus2125 = new BitSet(new long[]{0x00079EC600000FE0L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_ruleUnaryExpressionNotPlusMinus2147 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_39_in_ruleUnaryExpressionNotPlusMinus2166 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
+    public static final BitSet FOLLOW_39_in_ruleUnaryExpressionNotPlusMinus2166 = new BitSet(new long[]{0x00079EC600000FE0L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_ruleUnaryExpressionNotPlusMinus2188 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleCastedExpression_in_ruleUnaryExpressionNotPlusMinus2222 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulePrimaryExpression_in_ruleUnaryExpressionNotPlusMinus2250 = new BitSet(new long[]{0x0000000000000002L});
@@ -10081,187 +9962,182 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
     public static final BitSet FOLLOW_ruleParExpression_in_rulePrimaryExpression2342 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleLiteralExpression_in_rulePrimaryExpression2369 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleArrayCreator_in_rulePrimaryExpression2396 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleObjectCreation_in_rulePrimaryExpression2423 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleBaseJRExpression_in_rulePrimaryExpression2456 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMethodsExpression_in_rulePrimaryExpression2484 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rulePrimaryExpression2521 = new BitSet(new long[]{0x0000020000000000L});
-    public static final BitSet FOLLOW_40_in_rulePrimaryExpression2545 = new BitSet(new long[]{0x0000020000000000L});
-    public static final BitSet FOLLOW_41_in_rulePrimaryExpression2571 = new BitSet(new long[]{0x0000040000000000L});
-    public static final BitSet FOLLOW_42_in_rulePrimaryExpression2583 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleBaseJRExpression_in_entryRuleBaseJRExpression2620 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleBaseJRExpression2630 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJRFieldObj_in_ruleBaseJRExpression2677 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJRParameterObj_in_ruleBaseJRExpression2704 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJRVariableObj_in_ruleBaseJRExpression2731 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJRFieldObj_in_entryRuleJRFieldObj2766 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleJRFieldObj2776 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_43_in_ruleJRFieldObj2822 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRFieldObj2839 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJRParameterObj_in_entryRuleJRParameterObj2880 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleJRParameterObj2890 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_44_in_ruleJRParameterObj2936 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRParameterObj2953 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJRVariableObj_in_entryRuleJRVariableObj2994 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleJRVariableObj3004 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_45_in_ruleJRVariableObj3050 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRVariableObj3067 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMethodsExpression_in_entryRuleMethodsExpression3108 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMethodsExpression3118 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3175 = new BitSet(new long[]{0x0000420000000002L});
-    public static final BitSet FOLLOW_41_in_ruleMethodsExpression3188 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3209 = new BitSet(new long[]{0x0000420000000002L});
-    public static final BitSet FOLLOW_ruleBaseJRExpression_in_ruleMethodsExpression3240 = new BitSet(new long[]{0x0000020000000000L});
-    public static final BitSet FOLLOW_41_in_ruleMethodsExpression3253 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3274 = new BitSet(new long[]{0x0000420000000002L});
-    public static final BitSet FOLLOW_46_in_ruleMethodsExpression3291 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_ruleIntLiteral_in_ruleMethodsExpression3312 = new BitSet(new long[]{0x0000800000000000L});
-    public static final BitSet FOLLOW_47_in_ruleMethodsExpression3324 = new BitSet(new long[]{0x0000400000000002L});
-    public static final BitSet FOLLOW_ruleLiteralExpression_in_entryRuleLiteralExpression3362 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleLiteralExpression3372 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIntLiteral_in_ruleLiteralExpression3419 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLongLiteral_in_ruleLiteralExpression3446 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFloatLiteral_in_ruleLiteralExpression3473 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDoubleLiteral_in_ruleLiteralExpression3500 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCharLiteral_in_ruleLiteralExpression3527 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleStringLiteral_in_ruleLiteralExpression3554 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleBooleanLiteral_in_ruleLiteralExpression3581 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleNullLiteral_in_ruleLiteralExpression3608 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIntLiteral_in_entryRuleIntLiteral3643 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleIntLiteral3653 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_INT_in_ruleIntLiteral3704 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLongLiteral_in_entryRuleLongLiteral3745 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleLongLiteral3755 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_LONG_in_ruleLongLiteral3806 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFloatLiteral_in_entryRuleFloatLiteral3847 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleFloatLiteral3857 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_FLOAT_in_ruleFloatLiteral3908 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDoubleLiteral_in_entryRuleDoubleLiteral3949 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleDoubleLiteral3959 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_DOUBLE_in_ruleDoubleLiteral4010 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCharLiteral_in_entryRuleCharLiteral4051 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleCharLiteral4061 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_CHAR_in_ruleCharLiteral4112 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleStringLiteral_in_entryRuleStringLiteral4153 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleStringLiteral4163 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_ruleStringLiteral4214 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleBooleanLiteral_in_entryRuleBooleanLiteral4255 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleBooleanLiteral4265 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_48_in_ruleBooleanLiteral4312 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_49_in_ruleBooleanLiteral4330 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_50_in_ruleBooleanLiteral4348 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_51_in_ruleBooleanLiteral4374 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_52_in_ruleBooleanLiteral4403 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_53_in_ruleBooleanLiteral4432 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleNullLiteral_in_entryRuleNullLiteral4485 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleNullLiteral4495 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_54_in_ruleNullLiteral4541 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleParExpression_in_entryRuleParExpression4577 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleParExpression4587 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_55_in_ruleParExpression4624 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_ruleParExpression4646 = new BitSet(new long[]{0x0100000000000000L});
-    public static final BitSet FOLLOW_56_in_ruleParExpression4657 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCastedExpression_in_entryRuleCastedExpression4693 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleCastedExpression4703 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_55_in_ruleCastedExpression4749 = new BitSet(new long[]{0x0000000000000800L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleType_in_ruleCastedExpression4770 = new BitSet(new long[]{0x0100000000000000L});
-    public static final BitSet FOLLOW_56_in_ruleCastedExpression4782 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_ruleCastedExpression4803 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_entryRuleType4839 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleType4849 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rulePrimitiveType_in_ruleType4905 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmTypeReference_in_ruleType4932 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleArrayCreator_in_entryRuleArrayCreator4969 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleArrayCreator4979 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_57_in_ruleArrayCreator5025 = new BitSet(new long[]{0x0000000000000800L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleType_in_ruleArrayCreator5046 = new BitSet(new long[]{0x0000400000000000L});
-    public static final BitSet FOLLOW_46_in_ruleArrayCreator5060 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_ruleIntLiteral_in_ruleArrayCreator5081 = new BitSet(new long[]{0x0000800000000000L});
-    public static final BitSet FOLLOW_47_in_ruleArrayCreator5093 = new BitSet(new long[]{0x0000400000000002L});
-    public static final BitSet FOLLOW_46_in_ruleArrayCreator5115 = new BitSet(new long[]{0x0000800000000000L});
-    public static final BitSet FOLLOW_47_in_ruleArrayCreator5127 = new BitSet(new long[]{0x0400400000000000L});
-    public static final BitSet FOLLOW_ruleArrayInitializer_in_ruleArrayCreator5150 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleArrayInitializer_in_entryRuleArrayInitializer5188 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleArrayInitializer5198 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_58_in_ruleArrayInitializer5244 = new BitSet(new long[]{0x0AFF39C600000FE0L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleExpressionList_in_ruleArrayInitializer5265 = new BitSet(new long[]{0x0800000000000000L});
-    public static final BitSet FOLLOW_59_in_ruleArrayInitializer5278 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleObjectCreation_in_entryRuleObjectCreation5314 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleObjectCreation5324 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_57_in_ruleObjectCreation5370 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_ruleMethodInvocation_in_ruleObjectCreation5391 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMethodInvocation_in_entryRuleMethodInvocation5427 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMethodInvocation5437 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFullMethodName_in_ruleMethodInvocation5492 = new BitSet(new long[]{0x0080000000000000L});
-    public static final BitSet FOLLOW_ruleArguments_in_ruleMethodInvocation5513 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFullMethodName_in_entryRuleFullMethodName5549 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleFullMethodName5559 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleValidID_in_ruleFullMethodName5606 = new BitSet(new long[]{0x0000020000000000L});
-    public static final BitSet FOLLOW_41_in_ruleFullMethodName5624 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_ruleValidID_in_ruleFullMethodName5660 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleArguments_in_entryRuleArguments5696 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleArguments5706 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_55_in_ruleArguments5752 = new BitSet(new long[]{0x03FF39C600000FE0L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleExpressionList_in_ruleArguments5773 = new BitSet(new long[]{0x0100000000000000L});
-    public static final BitSet FOLLOW_56_in_ruleArguments5786 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionList_in_entryRuleExpressionList5822 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleExpressionList5832 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_ruleExpressionList5878 = new BitSet(new long[]{0x1000000000000002L});
-    public static final BitSet FOLLOW_60_in_ruleExpressionList5897 = new BitSet(new long[]{0x02FF39C600000FE0L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_ruleExpressionList5931 = new BitSet(new long[]{0x1000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmTypeReference_in_entryRuleJvmTypeReference5969 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleJvmTypeReference5979 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmParameterizedTypeReference_in_ruleJvmTypeReference6026 = new BitSet(new long[]{0x0000400000000002L});
-    public static final BitSet FOLLOW_46_in_ruleJvmTypeReference6064 = new BitSet(new long[]{0x0000800000000000L});
-    public static final BitSet FOLLOW_47_in_ruleJvmTypeReference6076 = new BitSet(new long[]{0x0000400000000002L});
-    public static final BitSet FOLLOW_ruleJvmParameterizedTypeReference_in_entryRuleJvmParameterizedTypeReference6115 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleJvmParameterizedTypeReference6125 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_ruleJvmParameterizedTypeReference6173 = new BitSet(new long[]{0x2000000000000002L});
-    public static final BitSet FOLLOW_61_in_ruleJvmParameterizedTypeReference6194 = new BitSet(new long[]{0x0000000004000800L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleJvmArgumentTypeReference_in_ruleJvmParameterizedTypeReference6216 = new BitSet(new long[]{0x5000000000000000L});
-    public static final BitSet FOLLOW_60_in_ruleJvmParameterizedTypeReference6229 = new BitSet(new long[]{0x0000000004000800L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleJvmArgumentTypeReference_in_ruleJvmParameterizedTypeReference6250 = new BitSet(new long[]{0x5000000000000000L});
-    public static final BitSet FOLLOW_62_in_ruleJvmParameterizedTypeReference6264 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmArgumentTypeReference_in_entryRuleJvmArgumentTypeReference6302 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleJvmArgumentTypeReference6312 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmTypeReference_in_ruleJvmArgumentTypeReference6359 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmWildcardTypeReference_in_ruleJvmArgumentTypeReference6386 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmWildcardTypeReference_in_entryRuleJvmWildcardTypeReference6421 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleJvmWildcardTypeReference6431 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_26_in_ruleJvmWildcardTypeReference6477 = new BitSet(new long[]{0x8000000000000002L,0x0000000000000001L});
-    public static final BitSet FOLLOW_ruleJvmUpperBound_in_ruleJvmWildcardTypeReference6499 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmLowerBound_in_ruleJvmWildcardTypeReference6526 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmUpperBound_in_entryRuleJvmUpperBound6564 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleJvmUpperBound6574 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_63_in_ruleJvmUpperBound6611 = new BitSet(new long[]{0x0000000000000800L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleJvmTypeReference_in_ruleJvmUpperBound6632 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmLowerBound_in_entryRuleJvmLowerBound6668 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleJvmLowerBound6678 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_64_in_ruleJvmLowerBound6715 = new BitSet(new long[]{0x0000000000000800L,0x00000000000001FEL});
-    public static final BitSet FOLLOW_ruleJvmTypeReference_in_ruleJvmLowerBound6736 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rulePrimitiveType_in_entryRulePrimitiveType6773 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRulePrimitiveType6784 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_65_in_rulePrimitiveType6822 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_66_in_rulePrimitiveType6841 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_67_in_rulePrimitiveType6860 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_68_in_rulePrimitiveType6879 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_69_in_rulePrimitiveType6898 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_70_in_rulePrimitiveType6917 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_71_in_rulePrimitiveType6936 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_72_in_rulePrimitiveType6955 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleRelationalOp_in_entryRuleRelationalOp6996 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleRelationalOp7007 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_73_in_ruleRelationalOp7045 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_61_in_ruleRelationalOp7064 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_74_in_ruleRelationalOp7083 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_62_in_ruleRelationalOp7102 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName7143 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleQualifiedName7154 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleValidID_in_ruleQualifiedName7201 = new BitSet(new long[]{0x0000020000000002L});
-    public static final BitSet FOLLOW_41_in_ruleQualifiedName7220 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_ruleValidID_in_ruleQualifiedName7242 = new BitSet(new long[]{0x0000020000000002L});
-    public static final BitSet FOLLOW_ruleValidID_in_entryRuleValidID7290 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleValidID7301 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_ruleValidID7340 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleBaseJRExpression_in_rulePrimaryExpression2429 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMethodsExpression_in_rulePrimaryExpression2457 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleStaticField_in_rulePrimaryExpression2484 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleStaticField_in_entryRuleStaticField2519 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleStaticField2529 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleValidID_in_ruleStaticField2585 = new BitSet(new long[]{0x0000010000000000L});
+    public static final BitSet FOLLOW_40_in_ruleStaticField2603 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_ruleValidID_in_ruleStaticField2639 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleBaseJRExpression_in_entryRuleBaseJRExpression2675 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleBaseJRExpression2685 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJRFieldObj_in_ruleBaseJRExpression2732 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJRParameterObj_in_ruleBaseJRExpression2759 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJRVariableObj_in_ruleBaseJRExpression2786 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJRFieldObj_in_entryRuleJRFieldObj2821 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleJRFieldObj2831 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_41_in_ruleJRFieldObj2877 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRFieldObj2894 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJRParameterObj_in_entryRuleJRParameterObj2935 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleJRParameterObj2945 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_42_in_ruleJRParameterObj2991 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRParameterObj3008 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJRVariableObj_in_entryRuleJRVariableObj3049 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleJRVariableObj3059 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_43_in_ruleJRVariableObj3105 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_ruleJRVariableObj3122 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMethodsExpression_in_entryRuleMethodsExpression3163 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMethodsExpression3173 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_44_in_ruleMethodsExpression3227 = new BitSet(new long[]{0x0000100000000800L});
+    public static final BitSet FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3262 = new BitSet(new long[]{0x0000210000000002L});
+    public static final BitSet FOLLOW_40_in_ruleMethodsExpression3275 = new BitSet(new long[]{0x0000100000000800L});
+    public static final BitSet FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3296 = new BitSet(new long[]{0x0000210000000002L});
+    public static final BitSet FOLLOW_ruleBaseJRExpression_in_ruleMethodsExpression3329 = new BitSet(new long[]{0x0000010000000000L});
+    public static final BitSet FOLLOW_ruleStringLiteral_in_ruleMethodsExpression3348 = new BitSet(new long[]{0x0000010000000000L});
+    public static final BitSet FOLLOW_40_in_ruleMethodsExpression3364 = new BitSet(new long[]{0x0000100000000800L});
+    public static final BitSet FOLLOW_ruleMethodInvocation_in_ruleMethodsExpression3385 = new BitSet(new long[]{0x0000210000000002L});
+    public static final BitSet FOLLOW_45_in_ruleMethodsExpression3402 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_ruleIntLiteral_in_ruleMethodsExpression3423 = new BitSet(new long[]{0x0000400000000000L});
+    public static final BitSet FOLLOW_46_in_ruleMethodsExpression3435 = new BitSet(new long[]{0x0000200000000002L});
+    public static final BitSet FOLLOW_ruleLiteralExpression_in_entryRuleLiteralExpression3473 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleLiteralExpression3483 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIntLiteral_in_ruleLiteralExpression3530 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLongLiteral_in_ruleLiteralExpression3557 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFloatLiteral_in_ruleLiteralExpression3584 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDoubleLiteral_in_ruleLiteralExpression3611 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleCharLiteral_in_ruleLiteralExpression3638 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleStringLiteral_in_ruleLiteralExpression3665 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleBooleanLiteral_in_ruleLiteralExpression3692 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleNullLiteral_in_ruleLiteralExpression3719 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIntLiteral_in_entryRuleIntLiteral3754 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleIntLiteral3764 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_INT_in_ruleIntLiteral3815 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLongLiteral_in_entryRuleLongLiteral3856 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleLongLiteral3866 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_LONG_in_ruleLongLiteral3917 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFloatLiteral_in_entryRuleFloatLiteral3958 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleFloatLiteral3968 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_FLOAT_in_ruleFloatLiteral4019 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDoubleLiteral_in_entryRuleDoubleLiteral4060 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleDoubleLiteral4070 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_DOUBLE_in_ruleDoubleLiteral4121 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleCharLiteral_in_entryRuleCharLiteral4162 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleCharLiteral4172 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_CHAR_in_ruleCharLiteral4223 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleStringLiteral_in_entryRuleStringLiteral4264 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleStringLiteral4274 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_ruleStringLiteral4325 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleBooleanLiteral_in_entryRuleBooleanLiteral4366 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleBooleanLiteral4376 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_47_in_ruleBooleanLiteral4423 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_48_in_ruleBooleanLiteral4447 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleNullLiteral_in_entryRuleNullLiteral4497 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleNullLiteral4507 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_49_in_ruleNullLiteral4553 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleParExpression_in_entryRuleParExpression4589 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleParExpression4599 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_50_in_ruleParExpression4636 = new BitSet(new long[]{0x00079EC600000FE0L});
+    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_ruleParExpression4658 = new BitSet(new long[]{0x0008000000000000L});
+    public static final BitSet FOLLOW_51_in_ruleParExpression4669 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleCastedExpression_in_entryRuleCastedExpression4705 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleCastedExpression4715 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_50_in_ruleCastedExpression4761 = new BitSet(new long[]{0xF800000000000800L,0x0000000000000007L});
+    public static final BitSet FOLLOW_ruleType_in_ruleCastedExpression4782 = new BitSet(new long[]{0x0008000000000000L});
+    public static final BitSet FOLLOW_51_in_ruleCastedExpression4794 = new BitSet(new long[]{0x00079EC600000FE0L});
+    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_ruleCastedExpression4815 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_entryRuleType4851 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleType4861 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rulePrimitiveType_in_ruleType4917 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmTypeReference_in_ruleType4944 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleArrayCreator_in_entryRuleArrayCreator4981 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleArrayCreator4991 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_44_in_ruleArrayCreator5037 = new BitSet(new long[]{0xF800000000000800L,0x0000000000000007L});
+    public static final BitSet FOLLOW_ruleType_in_ruleArrayCreator5058 = new BitSet(new long[]{0x0000200000000000L});
+    public static final BitSet FOLLOW_45_in_ruleArrayCreator5072 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_ruleIntLiteral_in_ruleArrayCreator5093 = new BitSet(new long[]{0x0000400000000000L});
+    public static final BitSet FOLLOW_46_in_ruleArrayCreator5105 = new BitSet(new long[]{0x0000200000000002L});
+    public static final BitSet FOLLOW_45_in_ruleArrayCreator5127 = new BitSet(new long[]{0x0000400000000000L});
+    public static final BitSet FOLLOW_46_in_ruleArrayCreator5139 = new BitSet(new long[]{0x0010200000000000L});
+    public static final BitSet FOLLOW_ruleArrayInitializer_in_ruleArrayCreator5162 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleArrayInitializer_in_entryRuleArrayInitializer5200 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleArrayInitializer5210 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_52_in_ruleArrayInitializer5256 = new BitSet(new long[]{0x00279EC600000FE0L});
+    public static final BitSet FOLLOW_ruleExpressionList_in_ruleArrayInitializer5277 = new BitSet(new long[]{0x0020000000000000L});
+    public static final BitSet FOLLOW_53_in_ruleArrayInitializer5290 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMethodInvocation_in_entryRuleMethodInvocation5326 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMethodInvocation5336 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFullMethodName_in_ruleMethodInvocation5391 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_ruleArguments_in_ruleMethodInvocation5412 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFullMethodName_in_entryRuleFullMethodName5448 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleFullMethodName5458 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleValidID_in_ruleFullMethodName5505 = new BitSet(new long[]{0x0000010000000000L});
+    public static final BitSet FOLLOW_40_in_ruleFullMethodName5523 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_ruleValidID_in_ruleFullMethodName5559 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleArguments_in_entryRuleArguments5595 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleArguments5605 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_50_in_ruleArguments5651 = new BitSet(new long[]{0x000F9EC600000FE0L});
+    public static final BitSet FOLLOW_ruleExpressionList_in_ruleArguments5672 = new BitSet(new long[]{0x0008000000000000L});
+    public static final BitSet FOLLOW_51_in_ruleArguments5685 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionList_in_entryRuleExpressionList5721 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleExpressionList5731 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_ruleExpressionList5777 = new BitSet(new long[]{0x0040000000000002L});
+    public static final BitSet FOLLOW_54_in_ruleExpressionList5796 = new BitSet(new long[]{0x00079EC600000FE0L});
+    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_ruleExpressionList5830 = new BitSet(new long[]{0x0040000000000002L});
+    public static final BitSet FOLLOW_ruleJvmTypeReference_in_entryRuleJvmTypeReference5868 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleJvmTypeReference5878 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmParameterizedTypeReference_in_ruleJvmTypeReference5925 = new BitSet(new long[]{0x0000200000000002L});
+    public static final BitSet FOLLOW_45_in_ruleJvmTypeReference5963 = new BitSet(new long[]{0x0000400000000000L});
+    public static final BitSet FOLLOW_46_in_ruleJvmTypeReference5975 = new BitSet(new long[]{0x0000200000000002L});
+    public static final BitSet FOLLOW_ruleJvmParameterizedTypeReference_in_entryRuleJvmParameterizedTypeReference6014 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleJvmParameterizedTypeReference6024 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_ruleJvmParameterizedTypeReference6072 = new BitSet(new long[]{0x0080000000000002L});
+    public static final BitSet FOLLOW_55_in_ruleJvmParameterizedTypeReference6093 = new BitSet(new long[]{0xF800000004000800L,0x0000000000000007L});
+    public static final BitSet FOLLOW_ruleJvmArgumentTypeReference_in_ruleJvmParameterizedTypeReference6115 = new BitSet(new long[]{0x0140000000000000L});
+    public static final BitSet FOLLOW_54_in_ruleJvmParameterizedTypeReference6128 = new BitSet(new long[]{0xF800000004000800L,0x0000000000000007L});
+    public static final BitSet FOLLOW_ruleJvmArgumentTypeReference_in_ruleJvmParameterizedTypeReference6149 = new BitSet(new long[]{0x0140000000000000L});
+    public static final BitSet FOLLOW_56_in_ruleJvmParameterizedTypeReference6163 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmArgumentTypeReference_in_entryRuleJvmArgumentTypeReference6201 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleJvmArgumentTypeReference6211 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmTypeReference_in_ruleJvmArgumentTypeReference6258 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmWildcardTypeReference_in_ruleJvmArgumentTypeReference6285 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmWildcardTypeReference_in_entryRuleJvmWildcardTypeReference6320 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleJvmWildcardTypeReference6330 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_26_in_ruleJvmWildcardTypeReference6376 = new BitSet(new long[]{0x0600000000000002L});
+    public static final BitSet FOLLOW_ruleJvmUpperBound_in_ruleJvmWildcardTypeReference6398 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmLowerBound_in_ruleJvmWildcardTypeReference6425 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmUpperBound_in_entryRuleJvmUpperBound6463 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleJvmUpperBound6473 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_57_in_ruleJvmUpperBound6510 = new BitSet(new long[]{0xF800000000000800L,0x0000000000000007L});
+    public static final BitSet FOLLOW_ruleJvmTypeReference_in_ruleJvmUpperBound6531 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmLowerBound_in_entryRuleJvmLowerBound6567 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleJvmLowerBound6577 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_58_in_ruleJvmLowerBound6614 = new BitSet(new long[]{0xF800000000000800L,0x0000000000000007L});
+    public static final BitSet FOLLOW_ruleJvmTypeReference_in_ruleJvmLowerBound6635 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rulePrimitiveType_in_entryRulePrimitiveType6672 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRulePrimitiveType6683 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_59_in_rulePrimitiveType6721 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_60_in_rulePrimitiveType6740 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_61_in_rulePrimitiveType6759 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_62_in_rulePrimitiveType6778 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_63_in_rulePrimitiveType6797 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_64_in_rulePrimitiveType6816 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_65_in_rulePrimitiveType6835 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_66_in_rulePrimitiveType6854 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleRelationalOp_in_entryRuleRelationalOp6895 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleRelationalOp6906 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_67_in_ruleRelationalOp6944 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_55_in_ruleRelationalOp6963 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_68_in_ruleRelationalOp6982 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_56_in_ruleRelationalOp7001 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName7042 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleQualifiedName7053 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleValidID_in_ruleQualifiedName7100 = new BitSet(new long[]{0x0000010000000002L});
+    public static final BitSet FOLLOW_40_in_ruleQualifiedName7119 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_ruleValidID_in_ruleQualifiedName7141 = new BitSet(new long[]{0x0000010000000002L});
+    public static final BitSet FOLLOW_ruleValidID_in_entryRuleValidID7189 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleValidID7200 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_ruleValidID7239 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_26_in_synpred1_InternalJavaJRExpression329 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_28_in_synpred2_InternalJavaJRExpression519 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_29_in_synpred3_InternalJavaJRExpression701 = new BitSet(new long[]{0x0000000000000002L});
@@ -10271,9 +10147,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
     public static final BitSet FOLLOW_set_in_synpred7_InternalJavaJRExpression1466 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_synpred8_InternalJavaJRExpression1701 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleCastedExpression_in_synpred9_InternalJavaJRExpression2206 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleBaseJRExpression_in_synpred10_InternalJavaJRExpression2440 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_46_in_synpred11_InternalJavaJRExpression6041 = new BitSet(new long[]{0x0000800000000000L});
-    public static final BitSet FOLLOW_47_in_synpred11_InternalJavaJRExpression6045 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_61_in_synpred12_InternalJavaJRExpression6186 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleBaseJRExpression_in_synpred10_InternalJavaJRExpression2413 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_45_in_synpred11_InternalJavaJRExpression5940 = new BitSet(new long[]{0x0000400000000000L});
+    public static final BitSet FOLLOW_46_in_synpred11_InternalJavaJRExpression5944 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_55_in_synpred12_InternalJavaJRExpression6085 = new BitSet(new long[]{0x0000000000000002L});
 
 }

@@ -52,6 +52,5 @@ public class JavaJRExpressionStandaloneSetupGenerated implements ISetup {
 		
 
 
-
 	}
 }

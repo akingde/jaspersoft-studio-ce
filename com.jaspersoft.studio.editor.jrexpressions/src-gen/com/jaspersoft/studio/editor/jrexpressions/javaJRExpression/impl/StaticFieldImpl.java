@@ -23,28 +23,27 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EDataTypeEList;
 
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Full Method Name</b></em>'.
+ * An implementation of the model object '<em><b>Static Field</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.FullMethodNameImpl#getPrefixQMN <em>Prefix QMN</em>}</li>
- *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.FullMethodNameImpl#getDots <em>Dots</em>}</li>
- *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.FullMethodNameImpl#getMethodName <em>Method Name</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.StaticFieldImpl#getPrefixQMN <em>Prefix QMN</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.StaticFieldImpl#getDots <em>Dots</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.StaticFieldImpl#getFieldName <em>Field Name</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements FullMethodName
+public class StaticFieldImpl extends JasperReportsExpressionImpl implements StaticField
 {
   /**
    * The cached value of the '{@link #getPrefixQMN() <em>Prefix QMN</em>}' attribute list.
@@ -67,31 +66,31 @@ public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements 
   protected EList<String> dots;
 
   /**
-   * The default value of the '{@link #getMethodName() <em>Method Name</em>}' attribute.
+   * The default value of the '{@link #getFieldName() <em>Field Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getMethodName()
+   * @see #getFieldName()
    * @generated
    * @ordered
    */
-  protected static final String METHOD_NAME_EDEFAULT = null;
+  protected static final String FIELD_NAME_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getMethodName() <em>Method Name</em>}' attribute.
+   * The cached value of the '{@link #getFieldName() <em>Field Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getMethodName()
+   * @see #getFieldName()
    * @generated
    * @ordered
    */
-  protected String methodName = METHOD_NAME_EDEFAULT;
+  protected String fieldName = FIELD_NAME_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected FullMethodNameImpl()
+  protected StaticFieldImpl()
   {
     super();
   }
@@ -104,7 +103,7 @@ public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements 
   @Override
   protected EClass eStaticClass()
   {
-    return JavaJRExpressionPackage.Literals.FULL_METHOD_NAME;
+    return JavaJRExpressionPackage.Literals.STATIC_FIELD;
   }
 
   /**
@@ -116,7 +115,7 @@ public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements 
   {
     if (prefixQMN == null)
     {
-      prefixQMN = new EDataTypeEList<String>(String.class, this, JavaJRExpressionPackage.FULL_METHOD_NAME__PREFIX_QMN);
+      prefixQMN = new EDataTypeEList<String>(String.class, this, JavaJRExpressionPackage.STATIC_FIELD__PREFIX_QMN);
     }
     return prefixQMN;
   }
@@ -130,7 +129,7 @@ public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements 
   {
     if (dots == null)
     {
-      dots = new EDataTypeEList<String>(String.class, this, JavaJRExpressionPackage.FULL_METHOD_NAME__DOTS);
+      dots = new EDataTypeEList<String>(String.class, this, JavaJRExpressionPackage.STATIC_FIELD__DOTS);
     }
     return dots;
   }
@@ -140,9 +139,9 @@ public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getMethodName()
+  public String getFieldName()
   {
-    return methodName;
+    return fieldName;
   }
 
   /**
@@ -150,12 +149,12 @@ public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setMethodName(String newMethodName)
+  public void setFieldName(String newFieldName)
   {
-    String oldMethodName = methodName;
-    methodName = newMethodName;
+    String oldFieldName = fieldName;
+    fieldName = newFieldName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME, oldMethodName, methodName));
+      eNotify(new ENotificationImpl(this, Notification.SET, JavaJRExpressionPackage.STATIC_FIELD__FIELD_NAME, oldFieldName, fieldName));
   }
 
   /**
@@ -168,12 +167,12 @@ public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__PREFIX_QMN:
+      case JavaJRExpressionPackage.STATIC_FIELD__PREFIX_QMN:
         return getPrefixQMN();
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__DOTS:
+      case JavaJRExpressionPackage.STATIC_FIELD__DOTS:
         return getDots();
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME:
-        return getMethodName();
+      case JavaJRExpressionPackage.STATIC_FIELD__FIELD_NAME:
+        return getFieldName();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -189,16 +188,16 @@ public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__PREFIX_QMN:
+      case JavaJRExpressionPackage.STATIC_FIELD__PREFIX_QMN:
         getPrefixQMN().clear();
         getPrefixQMN().addAll((Collection<? extends String>)newValue);
         return;
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__DOTS:
+      case JavaJRExpressionPackage.STATIC_FIELD__DOTS:
         getDots().clear();
         getDots().addAll((Collection<? extends String>)newValue);
         return;
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME:
-        setMethodName((String)newValue);
+      case JavaJRExpressionPackage.STATIC_FIELD__FIELD_NAME:
+        setFieldName((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -214,14 +213,14 @@ public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__PREFIX_QMN:
+      case JavaJRExpressionPackage.STATIC_FIELD__PREFIX_QMN:
         getPrefixQMN().clear();
         return;
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__DOTS:
+      case JavaJRExpressionPackage.STATIC_FIELD__DOTS:
         getDots().clear();
         return;
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME:
-        setMethodName(METHOD_NAME_EDEFAULT);
+      case JavaJRExpressionPackage.STATIC_FIELD__FIELD_NAME:
+        setFieldName(FIELD_NAME_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -237,12 +236,12 @@ public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__PREFIX_QMN:
+      case JavaJRExpressionPackage.STATIC_FIELD__PREFIX_QMN:
         return prefixQMN != null && !prefixQMN.isEmpty();
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__DOTS:
+      case JavaJRExpressionPackage.STATIC_FIELD__DOTS:
         return dots != null && !dots.isEmpty();
-      case JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME:
-        return METHOD_NAME_EDEFAULT == null ? methodName != null : !METHOD_NAME_EDEFAULT.equals(methodName);
+      case JavaJRExpressionPackage.STATIC_FIELD__FIELD_NAME:
+        return FIELD_NAME_EDEFAULT == null ? fieldName != null : !FIELD_NAME_EDEFAULT.equals(fieldName);
     }
     return super.eIsSet(featureID);
   }
@@ -262,10 +261,10 @@ public class FullMethodNameImpl extends MinimalEObjectImpl.Container implements 
     result.append(prefixQMN);
     result.append(", dots: ");
     result.append(dots);
-    result.append(", methodName: ");
-    result.append(methodName);
+    result.append(", fieldName: ");
+    result.append(fieldName);
     result.append(')');
     return result.toString();
   }
 
-} //FullMethodNameImpl
+} //StaticFieldImpl

@@ -60,14 +60,18 @@ UnaryExpressionNotPlusMinus returns JasperReportsExpression:
 
 PrimaryExpression returns JasperReportsExpression:
 	ParExpression
-	| LiteralExpression 
+	| LiteralExpression
 	| ArrayCreator 
-	| ObjectCreation
-	| (=>BaseJRExpression)	// Look for a base jrexpression, avoiding a sort of "dangling else problem". 
+	//| ObjectCreation
+	| =>BaseJRExpression	// Look for a base jrexpression, avoiding a sort of "dangling else problem". 
 							// MethodsExpression in fact uses BaseJRExpression resulting in potential ambiguity
-	| MethodsExpression 
-	| {TypeClass} (type=Type | void?='void') '.' 'class' 
+	| MethodsExpression
+	| StaticField
 	; 
+
+StaticField returns JasperReportsExpression:
+	{StaticField} (prefixQMN+=ValidID dots+='.')* fieldName=ValidID
+;
 
 BaseJRExpression returns JasperReportsExpression:
 	JRFieldObj | JRParameterObj | JRVariableObj;
@@ -87,8 +91,8 @@ JRVariableObj returns JasperReportsExpression:
 MethodsExpression returns JasperReportsExpression:
 	// arrayIndexes feature allows MethodExpression to support arrays
 	{MethodsExpression} 
-	(methodInvocations+=MethodInvocation	('.' methodInvocations+=MethodInvocation)* |
-	objectExpression=BaseJRExpression ('.' methodInvocations+=MethodInvocation)+) ('[' arrayIndexes+=IntLiteral ']')*
+	(includeObjectInstatiation?=('new')? methodInvocations+=MethodInvocation ('.' methodInvocations+=MethodInvocation)* |
+	objectExpression=(BaseJRExpression | StringLiteral) ('.' methodInvocations+=MethodInvocation)+) ('[' arrayIndexes+=IntLiteral ']')*
 ;
 
 LiteralExpression returns JasperReportsExpression:
@@ -127,10 +131,7 @@ StringLiteral returns JasperReportsExpression:
 ;
 
 BooleanLiteral returns JasperReportsExpression:
-	{BooleanLiteral} (
-		'false' | 'java.lang.Boolean.FALSE' | 'Boolean.FALSE' | 
-		isTrue?=('true' | 'java.lang.Boolean.TRUE' | 'Boolean.TRUE')
-	)
+	{BooleanLiteral} ('false' | isTrue?='true')
 ;
 
 NullLiteral  returns JasperReportsExpression:
@@ -156,9 +157,9 @@ ArrayInitializer:
 	{ArrayInitializer} '{' (initialization=ExpressionList)? '}'
 ;
 
-ObjectCreation returns JasperReportsExpression:
-	{ObjectCreation} 'new' constructorInvocation=MethodInvocation
-;
+//ObjectCreation returns JasperReportsExpression:
+//	{ObjectCreation} 'new' constructorInvocation=MethodInvocation
+//;
 
 MethodInvocation:
 	{MethodInvocation} fullyQualifiedMethodName=FullMethodName args=Arguments

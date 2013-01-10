@@ -14,9 +14,6 @@
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 /**
- * <copyright>
- * </copyright>
- *
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl;
 
@@ -54,11 +51,10 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.LongLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.NullLiteral;
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StringLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TestExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Type;
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass;
 
 /**
  * <!-- begin-user-doc -->
@@ -126,7 +122,7 @@ public class JavaJRExpressionFactoryImpl extends EFactoryImpl implements JavaJRE
       case JavaJRExpressionPackage.JVM_LOWER_BOUND: return createJvmLowerBound();
       case JavaJRExpressionPackage.TEST_EXPRESSION: return createTestExpression();
       case JavaJRExpressionPackage.BINARY_EXPRESSION: return createBinaryExpression();
-      case JavaJRExpressionPackage.TYPE_CLASS: return createTypeClass();
+      case JavaJRExpressionPackage.STATIC_FIELD: return createStaticField();
       case JavaJRExpressionPackage.JR_FIELD_OBJ: return createJRFieldObj();
       case JavaJRExpressionPackage.JR_PARAMETER_OBJ: return createJRParameterObj();
       case JavaJRExpressionPackage.JR_VARIABLE_OBJ: return createJRVariableObj();
@@ -141,7 +137,6 @@ public class JavaJRExpressionFactoryImpl extends EFactoryImpl implements JavaJRE
       case JavaJRExpressionPackage.NULL_LITERAL: return createNullLiteral();
       case JavaJRExpressionPackage.CASTED_EXPRESSION: return createCastedExpression();
       case JavaJRExpressionPackage.ARRAY_CREATOR: return createArrayCreator();
-      case JavaJRExpressionPackage.OBJECT_CREATION: return createObjectCreation();
       case JavaJRExpressionPackage.JVM_GENERIC_ARRAY_TYPE_REFERENCE: return createJvmGenericArrayTypeReference();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -307,10 +302,10 @@ public class JavaJRExpressionFactoryImpl extends EFactoryImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
-  public TypeClass createTypeClass()
+  public StaticField createStaticField()
   {
-    TypeClassImpl typeClass = new TypeClassImpl();
-    return typeClass;
+    StaticFieldImpl staticField = new StaticFieldImpl();
+    return staticField;
   }
 
   /**
@@ -465,17 +460,6 @@ public class JavaJRExpressionFactoryImpl extends EFactoryImpl implements JavaJRE
   {
     ArrayCreatorImpl arrayCreator = new ArrayCreatorImpl();
     return arrayCreator;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public ObjectCreation createObjectCreation()
-  {
-    ObjectCreationImpl objectCreation = new ObjectCreationImpl();
-    return objectCreation;
   }
 
   /**

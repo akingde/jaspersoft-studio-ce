@@ -34,7 +34,7 @@ Workflow {
 		activator="com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator"	
 		pathRtProject = runtimeProject
 		pathUiProject = "${runtimeProject}.ui"
-		pathTestProject = "${runtimeProject}.tests"
+//		pathTestProject = "${runtimeProject}.tests"
 		projectNameRt = projectName
 		projectNameUi = "${projectName}.ui"
 		
@@ -83,11 +83,11 @@ Workflow {
 			fragment = exporting.QualifiedNamesFragment {}
 			fragment = builder.BuilderIntegrationFragment {}
 
-			// generator API
-			fragment = generator.GeneratorFragment {
-				generateMwe = true
-				generateJavaMain = true
-			}
+//			// generator API
+//			fragment = generator.GeneratorFragment {
+//				generateMwe = true
+//				generateJavaMain = true
+//			}
 			
 			// formatter API 
 			fragment = formatting.FormatterFragment {}
@@ -95,12 +95,12 @@ Workflow {
 			// labeling API 
 			fragment = labeling.LabelProviderFragment {}
 
-			// outline API 
-			fragment = outline.OutlineTreeProviderFragment {}
-			fragment = outline.QuickOutlineFragment {}
+//			// outline API 
+//			fragment = outline.OutlineTreeProviderFragment {}
+//			fragment = outline.QuickOutlineFragment {}
 
-			// quickfix API 
-			fragment = quickfix.QuickfixProviderFragment {}
+//			// quickfix API 
+//			fragment = quickfix.QuickfixProviderFragment {}
 
 			// content assist API  
 			fragment = contentAssist.JavaBasedContentAssistFragment {}
@@ -108,8 +108,8 @@ Workflow {
 			// generates a more lightweight Antlr parser and lexer tailored for content assist  
 			fragment = parser.antlr.XtextAntlrUiGeneratorFragment {}
 
-			// generates junit test support classes into Generator#pathTestProject
-			fragment = junit.Junit4Fragment {}
+//			// generates junit test support classes into Generator#pathTestProject
+//			fragment = junit.Junit4Fragment {}
 
 			// project wizard (optional) 
 			// fragment = projectWizard.SimpleProjectWizardFragment {
@@ -120,11 +120,11 @@ Workflow {
 			// provides the necessary bindings for java types integration
 			fragment = types.TypesGeneratorFragment {}
 
-			// generates the required bindings only if the grammar inherits from Xbase
-			fragment = xbase.XbaseGeneratorFragment {}
+//			// generates the required bindings only if the grammar inherits from Xbase
+//			fragment = xbase.XbaseGeneratorFragment {}
 			
-			// provides a preference page for template proposals 
-			fragment = templates.CodetemplatesGeneratorFragment {}
+//			// provides a preference page for template proposals 
+//			fragment = templates.CodetemplatesGeneratorFragment {}
 
 			// rename refactoring
             // fragment = refactoring.RefactorElementNameFragment {}

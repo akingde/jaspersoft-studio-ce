@@ -31,7 +31,6 @@ import org.eclipse.xtext.parser.antlr.Lexer;
 @SuppressWarnings("all")
 public class InternalJavaJRExpressionLexer extends Lexer {
     public static final int T__68=68;
-    public static final int T__69=69;
     public static final int RULE_ID=11;
     public static final int T__66=66;
     public static final int T__67=67;
@@ -46,8 +45,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     public static final int RULE_ANY_OTHER=25;
     public static final int RULE_HEXDIGIT=19;
     public static final int T__61=61;
-    public static final int EOF=-1;
     public static final int T__60=60;
+    public static final int EOF=-1;
     public static final int T__55=55;
     public static final int T__56=56;
     public static final int T__57=57;
@@ -88,20 +87,15 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     public static final int T__32=32;
     public static final int RULE_STRING=10;
     public static final int T__33=33;
-    public static final int T__71=71;
     public static final int T__34=34;
-    public static final int T__72=72;
     public static final int T__35=35;
     public static final int T__36=36;
-    public static final int T__70=70;
     public static final int T__37=37;
     public static final int T__38=38;
     public static final int T__39=39;
     public static final int RULE_EXPONENT=20;
     public static final int RULE_INTEGERNUMBER=12;
     public static final int RULE_WS=24;
-    public static final int T__74=74;
-    public static final int T__73=73;
 
     // delegates
     // delegators
@@ -406,11 +400,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__40;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:25:7: ( 'void' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:25:9: 'void'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:25:7: ( '.' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:25:9: '.'
             {
-            match("void"); 
-
+            match('.'); 
 
             }
 
@@ -427,10 +420,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__41;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:26:7: ( '.' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:26:9: '.'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:26:7: ( '$F' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:26:9: '$F'
             {
-            match('.'); 
+            match("$F"); 
+
 
             }
 
@@ -447,10 +441,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__42;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:27:7: ( 'class' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:27:9: 'class'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:27:7: ( '$P' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:27:9: '$P'
             {
-            match("class"); 
+            match("$P"); 
 
 
             }
@@ -468,10 +462,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__43;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:28:7: ( '$F' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:28:9: '$F'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:28:7: ( '$V' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:28:9: '$V'
             {
-            match("$F"); 
+            match("$V"); 
 
 
             }
@@ -489,10 +483,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__44;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:29:7: ( '$P' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:29:9: '$P'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:29:7: ( 'new' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:29:9: 'new'
             {
-            match("$P"); 
+            match("new"); 
 
 
             }
@@ -510,11 +504,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__45;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:30:7: ( '$V' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:30:9: '$V'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:30:7: ( '[' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:30:9: '['
             {
-            match("$V"); 
-
+            match('['); 
 
             }
 
@@ -531,10 +524,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__46;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:31:7: ( '[' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:31:9: '['
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:31:7: ( ']' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:31:9: ']'
             {
-            match('['); 
+            match(']'); 
 
             }
 
@@ -551,10 +544,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__47;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:32:7: ( ']' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:32:9: ']'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:32:7: ( 'false' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:32:9: 'false'
             {
-            match(']'); 
+            match("false"); 
+
 
             }
 
@@ -571,10 +565,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__48;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:33:7: ( 'false' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:33:9: 'false'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:33:7: ( 'true' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:33:9: 'true'
             {
-            match("false"); 
+            match("true"); 
 
 
             }
@@ -592,10 +586,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__49;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:34:7: ( 'java.lang.Boolean.FALSE' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:34:9: 'java.lang.Boolean.FALSE'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:34:7: ( 'null' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:34:9: 'null'
             {
-            match("java.lang.Boolean.FALSE"); 
+            match("null"); 
 
 
             }
@@ -613,11 +607,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__50;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:35:7: ( 'Boolean.FALSE' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:35:9: 'Boolean.FALSE'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:35:7: ( '(' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:35:9: '('
             {
-            match("Boolean.FALSE"); 
-
+            match('('); 
 
             }
 
@@ -634,11 +627,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__51;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:36:7: ( 'true' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:36:9: 'true'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:36:7: ( ')' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:36:9: ')'
             {
-            match("true"); 
-
+            match(')'); 
 
             }
 
@@ -655,11 +647,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__52;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:37:7: ( 'java.lang.Boolean.TRUE' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:37:9: 'java.lang.Boolean.TRUE'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:37:7: ( '{' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:37:9: '{'
             {
-            match("java.lang.Boolean.TRUE"); 
-
+            match('{'); 
 
             }
 
@@ -676,11 +667,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__53;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:38:7: ( 'Boolean.TRUE' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:38:9: 'Boolean.TRUE'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:38:7: ( '}' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:38:9: '}'
             {
-            match("Boolean.TRUE"); 
-
+            match('}'); 
 
             }
 
@@ -697,11 +687,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__54;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:39:7: ( 'null' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:39:9: 'null'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:39:7: ( ',' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:39:9: ','
             {
-            match("null"); 
-
+            match(','); 
 
             }
 
@@ -718,10 +707,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__55;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:40:7: ( '(' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:40:9: '('
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:40:7: ( '<' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:40:9: '<'
             {
-            match('('); 
+            match('<'); 
 
             }
 
@@ -738,10 +727,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__56;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:41:7: ( ')' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:41:9: ')'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:41:7: ( '>' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:41:9: '>'
             {
-            match(')'); 
+            match('>'); 
 
             }
 
@@ -758,10 +747,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__57;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:42:7: ( 'new' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:42:9: 'new'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:42:7: ( 'extends' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:42:9: 'extends'
             {
-            match("new"); 
+            match("extends"); 
 
 
             }
@@ -779,10 +768,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__58;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:43:7: ( '{' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:43:9: '{'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:43:7: ( 'super' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:43:9: 'super'
             {
-            match('{'); 
+            match("super"); 
+
 
             }
 
@@ -799,10 +789,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__59;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:44:7: ( '}' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:44:9: '}'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:44:7: ( 'boolean' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:44:9: 'boolean'
             {
-            match('}'); 
+            match("boolean"); 
+
 
             }
 
@@ -819,10 +810,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__60;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:45:7: ( ',' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:45:9: ','
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:45:7: ( 'char' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:45:9: 'char'
             {
-            match(','); 
+            match("char"); 
+
 
             }
 
@@ -839,10 +831,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__61;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:46:7: ( '<' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:46:9: '<'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:46:7: ( 'byte' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:46:9: 'byte'
             {
-            match('<'); 
+            match("byte"); 
+
 
             }
 
@@ -859,10 +852,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__62;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:47:7: ( '>' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:47:9: '>'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:47:7: ( 'short' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:47:9: 'short'
             {
-            match('>'); 
+            match("short"); 
+
 
             }
 
@@ -879,10 +873,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__63;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:48:7: ( 'extends' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:48:9: 'extends'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:48:7: ( 'int' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:48:9: 'int'
             {
-            match("extends"); 
+            match("int"); 
 
 
             }
@@ -900,10 +894,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__64;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:49:7: ( 'super' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:49:9: 'super'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:49:7: ( 'long' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:49:9: 'long'
             {
-            match("super"); 
+            match("long"); 
 
 
             }
@@ -921,10 +915,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__65;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:50:7: ( 'boolean' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:50:9: 'boolean'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:50:7: ( 'float' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:50:9: 'float'
             {
-            match("boolean"); 
+            match("float"); 
 
 
             }
@@ -942,10 +936,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__66;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:51:7: ( 'char' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:51:9: 'char'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:51:7: ( 'double' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:51:9: 'double'
             {
-            match("char"); 
+            match("double"); 
 
 
             }
@@ -963,10 +957,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__67;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:52:7: ( 'byte' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:52:9: 'byte'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:52:7: ( '<=' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:52:9: '<='
             {
-            match("byte"); 
+            match("<="); 
 
 
             }
@@ -984,134 +978,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = T__68;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:53:7: ( 'short' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:53:9: 'short'
-            {
-            match("short"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "T__68"
-
-    // $ANTLR start "T__69"
-    public final void mT__69() throws RecognitionException {
-        try {
-            int _type = T__69;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:54:7: ( 'int' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:54:9: 'int'
-            {
-            match("int"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "T__69"
-
-    // $ANTLR start "T__70"
-    public final void mT__70() throws RecognitionException {
-        try {
-            int _type = T__70;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:55:7: ( 'long' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:55:9: 'long'
-            {
-            match("long"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "T__70"
-
-    // $ANTLR start "T__71"
-    public final void mT__71() throws RecognitionException {
-        try {
-            int _type = T__71;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:56:7: ( 'float' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:56:9: 'float'
-            {
-            match("float"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "T__71"
-
-    // $ANTLR start "T__72"
-    public final void mT__72() throws RecognitionException {
-        try {
-            int _type = T__72;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:57:7: ( 'double' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:57:9: 'double'
-            {
-            match("double"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "T__72"
-
-    // $ANTLR start "T__73"
-    public final void mT__73() throws RecognitionException {
-        try {
-            int _type = T__73;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:58:7: ( '<=' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:58:9: '<='
-            {
-            match("<="); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "T__73"
-
-    // $ANTLR start "T__74"
-    public final void mT__74() throws RecognitionException {
-        try {
-            int _type = T__74;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:59:7: ( '>=' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:59:9: '>='
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:53:7: ( '>=' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:53:9: '>='
             {
             match(">="); 
 
@@ -1124,15 +992,15 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "T__74"
+    // $ANTLR end "T__68"
 
     // $ANTLR start "RULE_LONG"
     public final void mRULE_LONG() throws RecognitionException {
         try {
             int _type = RULE_LONG;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3063:11: ( RULE_INTEGERNUMBER RULE_LONGSUFFIX )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3063:13: RULE_INTEGERNUMBER RULE_LONGSUFFIX
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3039:11: ( RULE_INTEGERNUMBER RULE_LONGSUFFIX )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3039:13: RULE_INTEGERNUMBER RULE_LONGSUFFIX
             {
             mRULE_INTEGERNUMBER(); 
             mRULE_LONGSUFFIX(); 
@@ -1152,8 +1020,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = RULE_INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3065:10: ( RULE_INTEGERNUMBER )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3065:12: RULE_INTEGERNUMBER
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3041:10: ( RULE_INTEGERNUMBER )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3041:12: RULE_INTEGERNUMBER
             {
             mRULE_INTEGERNUMBER(); 
 
@@ -1172,8 +1040,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = RULE_FLOAT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3067:12: ( RULE_NONINTEGERNUMBER RULE_FLOATSUFFIX )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3067:14: RULE_NONINTEGERNUMBER RULE_FLOATSUFFIX
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3043:12: ( RULE_NONINTEGERNUMBER RULE_FLOATSUFFIX )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3043:14: RULE_NONINTEGERNUMBER RULE_FLOATSUFFIX
             {
             mRULE_NONINTEGERNUMBER(); 
             mRULE_FLOATSUFFIX(); 
@@ -1193,11 +1061,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = RULE_DOUBLE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3069:13: ( RULE_NONINTEGERNUMBER ( RULE_DOUBLESUFFIX )? )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3069:15: RULE_NONINTEGERNUMBER ( RULE_DOUBLESUFFIX )?
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3045:13: ( RULE_NONINTEGERNUMBER ( RULE_DOUBLESUFFIX )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3045:15: RULE_NONINTEGERNUMBER ( RULE_DOUBLESUFFIX )?
             {
             mRULE_NONINTEGERNUMBER(); 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3069:37: ( RULE_DOUBLESUFFIX )?
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3045:37: ( RULE_DOUBLESUFFIX )?
             int alt1=2;
             int LA1_0 = input.LA(1);
 
@@ -1206,7 +1074,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             }
             switch (alt1) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3069:37: RULE_DOUBLESUFFIX
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3045:37: RULE_DOUBLESUFFIX
                     {
                     mRULE_DOUBLESUFFIX(); 
 
@@ -1231,11 +1099,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = RULE_CHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3071:11: ( '\\'' ( RULE_ESCAPESEQUENCE | ~ ( ( '\\'' | '\\\\' | '\\r' | '\\n' ) ) ) '\\'' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3071:13: '\\'' ( RULE_ESCAPESEQUENCE | ~ ( ( '\\'' | '\\\\' | '\\r' | '\\n' ) ) ) '\\''
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3047:11: ( '\\'' ( RULE_ESCAPESEQUENCE | ~ ( ( '\\'' | '\\\\' | '\\r' | '\\n' ) ) ) '\\'' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3047:13: '\\'' ( RULE_ESCAPESEQUENCE | ~ ( ( '\\'' | '\\\\' | '\\r' | '\\n' ) ) ) '\\''
             {
             match('\''); 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3071:18: ( RULE_ESCAPESEQUENCE | ~ ( ( '\\'' | '\\\\' | '\\r' | '\\n' ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3047:18: ( RULE_ESCAPESEQUENCE | ~ ( ( '\\'' | '\\\\' | '\\r' | '\\n' ) ) )
             int alt2=2;
             int LA2_0 = input.LA(1);
 
@@ -1253,14 +1121,14 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             }
             switch (alt2) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3071:19: RULE_ESCAPESEQUENCE
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3047:19: RULE_ESCAPESEQUENCE
                     {
                     mRULE_ESCAPESEQUENCE(); 
 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3071:39: ~ ( ( '\\'' | '\\\\' | '\\r' | '\\n' ) )
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3047:39: ~ ( ( '\\'' | '\\\\' | '\\r' | '\\n' ) )
                     {
                     if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                         input.consume();
@@ -1294,11 +1162,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3073:13: ( '\"' ( RULE_ESCAPESEQUENCE | ~ ( ( '\\\\' | '\"' | '\\r' | '\\n' ) ) )* '\"' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3073:15: '\"' ( RULE_ESCAPESEQUENCE | ~ ( ( '\\\\' | '\"' | '\\r' | '\\n' ) ) )* '\"'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3049:13: ( '\"' ( RULE_ESCAPESEQUENCE | ~ ( ( '\\\\' | '\"' | '\\r' | '\\n' ) ) )* '\"' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3049:15: '\"' ( RULE_ESCAPESEQUENCE | ~ ( ( '\\\\' | '\"' | '\\r' | '\\n' ) ) )* '\"'
             {
             match('\"'); 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3073:19: ( RULE_ESCAPESEQUENCE | ~ ( ( '\\\\' | '\"' | '\\r' | '\\n' ) ) )*
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3049:19: ( RULE_ESCAPESEQUENCE | ~ ( ( '\\\\' | '\"' | '\\r' | '\\n' ) ) )*
             loop3:
             do {
                 int alt3=3;
@@ -1314,14 +1182,14 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3073:20: RULE_ESCAPESEQUENCE
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3049:20: RULE_ESCAPESEQUENCE
             	    {
             	    mRULE_ESCAPESEQUENCE(); 
 
             	    }
             	    break;
             	case 2 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3073:40: ~ ( ( '\\\\' | '\"' | '\\r' | '\\n' ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3049:40: ~ ( ( '\\\\' | '\"' | '\\r' | '\\n' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -1356,72 +1224,72 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR start "RULE_ESCAPESEQUENCE"
     public final void mRULE_ESCAPESEQUENCE() throws RecognitionException {
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:30: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:32: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:30: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:32: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' )
             {
             match('\\'); 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:37: ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:37: ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' )
             int alt4=11;
             alt4 = dfa4.predict(input);
             switch (alt4) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:38: 'b'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:38: 'b'
                     {
                     match('b'); 
 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:42: 't'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:42: 't'
                     {
                     match('t'); 
 
                     }
                     break;
                 case 3 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:46: 'n'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:46: 'n'
                     {
                     match('n'); 
 
                     }
                     break;
                 case 4 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:50: 'f'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:50: 'f'
                     {
                     match('f'); 
 
                     }
                     break;
                 case 5 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:54: 'r'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:54: 'r'
                     {
                     match('r'); 
 
                     }
                     break;
                 case 6 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:58: '\"'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:58: '\"'
                     {
                     match('\"'); 
 
                     }
                     break;
                 case 7 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:62: '\\''
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:62: '\\''
                     {
                     match('\''); 
 
                     }
                     break;
                 case 8 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:67: '\\\\'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:67: '\\\\'
                     {
                     match('\\'); 
 
                     }
                     break;
                 case 9 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:72: '0' .. '3' '0' .. '7' '0' .. '7'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:72: '0' .. '3' '0' .. '7' '0' .. '7'
                     {
                     matchRange('0','3'); 
                     matchRange('0','7'); 
@@ -1430,7 +1298,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     break;
                 case 10 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:99: '0' .. '7' '0' .. '7'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:99: '0' .. '7' '0' .. '7'
                     {
                     matchRange('0','7'); 
                     matchRange('0','7'); 
@@ -1438,7 +1306,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     break;
                 case 11 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:117: '0' .. '7'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3051:117: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
@@ -1459,10 +1327,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR start "RULE_INTEGERNUMBER"
     public final void mRULE_INTEGERNUMBER() throws RecognitionException {
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:29: ( ( '0' | '1' .. '9' ( '0' .. '9' )* | '0' ( '0' .. '7' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )+ ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:31: ( '0' | '1' .. '9' ( '0' .. '9' )* | '0' ( '0' .. '7' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )+ )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:29: ( ( '0' | '1' .. '9' ( '0' .. '9' )* | '0' ( '0' .. '7' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )+ ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:31: ( '0' | '1' .. '9' ( '0' .. '9' )* | '0' ( '0' .. '7' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )+ )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:31: ( '0' | '1' .. '9' ( '0' .. '9' )* | '0' ( '0' .. '7' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )+ )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:31: ( '0' | '1' .. '9' ( '0' .. '9' )* | '0' ( '0' .. '7' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )+ )
             int alt8=4;
             int LA8_0 = input.LA(1);
 
@@ -1501,17 +1369,17 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             }
             switch (alt8) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:32: '0'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:32: '0'
                     {
                     match('0'); 
 
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:36: '1' .. '9' ( '0' .. '9' )*
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:36: '1' .. '9' ( '0' .. '9' )*
                     {
                     matchRange('1','9'); 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:45: ( '0' .. '9' )*
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:45: ( '0' .. '9' )*
                     loop5:
                     do {
                         int alt5=2;
@@ -1524,7 +1392,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         switch (alt5) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:46: '0' .. '9'
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:46: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1540,10 +1408,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:57: '0' ( '0' .. '7' )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:57: '0' ( '0' .. '7' )+
                     {
                     match('0'); 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:61: ( '0' .. '7' )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:61: ( '0' .. '7' )+
                     int cnt6=0;
                     loop6:
                     do {
@@ -1557,7 +1425,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         switch (alt6) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:62: '0' .. '7'
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:62: '0' .. '7'
                     	    {
                     	    matchRange('0','7'); 
 
@@ -1577,10 +1445,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     break;
                 case 4 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:73: RULE_HEXPREFIX ( RULE_HEXDIGIT )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:73: RULE_HEXPREFIX ( RULE_HEXDIGIT )+
                     {
                     mRULE_HEXPREFIX(); 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:88: ( RULE_HEXDIGIT )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:88: ( RULE_HEXDIGIT )+
                     int cnt7=0;
                     loop7:
                     do {
@@ -1594,7 +1462,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         switch (alt7) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:88: RULE_HEXDIGIT
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3053:88: RULE_HEXDIGIT
                     	    {
                     	    mRULE_HEXDIGIT(); 
 
@@ -1628,10 +1496,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR start "RULE_HEXPREFIX"
     public final void mRULE_HEXPREFIX() throws RecognitionException {
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3079:25: ( ( '0x' | '0X' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3079:27: ( '0x' | '0X' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3055:25: ( ( '0x' | '0X' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3055:27: ( '0x' | '0X' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3079:27: ( '0x' | '0X' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3055:27: ( '0x' | '0X' )
             int alt9=2;
             int LA9_0 = input.LA(1);
 
@@ -1659,7 +1527,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             }
             switch (alt9) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3079:28: '0x'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3055:28: '0x'
                     {
                     match("0x"); 
 
@@ -1667,7 +1535,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3079:33: '0X'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3055:33: '0X'
                     {
                     match("0X"); 
 
@@ -1689,8 +1557,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR start "RULE_HEXDIGIT"
     public final void mRULE_HEXDIGIT() throws RecognitionException {
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3081:24: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3081:26: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3057:24: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3057:26: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
             {
             if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='F')||(input.LA(1)>='a' && input.LA(1)<='f') ) {
                 input.consume();
@@ -1713,8 +1581,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR start "RULE_LONGSUFFIX"
     public final void mRULE_LONGSUFFIX() throws RecognitionException {
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3083:26: ( ( 'l' | 'L' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3083:28: ( 'l' | 'L' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3059:26: ( ( 'l' | 'L' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3059:28: ( 'l' | 'L' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -1737,17 +1605,17 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR start "RULE_NONINTEGERNUMBER"
     public final void mRULE_NONINTEGERNUMBER() throws RecognitionException {
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:32: ( ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | ( '0' .. '9' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )* '.' ( RULE_HEXDIGIT )* ( 'p' | 'P' ) ( '+' | '-' )? ( '0' .. '9' )+ ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:34: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | ( '0' .. '9' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )* '.' ( RULE_HEXDIGIT )* ( 'p' | 'P' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:32: ( ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | ( '0' .. '9' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )* '.' ( RULE_HEXDIGIT )* ( 'p' | 'P' ) ( '+' | '-' )? ( '0' .. '9' )+ ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:34: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | ( '0' .. '9' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )* '.' ( RULE_HEXDIGIT )* ( 'p' | 'P' ) ( '+' | '-' )? ( '0' .. '9' )+ )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:34: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | ( '0' .. '9' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )* '.' ( RULE_HEXDIGIT )* ( 'p' | 'P' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:34: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | ( '0' .. '9' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )* '.' ( RULE_HEXDIGIT )* ( 'p' | 'P' ) ( '+' | '-' )? ( '0' .. '9' )+ )
             int alt21=5;
             alt21 = dfa21.predict(input);
             switch (alt21) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:35: ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:35: ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:35: ( '0' .. '9' )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:35: ( '0' .. '9' )+
                     int cnt10=0;
                     loop10:
                     do {
@@ -1761,7 +1629,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         switch (alt10) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:36: '0' .. '9'
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:36: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1778,7 +1646,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     } while (true);
 
                     match('.'); 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:51: ( '0' .. '9' )*
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:51: ( '0' .. '9' )*
                     loop11:
                     do {
                         int alt11=2;
@@ -1791,7 +1659,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         switch (alt11) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:52: '0' .. '9'
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:52: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1803,7 +1671,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                         }
                     } while (true);
 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:63: ( RULE_EXPONENT )?
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:63: ( RULE_EXPONENT )?
                     int alt12=2;
                     int LA12_0 = input.LA(1);
 
@@ -1812,7 +1680,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     switch (alt12) {
                         case 1 :
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:63: RULE_EXPONENT
+                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:63: RULE_EXPONENT
                             {
                             mRULE_EXPONENT(); 
 
@@ -1825,10 +1693,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:78: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:78: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
                     {
                     match('.'); 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:82: ( '0' .. '9' )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:82: ( '0' .. '9' )+
                     int cnt13=0;
                     loop13:
                     do {
@@ -1842,7 +1710,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         switch (alt13) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:83: '0' .. '9'
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:83: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1858,7 +1726,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                         cnt13++;
                     } while (true);
 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:94: ( RULE_EXPONENT )?
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:94: ( RULE_EXPONENT )?
                     int alt14=2;
                     int LA14_0 = input.LA(1);
 
@@ -1867,7 +1735,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     switch (alt14) {
                         case 1 :
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:94: RULE_EXPONENT
+                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:94: RULE_EXPONENT
                             {
                             mRULE_EXPONENT(); 
 
@@ -1880,9 +1748,9 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:109: ( '0' .. '9' )+ RULE_EXPONENT
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:109: ( '0' .. '9' )+ RULE_EXPONENT
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:109: ( '0' .. '9' )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:109: ( '0' .. '9' )+
                     int cnt15=0;
                     loop15:
                     do {
@@ -1896,7 +1764,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         switch (alt15) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:110: '0' .. '9'
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:110: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1917,9 +1785,9 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     break;
                 case 4 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:135: ( '0' .. '9' )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:135: ( '0' .. '9' )+
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:135: ( '0' .. '9' )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:135: ( '0' .. '9' )+
                     int cnt16=0;
                     loop16:
                     do {
@@ -1933,7 +1801,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         switch (alt16) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:136: '0' .. '9'
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:136: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1953,10 +1821,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     break;
                 case 5 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:147: RULE_HEXPREFIX ( RULE_HEXDIGIT )* '.' ( RULE_HEXDIGIT )* ( 'p' | 'P' ) ( '+' | '-' )? ( '0' .. '9' )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:147: RULE_HEXPREFIX ( RULE_HEXDIGIT )* '.' ( RULE_HEXDIGIT )* ( 'p' | 'P' ) ( '+' | '-' )? ( '0' .. '9' )+
                     {
                     mRULE_HEXPREFIX(); 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:162: ( RULE_HEXDIGIT )*
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:162: ( RULE_HEXDIGIT )*
                     loop17:
                     do {
                         int alt17=2;
@@ -1969,7 +1837,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         switch (alt17) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:162: RULE_HEXDIGIT
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:162: RULE_HEXDIGIT
                     	    {
                     	    mRULE_HEXDIGIT(); 
 
@@ -1982,7 +1850,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     } while (true);
 
                     match('.'); 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:181: ( RULE_HEXDIGIT )*
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:181: ( RULE_HEXDIGIT )*
                     loop18:
                     do {
                         int alt18=2;
@@ -1995,7 +1863,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         switch (alt18) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:181: RULE_HEXDIGIT
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:181: RULE_HEXDIGIT
                     	    {
                     	    mRULE_HEXDIGIT(); 
 
@@ -2016,7 +1884,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                         recover(mse);
                         throw mse;}
 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:206: ( '+' | '-' )?
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:206: ( '+' | '-' )?
                     int alt19=2;
                     int LA19_0 = input.LA(1);
 
@@ -2042,7 +1910,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                     }
 
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:217: ( '0' .. '9' )+
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:217: ( '0' .. '9' )+
                     int cnt20=0;
                     loop20:
                     do {
@@ -2056,7 +1924,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         switch (alt20) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3085:218: '0' .. '9'
+                    	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3061:218: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -2090,8 +1958,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR start "RULE_EXPONENT"
     public final void mRULE_EXPONENT() throws RecognitionException {
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3087:24: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3087:26: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3063:24: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3063:26: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -2102,7 +1970,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3087:36: ( '+' | '-' )?
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3063:36: ( '+' | '-' )?
             int alt22=2;
             int LA22_0 = input.LA(1);
 
@@ -2128,7 +1996,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3087:47: ( '0' .. '9' )+
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3063:47: ( '0' .. '9' )+
             int cnt23=0;
             loop23:
             do {
@@ -2142,7 +2010,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                 switch (alt23) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3087:48: '0' .. '9'
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3063:48: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -2170,8 +2038,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR start "RULE_FLOATSUFFIX"
     public final void mRULE_FLOATSUFFIX() throws RecognitionException {
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3089:27: ( ( 'f' | 'F' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3089:29: ( 'f' | 'F' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3065:27: ( ( 'f' | 'F' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3065:29: ( 'f' | 'F' )
             {
             if ( input.LA(1)=='F'||input.LA(1)=='f' ) {
                 input.consume();
@@ -2194,8 +2062,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR start "RULE_DOUBLESUFFIX"
     public final void mRULE_DOUBLESUFFIX() throws RecognitionException {
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3091:28: ( ( 'd' | 'D' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3091:30: ( 'd' | 'D' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3067:28: ( ( 'd' | 'D' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3067:30: ( 'd' | 'D' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -2220,8 +2088,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = RULE_BRACED_IDENTIFIER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3093:24: ( '{' RULE_EXPOBJIDENTIFIER '}' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3093:26: '{' RULE_EXPOBJIDENTIFIER '}'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3069:24: ( '{' RULE_EXPOBJIDENTIFIER '}' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3069:26: '{' RULE_EXPOBJIDENTIFIER '}'
             {
             match('{'); 
             mRULE_EXPOBJIDENTIFIER(); 
@@ -2240,10 +2108,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR start "RULE_EXPOBJIDENTIFIER"
     public final void mRULE_EXPOBJIDENTIFIER() throws RecognitionException {
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3095:32: ( (~ ( ( '\\r' | '\\n' | '}' ) ) )+ )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3095:34: (~ ( ( '\\r' | '\\n' | '}' ) ) )+
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3071:32: ( (~ ( ( '\\r' | '\\n' | '}' ) ) )+ )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3071:34: (~ ( ( '\\r' | '\\n' | '}' ) ) )+
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3095:34: (~ ( ( '\\r' | '\\n' | '}' ) ) )+
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3071:34: (~ ( ( '\\r' | '\\n' | '}' ) ) )+
             int cnt24=0;
             loop24:
             do {
@@ -2257,7 +2125,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                 switch (alt24) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3095:34: ~ ( ( '\\r' | '\\n' | '}' ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3071:34: ~ ( ( '\\r' | '\\n' | '}' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='|')||(input.LA(1)>='~' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -2295,10 +2163,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3097:9: ( ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3097:11: ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3073:9: ( ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3073:11: ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3097:11: ( '^' )?
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3073:11: ( '^' )?
             int alt25=2;
             int LA25_0 = input.LA(1);
 
@@ -2307,7 +2175,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             }
             switch (alt25) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3097:11: '^'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3073:11: '^'
                     {
                     match('^'); 
 
@@ -2325,7 +2193,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3097:40: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3073:40: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             loop26:
             do {
                 int alt26=2;
@@ -2374,12 +2242,12 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = RULE_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3099:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3099:19: '/*' ( options {greedy=false; } : . )* '*/'
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:19: '/*' ( options {greedy=false; } : . )* '*/'
             {
             match("/*"); 
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3099:24: ( options {greedy=false; } : . )*
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:24: ( options {greedy=false; } : . )*
             loop27:
             do {
                 int alt27=2;
@@ -2404,7 +2272,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                 switch (alt27) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3099:52: .
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3075:52: .
             	    {
             	    matchAny(); 
 
@@ -2434,12 +2302,12 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = RULE_SL_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3101:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3101:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
             {
             match("//"); 
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3101:24: (~ ( ( '\\n' | '\\r' ) ) )*
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:24: (~ ( ( '\\n' | '\\r' ) ) )*
             loop28:
             do {
                 int alt28=2;
@@ -2452,7 +2320,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                 switch (alt28) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3101:24: ~ ( ( '\\n' | '\\r' ) )
+            	    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:24: ~ ( ( '\\n' | '\\r' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -2472,7 +2340,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                 }
             } while (true);
 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3101:40: ( ( '\\r' )? '\\n' )?
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:40: ( ( '\\r' )? '\\n' )?
             int alt30=2;
             int LA30_0 = input.LA(1);
 
@@ -2481,9 +2349,9 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             }
             switch (alt30) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3101:41: ( '\\r' )? '\\n'
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:41: ( '\\r' )? '\\n'
                     {
-                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3101:41: ( '\\r' )?
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:41: ( '\\r' )?
                     int alt29=2;
                     int LA29_0 = input.LA(1);
 
@@ -2492,7 +2360,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     }
                     switch (alt29) {
                         case 1 :
-                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3101:41: '\\r'
+                            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3077:41: '\\r'
                             {
                             match('\r'); 
 
@@ -2524,10 +2392,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = RULE_WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3103:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3103:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3079:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3079:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3103:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3079:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             int cnt31=0;
             loop31:
             do {
@@ -2581,8 +2449,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         try {
             int _type = RULE_ANY_OTHER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3105:16: ( . )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3105:18: .
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3081:16: ( . )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3081:18: .
             {
             matchAny(); 
 
@@ -2597,8 +2465,8 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR end "RULE_ANY_OTHER"
 
     public void mTokens() throws RecognitionException {
-        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:8: ( T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | RULE_LONG | RULE_INT | RULE_FLOAT | RULE_DOUBLE | RULE_CHAR | RULE_STRING | RULE_BRACED_IDENTIFIER | RULE_ID | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER )
-        int alt32=61;
+        // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:8: ( T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | RULE_LONG | RULE_INT | RULE_FLOAT | RULE_DOUBLE | RULE_CHAR | RULE_STRING | RULE_BRACED_IDENTIFIER | RULE_ID | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER )
+        int alt32=55;
         alt32 = dfa32.predict(input);
         switch (alt32) {
             case 1 :
@@ -2903,126 +2771,84 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                 }
                 break;
             case 44 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:268: T__69
-                {
-                mT__69(); 
-
-                }
-                break;
-            case 45 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:274: T__70
-                {
-                mT__70(); 
-
-                }
-                break;
-            case 46 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:280: T__71
-                {
-                mT__71(); 
-
-                }
-                break;
-            case 47 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:286: T__72
-                {
-                mT__72(); 
-
-                }
-                break;
-            case 48 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:292: T__73
-                {
-                mT__73(); 
-
-                }
-                break;
-            case 49 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:298: T__74
-                {
-                mT__74(); 
-
-                }
-                break;
-            case 50 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:304: RULE_LONG
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:268: RULE_LONG
                 {
                 mRULE_LONG(); 
 
                 }
                 break;
-            case 51 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:314: RULE_INT
+            case 45 :
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:278: RULE_INT
                 {
                 mRULE_INT(); 
 
                 }
                 break;
-            case 52 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:323: RULE_FLOAT
+            case 46 :
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:287: RULE_FLOAT
                 {
                 mRULE_FLOAT(); 
 
                 }
                 break;
-            case 53 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:334: RULE_DOUBLE
+            case 47 :
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:298: RULE_DOUBLE
                 {
                 mRULE_DOUBLE(); 
 
                 }
                 break;
-            case 54 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:346: RULE_CHAR
+            case 48 :
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:310: RULE_CHAR
                 {
                 mRULE_CHAR(); 
 
                 }
                 break;
-            case 55 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:356: RULE_STRING
+            case 49 :
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:320: RULE_STRING
                 {
                 mRULE_STRING(); 
 
                 }
                 break;
-            case 56 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:368: RULE_BRACED_IDENTIFIER
+            case 50 :
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:332: RULE_BRACED_IDENTIFIER
                 {
                 mRULE_BRACED_IDENTIFIER(); 
 
                 }
                 break;
-            case 57 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:391: RULE_ID
+            case 51 :
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:355: RULE_ID
                 {
                 mRULE_ID(); 
 
                 }
                 break;
-            case 58 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:399: RULE_ML_COMMENT
+            case 52 :
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:363: RULE_ML_COMMENT
                 {
                 mRULE_ML_COMMENT(); 
 
                 }
                 break;
-            case 59 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:415: RULE_SL_COMMENT
+            case 53 :
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:379: RULE_SL_COMMENT
                 {
                 mRULE_SL_COMMENT(); 
 
                 }
                 break;
-            case 60 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:431: RULE_WS
+            case 54 :
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:395: RULE_WS
                 {
                 mRULE_WS(); 
 
                 }
                 break;
-            case 61 :
-                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:439: RULE_ANY_OTHER
+            case 55 :
+                // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:1:403: RULE_ANY_OTHER
                 {
                 mRULE_ANY_OTHER(); 
 
@@ -3098,11 +2924,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             this.transition = DFA4_transition;
         }
         public String getDescription() {
-            return "3075:37: ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' )";
+            return "3051:37: ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' )";
         }
     }
     static final String DFA21_eotS =
-        "\1\uffff\1\7\1\uffff\1\7\4\uffff";
+        "\1\uffff\1\6\1\uffff\1\6\4\uffff";
     static final String DFA21_eofS =
         "\10\uffff";
     static final String DFA21_minS =
@@ -3110,15 +2936,15 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     static final String DFA21_maxS =
         "\1\71\1\170\1\uffff\1\145\4\uffff";
     static final String DFA21_acceptS =
-        "\2\uffff\1\2\1\uffff\1\5\1\1\1\3\1\4";
+        "\2\uffff\1\2\1\uffff\1\5\1\1\1\4\1\3";
     static final String DFA21_specialS =
         "\10\uffff}>";
     static final String[] DFA21_transitionS = {
             "\1\2\1\uffff\1\1\11\3",
-            "\1\5\1\uffff\12\3\13\uffff\1\6\22\uffff\1\4\14\uffff\1\6\22"+
+            "\1\5\1\uffff\12\3\13\uffff\1\7\22\uffff\1\4\14\uffff\1\7\22"+
             "\uffff\1\4",
             "",
-            "\1\5\1\uffff\12\3\13\uffff\1\6\37\uffff\1\6",
+            "\1\5\1\uffff\12\3\13\uffff\1\7\37\uffff\1\7",
             "",
             "",
             "",
@@ -3155,118 +2981,106 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             this.transition = DFA21_transition;
         }
         public String getDescription() {
-            return "3085:34: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | ( '0' .. '9' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )* '.' ( RULE_HEXDIGIT )* ( 'p' | 'P' ) ( '+' | '-' )? ( '0' .. '9' )+ )";
+            return "3061:34: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | ( '0' .. '9' )+ | RULE_HEXPREFIX ( RULE_HEXDIGIT )* '.' ( RULE_HEXDIGIT )* ( 'p' | 'P' ) ( '+' | '-' )? ( '0' .. '9' )+ )";
         }
     }
     static final String DFA32_eotS =
-        "\3\uffff\3\54\1\63\1\65\3\uffff\1\73\2\uffff\1\65\1\77\1\65\1\54"+
-        "\2\uffff\5\65\2\uffff\1\121\2\uffff\1\126\1\130\5\65\2\142\3\54"+
-        "\12\uffff\1\65\11\uffff\1\65\1\uffff\1\143\2\65\5\uffff\7\65\12"+
-        "\uffff\7\65\4\uffff\1\142\2\143\3\uffff\1\142\3\uffff\1\65\1\u0089"+
-        "\1\65\1\uffff\10\65\1\u0095\7\65\1\142\1\uffff\1\143\2\uffff\1\143"+
-        "\1\65\1\uffff\1\u00a2\1\uffff\1\143\1\65\1\u00a4\4\65\1\u00a9\1"+
-        "\u00aa\1\uffff\4\65\1\u00af\1\u00b0\1\65\3\uffff\1\143\1\65\1\uffff"+
-        "\1\u00b5\1\uffff\1\u00b6\1\u00b7\1\uffff\1\65\2\uffff\1\65\1\u00bb"+
-        "\1\u00bc\1\65\2\uffff\1\65\1\uffff\1\143\1\65\4\uffff\2\65\2\uffff"+
-        "\1\65\1\u00c4\1\65\1\uffff\1\65\1\u00c8\1\u00c9\1\uffff\1\65\4\uffff"+
-        "\1\65\3\uffff\1\u00d0\14\uffff";
+        "\3\uffff\3\51\1\60\1\62\3\uffff\1\70\2\uffff\1\73\1\51\1\62\2\uffff"+
+        "\2\62\2\uffff\1\111\2\uffff\1\116\1\120\6\62\2\135\3\51\12\uffff"+
+        "\1\62\12\uffff\1\137\3\uffff\2\62\2\uffff\3\62\12\uffff\10\62\2"+
+        "\uffff\1\137\1\135\1\uffff\1\137\4\uffff\1\135\3\uffff\1\62\1\176"+
+        "\1\uffff\1\u0081\14\62\1\135\1\uffff\1\137\2\uffff\1\137\1\62\2"+
+        "\uffff\1\137\1\uffff\1\u0093\2\62\1\u0096\4\62\1\u009b\1\u009c\1"+
+        "\u009d\1\62\3\uffff\1\137\1\62\1\uffff\1\u00a2\1\u00a3\1\uffff\1"+
+        "\62\1\u00a5\1\u00a6\1\62\3\uffff\1\62\1\uffff\1\137\1\62\2\uffff"+
+        "\1\62\2\uffff\1\62\1\u00ac\1\62\1\u00ae\1\u00af\1\uffff\1\62\2\uffff"+
+        "\1\62\1\u00b2\1\uffff";
     static final String DFA32_eofS =
-        "\u00db\uffff";
+        "\u00b3\uffff";
     static final String DFA32_minS =
-        "\1\0\2\uffff\1\174\1\46\2\75\1\156\3\uffff\1\52\2\uffff\1\157\1"+
-        "\60\1\150\1\106\2\uffff\2\141\1\157\1\162\1\145\2\uffff\1\0\2\uffff"+
-        "\2\75\1\170\1\150\3\157\2\56\2\0\1\101\12\uffff\1\163\11\uffff\1"+
-        "\151\1\uffff\1\60\2\141\5\uffff\1\154\1\157\1\166\1\157\1\165\1"+
-        "\154\1\167\12\uffff\1\164\1\160\2\157\1\164\1\156\1\165\2\56\2\uffff"+
-        "\2\56\1\60\1\53\2\uffff\1\56\3\uffff\1\164\1\60\1\144\1\53\1\163"+
-        "\1\162\1\163\2\141\1\154\1\145\1\154\1\60\2\145\1\162\1\154\1\145"+
-        "\1\147\1\142\1\56\2\60\1\53\2\60\1\141\1\uffff\3\60\1\163\1\60\1"+
-        "\145\1\164\1\56\1\145\2\60\1\uffff\1\156\1\162\1\164\1\145\2\60"+
-        "\1\154\1\60\1\53\2\60\1\156\1\uffff\1\60\1\uffff\2\60\1\154\1\141"+
-        "\2\uffff\1\144\2\60\1\141\2\uffff\1\145\2\60\1\143\3\uffff\1\141"+
-        "\1\156\1\163\2\uffff\1\156\1\60\1\145\1\156\1\56\2\60\1\uffff\1"+
-        "\157\1\147\1\106\2\uffff\1\146\1\56\2\uffff\1\60\1\102\1\uffff\2"+
-        "\157\1\154\1\145\1\141\1\156\1\56\1\106\2\uffff";
+        "\1\0\2\uffff\1\174\1\46\2\75\1\156\3\uffff\1\52\2\uffff\1\60\1\106"+
+        "\1\145\2\uffff\1\141\1\162\2\uffff\1\0\2\uffff\2\75\1\170\1\150"+
+        "\1\157\1\150\2\157\2\56\2\0\1\101\12\uffff\1\163\12\uffff\1\60\3"+
+        "\uffff\1\167\1\154\2\uffff\1\154\1\157\1\165\12\uffff\1\164\1\160"+
+        "\2\157\1\164\1\141\1\156\1\165\2\56\1\60\1\56\1\uffff\1\56\3\uffff"+
+        "\1\53\1\56\3\uffff\1\164\1\60\1\53\1\60\1\154\1\163\1\141\3\145"+
+        "\1\162\1\154\1\145\1\162\1\147\1\142\1\56\2\60\1\53\2\60\1\141\1"+
+        "\uffff\2\60\1\uffff\1\60\1\145\1\164\1\60\1\156\1\162\1\164\1\145"+
+        "\3\60\1\154\1\60\1\53\2\60\1\156\1\uffff\2\60\1\uffff\1\144\2\60"+
+        "\1\141\3\uffff\1\145\2\60\1\143\2\uffff\1\163\2\uffff\1\156\1\60"+
+        "\1\145\2\60\1\uffff\1\157\2\uffff\1\146\1\60\1\uffff";
     static final String DFA32_maxS =
-        "\1\uffff\2\uffff\1\174\1\46\2\75\1\156\3\uffff\1\57\2\uffff\1\157"+
-        "\1\71\1\154\1\126\2\uffff\1\154\1\141\1\157\1\162\1\165\2\uffff"+
-        "\1\uffff\2\uffff\2\75\1\170\1\165\1\171\2\157\1\170\1\154\2\uffff"+
-        "\1\172\12\uffff\1\164\11\uffff\1\151\1\uffff\1\146\2\141\5\uffff"+
-        "\1\154\1\157\1\166\1\157\1\165\1\154\1\167\12\uffff\1\164\1\160"+
-        "\2\157\1\164\1\156\1\165\2\146\2\uffff\1\154\2\146\1\71\2\uffff"+
-        "\1\154\3\uffff\1\164\1\172\1\144\1\71\1\163\1\162\1\163\2\141\1"+
-        "\154\1\145\1\154\1\172\2\145\1\162\1\154\1\145\1\147\1\142\1\154"+
-        "\1\160\1\146\2\71\1\146\1\141\1\uffff\1\172\1\71\1\146\1\163\1\172"+
-        "\1\145\1\164\1\56\1\145\2\172\1\uffff\1\156\1\162\1\164\1\145\2"+
-        "\172\1\154\1\160\2\71\1\146\1\156\1\uffff\1\172\1\uffff\2\172\1"+
-        "\154\1\141\2\uffff\1\144\2\172\1\141\2\uffff\1\145\1\71\1\146\1"+
-        "\143\3\uffff\1\141\1\156\1\163\2\uffff\1\156\1\172\1\145\1\156\1"+
-        "\56\2\172\1\uffff\1\157\1\147\1\124\2\uffff\1\146\1\56\2\uffff\1"+
-        "\172\1\102\1\uffff\2\157\1\154\1\145\1\141\1\156\1\56\1\124\2\uffff";
+        "\1\uffff\2\uffff\1\174\1\46\2\75\1\156\3\uffff\1\57\2\uffff\1\71"+
+        "\1\126\1\165\2\uffff\1\154\1\162\2\uffff\1\uffff\2\uffff\2\75\1"+
+        "\170\1\165\1\171\1\150\2\157\1\170\1\154\2\uffff\1\172\12\uffff"+
+        "\1\164\12\uffff\1\146\3\uffff\1\167\1\154\2\uffff\1\154\1\157\1"+
+        "\165\12\uffff\1\164\1\160\2\157\1\164\1\141\1\156\1\165\3\146\1"+
+        "\154\1\uffff\1\146\3\uffff\1\71\1\154\3\uffff\1\164\1\172\1\71\1"+
+        "\172\1\154\1\163\1\141\3\145\1\162\1\154\1\145\1\162\1\147\1\142"+
+        "\1\154\1\160\1\146\2\71\1\146\1\141\1\uffff\1\71\1\146\1\uffff\1"+
+        "\172\1\145\1\164\1\172\1\156\1\162\1\164\1\145\3\172\1\154\1\160"+
+        "\2\71\1\146\1\156\1\uffff\2\172\1\uffff\1\144\2\172\1\141\3\uffff"+
+        "\1\145\1\71\1\146\1\143\2\uffff\1\163\2\uffff\1\156\1\172\1\145"+
+        "\2\172\1\uffff\1\157\2\uffff\1\146\1\172\1\uffff";
     static final String DFA32_acceptS =
-        "\1\uffff\1\1\1\2\5\uffff\1\10\1\11\1\12\1\uffff\1\14\1\15\4\uffff"+
-        "\1\25\1\26\5\uffff\1\36\1\37\1\uffff\1\42\1\43\14\uffff\1\71\1\74"+
-        "\1\75\1\1\1\2\1\3\1\4\1\5\1\6\1\16\1\uffff\1\71\1\10\1\11\1\12\1"+
-        "\72\1\73\1\13\1\14\1\15\1\uffff\1\20\3\uffff\1\22\1\23\1\24\1\25"+
-        "\1\26\7\uffff\1\36\1\37\1\41\1\70\1\42\1\43\1\60\1\44\1\61\1\45"+
-        "\11\uffff\1\63\1\65\4\uffff\1\62\1\64\1\uffff\1\66\1\67\1\74\33"+
-        "\uffff\1\54\13\uffff\1\40\14\uffff\1\17\1\uffff\1\51\4\uffff\1\32"+
-        "\1\35\4\uffff\1\52\1\55\4\uffff\1\21\1\27\1\56\3\uffff\1\47\1\53"+
-        "\7\uffff\1\57\3\uffff\1\46\1\50\2\uffff\1\31\1\34\2\uffff\1\7\10"+
-        "\uffff\1\30\1\33";
+        "\1\uffff\1\1\1\2\5\uffff\1\10\1\11\1\12\1\uffff\1\14\1\15\3\uffff"+
+        "\1\24\1\25\2\uffff\1\31\1\32\1\uffff\1\34\1\35\15\uffff\1\63\1\66"+
+        "\1\67\1\1\1\2\1\3\1\4\1\5\1\6\1\16\1\uffff\1\63\1\10\1\11\1\12\1"+
+        "\64\1\65\1\13\1\14\1\15\1\17\1\uffff\1\20\1\21\1\22\2\uffff\1\24"+
+        "\1\25\3\uffff\1\31\1\32\1\33\1\62\1\34\1\35\1\52\1\36\1\53\1\37"+
+        "\14\uffff\1\55\1\uffff\1\57\1\54\1\56\2\uffff\1\60\1\61\1\66\27"+
+        "\uffff\1\46\2\uffff\1\23\21\uffff\1\30\2\uffff\1\27\4\uffff\1\44"+
+        "\1\43\1\47\4\uffff\1\26\1\50\1\uffff\1\41\1\45\5\uffff\1\51\1\uffff"+
+        "\1\40\1\42\2\uffff\1\7";
     static final String DFA32_specialS =
-        "\1\0\32\uffff\1\2\13\uffff\1\1\1\3\u00b2\uffff}>";
+        "\1\0\26\uffff\1\1\14\uffff\1\2\1\3\u008d\uffff}>";
     static final String[] DFA32_transitionS = {
-            "\11\54\2\53\2\54\1\53\22\54\1\53\1\6\1\50\1\54\1\21\1\14\1\4"+
-            "\1\47\1\31\1\32\1\12\1\10\1\35\1\11\1\17\1\13\1\45\11\46\1\2"+
-            "\1\54\1\36\1\5\1\37\1\1\1\54\1\52\1\26\30\52\1\22\1\54\1\23"+
-            "\1\51\1\52\1\54\1\52\1\42\1\20\1\44\1\40\1\24\2\52\1\7\1\25"+
-            "\1\52\1\43\1\52\1\30\4\52\1\41\1\27\1\52\1\16\4\52\1\33\1\3"+
-            "\1\34\1\15\uff81\54",
+            "\11\51\2\50\2\51\1\50\22\51\1\50\1\6\1\45\1\51\1\17\1\14\1\4"+
+            "\1\44\1\25\1\26\1\12\1\10\1\31\1\11\1\16\1\13\1\42\11\43\1\2"+
+            "\1\51\1\32\1\5\1\33\1\1\1\51\32\47\1\21\1\51\1\22\1\46\1\47"+
+            "\1\51\1\47\1\36\1\37\1\41\1\34\1\23\2\47\1\7\2\47\1\40\1\47"+
+            "\1\20\4\47\1\35\1\24\6\47\1\27\1\3\1\30\1\15\uff81\51",
             "",
             "",
+            "\1\54",
+            "\1\55",
+            "\1\56",
             "\1\57",
-            "\1\60",
             "\1\61",
-            "\1\62",
-            "\1\64",
             "",
             "",
             "",
-            "\1\71\4\uffff\1\72",
+            "\1\66\4\uffff\1\67",
             "",
             "",
-            "\1\76",
-            "\12\100",
-            "\1\102\3\uffff\1\101",
-            "\1\103\11\uffff\1\104\5\uffff\1\105",
+            "\12\74",
+            "\1\75\11\uffff\1\76\5\uffff\1\77",
+            "\1\100\17\uffff\1\101",
             "",
             "",
-            "\1\110\12\uffff\1\111",
-            "\1\112",
-            "\1\113",
-            "\1\114",
-            "\1\116\17\uffff\1\115",
+            "\1\104\12\uffff\1\105",
+            "\1\106",
             "",
             "",
-            "\12\122\1\uffff\2\122\1\uffff\157\122\1\uffff\uff82\122",
+            "\12\112\1\uffff\2\112\1\uffff\157\112\1\uffff\uff82\112",
             "",
             "",
-            "\1\125",
+            "\1\115",
+            "\1\117",
+            "\1\121",
+            "\1\123\14\uffff\1\122",
+            "\1\124\11\uffff\1\125",
+            "\1\126",
             "\1\127",
-            "\1\131",
-            "\1\133\14\uffff\1\132",
-            "\1\134\11\uffff\1\135",
-            "\1\136",
-            "\1\137",
-            "\1\146\1\uffff\10\144\2\145\12\uffff\1\143\1\147\1\151\5\uffff"+
-            "\1\150\13\uffff\1\141\13\uffff\1\143\1\147\1\151\5\uffff\1\150"+
-            "\13\uffff\1\140",
-            "\1\146\1\uffff\12\152\12\uffff\1\143\1\147\1\151\5\uffff\1"+
-            "\150\27\uffff\1\143\1\147\1\151\5\uffff\1\150",
-            "\12\153\1\uffff\2\153\1\uffff\31\153\1\uffff\uffd8\153",
-            "\12\154\1\uffff\2\154\1\uffff\ufff2\154",
-            "\32\65\4\uffff\1\65\1\uffff\32\65",
+            "\1\130",
+            "\1\133\1\uffff\10\134\2\136\12\uffff\1\137\1\142\1\141\5\uffff"+
+            "\1\140\13\uffff\1\132\13\uffff\1\137\1\142\1\141\5\uffff\1\140"+
+            "\13\uffff\1\131",
+            "\1\133\1\uffff\12\143\12\uffff\1\137\1\142\1\141\5\uffff\1"+
+            "\140\27\uffff\1\137\1\142\1\141\5\uffff\1\140",
+            "\12\144\1\uffff\2\144\1\uffff\31\144\1\uffff\uffd8\144",
+            "\12\145\1\uffff\2\145\1\uffff\ufff2\145",
+            "\32\62\4\uffff\1\62\1\uffff\32\62",
             "",
             "",
             "",
@@ -3277,7 +3091,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             "",
             "",
             "",
-            "\1\156\1\157",
+            "\1\147\1\150",
             "",
             "",
             "",
@@ -3287,168 +3101,131 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             "",
             "",
             "",
+            "",
+            "\12\74\13\uffff\1\151\1\141\36\uffff\1\151\1\141",
+            "",
+            "",
+            "",
+            "\1\152",
+            "\1\153",
+            "",
+            "",
+            "\1\154",
+            "\1\155",
+            "\1\156",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "\1\157",
             "\1\160",
-            "",
-            "\12\100\13\uffff\1\161\1\151\36\uffff\1\161\1\151",
+            "\1\161",
             "\1\162",
             "\1\163",
-            "",
-            "",
-            "",
-            "",
-            "",
             "\1\164",
             "\1\165",
             "\1\166",
-            "\1\167",
-            "\1\170",
-            "\1\171",
-            "\1\172",
+            "\1\170\1\uffff\12\167\7\uffff\6\167\32\uffff\6\167",
+            "\1\170\1\uffff\12\167\7\uffff\6\167\32\uffff\6\167",
+            "\12\171\13\uffff\1\172\1\141\36\uffff\1\172\1\141",
+            "\1\133\1\uffff\10\134\2\136\12\uffff\1\137\1\142\1\141\5\uffff"+
+            "\1\140\27\uffff\1\137\1\142\1\141\5\uffff\1\140",
+            "",
+            "\1\133\1\uffff\12\136\13\uffff\1\142\1\141\36\uffff\1\142\1"+
+            "\141",
             "",
             "",
             "",
+            "\1\173\1\uffff\1\173\2\uffff\12\174",
+            "\1\133\1\uffff\12\143\12\uffff\1\137\1\142\1\141\5\uffff\1"+
+            "\140\27\uffff\1\137\1\142\1\141\5\uffff\1\140",
             "",
             "",
             "",
-            "",
-            "",
-            "",
-            "",
-            "\1\173",
-            "\1\174",
             "\1\175",
-            "\1\176",
-            "\1\177",
-            "\1\u0080",
-            "\1\u0081",
-            "\1\u0083\1\uffff\12\u0082\7\uffff\6\u0082\32\uffff\6\u0082",
-            "\1\u0083\1\uffff\12\u0082\7\uffff\6\u0082\32\uffff\6\u0082",
-            "",
-            "",
-            "\1\146\1\uffff\10\144\2\145\12\uffff\1\143\1\147\1\151\5\uffff"+
-            "\1\150\27\uffff\1\143\1\147\1\151\5\uffff\1\150",
-            "\1\146\1\uffff\12\145\13\uffff\1\147\1\151\36\uffff\1\147\1"+
-            "\151",
-            "\12\u0084\13\uffff\1\u0085\1\151\36\uffff\1\u0085\1\151",
-            "\1\u0086\1\uffff\1\u0086\2\uffff\12\u0087",
-            "",
-            "",
-            "\1\146\1\uffff\12\152\12\uffff\1\143\1\147\1\151\5\uffff\1"+
-            "\150\27\uffff\1\143\1\147\1\151\5\uffff\1\150",
-            "",
-            "",
-            "",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
+            "\1\177\1\uffff\1\177\2\uffff\12\u0080",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
+            "\1\u0082",
+            "\1\u0083",
+            "\1\u0084",
+            "\1\u0085",
+            "\1\u0086",
+            "\1\u0087",
             "\1\u0088",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
+            "\1\u0089",
             "\1\u008a",
-            "\1\u008b\1\uffff\1\u008b\2\uffff\12\u008c",
+            "\1\u008b",
+            "\1\u008c",
             "\1\u008d",
-            "\1\u008e",
-            "\1\u008f",
-            "\1\u0090",
-            "\1\u0091",
+            "\1\170\1\uffff\12\167\7\uffff\6\167\5\uffff\1\140\24\uffff"+
+            "\6\167\5\uffff\1\140",
+            "\12\u008e\7\uffff\6\u008e\11\uffff\1\u008f\20\uffff\6\u008e"+
+            "\11\uffff\1\u008f",
+            "\12\171\13\uffff\1\172\1\141\36\uffff\1\172\1\141",
+            "\1\u0090\1\uffff\1\u0090\2\uffff\12\u0091",
+            "\12\174",
+            "\12\174\14\uffff\1\141\37\uffff\1\141",
             "\1\u0092",
-            "\1\u0093",
+            "",
+            "\12\u0080",
+            "\12\u0080\14\uffff\1\141\37\uffff\1\141",
+            "",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
             "\1\u0094",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\1\u0096",
+            "\1\u0095",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
             "\1\u0097",
             "\1\u0098",
             "\1\u0099",
             "\1\u009a",
-            "\1\u009b",
-            "\1\u009c",
-            "\1\u0083\1\uffff\12\u0082\7\uffff\6\u0082\5\uffff\1\150\24"+
-            "\uffff\6\u0082\5\uffff\1\150",
-            "\12\u009d\7\uffff\6\u009d\11\uffff\1\u009e\20\uffff\6\u009d"+
-            "\11\uffff\1\u009e",
-            "\12\u0084\13\uffff\1\u0085\1\151\36\uffff\1\u0085\1\151",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
+            "\1\u009e",
+            "\12\u008e\7\uffff\6\u008e\11\uffff\1\u008f\20\uffff\6\u008e"+
+            "\11\uffff\1\u008f",
             "\1\u009f\1\uffff\1\u009f\2\uffff\12\u00a0",
-            "\12\u0087",
-            "\12\u0087\14\uffff\1\151\37\uffff\1\151",
+            "\12\u0091",
+            "\12\u0091\14\uffff\1\141\37\uffff\1\141",
             "\1\u00a1",
             "",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\12\u008c",
-            "\12\u008c\14\uffff\1\151\37\uffff\1\151",
-            "\1\u00a3",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\1\u00a5",
-            "\1\u00a6",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
+            "",
+            "\1\u00a4",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
             "\1\u00a7",
+            "",
+            "",
+            "",
             "\1\u00a8",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
+            "\12\u00a0",
+            "\12\u00a0\14\uffff\1\141\37\uffff\1\141",
+            "\1\u00a9",
+            "",
+            "",
+            "\1\u00aa",
+            "",
             "",
             "\1\u00ab",
-            "\1\u00ac",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
             "\1\u00ad",
-            "\1\u00ae",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
+            "",
+            "\1\u00b0",
+            "",
+            "",
             "\1\u00b1",
-            "\12\u009d\7\uffff\6\u009d\11\uffff\1\u009e\20\uffff\6\u009d"+
-            "\11\uffff\1\u009e",
-            "\1\u00b2\1\uffff\1\u00b2\2\uffff\12\u00b3",
-            "\12\u00a0",
-            "\12\u00a0\14\uffff\1\151\37\uffff\1\151",
-            "\1\u00b4",
-            "",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\1\u00b8",
-            "\1\u00b9",
-            "",
-            "",
-            "\1\u00ba",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\1\u00bd",
-            "",
-            "",
-            "\1\u00be",
-            "\12\u00b3",
-            "\12\u00b3\14\uffff\1\151\37\uffff\1\151",
-            "\1\u00bf",
-            "",
-            "",
-            "",
-            "\1\u00c0",
-            "\1\u00c1",
-            "\1\u00c2",
-            "",
-            "",
-            "\1\u00c3",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\1\u00c5",
-            "\1\u00c6",
-            "\1\u00c7",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "",
-            "\1\u00ca",
-            "\1\u00cb",
-            "\1\u00cc\15\uffff\1\u00cd",
-            "",
-            "",
-            "\1\u00ce",
-            "\1\u00cf",
-            "",
-            "",
-            "\12\65\7\uffff\32\65\4\uffff\1\65\1\uffff\32\65",
-            "\1\u00d1",
-            "",
-            "\1\u00d2",
-            "\1\u00d3",
-            "\1\u00d4",
-            "\1\u00d5",
-            "\1\u00d6",
-            "\1\u00d7",
-            "\1\u00d8",
-            "\1\u00d9\15\uffff\1\u00da",
-            "",
+            "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
             ""
     };
 
@@ -3482,7 +3259,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             this.transition = DFA32_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | RULE_LONG | RULE_INT | RULE_FLOAT | RULE_DOUBLE | RULE_CHAR | RULE_STRING | RULE_BRACED_IDENTIFIER | RULE_ID | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER );";
+            return "1:1: Tokens : ( T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | RULE_LONG | RULE_INT | RULE_FLOAT | RULE_DOUBLE | RULE_CHAR | RULE_STRING | RULE_BRACED_IDENTIFIER | RULE_ID | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER );";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
@@ -3518,97 +3295,91 @@ public class InternalJavaJRExpressionLexer extends Lexer {
 
                         else if ( (LA32_0=='~') ) {s = 13;}
 
-                        else if ( (LA32_0=='v') ) {s = 14;}
+                        else if ( (LA32_0=='.') ) {s = 14;}
 
-                        else if ( (LA32_0=='.') ) {s = 15;}
+                        else if ( (LA32_0=='$') ) {s = 15;}
 
-                        else if ( (LA32_0=='c') ) {s = 16;}
+                        else if ( (LA32_0=='n') ) {s = 16;}
 
-                        else if ( (LA32_0=='$') ) {s = 17;}
+                        else if ( (LA32_0=='[') ) {s = 17;}
 
-                        else if ( (LA32_0=='[') ) {s = 18;}
+                        else if ( (LA32_0==']') ) {s = 18;}
 
-                        else if ( (LA32_0==']') ) {s = 19;}
+                        else if ( (LA32_0=='f') ) {s = 19;}
 
-                        else if ( (LA32_0=='f') ) {s = 20;}
+                        else if ( (LA32_0=='t') ) {s = 20;}
 
-                        else if ( (LA32_0=='j') ) {s = 21;}
+                        else if ( (LA32_0=='(') ) {s = 21;}
 
-                        else if ( (LA32_0=='B') ) {s = 22;}
+                        else if ( (LA32_0==')') ) {s = 22;}
 
-                        else if ( (LA32_0=='t') ) {s = 23;}
+                        else if ( (LA32_0=='{') ) {s = 23;}
 
-                        else if ( (LA32_0=='n') ) {s = 24;}
+                        else if ( (LA32_0=='}') ) {s = 24;}
 
-                        else if ( (LA32_0=='(') ) {s = 25;}
+                        else if ( (LA32_0==',') ) {s = 25;}
 
-                        else if ( (LA32_0==')') ) {s = 26;}
+                        else if ( (LA32_0=='<') ) {s = 26;}
 
-                        else if ( (LA32_0=='{') ) {s = 27;}
+                        else if ( (LA32_0=='>') ) {s = 27;}
 
-                        else if ( (LA32_0=='}') ) {s = 28;}
+                        else if ( (LA32_0=='e') ) {s = 28;}
 
-                        else if ( (LA32_0==',') ) {s = 29;}
+                        else if ( (LA32_0=='s') ) {s = 29;}
 
-                        else if ( (LA32_0=='<') ) {s = 30;}
+                        else if ( (LA32_0=='b') ) {s = 30;}
 
-                        else if ( (LA32_0=='>') ) {s = 31;}
+                        else if ( (LA32_0=='c') ) {s = 31;}
 
-                        else if ( (LA32_0=='e') ) {s = 32;}
+                        else if ( (LA32_0=='l') ) {s = 32;}
 
-                        else if ( (LA32_0=='s') ) {s = 33;}
+                        else if ( (LA32_0=='d') ) {s = 33;}
 
-                        else if ( (LA32_0=='b') ) {s = 34;}
+                        else if ( (LA32_0=='0') ) {s = 34;}
 
-                        else if ( (LA32_0=='l') ) {s = 35;}
+                        else if ( ((LA32_0>='1' && LA32_0<='9')) ) {s = 35;}
 
-                        else if ( (LA32_0=='d') ) {s = 36;}
+                        else if ( (LA32_0=='\'') ) {s = 36;}
 
-                        else if ( (LA32_0=='0') ) {s = 37;}
+                        else if ( (LA32_0=='\"') ) {s = 37;}
 
-                        else if ( ((LA32_0>='1' && LA32_0<='9')) ) {s = 38;}
+                        else if ( (LA32_0=='^') ) {s = 38;}
 
-                        else if ( (LA32_0=='\'') ) {s = 39;}
+                        else if ( ((LA32_0>='A' && LA32_0<='Z')||LA32_0=='_'||LA32_0=='a'||(LA32_0>='g' && LA32_0<='h')||(LA32_0>='j' && LA32_0<='k')||LA32_0=='m'||(LA32_0>='o' && LA32_0<='r')||(LA32_0>='u' && LA32_0<='z')) ) {s = 39;}
 
-                        else if ( (LA32_0=='\"') ) {s = 40;}
+                        else if ( ((LA32_0>='\t' && LA32_0<='\n')||LA32_0=='\r'||LA32_0==' ') ) {s = 40;}
 
-                        else if ( (LA32_0=='^') ) {s = 41;}
-
-                        else if ( (LA32_0=='A'||(LA32_0>='C' && LA32_0<='Z')||LA32_0=='_'||LA32_0=='a'||(LA32_0>='g' && LA32_0<='h')||LA32_0=='k'||LA32_0=='m'||(LA32_0>='o' && LA32_0<='r')||LA32_0=='u'||(LA32_0>='w' && LA32_0<='z')) ) {s = 42;}
-
-                        else if ( ((LA32_0>='\t' && LA32_0<='\n')||LA32_0=='\r'||LA32_0==' ') ) {s = 43;}
-
-                        else if ( ((LA32_0>='\u0000' && LA32_0<='\b')||(LA32_0>='\u000B' && LA32_0<='\f')||(LA32_0>='\u000E' && LA32_0<='\u001F')||LA32_0=='#'||LA32_0==';'||LA32_0=='@'||LA32_0=='\\'||LA32_0=='`'||(LA32_0>='\u007F' && LA32_0<='\uFFFF')) ) {s = 44;}
+                        else if ( ((LA32_0>='\u0000' && LA32_0<='\b')||(LA32_0>='\u000B' && LA32_0<='\f')||(LA32_0>='\u000E' && LA32_0<='\u001F')||LA32_0=='#'||LA32_0==';'||LA32_0=='@'||LA32_0=='\\'||LA32_0=='`'||(LA32_0>='\u007F' && LA32_0<='\uFFFF')) ) {s = 41;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 1 : 
-                        int LA32_39 = input.LA(1);
+                        int LA32_23 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA32_39>='\u0000' && LA32_39<='\t')||(LA32_39>='\u000B' && LA32_39<='\f')||(LA32_39>='\u000E' && LA32_39<='&')||(LA32_39>='(' && LA32_39<='\uFFFF')) ) {s = 107;}
+                        if ( ((LA32_23>='\u0000' && LA32_23<='\t')||(LA32_23>='\u000B' && LA32_23<='\f')||(LA32_23>='\u000E' && LA32_23<='|')||(LA32_23>='~' && LA32_23<='\uFFFF')) ) {s = 74;}
 
-                        else s = 44;
+                        else s = 73;
 
                         if ( s>=0 ) return s;
                         break;
                     case 2 : 
-                        int LA32_27 = input.LA(1);
+                        int LA32_36 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA32_27>='\u0000' && LA32_27<='\t')||(LA32_27>='\u000B' && LA32_27<='\f')||(LA32_27>='\u000E' && LA32_27<='|')||(LA32_27>='~' && LA32_27<='\uFFFF')) ) {s = 82;}
+                        if ( ((LA32_36>='\u0000' && LA32_36<='\t')||(LA32_36>='\u000B' && LA32_36<='\f')||(LA32_36>='\u000E' && LA32_36<='&')||(LA32_36>='(' && LA32_36<='\uFFFF')) ) {s = 100;}
 
-                        else s = 81;
+                        else s = 41;
 
                         if ( s>=0 ) return s;
                         break;
                     case 3 : 
-                        int LA32_40 = input.LA(1);
+                        int LA32_37 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA32_40>='\u0000' && LA32_40<='\t')||(LA32_40>='\u000B' && LA32_40<='\f')||(LA32_40>='\u000E' && LA32_40<='\uFFFF')) ) {s = 108;}
+                        if ( ((LA32_37>='\u0000' && LA32_37<='\t')||(LA32_37>='\u000B' && LA32_37<='\f')||(LA32_37>='\u000E' && LA32_37<='\uFFFF')) ) {s = 101;}
 
-                        else s = 44;
+                        else s = 41;
 
                         if ( s>=0 ) return s;
                         break;

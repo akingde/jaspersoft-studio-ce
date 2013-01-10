@@ -14,9 +14,6 @@
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 /**
- * <copyright>
- * </copyright>
- *
  */
 package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.util;
 
@@ -52,11 +49,10 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.LongLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.NullLiteral;
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StaticField;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StringLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TestExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Type;
-import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TypeClass;
 
 /**
  * <!-- begin-user-doc -->
@@ -223,11 +219,11 @@ public class JavaJRExpressionSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case JavaJRExpressionPackage.TYPE_CLASS:
+      case JavaJRExpressionPackage.STATIC_FIELD:
       {
-        TypeClass typeClass = (TypeClass)theEObject;
-        T result = caseTypeClass(typeClass);
-        if (result == null) result = caseJasperReportsExpression(typeClass);
+        StaticField staticField = (StaticField)theEObject;
+        T result = caseStaticField(staticField);
+        if (result == null) result = caseJasperReportsExpression(staticField);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -340,14 +336,6 @@ public class JavaJRExpressionSwitch<T> extends Switch<T>
         ArrayCreator arrayCreator = (ArrayCreator)theEObject;
         T result = caseArrayCreator(arrayCreator);
         if (result == null) result = caseJasperReportsExpression(arrayCreator);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case JavaJRExpressionPackage.OBJECT_CREATION:
-      {
-        ObjectCreation objectCreation = (ObjectCreation)theEObject;
-        T result = caseObjectCreation(objectCreation);
-        if (result == null) result = caseJasperReportsExpression(objectCreation);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -588,17 +576,17 @@ public class JavaJRExpressionSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Type Class</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Static Field</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Type Class</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Static Field</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseTypeClass(TypeClass object)
+  public T caseStaticField(StaticField object)
   {
     return null;
   }
@@ -823,22 +811,6 @@ public class JavaJRExpressionSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseArrayCreator(ArrayCreator object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Object Creation</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Object Creation</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseObjectCreation(ObjectCreation object)
   {
     return null;
   }
