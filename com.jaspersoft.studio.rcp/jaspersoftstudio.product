@@ -162,8 +162,10 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="com.jaspersoft.studio.rcp"/>
       <plugin id="com.jaspersoft.studio.server"/>
       <plugin id="de.itemis.xtext.utils.jface"/>
+      <plugin id="javax.el"/>
       <plugin id="javax.inject"/>
       <plugin id="javax.servlet"/>
+      <plugin id="javax.servlet.jsp"/>
       <plugin id="javax.xml"/>
       <plugin id="net.sf.jasperreports"/>
       <plugin id="net.sf.jasperreports.doc"/>
@@ -173,6 +175,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.apache.commons.lang"/>
       <plugin id="org.apache.commons.logging"/>
       <plugin id="org.apache.commons.pool"/>
+      <plugin id="org.apache.jasper.glassfish"/>
       <plugin id="org.apache.log4j"/>
       <plugin id="org.apache.lucene"/>
       <plugin id="org.apache.lucene.analysis"/>
@@ -238,11 +241,15 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.eclipse.emf.mwe2.runtime"/>
       <plugin id="org.eclipse.equinox.app"/>
       <plugin id="org.eclipse.equinox.common"/>
+      <plugin id="org.eclipse.equinox.concurrent"/>
       <plugin id="org.eclipse.equinox.ds"/>
       <plugin id="org.eclipse.equinox.frameworkadmin"/>
       <plugin id="org.eclipse.equinox.frameworkadmin.equinox"/>
       <plugin id="org.eclipse.equinox.http.jetty"/>
+      <plugin id="org.eclipse.equinox.http.registry"/>
       <plugin id="org.eclipse.equinox.http.servlet"/>
+      <plugin id="org.eclipse.equinox.jsp.jasper"/>
+      <plugin id="org.eclipse.equinox.jsp.jasper.registry"/>
       <plugin id="org.eclipse.equinox.p2.artifact.repository"/>
       <plugin id="org.eclipse.equinox.p2.core"/>
       <plugin id="org.eclipse.equinox.p2.director"/>
@@ -278,6 +285,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.eclipse.help"/>
       <plugin id="org.eclipse.help.base"/>
       <plugin id="org.eclipse.help.ui"/>
+      <plugin id="org.eclipse.help.webapp"/>
       <plugin id="org.eclipse.jdt.annotation"/>
       <plugin id="org.eclipse.jdt.compiler.apt" fragment="true"/>
       <plugin id="org.eclipse.jdt.compiler.tool" fragment="true"/>
