@@ -33,6 +33,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.toolbar.ATopToolBarManager;
@@ -278,6 +279,8 @@ public class PreviewJRPrint extends ABasicEditor {
 	public void createPartControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(2, false));
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.editor_jrprint");
 
 		getTopToolBarManager1(container);
 		getTopToolBarManager(container);

@@ -45,6 +45,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -158,6 +159,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 		rowLayout.pack = true;
 		rowLayout.fill = true;
 		c.setLayout(rowLayout);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(c, "com.jaspersoft.studio.doc.editor_dataadapter");
 
 		nameComposite = new NameComposite(c, SWT.NONE);
 		if (descriptor != null) {

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
@@ -204,8 +199,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		int index = addPage(reportContainer, getEditorInput());
 		setPageText(index, Messages.JrxmlEditor_design);
 	}
-	
-	public ReportContainer getReportContainer(){
+
+	public ReportContainer getReportContainer() {
 		return reportContainer;
 	}
 
@@ -258,22 +253,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	protected void createPages() {
-		// CTabFolder ctfolder = (CTabFolder) getContainer();
-		// ctfolder.setUnselectedCloseVisible(true);
-		//
-		// ToolBar toolBar = new ToolBar(ctfolder, SWT.FLAT | SWT.HORIZONTAL | SWT.WRAP | SWT.RIGHT);
-		// ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		// item.setText("+ ");
-		// item = new ToolItem(toolBar, SWT.PUSH);
-		// item.setText("- ");
-		// item = new ToolItem(toolBar, SWT.PUSH);
-		// item.setText(">> ");
-		//
-		// int tabHeight = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-		// tabHeight = Math.max(tabHeight, ctfolder.getTabHeight());
-		// ctfolder.setTabHeight(tabHeight);
-		//
-		// ctfolder.setTopRight(toolBar);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getContainer(), "com.jaspersoft.studio.doc.editor_jrxml");
+
 		try {
 			createPage0();
 			createPage1();
