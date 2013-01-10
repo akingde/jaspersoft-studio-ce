@@ -1,0 +1,66 @@
+<html>
+<body>
+
+
+	<p>This is the place where reports are build, and run. There are
+		two ways to build a report using a WYSIWYG editor or source editor for
+		.jxml file, the last one is for advanced users. In preview we can see
+		our report filled with data from datasource and save the results in
+		different formats.</p>
+	<h2>Design mode WYSIWYG editor.</h2>
+	<p>Most used editor, in Jaspersoft Studio. This editor is used
+		together with Outline View, Properties View, Palette and Problems
+		View. Some complex JasperReports components like List, Table, Crosstab
+		have their own editor, to open it just double click on the element in
+		the designer or outline view. There are some buttons on the toolbar to
+		control zoom, publish reports to a Jaspersoft Server, open query
+		editor or change settings related to rulers, grid, decorators. To add
+		elements to the page drag and drop them from the palette or it's
+		possible to drag and drop Fields, Properties or Variables from outline
+		view directly to the report. Use context menu to delete, arrange,
+		resize, align, set PDF properties of the elements. It's possible to
+		use keyboard to manipulate elements on the canvas: DEL to delete an
+		element, arrows to select elements, &ldquo;.&rdquo; (point) will
+		select an operation like riseze left, right, up, down, or move.</p>
+	<p>
+		<img src="jrxml_design.png" />
+	</p>
+	<h2>Source mode.</h2>
+	<p>This is a simple text editor with xml syntax highlighting. We
+		can use it in combination with Outline view where all xml nodes are
+		visible and clicking on a node will show position to the corresponding
+		line in text editor.</p>
+	<p>Jrxml errors are shown in the left vertical band of the editor
+		in front of the problematic line, users can see all the errors in
+		Problems view, clicking on an error will position the cursor to the
+		error line in the editor.</p>
+	<p>
+		<img src="jrxml_source.png" />
+	</p>
+	<p>&nbsp;</p>
+	<h2>Preview mode.</h2>
+	<p>The goal of this view is to for prompt user input parameters,
+		help configure some settings, select a DataAdapter, see generated
+		report in different formats, save report to a file. There are three
+		main parts to do that:</p>
+	<ul>
+		<li>
+			<p>toolbar with buttons to select DataAdapter, run report button
+				and a menu to select the preview mode like java, html, csv, etc.</p>
+		</li>
+		<li>
+			<p>on the right we have a preview for each format, for html this
+				will be an embedded browser, for Java we'll have some additional
+				controls like page navigation, zoom.</p>
+		</li>
+		<li>
+			<p>The right part, contains several pages: input controls,
+				biult-in controls, sort fields, exporter preferences</p>
+		</li>
+	</ul>
+	<p>
+		<img src="jrxml_preview.png" />
+	</p>
+
+</body>
+</html>

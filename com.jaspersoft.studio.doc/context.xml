@@ -45,4 +45,50 @@
 			label="Designing a report with JasperSoft Studio" />
 		<topic href="http://community.jaspersoft.com/wiki/groups" label="Groups in JasperSoft Studio" />
 	</context>
+   <context id="view_reportstate" title="Report State View">
+      <description>Report state view</description>
+      <topic href="html/view/reportstate/reportstate.html" label="Report State View"/>
+   </context>
+   <context id="view_outline" title="Outline View">
+      <description>Outline view</description>
+      <topic href="html/view/outline/outline.html" label="Outline View"/>
+   </context>
+   <context id="view_properties" title="Properties View">
+      <description>Properties view</description>
+      <topic href="html/view/properties/properties.html" label="Properties View"/>
+   </context>
+   <context id="view_preview" title="Report Templates Preview">
+      <description>Report Templates Preview</description>
+      <topic href="html/view/preview/preview.html" label="Report Templates Preview"/>
+   </context>
+    <context id="view_repository" title="Repository View">
+      <description>Properties view</description>
+      <topic href="html/view/repository/repository.html" label="Repository View"/>
+   </context>
+   
+   <context id="editor_jrxml" title="Report Templates (jrxml) Editor">
+      <description>Report Templates (jrxml) Editor</description>
+      <topic href="html/editors/jrxml/jrxml.html" label="Report Templates (jrxml) Editor"/>
+   </context>
+   <context id="editor_jrtx" title="Style Templates Editor">
+      <description>Style Templates Editor</description>
+      <topic href="html/editors/jrtx/jrtx.html" label="Style Templates Editor"/>
+   </context>
+    <context id="editor_dataadapter" title="Data Adapter Editor">
+      <description>Data Adapter Editor</description>
+      <topic href="html/editors/dataAdapter/dataadapter.html" label="Data Adapter Editor"/>
+   </context>
+   <context id="editor_jrprint" title="Report Preview Editor">
+      <description>Report Preview Editor</description>
+      <topic href="html/editors/jrprint/jrprint.html" label="Report Preview Editor"/>
+   </context>
+   <context id="editor_preview" title="Report Run And Preview Editor">
+      <description>Report Run And Preview Editor</description>
+      <topic href="html/editors/preview/preview.html" label="Report Run And Preview Editor"/>
+   </context>
+   
+   <context id="preferences_font" title="Font management">
+      <description>Font Management</description>
+      <topic href="html/preferences/font/fontmanagement.html" label="Font Management"/>
+   </context>
 </contexts>
