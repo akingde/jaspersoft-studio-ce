@@ -12,6 +12,9 @@ To keep things simple, this tutorial uses a sample database included in the inst
       <description>
          The first thing to do is start the wizard for the creation of a new report. To do this open the &quot;File&quot; menu and select &quot;New&quot; and then &quot;Jasper Report&quot;.
       </description>
+      <command
+            required="false"
+            serialization="com.jaspersoft.studio.commands.ReportNewWizard"/>
    </item>
    <item
          title="Select the template">
