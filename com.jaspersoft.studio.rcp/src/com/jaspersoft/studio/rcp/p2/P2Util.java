@@ -17,6 +17,8 @@ package com.jaspersoft.studio.rcp.p2;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.equinox.internal.p2.ui.model.ElementUtils;
 import org.eclipse.equinox.internal.p2.ui.model.MetadataRepositoryElement;
@@ -34,7 +36,7 @@ import com.jaspersoft.studio.rcp.messages.Messages;
 public class P2Util {
 
 	// Main update site for JSS product 
-	private static String UPDATE_SITE = "http://jasperstudio.sf.net/jssproductrepo/"; //$NON-NLS-1$
+	public static String JSS_CE_UPDATE_SITE = "http://jasperstudio.sf.net/jssproductrepo/"; //$NON-NLS-1$
 	  
 	/**
 	 * Sets the default repositories to look into.
@@ -47,11 +49,38 @@ public class P2Util {
 	 * 
 	 */
 	public static void setRepositories() {
-	    try {
-	      final MetadataRepositoryElement element = new MetadataRepositoryElement(null, new URI(UPDATE_SITE), true);
-	      ElementUtils.updateRepositoryUsingElements(ProvisioningUI.getDefaultUI(), new MetadataRepositoryElement[] {element}, null);
-	    } catch (URISyntaxException e) {
-	      Activator.getDefault().logError(Messages.P2Util_ErrorMessage, e);
-	    }
+		try {
+			final MetadataRepositoryElement element = new MetadataRepositoryElement(
+					null, new URI(JSS_CE_UPDATE_SITE), true);
+			ElementUtils.updateRepositoryUsingElements(
+					ProvisioningUI.getDefaultUI(),
+					new MetadataRepositoryElement[] { element }, null);
+		} catch (URISyntaxException e) {
+			Activator.getDefault().logError(Messages.P2Util_ErrorMessage, e);
+		}
+	}
+	
+	/** 
+	 * Sets the defaults repositories to look into.
+	 * <p>
+	 * 
+	 * Differently from the {@link #setRepositories()} method, 
+	 * a custom set of repositories is set.
+	 * 
+	 * @param repositoryURLs the list of repository URLs
+	 */
+	public static void setRepositories(List<String> repositoryURLs){
+		try {
+			List<MetadataRepositoryElement> repos = new ArrayList<MetadataRepositoryElement>(repositoryURLs.size());
+			for(String url : repositoryURLs){
+				MetadataRepositoryElement repoEl = 
+						new MetadataRepositoryElement(null, new URI(url), true);
+				repos.add(repoEl);
+			}
+			ElementUtils.updateRepositoryUsingElements(
+					ProvisioningUI.getDefaultUI(), repos.toArray(new MetadataRepositoryElement[repos.size()]), null);
+		} catch (URISyntaxException e) {
+			Activator.getDefault().logError(Messages.P2Util_ErrorMessage, e);
+		}
 	}
 }

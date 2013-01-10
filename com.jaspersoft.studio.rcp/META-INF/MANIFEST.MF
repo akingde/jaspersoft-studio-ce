@@ -19,4 +19,5 @@ Require-Bundle: org.eclipse.ui.intro,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.jaspersoft.studio.rcp,
- com.jaspersoft.studio.rcp.intro
+ com.jaspersoft.studio.rcp.intro,
+ com.jaspersoft.studio.rcp.p2

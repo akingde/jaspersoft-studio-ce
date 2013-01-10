@@ -105,7 +105,15 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	public void preStartup() {
 		super.preStartup();
 		IDE.registerAdapters();
-		P2Util.setRepositories();
+		setRepositories();
+	}
+	
+	/**
+	 * Sets the list of default repositories that will be
+	 * used for the JSS product update. 
+	 */
+	protected void setRepositories(){
+		P2Util.setRepositories();		
 	}
 
 	/**
