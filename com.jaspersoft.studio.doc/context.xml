@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <contexts>
 	<context id="dataAdapters_wizard_list">
-		<description>Hello here is our help for data adapters!!!</description>
-		<topic href="html/jasperserver/wizard.html" label="Create a JasperServer connection" />
+		<description>Data Adapters</description>
+		<topic href="html/dataAdapters/dataadapters.html" label="Data Adapters" />
+  <topic href="html/editors/dataAdapter/dataadapter.html" label="Data Adapter Editor"/>
+  <topic href="html/dataAdapters/wizard.html" label="Data Adapter Wizard"/>
 	</context>
 	<context id="jaspersoftserver">
 		<description>Hello here is our help for jasperserver</description>
@@ -76,7 +78,9 @@
    </context>
     <context id="editor_dataadapter" title="Data Adapter Editor">
       <description>Data Adapter Editor</description>
-      <topic href="html/editors/dataAdapter/dataadapter.html" label="Data Adapter Editor"/>
+      <topic href="html/dataAdapters/dataadapters.html" label="Data Adapters" />
+  <topic href="html/editors/dataAdapter/dataadapter.html" label="Data Adapter Editor"/>
+  <topic href="html/dataAdapters/wizard.html" label="Data Adapter Wizard"/>
    </context>
    <context id="editor_jrprint" title="Report Preview Editor">
       <description>Report Preview Editor</description>
