@@ -2,9 +2,6 @@ package com.jaspersoft.studio.model.dataset.command;
 
 import java.util.List;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IEditorPart;
 
@@ -17,7 +14,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 public class NewDatasetWizardHandler extends Action{
 
 	/**
-	 * Search the summary band from the root of the document
+	 * Search the MReport element from the root of the document
 	 * @param root root node of the document
 	 * @return summary band if found, null otherwise
 	 */
@@ -40,27 +37,10 @@ public class NewDatasetWizardHandler extends Action{
 			MReport report = getReport(root);
 			if (report != null){
 				MDataset tempDataset = new MDataset();
-				CreateDatasetCommand command = new CreateDatasetCommand(report, tempDataset, -1);
-				
+				CreateDatasetCommand command = new CreateDatasetCommand(report, tempDataset, -1);		
 				command.execute();
 			}
 		}
 	};
-	
-
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
-		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
-			INode root = ((JrxmlEditor) activeJRXMLEditor).getModel();
-			MReport report = getReport(root);
-			if (report != null){
-				MDataset tempDataset = new MDataset();
-				CreateDatasetCommand command = new CreateDatasetCommand(report, tempDataset, -1);
-				
-				command.execute();
-			}
-		}
-		return null;
-	}
 
 }

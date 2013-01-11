@@ -645,11 +645,4 @@
             ClassFactory="com.jaspersoft.studio.components.crosstab.model.cell.command.PostSetSizeCell">
       </postsetvalue>
    </extension>
- 	<extension point="org.eclipse.ui.commands">
-	  <command
-         id="com.jaspersoft.studio.commands.NewChartWizard"
-         name="ChartWizardOpen"
-         defaultHandler="com.jaspersoft.studio.components.chart.model.command.NewChartWizardHandler">
-	  </command>
-	</extension>
 </plugin>

@@ -7,42 +7,40 @@
       </description>
    </intro>
    <item
-         title="Set the chart">
+         title="Set the chart" dialog="true">
       <description>
-         Drag and Drop the chart element from the &quot;Palette&quot; into the &quot;Summary&quot; band, then wizard of the chart will appear.
+         Drag and Drop the chart element from the &quot;<b>Palette</b>&quot; into the &quot;<b>Summary</b>&quot; band, then wizard of the chart will appear.
       </description>
-      <command
-            required="false"
-            serialization="com.jaspersoft.studio.commands.NewChartWizard"/>
+      <action pluginId="com.jaspersoft.studio.components" class="com.jaspersoft.studio.components.chart.model.command.NewChartWizardHandler" required="false"/>
    </item>
    <item
          title="Select the type of chart">
       <description>
-         From the first step of the wizard select the bar chart and hit &quot;Next&quot;.
+         From the first step of the wizard select the bar chart and hit &quot;<b>Next</b>&quot;.
       </description>
    </item>
    <item
          title="Add the series and labels for the cities">
       <description>
-         In the fields &quot;Series&quot; and &quot;Label&quot; add the value &quot;$F{SHIPCITY}&quot;
+         In the fields &quot;<b>Series</b>&quot; and &quot;<b>Label</b>&quot; add the value &quot;$<b>F{SHIPCITY}</b>&quot;
       </description>
    </item>
    <item
          title="Select the correct dataset">
       <description>
-         In the field &quot;Dataset&quot; select the dataset created before.
+         In the field &quot;<b>Dataset</b>&quot; select the dataset created before.
       </description>
    </item>
    <item
          title="Set the value">
       <description>
-         For the field &quot;Value&quot; use &quot;$F{C1}&quot;, to have the number of shipment for every city.
+         For the field &quot;<b>Value</b>&quot; use &quot;<b>$F{C1}</b>&quot;, to have the number of shipments for every city.
       </description>
    </item>
    <item
          title="Complete the wizard">
       <description>
-         The category is not needed, so in the field &quot;Category&quot; insert an empty string with a double quote. The hit the button &quot;Finish&quot;.
+         The category is not needed, so in the field &quot;<b>Category</b>&quot; insert an empty string with a double quote. Then hit the button &quot;<b>Finish</b>&quot;.
       </description>
    </item>
 </cheatsheet>

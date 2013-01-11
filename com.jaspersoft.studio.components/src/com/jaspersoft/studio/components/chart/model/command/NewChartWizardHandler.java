@@ -4,9 +4,7 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IEditorPart;
 
 import com.jaspersoft.studio.components.chart.model.MChart;
@@ -23,7 +21,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  * @author Orlandin Marco
  *
  */
-public class NewChartWizardHandler extends AbstractHandler {
+public class NewChartWizardHandler extends Action {
 
 	/**
 	 * Search for a Summary band inside a list o elements
@@ -60,7 +58,7 @@ public class NewChartWizardHandler extends AbstractHandler {
 	 * be opened
 	 */
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public void run() {
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
 		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
 			INode root = ((JrxmlEditor) activeJRXMLEditor).getModel();
@@ -71,7 +69,5 @@ public class NewChartWizardHandler extends AbstractHandler {
 				command.execute();
 			}
 		}
-		return null;
-	}
-
+	};
 }

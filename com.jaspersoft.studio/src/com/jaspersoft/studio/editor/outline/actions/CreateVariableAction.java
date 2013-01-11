@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.actions;
 
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -40,6 +41,10 @@ public class CreateVariableAction extends ACreateAndSelectAction {
 	public CreateVariableAction(IWorkbenchPart part) {
 		super(part);
 		setCreationFactory(new JDPaletteCreationFactory(MVariable.class));
+	}
+	
+	public void forcerSelection(ISelection selection) {
+		setSelection(selection);
 	}
 
 	/**

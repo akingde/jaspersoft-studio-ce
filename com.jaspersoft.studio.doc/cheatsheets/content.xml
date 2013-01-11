@@ -18,9 +18,9 @@
          To create a new Data Adapter, right click the <b>Data Adapters</b> node and select <b>Create Data Adapter</b>.
          Select Database JDBC Connection and press <b>Next &gt;</b>.
       </description>
-       <action pluginId="com.jaspersoft.studio" class="com.jaspersoft.studio.repository.actions.CreateDataAdapterAction"/> 
+       <action pluginId="com.jaspersoft.studio" class="com.jaspersoft.studio.data.actions.CreateDataAdapterAction"/> 
 	</item>   
-   <item title="Launch the JDBC datasource editor" skip="true">
+   <item title="Launch the JDBC datasource editor" skip="true" dialog="true">
 		<description>Set the correct JDBC driver name. You will have to add the jar(s) of the driver in order to be able to connect
 		to your database. When done, press <b>Test</b> to test your connection.  
 		</description>
