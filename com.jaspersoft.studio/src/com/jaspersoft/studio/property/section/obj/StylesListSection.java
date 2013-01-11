@@ -67,6 +67,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.model.MPage;
+import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
@@ -384,7 +385,9 @@ public class StylesListSection extends AbstractSection {
 	 */
 	private LinkedList<MStyle> buildStylesGerarchy(APropertyNode element) {
 		LinkedList<MStyle> result = new LinkedList<MStyle>();
-		Object styleName = element.getPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE);
+		Object styleName;
+		if (element instanceof MConditionalStyle) styleName = ((MStyle)element.getParent()).getPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE);
+		else styleName = element.getPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE);
 		StyleContainer styleContainer = styleMaps.get(styleName.toString());
 		if (styleContainer != null){
 			MStyle styleModel = styleContainer.getStyle();
