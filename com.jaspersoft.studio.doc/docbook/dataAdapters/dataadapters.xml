@@ -29,22 +29,6 @@
 			and select the Data Adapter from the list, next page is specific for each data adapter type. In case of the Data Adapter stored in eclipse preferences go to Repository View and use
 			<guimenu>Create DataAdapter</guimenu> action in the top right corner of the view, a similar wizard will popup.
 
-
-
-
-			where dataadapters are stored
-			ui to create/delete a dataadapter
-			import /export datadadapter
-
-			example how ui look for
-			jdbc, csv
-
-			for developement point to samples
-
-			example with
-			dataadapter from src
-
-
 		</para>
 	</section>
 
