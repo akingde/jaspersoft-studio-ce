@@ -109,8 +109,10 @@ public abstract class JSSWizardSelectionPage extends JSSWizardPage {
 			// Allow the wizard to create its pages
 			wizard.addPages();
 		}
-
-		return wizard.getStartingPage();
+		
+		IWizardPage nextPage = wizard.getStartingPage();
+		
+		return nextPage;
 	}
 
 	/**

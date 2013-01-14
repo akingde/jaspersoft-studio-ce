@@ -30,7 +30,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDataset;
@@ -38,6 +37,7 @@ import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.AWizardNode;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardSelectionPage;
 
@@ -194,6 +194,7 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		setDescription(Messages.WizardDatasetPage_description);
 		this.acceptMainDataset = acceptMainDataset;
 		this.componentName = componentName;
+		contextName = ContextHelpIDs.wizardTableSelectDataset;
 	
 	}
 
@@ -271,7 +272,6 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		
 		handleOptionSelected();
 		
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
 	}
 
 	

@@ -43,7 +43,7 @@ public class CreateVariableAction extends ACreateAndSelectAction {
 		setCreationFactory(new JDPaletteCreationFactory(MVariable.class));
 	}
 	
-	public void forcerSelection(ISelection selection) {
+	public void forceSelection(ISelection selection) {
 		setSelection(selection);
 	}
 

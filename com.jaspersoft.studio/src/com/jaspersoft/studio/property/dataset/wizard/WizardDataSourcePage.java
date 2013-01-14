@@ -44,7 +44,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
@@ -211,8 +210,6 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		lblEmptyEditor = new Label(composite_editor, SWT.BORDER);
 		lblEmptyEditor.setText(Messages.WizardDataSourcePage_lblThisDataAdapter_text);
 		
-		
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
 	/**

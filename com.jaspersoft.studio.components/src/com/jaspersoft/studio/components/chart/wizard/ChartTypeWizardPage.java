@@ -34,12 +34,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Scale;
-import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 public class ChartTypeWizardPage extends JSSWizardPage {
@@ -59,6 +59,7 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 		setDescription(Messages.ChartWizardPage_chart_wizard_description);
 		this.chart = chart;
 		this.chartType = ((JRDesignChart) chart.getValue()).getChartType();
+		contextName = ContextHelpIDs.wizardChartType;
 	}
 
 	public void createControl(Composite parent) {
@@ -120,9 +121,6 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 						(int) (GALLERY_HEIGHT * c));
 			}
 		});
-
-		PlatformUI.getWorkbench().getHelpSystem()
-				.setHelp(getControl(), "Jaspersoft.wizard"); //$NON-NLS-1$
 	}
 
 	private void setTableSelection() {

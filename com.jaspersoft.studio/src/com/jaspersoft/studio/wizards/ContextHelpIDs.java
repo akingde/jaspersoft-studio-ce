@@ -19,4 +19,16 @@ public class ContextHelpIDs {
 	public static String wizardSelectGroup = prefix.concat("select_groups");
 	
 	public static String wizardSelectFields = prefix.concat("select_fields");
+	
+	public static String wizardTableSelectDataset = prefix.concat("select_table_dataset");
+	
+	public static String wizardDatasetName = prefix.concat("select_dataset_name");
+	
+	public static String wizardDatasetConnection = prefix.concat("select_dataset_connection");
+	
+	public static String wizardLayoutPage = prefix.concat("select_layout");
+	
+	public static String wizardChartType = prefix.concat("select_chart_type");
+	
+	public static String wizardChartData = prefix.concat("select_chart_data");
 }

@@ -18,15 +18,16 @@ package com.jaspersoft.studio.property.dataset.wizard;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidgetRadio;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class WizardConnectionPage extends WizardPage implements IExpressionContextSetter{
+public class WizardConnectionPage extends JSSHelpWizardPage implements IExpressionContextSetter{
 	
 
 	private DatasetRunWidgetRadio dsRun;
@@ -81,6 +82,7 @@ public class WizardConnectionPage extends WizardPage implements IExpressionConte
 		JRDesignExpression exp = new JRDesignExpression();
 		exp.setText("$P{REPORT_CONNECTION}");
 		jrDsRun.setConnectionExpression( exp );
+		contextName = ContextHelpIDs.wizardDatasetConnection;
 	}
 
 	public void createControl(Composite parent) {

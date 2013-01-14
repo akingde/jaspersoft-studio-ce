@@ -36,6 +36,7 @@ import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 public class ChartDataPage extends JSSWizardPage implements IExpressionContextSetter{
@@ -55,6 +56,7 @@ public class ChartDataPage extends JSSWizardPage implements IExpressionContextSe
 		this.jrChart = jrChart;
 		this.edataset = edataset;
 		this.jrContext = jrContext;
+		contextName = ContextHelpIDs.wizardChartData;
 	}
 
 	public void createControl(Composite parent) {

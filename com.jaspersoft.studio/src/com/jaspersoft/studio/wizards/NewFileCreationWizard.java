@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -78,28 +77,6 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.wizardNewFile);
 	}
 	
-	/**
-	 * When the user move from a page to another the help data of that page is set. This is done to show the correct help when the user move from 
-	 * a step to another while the help is opened
-	 */
-	@Override
-	public IWizardPage getNextPage() {
-		IWizardPage nextPage = super.getNextPage();
-		if (nextPage != null && nextPage instanceof ContextData) ((ContextData)nextPage).setHelpData();
-		return nextPage;
-	};
-	
-	
-	/**
-	 * When the user move from a page to another the help data of that page is set. This is done to show the correct help when the user move from 
-	 * a step to another while the help is opened
-	 */
-	@Override
-	public IWizardPage getPreviousPage() {
-		IWizardPage prevPage = super.getPreviousPage();
-		if (prevPage != null && prevPage instanceof ContextData) ((ContextData)prevPage).setHelpData();
-		return prevPage;
-	};
 
 	
 	@Override
@@ -111,6 +88,7 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 				performHelp();	
 			}
 		});
+		setHelpData();
 	};
 	
 	/**

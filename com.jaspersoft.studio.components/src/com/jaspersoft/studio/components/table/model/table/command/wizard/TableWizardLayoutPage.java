@@ -15,19 +15,19 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.model.table.command.wizard;
 
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class TableWizardLayoutPage extends WizardPage {
+public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	private MTable table = new MTable();
 
 	private boolean isTableHeader = true;
@@ -45,6 +45,7 @@ public class TableWizardLayoutPage extends WizardPage {
 		super("tablepage"); //$NON-NLS-1$
 		setTitle(Messages.TableWizardLayoutPage_layout);
 		setDescription(Messages.TableWizardLayoutPage_description);
+		contextName = ContextHelpIDs.wizardLayoutPage;
 	}
 
 	@Override
@@ -143,8 +144,6 @@ public class TableWizardLayoutPage extends WizardPage {
 
 			}
 		});
-
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(addTHeader, "Jaspersoft.wizard");
 
 	}
 
