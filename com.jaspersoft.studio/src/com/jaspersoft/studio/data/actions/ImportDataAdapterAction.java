@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.actions;
 
@@ -66,9 +61,13 @@ public class ImportDataAdapterAction extends Action {
 	@Override
 	public void run() {
 		Object obj = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
-		if (obj instanceof MDataAdapter) {
-			MDataAdapter mDataAdapter = (MDataAdapter) obj;
-			final ADataAdapterStorage storage = ((MDataAdapters) mDataAdapter.getParent()).getValue();
+		MDataAdapters mDataAdapters = null;
+		if (obj instanceof MDataAdapters)
+			mDataAdapters = (MDataAdapters) obj;
+		if (obj instanceof MDataAdapter)
+			mDataAdapters = (MDataAdapters) ((MDataAdapter) obj).getParent();
+		if (mDataAdapters != null) {
+			final ADataAdapterStorage storage = mDataAdapters.getValue();
 
 			Job job = new WorkspaceJob("Searching DataAdapters") {
 				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
@@ -91,20 +90,24 @@ public class ImportDataAdapterAction extends Action {
 
 				protected void checkFile(IFile file) throws CoreException {
 					if (file.getName().endsWith(".xml")) {
-						final DataAdapterDescriptor das = FileDataAdapterStorage.readDataADapter(file.getContents(),
-								file.getProject());
-						if (das != null) {
-							Display.getDefault().asyncExec(new Runnable() {
+						try {
+							final DataAdapterDescriptor das = FileDataAdapterStorage.readDataADapter(file.getContents(),
+									file.getProject());
+							if (das != null) {
+								Display.getDefault().asyncExec(new Runnable() {
 
-								public void run() {
-									DataAdapterDescriptor oldDas = storage.findDataAdapter(das.getName());
-									if (oldDas != null)
-										; // DataAdapterManager.removeDataAdapter(oldDas); replace?
-									else
-										storage.addDataAdapter("", das);
-								}
-							});
+									public void run() {
+										DataAdapterDescriptor oldDas = storage.findDataAdapter(das.getName());
+										if (oldDas != null)
+											; // DataAdapterManager.removeDataAdapter(oldDas); replace?
+										else
+											storage.addDataAdapter("", das);
+									}
+								});
 
+							}
+						} catch (Throwable e) {
+							e.printStackTrace();
 						}
 					}
 				}
