@@ -6,7 +6,7 @@
 
 	<section>
 		<para>
-			After jasper report run agains a database a
+			After jasper report run against a database a
 			<filename class='extension'>.jrprint</filename>
 			file
 			is generated, this file contains the executed report user can save it

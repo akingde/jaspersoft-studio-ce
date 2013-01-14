@@ -6,21 +6,45 @@
 
 	<section>
 		<para>
-			After jasper report run against a database a
-			<filename class='extension'>.jrprint</filename>
-			file
-			is generated, this file contains the executed report user can save it
-			and see later. It's also possible for the user to save the report
-			in
-			pdf, html or other format, but this is native
-			JasperReport format, from
-			which JasperReport library can export in a supported format.
+			Data adapters are objects that contain necessary information to access data and the logic for connection creation for jasper reports engine. This objects are portable between
+			Jaspersoft Studio
+			and Jaspersoft Server. For iReport users DataAdapters are similar to connections.
 		</para>
 		<para>
-			We have a special editor to open this file, the editor contains a toolbar with actions and tools to zoom the
-			report and export to a supported format, just double click on the
-			<filename class='extension'>.jrprint</filename>
-			file it will be opened automatically.
+			Data adapters are xml files, in Jaspersoft Studio this files usually are created by the user and stored in the project
+			with report (
+			<filename class='extension'>.jrxml</filename>
+			) files and other resources. But we store a list of DataAdapters also in Eclipse workspace preferences, in this way users can reuse them in reports from all the projects.
+		</para>
+		<para>
+			Jaspersoft Studio offers all the actions to work with DataAdapters create, delete, edit, duplicate or write new ones. To create a data adapter inside the project, go to
+			<menuchoice>
+				<guimenu>File</guimenu>
+				<guimenuitem>New</guimenuitem>
+				<guimenuitem>Other...</guimenuitem>
+				<guimenuitem>Jaspersoft Studio</guimenuitem>
+				<guimenuitem>Data Adapters</guimenuitem>
+			</menuchoice>
+
+			and select the Data Adapter from the list, next page is specific for each data adapter type. In case of the Data Adapter stored in eclipse preferences go to Repository View and use
+			<guimenu>Create DataAdapter</guimenu> action in the top right corner of the view, a similar wizard will popup.
+
+
+
+
+			where dataadapters are stored
+			ui to create/delete a dataadapter
+			import /export datadadapter
+
+			example how ui look for
+			jdbc, csv
+
+			for developement point to samples
+
+			example with
+			dataadapter from src
+
+
 		</para>
 	</section>
 
