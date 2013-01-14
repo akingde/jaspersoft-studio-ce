@@ -29,23 +29,24 @@
 		<description>Here you can define a datasource, the location from which the data is taken to fill the report. A datasource is composed by a data adapter, that is a connection to a resource (like and XML file or an SQL database), and eventually a query to identify fields that will be extracted from the resource.
 		</description>
 		<topic
-			href="http://community.jaspersoft.com/node/801267"
+			href="html/wizard/createreport/createreport.html"
 			label="Designing a report with JasperSoft Studio" />
-		<topic href="http://community.jaspersoft.com/node/801415" label="Using XML datasources"/>
-		<topic href="http://community.jaspersoft.com/node/801346" label="Creating Charts and Datasets"/>
+		<topic href="html/wizard/xmldatasources/createxml.html" label="Using XML datasources"/>
+		<topic href="html/wizard/xmldatasources/remotexml.html" label="Using Remote XML datasources"/>
+		<topic href="html/wizard/chartanddataset/createdataset.html" label="Creating datasets"/>
 	</context>
 	<context id="select_fields">
 		<description>Here you can select which fields, discovered in the data adapter, will be added to the report or table. Fields that are not added now can be added later.</description>
 		<topic
-			href="http://community.jaspersoft.com/node/801267"
+			href="html/wizard/createreport/createreport.html"
 			label="Designing a report with JasperSoft Studio" />
 	</context>
 	<context id="select_groups">
 		<description>Here you can choose which from the added fields will became groups</description>
 		<topic
-			href="http://community.jaspersoft.com/node/801267"
+			href="html/wizard/createreport/createreport.html"
 			label="Designing a report with JasperSoft Studio" />
-		<topic href="http://community.jaspersoft.com/wiki/groups" label="Groups in JasperSoft Studio" />
+		<topic href="html/wizard/creategroup/creategroup.html" label="Groups in JasperSoft Studio" />
 	</context>
    <context id="view_reportstate" title="Report State View">
       <description>Report state view</description>
@@ -97,26 +98,31 @@
    </context>
    <context id="select_table_dataset" title="Select a dataset">
       <description>Here you need to specify a dataset, choosing if you want to create a new one or reuse another one created before.</description>
-      <topic href="http://community.jaspersoft.com/node/801568#The_Tables" label="Tables in Jaspersoft Studio"/>
+      <topic href="html/wizard/chartanddataset/createdataset.html" label="Creating a dataset"/>
+      <topic href="html/wizard/tablecrosstabs/createtable.html" label="Creating a table"/>
    </context>
    <context id="select_dataset_name" title="Select name and type">
       <description>Here you need to specify a name for the new dataset, and it must be unique since it is used as identifier. You also need to specify if the new dataset get the data from a data source (like a database or a XML file for example) or if it is empty and has no data in it</description>
-      <topic href="http://community.jaspersoft.com/node/801568#The_Tables" label="Tables in Jaspersoft Studio"/>
+      <topic href="html/wizard/chartanddataset/createdataset.html" label="Creating a dataset"/>
+      <topic href="html/wizard/tablecrosstabs/createtable.html" label="Creating a table"/>
    </context>
    <context id="select_dataset_connection" title="Select the connection">
-      <description>Here you need to specify the connection used from the dataset to retrive the data from the datasource. You can use an existing connection created for another datasource, or create a new one, choose the connection with an expression, or create and empty connection (this case it is equivalent to have an empty dataset</description>
-      <topic href="http://community.jaspersoft.com/node/801568#The_Tables" label="Tables in Jaspersoft Studio"/>
+      <description>Here you need to specify the connection used from the dataset to retrieve the data from the datasource. You can use an existing connection created for another datasource, or create a new one, choose the connection with an expression, or create and empty connection (this case it is equivalent to have an empty dataset</description>
+      <topic href="html/wizard/chartanddataset/createdataset.html" label="Creating a dataset"/>
+      <topic href="html/wizard/tablecrosstabs/createtable.html" label="Creating a table"/>
    </context>
    <context id="select_layout" title="Select the layout">
       <description>Here you can select which columns will be created for the table. Note that all the fields selected in the previous steps will be inserted into the Detail cell, so it is not present in this selection</description>
-      <topic href="http://community.jaspersoft.com/node/801568#The_Tables" label="Tables in Jaspersoft Studio"/>
+      <topic href="html/wizard/chartanddataset/createdataset.html" label="Creating a dataset"/>
+      <topic href="html/wizard/tablecrosstabs/createtable.html" label="Creating a table"/>
    </context>
    <context id="select_chart_type" title="Select the chart type">
       <description>Here you can select the type of chart you want to place into the report, select a template and hit Next.</description>
-      <topic href="http://community.jaspersoft.com/node/801568#The_Tables" label="Tables in Jaspersoft Studio"/>
+      <topic href="html/wizard/chartanddataset/createchart.html" label="Creating a chart"/>
    </context>
    <context id="select_chart_data" title="Select the chart data">
       <description>Here you can configure your chart. The dataset define the context of the report, or in other words the location of the data used to fill the chart. Reset type allow you to periodically reset the dataset. The increment when expressions allows you to add a flag to determine whether to add a record to the record set designed to feed the chart. You can provide one or more series using fields and variables</description>
-      <topic href="http://community.jaspersoft.com/node/801568#The_Tables" label="Tables in Jaspersoft Studio"/>
+      <topic href="html/wizard/chartanddataset/createdataset.html" label="Creating datasets"/>
+      <topic href="html/wizard/chartanddataset/createchart.html" label="Creating a chart"/>
    </context>
 </contexts>
