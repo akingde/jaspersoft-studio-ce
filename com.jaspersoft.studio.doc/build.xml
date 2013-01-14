@@ -7,7 +7,7 @@
 	</description>
 
 	<property name="input.dir" value="docbook" />
-	<property name="output.dir" value="htmlbook" />
+	<property name="output.dir" value="html" />
 	<property name="html.stylesheet" value="docbook-xsl/html/docbook.xsl" />
 
 	<target name="clean" description="Cleans up generated files.">
