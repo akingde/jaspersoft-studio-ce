@@ -13,16 +13,16 @@
 	<context id="select_template">
 		<description>Here you can select a template for the new report, to define its base layout. Select the template by clicking on it, then hit the button "Next" to proceed.</description>
 		<topic
-			href="http://community.jaspersoft.com/node/801267"
+			href="html/wizard/createreport/createreport.html"
 			label="Designing a report with JasperSoft Studio" />
 	</context>
 	<context id="select_name">
 		<description>Here you can select the folder in the workspace where you want to put the report, and name for the report itself, then hit the button "Next" to proceed.</description>
 		<topic
-			href="http://community.jaspersoft.com/node/801267"
+			href="html/wizard/createreport/createreport.html"
 			label="Designing a report with JasperSoft Studio" />
 		<topic
-			href="http://community.jaspersoft.com/node/801267#Create_a_Project_Folder"
+			href="html/wizard/createreport/addfolder.html"
 			label="Create a Project Folder" />
 	</context>
 	<context id="select_dataset">
@@ -35,7 +35,7 @@
 		<topic href="http://community.jaspersoft.com/node/801346" label="Creating Charts and Datasets"/>
 	</context>
 	<context id="select_fields">
-		<description>Here you can select which fields, discovered in the data adapter, will be added to the report. Fields that are not added now can be added later, simply by editing the datasource.</description>
+		<description>Here you can select which fields, discovered in the data adapter, will be added to the report or table. Fields that are not added now can be added later.</description>
 		<topic
 			href="http://community.jaspersoft.com/node/801267"
 			label="Designing a report with JasperSoft Studio" />
@@ -116,7 +116,7 @@
       <topic href="http://community.jaspersoft.com/node/801568#The_Tables" label="Tables in Jaspersoft Studio"/>
    </context>
    <context id="select_chart_data" title="Select the chart data">
-      <description>To do</description>
+      <description>Here you can configure your chart. The dataset define the context of the report, or in other words the location of the data used to fill the chart. Reset type allow you to periodically reset the dataset. The increment when expressions allows you to add a flag to determine whether to add a record to the record set designed to feed the chart. You can provide one or more series using fields and variables</description>
       <topic href="http://community.jaspersoft.com/node/801568#The_Tables" label="Tables in Jaspersoft Studio"/>
    </context>
 </contexts>
