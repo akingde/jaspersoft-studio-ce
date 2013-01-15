@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<compositeCheatsheet name="Creation of a chart">
+   <taskGroup kind="sequence" name="Create a report with a dataset and a chart" skip="false">
+      <intro>
+         In this cheatsheet is explained how to create a report from scratch, add a dataset, a chart and execute it.
+      </intro>
+      <onCompletion>
+         At the end of this steps we have a report with a complex layout and a main dataset used to provide many records. Then another dataset is used to fill a chart. Then all this can be compiled and exported. Doing this we have seen many complex concepts like the subdataset and the charts.
+      </onCompletion>
+      <task kind="cheatsheet" name="Create the report" skip="false">
+         <intro>
+            In this first step the base report will be created, with a nice layout and some data in it.
+         </intro>
+         <onCompletion>
+            <b>Conclusion</b>
+         </onCompletion>
+         <param name="path" value="reportcreation.xml">
+         </param>
+      </task>
+      <task kind="cheatsheet" name="Create a dataset" skip="false">
+         <intro>
+            Every report has a main dataset, defined when the report is created. But sometime we need more than one dataset, because we need data from different datasources or becasue we need to discover the same datasource with different query. In this cheetsheet we will see how to create a dataset other than the main one.
+         </intro>
+         <onCompletion>
+            <b>Conclusion</b>
+         </onCompletion>
+         <param name="path" value="createdataset.xml">
+         </param>
+      </task>
+      <task kind="cheatsheet" name="Create the Chart" skip="false">
+         <intro>
+            In this steps we will add a chart in the summary band of the report created in the step 1, and this chart will take the data from the dataset created in the step 2.
+         </intro>
+         <onCompletion>
+            <b>Conclusion</b>
+         </onCompletion>
+         <param name="path" value="chartstep.xml">
+         </param>
+      </task>
+      <task kind="cheatsheet" name="Run the report" skip="false">
+         <intro>
+            After the report is fully defined it can be compiled, viewed and exported.
+         </intro>
+         <onCompletion>
+            <b>Conclusion</b>
+         </onCompletion>
+         <param name="path" value="runreport.xml">
+         </param>
+      </task>
+   </taskGroup>
+</compositeCheatsheet>

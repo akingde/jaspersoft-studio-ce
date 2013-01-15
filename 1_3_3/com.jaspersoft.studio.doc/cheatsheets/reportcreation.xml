@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet
+      title="Creation of the Report">
+   <intro>
+      <description>
+         In this cheatsheet, we will see the basics of how to design a report. In the report creation process there are three main steps: creating a data source or a database connection used to fill the report, designing the report layout and running the report.
+To keep things simple, this tutorial uses a sample database included in the installation of Jaspersoft Studio. The data to print is retrieved using an SQL query defined during the creation of the datasource.e.
+      </description>
+   </intro>
+   <item
+         title="Start the Creation">
+      <description>
+         The first thing to do is start the wizard for the creation of a new report. To do this open the &quot;File&quot; menu and select &quot;New&quot; and then &quot;Jasper Report&quot;.
+      </description>
+      <command
+            required="false"
+            serialization="com.jaspersoft.studio.commands.ReportNewWizard"/>
+   </item>
+   <item
+         title="Select the template">
+      <description>
+       In the first step of the wizard you can choose a template for the report, select the template &quot;Coffee&quot; and hit &quot;Next&quot;.;.
+      </description>
+   </item>
+   <item
+         title="Define the report name and location">
+      <description>
+       You now must choose a location and a name for the report, for this parameters you can choose whatever you want, even the dafault values are good, then hit &quot;Next&quot;.;.
+      </description>
+   </item>
+   <item
+         title="Creation of the main data adapter">
+      <description>
+       Now we must define a datasource, and we will use a database provided by default with JasperSoft Studio. For the field &quot;Data Adapter&quot; select from the drop down list the item <b>&quot;Sample DB - Database JDBC Connection&quot;</b>.
+Now you must insert a query to define which data will be extracted from the database, use <b>&quot;select * from orders&quot;</b>, then hit &quot;Next&quot;.;.
+      </description>
+   </item>
+   <item
+         title="Add the field to the Report">
+      <description>
+       Using the query provided in the previous step some fields are discovered and you can choose which ones add to the report. Double click on the field &quot;ORDERID&quot;, &quot;SHIPADDRESS&quot; and &quot;SHIPCITY&quot;. Then hit &quot;Next&quot;.;.
+      </description>
+   </item>
+   <item
+         title="Finish the Wizard">
+      <description>
+       In the next step you can group the data, but we don&apos;t need the grouping at this time, so hit &quot;Next&quot; and then &quot;Finish&quot;.;.
+      </description>
+   </item>
+   <item
+         title="Preview the Report">
+      <description>
+         Now you have your report with some fields into it. You can check if it is all right by click into the &quot;Preview&quot; tab. Doing this the report will be compiled and the result is shown.
+      </description>
+   </item>
+</cheatsheet>
