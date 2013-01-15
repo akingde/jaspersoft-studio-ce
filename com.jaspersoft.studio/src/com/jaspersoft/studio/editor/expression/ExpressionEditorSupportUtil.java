@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.expression;
 
@@ -51,7 +46,7 @@ public class ExpressionEditorSupportUtil {
 	private static final IExpressionEditorSupportFactory supportFactory;
 	private static final Map<String, ExpressionEditorSupport> editorSupports;
 	private static ExpressionContext currentContext;
-	
+
 	static {
 		supportFactory = JaspersoftStudioPlugin.getExtensionManager().getExpressionEditorSupportFactory();
 		editorSupports = new HashMap<String, ExpressionEditorSupport>(3); // java, groovy, javascript are languages that
@@ -134,10 +129,13 @@ public class ExpressionEditorSupportUtil {
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
 		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
 			final ANode mroot = (ANode) ((JrxmlEditor) activeJRXMLEditor).getModel();
-			final ANode mreport = (ANode) mroot.getChildren().get(0);
-			JRDataset mainDS = mreport.getJasperDesign().getMainDataset();
-			ExpressionContext exprContext = new ExpressionContext((JRDesignDataset) mainDS, mreport.getJasperConfiguration());
-			return exprContext;
+			if (mroot != null) {
+				final ANode mreport = (ANode) mroot.getChildren().get(0);
+				JRDataset mainDS = mreport.getJasperDesign().getMainDataset();
+				ExpressionContext exprContext = new ExpressionContext((JRDesignDataset) mainDS,
+						mreport.getJasperConfiguration());
+				return exprContext;
+			}
 		}
 		return null;
 	}
@@ -153,8 +151,7 @@ public class ExpressionEditorSupportUtil {
 	 */
 	public static void addFunctionsLibraryImports(JasperDesign jd, JasperReportsConfiguration jrContext) {
 		Assert.isNotNull(jd);
-		Collection<JRExpression> collectedExpressions = JRExpressionCollector.collector(jrContext, jd)
-				.getExpressions();
+		Collection<JRExpression> collectedExpressions = JRExpressionCollector.collector(jrContext, jd).getExpressions();
 		List<String> libraryClasses = getStaticImportsForExpressions(collectedExpressions);
 		for (String clazzName : libraryClasses) {
 			jd.addImport("static " + clazzName + ".*");
@@ -235,7 +232,7 @@ public class ExpressionEditorSupportUtil {
 	public static void setCurrentExpressionContext(ExpressionContext exprContext) {
 		currentContext = exprContext;
 	}
-	
+
 	/**
 	 * @return the current expression context if any, <code>null</code> otherwise
 	 */
@@ -249,12 +246,11 @@ public class ExpressionEditorSupportUtil {
 	 */
 	public static ExpressionContext safeGetCurrentExpressionContext() {
 		ExpressionContext expContext = getCurrentExpressionContext();
-		if(expContext==null){
+		if (expContext == null) {
 			return getReportExpressionContext();
-		}
-		else {
+		} else {
 			return expContext;
 		}
 	}
-	
+
 }
