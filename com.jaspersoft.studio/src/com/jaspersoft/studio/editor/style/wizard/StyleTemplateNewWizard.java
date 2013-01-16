@@ -47,6 +47,10 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -59,6 +63,8 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.wizards.ContextData;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /*
  * This is a sample new wizard. Its role is to create a new file resource in the provided container. If the container
@@ -81,13 +87,52 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		setWindowTitle(Messages.StyleTemplateNewWizard_wizardtitle);
 		setNeedsProgressMonitor(true);
 	}
+	
+	/**
+	 * Extends the original WizardNewFileCreationPage to implements the method to have a contextual help
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class WizardHelpNewFileCreationPage extends WizardNewFileCreationPage implements ContextData{
+		
+		public WizardHelpNewFileCreationPage(String pageName, IStructuredSelection selection) {
+			super(pageName, selection);
+		}
+
+		/**
+		 * Set and show the help data 
+		 */
+		@Override
+		public void performHelp() {
+			PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.wizardStyleTemplatePath);
+		}
+		
+		/**
+		 * Set the help data that should be seen in this step
+		 */
+		@Override
+		public void setHelpData(){
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.wizardStyleTemplatePath);
+		}
+		
+		@Override
+		protected void setControl(Control newControl) {
+			super.setControl(newControl);
+			newControl.addListener(SWT.Help, new Listener() {			
+				@Override
+				public void handleEvent(Event event) {
+					performHelp();	
+				}
+			});
+			setHelpData();
+		};
+	}
 
 	/**
 	 * Adding the page to the wizard.
 	 */
-
 	public void addPages() {
-		step1 = new WizardNewFileCreationPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
+		step1 = new WizardHelpNewFileCreationPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
 		step1.setTitle(Messages.StyleTemplateNewWizard_title);
 		step1.setDescription(Messages.StyleTemplateNewWizard_description);
 		step1.setFileExtension("jrtx");//$NON-NLS-1$

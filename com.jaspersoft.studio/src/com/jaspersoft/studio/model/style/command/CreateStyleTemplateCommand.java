@@ -19,16 +19,20 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 /*
  * link nodes & together.
  * 
@@ -79,9 +83,26 @@ public class CreateStyleTemplateCommand extends Command {
 		}
 	}
 
+	private class FilteredHelpDialog extends FilteredResourcesSelectionDialog{
+
+		public FilteredHelpDialog(Shell shell, boolean multi, IContainer container, int typesMask) {
+			super(shell, multi, container, typesMask);
+		}
+
+		/**
+		 * Set the help data that should be seen in this step
+		 */
+		@Override
+		protected void configureShell(Shell shell){
+			super.configureShell(shell);
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(shell, ContextHelpIDs.wizardStyleTemplateLoad);
+		}
+		
+	}
+	
 	private void createObject() {
 		if (jrTemplate == null) {
-			FilteredResourcesSelectionDialog fd = new FilteredResourcesSelectionDialog(Display.getCurrent().getActiveShell(),
+			FilteredResourcesSelectionDialog fd = new FilteredHelpDialog(Display.getCurrent().getActiveShell(),
 					false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
 			fd.setInitialPattern("*.jrtx");//$NON-NLS-1$
 			if (fd.open() == Dialog.OK) {

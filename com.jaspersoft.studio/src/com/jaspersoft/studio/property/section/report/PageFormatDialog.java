@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 
@@ -53,6 +54,7 @@ import com.jaspersoft.studio.property.section.report.util.PageSize;
 import com.jaspersoft.studio.property.section.report.util.UnitsWidget;
 import com.jaspersoft.studio.property.section.report.util.ValueUnitsWidget;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 public final class PageFormatDialog extends FormDialog {
 	private JasperDesign jd;
@@ -70,6 +72,7 @@ public final class PageFormatDialog extends FormDialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(Messages.PageFormatDialog_0);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(newShell, ContextHelpIDs.wizardPageFormat);
 	}
 
 	@Override

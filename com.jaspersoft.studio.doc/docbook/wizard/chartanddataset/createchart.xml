@@ -22,7 +22,7 @@
         <para>After the chart is placed the creation wizard will appear. On the first step select a &quot;Pie Chart&quot;, to have
         something different from the previous tutorial, and hit Next. In the following step find the field named
         &quot;Dataset&quot;, normally with the value &quot;[MainDataset]&quot;. You must change this value to
-        &quot;GroupData&quot;, so the chart will use the new dataset, as in the image below:</para>
+        &quot;GroupData&quot; (to create this dataset follow the <ulink url="createdataset.html">create a dataset</ulink> tutorial), so the chart will use the new dataset, as in the image below:</para>
         		<figure>
 			<title>Select the dataset for the Chart</title>
 			<screenshot>

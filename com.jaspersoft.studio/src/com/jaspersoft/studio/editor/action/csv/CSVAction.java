@@ -28,6 +28,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.action.pdf.PropertiesList;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -89,10 +90,10 @@ public class CSVAction extends SelectionAction{
 		if (editpart.getModel() instanceof APropertyNode){
 			APropertyNode columnValue = (APropertyNode)editpart.getModel();
 			if (columnValue.getRoot() instanceof MRoot) {
+				INode rootChildren = columnValue.getRoot().getChildren().get(0);
 				//Return the MPage
-				return (APropertyNode)columnValue.getRoot().getChildren().get(0);
-			}
-			return (APropertyNode)columnValue.getRoot();
+				if (rootChildren instanceof APropertyNode) return (APropertyNode)rootChildren;
+			} else return (APropertyNode)columnValue.getRoot();
 		}
 		return null;
 	}

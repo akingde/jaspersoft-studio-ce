@@ -31,4 +31,12 @@ public class ContextHelpIDs {
 	public static String wizardChartType = prefix.concat("select_chart_type");
 	
 	public static String wizardChartData = prefix.concat("select_chart_data");
+	
+	public static String wizardStyleTemplatePath = prefix.concat("select_style_template_path");
+	
+	public static String wizardStyleTemplateLoad = prefix.concat("select_style_template_load");
+	
+	public static String wizardExpressionEditor = prefix.concat("select_expression");
+	
+	public static String wizardPageFormat = prefix.concat("select_page_format");
 }

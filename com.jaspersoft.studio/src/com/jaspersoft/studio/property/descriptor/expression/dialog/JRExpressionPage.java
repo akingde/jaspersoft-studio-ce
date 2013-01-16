@@ -17,7 +17,6 @@ package com.jaspersoft.studio.property.descriptor.expression.dialog;
 
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
@@ -37,8 +36,10 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.ClassType;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.RecentExpressions;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class JRExpressionPage extends WizardPage {
+public class JRExpressionPage extends JSSHelpWizardPage {
 	private JRDesignExpression value;
 	private StyledText queryText;
 	private ClassType valueType;
@@ -75,6 +76,7 @@ public class JRExpressionPage extends WizardPage {
 		super(pageName);
 		setTitle(Messages.common_expression_editor);
 		setDescription(Messages.JRExpressionPage_description);
+		contextName = ContextHelpIDs.wizardExpressionEditor;
 	}
 
 	public void createControl(Composite parent) {
