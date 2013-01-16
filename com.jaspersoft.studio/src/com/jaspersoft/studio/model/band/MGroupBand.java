@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.band;
 
@@ -26,18 +21,11 @@ import net.sf.jasperreports.engine.type.FooterPositionEnum;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.group.MGroup;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
-import com.jaspersoft.studio.utils.Misc;
 
 public class MGroupBand extends MGroup implements IPropertySource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	private static final Integer CONST_MIN_HEIGHT = new Integer(0);
 
 	public MGroupBand(JRDesignGroup jrDesignGroup) {
 		super();
@@ -48,53 +36,10 @@ public class MGroupBand extends MGroup implements IPropertySource {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		CheckBoxPropertyDescriptor startNewColumnD = new CheckBoxPropertyDescriptor(
-				JRDesignGroup.PROPERTY_START_NEW_COLUMN, Messages.MGroupBand_start_new_column);
-		startNewColumnD.setDescription(Messages.MGroupBand_start_new_column_description);
-		desc.add(startNewColumnD);
-
-		CheckBoxPropertyDescriptor startNewPageD = new CheckBoxPropertyDescriptor(JRDesignGroup.PROPERTY_START_NEW_PAGE,
-				Messages.MGroupBand_start_new_page);
-		startNewPageD.setDescription(Messages.MGroupBand_start_new_page_description);
-		desc.add(startNewPageD);
-
-		CheckBoxPropertyDescriptor reprintHeaderD = new CheckBoxPropertyDescriptor(
-				JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, Messages.MGroupBand_reprint_header_on_each_page);
-		reprintHeaderD.setDescription(Messages.MGroupBand_reprint_header_on_each_page_description);
-		desc.add(reprintHeaderD);
-
-		CheckBoxPropertyDescriptor resetPageNumberD = new CheckBoxPropertyDescriptor(
-				JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, Messages.MGroupBand_reset_page_number);
-		resetPageNumberD.setDescription(Messages.MGroupBand_reset_page_number_description);
-		desc.add(resetPageNumberD);
-
-		CheckBoxPropertyDescriptor keepTogetherD = new CheckBoxPropertyDescriptor(JRDesignGroup.PROPERTY_KEEP_TOGETHER,
-				Messages.MGroupBand_keep_together);
-		keepTogetherD.setDescription(Messages.MGroupBand_keep_together_description);
-		desc.add(keepTogetherD);
-
-		footerPositionD = new JSSEnumPropertyDescriptor(JRDesignGroup.PROPERTY_FOOTER_POSITION,
-				Messages.MGroupBand_footer_position, FooterPositionEnum.class, NullEnum.NULL);
-		footerPositionD.setDescription(Messages.MGroupBand_footer_position_description);
-		desc.add(footerPositionD);
-
-		PixelPropertyDescriptor minHeightD = new PixelPropertyDescriptor(
-				JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, Messages.MGroupBand_min_height_to_start_new_page);
-		minHeightD.setDescription(Messages.MGroupBand_min_height_to_start_new_page_description);
-		desc.add(minHeightD);
-
-		defaultsMap.put(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, CONST_MIN_HEIGHT);
-		defaultsMap.put(JRDesignGroup.PROPERTY_FOOTER_POSITION, FooterPositionEnum.NORMAL);
-		defaultsMap.put(JRDesignGroup.PROPERTY_KEEP_TOGETHER, Boolean.FALSE);
-		defaultsMap.put(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, Boolean.FALSE);
-		defaultsMap.put(JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, Boolean.FALSE);
-		defaultsMap.put(JRDesignGroup.PROPERTY_START_NEW_COLUMN, Boolean.FALSE);
-		defaultsMap.put(JRDesignGroup.PROPERTY_START_NEW_PAGE, Boolean.FALSE);
 	}
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor footerPositionD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -119,24 +64,6 @@ public class MGroupBand extends MGroup implements IPropertySource {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
-		if (id.equals(JRDesignGroup.PROPERTY_START_NEW_COLUMN))
-			return new Boolean(jrGroup.isStartNewColumn());
-		if (id.equals(JRDesignGroup.PROPERTY_START_NEW_PAGE))
-			return new Boolean(jrGroup.isStartNewPage());
-		if (id.equals(JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE))
-			return new Boolean(jrGroup.isReprintHeaderOnEachPage());
-		if (id.equals(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER))
-			return new Boolean(jrGroup.isResetPageNumber());
-		if (id.equals(JRDesignGroup.PROPERTY_KEEP_TOGETHER))
-			return new Boolean(jrGroup.isKeepTogether());
-
-		if (id.equals(JRDesignGroup.PROPERTY_FOOTER_POSITION))
-			return EnumHelper.getValue(jrGroup.getFooterPositionValue(), 1, true);
-
-		if (id.equals(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE))
-			return new Integer(jrGroup.getMinHeightToStartNewPage());
-
 		return super.getPropertyValue(id);
 	}
 
@@ -148,23 +75,11 @@ public class MGroupBand extends MGroup implements IPropertySource {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
-		if (id.equals(JRDesignGroup.PROPERTY_START_NEW_COLUMN))
-			jrGroup.setStartNewColumn(((Boolean) value).booleanValue());
-		else if (id.equals(JRDesignGroup.PROPERTY_START_NEW_PAGE))
-			jrGroup.setStartNewPage(((Boolean) value).booleanValue());
-		else if (id.equals(JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE))
-			jrGroup.setReprintHeaderOnEachPage(((Boolean) value).booleanValue());
-		else if (id.equals(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER))
-			jrGroup.setResetPageNumber(((Boolean) value).booleanValue());
-		else if (id.equals(JRDesignGroup.PROPERTY_KEEP_TOGETHER))
-			jrGroup.setKeepTogether(((Boolean) value).booleanValue());
 
-		else if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
+		if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
 			jrGroup
 					.setFooterPosition((FooterPositionEnum) EnumHelper.getSetValue(FooterPositionEnum.values(), value, 1, true));
 
-		else if (id.equals(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE))
-			jrGroup.setMinHeightToStartNewPage((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		else
 			super.setPropertyValue(id, value);
 	}
