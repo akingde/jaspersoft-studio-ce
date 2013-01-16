@@ -166,10 +166,13 @@
    <context id="select_page_format" title="Compose your expression">
       <description>Here you can define the page format of the report. This includes margin, number of columns, paper format and page orientation. You can use also use many measure unit when you define one of this parameters.</description>
 		<topic
-			href="html/wizard/expressioneditor/useexpressioneditor.html"
-			label="Expression Editor: what it is and how it works" />
+			href="html/wizard/reportstructure/pageformat.html"
+			label="Editing the page format" />
 		<topic
-			href="html/wizard/expressioneditor/extendeditor.html"
-			label="Expression Editor: how to extend it and contribute your own functions" />
+			href="html/wizard/reportstructure/columns.html"
+			label="Editing the number of columns" />
+		<topic
+			href="html/wizard/reportstructure/reportstructure.html"
+			label="The report structure" />
    </context>
 </contexts>
