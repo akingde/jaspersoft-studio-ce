@@ -21,6 +21,8 @@
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jasperreportseclipseplugin/trunk/net.sf.jasperreports,net.sf.jasperreports"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jasperreportseclipseplugin/trunk/net.sf.jasperreports.doc,net.sf.jasperreports.doc"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jasperreportseclipseplugin/trunk/net.sf.jasperreports.feature,net.sf.jasperreports.feature"/>
+<project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jasperreportseclipseplugin/trunk/net.sf.jasperreports.samples.feature,net.sf.jasperreports.samples.feature"/>
+<project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jasperreportseclipseplugin/trunk/net.sf.jasperreports.samples,net.sf.jasperreports.samples"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jasperreportseclipseplugin/trunk/net.sf.jasperreports.updatesite,net.sf.jasperreports.updatesite"/>
 </provider>
 </psf>
