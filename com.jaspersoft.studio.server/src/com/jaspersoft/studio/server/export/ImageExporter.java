@@ -17,12 +17,12 @@ package com.jaspersoft.studio.server.export;
 
 import java.io.File;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.type.ImageTypeEnum;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.utils.FileUtils;
 
 public class ImageExporter extends AExporter {
 

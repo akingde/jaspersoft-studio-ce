@@ -17,6 +17,8 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 
 import java.io.File;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -29,7 +31,6 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.utils.FileUtils;
 
 public class ResourceBundlePageContent extends AFileResourcePageContent {
 

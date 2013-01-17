@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -36,7 +38,6 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.util.StringInput;
 import com.jaspersoft.studio.server.editor.action.RunStopAction;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
-import com.jaspersoft.studio.utils.FileUtils;
 
 public class ReportUnitEditor extends PreviewJRPrint implements IRunReport,
 		IParametrable {

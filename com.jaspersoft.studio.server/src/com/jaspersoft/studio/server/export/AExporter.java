@@ -19,10 +19,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class AExporter {

@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -40,7 +41,6 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.plugin.IPublishContributor;
-import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
