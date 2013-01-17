@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish.wizard;
 
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -23,6 +22,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
  * Wizard page for the selection of a datasource for a resource 
@@ -31,7 +32,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class DatasourceSelectionPage extends WizardPage {
+public class DatasourceSelectionPage extends JSSHelpWizardPage {
 
 	public static final String PAGE_NAME = "ruDatasourceSelectionPage"; //$NON-NLS-1$
 	private JasperReportsConfiguration jConfig;
@@ -42,6 +43,7 @@ public class DatasourceSelectionPage extends WizardPage {
 		setTitle(Messages.DatasourceSelectionPage_Title);
 		setDescription(Messages.DatasourceSelectionPage_Description);
 		this.jConfig = jConfig;
+		contextName = ContextHelpIDs.wizardSelectDatasources;
 	}
 
 	@Override

@@ -185,12 +185,30 @@
    </context>
    <context id="select_subreport_property" title="Select the parameters of the subreport">
       <description>Here you can insert the parameter that will be passed to the subreport. The name of the parameter must be the same of the one used in the subreport and you can set the value of the parameter with an expression.</description>
-		<topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
-		<topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
+	  <topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
+	  <topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
    </context>
-    <context id="select_subreport_file" title="Select the subreport file">
+   <context id="select_subreport_file" title="Select the subreport file">
       <description>Select the a report file from your workspace, and it will be used as subreport.</description>
-		<topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
-		<topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
+	  <topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
+	  <topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
+   </context>
+   <context id="select_barcode" title="Select the type of barcode">
+      <description>Select the type of bar code you want insert in your report. Note that from here you can select only the type, instead the value can be set from the element properties when inserted.</description>
+   </context>
+   <context id="select_server" title="Select the server and location">
+      <description>Select a JasperReport server and the location where the report will be uploaded. Select also a report unit id, and an optional name (can be equal to the id) and description. The report unit is the "folder" that will contains the report on the server and its resources.</description>
+ 	  <topic href="html/wizard/jasperserver/connection.html" label="Connect to JasperReport Server" />
+ 	  <topic href="html/wizard/jasperserver/publishreport.html" label="Publish a report into JasperReport Server" />
+   </context>
+   <context id="select_server_resources" title="Select the resources to upload">
+      <description>Here you can select the resources used inside the report (like images) that will be uploaded with it in the report unit. Note that a report to be executed from JasperReport Server, must have all its resources uploaded.</description>
+ 	  <topic href="html/wizard/jasperserver/connection.html" label="Connect to JasperReport Server" />
+ 	  <topic href="html/wizard/jasperserver/publishreport.html" label="Publish a report into JasperReport Server" />
+   </context>
+   <context id="select_server_datasources" title="Select how to manage the data sources">
+      <description>Here you can define how to manage the datasources used by the report, since they can be needed to execute it. You can select to upload your use a datasource already on the server, try to upload your local one, or don't use any datasource.</description>
+ 	  <topic href="html/wizard/jasperserver/connection.html" label="Connect to JasperReport Server" />
+ 	  <topic href="html/wizard/jasperserver/publishreport.html" label="Publish a report into JasperReport Server" />
    </context>
 </contexts>

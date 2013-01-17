@@ -20,7 +20,6 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -50,8 +49,10 @@ import com.jaspersoft.studio.components.barcode.model.barcode4j.MRoyalMail;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCA;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCE;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUSPSIntelligent;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class BarcodeWizardPage extends WizardPage {
+public class BarcodeWizardPage extends JSSHelpWizardPage {
 	private MBarcode barcode = new MCodabar();
 
 	public MBarcode getBarcode() {
@@ -63,6 +64,7 @@ public class BarcodeWizardPage extends WizardPage {
 		setTitle(Messages.common_barcode_wizard);
 		setDescription(Messages.BarcodeWizardPage_barcode_wizard_description_a
 				+ Messages.BarcodeWizardPage_barcode_wizard_description_b);
+		contextName = ContextHelpIDs.wizardSelectBarcode;
 	}
 
 	@Override

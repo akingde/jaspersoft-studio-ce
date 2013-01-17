@@ -50,8 +50,10 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.utils.ValidationUtils;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class RUnitLocationPage extends WizardPage {
+public class RUnitLocationPage extends JSSHelpWizardPage {
 	private JasperDesign jDesign;
 	private TreeViewer treeViewer;
 	private Button bnRunit;
@@ -65,6 +67,7 @@ public class RUnitLocationPage extends WizardPage {
 		setDescription(Messages.RUnitLocationPage_description);
 		this.jDesign = jDesign;
 		this.n = n;
+		contextName = ContextHelpIDs.wizardSelectServer;
 	}
 
 	public MReportUnit getReportUnit() {

@@ -45,4 +45,12 @@ public class ContextHelpIDs {
 	public static String wizardSubreportProperty = prefix.concat("select_subreport_property");
 	
 	public static String wizardSubreportFile = prefix.concat("select_subreport_file");
+	
+	public static String wizardSelectBarcode = prefix.concat("select_barcode");
+	
+	public static String wizardSelectServer = prefix.concat("select_server");
+	
+	public static String wizardSelectResouces = prefix.concat("select_server_resources");
+	
+	public static String wizardSelectDatasources = prefix.concat("select_server_datasources");
 }

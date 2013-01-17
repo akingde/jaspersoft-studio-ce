@@ -44,8 +44,10 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class ResourcesPage extends WizardPage {
+public class ResourcesPage extends JSSHelpWizardPage {
 	private JasperReportsConfiguration jConfig;
 	private TableViewer tableViewer;
 
@@ -54,6 +56,7 @@ public class ResourcesPage extends WizardPage {
 		setTitle(Messages.ResourcesPage_title);
 		setDescription(Messages.ResourcesPage_description);
 		this.jConfig = jConfig;
+		contextName = ContextHelpIDs.wizardSelectResouces;
 	}
 
 	public boolean isEmpty() {
