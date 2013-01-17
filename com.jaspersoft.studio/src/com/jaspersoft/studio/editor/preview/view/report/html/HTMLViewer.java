@@ -18,6 +18,7 @@ package com.jaspersoft.studio.editor.preview.view.report.html;
 import java.io.File;
 import java.io.IOException;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.eclipse.jface.action.IToolBarManager;
@@ -40,7 +41,6 @@ import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.IURLViewable;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
 import com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage;
-import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable, IPreferencePage {

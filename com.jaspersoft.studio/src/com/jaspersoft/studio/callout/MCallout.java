@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -50,7 +51,6 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.Misc;
 
 /**

@@ -28,6 +28,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.util.ResourceScope;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -61,7 +62,6 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
-import com.jaspersoft.studio.utils.FileUtils;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
 

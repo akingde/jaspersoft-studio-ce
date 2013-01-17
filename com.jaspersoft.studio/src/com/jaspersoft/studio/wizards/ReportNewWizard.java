@@ -385,7 +385,6 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	 */
 	@Override
 	public boolean canFinish() {
-
 		if (getContainer().getCurrentPage() != congratulationsStep) {
 			return false;
 		}

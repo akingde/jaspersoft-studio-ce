@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -42,7 +43,6 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
-import com.jaspersoft.studio.utils.FileUtils;
 
 public class PropertyListFieldEditor extends TableFieldEditor {
 

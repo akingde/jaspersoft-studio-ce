@@ -19,7 +19,7 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
-import net.sf.jasperreports.eclipse.wizard.project.JRProjectWizard;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -569,7 +569,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				// Create a project if one doesn't exist and open it.
 				if (!project.exists()) {
 					project.create(null);
-					JRProjectWizard.createJRProject(null, project);
+					ProjectUtil.createJRProject(null, project);
 				}
 				if (!project.isOpen())
 					project.open(null);
