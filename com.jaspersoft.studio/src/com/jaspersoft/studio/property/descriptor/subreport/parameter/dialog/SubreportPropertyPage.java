@@ -50,6 +50,7 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 public class SubreportPropertyPage extends JSSWizardPage {
@@ -119,6 +120,7 @@ public class SubreportPropertyPage extends JSSWizardPage {
 		super(pageName);
 		setTitle(Messages.common_subreport_parameters);
 		setDescription(Messages.SubreportPropertyPage_description);
+		contextName = ContextHelpIDs.wizardSubreportProperty;
 	}
 
 	public void createControl(Composite parent) {

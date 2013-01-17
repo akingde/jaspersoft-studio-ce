@@ -42,7 +42,7 @@
 			label="Designing a report with JasperSoft Studio" />
 	</context>
 	<context id="select_groups">
-		<description>Here you can choose which from the added fields will became groups</description>
+		<description>Here you can choose which from the added fields will became groups.</description>
 		<topic
 			href="html/wizard/createreport/createreport.html"
 			label="Designing a report with JasperSoft Studio" />
@@ -103,19 +103,20 @@
       <topic href="html/wizard/tablecrosstabs/createcrosstab.html" label="Creation of a crosstab"/>
    </context>
    <context id="select_dataset_name" title="Select name and type">
-      <description>Here you need to specify a name for the new dataset, and it must be unique since it is used as identifier. You also need to specify if the new dataset get the data from a data source (like a database or a XML file for example) or if it is empty and has no data in it</description>
+      <description>Here you need to specify a name for the new dataset, and it must be unique since it is used as identifier. You also need to specify if the new dataset get the data from a data source (like a database or a XML file for example) or if it is empty and has no data in it.</description>
       <topic href="html/wizard/chartanddataset/createdataset.html" label="Creation of a dataset"/>
       <topic href="html/wizard/tablecrosstabs/createtable.html" label="Creation of a table"/>
       <topic href="html/wizard/tablecrosstabs/createcrosstab.html" label="Creation of a crosstab"/>
    </context>
    <context id="select_dataset_connection" title="Select the connection">
-      <description>Here you need to specify the connection used from the dataset to retrieve the data from the datasource. You can use an existing connection created for another datasource, or create a new one, choose the connection with an expression, or create and empty connection (this case it is equivalent to have an empty dataset</description>
+      <description>Here you need to specify the connection used from the dataset to retrieve the data from the datasource. You can use an existing connection created for another datasource, or create a new one, choose the connection with an expression, or create and empty connection (this case it is equivalent to have an empty dataset.</description>
       <topic href="html/wizard/chartanddataset/createdataset.html" label="Creation of a dataset"/>
       <topic href="html/wizard/tablecrosstabs/createtable.html" label="Creation of a table"/>
       <topic href="html/wizard/tablecrosstabs/createcrosstab.html" label="Creation of a crosstab"/>
+      <topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
    </context>
    <context id="select_layout" title="Select the layout">
-      <description>Here you can select which columns will be created for the table. Note that all the fields selected in the previous steps will be inserted into the Detail cell, so it is not present in this selection</description>
+      <description>Here you can select which columns will be created for the table. Note that all the fields selected in the previous steps will be inserted into the Detail cell, so it is not present in this selection.</description>
       <topic href="html/wizard/chartanddataset/createdataset.html" label="Creating a dataset"/>
       <topic href="html/wizard/tablecrosstabs/createtable.html" label="Creation of a table"/>
       <topic href="html/wizard/tablecrosstabs/createcrosstab.html" label="Creation of a crosstab"/>
@@ -126,12 +127,12 @@
       <topic href="html/wizard/chartanddataset/createdataset.html" label="Creation of a dataset"/>
    </context>
    <context id="select_chart_data" title="Select the chart data">
-      <description>Here you can configure your chart. The dataset define the context of the report, or in other words the location of the data used to fill the chart. Reset type allow you to periodically reset the dataset. The increment when expressions allows you to add a flag to determine whether to add a record to the record set designed to feed the chart. You can provide one or more series using fields and variables</description>
+      <description>Here you can configure your chart. The dataset define the context of the report, or in other words the location of the data used to fill the chart. Reset type allow you to periodically reset the dataset. The increment when expressions allows you to add a flag to determine whether to add a record to the record set designed to feed the chart. You can provide one or more series using fields and variables.</description>
       <topic href="html/wizard/chartanddataset/createdataset.html" label="Creation of a dataset"/>
       <topic href="html/wizard/chartanddataset/createchart.html" label="Creation of a chart"/>
    </context>
    <context id="select_style_template_path" title="Select location and name of the new syle template file">
-      <description>A style template is a container where you can define one or more styles and these styles can then be shared by many reports. In these step you can define location and name of the template file</description>
+      <description>A style template is a container where you can define one or more styles and these styles can then be shared by many reports. In these step you can define location and name of the template file.</description>
 		<topic
 			href="html/wizard/createreport/addfolder.html"
 			label="Create a Project Folder" />
@@ -143,7 +144,7 @@
 			label="Use a Styles Template" />
    </context>
    <context id="select_style_template_load" title="Select the styles template">
-      <description>Here you can select a styles template to include in your report. Doing this all the styles defined inside the template can be used inside the report</description>
+      <description>Here you can select a styles template to include in your report. Doing this all the styles defined inside the template can be used inside the report.</description>
 		<topic
 			href="html/wizard/createreport/addfolder.html"
 			label="Create a Project Folder" />
@@ -163,7 +164,7 @@
 			href="html/wizard/expressioneditor/extendeditor.html"
 			label="Expression Editor: how to extend it and contribute your own functions" />
    </context>
-   <context id="select_page_format" title="Compose your expression">
+   <context id="select_page_format" title="Change the page format">
       <description>Here you can define the page format of the report. This includes margin, number of columns, paper format and page orientation. You can use also use many measure unit when you define one of this parameters.</description>
 		<topic
 			href="html/wizard/reportstructure/pageformat.html"
@@ -174,5 +175,22 @@
 		<topic
 			href="html/wizard/reportstructure/reportstructure.html"
 			label="The report structure" />
+   </context>
+   <context id="select_subreport_source" title="Select the source of the subreport">
+      <description>Here you can define the source of the subreport. You can create a new report, using an existing one (you can directly select a report in the workspace or provide an expression to select it) or just create the subreport element in the report as palceholder.</description>
+		<topic
+			href="html/wizard/subreport/subreport.html"
+			label="How to use a subreport with parameters" />
+		<topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
+   </context>
+   <context id="select_subreport_property" title="Select the parameters of the subreport">
+      <description>Here you can insert the parameter that will be passed to the subreport. The name of the parameter must be the same of the one used in the subreport and you can set the value of the parameter with an expression.</description>
+		<topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
+		<topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
+   </context>
+    <context id="select_subreport_file" title="Select the subreport file">
+      <description>Select the a report file from your workspace, and it will be used as subreport.</description>
+		<topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
+		<topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
    </context>
 </contexts>

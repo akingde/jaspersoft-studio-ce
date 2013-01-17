@@ -39,4 +39,10 @@ public class ContextHelpIDs {
 	public static String wizardExpressionEditor = prefix.concat("select_expression");
 	
 	public static String wizardPageFormat = prefix.concat("select_page_format");
+	
+	public static String wizardSubreportSource = prefix.concat("select_subreport_source");
+	
+	public static String wizardSubreportProperty = prefix.concat("select_subreport_property");
+	
+	public static String wizardSubreportFile = prefix.concat("select_subreport_file");
 }

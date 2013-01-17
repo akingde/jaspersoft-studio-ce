@@ -57,6 +57,7 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.wizards.AWizardNode;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardSelectionPage;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
@@ -96,6 +97,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 		setTitle(Messages.common_subreport);
 		setDescription(Messages.WizardNewSubreportPage_description);
 		setImageDescriptor(MSubreport.getIconDescriptor().getIcon32());
+		contextName = ContextHelpIDs.wizardSubreportSource;
 	}
 
 	private MSubreport subreport;
@@ -217,7 +219,15 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 
 				public void widgetSelected(SelectionEvent e) {
 					FilteredResourcesSelectionDialog wizard = new FilteredResourcesSelectionDialog(Display.getCurrent()
-							.getActiveShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+							.getActiveShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE){
+						
+									@Override
+									protected void configureShell(org.eclipse.swt.widgets.Shell shell) {
+										super.configureShell(shell);
+										PlatformUI.getWorkbench().getHelpSystem().setHelp(shell, ContextHelpIDs.wizardSubreportFile);
+									};
+								};
+							
 							wizard.setInitialPattern("*.jrxml");//$NON-NLS-1$
 							if (wizard.open() == Dialog.OK)
 							{

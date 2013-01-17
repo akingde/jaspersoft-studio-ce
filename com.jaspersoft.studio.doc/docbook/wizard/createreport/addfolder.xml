@@ -5,7 +5,7 @@
 <title>Create a New Project Folder</title>
 <section>
         <para>From JasperSoft Studio, open the menu File, select New and then Others....</para>
-        		<figure>
+       	<figure>
 			<title>Select New-&gt;Other</title>
 			<screenshot>
 				<mediaobject>
@@ -15,10 +15,12 @@
 				</mediaobject>
 			</screenshot>
 		</figure>
-        <para>In the dialog that will appear type &quot;Jasper&quot; in the Wizards bar, this will filter all the actions showing only
-        the ones related to JasperSoft Studio, and from this filtered list select &quot;JasperReports Project&quot;. Then hit
-        Next.</para>
-               		<figure>
+        <para>
+   			In the dialog that will appear type &quot;Jasper&quot; in the Wizards bar, this will filter all the actions showing only
+        	the ones related to JasperSoft Studio, and from this filtered list select &quot;JasperReports Project&quot;. Then hit
+       		Next.
+        </para>
+        <figure>
 			<title>Select JasperReports Project</title>
 			<screenshot>
 				<mediaobject>
@@ -29,7 +31,7 @@
 			</screenshot>
 		</figure>
         <para>At this point you need only to insert the name of the folder and hit Finish.</para>
-               		<figure>
+        <figure>
 			<title>Insert the Name of the Folder</title>
 			<screenshot>
 				<mediaobject>
