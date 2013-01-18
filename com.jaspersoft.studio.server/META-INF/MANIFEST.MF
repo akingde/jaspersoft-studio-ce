@@ -51,4 +51,9 @@ Export-Package: com.jaspersoft.ireport.jasperserver.ws,
  org.apache.axis.encoding,
  org.apache.axis.encoding.ser,
  org.apache.axis.soap,
- org.apache.axis.utils
+ org.apache.axis.utils,
+ org.apache.commons.codec.binary,
+ org.apache.commons.httpclient,
+ org.apache.commons.httpclient.cookie,
+ org.apache.commons.httpclient.methods,
+ org.apache.commons.httpclient.params
