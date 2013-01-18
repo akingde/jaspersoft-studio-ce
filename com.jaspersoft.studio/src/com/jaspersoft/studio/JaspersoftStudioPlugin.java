@@ -23,6 +23,7 @@ import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.property.PostSetValueManager;
+import com.jaspersoft.studio.utils.BrandingInfo;
 import com.jaspersoft.studio.utils.jasper.DriversManager;
 
 /*
@@ -36,7 +37,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 
 	public static final String PLUGIN_ID = "com.jaspersoft.studio"; //$NON-NLS-1$
 	public static final String COMPONENTS_ID = "com.jaspersoft.studio.components"; //$NON-NLS-1$
-
+	
 	// The shared instance.
 	/** The plugin. */
 	private static JaspersoftStudioPlugin plugin;
@@ -55,6 +56,12 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		getExtensionManager();
+		// Sets the branding information
+		BrandingInfo info = new BrandingInfo();
+		info.setProductName("Jaspersoft Studio plug-in");
+		info.setProductVersion(getBundle().getVersion().toString());
+		info.setProductMainBundleID(PLUGIN_ID);
+		setBrandingInformation(info);
 	}
 
 	/**
@@ -139,5 +146,28 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	public static String getUniqueIdentifier() {
 		return PLUGIN_ID;
 	}
+	
+	/**
+	 * Sets the branding information that will helps identify the
+	 * product, for example in case of debug, diagnostics or statistics.
+	 * 
+	 * @param info branding information
+	 */
+	public void setBrandingInformation(BrandingInfo info){
+		getPreferenceStore().putValue(BrandingInfo.BRANDING_PRODUCT_NAME, info.getProductName());
+		getPreferenceStore().putValue(BrandingInfo.BRANDING_PRODUCT_VERSION, info.getProductVersion());
+		getPreferenceStore().putValue(BrandingInfo.BRANDING_PRODUCT_MAINBUNDLE, info.getProductMainBundleID());
+	}
 
+	/**
+	 * @return the branding information that identify the currently running product (plugin/product)
+	 * 
+	 */
+	public BrandingInfo getBrandingInformation(){
+		BrandingInfo info = new BrandingInfo();
+		info.setProductName(getPreferenceStore().getString(BrandingInfo.BRANDING_PRODUCT_NAME));
+		info.setProductVersion(getPreferenceStore().getString(BrandingInfo.BRANDING_PRODUCT_VERSION));
+		info.setProductMainBundleID(getPreferenceStore().getString(BrandingInfo.BRANDING_PRODUCT_MAINBUNDLE));
+		return info;
+	}
 }

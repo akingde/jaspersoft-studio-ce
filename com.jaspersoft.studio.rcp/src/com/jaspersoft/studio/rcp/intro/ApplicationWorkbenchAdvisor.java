@@ -33,9 +33,12 @@ import org.eclipse.ui.internal.ide.IDEInternalWorkbenchImages;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.osgi.framework.Bundle;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.ReportDesignPerspective;
+import com.jaspersoft.studio.rcp.Activator;
 import com.jaspersoft.studio.rcp.OpenDocumentEventProcessor;
 import com.jaspersoft.studio.rcp.p2.P2Util;
+import com.jaspersoft.studio.utils.BrandingInfo;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -80,6 +83,13 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		// It seems that in Windows and Linux platforms as default this value is set to true.
 		// However in Mac OS X the button does not shown as default behavior.
 		TrayDialog.setDialogHelpAvailable(true);
+		
+		// Sets the branding information
+		BrandingInfo info = new BrandingInfo();
+		info.setProductName("Jaspersoft Studio Community Edition");
+		info.setProductVersion(Activator.getDefault().getBundle().getVersion().toString());
+		info.setProductMainBundleID(Activator.PLUGIN_ID);
+		JaspersoftStudioPlugin.getInstance().setBrandingInformation(info);
 	}
 
 	private void declareWorkbenchImage(IWorkbenchConfigurer configurer_p,
