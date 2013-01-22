@@ -70,6 +70,8 @@ public class MCrosstabDataset extends MElementDataset {
 				.setDescription(Messages.MCrosstabDataset_data_presorted_description);
 		desc.add(repeatColumnHeadersD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#crosstabDataset");
 	}
 
 	/*

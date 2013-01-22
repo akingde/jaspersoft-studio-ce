@@ -26,6 +26,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -76,47 +77,15 @@ public class MAreaPlot extends MChartPlot {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR,
-				Messages.common_category_axis_label_color, NullEnum.NULL);
-		catAxisLabelColorD
-				.setDescription(Messages.MAreaPlot_category_axis_label_color_description);
-		desc.add(catAxisLabelColorD);
-
 		JRExpressionPropertyDescriptor catAxisLabelExprD = new JRExpressionPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION,
 				Messages.common_category_axis_label_expression);
 		catAxisLabelExprD
 				.setDescription(Messages.MAreaPlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
-
-		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT,
-				Messages.common_category_axis_label_font);
-		catAxisLabelFontD
-				.setDescription(Messages.MAreaPlot_category_axis_label_font_description);
-		desc.add(catAxisLabelFontD);
-
-		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR,
-				Messages.common_category_axis_tick_label_color, NullEnum.NULL);
-		catAxisTickLabelColorD
-				.setDescription(Messages.MAreaPlot_category_axis_tick_label_color_description);
-		desc.add(catAxisTickLabelColorD);
-
-		FontPropertyDescriptor catAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT,
-				Messages.common_category_axis_tick_label_font);
-		catAxisTickLabelFontD
-				.setDescription(Messages.MAreaPlot_category_axis_tick_label_font_description);
-		desc.add(catAxisTickLabelFontD);
-
-		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR,
-				Messages.common_category_axis_line_color, NullEnum.NULL);
-		catAxisLineColorD
-				.setDescription(Messages.MAreaPlot_category_axis_line_color_description);
-		desc.add(catAxisLineColorD);
+		catAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#categoryAxisLabelExpression"));
 
 		ColorPropertyDescriptor valAxisLabelColorD = new ColorPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR,
@@ -131,6 +100,9 @@ public class MAreaPlot extends MChartPlot {
 		valAxisLabelExprD
 				.setDescription(Messages.MAreaPlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
+		valAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#valueAxisLabelExpression"));
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LABEL_FONT,
@@ -138,6 +110,9 @@ public class MAreaPlot extends MChartPlot {
 		valAxisLabelFontD
 				.setDescription(Messages.MAreaPlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
+		valAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR,
@@ -152,6 +127,9 @@ public class MAreaPlot extends MChartPlot {
 		valAxisTickLabelFontD
 				.setDescription(Messages.MAreaPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
+		valAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LINE_COLOR,
@@ -166,6 +144,9 @@ public class MAreaPlot extends MChartPlot {
 		rangeAxisMinExprD
 				.setDescription(Messages.MAreaPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
+		rangeAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION,
@@ -173,6 +154,9 @@ public class MAreaPlot extends MChartPlot {
 		rangeAxisMaxExprD
 				.setDescription(Messages.MAreaPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
+		rangeAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMaxValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION,
@@ -180,6 +164,9 @@ public class MAreaPlot extends MChartPlot {
 		domainAxisMinExprD
 				.setDescription(Messages.MAreaPlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
+		domainAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION,
@@ -187,14 +174,9 @@ public class MAreaPlot extends MChartPlot {
 		domainAxisMaxExprD
 				.setDescription(Messages.MAreaPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
-
-		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
-				Messages.common_category_axis_vertical_tick_labels,
-				NullEnum.NULL);
-		catAxisVertTickLabelD
-				.setDescription(Messages.MAreaPlot_category_axis_vertical_tick_labels_description);
-		desc.add(catAxisVertTickLabelD);
+		domainAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMaxValueExpression"));
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
@@ -202,13 +184,6 @@ public class MAreaPlot extends MChartPlot {
 		valAxisVertTickLabelD
 				.setDescription(Messages.MAreaPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
-
-		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK,
-				Messages.common_category_axis_tick_label_mask);
-		catAxisTickLabelMaskD
-				.setDescription(Messages.MAreaPlot_category_axis_tick_label_mask_description);
-		desc.add(catAxisTickLabelMaskD);
 
 		NTextPropertyDescriptor valAxisTickLabelMaskD = new NTextPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK,
@@ -223,6 +198,68 @@ public class MAreaPlot extends MChartPlot {
 		catAxisTickLabelRotation
 				.setDescription(Messages.MAreaPlot_category_axis_tick_label_rotation_description);
 		desc.add(catAxisTickLabelRotation);
+		catAxisTickLabelRotation
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#categoryAxisFormat_labelRotation"));
+
+		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
+				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
+				Messages.common_category_axis_vertical_tick_labels,
+				NullEnum.NULL);
+		catAxisVertTickLabelD
+				.setDescription(Messages.MAreaPlot_category_axis_vertical_tick_labels_description);
+		desc.add(catAxisVertTickLabelD);
+
+		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
+				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK,
+				Messages.common_category_axis_tick_label_mask);
+		catAxisTickLabelMaskD
+				.setDescription(Messages.MAreaPlot_category_axis_tick_label_mask_description);
+		desc.add(catAxisTickLabelMaskD);
+
+		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
+				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT,
+				Messages.common_category_axis_label_font);
+		catAxisLabelFontD
+				.setDescription(Messages.MAreaPlot_category_axis_label_font_description);
+		desc.add(catAxisLabelFontD);
+		catAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
+
+		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
+				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR,
+				Messages.common_category_axis_tick_label_color, NullEnum.NULL);
+		catAxisTickLabelColorD
+				.setDescription(Messages.MAreaPlot_category_axis_tick_label_color_description);
+		desc.add(catAxisTickLabelColorD);
+
+		FontPropertyDescriptor catAxisTickLabelFontD = new FontPropertyDescriptor(
+				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT,
+				Messages.common_category_axis_tick_label_font);
+		catAxisTickLabelFontD
+				.setDescription(Messages.MAreaPlot_category_axis_tick_label_font_description);
+		desc.add(catAxisTickLabelFontD);
+		catAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
+
+		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
+				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR,
+				Messages.common_category_axis_line_color, NullEnum.NULL);
+		catAxisLineColorD
+				.setDescription(Messages.MAreaPlot_category_axis_line_color_description);
+		desc.add(catAxisLineColorD);
+
+		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
+				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR,
+				Messages.common_category_axis_label_color, NullEnum.NULL);
+		catAxisLabelColorD
+				.setDescription(Messages.MAreaPlot_category_axis_label_color_description);
+		desc.add(catAxisLabelColorD);
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat");
 
 		catAxisLabelColorD.setCategory(Messages.MAreaPlot_category_axis);
 		catAxisTickLabelMaskD.setCategory(Messages.MAreaPlot_category_axis);
@@ -234,7 +271,6 @@ public class MAreaPlot extends MChartPlot {
 		catAxisTickLabelColorD.setCategory(Messages.MAreaPlot_category_axis);
 		catAxisTickLabelFontD.setCategory(Messages.MAreaPlot_category_axis);
 		catAxisTickLabelRotation.setCategory(Messages.MAreaPlot_category_axis);
-
 	}
 
 	/*

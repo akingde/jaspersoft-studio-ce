@@ -64,7 +64,6 @@ import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
@@ -253,6 +252,9 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 				opaqueD.getEnumValue(ModeEnum.OPAQUE));
 		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, null);
 		defaultsMap.put(JRDesignCellContents.PROPERTY_STYLE, null);
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#crosstabCell");
 	}
 
 	public static final String LINE_BOX = "LineBox"; //$NON-NLS-1$

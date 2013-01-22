@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
@@ -78,6 +79,9 @@ public class MChartHighLowDataset extends MChartDataset {
 		closeExprD
 				.setDescription(Messages.MChartHighLowDataset_close_expression_description);
 		desc.add(closeExprD);
+		closeExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#closeExpression"));
 
 		JRExpressionPropertyDescriptor dateExprD = new JRExpressionPropertyDescriptor(
 				JRDesignHighLowDataset.PROPERTY_DATE_EXPRESSION,
@@ -85,6 +89,9 @@ public class MChartHighLowDataset extends MChartDataset {
 		dateExprD
 				.setDescription(Messages.MChartHighLowDataset_data_expression_description);
 		desc.add(dateExprD);
+		dateExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#dateExpression"));
 
 		JRExpressionPropertyDescriptor highExprD = new JRExpressionPropertyDescriptor(
 				JRDesignHighLowDataset.PROPERTY_HIGH_EXPRESSION,
@@ -92,12 +99,17 @@ public class MChartHighLowDataset extends MChartDataset {
 		highExprD
 				.setDescription(Messages.MChartHighLowDataset_high_expression_description);
 		desc.add(highExprD);
+		highExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#highExpression"));
 
 		JRExpressionPropertyDescriptor lowExprD = new JRExpressionPropertyDescriptor(
 				JRDesignHighLowDataset.PROPERTY_LOW_EXPRESSION,
 				Messages.MChartHighLowDataset_low_expression);
 		lowExprD.setDescription(Messages.MChartHighLowDataset_low_expression_description);
 		desc.add(lowExprD);
+		lowExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#lowExpression"));
 
 		JRExpressionPropertyDescriptor openExprD = new JRExpressionPropertyDescriptor(
 				JRDesignHighLowDataset.PROPERTY_OPEN_EXPRESSION,
@@ -105,6 +117,9 @@ public class MChartHighLowDataset extends MChartDataset {
 		openExprD
 				.setDescription(Messages.MChartHighLowDataset_open_expression_description);
 		desc.add(openExprD);
+		openExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#openExpression"));
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
 				JRDesignHighLowDataset.PROPERTY_SERIES_EXPRESSION,
@@ -112,6 +127,9 @@ public class MChartHighLowDataset extends MChartDataset {
 		seriesExprD
 				.setDescription(Messages.MChartHighLowDataset_series_expression_description);
 		desc.add(seriesExprD);
+		seriesExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#seriesExpression"));
 
 		JRExpressionPropertyDescriptor volumeExprD = new JRExpressionPropertyDescriptor(
 				JRDesignHighLowDataset.PROPERTY_VOLUME_EXPRESSION,
@@ -119,6 +137,9 @@ public class MChartHighLowDataset extends MChartDataset {
 		volumeExprD
 				.setDescription(Messages.MChartHighLowDataset_volume_expression_description);
 		desc.add(volumeExprD);
+		volumeExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#volumeExpression"));
 
 		JRPropertyDescriptor hyperLinkD = new JRPropertyDescriptor(
 				JRDesignHighLowDataset.PROPERTY_ITEM_HYPERLINK,
@@ -126,6 +147,9 @@ public class MChartHighLowDataset extends MChartDataset {
 		hyperLinkD
 				.setDescription(Messages.MChartHighLowDataset_item_hyperlink_description);
 		desc.add(hyperLinkD);
+		hyperLinkD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#itemHyperlink"));
 
 		closeExprD
 				.setCategory(Messages.MChartHighLowDataset_chart_highlow_dataset_category);

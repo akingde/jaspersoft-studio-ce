@@ -28,6 +28,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChartItemLabel;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -75,6 +76,9 @@ public class MPie3DPlot extends MChartPlot {
 				Messages.common_item_label);
 		itemLabelD.setDescription(Messages.MPie3DPlot_item_label_description);
 		desc.add(itemLabelD);
+		itemLabelD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#itemLabel"));
 
 		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(
 				JRDesignPie3DPlot.PROPERTY_SHOW_LABELS,
@@ -108,6 +112,9 @@ public class MPie3DPlot extends MChartPlot {
 		depthFactorD
 				.setDescription(Messages.MPie3DPlot_depth_factor_description);
 		desc.add(depthFactorD);
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pie3DPlot");
 	}
 
 	/*
@@ -138,7 +145,7 @@ public class MPie3DPlot extends MChartPlot {
 			return ilFont;
 		} else {
 			Object value = ilFont.getPropertyValue(id);
-			if (value == null) 
+			if (value == null)
 				value = super.getPropertyValue(id);
 			return value;
 		}

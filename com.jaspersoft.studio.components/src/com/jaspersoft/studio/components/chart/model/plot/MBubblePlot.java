@@ -28,6 +28,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -90,6 +91,9 @@ public class MBubblePlot extends MChartPlot {
 		catAxisLabelExprD
 				.setDescription(Messages.MBubblePlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
+		catAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#xAxisLabelExpression"));
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_FONT,
@@ -97,6 +101,9 @@ public class MBubblePlot extends MChartPlot {
 		catAxisLabelFontD
 				.setDescription(Messages.MBubblePlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
+		catAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_COLOR,
@@ -111,6 +118,9 @@ public class MBubblePlot extends MChartPlot {
 		catAxisTickLabelFontD
 				.setDescription(Messages.MBubblePlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
+		catAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_X_AXIS_LINE_COLOR,
@@ -132,6 +142,9 @@ public class MBubblePlot extends MChartPlot {
 		valAxisLabelExprD
 				.setDescription(Messages.MBubblePlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
+		valAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#yAxisLabelExpression"));
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_FONT,
@@ -139,6 +152,9 @@ public class MBubblePlot extends MChartPlot {
 		valAxisLabelFontD
 				.setDescription(Messages.MBubblePlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
+		valAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_COLOR,
@@ -153,6 +169,9 @@ public class MBubblePlot extends MChartPlot {
 		valAxisTickLabelFontD
 				.setDescription(Messages.MBubblePlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
+		valAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_Y_AXIS_LINE_COLOR,
@@ -167,6 +186,9 @@ public class MBubblePlot extends MChartPlot {
 		rangeAxisMinExprD
 				.setDescription(Messages.MBubblePlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
+		rangeAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION,
@@ -174,6 +196,9 @@ public class MBubblePlot extends MChartPlot {
 		rangeAxisMaxExprD
 				.setDescription(Messages.MBubblePlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
+		rangeAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMaxValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION,
@@ -181,6 +206,9 @@ public class MBubblePlot extends MChartPlot {
 		domainAxisMinExprD
 				.setDescription(Messages.MBubblePlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
+		domainAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION,
@@ -188,6 +216,9 @@ public class MBubblePlot extends MChartPlot {
 		domainAxisMaxExprD
 				.setDescription(Messages.MBubblePlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
+		domainAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMaxValueExpression"));
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_X_AXIS_VERTICAL_TICK_LABELS,
@@ -199,8 +230,7 @@ public class MBubblePlot extends MChartPlot {
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_Y_AXIS_VERTICAL_TICK_LABELS,
-				Messages.common_value_axis_vertical_tick_labels,
-				NullEnum.NULL);
+				Messages.common_value_axis_vertical_tick_labels, NullEnum.NULL);
 		valAxisVertTickLabelD
 				.setDescription(Messages.MBubblePlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
@@ -219,12 +249,18 @@ public class MBubblePlot extends MChartPlot {
 				.setDescription(Messages.MBubblePlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat");
+
 		ComboBoxPropertyDescriptor scaleType = new ComboBoxPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_SCALE_TYPE,
 				Messages.MBubblePlot_scale_type, EnumHelper.getEnumNames(
 						ScaleTypeEnum.values(), NullEnum.NOTNULL));
 		scaleType.setDescription(Messages.MBubblePlot_scale_type_description);
 		desc.add(scaleType);
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#bubblePlot");
 	}
 
 	/*

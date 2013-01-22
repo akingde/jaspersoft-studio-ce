@@ -26,6 +26,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -89,6 +90,9 @@ public class MLinePlot extends MChartPlot {
 		catAxisLabelExprD
 				.setDescription(Messages.MLinePlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
+		catAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#categoryAxisLabelExpression"));
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT,
@@ -96,6 +100,9 @@ public class MLinePlot extends MChartPlot {
 		catAxisLabelFontD
 				.setDescription(Messages.MLinePlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
+		catAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR,
@@ -110,6 +117,9 @@ public class MLinePlot extends MChartPlot {
 		catAxisTickLabelFontD
 				.setDescription(Messages.MLinePlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
+		catAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR,
@@ -131,6 +141,9 @@ public class MLinePlot extends MChartPlot {
 		valAxisLabelExprD
 				.setDescription(Messages.MLinePlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
+		valAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#valueAxisLabelExpressionn"));
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LABEL_FONT,
@@ -138,6 +151,9 @@ public class MLinePlot extends MChartPlot {
 		valAxisLabelFontD
 				.setDescription(Messages.MLinePlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
+		valAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR,
@@ -152,6 +168,9 @@ public class MLinePlot extends MChartPlot {
 		valAxisTickLabelFontD
 				.setDescription(Messages.MLinePlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
+		valAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LINE_COLOR,
@@ -166,6 +185,9 @@ public class MLinePlot extends MChartPlot {
 		rangeAxisMinExprD
 				.setDescription(Messages.MLinePlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
+		rangeAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION,
@@ -173,6 +195,9 @@ public class MLinePlot extends MChartPlot {
 		rangeAxisMaxExprD
 				.setDescription(Messages.MLinePlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
+		rangeAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMaxValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION,
@@ -180,6 +205,9 @@ public class MLinePlot extends MChartPlot {
 		domainAxisMinExprD
 				.setDescription(Messages.MLinePlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
+		domainAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION,
@@ -187,6 +215,9 @@ public class MLinePlot extends MChartPlot {
 		domainAxisMaxExprD
 				.setDescription(Messages.MLinePlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
+		domainAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMaxValueExpression"));
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
@@ -202,18 +233,6 @@ public class MLinePlot extends MChartPlot {
 		valAxisVertTickLabelD
 				.setDescription(Messages.MLinePlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
-
-		CheckBoxPropertyDescriptor showLinesD = new CheckBoxPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_SHOW_LINES,
-				Messages.common_show_lines, NullEnum.NULL);
-		showLinesD.setDescription(Messages.MLinePlot_show_lines_description);
-		desc.add(showLinesD);
-
-		CheckBoxPropertyDescriptor showShapesD = new CheckBoxPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_SHOW_SHAPES,
-				Messages.common_show_shapes, NullEnum.NULL);
-		showShapesD.setDescription(Messages.MLinePlot_show_shapes_description);
-		desc.add(showShapesD);
 
 		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK,
@@ -235,6 +254,24 @@ public class MLinePlot extends MChartPlot {
 		catAxisTickLabelRotation
 				.setDescription(Messages.MLinePlot_category_axis_tick_label_rotation_description);
 		desc.add(catAxisTickLabelRotation);
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat");
+
+		CheckBoxPropertyDescriptor showLinesD = new CheckBoxPropertyDescriptor(
+				JRDesignLinePlot.PROPERTY_SHOW_LINES,
+				Messages.common_show_lines, NullEnum.NULL);
+		showLinesD.setDescription(Messages.MLinePlot_show_lines_description);
+		desc.add(showLinesD);
+
+		CheckBoxPropertyDescriptor showShapesD = new CheckBoxPropertyDescriptor(
+				JRDesignLinePlot.PROPERTY_SHOW_SHAPES,
+				Messages.common_show_shapes, NullEnum.NULL);
+		showShapesD.setDescription(Messages.MLinePlot_show_shapes_description);
+		desc.add(showShapesD);
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#linePlot");
 
 	}
 

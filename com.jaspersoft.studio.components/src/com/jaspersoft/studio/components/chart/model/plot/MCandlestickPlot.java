@@ -26,6 +26,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -87,6 +88,9 @@ public class MCandlestickPlot extends MChartPlot {
 		catAxisLabelExprD
 				.setDescription(Messages.MCandlestickPlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
+		catAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#timeAxisLabelExpression"));
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_FONT,
@@ -94,6 +98,9 @@ public class MCandlestickPlot extends MChartPlot {
 		catAxisLabelFontD
 				.setDescription(Messages.MCandlestickPlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
+		catAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR,
@@ -109,6 +116,9 @@ public class MCandlestickPlot extends MChartPlot {
 		catAxisTickLabelFontD
 				.setDescription(Messages.MCandlestickPlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
+		catAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LINE_COLOR,
@@ -130,6 +140,9 @@ public class MCandlestickPlot extends MChartPlot {
 		valAxisLabelExprD
 				.setDescription(Messages.MCandlestickPlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
+		valAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#valueAxisLabelExpression"));
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_FONT,
@@ -137,6 +150,9 @@ public class MCandlestickPlot extends MChartPlot {
 		valAxisLabelFontD
 				.setDescription(Messages.MCandlestickPlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
+		valAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR,
@@ -151,6 +167,9 @@ public class MCandlestickPlot extends MChartPlot {
 		valAxisTickLabelFontD
 				.setDescription(Messages.MCandlestickPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
+		valAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LINE_COLOR,
@@ -165,6 +184,9 @@ public class MCandlestickPlot extends MChartPlot {
 		rangeAxisMinExprD
 				.setDescription(Messages.MCandlestickPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
+		rangeAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION,
@@ -172,6 +194,9 @@ public class MCandlestickPlot extends MChartPlot {
 		rangeAxisMaxExprD
 				.setDescription(Messages.MCandlestickPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
+		rangeAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMaxValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION,
@@ -179,6 +204,9 @@ public class MCandlestickPlot extends MChartPlot {
 		domainAxisMinExprD
 				.setDescription(Messages.MCandlestickPlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
+		domainAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION,
@@ -186,6 +214,9 @@ public class MCandlestickPlot extends MChartPlot {
 		domainAxisMaxExprD
 				.setDescription(Messages.MCandlestickPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
+		domainAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMaxValueExpression"));
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS,
@@ -216,6 +247,9 @@ public class MCandlestickPlot extends MChartPlot {
 				.setDescription(Messages.MCandlestickPlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat");
+
 		CheckBoxPropertyDescriptor showVolumeD = new CheckBoxPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_SHOW_VOLUME,
 				Messages.MCandlestickPlot_show_volume, NullEnum.NULL);
@@ -223,6 +257,8 @@ public class MCandlestickPlot extends MChartPlot {
 				.setDescription(Messages.MCandlestickPlot_show_volume_description);
 		desc.add(showVolumeD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#candlestickPlot");
 	}
 
 	/*

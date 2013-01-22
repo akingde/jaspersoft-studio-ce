@@ -85,6 +85,7 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.TimeP
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.TimeSerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.XySerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.XyzSerie;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -195,25 +196,6 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				.setDescription(Messages.MChart_title_position_description);
 		desc.add(titlePositionD);
 
-		legendPositionD = new EdgePropertyDescriptor(
-				JRBaseChart.PROPERTY_LEGEND_POSITION,
-				Messages.MChart_legend_position, EdgeEnum.class, NullEnum.NULL);
-		legendPositionD
-				.setDescription(Messages.MChart_legend_position_description);
-		desc.add(legendPositionD);
-
-		ColorPropertyDescriptor titleColorD = new ColorPropertyDescriptor(
-				JRBaseChart.PROPERTY_TITLE_COLOR, Messages.MChart_title_color,
-				NullEnum.INHERITED);
-		titleColorD.setDescription(Messages.MChart_title_color_description);
-		desc.add(titleColorD);
-
-		JRExpressionPropertyDescriptor titleExprD = new JRExpressionPropertyDescriptor(
-				JRDesignChart.PROPERTY_TITLE_EXPRESSION,
-				Messages.MChart_title_expression);
-		titleExprD.setDescription(Messages.MChart_title_expression_description);
-		desc.add(titleExprD);
-
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
 				JRDesignChart.PROPERTY_EVALUATION_TIME,
 				Messages.MChart_evaluation_time, EnumHelper.getEnumNames(
@@ -221,33 +203,6 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		evaluationTimeD
 				.setDescription(Messages.MChart_evaluation_time_description);
 		desc.add(evaluationTimeD);
-
-		ColorPropertyDescriptor subtitleColorD = new ColorPropertyDescriptor(
-				JRBaseChart.PROPERTY_SUBTITLE_COLOR,
-				Messages.MChart_subtitle_color, NullEnum.INHERITED);
-		subtitleColorD
-				.setDescription(Messages.MChart_subtitle_color_description);
-		desc.add(subtitleColorD);
-
-		JRExpressionPropertyDescriptor subtitleExprD = new JRExpressionPropertyDescriptor(
-				JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION,
-				Messages.MChart_subtitle_expression);
-		subtitleExprD
-				.setDescription(Messages.MChart_subtitle_expression_description);
-		desc.add(subtitleExprD);
-
-		ColorPropertyDescriptor legendColorD = new ColorPropertyDescriptor(
-				JRBaseChart.PROPERTY_LEGEND_COLOR,
-				Messages.MChart_legend_color, NullEnum.INHERITED);
-		legendColorD.setDescription(Messages.MChart_legend_color_description);
-		desc.add(legendColorD);
-
-		ColorPropertyDescriptor legendBackColorD = new ColorPropertyDescriptor(
-				JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR,
-				Messages.MChart_legend_background_color, NullEnum.INHERITED);
-		legendBackColorD
-				.setDescription(Messages.MChart_legend_background_color_description);
-		desc.add(legendBackColorD);
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(
 				JRDesignChart.PROPERTY_CUSTOMIZER_CLASS,
@@ -281,30 +236,105 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				.setDescription(Messages.MChart_evaluation_group_description);
 		desc.add(evaluationGroupD);
 
+		PlotPropertyDescriptor plotD = new PlotPropertyDescriptor(PLOTPROPERTY,
+				Messages.MChart_plot); //$NON-NLS-1$
+		plotD.setDescription(Messages.MChart_plot_description);
+		desc.add(plotD);
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart");
+
+		if (mHyperLink == null)
+			mHyperLink = new MHyperLink(null);
+		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart");
+
 		FontPropertyDescriptor titleFontD = new FontPropertyDescriptor(
 				JRDesignChart.PROPERTY_TITLE_FONT, Messages.MChart_title_font);
 		titleFontD.setDescription(Messages.MChart_title_font_description);
 		desc.add(titleFontD);
+		titleFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#font"));
+
+		ColorPropertyDescriptor titleColorD = new ColorPropertyDescriptor(
+				JRBaseChart.PROPERTY_TITLE_COLOR, Messages.MChart_title_color,
+				NullEnum.INHERITED);
+		titleColorD.setDescription(Messages.MChart_title_color_description);
+		desc.add(titleColorD);
+
+		JRExpressionPropertyDescriptor titleExprD = new JRExpressionPropertyDescriptor(
+				JRDesignChart.PROPERTY_TITLE_EXPRESSION,
+				Messages.MChart_title_expression);
+		titleExprD.setDescription(Messages.MChart_title_expression_description);
+		desc.add(titleExprD);
+		titleExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#titleExpression"));
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartTitle");
 
 		FontPropertyDescriptor subtitleFontD = new FontPropertyDescriptor(
 				JRDesignChart.PROPERTY_SUBTITLE_FONT,
 				Messages.MChart_subtitle_font);
 		subtitleFontD.setDescription(Messages.MChart_subtitle_font_description);
 		desc.add(subtitleFontD);
+		subtitleFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#font"));
+
+		ColorPropertyDescriptor subtitleColorD = new ColorPropertyDescriptor(
+				JRBaseChart.PROPERTY_SUBTITLE_COLOR,
+				Messages.MChart_subtitle_color, NullEnum.INHERITED);
+		subtitleColorD
+				.setDescription(Messages.MChart_subtitle_color_description);
+		desc.add(subtitleColorD);
+
+		JRExpressionPropertyDescriptor subtitleExprD = new JRExpressionPropertyDescriptor(
+				JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION,
+				Messages.MChart_subtitle_expression);
+		subtitleExprD
+				.setDescription(Messages.MChart_subtitle_expression_description);
+		desc.add(subtitleExprD);
+		subtitleExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subtitleExpression"));
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartSubtitle");
 
 		FontPropertyDescriptor legendFontD = new FontPropertyDescriptor(
 				JRDesignChart.PROPERTY_LEGEND_FONT, Messages.MChart_legend_font);
 		legendFontD.setDescription(Messages.MChart_legend_font_description);
 		desc.add(legendFontD);
+		legendFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#font"));
 
-		PlotPropertyDescriptor plotD = new PlotPropertyDescriptor(PLOTPROPERTY,
-				Messages.MChart_plot); //$NON-NLS-1$
-		plotD.setDescription(Messages.MChart_plot_description);
-		desc.add(plotD);
+		ColorPropertyDescriptor legendColorD = new ColorPropertyDescriptor(
+				JRBaseChart.PROPERTY_LEGEND_COLOR,
+				Messages.MChart_legend_color, NullEnum.INHERITED);
+		legendColorD.setDescription(Messages.MChart_legend_color_description);
+		desc.add(legendColorD);
 
-		if (mHyperLink == null)
-			mHyperLink = new MHyperLink(null);
-		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
+		ColorPropertyDescriptor legendBackColorD = new ColorPropertyDescriptor(
+				JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR,
+				Messages.MChart_legend_background_color, NullEnum.INHERITED);
+		legendBackColorD
+				.setDescription(Messages.MChart_legend_background_color_description);
+		desc.add(legendBackColorD);
+
+		legendPositionD = new EdgePropertyDescriptor(
+				JRBaseChart.PROPERTY_LEGEND_POSITION,
+				Messages.MChart_legend_position, EdgeEnum.class, NullEnum.NULL);
+		legendPositionD
+				.setDescription(Messages.MChart_legend_position_description);
+		desc.add(legendPositionD);
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartLegend");
 
 		titleFontD.setCategory(Messages.MChart_chart_title_category);
 		titleColorD.setCategory(Messages.MChart_chart_title_category);

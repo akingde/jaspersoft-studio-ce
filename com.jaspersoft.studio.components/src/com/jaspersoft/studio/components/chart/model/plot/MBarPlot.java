@@ -29,6 +29,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChartItemLabel;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -92,6 +93,9 @@ public class MBarPlot extends MChartPlot {
 		catAxisLabelExprD
 				.setDescription(Messages.MBarPlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
+		catAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#categoryAxisLabelExpression"));
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT,
@@ -99,6 +103,9 @@ public class MBarPlot extends MChartPlot {
 		catAxisLabelFontD
 				.setDescription(Messages.MBarPlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
+		catAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR,
@@ -113,6 +120,9 @@ public class MBarPlot extends MChartPlot {
 		catAxisTickLabelFontD
 				.setDescription(Messages.MBarPlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
+		catAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR,
@@ -134,6 +144,9 @@ public class MBarPlot extends MChartPlot {
 		valAxisLabelExprD
 				.setDescription(Messages.MBarPlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
+		valAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#valueAxisLabelExpression"));
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_FONT,
@@ -141,6 +154,9 @@ public class MBarPlot extends MChartPlot {
 		valAxisLabelFontD
 				.setDescription(Messages.MBarPlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
+		valAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR,
@@ -155,6 +171,9 @@ public class MBarPlot extends MChartPlot {
 		valAxisTickLabelFontD
 				.setDescription(Messages.MBarPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
+		valAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_ITEM_LABEL, Messages.common_item_label);
@@ -174,6 +193,9 @@ public class MBarPlot extends MChartPlot {
 		rangeAxisMinExprD
 				.setDescription(Messages.MBarPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
+		rangeAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION,
@@ -181,6 +203,9 @@ public class MBarPlot extends MChartPlot {
 		rangeAxisMaxExprD
 				.setDescription(Messages.MBarPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
+		rangeAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMaxValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION,
@@ -188,6 +213,9 @@ public class MBarPlot extends MChartPlot {
 		domainAxisMinExprD
 				.setDescription(Messages.MBarPlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
+		domainAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION,
@@ -195,6 +223,9 @@ public class MBarPlot extends MChartPlot {
 		domainAxisMaxExprD
 				.setDescription(Messages.MBarPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
+		domainAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMaxValueExpression"));
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
@@ -210,26 +241,6 @@ public class MBarPlot extends MChartPlot {
 		valAxisVertTickLabelD
 				.setDescription(Messages.MBarPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
-
-		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_SHOW_LABELS,
-				Messages.common_show_labels, NullEnum.NULL);
-		showLabelsD.setDescription(Messages.MBarPlot_show_labels_description);
-		desc.add(showLabelsD);
-
-		CheckBoxPropertyDescriptor showTickLabelsD = new CheckBoxPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_SHOW_TICK_LABELS,
-				Messages.MBarPlot_show_tick_labels, NullEnum.NULL);
-		showTickLabelsD
-				.setDescription(Messages.MBarPlot_show_tick_labels_description);
-		desc.add(showTickLabelsD);
-
-		CheckBoxPropertyDescriptor showTickMarksD = new CheckBoxPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_SHOW_TICK_MARKS,
-				Messages.MBarPlot_show_tick_marks, NullEnum.NULL);
-		showTickMarksD
-				.setDescription(Messages.MBarPlot_show_tick_marks_description);
-		desc.add(showTickMarksD);
 
 		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK,
@@ -252,24 +263,57 @@ public class MBarPlot extends MChartPlot {
 				.setDescription(Messages.MBarPlot_category_axis_tick_label_rotation_description);
 		desc.add(catAxisTickLabelRotation);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat");
+
+		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(
+				JRDesignBarPlot.PROPERTY_SHOW_LABELS,
+				Messages.common_show_labels, NullEnum.NULL);
+		showLabelsD.setDescription(Messages.MBarPlot_show_labels_description);
+		desc.add(showLabelsD);
+
+		CheckBoxPropertyDescriptor showTickLabelsD = new CheckBoxPropertyDescriptor(
+				JRDesignBarPlot.PROPERTY_SHOW_TICK_LABELS,
+				Messages.MBarPlot_show_tick_labels, NullEnum.NULL);
+		showTickLabelsD
+				.setDescription(Messages.MBarPlot_show_tick_labels_description);
+		desc.add(showTickLabelsD);
+
+		CheckBoxPropertyDescriptor showTickMarksD = new CheckBoxPropertyDescriptor(
+				JRDesignBarPlot.PROPERTY_SHOW_TICK_MARKS,
+				Messages.MBarPlot_show_tick_marks, NullEnum.NULL);
+		showTickMarksD
+				.setDescription(Messages.MBarPlot_show_tick_marks_description);
+		desc.add(showTickMarksD);
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#barPlot");
+
 	}
-	
+
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignBarPlot jrElement = (JRDesignBarPlot) getValue();
 		if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisLabelColor());
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getCategoryAxisLabelColor());
 		if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisTickLabelColor());
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getCategoryAxisTickLabelColor());
 		if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisLineColor());
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getCategoryAxisLineColor());
 		if (id.equals(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisLabelColor());
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getValueAxisLabelColor());
 		if (id.equals(JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisTickLabelColor());
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getValueAxisTickLabelColor());
 		if (id.equals(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LINE_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisLineColor());
-		else return super.getPropertyActualValue(id);
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getValueAxisLineColor());
+		else
+			return super.getPropertyActualValue(id);
 	};
 
 	/*
@@ -367,7 +411,7 @@ public class MBarPlot extends MChartPlot {
 			return ilFont;
 		} else {
 			Object value = ilFont.getPropertyValue(id);
-			if (value == null) 
+			if (value == null)
 				value = super.getPropertyValue(id);
 			return value;
 		}
@@ -475,7 +519,8 @@ public class MBarPlot extends MChartPlot {
 				.equals(JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION))
 			jrElement.setDomainAxisMinValueExpression(ExprUtil.setValues(
 					jrElement.getDomainAxisMinValueExpression(), value));
-		else ilFont.setPropertyValue(id, value);
+		else
+			ilFont.setPropertyValue(id, value);
 		super.setPropertyValue(id, value);
 
 	}

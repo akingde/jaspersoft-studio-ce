@@ -26,6 +26,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -87,6 +88,9 @@ public class MScatterPlot extends MChartPlot {
 		catAxisLabelExprD
 				.setDescription(Messages.MScatterPlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
+		catAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#xAxisLabelExpression"));
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_X_AXIS_LABEL_FONT,
@@ -94,6 +98,9 @@ public class MScatterPlot extends MChartPlot {
 		catAxisLabelFontD
 				.setDescription(Messages.MScatterPlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
+		catAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_X_AXIS_TICK_LABEL_COLOR,
@@ -108,6 +115,9 @@ public class MScatterPlot extends MChartPlot {
 		catAxisTickLabelFontD
 				.setDescription(Messages.MScatterPlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
+		catAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_X_AXIS_LINE_COLOR,
@@ -129,6 +139,9 @@ public class MScatterPlot extends MChartPlot {
 		valAxisLabelExprD
 				.setDescription(Messages.MScatterPlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
+		valAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#yAxisLabelExpression"));
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_LABEL_FONT,
@@ -136,6 +149,9 @@ public class MScatterPlot extends MChartPlot {
 		valAxisLabelFontD
 				.setDescription(Messages.MScatterPlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
+		valAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_TICK_LABEL_COLOR,
@@ -150,6 +166,9 @@ public class MScatterPlot extends MChartPlot {
 		valAxisTickLabelFontD
 				.setDescription(Messages.MScatterPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
+		valAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_LINE_COLOR,
@@ -164,6 +183,9 @@ public class MScatterPlot extends MChartPlot {
 		rangeAxisMinExprD
 				.setDescription(Messages.MScatterPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
+		rangeAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION,
@@ -171,6 +193,9 @@ public class MScatterPlot extends MChartPlot {
 		rangeAxisMaxExprD
 				.setDescription(Messages.MScatterPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
+		rangeAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMaxValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION,
@@ -178,6 +203,9 @@ public class MScatterPlot extends MChartPlot {
 		domainAxisMinExprD
 				.setDescription(Messages.MScatterPlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
+		domainAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION,
@@ -185,6 +213,9 @@ public class MScatterPlot extends MChartPlot {
 		domainAxisMaxExprD
 				.setDescription(Messages.MScatterPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
+		domainAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMaxValueExpression"));
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_X_AXIS_VERTICAL_TICK_LABELS,
@@ -215,6 +246,9 @@ public class MScatterPlot extends MChartPlot {
 				.setDescription(Messages.MScatterPlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat");
+
 		CheckBoxPropertyDescriptor showShapesD = new CheckBoxPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_SHOW_SHAPES,
 				Messages.common_show_shapes, NullEnum.NULL);
@@ -229,6 +263,8 @@ public class MScatterPlot extends MChartPlot {
 				.setDescription(Messages.MTimeSeriesPlot_show_lines_description);
 		desc.add(showLinesD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scatterPlot");
 	}
 
 	/*

@@ -29,6 +29,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChartItemLabel;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -92,6 +93,9 @@ public class MBar3DPlot extends MChartPlot {
 		catAxisLabelExprD
 				.setDescription(Messages.MBar3DPlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
+		catAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#categoryAxisLabelExpression"));
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT,
@@ -99,6 +103,9 @@ public class MBar3DPlot extends MChartPlot {
 		catAxisLabelFontD
 				.setDescription(Messages.MBar3DPlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
+		catAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR,
@@ -113,6 +120,9 @@ public class MBar3DPlot extends MChartPlot {
 		catAxisTickLabelFontD
 				.setDescription(Messages.MBar3DPlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
+		catAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR,
@@ -134,6 +144,9 @@ public class MBar3DPlot extends MChartPlot {
 		valAxisLabelExprD
 				.setDescription(Messages.MBar3DPlot_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
+		valAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#valueAxisLabelExpression"));
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_FONT,
@@ -141,6 +154,9 @@ public class MBar3DPlot extends MChartPlot {
 		valAxisLabelFontD
 				.setDescription(Messages.MBar3DPlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
+		valAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR,
@@ -155,12 +171,18 @@ public class MBar3DPlot extends MChartPlot {
 		valAxisTickLabelFontD
 				.setDescription(Messages.MBar3DPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
+		valAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_ITEM_LABEL,
 				Messages.common_item_label);
 		itemLabelD.setDescription(Messages.MBar3DPlot_item_label_description);
 		desc.add(itemLabelD);
+		itemLabelD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#itemLabel"));
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LINE_COLOR,
@@ -175,6 +197,9 @@ public class MBar3DPlot extends MChartPlot {
 		rangeAxisMinExprD
 				.setDescription(Messages.MBar3DPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
+		rangeAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION,
@@ -182,6 +207,9 @@ public class MBar3DPlot extends MChartPlot {
 		rangeAxisMaxExprD
 				.setDescription(Messages.MBar3DPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
+		rangeAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMaxValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION,
@@ -189,6 +217,9 @@ public class MBar3DPlot extends MChartPlot {
 		domainAxisMinExprD
 				.setDescription(Messages.MBar3DPlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
+		domainAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION,
@@ -196,6 +227,9 @@ public class MBar3DPlot extends MChartPlot {
 		domainAxisMaxExprD
 				.setDescription(Messages.MBar3DPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
+		domainAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMaxValueExpression"));
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
@@ -211,12 +245,6 @@ public class MBar3DPlot extends MChartPlot {
 		valAxisVertTickLabelD
 				.setDescription(Messages.MBar3DPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
-
-		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_SHOW_LABELS,
-				Messages.common_show_labels, NullEnum.NULL);
-		showLabelsD.setDescription(Messages.MBar3DPlot_show_labels_description);
-		desc.add(showLabelsD);
 
 		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK,
@@ -239,6 +267,15 @@ public class MBar3DPlot extends MChartPlot {
 				.setDescription(Messages.MBar3DPlot_category_axis_tick_label_rotation_description);
 		desc.add(catAxisTickLabelRotation);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat");
+
+		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(
+				JRDesignBar3DPlot.PROPERTY_SHOW_LABELS,
+				Messages.common_show_labels, NullEnum.NULL);
+		showLabelsD.setDescription(Messages.MBar3DPlot_show_labels_description);
+		desc.add(showLabelsD);
+
 		DoublePropertyDescriptor xoffsetD = new DoublePropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_X_OFFSET,
 				Messages.MBar3DPlot_x_offset);
@@ -251,24 +288,34 @@ public class MBar3DPlot extends MChartPlot {
 		yoffsetD.setDescription(Messages.MBar3DPlot_y_offset_description);
 		desc.add(yoffsetD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#bar3DPlot");
+
 	}
-	
+
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignBar3DPlot jrElement = (JRDesignBar3DPlot) getValue();
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisLabelColor());
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getCategoryAxisLabelColor());
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisTickLabelColor());
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getCategoryAxisTickLabelColor());
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getCategoryAxisLineColor());
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getCategoryAxisLineColor());
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisLabelColor());
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getValueAxisLabelColor());
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisTickLabelColor());
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getValueAxisTickLabelColor());
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LINE_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisLineColor());
-		else return super.getPropertyActualValue(id);
+			return Colors.getSWTRGB4AWTGBColor(jrElement
+					.getValueAxisLineColor());
+		else
+			return super.getPropertyActualValue(id);
 	};
 
 	/*
@@ -366,7 +413,7 @@ public class MBar3DPlot extends MChartPlot {
 			return ilFont;
 		} else {
 			Object value = ilFont.getPropertyValue(id);
-			if (value == null) 
+			if (value == null)
 				value = super.getPropertyValue(id);
 			return value;
 		}

@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MHyperLink;
@@ -98,6 +99,9 @@ public class MChartPieDataset extends MChartDataset {
 		oKeyExprD
 				.setDescription(Messages.MChartPieDataset_other_key_expression_description);
 		desc.add(oKeyExprD);
+		oKeyExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#otherKeyExpression"));
 
 		JRExpressionPropertyDescriptor oLblExprD = new JRExpressionPropertyDescriptor(
 				JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION,
@@ -105,6 +109,9 @@ public class MChartPieDataset extends MChartDataset {
 		oLblExprD
 				.setDescription(Messages.MChartPieDataset_other_label_expression_description);
 		desc.add(oLblExprD);
+		oLblExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#otherLabelExpression"));
 
 		// JRExpressionPropertyDescriptor valExpD = new
 		// JRExpressionPropertyDescriptor(
@@ -119,6 +126,9 @@ public class MChartPieDataset extends MChartDataset {
 		oSectHyperLD
 				.setDescription(Messages.MChartPieDataset_other_section_hyperlink_description);
 		desc.add(oSectHyperLD);
+		oSectHyperLD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#otherSectionHyperlink"));
 
 		// JRPropertyDescriptor sectHyperLD = new JRPropertyDescriptor(
 		// JRDesignPieDataset.PROPERTY_SECTION_HYPERLINK,
@@ -163,6 +173,8 @@ public class MChartPieDataset extends MChartDataset {
 				null);
 		defaultsMap.put(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION, null);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pieDataset");
 	}
 
 	private MHyperLink omHyperLink;

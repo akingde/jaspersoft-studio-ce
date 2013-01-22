@@ -31,6 +31,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.SeriesColorPropertyDescriptor;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
@@ -84,9 +85,14 @@ public class MChartPlot extends APropertyNode {
 				Messages.MChartPlot_series_colors);
 		scpd.setDescription(Messages.MChartPlot_series_colors_description);
 		desc.add(scpd);
+		scpd.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#seriesColor"));
 
 		defaultsMap.put(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA, null);
 		defaultsMap.put(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA, null);
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#plot");
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -138,22 +144,21 @@ public class MChartPlot extends APropertyNode {
 
 		return null;
 	}
-	
+
 	public Object getPropertyActualValue(Object id) {
 		JRBaseChartPlot jrElement = (JRBaseChartPlot) getValue();
 		if (id.equals(JRBaseChartPlot.PROPERTY_BACKCOLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getBackcolor());
-		if (id.equals(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA)){
+		if (id.equals(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA)) {
 			Float alpha = jrElement.getBackgroundAlphaFloat();
 			return alpha != null ? alpha : 1.0f;
 		}
-		if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA)){
+		if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA)) {
 			Float alpha = jrElement.getForegroundAlphaFloat();
 			return alpha != null ? alpha : 1.0f;
 		}
 		return super.getPropertyActualValue(id);
 	}
-
 
 	/*
 	 * (non-Javadoc)

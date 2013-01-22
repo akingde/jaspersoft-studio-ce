@@ -42,6 +42,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.list.ListNodeIconDescriptor;
 import com.jaspersoft.studio.components.list.messages.Messages;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -145,6 +146,9 @@ public class MList extends MGraphicElement implements IPastable,
 		printOrderD.setDescription(Messages.MList_print_order_description);
 		desc.add(printOrderD);
 		printOrderD.setCategory(Messages.MList_list_properties_category);
+		printOrderD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/components.schema.reference.html#_printOrder"));
 
 		CheckBoxPropertyDescriptor ignoreWidthD = new CheckBoxPropertyDescriptor(
 				StandardListComponent.PROPERTY_IGNORE_WIDTH,
@@ -152,19 +156,9 @@ public class MList extends MGraphicElement implements IPastable,
 		ignoreWidthD.setDescription(Messages.MList_ignore_width_description);
 		desc.add(ignoreWidthD);
 		ignoreWidthD.setCategory(Messages.MList_list_properties_category);
-
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(
-				PREFIX + DesignListContents.PROPERTY_HEIGHT,
-				Messages.MList_cell_height);
-		heightD.setCategory(Messages.MList_list_properties_category);
-		heightD.setDescription(Messages.MList_cell_height_description);
-		desc.add(heightD);
-
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(PREFIX
-				+ DesignListContents.PROPERTY_WIDTH, Messages.MList_cell_width);
-		widthD.setCategory(Messages.MList_list_properties_category);
-		widthD.setDescription(Messages.MList_cell_width_description);
-		desc.add(widthD);
+		ignoreWidthD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/components.schema.reference.html#_ignoreWidth"));
 
 		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(
 				PREFIX + StandardListComponent.PROPERTY_DATASET_RUN,
@@ -173,10 +167,31 @@ public class MList extends MGraphicElement implements IPastable,
 		datasetRunD.setCategory(Messages.MList_list_properties_category);
 		desc.add(datasetRunD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/components.schema.reference.html#list");
+
+		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(
+				PREFIX + DesignListContents.PROPERTY_HEIGHT,
+				Messages.MList_cell_height);
+		heightD.setCategory(Messages.MList_list_properties_category);
+		heightD.setDescription(Messages.MList_cell_height_description);
+		desc.add(heightD);
+		heightD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/components.schema.reference.html#listContents_height"));
+
+		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(PREFIX
+				+ DesignListContents.PROPERTY_WIDTH, Messages.MList_cell_width);
+		widthD.setCategory(Messages.MList_list_properties_category);
+		widthD.setDescription(Messages.MList_cell_width_description);
+		desc.add(widthD);
+		widthD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/components.schema.reference.html#listContents_width"));
+
 		defaultsMap.put(StandardListComponent.PROPERTY_IGNORE_WIDTH,
 				new Boolean(false));
 		defaultsMap.put(StandardListComponent.PROPERTY_PRINT_ORDER,
 				PrintOrderEnum.HORIZONTAL);
+
 	}
 
 	public static final String PREFIX = "CONTENTS."; //$NON-NLS-1$

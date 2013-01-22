@@ -34,6 +34,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.MeterIntervalPropertyDescriptor;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -110,6 +111,9 @@ public class MMeterPlot extends MChartPlot {
 				Messages.common_value_color, NullEnum.NULL);
 		valueColorD.setDescription(Messages.MMeterPlot_value_color_description);
 		desc.add(valueColorD);
+		valueColorD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#valueDisplay_color"));
 
 		FontPropertyDescriptor tickLabelFontD = new FontPropertyDescriptor(
 				JRDesignMeterPlot.PROPERTY_TICK_LABEL_FONT,
@@ -124,6 +128,9 @@ public class MMeterPlot extends MChartPlot {
 				Messages.common_value_font);
 		valueFontD.setDescription(Messages.MMeterPlot_value_font_description);
 		desc.add(valueFontD);
+		valueFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#font"));
 
 		IntegerPropertyDescriptor meterAngleD = new IntegerPropertyDescriptor(
 				JRDesignMeterPlot.PROPERTY_METER_ANGLE,
@@ -151,6 +158,9 @@ public class MMeterPlot extends MChartPlot {
 		dataRangeHighExprD
 				.setDescription(Messages.MMeterPlot_data_range_high_expression_description);
 		desc.add(dataRangeHighExprD);
+		dataRangeHighExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#highExpression"));
 
 		JRExpressionPropertyDescriptor dataRangeLowExprD = new JRExpressionPropertyDescriptor(
 				JRDesignMeterPlot.PROPERTY_DATA_RANGE
@@ -159,6 +169,9 @@ public class MMeterPlot extends MChartPlot {
 		dataRangeLowExprD
 				.setDescription(Messages.MMeterPlot_data_range_low_expression_description);
 		desc.add(dataRangeLowExprD);
+		dataRangeLowExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#lowExpression"));
 
 		NTextPropertyDescriptor unitsD = new NTextPropertyDescriptor(
 				JRDesignMeterPlot.PROPERTY_UNITS, Messages.MMeterPlot_units);
@@ -171,12 +184,18 @@ public class MMeterPlot extends MChartPlot {
 				Messages.common_value_mask);
 		maskD.setDescription(Messages.MMeterPlot_value_mask_description);
 		desc.add(maskD);
+		maskD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#valueDisplay_mask"));
 
 		MeterIntervalPropertyDescriptor mipd = new MeterIntervalPropertyDescriptor(
 				JRDesignMeterPlot.PROPERTY_INTERVALS, "Intervals");
 		mipd.setDescription("Meter Intervals");
 		desc.add(mipd);
+		mipd.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#meterInterval"));
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#meterPlot");
 	}
 
 	/*

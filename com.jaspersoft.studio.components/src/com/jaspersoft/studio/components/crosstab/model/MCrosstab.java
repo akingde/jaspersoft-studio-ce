@@ -211,6 +211,8 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		paramMapExprD
 				.setCategory(Messages.MCrosstab_crosstab_properties_category);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#crosstab");
 	}
 
 	@Override

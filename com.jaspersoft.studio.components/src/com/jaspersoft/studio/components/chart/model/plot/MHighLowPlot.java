@@ -26,6 +26,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -87,6 +88,9 @@ public class MHighLowPlot extends MChartPlot {
 		catAxisLabelExprD
 				.setDescription(Messages.MHighLowPlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
+		catAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#timeAxisLabelExpression"));
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LABEL_FONT,
@@ -94,6 +98,9 @@ public class MHighLowPlot extends MChartPlot {
 		catAxisLabelFontD
 				.setDescription(Messages.MHighLowPlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
+		catAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR,
@@ -108,6 +115,9 @@ public class MHighLowPlot extends MChartPlot {
 		catAxisTickLabelFontD
 				.setDescription(Messages.MHighLowPlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
+		catAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LINE_COLOR,
@@ -129,6 +139,9 @@ public class MHighLowPlot extends MChartPlot {
 		valAxisLabelExprD
 				.setDescription(Messages.MHighLowPlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
+		valAxisLabelExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#valueAxisLabelExpression"));
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LABEL_FONT,
@@ -136,6 +149,9 @@ public class MHighLowPlot extends MChartPlot {
 		valAxisLabelFontD
 				.setDescription(Messages.MHighLowPlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
+		valAxisLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#labelFont"));
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR,
@@ -150,6 +166,9 @@ public class MHighLowPlot extends MChartPlot {
 		valAxisTickLabelFontD
 				.setDescription(Messages.MHighLowPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
+		valAxisTickLabelFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#tickLabelFont"));
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LINE_COLOR,
@@ -164,6 +183,9 @@ public class MHighLowPlot extends MChartPlot {
 		rangeAxisMinExprD
 				.setDescription(Messages.MHighLowPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
+		rangeAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION,
@@ -171,13 +193,19 @@ public class MHighLowPlot extends MChartPlot {
 		rangeAxisMaxExprD
 				.setDescription(Messages.MHighLowPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
+		rangeAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#rangeAxisMaxValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION,
 				Messages.common_domain_axis_minvalue_expression);
 		domainAxisMinExprD
-				.setDescription(Messages.MHighLowPlot_domain_axis_minvalue_expression_description);
+				.setDescription(Messages.MHighLowPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMinExprD);
+		domainAxisMinExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMinValueExpression"));
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION,
@@ -185,6 +213,9 @@ public class MHighLowPlot extends MChartPlot {
 		domainAxisMaxExprD
 				.setDescription(Messages.MHighLowPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
+		domainAxisMaxExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#domainAxisMaxValueExpression"));
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS,
@@ -196,8 +227,7 @@ public class MHighLowPlot extends MChartPlot {
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
-				Messages.common_value_axis_vertical_tick_labels,
-				NullEnum.NULL);
+				Messages.common_value_axis_vertical_tick_labels, NullEnum.NULL);
 		valAxisVertTickLabelD
 				.setDescription(Messages.MHighLowPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
@@ -216,6 +246,9 @@ public class MHighLowPlot extends MChartPlot {
 				.setDescription(Messages.MHighLowPlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat");
+
 		CheckBoxPropertyDescriptor showCloseTicksD = new CheckBoxPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_SHOW_CLOSE_TICKS,
 				Messages.MHighLowPlot_show_close_ticks, NullEnum.NULL);
@@ -230,6 +263,8 @@ public class MHighLowPlot extends MChartPlot {
 				.setDescription(Messages.MHighLowPlot_show_open_ticks_description);
 		desc.add(showOpenTicksD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#highLowPlot");
 	}
 
 	/*

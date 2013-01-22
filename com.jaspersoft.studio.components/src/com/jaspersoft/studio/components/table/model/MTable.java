@@ -151,6 +151,9 @@ public class MTable extends MGraphicElement implements IContainer,
 
 		defaultsMap.put(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE,
 				whennodataD.getEnumValue(WhenNoDataTypeTableEnum.BLANK));
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/components.schema.reference.html#table");
 	}
 
 	private MDatasetRun mDatasetRun;

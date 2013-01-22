@@ -29,6 +29,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -90,6 +91,9 @@ public class MThermometerPlot extends MChartPlot {
 		valueColorD
 				.setDescription(Messages.MThermometerPlot_value_color_description);
 		desc.add(valueColorD);
+		valueColorD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#valueDisplay_color"));
 
 		FontPropertyDescriptor valueFontD = new FontPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
@@ -98,6 +102,9 @@ public class MThermometerPlot extends MChartPlot {
 		valueFontD
 				.setDescription(Messages.MThermometerPlot_value_font_description);
 		desc.add(valueFontD);
+		valueFontD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#font"));
 
 		NTextPropertyDescriptor maskD = new NTextPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
@@ -105,6 +112,8 @@ public class MThermometerPlot extends MChartPlot {
 				Messages.common_value_mask);
 		maskD.setDescription(Messages.MThermometerPlot_value_mask_description);
 		desc.add(maskD);
+		maskD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#valueDisplay_mask"));
 
 		JRExpressionPropertyDescriptor dataRangeHighExprD = new JRExpressionPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_DATA_RANGE
@@ -113,6 +122,9 @@ public class MThermometerPlot extends MChartPlot {
 		dataRangeHighExprD
 				.setDescription(Messages.MThermometerPlot_data_range_high_expression_description);
 		desc.add(dataRangeHighExprD);
+		dataRangeHighExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#highExpression"));
 
 		JRExpressionPropertyDescriptor dataRangeLowExprD = new JRExpressionPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_DATA_RANGE
@@ -121,6 +133,9 @@ public class MThermometerPlot extends MChartPlot {
 		dataRangeLowExprD
 				.setDescription(Messages.MThermometerPlot_data_range_low_expression_description);
 		desc.add(dataRangeLowExprD);
+		dataRangeLowExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#lowExpression"));
 
 		JRExpressionPropertyDescriptor highRangeHighExprD = new JRExpressionPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_HIGH_RANGE
@@ -129,6 +144,9 @@ public class MThermometerPlot extends MChartPlot {
 		highRangeHighExprD
 				.setDescription(Messages.MThermometerPlot_high_range_high_expression_description);
 		desc.add(highRangeHighExprD);
+		highRangeHighExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#highExpression"));
 
 		JRExpressionPropertyDescriptor highRangeLowExprD = new JRExpressionPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_HIGH_RANGE
@@ -137,6 +155,9 @@ public class MThermometerPlot extends MChartPlot {
 		highRangeLowExprD
 				.setDescription(Messages.MThermometerPlot_high_range_low_expression_description);
 		desc.add(highRangeLowExprD);
+		highRangeLowExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#lowExpression"));
 
 		JRExpressionPropertyDescriptor lowRangeHighExprD = new JRExpressionPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_LOW_RANGE
@@ -145,6 +166,9 @@ public class MThermometerPlot extends MChartPlot {
 		lowRangeHighExprD
 				.setDescription(Messages.MThermometerPlot_low_range_high_expression_description);
 		desc.add(lowRangeHighExprD);
+		lowRangeHighExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#highExpression"));
 
 		JRExpressionPropertyDescriptor lowRangeLowExprD = new JRExpressionPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_LOW_RANGE
@@ -153,6 +177,9 @@ public class MThermometerPlot extends MChartPlot {
 		lowRangeLowExprD
 				.setDescription(Messages.MThermometerPlot_low_range_low_expression_description);
 		desc.add(lowRangeLowExprD);
+		lowRangeLowExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#lowExpression"));
 
 		JRExpressionPropertyDescriptor medRangeHighExprD = new JRExpressionPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE
@@ -161,6 +188,9 @@ public class MThermometerPlot extends MChartPlot {
 		medRangeHighExprD
 				.setDescription(Messages.MThermometerPlot_medium_range_high_expression_description);
 		desc.add(medRangeHighExprD);
+		medRangeHighExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#highExpression"));
 
 		JRExpressionPropertyDescriptor medRangeLowExprD = new JRExpressionPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE
@@ -169,6 +199,9 @@ public class MThermometerPlot extends MChartPlot {
 		medRangeLowExprD
 				.setDescription(Messages.MThermometerPlot_medium_range_low_expression_description);
 		desc.add(medRangeLowExprD);
+		medRangeLowExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#lowExpression"));
 
 		positionTypeD = new JSSEnumPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_VALUE_LOCATION,
@@ -178,6 +211,8 @@ public class MThermometerPlot extends MChartPlot {
 				.setDescription(Messages.MThermometerPlot_value_location_description);
 		desc.add(positionTypeD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#thermometerPlot");
 	}
 
 	/*

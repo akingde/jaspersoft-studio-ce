@@ -82,6 +82,9 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 				.setCategory(Messages.MChartTimeSeriesDataset_chart_time_period_dataset_category);
 
 		defaultsMap.put(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD, null);
+
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#timeSeriesDataset");
 	}
 
 	@Override

@@ -27,6 +27,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChartItemLabel;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -72,6 +73,9 @@ public class MPiePlot extends MChartPlot {
 				JRDesignPiePlot.PROPERTY_ITEM_LABEL, Messages.common_item_label);
 		itemLabelD.setDescription(Messages.MPiePlot_item_label_description);
 		desc.add(itemLabelD);
+		itemLabelD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#itemLabel"));
 
 		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(
 				JRDesignPiePlot.PROPERTY_SHOW_LABELS,
@@ -98,6 +102,8 @@ public class MPiePlot extends MChartPlot {
 		labelFormatD.setDescription(Messages.MPiePlot_label_format_description);
 		desc.add(labelFormatD);
 
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#piePlot");
 	}
 
 	/*
@@ -126,20 +132,20 @@ public class MPiePlot extends MChartPlot {
 			return ilFont;
 		} else {
 			Object value = ilFont.getPropertyValue(id);
-			if (value == null) 
+			if (value == null)
 				value = super.getPropertyValue(id);
 			return value;
 		}
 	}
-	
+
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignPiePlot jrElement = (JRDesignPiePlot) getValue();
-		if (id.equals(JRDesignPiePlot.PROPERTY_SHOW_LABELS)){
+		if (id.equals(JRDesignPiePlot.PROPERTY_SHOW_LABELS)) {
 			Boolean value = jrElement.getShowLabels();
 			return value != null ? value : true;
 		}
-		if (id.equals(JRDesignPiePlot.PROPERTY_CIRCULAR)){
+		if (id.equals(JRDesignPiePlot.PROPERTY_CIRCULAR)) {
 			Boolean value = jrElement.getCircular();
 			return value != null ? value : true;
 		}
@@ -166,7 +172,8 @@ public class MPiePlot extends MChartPlot {
 			jrElement.setLegendLabelFormat((String) value);
 		else if (id.equals(JRDesignPiePlot.PROPERTY_LABEL_FORMAT))
 			jrElement.setLabelFormat((String) value);
-		else  ilFont.setPropertyValue(id, value);
+		else
+			ilFont.setPropertyValue(id, value);
 		super.setPropertyValue(id, value);
 	}
 }
