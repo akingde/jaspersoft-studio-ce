@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.band;
 
@@ -35,6 +30,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -206,8 +202,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
-	
+
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -216,8 +211,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT,
-				Messages.common_height);
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT, Messages.common_height);
 		heightD.setDescription(Messages.MBand_height_description);
 		desc.add(heightD);
 
@@ -225,11 +219,16 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 				SplitTypeEnum.class, NullEnum.NULL);
 		splitStyleD.setDescription(Messages.MBand_split_type_dscription);
 		desc.add(splitStyleD);
+		splitStyleD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#band_splitType"));
 
 		JRExpressionPropertyDescriptor printWhenExpD = new JRExpressionPropertyDescriptor(
 				JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.common_print_when_expression);
 		printWhenExpD.setDescription(Messages.MBand_print_when_expression_description);
 		desc.add(printWhenExpD);
+
+		printWhenExpD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression"));
 
 		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
 				Messages.common_properties);
@@ -239,6 +238,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		defaultsMap.put(JRDesignBand.PROPERTY_HEIGHT, CONST_HEIGHT);
 		defaultsMap.put(JRDesignBand.PROPERTY_SPLIT_TYPE, null);
 		defaultsMap.put(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, null);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#band");
 	}
 
 	/*
@@ -272,10 +273,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignBand jrband = (JRDesignBand) getValue();
 		if (jrband != null) {
-			if (id.equals(JRDesignBand.PROPERTY_HEIGHT)){
-					jrband.setHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));	
-			}
-			else if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
+			if (id.equals(JRDesignBand.PROPERTY_HEIGHT)) {
+				jrband.setHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));
+			} else if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
 				jrband.setSplitType((SplitTypeEnum) splitStyleD.getEnumValue(value));
 			else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION))
 				jrband.setPrintWhenExpression(ExprUtil.setValues(jrband.getPrintWhenExpression(), value, null));

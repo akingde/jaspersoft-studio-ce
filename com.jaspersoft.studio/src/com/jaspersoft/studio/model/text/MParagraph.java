@@ -122,6 +122,8 @@ public class MParagraph extends APropertyNode {
 		spacingBefore.setCategory("Paragraph");
 		spacingAfter.setCategory("Paragraph");
 		tabStopWidth.setCategory("Paragraph");
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#paragraph");
 	}
 
 	private static IPropertyDescriptor[] descriptors;

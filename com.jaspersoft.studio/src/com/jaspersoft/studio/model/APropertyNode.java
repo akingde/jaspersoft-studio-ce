@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -29,6 +24,8 @@ import org.eclipse.ui.views.properties.IPropertySource2;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.help.HelpPrefixBuilder;
+import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.property.ElementLabelProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -64,14 +61,16 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	public abstract void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1);
 
 	public abstract IPropertyDescriptor[] getDescriptors();
-	
+
 	/**
-	 * Return the actual value of an attribute, so the value that the system is 
-	 * using, not considering if it's inherited or of the element
-	 * @param id of the attribute
+	 * Return the actual value of an attribute, so the value that the system is using, not considering if it's inherited
+	 * or of the element
+	 * 
+	 * @param id
+	 *          of the attribute
 	 * @return the attribute value.
 	 */
-	public Object getPropertyActualValue(Object id){
+	public Object getPropertyActualValue(Object id) {
 		return getPropertyValue(id);
 	}
 
@@ -82,32 +81,30 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	 *          the desc
 	 */
 	public abstract void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap);
-	
 
 	/**
 	 * @param descriptors
 	 */
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		// Property descriptors that involve the use of an expression
-		// should have an expression context. 
+		// should have an expression context.
 		// Most of the times the right context can be get using directly the node information.
 		// Sometimes the context must be customized (i.e: dataset run related expressions).
 		// In this case the clients should override this method, but also be sure to call
 		// the superclass one first in order not to break the expression context setting of
 		// other property descriptors.
-		try{
-			JRDesignElement designEl=null;
-			if(this.getValue() instanceof JRDesignElement){
-				designEl=(JRDesignElement)this.getValue();
+		try {
+			JRDesignElement designEl = null;
+			if (this.getValue() instanceof JRDesignElement) {
+				designEl = (JRDesignElement) this.getValue();
 			}
-			ExpressionContext elementExpressionContext=ModelUtils.getElementExpressionContext(designEl, this);
-			for (IPropertyDescriptor desc : descriptors){
-				if(desc instanceof IExpressionContextSetter){
-					((IExpressionContextSetter)desc).setExpressionContext(elementExpressionContext);
+			ExpressionContext elementExpressionContext = ModelUtils.getElementExpressionContext(designEl, this);
+			for (IPropertyDescriptor desc : descriptors) {
+				if (desc instanceof IExpressionContextSetter) {
+					((IExpressionContextSetter) desc).setExpressionContext(elementExpressionContext);
 				}
 			}
-		}
-		catch(Exception ex){
+		} catch (Exception ex) {
 			// Unable to get a valid context expression, a default one will be used.
 			// Maybe we should log for debug purpose.
 		}
@@ -142,16 +139,21 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		postDescriptors(descriptors);
 		return descriptors;
 	}
-	
+
+	protected void setHelpPrefix(List<IPropertyDescriptor> desc, String prefix) {
+		for (IPropertyDescriptor pd : desc)
+			if (pd instanceof IHelp && ((IHelp) pd).getHelpReference() == null)
+				((IHelp) pd).setHelpRefBuilder(new HelpPrefixBuilder(prefix, pd));
+	}
+
 	/**
 	 * Return a list of the attribute descriptor that depends from a style
+	 * 
 	 * @return Hashmap where the key is the attribute id, and the value it's the attribute itself
 	 */
-	public HashMap<String,Object> getStylesDescriptors(){
+	public HashMap<String, Object> getStylesDescriptors() {
 		return new HashMap<String, Object>();
 	}
-	
-	
 
 	/*
 	 * (non-Javadoc)

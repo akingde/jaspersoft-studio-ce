@@ -187,6 +187,8 @@ public class MGroup extends APropertyNode implements ICopyable {
 		defaultsMap.put(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, Boolean.FALSE);
 		defaultsMap.put(JRDesignGroup.PROPERTY_START_NEW_COLUMN, Boolean.FALSE);
 		defaultsMap.put(JRDesignGroup.PROPERTY_START_NEW_PAGE, Boolean.FALSE);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#group");
 	}
 
 	private static final Integer CONST_MIN_HEIGHT = new Integer(0);

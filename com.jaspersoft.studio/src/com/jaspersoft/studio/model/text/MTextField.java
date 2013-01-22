@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
@@ -33,6 +28,7 @@ import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MHyperLink;
@@ -137,8 +133,8 @@ public class MTextField extends MTextElement {
 		evalGroupD.setDescription(Messages.MTextField_evaluation_group_description);
 		desc.add(evalGroupD);
 
-		NullCheckBoxPropertyDescriptor blankWhenNullD = new NullCheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,
-				Messages.common_blank_when_null);
+		NullCheckBoxPropertyDescriptor blankWhenNullD = new NullCheckBoxPropertyDescriptor(
+				JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Messages.common_blank_when_null);
 		blankWhenNullD.setDescription(Messages.MTextField_blank_when_null_description);
 		desc.add(blankWhenNullD);
 
@@ -151,6 +147,8 @@ public class MTextField extends MTextElement {
 				Messages.common_expression);
 		exprD.setDescription(Messages.MTextField_expression_description);
 		desc.add(exprD);
+		exprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textFieldExpression"));
 
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN,
 				Messages.common_pattern);
@@ -161,10 +159,16 @@ public class MTextField extends MTextElement {
 				JRDesignTextField.PROPERTY_PATTERN_EXPRESSION, "Pattern Expression"); //$NON-NLS-1$
 		pexprD.setDescription("Pattern expression"); //$NON-NLS-1$
 		desc.add(pexprD);
+		pexprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#patternExpression"));
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textField");
 
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textField");
 
 		patternD.setCategory(Messages.MTextField_textfield_category);
 		exprD.setCategory(Messages.MTextField_textfield_category);
@@ -177,15 +181,15 @@ public class MTextField extends MTextElement {
 		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
 		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Boolean.FALSE);
+
 	}
 
 	private ParameterDTO propertyDTO;
 	private MHyperLink mHyperLink;
 	private static JSSEnumPropertyDescriptor evaluationTimeD;
 
-	
 	@Override
-	public Object getPropertyActualValue(Object id){
+	public Object getPropertyActualValue(Object id) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrElement.isBlankWhenNull();
@@ -193,7 +197,7 @@ public class MTextField extends MTextElement {
 			return jrElement.getPattern();
 		return super.getPropertyActualValue(id);
 	}
-	
+
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
@@ -330,7 +334,8 @@ public class MTextField extends MTextElement {
 		jrDesignTextField.setY(0);
 		jrDesignTextField.setWidth(getDefaultWidth());
 		jrDesignTextField.setHeight(getDefaultHeight());
-		jrDesignTextField.setExpression(new JRDesignExpression("\"".concat(Messages.MTextField_common_text_field).concat("\""))); 
+		jrDesignTextField.setExpression(new JRDesignExpression("\"".concat(Messages.MTextField_common_text_field).concat(
+				"\"")));
 		return jrDesignTextField;
 	}
 

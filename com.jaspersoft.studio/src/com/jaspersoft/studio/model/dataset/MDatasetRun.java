@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset;
 
@@ -30,6 +25,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
@@ -77,27 +73,36 @@ public class MDatasetRun extends APropertyNode {
 				Messages.MDatasetRun_dataset_name, new String[] { "" }); //$NON-NLS-1$
 		subdatasetnameD.setDescription(Messages.MDatasetRun_dataset_name_description);
 		desc.add(subdatasetnameD);
+		subdatasetnameD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#datasetRun_subDataset"));
 
 		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(
 				JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, Messages.common_connection_expression);
 		connExprD.setDescription(Messages.MDatasetRun_connection_expression_description);
 		desc.add(connExprD);
+		connExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#connectionExpression"));
 
 		JRExpressionPropertyDescriptor dsExprD = new JRExpressionPropertyDescriptor(
 				JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, Messages.MDatasetRun_data_source_expression);
 		dsExprD.setDescription(Messages.MDatasetRun_data_source_expression_description);
 		desc.add(dsExprD);
+		dsExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#dataSourceExpression"));
 
 		JRExpressionPropertyDescriptor pmExprD = new JRExpressionPropertyDescriptor(
 				JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.common_parameters_map_expression);
 		pmExprD.setDescription(Messages.MDatasetRun_parameters_map_expression_description);
 		desc.add(pmExprD);
+		dsExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parametersMapExpression"));
 
 		ParameterPropertyDescriptor propertiesD = new ParameterPropertyDescriptor(JRDesignDatasetRun.PROPERTY_PARAMETERS,
 				Messages.common_parameters);
 		propertiesD.setDescription(Messages.MDatasetRun_parameters_description);
 		desc.add(propertiesD);
-
+		dsExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property"));
 	}
 
 	@Override

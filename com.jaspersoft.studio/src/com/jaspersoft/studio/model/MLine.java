@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -115,13 +110,15 @@ public class MLine extends MGraphicElementLinePen {
 		directionD.setCategory(Messages.MLine_line_category);
 		desc.add(directionD);
 
-		/*fillD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
-				NullEnum.INHERITED);
-		fillD.setDescription(Messages.MLine_fill_description);
-		desc.add(fillD);*/
+		/*
+		 * fillD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
+		 * NullEnum.INHERITED); fillD.setDescription(Messages.MLine_fill_description); desc.add(fillD);
+		 */
 
 		defaultsMap.put(JRBaseLine.PROPERTY_DIRECTION, EnumHelper.getValue(LineDirectionEnum.TOP_DOWN, 1, true));
 		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, null);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#line");
 	}
 
 	@Override

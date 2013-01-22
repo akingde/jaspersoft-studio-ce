@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
@@ -60,9 +55,9 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 	public MTextElement(ANode parent, JRDesignElement jrLine, int newIndex) {
 		super(parent, jrLine, newIndex);
 	}
-	
+
 	@Override
-	public HashMap<String,Object> getStylesDescriptors() {
+	public HashMap<String, Object> getStylesDescriptors() {
 		HashMap<String, Object> result = super.getStylesDescriptors();
 		if (getValue() == null)
 			return result;
@@ -70,9 +65,8 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		result.putAll(tFont.getStylesDescriptors());
 		return result;
 	}
-	
-	private static final String PARAGRAPH= "paragraph"; //$NON-NLS-1$
 
+	private static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
@@ -101,6 +95,8 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		JRPropertyDescriptor paragraph = new JRPropertyDescriptor(PARAGRAPH, "Paragraph");
 		desc.add(paragraph);
 
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textElement");
+
 		tFont = new MFont((JRFont) getValue());
 		tFont.setJasperConfiguration(getJasperConfiguration());
 		tFont.createPropertyDescriptors(desc, defaultsMap);
@@ -114,6 +110,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, null);
+
 	}
 
 	private MFont tFont;
@@ -130,7 +127,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		}
 		return tFont;
 	}
-	
+
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignTextElement jrElement = (JRDesignTextElement) getValue();
@@ -162,7 +159,6 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		return super.getPropertyActualValue(id);
 	}
 
-
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignTextElement jrElement = (JRDesignTextElement) getValue();
@@ -172,7 +168,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 
 		if (id.equals(PARAGRAPH)) {
 			if (mParagraph == null) {
-				mParagraph = new MParagraph(this,(JRBaseParagraph) jrElement.getParagraph());
+				mParagraph = new MParagraph(this, (JRBaseParagraph) jrElement.getParagraph());
 				setChildListener(mParagraph);
 			}
 			return mParagraph;

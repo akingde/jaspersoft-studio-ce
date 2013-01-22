@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.genericElement;
 
@@ -27,6 +22,7 @@ import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -147,6 +143,8 @@ public class MGenericElement extends MGraphicElement {
 		evaluationGroupNameD.setDescription(Messages.MGenericElement_evaluation_group_name_description);
 		desc.add(evaluationGroupNameD);
 
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#genericElement");
+
 		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignGenericElement.PROPERTY_GENERIC_TYPE
 				+ PROPERTY_NAME, Messages.MGenericElement_generic_type_name);
 		nameD.setDescription(Messages.MGenericElement_generic_type_name_description);
@@ -157,10 +155,14 @@ public class MGenericElement extends MGraphicElement {
 		nameSpaceD.setDescription(Messages.MGenericElement_generic_type_namespace_description);
 		desc.add(nameSpaceD);
 
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#genericElementType");
+
 		ParameterPropertyDescriptor parametersD = new ParameterPropertyDescriptor(
 				JRDesignGenericElement.PROPERTY_PARAMETERS, Messages.common_parameters);
 		parametersD.setDescription(Messages.MGenericElement_parameters_description);
 		desc.add(parametersD);
+		parametersD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#genericElementParameter"));
 
 		parametersD.setCategory(Messages.MGenericElement_generic_element_properties_category);
 		nameD.setCategory(Messages.MGenericElement_generic_element_properties_category);

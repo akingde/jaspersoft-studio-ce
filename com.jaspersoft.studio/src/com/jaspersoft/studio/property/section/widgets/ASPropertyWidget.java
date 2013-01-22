@@ -1,29 +1,21 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.jface.action.IStatusLineManager;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IViewSite;
@@ -35,41 +27,31 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpSystem;
+import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public abstract class ASPropertyWidget {
 	protected IPropertyDescriptor pDescriptor;
 	protected AbstractSection section;
-	protected String contextName;
-	
+
 	public ASPropertyWidget(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		this.pDescriptor = pDescriptor;
 		this.section = section;
 		createComponent(parent);
-		if (getControl() != null)
+		if (getControl() != null) {
 			getControl().addFocusListener(focusListener);
-		contextName = null;
-	}
-	
-	protected void enableHelp(){
-		Control control = getControl();
-		if (control != null && contextName != null){
-				control.addListener(SWT.Help, new Listener() {			
-					@Override
-					public void handleEvent(Event event) {
-						performHelp();	
-					}
-				});
-			PlatformUI.getWorkbench().getHelpSystem().setHelp(control, contextName);
+			bindToHelp(pDescriptor, getControl());
 		}
 	}
-	
-	protected void performHelp() {
-		if (contextName != null){
-			PlatformUI.getWorkbench().getHelpSystem().displayHelp(contextName);
-		}
-	};
+
+	protected void bindToHelp(IPropertyDescriptor pDescriptor, Control control) {
+		if (pDescriptor.getHelpContextIds() != null)
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(control, (String) pDescriptor.getHelpContextIds());
+		else if (pDescriptor instanceof IHelp)
+			HelpSystem.setHelp(control, ((IHelp) pDescriptor).getHelpReference());
+	}
 
 	public void setReadOnly(boolean readonly) {
 		if (getControl() != null)

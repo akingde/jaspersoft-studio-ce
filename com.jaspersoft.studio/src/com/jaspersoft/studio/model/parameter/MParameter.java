@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter;
 
@@ -27,6 +22,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
@@ -128,6 +124,8 @@ public class MParameter extends MParameterSystem implements ICopyable {
 				Messages.common_description);
 		descriptionD.setDescription(Messages.MParameter_description_description);
 		desc.add(descriptionD);
+		descriptionD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameterDescription"));
 
 		CheckBoxPropertyDescriptor isForPromptingD = new CheckBoxPropertyDescriptor(
 				JRDesignParameter.PROPERTY_FOR_PROMPTING, Messages.MParameter_is_for_prompting, NullEnum.NOTNULL);
@@ -138,11 +136,15 @@ public class MParameter extends MParameterSystem implements ICopyable {
 				JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION, Messages.MParameter_default_value_expression);
 		defValueExprD.setDescription(Messages.MParameter_default_value_expression_description);
 		desc.add(defValueExprD);
+		defValueExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#defaultValueExpression"));
 
 		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
 				Messages.common_properties);
 		propertiesD.setDescription(Messages.MParameter_properties_description);
 		desc.add(propertiesD);
+		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property"));
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME,
 				Messages.MParameter_nested_type_name);
@@ -150,6 +152,8 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		desc.add(classD);
 
 		defaultsMap.put(JRDesignParameter.PROPERTY_FOR_PROMPTING, Boolean.TRUE);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameter");
 	}
 
 	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$

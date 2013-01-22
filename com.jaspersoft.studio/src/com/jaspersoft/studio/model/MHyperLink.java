@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -45,7 +40,6 @@ public class MHyperLink extends APropertyNode {
 		setValue(hyperLink);
 	}
 
-	
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		JRExpressionPropertyDescriptor anchorExpressionD = new JRExpressionPropertyDescriptor(
@@ -68,8 +62,16 @@ public class MHyperLink extends APropertyNode {
 		toolTipExpressionD.setDescription(Messages.MHyperLink_hyperlink_tooltip_expression_description);
 		desc.add(toolTipExpressionD);
 
-		RComboBoxPropertyDescriptor linkTargetD = new RComboBoxPropertyDescriptor(JRDesignHyperlink.PROPERTY_LINK_TARGET,
-				Messages.MHyperLink_link_target, EnumHelper.getEnumNames(HyperlinkTargetEnum.values(), NullEnum.NULL));
+		ParameterPropertyDescriptor propertiesD = new ParameterPropertyDescriptor(
+				JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS, Messages.common_parameters);
+		propertiesD.setDescription(Messages.MHyperLink_parameters_description);
+		desc.add(propertiesD);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#");
+
+		RComboBoxPropertyDescriptor linkTargetD = new RComboBoxPropertyDescriptor(
+				JRDesignHyperlink.PROPERTY_HYPERLINK_TARGET, Messages.MHyperLink_link_target, EnumHelper.getEnumNames(
+						HyperlinkTargetEnum.values(), NullEnum.NULL));
 		linkTargetD.setDescription(Messages.MHyperLink_link_target_description);
 		desc.add(linkTargetD);
 
@@ -77,11 +79,6 @@ public class MHyperLink extends APropertyNode {
 				Messages.MHyperLink_link_type, EnumHelper.getEnumNames(HyperlinkTypeEnum.values(), NullEnum.NULL));
 		linkTypeD.setDescription(Messages.MHyperLink_link_type_description);
 		desc.add(linkTypeD);
-
-		ParameterPropertyDescriptor propertiesD = new ParameterPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS, Messages.common_parameters);
-		propertiesD.setDescription(Messages.MHyperLink_parameters_description);
-		desc.add(propertiesD);
 
 		propertiesD.setCategory(Messages.MHyperLink_hyperlink_category);
 		anchorExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
@@ -91,6 +88,7 @@ public class MHyperLink extends APropertyNode {
 
 		linkTargetD.setCategory(Messages.MHyperLink_hyperlink_category);
 		linkTypeD.setCategory(Messages.MHyperLink_hyperlink_category);
+
 	}
 
 	private static IPropertyDescriptor[] descriptors;

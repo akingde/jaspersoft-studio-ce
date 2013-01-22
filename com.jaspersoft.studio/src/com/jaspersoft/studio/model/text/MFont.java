@@ -174,6 +174,7 @@ public class MFont extends APropertyNode {
 		strikeTroughD.setCategory(Messages.common_font);
 		pdfEmbedD.setCategory(Messages.common_font);
 
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#font");
 	}
 
 	private static IPropertyDescriptor[] descriptors;

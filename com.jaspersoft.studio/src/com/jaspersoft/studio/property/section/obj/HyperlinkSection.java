@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.obj;
 
@@ -32,7 +27,7 @@ public class HyperlinkSection extends AbstractSection {
 
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_LINK_TARGET).getControl().setLayoutData(gd);
+		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_HYPERLINK_TARGET).getControl().setLayoutData(gd);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_LINK_TYPE).getControl().setLayoutData(gd);

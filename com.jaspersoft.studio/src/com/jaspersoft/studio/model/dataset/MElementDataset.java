@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset;
 
@@ -31,6 +26,7 @@ import net.sf.jasperreports.engine.type.ResetTypeEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -125,6 +121,8 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION, Messages.MElementDataset_increment_when_expression);
 		incWhenExprD.setDescription(Messages.MElementDataset_increment_when_expression_description);
 		desc.add(incWhenExprD);
+		incWhenExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#incrementWhenExpression"));
 
 		resetGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_GROUP,
 				Messages.common_reset_group, new String[] { "" }); //$NON-NLS-1$
@@ -140,7 +138,10 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				JRDesignElementDataset.PROPERTY_DATASET_RUN, Messages.MElementDataset_dataset_run);
 		datasetRunD.setDescription(Messages.MElementDataset_dataset_run_description);
 		desc.add(datasetRunD);
+		datasetRunD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#datasetRun"));
 
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#dataset");
 	}
 
 	public void setGroupItems(String[] items) {

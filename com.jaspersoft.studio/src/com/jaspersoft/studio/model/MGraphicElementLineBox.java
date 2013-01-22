@@ -66,6 +66,8 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		lineBoxD.setDescription(Messages.MGraphicElementLineBox_line_box_description);
 		desc.add(lineBoxD);
 		lineBoxD.setCategory(Messages.common_graphic);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#box");
 	}
 
 	private MLineBox lineBox;

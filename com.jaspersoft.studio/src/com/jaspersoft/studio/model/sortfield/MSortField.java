@@ -232,6 +232,8 @@ public class MSortField extends APropertyNode implements ICopyable {
 
 		defaultsMap.put(JRDesignSortField.PROPERTY_ORDER, typeD.getEnumValue(SortOrderEnum.ASCENDING));
 		defaultsMap.put(JRDesignSortField.PROPERTY_TYPE, orderD.getEnumValue(SortFieldTypeEnum.FIELD));
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#sortField");
 	}
 
 	/*

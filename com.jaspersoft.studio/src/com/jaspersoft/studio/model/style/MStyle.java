@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.style;
 
@@ -86,7 +81,8 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MStyle extends APropertyNode implements ICopyable, IPastable, IContainerEditPart, IDragable, MNotConditionalMarker {
+public class MStyle extends APropertyNode implements ICopyable, IPastable, IContainerEditPart, IDragable,
+		MNotConditionalMarker {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -177,7 +173,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 	private static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
 	private static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
-	private static final String PARAGRAPH= "paragraph"; //$NON-NLS-1$
+	private static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
@@ -199,8 +195,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			}
 		}
 	}
-	
-	public HashMap<String,Object> getStylesDescriptors() {
+
+	public HashMap<String, Object> getStylesDescriptors() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		if (getValue() == null)
 			return result;
@@ -222,11 +218,11 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		result.put(JRDesignStyle.PROPERTY_ROTATION, element.getOwnRotationValue());
 		result.put(JRDesignStyle.PROPERTY_SCALE_IMAGE, element.getOwnScaleImageValue());
 		result.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT, element.getOwnVerticalAlignmentValue());
-		result.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,element.isOwnBlankWhenNull());
+		result.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, element.isOwnBlankWhenNull());
 		result.put(PARAGRAPH, getPropertyValue(PARAGRAPH));
-		MLinePen linePen = (MLinePen)getPropertyValue(LINE_PEN);
+		MLinePen linePen = (MLinePen) getPropertyValue(LINE_PEN);
 		result.put(LINE_PEN, linePen);
-		MLineBox lineBox = (MLineBox)getPropertyValue(LINE_BOX);
+		MLineBox lineBox = (MLineBox) getPropertyValue(LINE_BOX);
 		result.put(LINE_BOX, lineBox);
 		return result;
 	}
@@ -301,12 +297,11 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 		modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class,
 				NullEnum.INHERITED);
-		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(
-				JRBaseStyle.PROPERTY_MODE, Messages.common_opaque);
+		CheckBoxPropertyDescriptor opaqueDBool = new CheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
+				Messages.common_opaque);
 		opaqueDBool.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueDBool);
-		
-		
+
 		CheckBoxPropertyDescriptor blankWhenNullD = new CheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL,
 				Messages.common_blank_when_null, NullEnum.INHERITED);
 		blankWhenNullD.setDescription(Messages.MStyle_blank_when_null_description);
@@ -316,7 +311,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage("icons/resources/bold.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
+						"icons/resources/bold.png"));
 			}
 		};
 		boldD.setDescription(Messages.MFont_bold_description);
@@ -326,7 +322,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				Messages.common_italic, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage("icons/resources/italic.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
+						"icons/resources/italic.png"));
 			}
 		};
 		italicD.setDescription(Messages.MFont_italic_description);
@@ -336,8 +333,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				Messages.common_underline, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this,
-						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/underline.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
+						"icons/resources/underline.png"));
 			}
 		};
 		underlineD.setDescription(Messages.MFont_underline_description);
@@ -347,8 +344,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				Messages.common_strike_trough, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this,
-						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/strikethrought.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
+						"icons/resources/strikethrought.png"));
 			}
 		};
 		strikeThroughD.setDescription(Messages.MFont_strike_trough_description);
@@ -374,10 +371,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
-		
-		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(MFont.FONT_INCREMENT,this);
+
+		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(MFont.FONT_INCREMENT, this);
 		desc.add(fontIncrement);
-		
 
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRBaseStyle.PROPERTY_PATTERN,
 				Messages.common_pattern);
@@ -433,6 +429,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		defaultsMap.put(JRBaseStyle.PROPERTY_BOLD, Boolean.FALSE);
 		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
 		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, "10"); //$NON-NLS-1$
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#style");
 	}
 
 	private MLinePen linePen;
@@ -512,8 +510,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return valignD.getEnumValue(jrstyle.getOwnVerticalAlignmentValue());
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			return rotationD.getEnumValue(jrstyle.getOwnRotationValue());
-		if (id.equals(JRBaseStyle.PROPERTY_MODE)){
-			if (modeD == null) modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class, NullEnum.INHERITED);
+		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
+			if (modeD == null)
+				modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class,
+						NullEnum.INHERITED);
 			ModeEnum modeValue = jrstyle.getOwnModeValue();
 			return modeValue != null ? modeValue.equals(ModeEnum.TRANSPARENT) : null;
 		}
@@ -543,8 +543,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		}
 		return null;
 	}
-	
-	
+
 	public Object getPropertyActualValue(Object id) {
 		if (getValue() == null)
 			return null;
@@ -570,8 +569,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return valignD.getEnumValue(jrstyle.getVerticalAlignmentValue());
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			return rotationD.getEnumValue(jrstyle.getRotationValue());
-		if (id.equals(JRBaseStyle.PROPERTY_MODE)){
-			if (modeD == null) modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class, NullEnum.INHERITED);
+		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
+			if (modeD == null)
+				modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class,
+						NullEnum.INHERITED);
 			return modeD.getEnumValue(jrstyle.getModeValue()).equals(modeD.getEnumValue(ModeEnum.TRANSPARENT));
 		}
 		if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
@@ -616,8 +617,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
 				jrstyle.setPattern((String) value);
 			else if (id.equals(JRDesignStyle.PROPERTY_DEFAULT)) {
-				//getJasperDesign().resetDefaultStyle();
-				JRDesignStyle style = (JRDesignStyle)getJasperDesign().getDefaultStyle();
+				// getJasperDesign().resetDefaultStyle();
+				JRDesignStyle style = (JRDesignStyle) getJasperDesign().getDefaultStyle();
 				if (style != null)
 					style.setDefault(false);
 				jrstyle.setDefault(((Boolean) value).booleanValue());
@@ -656,9 +657,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		else if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			jrstyle.setRotation((RotationEnum) rotationD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_MODE))
-			if (value == null) jrstyle.setMode(null);
-			else if ((Boolean)value) jrstyle.setMode(ModeEnum.TRANSPARENT);
-			else jrstyle.setMode(ModeEnum.OPAQUE);
+			if (value == null)
+				jrstyle.setMode(null);
+			else if ((Boolean) value)
+				jrstyle.setMode(ModeEnum.TRANSPARENT);
+			else
+				jrstyle.setMode(ModeEnum.OPAQUE);
 		else if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrstyle.setBlankWhenNull((Boolean) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_STRIKE_THROUGH))
@@ -672,12 +676,14 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			jrstyle.setFontName((String) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
-			if ((value instanceof String && value.toString().length()==0) || value == null) jrstyle.setFontSize(null);
-			else jrstyle.setFontSize(new Integer((String) value));
-		else 	if (lineBox != null) {
+			if ((value instanceof String && value.toString().length() == 0) || value == null)
+				jrstyle.setFontSize(null);
+			else
+				jrstyle.setFontSize(new Integer((String) value));
+		else if (lineBox != null) {
 			lineBox.setPropertyValue(id, value);
-		} 
-		if (linePen!=null){
+		}
+		if (linePen != null) {
 			linePen.setPropertyValue(id, value);
 		}
 	}

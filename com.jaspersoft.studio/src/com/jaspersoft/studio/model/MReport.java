@@ -45,6 +45,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
@@ -167,6 +168,14 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+
+		ImportDeclarationPropertyDescriptor importsD = new ImportDeclarationPropertyDescriptor(
+				JasperDesign.PROPERTY_IMPORTS, Messages.MReport_imports);
+		importsD.setDescription(Messages.MReport_imports_description);
+		desc.add(importsD);
+		importsD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#import"));
+
 		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JasperDesign.PROPERTY_NAME,
 				Messages.MReport_report_name);
 		nameD.setDescription(Messages.MReport_report_name_description);
@@ -177,11 +186,6 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 				JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS, Messages.MReport_format_factory_class);
 		formatFactoryClassD.setDescription(Messages.MReport_format_factory_class_description);
 		desc.add(formatFactoryClassD);
-
-		ImportDeclarationPropertyDescriptor importsD = new ImportDeclarationPropertyDescriptor(
-				JasperDesign.PROPERTY_IMPORTS, Messages.MReport_imports);
-		importsD.setDescription(Messages.MReport_imports_description);
-		desc.add(importsD);
 
 		// main dataset
 		PropertyDescriptor datasetD = new PropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET,
@@ -332,6 +336,8 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		defaultsMap.put(JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER, Boolean.FALSE);
 		defaultsMap.put(JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER, Boolean.FALSE);
 		defaultsMap.put(JasperDesign.PROPERTY_IGNORE_PAGINATION, Boolean.FALSE);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#jasperReport");
 	}
 
 	private void createDataset(JasperDesign jrDesign) {

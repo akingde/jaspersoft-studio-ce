@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -94,6 +89,8 @@ public class MEllipse extends MGraphicElementLinePen {
 				EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
 		fillD.setDescription(Messages.MEllipse_fill_description);
 		desc.add(fillD);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#graphicElement");
 	}
 
 	@Override
@@ -103,8 +100,7 @@ public class MEllipse extends MGraphicElementLinePen {
 			return EnumHelper.getValue(jrElement.getOwnFillValue(), 1, true);
 		return super.getPropertyValue(id);
 	}
-	
-	
+
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignEllipse jrElement = (JRDesignEllipse) getValue();
@@ -112,7 +108,6 @@ public class MEllipse extends MGraphicElementLinePen {
 			return EnumHelper.getValue(jrElement.getFillValue(), 1, true);
 		return super.getPropertyActualValue(id);
 	}
-
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {

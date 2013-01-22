@@ -207,6 +207,8 @@ public class MDataset extends APropertyNode implements ICopyable {
 		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,
 				EnumHelper.getValue(WhenResourceMissingTypeEnum.NULL, 1, false));
 		defaultsMap.put(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, null);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subDataset");
 	}
 
 	private MQuery mQuery;

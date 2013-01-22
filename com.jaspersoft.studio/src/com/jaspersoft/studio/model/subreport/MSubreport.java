@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.subreport;
 
@@ -33,6 +28,7 @@ import net.sf.jasperreports.engine.util.JRCloneUtils;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.JReportsDTO;
@@ -133,31 +129,43 @@ public class MSubreport extends MGraphicElement {
 				Messages.common_expression);
 		exprD.setDescription(Messages.MSubreport_expression_description);
 		desc.add(exprD);
+		exprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreportExpression"));
 
 		JRExpressionPropertyDescriptor paramExprD = new JRExpressionPropertyDescriptor(
 				JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.common_parameters_map_expression);
 		paramExprD.setDescription(Messages.MSubreport_parameters_map_expression_description);
 		desc.add(paramExprD);
+		paramExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parametersMapExpression"));
 
 		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(
 				JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, Messages.common_connection_expression);
 		connExprD.setDescription(Messages.MSubreport_connection_expression_description);
 		desc.add(connExprD);
+		connExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#connectionExpression"));
 
 		JRExpressionPropertyDescriptor dsExprD = new JRExpressionPropertyDescriptor(
 				JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION, Messages.MSubreport_datasource_expression);
 		dsExprD.setDescription(Messages.MSubreport_datasource_expression_description);
 		desc.add(dsExprD);
+		dsExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#dataSourceExpression"));
 
 		SubreportPropertiesPropertyDescriptor propertiesD = new SubreportPropertiesPropertyDescriptor(
 				JRDesignSubreport.PROPERTY_PARAMETERS, Messages.common_parameters);
 		propertiesD.setDescription(Messages.MSubreport_parameters_description);
 		desc.add(propertiesD);
+		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreportParameter"));
 
 		RVPropertyDescriptor returnValuesD = new RVPropertyDescriptor(JRDesignSubreport.PROPERTY_RETURN_VALUES,
 				Messages.common_return_values);
 		returnValuesD.setDescription(Messages.MSubreport_return_values_description);
 		desc.add(returnValuesD);
+		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#returnValue"));
 
 		returnValuesD.setCategory(Messages.MSubreport_subreport_properties_category);
 		propertiesD.setCategory(Messages.MSubreport_subreport_properties_category);
@@ -168,6 +176,7 @@ public class MSubreport extends MGraphicElement {
 		useCacheD.setCategory(Messages.MSubreport_subreport_properties_category);
 		runToBottomD.setCategory(Messages.MSubreport_subreport_properties_category);
 
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreport");
 	}
 
 	private JReportsDTO returnValuesDTO;

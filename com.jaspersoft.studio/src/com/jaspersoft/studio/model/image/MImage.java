@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.image;
 
@@ -37,6 +32,7 @@ import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
@@ -141,6 +137,8 @@ public class MImage extends MGraphicElementLineBox {
 				Messages.common_expression);
 		expressionD.setDescription(Messages.MImage_expression_description);
 		desc.add(expressionD);
+		expressionD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#imageExpression"));
 
 		fillD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
 				NullEnum.INHERITED);
@@ -187,9 +185,13 @@ public class MImage extends MGraphicElementLineBox {
 		lazyD.setDescription(Messages.MImage_lazy_description);
 		desc.add(lazyD);
 
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#image");
+
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#image");
 
 		evaluationTimeD.setCategory(Messages.MImage_image_properties_category);
 		evalGroupD.setCategory(Messages.MImage_image_properties_category);
@@ -273,7 +275,7 @@ public class MImage extends MGraphicElementLineBox {
 			return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
 		return super.getPropertyValue(id);
 	}
-	
+
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignImage jrElement = (JRDesignImage) getValue();

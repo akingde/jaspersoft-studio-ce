@@ -1,29 +1,26 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptors;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 
+import com.jaspersoft.studio.help.IHelp;
+import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPReadCombo;
 
-public class JSSComboPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget {
+public class JSSComboPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
 	private String[] labels;
 
 	public JSSComboPropertyDescriptor(Object id, String displayName, String[] labels) {
@@ -39,4 +36,17 @@ public class JSSComboPropertyDescriptor extends ComboBoxPropertyDescriptor imple
 		return new SPReadCombo(parent, section, this);
 	}
 
+	private IHelpRefBuilder refBuilder;
+
+	@Override
+	public void setHelpRefBuilder(IHelpRefBuilder refBuilder) {
+		this.refBuilder = refBuilder;
+	}
+
+	@Override
+	public String getHelpReference() {
+		if (refBuilder != null)
+			return refBuilder.getHelpReference();
+		return null;
+	}
 }

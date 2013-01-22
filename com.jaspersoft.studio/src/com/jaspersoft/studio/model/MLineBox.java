@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -38,9 +33,9 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 		super();
 		setValue(lineBox);
 	}
-	
+
 	@Override
-	public HashMap<String,Object> getStylesDescriptors() {
+	public HashMap<String, Object> getStylesDescriptors() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		if (getValue() == null)
 			return result;
@@ -50,15 +45,15 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 		result.put(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, element.getOwnBottomPadding());
 		result.put(JRBaseLineBox.PROPERTY_LEFT_PADDING, element.getOwnLeftPadding());
 		result.put(JRBaseLineBox.PROPERTY_RIGHT_PADDING, element.getOwnRightPadding());
-		MLinePen linePen = (MLinePen)getPropertyValue(LINE_PEN);
+		MLinePen linePen = (MLinePen) getPropertyValue(LINE_PEN);
 		result.put(LINE_PEN, linePen);
-		MLinePen linePenTop = (MLinePen)getPropertyValue(LINE_PEN_TOP);
+		MLinePen linePenTop = (MLinePen) getPropertyValue(LINE_PEN_TOP);
 		result.put(LINE_PEN_TOP, linePenTop);
-		MLinePen linePenBottom = (MLinePen)getPropertyValue(LINE_PEN_BOTTOM);
+		MLinePen linePenBottom = (MLinePen) getPropertyValue(LINE_PEN_BOTTOM);
 		result.put(LINE_PEN_BOTTOM, linePenBottom);
-		MLinePen linePenLeft = (MLinePen)getPropertyValue(LINE_PEN_LEFT);
+		MLinePen linePenLeft = (MLinePen) getPropertyValue(LINE_PEN_LEFT);
 		result.put(LINE_PEN_LEFT, linePenLeft);
-		MLinePen linePenRight = (MLinePen)getPropertyValue(LINE_PEN_RIGHT);
+		MLinePen linePenRight = (MLinePen) getPropertyValue(LINE_PEN_RIGHT);
 		result.put(LINE_PEN_RIGHT, linePenRight);
 		return result;
 	}
@@ -122,6 +117,8 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 		defaultsMap.put(JRBaseLineBox.PROPERTY_RIGHT_PADDING, null);
 		defaultsMap.put(JRBaseLineBox.PROPERTY_TOP_PADDING, null);
 		defaultsMap.put(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, null);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#box");
 	}
 
 	public static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
@@ -218,7 +215,7 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 		}
 		return null;
 	}
-	
+
 	public Object getPropertyActualValue(Object id) {
 		// pen
 		JRLineBox lineBox = (JRLineBox) getValue();

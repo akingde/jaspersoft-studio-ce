@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -43,6 +38,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -357,6 +353,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MGraphicElement_parent_style_description);
 		desc.add(styleD);
+		styleD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement_style"));
 
 		groupChangesD = new RComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES,
 				Messages.MGraphicElement_print_when_group_changes, new String[] { "" }); //$NON-NLS-1$
@@ -418,12 +416,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(positionTypeD);
 		positionTypeD.setCategory(Messages.MGraphicElement_location_category);
 
-		stretchTypeD = new JSSEnumPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE, Messages.common_stretch_type,
-				StretchTypeEnum.class, NullEnum.NOTNULL);
-		stretchTypeD.setCategory(Messages.common_size);
-		stretchTypeD.setDescription(Messages.MGraphicElement_stretch_type_description);
-		desc.add(stretchTypeD);
-
 		CheckBoxPropertyDescriptor printRVAlueD = new CheckBoxPropertyDescriptor(
 				JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, Messages.MGraphicElement_print_repeated_values);
 		printRVAlueD.setDescription(Messages.MGraphicElement_print_repeated_values_description);
@@ -450,11 +442,23 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		printWhenExprD.setDescription(Messages.MGraphicElement_print_when_expression_description);
 		printWhenExprD.setCategory(Messages.MGraphicElement_print_when);
 		desc.add(printWhenExprD);
+		printWhenExprD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression"));
 
 		JPropertyExpressionsDescriptor propertiesD = new JPropertyExpressionsDescriptor(
 				JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, Messages.MGraphicElement_property_expressions);
 		propertiesD.setDescription(Messages.MGraphicElement_property_expressions_description);
 		desc.add(propertiesD);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement");
+
+		stretchTypeD = new JSSEnumPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE, Messages.common_stretch_type,
+				StretchTypeEnum.class, NullEnum.NOTNULL);
+		stretchTypeD.setCategory(Messages.common_size);
+		stretchTypeD.setDescription(Messages.MGraphicElement_stretch_type_description);
+		desc.add(stretchTypeD);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#graphicElement");
 
 		// JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
 		// Messages.common_properties);
@@ -478,6 +482,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_IN_FIRST_WHOLE_BAND, Boolean.FALSE);
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, Boolean.FALSE);
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, null);
+
 	}
 
 	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
@@ -588,7 +593,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 						jrElement.setStyleNameReference(null);
 					} else {
 						jrElement.setStyleNameReference((String) value);
-						//The local style is set to null so the external one will be used
+						// The local style is set to null so the external one will be used
 						jrElement.setStyle(null);
 					}
 				}

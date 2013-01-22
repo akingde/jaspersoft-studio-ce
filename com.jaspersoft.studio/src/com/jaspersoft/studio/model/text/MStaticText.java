@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
@@ -30,6 +25,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -61,10 +57,9 @@ public class MStaticText extends MTextElement {
 	public MStaticText() {
 		super();
 	}
-	
-	
+
 	@Override
-	public HashMap<String,Object> getStylesDescriptors() {
+	public HashMap<String, Object> getStylesDescriptors() {
 		HashMap<String, Object> result = super.getStylesDescriptors();
 		if (getValue() == null)
 			return result;
@@ -75,7 +70,6 @@ public class MStaticText extends MTextElement {
 		result.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT, element.getOwnVerticalAlignmentValue());
 		return result;
 	}
-
 
 	/**
 	 * Instantiates a new m static text.
@@ -118,13 +112,16 @@ public class MStaticText extends MTextElement {
 		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRBaseStaticText.PROPERTY_TEXT, Messages.common_text);
 		desc.add(textD);
 		textD.setCategory(Messages.MStaticText_text_description);
+
+		textD
+				.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#text"));
 	}
 
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		return super.getPropertyActualValue(id);
 	}
-	
+
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignStaticText jrElement = (JRDesignStaticText) getValue();
