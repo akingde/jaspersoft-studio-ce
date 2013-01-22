@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio Documentation
 Bundle-SymbolicName: com.jaspersoft.studio.doc; singleton:=true
-Bundle-Version: 1.3.3
+Bundle-Version: 2.0.0
 Bundle-Vendor: Jaspersoft Corporation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.ui.cheatsheets,
- com.jaspersoft.studio;bundle-version="1.3.3"
+ com.jaspersoft.studio;bundle-version="2.0.0"
