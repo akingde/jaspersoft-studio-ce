@@ -149,6 +149,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="com.google.inject"/>
       <plugin id="com.ibm.icu"/>
       <plugin id="com.jaspersoft.studio"/>
+      <plugin id="com.jaspersoft.studio.community"/>
       <plugin id="com.jaspersoft.studio.components"/>
       <plugin id="com.jaspersoft.studio.data"/>
       <plugin id="com.jaspersoft.studio.data.drivers"/>
