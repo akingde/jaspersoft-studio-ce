@@ -10,6 +10,7 @@
       <description>
          Open a report, and click on <b>&quot;Preview&quot;</b> tab on the bottom of the editor.
       </description>
+      <action pluginId="com.jaspersoft.studio.doc" class="com.jaspersoft.studio.doc.handlers.SwitchToPreviewHandler" required="false" dialog="true"/>
    </item>
   
    <item

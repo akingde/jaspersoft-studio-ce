@@ -52,5 +52,6 @@ Now you must insert a query to define which data will be extracted from the data
       <description>
          Now you have your report with some fields into it. You can check if it is all right by click into the &quot;Preview&quot; tab. Doing this the report will be compiled and the result is shown.
       </description>
+      <action pluginId="com.jaspersoft.studio.doc" class="com.jaspersoft.studio.doc.handlers.SwitchToPreviewHandler" required="false"/>
    </item>
 </cheatsheet>

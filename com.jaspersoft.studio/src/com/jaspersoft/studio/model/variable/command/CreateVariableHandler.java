@@ -12,13 +12,11 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
-import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariables;
-import com.jaspersoft.studio.outline.ReportOutlineView;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class CreateVariableHandler extends Action {

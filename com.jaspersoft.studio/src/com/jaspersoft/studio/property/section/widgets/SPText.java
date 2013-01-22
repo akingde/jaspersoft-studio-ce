@@ -34,12 +34,16 @@ import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 public class SPText extends AHistorySPropertyWidget {
 	protected Text ftext;
-
+	
 	public SPText(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
+		String context = "SPText_".concat(this.pDescriptor.getId().toString());
+		contextName = ContextHelpIDs.prefix.concat(context);
+		enableHelp();
 	}
 
 	@Override

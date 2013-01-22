@@ -193,6 +193,11 @@
 	  <topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
 	  <topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
    </context>
+   <context id="SPText_name" title="Test property name help">
+      <description>This is the help of the property name.</description>
+	  <topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
+	  <topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
+   </context>
    <context id="select_barcode" title="Select the type of barcode">
       <description>Select the type of bar code you want insert in your report. Note that from here you can select only the type, instead the value can be set from the element properties when inserted.</description>
    </context>
@@ -210,5 +215,11 @@
       <description>Here you can define how to manage the datasources used by the report, since they can be needed to execute it. You can select to upload your use a datasource already on the server, try to upload your local one, or don't use any datasource.</description>
  	  <topic href="html/wizard/jasperserver/connection.html" label="Connect to JasperReport Server" />
  	  <topic href="html/wizard/jasperserver/publishreport.html" label="Publish a report into JasperReport Server" />
+   </context>
+   <context id="congratualions_page" title="Wizard completed">
+      <description>You have successfully completed the wizard, hit Finish to return to the report.</description>
+   </context>
+   <context id="select_sample_location" title="Select the sample location">
+      <description>Here you can select the location in the workspace for the sample projects, by providing a name for the workspace fodler. Note that the name must be unique.</description>
    </context>
 </contexts>

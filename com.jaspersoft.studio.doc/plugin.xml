@@ -65,6 +65,13 @@
             id="com.jaspersoft.studio.cheatsheets.createreport"
             name="Create a Report">
       </cheatsheet>
+      <cheatsheet
+           	category="com.jaspersoft.studio.cheatsheets.repository"
+            composite="false"
+            contentFile="cheatsheets/addfields.xml"
+            id="com.jaspersoft.studio.cheatsheets.addfield"
+            name="Add a Field">
+      </cheatsheet>
    </extension>
 
 </plugin>

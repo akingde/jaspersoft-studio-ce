@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet
+      title="Add Fields to the Report">
+   <intro>
+      <description>
+         <b>In this cheatsheet we will see how to add a field to a report by editing the query of its main dataset</b>
+      </description>
+   </intro>
+    <item title="Open a report">
+    	<description>
+    		Open a report with a SQL data adapter into the main data source
+    	</description>
+    </item>
+    <item title="Edit the report query">
+      <description>
+         For this step you need to open the report main query. Click on the report element in the Outline view and from the Properties view hit the button &quot;Edit query, filter and sort options&quot;
+      </description>
+      <action pluginId="com.jaspersoft.studio.doc" class="com.jaspersoft.studio.doc.handlers.OpenQueryHandler" required="false"/>
+   </item>
+   <item title="Edit the query">
+    	<description>
+    		Edit the query and hit the button "Read Fields" to search for new fields related to the query. This button will add all the available fields from the 
+    		provided query
+    	</description>
+    </item>
+    <item title="Edit the fields and confirm">
+    	<description>
+    		Eventually remove or edit a field and hit Ok
+    	</description>
+    </item>
+</cheatsheet>

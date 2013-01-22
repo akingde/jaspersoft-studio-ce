@@ -16,11 +16,14 @@
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IViewSite;
@@ -38,14 +41,35 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 public abstract class ASPropertyWidget {
 	protected IPropertyDescriptor pDescriptor;
 	protected AbstractSection section;
-
+	protected String contextName;
+	
 	public ASPropertyWidget(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		this.pDescriptor = pDescriptor;
 		this.section = section;
 		createComponent(parent);
 		if (getControl() != null)
 			getControl().addFocusListener(focusListener);
+		contextName = null;
 	}
+	
+	protected void enableHelp(){
+		Control control = getControl();
+		if (control != null && contextName != null){
+				control.addListener(SWT.Help, new Listener() {			
+					@Override
+					public void handleEvent(Event event) {
+						performHelp();	
+					}
+				});
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(control, contextName);
+		}
+	}
+	
+	protected void performHelp() {
+		if (contextName != null){
+			PlatformUI.getWorkbench().getHelpSystem().displayHelp(contextName);
+		}
+	};
 
 	public void setReadOnly(boolean readonly) {
 		if (getControl() != null)

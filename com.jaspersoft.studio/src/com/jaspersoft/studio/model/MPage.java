@@ -21,6 +21,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -29,6 +30,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
+import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 
@@ -41,6 +43,12 @@ public class MPage extends APropertyNode implements IGraphicElement, IContainerE
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 
+	private MDataset getDataset(JasperDesign jrDesign) {
+		MDataset mDataset = new MDataset(null, (JRDesignDataset) jrDesign.getMainDataset());
+		mDataset.setJasperConfiguration(getJasperConfiguration());
+		return mDataset;
+	}
+	
 	public void register(ANode n) {
 		if (n.getValue() != null)
 			obj2Node.put(n.getValue(), n);
@@ -132,6 +140,8 @@ public class MPage extends APropertyNode implements IGraphicElement, IContainerE
 		if (id.equals(MGraphicElement.PROPERTY_MAP)) {
 			// to avoid duplication I remove it first
 			return (JRPropertiesMap) jrDesign.getPropertiesMap().cloneProperties();
+		} else if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET)){
+			return getDataset(jrDesign);
 		}
 		return null;
 	}
