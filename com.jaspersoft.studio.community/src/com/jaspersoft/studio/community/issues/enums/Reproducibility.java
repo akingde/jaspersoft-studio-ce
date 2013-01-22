@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.community.issues.enums;
 
+import com.jaspersoft.studio.community.messages.Messages;
+
 /**
  * Enumeration representing the issue reproducibility.
  * 
@@ -22,14 +24,14 @@ package com.jaspersoft.studio.community.issues.enums;
  *
  */
 public enum Reproducibility {
-	Always(10,"Always"),
-	Sometimes(30,"Sometimes"),
-	Random(50,"Random"),
-	NotAttempted(70,"Not Attempted"),
-	UnableToReproduce(90,"Unable to Reproduce"),
-	NotAvailable(100,"N/A");
+	Always(10,Messages.Reproducibility_Always),
+	Sometimes(30,Messages.Reproducibility_Sometimes),
+	Random(50,Messages.Reproducibility_Random),
+	NotAttempted(70,Messages.Reproducibility_NotAttempted),
+	UnableToReproduce(90,Messages.Reproducibility_UnableToReproduce),
+	NotAvailable(100,Messages.Reproducibility_NotAvailable);
 	
-	public static final String FIELD_NAME = "field_bug_reproducibility";
+	public static final String FIELD_NAME = "field_bug_reproducibility"; //$NON-NLS-1$
 	private Integer value;
 	private String text;
 	

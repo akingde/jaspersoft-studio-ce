@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.community.JSSCommunityActivator;
+import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.utils.CommunityUser;
 import com.jaspersoft.studio.utils.UIUtils;
 
@@ -53,11 +54,11 @@ public class NewIssueAuthenticationPage extends WizardPage {
 	 * Create the wizard.
 	 */
 	public NewIssueAuthenticationPage() {
-		super("wizardPage");
+		super("authenticationInfoWizardPage"); //$NON-NLS-1$
 		setImageDescriptor(
-				JSSCommunityActivator.getDefault().getImageDescriptor("resources/images/softwareBug.jpg"));
-		setTitle("Community user authentication");
-		setDescription("Please enter the authentication information to submit the issue");
+				JSSCommunityActivator.getDefault().getImageDescriptor("resources/images/softwareBug.jpg")); //$NON-NLS-1$
+		setTitle(Messages.NewIssueAuthenticationPage_Title);
+		setDescription(Messages.NewIssueAuthenticationPage_Description);
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class NewIssueAuthenticationPage extends WizardPage {
 		
 		Label lblUsername = new Label(container, SWT.NONE);
 		lblUsername.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblUsername.setText("Username");
+		lblUsername.setText(Messages.NewIssueAuthenticationPage_Username);
 		
 		username = new Text(container, SWT.BORDER);
 		username.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -88,7 +89,7 @@ public class NewIssueAuthenticationPage extends WizardPage {
 		
 		Label lblPassword = new Label(container, SWT.NONE);
 		lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblPassword.setText("Password");
+		lblPassword.setText(Messages.NewIssueAuthenticationPage_Password);
 		
 		password = new Text(container, SWT.BORDER | SWT.PASSWORD);
 		password.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -101,7 +102,7 @@ public class NewIssueAuthenticationPage extends WizardPage {
 		
 		btnReuseStoredCredentials = new Button(container, SWT.CHECK);
 		btnReuseStoredCredentials.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-		btnReuseStoredCredentials.setText("Re-use stored credentials");
+		btnReuseStoredCredentials.setText(Messages.NewIssueAuthenticationPage_ReuseCredentialsCheckbox);
 		btnReuseStoredCredentials.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -110,7 +111,7 @@ public class NewIssueAuthenticationPage extends WizardPage {
 					btnStoreCommunityUserCredentials.setSelection(false);
 					communityUserInformation = JSSCommunityActivator.getDefault().getCommunityUserInformation();
 					if(communityUserInformation==null){
-						MessageDialog.openWarning(UIUtils.getShell(), "Community user credentials", "No information regarding a community user were found.\nYou need to enter them in dedicated username and password fields.");
+						MessageDialog.openWarning(UIUtils.getShell(), Messages.NewIssueAuthenticationPage_WarningDialogTitle, Messages.NewIssueAuthenticationPage_WarningDialogMsg);
 						btnReuseStoredCredentials.setSelection(false);
 						btnStoreCommunityUserCredentials.setEnabled(true);
 					}
@@ -133,7 +134,7 @@ public class NewIssueAuthenticationPage extends WizardPage {
 		
 		btnStoreCommunityUserCredentials = new Button(container, SWT.CHECK);
 		btnStoreCommunityUserCredentials.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-		btnStoreCommunityUserCredentials.setText("Store community user information");
+		btnStoreCommunityUserCredentials.setText(Messages.NewIssueAuthenticationPage_StoreUserCredentialsCheckbox);
 		btnStoreCommunityUserCredentials.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {

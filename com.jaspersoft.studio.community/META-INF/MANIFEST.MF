@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Jaspersoft Studio Community Site
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: com.jaspersoft.studio.community;singleton:=true
 Bundle-Version: 1.3.3
 Bundle-Activator: com.jaspersoft.studio.community.JSSCommunityActivator
-Bundle-Vendor: Jaspersoft Corporation
+Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.jaspersoft.studio.server;bundle-version="1.3.3",

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.community.issues.enums;
 
+import com.jaspersoft.studio.community.messages.Messages;
+
 /**
  * Enumeration representing the issue severity.
  * 
@@ -22,16 +24,16 @@ package com.jaspersoft.studio.community.issues.enums;
  *
  */
 public enum Severity {
-	Feature(10,"Feature"),
-	Trivial(20,"Trivial"),
-	Text(30,"Text"),
-	Tweak(40,"Tweak"),
-	Minor(50,"Minor"),
-	Major(60,"Major"),
-	Critical(70,"Critical"),
-	Block(80,"Block");
+	Feature(10,Messages.Severity_Feature),
+	Trivial(20,Messages.Severity_Trivial),
+	Text(30,Messages.Severity_Text),
+	Tweak(40,Messages.Severity_Tweak),
+	Minor(50,Messages.Severity_Minor),
+	Major(60,Messages.Severity_Major),
+	Critical(70,Messages.Severity_Critical),
+	Block(80,Messages.Severity_Block);
 	
-	public static final String FIELD_NAME = "field_bug_severity";
+	public static final String FIELD_NAME = "field_bug_severity"; //$NON-NLS-1$
 	private Integer value;
 	private String text;
 	

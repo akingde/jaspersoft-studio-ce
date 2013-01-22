@@ -25,6 +25,7 @@ import org.eclipse.wb.internal.core.utils.platform.PlatformInfo;
 import org.eclipse.wb.internal.core.utils.platform.PluginUtilities;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.zip.ZipEntry;
 import com.jaspersoft.studio.utils.BrandingInfo;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -41,10 +42,10 @@ import com.jaspersoft.studio.utils.UIUtils;
  */
 public class CommunityAPIUtils {
 	// Constants
-	private static final String CR = "\n";
+	private static final String CR = "\n"; //$NON-NLS-1$
 	private static final String JSS_PREFS_RELATIVE_LOCATION = 
-			".metadata/.plugins/org.eclipse.core.runtime/.settings/com.jaspersoft.studio.prefs";
-	private static final String JSS_LOG_RELATIVE_LOCATION = ".metadata/.log";
+			".metadata/.plugins/org.eclipse.core.runtime/.settings/com.jaspersoft.studio.prefs"; //$NON-NLS-1$
+	private static final String JSS_LOG_RELATIVE_LOCATION = ".metadata/.log"; //$NON-NLS-1$
 	
 	/**
 	 * Creates a ZIP file using the specified zip entries.
@@ -54,12 +55,12 @@ public class CommunityAPIUtils {
 	 * @throws CommunityAPIException
 	 */
 	public static File createZipFile(List<ZipEntry> zipEntries) throws CommunityAPIException {
-		String tmpDirectory = System.getProperty("java.io.tmpdir");
+		String tmpDirectory = System.getProperty("java.io.tmpdir"); //$NON-NLS-1$
 		String zipFileLocation = tmpDirectory;
-		if(!(tmpDirectory.endsWith("/") || tmpDirectory.endsWith("\\"))){
-			zipFileLocation += System.getProperty("file.separator");
+		if(!(tmpDirectory.endsWith("/") || tmpDirectory.endsWith("\\"))){ //$NON-NLS-1$ //$NON-NLS-2$
+			zipFileLocation += System.getProperty("file.separator"); //$NON-NLS-1$
 		}
-		zipFileLocation += "issueDetails.zip";
+		zipFileLocation += "issueDetails.zip"; //$NON-NLS-1$
 		
 		try {
 			// create byte buffer
@@ -85,7 +86,7 @@ public class CommunityAPIUtils {
 			//close the ZipOutputStream
 			zout.close();
 		} catch (IOException e) {
-			throw new CommunityAPIException("Unable to create the zip file that should be attached to the issue.", e);
+			throw new CommunityAPIException(Messages.CommunityAPIUtils_ZipCreationError, e);
 		}
 		return new File(zipFileLocation);
 	}
@@ -94,14 +95,14 @@ public class CommunityAPIUtils {
 	 * @return the location of Jaspersoft Studio preferences file
 	 */
 	public static String getJaspersoftStudioPrefsLocation(){
-		return BundleCommonUtils.getWorkspaceLocation() + "/" + JSS_PREFS_RELATIVE_LOCATION;
+		return BundleCommonUtils.getWorkspaceLocation() + "/" + JSS_PREFS_RELATIVE_LOCATION; //$NON-NLS-1$
 	}
 	
 	/**
 	 * @return the location of Jaspersoft Studio log file
 	 */
 	public static String getJaspersoftStudioLogFileLocation(){
-		return BundleCommonUtils.getWorkspaceLocation() + "/" + JSS_LOG_RELATIVE_LOCATION;
+		return BundleCommonUtils.getWorkspaceLocation() + "/" + JSS_LOG_RELATIVE_LOCATION; //$NON-NLS-1$
 	}
 	
 	
@@ -110,42 +111,42 @@ public class CommunityAPIUtils {
 	 */
 	public static String getHardwareSoftwareInfo() {
 		BrandingInfo currBranding = JaspersoftStudioPlugin.getInstance().getBrandingInformation();
-		String c = "";
-		c += "Product Name: " + currBranding.getProductName() + CR;
-		c += "Product Version: " + currBranding.getProductVersion() + CR;
-		c += "Installation Path: " + getInstallationPath(currBranding.getProductMainBundleID()) + CR;
-		c += "Eclipse Version: " + PlatformInfo.getEclipseVersion().toString()
+		String c = ""; //$NON-NLS-1$
+		c += "Product Name: " + currBranding.getProductName() + CR; //$NON-NLS-1$
+		c += "Product Version: " + currBranding.getProductVersion() + CR; //$NON-NLS-1$
+		c += "Installation Path: " + getInstallationPath(currBranding.getProductMainBundleID()) + CR; //$NON-NLS-1$
+		c += "Eclipse Version: " + PlatformInfo.getEclipseVersion().toString() //$NON-NLS-1$
 				+ CR;
-		c += "Eclipse Build Name: " + PlatformInfo.getEclipseBuildName() + CR;
-		c += "Eclipse Build ID: " + PlatformInfo.getEclipseBuildId() + CR;
-		c += "IDE Name: " + PlatformInfo.getIDEName() + CR;
-		c += "IDE Version: " + PlatformInfo.getIDEVersionString() + CR;
-		c += "IDE NL: " + PlatformInfo.getIDENL() + CR;
-		c += "Eclipse Commands: "
+		c += "Eclipse Build Name: " + PlatformInfo.getEclipseBuildName() + CR; //$NON-NLS-1$
+		c += "Eclipse Build ID: " + PlatformInfo.getEclipseBuildId() + CR; //$NON-NLS-1$
+		c += "IDE Name: " + PlatformInfo.getIDEName() + CR; //$NON-NLS-1$
+		c += "IDE Version: " + PlatformInfo.getIDEVersionString() + CR; //$NON-NLS-1$
+		c += "IDE NL: " + PlatformInfo.getIDENL() + CR; //$NON-NLS-1$
+		c += "Eclipse Commands: " //$NON-NLS-1$
 				+ StringUtils.replaceChars(
-						getSystemProperty("eclipse.commands"), "\n\r", " ")
+						getSystemProperty("eclipse.commands"), "\n\r", " ") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ CR;
-		c += "Eclipse VM: " + getSystemProperty("eclipse.vm") + CR;
-		c += "Eclipse VM Args: " + getSystemProperty("eclipse.vmargs") + CR;
-		c += "OS Name: " + getSystemProperty("os.name") + CR;
-		c += "OS Arch: " + getSystemProperty("os.arch") + CR;
-		c += "OS Version: " + getSystemProperty("os.version") + CR;
+		c += "Eclipse VM: " + getSystemProperty("eclipse.vm") + CR; //$NON-NLS-1$ //$NON-NLS-2$
+		c += "Eclipse VM Args: " + getSystemProperty("eclipse.vmargs") + CR; //$NON-NLS-1$ //$NON-NLS-2$
+		c += "OS Name: " + getSystemProperty("os.name") + CR; //$NON-NLS-1$ //$NON-NLS-2$
+		c += "OS Arch: " + getSystemProperty("os.arch") + CR; //$NON-NLS-1$ //$NON-NLS-2$
+		c += "OS Version: " + getSystemProperty("os.version") + CR; //$NON-NLS-1$ //$NON-NLS-2$
 		String linuxDescription = getLinuxDescription();
 		if (!StringUtils.isEmpty(linuxDescription)) {
-			c += "Linux Description: " + linuxDescription + CR;
+			c += "Linux Description: " + linuxDescription + CR; //$NON-NLS-1$
 		}
 		String m_mozillaResult = tryCreateMozilla();
 		if (!StringUtils.isEmpty(m_mozillaResult)) {
-			c += "Browser Creation Result: " + m_mozillaResult + CR;
+			c += "Browser Creation Result: " + m_mozillaResult + CR; //$NON-NLS-1$
 		}
 		Runtime runtime = Runtime.getRuntime();
-		c += "Available Processors: " + runtime.availableProcessors() + CR;
-		c += "Memory Max: " + runtime.maxMemory() + CR;
-		c += "Memory Total: " + runtime.totalMemory() + CR;
-		c += "Memory Free: " + runtime.freeMemory() + CR;
-		c += "Java Vendor: " + getSystemProperty("java.vendor") + CR;
-		c += "Java Version: " + getSystemProperty("java.version") + CR;
-		c += "Java Library Path: " + getSystemProperty("java.library.path") + CR;
+		c += "Available Processors: " + runtime.availableProcessors() + CR; //$NON-NLS-1$
+		c += "Memory Max: " + runtime.maxMemory() + CR; //$NON-NLS-1$
+		c += "Memory Total: " + runtime.totalMemory() + CR; //$NON-NLS-1$
+		c += "Memory Free: " + runtime.freeMemory() + CR; //$NON-NLS-1$
+		c += "Java Vendor: " + getSystemProperty("java.vendor") + CR; //$NON-NLS-1$ //$NON-NLS-2$
+		c += "Java Version: " + getSystemProperty("java.version") + CR; //$NON-NLS-1$ //$NON-NLS-2$
+		c += "Java Library Path: " + getSystemProperty("java.library.path") + CR; //$NON-NLS-1$ //$NON-NLS-2$
 		return c;
 	}
 
@@ -154,7 +155,7 @@ public class CommunityAPIUtils {
 	 */
 	private static String getInstallationPath(String pluginID) {
 		URL installUrl = PluginUtilities.getInstallUrl(pluginID);
-		String installationPath = "Unknown";
+		String installationPath = "Unknown"; //$NON-NLS-1$
 		try {
 			if (installUrl != null) {
 				installationPath = FileLocator.toFileURL(installUrl).getPath();
@@ -177,7 +178,7 @@ public class CommunityAPIUtils {
 	 */
 	private static String getSystemProperty(String prop) {
 		String propValue = System.getProperty(prop);
-		return propValue == null ? "" : propValue;
+		return propValue == null ? "" : propValue; //$NON-NLS-1$
 	}
 
 	/**
@@ -186,11 +187,11 @@ public class CommunityAPIUtils {
 	private static String getLinuxDescription() {
 		StringBuilder result = new StringBuilder();
 		if (EnvironmentUtils.IS_LINUX) {
-			String[] files = new String[] { "/etc/lsb-release",
-					"/etc/lsb_release", "/etc/system-release",
-					"/etc/fedora-release", "/etc/SuSE-release",
-					"/etc/redhat-release", "/etc/release",
-					"/proc/version_signature", "/proc/version", "/etc/issue", };
+			String[] files = new String[] { "/etc/lsb-release", //$NON-NLS-1$
+					"/etc/lsb_release", "/etc/system-release", //$NON-NLS-1$ //$NON-NLS-2$
+					"/etc/fedora-release", "/etc/SuSE-release", //$NON-NLS-1$ //$NON-NLS-2$
+					"/etc/redhat-release", "/etc/release", //$NON-NLS-1$ //$NON-NLS-2$
+					"/proc/version_signature", "/proc/version", "/etc/issue", }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			for (int i = 0; i < files.length; i++) {
 				File file = new File(files[i]);
 				if (file.exists() && file.canRead()) {
@@ -198,7 +199,7 @@ public class CommunityAPIUtils {
 						String version = IOUtils2.readString(file).trim();
 						if (version != null && result.indexOf(version) == -1) {
 							result.append(version);
-							result.append("\n");
+							result.append("\n"); //$NON-NLS-1$
 						}
 					} catch (Throwable e) {
 						// just ignore
@@ -240,6 +241,6 @@ public class CommunityAPIUtils {
 				Device.DEBUG = oldDebug;
 			}
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 }

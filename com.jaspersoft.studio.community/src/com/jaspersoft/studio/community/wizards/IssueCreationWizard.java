@@ -28,6 +28,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.community.JSSCommunityActivator;
 import com.jaspersoft.studio.community.RESTCommunityHelper;
+import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.requests.IssueRequest;
 import com.jaspersoft.studio.community.utils.CommunityAPIException;
 import com.jaspersoft.studio.community.utils.CommunityAPIUtils;
@@ -49,7 +50,7 @@ public class IssueCreationWizard extends Wizard {
 	private boolean isPublished;
 
 	public IssueCreationWizard() {
-		setWindowTitle("Submit a new issue to the Community Tracker");
+		setWindowTitle(Messages.IssueCreationWizard_Title);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class IssueCreationWizard extends Wizard {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException,
 						InterruptedException {
-					monitor.beginTask("Publishing the new issue to the tracker", IProgressMonitor.UNKNOWN);
+					monitor.beginTask(Messages.IssueCreationWizard_TaskName, IProgressMonitor.UNKNOWN);
 					isPublished = publishNewIssue(issueRequest,zipEntries,authInfo);
 					monitor.done();
 					

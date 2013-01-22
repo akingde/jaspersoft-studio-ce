@@ -34,14 +34,14 @@ public class IssueBody {
 	
 	public String asJsonString(){
 		StringBuffer sb = new StringBuffer();
-		sb.append("\"body\":{");
-		sb.append("\"und\":[");
-		sb.append("{");
-		sb.append("\"value\": \"").append(bodyContent).append("\",");
-		sb.append("\"format\": \"plain_text_html\"");
-		sb.append("}");
-		sb.append("]");
-		sb.append("}");
+		sb.append("\"body\":{"); //$NON-NLS-1$
+		sb.append("\"und\":["); //$NON-NLS-1$
+		sb.append("{"); //$NON-NLS-1$
+		sb.append("\"value\": \"").append(bodyContent).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
+		sb.append("\"format\": \"plain_text_html\""); //$NON-NLS-1$
+		sb.append("}"); //$NON-NLS-1$
+		sb.append("]"); //$NON-NLS-1$
+		sb.append("}"); //$NON-NLS-1$
 		return sb.toString();
 	}
 }

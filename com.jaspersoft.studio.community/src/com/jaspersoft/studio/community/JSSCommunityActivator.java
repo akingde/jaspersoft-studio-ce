@@ -22,6 +22,7 @@ import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.osgi.framework.BundleContext;
 
+import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.utils.CommunityUser;
 import com.jaspersoft.studio.utils.UIUtils;
 
@@ -90,11 +91,11 @@ public class JSSCommunityActivator extends AbstractJRUIPlugin {
 		ISecurePreferences secPrefs = SecurePreferencesFactory.getDefault();
 		ISecurePreferences node = secPrefs.node(CommunityConstants.SECURE_PREFSTORE_PATHNAME);
 		try {
-			node.put("username", user.getUsername(), true);
-			node.put("password", user.getPassword(), true);
+			node.put("username", user.getUsername(), true); //$NON-NLS-1$
+			node.put("password", user.getPassword(), true); //$NON-NLS-1$
 		}
 		catch (StorageException ex){
-			logError("Unable to store the Jaspersoft Community credentials on the secure preferences store.", ex);
+			logError(Messages.JSSCommunityActivator_CredentialsStoreError, ex);
 			UIUtils.showError(ex);
 		}
 	}
@@ -108,14 +109,14 @@ public class JSSCommunityActivator extends AbstractJRUIPlugin {
          if (preferences.nodeExists(CommunityConstants.SECURE_PREFSTORE_PATHNAME)) {
              ISecurePreferences node = preferences.node(CommunityConstants.SECURE_PREFSTORE_PATHNAME);
              try {
-                 String username = node.get("username", "n/a");
-                 String password = node.get("password", "n/a");
-                 if(username.equals("n/a") || password.equals("n/a")){
+                 String username = node.get("username", "n/a"); //$NON-NLS-1$ //$NON-NLS-2$
+                 String password = node.get("password", "n/a"); //$NON-NLS-1$ //$NON-NLS-2$
+                 if(username.equals("n/a") || password.equals("n/a")){ //$NON-NLS-1$ //$NON-NLS-2$
                 	 return null;
                  }
                  return new CommunityUser(username,password);
              } catch (StorageException ex) {
-            	 logError("A problem occurred while trying to get the stored community user information.", ex);
+            	 logError(Messages.JSSCommunityActivator_CredentialsRecoveringError, ex);
             	 UIUtils.showError(ex);	 
              }
          }

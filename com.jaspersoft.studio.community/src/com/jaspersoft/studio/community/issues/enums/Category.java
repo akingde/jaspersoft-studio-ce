@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.community.issues.enums;
 
+import com.jaspersoft.studio.community.messages.Messages;
+
 /**
  * Enumeration representing the issue category.
  * 
@@ -22,14 +24,14 @@ package com.jaspersoft.studio.community.issues.enums;
  *
  */
 public enum Category {
-	BugReport("bug","Bug report"),
-	Task("task","Task"),
-	FeatureRequest("feature","Feature request"),
-	Enhancement("enhancement", "Enhancement request"),
-	General("general","General"),
-	Patch("patch","Patch");
+	BugReport("bug",Messages.Category_BugReport), //$NON-NLS-1$
+	Task("task",Messages.Category_Task), //$NON-NLS-1$
+	FeatureRequest("feature",Messages.Category_FeatureRequest), //$NON-NLS-1$
+	Enhancement("enhancement", Messages.Category_EnhancementRequest), //$NON-NLS-1$
+	General("general",Messages.Category_General), //$NON-NLS-1$
+	Patch("patch",Messages.Category_Patch); //$NON-NLS-1$
 	
-	public static final String FIELD_NAME = "field_bug_category";
+	public static final String FIELD_NAME = "field_bug_category"; //$NON-NLS-1$
 	private String value;
 	private String text;
 	

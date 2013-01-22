@@ -26,7 +26,7 @@ import com.jaspersoft.studio.community.issues.IssueField;
  */
 public class IssueRequest {
 	
-	private static final String FIELD_SEPARATOR = ","; 
+	private static final String FIELD_SEPARATOR = ",";  //$NON-NLS-1$
 
 	private String nodeTitle;
 	private String nodeStatus;
@@ -52,12 +52,12 @@ public class IssueRequest {
 		this.nodeTitle = title;
 		this.nodeBody = new IssueBody(text);
 		// default values for some node properties
-		this.nodeStatus = "1";
-		this.nodeComment = "2";
-		this.nodePromote = "0";
-		this.nodeSticky = "0";
-		this.nodeType = "bug";
-		this.nodeLanguage = "und";
+		this.nodeStatus = "1"; //$NON-NLS-1$
+		this.nodeComment = "2"; //$NON-NLS-1$
+		this.nodePromote = "0"; //$NON-NLS-1$
+		this.nodeSticky = "0"; //$NON-NLS-1$
+		this.nodeType = "bug"; //$NON-NLS-1$
+		this.nodeLanguage = "und"; //$NON-NLS-1$
 	}
 
 	public IssueField getCategory() {
@@ -134,15 +134,15 @@ public class IssueRequest {
 
 	public String getAsJSON() {
 		StringBuffer jsonBuf = new StringBuffer();
-		jsonBuf.append("{");
-		jsonBuf.append("\"node\":{");
-		jsonBuf.append("\"title\": \"").append(nodeTitle).append("\",");
-		jsonBuf.append("\"status\": \"").append(nodeStatus).append("\",");
-		jsonBuf.append("\"comment\": \"").append(nodeComment).append("\",");
-		jsonBuf.append("\"promote\": \"").append(nodePromote).append("\",");
-		jsonBuf.append("\"sticky\": \"").append(nodeSticky).append("\",");
-		jsonBuf.append("\"type\": \"").append(nodeType).append("\",");
-		jsonBuf.append("\"language\": \"").append(nodeLanguage).append("\",");
+		jsonBuf.append("{"); //$NON-NLS-1$
+		jsonBuf.append("\"node\":{"); //$NON-NLS-1$
+		jsonBuf.append("\"title\": \"").append(nodeTitle).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
+		jsonBuf.append("\"status\": \"").append(nodeStatus).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
+		jsonBuf.append("\"comment\": \"").append(nodeComment).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
+		jsonBuf.append("\"promote\": \"").append(nodePromote).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
+		jsonBuf.append("\"sticky\": \"").append(nodeSticky).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
+		jsonBuf.append("\"type\": \"").append(nodeType).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
+		jsonBuf.append("\"language\": \"").append(nodeLanguage).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
 		jsonBuf.append(nodeBody.asJsonString()).append(FIELD_SEPARATOR);
 		jsonBuf.append(category.asJsonString()).append(FIELD_SEPARATOR);
 		jsonBuf.append(priority.asJsonString()).append(FIELD_SEPARATOR);
@@ -157,8 +157,8 @@ public class IssueRequest {
 		if(attachments!=null && !attachments.asJsonString().isEmpty()){
 			jsonBuf.append(FIELD_SEPARATOR).append(attachments.asJsonString());
 		}
-		jsonBuf.append("}");
-		jsonBuf.append("}");
+		jsonBuf.append("}"); //$NON-NLS-1$
+		jsonBuf.append("}"); //$NON-NLS-1$
 		return jsonBuf.toString();
 	}
 	

@@ -37,6 +37,7 @@ import com.jaspersoft.studio.community.issues.enums.Reproducibility;
 import com.jaspersoft.studio.community.issues.enums.Resolution;
 import com.jaspersoft.studio.community.issues.enums.Severity;
 import com.jaspersoft.studio.community.issues.enums.Status;
+import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.requests.IssueRequest;
 
 /**
@@ -59,11 +60,11 @@ public class NewIssueDetailsPage extends WizardPage {
 	 * Create the wizard.
 	 */
 	public NewIssueDetailsPage() {
-		super("wizardPage");
+		super("issueDetailsWizardPage"); //$NON-NLS-1$
 		setImageDescriptor(
-				JSSCommunityActivator.getDefault().getImageDescriptor("resources/images/softwareBug.jpg"));
-		setTitle("Community issue details");
-		setDescription("Enter the mandatory issue details");
+				JSSCommunityActivator.getDefault().getImageDescriptor("resources/images/softwareBug.jpg")); //$NON-NLS-1$
+		setTitle(Messages.NewIssueDetailsPage_Title);
+		setDescription(Messages.NewIssueDetailsPage_Description);
 	}
 
 	/**
@@ -81,7 +82,7 @@ public class NewIssueDetailsPage extends WizardPage {
 		
 		Label lblTitle = new Label(container, SWT.NONE);
 		lblTitle.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblTitle.setText("Title");
+		lblTitle.setText(Messages.NewIssueDetailsPage_IssueTitle);
 		
 		title = new Text(container, SWT.BORDER);
 		title.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
@@ -94,7 +95,7 @@ public class NewIssueDetailsPage extends WizardPage {
 		
 		Label lblDescription = new Label(container, SWT.NONE);
 		lblDescription.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
-		lblDescription.setText("Description");
+		lblDescription.setText(Messages.NewIssueDetailsPage_IssueDescription);
 		
 		description = new Text(container, SWT.BORDER | SWT.MULTI);
 		GridData gd_description = new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1);
@@ -109,7 +110,7 @@ public class NewIssueDetailsPage extends WizardPage {
 		
 		Label lblCategory = new Label(container, SWT.NONE);
 		lblCategory.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblCategory.setText("Category");
+		lblCategory.setText(Messages.NewIssueDetailsPage_IssueCategory);
 		category = new Combo(container, SWT.READ_ONLY);
 		category.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		category.addSelectionListener(new PageCompletionChecker());
@@ -121,7 +122,7 @@ public class NewIssueDetailsPage extends WizardPage {
 		
 		Label lblPriority = new Label(container, SWT.NONE);
 		lblPriority.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblPriority.setText("Priority");
+		lblPriority.setText(Messages.NewIssueDetailsPage_IssuePriority);
 		priority = new Combo(container, SWT.READ_ONLY);
 		priority.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		priority.addSelectionListener(new PageCompletionChecker());
@@ -133,7 +134,7 @@ public class NewIssueDetailsPage extends WizardPage {
 		
 		Label lblSeverity = new Label(container, SWT.NONE);
 		lblSeverity.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblSeverity.setText("Severity");
+		lblSeverity.setText(Messages.NewIssueDetailsPage_IssueSeverity);
 		severity = new Combo(container, SWT.READ_ONLY);
 		severity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		severity.addSelectionListener(new PageCompletionChecker());
@@ -145,7 +146,7 @@ public class NewIssueDetailsPage extends WizardPage {
 		
 		Label lblReproducibility = new Label(container, SWT.NONE);
 		lblReproducibility.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblReproducibility.setText("Reproducibility");
+		lblReproducibility.setText(Messages.NewIssueDetailsPage_IssueReproducibility);
 		reproducibility = new Combo(container, SWT.READ_ONLY);
 		reproducibility.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		reproducibility.addSelectionListener(new PageCompletionChecker());
@@ -157,7 +158,7 @@ public class NewIssueDetailsPage extends WizardPage {
 		
 		Label lblResolution = new Label(container, SWT.NONE);
 		lblResolution.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblResolution.setText("Resolution");
+		lblResolution.setText(Messages.NewIssueDetailsPage_IssueResolution);
 		resolution = new Combo(container, SWT.READ_ONLY);
 		resolution.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		resolution.add(Resolution.Open.getText());
@@ -166,7 +167,7 @@ public class NewIssueDetailsPage extends WizardPage {
 		
 		Label lblStatus = new Label(container, SWT.NONE);
 		lblStatus.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblStatus.setText("Status");
+		lblStatus.setText(Messages.NewIssueDetailsPage_IssueStatus);
 		status = new Combo(container, SWT.READ_ONLY);
 		status.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		status.add(Status.New.getText());
@@ -187,10 +188,10 @@ public class NewIssueDetailsPage extends WizardPage {
 		issue.setReproducibility(new IssueField(Reproducibility.FIELD_NAME,(String)reproducibility.getData(reproducibility.getText())));
 		issue.setResolution(new IssueField(Resolution.FIELD_NAME,(String)resolution.getData(resolution.getText())));
 		issue.setStatus(new IssueField(Status.FIELD_NAME,(String)status.getData(status.getText())));
-		issue.setProject(new IssueField("field_bug_project", String.valueOf(CommunityConstants.JSSPROJECT_COMMUNITY_ID)){
+		issue.setProject(new IssueField("field_bug_project", String.valueOf(CommunityConstants.JSSPROJECT_COMMUNITY_ID)){ //$NON-NLS-1$
 			@Override
 			protected String getValueAttributeName() {
-				return "target_id";
+				return "target_id"; //$NON-NLS-1$
 			}
 		});
 		

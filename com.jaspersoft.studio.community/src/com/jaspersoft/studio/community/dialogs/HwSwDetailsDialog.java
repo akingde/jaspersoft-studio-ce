@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.utils.CommunityAPIUtils;
 
 /**
@@ -53,7 +54,7 @@ public class HwSwDetailsDialog extends Dialog {
 	 */
 	public HwSwDetailsDialog(Shell parent, int style) {
 		super(parent, style);
-		setText("Hardware and software details");
+		setText(Messages.HwSwDetailsDialog_Title);
 	}
 
 	/**

@@ -33,9 +33,9 @@ public class FileUploadRequest {
 
 	public String getAsJSON(){
 		StringBuffer jsonBuf = new StringBuffer();
-		jsonBuf.append("{");
-		jsonBuf.append("\"file\": \"").append(new String(encodedFileData)).append("\",");
-		jsonBuf.append("\"filename\": \"").append(filename).append("\" }");
+		jsonBuf.append("{"); //$NON-NLS-1$
+		jsonBuf.append("\"file\": \"").append(new String(encodedFileData)).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
+		jsonBuf.append("\"filename\": \"").append(filename).append("\" }"); //$NON-NLS-1$ //$NON-NLS-2$
 		return jsonBuf.toString();
 	}
 }

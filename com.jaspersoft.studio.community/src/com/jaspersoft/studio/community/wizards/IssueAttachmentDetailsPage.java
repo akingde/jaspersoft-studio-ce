@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.List;
 
 import com.jaspersoft.studio.community.JSSCommunityActivator;
 import com.jaspersoft.studio.community.dialogs.HwSwDetailsDialog;
+import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.utils.CommunityAPIUtils;
 import com.jaspersoft.studio.community.zip.ZipEntry;
 import com.jaspersoft.studio.community.zip.ZipEntryType;
@@ -67,11 +68,11 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 	 * Create the wizard.
 	 */
 	public IssueAttachmentDetailsPage() {
-		super("wizardPage");
+		super("issueAttachmentDetailsWizardPage"); //$NON-NLS-1$
 		setImageDescriptor(
-				JSSCommunityActivator.getDefault().getImageDescriptor("resources/images/softwareBug.jpg"));
-		setTitle("Issue details inclusion");
-		setDescription("Select the information to include in the final issue reported");
+				JSSCommunityActivator.getDefault().getImageDescriptor("resources/images/softwareBug.jpg")); //$NON-NLS-1$
+		setTitle(Messages.IssueAttachmentDetailsPage_Title);
+		setDescription(Messages.IssueAttachmentDetailsPage_Description);
 	}
 
 	/**
@@ -96,11 +97,11 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 			}
 		});
 		btnLogFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		btnLogFile.setText("Log file (ex. JSS or Eclipse log)");
+		btnLogFile.setText(Messages.IssueAttachmentDetailsPage_LogFileCheckbox);
 		
 		// Hardware and Software summary information
 		btnSoftwareAndHardware = new Button(container, SWT.CHECK);
-		btnSoftwareAndHardware.setText("Software and Hardware summary");
+		btnSoftwareAndHardware.setText(Messages.IssueAttachmentDetailsPage_SwAndHwSummaryCheckbox);
 		btnSoftwareAndHardware.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -108,7 +109,7 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 			}
 		});
 		final Link viewHwSwSummary = new Link(container, SWT.NONE);
-		viewHwSwSummary.setText("<a>view...</a>");
+		viewHwSwSummary.setText(Messages.IssueAttachmentDetailsPage_ViewLink);
 		final HwSwDetailsDialog hwSwDialog = new HwSwDetailsDialog(getShell(),SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM);
 		viewHwSwSummary.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -135,9 +136,9 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 				refreshZipEntriesList();
 			}
 		});
-		btnAttachments.setText("Attachments (screenshots, JRXMLs, etc.)");
+		btnAttachments.setText(Messages.IssueAttachmentDetailsPage_AttachmentsCheckbox);
 		addAttachments = new Link(container, SWT.NONE);
-		addAttachments.setText("<a>add...</a>");
+		addAttachments.setText(Messages.IssueAttachmentDetailsPage_AddLink);
 		addAttachments.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -153,7 +154,7 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 		});
 		
 		btnJaspersoftStudioPreferences = new Button(container, SWT.CHECK);
-		btnJaspersoftStudioPreferences.setText("Jaspersoft Studio preferences");
+		btnJaspersoftStudioPreferences.setText(Messages.IssueAttachmentDetailsPage_JSSPreferencesCheckbox);
 		btnJaspersoftStudioPreferences.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,false,2,1));
 		btnJaspersoftStudioPreferences.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -164,7 +165,7 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 		
 		// Final zip file content
 		Group groupZipContent = new Group(container, SWT.NONE);
-		groupZipContent.setText("Contents listing for the final attached zip file");
+		groupZipContent.setText(Messages.IssueAttachmentDetailsPage_ZipContentsGroup);
 		groupZipContent.setLayout(new FillLayout(SWT.HORIZONTAL));
 		GridData gd_groupZipContent = new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1);
 		gd_groupZipContent.widthHint = 579;
@@ -180,7 +181,7 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 		if(btnJaspersoftStudioPreferences.getSelection()){
 			// Add JSS preferences file
 			zipEntries.add(
-					new ZipEntry("jss_preferences_file.prefs",CommunityAPIUtils.getJaspersoftStudioPrefsLocation(),ZipEntryType.PREFS));
+					new ZipEntry("jss_preferences_file.prefs",CommunityAPIUtils.getJaspersoftStudioPrefsLocation(),ZipEntryType.PREFS)); //$NON-NLS-1$
 		}
 		else {
 			// Remove preference file if any
@@ -195,7 +196,7 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 	private void hwSwInfoSelectionPerformed() {
 		if(hwSwInfoFile==null){
 			try {
-				hwSwInfoFile = File.createTempFile("hwSwInfo", ".txt");
+				hwSwInfoFile = File.createTempFile("hwSwInfo", ".txt"); //$NON-NLS-1$ //$NON-NLS-2$
 				FileWriter fw = new FileWriter(hwSwInfoFile);
 				fw.write(CommunityAPIUtils.getHardwareSoftwareInfo());
 				fw.close();
@@ -221,7 +222,7 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 		if(btnLogFile.getSelection()){
 			// Add log file to final zip attachment
 			zipEntries.add(
-					new ZipEntry("jss_logfile.txt",CommunityAPIUtils.getJaspersoftStudioLogFileLocation(),ZipEntryType.LOG));
+					new ZipEntry("jss_logfile.txt",CommunityAPIUtils.getJaspersoftStudioLogFileLocation(),ZipEntryType.LOG)); //$NON-NLS-1$
 		}
 		else {
 			// Remove log file if any

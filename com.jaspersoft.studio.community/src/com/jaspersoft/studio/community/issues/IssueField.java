@@ -69,16 +69,16 @@ public class IssueField {
 	
 	public String asJsonString(){
 		StringBuffer sb = new StringBuffer();
-		sb.append("\"").append(name).append("\":{");
-		sb.append("\"und\":");
+		sb.append("\"").append(name).append("\":{"); //$NON-NLS-1$ //$NON-NLS-2$
+		sb.append("\"und\":"); //$NON-NLS-1$
 		if(isArray()){
-			sb.append("[");
+			sb.append("["); //$NON-NLS-1$
 		}
 		appendAllValues(sb);
 		if(isArray()){
-			sb.append("]");
+			sb.append("]"); //$NON-NLS-1$
 		}
-		sb.append("}");
+		sb.append("}"); //$NON-NLS-1$
 		return sb.toString();
 	}
 	
@@ -94,15 +94,15 @@ public class IssueField {
 		int valuesNum = values.size();
 		int i = 0;
 		while(i < valuesNum){
-			sb.append("{\"").append(getValueAttributeName()).append("\": \"").append(values.get(i)).append("\"}");			
+			sb.append("{\"").append(getValueAttributeName()).append("\": \"").append(values.get(i)).append("\"}");			 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if(i!=valuesNum-1){
-				sb.append(",");
+				sb.append(","); //$NON-NLS-1$
 			}
 			i++;
 		}
 	}
 	
 	protected String getValueAttributeName(){
-		return "value";
+		return "value"; //$NON-NLS-1$
 	}
 }

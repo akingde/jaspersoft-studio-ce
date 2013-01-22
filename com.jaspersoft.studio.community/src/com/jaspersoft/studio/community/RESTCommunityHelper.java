@@ -39,6 +39,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.community.issues.IssueField;
+import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.requests.FileUploadRequest;
 import com.jaspersoft.studio.community.requests.IssueRequest;
 import com.jaspersoft.studio.community.utils.CommunityAPIException;
@@ -78,14 +79,14 @@ public class RESTCommunityHelper {
 			PostMethod loginPost = new PostMethod(CommunityConstants.LOGIN_URL);
 			loginPost.setRequestEntity(
 					new StringRequestEntity(
-							"{ \"username\": \""+username+"\", \"password\":\""+password+"\" }", 
+							"{ \"username\": \""+username+"\", \"password\":\""+password+"\" }",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 							CommunityConstants.JSON_CONTENT_TYPE,CommunityConstants.REQUEST_CHARSET));
 			client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
 			int httpRetCode = client.executeMethod(loginPost);
 			String responseBodyAsString = loginPost.getResponseBodyAsString();
 			
 			if(log.isDebugEnabled()){
-				displayCookiesAndResponseBody("====== LOGIN ======",client,loginPost);
+				displayCookiesAndResponseBody("====== LOGIN ======",client,loginPost); //$NON-NLS-1$
 			}
 			
 			if(HttpStatus.SC_OK == httpRetCode) {
@@ -93,7 +94,7 @@ public class RESTCommunityHelper {
 				Cookie[] cookies = client.getState().getCookies();
 				Cookie authCookie = null;
 				for(Cookie cookie : cookies){
-					if(cookie.getName().startsWith("SESS")){
+					if(cookie.getName().startsWith("SESS")){ //$NON-NLS-1$
 						authCookie = cookie;
 						break;
 					}
@@ -104,7 +105,7 @@ public class RESTCommunityHelper {
 			else if(HttpStatus.SC_UNAUTHORIZED == httpRetCode){
 				releaseConnectionAndClearCookies(loginPost, client);
 				// Unauthorized... wrong username or password
-				CommunityAPIException unauthorizedEx = new CommunityAPIException("The specified username or password are not valid.");
+				CommunityAPIException unauthorizedEx = new CommunityAPIException(Messages.RESTCommunityHelper_WrongUsernamePasswordError);
 				unauthorizedEx.setHttpStatusCode(httpRetCode);
 				unauthorizedEx.setResponseBodyAsString(responseBodyAsString);
 				throw unauthorizedEx;
@@ -112,20 +113,20 @@ public class RESTCommunityHelper {
 			else {
 				releaseConnectionAndClearCookies(loginPost, client);
 				// Some other problem occurred
-				CommunityAPIException generalEx = new CommunityAPIException("Unable to retrieve authentication information.");
+				CommunityAPIException generalEx = new CommunityAPIException(Messages.RESTCommunityHelper_AuthInfoProblemsError);
 				generalEx.setHttpStatusCode(httpRetCode);
 				generalEx.setResponseBodyAsString(responseBodyAsString);
 				throw generalEx;				
 			}
 		} catch (UnsupportedEncodingException e) {
 			JSSCommunityActivator.getDefault().logError(
-					"The supported encoding for POST method was not valid.", e);
+					Messages.RESTCommunityHelper_EncodingNotValidError, e);
 		} catch (HttpException e) {
 			JSSCommunityActivator.getDefault().logError(
-					"Problems occurred while executing the POST method.", e);
+					Messages.RESTCommunityHelper_PostMethodError, e);
 		} catch (IOException e) {
 			JSSCommunityActivator.getDefault().logError(
-					"A generic I/O error occurred while attempting the POST request.",e);
+					Messages.RESTCommunityHelper_PostMethodIOError,e);
 		}
 		
 		return null;
@@ -158,12 +159,12 @@ public class RESTCommunityHelper {
 			PostMethod fileupload = new PostMethod(CommunityConstants.FILE_UPLOAD_URL);
 			fileupload.setRequestEntity(new StringRequestEntity(
 					uploadReq.getAsJSON(),CommunityConstants.JSON_CONTENT_TYPE,CommunityConstants.REQUEST_CHARSET));
-			fileupload.setRequestHeader(new Header("Cookie", authCookie.toExternalForm()));
+			fileupload.setRequestHeader(new Header("Cookie", authCookie.toExternalForm())); //$NON-NLS-1$
 			
 			int httpRetCode = client.executeMethod(fileupload);
 			String responseBodyAsString = fileupload.getResponseBodyAsString();
 			if(log.isDebugEnabled()){
-				displayCookiesAndResponseBody("====== FILE UPLOAD ======",client,fileupload);
+				displayCookiesAndResponseBody("====== FILE UPLOAD ======",client,fileupload); //$NON-NLS-1$
 			}
 
 			if(HttpStatus.SC_OK == httpRetCode){
@@ -172,13 +173,13 @@ public class RESTCommunityHelper {
 				mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 				mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 				JsonNode jsonRoot = mapper.readTree(responseBodyAsString);
-				String fid = jsonRoot.get("fid").asText();
-				String uri = jsonRoot.get("uri").asText();
+				String fid = jsonRoot.get("fid").asText(); //$NON-NLS-1$
+				String uri = jsonRoot.get("uri").asText(); //$NON-NLS-1$
 				releaseConnectionAndClearCookies(fileupload, client);
 				return fid;
 			}
 			else {
-				CommunityAPIException ex = new CommunityAPIException("Unable to perform file upload.");
+				CommunityAPIException ex = new CommunityAPIException(Messages.RESTCommunityHelper_FileUploadError);
 				ex.setHttpStatusCode(httpRetCode);
 				ex.setResponseBodyAsString(responseBodyAsString);
 				throw ex;
@@ -186,16 +187,16 @@ public class RESTCommunityHelper {
 			
 		} catch (FileNotFoundException e) {
 			JSSCommunityActivator.getDefault().logError(
-					"Unable to find the specified file to send.", e);
+					Messages.RESTCommunityHelper_FileNotFoundError, e);
 		} catch (UnsupportedEncodingException e) {
 			JSSCommunityActivator.getDefault().logError(
-					"The supported encoding for POST method was not valid.", e);
+					Messages.RESTCommunityHelper_EncodingNotValidError, e);
 		} catch (HttpException e) {
 			JSSCommunityActivator.getDefault().logError(
-					"Problems occurred while executing the POST method.", e);
+					Messages.RESTCommunityHelper_PostMethodError, e);
 		} catch (IOException e) {
 			JSSCommunityActivator.getDefault().logError(
-					"A generic I/O error occurred while attempting the POST request.",e);
+					Messages.RESTCommunityHelper_PostMethodIOError,e);
 		}
 
 		return null;
@@ -218,7 +219,7 @@ public class RESTCommunityHelper {
 				IssueField attachmentsField = new IssueField(){
 					@Override
 					protected String getValueAttributeName() {
-						return "fid";
+						return "fid"; //$NON-NLS-1$
 					}
 
 					@Override
@@ -226,7 +227,7 @@ public class RESTCommunityHelper {
 						return true;
 					}
 				};
-				attachmentsField.setName("field_bug_attachments");
+				attachmentsField.setName("field_bug_attachments"); //$NON-NLS-1$
 				attachmentsField.setValues(attachmentsIds);
 				newIssue.setAttachments(attachmentsField);
 			}
@@ -234,29 +235,29 @@ public class RESTCommunityHelper {
 			PostMethod issueCreation = new PostMethod(CommunityConstants.ISSUE_CREATION_URL);
 			issueCreation.setRequestEntity(new StringRequestEntity(
 					newIssue.getAsJSON(), CommunityConstants.JSON_CONTENT_TYPE, CommunityConstants.REQUEST_CHARSET));
-			issueCreation.setRequestHeader(new Header("Cookie", authCookie.toExternalForm()));
+			issueCreation.setRequestHeader(new Header("Cookie", authCookie.toExternalForm())); //$NON-NLS-1$
 			int httpRetCode = client.executeMethod(issueCreation);
 			String responseBodyAsString = issueCreation.getResponseBodyAsString();
 			if(log.isDebugEnabled()){
-				displayCookiesAndResponseBody("====== ISSUE CREATION ======",client,issueCreation);
+				displayCookiesAndResponseBody("====== ISSUE CREATION ======",client,issueCreation); //$NON-NLS-1$
 			}
 			releaseConnectionAndClearCookies(issueCreation, client);
 			
 			if(HttpStatus.SC_OK != httpRetCode){
-				CommunityAPIException ex = new CommunityAPIException("Unable to perform the issue creation.");
+				CommunityAPIException ex = new CommunityAPIException(Messages.RESTCommunityHelper_IssueCreationError);
 				ex.setHttpStatusCode(httpRetCode);
 				ex.setResponseBodyAsString(responseBodyAsString);
 				throw ex;
 			}
 		} catch (UnsupportedEncodingException e) {
 			JSSCommunityActivator.getDefault().logError(
-					"The supported encoding for POST method was not valid.", e);
+					Messages.RESTCommunityHelper_EncodingNotValidError, e);
 		} catch (HttpException e) {
 			JSSCommunityActivator.getDefault().logError(
-					"Problems occurred while executing the POST method.", e);
+					Messages.RESTCommunityHelper_PostMethodError, e);
 		} catch (IOException e) {
 			JSSCommunityActivator.getDefault().logError(
-					"A generic I/O error occurred while attempting the POST request.",e);
+					Messages.RESTCommunityHelper_PostMethodIOError,e);
 		}
 	}
 
@@ -270,13 +271,13 @@ public class RESTCommunityHelper {
 		// Get all the cookies
         Cookie[] cookies = client.getState().getCookies();
         // Display the cookies
-        log.debug("Actual cookies: ");
+        log.debug("Actual cookies: "); //$NON-NLS-1$
         for (int i = 0; i < cookies.length; i++) {
-            log.debug(" - " + cookies[i].toExternalForm());
+            log.debug(" - " + cookies[i].toExternalForm()); //$NON-NLS-1$
         }
         
         // Response body
-        log.debug("Response content: ");
+        log.debug("Response content: "); //$NON-NLS-1$
 		log.debug(method.getResponseBodyAsString());
 	}
 	

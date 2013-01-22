@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.community.issues.enums;
 
+import com.jaspersoft.studio.community.messages.Messages;
+
 /**
  * Enumeration representing the issue resolution.
  * 
@@ -22,18 +24,18 @@ package com.jaspersoft.studio.community.issues.enums;
  *
  */
 public enum Resolution {
-	Open(10,"Open"),
-	Fixed(20,"Fixed"),
-	Reopened(30,"Reopened"),
-	UnableToReproduce(40,"Unable to Reproduce"),
-	NotFixable(50,"Not Fixable"),
-	Duplicate(60,"Duplicate"),
-	NoChangeRequired(70,"NoChangeRequired"),
-	WorksAsDesigned(75,"Works as Designed"),
-	Suspended(80,"Suspended"),
-	WontFix(90,"Won't Fix");
+	Open(10,Messages.Resolution_Open),
+	Fixed(20,Messages.Resolution_Fixed),
+	Reopened(30,Messages.Resolution_Reopened),
+	UnableToReproduce(40,Messages.Resolution_UnableToReproduce),
+	NotFixable(50,Messages.Resolution_NotFixable),
+	Duplicate(60,Messages.Resolution_Duplicate),
+	NoChangeRequired(70,Messages.Resolution_NoChangeRequired),
+	WorksAsDesigned(75,Messages.Resolution_WorksAsDesigned),
+	Suspended(80,Messages.Resolution_Suspended),
+	WontFix(90,Messages.Resolution_WontFix);
 	
-	public static final String FIELD_NAME = "field_bug_resolution";
+	public static final String FIELD_NAME = "field_bug_resolution"; //$NON-NLS-1$
 	private Integer value;
 	private String text;
 	

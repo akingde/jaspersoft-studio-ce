@@ -23,12 +23,12 @@ package com.jaspersoft.studio.community;
  */
 public class CommunityConstants {
 
-	public static final String LOGIN_URL = "http://community.jaspersoft.com/community-api/user/login";
-	public static final String FILE_UPLOAD_URL = "http://community.jaspersoft.com/community-api/file.json";
-	public static final String ISSUE_CREATION_URL = "http://community.jaspersoft.com/community-api/node.json";
-	public static final String JSON_CONTENT_TYPE = "application/json";
-	public static final String REQUEST_CHARSET = "UTF-8";
-	public static final String SECURE_PREFSTORE_PATHNAME = "jaspersoft_community_site";
+	public static final String LOGIN_URL = "http://community.jaspersoft.com/community-api/user/login"; //$NON-NLS-1$
+	public static final String FILE_UPLOAD_URL = "http://community.jaspersoft.com/community-api/file.json"; //$NON-NLS-1$
+	public static final String ISSUE_CREATION_URL = "http://community.jaspersoft.com/community-api/node.json"; //$NON-NLS-1$
+	public static final String JSON_CONTENT_TYPE = "application/json"; //$NON-NLS-1$
+	public static final String REQUEST_CHARSET = "UTF-8"; //$NON-NLS-1$
+	public static final String SECURE_PREFSTORE_PATHNAME = "jaspersoft_community_site"; //$NON-NLS-1$
 	public static final int JSSPROJECT_COMMUNITY_ID = 496;
 	
 	private CommunityConstants(){

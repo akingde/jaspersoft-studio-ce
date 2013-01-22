@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.community.issues.enums;
 
+import com.jaspersoft.studio.community.messages.Messages;
+
 /**
  * Enumeration representing the issue status.
  * 
@@ -22,15 +24,15 @@ package com.jaspersoft.studio.community.issues.enums;
  *
  */
 public enum Status {
-	New(10,"New"),
-	FeedbackRequested(20,"Feedback Requested"),
-	Acknowledged(30,"Acknowledged"),
-	Confirmed(40,"Confirmed"),
-	Assigned(50,"Assigned"),
-	Resolved(80,"Resolved"),
-	Closed(90,"Closed");
+	New(10,Messages.Status_New),
+	FeedbackRequested(20,Messages.Status_FeedbackRequested),
+	Acknowledged(30,Messages.Status_Acknowledged),
+	Confirmed(40,Messages.Status_Confirmed),
+	Assigned(50,Messages.Status_Assigned),
+	Resolved(80,Messages.Status_Resolved),
+	Closed(90,Messages.Status_Closed);
 	
-	public static final String FIELD_NAME = "field_bug_status";
+	public static final String FIELD_NAME = "field_bug_status"; //$NON-NLS-1$
 	private Integer value;
 	private String text;
 	

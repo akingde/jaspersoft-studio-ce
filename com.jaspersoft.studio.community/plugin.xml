@@ -3,7 +3,7 @@
   <extension
          point="org.eclipse.ui.commands">
       <command
-            name="Submit a new issue"
+            name="%command.name"
             id="com.jaspersoft.studio.community.command.issueSubmit">
       </command>
    </extension>
@@ -20,7 +20,7 @@
             locationURI="menu:help">
             <command
                   commandId="com.jaspersoft.studio.community.command.issueSubmit"
-            	  mnemonic="Submit a new issue"
+            	  mnemonic="%command.mnemonic"
                   id="com.jaspersoft.studio.community.menu.issueSubmit">
             </command>
                         
