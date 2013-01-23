@@ -156,13 +156,13 @@ public class XMLDocumentManager implements ISelectableNodes<XMLNode> {
 					return selectedPath.replace(currentPath + "/", "");
 				} else if (currentPath.startsWith(selectedPath)) {
 					// selected node is parent of the current one
-					return "anchestor::" + selectedNode.getNodeName();
+					return "ancestor::" + selectedNode.getNodeName();
 				} else if (isAttribute
 						&& currentPath.startsWith(selectedPath.replace(
 								attributePostfix, ""))) {
 					// special case of the selected attribute and located on
-					// anchestor node
-					return "anchestor::"
+					// ancestor node
+					return "ancestor::"
 							+ ((Attr) selectedNode).getOwnerElement()
 									.getNodeName() + attributePostfix;
 				}
