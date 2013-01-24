@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet
+      title="Open a Report">
+   <intro>
+      <description>
+         <b>In this tutorial we will see how to open an example report from the Samples. If the samples was not in your workspace you can also import them following this cheatsheet</b>
+      </description>
+   </intro>
+   <item title="Import the samples" dialog="true">
+      <description>
+         Import the samples in the workspace folder "JasperReportsSamples". If you have already done this operation you can skip this step.
+      </description>
+      <action pluginId="com.jaspersoft.studio.doc" class="com.jaspersoft.studio.doc.samples.handlers.ImportSamplesWizardHandler" required="false"/>
+   </item>
+   <item title="Open a report">
+      <description>
+         Open the the report in <b>/JasperReportsSamples/datasource/Reports/DataSourceReport.jrxml</b>
+      </description>
+      <action pluginId="com.jaspersoft.studio.doc" class="com.jaspersoft.studio.doc.samples.handlers.OpenReportHandler" required="false"/>
+   </item>
+   <item title="Compile the report">
+      <description>
+         You can now compile the report by switching into the preview tab
+      </description>
+	 <action pluginId="com.jaspersoft.studio.doc" class="com.jaspersoft.studio.doc.handlers.SwitchToPreviewHandler" required="false"/>
+   </item>
+</cheatsheet>
