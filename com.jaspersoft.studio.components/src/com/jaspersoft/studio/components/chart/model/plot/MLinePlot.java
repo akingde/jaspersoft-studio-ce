@@ -225,6 +225,7 @@ public class MLinePlot extends MChartPlot {
 				NullEnum.NULL);
 		catAxisVertTickLabelD
 				.setDescription(Messages.MLinePlot_category_axis_vertical_tick_labels_description);
+		catAxisVertTickLabelD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat_verticalTickLabels"));
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
@@ -232,6 +233,7 @@ public class MLinePlot extends MChartPlot {
 				Messages.common_value_axis_vertical_tick_labels, NullEnum.NULL);
 		valAxisVertTickLabelD
 				.setDescription(Messages.MLinePlot_value_axis_vertical_tick_labels_description);
+		valAxisVertTickLabelD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat_verticalTickLabels"));
 		desc.add(valAxisVertTickLabelD);
 
 		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
@@ -239,6 +241,7 @@ public class MLinePlot extends MChartPlot {
 				Messages.common_category_axis_tick_label_mask);
 		catAxisTickLabelMaskD
 				.setDescription(Messages.MLinePlot_category_axis_tick_label_mask_description);
+		catAxisTickLabelMaskD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat_tickLabelMask"));
 		desc.add(catAxisTickLabelMaskD);
 
 		NTextPropertyDescriptor valAxisTickLabelMaskD = new NTextPropertyDescriptor(
@@ -246,6 +249,7 @@ public class MLinePlot extends MChartPlot {
 				Messages.common_value_axis_tick_label_mask);
 		valAxisTickLabelMaskD
 				.setDescription(Messages.MLinePlot_value_axis_tick_label_mask_description);
+		valAxisTickLabelMaskD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axisFormat_tickLabelMask"));
 		desc.add(valAxisTickLabelMaskD);
 
 		DoublePropertyDescriptor catAxisTickLabelRotation = new DegreePropertyDescriptor(

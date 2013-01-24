@@ -45,6 +45,7 @@ import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeader;
 import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeaderCell;
 import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoData;
 import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDataCell;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -162,6 +163,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 				Messages.MCrosstab_parameter_map_expression);
 		paramMapExprD
 				.setDescription(Messages.MCrosstab_parameter_map_expression_description);
+		paramMapExprD.setHelpContextIds(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parametersMapExpression"));
 		desc.add(paramMapExprD);
 
 		CheckBoxPropertyDescriptor repeatColumnHeadersD = new CheckBoxPropertyDescriptor(

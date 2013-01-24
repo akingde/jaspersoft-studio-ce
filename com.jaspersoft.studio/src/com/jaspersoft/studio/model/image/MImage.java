@@ -144,6 +144,7 @@ public class MImage extends MGraphicElementLineBox {
 				NullEnum.INHERITED);
 		fillD.setDescription(Messages.MImage_fill_description);
 		desc.add(fillD);
+		fillD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#style_fill"));
 
 		scaleImageD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_SCALE_IMAGE, Messages.MImage_scale_image,
 				ScaleImageEnum.class, NullEnum.INHERITED);
