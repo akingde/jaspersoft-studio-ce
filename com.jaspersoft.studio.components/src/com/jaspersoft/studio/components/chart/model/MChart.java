@@ -69,7 +69,6 @@ import net.sf.jasperreports.engine.util.JRStyleResolver;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
@@ -107,6 +106,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
@@ -196,10 +196,10 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				.setDescription(Messages.MChart_title_position_description);
 		desc.add(titlePositionD);
 
-		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
+		evaluationTimeD = new JSSEnumPropertyDescriptor(
 				JRDesignChart.PROPERTY_EVALUATION_TIME,
-				Messages.MChart_evaluation_time, EnumHelper.getEnumNames(
-						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
+				Messages.MChart_evaluation_time, EvaluationTimeEnum.class,
+				NullEnum.NOTNULL);
 		evaluationTimeD
 				.setDescription(Messages.MChart_evaluation_time_description);
 		desc.add(evaluationTimeD);
@@ -401,6 +401,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 	private ParameterDTO propertyDTO;
 	private static EdgePropertyDescriptor titlePositionD;
 	private static EdgePropertyDescriptor legendPositionD;
+	private static JSSEnumPropertyDescriptor evaluationTimeD;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -413,8 +414,8 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			return legendPositionD.getEnumValue(jrElement
 					.getLegendPositionValue());
 		if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1,
-					false);
+			return evaluationTimeD.getEnumValue(jrElement
+					.getEvaluationTimeValue());
 		if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE))
 			return jrElement.getRenderType();
 		if (id.equals(JRBaseChart.PROPERTY_THEME))
@@ -550,8 +551,8 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			jrElement.setLegendPosition((EdgeEnum) legendPositionD
 					.getEnumValue(value));
 		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime((EvaluationTimeEnum) EnumHelper
-					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
+			jrElement.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD
+					.getEnumValue(value));
 		else if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
 			jrElement.setShowLegend((Boolean) value);
 		else if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE)) {
