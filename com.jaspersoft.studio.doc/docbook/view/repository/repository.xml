@@ -7,19 +7,31 @@
 	<section>
 
 		<para>
-			In this view you can see and manage DataAdapters, Jasperreports Server connections and resources.
-			Toolbar of the view contains two actions, one to create a DataAdapter another to create a
-			Jasprereports Server connection. Management of tree objects is done with context menu.
+			In this view you can see and manage data adapters, JasperReports Server connections, and resources. The toolbar in this view contains two actions:
+			<itemizedlist mark='opencircle'>
+				<listitem>
+					<para>Create a Data Adapter
+					</para>
+				</listitem>
+				<listitem>
+					<para>Create a JasperReports Server connection.
+					</para>
+				</listitem>
+			</itemizedlist>
+
+		</para>
+		<para>
+			Management of tree objects is done with a context menu.
 		</para>
 		<para>
 			Inside
 			<emphasis>DataAdapters</emphasis>
-			tree item we can see all the DataAdapters stored in eclipse preferences at instance level. In context menus we have actions to create, edit, delete, duplicate data adapters. DataAdapters can be
-			stored in filesystem inside eclipse projects, there are actions to import and export data adapters to or from eclipse preferences.
+			tree item we can see all the data adapters stored in Eclipse preferences at the instance level. In the context menu, we have actions to create, edit, delete, and duplicate data adapters. Data
+			adapters can be stored in the filesystem inside Eclipse projects. There are actions to import and export data adapters to or from Eclipse preferences.
 		</para>
 		<tip>
 			<para>
-				It's better to store DataAdapters inside the projects, because finally reports will be deployed somewhere.
+				It's better to store data adapters inside the projects, because reports may be deployed elsewhere.
 			</para>
 		</tip>
 		<figure>
@@ -33,21 +45,24 @@
 			</screenshot>
 		</figure>
 		<para>
-			From context menu inside
+			From the context menu inside
 			<emphasis>Servers</emphasis>
-			it's possible to create, edit, doublicate or delete a server connection. To see objects inside a server connection, click on the arrow on the left of connection name, after some seconds (depending
-			on your connection and server communication speed) the node will be populated with a list of Jasperreports Server objects like folders, ReportUnits, connections, reports, etc.
+			you can create, edit, duplicate, or delete a server connection. To see objects inside a server connection, click on the arrow to the left of connection name.
+			After a few seconds (depending on your
+			connection and server communication speed) the node is populated
+			with a list of JasperReports Server objects, such as folders, Report Units, connections, reports, etc.
 		</para>
 		<para>
-			Right click on an object, depending on resource type we can see actions that are possible on this type of resource. Common actions are cut, copy, paste, refresh. To open a dialog where we can see
-			or edit the object, use
+			When you right-click on an object, depending on resource type, we can see actions that are possible for that type of resource.
+			Common actions are cut, copy, paste, and refresh. To open a dialog
+			where we can see or edit the object, use the
 			<guimenu>Properties</guimenu>
 			menu item.
 		</para>
-		<para>In case of ReportUnits there is an action to run this reports on a server and view them in Jaspersoft Studio.</para>
+		<para>For ReportUnits, there is an action to run this reports on a server and view them in Jaspersoft Studio.</para>
 		<tip>
 			<para>
-				Cut, Copy and Paste actions work inside the same server connection. Currently it's not possible to copy resources between different servers.
+				Cut, copy and paste actions work inside the same server connection. Currently it's not possible to copy resources between different servers.
 			</para>
 		</tip>
 		<figure>

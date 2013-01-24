@@ -6,7 +6,8 @@
 
 	<section>
 		<para>
-			This view quickly preview report templates. It's possible to set different zoom levels, and print the template. To open this view go to
+			You can easily preview report templates, set different zoom levels, and print a template. To open the Report Templates Preview view,
+			select
 			<menuchoice>
 				<guimenu>Window</guimenu>
 				<guimenuitem>Show View</guimenuitem>
@@ -14,10 +15,11 @@
 				<guimenuitem>Jaspersoft Studio</guimenuitem>
 				<guimenuitem>Preview</guimenuitem>
 			</menuchoice>
-			open the view, than select a report template, a file of type
+			, then select a report template, a file of type
 			<filename class='extension'>.jrxml</filename>
 			or
 			<filename class='extension'>.jasper</filename>
+			.
 		</para>
 
 		<figure>

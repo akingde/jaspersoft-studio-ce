@@ -7,35 +7,37 @@
 	<section>
 
 		<para>
-			Properties view help configuring a selected element or elements.
-			In case more than one element is selected, only properties commont to
-			all the selected elements are shown. If Properties view is not
-			visible, look in the context menu of selected elements for
-			<guimenu>Show
-				Properties
-			</guimenu>
-			menu item, this one will show and bring to front the
-			properties view.
+			The Properties view helps you configure a selected element or elements.
+			If more than one element is selected, only the properties those elements have in common are shown. If the 5Properties view is
+			not
+			visible, open the context menu for the selected elements and find the
+			<guimenuitem>Show Properties</guimenuitem>
+			menu item, which shows and brings to the front the
+			Properties view.
 		</para>
 		<para>
-			Properties are organized in tabs, and sections for a better
-			organization and usability. Usually we can see an
-			<emphasis>Appearance</emphasis>
-			; tab, that contain all the properties
-			responsible for element size, position, colors, style and flags when
-			the element will be shown in the runtime. Another common tab is named
-			<emphasis>Borders</emphasis>
-			, here we can configure how borders of the
-			element are painted. There is a special
-			<emphasis>Advanced</emphasis>
-			tab
-			that contains all the properties for the report element in a form of a
-			table tree, it's possible to reset the property to default value, in
-			context menu.
+			Properties are organized into tabs and sections for a better
+			organization and usability. Tabs can include the following:
+			<itemizedlist mark='opencircle'>
+				<listitem>
+					<para>
+						Appearance, which contains all the properties responsible for element size, position, colors, style and flags when the element is shown in the runtime.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Borders, where you can configure how borders of the element are painted.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Advanced, which contains all the properties for the report element in a form of a table tree, and you can reset the property to default value, in context menu.
+					</para>
+				</listitem>
+			</itemizedlist>
 		</para>
 		<para>
-			For focused property a property description is shown in the tool
-			tip and in the status line.
+			For example, a property description is shown in the tool tip and in the status line.
 		</para>
 
 		<figure>

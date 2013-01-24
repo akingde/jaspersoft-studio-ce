@@ -6,70 +6,52 @@
 
 	<section>
 
-		<para>Jaspersoft Studio use eclipse way to organize all the resources,
-			this
-			means users will create projects that contain files, images,
-			styles,
-			libraries and other files needed for reports development.
-			Users will
-			use Project Explorer View in order to do that.
+		<para>
+			Jaspersoft Studio uses the Eclipse environment to organize all the resources. This means users create projects that contain images, styles, libraries, and other files needed for report development.
+			This is done in the
+			<emphasis>Project Explorer view</emphasis>
+			.
 		</para>
-		<para>This view show projects file structure similar to file
-			managers.
-			Users should use context menus or drag and drop to work
-			with files.
+		<para>This view shows a project file structure similar to that found in other file managers. Use context menus or drag and drop files to work with them.
 		</para>
 		<para>
-			One of the current tasks is to open a report, to do this just double clicking a
+			One of the current tasks is to open a report. To do this, double-click a
 			<filename class='extension'>.jrxml</filename>
 			or
 			<filename class='extension'>.jasper</filename>
-			file, or selecting
+			file, or select
+			the
 			<guimenuitem>Open With </guimenuitem>
-			context menu, there are two modes
+			context menu.
 			<guimenuitem>JasperReports Designer</guimenuitem>
-			will open report in design mode, or
+			can open reports in design mode,
+			or
 			<guimenuitem>JasperReports Preview</guimenuitem>
-			will open only preview from which it's possible to run reports. It's also possible to open
+			can open a preview from which it's possible to run reports.
+			It's also possible to open
 			<filename class='extension'>.jrprint</filename>
-			files to just see a generated report,
+			files to view a generated report,
 			<filename class='extension'>.jrtx</filename>
-			files to edit styles, DataAdapter files to create DataAdapters, or just preview the report from
+			files to edit styles,
+			DataAdapter files to create data adapters, or just Preview the report from the
 			<guimenuitem>Preview</guimenuitem>
 			item in context menu.
 		</para>
 		<para>
-			Another important task is to add or remove java libraries
-			jars to
-			or from
-			project CLASSPATH. For this open context menu on the
-			desired
-			jar and
-			look at "Build Path" item, sub items are
+			Another task is to add or remove java library jars to or from project CLASSPATH. To do this, open a context menu on the desired jar and locate the Build Path item.
+			Choose the correct sub-item,
 			<guimenuitem>"Add To Build
 				Path"
 			</guimenuitem>
 			or
 			<guimenuitem>"Remove From Build"</guimenuitem>
-			path menus, accordingly. Please look into eclipse
-			documentation how
-			to configure CLASSPATH in eclipse, use
-			<guimenuitem>source
-				folders
-			</guimenuitem>
-			and Project
-			Explorer View for more information.
+			. Please look into Eclipse documentation for information on how to configure CLASSPATH in Eclipse.
 		</para>
 		<para>
-			Existing eclipse users may already have some projects in
-			the
-			workspace, for
-			this users it's important to know that they have
-			to
-			activate
-			JasperReports Nature on the project with
+			Existing Eclipse users may already have some projects in the workspace. These users must activate JasperReports Nature on the project with
 			<filename class='extension'>.jrxml</filename>
-			files, to do this jus select the project, open context menu and look at
+			files,
+			to do this, select the project, open the context menu, and look at
 			<menuchoice>
 				<guimenu>JasperReports</guimenu>
 				<guimenuitem>Toggle JasperReports Nature</guimenuitem>
@@ -77,12 +59,7 @@
 			menu item.
 		</para>
 		<para>
-			Plenty of configuration options are available for this
-			view, to
-			open
-			configuration dialog click on the arrow in top right
-			corner of the
-			view.
+			Plenty of configuration options are available for this view. To open the configuration dialog, click on the arrow in top right corner of the view.
 		</para>
 		<figure>
 			<title>Setup JasperReport Nature</title>

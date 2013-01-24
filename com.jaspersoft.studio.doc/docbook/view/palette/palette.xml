@@ -7,43 +7,34 @@
 	<section>
 
 		<para>
-			This view contains all graphic elements we can drag from palette to
-			the graphic editor. There are two modes for this view, one inside
-			report designer another as a separate view. To open palette in a
-			separate view go to
+			This view contains every graphic element we can drag from Palette to the graphics editor. There are two modes for this view, one inside the report designer, and another as a separate view. To open
+			the Palette in a separate view, select
 			<menuchoice>
 				<guimenu>Windows</guimenu>
 				<guimenuitem>Show View</guimenuitem>
 				<guimenuitem>General</guimenuitem>
 				<guimenuitem>Palette</guimenuitem>
 			</menuchoice>
-			if you close this view palette
-			will be available inside the graphic editor.
+			. If you close this view the palette will be available inside the graphic editor.
 		</para>
-		<para>It's possible to configure palette view just right clicking
-			inside it, a context menu will propose options for big or small icons,
-			the way elements are arranged (column, list, icons only,
-			details), the
-			place where palette is docked.
+		<para>You can configure the Palette view by right-clicking inside it and opening the context menu, which includes options for big or small icons, the way elements are arranged (column, list, icons
+			only, details), and where the Palette is docked.
 		</para>
-		<para>There are three ways to create elements from a palette:</para>
+		<para>There are three ways to create elements from the Palette:</para>
 		<itemizedlist mark='opencircle'>
 			<listitem>
 				<para>
-					drag and drop element over a report container like a band,
-					when object is dropped this will be the position for the element
+					Drag and drop element over a report container like a band, when object is dropped this will be the position for the element.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					click on an element inside the palette, go to a report
-					container like a band click in the place where you want the top left
-					corner will be, and drag in right-down direction
+					Click on an element inside the palette, go to a report container like a band click in the place where you want the top left corner will be, and drag in right-down direction.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					drag from palette to outline view
+					Drag from Palette to Outline view.
 				</para>
 			</listitem>
 

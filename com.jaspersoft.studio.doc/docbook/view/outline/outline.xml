@@ -6,51 +6,51 @@
 
 	<section>
 
-		<para>In outline view we can see all JasperReports elements in a form
+		<para>In the Outline view we can see all JasperReports elements in a form
 			of a tree. These elements can be managed using context menu where we
 			can find the following operations:
 		</para>
 		<itemizedlist mark='opencircle'>
 			<listitem>
 				<para>
-					creation of new objects, like Group, Dataset, Field,
+					Creation of new objects, like Group, Dataset, Field,
 					Parameter, Variable, etc.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					removal of objects
+					Removal of objects
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					standard editor operations like undo, redo, copy, cut, paste
+					Standard editor operations like undo, redo, copy, cut, paste
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					user interface actions that help to arrange elements, resize
+					User interface actions that help to arrange elements, resize
 					container, order elements, etc.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					we always have
+					We always have
 					<guimenu>"Show Properties"</guimenu>
 					action that will show properties page for the selected element
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					actions that help us set properties like PDF508 Tags
+					Actions that help us set properties like PDF508 Tags
 				</para>
 			</listitem>
 		</itemizedlist>
 
-		<para>Users can move elements from one container node to another or
-			reorder elements using drag and drop inside outline view. Double
-			clicking an element will open an expression editor, or an editor
-			for objects like Crosstab, Table, List.
+		<para>Users can move elements from one container node to another, or
+			reorder elements by dragging and dropping within the Outline view. Double
+			clicking an element opens an expression editor, or an editor
+			for objects like Crosstab, Table, and List.
 		</para>
 		<figure>
 			<title>Outline View</title>
