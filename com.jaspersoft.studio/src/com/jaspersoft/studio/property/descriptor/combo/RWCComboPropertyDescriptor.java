@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -48,9 +49,9 @@ public class RWCComboPropertyDescriptor extends ComboBoxPropertyDescriptor imple
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
 		cellEditor = new RWComboBoxCellEditor(parent, labels);
-		if (getValidator() != null) {
+		if (getValidator() != null)
 			cellEditor.setValidator(getValidator());
-		}
+		HelpSystem.bindToHelp(this, cellEditor.getControl());
 		return cellEditor;
 	}
 

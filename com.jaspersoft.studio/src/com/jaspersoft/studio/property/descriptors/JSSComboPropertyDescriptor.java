@@ -10,9 +10,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptors;
 
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -30,6 +32,13 @@ public class JSSComboPropertyDescriptor extends ComboBoxPropertyDescriptor imple
 
 	public String[] getLabels() {
 		return labels;
+	}
+
+	@Override
+	public CellEditor createPropertyEditor(Composite parent) {
+		CellEditor editor = super.createPropertyEditor(parent);
+		HelpSystem.bindToHelp(this, editor.getControl());
+		return editor;
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {

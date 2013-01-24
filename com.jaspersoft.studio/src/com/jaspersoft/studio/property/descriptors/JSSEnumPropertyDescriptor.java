@@ -12,9 +12,11 @@ package com.jaspersoft.studio.property.descriptors;
 
 import net.sf.jasperreports.engine.type.JREnum;
 
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -42,6 +44,13 @@ public class JSSEnumPropertyDescriptor extends ComboBoxPropertyDescriptor implem
 		this.type = type;
 		jrEnums = jrEnum.getEnumConstants();
 		this.start = jrEnums[0].getValue();
+	}
+
+	@Override
+	public CellEditor createPropertyEditor(Composite parent) {
+		CellEditor editor = super.createPropertyEditor(parent);
+		HelpSystem.bindToHelp(this, editor.getControl());
+		return editor;
 	}
 
 	public Integer getEnumValue(JREnum jrvalue) {

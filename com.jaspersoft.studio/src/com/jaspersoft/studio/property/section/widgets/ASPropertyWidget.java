@@ -28,7 +28,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpSystem;
-import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -42,15 +41,8 @@ public abstract class ASPropertyWidget {
 		createComponent(parent);
 		if (getControl() != null) {
 			getControl().addFocusListener(focusListener);
-			bindToHelp(pDescriptor, getControl());
+			HelpSystem.bindToHelp(pDescriptor, getControl());
 		}
-	}
-
-	protected void bindToHelp(IPropertyDescriptor pDescriptor, Control control) {
-		if (pDescriptor.getHelpContextIds() != null)
-			PlatformUI.getWorkbench().getHelpSystem().setHelp(control, (String) pDescriptor.getHelpContextIds());
-		else if (pDescriptor instanceof IHelp)
-			HelpSystem.setHelp(control, ((IHelp) pDescriptor).getHelpReference());
 	}
 
 	public void setReadOnly(boolean readonly) {

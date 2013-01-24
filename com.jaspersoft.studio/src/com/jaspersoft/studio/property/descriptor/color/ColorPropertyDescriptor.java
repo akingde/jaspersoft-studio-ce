@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -34,9 +35,9 @@ public class ColorPropertyDescriptor extends org.eclipse.ui.views.properties.Col
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
 		CellEditor editor = new ColorCellEditor(parent);
-		if (getValidator() != null) {
+		if (getValidator() != null)
 			editor.setValidator(getValidator());
-		}
+		HelpSystem.bindToHelp(this, editor.getControl());
 		return editor;
 	}
 

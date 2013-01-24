@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -33,7 +34,9 @@ public class JRQueryPropertyDescriptor extends PropertyDescriptor implements IPr
 
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
-		return new JRQueryCellEditor(parent);
+		JRQueryCellEditor editor = new JRQueryCellEditor(parent);
+		HelpSystem.bindToHelp(this, editor.getControl());
+		return editor;
 	}
 
 	@Override

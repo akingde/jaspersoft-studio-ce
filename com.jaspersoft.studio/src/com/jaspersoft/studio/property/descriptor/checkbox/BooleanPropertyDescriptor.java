@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 
@@ -35,6 +36,7 @@ public class BooleanPropertyDescriptor extends PropertyDescriptor implements IHe
 		ICellEditorValidator v = getValidator();
 		if (v != null)
 			editor.setValidator(v);
+		HelpSystem.bindToHelp(this, editor.getControl());
 		return editor;
 	}
 

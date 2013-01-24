@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.jface.BooleanCellEditorValidator;
@@ -46,6 +47,7 @@ public class CheckBoxPropertyDescriptor extends PropertyDescriptor implements IP
 		CellEditor editor = new BCheckBoxCellEditor(parent, canBeNull);
 		if (getValidator() != null)
 			editor.setValidator(getValidator());
+		HelpSystem.bindToHelp(this, editor.getControl());
 		return editor;
 
 	}

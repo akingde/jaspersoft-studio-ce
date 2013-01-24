@@ -9,6 +9,7 @@ import org.eclipse.swt.events.HelpEvent;
 import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 public class HelpSystem {
 	private HelpSystem() {
@@ -61,5 +62,12 @@ public class HelpSystem {
 				control.removeHelpListener(listener);
 			}
 		});
+	}
+
+	public static void bindToHelp(IPropertyDescriptor pDescriptor, Control control) {
+		if (pDescriptor.getHelpContextIds() != null)
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(control, (String) pDescriptor.getHelpContextIds());
+		else if (pDescriptor instanceof IHelp)
+			HelpSystem.setHelp(control, ((IHelp) pDescriptor).getHelpReference());
 	}
 }

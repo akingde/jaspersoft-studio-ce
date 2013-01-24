@@ -145,13 +145,13 @@ public class MGenericElement extends MGraphicElement {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#genericElement");
 
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignGenericElement.PROPERTY_GENERIC_TYPE
-				+ PROPERTY_NAME, Messages.MGenericElement_generic_type_name);
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(PROPERTY_NAME,
+				Messages.MGenericElement_generic_type_name);
 		nameD.setDescription(Messages.MGenericElement_generic_type_name_description);
 		desc.add(nameD);
 
-		NTextPropertyDescriptor nameSpaceD = new NTextPropertyDescriptor(JRDesignGenericElement.PROPERTY_GENERIC_TYPE
-				+ PROPERTY_NAMESPACE, Messages.MGenericElement_generic_type_namespace);
+		NTextPropertyDescriptor nameSpaceD = new NTextPropertyDescriptor(PROPERTY_NAMESPACE,
+				Messages.MGenericElement_generic_type_namespace);
 		nameSpaceD.setDescription(Messages.MGenericElement_generic_type_namespace_description);
 		desc.add(nameSpaceD);
 
@@ -173,8 +173,8 @@ public class MGenericElement extends MGraphicElement {
 		defaultsMap.put(JRDesignGenericElement.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 	}
 
-	public static final String PROPERTY_NAME = "NAME"; //$NON-NLS-1$
-	public static final String PROPERTY_NAMESPACE = "NAMESPACE"; //$NON-NLS-1$
+	public static final String PROPERTY_NAME = "name"; //$NON-NLS-1$
+	public static final String PROPERTY_NAMESPACE = "namespace"; //$NON-NLS-1$
 	private ParameterDTO propertyDTO;
 	private static JSSEnumPropertyDescriptor evaluationTimeD;
 
@@ -194,9 +194,9 @@ public class MGenericElement extends MGraphicElement {
 			return jrElement.getEvaluationGroupName();
 		JRGenericElementType genericType = jrElement.getGenericType();
 		if (genericType != null) {
-			if (id.equals(JRDesignGenericElement.PROPERTY_GENERIC_TYPE + PROPERTY_NAME))
+			if (id.equals(PROPERTY_NAME))
 				return genericType.getName();
-			if (id.equals(JRDesignGenericElement.PROPERTY_GENERIC_TYPE + PROPERTY_NAMESPACE))
+			if (id.equals(PROPERTY_NAMESPACE))
 				return genericType.getNamespace();
 		}
 		if (id.equals(JRDesignGenericElement.PROPERTY_PARAMETERS)) {
@@ -233,10 +233,10 @@ public class MGenericElement extends MGraphicElement {
 			}
 
 			// FIXME: in JR rewrite hashCode to work with null values for namespace and name
-		} else if (id.equals(JRDesignGenericElement.PROPERTY_GENERIC_TYPE + PROPERTY_NAME)) {
+		} else if (id.equals(PROPERTY_NAME)) {
 			String namespace = genericType != null ? genericType.getNamespace() : "";
 			jrElement.setGenericType(new JRGenericElementType(namespace, (String) value));
-		} else if (id.equals(JRDesignGenericElement.PROPERTY_GENERIC_TYPE + PROPERTY_NAMESPACE)) {
+		} else if (id.equals(PROPERTY_NAMESPACE)) {
 			String name = genericType != null ? genericType.getName() : "";
 			jrElement.setGenericType(new JRGenericElementType((String) value, name));
 		}

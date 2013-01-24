@@ -15,9 +15,11 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.type.JREnum;
 
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
@@ -55,6 +57,13 @@ public class JSSPopupPropertyDescriptor extends ComboBoxPropertyDescriptor imple
 		jrEnums = jrEnum.getEnumConstants();
 		this.start = jrEnums[0].getValue();
 		this.items = items;
+	}
+
+	@Override
+	public CellEditor createPropertyEditor(Composite parent) {
+		CellEditor editor = super.createPropertyEditor(parent);
+		HelpSystem.bindToHelp(this, editor.getControl());
+		return editor;
 	}
 
 	private void setItemsToDefault() {

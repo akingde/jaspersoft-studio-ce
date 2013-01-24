@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.jface.FloatCellEditorValidator;
@@ -76,7 +77,7 @@ public class FloatPropertyDescriptor extends TextPropertyDescriptor implements I
 		};
 		editor.setValidator(FloatCellEditorValidator.instance());
 		setValidator(FloatCellEditorValidator.instance());
-
+		HelpSystem.bindToHelp(this, editor.getControl());
 		return editor;
 	}
 

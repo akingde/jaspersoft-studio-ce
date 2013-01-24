@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 
@@ -23,7 +24,9 @@ public class StringPropertyDescriptor extends PropertyDescriptor implements IHel
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
-		return new InputDialogCellEditor(parent, getDisplayName());
+		InputDialogCellEditor editor = new InputDialogCellEditor(parent, getDisplayName());
+		HelpSystem.bindToHelp(this, editor.getControl());
+		return editor;
 	}
 
 	private IHelpRefBuilder refBuilder;
