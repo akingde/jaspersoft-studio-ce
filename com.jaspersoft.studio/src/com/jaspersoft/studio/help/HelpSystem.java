@@ -1,6 +1,5 @@
 package com.jaspersoft.studio.help;
 
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.eclipse.swt.events.DisposeEvent;
@@ -34,11 +33,7 @@ public class HelpSystem {
 					Object object = e.widget.getData(HELP_KEY);
 					if (object != null && object instanceof String) {
 						URL url = PlatformUI.getWorkbench().getHelpSystem().resolve((String) object, false);
-						try {
-							PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(url.toURI().toASCIIString());
-						} catch (URISyntaxException e1) {
-							e1.printStackTrace();
-						}
+						PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(url.toExternalForm());
 					}
 				}
 			};

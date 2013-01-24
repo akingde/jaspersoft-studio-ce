@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
@@ -26,7 +21,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.editor.text.NStringFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
@@ -53,12 +50,16 @@ public class CSVMetadataExporterPreferencePage extends FieldEditorOverlayPage {
 		tf.setEmptyStringAllowed(false);
 		tf.setTextLimit(10);
 		addField(tf);
+		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
+				StudioPreferencePage.REFERENCE_PREFIX + tf.getPreferenceName());
 
-		NStringFieldEditor fd = new NStringFieldEditor(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER,
-				Messages.CSVExporterPreferencePage_4, 4, getFieldEditorParent());
-		fd.setEmptyStringAllowed(false);
-		fd.setTextLimit(10);
-		addField(fd);
+		tf = new NStringFieldEditor(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER, Messages.CSVExporterPreferencePage_4,
+				4, getFieldEditorParent());
+		tf.setEmptyStringAllowed(false);
+		tf.setTextLimit(10);
+		addField(tf);
+		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
+				StudioPreferencePage.REFERENCE_PREFIX + tf.getPreferenceName());
 
 		Browser browser = new Browser(getFieldEditorParent(), SWT.MULTI);
 		browser.setText(Messages.CSVExporterPreferencePage_5);
@@ -67,10 +68,17 @@ public class CSVMetadataExporterPreferencePage extends FieldEditorOverlayPage {
 		gd.horizontalSpan = 2;
 		browser.setLayoutData(gd);
 
-		addField(new BooleanFieldEditor(JRCsvMetadataExporterParameter.PROPERTY_WRITE_HEADER, "Write Header",
-				getFieldEditorParent()));
-		addField(new NStringFieldEditor(JRCsvMetadataExporterParameter.PROPERTY_COLUMN_NAMES_PREFIX, "Column Names",
-				getFieldEditorParent()));
+		BooleanFieldEditor bf = new BooleanFieldEditor(JRCsvMetadataExporterParameter.PROPERTY_WRITE_HEADER,
+				"Write Header", getFieldEditorParent());
+		addField(bf);
+		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
+				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+
+		tf = new NStringFieldEditor(JRCsvMetadataExporterParameter.PROPERTY_COLUMN_NAMES_PREFIX, "Column Names",
+				getFieldEditorParent());
+		addField(tf);
+		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
+				StudioPreferencePage.REFERENCE_PREFIX + tf.getPreferenceName() + ".{suffix}");
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

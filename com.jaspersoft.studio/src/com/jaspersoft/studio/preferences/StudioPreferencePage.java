@@ -31,6 +31,7 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.StudioPreferencePage.property";
 	public static final String JSS_COMPATIBILITY_SHOW_DIALOG = "com.jaspersoft.studio.compatibility.showdialog"; //$NON-NLS-1$
 	public static final String JSS_COMPATIBILITY_VERSION = "com.jaspersoft.studio.compatibility.version"; //$NON-NLS-1$
+	public static final String REFERENCE_PREFIX = "net.sf.jasperreports.doc/docs/config.reference.html?cp=0_2#";
 
 	public StudioPreferencePage() {
 		super(GRID);

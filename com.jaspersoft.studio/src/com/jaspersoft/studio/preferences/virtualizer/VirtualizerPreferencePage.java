@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.virtualizer;
 
@@ -20,13 +15,15 @@ import net.sf.jasperreports.engine.fill.JRGzipVirtualizer;
 import net.sf.jasperreports.engine.fill.JRSwapFileVirtualizer;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.help.HelpSystem;
+import com.jaspersoft.studio.preferences.StudioPreferencePage;
+import com.jaspersoft.studio.preferences.editor.JSSComboFieldEditor;
 import com.jaspersoft.studio.preferences.editor.number.SpinnerFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
@@ -42,7 +39,7 @@ public class VirtualizerPreferencePage extends FieldEditorOverlayPage {
 	public static final String JSS_VIRTUALIZER_PAGE_ELEMENT_SIZE = "net.sf.jasperreports.virtual.page.element.size"; //$NON-NLS-1$
 
 	private BooleanFieldEditor bfeONEXIT;
-	private ComboFieldEditor cfeType;
+	private JSSComboFieldEditor cfeType;
 	private SpinnerFieldEditor msfe;
 	private DirectoryFieldEditor dfeTMP;
 	private BooleanFieldEditor bfeUSE;
@@ -67,14 +64,18 @@ public class VirtualizerPreferencePage extends FieldEditorOverlayPage {
 		bfeONEXIT = new BooleanFieldEditor(NSF_FILES_DELETE_ONEXIT, "Delete Temporary Files On Exit",
 				getFieldEditorParent());
 		addField(bfeONEXIT);
+		HelpSystem.setHelp(bfeONEXIT.getDescriptionControl(getFieldEditorParent()), StudioPreferencePage.REFERENCE_PREFIX
+				+ bfeONEXIT.getPreferenceName());
 
 		sfePAGEELSIZE = new SpinnerFieldEditor(JSS_VIRTUALIZER_PAGE_ELEMENT_SIZE, "Page Element Size",
 				getFieldEditorParent(), 0);
 		sfePAGEELSIZE.setMinimum(1);
 		sfePAGEELSIZE.setMaximum(Integer.MAX_VALUE);
 		addField(sfePAGEELSIZE);
+		HelpSystem.setHelp(sfePAGEELSIZE.getSpinnerControl(),
+				StudioPreferencePage.REFERENCE_PREFIX + sfePAGEELSIZE.getPreferenceName());
 
-		cfeType = new ComboFieldEditor(JSS_VIRTUALIZER_TYPE, "Type", new String[][] {
+		cfeType = new JSSComboFieldEditor(JSS_VIRTUALIZER_TYPE, "Type", new String[][] {
 				{ "File Virtualizer", JRFileVirtualizer.class.getName() },
 				{ "GZip In Memory Virtualizer", JRGzipVirtualizer.class.getName() },
 				{ "Single Swap File Virtualizer", JRSwapFileVirtualizer.class.getName() } }, getFieldEditorParent());
