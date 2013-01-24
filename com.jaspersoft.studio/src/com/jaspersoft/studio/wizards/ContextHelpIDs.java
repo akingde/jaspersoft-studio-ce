@@ -55,4 +55,6 @@ public class ContextHelpIDs {
 	public static String wizardSelectDatasources = prefix.concat("select_server_datasources");
 	
 	public static String wizardCongratulationsPage = prefix.concat("congratualions_page");
+	
+	public static String wizardAddReturnValue = prefix.concat("select_return_values");
 }
