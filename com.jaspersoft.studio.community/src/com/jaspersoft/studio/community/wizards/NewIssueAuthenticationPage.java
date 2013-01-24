@@ -127,6 +127,7 @@ public class NewIssueAuthenticationPage extends WizardPage {
 					btnStoreCommunityUserCredentials.setEnabled(true);
 					username.setEnabled(true);
 					password.setEnabled(true);
+					communityUserInformation=null;
 				}
 				checkForPageComplete();
 			}

@@ -30,6 +30,7 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.logging.Log;
@@ -70,7 +71,7 @@ public class RESTCommunityHelper {
 	 *            the community user password
 	 * @return the authentication cookie if able to retrieve it,
 	 *         <code>null</code> otherwise
-	 * @throws CommunityAPIException 
+	 * @throws CommunityAPIException
 	 */
 	public static Cookie getAuthenticationCookie(
 			HttpClient client, String username, String password) throws CommunityAPIException{
@@ -121,15 +122,16 @@ public class RESTCommunityHelper {
 		} catch (UnsupportedEncodingException e) {
 			JSSCommunityActivator.getDefault().logError(
 					Messages.RESTCommunityHelper_EncodingNotValidError, e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_AuthenticationError, e);
 		} catch (HttpException e) {
 			JSSCommunityActivator.getDefault().logError(
 					Messages.RESTCommunityHelper_PostMethodError, e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_AuthenticationError, e);
 		} catch (IOException e) {
 			JSSCommunityActivator.getDefault().logError(
 					Messages.RESTCommunityHelper_PostMethodIOError,e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_AuthenticationError, e);
 		}
-		
-		return null;
 	}
 	
 	
@@ -144,7 +146,7 @@ public class RESTCommunityHelper {
 	 * @param authCookie
 	 *            the session cookie to use for authentication purpose
 	 * @return the identifier of the file uploaded, <code>null</code> otherwise
-	 * @throws CommunityAPIException 
+	 * @throws CommunityAPIException
 	 */
 	public static String uploadFile(
 			HttpClient client, File attachment, Cookie authCookie) throws CommunityAPIException{
@@ -188,30 +190,38 @@ public class RESTCommunityHelper {
 		} catch (FileNotFoundException e) {
 			JSSCommunityActivator.getDefault().logError(
 					Messages.RESTCommunityHelper_FileNotFoundError, e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_FileUploadError,e);
 		} catch (UnsupportedEncodingException e) {
 			JSSCommunityActivator.getDefault().logError(
 					Messages.RESTCommunityHelper_EncodingNotValidError, e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_FileUploadError,e);
 		} catch (HttpException e) {
 			JSSCommunityActivator.getDefault().logError(
 					Messages.RESTCommunityHelper_PostMethodError, e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_FileUploadError,e);
 		} catch (IOException e) {
 			JSSCommunityActivator.getDefault().logError(
 					Messages.RESTCommunityHelper_PostMethodIOError,e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_FileUploadError,e);
 		}
-
-		return null;
 	}
 	
 	/**
 	 * Creates a new issue in the community tracker.
 	 * 
-	 * @param client the http client to use
-	 * @param newIssue the new issue to create on the community tracker
-	 * @param attachmentsIds the list of file identifiers that will be attached to the final issue
-	 * @param authCookie the session cookie to use for authentication purpose 
-	 * @throws CommunityAPIException 
+	 * @param client
+	 *            the http client to use
+	 * @param newIssue
+	 *            the new issue to create on the community tracker
+	 * @param attachmentsIds
+	 *            the list of file identifiers that will be attached to the
+	 *            final issue
+	 * @param authCookie
+	 *            the session cookie to use for authentication purpose
+	 * @return the tracker URL of the newly created issue
+	 * @throws CommunityAPIException
 	 */
-	public static void createNewIssue(
+	public static String createNewIssue(
 			HttpClient client, IssueRequest newIssue, List<String> attachmentsIds, Cookie authCookie) throws CommunityAPIException{
 		try {
 			// Add attachments if any
@@ -249,15 +259,81 @@ public class RESTCommunityHelper {
 				ex.setResponseBodyAsString(responseBodyAsString);
 				throw ex;
 			}
+			else {
+				// extract the node ID information in order
+				// to retrieve the issue URL available on the tracker
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+				mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+				mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+				JsonNode jsonRoot = mapper.readTree(responseBodyAsString);
+				String nodeID = jsonRoot.get("nid").asText(); //$NON-NLS-1$
+				JsonNode jsonNodeContent = retrieveNodeContentAsJSON(client, nodeID, authCookie);
+				return jsonNodeContent.get("path").asText(); //$NON-NLS-1$
+			}
+						
 		} catch (UnsupportedEncodingException e) {
 			JSSCommunityActivator.getDefault().logError(
 					Messages.RESTCommunityHelper_EncodingNotValidError, e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_IssueCreationError,e);
 		} catch (HttpException e) {
 			JSSCommunityActivator.getDefault().logError(
 					Messages.RESTCommunityHelper_PostMethodError, e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_IssueCreationError,e);
 		} catch (IOException e) {
 			JSSCommunityActivator.getDefault().logError(
 					Messages.RESTCommunityHelper_PostMethodIOError,e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_IssueCreationError,e);
+		}
+	}
+	
+	/**
+	 * Tries to retrieve the content for the specified node ID.
+	 * 
+	 * @param client
+	 *            the http client to use
+	 * @param nodeID
+	 *            the node ID
+	 * @param authCookie
+	 *            the session cookie to use for authentication purpose
+	 * @return the node content as JSON
+	 * @throws CommunityAPIException
+	 */
+	public static JsonNode retrieveNodeContentAsJSON(
+			HttpClient client, String nodeID,Cookie authCookie) throws CommunityAPIException{
+		try {
+			GetMethod retrieNodeContent = 
+					new GetMethod(CommunityConstants.NODE_CONTENT_URL_PREFIX + nodeID + ".json"); //$NON-NLS-1$
+			retrieNodeContent.setRequestHeader(new Header("Cookie", authCookie.toExternalForm())); //$NON-NLS-1$
+			int httpRetCode = client.executeMethod(retrieNodeContent);
+			String responseBodyAsString = retrieNodeContent.getResponseBodyAsString();
+			if(log.isDebugEnabled()){
+				displayCookiesAndResponseBody("====== NODE CONTENT RETRIEVE ======",client,retrieNodeContent); //$NON-NLS-1$
+			}
+			
+			if(HttpStatus.SC_OK == httpRetCode){
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+				mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+				mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+				JsonNode jsonRoot = mapper.readTree(responseBodyAsString);
+				releaseConnectionAndClearCookies(retrieNodeContent, client);
+				return jsonRoot;
+			}
+			else {
+				CommunityAPIException ex = new CommunityAPIException(Messages.RESTCommunityHelper_NodeContentRetrieveError);
+				ex.setHttpStatusCode(httpRetCode);
+				ex.setResponseBodyAsString(responseBodyAsString);
+				throw ex;
+			}
+		} catch (HttpException e) {
+			JSSCommunityActivator.getDefault().logError(
+					Messages.RESTCommunityHelper_GetMethodError, e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_NodeContentRetrieveError,e);
+		} catch (IOException e) {
+			JSSCommunityActivator.getDefault().logError(
+					Messages.RESTCommunityHelper_GetMethodIOError,e);
+			throw new CommunityAPIException(Messages.RESTCommunityHelper_NodeContentRetrieveError,e);
 		}
 	}
 

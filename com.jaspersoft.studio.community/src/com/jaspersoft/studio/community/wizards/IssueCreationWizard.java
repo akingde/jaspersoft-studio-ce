@@ -23,8 +23,22 @@ import java.util.List;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.program.Program;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.community.JSSCommunityActivator;
 import com.jaspersoft.studio.community.RESTCommunityHelper;
@@ -48,6 +62,7 @@ public class IssueCreationWizard extends Wizard {
 	private NewIssueDetailsPage page2;
 	private NewIssueAuthenticationPage page3;
 	private boolean isPublished;
+	private String issuePath;
 
 	public IssueCreationWizard() {
 		setWindowTitle(Messages.IssueCreationWizard_Title);
@@ -90,6 +105,14 @@ public class IssueCreationWizard extends Wizard {
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}
+		
+		if(isPublished){
+			new IssueCreatedDialog(
+					getShell(), Messages.IssueCreationWizard_InfoDialogTitle, null, 
+					Messages.IssueCreationWizard_InfoDialogMessage,
+					MessageDialog.INFORMATION,new String[] { IDialogConstants.OK_LABEL }, 0).open();
+		}
+		
 		return isPublished;
 	}
 
@@ -110,7 +133,8 @@ public class IssueCreationWizard extends Wizard {
 			}
 			
 			// Publish the issue to the community tracker
-			RESTCommunityHelper.createNewIssue(client, issueRequest, attachmentsIDs, authCookie);
+			issuePath = 
+					RESTCommunityHelper.createNewIssue(client, issueRequest, attachmentsIDs, authCookie);
 						
 		} catch (CommunityAPIException e) {
 			UIUtils.showError(e);
@@ -119,4 +143,51 @@ public class IssueCreationWizard extends Wizard {
 		return true;
 	}
 
+	/*
+	 * Information dialog that shows a link to the newly created issue on the
+	 * community tracker.
+	 */
+	private class IssueCreatedDialog extends MessageDialog {
+
+		public IssueCreatedDialog(Shell parentShell, String dialogTitle,
+				Image dialogTitleImage, String dialogMessage,
+				int dialogImageType, String[] dialogButtonLabels,
+				int defaultIndex) {
+			super(parentShell, dialogTitle, dialogTitleImage, dialogMessage,
+					dialogImageType, dialogButtonLabels, defaultIndex);
+		}
+		
+		@Override
+		protected Control createCustomArea(Composite parent) {
+			final StyledText issueLink = new StyledText(parent, SWT.READ_ONLY);
+			issueLink.setText(issuePath);
+			issueLink.setBackground(parent.getBackground());
+			issueLink.setLayoutData(new GridData(SWT.RIGHT,SWT.TOP,true,false,2,1));
+			
+			StyleRange style = new StyleRange();
+			style.underline = true;
+			style.underlineStyle = SWT.UNDERLINE_LINK;
+			int[] ranges = {0, issuePath.length()};
+			StyleRange[] styles = {style};
+			issueLink.setStyleRanges(ranges, styles);
+			
+			issueLink.addListener(SWT.MouseDown, new Listener() {
+				@Override
+				public void handleEvent(Event event) {
+					try {
+						int offset = issueLink.getOffsetAtLocation(new Point (event.x, event.y));
+						StyleRange style = issueLink.getStyleRangeAtOffset(offset);
+						if (style != null && style.underline && style.underlineStyle == SWT.UNDERLINE_LINK) {
+							Program.launch(issuePath);
+						}
+					} catch (IllegalArgumentException e) {
+						// no character under event.x, event.y
+					}
+				}
+			});
+			
+			return issueLink;
+		}
+
+	}
 }

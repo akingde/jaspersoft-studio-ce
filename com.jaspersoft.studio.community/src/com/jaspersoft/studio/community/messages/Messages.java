@@ -36,6 +36,8 @@ public class Messages extends NLS {
 	public static String IssueAttachmentDetailsPage_Title;
 	public static String IssueAttachmentDetailsPage_ViewLink;
 	public static String IssueAttachmentDetailsPage_ZipContentsGroup;
+	public static String IssueCreationWizard_InfoDialogMessage;
+	public static String IssueCreationWizard_InfoDialogTitle;
 	public static String IssueCreationWizard_TaskName;
 	public static String IssueCreationWizard_Title;
 	public static String JSSCommunityActivator_CredentialsRecoveringError;
@@ -80,11 +82,15 @@ public class Messages extends NLS {
 	public static String Resolution_UnableToReproduce;
 	public static String Resolution_WontFix;
 	public static String Resolution_WorksAsDesigned;
+	public static String RESTCommunityHelper_AuthenticationError;
 	public static String RESTCommunityHelper_AuthInfoProblemsError;
 	public static String RESTCommunityHelper_EncodingNotValidError;
 	public static String RESTCommunityHelper_FileNotFoundError;
 	public static String RESTCommunityHelper_FileUploadError;
+	public static String RESTCommunityHelper_GetMethodError;
+	public static String RESTCommunityHelper_GetMethodIOError;
 	public static String RESTCommunityHelper_IssueCreationError;
+	public static String RESTCommunityHelper_NodeContentRetrieveError;
 	public static String RESTCommunityHelper_PostMethodError;
 	public static String RESTCommunityHelper_PostMethodIOError;
 	public static String RESTCommunityHelper_WrongUsernamePasswordError;
