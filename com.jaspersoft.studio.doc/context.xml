@@ -184,7 +184,7 @@
 		<topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
    </context>
    <context id="select_subreport_property" title="Select the parameters of the subreport">
-      <description>Here you can insert the parameter that will be passed to the subreport. The name of the parameter must be the same of the one used in the subreport and you can set the value of the parameter with an expression.</description>
+      <description>Here you can insert the parameter that will be passed to the subreport. The name of the parameter must be the same of the one used in the subreport and you can set the value of the parameters with an expression.</description>
 	  <topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
 	  <topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
    </context>
@@ -221,5 +221,11 @@
    </context>
    <context id="select_sample_location" title="Select the sample location">
       <description>Here you can select the location in the workspace for the sample projects, by providing a name for the workspace fodler. Note that the name must be unique.</description>
+   </context>
+   <context id="select_return_values" title="Select the return values">
+      <description>Here you can insert the value that will be returned by the subreport. The value must be assigned to a variable and have a calculation time, necessary to know when evaluate the parameter</description>
+      <topic href="html/wizard/reportvariables/createvariable.html" label="The variables in Jaspersoft Studio" />
+	  <topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
+	  <topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
    </context>
 </contexts>

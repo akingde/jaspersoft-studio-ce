@@ -45,7 +45,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -66,8 +65,10 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class RVPropertyPage extends WizardPage {
+public class RVPropertyPage extends JSSHelpWizardPage {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -134,6 +135,7 @@ public class RVPropertyPage extends WizardPage {
 		super(pageName);
 		setTitle(Messages.RVPropertyPage_subreport_return_values);
 		setDescription(Messages.RVPropertyPage_description);
+		contextName = ContextHelpIDs.wizardAddReturnValue;
 	}
 
 	public void createControl(Composite parent) {
