@@ -31,6 +31,7 @@ public class CommunityConstants {
 	public static final String SECURE_PREFSTORE_PATHNAME = "jaspersoft_community_site"; //$NON-NLS-1$
 	public static final int JSSPROJECT_COMMUNITY_ID = 496;
 	public static final String NODE_CONTENT_URL_PREFIX = "http://community.jaspersoft.com/community-api/node/"; //$NON-NLS-1$
+	public static final String ISSUE_SUBMISSION_WIZARD_IMG = "resources/images/softwareBug.png";
 	
 	private CommunityConstants(){
 		// prevent instantiation...

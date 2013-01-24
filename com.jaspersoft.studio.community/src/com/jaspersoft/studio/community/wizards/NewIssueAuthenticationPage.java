@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.community.CommunityConstants;
 import com.jaspersoft.studio.community.JSSCommunityActivator;
 import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.utils.CommunityUser;
@@ -56,7 +57,7 @@ public class NewIssueAuthenticationPage extends WizardPage {
 	public NewIssueAuthenticationPage() {
 		super("authenticationInfoWizardPage"); //$NON-NLS-1$
 		setImageDescriptor(
-				JSSCommunityActivator.getDefault().getImageDescriptor("resources/images/softwareBug.jpg")); //$NON-NLS-1$
+				JSSCommunityActivator.getDefault().getImageDescriptor(CommunityConstants.ISSUE_SUBMISSION_WIZARD_IMG));
 		setTitle(Messages.NewIssueAuthenticationPage_Title);
 		setDescription(Messages.NewIssueAuthenticationPage_Description);
 	}

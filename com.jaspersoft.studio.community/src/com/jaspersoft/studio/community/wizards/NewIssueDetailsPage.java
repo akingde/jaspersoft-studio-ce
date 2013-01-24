@@ -62,7 +62,7 @@ public class NewIssueDetailsPage extends WizardPage {
 	public NewIssueDetailsPage() {
 		super("issueDetailsWizardPage"); //$NON-NLS-1$
 		setImageDescriptor(
-				JSSCommunityActivator.getDefault().getImageDescriptor("resources/images/softwareBug.jpg")); //$NON-NLS-1$
+				JSSCommunityActivator.getDefault().getImageDescriptor(CommunityConstants.ISSUE_SUBMISSION_WIZARD_IMG));
 		setTitle(Messages.NewIssueDetailsPage_Title);
 		setDescription(Messages.NewIssueDetailsPage_Description);
 	}

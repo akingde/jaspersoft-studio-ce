@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.List;
 
+import com.jaspersoft.studio.community.CommunityConstants;
 import com.jaspersoft.studio.community.JSSCommunityActivator;
 import com.jaspersoft.studio.community.dialogs.HwSwDetailsDialog;
 import com.jaspersoft.studio.community.messages.Messages;
@@ -70,7 +71,7 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 	public IssueAttachmentDetailsPage() {
 		super("issueAttachmentDetailsWizardPage"); //$NON-NLS-1$
 		setImageDescriptor(
-				JSSCommunityActivator.getDefault().getImageDescriptor("resources/images/softwareBug.jpg")); //$NON-NLS-1$
+				JSSCommunityActivator.getDefault().getImageDescriptor(CommunityConstants.ISSUE_SUBMISSION_WIZARD_IMG));
 		setTitle(Messages.IssueAttachmentDetailsPage_Title);
 		setDescription(Messages.IssueAttachmentDetailsPage_Description);
 	}
