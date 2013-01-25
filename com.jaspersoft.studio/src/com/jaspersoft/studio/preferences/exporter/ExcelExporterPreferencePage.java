@@ -101,68 +101,57 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 
 		BooleanFieldEditor bf = new BooleanFieldEditor(NSF_EXPORT_XLS_USE_TIMEZONE, "Use Report Time Zone", sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,
 				Messages.ExcelExporterPreferencePage_30, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN,
 				Messages.ExcelExporterPreferencePage_31, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
 				Messages.ExcelExporterPreferencePage_32, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
 				Messages.ExcelExporterPreferencePage_33, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS,
 				Messages.ExcelExporterPreferencePage_34, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED,
 				Messages.ExcelExporterPreferencePage_35, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		StringFieldEditor se = new StringFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD,
 				Messages.ExcelExporterPreferencePage_36, sc);
 		((Text) se.getTextControl(sc)).setEchoChar('*');
 		addField(se);
-		HelpSystem.setHelp(se.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
+		HelpSystem.setHelp(se.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
 
 		JSSComboFieldEditor cfe = new JSSComboFieldEditor(NSF_EXPORT_XLS_AUTO_FILTER, "Auto Filter", new String[][] {
 				{ "", "" }, { "Start", "Start" }, { "Stop", "Stop" } }, sc);
 		addField(cfe);
-		HelpSystem.setHelp(cfe.getComboBoxControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
+		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
 		IntegerFieldEditor iedit = new IntegerFieldEditor(NSF_EXPORT_XLS_FREEZ_ROW, "Freez On Row", sc);
 		iedit.setValidRange(0, 65536);
 		addField(iedit);
-		HelpSystem.setHelp(se.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
+		HelpSystem.setHelp(se.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
 
 		NStringFieldEditor sfe = new NStringFieldEditor(NSF_EXPORT_XLS_FREEZ_COLUMN, "Freez On Column (A, AB, etc.)", sc);
 		addField(sfe);
-		HelpSystem.setHelp(se.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
+		HelpSystem.setHelp(se.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
 
 		FloatFieldEditor fedit = new FloatFieldEditor(NSF_EXPORT_XLS_COLUMN_WIDTH_RATIO, "Column Freez Ratio", sc);
 		fedit.setValidRange(0f, Float.MAX_VALUE);
@@ -192,33 +181,29 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 						{ RunDirectionEnum.LTR.getName(), RunDirectionEnum.LTR.getName() },
 						{ RunDirectionEnum.RTL.getName(), RunDirectionEnum.RTL.getName() } }, parent);
 		addField(cfe);
-		HelpSystem.setHelp(cfe.getComboBoxControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
+		HelpSystem.setHelp(cfe.getComboBoxControl(parent), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
 		IntegerFieldEditor iedit = new IntegerFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET,
 				Messages.ExcelExporterPreferencePage_40, parent);
 		iedit.setValidRange(0, Integer.MAX_VALUE);
 		addField(iedit);
-		HelpSystem.setHelp(iedit.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + iedit.getPreferenceName());
+		HelpSystem.setHelp(iedit.getTextControl(parent), StudioPreferencePage.REFERENCE_PREFIX + iedit.getPreferenceName());
 
 		BooleanFieldEditor bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET,
 				Messages.ExcelExporterPreferencePage_41, parent);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem
+				.setHelp(bf.getDescriptionControl(parent), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		iedit = new IntegerFieldEditor(NSF_EXPORT_XLS_FIT_HEIGHT, Messages.ExcelExporterPreferencePage_42, parent);
 		iedit.setValidRange(0, Integer.MAX_VALUE);
 		addField(iedit);
-		HelpSystem.setHelp(iedit.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + iedit.getPreferenceName());
+		HelpSystem.setHelp(iedit.getTextControl(parent), StudioPreferencePage.REFERENCE_PREFIX + iedit.getPreferenceName());
 
 		iedit = new IntegerFieldEditor(NSF_EXPORT_XLS_FIT_WIDTH, Messages.ExcelExporterPreferencePage_43, parent);
 		iedit.setValidRange(0, Integer.MAX_VALUE);
 		addField(iedit);
-		HelpSystem.setHelp(iedit.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + iedit.getPreferenceName());
+		HelpSystem.setHelp(iedit.getTextControl(parent), StudioPreferencePage.REFERENCE_PREFIX + iedit.getPreferenceName());
 
 		cTab.setControl(parent);
 
@@ -231,18 +216,15 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		TextFieldEditor tfe = new TextFieldEditor(NSF_EXPORT_XLS_SHEET_HEADER_LEFT,
 				Messages.ExcelExporterPreferencePage_45, parent);
 		addField(tfe);
-		HelpSystem.setHelp(tfe.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
+		HelpSystem.setHelp(tfe.getTextControl(parent), StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
 
 		tfe = new TextFieldEditor(NSF_EXPORT_XLS_SHEET_HEADER_CENTER, Messages.ExcelExporterPreferencePage_46, parent);
 		addField(tfe);
-		HelpSystem.setHelp(tfe.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
+		HelpSystem.setHelp(tfe.getTextControl(parent), StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
 
 		tfe = new TextFieldEditor(NSF_EXPORT_XLS_SHEET_HEADER_RIGHT, Messages.ExcelExporterPreferencePage_47, parent);
 		addField(tfe);
-		HelpSystem.setHelp(tfe.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
+		HelpSystem.setHelp(tfe.getTextControl(parent), StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
 
 		cTab.setControl(parent);
 
@@ -254,18 +236,15 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 
 		tfe = new TextFieldEditor(NSF_EXPORT_XLS_SHEET_FOOTER_LEFT, Messages.ExcelExporterPreferencePage_49, parent);
 		addField(tfe);
-		HelpSystem.setHelp(tfe.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
+		HelpSystem.setHelp(tfe.getTextControl(parent), StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
 
 		tfe = new TextFieldEditor(NSF_EXPORT_XLS_SHEET_FOOTER_CENTER, Messages.ExcelExporterPreferencePage_50, parent);
 		addField(tfe);
-		HelpSystem.setHelp(tfe.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
+		HelpSystem.setHelp(tfe.getTextControl(parent), StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
 
 		tfe = new TextFieldEditor(NSF_EXPORT_XLS_SHEET_FOOTER_RIGHT, Messages.ExcelExporterPreferencePage_51, parent);
 		addField(tfe);
-		HelpSystem.setHelp(tfe.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
+		HelpSystem.setHelp(tfe.getTextControl(parent), StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
 
 		cTab.setControl(parent);
 		tFolder.setSelection(0);
@@ -282,31 +261,26 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		BooleanFieldEditor bf = new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_HIDDEN, Messages.ExcelExporterPreferencePage_53,
 				sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_LOCKED, Messages.ExcelExporterPreferencePage_54, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE,
 				Messages.ExcelExporterPreferencePage_55, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND,
 				Messages.ExcelExporterPreferencePage_56, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER,
 				Messages.ExcelExporterPreferencePage_57, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_WRAP_TEXT, Messages.ExcelExporterPreferencePage_58, sc);
 		addField(bf);
@@ -316,8 +290,7 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED,
 				Messages.ExcelExporterPreferencePage_59, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		ptab.setControl(sc);
 	}
@@ -336,8 +309,7 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		BooleanFieldEditor bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE,
 				Messages.ExcelExporterPreferencePage_61, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_USE_TMP_FILE, Messages.ExcelExporterPreferencePage_62, sc));
 		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT, Messages.ExcelExporterPreferencePage_63, sc));

@@ -83,50 +83,42 @@ public class HTMLExporterPreferencePage extends FieldEditorOverlayPage {
 						{ Messages.HTMLExporterPreferencePage_17, Messages.HTMLExporterPreferencePage_18 },
 						{ Messages.HTMLExporterPreferencePage_19, Messages.HTMLExporterPreferencePage_20 } }, sc);
 		addField(cfe);
-		HelpSystem.setHelp(cfe.getComboBoxControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
+		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
 		BooleanFieldEditor bf = new BooleanFieldEditor(NSF_EXPORT_HTML_ACCESSIBLE, Messages.HTMLExporterPreferencePage_21,
 				sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_FLUSH_OUTPUT, Messages.HTMLExporterPreferencePage_22,
 				sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES,
 				Messages.HTMLExporterPreferencePage_23, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
 				Messages.HTMLExporterPreferencePage_24, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN,
 				Messages.HTMLExporterPreferencePage_25, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,
 				Messages.HTMLExporterPreferencePage_26, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD,
 				Messages.HTMLExporterPreferencePage_27, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		ptab.setControl(sc);
 	}

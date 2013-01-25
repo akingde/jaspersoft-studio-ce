@@ -165,27 +165,23 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		BooleanFieldEditor bf = new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_ENCRYPTED,
 				Messages.PDFExporterPreferencePage_45, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_128_BIT_KEY, Messages.PDFExporterPreferencePage_46, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		StringFieldEditor se = new StringFieldEditor(JRPdfExporterParameter.PROPERTY_USER_PASSWORD,
 				Messages.PDFExporterPreferencePage_47, sc);
 		((Text) se.getTextControl(sc)).setEchoChar('*');
 		addField(se);
-		HelpSystem.setHelp(se.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
+		HelpSystem.setHelp(se.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
 
 		se = new StringFieldEditor(JRPdfExporterParameter.PROPERTY_OWNER_PASSWORD, Messages.PDFExporterPreferencePage_48,
 				sc);
 		((Text) se.getTextControl(sc)).setEchoChar('*');
 		addField(se);
-		HelpSystem.setHelp(se.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
+		HelpSystem.setHelp(se.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
 
 		addField(new PDFPermissionFieldEditor(NSF_EXPORT_PDF_PERMISSION, Messages.PDFExporterPreferencePage_49, sc));
 
@@ -201,20 +197,17 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 
 		BooleanFieldEditor bf = new BooleanFieldEditor(NSF_EXPORT_PDF_EMBEDDED, Messages.PDFExporterPreferencePage_52, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		JSSComboFieldEditor cfe = new JSSComboFieldEditor(NSF_EXPORT_PDF_ENCODING, Messages.PDFExporterPreferencePage_51,
 				ModelUtils.getPdfEncodings2(), sc);
 		addField(cfe);
-		HelpSystem.setHelp(cfe.getComboBoxControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
+		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
 		cfe = new JSSComboFieldEditor(NSF_EXPORT_PDF_FONT_NAME, Messages.PDFExporterPreferencePage_53,
 				ModelUtils.getPDFFontNames2(), sc);
 		addField(cfe);
-		HelpSystem.setHelp(cfe.getComboBoxControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
+		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
 		Composite fdircompo = new Composite(sc, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -223,8 +216,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		PathEditor pe = new PathEditor(NSF_EXPORT_PDF_FONTDIR, Messages.PDFExporterPreferencePage_54,
 				Messages.PDFExporterPreferencePage_55, fdircompo);
 		addField(pe);
-		HelpSystem.setHelp(pe.getListControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + pe.getPreferenceName());
+		HelpSystem.setHelp(pe.getListControl(sc), StudioPreferencePage.REFERENCE_PREFIX + pe.getPreferenceName());
 
 		fdircompo.setLayout(new GridLayout(4, false));
 	}
@@ -245,8 +237,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 						{ Messages.PDFExporterPreferencePage_68, Messages.PDFExporterPreferencePage_69 },
 						{ Messages.PDFExporterPreferencePage_70, Messages.PDFExporterPreferencePage_71 } }, sc);
 		addField(cfe);
-		HelpSystem.setHelp(cfe.getComboBoxControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
+		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
 		cfe = new JSSComboFieldEditor(
 				JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE,
@@ -255,8 +246,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 						{ JRPdfExporterParameter.PDFA_CONFORMANCE_1A, "1A" }, { JRPdfExporterParameter.PDFA_CONFORMANCE_1B, "1B" } },
 				sc);
 		addField(cfe);
-		HelpSystem.setHelp(cfe.getComboBoxControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
+		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
 		Composite fcompo = new Composite(sc, SWT.NONE);
 		fcompo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -265,55 +255,46 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 				"ICC Profile File", fcompo);
 		ffe.setFileExtensions(new String[] { ".icc" }); //$NON-NLS-1$
 		addField(ffe);
-		HelpSystem.setHelp(ffe.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + ffe.getPreferenceName());
+		HelpSystem.setHelp(ffe.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + ffe.getPreferenceName());
 
 		BooleanFieldEditor bf = new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_COMPRESSED,
 				Messages.PDFExporterPreferencePage_72, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS,
 				Messages.PDFExporterPreferencePage_73, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(NSF_EXPORT_PDF_COLLAPSE_MISSING_BOOKMARK_LEVELS, Messages.PDFExporterPreferencePage_74,
 				sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES,
 				Messages.PDFExporterPreferencePage_75, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_TAGGED, Messages.PDFExporterPreferencePage_77, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		cfe = new JSSComboFieldEditor(JRPdfExporterParameter.PROPERTY_PRINT_SCALING, Messages.PDFExporterPreferencePage_78,
 				new String[][] { { "Default", "default" }, { "None", "none" } }, sc);
 		addField(cfe); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		HelpSystem.setHelp(cfe.getComboBoxControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
+		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
 		StringFieldEditor sfe = new StringFieldEditor(JRPdfExporterParameter.PROPERTY_TAG_LANGUAGE,
 				Messages.PDFExporterPreferencePage_83, sc);
 		addField(sfe);
-		HelpSystem.setHelp(sfe.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + sfe.getPreferenceName());
+		HelpSystem.setHelp(sfe.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + sfe.getPreferenceName());
 
 		TextFieldEditor tfe = new TextFieldEditor(JRPdfExporterParameter.PROPERTY_PDF_JAVASCRIPT,
 				Messages.PDFExporterPreferencePage_84, sc);
 		addField(tfe);
-		HelpSystem.setHelp(tfe.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
+		HelpSystem.setHelp(tfe.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + tfe.getPreferenceName());
 
 		ptab.setControl(sc);
 	}
