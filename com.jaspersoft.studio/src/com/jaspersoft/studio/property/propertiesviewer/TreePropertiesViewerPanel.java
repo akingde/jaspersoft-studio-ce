@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.propertiesviewer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.resource.JFaceResources;
@@ -40,7 +41,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -63,6 +63,7 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 
 	protected FormToolkit toolkit;
 	private List<T> nodes;
+	private List<PropertiesNodeChangeListener> nodeChangedListeners;
 	protected IPropertiesViewerNode currentSelectedNode;
 	
 	// Widgets
@@ -83,6 +84,7 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 		super(parent, style);
 		toolkit = new FormToolkit(parent.getDisplay());
 		this.nodes=nodes;
+		this.nodeChangedListeners=new ArrayList<PropertiesNodeChangeListener>(1); // usually one listener is enough
 		createPanelContent();
 	}
 
@@ -146,6 +148,7 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 				final Object selection = getSingleSelection(event.getSelection());
 				if (selection instanceof IPropertiesViewerNode) {
 					showNodeContent((IPropertiesViewerNode)selection);
+					notifyPropertiesNodeChanged((IPropertiesViewerNode)selection);
 				}
 			}
 		});
@@ -304,13 +307,32 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 	 */
 	public void selectPropertiesNode(IPropertiesViewerNode node){
 		filteredTree.getViewer().setSelection(new StructuredSelection(node));
-		// update the help information if available
-		String helpContextID = node.getHelpContextID();
-		if(helpContextID!=null && !helpContextID.isEmpty()){
-			PlatformUI.getWorkbench().getHelpSystem().setHelp(this.getParent(), helpContextID);
-		}
-		else {
-			// TODO - any way to remove a previously attached help?
+	}
+
+	/**
+	 * Adds a new {@link PropertiesNodeChangeListener} to the widget current ones.
+	 * 
+	 * @param l the new listener
+	 */
+	public void addPropertiesNodeChangedListener(PropertiesNodeChangeListener l){
+		nodeChangedListeners.add(l);
+	}
+	
+	/**
+	 * Removes a {@link PropertiesNodeChangeListener} from current ones of the widget.
+	 * 
+	 * @param l the listener to remove
+	 */
+	public void removePropertiesNodeChangedListener(PropertiesNodeChangeListener l){
+		nodeChangedListeners.remove(l);
+	}
+	
+	/*
+	 * Notifies to the listeners that a node change event has occurred.
+	 */
+	private void notifyPropertiesNodeChanged(IPropertiesViewerNode node){
+		for(PropertiesNodeChangeListener l : nodeChangedListeners){
+			l.nodeChanged(node);
 		}
 	}
 
