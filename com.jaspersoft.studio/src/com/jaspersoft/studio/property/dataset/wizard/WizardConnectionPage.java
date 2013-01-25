@@ -82,7 +82,7 @@ public class WizardConnectionPage extends JSSHelpWizardPage implements IExpressi
 		JRDesignExpression exp = new JRDesignExpression();
 		exp.setText("$P{REPORT_CONNECTION}");
 		jrDsRun.setConnectionExpression( exp );
-		contextName = ContextHelpIDs.wizardDatasetConnection;
+		contextName = ContextHelpIDs.WIZARD_DATASET_CONNECTION;
 	}
 
 	public void createControl(Composite parent) {

@@ -64,7 +64,7 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 		setTitle(Messages.common_barcode_wizard);
 		setDescription(Messages.BarcodeWizardPage_barcode_wizard_description_a
 				+ Messages.BarcodeWizardPage_barcode_wizard_description_b);
-		contextName = ContextHelpIDs.wizardSelectBarcode;
+		contextName = ContextHelpIDs.WIZARD_SELECT_BARCODE;
 	}
 
 	@Override

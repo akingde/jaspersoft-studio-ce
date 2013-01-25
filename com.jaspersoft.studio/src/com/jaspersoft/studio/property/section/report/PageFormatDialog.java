@@ -72,7 +72,7 @@ public final class PageFormatDialog extends FormDialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(Messages.PageFormatDialog_0);
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(newShell, ContextHelpIDs.wizardPageFormat);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(newShell, ContextHelpIDs.WIZARD_FORMAT_PAGE);
 	}
 
 	@Override

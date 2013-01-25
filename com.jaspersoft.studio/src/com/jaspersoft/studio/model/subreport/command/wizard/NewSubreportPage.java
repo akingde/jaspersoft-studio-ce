@@ -97,7 +97,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 		setTitle(Messages.common_subreport);
 		setDescription(Messages.WizardNewSubreportPage_description);
 		setImageDescriptor(MSubreport.getIconDescriptor().getIcon32());
-		contextName = ContextHelpIDs.wizardSubreportSource;
+		contextName = ContextHelpIDs.WIZARD_SUBREPORT_SOURCE;
 	}
 
 	private MSubreport subreport;
@@ -224,7 +224,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 									@Override
 									protected void configureShell(org.eclipse.swt.widgets.Shell shell) {
 										super.configureShell(shell);
-										PlatformUI.getWorkbench().getHelpSystem().setHelp(shell, ContextHelpIDs.wizardSubreportFile);
+										PlatformUI.getWorkbench().getHelpSystem().setHelp(shell, ContextHelpIDs.WIZARD_SUBREPORT_FILE);
 									};
 								};
 							

@@ -28,6 +28,7 @@ import com.jaspersoft.studio.model.MGraphicElementLinePen;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 /*
  * The location section on the location tab.
@@ -59,9 +60,9 @@ public class LinePenSection extends AbstractRealValueSection {
 		panel.setLayout(new GridLayout(2,false));
 		panel.setText("Line");
 		
-		createWidget4Property(panel, JRBasePen.PROPERTY_LINE_COLOR);
-		createWidget4Property(panel, JRBasePen.PROPERTY_LINE_STYLE);
-		createWidget4Property(panel, JRBasePen.PROPERTY_LINE_WIDTH);
+		ASPropertyWidget returnedWidget = createWidget4Property(panel, JRBasePen.PROPERTY_LINE_COLOR);
+		returnedWidget = createWidget4Property(panel, JRBasePen.PROPERTY_LINE_STYLE);
+		returnedWidget = createWidget4Property(panel, JRBasePen.PROPERTY_LINE_WIDTH);
 	}
 
 }

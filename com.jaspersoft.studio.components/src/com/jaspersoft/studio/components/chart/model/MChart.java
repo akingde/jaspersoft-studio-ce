@@ -194,6 +194,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				Messages.MChart_title_position, EdgeEnum.class, NullEnum.NULL);
 		titlePositionD
 				.setDescription(Messages.MChart_title_position_description);
+		titlePositionD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartTitle_position"));
 		desc.add(titlePositionD);
 
 		evaluationTimeD = new JSSEnumPropertyDescriptor(
@@ -331,6 +332,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				Messages.MChart_legend_position, EdgeEnum.class, NullEnum.NULL);
 		legendPositionD
 				.setDescription(Messages.MChart_legend_position_description);
+		legendPositionD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartLegend_position"));
 		desc.add(legendPositionD);
 
 		setHelpPrefix(desc,

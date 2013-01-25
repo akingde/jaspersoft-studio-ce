@@ -66,7 +66,7 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	 */
 	@Override
 	public void performHelp() {
-		PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.wizardNewFile);
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.WIZARD_NEW_FILE);
 	}
 	
 	/**
@@ -74,7 +74,7 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	 */
 	@Override
 	public void setHelpData(){
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.wizardNewFile);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.WIZARD_NEW_FILE);
 	}
 	
 

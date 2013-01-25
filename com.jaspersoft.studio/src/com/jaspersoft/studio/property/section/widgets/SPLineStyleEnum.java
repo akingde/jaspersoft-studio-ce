@@ -88,6 +88,14 @@ public class SPLineStyleEnum {
 				}
 		});
 	}
+	
+	/**
+	 * Set the contextual help for the control
+     * @param href uri to open when the help is requested
+	 */
+	public void setHelp(String href){
+		combo.setHelp(href);
+	}
 
 	public void propertyChange(AbstractSection section, String property, Integer value) {
 		section.changeProperty(property, value);

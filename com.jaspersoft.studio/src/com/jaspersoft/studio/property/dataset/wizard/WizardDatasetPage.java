@@ -194,7 +194,7 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		setDescription(Messages.WizardDatasetPage_description);
 		this.acceptMainDataset = acceptMainDataset;
 		this.componentName = componentName;
-		contextName = ContextHelpIDs.wizardTableSelectDataset;
+		contextName = ContextHelpIDs.WIZARD_SELECT_TABLE_DATASET;
 	
 	}
 

@@ -32,6 +32,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -86,18 +87,19 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		ColorPropertyDescriptor penLineColorD = new ColorPropertyDescriptor(JRBasePen.PROPERTY_LINE_COLOR,
 				Messages.common_line_color, NullEnum.INHERITED);
 		penLineColorD.setDescription(Messages.MLinePen_line_color_description);
+		penLineColorD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineColor"));
 		desc.add(penLineColorD);
 
 		FloatPropertyDescriptor penLineWidthD = new FloatPropertyDescriptor(JRBasePen.PROPERTY_LINE_WIDTH,
 				Messages.MLinePen_line_width);
 		penLineWidthD.setDescription(Messages.MLinePen_line_width_description);
+		penLineWidthD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineWidth"));
 		desc.add(penLineWidthD);
 
-		/*penLineStyleD = new LineStylePropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_line_style,
-				LineStyleEnum.class, NullEnum.INHERITED);*/
 		penLineStyleD = new JSSPopupPropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_line_style,
 				LineStyleEnum.class, NullEnum.INHERITED, createLineSpacingItems());
 		penLineStyleD.setDescription(Messages.MLinePen_line_style_description);
+		penLineStyleD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineStyle"));
 		desc.add(penLineStyleD);
 
 		defaultsMap.put(JRBasePen.PROPERTY_LINE_STYLE, null);

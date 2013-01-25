@@ -28,6 +28,7 @@ import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -40,6 +41,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.wb.swt.ResourceManager;
+
+import com.jaspersoft.studio.help.HelpSystem;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class ComboButton extends Viewer {
 
@@ -117,8 +121,6 @@ public class ComboButton extends Viewer {
 	 */
 	private boolean pressed = false;
 
-	private boolean forceFocus = false;
-
 	/**
 	 * Size of the text
 	 */
@@ -134,6 +136,8 @@ public class ComboButton extends Viewer {
 	 */
 	private List<IOpenListener> openListeners = null;
 	
+	private IMenuProvider menuProvider;
+	
 	/**
 	 * Caches:
 	 */
@@ -146,6 +150,79 @@ public class ComboButton extends Viewer {
 	private Rectangle imgArea = null;
 	private Rectangle textArea = null;
 
+	
+	/**
+	 * Canvas that appear like a button
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class GraphicButton extends Canvas {
+		
+		/**
+		 * Last help listener set for this element
+		 */
+		private HelpListener lastListener = null;
+		
+		/**
+		 * Size of the maximum text size
+		 */
+		private Point textSize;
+		
+		public GraphicButton(Composite parent, String biggerString){
+			super(parent, SWT.DOUBLE_BUFFERED);
+			textSize = calcTextSize(biggerString.toUpperCase());
+		}
+		
+		public Point computeSize(int wHint, int hHint, boolean changed) {
+			checkWidget();
+			if (changed)
+				clearCaches();
+			Point imageSize = getImageSize();
+			boolean hasArrows = hasArrows();
+
+			int width;
+			if (wHint != SWT.DEFAULT) {
+				width = Math.max(wHint, MARGIN * 2);
+			} else {
+				width = MARGIN * 2 + imageSize.x + textSize.x + BORDER * 2;
+				if (hasArrows) {
+					width += ARROW_WIDTH + CONTENT_ARROW_SPACING;
+				}
+				if (imageSize.x != 0 && textSize.x != 0) {
+					width += IMAGE_TEXT_SPACING;
+				}
+			}
+
+			int minHeight = MARGIN * 2 + Math.max(imageSize.y, textSize.y) + BORDER * 2;
+			if (hasArrows) {
+				minHeight = Math.max(minHeight, ARROW_HEIGHT * 2 + ARROWS_SPACING);
+			}
+			int height = minHeight;
+			Rectangle trim = computeTrim(0, 0, width, height);
+			return new Point(trim.width, trim.height);
+		}
+		
+		/**
+		 * Substitute the original listener with one adapted to this type of element. This help will open a 
+		 * browser window when used the key F1 on the element, the link is taken from the properties of this element
+		 */
+		@Override
+		public void addHelpListener(HelpListener listener) {
+			HelpProvider contextHelp = new HelpProvider(menuProvider.getMenu());
+			lastListener = contextHelp.setHelp(control.getData(HelpSystem.HELP_KEY).toString());
+		}
+
+		@Override
+		public void removeHelpListener(HelpListener listener) {
+			if (lastListener != null){
+				super.removeHelpListener(lastListener);
+				lastListener = null;
+			}
+		}
+		
+	};
+	
 	/**
 	 * Constructs a new instance of this class given its parent and a style value describing its behavior and appearance.
 	 * 
@@ -162,44 +239,13 @@ public class ComboButton extends Viewer {
 	 * @param biggerString
 	 *          the most big string that will be represented, used to give the element a right size
 	 */
-	public ComboButton(Composite parent, int style, final String biggerString) {
+	public ComboButton(Composite parent, int style, final String biggerString, final IMenuProvider menuProvider) {
 		this.style = checkStyle(style, NORMAL, NORMAL, NO_TEXT, NO_IMAGE) | checkStyle(style, SWT.NONE, NO_ARROWS);
-		this.control = new Canvas(parent, SWT.DOUBLE_BUFFERED) {
-			public Point computeSize(int wHint, int hHint, boolean changed) {
-				checkWidget();
-				if (changed)
-					clearCaches();
-				Point imageSize = getImageSize();
-				Point textSize = calcTextSize(biggerString.toUpperCase());
-				boolean hasArrows = hasArrows();
-
-				int width;
-				if (wHint != SWT.DEFAULT) {
-					width = Math.max(wHint, MARGIN * 2);
-				} else {
-					width = MARGIN * 2 + imageSize.x + textSize.x + BORDER * 2;
-					if (hasArrows) {
-						width += ARROW_WIDTH + CONTENT_ARROW_SPACING;
-					}
-					if (imageSize.x != 0 && textSize.x != 0) {
-						width += IMAGE_TEXT_SPACING;
-					}
-				}
-
-				int minHeight = MARGIN * 2 + Math.max(imageSize.y, textSize.y) + BORDER * 2;
-				if (hasArrows) {
-					minHeight = Math.max(minHeight, ARROW_HEIGHT * 2 + ARROWS_SPACING);
-				}
-				int height = minHeight;
-				Rectangle trim = computeTrim(0, 0, width, height);
-				return new Point(trim.width, trim.height);
-			}
-
-		};
+		this.menuProvider = menuProvider;
+		control = new  GraphicButton(parent, biggerString);
 		hookControl(control);
 	}
 	
-	boolean menuOpen = false;
 
 	/**
 	 * Hook to the control the principal events: paint, mouse up, mouse enter and exit (for hovering the control), key
@@ -221,7 +267,7 @@ public class ComboButton extends Viewer {
           if (event.button == 1)
               handleMousePress();
           break;
-      case SWT.MouseUp:
+        case SWT.MouseUp:
           if (event.button == 1)
               handleMouseRelease();
           break;
@@ -237,8 +283,14 @@ public class ComboButton extends Viewer {
 				case SWT.FocusIn:
 					handleFocusIn();
 					break;
+				case SWT.HELP:
+					System.out.println("bubba");
+					break;
 				case SWT.FocusOut:
 					handleFocusOut();
+					break;
+				default:
+					System.out.println("cacca "+event.type);
 				}
 			}
 		};
@@ -483,14 +535,6 @@ public class ComboButton extends Viewer {
 	}
 
 	/**
-	 * Check if the focus is forced
-	 * @return
-	 */
-	public boolean isForceFocus() {
-		return forceFocus;
-	}
-
-	/**
 	 * Set the hovered state of the control, then the control will be refreshed
 	 * @param hovered
 	 */
@@ -513,16 +557,7 @@ public class ComboButton extends Viewer {
 		refreshControl();
 	}
 
-	/**
-	 * Set the force focus state, then the control will be refreshed
-	 * @param focused
-	 */
-	public void setForceFocus(boolean focused) {
-		if (focused == this.forceFocus)
-			return;
-		this.forceFocus = focused;
-		refreshControl();
-	}
+
 
 	/**
 	 * Set the text inside the control, then it will be refreshed, but only 
@@ -661,9 +696,9 @@ public class ComboButton extends Viewer {
 	 */
 	protected Point calcTextSize(String text) {
 		Point size;
-		GC gc = new GC(getControl().getDisplay());
+		GC gc = new GC(UIUtils.getDisplay());
 		try {
-			gc.setFont(getControl().getFont());
+			gc.setFont(UIUtils.getDisplay().getSystemFont());
 			size = gc.stringExtent(text.concat("  "));
 		} finally {
 			gc.dispose();
@@ -786,7 +821,7 @@ public class ComboButton extends Viewer {
 		gc.setTextAntialias(SWT.ON);
 		
 		int x, y, w, h;
-		boolean focused = getControl().isFocusControl() || isForceFocus();
+		boolean focused = getControl().isFocusControl();
 		boolean hasBackgroundAndBorder = pressed || hovered || focused;
 		if (hasBackgroundAndBorder) {
 			// draw control background

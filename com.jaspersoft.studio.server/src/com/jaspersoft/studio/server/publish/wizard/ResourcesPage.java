@@ -25,7 +25,6 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -56,7 +55,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		setTitle(Messages.ResourcesPage_title);
 		setDescription(Messages.ResourcesPage_description);
 		this.jConfig = jConfig;
-		contextName = ContextHelpIDs.wizardSelectResouces;
+		contextName = ContextHelpIDs.WIZARD_SELECT_RESOURCES;
 	}
 
 	public boolean isEmpty() {

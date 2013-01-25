@@ -8,53 +8,53 @@ package com.jaspersoft.studio.wizards;
  */
 public class ContextHelpIDs {
 	
-	public static String prefix = "com.jaspersoft.studio.doc.";
+	public static final String PREFIX = "com.jaspersoft.studio.doc.";
 	
-	public static String wizardTemplatePage = prefix.concat("select_template");
+	public static final String WIZARD_TEMPLATE_PAGE = PREFIX.concat("select_template");
 	
-	public static String wizardNewFile = prefix.concat("select_name");
+	public static final String WIZARD_NEW_FILE = PREFIX.concat("select_name");
 	
-	public static String wizardSelectDataset = prefix.concat("select_dataset");
+	public static final String WIZARD_SELECT_DATASET = PREFIX.concat("select_dataset");
 	
-	public static String wizardSelectGroup = prefix.concat("select_groups");
+	public static final String WIZARD_SELECT_GROUP = PREFIX.concat("select_groups");
 	
-	public static String wizardSelectFields = prefix.concat("select_fields");
+	public static final String WIZARD_SELECT_FIELDS = PREFIX.concat("select_fields");
 	
-	public static String wizardTableSelectDataset = prefix.concat("select_table_dataset");
+	public static final String WIZARD_SELECT_TABLE_DATASET = PREFIX.concat("select_table_dataset");
 	
-	public static String wizardDatasetName = prefix.concat("select_dataset_name");
+	public static final String WIZARD_DATASET_NAME = PREFIX.concat("select_dataset_name");
 	
-	public static String wizardDatasetConnection = prefix.concat("select_dataset_connection");
+	public static final String WIZARD_DATASET_CONNECTION = PREFIX.concat("select_dataset_connection");
 	
-	public static String wizardLayoutPage = prefix.concat("select_layout");
+	public static final String WIZARD_LAYOUT_PAGE = PREFIX.concat("select_layout");
 	
-	public static String wizardChartType = prefix.concat("select_chart_type");
+	public static final String WIZARD_CHART_TYPE = PREFIX.concat("select_chart_type");
 	
-	public static String wizardChartData = prefix.concat("select_chart_data");
+	public static final String WIZARD_CHART_DATA = PREFIX.concat("select_chart_data");
 	
-	public static String wizardStyleTemplatePath = prefix.concat("select_style_template_path");
+	public static final String WIZARD_STYLE_TEMPLATE_PATH = PREFIX.concat("select_style_template_path");
 	
-	public static String wizardStyleTemplateLoad = prefix.concat("select_style_template_load");
+	public static final String WIZARD_STYLE_TEMPLATE_LOAD = PREFIX.concat("select_style_template_load");
 	
-	public static String wizardExpressionEditor = prefix.concat("select_expression");
+	public static final String WIZARD_EXPRESSION_EDITOR = PREFIX.concat("select_expression");
 	
-	public static String wizardPageFormat = prefix.concat("select_page_format");
+	public static final String WIZARD_FORMAT_PAGE = PREFIX.concat("select_page_format");
 	
-	public static String wizardSubreportSource = prefix.concat("select_subreport_source");
+	public static final String WIZARD_SUBREPORT_SOURCE = PREFIX.concat("select_subreport_source");
 	
-	public static String wizardSubreportProperty = prefix.concat("select_subreport_property");
+	public static final String WIZARD_SUBREPORT_PROPERTIES = PREFIX.concat("select_subreport_property");
 	
-	public static String wizardSubreportFile = prefix.concat("select_subreport_file");
+	public static final String WIZARD_SUBREPORT_FILE = PREFIX.concat("select_subreport_file");
 	
-	public static String wizardSelectBarcode = prefix.concat("select_barcode");
+	public static final String WIZARD_SELECT_BARCODE = PREFIX.concat("select_barcode");
 	
-	public static String wizardSelectServer = prefix.concat("select_server");
+	public static final String WIZARD_SELECT_SERVER = PREFIX.concat("select_server");
 	
-	public static String wizardSelectResouces = prefix.concat("select_server_resources");
+	public static final String WIZARD_SELECT_RESOURCES = PREFIX.concat("select_server_resources");
 	
-	public static String wizardSelectDatasources = prefix.concat("select_server_datasources");
+	public static final String WIZARD_SELECT_DATASOURCES = PREFIX.concat("select_server_datasources");
 	
-	public static String wizardCongratulationsPage = prefix.concat("congratualions_page");
+	public static final String WIZARD_CONFIGURATION_PAGE = PREFIX.concat("congratualions_page");
 	
-	public static String wizardAddReturnValue = prefix.concat("select_return_values");
+	public static final String WIZARD_RETURN_VALUE = PREFIX.concat("select_return_values");
 }

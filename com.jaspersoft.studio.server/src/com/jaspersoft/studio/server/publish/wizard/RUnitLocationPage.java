@@ -25,7 +25,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -67,7 +66,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		setDescription(Messages.RUnitLocationPage_description);
 		this.jDesign = jDesign;
 		this.n = n;
-		contextName = ContextHelpIDs.wizardSelectServer;
+		contextName = ContextHelpIDs.WIZARD_SELECT_SERVER;
 	}
 
 	public MReportUnit getReportUnit() {

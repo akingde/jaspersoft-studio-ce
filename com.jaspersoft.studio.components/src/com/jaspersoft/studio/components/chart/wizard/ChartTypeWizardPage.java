@@ -59,7 +59,7 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 		setDescription(Messages.ChartWizardPage_chart_wizard_description);
 		this.chart = chart;
 		this.chartType = ((JRDesignChart) chart.getValue()).getChartType();
-		contextName = ContextHelpIDs.wizardChartType;
+		contextName = ContextHelpIDs.WIZARD_CHART_TYPE;
 	}
 
 	public void createControl(Composite parent) {

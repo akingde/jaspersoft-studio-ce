@@ -104,7 +104,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		 */
 		@Override
 		public void performHelp() {
-			PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.wizardStyleTemplatePath);
+			PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.WIZARD_STYLE_TEMPLATE_PATH);
 		}
 		
 		/**
@@ -112,7 +112,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		 */
 		@Override
 		public void setHelpData(){
-			PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.wizardStyleTemplatePath);
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.WIZARD_STYLE_TEMPLATE_PATH);
 		}
 		
 		@Override

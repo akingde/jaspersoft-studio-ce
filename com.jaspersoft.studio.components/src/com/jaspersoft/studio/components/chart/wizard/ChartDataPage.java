@@ -56,7 +56,7 @@ public class ChartDataPage extends JSSWizardPage implements IExpressionContextSe
 		this.jrChart = jrChart;
 		this.edataset = edataset;
 		this.jrContext = jrContext;
-		contextName = ContextHelpIDs.wizardChartData;
+		contextName = ContextHelpIDs.WIZARD_CHART_DATA;
 	}
 
 	public void createControl(Composite parent) {

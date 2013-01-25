@@ -89,7 +89,9 @@ public class JSSPopupPropertyDescriptor extends ComboBoxPropertyDescriptor imple
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 		// return new SPReadComboEnum(parent, section, this);
-		return new SPRWPopUpCombo(parent, section, this, items);
+		ASPropertyWidget widget = new SPRWPopUpCombo(parent, section, this, items);
+		HelpSystem.bindToHelp(this, widget.getControl());
+		return widget;
 	}
 
 	public NullEnum getType() {

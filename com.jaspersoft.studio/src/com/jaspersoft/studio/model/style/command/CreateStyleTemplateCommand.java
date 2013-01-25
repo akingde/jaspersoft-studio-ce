@@ -95,7 +95,7 @@ public class CreateStyleTemplateCommand extends Command {
 		@Override
 		protected void configureShell(Shell shell){
 			super.configureShell(shell);
-			PlatformUI.getWorkbench().getHelpSystem().setHelp(shell, ContextHelpIDs.wizardStyleTemplateLoad);
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(shell, ContextHelpIDs.WIZARD_STYLE_TEMPLATE_LOAD);
 		}
 		
 	}

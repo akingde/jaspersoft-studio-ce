@@ -37,13 +37,15 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import com.jaspersoft.studio.help.HelpSystem;
+
 /**
  * Class that manage the Combo Popup, create the popup manu and execture the action. the combo popup want to imitate a combobox
  * where a series of element are listed, but the selection of one item is done using a popup menu, opened by a left click on the combobox
  * @author Orlandin Marco
  *
  */
-public class ComboMenuViewer  {
+public class ComboMenuViewer  implements IMenuProvider{
 
     /**
      * Style bit: Create handle control and drop-down widget with default
@@ -182,23 +184,13 @@ public class ComboMenuViewer  {
      * @see #FILTERED
      */
     public ComboMenuViewer(Composite parent, int style, String biggerString) {
-        dropDownHandle = new ComboButton(parent, style, biggerString);
+        dropDownHandle = new ComboButton(parent, style, biggerString, this);
         listeners = new ArrayList<ComboItemAction>();
         dropDownHandle.addOpenListener(new IOpenListener() {
             public void open(OpenEvent event) {
                 openPopup();
             }
         });
-        /*dropDownHandle.getControl().addFocusListener(new FocusListener() {
-					
-					@Override
-					public void focusLost(FocusEvent e) {
-						closePopup();
-					}
-					
-					@Override
-					public void focusGained(FocusEvent e) {}
-				});*/
     }
     
     /**
@@ -298,18 +290,25 @@ public class ComboMenuViewer  {
     }
 
     /**
-     * Open the popup menu from a menu manager, if the manager was not still created it will be 
+     * Open the popup menu from a menu manager
      * instantiated 
      */
     protected void openPopup() {
+      	openPopupMenu(getPopup());
+    }
+
+    /**
+     * Return the previous created popup menu, if it was never created before then it will be
+     * created and returned
+     * @return a menu
+     */
+    protected Menu getPopup(){
     	if (popupMenu == null) {
     		popupMenu = createPopupMenu();
       }
-      if (popupMenu != null) {
-      	openPopupMenu(popupMenu);
-      }
+    	return popupMenu;
     }
-
+    
     /**
      * Open the popoup menu inside the menumanger and place it under the combobox
      * @param menuManager
@@ -365,7 +364,19 @@ public class ComboMenuViewer  {
     	elementList = newItems;
     	createPopupMenu();
     }
+    
 
+    /**
+     * Set the contextual help for this control. The help will be set in the button and also 
+     * in the contextual menu
+     * 
+     * @param href uri to open when the help is requested
+     */
+    public void setHelp(String href){
+    	HelpSystem.setHelp(dropDownHandle.getControl(), href);
+    	HelpProvider provider = new HelpProvider(getPopup());
+    	provider.setHelp(href);
+    }
 
     /**
      * Refresh the popup menu deleting the old entry and creating the updated one
@@ -496,5 +507,11 @@ public class ComboMenuViewer  {
                 && !popupMenu.isDisposed()
                 && popupMenu.isVisible();
     }
+
+		@Override
+		public Menu getMenu() {
+			return getPopup();
+		}
+
 
 }

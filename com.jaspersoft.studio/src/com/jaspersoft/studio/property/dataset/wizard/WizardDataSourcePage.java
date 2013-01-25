@@ -116,7 +116,7 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		setTitle(Messages.WizardDataSourcePage_datasource);
 		setImageDescriptor(MDatasources.getIconDescriptor().getIcon32());
 		setDescription(Messages.WizardDataSourcePage_description);
-		contextName = ContextHelpIDs.wizardSelectDataset;
+		contextName = ContextHelpIDs.WIZARD_SELECT_DATASET;
 	}
 
 	/**

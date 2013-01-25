@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
@@ -252,6 +253,15 @@ public class ColorStyledText {
 				}
 			}
 		});
+	}
+	
+	/**
+	 * Set the contexutal help for the element
+	 * 
+	 * @param href link to the element of the documentation relative to this element
+	 */
+	public void setHelp(String href){
+		HelpSystem.setHelp(textArea, href);
 	}
 	
 	private String leftPadWithZero(String baseString){

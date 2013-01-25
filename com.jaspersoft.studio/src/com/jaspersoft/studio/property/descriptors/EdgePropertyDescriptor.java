@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.type.JREnum;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -31,6 +32,9 @@ public class EdgePropertyDescriptor extends JSSEnumPropertyDescriptor {
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPLegendAlignementEnum(parent, section, this);
+		ASPropertyWidget widget = new SPLegendAlignementEnum(parent, section, this);
+		HelpSystem.bindToHelp(this, widget.getControl());
+		return widget;
 	}
+	
 }

@@ -47,6 +47,7 @@ import org.eclipse.ui.forms.widgets.ColumnLayout;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
@@ -141,6 +142,26 @@ public class BordersSection extends AbstractSection {
 	 * The widget used to set\show the line color
 	 */
 	private ColorStyledText lineColor;
+	
+	private static final String PREFIX = "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1";
+	
+	private static final String PADDING_GENERAL = PREFIX.concat("#box_padding");
+	
+	private static final String PADDING_TOP = PREFIX.concat("#box_topPadding");
+
+	private static final String PADDING_BOTTOM = PREFIX.concat("#box_bottomPadding");
+	
+	private static final String PADDING_LEFT = PREFIX.concat("#box_leftPadding");
+	
+	private static final String PADDING_RIGHT = PREFIX.concat("#box_rightPadding");
+	
+	private static final String LINE_COLOR = PREFIX.concat("#pen_lineColor");
+	
+	private static final String LINE_WIDTH = PREFIX.concat("#pen_lineWidth");
+	
+	private static final String LINE_STYLE = PREFIX.concat("#pen_lineStyle");
+	
+	private static final String BOX = PREFIX.concat("#box");
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -189,6 +210,7 @@ public class BordersSection extends AbstractSection {
 	private void createBorderPreview(Composite composite) {
 		square = new Canvas(composite, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
 		square.setBackground(ColorConstants.white);
+		HelpSystem.setHelp(square, BOX);
 		//The mouse down may select a border and the mouse up refresh the painting area
 		square.addMouseListener(new MouseListener() {
 			
@@ -280,6 +302,7 @@ public class BordersSection extends AbstractSection {
 		
 		checkBoxPadding = getWidgetFactory().createButton(composite, Messages.BordersSection_Same_Padding_Value_Check, SWT.CHECK);
 		checkBoxPadding.setLayoutData(gd);
+		HelpSystem.setHelp(checkBoxPadding, PADDING_GENERAL);
 		checkBoxPadding.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				checkBoxValueChange();
@@ -292,6 +315,7 @@ public class BordersSection extends AbstractSection {
 		paddingLeft = new Spinner(composite, SWT.BORDER | SWT.FLAT);
 		paddingLeft.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		paddingLeft.setToolTipText(Messages.BordersSection_padding_tool_tip);
+		HelpSystem.setHelp(paddingLeft, PADDING_LEFT);
 		paddingLeft.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changePropertyPadding(JRBaseLineBox.PROPERTY_LEFT_PADDING, new Integer(paddingLeft.getSelection()));
@@ -303,6 +327,7 @@ public class BordersSection extends AbstractSection {
 		paddingRight = new Spinner(composite, SWT.BORDER | SWT.FLAT);
 		paddingRight.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		paddingRight.setToolTipText(Messages.BordersSection_padding_tool_tip);
+		HelpSystem.setHelp(paddingRight, PADDING_RIGHT);
 		paddingRight.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changePropertyPadding(JRBaseLineBox.PROPERTY_RIGHT_PADDING, new Integer(paddingRight.getSelection()));
@@ -314,6 +339,7 @@ public class BordersSection extends AbstractSection {
 		paddingTop = new Spinner(composite, SWT.BORDER | SWT.FLAT);
 		paddingTop.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		paddingTop.setToolTipText(Messages.BordersSection_padding_tool_tip);
+		HelpSystem.setHelp(paddingTop, PADDING_TOP);
 		paddingTop.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changePropertyPadding(JRBaseLineBox.PROPERTY_TOP_PADDING, new Integer(paddingTop.getSelection()));
@@ -325,6 +351,7 @@ public class BordersSection extends AbstractSection {
 		paddingBottom = new Spinner(composite, SWT.BORDER | SWT.FLAT);
 		paddingBottom.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		paddingBottom.setToolTipText(Messages.BordersSection_padding_tool_tip);
+		HelpSystem.setHelp(paddingBottom, PADDING_BOTTOM);
 		paddingBottom.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changePropertyPadding(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, new Integer(paddingBottom.getSelection()));
@@ -340,6 +367,7 @@ public class BordersSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, Messages.common_pen_color + ":", SWT.RIGHT); //$NON-NLS-1$
 		lineColor = new ColorStyledText(composite);
 		lineColor.setColor(new RGB(0, 0, 0));
+		lineColor.setHelp(LINE_COLOR);
 		lineColor.addListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -356,6 +384,7 @@ public class BordersSection extends AbstractSection {
 		lineWidth = new Spinner(composite, SWT.BORDER | SWT.FLAT);
 		lineWidth.setValues(0, 0, 5000, 1, 1, 1);
 		lineWidth.setToolTipText(Messages.BordersSection_width_tool_tip);
+		HelpSystem.setHelp(lineWidth, LINE_WIDTH);
 		lineWidth.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				int selection = lineWidth.getSelection();
@@ -383,6 +412,7 @@ public class BordersSection extends AbstractSection {
 			}
 		};
 		lineStyle.setData(1);
+		lineStyle.setHelp(LINE_STYLE);
 	}
 
 	/**
