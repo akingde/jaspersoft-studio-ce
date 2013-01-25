@@ -286,6 +286,10 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 			}
 		}
 	}
+	
+	public TreeViewer getTreeViewer(){
+		return treeViewer;
+	}
 
 	@Override
 	public void setFocus() {

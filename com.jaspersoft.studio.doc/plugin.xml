@@ -72,6 +72,13 @@
             id="com.jaspersoft.studio.cheatsheets.addfield"
             name="Add a Field">
       </cheatsheet>
+      <cheatsheet
+           	category="com.jaspersoft.studio.cheatsheets.repository"
+            composite="false"
+            contentFile="cheatsheets/creasteJServerConnection.xml"
+            id="com.jaspersoft.studio.cheatsheets.JServerConnection"
+            name="Create a connection to JasperReport Server">
+      </cheatsheet>
    </extension>
 
 </plugin>

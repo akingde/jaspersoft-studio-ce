@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -26,6 +27,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.repository.RepositoryView;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
@@ -77,6 +79,10 @@ public class HandlersUtil {
 	 		if (actualPart instanceof MRoot) it = getFirstChildrendIterator(actualPart.getChildren());
 	 	}
 	 	return null;
+	}
+	
+	public static RepositoryView getRepositoryView(){
+		return (RepositoryView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("com.jaspersoft.studio.Repository");
 	}
 	
 }
