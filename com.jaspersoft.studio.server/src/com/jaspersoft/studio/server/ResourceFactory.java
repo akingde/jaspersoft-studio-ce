@@ -46,6 +46,7 @@ import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
 import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.server.model.datasource.MRDatasource;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceAWS;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceBean;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceDiagnostic;
@@ -74,6 +75,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.StyleTemplatePageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.XmlPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DataAdapterPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceAWSPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceBeanPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceJDBCPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceJndiPageContent;
@@ -135,6 +137,10 @@ public class ResourceFactory {
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),
 							new DatasourceJDBCPageContent(parent, resource));
+				else if (resource instanceof MRDatasourceAWS)
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new DatasourceAWSPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceBean)
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),
@@ -296,6 +302,8 @@ public class ResourceFactory {
 			return new MRDatasourceVDS(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI))
 			return new MRDatasourceJNDI(parent, resource, index);
+		if (wstype.equals(MRDatasourceAWS.TYPE_AWS))
+			return new MRDatasourceAWS(parent, resource, index);
 
 		if (wstype.equals("ReportOptionsResource"))
 			return new MReportUnitOptions(parent, resource, index);

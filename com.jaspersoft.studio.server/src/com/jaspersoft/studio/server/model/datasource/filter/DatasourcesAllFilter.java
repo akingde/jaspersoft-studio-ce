@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.server.model.datasource.filter;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceAWS;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
 
 public class DatasourcesAllFilter implements IDatasourceFilter {
@@ -32,6 +33,7 @@ public class DatasourcesAllFilter implements IDatasourceFilter {
 				|| r.getWsType()
 						.equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI)
 				|| r.getWsType().equals(MRDatasourceVDS.TYPE_DATASOURCE_VDS)
+				|| r.getWsType().equals(MRDatasourceAWS.TYPE_AWS)
 				|| r.getWsType().equals("Domain") //$NON-NLS-1$
 				|| (r.getWsType().equals("custom") //$NON-NLS-1$
 						&& r.getResourcePropertyValue("PROP_RESOURCE_TYPE") != null && r //$NON-NLS-1$
