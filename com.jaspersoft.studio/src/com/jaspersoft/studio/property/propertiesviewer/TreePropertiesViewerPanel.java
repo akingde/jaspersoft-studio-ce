@@ -301,6 +301,13 @@ public class TreePropertiesViewerPanel<T extends IPropertiesViewerNode> extends 
 	}
 	
 	/**
+	 * @return the currently selected node
+	 */
+	public IPropertiesViewerNode getCurrentSelectedNode(){
+		return this.currentSelectedNode;
+	}
+	
+	/**
 	 * Forces the node selection and the showing of the related content.
 	 * 
 	 * @param node the node to be selected
