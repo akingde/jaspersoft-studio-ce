@@ -133,14 +133,14 @@ public class ResourceFactory {
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),
 							new DatasourceJndiPageContent(parent, resource));
-				else if (resource instanceof MRDatasourceJDBC)
-					page = APageContent.getPages(resource,
-							new ResourcePageContent(parent, resource),
-							new DatasourceJDBCPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceAWS)
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),
 							new DatasourceAWSPageContent(parent, resource));
+				else if (resource instanceof MRDatasourceJDBC)
+					page = APageContent.getPages(resource,
+							new ResourcePageContent(parent, resource),
+							new DatasourceJDBCPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceBean)
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),

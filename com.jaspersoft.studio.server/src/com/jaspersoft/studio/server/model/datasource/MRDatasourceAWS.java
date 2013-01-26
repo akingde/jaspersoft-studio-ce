@@ -21,13 +21,20 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
+import com.jaspersoft.studio.server.model.MResource;
 
-public class MRDatasourceAWS extends MRDatasourceCustom {
+public class MRDatasourceAWS extends MResource {
 
-	public static final String CUSTOM_CLASS = "com.jaspersoft.jasperserver.api.logging.diagnostic.datasource.DiagnosticCustomDataSourceService";
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-
 	public static final String TYPE_AWS = "aws";
+
+	public static final String PROP_DATASOURCE_AWS_ACCESS_KEY = "PROP_DATASOURCE_AWS_ACCESS_KEY";
+	public static final String PROP_DATASOURCE_AWS_SECRET_KEY = "PROP_DATASOURCE_AWS_SECRET_KEY";
+	public static final String PROP_DATASOURCE_AWS_ROLE_ARN = "PROP_DATASOURCE_AWS_ROLE_ARN";
+	public static final String PROP_DATASOURCE_AWS_REGION = "PROP_DATASOURCE_AWS_REGION";
+	public static final String PROP_DATASOURCE_AWS_DB_NAME = "PROP_DATASOURCE_AWS_DB_NAME";
+	public static final String PROP_DATASOURCE_AWS_DB_SERVICE = "PROP_DATASOURCE_AWS_DB_SERVICE";
+	public static final String PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER = "PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER";
 
 	public MRDatasourceAWS(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
@@ -47,18 +54,8 @@ public class MRDatasourceAWS extends MRDatasourceCustom {
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MRDatasourceCustom.createDescriptor(parent);
-		// ResourceProperty rp = new ResourceProperty(
-		// MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
-		// List<ResourceProperty> props = new ArrayList<ResourceProperty>();
-		// props.add(new ResourceProperty("_cds_name",
-		// "diagnosticCustomDataSource"));
-		// rp.setProperties(props);
-		// rd.getProperties().add(rp);
-		// rp = new ResourceProperty(
-		// MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS,
-		// CUSTOM_CLASS);
-		// rd.getProperties().add(rp);
+		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		rd.setWsType(MRDatasourceAWS.TYPE_AWS);
 		return rd;
 	}
 }
