@@ -10,4 +10,5 @@ Require-Bundle: org.eclipse.ui.cheatsheets,
  com.jaspersoft.studio.server
 Import-Package: com.jaspersoft.studio.server,
  com.jaspersoft.studio.server.model.server,
+ com.jaspersoft.studio.server.publish.wizard;resolution:=optional,
  com.jaspersoft.studio.server.wizard

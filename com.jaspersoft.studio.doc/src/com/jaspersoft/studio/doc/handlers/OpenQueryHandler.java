@@ -29,6 +29,7 @@ import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * Open the edit query dialog of a report or a message dialog if the query dialog isn't available for the 
@@ -50,6 +51,6 @@ public class OpenQueryHandler extends Action{
 			DatasetDialog dlg = new DatasetDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), mdataset, mquery.getJasperConfiguration());
 			dlg.open();
 		} else 
-			MessageDialog.openWarning(PlatformUI.getWorkbench().getDisplay().getActiveShell(), Messages.OpenQueryHandler_message_title, Messages.OpenQueryHandler_message_text);
+			MessageDialog.openWarning(UIUtils.getShell(), Messages.OpenQueryHandler_message_title, Messages.OpenQueryHandler_message_text);
 	}
 }

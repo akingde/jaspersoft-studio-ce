@@ -79,6 +79,13 @@
             id="com.jaspersoft.studio.cheatsheets.JServerConnection"
             name="Create a connection to JasperReport Server">
       </cheatsheet>
+      <cheatsheet
+           	category="com.jaspersoft.studio.cheatsheets.repository"
+            composite="false"
+            contentFile="cheatsheets/uploadReport.xml"
+            id="com.jaspersoft.studio.cheatsheets.UploiadReport"
+            name="Upload a report to JasperReport Server">
+      </cheatsheet>
    </extension>
 
 </plugin>

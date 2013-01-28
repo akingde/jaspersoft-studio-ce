@@ -22,12 +22,14 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.repository.RepositoryView;
+import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
@@ -59,6 +61,16 @@ public class HandlersUtil {
 		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
 			INode root = ((JrxmlEditor) activeJRXMLEditor).getModel();
 			return root;
+		}
+		return null;
+	}
+	
+	
+	public static ANode getServers(){
+		ANode repositoryRoot = HandlersUtil.getRepositoryView().getResources();
+		if (repositoryRoot != null){
+			for(INode node : repositoryRoot.getChildren())
+				if (node instanceof MServers) return (ANode)node;
 		}
 		return null;
 	}

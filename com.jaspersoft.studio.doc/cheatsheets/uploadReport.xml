@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet
+      title="Upload a report to JasperReprot Server">
+   <intro>
+      <description>
+         <b>In this cheatsheet we will see how to upload a report into a local installation of JasperReport Server</b>
+      </description>
+   </intro>
+   <item
+         title="Open a report and switch into">
+      <description>
+         <b>Body</b>
+      </description>
+   </item>
+   <item
+         title="Start the upload action">
+      <description>
+         On the top right border of the editor window there is a button with a blu arrow. Click it to start the upload.
+      </description>
+       <action pluginId="com.jaspersoft.studio.doc" class="com.jaspersoft.studio.doc.handlers.UploadReportCheatAction" required="false"/>
+   </item>
+</cheatsheet>
