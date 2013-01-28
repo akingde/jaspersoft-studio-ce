@@ -127,4 +127,11 @@
          version="2.0.0"
          unpack="false"/>
 
+   <plugin
+         id="com.jaspersoft.studio.community"
+         download-size="0"
+         install-size="0"
+         version="2.0.0"
+         unpack="false"/>
+
 </feature>
