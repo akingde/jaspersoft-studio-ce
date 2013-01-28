@@ -76,13 +76,22 @@ public class ListEditPart extends EditableFigureEditPart {
 	 */
 	protected void setupListFigure(IFigure rect) {
 		MList model = (MList) getModel();
-		int listHeight = (Integer) (model.getPropertyValue(MList.PREFIX
-				+ DesignListContents.PROPERTY_HEIGHT));
-		int listWidth = (Integer) (model.getPropertyValue(MList.PREFIX
-				+ DesignListContents.PROPERTY_WIDTH));
+
 		ListFigure lfig = (ListFigure) rect;
-		lfig.setCellHeight(listHeight);
-		lfig.setCellWidth(listWidth);
+
+		Integer h = (Integer) model.getPropertyValue(MList.PREFIX
+				+ DesignListContents.PROPERTY_HEIGHT);
+		if (h == null)
+			h = (Integer) model
+					.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT);
+		lfig.setCellHeight(h);
+
+		Integer w = (Integer) (model.getPropertyValue(MList.PREFIX
+				+ DesignListContents.PROPERTY_WIDTH));
+		if (w == null)
+			w = (Integer) model
+					.getPropertyValue(JRDesignElement.PROPERTY_WIDTH);
+		lfig.setCellWidth(w);
 	}
 
 	/**
