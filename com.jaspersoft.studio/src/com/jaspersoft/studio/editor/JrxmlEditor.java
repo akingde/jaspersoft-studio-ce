@@ -295,7 +295,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public Object getAdapter(Class type) {
 		if (type == IContentOutlinePage.class) {
 			outlinePage = new MultiOutlineView(this);
-			Display.getDefault().asyncExec(new Runnable() {
+			Display.getDefault().syncExec(new Runnable() {
 
 				public void run() {
 					updateContentOutline(getActivePage());
