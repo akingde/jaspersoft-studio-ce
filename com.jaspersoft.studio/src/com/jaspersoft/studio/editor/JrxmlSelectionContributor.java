@@ -31,7 +31,7 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.SubCoolBarManager;
 import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.internal.provisional.action.CoolBarManager2;
+import org.eclipse.jface.internal.provisional.action.ICoolBarManager2;
 import org.eclipse.jface.internal.provisional.action.ToolBarContributionItem2;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -72,7 +72,7 @@ public class JrxmlSelectionContributor {
 		tbarID.clear();
 		if (bars instanceof IActionBars2) {
 			if (((IActionBars2) bars).getCoolBarManager() instanceof SubCoolBarManager) {
-				CoolBarManager2 cbm2 = (CoolBarManager2) ((SubCoolBarManager) ((IActionBars2) bars).getCoolBarManager())
+				ICoolBarManager2 cbm2 = (ICoolBarManager2) ((SubCoolBarManager) ((IActionBars2) bars).getCoolBarManager())
 						.getParent();
 				for (String baritem : cbaritemID) {
 					String[] bt = baritem.split(";");
@@ -177,7 +177,7 @@ public class JrxmlSelectionContributor {
 		if (lastEditor instanceof ReportContainer)
 			lastEditor = ((ReportContainer) lastEditor).getActiveEditor();
 		if (coolBarManager instanceof SubCoolBarManager) {
-			CoolBarManager2 cbm2 = (CoolBarManager2) ((SubCoolBarManager) coolBarManager).getParent();
+			ICoolBarManager2 cbm2 = (ICoolBarManager2) ((SubCoolBarManager) coolBarManager).getParent();
 
 			ToolItemsManager tm = JaspersoftStudioPlugin.getToolItemsManager();
 			for (ToolItemsSet ts : tm.getSets()) {
@@ -198,7 +198,7 @@ public class JrxmlSelectionContributor {
 		}
 	}
 
-	private void addContributionToCoolbar(CoolBarManager2 cbm2, ToolItemsSet ts, ToolItem ti, ISelection selection) {
+	private void addContributionToCoolbar(ICoolBarManager2 cbm2, ToolItemsSet ts, ToolItem ti, ISelection selection) {
 		String tbarid = ts.getToolbarUri();
 		IContributionItem item = getToolbarContributionItem(cbm2, tbarid);
 		if (item != null && item instanceof ToolBarContributionItem2) {
@@ -216,7 +216,7 @@ public class JrxmlSelectionContributor {
 		}
 	}
 
-	private void addActionToCoolbar(final IActionBars bars, CoolBarManager2 cbm2, ToolItemsSet ts, ToolItem ti) {
+	private void addActionToCoolbar(final IActionBars bars, ICoolBarManager2 cbm2, ToolItemsSet ts, ToolItem ti) {
 		IAction action = editorContributor.getAction(ti.getId());
 		if (action == null)
 			action = registry.getAction(ti.getId());
@@ -269,7 +269,7 @@ public class JrxmlSelectionContributor {
 	public void contributeToContextToolBar(IToolBarManager tbm, ISelection selection) {
 	}
 
-	private void addAction(CoolBarManager2 cbm2, String tbarid, IAction action) {
+	private void addAction(ICoolBarManager2 cbm2, String tbarid, IAction action) {
 		IContributionItem item = getToolbarContributionItem(cbm2, tbarid);
 		if (item != null && item instanceof ToolBarContributionItem2) {
 			ToolBarContributionItem2 tbitem = (ToolBarContributionItem2) item;
@@ -278,7 +278,7 @@ public class JrxmlSelectionContributor {
 		}
 	}
 
-	private IContributionItem getToolbarContributionItem(CoolBarManager2 cbm2, String tbarid) {
+	private IContributionItem getToolbarContributionItem(ICoolBarManager2 cbm2, String tbarid) {
 		IContributionItem item = cbm2.find(tbarid);
 		if (item == null) {
 			item = new ToolBarContributionItem2(new ToolBarManager(), tbarid);
