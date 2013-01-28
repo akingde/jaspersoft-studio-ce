@@ -23,11 +23,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.doc.handlers.AsyncAction;
 import com.jaspersoft.studio.doc.samples.messages.Messages;
 
 
@@ -37,14 +37,14 @@ import com.jaspersoft.studio.doc.samples.messages.Messages;
  * @author Orlandin Marco
  *
  */
-public class OpenReportHandler extends Action {
+public class OpenReportHandler extends AsyncAction {
 	
 	private String exampleReportName = "Coffee_4.jrxml"; //$NON-NLS-1$
 	
 	private String exampleReportPath = "/MyReports/"; //$NON-NLS-1$
 	
 	@Override
-	public void run() {
+	public void doAction() {
 		IPath path = new Path(exampleReportPath.concat(exampleReportName));
 		IFile sampleFile =  ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 		if (sampleFile.exists()){
