@@ -6,6 +6,8 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.doc.messages.messages"; //$NON-NLS-1$
 	public static String OpenQueryHandler_message_text;
 	public static String OpenQueryHandler_message_title;
+	public static String UploadReportCheatAction_no_server_title;
+	public static String UploadReportCheatAction_no_server_warning;
 	public static String UploadReportCheatAction_warning_message;
 	public static String UploadReportCheatAction_warning_title;
 	static {

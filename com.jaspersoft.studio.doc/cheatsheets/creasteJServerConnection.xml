@@ -14,7 +14,7 @@
             required="false"
             serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=com.jaspersoft.studio.Repository)"/>
    </item>
-   <item title="Start the wizard">
+   <item title="Start the wizard" dialog="true">
       <description>
          Right click on the node &quot;Servers&quot; and select &quot;Create a JasperServer connection&quot;. A wizard dialog will appear.
       </description>
@@ -29,7 +29,7 @@
    <item
          title="Complete the wizard">
       <description>
-         If the result of the test is successfull hit &quot;Finish&quot; to complete the wizard. You now will see the new server into the repository explorer
+         If the result of the test is successful hit &quot;Finish&quot; to complete the wizard. You now will see the new server into the repository explorer
       </description>
    </item>
 </cheatsheet>

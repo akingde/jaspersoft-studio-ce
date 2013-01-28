@@ -2,12 +2,15 @@ package com.jaspersoft.studio.doc.handlers;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 
 import com.jaspersoft.studio.doc.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.publish.wizard.Publish2ServerWizard;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -18,18 +21,32 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Orlandin Marco
  *
  */
-public class UploadReportCheatAction extends Action {
+public class UploadReportCheatAction extends AsyncAction {
+	
+	private ANode cloneServer(ANode server, ANode parent){
+		MServerProfile fakeServer = new MServerProfile(parent, (ServerProfile)server.getValue());
+		for(INode element : server.getChildren())
+			fakeServer.addChild((ANode)element);
+		return fakeServer;
+	}
 	
 	@Override
-	public void run() {
+	protected void doAction() {
 		ANode rootElement = HandlersUtil.getRootElement();
 		if (rootElement != null){
 			JasperDesign design = rootElement.getJasperDesign();
 			JasperReportsConfiguration config = rootElement.getJasperConfiguration();
-			Publish2ServerWizard wizard = new Publish2ServerWizard(null, design, config,1);
-			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
-			dialog.create();
-			dialog.open();
+			ANode servers = HandlersUtil.getServers();
+			if (servers != null && servers.getChildren().size()>0){
+				//Create a fake root to show only the server connection in the list
+				MRoot fakeRoot = new MRoot(null,design);
+				for(INode server : servers.getChildren())
+					cloneServer((ANode)server, fakeRoot);
+				Publish2ServerWizard wizard = new Publish2ServerWizard(fakeRoot , design, config,1);
+				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
+				dialog.create();
+				dialog.open();
+			} else MessageDialog.openWarning(UIUtils.getShell(), Messages.UploadReportCheatAction_no_server_title, Messages.UploadReportCheatAction_no_server_warning);
 		} else MessageDialog.openWarning(UIUtils.getShell(), Messages.UploadReportCheatAction_warning_title, Messages.UploadReportCheatAction_warning_message);
 	};
 	

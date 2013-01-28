@@ -3,20 +3,30 @@
       title="Upload a report to JasperReprot Server">
    <intro>
       <description>
-         <b>In this cheatsheet we will see how to upload a report into a local installation of JasperReport Server</b>
+         <b>In this cheatsheet we will see how to upload a report into a local installation of JasperReport Server. To follow this cheatsheet 
+         a connection to the JasperRepost Server is required, and also the report to upload must be already opened in the editor.</b>
       </description>
    </intro>
    <item
-         title="Open a report and switch into">
+         title="Go into the repository explorer">
       <description>
-         <b>Body</b>
+         With a report opened, go into the repository explorer view.
       </description>
+      <command
+            required="false"
+            serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=com.jaspersoft.studio.Repository)"/>
    </item>
    <item
-         title="Start the upload action">
+         title="Start the upload action" dialog="true">
       <description>
          On the top right border of the editor window there is a button with a blu arrow. Click it to start the upload.
       </description>
        <action pluginId="com.jaspersoft.studio.doc" class="com.jaspersoft.studio.doc.handlers.UploadReportCheatAction" required="false"/>
+   </item>
+   <item
+         title="Select the location" dialog="true">
+      <description>
+         Expand the server where you want to upload the report and select the folder &quot;Reports&quot;
+      </description>
    </item>
 </cheatsheet>

@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.doc.handlers;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
@@ -27,10 +26,10 @@ import com.jaspersoft.studio.editor.JrxmlEditor;
  * @author Orandin Marco
  *
  */
-public class SwitchToPreviewHandler extends Action {
+public class SwitchToPreviewHandler extends AsyncAction {
 
 		@Override
-		public void run() {
+		public void doAction() {
 			JrxmlEditor editor = (JrxmlEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			editor.setActiveEditor(editor.getEditor(2));
 		}

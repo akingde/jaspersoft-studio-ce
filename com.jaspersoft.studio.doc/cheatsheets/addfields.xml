@@ -11,7 +11,7 @@
     		Open a report with a SQL data adapter into the main data source
     	</description>
     </item>
-    <item title="Edit the report query">
+    <item title="Edit the report query" dialog="true">
       <description>
          For this step you need to open the report main query. Click on the report element in the Outline view and from the Properties view hit the button &quot;Edit query, filter and sort options&quot;
       </description>
