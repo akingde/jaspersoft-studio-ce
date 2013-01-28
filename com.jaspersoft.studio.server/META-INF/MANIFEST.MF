@@ -19,6 +19,7 @@ Bundle-ClassPath: lib/jasperserver-common-ws-4.2.0.jar,
  lib/js_mail-1.4.jar,
  lib/js_saaj-api-1.3.jar,
  lib/js_wsdl4j-1.5.1.jar,
+ lib/js-extra-classes.jar,
  .
 Eclipse-RegisterBuddy: com.jaspersoft.studio
 Eclipse-BuddyPolicy: registered
