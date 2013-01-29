@@ -24,7 +24,6 @@ import org.eclipse.jface.viewers.IPostSelectionProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;
@@ -112,10 +111,8 @@ public class MultiPageToolbarEditorSite implements IEditorSite, INestable {
 		IServiceLocatorCreator slc = (IServiceLocatorCreator) parentServiceLocator.getService(IServiceLocatorCreator.class);
 		this.serviceLocator = (ServiceLocator) slc.createServiceLocator(multiPageEditor.getSite(), null, new IDisposable() {
 			public void dispose() {
-				final Control control = ((PartSite) getMultiPageEditor().getSite()).getPane().getControl();
-				if (control != null && !control.isDisposed()) {
-					((PartSite) getMultiPageEditor().getSite()).getPane().doHide();
-				}
+				// Fix for ensuring compilation in E4
+				getMultiPageEditor().close();
 			}
 		});
 

@@ -58,7 +58,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.ui.internal.PartSite;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.misc.Policy;
 import org.eclipse.ui.internal.services.INestable;
@@ -552,10 +551,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 				IServiceLocatorCreator slc = (IServiceLocatorCreator) getSite().getService(IServiceLocatorCreator.class);
 				IServiceLocator sl = slc.createServiceLocator(getSite(), null, new IDisposable() {
 					public void dispose() {
-						final Control control = ((PartSite) getSite()).getPane().getControl();
-						if (control != null && !control.isDisposed()) {
-							((PartSite) getSite()).getPane().doHide();
-						}
+						close();
 					}
 				});
 				item.setData(sl);
@@ -578,10 +574,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 			IServiceLocatorCreator slc = (IServiceLocatorCreator) getSite().getService(IServiceLocatorCreator.class);
 			pageContainerSite = slc.createServiceLocator(getSite(), null, new IDisposable() {
 				public void dispose() {
-					final Control control = ((PartSite) getSite()).getPane().getControl();
-					if (control != null && !control.isDisposed()) {
-						((PartSite) getSite()).getPane().doHide();
-					}
+					close();
 				}
 			});
 		}
@@ -1113,4 +1106,27 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	public INestable getActiveServiceLocator() {
 		return activeServiceLocator;
 	}
+	
+	/*
+	 * Closes the editor when the IServiceLocator is disposed.
+	 */
+	void close(){
+		// Ugly fix that does not check if widget/control is already disposed
+		// This in order not to break compilation in Juno
+		// In Eclipse Juno 4.2.x give a look at MultipageEditorPart#close()
+		try{
+			if(getSite()!=null && getSite().getPage()!=null){
+				getSite().getPage().closeEditor(MultiPageToolbarEditorPart.this, true);
+			}
+		}
+		catch (Exception e){
+			// do nothing...
+		}	
+		// Original code that breaks compilation in Juno (Eclipse 4).
+		// final Control control = ((PartSite) getSite()).getPane().getControl();
+		// if (control != null && !control.isDisposed()) {
+		// 	((PartSite) getSite()).getPane().doHide();
+		// }
+	}
+	
 }
