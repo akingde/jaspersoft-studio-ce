@@ -54,6 +54,7 @@ import com.jaspersoft.studio.server.model.MReportUnitOptions;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MXmlFile;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceAWS;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceBean;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceDiagnostic;
@@ -65,6 +66,7 @@ import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
 import com.jaspersoft.studio.server.model.datasource.MROlapUnit;
 import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
 public class AddResourcePage extends WizardPage {
 	private MResource resource;
@@ -143,8 +145,17 @@ public class AddResourcePage extends WizardPage {
 				new MRQuery(root, MRQuery.createDescriptor(parent), -1);
 
 				new MDataType(root, MDataType.createDescriptor(parent), -1);
+				new MRDashboard(root, MRDashboard.createDescriptor(parent), -1);
+				new MRMondrianSchema(root,
+						MRMondrianSchema.createDescriptor(parent), -1);
+				new MROlapMondrianConnection(root,
+						MROlapMondrianConnection.createDescriptor(parent), -1);
+				new MROlapXmlaConnection(root,
+						MROlapXmlaConnection.createDescriptor(parent), -1);
+				new MROlapUnit(root, MROlapUnit.createDescriptor(parent), -1);
+				new MRAccessGrantSchema(root,
+						MRAccessGrantSchema.createDescriptor(parent), -1);
 			}
-
 			new MJrxml(root, MJrxml.createDescriptor(parent), -1);
 			new MInputControl(root, MInputControl.createDescriptor(parent), -1);
 			new MListOfValues(root, MListOfValues.createDescriptor(parent), -1);
@@ -160,21 +171,21 @@ public class AddResourcePage extends WizardPage {
 			new MXmlFile(root, MXmlFile.createDescriptor(parent), -1);
 			new MDataAdapter(root, MDataAdapter.createDescriptor(parent), -1);
 
-			new MRDashboard(root, MRDashboard.createDescriptor(parent), -1);
-			new MRMondrianSchema(root,
-					MRMondrianSchema.createDescriptor(parent), -1);
-			new MROlapMondrianConnection(root,
-					MROlapMondrianConnection.createDescriptor(parent), -1);
-			new MROlapXmlaConnection(root,
-					MROlapXmlaConnection.createDescriptor(parent), -1);
-			new MROlapUnit(root, MROlapUnit.createDescriptor(parent), -1);
-			new MRAccessGrantSchema(root,
-					MRAccessGrantSchema.createDescriptor(parent), -1);
-
 			if (parent instanceof MReportUnit) {
 				new MReportUnitOptions(root,
 						MReportUnitOptions
 								.createDescriptor((MReportUnit) parent), -1);
+				boolean dsexists = false;
+				for (INode n : parent.getChildren()) {
+					if (n instanceof MResource
+							&& SelectorDatasource.isDatasource(((MResource) n)
+									.getValue())) {
+						dsexists = true;
+						break;
+					}
+				}
+				if (!dsexists)
+					createDatasources(root);
 			}
 
 			Activator.getExtManager().createNewResource(root, parent);
@@ -205,6 +216,8 @@ public class AddResourcePage extends WizardPage {
 		new MRDatasourceVDS(root, MRDatasourceVDS.createDescriptor(parent), -1);
 		new MRDatasourceDiagnostic(root,
 				MRDatasourceDiagnostic.createDescriptor(parent), -1);
+
+		new MRDatasourceAWS(root, MRDatasourceAWS.createDescriptor(parent), -1);
 
 		Activator.getExtManager().createNewDatasource(root, parent);
 	}

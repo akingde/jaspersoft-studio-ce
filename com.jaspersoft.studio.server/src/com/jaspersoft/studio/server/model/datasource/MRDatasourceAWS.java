@@ -18,6 +18,7 @@ package com.jaspersoft.studio.server.model.datasource;
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
@@ -56,6 +57,19 @@ public class MRDatasourceAWS extends MResource {
 	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(MRDatasourceAWS.TYPE_AWS);
+
+		ResourceProperty rp = new ResourceProperty(
+				MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, "");
+		rd.getProperties().add(rp);
+		rp = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME,
+				"");
+		rd.getProperties().add(rp);
+		rp = new ResourceProperty(
+				MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, "");
+		rd.getProperties().add(rp);
+		rp = new ResourceProperty(
+				MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, "");
+		rd.getProperties().add(rp);
 		return rd;
 	}
 }
