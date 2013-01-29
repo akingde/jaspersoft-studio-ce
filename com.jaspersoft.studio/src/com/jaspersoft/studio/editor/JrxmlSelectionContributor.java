@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,6 +38,7 @@ import org.eclipse.ui.IActionBars2;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.actions.LabelRetargetAction;
 import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.internal.PartService;
@@ -113,8 +116,33 @@ public class JrxmlSelectionContributor {
 		contributeToContextStatusLine(bars.getStatusLineManager(), selection);
 
 		IPartService pservice = ((WorkbenchPage) editorContributor.getPage()).getWorkbenchWindow().getPartService();
-		if (pservice.getActivePartReference() != null && pservice instanceof PartService)
-			((PartService) pservice).partBroughtToTop(pservice.getActivePartReference());
+		if (pservice.getActivePartReference() != null && pservice instanceof PartService) {
+			// I use reflection because methods are different in eclipse 3.x and 4.x
+			try {
+				Method m = null;
+				try {
+					m = PartService.class.getMethod("firePartBroughtToTop", IWorkbenchPartReference.class);
+				} catch (NoSuchMethodException e) {
+					try {
+						m = PartService.class.getMethod("partBroughtToTop", IWorkbenchPartReference.class);
+						m.invoke((PartService) pservice, pservice.getActivePartReference());
+					} catch (NoSuchMethodException e1) {
+						e1.printStackTrace();
+					}
+				}
+				if (m != null)
+					m.invoke((PartService) pservice, pservice.getActivePartReference());
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+
+			// ((PartService) pservice).firePartBroughtToTop(pservice.getActivePartReference());
+			// ((PartService) pservice).partBroughtToTop(pservice.getActivePartReference());
+		}
 
 		bars.updateActionBars();
 	}
