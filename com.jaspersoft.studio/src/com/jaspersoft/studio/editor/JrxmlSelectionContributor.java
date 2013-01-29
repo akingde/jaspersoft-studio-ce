@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
@@ -32,12 +27,14 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.SubCoolBarManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.internal.provisional.action.ICoolBarManager2;
+import org.eclipse.jface.internal.provisional.action.IToolBarContributionItem;
 import org.eclipse.jface.internal.provisional.action.ToolBarContributionItem2;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IActionBars2;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.LabelRetargetAction;
 import org.eclipse.ui.actions.RetargetAction;
@@ -59,7 +56,6 @@ public class JrxmlSelectionContributor {
 
 	public JrxmlSelectionContributor(JrxmlEditorContributor editorContributor) {
 		this.editorContributor = editorContributor;
-
 	}
 
 	public void setRegistry(ActionRegistry registry) {
@@ -67,32 +63,32 @@ public class JrxmlSelectionContributor {
 	}
 
 	public void cleanBars(IActionBars bars) {
-		for (String id : tbarID)
-			bars.getToolBarManager().remove(id);
-		tbarID.clear();
-		if (bars instanceof IActionBars2) {
-			if (((IActionBars2) bars).getCoolBarManager() instanceof SubCoolBarManager) {
-				ICoolBarManager2 cbm2 = (ICoolBarManager2) ((SubCoolBarManager) ((IActionBars2) bars).getCoolBarManager())
-						.getParent();
-				for (String baritem : cbaritemID) {
-					String[] bt = baritem.split(";");
-					IContributionItem ictb = cbm2.find(bt[0]);
-					if (ictb instanceof ToolBarContributionItem2) {
-						IToolBarManager tbmanager = ((ToolBarContributionItem2) ictb).getToolBarManager();
-						tbmanager.remove(bt[1]);
-						tbmanager.update(true);
+		if (bars instanceof IActionBars2 && ((IActionBars2) bars).getCoolBarManager() instanceof SubCoolBarManager) {
+			ICoolBarManager2 cbm2 = (ICoolBarManager2) ((SubCoolBarManager) ((IActionBars2) bars).getCoolBarManager())
+					.getParent();
+			for (String baritem : cbaritemID) {
+				String[] bt = baritem.split(";");
+				IContributionItem ictb = findToolbar(cbm2, bt[0]);
+				if (ictb instanceof IToolBarContributionItem) {
+					IToolBarManager tbmanager = ((IToolBarContributionItem) ictb).getToolBarManager();
+					for (IContributionItem ci : tbmanager.getItems()) {
+						if (ci.equals(bt[1]))
+							tbmanager.remove(ci);
 					}
+
+					tbmanager.update(true);
 				}
-				for (String id : cbarID)
-					cbm2.remove(id);
-				cbm2.refresh();
-				cbm2.update(true);
 			}
+			for (String id : cbarID) {
+				IContributionItem ic = findToolbar(cbm2, id);
+				if (ic != null)
+					cbm2.remove(ic);
+			}
+			cbm2.refresh();
+			cbm2.update(true);
 		}
-		tbarID.clear();
 		cbaritemID.clear();
 		cbarID.clear();
-
 	}
 
 	public void cleanBars(IActionBars bars, ISelection selection) {
@@ -116,23 +112,151 @@ public class JrxmlSelectionContributor {
 			contributeToContextCoolBar(bars, ((IActionBars2) bars).getCoolBarManager(), selection);
 		contributeToContextStatusLine(bars.getStatusLineManager(), selection);
 
-		PartService pservice = ((WorkbenchPage) editorContributor.getPage()).getPartService();
-		if (pservice.getActivePartReference() != null)
-			pservice.firePartBroughtToTop(pservice.getActivePartReference());
+		IPartService pservice = ((WorkbenchPage) editorContributor.getPage()).getWorkbenchWindow().getPartService();
+		if (pservice.getActivePartReference() != null && pservice instanceof PartService)
+			((PartService) pservice).partBroughtToTop(pservice.getActivePartReference());
 
 		bars.updateActionBars();
 	}
 
-	public void contributeToContextStatusLine(IStatusLineManager statusLineManager, ISelection selection) {
-
-	}
-
 	private Set<String> cbarID = new HashSet<String>();
 	private Set<String> cbaritemID = new HashSet<String>();
-	private Set<String> tbarID = new HashSet<String>();
 
 	private List<?> sobjects = null;
 	private ISelection lastselection;
+
+	public void contributeToContextCoolBar(IActionBars bars, ICoolBarManager coolBarManager, ISelection selection) {
+		IEditorPart lastEditor = editorContributor.getLastEditor();
+		if (lastEditor instanceof ReportContainer)
+			lastEditor = ((ReportContainer) lastEditor).getActiveEditor();
+		if (coolBarManager instanceof SubCoolBarManager) {
+			ICoolBarManager2 cbm2 = (ICoolBarManager2) ((SubCoolBarManager) coolBarManager).getParent();
+
+			ToolItemsManager tm = JaspersoftStudioPlugin.getToolItemsManager();
+			for (ToolItemsSet ts : tm.getSets()) {
+				if (!isToolbarVisible(ts))
+					continue;
+				if (ts.getToolbarUri() != null) {
+					for (ToolItem ti : ts.getToolItems()) {
+						if (!isSelected(selection, ti.getClasses()))
+							continue;
+						if (ti.getContributionItem() != null)
+							addContributionToCoolbar(cbm2, ts, ti, selection);
+						else if (ti.getActionID() != null)
+							addActionToCoolbar(bars, cbm2, ts, ti);
+					}
+				}
+			}
+			cbm2.update(true);
+		} else {
+			System.out.println("haha");
+		}
+	}
+
+	private void addContributionToCoolbar(ICoolBarManager2 cbm2, ToolItemsSet ts, ToolItem ti, ISelection selection) {
+		String tbarid = ts.getToolbarUri();
+		IContributionItem item = getToolbarContributionItem(cbm2, tbarid);
+		if (item != null && item instanceof IToolBarContributionItem) {
+			IToolBarContributionItem tbitem = (IToolBarContributionItem) item;
+			// add coolbarcontributionitem
+			IContributionItem citem = ti.getContributionItem();
+			tbitem.getToolBarManager().add(citem);
+			// citem.update();
+			if (citem instanceof ISelectionContributionItem) {
+				((ISelectionContributionItem) citem).setSelection(selection);
+				((ISelectionContributionItem) citem).setWorkbenchPart(editorContributor.getLastEditor());
+			}
+
+			cbaritemID.add(tbarid + ";" + ti.getId());
+		}
+	}
+
+	private void addActionToCoolbar(final IActionBars bars, ICoolBarManager2 cbm2, ToolItemsSet ts, ToolItem ti) {
+		IAction action = editorContributor.getAction(ti.getId());
+		if (action == null)
+			action = registry.getAction(ti.getId());
+		if (action == null) {
+			action = new LabelRetargetAction(ti.getActionID(), ti.getLabel()) {
+				// @Override
+				// public void partDeactivated(IWorkbenchPart part) {
+				// // if (isSameSelection(bars, part.getSite().getSelectionProvider().getSelection()))
+				// // return;
+				// super.partDeactivated(part);
+				// }
+
+				@Override
+				public void partBroughtToTop(IWorkbenchPart part) {
+					partActivated(part);
+				}
+			};
+
+			editorContributor.addRetargetAction((RetargetAction) action);
+		}
+		if (ti.getLabel() != null)
+			action.setText(ti.getLabel());
+		if (ti.getTooltip() != null)
+			action.setToolTipText(ti.getTooltip());
+		if (ti.getIcon() != null)
+			action.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(ti.getIcon()));
+		addAction(cbm2, ts.getToolbarUri(), ti, action);
+	}
+
+	private void addAction(ICoolBarManager2 cbm2, String tbarid, ToolItem ti, IAction action) {
+		IContributionItem item = getToolbarContributionItem(cbm2, tbarid);
+		if (item != null && item instanceof IToolBarContributionItem) {
+			IToolBarContributionItem tbitem = (IToolBarContributionItem) item;
+			tbitem.getToolBarManager().add(action);
+			cbaritemID.add(tbarid + ";" + ti.getId());
+		}
+	}
+
+	private IContributionItem getToolbarContributionItem(ICoolBarManager2 cbm2, String tbarid) {
+		IContributionItem item = findToolbar(cbm2, tbarid);
+		// IContributionItem item = cbm2.find(tbarid);
+		if (item == null) {
+			item = new ToolBarContributionItem2(new ToolBarManager(), tbarid);
+			cbm2.appendToGroup("group.editor", item);
+		}
+		if (item != null)
+			cbarID.add(tbarid);
+		return item;
+	}
+
+	private IContributionItem findToolbar(ICoolBarManager2 cbm2, String tbarid) {
+		for (IContributionItem ci : cbm2.getItems()) {
+			if (ci.getId().equals(tbarid))
+				return ci;
+		}
+		return null;
+	}
+
+	public void contributeToContextToolBar(IToolBarManager tbm, ISelection selection) {
+	}
+
+	public void contributeToContextMenu(IMenuManager manager, ISelection selection) {
+	}
+
+	public void contributeToContextStatusLine(IStatusLineManager statusLineManager, ISelection selection) {
+	}
+
+	private boolean isSelected(ISelection selection, List<Class<?>> classes) {
+		StructuredSelection sel = (StructuredSelection) selection;
+		for (Iterator<?> it = sel.iterator(); it.hasNext();) {
+			Object obj = it.next();
+			if (obj instanceof EditPart)
+				obj = ((EditPart) obj).getModel();
+			boolean iscompatible = false;
+			for (Class<?> c : classes) {
+				if (c.isAssignableFrom(obj.getClass())) {
+					iscompatible = iscompatible || true;
+					break;
+				}
+			}
+			if (!iscompatible)
+				return false;
+		}
+		return true;
+	}
 
 	private boolean isSameSelection(IActionBars bars, ISelection selection) {
 		if (selection == null || !(selection instanceof StructuredSelection)) {
@@ -170,130 +294,5 @@ public class JrxmlSelectionContributor {
 			}
 		}
 		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(ts.getId());
-	}
-
-	public void contributeToContextCoolBar(IActionBars bars, ICoolBarManager coolBarManager, ISelection selection) {
-		IEditorPart lastEditor = editorContributor.getLastEditor();
-		if (lastEditor instanceof ReportContainer)
-			lastEditor = ((ReportContainer) lastEditor).getActiveEditor();
-		if (coolBarManager instanceof SubCoolBarManager) {
-			ICoolBarManager2 cbm2 = (ICoolBarManager2) ((SubCoolBarManager) coolBarManager).getParent();
-
-			ToolItemsManager tm = JaspersoftStudioPlugin.getToolItemsManager();
-			for (ToolItemsSet ts : tm.getSets()) {
-				if (!isToolbarVisible(ts))
-					continue;
-				if (ts.getToolbarUri() != null) {
-					for (ToolItem ti : ts.getToolItems()) {
-						if (!isSelected(selection, ti.getClasses()))
-							continue;
-						if (ti.getContributionItem() != null) {
-							addContributionToCoolbar(cbm2, ts, ti, selection);
-						} else if (ti.getActionID() != null)
-							addActionToCoolbar(bars, cbm2, ts, ti);
-					}
-				}
-			}
-			cbm2.update(true);
-		}
-	}
-
-	private void addContributionToCoolbar(ICoolBarManager2 cbm2, ToolItemsSet ts, ToolItem ti, ISelection selection) {
-		String tbarid = ts.getToolbarUri();
-		IContributionItem item = getToolbarContributionItem(cbm2, tbarid);
-		if (item != null && item instanceof ToolBarContributionItem2) {
-			ToolBarContributionItem2 tbitem = (ToolBarContributionItem2) item;
-			// add coolbarcontributionitem
-			IContributionItem citem = ti.getContributionItem();
-			tbitem.getToolBarManager().add(citem);
-			// citem.update();
-			if (citem instanceof ISelectionContributionItem) {
-				((ISelectionContributionItem) citem).setSelection(selection);
-				((ISelectionContributionItem) citem).setWorkbenchPart(editorContributor.getLastEditor());
-			}
-
-			cbaritemID.add(tbarid + ";" + ti.getId());
-		}
-	}
-
-	private void addActionToCoolbar(final IActionBars bars, ICoolBarManager2 cbm2, ToolItemsSet ts, ToolItem ti) {
-		IAction action = editorContributor.getAction(ti.getId());
-		if (action == null)
-			action = registry.getAction(ti.getId());
-		if (action == null) {
-			action = new LabelRetargetAction(ti.getActionID(), ti.getLabel()) {
-				// @Override
-				// public void partDeactivated(IWorkbenchPart part) {
-				// // if (isSameSelection(bars, part.getSite().getSelectionProvider().getSelection()))
-				// // return;
-				// super.partDeactivated(part);
-				// }
-
-				@Override
-				public void partBroughtToTop(IWorkbenchPart part) {
-					partActivated(part);
-				}
-			};
-
-			editorContributor.addRetargetAction((RetargetAction) action);
-
-		}
-		if (ti.getLabel() != null)
-			action.setText(ti.getLabel());
-		if (ti.getTooltip() != null)
-			action.setToolTipText(ti.getTooltip());
-		if (ti.getIcon() != null)
-			action.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(ti.getIcon()));
-		addAction(cbm2, ts.getToolbarUri(), action);
-	}
-
-	private boolean isSelected(ISelection selection, List<Class<?>> classes) {
-		StructuredSelection sel = (StructuredSelection) selection;
-		for (Iterator<?> it = sel.iterator(); it.hasNext();) {
-			Object obj = it.next();
-			if (obj instanceof EditPart)
-				obj = ((EditPart) obj).getModel();
-			boolean iscompatible = false;
-			for (Class<?> c : classes) {
-				if (c.isAssignableFrom(obj.getClass())) {
-					iscompatible = iscompatible || true;
-					break;
-				}
-			}
-			if (!iscompatible)
-				return false;
-		}
-		return true;
-	}
-
-	public void contributeToContextToolBar(IToolBarManager tbm, ISelection selection) {
-	}
-
-	private void addAction(ICoolBarManager2 cbm2, String tbarid, IAction action) {
-		IContributionItem item = getToolbarContributionItem(cbm2, tbarid);
-		if (item != null && item instanceof ToolBarContributionItem2) {
-			ToolBarContributionItem2 tbitem = (ToolBarContributionItem2) item;
-			tbitem.getToolBarManager().add(action);
-			cbaritemID.add(tbarid + ";" + action.getId());
-		}
-	}
-
-	private IContributionItem getToolbarContributionItem(ICoolBarManager2 cbm2, String tbarid) {
-		IContributionItem item = cbm2.find(tbarid);
-		if (item == null) {
-			item = new ToolBarContributionItem2(new ToolBarManager(), tbarid);
-			cbm2.add(item);
-			cbarID.add(tbarid);
-		}
-		return item;
-	}
-
-	private void addAction(IToolBarManager tbm, IAction action) {
-		tbm.add(action);
-		tbarID.add(action.getId());
-	}
-
-	public void contributeToContextMenu(IMenuManager manager, ISelection selection) {
-
 	}
 }
