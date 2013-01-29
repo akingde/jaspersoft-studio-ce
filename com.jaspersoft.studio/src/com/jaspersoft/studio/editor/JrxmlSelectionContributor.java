@@ -109,13 +109,13 @@ public class JrxmlSelectionContributor {
 			return;
 		cleanBars(bars);
 
+		IPartService pservice = ((WorkbenchPage) editorContributor.getPage()).getWorkbenchWindow().getPartService();
+
 		contributeToContextMenu(bars.getMenuManager(), selection);
 		contributeToContextToolBar(bars.getToolBarManager(), selection);
 		if (bars instanceof IActionBars2)
 			contributeToContextCoolBar(bars, ((IActionBars2) bars).getCoolBarManager(), selection);
 		contributeToContextStatusLine(bars.getStatusLineManager(), selection);
-
-		IPartService pservice = ((WorkbenchPage) editorContributor.getPage()).getWorkbenchWindow().getPartService();
 		if (pservice.getActivePartReference() != null && pservice instanceof PartService) {
 			// I use reflection because methods are different in eclipse 3.x and 4.x
 			try {
@@ -142,6 +142,8 @@ public class JrxmlSelectionContributor {
 
 			// ((PartService) pservice).firePartBroughtToTop(pservice.getActivePartReference());
 			// ((PartService) pservice).partBroughtToTop(pservice.getActivePartReference());
+		} else {
+			pservice.getActivePart();
 		}
 
 		bars.updateActionBars();
@@ -194,7 +196,6 @@ public class JrxmlSelectionContributor {
 				((ISelectionContributionItem) citem).setSelection(selection);
 				((ISelectionContributionItem) citem).setWorkbenchPart(editorContributor.getLastEditor());
 			}
-
 			cbaritemID.add(tbarid + ";" + ti.getId());
 		}
 	}
@@ -202,7 +203,7 @@ public class JrxmlSelectionContributor {
 	private void addActionToCoolbar(final IActionBars bars, ICoolBarManager2 cbm2, ToolItemsSet ts, ToolItem ti) {
 		IAction action = editorContributor.getAction(ti.getId());
 		if (action == null)
-			action = registry.getAction(ti.getId());
+			action = registry.getAction(ti.getActionID());
 		if (action == null) {
 			action = new LabelRetargetAction(ti.getActionID(), ti.getLabel()) {
 				// @Override
