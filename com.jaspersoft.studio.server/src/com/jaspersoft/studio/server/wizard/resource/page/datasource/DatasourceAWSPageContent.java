@@ -79,15 +79,17 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 		ec2Cred.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ResourceDescriptor rd = res.getValue();
-				if (pAccessKey != null)
-					rd.getProperties().remove(pAccessKey);
-				if (pSecretKey != null)
-					rd.getProperties().remove(pSecretKey);
-				if (pArn != null)
-					rd.getProperties().remove(pArn);
-				unbindAWS();
-				awsCred.setSelection(false);
+				if (ec2Cred.getSelection()) {
+					ResourceDescriptor rd = res.getValue();
+					if (pAccessKey != null)
+						rd.getProperties().remove(pAccessKey);
+					if (pSecretKey != null)
+						rd.getProperties().remove(pSecretKey);
+					if (pArn != null)
+						rd.getProperties().remove(pArn);
+					unbindAWS();
+					setEC2Settings(true);
+				}
 			}
 		});
 
@@ -119,7 +121,7 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 					rd.getProperties().add(pArn);
 
 					bindAWS();
-					ec2Cred.setSelection(false);
+					setEC2Settings(false);
 				}
 			}
 		});
@@ -131,7 +133,7 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 
 		UIUtils.createLabel(composite, "AWS Secret Key");
 
-		awsSecretKey = new Text(composite, SWT.BORDER);
+		awsSecretKey = new Text(composite, SWT.BORDER | SWT.PASSWORD);
 		awsSecretKey.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		UIUtils.createLabel(composite, "ARN");
@@ -149,6 +151,11 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 		Text awsService = new Text(composite, SWT.BORDER);
 		awsService.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		UIUtils.createLabel(composite, "AWS Instance DB Identifier");
+
+		Text awsDBInstance = new Text(composite, SWT.BORDER);
+		awsDBInstance.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		UIUtils.createLabel(composite, "Data Source DB Name");
 
 		Text awsDSDBName = new Text(composite, SWT.BORDER);
@@ -164,8 +171,7 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 		bindAWS();
 		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(
 				MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, props);
-		ec2Cred.setSelection(resprop != null);
-		awsCred.setSelection(resprop == null);
+		setEC2Settings(resprop == null);
 
 		resprop = ResourceDescriptorUtil.getProperty(
 				MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, props);
@@ -182,12 +188,29 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
 		resprop = ResourceDescriptorUtil.getProperty(
+				MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER,
+				props);
+
+		bindingContext.bindValue(
+				SWTObservables.observeText(awsDBInstance, SWT.Modify),
+				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+
+		resprop = ResourceDescriptorUtil.getProperty(
 				MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME, props);
 
 		bindingContext.bindValue(
 				SWTObservables.observeText(awsDSDBName, SWT.Modify),
 				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 		return composite;
+	}
+
+	private void setEC2Settings(boolean ec2) {
+		ec2Cred.setSelection(ec2);
+
+		awsCred.setSelection(!ec2);
+		awsAccessKey.setEnabled(!ec2);
+		awsSecretKey.setEnabled(!ec2);
+		awsArn.setEnabled(!ec2);
 	}
 
 	private void bindAWS() {
@@ -223,5 +246,10 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 			bindingContext.removeBinding(bSecretKey);
 		if (bArn != null)
 			bindingContext.removeBinding(bArn);
+	}
+
+	@Override
+	protected void createImportButton(Composite composite, Text tdriver,
+			Text turl, Text tuser, Text tpass) {
 	}
 }

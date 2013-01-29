@@ -80,7 +80,7 @@ public class ServerProfileWizard extends Wizard {
 
 			});
 		} catch (InvocationTargetException e) {
-			UIUtils.showError(e);
+			UIUtils.showError(e.getTargetException());
 		} catch (InterruptedException e) {
 			UIUtils.showError(e);
 		}

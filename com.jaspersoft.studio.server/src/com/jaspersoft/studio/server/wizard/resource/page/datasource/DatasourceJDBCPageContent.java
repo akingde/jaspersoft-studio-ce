@@ -83,6 +83,23 @@ public class DatasourceJDBCPageContent extends APageContent {
 		final Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		createImportButton(composite, tdriver, turl, tuser, tpass);
+
+		bindingContext.bindValue(
+				SWTObservables.observeText(tdriver, SWT.Modify),
+				PojoObservables.observeValue(res.getValue(), "driverClass")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(turl, SWT.Modify),
+				PojoObservables.observeValue(res.getValue(), "connectionUrl")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tuser, SWT.Modify),
+				PojoObservables.observeValue(res.getValue(), "username")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify),
+				PojoObservables.observeValue(res.getValue(), "password")); //$NON-NLS-1$
+
+		return composite;
+	}
+
+	protected void createImportButton(Composite composite, final Text tdriver,
+			final Text turl, final Text tuser, final Text tpass) {
 		Button importDA = new Button(composite, SWT.NONE);
 		importDA.setText(Messages.RDDatasourceJDBCPage_ImportButton);
 		importDA.setToolTipText(Messages.RDDatasourceJDBCPage_ImportButtonTooltip);
@@ -112,17 +129,5 @@ public class DatasourceJDBCPageContent extends APageContent {
 				}
 			}
 		});
-
-		bindingContext.bindValue(
-				SWTObservables.observeText(tdriver, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "driverClass")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeText(turl, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "connectionUrl")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeText(tuser, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "username")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "password")); //$NON-NLS-1$
-
-		return composite;
 	}
 }
