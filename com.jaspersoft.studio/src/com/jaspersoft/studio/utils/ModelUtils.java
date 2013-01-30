@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
@@ -118,23 +113,22 @@ public class ModelUtils {
 		}
 		return null;
 	}
-	
+
 	public static org.eclipse.swt.graphics.Color getSWTColorFromAWT(java.awt.Color awtColor) {
 		return new org.eclipse.swt.graphics.Color(null, awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue());
 	}
 
-
 	/**
 	 * Get all the available datasets in the provided JasperDesign.
 	 * 
-	 * If the main datasetis included, since the main dataset has not a name,
-	 * it is assigned with a constanct name:
+	 * If the main datasetis included, since the main dataset has not a name, it is assigned with a constanct name:
 	 * 
 	 * {@link ModelUtils.MAIN_DATASET MAIN_DATASET}
 	 * 
 	 * 
 	 * @param jd
-	 * @param includeMainDataset - true to include the main dataset
+	 * @param includeMainDataset
+	 *          - true to include the main dataset
 	 * @return an array of strings with the names of the datasets.
 	 */
 	public static String[] getDataSets(JasperDesign jd, boolean includeMainDataset) {
@@ -652,7 +646,8 @@ public class ModelUtils {
 		List<JRDesignElement> list = new ArrayList<JRDesignElement>();
 		List<JRDesignCellContents> cells = getAllCells(crosstab);
 		for (JRDesignCellContents content : cells)
-			list.addAll(getGElements(content));
+			if (content != null)
+				list.addAll(getGElements(content));
 		return list;
 	}
 
@@ -927,8 +922,9 @@ public class ModelUtils {
 	}
 
 	/**
-	 * Return the font names, the names can be split in more array to categorize them. 
-	 * In this way when represented, the category can be graphically divided  (for example with a separator)
+	 * Return the font names, the names can be split in more array to categorize them. In this way when represented, the
+	 * category can be graphically divided (for example with a separator)
+	 * 
 	 * @param jContext
 	 * @return
 	 */
@@ -1259,13 +1255,12 @@ public class ModelUtils {
 	 *          the jasper configuration
 	 * @return the current report language if any, <code>null</code> otherwise
 	 */
-	public static String getCurrentReportLanguage(JasperReportsConfiguration jconfig){
+	public static String getCurrentReportLanguage(JasperReportsConfiguration jconfig) {
 		Assert.isNotNull(jconfig);
 		JasperDesign jd = jconfig.getJasperDesign();
-		if(jd!=null) {
+		if (jd != null) {
 			return jd.getLanguage();
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
