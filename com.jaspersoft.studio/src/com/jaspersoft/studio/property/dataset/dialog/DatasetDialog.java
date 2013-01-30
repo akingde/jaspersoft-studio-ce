@@ -272,6 +272,8 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		command = new CompoundCommand();
 
 		String lang = newdataset.getQuery().getLanguage();
+		((JRDesignQuery) newdataset.getQuery()).setText(dataquery.getQuery());
+
 		String qtext = newdataset.getQuery().getText();
 		if (ds.getQuery() == null) {
 			JRDesignQuery jrQuery = new JRDesignQuery();

@@ -450,10 +450,14 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			}
 		}
 
-		else if (id.equals(JasperDesign.PROPERTY_LANGUAGE))
-			jrDesign.setLanguage(value == null ? null : ((String) value).toLowerCase());
-
-		else if (id.equals(JasperDesign.PROPERTY_PAGE_HEIGHT))
+		else if (id.equals(JasperDesign.PROPERTY_LANGUAGE)) {
+			String str = (String) value;
+			if (str != null && str.isEmpty())
+				str = null;
+			if (str != null)
+				str = str.toLowerCase();
+			jrDesign.setLanguage(str);
+		} else if (id.equals(JasperDesign.PROPERTY_PAGE_HEIGHT))
 			jrDesign.setPageHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		else if (id.equals(JasperDesign.PROPERTY_PAGE_WIDTH))
 			jrDesign.setPageWidth((Integer) Misc.nvl(value, Integer.valueOf(0)));
