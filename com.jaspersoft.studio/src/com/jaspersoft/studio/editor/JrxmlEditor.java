@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.core.internal.resources.ResourceException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -213,18 +212,24 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		xmlEditor = new XMLEditor(jrContext);
 		int index = addPage(xmlEditor, getEditorInput());
 		setPageText(index, Messages.common_source);
-		xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput())
-				.addDocumentListener(new IDocumentListener() {
+		IDocument doc = xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput());
+		try {
+			String xml = JRXmlWriterHelper.writeReport(jrContext, getMReport().getJasperDesign(), "UTF-8", version);
+			doc.set(xml);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		doc.addDocumentListener(new IDocumentListener() {
 
-					public void documentChanged(DocumentEvent event) {
-						xmlFresh = false;
-						previewEditor.setDirty(true);
-					}
+			public void documentChanged(DocumentEvent event) {
+				xmlFresh = false;
+				previewEditor.setDirty(true);
+			}
 
-					public void documentAboutToBeChanged(DocumentEvent event) {
+			public void documentAboutToBeChanged(DocumentEvent event) {
 
-					}
-				});
+			}
+		});
 	}
 
 	/**
@@ -318,7 +323,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			outline = new EmptyOutlinePage();
 
 		outlinePage.setPageActive(outline);
-
 	}
 
 	/**
