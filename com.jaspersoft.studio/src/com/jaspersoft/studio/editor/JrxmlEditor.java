@@ -521,6 +521,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			if (!isRefresh) {
 				jrContext.setJasperDesign(jd);
 				setModel(ReportFactory.createReport(jrContext));
+				model2xml();
 			}
 		} catch (JRException e) {
 			setModel(null);
