@@ -28,6 +28,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -54,7 +55,7 @@ import com.jaspersoft.studio.doc.samples.messages.Messages;
  * @author Orlandin Marco
  *
  */
-public class ImportSamplesWizardHandler extends AsyncAction {
+public class ImportSamplesWizardHandler extends Action {
 	
 		/**
 		 * Redefinitions of the wizard page to adapt it to the cheatsheets, and adding also the contextual help
@@ -123,7 +124,7 @@ public class ImportSamplesWizardHandler extends AsyncAction {
 			}
 			
 			/**
-			 * When the main control is set, a listner for the help request is added to it
+			 * When the main control is set, a listener for the help request is added to it
 			 */
 			@Override
 			protected void setControl(Control newControl) {
@@ -153,13 +154,14 @@ public class ImportSamplesWizardHandler extends AsyncAction {
 			};
 			
 	}
-	
+		
 	@Override
-	public void doAction() {
+	public void run() {
 		SampleNewWizard wizard = new SampleNewWizard();
 		wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(), new JRFixedProjectPage());
-		WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
-		dialog.open();
+		WizardDialog dialogToOpen = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+		dialogToOpen.open();
 	}
+
 	
 }
