@@ -216,7 +216,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		PathEditor pe = new PathEditor(NSF_EXPORT_PDF_FONTDIR, Messages.PDFExporterPreferencePage_54,
 				Messages.PDFExporterPreferencePage_55, fdircompo);
 		addField(pe);
-		HelpSystem.setHelp(pe.getListControl(sc), StudioPreferencePage.REFERENCE_PREFIX + pe.getPreferenceName());
+		HelpSystem.setHelp(pe.getListControl(fdircompo), StudioPreferencePage.REFERENCE_PREFIX + pe.getPreferenceName());
 
 		fdircompo.setLayout(new GridLayout(4, false));
 	}
@@ -255,7 +255,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 				"ICC Profile File", fcompo);
 		ffe.setFileExtensions(new String[] { ".icc" }); //$NON-NLS-1$
 		addField(ffe);
-		HelpSystem.setHelp(ffe.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + ffe.getPreferenceName());
+		HelpSystem.setHelp(ffe.getTextControl(fcompo), StudioPreferencePage.REFERENCE_PREFIX + ffe.getPreferenceName());
 
 		BooleanFieldEditor bf = new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_COMPRESSED,
 				Messages.PDFExporterPreferencePage_72, sc);
