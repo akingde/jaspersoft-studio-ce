@@ -30,7 +30,9 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.action.server.EditServerAction;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class RefreshResourcesAction extends Action {
@@ -41,10 +43,10 @@ public class RefreshResourcesAction extends Action {
 		setId(ActionFactory.REFRESH.getId());
 		setText("Refresh");
 		setToolTipText(Messages.common_delete);
-		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseicons/reload.gif"));
-		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseicons/reload.gif"));
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance()
+				.getImageDescriptor("icons/eclipseicons/reload.gif"));
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance()
+				.getImageDescriptor("icons/eclipseicons/reload.gif"));
 		this.treeViewer = treeViewer;
 	}
 
@@ -86,6 +88,9 @@ public class RefreshResourcesAction extends Action {
 				} catch (InterruptedException e) {
 					UIUtils.showError(e);
 				}
+			} else if (obj instanceof MServerProfile) {
+				EditServerAction.fillServerProfile((MServerProfile) obj,
+						treeViewer);
 			}
 		}
 	}

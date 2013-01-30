@@ -130,6 +130,11 @@ public class ServerProvider implements IRepositoryViewProvider {
 				lst.add(editServerAction);
 			if (duplicateServerAction.isEnabled())
 				lst.add(duplicateServerAction);
+
+			lst.add(new Separator());
+			if (refreshAction.isEnabled())
+				lst.add(refreshAction);
+
 			lst.add(new Separator());
 			if (deleteServerAction.isEnabled())
 				lst.add(deleteServerAction);
