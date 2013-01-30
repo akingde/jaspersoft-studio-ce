@@ -34,6 +34,7 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -322,11 +323,14 @@ public class MDataset extends APropertyNode implements ICopyable {
 		return false;
 	}
 
-	public MParameter getParamater(String name) {
-		for (INode n : getChildren()) {
+	public MParameterSystem getParamater(String name) {
+		List<INode> children = getChildren();
+		if (children == null || children.isEmpty())
+			children = mreport.getChildren();
+		for (INode n : children) {
 			if (n instanceof MParameters) {
 				for (INode nf : n.getChildren()) {
-					MParameter mfield = (MParameter) nf;
+					MParameterSystem mfield = (MParameterSystem) nf;
 					if (mfield.getValue().getName().equals(name))
 						return mfield;
 				}
@@ -337,7 +341,10 @@ public class MDataset extends APropertyNode implements ICopyable {
 	}
 
 	public MField getField(String name) {
-		for (INode n : getChildren()) {
+		List<INode> children = getChildren();
+		if (children == null || children.isEmpty())
+			children = mreport.getChildren();
+		for (INode n : children) {
 			if (n instanceof MFields) {
 				for (INode nf : n.getChildren()) {
 					MField mfield = (MField) nf;

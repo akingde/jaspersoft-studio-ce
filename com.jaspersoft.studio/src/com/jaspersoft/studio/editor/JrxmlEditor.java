@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.internal.resources.ResourceException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -58,6 +59,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SaveAsDialog;
+import org.eclipse.ui.editors.text.IStorageDocumentProvider;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IGotoMarker;
@@ -358,6 +360,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				resource.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
 
 			resource.setCharset("UTF-8", monitor);
+			((IStorageDocumentProvider) xmlEditor.getDocumentProvider()).setEncoding(getEditorInput(), "UTF-8");
 		} catch (CoreException e) {
 			UIUtils.showError(e);
 		} catch (UnsupportedEncodingException e) {

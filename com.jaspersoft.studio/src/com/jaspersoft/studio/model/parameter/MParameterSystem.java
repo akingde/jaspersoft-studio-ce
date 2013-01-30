@@ -77,6 +77,11 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	}
 
 	@Override
+	public JRDesignParameter getValue() {
+		return (JRDesignParameter) super.getValue();
+	}
+
+	@Override
 	public Color getForeground() {
 		return ColorConstants.lightGray;
 	}

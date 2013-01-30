@@ -54,6 +54,7 @@ import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.command.CreateFieldCommand;
 import com.jaspersoft.studio.model.field.command.DeleteFieldCommand;
 import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.parameter.command.CreateParameterCommand;
 import com.jaspersoft.studio.model.parameter.command.DeleteParameterCommand;
 import com.jaspersoft.studio.model.sortfield.command.CreateSortFieldCommand;
@@ -313,7 +314,13 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 					}
 					notexists = false;
 				} else if (mapfields.containsValue(newf)) {
-					MField mfield = mdataset.getField(f.getName());
+					MField mfield = null;
+					for (JRField p : mapfields.keySet()) {
+						if (mapfields.get(p) == newf) {
+							mfield = mdataset.getField(p.getName());
+							break;
+						}
+					}
 					if (mfield != null) {
 						command.add(setValueCommand(JRDesignField.PROPERTY_NAME, newf.getName(), mfield));
 						addSetValueCommand(command, JRDesignField.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mfield);
@@ -355,7 +362,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			boolean notexists = true;
 			for (JRParameter f : oldparams) {
 				if (newf.getName().equals(f.getName())) {
-					MParameter mparam = mdataset.getParamater(newf.getName());
+					MParameterSystem mparam = mdataset.getParamater(newf.getName());
 					if (mparam != null) {
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_DESCRIPTION, newf.getDescription(), mparam);
@@ -365,7 +372,13 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 					}
 					notexists = false;
 				} else if (mapparam.containsValue(newf)) {
-					MParameter mparam = mdataset.getParamater(f.getName());
+					MParameterSystem mparam = null;
+					for (JRParameter p : mapparam.keySet()) {
+						if (mapparam.get(p) == newf) {
+							mparam = mdataset.getParamater(p.getName());
+							break;
+						}
+					}
 					if (mparam != null) {
 						command.add(setValueCommand(JRDesignParameter.PROPERTY_NAME, newf.getName(), mparam));
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mparam);
