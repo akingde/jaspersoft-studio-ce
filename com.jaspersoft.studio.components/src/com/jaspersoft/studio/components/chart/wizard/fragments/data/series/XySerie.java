@@ -34,6 +34,7 @@ public class XySerie implements ISeriesFactory<JRXySeries> {
 	@Override
 	public JRDesignXySeries createSerie(JRDesignExpression expr) {
 		JRDesignXySeries f = new JRDesignXySeries();
+		f.setAutoSort(true);
 		f.setSeriesExpression(expr);
 		f.setXValueExpression(new JRDesignExpression("new Double(0)"));
 		f.setYValueExpression(new JRDesignExpression("new Double(0)"));
