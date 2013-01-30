@@ -71,7 +71,7 @@ public class Publish2ServerWizard extends Wizard {
 		final MReportUnit rpunit = getReportUnit();
 		if (page == page1) {
 			try {
-				getContainer().run(true, true, new IRunnableWithProgress() {
+				getContainer().run(false, true, new IRunnableWithProgress() {
 					public void run(IProgressMonitor monitor)
 							throws InvocationTargetException,
 							InterruptedException {
@@ -99,6 +99,8 @@ public class Publish2ServerWizard extends Wizard {
 													page2.configurePage(
 															rpunit.getParent(),
 															rpunit);
+													page2.setPreviousPage(page0);
+													page2.setPageComplete(true);
 													getContainer().showPage(
 															page2);
 													page2.setPreviousPage(page0);
