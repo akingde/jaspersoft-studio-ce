@@ -28,15 +28,27 @@
       </description>
    </item>
    <item
-         title="Choose the data adapter">
+         title="Define the data origins">
       <description>
-         Select the example data adapter &quot;<b>Sample DB - Database JDBC connection</b>&quot; and use the query &quot;<b>select count(*), SHIPCITY from orders group by SHIPCITY</b>&quot;, then hit &quot;<b>Next</b>&quot;.
+         In this step you need to define a data adapter, the location from where the fields will be retrieved, and a query to define how and which fields will be retrieved
       </description>
+      <subitem
+            label="As data adapter use the default one, provided with Jaspersoft Studio, &lt;b&gt;Sample DB - Database JDBC connection&lt;/b&gt;.">
+      </subitem>
+      <subitem
+            label="Provide a query to retrieve the fields from the data adapter, like &lt;b&gt;select count(*), SHIPCITY from orders group by SHIPCITY&lt;/b&gt;&quot;, then hit &quot;&lt;b&gt;Next&lt;/b&gt;.">
+      </subitem>
    </item>
    <item
          title="Add the fields to the dataset">
       <description>
-         At this point two fields will be discovered, add them to the dataset by double clicking on them or using the button &quot;<b>&gt;&gt;</b>&quot;, and then hit &quot;<b>Finish</b>&quot;.
+         At this point two fields will be discovered, add them to the dataset by double clicking on them or using the button <b>&gt;&gt;</b>.
+      </description>
+   </item>
+   <item
+         title="Complete the wizard">
+      <description>
+         The wizard is now finished, you can hit the button <b>Finish</b> to complete the dataset creation.
       </description>
    </item>
 </cheatsheet>

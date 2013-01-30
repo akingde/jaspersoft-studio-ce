@@ -94,6 +94,13 @@
             id="com.jaspersoft.studio.cheatsheets.UploadReport"
             name="Upload a report to JasperReport Server">
       </cheatsheet>
+      <cheatsheet
+            category="com.jaspersoft.studio.cheatsheets.elements"
+            composite="true"
+            contentFile="cheatsheets/chart.xml"
+            id="com.jaspersoft.studio.doc.cheatsheet1"
+            name="Create a report with a chart">
+      </cheatsheet>
    </extension>
 
 </plugin>

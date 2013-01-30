@@ -18,6 +18,8 @@ package com.jaspersoft.studio.doc.handlers;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.jasperreports.engine.type.BandTypeEnum;
+
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -28,6 +30,8 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.repository.RepositoryView;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.utils.SelectionHelper;
@@ -73,6 +77,33 @@ public class HandlersUtil {
 				if (node instanceof MServers) return (ANode)node;
 		}
 		return null;
+	}
+	
+	public static INode getRootFields(){
+		INode root =  getRootElement();
+		if (root == null) return null;
+		List children = root.getChildren();
+	 	Iterator it = getFirstChildrendIterator(children);
+	 	while(it != null && it.hasNext()){
+	 		INode actualPart = (INode)it.next();
+	 		if (actualPart instanceof MFields) return actualPart;
+	 	}
+	 	return null;
+	}
+	
+	public static APropertyNode getBand(){
+		INode root =  getRootElement();
+		if (root == null) return null;
+		List children = root.getChildren();
+	 	Iterator it = getFirstChildrendIterator(children);
+	 	while(it != null && it.hasNext()){
+	 		INode actualPart = (INode)it.next();
+	 		if (actualPart instanceof MBand) {
+	 			MBand band = (MBand) actualPart;
+	 			if (band.getBandType() == BandTypeEnum.SUMMARY) return band;
+	 		}
+	 	}
+	 	return null;
 	}
 	
 	/**
