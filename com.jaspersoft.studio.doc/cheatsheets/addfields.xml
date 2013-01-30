@@ -3,7 +3,8 @@
       title="Add Fields to the Report">
    <intro>
       <description>
-         <b>In this cheatsheet we will see how to add a field to a report by editing the query of its main dataset</b>
+         In this cheatsheet we will see how to add a field to a report by editing the query of its main dataset. To add a field we have to edit the 
+         query of the main dataset of the report. For this cheatsheet it is supposed to have a report opened that use the Sample Database as datasource.
       </description>
    </intro>
     <item title="Open a report">

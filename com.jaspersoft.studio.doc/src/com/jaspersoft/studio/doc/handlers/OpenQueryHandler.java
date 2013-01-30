@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PlatformUI;
 
@@ -37,10 +38,10 @@ import com.jaspersoft.studio.utils.UIUtils;
  * @author Orlandin Marco
  *
  */
-public class OpenQueryHandler extends AsyncAction{
+public class OpenQueryHandler extends Action{
 
 	@Override
-	public void doAction() {
+	public void run() {
 		APropertyNode reportRoot = HandlersUtil.getRootElement();
 		if (reportRoot != null){
 			MDataset mdataset = (MDataset)reportRoot.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);

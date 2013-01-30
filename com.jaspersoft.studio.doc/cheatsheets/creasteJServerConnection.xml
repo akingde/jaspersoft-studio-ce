@@ -3,7 +3,7 @@
       title="Create a connection to JasperReport Server">
    <intro>
       <description>
-         <b>In this cheatsheet will be shown how to create a connection to a local installation of JasperReport Server, configured with the default parameter. This new connection can be used then to upload the local reports into the server.</b>
+         In this cheatsheet will be shown how to create a connection to a local installation of JasperReport Server, configured with the default parameter. This new connection can be used then to upload the local reports into the server.
       </description>
    </intro>
    <item title="Switch to repository explorer">

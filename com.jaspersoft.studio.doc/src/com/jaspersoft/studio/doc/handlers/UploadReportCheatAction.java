@@ -2,6 +2,7 @@ package com.jaspersoft.studio.doc.handlers;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 
@@ -21,7 +22,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Orlandin Marco
  *
  */
-public class UploadReportCheatAction extends AsyncAction {
+public class UploadReportCheatAction extends Action {
 	
 	private ANode cloneServer(ANode server, ANode parent){
 		MServerProfile fakeServer = new MServerProfile(parent, (ServerProfile)server.getValue());
@@ -31,7 +32,7 @@ public class UploadReportCheatAction extends AsyncAction {
 	}
 	
 	@Override
-	protected void doAction() {
+	public void run() {
 		ANode rootElement = HandlersUtil.getRootElement();
 		if (rootElement != null){
 			JasperDesign design = rootElement.getJasperDesign();
@@ -43,11 +44,11 @@ public class UploadReportCheatAction extends AsyncAction {
 				for(INode server : servers.getChildren())
 					cloneServer((ANode)server, fakeRoot);
 				Publish2ServerWizard wizard = new Publish2ServerWizard(fakeRoot , design, config,1);
-				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
-				dialog.create();
-				dialog.open();
+				WizardDialog dialogToOpen = new WizardDialog(UIUtils.getShell(), wizard);
+				dialogToOpen.create();
+				dialogToOpen.open();
 			} else MessageDialog.openWarning(UIUtils.getShell(), Messages.UploadReportCheatAction_no_server_title, Messages.UploadReportCheatAction_no_server_warning);
 		} else MessageDialog.openWarning(UIUtils.getShell(), Messages.UploadReportCheatAction_warning_title, Messages.UploadReportCheatAction_warning_message);
-	};
+	}
 	
 }

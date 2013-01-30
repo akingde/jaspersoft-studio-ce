@@ -4,7 +4,7 @@
    <intro>
       <description>
          In this cheatsheet, we will see the basics of how to design a report. In the report creation process there are three main steps: creating a data source or a database connection used to fill the report, designing the report layout and running the report.
-To keep things simple, this tutorial uses a sample database included in the installation of Jaspersoft Studio. The data to print is retrieved using an SQL query defined during the creation of the datasource.
+		To keep things simple, this tutorial uses a sample database included in the installation of Jaspersoft Studio. The data to print is retrieved using an SQL query defined during the creation of the datasource.
       </description>
    </intro>
    <item
