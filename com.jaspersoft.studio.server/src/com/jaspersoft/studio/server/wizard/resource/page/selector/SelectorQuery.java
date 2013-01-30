@@ -82,7 +82,9 @@ public class SelectorQuery {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				RepositoryDialog rd = new RepositoryDialog(Display.getDefault()
-						.getActiveShell(), ServerManager.getMServerProfileCopy((MServerProfile)parent.getRoot())) {
+						.getActiveShell(), ServerManager
+						.getMServerProfileCopy((MServerProfile) parent
+								.getRoot())) {
 
 					@Override
 					public boolean isResourceCompatible(MResource r) {
@@ -136,9 +138,8 @@ public class SelectorQuery {
 				ResourceDescriptor runit = res.getValue();
 				ResourceDescriptor ref = getQuery(runit);
 				if (ref != null
-						&& ref.getIsReference()
-						|| ref.getWsType().equals(
-								ResourceDescriptor.TYPE_REFERENCE))
+						&& (ref.getIsReference() || ref.getWsType().equals(
+								ResourceDescriptor.TYPE_REFERENCE)))
 					ref = null;
 				boolean newref = false;
 				Shell shell = Display.getDefault().getActiveShell();
@@ -168,13 +169,12 @@ public class SelectorQuery {
 			}
 		});
 		ResourceDescriptor r = getQuery(res.getValue());
-		if (r != null) {
-			if (r.getIsReference()
-					|| r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
-				setEnabled(0);
-			else
-				setEnabled(1);
-		}
+		if (r != null
+				&& (r.getIsReference() || r.getWsType().equals(
+						ResourceDescriptor.TYPE_REFERENCE)))
+			setEnabled(0);
+		else
+			setEnabled(1);
 	}
 
 	public static ResourceDescriptor cloneResource(ResourceDescriptor rd) {
