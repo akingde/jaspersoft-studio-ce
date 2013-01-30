@@ -507,7 +507,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 			in = getXML(jrContext, editorInput, file.getCharset(true), in, version);
 
-			InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
+			InputSource is = new InputSource(in);
 
 			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
