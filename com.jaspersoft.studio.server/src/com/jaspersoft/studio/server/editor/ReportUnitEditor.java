@@ -167,6 +167,13 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport,
 		}
 	}
 
+	@Override
+	protected boolean switchRightView(APreview view, Statistics stats,
+			MultiPageContainer container) {
+		reportControler.viewerChanged(view);
+		return super.switchRightView(view, stats, container);
+	}
+
 	public void showParameters(boolean showprm) {
 		if (showprm)
 			sashform.upRestore();

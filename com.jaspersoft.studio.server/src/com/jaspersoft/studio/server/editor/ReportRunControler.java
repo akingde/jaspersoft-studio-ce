@@ -113,10 +113,13 @@ public class ReportRunControler {
 	public LinkedHashMap<String, APreview> createControls(Composite composite,
 			JasperReportsConfiguration jContext) {
 		viewmap = new LinkedHashMap<String, APreview>();
-		viewmap.put(FORM_PARAMETERS, new VInputControls(composite, jContext));
-		viewmap.put(ReportControler.FORM_EXPORTER, new VExporter(composite,
-				jContext));
+		viewmap.put(FORM_PARAMETERS, new VInputControls(composite, jContext)); 
+		viewmap.put(ReportControler.FORM_EXPORTER, new VExporter(composite, jContext));
 		return viewmap;
+	}
+	public void viewerChanged(APreview view) {
+		VExporter vs = (VExporter) viewmap.get(ReportControler.FORM_EXPORTER);
+		vs.setPreferencesPage(view);
 	}
 
 	private void fillForms() {
