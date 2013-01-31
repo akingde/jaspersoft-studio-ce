@@ -45,7 +45,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
-import com.jaspersoft.studio.doc.handlers.AsyncAction;
 import com.jaspersoft.studio.doc.samples.messages.Messages;
 
 
@@ -113,9 +112,9 @@ public class ImportSamplesWizardHandler extends Action {
 									public IStatus validate(Object value) {
 										IStatus s = super.validate(value);
 										if (s.equals(Status.OK_STATUS)) {
-												if (isProjectPresent(value))
-													return ValidationStatus.warning(Messages.ImportSamplesWizardHandler_plugin_exist);
-												else if (value.equals(defaultName))
+												if (isProjectPresent(value)){
+													return ValidationStatus.error(Messages.ImportSamplesWizardHandler_plugin_exist);
+												} else if (value.equals(defaultName))
 													return ValidationStatus.info(Messages.ImportSamplesWizardHandler_suggested_name);
 										}
 										return s;
