@@ -214,7 +214,8 @@ public class InputControlPageContent extends APageContent {
 
 	@Override
 	public void dispose() {
-		qvct.dispose();
+		if (qvct != null)
+			qvct.dispose();
 		super.dispose();
 	}
 
