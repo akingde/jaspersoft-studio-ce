@@ -210,15 +210,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	void createPage1() throws PartInitException {
 		xmlEditor = new XMLEditor(jrContext);
+
 		int index = addPage(xmlEditor, getEditorInput());
 		setPageText(index, Messages.common_source);
 		IDocument doc = xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput());
-		try {
-			String xml = JRXmlWriterHelper.writeReport(jrContext, getMReport().getJasperDesign(), "UTF-8", version);
-			doc.set(xml);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		doc.addDocumentListener(new IDocumentListener() {
 
 			public void documentChanged(DocumentEvent event) {
@@ -242,17 +237,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		setPageText(index, Messages.JrxmlEditor_preview);
 
 		xmlEditor.getDocumentProvider().addElementStateListener(new StateListener());
-
-		// IPropertyListener l = new IPropertyListener() {
-		//
-		// @Override
-		// public void propertyChanged(Object source, int propId) {
-		// if(p)
-		// previewEditor.setDirty(true);
-		// }
-		// };
-		// reportContainer.addPropertyListener(l);
-		// xmlEditor.addPropertyListener(l);
 	}
 
 	/**
@@ -511,9 +495,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 			in = getXML(jrContext, editorInput, file.getCharset(true), in, version);
 
-			InputSource is = new InputSource(in);
-
-			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
+			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(new InputSource(in));
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
 			// NO LONGER AVAILABLE IN GLOBAL TOOLBAR SINCE
 			// THEY WILL BE VISIBLE IN THE ReportContainer toolbar.
