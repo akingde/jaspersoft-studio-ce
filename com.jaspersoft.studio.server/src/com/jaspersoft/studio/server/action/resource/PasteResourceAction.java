@@ -143,7 +143,7 @@ public class PasteResourceAction extends Action {
 					String newname = dURI + "/" + origin.getName();
 					if (parent instanceof MFolder) {
 						if (m.isCut()) {
-							ws.move(origin, newname);
+							ws.move(origin, dURI);
 							m.setCut(false);
 						} else {
 							ResourceDescriptor newrd = ws.copy(origin, newname);
