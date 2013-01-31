@@ -15,8 +15,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish.wizard;
 
+import java.lang.reflect.InvocationTargetException;
+
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeViewerListener;
@@ -49,6 +53,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.utils.ValidationUtils;
+import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -86,11 +91,11 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				&& (getReportUnit() instanceof MReportUnit)
 				&& getErrorMessage() == null;
 	}
-	
+
 	@Override
 	public void setErrorMessage(String newMessage) {
 		super.setErrorMessage(newMessage);
-		setPageComplete(newMessage==null);
+		setPageComplete(newMessage == null);
 	}
 
 	public void createControl(Composite parent) {
@@ -120,11 +125,10 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				ruLabel.setEnabled(selected);
 				ruID.setEnabled(selected);
 				ruDescription.setEnabled(selected);
-				
-				if(selected){
+
+				if (selected) {
 					performPageChecks();
-				}
-				else{
+				} else {
 					// Clean error message and disable page complete enablement
 					setErrorMessage(null);
 					setPageComplete(false);
@@ -136,9 +140,10 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			}
 		});
 
-		// Report Unit ID (resource descriptor name)   
+		// Report Unit ID (resource descriptor name)
 		Label lblRepoUnitID = new Label(composite, SWT.NONE);
-		lblRepoUnitID.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
+		lblRepoUnitID.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
+				false));
 		lblRepoUnitID.setText(Messages.RUnitLocationPage_lblreportunit);
 		ruID = new Text(composite, SWT.BORDER);
 		ruID.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -147,23 +152,24 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			public void modifyText(ModifyEvent e) {
 				String rtext = ruID.getText();
 				ResourceDescriptor ru = getNewRunit().getValue();
-				ru.setName(rtext.replace(" ", ""));	 //$NON-NLS-1$ //$NON-NLS-2$
+				ru.setName(rtext.replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
 				setErrorMessage(ValidationUtils.validateName(rtext));
 			}
 		});
 		ruID.addVerifyListener(new VerifyListener() {
 			@Override
 			public void verifyText(VerifyEvent e) {
-				if(Character.isWhitespace(e.character)){
-					e.doit = false;	
+				if (Character.isWhitespace(e.character)) {
+					e.doit = false;
 				}
 			}
 		});
 		ruID.setText(jDesign.getName().replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
-		
+
 		// Report Unit shown label (resource descriptor label)
 		Label lblRepoUnitName = new Label(composite, SWT.NONE);
-		lblRepoUnitName.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
+		lblRepoUnitName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
+				false));
 		lblRepoUnitName.setText(Messages.RUnitLocationPage_reportunitlabel);
 		ruLabel = new Text(composite, SWT.BORDER);
 		ruLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -177,15 +183,16 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			}
 		});
 		ruLabel.setText(jDesign.getName());
-		
+
 		// Report Unit description
 		Label lblRepoUnitDescription = new Label(composite, SWT.NONE);
-		GridData descLblGD = new GridData(SWT.FILL,SWT.TOP,false,false);
+		GridData descLblGD = new GridData(SWT.FILL, SWT.TOP, false, false);
 		lblRepoUnitDescription.setLayoutData(descLblGD);
-		lblRepoUnitDescription.setText(Messages.RUnitLocationPage_reportunitdesc_label);
+		lblRepoUnitDescription
+				.setText(Messages.RUnitLocationPage_reportunitdesc_label);
 		ruDescription = new Text(composite, SWT.BORDER | SWT.MULTI);
-		GridData descGD = new GridData(SWT.FILL,SWT.TOP,true,true);
-		descGD.minimumHeight=50;
+		GridData descGD = new GridData(SWT.FILL, SWT.TOP, true, true);
+		descGD.minimumHeight = 50;
 		ruDescription.setLayoutData(descGD);
 		ruDescription.addModifyListener(new ModifyListener() {
 
@@ -196,7 +203,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				setErrorMessage(ValidationUtils.validateDesc(rtext));
 			}
 		});
-		ruDescription.setText("");		 //$NON-NLS-1$
+		ruDescription.setText(""); //$NON-NLS-1$
 
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -211,11 +218,38 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 			private ServerProvider serverProvider;
 
-			public void treeExpanded(TreeExpansionEvent event) {
+			public void treeExpanded(final TreeExpansionEvent event) {
 				if (!skipEvents) {
-					if (serverProvider == null)
-						serverProvider = new ServerProvider();
-					serverProvider.handleTreeEvent(event);
+					try {
+						getContainer().run(false, true,
+								new IRunnableWithProgress() {
+									public void run(IProgressMonitor monitor)
+											throws InvocationTargetException,
+											InterruptedException {
+										monitor.beginTask(
+												Messages.Publish2ServerWizard_MonitorName,
+												IProgressMonitor.UNKNOWN);
+										try {
+											if (serverProvider == null)
+												serverProvider = new ServerProvider();
+											serverProvider.handleTreeEvent(
+													event, monitor);
+										} catch (Exception e) {
+											if (e instanceof InterruptedException)
+												throw (InterruptedException) e;
+											else
+												UIUtils.showError(e);
+										} finally {
+											monitor.done();
+										}
+									}
+								});
+					} catch (InvocationTargetException e) {
+						UIUtils.showError(e.getCause());
+					} catch (InterruptedException e) {
+						UIUtils.showError(e.getCause());
+					}
+
 				}
 			}
 
@@ -293,18 +327,18 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 	}
 
 	/*
-	 * Perform validation checks and eventually set the error message. 
+	 * Perform validation checks and eventually set the error message.
 	 */
 	private void performPageChecks() {
-		String errorMsg=null;
-		errorMsg=ValidationUtils.validateName(ruID.getText());
-		if(errorMsg==null){
-			errorMsg=ValidationUtils.validateLabel(ruLabel.getText());
+		String errorMsg = null;
+		errorMsg = ValidationUtils.validateName(ruID.getText());
+		if (errorMsg == null) {
+			errorMsg = ValidationUtils.validateLabel(ruLabel.getText());
 		}
-		if(errorMsg==null){
-			errorMsg=ValidationUtils.validateDesc(ruDescription.getText());
+		if (errorMsg == null) {
+			errorMsg = ValidationUtils.validateDesc(ruDescription.getText());
 		}
 		setErrorMessage(errorMsg);
-		setPageComplete(errorMsg==null);
+		setPageComplete(errorMsg == null);
 	}
 }
