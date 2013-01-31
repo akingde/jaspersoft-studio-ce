@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.obj;
 
@@ -37,8 +32,7 @@ public class GenericElementSection extends AbstractSection {
 		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
 		widgets.put(pd.getId(), new SPEvaluationTime(parent, this, pd, gpd));
 
-		createWidget4Property(parent, JRDesignGenericElement.PROPERTY_GENERIC_TYPE + MGenericElement.PROPERTY_NAME);
-		createWidget4Property(parent, JRDesignGenericElement.PROPERTY_GENERIC_TYPE + MGenericElement.PROPERTY_NAMESPACE);
-
+		createWidget4Property(parent, MGenericElement.PROPERTY_NAME);
+		createWidget4Property(parent, MGenericElement.PROPERTY_NAMESPACE);
 	}
 }

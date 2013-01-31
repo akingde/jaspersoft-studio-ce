@@ -16,7 +16,9 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRGenericElementParameter;
 import net.sf.jasperreports.engine.JRGenericElementType;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGenericElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -242,5 +244,12 @@ public class MGenericElement extends MGraphicElement {
 		}
 
 		super.setPropertyValue(id, value);
+	}
+
+	@Override
+	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
+		JRDesignGenericElement el = new JRDesignGenericElement(jasperDesign);
+		el.setGenericType(new JRGenericElementType("namespace", "name"));
+		return el;
 	}
 }
