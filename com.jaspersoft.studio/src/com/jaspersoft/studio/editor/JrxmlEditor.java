@@ -701,8 +701,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				});
 				break;
 			case PAGE_XMLEDITOR:
-				if (reportContainer.isDirty())
-					model2xml();
+				// if (reportContainer.isDirty())
+				model2xml();
 				break;
 			case PAGE_PREVIEW:
 				if (activePage == PAGE_XMLEDITOR)
