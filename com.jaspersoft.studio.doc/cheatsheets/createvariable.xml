@@ -14,7 +14,7 @@
    </item>
    <item title="Create a variable from the contextual menu">
       <description>
-         Right click on the element &quot;<b>Variables</b>&quot; and select  &quot;<b>Create variable</b>&quot;.
+         Right click on the element <b>Variables</b> and select <b>Create variable</b>.
       </description>
       <action pluginId="com.jaspersoft.studio" class="com.jaspersoft.studio.model.variable.command.CreateVariableHandler" required="false"/>
    </item>

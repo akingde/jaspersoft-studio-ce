@@ -3,8 +3,7 @@
       title="Add Fields to the Report">
    <intro>
       <description>
-         In this cheatsheet we will see how to add a field to a report by editing the query of its main dataset. To add a field we have to edit the 
-         query of the main dataset of the report.
+         In this cheatsheet we will see how to add a field to a report by editing the query of its main dataset. To add a field we have to edit the query of the main dataset of the report.
       </description>
    </intro>
     <item title="Open a report">
@@ -22,13 +21,13 @@
    </item>
     <item title="Edit the report query" dialog="true">
       <description>
-         Now you need to enter in the main query editor, to do this select the report element in the Outline view and from the Properties view hit the button &quot;Edit query, filter and sort options&quot;
+         Now you need to enter in the main query editor, to do this select the report element in the Outline view and from the Properties view hit the button <b>Edit query, filter and sort options</b>
       </description>
       <action pluginId="com.jaspersoft.studio.doc" class="com.jaspersoft.studio.doc.handlers.OpenQueryHandler" required="false"/>
    </item>
    <item title="Select the dataset">
     	<description>
-    		From the current dialog, select in the upper left corner the dataset &quot;Sample DB&quot;.</description>
+    		From the current dialog, select in the upper left corner the dataset <b>Sample DB</b>.</description>
     </item>
    <item title="Insert the query">
     	<description>
@@ -37,14 +36,14 @@
     </item>
     <item title="Read the fields">
     	<description>
-    		Hit the &quot;Read Fields&quot; button to discover the new fields using the provided query. If it is all right two fields should be discovered, C1 and C2. Then hit &quot;Ok&quot;. Fields button to discover the new fields using the provided query. If it is all right two fields should be discovered, C1 and C2. Then hit Ok.
+    		Hit the <b>Read Fields</b> button to discover the new fields using the provided query. If it is all right two fields should be discovered, C1 and C2. Then hit <b>Ok</b>. Fields button to discover the new fields using the provided query. If it is all right two fields should be discovered, C1 and C2. Then hit <b>Ok</b>.
     	</description>
     </item>
 
     <item
           title="Place the field">
        <description>
-          In the outline view now you can find the two new fields, under the &quot;Fields&quot; element. Drag and drop them inside the detail band of the report.
+          In the outline view now you can find the two new fields, under the <b>Fields</b> element. Drag and drop them inside the detail band of the report.
        </description>
     </item>
     <item

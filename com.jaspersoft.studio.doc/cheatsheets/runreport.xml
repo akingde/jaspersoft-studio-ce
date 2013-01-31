@@ -8,7 +8,7 @@
    </intro> <item
          title="Switch to preview mode">
       <description>
-         Open a report, and click on <b>&quot;Preview&quot;</b> tab on the bottom of the editor.
+         Open a report, and click on <b>Preview</b> tab on the bottom of the editor.
       </description>
       <action pluginId="com.jaspersoft.studio.doc" class="com.jaspersoft.studio.doc.handlers.SwitchToPreviewHandler" required="false" dialog="true"/>
    </item>
@@ -27,7 +27,7 @@
       </item>
    <item title="Export report">
       <description>
-         On the preview editor toolbar press <b>&quot;Export&quot;</b> icon and select the format you want to export. The file dialog will ask the location where report will be exported.
+         On the preview editor toolbar press <b>Export</b> icon and select the format you want to export. The file dialog will ask the location where report will be exported.
       </description>
    </item>
 </cheatsheet>

@@ -3,18 +3,15 @@
       title="Upload a report to JasperReprot Server">
    <intro>
       <description>
-         In this cheatsheet we will see how to upload a report into a local installation of JasperReport Server. To follow this cheatsheet 
-         a connection to the JasperRepost Server is required, and also the report to upload must be already opened in the editor.
+         In this cheatsheet we will see how to upload a report into a local installation of JasperReport Server. To follow this cheatsheet a connection to the JasperRepost Server is required, and also the report to upload must be already opened in the editor.
       </description>
    </intro>
    <item
          title="Go into the repository explorer">
       <description>
-         With a report opened, go into the repository explorer view.
+         With a report opened, go into the design view.
       </description>
-      <command
-            required="false"
-            serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=com.jaspersoft.studio.Repository)"/>
+      <action pluginId="com.jaspersoft.studio.doc" class="com.jaspersoft.studio.doc.handlers.SwitchToDesignerHandler" required="false"/>
    </item>
    <item title="Start the upload action" dialog="true">
       <description>
@@ -24,14 +21,13 @@
    </item>
    <item title="Select the location" dialog="true">
       <description>
-         Expand the server where you want to upload the report and select the folder &quot;Reports&quot;
+         Expand the server where you want to upload the report and select the folder <b>Reports</b>.
       </description>
    </item>
    <item
          title="Choose a name">
       <description>
-         Choose an unique name for the report unit (the folder where will be uploaded the report).
-Optionally you can provide a more expressive name and a description. Then hit &quot;Next&quot;.
+         Choose an unique name for the report unit (the folder where will be uploaded the report). Optionally you can provide a more expressive name and a description. Then hit <b>Next</b>.
       </description>
    </item>
    <item
@@ -44,7 +40,7 @@ Optionally you can provide a more expressive name and a description. Then hit &q
    <item
          title="Handle the datasource">
       <description>
-         For this choose to not upload the datasource, selecting the third option. Then hit &quot;Finish&quot;
+         For this choose to not upload the datasource, selecting the third option. Then hit <b>Finish</b>.
       </description>
    </item>
    <item
