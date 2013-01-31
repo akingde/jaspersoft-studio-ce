@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -309,6 +310,8 @@ public class VErrorPreview extends APreview {
 
 	public void addError(Throwable t) {
 		if (t != null) {
+			if(t instanceof InvocationTargetException)
+				t = t.getCause();
 			String msg = terror.getText() + ErrorUtil.getStackTrace(t) + NL;
 			terror.setText(terror.getText() + msg + "\n");
 			addError2List(t, t.getMessage());
