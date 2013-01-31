@@ -24,7 +24,7 @@
          skip="false"
          title="Define the name">
       <description>
-         Insert a name for the dataset and hit &quot;<b>Next</b>&quot;.
+         Insert a name for the dataset and hit <b>Next</b>.
       </description>
    </item>
    <item
@@ -33,16 +33,16 @@
          In this step you need to define a data adapter, the location from where the fields will be retrieved, and a query to define how and which fields will be retrieved
       </description>
       <subitem
-            label="As data adapter use the default one, provided with Jaspersoft Studio, &lt;b&gt;Sample DB - Database JDBC connection&lt;/b&gt;.">
+            label="As data adapter use the default one, provided with Jaspersoft Studio, &quot;Sample DB - Database JDBC connection&quot;.">
       </subitem>
       <subitem
-            label="Provide a query to retrieve the fields from the data adapter, like &lt;b&gt;select count(*), SHIPCITY from orders group by SHIPCITY&lt;/b&gt;&quot;, then hit &quot;&lt;b&gt;Next&lt;/b&gt;.">
+            label="Provide a query to retrieve the fields from the data adapter, like &quot;select count(*), SHIPCITY from orders group by SHIPCITY&quot;, then hit &quot;Next&quot;.">
       </subitem>
    </item>
    <item
          title="Add the fields to the dataset">
       <description>
-         At this point two fields will be discovered, add them to the dataset by double clicking on them or using the button <b>&gt;&gt;</b>.
+         At this point two fields will be discovered, add them to the dataset by double clicking on them or using the button &quot;&gt;&gt;&quot;.
       </description>
    </item>
    <item

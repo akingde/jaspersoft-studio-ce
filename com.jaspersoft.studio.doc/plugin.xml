@@ -54,10 +54,10 @@
       </cheatsheet>
       <cheatsheet
            	category="com.jaspersoft.studio.cheatsheets.elements"
-            composite="false"
-            contentFile="cheatsheets/chartstep.xml"
+            composite="true"
+            contentFile="cheatsheets/createchart.xml"
             id="com.jaspersoft.studio.cheatsheets.createchart"
-            name="Create a Chart">
+            name="Create a chart for a report">
       </cheatsheet>
       <cheatsheet
            	category="com.jaspersoft.studio.cheatsheets.elements"
