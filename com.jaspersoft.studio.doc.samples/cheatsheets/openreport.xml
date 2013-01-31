@@ -9,7 +9,7 @@
    <item
          title="Import the samples">
       <description>
-         You need to import the report samples into your workspace. The project name suggested for the samples is &quot;JasperReports Samples&quot;, the default one, to use the automatized commands provided by this cheatsheet.
+         You need to import the report samples into your workspace. The project name suggested for the samples is <b>JasperReports Samples</b>, the default one, to use the automated commands provided by this cheatsheet.
       </description>
       <subitem
             dialog="true"
