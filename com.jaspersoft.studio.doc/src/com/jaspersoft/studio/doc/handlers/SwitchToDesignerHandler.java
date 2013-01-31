@@ -17,21 +17,20 @@ package com.jaspersoft.studio.doc.handlers;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PlatformUI;
-
 import com.jaspersoft.studio.editor.JrxmlEditor;
 
 /**
  * 
- * Handler to switch the report editor into the preview tab
+ * Handler to switch the report editor into the design tab
  * 
- * @author Oralndin Marco
+ * @author Orlandin Marco
  *
  */
-public class SwitchToPreviewHandler extends Action {
+public class SwitchToDesignerHandler extends Action {
 	
 		@Override
 		public void run() {
 			JrxmlEditor editor = (JrxmlEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-			editor.setActiveEditor(editor.getEditor(2));
+			editor.setActiveEditor(editor.getEditor(0));
 		}
 }
