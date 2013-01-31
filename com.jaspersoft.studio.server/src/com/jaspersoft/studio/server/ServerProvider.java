@@ -218,33 +218,19 @@ public class ServerProvider implements IRepositoryViewProvider {
 			lazyLoadResource(event);
 		}
 	}
+	public void handleTreeEvent(TreeExpansionEvent event, IProgressMonitor monitor) {
+		if (event.getElement() instanceof MServerProfile) {
+			listServer(event, monitor);
+		} else if (event.getElement() instanceof MResource) {
+			lazyLoadResource(event, monitor);
+		}
+	}
 
 	private void listServer(final TreeExpansionEvent event) {
 		Job job = new Job("Refreshing tree") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				MServerProfile r = (MServerProfile) event.getElement();
-				try {
-					WSClientHelper.connectGetData(r, monitor);
-					Display.getDefault().asyncExec(new Runnable() {
-
-						public void run() {
-							event.getTreeViewer().refresh(true);
-						}
-					});
-
-					return Status.OK_STATUS;
-				} catch (final Throwable e) {
-					Display.getDefault().syncExec(new Runnable() {
-
-						public void run() {
-							event.getTreeViewer().collapseToLevel(
-									(MServerProfile) event.getElement(), 1);
-							UIUtils.showErrorDialog(e.getMessage(), e);
-						}
-					});
-				}
-				return Status.CANCEL_STATUS;
+				return listServer(event, monitor);
 			}
 		};
 		job.setPriority(Job.SHORT);
@@ -257,34 +243,65 @@ public class ServerProvider implements IRepositoryViewProvider {
 		Job job = new Job("Refreshing tree") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				MResource r = (MResource) event.getElement();
-				try {
-					WSClientHelper.refreshResource(r, monitor);
-					Display.getDefault().asyncExec(new Runnable() {
-
-						public void run() {
-							event.getTreeViewer().refresh(true);
-						}
-					});
-
-					return Status.OK_STATUS;
-				} catch (final Throwable e) {
-					Display.getDefault().syncExec(new Runnable() {
-
-						public void run() {
-							event.getTreeViewer().collapseToLevel(
-									event.getElement(), 1);
-							UIUtils.showErrorDialog(e.getMessage(), e);
-						}
-					});
-
-				}
-				return Status.CANCEL_STATUS;
+				return lazyLoadResource(event, monitor);
 			}
 		};
 		job.setPriority(Job.SHORT);
 		job.setSystem(false);
 		job.setUser(true);
 		job.schedule();
+	}
+
+	public IStatus lazyLoadResource(final TreeExpansionEvent event,
+			IProgressMonitor monitor) {
+		MResource r = (MResource) event.getElement();
+		try {
+			WSClientHelper.refreshResource(r, monitor);
+			Display.getDefault().asyncExec(new Runnable() {
+
+				public void run() {
+					event.getTreeViewer().refresh(true);
+				}
+			});
+
+			return Status.OK_STATUS;
+		} catch (final Throwable e) {
+			Display.getDefault().syncExec(new Runnable() {
+
+				public void run() {
+					event.getTreeViewer()
+							.collapseToLevel(event.getElement(), 1);
+					UIUtils.showErrorDialog(e.getMessage(), e);
+				}
+			});
+
+		}
+		return Status.CANCEL_STATUS;
+	}
+
+	private IStatus listServer(final TreeExpansionEvent event,
+			IProgressMonitor monitor) {
+		MServerProfile r = (MServerProfile) event.getElement();
+		try {
+			WSClientHelper.connectGetData(r, monitor);
+			Display.getDefault().asyncExec(new Runnable() {
+
+				public void run() {
+					event.getTreeViewer().refresh(true);
+				}
+			});
+
+			return Status.OK_STATUS;
+		} catch (final Throwable e) {
+			Display.getDefault().syncExec(new Runnable() {
+
+				public void run() {
+					event.getTreeViewer().collapseToLevel(
+							(MServerProfile) event.getElement(), 1);
+					UIUtils.showErrorDialog(e.getMessage(), e);
+				}
+			});
+		}
+		return Status.CANCEL_STATUS;
 	}
 }
