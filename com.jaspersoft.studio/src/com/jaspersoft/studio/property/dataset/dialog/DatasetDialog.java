@@ -36,7 +36,11 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -63,6 +67,7 @@ import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPreviewInfoProvider {
 	private MDataset mdataset;
@@ -103,11 +108,35 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		dataquery.dispose();
 		return super.close();
 	}
+	
+	
+	/**
+	 * Set the root control of the wizard, and also add a listener to do the perform help action 
+	 * and set the context of the top control.
+	 */
+	protected void setHelpControl(Control newControl) {
+		newControl.addListener(SWT.Help, new Listener() {			
+			@Override
+			public void handleEvent(Event event) {
+				performHelp();	
+			}
+		});
+	};
+
+	/**
+	 * Set and show the help data if a context, that bind this wizard with the data, is provided
+	 */
+	public void performHelp() {
+			PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.WIZARD_QUERY_DIALOG);
+	};
+	
 
 	@Override
 	protected void createFormContent(final IManagedForm mform) {
 		FormToolkit toolkit = mform.getToolkit();
 		Composite body = mform.getForm().getBody();
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(body,ContextHelpIDs.WIZARD_QUERY_DIALOG);
+		setHelpControl(body);
 		body.setLayout(new GridLayout(1, true));
 		background = body.getBackground();
 		body.setBackground(body.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));

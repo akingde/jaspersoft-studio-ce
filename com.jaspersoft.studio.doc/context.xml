@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <contexts>
 	<context id="dataAdapters_wizard_list">
-		<description>Here you can select the type of data adapter, you want to create. Every type of data adapter allow to connect and query a different type of data source. It is possible to say that a data adapter act as bridge from a source of information and JasperReport\Jaspersoft Studio.</description>
+		<description>Here you can select the type of data adapter you want to create. Every type of data adapter allow to connect and query a different type of data source. It is possible to say that a data adapter act as bridge from a source of information and JasperReport\Jaspersoft Studio.</description>
 		<topic href="html/dataAdapters/dataadapters.html" label="Data Adapters" />
-  <topic href="html/editors/dataAdapter/dataadapter.html" label="Data Adapter Editor"/>
+  		<topic href="html/editors/dataAdapter/dataadapter.html" label="Data Adapter Editor"/>
   <topic href="html/dataAdapters/wizard.html" label="Data Adapter Wizard"/>
 	</context>
 	<context id="jaspersoftserver">
@@ -234,7 +234,7 @@
    <context id="adapter_csv" title="Create a CSV data adapter">
       <description>The CSV (comma separated values) data adapter use as source a text file with all values expressed as strings, separated by a simbol, tipically a comma.</description>
    </context>
-   <context id="adapter_javabeans" title="Select the CSV data adapter">
+   <context id="adapter_javabeans" title="Create a JavaBean data adapter">
       <description>JavaBeans are reusable software components for Java. Practically, they are classes written in the Java programming language conforming to a particular convention. They are used to encapsulate many objects into a single object (the bean), so that they can be passed around as a single bean object instead of as multiple individual objects. A JavaBean is a Java Object that is serializable, has a 0-argument constructor, and allows access to properties using getter and setter methods. A collection of JavaBeans is produced by a Bean Factory.</description>
       <topic href="html/adaptersamples/bean/adapterfactory.html" label="Exemple of a Bean factory"/>
        <topic href="html/adaptersamples/bean/beanfile.html" label="Exemple of a Bean class"/>
@@ -294,5 +294,12 @@
    </context>
    <context id="adapter_quryexecutor" title="Define an empty data adapter">
       <description>An empty data adapter that can be used as placeholder, without connection, sources or data.</description>
+   </context>
+   <context id="query_dialog" title="Dataset and query dialog">
+      <description>From this dialog you can change the dataset query, define new parameters or change the adapter used to retrive the data.</description>
+      <topic href="html/dataAdapters/dataadapters.html" label="Data Adapters" />
+      <topic href="html/wizard/xmldatasources/createxml.html" label="Using XML datasources"/>
+      <topic href="html/wizard/chartanddataset/createdataset.html" label="Creation of a dataset"/>
+  	  <topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
    </context>
 </contexts>
