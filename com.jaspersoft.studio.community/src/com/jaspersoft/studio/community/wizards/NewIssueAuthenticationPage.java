@@ -24,9 +24,11 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.community.CommunityConstants;
@@ -74,6 +76,16 @@ public class NewIssueAuthenticationPage extends WizardPage {
 		gl_container.verticalSpacing = 10;
 		gl_container.horizontalSpacing = 10;
 		container.setLayout(gl_container);
+		
+		Link communityLink = new Link(container,SWT.NONE);
+		communityLink.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+		communityLink.setText(Messages.NewIssueAuthenticationPage_CredentialsLink);
+		communityLink.addSelectionListener(new SelectionAdapter() {
+			@Override	
+			public void widgetSelected(SelectionEvent e) {
+				Program.launch(CommunityConstants.NEW_COMMUNITY_TRACKER_ACCOUNT_URL);
+			}
+		});
 		
 		Label lblUsername = new Label(container, SWT.NONE);
 		lblUsername.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -147,6 +159,14 @@ public class NewIssueAuthenticationPage extends WizardPage {
 		});
 		
 		setPageComplete(false);
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		// Let's set focus on the username field
+		// We avoid the link to have the "selected" effect
+		username.setFocus();
 	}
 
 	/*

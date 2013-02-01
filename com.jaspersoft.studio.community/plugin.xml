@@ -21,7 +21,8 @@
             <command
                   commandId="com.jaspersoft.studio.community.command.issueSubmit"
             	  mnemonic="%command.mnemonic"
-                  id="com.jaspersoft.studio.community.menu.issueSubmit">
+                  id="com.jaspersoft.studio.community.menu.issueSubmit"
+                  icon="resources/images/softwareBugIcon.png">
             </command>
                         
       </menuContribution>

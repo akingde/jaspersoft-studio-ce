@@ -42,6 +42,7 @@ public class Messages extends NLS {
 	public static String IssueCreationWizard_Title;
 	public static String JSSCommunityActivator_CredentialsRecoveringError;
 	public static String JSSCommunityActivator_CredentialsStoreError;
+	public static String NewIssueAuthenticationPage_CredentialsLink;
 	public static String NewIssueAuthenticationPage_Description;
 	public static String NewIssueAuthenticationPage_Password;
 	public static String NewIssueAuthenticationPage_ReuseCredentialsCheckbox;
