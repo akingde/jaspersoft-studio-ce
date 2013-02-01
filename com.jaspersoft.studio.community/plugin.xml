@@ -23,8 +23,34 @@
             	  mnemonic="%command.mnemonic"
                   id="com.jaspersoft.studio.community.menu.issueSubmit"
                   icon="resources/images/softwareBugIcon.png">
+   					<visibleWhen checkEnabled="false">
+		                <with variable="activeWorkbenchWindow.activePerspective">
+		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
+		            	</with>
+				    </visibleWhen>
             </command>
                         
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="com.jaspersoft.studio.community.toolbar">
+            <command
+                  commandId="com.jaspersoft.studio.community.command.issueSubmit"
+                  icon="resources/images/softwareBugIcon.png"
+                  id="com.jaspersoft.studio.community.toolbar.issueSubmit"
+                  label="%command.label"
+                  mnemonic="%command.mnemonic"
+                  tooltip="%command.tooltip"
+                  style="push">
+   					<visibleWhen checkEnabled="false">
+		                <with variable="activeWorkbenchWindow.activePerspective">
+		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
+		            	</with>
+				    </visibleWhen>                  
+            </command>
+         </toolbar>
       </menuContribution>
    </extension>
 </plugin>
