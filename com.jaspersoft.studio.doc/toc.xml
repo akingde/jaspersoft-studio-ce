@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Jaspersoft Studio Documentation">
+	<topic label="Release Notes" href="html/release.notes.html"/>
+ <topic href="html/editors/editors.html" label="Editors">
+    <topic href="html/editors/jrxml/jrxml.html" label="Report Templates (jrxml) Editor">
+    </topic>
+    <topic href="html/editors/jrprint/jrprint.html" label="Report Preview Editor">
+    </topic>
+    <topic href="html/editors/dataAdapter/dataadapter.html" label="Data Adapter Editor">
+    </topic>
+    <topic href="html/editors/jrtx/jrtx.html" label="Style Templates Editor">
+    </topic>
+    <topic href="html/editors/preview/preview.html" label="Report Run And Preview Editor">
+    </topic>
+ </topic>
+ <topic href="html/view/views.html" label="Views">
+    <topic href="html/view/outline/outline.html" label="Outline">
+    </topic>
+    <topic href="html/view/reportstate/reportstate.html" label="Report State">
+    </topic>
+    <topic href="html/view/properties/properties.html" label="Properties">
+    </topic>
+    <topic href="html/view/palette/palette.html" label="Palette">
+    </topic>
+    <topic href="html/view/problems/problems.html" label="Problems">
+    </topic>
+    <topic href="html/view/progress/progress.html" label="Jobs Progress">
+    </topic>
+    <topic href="html/view/explorer/explorer.html" label="Project Explorer">
+    </topic>
+    <topic href="html/view/preview/preview.html" label="Report Templates Preview">
+    </topic>
+    <topic href="html/view/repository/repository.html" label="Repository">
+    </topic>
+ </topic>
+ <topic href="html/preferences/font/fontmanagement.html" label="Font Management">
+ </topic>
+ <topic href="html/preferences/preferences.html" label="Preferences">
+ </topic>
+ <topic href="html/dataAdapters/dataadapters.html" label="Data Adapters">
+ </topic> 
+</toc>
