@@ -80,4 +80,9 @@ public class HiveDataAdapterComposite extends ADataAdapterComposite {
 				SWTObservables.observeText(urlField, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "url")); //$NON-NLS-1$
 	}
+	
+	@Override
+	public String getHelpContextId() {
+		return PREFIX.concat("adapter_hive");
+	}
 }

@@ -234,4 +234,9 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		datasource.setItems(dsources);
 		datasource.select(0);
 	}
+	
+	@Override
+	public String getHelpContextId() {
+		return PREFIX.concat("adapter_xmla");
+	}
 }

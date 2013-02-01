@@ -41,6 +41,7 @@ public class MondrianDataAdapterEditor extends JDBCDataAdapterEditor {
 			if (composite != null)
 				composite.dispose();
 			composite = new MondrianDataAdapterComposite(parent, style);
+			composite.setContextId("adapter_mondrian");
 		}
 		return composite;
 	}
@@ -59,4 +60,5 @@ public class MondrianDataAdapterEditor extends JDBCDataAdapterEditor {
 					.setDataAdapter((MondrianDataAdapterDescriptor) dataAdapter);
 		}
 	}
+	
 }

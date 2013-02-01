@@ -44,8 +44,12 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -65,6 +69,8 @@ import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.ContextData;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implements INewWizard, SelectionListener {
 	/** The wizard ID */
@@ -93,10 +99,56 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 		this();
 		this.dataAdapter = dataAdapter;
 	}
+	
+	private class WizardNewAdapterPage extends WizardNewFileCreationPage implements ContextData {
+
+		protected String contextName;
+		
+		public WizardNewAdapterPage(String pageName, IStructuredSelection selection, String contextName) {
+			super(pageName, selection);
+			this.contextName = contextName;
+		}
+		
+		/**
+		 * Set the root control of the wizard, and also add a listener to do the perform help action 
+		 * and set the context of the top control.
+		 */
+		@Override
+		protected void setControl(Control newControl) {
+			super.setControl(newControl);
+			newControl.addListener(SWT.Help, new Listener() {			
+				@Override
+				public void handleEvent(Event event) {
+					performHelp();	
+				}
+			});
+			setHelpData();
+		};
+
+		/**
+		 * Set the help data that should be seen in this step
+		 */
+		@Override
+		public void setHelpData(){
+			if (contextName != null){
+				PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),contextName);
+			}
+		}
+		
+		/**
+		 * Set and show the help data if a context, that bind this wizard with the data, is provided
+		 */
+		@Override
+		public void performHelp() {
+			if (contextName != null){
+				PlatformUI.getWorkbench().getHelpSystem().displayHelp(contextName);
+			}
+		};
+	}
 
 	@Override
 	public void addPages() {
-		step1 = new WizardNewFileCreationPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
+		step1 = new WizardNewAdapterPage("newFilePage1", (IStructuredSelection) selection, ContextHelpIDs.WIZARD_NEW_DATAAPDATER);//$NON-NLS-1$
 		step1.setTitle("DataAdapter File");
 		step1.setDescription("Create a DataAdapter in a file");
 		step1.setFileExtension("xml");//$NON-NLS-1$

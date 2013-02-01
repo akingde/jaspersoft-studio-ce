@@ -113,5 +113,10 @@ public class BeanDataAdapterComposite extends ADataAdapterComposite {
 
 		return dataAdapterDesc;
 	}
+	
+	@Override
+	public String getHelpContextId() {
+		return PREFIX.concat("adapter_javabeans");
+	}
 
 }

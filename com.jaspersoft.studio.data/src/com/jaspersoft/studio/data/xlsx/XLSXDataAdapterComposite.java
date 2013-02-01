@@ -755,4 +755,9 @@ public class XLSXDataAdapterComposite extends ADataAdapterComposite {
 
 		return true;
 	}
+	
+	@Override
+	public String getHelpContextId() {
+		return PREFIX.concat("adapter_excel");
+	}
 }

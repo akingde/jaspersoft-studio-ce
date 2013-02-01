@@ -95,4 +95,9 @@ public class MongoDbDataAdapterComposite extends ADataAdapterComposite {
         bindingContext.bindValue(SWTObservables.observeText(passwordField, SWT.Modify),
                 PojoObservables.observeValue(dataAdapter, "password"));
     }
+    
+    @Override
+    public String getHelpContextId() {
+    	return PREFIX.concat("adapter_mongodb");
+    }
 }

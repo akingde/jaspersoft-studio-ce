@@ -30,6 +30,8 @@ import org.eclipse.swt.widgets.Composite;
 public abstract class ADataAdapterComposite extends Composite {
 	protected DataBindingContext bindingContext;
 
+	public final static String PREFIX = "com.jaspersoft.studio.doc.";
+	
 	public ADataAdapterComposite(Composite parent, int style) {
 		super(parent, style);
 		bindingContext = new DataBindingContext();
@@ -40,8 +42,9 @@ public abstract class ADataAdapterComposite extends Composite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
+	
 	public String getHelpContextId() {
-		return "com.jaspersoft.studio.doc.dataAdapters_wizard_list";
+		return PREFIX.concat("dataAdapters_wizard_list");
 	}
 
 	public void removeBindings() {

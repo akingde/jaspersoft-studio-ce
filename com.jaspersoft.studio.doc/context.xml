@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <contexts>
 	<context id="dataAdapters_wizard_list">
-		<description>Data Adapters</description>
+		<description>Here you can select the type of data adapter, you want to create. Every type of data adapter allow to connect and query a different type of data source. It is possible to say that a data adapter act as bridge from a source of information and JasperReport\Jaspersoft Studio.</description>
 		<topic href="html/dataAdapters/dataadapters.html" label="Data Adapters" />
   <topic href="html/editors/dataAdapter/dataadapter.html" label="Data Adapter Editor"/>
   <topic href="html/dataAdapters/wizard.html" label="Data Adapter Wizard"/>
@@ -21,9 +21,7 @@
 		<topic
 			href="html/wizard/createreport/createreport.html"
 			label="Designing a report with JasperSoft Studio" />
-		<topic
-			href="html/wizard/createreport/addfolder.html"
-			label="Create a Project Folder" />
+		<topic href="html/wizard/createreport/addfolder.html" label="Create a Project Folder" />
 	</context>
 	<context id="select_dataset">
 		<description>Here you can define a datasource, the location from which the data is taken to fill the report. A datasource is composed by a data adapter, that is a connection to a resource (like and XML file or an SQL database), and eventually a query to identify fields that will be extracted from the resource.
@@ -227,5 +225,74 @@
       <topic href="html/wizard/reportvariables/createvariable.html" label="The variables in Jaspersoft Studio" />
 	  <topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
 	  <topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
+   </context>
+   <context id="select_new_adapter" title="Select the data adapter location">
+      <description>Here you can select the name and the location of your new data adapter</description>
+	  <topic href="html/wizard/chartanddataset/createdataset.html" label="Creation of a dataset"/>
+	  <topic href="html/wizard/createreport/addfolder.html" label="Create a Project Folder" />
+   </context>
+   <context id="adapter_csv" title="Create a CSV data adapter">
+      <description>The CSV (comma separated values) data adapter use as source a text file with all values expressed as strings, separated by a simbol, tipically a comma.</description>
+   </context>
+   <context id="adapter_javabeans" title="Select the CSV data adapter">
+      <description>JavaBeans are reusable software components for Java. Practically, they are classes written in the Java programming language conforming to a particular convention. They are used to encapsulate many objects into a single object (the bean), so that they can be passed around as a single bean object instead of as multiple individual objects. A JavaBean is a Java Object that is serializable, has a 0-argument constructor, and allows access to properties using getter and setter methods. A collection of JavaBeans is produced by a Bean Factory.</description>
+      <topic href="html/adaptersamples/bean/adapterfactory.html" label="Exemple of a Bean factory"/>
+       <topic href="html/adaptersamples/bean/beanfile.html" label="Exemple of a Bean class"/>
+   </context>
+   <context id="adapter_JDBC" title="Create a JDBC data adapter">
+      <description>JDBC is a Java-based data access technology (Java Standard Edition platform) from Oracle. It is an acronym as it is unofficially referred to as Java Database Connectivity, with DB being universally recognized as the abbreviation for database. This technology provide the functionality to allow a client may access a database and it also provides methods for querying and updating data in a database. To define this data adapter you must provide its address expressed as URL and the access credential (username and password).</description>
+   </context>
+   <context id="adapter_EJBQL" title="Create a EJBQL data adapter">
+      <description>EJBQL is a portable database query language for Enterprise Java Beans.</description>
+   </context>
+   <context id="adapter_empty" title="Create an Empty Rows data adapter">
+      <description>A simple list of empty rows. The number of rows can be defined by users.</description>
+   </context>
+   <context id="adapter_hibernate" title="Create an hibernate connection as data adapter">
+      <description>Hibernate is an object-relational mapping (ORM) library for the Java language, providing a framework for mapping an object-oriented domain model to a traditional relational database. Hibernate solves object-relational impedance mismatch problems by replacing direct persistence-related database accesses with high-level object handling functions. You need to provide a valide hibernate configuration in your classpath.</description>
+   </context>
+   <context id="adapter_hibernatespring" title="Create an hibernate connection as data adapter, using Spring">
+      <description>If you use the Spring framework, you can use a Spring configuration file to define your connection. In this case, you'll need to set the configuration file name and the seesion factory bean ID.</description>
+   </context>
+   <context id="adapter_hive" title="Create an hive connection as data adapter">
+      <description>Hive is a data warehouse system for Hadoop that facilitates easy data summarization, ad-hoc queries, and the analysis of large datasets stored in Hadoop compatible file systems. Hive provides a mechanism to project structure onto this data and query the data using a SQL-like language called HiveQL. At the same time this language also allows traditional map/reduce programmers to plug in their custom mappers and reducers when it is inconvenient or inefficient to express this logic in HiveQL. To create a connection with an hive database provide its URL</description>
+   </context>
+   <context id="adapter_jndi" title="Create a JNDI data adapter">
+      <description>The Java Naming and Directory Interface (JNDI) is a Java API for a directory service that allows Java software clients to discover and look up data and objects via a name. Like all Java APIs that interface with host systems, JNDI is independent of the underlying implementation. Additionally, it specifies a service provider interface (SPI) that allows directory service implementations to be plugged into the framework. It may make use of a server, a flat file, or a database.</description>
+   </context>
+   <context id="adapter_json" title="Create a JSON data adapter">
+      <description>JSON, or JavaScript Object Notation, is a text-based open standard designed for human-readable data interchange. It is derived from the JavaScript scripting language for representing simple data structures and associative arrays, called objects.</description>
+   	   <topic href="html/adaptersamples/json/jsonexample.html" label="Exemple of JSON file"/>
+   </context>
+   <context id="adapter_excel" title="Create an Excel data adapter">
+      <description>Use a file generated from microsoft excel as data source. You need to provide the path to a local excel file and define the columns from where the data will be taken.</description>
+   </context>
+   <context id="adapter_mondrian" title="Create a Mondrian data adapter">
+      <description>Mondrian is an open source OLAP (online analytical processing) server, written in Java. It supports the MDX (multidimensional expressions) query language and the XML for Analysis and olap4j interface specifications. It reads from SQL and other data sources and aggregates data in a memory cache.</description>
+   </context>
+   <context id="adapter_mongodb" title="Create a MongoDB data adapter">
+      <description>MongoDB is an open source document-oriented database system developed and supported by 10gen. It is part of the NoSQL family of database systems. Instead of storing data in tables as is done in a "classical" relational database, MongoDB stores structured data as JSON-like documents with dynamic schemas (MongoDB calls the format BSON), making the integration of data in certain types of applications easier and faster.</description>
+   </context>
+   <context id="adapter_xml" title="Create a XML data adapter">
+      <description>The Extensible Markup Language (XML) is a markup language that defines a set of rules for encoding documents in a format that is both human-readable and machine-readable. Here you can provide a local XML file used to fill the report.</description>
+   	  <topic href="html/wizard/xmldatasources/createxml.html" label="Using XML datasources"/>
+	  <topic href="html/wizard/xmldatasources/remotexml.html" label="Using Remote XML datasources"/>
+   </context>
+   <context id="adapter_xml_remote" title="Create a Remote XML data adapter">
+      <description>The Extensible Markup Language (XML) is a markup language that defines a set of rules for encoding documents in a format that is both human-readable and machine-readable. The xml is not read from a local resource, but it is retrived from a URL that can be for example and XML on a server or an RSS Feed.</description>
+   	  <topic href="html/wizard/xmldatasources/createxml.html" label="Using XML datasources"/>
+	  <topic href="html/wizard/xmldatasources/remotexml.html" label="Using Remote XML datasources"/>
+   </context>
+   <context id="adapter_xmla" title="Create an XMLA server data adapter">
+      <description>XML for Analysis (abbreviated as XMLA) is an industry standard for data access in analytical systems, such as OLAP and data mining. XMLA is based on other industry standards such as XML, SOAP and HTTP.</description>
+   </context>
+   <context id="adapter_custom" title="Define a Custom Class as data adapter">
+      <description>Some time it is necessary to reterive informations from sources unsopported by any data adapters. In this case you can write your own java class to connect and query this sources, and then elaborate the extracted informations to be compatible with JasperReport. Using this data adapter you must specify this class, the jar where it is (or required as dependencies) and the method used to retreive the information. With this information JasperReport will use this class to extract the informations and will use them to fill the report.</description>
+   </context>
+  <context id="adapter_jrdatasourceprovider" title="Define a Custom Class as data adapter">
+      <description>Some time it is necessary to reterive informations from sources unsopported by any data adapters. In this case you can write your own java class to connect and query this sources, and then elaborate the extracted informations to be compatible with JasperReport. Using this data adapter you must specify this class, that must implements the JRDataSourceProvider interface, and the jar where it is or where are its dependencies. With this information JasperReport will use this class to extract the informations and will use them to fill the report.</description>
+   </context>
+   <context id="adapter_quryexecutor" title="Define an empty data adapter">
+      <description>An empty data adapter that can be used as placeholder, without connection, sources or data.</description>
    </context>
 </contexts>

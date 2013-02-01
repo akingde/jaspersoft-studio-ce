@@ -1196,4 +1196,9 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 
 		return true;
 	}
+	
+	@Override
+	public String getHelpContextId() {
+		return PREFIX.concat("adapter_csv"); 
+	}
 }

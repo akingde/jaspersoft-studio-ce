@@ -71,4 +71,9 @@ public class EjbqlDataAdapterComposite extends ADataAdapterComposite {
 		return dataAdapterDesc;
 	}
 
+	
+	@Override
+	public String getHelpContextId() {
+		return PREFIX.concat("adapter_EJBQL");
+	}
 }

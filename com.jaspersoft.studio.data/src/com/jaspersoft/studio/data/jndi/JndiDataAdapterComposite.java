@@ -70,5 +70,10 @@ public class JndiDataAdapterComposite extends ADataAdapterComposite {
 
 		return dataAdapterDesc;
 	}
+	
+	@Override
+	public String getHelpContextId() {
+		return PREFIX.concat("adapter_jndi");
+	}
 
 }

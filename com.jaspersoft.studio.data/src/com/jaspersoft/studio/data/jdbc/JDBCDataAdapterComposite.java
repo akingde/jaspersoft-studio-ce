@@ -146,6 +146,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 		createClasspathTab(tabFolder);
 		tabFolder.setSelection(0);
+		contextId = "adapter_JDBC";
 	}
 
 	protected void createPreWidgets(Composite parent) {
@@ -419,6 +420,17 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 			jdbcDataAdapter.setServerAddress(textServerAddress.getText());
 		else
 			jdbcDataAdapter.setServerAddress("");
+	}
+	
+	protected String contextId;
+	
+	@Override
+	public String getHelpContextId() {
+		return PREFIX.concat(contextId);
+	}
+	
+	public void setContextId(String contextId){
+		this.contextId = contextId;
 	}
 
 }
