@@ -60,6 +60,11 @@ public class VersionUpdateDialog extends Dialog {
 		newShell.setSize(600, 250);
 	}
 
+	@Override
+	protected boolean isResizable() {
+		return true;
+	}
+
 	public void setNewVersion(String msg) {
 		this.newVersion = msg;
 	}
@@ -102,9 +107,9 @@ public class VersionUpdateDialog extends Dialog {
 		link.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		if (optMessage != null) {
-			Label lblOptMessage = new Label(container, SWT.NONE);
+			Label lblOptMessage = new Label(container, SWT.WRAP);
 			lblOptMessage.setText(optMessage);
-			lblOptMessage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			lblOptMessage.setLayoutData(new GridData(GridData.FILL_BOTH));
 		}
 
 		final Button btnShowAgain = new Button(container, SWT.CHECK);
