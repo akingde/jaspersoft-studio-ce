@@ -23,11 +23,6 @@
             	  mnemonic="%command.mnemonic"
                   id="com.jaspersoft.studio.community.menu.issueSubmit"
                   icon="resources/images/softwareBugIcon.png">
-   					<visibleWhen checkEnabled="false">
-		                <with variable="activeWorkbenchWindow.activePerspective">
-		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
-		            	</with>
-				    </visibleWhen>
             </command>
                         
       </menuContribution>
@@ -44,11 +39,6 @@
                   mnemonic="%command.mnemonic"
                   tooltip="%command.tooltip"
                   style="push">
-   					<visibleWhen checkEnabled="false">
-		                <with variable="activeWorkbenchWindow.activePerspective">
-		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
-		            	</with>
-				    </visibleWhen>                  
             </command>
          </toolbar>
       </menuContribution>
