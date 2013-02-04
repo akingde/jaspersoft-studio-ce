@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.style.wizard;
 
@@ -27,6 +22,7 @@ import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -87,41 +83,42 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		setWindowTitle(Messages.StyleTemplateNewWizard_wizardtitle);
 		setNeedsProgressMonitor(true);
 	}
-	
+
 	/**
 	 * Extends the original WizardNewFileCreationPage to implements the method to have a contextual help
+	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
-	private class WizardHelpNewFileCreationPage extends WizardNewFileCreationPage implements ContextData{
-		
+	private class WizardHelpNewFileCreationPage extends WizardNewFileCreationPage implements ContextData {
+
 		public WizardHelpNewFileCreationPage(String pageName, IStructuredSelection selection) {
 			super(pageName, selection);
 		}
 
 		/**
-		 * Set and show the help data 
+		 * Set and show the help data
 		 */
 		@Override
 		public void performHelp() {
 			PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.WIZARD_STYLE_TEMPLATE_PATH);
 		}
-		
+
 		/**
 		 * Set the help data that should be seen in this step
 		 */
 		@Override
-		public void setHelpData(){
+		public void setHelpData() {
 			PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.WIZARD_STYLE_TEMPLATE_PATH);
 		}
-		
+
 		@Override
 		protected void setControl(Control newControl) {
 			super.setControl(newControl);
-			newControl.addListener(SWT.Help, new Listener() {			
+			newControl.addListener(SWT.Help, new Listener() {
 				@Override
 				public void handleEvent(Event event) {
-					performHelp();	
+					performHelp();
 				}
 			});
 			setHelpData();
@@ -148,12 +145,14 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 				if (s.getFirstElement() instanceof IFile) {
 					IFile file = (IFile) s.getFirstElement();
 
-					String f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + Messages.StyleTemplateNewWizard_2 + filename;
+					String f = file.getProjectRelativePath().removeLastSegments(1).toOSString()
+							+ Messages.StyleTemplateNewWizard_2 + filename;
 
 					int i = 1;
 					while (file.getProject().getFile(f).exists()) {
 						filename = Messages.StyleTemplateNewWizard_3 + i + Messages.StyleTemplateNewWizard_4;
-						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + Messages.StyleTemplateNewWizard_5 + filename;
+						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + Messages.StyleTemplateNewWizard_5
+								+ filename;
 						i++;
 					}
 				}
@@ -271,6 +270,11 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
+			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile
+					|| selection.getFirstElement() instanceof IFolder) {
+				this.selection = selection;
+				return;
+			}
 			for (Object obj : selection.toList()) {
 				if (obj instanceof EditPart) {
 					IEditorInput ein = SelectionHelper.getActiveJRXMLEditor().getEditorInput();
@@ -297,7 +301,8 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 				try {
 					if (p.isAccessible()) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(Messages.StyleTemplateNewWizard_6) }));
+						this.selection = new TreeSelection(new TreePath(
+								new Object[] { p.getFile(Messages.StyleTemplateNewWizard_6) }));
 						return;
 					}
 				} catch (CoreException e) {

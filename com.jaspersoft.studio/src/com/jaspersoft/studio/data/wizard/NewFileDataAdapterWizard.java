@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.wizard;
 
@@ -24,6 +19,7 @@ import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -86,7 +82,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 	 */
 	public NewFileDataAdapterWizard() {
 		setWindowTitle(Messages.DataAdapterWizard_windowtitle);
-		this.storage=DataAdapterManager.getPreferencesStorage();
+		this.storage = DataAdapterManager.getPreferencesStorage();
 		init(new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null));
 	}
 
@@ -99,27 +95,27 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 		this();
 		this.dataAdapter = dataAdapter;
 	}
-	
+
 	private class WizardNewAdapterPage extends WizardNewFileCreationPage implements ContextData {
 
 		protected String contextName;
-		
+
 		public WizardNewAdapterPage(String pageName, IStructuredSelection selection, String contextName) {
 			super(pageName, selection);
 			this.contextName = contextName;
 		}
-		
+
 		/**
-		 * Set the root control of the wizard, and also add a listener to do the perform help action 
-		 * and set the context of the top control.
+		 * Set the root control of the wizard, and also add a listener to do the perform help action and set the context of
+		 * the top control.
 		 */
 		@Override
 		protected void setControl(Control newControl) {
 			super.setControl(newControl);
-			newControl.addListener(SWT.Help, new Listener() {			
+			newControl.addListener(SWT.Help, new Listener() {
 				@Override
 				public void handleEvent(Event event) {
-					performHelp();	
+					performHelp();
 				}
 			});
 			setHelpData();
@@ -129,18 +125,18 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 		 * Set the help data that should be seen in this step
 		 */
 		@Override
-		public void setHelpData(){
-			if (contextName != null){
-				PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),contextName);
+		public void setHelpData() {
+			if (contextName != null) {
+				PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), contextName);
 			}
 		}
-		
+
 		/**
 		 * Set and show the help data if a context, that bind this wizard with the data, is provided
 		 */
 		@Override
 		public void performHelp() {
-			if (contextName != null){
+			if (contextName != null) {
 				PlatformUI.getWorkbench().getHelpSystem().displayHelp(contextName);
 			}
 		};
@@ -148,7 +144,8 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 
 	@Override
 	public void addPages() {
-		step1 = new WizardNewAdapterPage("newFilePage1", (IStructuredSelection) selection, ContextHelpIDs.WIZARD_NEW_DATAAPDATER);//$NON-NLS-1$
+		step1 = new WizardNewAdapterPage(
+				"newFilePage1", (IStructuredSelection) selection, ContextHelpIDs.WIZARD_NEW_DATAAPDATER);//$NON-NLS-1$
 		step1.setTitle("DataAdapter File");
 		step1.setDescription("Create a DataAdapter in a file");
 		step1.setFileExtension("xml");//$NON-NLS-1$
@@ -300,7 +297,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 			public void run() {
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
-					// Force the default editor for the data adapter file 
+					// Force the default editor for the data adapter file
 					// so that it can be opened with the same one in the future
 					IDE.setDefaultEditor(file, DataAdapterEditorPart.ID);
 					IDE.openEditor(page, file, DataAdapterEditorPart.ID);
@@ -314,7 +311,8 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
-			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile) {
+			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile
+					|| selection.getFirstElement() instanceof IFolder) {
 				this.selection = selection;
 				return;
 			}

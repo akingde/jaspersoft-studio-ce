@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -325,7 +326,8 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
-			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile) {
+			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile
+					|| selection.getFirstElement() instanceof IFolder) {
 				this.selection = selection;
 				return;
 			}
