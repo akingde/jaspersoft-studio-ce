@@ -136,4 +136,10 @@ public class XMLEditor extends TextEditor {
 		}
 	}
 
+	@Override
+	protected void installEncodingSupport() {
+		super.installEncodingSupport();
+		fEncodingSupport.setEncoding("UTF-8");
+	}
+
 }
