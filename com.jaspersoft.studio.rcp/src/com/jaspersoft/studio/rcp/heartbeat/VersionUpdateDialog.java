@@ -57,6 +57,7 @@ public class VersionUpdateDialog extends Dialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("Version Update");
+		newShell.setSize(600, 250);
 	}
 
 	public void setNewVersion(String msg) {
