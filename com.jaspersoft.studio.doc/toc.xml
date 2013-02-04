@@ -35,10 +35,14 @@
     <topic href="html/view/repository/repository.html" label="Repository">
     </topic>
  </topic>
+ <topic href="html/dataAdapters/dataadapters.html" label="Data Adapters">
+    <topic href="html/adaptersamples/json/jsonexample.html" label="JSON Data Adapter">
+    </topic>
+    <topic href="html/adaptersamples/bean/adapterfactory.html" label="Bean Data Adapter">
+    </topic>
+ </topic>
  <topic href="html/preferences/font/fontmanagement.html" label="Font Management">
  </topic>
  <topic href="html/preferences/preferences.html" label="Preferences">
- </topic>
- <topic href="html/dataAdapters/dataadapters.html" label="Data Adapters">
  </topic> 
 </toc>
