@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.rcp.Activator;
 
@@ -38,15 +39,13 @@ public class Heartbeat {
 	static {
 		UUID_PROPERTY = "UUID";
 		String ver = "x.x.x - NOT DETECTED"; // $//$NON-NLS-1$
-		try{
+		try {
 			// Get JSS version directly from the plugin one:
 			// for sure it will be kept in sync with the product one.
 			ver = Activator.getDefault().getBundle().getVersion().toString();
-		}
-		catch(Exception ex){
+		} catch (Exception ex) {
 			// Should never happen...
-		}
-		finally{
+		} finally {
 			VERSION = ver;
 		}
 	}
