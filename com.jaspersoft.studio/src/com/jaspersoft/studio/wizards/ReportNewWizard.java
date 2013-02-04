@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.wizards;
 
@@ -236,12 +231,12 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 		TemplateEngine templateEngine = templateBundle.getTemplateEngine();
 
 		try {
-
 			ReportBundle reportBundle = templateEngine.generateReportBundle(templateBundle, templateSettings);
 
 			// Save the data adapter used...
 			if (step2.getDataAdapter() != null) {
-				reportBundle.getJasperDesign().setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, step2.getDataAdapter().getName());
+				reportBundle.getJasperDesign().setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER,
+						step2.getDataAdapter().getName());
 			}
 
 			// Store the report bundle on file system
@@ -261,7 +256,6 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 
 			saveReportBundleResources(monitor, reportBundle, container);
 
-			monitor.worked(1);
 			monitor.setTaskName(Messages.ReportNewWizard_5);
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
@@ -273,14 +267,8 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 					}
 				}
 			});
-
-			monitor.worked(1);
-
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			UIUtils.showError(e);
-			e.printStackTrace();
-
 		}
 	}
 
