@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
@@ -783,8 +784,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			String xml = JRXmlWriterHelper.writeReport(jrContext, report, "UTF-8", version);
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
-
-			doc.set(xml);
+			if (!Arrays.equals(doc.get().getBytes(), xml.getBytes()))
+				doc.set(xml);
 			xmlFresh = true;
 		} catch (final Exception e) {
 			UIUtils.showError(e);
