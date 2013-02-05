@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cheatsheet
-      title="Upload a report to JasperReprot Server">
+      title="Publish a report to JasperReports Server">
    <intro>
       <description>
-         In this cheatsheet we will see how to upload a report into a local installation of JasperReport Server. To follow this cheatsheet a connection to the JasperRepost Server is required, and also the report to upload must be already opened in the editor.
+         In this cheatsheet we will see how to upload a report into a local installation of JasperReports Server. To follow this cheatsheet a connection to the JasperRepost Server is required, and also the report to upload must be already opened in the editor.
       </description>
    </intro>
    <item

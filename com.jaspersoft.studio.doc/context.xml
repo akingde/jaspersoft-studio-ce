@@ -288,12 +288,13 @@
    </context>
    <context id="adapter_custom" title="Define a Custom Class as data adapter">
       <description>Some time it is necessary to reterive informations from sources unsopported by any data adapters. In this case you can write your own java class to connect and query this sources, and then elaborate the extracted informations to be compatible with JasperReport. Using this data adapter you must specify this class, the jar where it is (or required as dependencies) and the method used to retreive the information. With this information JasperReport will use this class to extract the informations and will use them to fill the report.</description>
+   	  <topic href="html/adaptersamples/JRDataSource/JRDataSourceAdapter.html" label="How to Create and Use a JRDataSource adapter" />	
    </context>
   <context id="adapter_jrdatasourceprovider" title="Define a Custom Class as data adapter">
-      <description>Some time it is necessary to reterive informations from sources unsopported by any data adapters. In this case you can write your own java class to connect and query this sources, and then elaborate the extracted informations to be compatible with JasperReport. Using this data adapter you must specify this class, that must implements the JRDataSourceProvider interface, and the jar where it is or where are its dependencies. With this information JasperReport will use this class to extract the informations and will use them to fill the report.</description>
+      <description>Some time it is necessary to reterive informations from sources unsopported by any data adapters. In this case you can write your own java class to connect and query this sources, and then elaborate the extracted informations to be compatible with JasperReport. Using this data adapter you must specify this class, that must implements the JRDataSourceProvider interface, and the jar where it is or where are its dependencies. With this information JasperReport will use this class to extract the informations and will use them to fill the report.</description>	
    </context>
    <context id="adapter_quryexecutor" title="Define an empty data adapter">
-      <description>An empty data adapter that can be used as placeholder, without connection, sources or data.</description>
+      <description>An empty data adapter that can be used as placeholder, without connection, sources or data. It is needed to run a report without any data source and it is characterized only by its name.</description>
    </context>
    <context id="query_dialog" title="Dataset and query dialog">
       <description>From this dialog you can change the dataset query, define new parameters or change the adapter used to retrive the data.</description>
