@@ -1,20 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import org.eclipse.swt.SWT;
@@ -27,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 public class WLocale extends Composite {
 	private Combo combo;
 	private Locale[] locales;
+	private String[] strLocales;
 
 	public WLocale(Composite parent, int style) {
 		super(parent, SWT.NONE);
@@ -55,24 +52,50 @@ public class WLocale extends Composite {
 
 	private String[] getLocales() {
 		locales = Locale.getAvailableLocales();
-		String[] str = new String[locales.length];
-		for (int i = 0; i < str.length; i++)
-			str[i] = locales[i].getDisplayName();
-		return str;
+		strLocales = new String[locales.length];
+		for (int i = 0; i < strLocales.length; i++)
+			strLocales[i] = locales[i].getDisplayName();
+		Arrays.sort(strLocales);
+		return strLocales;
 	}
 
 	public void setSelection(Locale locale) {
-		for (int i = 0; i < locales.length; i++) {
-			if (locale.equals(locales[i])) {
-				combo.select(i);
-				break;
-			}
-		}
+		int index;
+		if (locale == null)
+			index = getIndexFromLocale(Locale.getDefault());
+		else
+			index = getIndexFromLocale(locale);
+		combo.select(index);
 	}
 
 	public Locale getLocale() {
-		if (combo.getSelectionIndex() >= 0 && combo.getSelectionIndex() < locales.length)
-			return locales[combo.getSelectionIndex()];
-		return Locale.getDefault();
+		int selectionIndex = combo.getSelectionIndex();
+		if (selectionIndex < 0)
+			return Locale.getDefault();
+		else {
+			String strLocale = strLocales[combo.getSelectionIndex()];
+			for (int i = 0; i < locales.length; i++) {
+				if (locales[i].getDisplayName().equals(strLocale))
+					return locales[i];
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * This returns the list index for a given locale.
+	 * 
+	 * @param locale
+	 * @return int index
+	 */
+	private int getIndexFromLocale(Locale locale) {
+		int returnedIndex = -1;
+		if (locale != null) {
+			for (int i = 0; i < strLocales.length; i++) {
+				if (strLocales[i].equals(locale.getDisplayName()))
+					returnedIndex = i;
+			}
+		}
+		return returnedIndex;
 	}
 }

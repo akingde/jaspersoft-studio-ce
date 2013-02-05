@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
@@ -31,17 +26,18 @@ public class WLocaleList extends Composite {
 	private String[] strLocales;
 	private ListViewer listViewer;
 	private List list;
-	
+
 	/**
 	 * Create an instance of WLocaleList, a single select list of available locales.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
 	public WLocaleList(Composite parent, int style) {
-		
+
 		super(parent, style);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
-		
+
 		listViewer = new ListViewer(this, SWT.BORDER | SWT.V_SCROLL);
 		list = listViewer.getList();
 		locales = Locale.getAvailableLocales();
@@ -54,7 +50,6 @@ public class WLocaleList extends Composite {
 	}
 
 	private void initList() {
-		
 		// extract all locales names into a String[]...
 		strLocales = new String[locales.length];
 		for (int i = 0; i < locales.length; i++) {
@@ -62,61 +57,59 @@ public class WLocaleList extends Composite {
 		}
 		// ...and sort the array...
 		Arrays.sort(strLocales);
-		
+
 		// ...then fill the list
 		for (String strLocale : strLocales) {
-			
 			list.add(strLocale);
 		}
 	}
-	
+
 	/**
 	 * This returns the list index for a given locale.
+	 * 
 	 * @param locale
 	 * @return int index
 	 */
 	private int getIndexFromLocale(Locale locale) {
-		
+
 		int returnedIndex = -1;
-		
+
 		if (locale != null) {
 			for (int i = 0; i < strLocales.length; i++) {
-				if(strLocales[i].equals( locale.getDisplayName() )) {
+				if (strLocales[i].equals(locale.getDisplayName())) {
 					returnedIndex = i;
 				}
 			}
 		}
-		
+
 		return returnedIndex;
 	}
-	
+
 	/**
-	 * Set the selection to a given locale.
-	 * If locale is null or the list does not contain it,
-	 * the default locale value is selected.
+	 * Set the selection to a given locale. If locale is null or the list does not contain it, the default locale value is
+	 * selected.
+	 * 
 	 * @param locale
 	 */
 	public void setSelection(Locale locale) {
-		
+
 		int index;
-		
+
 		if (locale == null) {
 			index = getIndexFromLocale(Locale.getDefault());
 		} else {
 			index = getIndexFromLocale(locale);
 		}
-		
+
 		list.setSelection(index);
 	}
 
 	/**
-	 * Return the selected locale from the list.
-	 * If the list has no selected locale,
-	 * it returns the default locale.
+	 * Return the selected locale from the list. If the list has no selected locale, it returns the default locale.
+	 * 
 	 * @return locale
 	 */
-	public Locale getSelectedLocale(){
-		
+	public Locale getSelectedLocale() {
 		int selectionIndex = list.getSelectionIndex();
 		if (selectionIndex < 0) {
 			return Locale.getDefault();
@@ -132,8 +125,8 @@ public class WLocaleList extends Composite {
 	}
 
 	/**
-	 * Check if the list contains the given locale: true if it does
-	 * and false if not.
+	 * Check if the list contains the given locale: true if it does and false if not.
+	 * 
 	 * @param locale
 	 * @return true or false
 	 */
@@ -141,7 +134,8 @@ public class WLocaleList extends Composite {
 		String displayName = locale.getDisplayName();
 		if (displayName != null && displayName.length() > 0) {
 			for (String strLocale : strLocales) {
-				if (strLocale.equals(displayName)) return true;
+				if (strLocale.equals(displayName))
+					return true;
 			}
 		}
 		return false;
@@ -149,6 +143,7 @@ public class WLocaleList extends Composite {
 
 	/**
 	 * Check if the list has a selected locale.
+	 * 
 	 * @return true or false
 	 */
 	public boolean hasSelectedLocale() {
@@ -158,9 +153,10 @@ public class WLocaleList extends Composite {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Set the list selection listeners
+	 * 
 	 * @param selectionAdapter
 	 */
 	public void setListSelectionListener(SelectionAdapter selectionAdapter) {
