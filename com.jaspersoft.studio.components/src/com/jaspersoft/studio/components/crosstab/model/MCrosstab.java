@@ -163,7 +163,9 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 				Messages.MCrosstab_parameter_map_expression);
 		paramMapExprD
 				.setDescription(Messages.MCrosstab_parameter_map_expression_description);
-		paramMapExprD.setHelpContextIds(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parametersMapExpression"));
+		paramMapExprD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parametersMapExpression"));
 		desc.add(paramMapExprD);
 
 		CheckBoxPropertyDescriptor repeatColumnHeadersD = new CheckBoxPropertyDescriptor(
