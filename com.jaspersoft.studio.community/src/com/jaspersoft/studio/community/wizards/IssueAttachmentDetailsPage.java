@@ -173,6 +173,11 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 		groupZipContent.setLayoutData(gd_groupZipContent);
 		zipFileContent = new List(groupZipContent, SWT.BORDER);
 
+		// Preselect 1) log file and 2) software/hardware summary
+		btnLogFile.setSelection(true);
+		logFileSelectionPerformed();
+		btnSoftwareAndHardware.setSelection(true);
+		hwSwInfoSelectionPerformed();
 	}
 	
 	/*
