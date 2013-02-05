@@ -60,23 +60,25 @@ public abstract class AFileResourcePageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 
-		Button bexport = new Button(composite, SWT.PUSH | SWT.LEFT);
-		bexport.setText(Messages.AFileResourcePage_downloadfilebutton);
-		bexport.setImage(Activator.getDefault().getImage(
-				"icons/drive-download.png")); //$NON-NLS-1$
-		bexport.addSelectionListener(new SelectionAdapter() {
+		if (!res.getValue().getIsNew()) {
+			Button bexport = new Button(composite, SWT.PUSH | SWT.LEFT);
+			bexport.setText(Messages.AFileResourcePage_downloadfilebutton);
+			bexport.setImage(Activator.getDefault().getImage(
+					"icons/drive-download.png")); //$NON-NLS-1$
+			bexport.addSelectionListener(new SelectionAdapter() {
 
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell(), SWT.SAVE);
-				fd.setFilterExtensions(getFilter());
-				fd.setFileName(res.getValue().getName());
-				fd.setText(Messages.AFileResourcePage_filedialogtitle);
-				String filename = fd.open();
-				doSaveFile(filename);
-			}
+				public void widgetSelected(SelectionEvent e) {
+					FileDialog fd = new FileDialog(Display.getDefault()
+							.getActiveShell(), SWT.SAVE);
+					fd.setFilterExtensions(getFilter());
+					fd.setFileName(res.getValue().getName());
+					fd.setText(Messages.AFileResourcePage_filedialogtitle);
+					String filename = fd.open();
+					doSaveFile(filename);
+				}
 
-		});
+			});
+		}
 
 		Button bimport = new Button(composite, SWT.PUSH | SWT.LEFT);
 		bimport.setText(Messages.AFileResourcePage_uploadfile);
