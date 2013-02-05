@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.type.WhenResourceMissingTypeEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -33,7 +34,6 @@ import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
-import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -179,11 +179,15 @@ public class MDataset extends APropertyNode implements ICopyable {
 				Messages.common_properties);
 		propertiesD.setDescription(Messages.MDataset_properties_description);
 		desc.add(propertiesD);
+		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property"));
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
 				Messages.MDataset_scriplet_class);
 		classD.setDescription(Messages.MDataset_class_description);
 		desc.add(classD);
+		classD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptlet"));
 
 		NResourcePropertyDescriptor resBundleD = new NResourcePropertyDescriptor(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE,
 				Messages.MDataset_resource_bundle);
@@ -194,6 +198,8 @@ public class MDataset extends APropertyNode implements ICopyable {
 				Messages.common_query, NullEnum.NULL, Messages.MDataset_Edit_Query_Button_Text);
 		queryD.setDescription(Messages.MDataset_query_description);
 		desc.add(queryD);
+		queryD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#queryString"));
 
 		whenResMissTypeD = new JSSEnumPropertyDescriptor(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,
 				Messages.MDataset_when_resource_missing_type, WhenResourceMissingTypeEnum.class, NullEnum.NOTNULL);
@@ -204,7 +210,10 @@ public class MDataset extends APropertyNode implements ICopyable {
 				JRDesignDataset.PROPERTY_FILTER_EXPRESSION, Messages.MDataset_filter_expression);
 		filterExpression.setDescription(Messages.MDataset_filter_expression_description);
 		desc.add(filterExpression);
+		filterExpression.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#filterExpression"));
 
+		defaultsMap.put(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, null);
 		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,
 				EnumHelper.getValue(WhenResourceMissingTypeEnum.NULL, 1, false));
 		defaultsMap.put(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, null);
@@ -263,9 +272,12 @@ public class MDataset extends APropertyNode implements ICopyable {
 		JRDesignDataset jrDataset = (JRDesignDataset) getValue();
 		if (id.equals(JRDesignDataset.PROPERTY_NAME))
 			jrDataset.setName((String) value);
-		else if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE))
-			jrDataset.setResourceBundle((String) value);
-		else if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS)) {
+		else if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE)) {
+			String v = (String) value;
+			if (v != null && v.trim().isEmpty())
+				v = null;
+			jrDataset.setResourceBundle(v);
+		} else if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS)) {
 			String v = (String) value;
 			if (v.trim().isEmpty())
 				v = null;
