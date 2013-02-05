@@ -2,10 +2,6 @@
 <?eclipse version="3.4"?>
 <fragment>
  <extension point="org.eclipse.ui.cheatsheets.cheatSheetContent">
-      <category
-            id="com.jaspersoft.studio.cheatsheets.reports"
-            name="Manage reports in Jaspersoft Studio">
-      </category>
       <cheatsheet
       	category="com.jaspersoft.studio.cheatsheets.reports"
         composite="false"
