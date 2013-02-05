@@ -28,7 +28,7 @@ public class JSSTextPropertyDescriptor extends TextPropertyDescriptor implements
 	/**
 	 * Field to check if the widget should be read only
 	 */
-	private boolean readOnly;
+	protected boolean readOnly;
 	private int style = SWT.NONE;
 
 	public JSSTextPropertyDescriptor(Object id, String displayName) {

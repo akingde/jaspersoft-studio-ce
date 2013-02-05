@@ -15,6 +15,9 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.SPResourceType;
 
 public class NResourcePropertyDescriptor extends NTextPropertyDescriptor {
 
@@ -28,5 +31,11 @@ public class NResourcePropertyDescriptor extends NTextPropertyDescriptor {
 		setValidator(NResourceCellEditorValidator.instance());
 		HelpSystem.bindToHelp(this, editor.getControl());
 		return editor;
+	}
+
+	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+		ASPropertyWidget textWidget = new SPResourceType(parent, section, this);
+		textWidget.setReadOnly(readOnly);
+		return textWidget;
 	}
 }
