@@ -33,6 +33,7 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.wb.swt.SWTResourceManager;
 
@@ -150,9 +151,11 @@ public class CalloutEditPart extends AJDEditPart implements PropertyChangeListen
 	@Override
 	public void refreshVisuals() {
 		IFigure rect = getFigure();
-		setupFigure(rect);
-		rect.invalidate();
-		rect.repaint();
+		if (Display.getCurrent() != null) {
+			setupFigure(rect);
+			rect.invalidate();
+			rect.repaint();
+		}
 	}
 
 	protected JasperReportsConfiguration jConfig;
