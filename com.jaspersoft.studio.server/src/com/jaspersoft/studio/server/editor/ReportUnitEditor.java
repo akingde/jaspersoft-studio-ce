@@ -21,14 +21,18 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.IParametrable;
 import com.jaspersoft.studio.editor.preview.IRunReport;
 import com.jaspersoft.studio.editor.preview.MultiPageContainer;
@@ -97,6 +101,18 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport,
 
 		getTopToolBarManager1(container);
 		getTopToolBarManager(container);
+
+		Button lbutton = new Button(container, SWT.PUSH);
+		lbutton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		lbutton.setImage(JaspersoftStudioPlugin.getInstance().getImage(
+				"icons/application-sidebar-expand.png"));
+		lbutton.setToolTipText("Show Parameters");
+		lbutton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				sashform.upRestore();
+			}
+		});
 
 		sashform = new CSashForm(container, SWT.HORIZONTAL);
 		GridData gd = new GridData(GridData.FILL_BOTH);
