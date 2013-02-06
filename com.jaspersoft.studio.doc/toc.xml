@@ -40,6 +40,8 @@
     </topic>
     <topic href="html/adaptersamples/bean/adapterfactory.html" label="Bean Data Adapter">
     </topic>
+    <topic href="html/adaptersamples/JRDataSource/JRDataSourceAdapter.html" label="JRDataSource">
+    </topic>
  </topic>
  <topic href="html/preferences/font/fontmanagement.html" label="Font Management">
  </topic>
