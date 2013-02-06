@@ -21,17 +21,17 @@
          point="org.eclipse.ui.cheatsheets.cheatSheetContent">
       <category
             id="com.jaspersoft.studio.cheatsheets.elements"
-            name="Report elements in Jaspersoft Studio"
+            name="Report elements"
             parentCategory="com.jaspersoft.studio.doc.jasperRoot">
       </category>
       <category
             id="com.jaspersoft.studio.cheatsheets.reports"
-            name="Manage reports in Jaspersoft Studio"
+            name="Manage reports"
             parentCategory="com.jaspersoft.studio.doc.jasperRoot">
       </category>
       <category
             id="com.jaspersoft.studio.cheatsheets.server"
-            name="Jaspersoft Studio and JasperReport Server"
+            name="Working with Jaspersoft Studio and JasperReports Server"
             parentCategory="com.jaspersoft.studio.doc.jasperRoot">
       </category>
       <category

@@ -17,7 +17,7 @@ import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * This class start the upload of a report into an instance of JasperReport Server
+ * This class start the upload of a report into an instance of JasperReports Server
  * 
  * @author Orlandin Marco
  *

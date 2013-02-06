@@ -61,14 +61,14 @@
 		<div class="figure"><a name="N400A0"></a><p class="title"><b>Figure&nbsp;4.&nbsp;Work environment example</b></p><div class="figure-contents">
 			
 			<div class="screenshot">
-				<div class="mediaobject"><img src="8.png" alt="Work environment example"></div>
+				<div class="mediaobject"><img src="8.png" width="800" alt="Work environment example"></div>
 			</div>
 		</div></div><br class="figure-break">
 		<p>
 			Summarizing these are the steps that should be performed:
 			</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: opencircle; "><li class="listitem" style="list-style-type: circle">Create a Java Project "CustomExpressionFunctions"</li><li class="listitem" style="list-style-type: circle">Add via "Java Build Path" the libraries jasperreports-expressions-x.y.z.jar and jasperreports-exprfunctions-x.y.z.jar. They can be found in the dist folder of the related projects.</li><li class="listitem" style="list-style-type: circle">
 					Create a Java Class net.sf.jasperreports.expressions.functions.tests.CustomFunctions that contains the code for the function REPEATMESSAGE
-					<div class="figure"><a name="N400C0"></a><p class="title"><b>Figure&nbsp;5.&nbsp;REPEATMESSAGE code</b></p><div class="figure-contents">
+					<div class="figure"><a name="N400C1"></a><p class="title"><b>Figure&nbsp;5.&nbsp;REPEATMESSAGE code</b></p><div class="figure-contents">
 						
 						<div class="screenshot">
 							<div class="mediaobject"><img src="extra1.png" alt="REPEATMESSAGE code"></div>
@@ -76,7 +76,7 @@
 					</div></div><br class="figure-break">
 				</li><li class="listitem" style="list-style-type: circle">
 					Create a jasperreports_extension.properties file that contains the mandatory information:
-					<div class="figure"><a name="N400D6"></a><p class="title"><b>Figure&nbsp;6.&nbsp;jasperreports_extension.properties for REPEATMESSAGE</b></p><div class="figure-contents">
+					<div class="figure"><a name="N400D7"></a><p class="title"><b>Figure&nbsp;6.&nbsp;jasperreports_extension.properties for REPEATMESSAGE</b></p><div class="figure-contents">
 						
 						<div class="screenshot">
 							<div class="mediaobject"><img src="extra2.png" alt="jasperreports_extension.properties for REPEATMESSAGE"></div>
@@ -84,21 +84,21 @@
 					</div></div><br class="figure-break">
 				</li><li class="listitem" style="list-style-type: circle">Package all the stuff into a jar file that can then be attached to our report project.</li></ul></div><p>
 			Moving to our Jaspersoft Studio runtime environment, the first thing to do is to add the previously exported jar as library. This can of course be done via "Java Build Path" section.
-			</p><div class="figure"><a name="N400EE"></a><p class="title"><b>Figure&nbsp;7.&nbsp;Add the .jar that contains the new function</b></p><div class="figure-contents">
+			</p><div class="figure"><a name="N400EF"></a><p class="title"><b>Figure&nbsp;7.&nbsp;Add the .jar that contains the new function</b></p><div class="figure-contents">
 				
 				<div class="screenshot">
 					<div class="mediaobject"><img src="9.png" alt="Add the .jar that contains the new function"></div>
 				</div>
 			</div></div><p><br class="figure-break">
 			Once this is done, next time you will open the expression editor you will be able to use the newly contributed function:
-			</p><div class="figure"><a name="N40101"></a><p class="title"><b>Figure&nbsp;8.&nbsp;The new function is now into the expression editor</b></p><div class="figure-contents">
+			</p><div class="figure"><a name="N40102"></a><p class="title"><b>Figure&nbsp;8.&nbsp;The new function is now into the expression editor</b></p><div class="figure-contents">
 				
 				<div class="screenshot">
 					<div class="mediaobject"><img src="10.png" alt="The new function is now into the expression editor"></div>
 				</div>
 			</div></div><p><br class="figure-break">
 			As you can see you can create a simple report that allows you to see your brand-new function in action. This is a very simple example of how it will looks like:
-			</p><div class="figure"><a name="N40114"></a><p class="title"><b>Figure&nbsp;9.&nbsp;Test of the new function</b></p><div class="figure-contents">
+			</p><div class="figure"><a name="N40115"></a><p class="title"><b>Figure&nbsp;9.&nbsp;Test of the new function</b></p><div class="figure-contents">
 				
 				<div class="screenshot">
 					<div class="mediaobject"><img src="11.png" alt="Test of the new function"></div>

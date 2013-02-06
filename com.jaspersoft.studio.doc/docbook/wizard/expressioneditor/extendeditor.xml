@@ -97,7 +97,7 @@
 			<screenshot>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="8.png" format="PNG" />
+						<imagedata fileref="8.png" format="PNG" contentwidth="800px" />
 					</imageobject>
 				</mediaobject>
 			</screenshot>
