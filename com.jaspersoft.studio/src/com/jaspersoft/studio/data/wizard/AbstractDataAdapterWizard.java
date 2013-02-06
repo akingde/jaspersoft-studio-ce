@@ -183,7 +183,7 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 					}
 				});
 			} catch (InvocationTargetException e1) {
-				UIUtils.showError(e1);
+				UIUtils.showError(e1.getCause());
 			} catch (InterruptedException e1) {
 				UIUtils.showError(e1);
 			}

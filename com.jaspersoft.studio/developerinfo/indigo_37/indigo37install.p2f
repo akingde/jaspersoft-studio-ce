@@ -1,14 +1,53 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='14'>
-    <iu id='org.apache.commons.pool' name='Apache Commons Pool' version='1.6.0.v201204271246'>
-      <repositories size='1'>
+  <ius size='19'>
+    <iu id='org.apache.commons.dbcp' name='Apache Commons DBCP' version='1.4.0.v201204271417'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/'/>
         <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
       </repositories>
-    </iu>  
+    </iu>
+    <iu id='org.apache.commons.httpclient' name='Apache Commons Httpclient' version='3.1.0.v201012070820'>
+      <repositories size='4'>
+        <repository location='http://download.eclipse.org/eclipse/updates/3.8'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/'/>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
+      </repositories>
+    </iu>
     <iu id='org.apache.commons.io' name='Apache Commons IO' version='2.0.1.v201105210651'>
-      <repositories size='2'>
+      <repositories size='3'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/'/>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.commons.lang' name='Apache Commons Lang' version='2.6.0.v201205030909'>
+      <repositories size='4'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/'/>
+        <repository location='http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/'/>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.commons.logging' name='Apache Commons Logging Plug-in' version='1.1.1.v201101211721'>
+      <repositories size='3'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/'/>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.commons.math' name='Apache Commons Math' version='2.1.0.v201105210652'>
+      <repositories size='3'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/'/>
+        <repository location='http://download.eclipse.org/releases/juno'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.commons.pool' name='Apache Commons Pool' version='1.6.0.v201204271246'>
+      <repositories size='3'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/'/>
         <repository location='http://download.eclipse.org/releases/juno'/>
         <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/'/>
       </repositories>
