@@ -22,7 +22,6 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.query.JRQueryExecuter;
 import net.sf.jasperreports.engine.query.QueryExecuterFactory;
 
 /**
@@ -46,7 +45,7 @@ public class HiveQueryExecuterFactory implements QueryExecuterFactory {
 	}
 
 	@Override
-	public JRQueryExecuter createQueryExecuter(
+	public HiveQueryExecuter createQueryExecuter(
 			JasperReportsContext jasperReportsContext, JRDataset dataset,
 			Map<String, ? extends JRValueParameter> parameters)
 			throws JRException {
@@ -54,7 +53,7 @@ public class HiveQueryExecuterFactory implements QueryExecuterFactory {
 	}
 
 	@Override
-	public JRQueryExecuter createQueryExecuter(JRDataset dataset,
+	public HiveQueryExecuter createQueryExecuter(JRDataset dataset,
 			Map<String, ? extends JRValueParameter> parameters)
 			throws JRException {
 		return new HiveQueryExecuter(DefaultJasperReportsContext.getInstance(),
