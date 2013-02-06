@@ -23,10 +23,12 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
@@ -36,6 +38,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
@@ -126,15 +129,26 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	@Override
 	public void createPartControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new GridLayout(2, false));
+		container.setLayout(new GridLayout(3, false));
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.editor_preview");
 
 		getTopToolBarManager1(container);
 		getTopToolBarManager(container);
 
+		Button lbutton = new Button(container, SWT.PUSH);
+		lbutton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		lbutton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/application-sidebar-expand.png"));
+		lbutton.setToolTipText("Show Parameters");
+		lbutton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				sashform.upRestore();
+			}
+		});
+
 		sashform = new CSashForm(container, SWT.HORIZONTAL);
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 3;
 		sashform.setLayoutData(gd);
 
 		createLeft(parent, sashform);
