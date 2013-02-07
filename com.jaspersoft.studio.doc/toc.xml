@@ -56,6 +56,8 @@
 			<topic href="html/wizard/reportstructure/columns.html" label="Editing the number of columns" />
    <topic href="html/wizard/exportreport/exportreport.html" label="Report exporting">
    </topic>
+   <topic href="html/wizard/measureunits/measureunits.html" label="Measure Units">
+   </topic>
 		</topic>
 		<topic label="Variables and Expressions">
 			<topic href="html/wizard/reportvariables/createvariable.html" label="The variables in Jaspersoft Studio" />
@@ -71,6 +73,8 @@
 			<topic href="html/adaptersamples/json/jsonexample.html" label="Exemple of JSON file"/>
 		</topic>
 		<topic label="Charts and Subreports">
+     <topic href="html/wizard/reportparameters/useparameters.html" label="Report Parameters">
+     </topic>
 			<topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters"/>
 			<topic href="html/wizard/chartanddataset/createchart.html" label="Creation of a chart"/>
 			<topic href="html/wizard/chartsubreport/createsubchart.html" label="Using charts and subreports" />
@@ -80,6 +84,8 @@
 			<topic href="html/wizard/tablecrosstabs/createcrosstab.html" label="Creation of a crosstab"/>
 		</topic>
 		<topic label="Styles">
+     <topic href="html/wizard/elementstyles/elementstyles.html" label="Overview on the Styles">
+     </topic>
 			<topic href="html/wizard/stylestemplate/createtemplate.html" label="Create a Styles Template"/>
 			<topic href="html/wizard/stylestemplate/usetemplate.html" label="Use a Styles Template" />
 		</topic>
