@@ -6,7 +6,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/cassandra-clientutil-1.0.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/cassandra-jdbc-1.0.5-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/cassandra-thrift-1.0.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/guava-r08.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/libthrift-0.6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
