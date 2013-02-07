@@ -36,14 +36,11 @@
     </topic>
  </topic>
  <topic href="html/dataAdapters/dataadapters.html" label="Data Adapters">
-    <topic href="html/adaptersamples/json/jsonexample.html" label="JSON Data Adapter">
-    </topic>
-    <topic href="html/adaptersamples/bean/adapterfactory.html" label="Bean Data Adapter" >
-    </topic>
-    	<topic href="html/wizard/xmldatasources/createxml.html" label="Using XML datasources"/>
-		<topic href="html/wizard/xmldatasources/remotexml.html" label="Using Remote XML datasources"/>
-    	<topic href="html/adaptersamples/JRDataSource/JRDataSourceAdapter.html" label="JRDataSource"/>
-    
+    <topic href="html/adaptersamples/json/jsonexample.html" label="JSON Data Adapter"/>
+    <topic href="html/adaptersamples/bean/adapterfactory.html" label="Bean Data Adapter"/>
+    <topic href="html/wizard/xmldatasources/createxml.html" label="Using XML datasources"/>
+	<topic href="html/wizard/xmldatasources/remotexml.html" label="Using Remote XML datasources"/>
+    <topic href="html/adaptersamples/JRDataSource/JRDataSourceAdapter.html" label="JRDataSource"/>
  </topic>
  <topic href="html/preferences/font/fontmanagement.html" label="Font Management">
  </topic>
@@ -84,7 +81,7 @@
 			<topic href="html/wizard/stylestemplate/createtemplate.html" label="Create a Styles Template"/>
 			<topic href="html/wizard/stylestemplate/usetemplate.html" label="Use a Styles Template" />
 		</topic>
-		<topic label="Working with JasperReports Server">
+		<topic label="Working with JasperSoft Studio and JasperReports Server">
 			<topic href="html/wizard/jasperserver/connection.html" label="Connect to JasperReports Server" />
 			<topic href="html/wizard/jasperserver/publishreport.html" label="Publish a report into JasperReports Server" />
 		</topic>
