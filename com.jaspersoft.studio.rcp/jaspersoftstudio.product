@@ -152,6 +152,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="com.jaspersoft.studio.community"/>
       <plugin id="com.jaspersoft.studio.components"/>
       <plugin id="com.jaspersoft.studio.data"/>
+      <plugin id="com.jaspersoft.studio.data.cassandra"/>
       <plugin id="com.jaspersoft.studio.data.drivers"/>
       <plugin id="com.jaspersoft.studio.data.hive"/>
       <plugin id="com.jaspersoft.studio.data.mongodb"/>
@@ -175,9 +176,11 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.antlr.runtime"/>
       <plugin id="org.apache.ant"/>
       <plugin id="org.apache.commons.cli"/>
+      <plugin id="org.apache.commons.dbcp"/>
       <plugin id="org.apache.commons.io"/>
       <plugin id="org.apache.commons.lang"/>
       <plugin id="org.apache.commons.logging"/>
+      <plugin id="org.apache.commons.math"/>
       <plugin id="org.apache.commons.pool"/>
       <plugin id="org.apache.jasper.glassfish"/>
       <plugin id="org.apache.log4j"/>
