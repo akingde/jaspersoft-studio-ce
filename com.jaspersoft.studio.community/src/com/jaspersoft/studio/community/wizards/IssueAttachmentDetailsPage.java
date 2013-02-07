@@ -26,6 +26,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -35,6 +36,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.community.CommunityConstants;
 import com.jaspersoft.studio.community.JSSCommunityActivator;
@@ -64,6 +66,7 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 	private Button btnAttachments;
 	private Button btnJaspersoftStudioPreferences;
 	private Link addAttachments;
+	private Font standardListFont;
 	
 	/**
 	 * Create the wizard.
@@ -172,6 +175,7 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 		gd_groupZipContent.widthHint = 579;
 		groupZipContent.setLayoutData(gd_groupZipContent);
 		zipFileContent = new List(groupZipContent, SWT.BORDER);
+		standardListFont = zipFileContent.getFont();
 
 		// Preselect 1) log file and 2) software/hardware summary
 		btnLogFile.setSelection(true);
@@ -242,13 +246,20 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 	 */
 	private void refreshZipEntriesList() {
 		zipFileContent.removeAll();
-		java.util.List<String> fileLocations = new ArrayList<String>();
-		for(ZipEntry ze : zipEntries){
-			fileLocations.add(ze.getLocation());
+		if(!zipEntries.isEmpty()){
+			java.util.List<String> fileLocations = new ArrayList<String>();
+			for(ZipEntry ze : zipEntries){
+				fileLocations.add(ze.getLocation());
+			}
+			Collections.sort(fileLocations);
+			for(String loc : fileLocations){
+				zipFileContent.add(loc);
+			}
+			zipFileContent.setFont(standardListFont);
 		}
-		Collections.sort(fileLocations);
-		for(String loc : fileLocations){
-			zipFileContent.add(loc);
+		else {
+			zipFileContent.add(Messages.IssueAttachmentDetailsPage_NoAttachments);
+			zipFileContent.setFont(ResourceManager.getItalicFont(standardListFont));
 		}
 	}
 	

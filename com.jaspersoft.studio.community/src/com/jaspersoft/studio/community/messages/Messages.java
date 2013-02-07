@@ -32,6 +32,7 @@ public class Messages extends NLS {
 	public static String IssueAttachmentDetailsPage_Description;
 	public static String IssueAttachmentDetailsPage_JSSPreferencesCheckbox;
 	public static String IssueAttachmentDetailsPage_LogFileCheckbox;
+	public static String IssueAttachmentDetailsPage_NoAttachments;
 	public static String IssueAttachmentDetailsPage_SwAndHwSummaryCheckbox;
 	public static String IssueAttachmentDetailsPage_Title;
 	public static String IssueAttachmentDetailsPage_ViewLink;
