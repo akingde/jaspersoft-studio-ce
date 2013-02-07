@@ -23,6 +23,11 @@ import java.util.Map;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
@@ -43,23 +48,24 @@ public class JSFileResolver extends SimpleFileResolver {
 
 	private List<ResourceDescriptor> reportUnitResources = null;
 
-	public JSFileResolver(JasperDesign jasperDesign) {
-		this(new ArrayList<File>(), jasperDesign);
+	public JSFileResolver(JasperDesign jasperDesign, IProgressMonitor monitor) {
+		this(new ArrayList<File>(), jasperDesign, monitor);
 	}
 
-	public JSFileResolver(List<File> parentFolders, JasperDesign jDesign) {
+	public JSFileResolver(List<File> parentFolders, JasperDesign jDesign,
+			IProgressMonitor monitor) {
 		super(parentFolders);
 		this.jDesign = jDesign;
-		init();
+		init(monitor);
 
 		setResolveAbsolutePath(true);
 	}
 
-	private void init() {
+	private void init(IProgressMonitor monitor) {
 		serverUri = jDesign.getProperty(JrxmlExporter.PROP_SERVERURL);
 		if (serverUri != null)
 			try {
-				c = ServerManager.getServer(serverUri, null);
+				c = ServerManager.getServer(serverUri, monitor);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -70,8 +76,17 @@ public class JSFileResolver extends SimpleFileResolver {
 
 	@Override
 	public File resolveFile(String fileName) {
-		if (c == null)
-			init();
+		if (c == null) {
+			Job job = new Job("Initialize connection") {
+				protected IStatus run(IProgressMonitor monitor) {
+					init(monitor);
+					return Status.OK_STATUS;
+				}
+			};
+			job.setPriority(Job.SHORT);
+			job.setSystem(true);
+			job.schedule();
+		}
 		if (c != null && fileName.startsWith("repo:")) {
 			File f = map.get(fileName);
 			if (f != null)

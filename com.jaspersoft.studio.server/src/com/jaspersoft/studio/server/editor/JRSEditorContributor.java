@@ -18,6 +18,9 @@ package com.jaspersoft.studio.server.editor;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.EditorPart;
@@ -33,15 +36,23 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRSEditorContributor implements IEditorContributor {
 
-	public void onLoad(JasperDesign jd, EditorPart editor) {
+	public void onLoad(final JasperDesign jd, final EditorPart editor) {
 		if (!(editor instanceof JrxmlEditor))
 			return;
-		JrxmlEditor edit = (JrxmlEditor) editor;
-
 		String prop = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
 		if (prop == null)
 			return;
-		edit.addFileResolver(new JSFileResolver(jd));
+
+		Job job = new Job("Initialize JRS File Resolver") {
+			protected IStatus run(IProgressMonitor monitor) {
+				((JrxmlEditor) editor).addFileResolver(new JSFileResolver(jd,
+						monitor));
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.LONG);
+		job.setSystem(true);
+		job.schedule();
 
 		// prop = jd.getProperty("com.jaspersoft.ji.adhoc");
 		// if (prop != null && prop.equals("1")) {

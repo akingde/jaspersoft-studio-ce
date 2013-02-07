@@ -56,7 +56,8 @@ public class WSClientHelper {
 
 	public static WSClient connect(MServerProfile msp, IProgressMonitor monitor)
 			throws Exception {
-		monitor.subTask("Connecting");
+		if (monitor != null)
+			monitor.subTask("Connecting");
 		JServer server = msp.getWsClient() == null ? new JServer() : msp
 				.getWsClient().getServer();
 		ServerProfile sp = msp.getValue();
@@ -239,7 +240,7 @@ public class WSClientHelper {
 
 			MReportUnit mru = res.getReportUnit();
 			WSClient cli = sp.getWsClient();
-//			System.out.println("saving: " + rd.getUriString());
+			// System.out.println("saving: " + rd.getUriString());
 			if (mru != null && res != mru) {
 				String ruuri = mru.getValue().getUriString();
 

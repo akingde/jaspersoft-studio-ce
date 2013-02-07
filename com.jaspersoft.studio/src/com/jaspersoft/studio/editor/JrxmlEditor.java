@@ -56,6 +56,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SaveAsDialog;
@@ -534,7 +535,18 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	}
 
 	private void closeEditor() {
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor(JrxmlEditor.this, false);
+		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null) {
+			final IWorkbenchPage apage = activeWorkbenchWindow.getActivePage();
+			if (apage != null)
+				Display.getDefault().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						apage.closeEditor(JrxmlEditor.this, false);
+					}
+				});
+		}
 	}
 
 	public static IEditorInput checkAndConvertEditorInput(IEditorInput editorInput) throws PartInitException {
