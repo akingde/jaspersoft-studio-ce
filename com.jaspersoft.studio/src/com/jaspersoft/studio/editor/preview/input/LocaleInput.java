@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.input;
 
@@ -43,8 +38,7 @@ public class LocaleInput extends ADataInput {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
 			wlocal.setLayoutData(gd);
-			if (params.get(param.getName()) != null)
-				wlocal.setSelection((Locale) params.get(param.getName()));
+			updateInput();
 			wlocal.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -57,7 +51,10 @@ public class LocaleInput extends ADataInput {
 
 	public void updateInput() {
 		Object value = params.get(param.getName());
-		if (value != null && value instanceof Locale)
-			wlocal.setSelection((Locale) value);
+		if (value != null && value instanceof Locale) {
+			Locale locale = (Locale) value;
+			wlocal.setSelection(locale);
+			wlocal.setToolTipText(locale.toString());
+		}
 	}
 }

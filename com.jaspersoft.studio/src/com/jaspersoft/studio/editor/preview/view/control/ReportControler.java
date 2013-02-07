@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
@@ -23,12 +24,14 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
 import net.sf.jasperreports.engine.fill.FillListener;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
 
+import org.apache.commons.lang.LocaleUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
@@ -67,7 +70,8 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.html.JiveViewer;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
+import com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage;
+import com.jaspersoft.studio.preferences.execution.VirtualizerHelper;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -136,9 +140,10 @@ public class ReportControler {
 
 	public static Map<String, Object> resetParameters(Map<String, Object> jasperParameters,
 			JasperReportsConfiguration jrContext) {
-		if (jasperParameters == null)
+		if (jasperParameters == null) {
 			jasperParameters = new HashMap<String, Object>();
-		else {
+			setDefaultParameterValues(jasperParameters, jrContext);
+		} else {
 			Map<String, Object> map = new HashMap<String, Object>();
 			List<JRParameter> prm = jrContext.getJasperDesign().getParametersList();
 			for (JRParameter p : prm) {
@@ -165,6 +170,25 @@ public class ReportControler {
 		}
 		jrContext.setJRParameters(jasperParameters);
 		return jasperParameters;
+	}
+
+	private static void setDefaultParameterValues(Map<String, Object> jasperParameters,
+			JasperReportsConfiguration jrContext) {
+		Boolean b = jrContext.getPropertyBoolean(ReportExecutionPreferencePage.JSS_IGNOREPAGINATION);
+		if (b != null)
+			jasperParameters.put(JRDesignParameter.IS_IGNORE_PAGINATION, b);
+		b = jrContext.getPropertyBoolean(ReportExecutionPreferencePage.JSS_LIMIT_RECORDS, false);
+		if (b) {
+			Integer mr = jrContext.getPropertyInteger(ReportExecutionPreferencePage.JSS_MAX_RECORDS);
+			if (mr != null)
+				jasperParameters.put(JRDesignParameter.REPORT_MAX_COUNT, mr);
+		}
+		String str = jrContext.getProperty(ReportExecutionPreferencePage.JSS_REPORT_LOCALE);
+		if (str != null && !str.isEmpty())
+			jasperParameters.put(JRDesignParameter.REPORT_LOCALE, LocaleUtils.toLocale(str));
+		str = jrContext.getProperty(ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE);
+		if (str != null && !str.isEmpty())
+			jasperParameters.put(JRDesignParameter.REPORT_TIME_ZONE, TimeZone.getTimeZone(str));
 	}
 
 	public LinkedHashMap<String, APreview> createControls(Composite composite) {
