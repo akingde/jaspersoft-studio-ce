@@ -57,22 +57,23 @@ import com.jaspersoft.studio.utils.UIUtils;
  *
  */
 public class IssueCreationWizard extends Wizard {
-
-	private IssueAttachmentDetailsPage page1;
-	private NewIssueDetailsPage page2;
+	
+	private static IssueCreationWizard instance = null;
+	private NewIssueDetailsPage page1;
+	private IssueAttachmentDetailsPage page2;
 	private NewIssueAuthenticationPage page3;
 	private boolean isPublished;
 	private String issuePath;
 
-	public IssueCreationWizard() {
+	private IssueCreationWizard() {
 		setWindowTitle(Messages.IssueCreationWizard_Title);
 	}
 
 	@Override
 	public void addPages() {
-		page1 = new IssueAttachmentDetailsPage();
+		page1 = new NewIssueDetailsPage();
 		addPage(page1);
-		page2 = new NewIssueDetailsPage();
+		page2 = new IssueAttachmentDetailsPage();
 		addPage(page2);
 		page3 = new NewIssueAuthenticationPage();
 		addPage(page3);
@@ -81,9 +82,9 @@ public class IssueCreationWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 		// List of entries for the final zip attachment
-		final List<ZipEntry> zipEntries = page1.getZipEntries();
+		final List<ZipEntry> zipEntries = page2.getZipEntries();
 		// Issue request that still needs the attachment file id
-		final IssueRequest issueRequest = page2.getIssueRequest();
+		final IssueRequest issueRequest = page1.getIssueRequest();
 		// Authentication information
 		final CommunityUser authInfo = page3.getCommunityUserInformation();
 		// Let's save credentials if required		
@@ -189,5 +190,27 @@ public class IssueCreationWizard extends Wizard {
 			return issueLink;
 		}
 
+	}
+
+	/**
+	 * Static method for creating the {@link IssueCreationWizard} instance.
+	 * 
+	 * @return the wizard instance newly created, <code>null</code> if an
+	 *         instance already exists
+	 */
+	public static synchronized IssueCreationWizard createWizard() {
+		if(instance==null){
+			instance = new IssueCreationWizard();
+			return instance;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		instance = null;
 	}
 }

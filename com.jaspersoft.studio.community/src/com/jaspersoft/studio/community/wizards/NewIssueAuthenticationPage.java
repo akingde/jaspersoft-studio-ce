@@ -116,6 +116,7 @@ public class NewIssueAuthenticationPage extends WizardPage {
 		btnReuseStoredCredentials = new Button(container, SWT.CHECK);
 		btnReuseStoredCredentials.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		btnReuseStoredCredentials.setText(Messages.NewIssueAuthenticationPage_ReuseCredentialsCheckbox);
+		btnReuseStoredCredentials.setToolTipText(Messages.NewIssueAuthenticationPage_ReuseCredentialsCheckboxTooltip);
 		btnReuseStoredCredentials.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -149,6 +150,7 @@ public class NewIssueAuthenticationPage extends WizardPage {
 		btnStoreCommunityUserCredentials = new Button(container, SWT.CHECK);
 		btnStoreCommunityUserCredentials.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		btnStoreCommunityUserCredentials.setText(Messages.NewIssueAuthenticationPage_StoreUserCredentialsCheckbox);
+		btnStoreCommunityUserCredentials.setToolTipText(Messages.NewIssueAuthenticationPage_StoreUserCredentialsCheckboxTooltip);
 		btnStoreCommunityUserCredentials.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -157,6 +159,11 @@ public class NewIssueAuthenticationPage extends WizardPage {
 				checkForPageComplete();
 			}
 		});
+		
+		// Check for existing credentials
+		if(JSSCommunityActivator.getDefault().getCommunityUserInformation() == null){
+			btnReuseStoredCredentials.setEnabled(false);
+		}
 		
 		setPageComplete(false);
 	}

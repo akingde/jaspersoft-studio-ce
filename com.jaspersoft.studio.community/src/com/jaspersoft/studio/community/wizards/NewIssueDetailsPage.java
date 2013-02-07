@@ -53,8 +53,6 @@ public class NewIssueDetailsPage extends WizardPage {
 	private Combo priority;
 	private Combo severity;
 	private Combo reproducibility;
-	private Combo resolution;
-	private Combo status;
 
 	/**
 	 * Create the wizard.
@@ -97,7 +95,7 @@ public class NewIssueDetailsPage extends WizardPage {
 		lblDescription.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
 		lblDescription.setText(Messages.NewIssueDetailsPage_IssueDescription);
 		
-		description = new Text(container, SWT.BORDER | SWT.MULTI);
+		description = new Text(container, SWT.BORDER | SWT.MULTI | SWT.WRAP);
 		GridData gd_description = new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1);
 		gd_description.heightHint = 150;
 		description.setLayoutData(gd_description);
@@ -120,17 +118,17 @@ public class NewIssueDetailsPage extends WizardPage {
 		}
 		category.select(0); // BugReport
 		
-		Label lblPriority = new Label(container, SWT.NONE);
-		lblPriority.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblPriority.setText(Messages.NewIssueDetailsPage_IssuePriority);
-		priority = new Combo(container, SWT.READ_ONLY);
-		priority.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		priority.addSelectionListener(new PageCompletionChecker());
-		for(Priority p : Priority.values()){
-			priority.add(p.getText());
-			priority.setData(p.getText(),p.getStringValue());
+		Label lblReproducibility = new Label(container, SWT.NONE);
+		lblReproducibility.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblReproducibility.setText(Messages.NewIssueDetailsPage_IssueReproducibility);
+		reproducibility = new Combo(container, SWT.READ_ONLY);
+		reproducibility.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		reproducibility.addSelectionListener(new PageCompletionChecker());
+		for(Reproducibility r : Reproducibility.values()){
+			reproducibility.add(r.getText());
+			reproducibility.setData(r.getText(),r.getStringValue());
 		}
-		priority.select(1); // Low
+		reproducibility.select(3); // Not Attempted
 		
 		Label lblSeverity = new Label(container, SWT.NONE);
 		lblSeverity.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -144,35 +142,17 @@ public class NewIssueDetailsPage extends WizardPage {
 		}
 		severity.select(4); // Minor
 		
-		Label lblReproducibility = new Label(container, SWT.NONE);
-		lblReproducibility.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblReproducibility.setText(Messages.NewIssueDetailsPage_IssueReproducibility);
-		reproducibility = new Combo(container, SWT.READ_ONLY);
-		reproducibility.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		reproducibility.addSelectionListener(new PageCompletionChecker());
-		for(Reproducibility r : Reproducibility.values()){
-			reproducibility.add(r.getText());
-			reproducibility.setData(r.getText(),r.getStringValue());
+		Label lblPriority = new Label(container, SWT.NONE);
+		lblPriority.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblPriority.setText(Messages.NewIssueDetailsPage_IssuePriority);
+		priority = new Combo(container, SWT.READ_ONLY);
+		priority.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		priority.addSelectionListener(new PageCompletionChecker());
+		for(Priority p : Priority.values()){
+			priority.add(p.getText());
+			priority.setData(p.getText(),p.getStringValue());
 		}
-		reproducibility.select(0); // Always
-		
-		Label lblResolution = new Label(container, SWT.NONE);
-		lblResolution.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblResolution.setText(Messages.NewIssueDetailsPage_IssueResolution);
-		resolution = new Combo(container, SWT.READ_ONLY);
-		resolution.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		resolution.add(Resolution.Open.getText());
-		resolution.setData(Resolution.Open.getText(),Resolution.Open.getStringValue());
-		resolution.select(0); //Open
-		
-		Label lblStatus = new Label(container, SWT.NONE);
-		lblStatus.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblStatus.setText(Messages.NewIssueDetailsPage_IssueStatus);
-		status = new Combo(container, SWT.READ_ONLY);
-		status.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		status.add(Status.New.getText());
-		status.setData(Status.New.getText(),Status.New.getStringValue());
-		status.select(0); // New
+		priority.select(1); // Low		
 		
 		setPageComplete(false);
 	}
@@ -186,8 +166,8 @@ public class NewIssueDetailsPage extends WizardPage {
 		issue.setPriority(new IssueField(Priority.FIELD_NAME,(String)priority.getData(priority.getText())));
 		issue.setSeverity(new IssueField(Severity.FIELD_NAME,(String)severity.getData(severity.getText())));
 		issue.setReproducibility(new IssueField(Reproducibility.FIELD_NAME,(String)reproducibility.getData(reproducibility.getText())));
-		issue.setResolution(new IssueField(Resolution.FIELD_NAME,(String)resolution.getData(resolution.getText())));
-		issue.setStatus(new IssueField(Status.FIELD_NAME,(String)status.getData(status.getText())));
+		issue.setResolution(new IssueField(Resolution.FIELD_NAME,Resolution.Open.getStringValue()));
+		issue.setStatus(new IssueField(Status.FIELD_NAME,Status.New.getStringValue()));
 		issue.setProject(new IssueField("field_bug_project", String.valueOf(CommunityConstants.JSSPROJECT_COMMUNITY_ID)){ //$NON-NLS-1$
 			@Override
 			protected String getValueAttributeName() {
@@ -209,9 +189,7 @@ public class NewIssueDetailsPage extends WizardPage {
 				!category.getText().isEmpty() &&
 				!priority.getText().isEmpty() && 
 				!severity.getText().isEmpty() &&
-				!reproducibility.getText().isEmpty() &&
-				!resolution.getText().isEmpty() &&
-				!status.getText().isEmpty();
+				!reproducibility.getText().isEmpty();
 		setPageComplete(pageComplete);
 	}
 	

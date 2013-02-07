@@ -40,13 +40,17 @@ public class Messages extends NLS {
 	public static String IssueCreationWizard_InfoDialogTitle;
 	public static String IssueCreationWizard_TaskName;
 	public static String IssueCreationWizard_Title;
+	public static String IssueSubmissionHandler_WarningMsg;
+	public static String IssueSubmissionHandler_WarningTitle;
 	public static String JSSCommunityActivator_CredentialsRecoveringError;
 	public static String JSSCommunityActivator_CredentialsStoreError;
 	public static String NewIssueAuthenticationPage_CredentialsLink;
 	public static String NewIssueAuthenticationPage_Description;
 	public static String NewIssueAuthenticationPage_Password;
 	public static String NewIssueAuthenticationPage_ReuseCredentialsCheckbox;
+	public static String NewIssueAuthenticationPage_ReuseCredentialsCheckboxTooltip;
 	public static String NewIssueAuthenticationPage_StoreUserCredentialsCheckbox;
+	public static String NewIssueAuthenticationPage_StoreUserCredentialsCheckboxTooltip;
 	public static String NewIssueAuthenticationPage_Title;
 	public static String NewIssueAuthenticationPage_Username;
 	public static String NewIssueAuthenticationPage_WarningDialogMsg;
@@ -56,9 +60,7 @@ public class Messages extends NLS {
 	public static String NewIssueDetailsPage_IssueDescription;
 	public static String NewIssueDetailsPage_IssuePriority;
 	public static String NewIssueDetailsPage_IssueReproducibility;
-	public static String NewIssueDetailsPage_IssueResolution;
 	public static String NewIssueDetailsPage_IssueSeverity;
-	public static String NewIssueDetailsPage_IssueStatus;
 	public static String NewIssueDetailsPage_IssueTitle;
 	public static String NewIssueDetailsPage_Title;
 	public static String Priority_High;
