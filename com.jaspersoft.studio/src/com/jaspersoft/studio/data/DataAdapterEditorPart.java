@@ -159,13 +159,11 @@ public class DataAdapterEditorPart extends ABasicEditor {
 		rowLayout.pack = true;
 		rowLayout.fill = true;
 		c.setLayout(rowLayout);
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(c, "com.jaspersoft.studio.doc.editor_dataadapter");
-
 		nameComposite = new NameComposite(c, SWT.NONE);
 		if (descriptor != null) {
 			editor = descriptor.getEditor();
 			dacomposite = editor.getComposite(c, SWT.NONE, null);
-
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(c, editor.getHelpContextId());
 			nameComposite.addModifyListener(modelListener);
 			dacomposite.addModifyListener(modelListener);
 
