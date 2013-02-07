@@ -762,6 +762,8 @@ public class Messages extends NLS {
 	public static String MHyperLink_link_type;
 	public static String MHyperLink_link_type_description;
 	public static String MHyperLink_parameters_description;
+	public static String MHyperLink_whenexpr;
+	public static String MHyperLink_whenexpr_desc;
 	public static String MImage_evaluation_type;
 	public static String MImage_evaluation_type_description;
 	public static String MImage_expression_description;

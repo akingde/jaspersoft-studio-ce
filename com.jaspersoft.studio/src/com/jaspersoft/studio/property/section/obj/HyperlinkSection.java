@@ -50,6 +50,12 @@ public class HyperlinkSection extends AbstractSection {
 		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION, false).getControl()
 				.setLayoutData(gd);
 
+		getWidgetFactory().createCLabel(parent, "When");
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION, false).getControl()
+				.setLayoutData(gd);
+
 		getWidgetFactory().createCLabel(parent, "Tooltip");
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;

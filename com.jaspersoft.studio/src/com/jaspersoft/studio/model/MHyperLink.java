@@ -57,6 +57,11 @@ public class MHyperLink extends APropertyNode {
 		referenceExpressionD.setDescription(Messages.MHyperLink_hyperlink_reference_expression_description);
 		desc.add(referenceExpressionD);
 
+		JRExpressionPropertyDescriptor whenExpressionD = new JRExpressionPropertyDescriptor(
+				JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION, Messages.MHyperLink_whenexpr);
+		whenExpressionD.setDescription(Messages.MHyperLink_whenexpr_desc);
+		desc.add(whenExpressionD);
+
 		JRExpressionPropertyDescriptor toolTipExpressionD = new JRExpressionPropertyDescriptor(
 				JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION, Messages.MHyperLink_hyperlink_tooltip_expression);
 		toolTipExpressionD.setDescription(Messages.MHyperLink_hyperlink_tooltip_expression_description);
@@ -67,7 +72,7 @@ public class MHyperLink extends APropertyNode {
 		propertiesD.setDescription(Messages.MHyperLink_parameters_description);
 		desc.add(propertiesD);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#"); //$NON-NLS-1$
 
 		RComboBoxPropertyDescriptor linkTargetD = new RComboBoxPropertyDescriptor(
 				JRDesignHyperlink.PROPERTY_HYPERLINK_TARGET, Messages.MHyperLink_link_target, EnumHelper.getEnumNames(
@@ -82,6 +87,7 @@ public class MHyperLink extends APropertyNode {
 
 		propertiesD.setCategory(Messages.MHyperLink_hyperlink_category);
 		anchorExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
+		whenExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
 		pageExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
 		referenceExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
 		toolTipExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
@@ -123,18 +129,16 @@ public class MHyperLink extends APropertyNode {
 				return jrElement.getLinkTarget();
 			if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 				return jrElement.getLinkType();
-			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
+			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION))
 				return ExprUtil.getExpression(jrElement.getHyperlinkAnchorExpression());
-			}
-			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
+			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION))
 				return ExprUtil.getExpression(jrElement.getHyperlinkPageExpression());
-			}
-			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
+			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
 				return ExprUtil.getExpression(jrElement.getHyperlinkReferenceExpression());
-			}
-			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
+			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION))
+				return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
+			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 				return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
-			}
 			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 				if (propertyDTO == null) {
 					propertyDTO = new ParameterDTO();
@@ -168,6 +172,8 @@ public class MHyperLink extends APropertyNode {
 			else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
 				jrElement
 						.setHyperlinkReferenceExpression(ExprUtil.setValues(jrElement.getHyperlinkReferenceExpression(), value));
+			else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION))
+				jrElement.setHyperlinkWhenExpression(ExprUtil.setValues(jrElement.getHyperlinkWhenExpression(), value));
 			else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 				jrElement.setHyperlinkTooltipExpression(ExprUtil.setValues(jrElement.getHyperlinkTooltipExpression(), value));
 			else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
