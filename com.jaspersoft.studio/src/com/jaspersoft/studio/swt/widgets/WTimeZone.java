@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
+import java.util.Arrays;
 import java.util.TimeZone;
 
 import org.eclipse.swt.SWT;
@@ -55,6 +56,7 @@ public class WTimeZone extends Composite {
 
 	private String[] getTimeZones() {
 		timezones = TimeZone.getAvailableIDs();
+		Arrays.sort(timezones);
 		return timezones;
 	}
 

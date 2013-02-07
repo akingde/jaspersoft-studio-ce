@@ -20,6 +20,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage;
+import com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage;
@@ -30,7 +31,6 @@ import com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage;
 import com.jaspersoft.studio.preferences.theme.ThemesPreferencePage;
-import com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage;
 
 /*
  * Class used to initialize default preference values.
@@ -66,7 +66,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		G2DExporterPreferencePage.getDefaults(store);
 
 		StudioPreferencePage.getDefaults(store);
-		VirtualizerPreferencePage.getDefaults(store);
+		ReportExecutionPreferencePage.getDefaults(store);
 		ToolItemsPreferencePage.getDefaults(store);
 
 		ThemesPreferencePage.getDefaults(store);

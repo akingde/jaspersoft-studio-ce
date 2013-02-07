@@ -214,13 +214,13 @@
             name="Report Designer">
       </page>
       <page
-            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             class="com.jaspersoft.studio.preferences.theme.ThemesPreferencePage"
             id="com.jaspersoft.studio.preferences.theme.ThemesPreferencePage"
             name="Report Designer Themes">
       </page>
       <page
-            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             class="com.jaspersoft.studio.preferences.RulersGridPreferencePage"
             id="com.jaspersoft.studio.preferences.GridRulerPreferencePage"
             name="Rulers And Grid">
@@ -293,9 +293,9 @@
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
-            class="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
-            id="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
-            name="Virtualizer">
+            class="com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage"
+            id="com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage"
+            name="Report Execution">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
@@ -310,7 +310,7 @@
             category="com.jaspersoft.studio.preferences.StudioPreferencePage">
       </page>
       <page
-            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             class="com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage"
             id="com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage"
             name="Toolbars">
@@ -476,9 +476,9 @@
       </page>       
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
-            class="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
-            id="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage.property"
-            name="Virtualizer">
+            class="com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage"
+            id="com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage.property"
+            name="Report Execution">
          <enabledWhen>
             <reference
                   definitionId="com.jaspersoft.studio.projectorjrxml">
