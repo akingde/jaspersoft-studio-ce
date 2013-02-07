@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.community.wizards;
 
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -39,6 +38,7 @@ import com.jaspersoft.studio.community.issues.enums.Severity;
 import com.jaspersoft.studio.community.issues.enums.Status;
 import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.requests.IssueRequest;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
  * Wizard page that allows to configure the issue basic information.
@@ -46,7 +46,7 @@ import com.jaspersoft.studio.community.requests.IssueRequest;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class NewIssueDetailsPage extends WizardPage {
+public class NewIssueDetailsPage extends JSSHelpWizardPage {
 	private Text title;
 	private Text description;
 	private Combo category;
@@ -63,6 +63,7 @@ public class NewIssueDetailsPage extends WizardPage {
 				JSSCommunityActivator.getDefault().getImageDescriptor(CommunityConstants.ISSUE_SUBMISSION_WIZARD_IMG));
 		setTitle(Messages.NewIssueDetailsPage_Title);
 		setDescription(Messages.NewIssueDetailsPage_Description);
+		contextName = ContextHelpIDs.WIZARD_ISSUE_DETAIL;
 	}
 
 	/**
