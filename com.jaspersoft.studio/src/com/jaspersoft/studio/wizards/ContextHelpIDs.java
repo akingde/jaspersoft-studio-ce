@@ -61,4 +61,6 @@ public class ContextHelpIDs {
 	public static final String WIZARD_NEW_DATAAPDATER = PREFIX.concat("select_new_adapter");
 	
 	public static final String WIZARD_QUERY_DIALOG = PREFIX.concat("query_dialog");
+	
+	public static final String WIZARD_PROPERTIES = PREFIX.concat("properties_tab");
 }

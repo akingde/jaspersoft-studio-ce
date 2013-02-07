@@ -27,7 +27,6 @@ import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -48,6 +47,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertiesList;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
@@ -60,8 +60,10 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class JRPropertyExpressionPage extends WizardPage {
+public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	private final class EditElement implements IEditElement<PropertyDTO> {
 		@Override
 		public void editElement(List<PropertyDTO> input, int pos) {
@@ -124,6 +126,7 @@ public class JRPropertyExpressionPage extends WizardPage {
 		super(pageName);
 		setTitle(Messages.common_properties);
 		setDescription(Messages.JRPropertyPage_description);
+		contextName = ContextHelpIDs.WIZARD_PROPERTIES;
 	}
 
 	public void createControl(final Composite parent) {
@@ -195,7 +198,9 @@ public class JRPropertyExpressionPage extends WizardPage {
 				editButton.push();
 			}
 		});
-
+		//set the help for the elements inside the table
+		TableHelpListener.setTableHelp(table);
+		
 		tableViewer = new TableViewer(table);
 		tableViewer.setContentProvider(new ListContentProvider());
 		tableViewer.setLabelProvider(new TPropertyLabelProvider());

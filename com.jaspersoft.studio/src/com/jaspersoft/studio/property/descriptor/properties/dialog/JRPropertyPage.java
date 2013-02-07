@@ -26,7 +26,6 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -44,6 +43,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
@@ -51,8 +51,10 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class JRPropertyPage extends WizardPage {
+public class JRPropertyPage extends JSSHelpWizardPage {
 
 	private JRPropertiesMap value;
 	private Table table;
@@ -88,6 +90,7 @@ public class JRPropertyPage extends WizardPage {
 		super(pageName);
 		setTitle(Messages.common_properties);
 		setDescription(Messages.JRPropertyPage_description);
+		contextName = ContextHelpIDs.WIZARD_PROPERTIES;
 	}
 
 	public void createControl(Composite parent) {
@@ -95,7 +98,6 @@ public class JRPropertyPage extends WizardPage {
 		GridLayout layout = new GridLayout(2, false);
 		composite.setLayout(layout);
 		setControl(composite);
-
 		buildTable(composite);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -144,6 +146,7 @@ public class JRPropertyPage extends WizardPage {
 		tableViewer = new TableViewer(table);
 		tableViewer.setContentProvider(new ListContentProvider());
 		tableViewer.setLabelProvider(new TPropertyLabelProvider());
+	
 		attachCellEditors(tableViewer, table);
 
 		setColumnToolTip();
@@ -164,6 +167,8 @@ public class JRPropertyPage extends WizardPage {
 		tlayout.addColumnData(new ColumnWeightData(50, true));
 		tlayout.addColumnData(new ColumnWeightData(50, true));
 		table.setLayout(tlayout);
+		//Set the help for the elements
+		TableHelpListener.setTableHelp(table);
 
 		table.addSelectionListener(new SelectionListener() {
 

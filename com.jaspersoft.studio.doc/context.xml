@@ -275,4 +275,8 @@
       <topic href="html/wizard/chartanddataset/createdataset.html" label="Creation of a dataset"/>
   	  <topic href="html/wizard/subreport/subreport.html" label="How to use a subreport with parameters" />
    </context>
+   <context id="properties_tab" title="Element properties">
+      <description>In this table are shown all the configuration properties of the element. You can change, edit or remove them. These properties are used to change the behavior of JasperReport when the your report will be compiled.</description>
+   	 <topic href="../net.sf.jasperreports.doc/docs/config.reference.html" label="Configurations properties reference" />
+   </context>
 </contexts>
