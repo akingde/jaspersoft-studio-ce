@@ -1705,7 +1705,7 @@
 		point="org.eclipse.ui.menus">
 		<menuContribution locationURI="menu:file?after=export">
 			<command commandId="com.jaspersoft.studio.command.exportFilesTo"
-				icon="icons/exportFilesTo.png" label="Export files to..." style="push">
+				icon="icons/eclipseicons/save.gif" label="Export Report To ..." style="push">
 			</command>
 		</menuContribution>
 		<menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=export">
