@@ -186,12 +186,15 @@ public class ServerProvider implements IRepositoryViewProvider {
 	}
 
 	public void doubleClick(TreeViewer treeViewer) {
+
 		if (editServerAction.isEnabled())
 			editServerAction.run();
 		// if (runReportUnitAction.isEnabled())
 		// runReportUnitAction.run();
-		if (openInEditorAction.isEnabled())
+		else if (openInEditorAction.isEnabled())
 			openInEditorAction.run();
+		else if (runReportUnitAction.isEnabled())
+			runReportUnitAction.run();
 	}
 
 	public ANode getNode(ANode root) {
@@ -218,7 +221,9 @@ public class ServerProvider implements IRepositoryViewProvider {
 			lazyLoadResource(event);
 		}
 	}
-	public void handleTreeEvent(TreeExpansionEvent event, IProgressMonitor monitor) {
+
+	public void handleTreeEvent(TreeExpansionEvent event,
+			IProgressMonitor monitor) {
 		if (event.getElement() instanceof MServerProfile) {
 			listServer(event, monitor);
 		} else if (event.getElement() instanceof MResource) {

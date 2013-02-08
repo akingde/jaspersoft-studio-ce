@@ -97,50 +97,25 @@ public class InputControlsManager {
 	public List<ResourceDescriptor> getInputControls(
 			List<ResourceDescriptor> list, WSClient cl) throws Exception {
 		this.wsclient = cl;
-		String dsUri = null;
-
 		inputcontrols = new java.util.ArrayList<ResourceDescriptor>();
 		for (ResourceDescriptor sub_rd : list) {
-			if (sub_rd.getWsType()
-					.equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
+			String wsType = sub_rd.getWsType();
+			if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
 				inputcontrols.add(sub_rd);
-			} else if (sub_rd.getWsType().equals(
-					ResourceDescriptor.TYPE_DATASOURCE)) {
+			else if (wsType.equals(ResourceDescriptor.TYPE_DATASOURCE))
 				dsUri = sub_rd.getReferenceUri();
-			}
-			// else if (RepositoryFolder.isDataSource(sub_rd)) {
-			// dsUri = sub_rd.getUriString();
-			// }
+			else if (SelectorDatasource.isDatasource(sub_rd))
+				dsUri = sub_rd.getUriString();
 		}
-
 		for (int i = 0; i < inputcontrols.size(); ++i) {
 			ResourceDescriptor ic = inputcontrols.get(i);
 			if (isICQuery(ic)) {
-				String dsUriQuery = null;
 				inputcontrols.remove(ic);
 
-				// Ask to add values to the control....
-				java.util.List<Argument> args = new java.util.ArrayList<Argument>();
-				// reset query data...
-				// Look if this query has a specific datasource...
-				for (int k = 0; dsUriQuery == null
-						&& k < ic.getChildren().size(); ++k) {
-					ResourceDescriptor sub_ic = (ResourceDescriptor) ic
-							.getChildren().get(k);
-					if (isRDQuery(sub_ic))
-						for (int k2 = 0; k2 < sub_ic.getChildren().size(); ++k2) {
-							ResourceDescriptor sub_sub_ic = (ResourceDescriptor) sub_ic
-									.getChildren().get(k2);
-							if (SelectorDatasource.isDatasource(sub_sub_ic)) {
-								dsUriQuery = sub_sub_ic.getUriString();
-								break;
-							}
-						}
-				}
-				if (dsUriQuery == null)
-					dsUriQuery = dsUri;
+				String dsUriQuery = getDataSourceQueryURI(dsUri, ic);
 				ic.setResourceProperty(ResourceDescriptor.PROP_QUERY_DATA, null);
-
+				// Ask to add values to the control....
+				List<Argument> args = new ArrayList<Argument>();
 				args.add(new Argument(Argument.IC_GET_QUERY_DATA, dsUriQuery));
 				ic = cl.get(ic, null, args);
 
@@ -149,6 +124,28 @@ public class InputControlsManager {
 			}
 		}
 		return inputcontrols;
+	}
+
+	private String getDataSourceQueryURI(String dsUri, ResourceDescriptor ic) {
+		String dsUriQuery = null;
+		// reset query data...
+		// Look if this query has a specific datasource...
+		for (int k = 0; dsUriQuery == null && k < ic.getChildren().size(); ++k) {
+			ResourceDescriptor sub_ic = (ResourceDescriptor) ic.getChildren()
+					.get(k);
+			if (isRDQuery(sub_ic))
+				for (int k2 = 0; k2 < sub_ic.getChildren().size(); ++k2) {
+					ResourceDescriptor sub_sub_ic = (ResourceDescriptor) sub_ic
+							.getChildren().get(k2);
+					if (SelectorDatasource.isDatasource(sub_sub_ic)) {
+						dsUriQuery = sub_sub_ic.getUriString();
+						break;
+					}
+				}
+		}
+		if (dsUriQuery == null)
+			dsUriQuery = dsUri;
+		return dsUriQuery;
 	}
 
 	private void cascadingDependencies(ResourceDescriptor ic) {
@@ -220,6 +217,7 @@ public class InputControlsManager {
 			}
 		}
 	};
+	private String dsUri;
 
 	public PropertyChangeListener getPropertyChangeListener() {
 		return propChangeListener;
@@ -256,12 +254,14 @@ public class InputControlsManager {
 
 	private void updateControl(final IDataInput ic,
 			Map<String, Object> parameters) throws Exception {
+		PResourceDescriptor presd = (PResourceDescriptor) ic.getParameter();
 		List<Argument> args = new ArrayList<Argument>();
-		args.add(new Argument(Argument.IC_GET_QUERY_DATA, ""));
+
+		args.add(new Argument(Argument.IC_GET_QUERY_DATA,
+				getDataSourceQueryURI(dsUri, presd.getResourceDescriptor())));
 		args.add(new Argument(Argument.RU_REF_URI, WSClientHelper
 				.getReportUnitUri(reportUnit)));
 
-		PResourceDescriptor presd = (PResourceDescriptor) ic.getParameter();
 		ResourceDescriptor rd = presd.getResourceDescriptor();
 		rd.getParameters().clear();
 		rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_DATA, null);
@@ -289,7 +289,6 @@ public class InputControlsManager {
 					((ListOfValuesInput) ic).fillTable();
 			}
 		});
-
 	}
 
 	public boolean isAnyVisible() {

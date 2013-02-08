@@ -97,7 +97,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport,
 	@Override
 	public void createPartControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new GridLayout(2, false));
+		container.setLayout(new GridLayout(3, false));
 
 		getTopToolBarManager1(container);
 		getTopToolBarManager(container);
@@ -116,7 +116,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport,
 
 		sashform = new CSashForm(container, SWT.HORIZONTAL);
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 3;
 		sashform.setLayoutData(gd);
 
 		createLeft(parent, sashform);
