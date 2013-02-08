@@ -249,15 +249,11 @@ public class MSubreport extends MGraphicElement {
 			}
 		} else if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES)) {
 			returnValuesDTO = (JReportsDTO) value;
-			if (returnValuesDTO.getValue() instanceof List) {
-				@SuppressWarnings("unchecked")
-				List<JRSubreportReturnValue> list = (List<JRSubreportReturnValue>) returnValuesDTO.getValue();
-				JRSubreportReturnValue[] marray = list.toArray(new JRSubreportReturnValue[list.size()]);
-				for (JRSubreportReturnValue srv : marray)
-					jrElement.removeReturnValue(srv);
-				for (JRSubreportReturnValue j : list)
-					jrElement.addReturnValue(j);
-			}
+			List<JRSubreportReturnValue> list = (List<JRSubreportReturnValue>) returnValuesDTO.getValue();
+			for (JRSubreportReturnValue srv : jrElement.getReturnValues())
+				jrElement.removeReturnValue(srv);
+			for (JRSubreportReturnValue j : list)
+				jrElement.addReturnValue(j);
 		}
 		super.setPropertyValue(id, value);
 	}
