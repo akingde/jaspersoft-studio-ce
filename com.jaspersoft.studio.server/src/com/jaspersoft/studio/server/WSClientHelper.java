@@ -19,6 +19,8 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -139,6 +141,14 @@ public class WSClientHelper {
 		depth++;
 
 		List<ResourceDescriptor> children = client.list(rd);
+		Collections.sort(children, new Comparator<ResourceDescriptor>() {
+
+			@Override
+			public int compare(ResourceDescriptor arg0, ResourceDescriptor arg1) {
+				return arg0.getLabel().compareTo(arg1.getLabel());
+			}
+		});
+
 		Set<String> set = new HashSet<String>();
 		for (ResourceDescriptor r : children) {
 			if (set.contains(r.getUriString()))
