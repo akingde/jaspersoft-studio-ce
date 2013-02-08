@@ -15,13 +15,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.action.server;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.ISharedImages;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.data.actions.DuplicateDataAdapterAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -31,6 +36,7 @@ import com.jaspersoft.studio.utils.UIUtils;
 public class DuplicateServerAction extends Action {
 	public static final String ID = "duplicateServerAction"; //$NON-NLS-1$
 	private TreeViewer treeViewer;
+	private EditServerAction editAction;
 
 	public DuplicateServerAction(TreeViewer treeViewer) {
 		super();
@@ -39,10 +45,10 @@ public class DuplicateServerAction extends Action {
 		setText("Duplicate JasperServer Connection");
 		setDescription("Duplicate JasperServer Connection");
 		setToolTipText("Duplicate JasperServer connection");
-		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
-		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance()
+				.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance()
+				.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
 	}
 
 	@Override
@@ -56,23 +62,41 @@ public class DuplicateServerAction extends Action {
 	public void run() {
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
+		List<MServerProfile> copies = new ArrayList<MServerProfile>();
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MServerProfile) {
 				try {
 					ServerProfile copy = (ServerProfile) ((MServerProfile) obj)
 							.getValue().clone();
-					copy.setName("Copy_Of_" + copy.getName());
+					copy.setName(DuplicateDataAdapterAction.COPY_OF
+							+ copy.getName());
 
 					MServerProfile copyDataAdapter = new MServerProfile(
 							(ANode) ((MServerProfile) obj).getParent(), copy);
 					ServerManager.addServerProfile(copyDataAdapter);
-					treeViewer.refresh(true);
+					copies.add(copyDataAdapter);
+
 				} catch (CloneNotSupportedException e) {
 					UIUtils.showError(e);
 				}
 
 			}
 		}
+		if (!copies.isEmpty()) {
+			treeViewer.refresh(true);
+			if (copies.size() == 1) {
+				MServerProfile copy = copies.get(0);
+				treeViewer.setSelection(new StructuredSelection(copy));
+				treeViewer.reveal(copy);
+				runEditAction();
+			}
+		}
+	}
+
+	private void runEditAction() {
+		if (editAction == null)
+			editAction = new EditServerAction(treeViewer);
+		editAction.run();
 	}
 }

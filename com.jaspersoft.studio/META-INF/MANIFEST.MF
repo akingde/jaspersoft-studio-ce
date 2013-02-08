@@ -87,6 +87,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    com.jaspersoft.studio.repository,
    org.eclipse.swt.graphics,
    org.eclipse.swt.widgets",
+ com.jaspersoft.studio.data.actions,
  com.jaspersoft.studio.data.designer;
   uses:="com.jaspersoft.studio.property.dataset.dialog,
    org.eclipse.jface.operation,

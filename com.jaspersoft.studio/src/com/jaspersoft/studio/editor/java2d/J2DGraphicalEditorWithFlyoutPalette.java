@@ -48,8 +48,6 @@ public abstract class J2DGraphicalEditorWithFlyoutPalette extends GraphicalEdito
 	 *            The parent composite
 	 */
 	protected void createGraphicalViewer(Composite parent) {
-		System.out.println("Creating graphical viewer!!1"); //$NON-NLS-1$
-		System.out.flush();
 		GraphicalViewer viewer = new J2DScrollingGraphicalViewer();
 		viewer.createControl(parent);
 		setGraphicalViewer(viewer);
