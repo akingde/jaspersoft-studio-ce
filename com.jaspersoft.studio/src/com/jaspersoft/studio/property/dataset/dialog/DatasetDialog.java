@@ -57,7 +57,6 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.command.CreateFieldCommand;
 import com.jaspersoft.studio.model.field.command.DeleteFieldCommand;
-import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.parameter.command.CreateParameterCommand;
 import com.jaspersoft.studio.model.parameter.command.DeleteParameterCommand;
@@ -108,17 +107,16 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		dataquery.dispose();
 		return super.close();
 	}
-	
-	
+
 	/**
-	 * Set the root control of the wizard, and also add a listener to do the perform help action 
-	 * and set the context of the top control.
+	 * Set the root control of the wizard, and also add a listener to do the perform help action and set the context of
+	 * the top control.
 	 */
 	protected void setHelpControl(Control newControl) {
-		newControl.addListener(SWT.Help, new Listener() {			
+		newControl.addListener(SWT.Help, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				performHelp();	
+				performHelp();
 			}
 		});
 	};
@@ -127,15 +125,14 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	 * Set and show the help data if a context, that bind this wizard with the data, is provided
 	 */
 	public void performHelp() {
-			PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.WIZARD_QUERY_DIALOG);
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.WIZARD_QUERY_DIALOG);
 	};
-	
 
 	@Override
 	protected void createFormContent(final IManagedForm mform) {
 		FormToolkit toolkit = mform.getToolkit();
 		Composite body = mform.getForm().getBody();
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(body,ContextHelpIDs.WIZARD_QUERY_DIALOG);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(body, ContextHelpIDs.WIZARD_QUERY_DIALOG);
 		setHelpControl(body);
 		body.setLayout(new GridLayout(1, true));
 		background = body.getBackground();
@@ -155,7 +152,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 			@Override
 			public void setParameters(List<JRDesignParameter> params) {
-
+				DatasetDialog.this.setParameters(params);
 			}
 
 			@Override
@@ -196,6 +193,10 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 	public void setFields(List<JRDesignField> fields) {
 		ftable.setFields(fields);
+	}
+
+	public void setParameters(List<JRDesignParameter> fields) {
+		ptable.setFields(fields);
 	}
 
 	public List<JRDesignField> getCurrentFields() {

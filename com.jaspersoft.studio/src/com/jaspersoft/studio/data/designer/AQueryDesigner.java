@@ -1,22 +1,20 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.designer;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -77,7 +75,16 @@ public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext
 	}
 
 	public void setFields(List<JRDesignField> fields) {
-		container.setFields(fields);
+		// remove duplicates
+		List<JRDesignField> toadd = new ArrayList<JRDesignField>();
+		Set<String> names = new HashSet<String>();
+		for (JRDesignField f : fields) {
+			if (names.contains(f.getName()))
+				continue;
+			names.add(f.getName());
+			toadd.add(f);
+		}
+		container.setFields(toadd);
 	}
 
 	public void setParameters(List<JRDesignParameter> params) {
