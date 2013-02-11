@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.wizards;
 
@@ -62,35 +57,33 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	}
 
 	/**
-	 * Set and show the help data 
+	 * Set and show the help data
 	 */
 	@Override
 	public void performHelp() {
 		PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.WIZARD_NEW_FILE);
 	}
-	
+
 	/**
 	 * Set the help data that should be seen in this step
 	 */
 	@Override
-	public void setHelpData(){
+	public void setHelpData() {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.WIZARD_NEW_FILE);
 	}
-	
 
-	
 	@Override
 	protected void setControl(Control newControl) {
 		super.setControl(newControl);
-		newControl.addListener(SWT.Help, new Listener() {			
+		newControl.addListener(SWT.Help, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				performHelp();	
+				performHelp();
 			}
 		});
 		setHelpData();
 	};
-	
+
 	/**
 	 * Add an extra check to validate if the directory inside the project exists or not. We don't want to create a new
 	 * directory for the user...
@@ -245,7 +238,8 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 				settings.remove(JSSWizard.FILE_PATH);
 				settings.remove(JSSWizard.FILE_NAME);
 			}
-			JasperReportsConfiguration jConfig = (JasperReportsConfiguration) settings.get(JSSWizard.JASPERREPORTS_CONFIGURATION);
+			JasperReportsConfiguration jConfig = (JasperReportsConfiguration) settings
+					.get(JSSWizard.JASPERREPORTS_CONFIGURATION);
 			jConfig.init(file);
 		}
 	}

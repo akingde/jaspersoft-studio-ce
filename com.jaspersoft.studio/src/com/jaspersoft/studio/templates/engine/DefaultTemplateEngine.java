@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.templates.engine;
 
@@ -45,50 +40,46 @@ import com.jaspersoft.templates.TemplateBundle;
 import com.jaspersoft.templates.TemplateEngine;
 import com.jaspersoft.templates.TemplateEngineException;
 
-
 /**
- * A default template Engine which expect in the settings a dataset with the key "main_dataset",
- * and few other optional informations.
- * It will then elaborate the input template with the basic rules used with iReport templates.
+ * A default template Engine which expect in the settings a dataset with the key "main_dataset", and few other optional
+ * informations. It will then elaborate the input template with the basic rules used with iReport templates.
  * 
  * 
  * @author gtoffoli
- *
+ * 
  */
-public class DefaultTemplateEngine implements TemplateEngine{
+public class DefaultTemplateEngine implements TemplateEngine {
 
 	final static public String DATASET = "main_dataset"; //$NON-NLS-1$
 	final static public String FIELDS = "main_fields"; //$NON-NLS-1$
 	final static public String GROUP_FIELDS = "main_group_fields"; //$NON-NLS-1$
 	final static public String DATA_ADAPTER = "data_adapter"; //$NON-NLS-1$
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings) throws TemplateEngineException {
-		
-		JasperDesign jdCopy=null;
+	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings)
+			throws TemplateEngineException {
+
+		JasperDesign jdCopy = null;
 		try {
 			// N.B: We need a fresh new copy of the jasper design!
-			jdCopy=ModelUtils.copyJasperDesign(template.getJasperDesign());
+			jdCopy = ModelUtils.copyJasperDesign(template.getJasperDesign());
 		} catch (JRException e) {
 			UIUtils.showError(e);
 			return null;
 		}
-		
-		List<Object> fields = (List<Object>)settings.get( FIELDS );
-		List<Object> groupFields = (List<Object>)settings.get( GROUP_FIELDS );
-		
-		JRDesignDataset dataset = (JRDesignDataset)settings.get( DATASET );
 
-		
-		if (dataset != null)
-		{
-			jdCopy.getMainDesignDataset().setQuery( (JRDesignQuery) dataset.getQuery() );
-			
-			System.out.println("Query: " + dataset.getQuery().getText() );
-			
-			for (JRField f : dataset.getFields())
-			{
+		List<Object> fields = (List<Object>) settings.get(FIELDS);
+		List<Object> groupFields = (List<Object>) settings.get(GROUP_FIELDS);
+
+		JRDesignDataset dataset = (JRDesignDataset) settings.get(DATASET);
+
+		if (dataset != null) {
+			jdCopy.getMainDesignDataset().setQuery((JRDesignQuery) dataset.getQuery());
+
+			System.out.println("Query: " + dataset.getQuery().getText());
+
+			for (JRField f : dataset.getFields()) {
 				try {
 					jdCopy.getMainDesignDataset().addField(f);
 				} catch (JRException e) {
@@ -96,21 +87,17 @@ public class DefaultTemplateEngine implements TemplateEngine{
 				}
 			}
 		}
-		
-		processTemplate(jdCopy,  fields,  groupFields);
-		
+
+		processTemplate(jdCopy, fields, groupFields);
+
 		ReportBundle reportBundle = new ReportBundle(template);
-		
+
 		reportBundle.setJasperDesign(jdCopy);
-		
+
 		return reportBundle;
 	}
 
-	
-	
-	protected void processTemplate(JasperDesign jd, List<Object> fields, List<Object> groupFields)
-	{
-		
+	protected void processTemplate(JasperDesign jd, List<Object> fields, List<Object> groupFields) {
 		String reportType = Misc.nvl(jd.getProperty("template.type"), "tabular"); //$NON-NLS-1$ $NON-NLS-2$
 
 		boolean keepExtraGroups = false;
@@ -123,18 +110,21 @@ public class DefaultTemplateEngine implements TemplateEngine{
 		// Adjusting groups
 		if (groupFields != null)
 			for (int i = 0; i < groupFields.size(); ++i) {
-				
 				if (jd.getGroupsList().size() <= i) {
 					try {
 						// Add a new group on the fly...
 						JRDesignGroup g = new JRDesignGroup();
-						g.setName(((JRField) groupFields.get(i)).getName());
+						String name = ((JRField) groupFields.get(i)).getName();
+						g.setName(name);
+						JRDesignExpression jre = new JRDesignExpression();
+						jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+						g.setExpression(jre);
 						jd.addGroup(g);
 					} catch (JRException e) {
 						// Duplicate group name should never occur
 					}
 				}
-				
+
 				JRField gr = (JRField) groupFields.get(i);
 				JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(i);
 
@@ -296,24 +286,21 @@ public class DefaultTemplateEngine implements TemplateEngine{
 						newTextField.setY(currentY);
 						addElement(detailBandField, newTextField);
 					}
-
 					currentY += rowHeight;
 				}
 
 			setGroupHeight(detailBand, currentY);
 			setGroupHeight(detailBandField, currentY);
-
 		}
-
 	}
 
 	/**
-   * Find a JRDesignStaticText element having exp as text.
-   * 
-   * @param band
-   * @param exp
-   * @return the first matching element or null.
-   */
+	 * Find a JRDesignStaticText element having exp as text.
+	 * 
+	 * @param band
+	 * @param exp
+	 * @return the first matching element or null.
+	 */
 	public static JRDesignStaticText findStaticTextElement(JRElementGroup parent, String exp) {
 		JRElement[] elements = parent.getElements();
 		for (int i = 0; i < elements.length; ++i) {
@@ -363,8 +350,8 @@ public class DefaultTemplateEngine implements TemplateEngine{
 	}
 
 	/**
-	 * Remove an element from its container. This method checks if the container
-	 * is a frame or an element groups (like a band or a cell);
+	 * Remove an element from its container. This method checks if the container is a frame or an element groups (like a
+	 * band or a cell);
 	 * 
 	 * @param container
 	 * @param element
@@ -379,8 +366,8 @@ public class DefaultTemplateEngine implements TemplateEngine{
 	}
 
 	/**
-	 * Add an element to a container. This method checks if the container
-	 * is a frame or an element groups (like a band or a cell);
+	 * Add an element to a container. This method checks if the container is a frame or an element groups (like a band or
+	 * a cell);
 	 * 
 	 * @param container
 	 * @param element
@@ -388,33 +375,27 @@ public class DefaultTemplateEngine implements TemplateEngine{
 	public void addElement(JRElementGroup container, JRDesignElement element) {
 		if (container instanceof JRDesignElementGroup) {
 			((JRDesignElementGroup) container).addElement(element);
-
 		}
 		if (container instanceof JRDesignFrame) {
 			((JRDesignFrame) container).addElement(element);
 		}
 	}
 
-	
 	/**
-	 * Set the height of a container (which could be a band or a frame). If the height of the container is
-	 * already bigger than the passed in value, the container is left unchanged. 
+	 * Set the height of a container (which could be a band or a frame). If the height of the container is already bigger
+	 * than the passed in value, the container is left unchanged.
 	 * 
 	 * @param container
-	 * @param minHeight - The minimum height of the container
+	 * @param minHeight
+	 *          - The minimum height of the container
 	 */
 	private void setGroupHeight(JRElementGroup container, int minHeight) {
 		if (container instanceof JRDesignBand) {
 			((JRDesignBand) container).setHeight(Math.max(minHeight, ((JRDesignBand) container).getHeight()));
-
 		}
 		if (container instanceof JRDesignFrame) {
 			((JRDesignFrame) container).setHeight(Math.max(minHeight, ((JRDesignFrame) container).getHeight()));
 		}
 	}
-	
-	
-	
-	
-	
+
 }

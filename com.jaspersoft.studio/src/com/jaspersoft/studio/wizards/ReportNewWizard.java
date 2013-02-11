@@ -11,6 +11,7 @@
 package com.jaspersoft.studio.wizards;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -204,7 +205,6 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	 * the editor on the newly created file.
 	 */
 	private void doFinish(String containerName, String fileName, IProgressMonitor monitor) throws CoreException {
-
 		monitor.beginTask(Messages.ReportNewWizard_3 + fileName, 2);
 
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -230,7 +230,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 		}
 
 		TemplateEngine templateEngine = templateBundle.getTemplateEngine();
-
+		ByteArrayInputStream stream = null;
 		try {
 			ReportBundle reportBundle = templateEngine.generateReportBundle(templateBundle, templateSettings);
 
@@ -246,7 +246,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 
 			// Save the all the files...
 			String contents = JRXmlWriterHelper.writeReport(getConfig(), reportBundle.getJasperDesign(), reportFile, false);
-			ByteArrayInputStream stream = new ByteArrayInputStream(contents.getBytes());
+			stream = new ByteArrayInputStream(contents.getBytes());
 
 			if (reportFile.exists()) {
 				reportFile.setContents(stream, true, true, monitor);
@@ -254,7 +254,6 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 				reportFile.create(stream, true, monitor);
 			}
 			stream.close();
-
 			saveReportBundleResources(monitor, reportBundle, container);
 
 			monitor.setTaskName(Messages.ReportNewWizard_5);
@@ -270,12 +269,16 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 			});
 		} catch (Exception e) {
 			UIUtils.showError(e);
+		} finally {
+			try {
+				stream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	private IFile reportFile;
-
-	// private JasperDesign jDesign;
 
 	public IFile getReportFile() {
 		return reportFile;
@@ -289,28 +292,30 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	 * @param container
 	 */
 	private void saveReportBundleResources(final IProgressMonitor monitor, ReportBundle reportBundle, IContainer container) {
-
 		monitor.subTask(Messages.ReportNewWizard_6);
 
 		List<String> resourceNames = reportBundle.getResourceNames();
 
 		for (String resourceName : resourceNames) {
 			IFile resourceFile = container.getFile(new Path(resourceName));
-
+			InputStream is = null;
 			try {
 				if (!resourceFile.exists()) {
-					InputStream is = reportBundle.getResource(resourceName);
+					is = reportBundle.getResource(resourceName);
 					if (is != null) {
-
 						resourceFile.create(is, true, monitor);
 					}
 				}
 			} catch (Exception e) {
 				UIUtils.showError(e);
-				e.printStackTrace();
+			} finally {
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-
 		monitor.done();
 	}
 
