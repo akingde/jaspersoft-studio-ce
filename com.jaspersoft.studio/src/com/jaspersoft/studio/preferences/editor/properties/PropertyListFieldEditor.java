@@ -39,10 +39,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 public class PropertyListFieldEditor extends TableFieldEditor {
 
@@ -181,6 +184,8 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 					}
 				}
 			}
+			//Add an help listener to the table
+			TableHelpListener.setTableHelp(getTable());
 		}
 	}
 
@@ -208,6 +213,12 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			return PropertiesHelper.DPROP.getProperty(ti.getText(0)) == null;
 		}
 		return super.isFieldEditable(col, row);
+	}
+	
+	@Override
+	protected void createControl(Composite parent) {
+		super.createControl(parent);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, ContextHelpIDs.PREFERENCES_PROPERTIES);
 	}
 
 	@Override

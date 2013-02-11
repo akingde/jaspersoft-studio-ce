@@ -294,4 +294,7 @@
    	  <topic href="http://community.jaspersoft.com/bug-tracker?field_bug_project_target_id=496" label="Bug Tracker" />
    	  <topic href="http://community.jaspersoft.com/modal_forms/nojs/login" label="Register User page" />
    </context>
+ 	<context id="preferences_properties_tab" title="Manage the properties configuration">
+      <description>In this page you can set some properties that will be used to configure JasperReports. To get information on what a property does, select it from the list and press the help key (on linux and windows it is the key F1).</description>
+   </context>
 </contexts>

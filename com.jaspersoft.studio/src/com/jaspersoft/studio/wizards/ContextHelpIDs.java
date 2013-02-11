@@ -78,4 +78,6 @@ public class ContextHelpIDs {
 	public static final String WIZARD_QUERY_DIALOG = PREFIX.concat("query_dialog");
 	
 	public static final String WIZARD_PROPERTIES = PREFIX.concat("properties_tab");
+	
+	public static final String PREFERENCES_PROPERTIES = PREFIX.concat("preferences_properties_tab");
 }
