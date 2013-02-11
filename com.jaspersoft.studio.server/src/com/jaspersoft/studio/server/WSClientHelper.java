@@ -145,6 +145,10 @@ public class WSClientHelper {
 
 			@Override
 			public int compare(ResourceDescriptor arg0, ResourceDescriptor arg1) {
+				if (arg0.getLabel() == null)
+					return -1;
+				if (arg1.getLabel() == null)
+					return 1;
 				return arg0.getLabel().compareTo(arg1.getLabel());
 			}
 		});
