@@ -47,7 +47,7 @@ public abstract class AExporter {
 		if (filename != null)
 			f = new File(filename);
 		else
-			f = FileUtils.createTempFile("jrsres", dextention);
+			f = FileUtils.createTempFile(rd.getName(), dextention);
 		try {
 			WSClientHelper.getResource(res, rd, f);
 		} catch (Exception e) {

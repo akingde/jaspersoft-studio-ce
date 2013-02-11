@@ -57,6 +57,8 @@ public class Messages extends NLS {
 	public static String OLAPXmlaPageContent_title;
 	public static String OLAPXmlaPageContent_username;
 	public static String OLAPXmlaPageContent_uti;
+	public static String OpenInEditorAction_desc;
+	public static String OpenInEditorAction_title;
 	public static String Publish2ServerWizard_MonitorName;
 	public static String Publish2ServerWizard_Title;
 	public static String RDDataAdapterPage_Description;

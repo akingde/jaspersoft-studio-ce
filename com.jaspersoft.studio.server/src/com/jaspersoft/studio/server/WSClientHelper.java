@@ -141,17 +141,22 @@ public class WSClientHelper {
 		depth++;
 
 		List<ResourceDescriptor> children = client.list(rd);
-		Collections.sort(children, new Comparator<ResourceDescriptor>() {
+		if (parent instanceof MResource
+				&& ((MResource) parent).getValue().getWsType()
+						.equals(ResourceDescriptor.TYPE_FOLDER)) {
+			Collections.sort(children, new Comparator<ResourceDescriptor>() {
 
-			@Override
-			public int compare(ResourceDescriptor arg0, ResourceDescriptor arg1) {
-				if (arg0.getLabel() == null)
-					return -1;
-				if (arg1.getLabel() == null)
-					return 1;
-				return arg0.getLabel().compareTo(arg1.getLabel());
-			}
-		});
+				@Override
+				public int compare(ResourceDescriptor arg0,
+						ResourceDescriptor arg1) {
+					if (arg0.getLabel() == null)
+						return -1;
+					if (arg1.getLabel() == null)
+						return 1;
+					return arg0.getLabel().compareTo(arg1.getLabel());
+				}
+			});
+		}
 
 		Set<String> set = new HashSet<String>();
 		for (ResourceDescriptor r : children) {
@@ -162,7 +167,7 @@ public class WSClientHelper {
 				if (SelectorDatasource.isDatasource(r))
 					continue;
 			}
-			ANode node = ResourceFactory.getResource(parent, r, index);
+			MResource node = ResourceFactory.getResource(parent, r, index);
 			if (r.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
 				listFolder(node, client, r.getUriString(), monitor, depth);
 			} else if (r.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {

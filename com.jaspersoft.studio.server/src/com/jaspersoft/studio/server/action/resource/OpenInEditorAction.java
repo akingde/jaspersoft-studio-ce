@@ -35,6 +35,7 @@ import com.jaspersoft.studio.server.export.ImageExporter;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.export.ResourceBundleExporter;
 import com.jaspersoft.studio.server.export.StyleTemplateExporter;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MResource;
@@ -43,15 +44,15 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class OpenInEditorAction extends Action {
-	private static final String ID = "OPENINEDITOR";
+	private static final String ID = "OPENINEDITOR"; //$NON-NLS-1$
 	private TreeViewer treeViewer;
 
 	public OpenInEditorAction(TreeViewer treeViewer) {
 		super();
 		setId(ID);
-		setText("Open In Editor");
-		setDescription("Open resource in the editor");
-		setToolTipText("Open resource in the editor");
+		setText(Messages.OpenInEditorAction_title);
+		setDescription(Messages.OpenInEditorAction_desc);
+		setToolTipText(Messages.OpenInEditorAction_desc);
 		this.treeViewer = treeViewer;
 	}
 
