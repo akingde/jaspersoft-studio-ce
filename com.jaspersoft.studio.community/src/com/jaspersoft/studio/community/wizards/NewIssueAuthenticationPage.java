@@ -16,7 +16,6 @@
 package com.jaspersoft.studio.community.wizards;
 
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -36,6 +35,7 @@ import com.jaspersoft.studio.community.JSSCommunityActivator;
 import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.utils.CommunityUser;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
  * Wizard page that allows to configure the authentication information when
@@ -44,7 +44,7 @@ import com.jaspersoft.studio.utils.UIUtils;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class NewIssueAuthenticationPage extends WizardPage {
+public class NewIssueAuthenticationPage extends JSSHelpWizardPage {
 	private CommunityUser communityUserInformation;
 	private boolean shouldSaveCredentials;
 	
@@ -202,5 +202,10 @@ public class NewIssueAuthenticationPage extends WizardPage {
 	 */
 	public boolean shouldSaveCredentials(){
 		return this.shouldSaveCredentials;
+	}
+
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_ISSUE_LOGIN;
 	}
 }

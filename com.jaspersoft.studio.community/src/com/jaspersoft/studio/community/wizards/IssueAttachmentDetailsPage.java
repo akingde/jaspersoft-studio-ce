@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,6 +45,7 @@ import com.jaspersoft.studio.community.utils.CommunityAPIUtils;
 import com.jaspersoft.studio.community.zip.ZipEntry;
 import com.jaspersoft.studio.community.zip.ZipEntryType;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
  * Wizard page containing the issue details that will be attached as a final zip
@@ -54,7 +54,7 @@ import com.jaspersoft.studio.utils.UIUtils;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class IssueAttachmentDetailsPage extends WizardPage {
+public class IssueAttachmentDetailsPage extends JSSHelpWizardPage {
 
 	private java.util.List<ZipEntry> zipEntries=new ArrayList<ZipEntry>();
 	private File hwSwInfoFile = null;
@@ -277,5 +277,10 @@ public class IssueAttachmentDetailsPage extends WizardPage {
 	
 	public java.util.List<ZipEntry> getZipEntries(){
 		return this.zipEntries;
+	}
+
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_ISSUE_ATTACHMENTS;
 	}
 }

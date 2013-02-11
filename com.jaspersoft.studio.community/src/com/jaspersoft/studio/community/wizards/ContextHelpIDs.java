@@ -27,4 +27,7 @@ public class ContextHelpIDs {
 	
 	public static final String WIZARD_ISSUE_DETAIL = PREFIX.concat("issue_detail");
 	
+	public static final String WIZARD_ISSUE_ATTACHMENTS = PREFIX.concat("issue_attachments");
+	
+	public static final String WIZARD_ISSUE_LOGIN = PREFIX.concat("issue_login");
 }

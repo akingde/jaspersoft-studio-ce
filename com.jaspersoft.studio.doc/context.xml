@@ -279,8 +279,18 @@
       <description>In this table are shown all the configuration properties of the element. You can change, edit or remove them. These properties are used to change the behavior of JasperReport when the your report will be compiled.</description>
    	 <topic href="../net.sf.jasperreports.doc/docs/config.reference.html" label="Configurations properties reference" />
    </context>
-   <context id="issue_detail" title="Issue details">
-      <description>In this step of the wizard you can provide some detail for the bug\feature you want to submit, like a title and a description. At the end of the procedure you will see you feedback in the bug tracker on the community site of JasperSoft Studio. You must be a registered user to commit a feedback</description>
+   <context id="issue_detail" title="Feedback details">
+      <description>In this step of the wizard you can provide some details for the bug or feature you want to submit, the title and a description are mandatory. At the end of the procedure you will see you feedback in the bug tracker on the community site of JasperSoft, and you will able to interact with the other users and developers. For this reason you must be a registered user to commit a feedback.</description>
+   	  <topic href="http://community.jaspersoft.com/bug-tracker?field_bug_project_target_id=496" label="Bug Tracker" />
+   	  <topic href="http://community.jaspersoft.com/modal_forms/nojs/login" label="Register User page" />
+   </context>
+   <context id="issue_attachments" title="Feedback attachments">
+      <description>If you are submitting an issue you can also attach to the feedback some standard files like the eclipse log, a summary of your hardware configuration or choose manually the file to upload.</description>
+   	  <topic href="http://community.jaspersoft.com/bug-tracker?field_bug_project_target_id=496" label="Bug Tracker" />
+   	  <topic href="http://community.jaspersoft.com/modal_forms/nojs/login" label="Register User page" />
+   </context>
+   <context id="issue_login" title="Provide your login informations">
+      <description>To complete the feedback procedure you must provide a valid username and password to access to community.jaspersoft.com, the official community site of JasperSoft . If you haven't an account you can register just now, it is free and with an account you can interact with the other users and developers by JasperSoft, post your own tutorials or questions, and many other things.</description>
    	  <topic href="http://community.jaspersoft.com/bug-tracker?field_bug_project_target_id=496" label="Bug Tracker" />
    	  <topic href="http://community.jaspersoft.com/modal_forms/nojs/login" label="Register User page" />
    </context>
