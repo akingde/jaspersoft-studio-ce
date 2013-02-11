@@ -135,7 +135,14 @@ public class RVPropertyPage extends JSSHelpWizardPage {
 		super(pageName);
 		setTitle(Messages.RVPropertyPage_subreport_return_values);
 		setDescription(Messages.RVPropertyPage_description);
-		contextName = ContextHelpIDs.WIZARD_RETURN_VALUE;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_RETURN_VALUE;
 	}
 
 	public void createControl(Composite parent) {

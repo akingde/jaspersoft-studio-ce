@@ -30,7 +30,14 @@ public class CongratulationsWizardPage extends JSSWizardPage {
 		super("congratulations_page"); //$NON-NLS-1$
 		setTitle("Finish");
 		setMessage("We are ready to create your report");
-		contextName = ContextHelpIDs.WIZARD_CONFIGURATION_PAGE;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_CONFIGURATION_PAGE;
 	}
 
 	@Override

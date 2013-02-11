@@ -71,7 +71,14 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		setDescription(Messages.RUnitLocationPage_description);
 		this.jDesign = jDesign;
 		this.n = n;
-		contextName = ContextHelpIDs.WIZARD_SELECT_SERVER;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_SELECT_SERVER;
 	}
 
 	public MReportUnit getReportUnit() {

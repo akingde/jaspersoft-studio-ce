@@ -45,7 +45,14 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		super("tablepage"); //$NON-NLS-1$
 		setTitle(Messages.TableWizardLayoutPage_layout);
 		setDescription(Messages.TableWizardLayoutPage_description);
-		contextName = ContextHelpIDs.WIZARD_LAYOUT_PAGE;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_LAYOUT_PAGE;
 	}
 
 	@Override

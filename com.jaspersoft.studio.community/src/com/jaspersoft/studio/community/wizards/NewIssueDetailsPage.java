@@ -63,7 +63,14 @@ public class NewIssueDetailsPage extends JSSHelpWizardPage {
 				JSSCommunityActivator.getDefault().getImageDescriptor(CommunityConstants.ISSUE_SUBMISSION_WIZARD_IMG));
 		setTitle(Messages.NewIssueDetailsPage_Title);
 		setDescription(Messages.NewIssueDetailsPage_Description);
-		contextName = ContextHelpIDs.WIZARD_ISSUE_DETAIL;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_ISSUE_DETAIL;
 	}
 
 	/**

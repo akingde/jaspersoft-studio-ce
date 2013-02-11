@@ -76,7 +76,14 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		setTitle(Messages.ReportTemplatesWizardPage_title);
 		setDescription(Messages.ReportTemplatesWizardPage_description);
 		templateImages=new ArrayList<Image>();
-		contextName = ContextHelpIDs.WIZARD_TEMPLATE_PAGE;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_TEMPLATE_PAGE;
 	}
 
 	private static final int GALLERY_HEIGHT = 100;

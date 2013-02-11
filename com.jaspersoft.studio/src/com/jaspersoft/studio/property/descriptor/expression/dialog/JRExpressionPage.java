@@ -76,7 +76,14 @@ public class JRExpressionPage extends JSSHelpWizardPage {
 		super(pageName);
 		setTitle(Messages.common_expression_editor);
 		setDescription(Messages.JRExpressionPage_description);
-		contextName = ContextHelpIDs.WIZARD_EXPRESSION_EDITOR;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_EXPRESSION_EDITOR;
 	}
 
 	public void createControl(Composite parent) {

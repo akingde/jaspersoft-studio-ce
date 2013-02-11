@@ -43,7 +43,14 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage {
 		setTitle(Messages.DatasourceSelectionPage_Title);
 		setDescription(Messages.DatasourceSelectionPage_Description);
 		this.jConfig = jConfig;
-		contextName = ContextHelpIDs.WIZARD_SELECT_DATASOURCES;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_SELECT_DATASOURCES;
 	}
 
 	@Override

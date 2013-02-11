@@ -55,7 +55,14 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		setTitle(Messages.ResourcesPage_title);
 		setDescription(Messages.ResourcesPage_description);
 		this.jConfig = jConfig;
-		contextName = ContextHelpIDs.WIZARD_SELECT_RESOURCES;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_SELECT_RESOURCES;
 	}
 
 	public boolean isEmpty() {

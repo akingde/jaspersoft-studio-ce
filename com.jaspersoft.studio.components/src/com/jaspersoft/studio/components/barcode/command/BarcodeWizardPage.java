@@ -64,7 +64,14 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 		setTitle(Messages.common_barcode_wizard);
 		setDescription(Messages.BarcodeWizardPage_barcode_wizard_description_a
 				+ Messages.BarcodeWizardPage_barcode_wizard_description_b);
-		contextName = ContextHelpIDs.WIZARD_SELECT_BARCODE;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_SELECT_BARCODE;
 	}
 
 	@Override

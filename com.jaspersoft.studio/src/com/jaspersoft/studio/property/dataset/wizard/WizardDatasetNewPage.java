@@ -106,7 +106,14 @@ public class WizardDatasetNewPage extends JSSWizardPage {
 		setTitle(Messages.common_dataset);
 		setImageDescriptor(MDataset.getIconDescriptor().getIcon32());
 		setDescription(Messages.WizardDatasetNewPage_description);
-		contextName = ContextHelpIDs.WIZARD_DATASET_NAME;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_DATASET_NAME;
 	}
 
 	/**

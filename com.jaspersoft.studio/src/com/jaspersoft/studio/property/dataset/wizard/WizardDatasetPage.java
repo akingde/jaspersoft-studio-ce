@@ -194,8 +194,14 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		setDescription(Messages.WizardDatasetPage_description);
 		this.acceptMainDataset = acceptMainDataset;
 		this.componentName = componentName;
-		contextName = ContextHelpIDs.WIZARD_SELECT_TABLE_DATASET;
+	}
 	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_SELECT_TABLE_DATASET;
 	}
 
 	public void createControl(Composite parent) {

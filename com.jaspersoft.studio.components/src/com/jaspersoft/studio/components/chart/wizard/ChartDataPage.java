@@ -56,9 +56,16 @@ public class ChartDataPage extends JSSWizardPage implements IExpressionContextSe
 		this.jrChart = jrChart;
 		this.edataset = edataset;
 		this.jrContext = jrContext;
-		contextName = ContextHelpIDs.WIZARD_CHART_DATA;
 	}
 
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_CHART_DATA;
+	}
+	
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout());

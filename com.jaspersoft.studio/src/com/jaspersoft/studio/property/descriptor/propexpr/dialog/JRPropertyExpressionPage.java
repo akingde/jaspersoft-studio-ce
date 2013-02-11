@@ -126,7 +126,14 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		super(pageName);
 		setTitle(Messages.common_properties);
 		setDescription(Messages.JRPropertyPage_description);
-		contextName = ContextHelpIDs.WIZARD_PROPERTIES;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_PROPERTIES;
 	}
 
 	public void createControl(final Composite parent) {

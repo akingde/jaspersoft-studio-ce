@@ -97,7 +97,14 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 		setTitle(Messages.common_subreport);
 		setDescription(Messages.WizardNewSubreportPage_description);
 		setImageDescriptor(MSubreport.getIconDescriptor().getIcon32());
-		contextName = ContextHelpIDs.WIZARD_SUBREPORT_SOURCE;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_SUBREPORT_SOURCE;
 	}
 
 	private MSubreport subreport;

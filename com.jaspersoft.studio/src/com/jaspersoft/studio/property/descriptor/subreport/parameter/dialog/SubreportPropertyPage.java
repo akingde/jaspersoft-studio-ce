@@ -120,7 +120,14 @@ public class SubreportPropertyPage extends JSSWizardPage {
 		super(pageName);
 		setTitle(Messages.common_subreport_parameters);
 		setDescription(Messages.SubreportPropertyPage_description);
-		contextName = ContextHelpIDs.WIZARD_SUBREPORT_PROPERTIES;
+	}
+	
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_SUBREPORT_PROPERTIES;
 	}
 
 	public void createControl(Composite parent) {

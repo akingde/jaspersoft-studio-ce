@@ -30,10 +30,15 @@ public class WizardFieldsGroupByPage extends WizardFieldsPage {
 		super("groupfields"); //$NON-NLS-1$
 		setTitle(Messages.WizardFieldsGroupByPage_group_by);
 		setDescription(Messages.WizardFieldsGroupByPage_description);
-		contextName = ContextHelpIDs.WIZARD_SELECT_GROUP;
 	}
 
-
+	/**
+	 * Return the context name for the help of this page
+	 */
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_SELECT_GROUP;
+	}
 
 	/**
 	 * This procedure initialize the dialog page with the list of available objects.

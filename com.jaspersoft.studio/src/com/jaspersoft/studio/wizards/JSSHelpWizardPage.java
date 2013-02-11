@@ -22,14 +22,30 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.PlatformUI;
 
+/**
+ * 
+ * Extend a simple wizard page to provide an easy way to define a contextual help
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public abstract class JSSHelpWizardPage extends WizardPage implements ContextData {
 
-	protected String contextName;
+	private String contextName;
 	
 	protected JSSHelpWizardPage(String pageName) {
 		super(pageName);
-		contextName = null;
+		 contextName = getContextName();
 	}
+	
+	/**
+	 * This method is called by the constructor of JSSHelpWizardPage to initialize the context name 
+	 * of a wizard page. With the context name a contextual help will be available. This method 
+	 * should be defined in the subclasses to provide a context name for each wizard page. If 
+	 * this method return null the context will not used, and the behavior of this wizard page will 
+	 * be a default one without help.
+	 */
+	protected abstract String getContextName();
 	
 	/**
 	 * Set the root control of the wizard, and also add a listener to do the perform help action 
