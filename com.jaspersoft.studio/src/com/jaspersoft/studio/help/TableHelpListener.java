@@ -24,8 +24,12 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.PlatformUI;
 
 /**
+ * 
  * This class implements an help listener for a table element. The table it is supposed to be a on properties table and when 
  * the help key is pressed a contextual help is opened, showing informations about the selected properties on the table.
+ *
+ * @author Orlandin Marco
+ *
  */
 public class TableHelpListener implements Listener {
 
@@ -59,9 +63,10 @@ public class TableHelpListener implements Listener {
 		}
 		
 		/**
-		 * Recieve a properties table and set the contextual help on that table
+		 * Receive a properties table and set the contextual help on that table. The table must be not null.
 		 */
 		public static void setTableHelp(Table table){
-			table.addListener(SWT.Help, new TableHelpListener(table));
+			if (table != null)
+				table.addListener(SWT.Help, new TableHelpListener(table));
 		}
 }
