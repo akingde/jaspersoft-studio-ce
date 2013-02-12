@@ -100,7 +100,8 @@ public class SelectorQuery {
 							ref = WSClientHelper.getResource(parent, ref);
 							ref.setIsReference(false);
 							ref.setReferenceUri(ref.getUriString());
-							ref.setParentFolder(runit.getUriString() + "_files"); //$NON-NLS-1$
+							ref.setParentFolder(runit.getParentFolder()
+									+ "/" + runit.getName() + "_files"); //$NON-NLS-1$
 							ref.setUriString(ref.getParentFolder() + "/" //$NON-NLS-1$
 									+ ref.getName());
 							ref.setWsType(ResourceDescriptor.TYPE_REFERENCE);
@@ -149,7 +150,8 @@ public class SelectorQuery {
 					ref = MRQuery.createDescriptor(res);
 					ref.setIsNew(true);
 					ref.setIsReference(false);
-					ref.setParentFolder(runit.getUriString() + "_files"); //$NON-NLS-1$
+					ref.setParentFolder(runit.getParentFolder()
+							+ "/" + runit.getName() + "_files"); //$NON-NLS-1$
 
 					newref = true;
 				}
