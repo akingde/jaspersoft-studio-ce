@@ -265,8 +265,8 @@
    </context>
   <context id="adapter_jrdatasourceprovider" title="Custom Class as data adapter">
       <description>In a similar way to the custom JRDataSource you can write your own java class to connect and query a source, but in additional you can provide a description of the fields that your adapter will provide. To do this you must specify this class, that must implements the JRDataSourceProvider interface, and in case the jar where it is or where are its dependencies. With this information JasperReport will use this class to extract the informations and will use them to fill the report.</description>	
+      <topic href="html/adaptersamples/JRDataSourceProvider/JRDataSourceProvider.html" label="How to Create and Use a JRDataSourceProvider adapter"/>	
       <topic href="html/adaptersamples/JRDataSource/JRDataSourceAdapter.html" label="How to Create and Use a JRDataSource adapter" />
-   	  <topic href="html/adaptersamples/JRDataSourceProvider/JRDataSourceProvider.html" label="How to Create and Use a JRDataSourceProvider adapter"/>	
    </context>
    <context id="adapter_quryexecutor" title="Empty data adapter">
       <description>An empty data adapter that can be used as placeholder, without connection, sources or data. It is needed to run a report without any data source and it is characterized only by its name.</description>

@@ -69,6 +69,8 @@
 			<topic href="html/wizard/xmldatasources/createxml.html" label="Using XML datasources"/>
 			<topic href="html/wizard/xmldatasources/remotexml.html" label="Using Remote XML datasources"/>
 			<topic href="html/adaptersamples/JRDataSource/JRDataSourceAdapter.html" label="How to Create and Use a JRDataSource adapter" />
+   <topic href="html/adaptersamples/JRDataSourceProvider/JRDataSourceProvider.html" label="How to Create and Use a JRDataSourceProvider adapter">
+   </topic>
 			<topic href="html/adaptersamples/bean/beanfile.html" label="Exemple of a Bean class"/>
 			<topic href="html/adaptersamples/json/jsonexample.html" label="Exemple of JSON file"/>
 		</topic>
