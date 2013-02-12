@@ -464,6 +464,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 	}
 
+	@Override
+	public String getTitleToolTip() {
+		return JaspersoftStudioPlugin.getExtensionManager().getTitleToolTip(jrContext, super.getTitleToolTip());
+	}
+
 	/**
 	 * The <code>MultiPageEditorExample</code> implementation of this method checks that the input is an instance of
 	 * <code>IFileEditorInput</code>.
