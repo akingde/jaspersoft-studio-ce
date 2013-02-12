@@ -46,8 +46,11 @@ public abstract class AExporter {
 		File f = null;
 		if (filename != null)
 			f = new File(filename);
-		else
-			f = FileUtils.createTempFile(rd.getName(), dextention);
+		else {
+			String fname = rd.getName();
+			fname = fname.substring(0, fname.lastIndexOf(".")) + "_";
+			f = FileUtils.createTempFile(fname, dextention);
+		}
 		try {
 			WSClientHelper.getResource(res, rd, f);
 		} catch (Exception e) {

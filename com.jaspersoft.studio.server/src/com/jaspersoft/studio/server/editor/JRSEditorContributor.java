@@ -106,4 +106,23 @@ public class JRSEditorContributor implements IEditorContributor {
 		return new AContributorAction[] { new JrxmlPublishAction() };
 	}
 
+	@Override
+	public String getTitleToolTip(JasperReportsConfiguration jrConfig,
+			String toolTip) {
+		String s = toolTip;
+		JasperDesign jd = jrConfig.getJasperDesign();
+		if (jd != null) {
+			String p = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
+			if (p != null)
+				s += "\nServer: " + p;
+			p = jd.getProperty(JrxmlExporter.PROP_REPORTUNIT);
+			if (p != null)
+				s += "\nReport Unit: " + p;
+			p = jd.getProperty(JrxmlExporter.PROP_REPORTRESOURCE);
+			if (p != null)
+				s += "\nResource name: " + p;
+		}
+		return s;
+	}
+
 }
