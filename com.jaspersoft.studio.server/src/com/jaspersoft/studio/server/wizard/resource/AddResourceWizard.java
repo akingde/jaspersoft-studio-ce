@@ -89,8 +89,9 @@ public class AddResourceWizard extends Wizard {
 					f.setAccessible(true); // FIXME, REALLY UGLY :( BUT IT'S
 											// FASTER
 					List<IWizardPage> wpages = (List<IWizardPage>) f.get(this);
-					for (int i = 1; i < size; i++)
-						wpages.remove(i);
+					for (int i = 1; i < size; i++) {
+						wpages.remove(1);
+					}
 				} catch (SecurityException e) {
 					e.printStackTrace();
 				} catch (NoSuchFieldException e) {

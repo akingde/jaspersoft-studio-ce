@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
@@ -207,7 +208,12 @@ public class ReferencePageContent extends APageContent {
 			if (ref != null) {
 				bind();
 				bindingContext.updateTargets();
+				if (ResourceFactory.isFileResourceType(ref))
+					res.getValue().setWsType(ResourceDescriptor.TYPE_REFERENCE);
+				else
+					res.getValue().setWsType(ref.getWsType());
 			}
+
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}

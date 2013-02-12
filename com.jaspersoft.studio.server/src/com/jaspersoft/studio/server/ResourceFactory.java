@@ -329,4 +329,15 @@ public class ResourceFactory {
 
 		return new MUnknown(parent, resource, index);
 	}
+
+	public static boolean isFileResourceType(ResourceDescriptor ref) {
+		String t = ref.getWsType();
+		return t.equals(ResourceDescriptor.TYPE_IMAGE)
+				|| t.equals(ResourceDescriptor.TYPE_FONT)
+				|| t.equals(ResourceDescriptor.TYPE_JRXML)
+				|| t.equals(ResourceDescriptor.TYPE_CLASS_JAR)
+				|| t.equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE)
+				|| t.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE)
+				|| t.equals(ResourceDescriptor.TYPE_XML_FILE);
+	}
 }

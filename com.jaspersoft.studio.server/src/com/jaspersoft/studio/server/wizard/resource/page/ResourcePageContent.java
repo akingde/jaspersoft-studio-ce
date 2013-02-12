@@ -27,6 +27,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
@@ -61,11 +62,13 @@ public class ResourcePageContent extends APageContent {
 
 	public Control createContent(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 
 		UIUtils.createLabel(composite, Messages.AResourcePage_parentfolder);
 		Text tparent = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-		tparent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		tparent.setLayoutData(gd);
 		tparent.setEnabled(false);
 
 		UIUtils.createLabel(composite, Messages.AResourcePage_type);
@@ -73,25 +76,36 @@ public class ResourcePageContent extends APageContent {
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ttype.setEnabled(false);
 
+		Button bisRef = new Button(composite, SWT.CHECK);
+		bisRef.setText("is Reference");
+		bisRef.setEnabled(false);
+
 		UIUtils.createLabel(composite, Messages.AResourcePage_creationdate);
 		Text tcdate = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-		tcdate.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		tcdate.setLayoutData(gd);
 		tcdate.setEnabled(false);
 
-		UIUtils.createSeparator(composite, 2);
+		UIUtils.createSeparator(composite, 3);
 
 		UIUtils.createLabel(composite, Messages.AResourcePage_id);
 		final Text tid = new Text(composite, SWT.BORDER);
-		tid.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		tid.setLayoutData(gd);
 
 		UIUtils.createLabel(composite, Messages.AResourcePage_name);
 		final Text tname = new Text(composite, SWT.BORDER);
-		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		tname.setLayoutData(gd);
 
 		UIUtils.createLabel(composite, Messages.AResourcePage_description);
 		Text tdesc = new Text(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
-		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;
+		gd.horizontalSpan = 2;
 		tdesc.setLayoutData(gd);
 
 		final ResourceDescriptor rd = res.getValue();
@@ -103,6 +117,9 @@ public class ResourcePageContent extends APageContent {
 
 		bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE),
 				PojoObservables.observeValue(rd, "wsType")); //$NON-NLS-1$
+
+		bindingContext.bindValue(SWTObservables.observeSelection(bisRef),
+				PojoObservables.observeValue(rd, "isReference")); //$NON-NLS-1$
 
 		bindingContext.bindValue(
 				SWTObservables.observeText(tid, SWT.Modify),
