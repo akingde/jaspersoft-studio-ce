@@ -48,7 +48,9 @@ public abstract class AExporter {
 			f = new File(filename);
 		else {
 			String fname = rd.getName();
-			fname = fname.substring(0, fname.lastIndexOf(".")) + "_";
+			int lastpoint = fname.lastIndexOf(".");
+			if (lastpoint > 0 && lastpoint < fname.length())
+				fname = fname.substring(0, lastpoint) + "_";
 			f = FileUtils.createTempFile(fname, dextention);
 		}
 		try {
