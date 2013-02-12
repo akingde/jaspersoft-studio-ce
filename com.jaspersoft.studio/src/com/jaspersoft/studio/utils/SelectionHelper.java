@@ -1,24 +1,21 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -132,9 +129,15 @@ public class SelectionHelper {
 		}
 	}
 
+	private static Map<String, IStorageEditorInput> streditors = new HashMap<String, IStorageEditorInput>();
+
 	public static final void openEditor(String content, String name) {
-		IStorage storage = new StringStorage(content);
-		IStorageEditorInput input = new StringInput(storage);
+		IStorageEditorInput input = streditors.get(content);
+		if (input == null) {
+			IStorage storage = new StringStorage(content);
+			input = new StringInput(storage);
+			streditors.put(content, input);
+		}
 		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		if (window == null)
 			window = PlatformUI.getWorkbench().getWorkbenchWindows()[0];
