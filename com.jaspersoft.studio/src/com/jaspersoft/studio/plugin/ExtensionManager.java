@@ -317,7 +317,7 @@ public class ExtensionManager {
 		for (IEditorContributor f : eContributor) {
 			String s = f.getTitleToolTip(jrConfig, tooltip);
 			if (s != null && !s.isEmpty())
-				tooltip += s;
+				tooltip = s;
 		}
 		return tooltip;
 	}
