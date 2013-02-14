@@ -523,9 +523,10 @@ public class MBarPlot extends MChartPlot {
 				.equals(JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION))
 			jrElement.setDomainAxisMinValueExpression(ExprUtil.setValues(
 					jrElement.getDomainAxisMinValueExpression(), value));
-		else
+		else {
 			ilFont.setPropertyValue(id, value);
 		super.setPropertyValue(id, value);
+		}
 
 	}
 }
