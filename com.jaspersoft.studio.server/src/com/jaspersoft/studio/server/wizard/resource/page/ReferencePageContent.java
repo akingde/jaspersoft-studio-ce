@@ -77,6 +77,7 @@ public class ReferencePageContent extends APageContent {
 
 		trefuri = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		trefuri.setEnabled(false);
 
 		Button bbrowse = new Button(composite, SWT.ARROW | SWT.DOWN);
 		bbrowse.addSelectionListener(new SelectionAdapter() {
