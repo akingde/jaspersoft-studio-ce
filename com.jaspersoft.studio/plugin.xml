@@ -1613,6 +1613,105 @@
                 class="com.jaspersoft.studio.callout.MCallout">
           </selectedObject>
        </toolitems>
+       <toolitems
+             ActionID="band_org.eclipse.gef.align_bottom"
+             icon="icons/resources/eclipse/align-band-bottom.gif"
+             id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_bottom"
+             label="Align to bottom"
+             tooltip="Align the element to the bottom">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="band_org.eclipse.gef.align_top"
+             icon="icons/resources/eclipse/align-band-top.gif"
+             id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_top"
+             label="Align to top"
+             tooltip="Align the element to the top">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="band_org.eclipse.gef.align_left"
+             icon="icons/resources/eclipse/align-band-left.gif"
+             id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_left"
+             label="Align to left"
+             tooltip="Align the element to the left">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="band_org.eclipse.gef.align_right"
+             icon="icons/resources/eclipse/align-band-right.gif"
+             id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_right"
+             label="Align to right"
+             tooltip="Align the element to the right">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="band_org.eclipse.gef.align_center"
+             icon="icons/resources/eclipse/align-band-center.gif"
+             id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_center"
+             label="Align to center"
+             tooltip="Align the element to the center (horizontally)">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="band_org.eclipse.gef.align_middle"
+             icon="icons/resources/eclipse/align-band-middle.gif"
+             id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_middle"
+             label="Align to middle"
+             tooltip="Align the element to the middle (vertically)">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="band_WIDTH"
+             icon="icons/eclipseapps/size_to_control_width.gif"
+             id="com.jaspersoft.studio.editor.action.size.Size2BorderAction_width"
+             label="Fit to width"
+             tooltip="Fit the element to the band width">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="band_HEIGHT"
+             icon="icons/eclipseapps/size_to_control_height.gif"
+             id="com.jaspersoft.studio.editor.action.size.Size2BorderAction_height"
+             label="Fit to height"
+             tooltip="Fit the element to the band height">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="band_BOTH"
+             icon="icons/eclipseapps/size_to_control.gif"
+             id="com.jaspersoft.studio.editor.action.size.Size2BorderAction_both"
+             label="Fit to both"
+             tooltip="Fit the element to the band both height and width">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             contributionItemClass="com.jaspersoft.studio.editor.action.border.ATableComboContribution"
+             id="com.jaspersoft.studio.editor.action.border.AComboItemButtonContribution"
+             label="Borders template"
+             tooltip="Borders template">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElementLineBox">
+          </selectedObject>
+       </toolitems>
     </extension>
     <extension
           point="com.jaspersoft.studio.toolitemsets">
@@ -1666,6 +1765,57 @@
              visibility="true">
           <toolitem
                 toolitemID="com.jaspersoft.studio.callout.action.CreatePinAction"></toolitem>
+       </toolitemsets>
+       <toolitemsets
+             description="Actions to manage elements alignment"
+             id="com.jaspersoft.studio.graphic.align"
+             name="Element Alignement"
+             toolbaruri="com.jaspersoft.studio.graphic.align"
+             visibility="true">
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.align.Align2BorderAction_bottom">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.align.Align2BorderAction_top">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.align.Align2BorderAction_left">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.align.Align2BorderAction_right">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.align.Align2BorderAction_center">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.align.Align2BorderAction_middle">
+          </toolitem>
+       </toolitemsets>
+       <toolitemsets
+             description="Actions to manage elements size"
+             id="com.jaspersoft.studio.graphic.size"
+             name="Element size"
+             toolbaruri="com.jaspersoft.studio.graphic.size"
+             visibility="true">
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.size.Size2BorderAction_width">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.size.Size2BorderAction_height">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.size.Size2BorderAction_both">
+          </toolitem>
+       </toolitemsets>
+       <toolitemsets
+             description="Template for the border of the element"
+             id="com.jaspersoft.studio.graphic.borders"
+             name="Borders"
+             toolbaruri="com.jaspersoft.studio.graphic.borders"
+             visibility="true">
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.border.AComboItemButtonContribution">
+          </toolitem>
        </toolitemsets>
     </extension>
     <extension

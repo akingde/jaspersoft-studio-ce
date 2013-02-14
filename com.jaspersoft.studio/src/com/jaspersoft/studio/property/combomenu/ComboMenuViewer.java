@@ -225,6 +225,10 @@ public class ComboMenuViewer  implements IMenuProvider{
         return elementList.size();
     }
     
+    public int getWidth(){
+    	return dropDownHandle.getWidth();
+    }
+    
     /**
      * Return the index of the selected item in the combo
      * @return 

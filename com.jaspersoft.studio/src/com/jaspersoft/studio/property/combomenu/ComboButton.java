@@ -174,6 +174,7 @@ public class ComboButton extends Viewer {
 			textSize = calcTextSize(biggerString.toUpperCase());
 		}
 		
+		@Override
 		public Point computeSize(int wHint, int hHint, boolean changed) {
 			checkWidget();
 			if (changed)
@@ -222,6 +223,20 @@ public class ComboButton extends Viewer {
 		}
 		
 	};
+	
+	public int getWidth(){
+		int width;
+		Point imageSize = getImageSize();
+		Point textSize = getTextSize();
+		width = MARGIN * 2 + imageSize.x + textSize.x + BORDER * 2;
+		if (hasArrows()) {
+			width += ARROW_WIDTH + CONTENT_ARROW_SPACING;
+		}
+		if (imageSize.x != 0 && textSize.x != 0) {
+			width += IMAGE_TEXT_SPACING;
+		}
+		return width;
+	}
 	
 	/**
 	 * Constructs a new instance of this class given its parent and a style value describing its behavior and appearance.
