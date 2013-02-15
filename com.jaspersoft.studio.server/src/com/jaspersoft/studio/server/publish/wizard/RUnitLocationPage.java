@@ -72,7 +72,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		this.jDesign = jDesign;
 		this.n = n;
 	}
-	
+
 	/**
 	 * Return the context name for the help of this page
 	 */
@@ -154,15 +154,6 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		lblRepoUnitID.setText(Messages.RUnitLocationPage_lblreportunit);
 		ruID = new Text(composite, SWT.BORDER);
 		ruID.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		ruID.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				String rtext = ruID.getText();
-				ResourceDescriptor ru = getNewRunit().getValue();
-				ru.setName(rtext.replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
-				setErrorMessage(ValidationUtils.validateName(rtext));
-			}
-		});
 		ruID.addVerifyListener(new VerifyListener() {
 			@Override
 			public void verifyText(VerifyEvent e) {
@@ -190,6 +181,16 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			}
 		});
 		ruLabel.setText(jDesign.getName());
+		ruID.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				String rtext = ruID.getText();
+				ResourceDescriptor ru = getNewRunit().getValue();
+				ru.setName(rtext.replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
+				setErrorMessage(ValidationUtils.validateName(rtext));
+				ruLabel.setText(rtext);
+			}
+		});
 
 		// Report Unit description
 		Label lblRepoUnitDescription = new Label(composite, SWT.NONE);
