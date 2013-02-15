@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.jaspersoft.studio.community-edition</groupId>
+		<artifactId>aggregator</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.jaspersoft.studio.community-edition</groupId>
+	<artifactId>plugins</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<modules>
+		<!-- JasperReports plug-ins -->
+		<module>../../net.sf.jasperreports</module>
+		<module>../../net.sf.jasperreports.doc</module>
+		<module>../../net.sf.jasperreports.samples</module>
+		<!-- Jaspersoft Studio plug-ins -->
+		<module>../../com.jaspersoft.studio</module>
+		<module>../../com.jaspersoft.studio.community</module>
+		<module>../../com.jaspersoft.studio.components</module>
+		<module>../../com.jaspersoft.studio.data</module>
+		<module>../../com.jaspersoft.studio.data.cassandra</module>
+		<module>../../com.jaspersoft.studio.data.drivers</module>
+		<module>../../com.jaspersoft.studio.data.hive</module>
+		<module>../../com.jaspersoft.studio.data.mongodb</module>
+		<module>../../com.jaspersoft.studio.doc</module>
+		<module>../../com.jaspersoft.studio.doc.samples</module>
+		<module>../../com.jaspersoft.studio.editor.jrexpressions</module>
+		<module>
+			../../com.jaspersoft.studio.editor.jrexpressions.ui
+		</module>
+		<module>../../com.jaspersoft.studio.html</module>
+		<module>../../com.jaspersoft.studio.properties</module>
+		<module>../../com.jaspersoft.studio.rcp</module>
+		<module>../../com.jaspersoft.studio.server</module>
+		<!-- The update site plug-in -->
+		<module>../../com.jaspersoft.studio.updatesite</module>
+	</modules>
+</project> 
