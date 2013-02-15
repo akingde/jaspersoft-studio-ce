@@ -65,38 +65,39 @@ import com.jaspersoft.studio.model.datasource.xml.XMLAttributeNode;
 import com.jaspersoft.studio.model.datasource.xml.XMLNode;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /**
  * Query designer for the XPath language.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
 public class XPathQueryDesigner extends TreeBasedQueryDesigner {
-	
-	private static final int JOB_DELAY=300;
+
+	private static final int JOB_DELAY = 300;
 	private XMLDocumentManager documentManager;
 	private DecorateTreeViewerJob decorateJob;
 	private NodeBoldStyledLabelProvider<XMLNode> treeLabelProvider;
 	private Composite toolbarComposite;
 
-	public XPathQueryDesigner(){
+	public XPathQueryDesigner() {
 		super();
-		this.documentManager=new XMLDocumentManager();
-		this.decorateJob=new DecorateTreeViewerJob();
-		this.treeLabelProvider=new NodeBoldStyledLabelProvider<XMLNode>();
+		this.documentManager = new XMLDocumentManager();
+		this.decorateJob = new DecorateTreeViewerJob();
+		this.treeLabelProvider = new NodeBoldStyledLabelProvider<XMLNode>();
 	}
 
 	@Override
 	public Control createToolbar(Composite parent) {
-		if(showAdditionalInfo()){
+		if (showAdditionalInfo()) {
 			toolbarComposite = new Composite(parent, SWT.RIGHT_TO_LEFT);
 			toolbarComposite.setBackgroundMode(SWT.INHERIT_FORCE);
 			GridLayout layout = new GridLayout(1, false);
 			layout.marginHeight = 0;
 			layout.marginWidth = 0;
 			toolbarComposite.setLayout(layout);
-	
+
 			Button btn = new Button(toolbarComposite, SWT.PUSH);
 			btn.setText(Messages.XPathQueryDesigner_ReadFieldsButton);
 			btn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
@@ -105,15 +106,14 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 				public void widgetSelected(SelectionEvent e) {
 					container.doGetFields();
 				}
-	
+
 			});
 			return toolbarComposite;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public Control getToolbarControl() {
 		return this.toolbarComposite;
@@ -121,20 +121,21 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 
 	@Override
 	protected void createTitleBar(Composite parent) {
-		if(showAdditionalInfo()){
-			Label titleLabel=new Label(parent,SWT.WRAP);
+		if (showAdditionalInfo()) {
+			Label titleLabel = new Label(parent, SWT.WRAP);
 			titleLabel.setText(Messages.XPathQueryDesigner_InfoTitle);
-			titleLabel.setLayoutData(new GridData(SWT.FILL,SWT.TOP,true,false));
+			titleLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
+					false));
 		}
 	}
 
 	private boolean showAdditionalInfo() {
-		return container.getContainerType()==DataQueryAdapters.CONTAINER_WITH_INFO_TABLES;
+		return container.getContainerType() == DataQueryAdapters.CONTAINER_WITH_INFO_TABLES;
 	}
-	
+
 	@Override
 	protected void decorateTreeUsingQueryText() {
-		if(documentManager.isDocumentSet()){
+		if (documentManager.isDocumentSet()) {
 			decorateJob.cancel();
 			decorateJob.schedule(JOB_DELAY);
 		}
@@ -143,7 +144,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 	@Override
 	protected void createTreeViewer(Composite parent) {
 		super.createTreeViewer(parent);
-		if(showAdditionalInfo()){
+		if (showAdditionalInfo()) {
 			addDragSupport();
 			createContextualMenu();
 		}
@@ -161,25 +162,28 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 	}
 
 	/*
-	 * Adds support for generating the Xpath query expression,
-	 * using the current selected node as input.
+	 * Adds support for generating the Xpath query expression, using the current
+	 * selected node as input.
 	 */
 	private void addDoubleClickSupport() {
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
 				TreeSelection s = (TreeSelection) treeViewer.getSelection();
-				if(s.getFirstElement() instanceof XMLNode){
-					XMLNode xmlNode=(XMLNode) s.getFirstElement();
-					String xPathExpression = documentManager.getXPathExpression(null,xmlNode);
-					queryTextArea.setText((xPathExpression!=null) ? xPathExpression : "");  //$NON-NLS-1$
+				if (s.getFirstElement() instanceof XMLNode) {
+					XMLNode xmlNode = (XMLNode) s.getFirstElement();
+					String xPathExpression = documentManager
+							.getXPathExpression(null, xmlNode);
+					queryTextArea
+							.setText((xPathExpression != null) ? xPathExpression
+									: ""); //$NON-NLS-1$
 				}
 			}
 		});
 	}
-	
+
 	/*
-	 * Adds drag support to the xml tree viewer. 
+	 * Adds drag support to the xml tree viewer.
 	 */
 	private void addDragSupport() {
 		int ops = DND.DROP_COPY | DND.DROP_MOVE;
@@ -190,14 +194,14 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 			@Override
 			public void dragStart(DragSourceEvent event) {
 				TreeSelection s = (TreeSelection) treeViewer.getSelection();
-				if(s.getFirstElement() instanceof XMLNode){
-					XMLNode xmlNode=(XMLNode) s.getFirstElement();
-					xmlNode.setXPathExpression(
-							documentManager.getXPathExpression(queryTextArea.getText(), xmlNode));
+				if (s.getFirstElement() instanceof XMLNode) {
+					XMLNode xmlNode = (XMLNode) s.getFirstElement();
+					xmlNode.setXPathExpression(documentManager
+							.getXPathExpression(queryTextArea.getText(),
+									xmlNode));
 					event.doit = !s.isEmpty();
-				}
-				else{
-					event.doit=false;
+				} else {
+					event.doit = false;
 				}
 			}
 
@@ -210,32 +214,40 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 	}
 
 	/*
-	 * Creates the contextual menu for the tree representing the XML document. 
+	 * Creates the contextual menu for the tree representing the XML document.
 	 */
 	private void createContextualMenu() {
-		Menu contextMenu=new Menu(treeViewer.getTree());
-		final MenuItem setRecordNodeItem=new MenuItem(contextMenu, SWT.PUSH);
+		Menu contextMenu = new Menu(treeViewer.getTree());
+		final MenuItem setRecordNodeItem = new MenuItem(contextMenu, SWT.PUSH);
 		setRecordNodeItem.setText(Messages.XPathQueryDesigner_SetRecordItem);
 		setRecordNodeItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Object sel = ((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
-				if(sel instanceof XMLNode){
-					String xPathExpression = documentManager.getXPathExpression(null,(XMLNode)sel);
-					queryTextArea.setText((xPathExpression!=null) ? xPathExpression : ""); //$NON-NLS-1$
+				Object sel = ((IStructuredSelection) treeViewer.getSelection())
+						.getFirstElement();
+				if (sel instanceof XMLNode) {
+					String xPathExpression = documentManager
+							.getXPathExpression(null, (XMLNode) sel);
+					queryTextArea
+							.setText((xPathExpression != null) ? xPathExpression
+									: ""); //$NON-NLS-1$
 				}
 			}
 		});
-		final MenuItem setDocumentRootItem=new MenuItem(contextMenu, SWT.PUSH);
+		final MenuItem setDocumentRootItem = new MenuItem(contextMenu, SWT.PUSH);
 		setDocumentRootItem.setText(Messages.XPathQueryDesigner_SetDocRootItem);
 		setDocumentRootItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Object sel = ((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
+				Object sel = ((IStructuredSelection) treeViewer.getSelection())
+						.getFirstElement();
 				try {
-					Document newDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-					Node originalNode = documentManager.getDocumentNodesMap().get(sel);
-					Node importedNode = newDocument.importNode(originalNode, true);
+					Document newDocument = DocumentBuilderFactory.newInstance()
+							.newDocumentBuilder().newDocument();
+					Node originalNode = documentManager.getDocumentNodesMap()
+							.get(sel);
+					Node importedNode = newDocument.importNode(originalNode,
+							true);
 					newDocument.appendChild(importedNode);
 					documentManager.setDocument(newDocument);
 					treeViewer.setInput(documentManager.getXMLDocumentModel());
@@ -245,34 +257,40 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 			}
 		});
 		new MenuItem(contextMenu, SWT.SEPARATOR);
-		final MenuItem addNodeAsFieldItem1=new MenuItem(contextMenu, SWT.PUSH);
+		final MenuItem addNodeAsFieldItem1 = new MenuItem(contextMenu, SWT.PUSH);
 		addNodeAsFieldItem1.setText(Messages.XPathQueryDesigner_AddAsFieldItem);
 		addNodeAsFieldItem1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Object sel = ((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
-				if(sel instanceof XMLNode){
-					String xPathExpression = documentManager.getXPathExpression(queryTextArea.getText(),(XMLNode)sel);
-					((XMLNode)sel).setXPathExpression(xPathExpression);
-					createField((XMLNode)sel);
+				Object sel = ((IStructuredSelection) treeViewer.getSelection())
+						.getFirstElement();
+				if (sel instanceof XMLNode) {
+					String xPathExpression = documentManager
+							.getXPathExpression(queryTextArea.getText(),
+									(XMLNode) sel);
+					((XMLNode) sel).setXPathExpression(xPathExpression);
+					createField((XMLNode) sel);
 				}
 			}
 		});
-		final MenuItem addNodeAsFieldItem2=new MenuItem(contextMenu, SWT.PUSH);
-		addNodeAsFieldItem2.setText(Messages.XPathQueryDesigner_AddAsFieldAbsoluteItem);
+		final MenuItem addNodeAsFieldItem2 = new MenuItem(contextMenu, SWT.PUSH);
+		addNodeAsFieldItem2
+				.setText(Messages.XPathQueryDesigner_AddAsFieldAbsoluteItem);
 		addNodeAsFieldItem2.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Object sel = ((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
-				if(sel instanceof XMLNode){
-					String xPathExpression = documentManager.getXPathExpression(null,(XMLNode)sel);
-					((XMLNode)sel).setXPathExpression(xPathExpression);
-					createField((XMLNode)sel);
+				Object sel = ((IStructuredSelection) treeViewer.getSelection())
+						.getFirstElement();
+				if (sel instanceof XMLNode) {
+					String xPathExpression = documentManager
+							.getXPathExpression(null, (XMLNode) sel);
+					((XMLNode) sel).setXPathExpression(xPathExpression);
+					createField((XMLNode) sel);
 				}
 			}
 		});
 		new MenuItem(contextMenu, SWT.SEPARATOR);
-		final MenuItem expandAllItem=new MenuItem(contextMenu, SWT.PUSH);
+		final MenuItem expandAllItem = new MenuItem(contextMenu, SWT.PUSH);
 		expandAllItem.setText(Messages.XPathQueryDesigner_ExpandAllItem);
 		expandAllItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -280,7 +298,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 				treeViewer.expandAll();
 			}
 		});
-		final MenuItem collapseAllItem=new MenuItem(contextMenu, SWT.PUSH);
+		final MenuItem collapseAllItem = new MenuItem(contextMenu, SWT.PUSH);
 		collapseAllItem.setText(Messages.XPathQueryDesigner_CollapseAllItem);
 		collapseAllItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -288,7 +306,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 				treeViewer.collapseAll();
 			}
 		});
-		final MenuItem resetRefreshDocItem=new MenuItem(contextMenu, SWT.PUSH);
+		final MenuItem resetRefreshDocItem = new MenuItem(contextMenu, SWT.PUSH);
 		resetRefreshDocItem.setText(Messages.XPathQueryDesigner_RefreshItem);
 		resetRefreshDocItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -297,148 +315,177 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 			}
 		});
 		treeViewer.getTree().setMenu(contextMenu);
-		
+
 		contextMenu.addMenuListener(new MenuListener() {
 			@Override
 			public void menuShown(MenuEvent e) {
-				Object selEl = ((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
-				if(selEl instanceof XMLNode){
+				Object selEl = ((IStructuredSelection) treeViewer
+						.getSelection()).getFirstElement();
+				if (selEl instanceof XMLNode) {
 					addNodeAsFieldItem1.setEnabled(true);
 					addNodeAsFieldItem2.setEnabled(true);
-					if(selEl instanceof XMLAttributeNode){
+					if (selEl instanceof XMLAttributeNode) {
 						setRecordNodeItem.setEnabled(false);
 						setDocumentRootItem.setEnabled(false);
-					}
-					else{
+					} else {
 						setRecordNodeItem.setEnabled(true);
 						setDocumentRootItem.setEnabled(true);
 					}
-				}
-				else{
+				} else {
 					setRecordNodeItem.setEnabled(false);
 					setDocumentRootItem.setEnabled(false);
 					addNodeAsFieldItem1.setEnabled(false);
 					addNodeAsFieldItem2.setEnabled(false);
 				}
 			}
-			
+
 			@Override
 			public void menuHidden(MenuEvent e) {
-				
+
 			}
 		});
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.designer.TreeBasedQueryDesigner#refreshTreeViewerContent(com.jaspersoft.studio.data.DataAdapterDescriptor)
+	 * 
+	 * @see com.jaspersoft.studio.data.designer.TreeBasedQueryDesigner#
+	 * refreshTreeViewerContent
+	 * (com.jaspersoft.studio.data.DataAdapterDescriptor)
 	 */
-	protected void refreshTreeViewerContent(final DataAdapterDescriptor da){
-		if(!isRefreshing){
-			isRefreshing=true;
+	protected void refreshTreeViewerContent(final DataAdapterDescriptor da) {
+		if (!isRefreshing) {
+			isRefreshing = true;
 			this.container.getQueryStatus().showInfo(""); //$NON-NLS-1$
-			if(da!=null && da.getDataAdapter() instanceof XmlDataAdapter) {
+			if (da != null && da.getDataAdapter() instanceof XmlDataAdapter) {
 				treeViewer.setInput(XMLTreeCustomStatus.LOADING_XML);
 				try {
-					XPathQueryDesigner.this.run(true, true, new IRunnableWithProgress() {
-						
-						@Override
-						public void run(IProgressMonitor monitor) throws InvocationTargetException,
-								InterruptedException {
-							
-							monitor.beginTask(Messages.XPathQueryDesigner_TaskTitle, -1);
-							
-							String fileName = ((XmlDataAdapter)da.getDataAdapter()).getFileName();
-							try {
-								Document doc=null;
-								if(da.getDataAdapter() instanceof RemoteXmlDataAdapter){
-									doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(fileName);
-								}
-								else {
-									File in = new File(fileName);
-									doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
-								}
-								documentManager.setDocument(doc);
-								documentManager.setJasperConfiguration(XPathQueryDesigner.this.container.getjConfig());
-								Display.getDefault().asyncExec(new Runnable() {
-									@Override
-									public void run() {
-										treeViewer.setInput(documentManager.getXMLDocumentModel());
-										treeViewer.expandToLevel(2);
-										decorateTreeUsingQueryText();
-										isRefreshing=false;
+					XPathQueryDesigner.this.run(true, true,
+							new IRunnableWithProgress() {
+
+								@Override
+								public void run(IProgressMonitor monitor)
+										throws InvocationTargetException,
+										InterruptedException {
+
+									monitor.beginTask(
+											Messages.XPathQueryDesigner_TaskTitle,
+											-1);
+
+									String fileName = ((XmlDataAdapter) da
+											.getDataAdapter()).getFileName();
+									try {
+										Document doc = null;
+										if (da.getDataAdapter() instanceof RemoteXmlDataAdapter) {
+											doc = DocumentBuilderFactory
+													.newInstance()
+													.newDocumentBuilder()
+													.parse(fileName);
+										} else {
+											File in = new File(fileName);
+											doc = DocumentBuilderFactory
+													.newInstance()
+													.newDocumentBuilder()
+													.parse(in);
+										}
+										documentManager.setDocument(doc);
+										documentManager
+												.setJasperConfiguration(XPathQueryDesigner.this.container
+														.getjConfig());
+										Display.getDefault().asyncExec(
+												new Runnable() {
+													@Override
+													public void run() {
+														treeViewer
+																.setInput(documentManager
+																		.getXMLDocumentModel());
+														treeViewer
+																.expandToLevel(2);
+														decorateTreeUsingQueryText();
+														isRefreshing = false;
+													}
+												});
+									} catch (Exception e) {
+										XPathQueryDesigner.this.container
+												.getQueryStatus().showError(e);
+										Display.getDefault().asyncExec(
+												new Runnable() {
+													@Override
+													public void run() {
+														treeViewer.getTree()
+																.removeAll();
+														treeViewer
+																.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
+														isRefreshing = false;
+													}
+												});
+									} finally {
+										monitor.done();
 									}
-								});
-							} catch (Exception e) {
-								XPathQueryDesigner.this.container.getQueryStatus().showError(e);
-								Display.getDefault().asyncExec(new Runnable() {
-									@Override
-									public void run() {
-										treeViewer.getTree().removeAll();
-										treeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
-										isRefreshing=false;
-									}
-								});
-							} finally {
-								monitor.done();
-							}
-						}
-					});
+								}
+							});
 				} catch (Exception ex) {
-					XPathQueryDesigner.this.container.getQueryStatus().showError(ex);
+					XPathQueryDesigner.this.container.getQueryStatus()
+							.showError(ex);
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
 							treeViewer.getTree().removeAll();
-							treeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
-							isRefreshing=false;
+							treeViewer
+									.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
+							isRefreshing = false;
 						}
 					});
-				}					
-			}
-			else{
+				}
+			} else {
 				treeViewer.getTree().removeAll();
 				treeViewer.setInput(XMLTreeCustomStatus.FILE_NOT_FOUND);
-				isRefreshing=false;
+				isRefreshing = false;
 			}
 		}
 	}
-	
-	/*
-	 * Job that is responsible to update the treeviewer presentation 
-	 * depending on the nodes selected by the XPath query.
-	 */
-	private final class DecorateTreeViewerJob extends WorkbenchJob{
 
-		public DecorateTreeViewerJob(){
+	/*
+	 * Job that is responsible to update the treeviewer presentation depending
+	 * on the nodes selected by the XPath query.
+	 */
+	private final class DecorateTreeViewerJob extends WorkbenchJob {
+
+		public DecorateTreeViewerJob() {
 			super(Messages.XPathQueryDesigner_RefreshJobTitle);
 			setSystem(true);
 		}
-		
+
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			if(control!=null && !control.isDisposed()){
-				monitor.beginTask(Messages.XPathQueryDesigner_RefreshTaskTitle, IProgressMonitor.UNKNOWN);
-				String query=queryTextArea.getText();
-				treeLabelProvider.setSelectedNodes(documentManager.getSelectableNodes(query));
+			if (control != null && !control.isDisposed()) {
+				monitor.beginTask(Messages.XPathQueryDesigner_RefreshTaskTitle,
+						IProgressMonitor.UNKNOWN);
+				String query = queryTextArea.getText();
+				treeLabelProvider.setSelectedNodes(documentManager
+						.getSelectableNodes(query));
 				treeViewer.refresh();
 				monitor.done();
 				return Status.OK_STATUS;
-			}
-			else {
+			} else {
 				return Status.CANCEL_STATUS;
 			}
 		}
-		
+
 	}
-	
+
 	@Override
 	public void dispose() {
-		if(decorateJob!=null){
+		if (decorateJob != null) {
 			decorateJob.cancel();
-			decorateJob=null;
+			decorateJob = null;
 		}
 		super.dispose();
+	}
+
+	@Override
+	public String getContextHelpId() {
+		return ContextHelpIDs.WIZARD_QUERY_DIALOG;
 	}
 
 }
