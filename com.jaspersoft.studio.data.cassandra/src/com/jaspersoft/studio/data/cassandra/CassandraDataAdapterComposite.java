@@ -107,4 +107,9 @@ public class CassandraDataAdapterComposite extends ADataAdapterComposite {
 				SWTObservables.observeText(jdbcURL, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "jdbcURL"));
 	}
+
+	@Override
+	public String getHelpContextId() {
+		return PREFIX.concat("adapter_cassandra");
+	}
 }

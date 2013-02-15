@@ -18,5 +18,19 @@
             ClassFactory="com.jaspersoft.studio.data.hive.server.HiveResourceFactory">
       </resource>
    </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc_dataadapters.xml"
+            primary="false">
+      </toc>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="context.xml"
+            plugin="com.jaspersoft.studio.doc">
+      </contexts>
+   </extension>
 
 </plugin>

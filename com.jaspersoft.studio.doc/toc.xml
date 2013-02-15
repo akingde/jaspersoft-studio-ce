@@ -14,6 +14,7 @@
     </topic>
     <topic href="html/editors/preview/preview.html" label="Report Run And Preview Editor">
     </topic>
+    <anchor id="jsseditors"/>
  </topic>
  <topic href="html/view/views.html" label="Views">
     <topic href="html/view/outline/outline.html" label="Outline">
@@ -34,6 +35,7 @@
     </topic>
     <topic href="html/view/repository/repository.html" label="Repository">
     </topic>
+    <anchor id="jssviews"/>
  </topic>
  <topic href="html/dataAdapters/dataadapters.html" label="Data Adapters">
     <topic href="html/adaptersamples/json/jsonexample.html" label="JSON Data Adapter"/>
@@ -41,6 +43,10 @@
     <topic href="html/wizard/xmldatasources/createxml.html" label="Using XML datasources"/>
 	<topic href="html/wizard/xmldatasources/remotexml.html" label="Using Remote XML datasources"/>
     <topic href="html/adaptersamples/JRDataSource/JRDataSourceAdapter.html" label="JRDataSource"/>
+    <anchor id="dataadapters"/>
+ </topic>
+ <topic label="Query Editors">
+    <anchor id="queryeditors"/>
  </topic>
  <topic href="html/preferences/font/fontmanagement.html" label="Font Management">
  </topic>
@@ -94,15 +100,20 @@
 		<topic label="Working with JasperReports Server">
 			<topic href="html/wizard/jasperserver/connection.html" label="Connect to JasperReports Server" />
 			<topic href="html/wizard/jasperserver/publishreport.html" label="Publish a report into JasperReports Server" />
+   <anchor id="jasperreportsserver"/>
 		</topic>
+  <anchor id="jsstutorials"/>
  </topic>
   <topic label="Developer Guide">
      <topic label="Extension Points">
         <topic href="html/programmers/extensionPoints/toolbaritems.html" label="How to create context tool items">
         </topic>
+        <anchor id="jssextensionpoints"/>
      </topic>
      <topic href="html/wizard/expressioneditor/extendeditor.html" label="Expression Editor: how to extend it and contribute your own functions">
      </topic>
+     <anchor id="jssdeveloperguide"/>
   </topic>
+  <anchor id="jsspluginhelp"/>
 
 </toc>

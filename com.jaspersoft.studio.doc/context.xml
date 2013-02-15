@@ -226,9 +226,6 @@
    <context id="adapter_hibernatespring" title="Hibernate connection data adapter, using Spring">
       <description>If you use the Spring framework, you can use a Spring configuration file to define your connection. In this case, you'll need to set the configuration file name and the seesion factory bean ID.</description>
    </context>
-   <context id="adapter_hive" title="Create an hive connection as data adapter">
-      <description>Hive is a data warehouse system for Hadoop that facilitates easy data summarization, ad-hoc queries, and the analysis of large datasets stored in Hadoop compatible file systems. Hive provides a mechanism to project structure onto this data and query the data using a SQL-like language called HiveQL. At the same time this language also allows traditional map/reduce programmers to plug in their custom mappers and reducers when it is inconvenient or inefficient to express this logic in HiveQL. To create a connection with an hive database provide its URL</description>
-   </context>
    <context id="adapter_jndi" title="JNDI data adapter">
       <description>The Java Naming and Directory Interface (JNDI) is a Java API for a directory service that allows Java software clients to discover and look up data and objects via a name. Like all Java APIs that interface with host systems, JNDI is independent of the underlying implementation. Additionally, it specifies a service provider interface (SPI) that allows directory service implementations to be plugged into the framework. It may make use of a server, a flat file, or a database.</description>
    </context>
@@ -241,9 +238,6 @@
    </context>
    <context id="adapter_mondrian" title="Mondrian data adapter">
       <description>Mondrian is an open source OLAP (online analytical processing) server, written in Java. It supports the MDX (multidimensional expressions) query language and the XML for Analysis and olap4j interface specifications. It reads from SQL and other data sources and aggregates data in a memory cache.</description>
-   </context>
-   <context id="adapter_mongodb" title="MongoDB data adapter">
-      <description>MongoDB is an open source document-oriented database system developed and supported by 10gen. It is part of the NoSQL family of database systems. Instead of storing data in tables as is done in a "classical" relational database, MongoDB stores structured data as JSON-like documents with dynamic schemas (MongoDB calls the format BSON), making the integration of data in certain types of applications easier and faster.</description>
    </context>
    <context id="adapter_xml" title="XML data adapter">
       <description>The Extensible Markup Language (XML) is a markup language that defines a set of rules for encoding documents in a format that is both human-readable and machine-readable. Here you can provide a local XML file used to fill the report.</description>

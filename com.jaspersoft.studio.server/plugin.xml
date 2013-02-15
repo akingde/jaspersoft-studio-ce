@@ -193,6 +193,26 @@
             ClassFactory="com.jaspersoft.studio.server.editor.JRSEditorContributor">
       </editorLifecycle>
    </extension>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            id="com.jaspersoft.studio"
+            name="Jaspersoft Studio">
+      </category>
+      <wizard
+            category="com.jaspersoft.studio"
+            class="com.jaspersoft.studio.server.publish.wizard.Publish2ServerWizard"
+            id="com.jaspersoft.studio.server.publish"
+            name="Export To JasperReports Server">
+         <description>
+            Export the report to JasperReports Server
+         </description>
+         <selection
+               class="org.eclipse.core.resources.IResource"
+               name="*.jrxml">
+         </selection>
+      </wizard>
+   </extension>
 
 
 </plugin>
