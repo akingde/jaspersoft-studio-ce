@@ -1721,6 +1721,16 @@
                 class="com.jaspersoft.studio.model.MGraphicElementLineBox">
           </selectedObject>
        </toolitems>
+       <toolitems
+             ActionID="ActionImageChangeExpression"
+             icon="icons/resources/blue-folder-open-image.png"
+             id="com.jaspersoft.studio.editor.action.image.ChangeImageExpression"
+             label="Change Source"
+             tooltip="Change the source of the image">
+          <selectedObject
+                class="com.jaspersoft.studio.model.image.MImage">
+          </selectedObject>
+       </toolitems>
     </extension>
     <extension
           point="com.jaspersoft.studio.toolitemsets">
@@ -1825,6 +1835,15 @@
           <toolitem
                 toolitemID="com.jaspersoft.studio.editor.action.border.AComboItemButtonContribution">
           </toolitem>
+       </toolitemsets>
+       <toolitemsets
+             description="Changes the attribute of the images"
+             id="com.jaspersoft.studio.graphic.image"
+             name="Images Actions"
+             toolbaruri="com.jaspersoft.studio.graphic.image"
+             visibility="true">
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.image.ChangeImageExpression"></toolitem>
        </toolitemsets>
     </extension>
     <extension
