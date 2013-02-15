@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
@@ -70,7 +65,7 @@ public abstract class DataQueryAdapters {
 
 	/** Property to save a default data adapter to select */
 	public static final String DEFAULT_DATAADAPTER = "com.jaspersoft.studio.data.defaultdataadapter";
-	
+
 	public static final int CONTAINER_WITH_NO_TABLES = 0x01;
 	public static final int CONTAINER_WITH_INFO_TABLES = 0x02;
 
@@ -227,6 +222,10 @@ public abstract class DataQueryAdapters {
 		}
 	}
 
+	public String getContextHelpId() {
+		return currentDesigner.getContextHelpId();
+	}
+
 	public Composite createToolbar(Composite parent) {
 		final Composite comp = new Composite(parent, SWT.NONE);
 		comp.setLayout(new GridLayout(5, false));
@@ -316,13 +315,13 @@ public abstract class DataQueryAdapters {
 			langCombo.setItem(0, Misc.nvl(query.getLanguage()));
 		isRefresh = false;
 		changeLanguage();
-		
+
 		if (jDesign != null) {
 			// Try to find the default data adapter for the specified dataset
 			String defaultAdapter = ds.getPropertiesMap().getProperty(DEFAULT_DATAADAPTER);
-			if(defaultAdapter==null && ds.isMainDataset()){
+			if (defaultAdapter == null && ds.isMainDataset()) {
 				// if none available get the default for the main report
-				defaultAdapter=jDesign.getProperty(DEFAULT_DATAADAPTER);
+				defaultAdapter = jDesign.getProperty(DEFAULT_DATAADAPTER);
 			}
 			dscombo.setSelected(defaultAdapter);
 			currentDesigner.setDataAdapter(dscombo.getSelected());
