@@ -36,28 +36,60 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.toolitems.ISelectionContributionItem;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.property.SetValueCommand;
 
+/**
+ * Component that represent a combo with inside the preview of some border presets. This component should 
+ * be placed in the toolbar when an element that can have borders is selected
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class ATableComboContribution extends ContributionItem implements ISelectionContributionItem, Listener {
 		
+		/**
+		 * The item that will placed in the toolbard
+		 */
 		private ToolItem toolitem;
 		
+		/**
+		 * The composite that will displayed in the toolbar, it contains a label and the combo
+		 */
 		private Composite control;
 		
+		/**
+		 * The combo with the border presets inside
+		 */
 		private TableCombo combo;
-		
+
+		/**
+		 * The workbench
+		 */
 		private IWorkbenchPart workbenchPart;
 		
+		/**
+		 * The selected element
+		 */
 		private ISelection selection;
 		
+		/**
+		 * The list of available presets
+		 */
 		private List<TemplateBorder> exampleImages;
 		
+		/**
+		 * The model of the selected element
+		 */
 		protected MGraphicElementLineBox model;
 		
+		/**
+		 * A listener to uniform in the toolbar change done by the property tab
+		 */
 		private ModelListener modelListener = new ModelListener();
 		
 		private class ModelListener implements PropertyChangeListener {
@@ -68,8 +100,11 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			}
 		}
 		
+		/**
+		 * Create the class and some presets
+		 */
 		public ATableComboContribution(){
-			super("BordersTemplateCombo");
+			super("BordersTemplateCombo"); //$NON-NLS-1$
 			exampleImages = new ArrayList<TemplateBorder>();
 			exampleImages.add(new TemplateBorder(null, LineStyleEnum.SOLID));
 			exampleImages.add(new TemplateBorder(1f, LineStyleEnum.SOLID));
@@ -86,15 +121,26 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			exampleImages.add(new TemplateBorder(4f, LineStyleEnum.DOUBLE));
 		}
 		
+		/**
+		 * When an element is selected if it use a preset it will be automatically 
+		 * selected in the comb. If no preset is used for the element the Custom 
+		 * image will be used
+		 */
 		protected void setCorrectValue(){
 			TemplateBorder actualBorder = getElementAttributes();
-			//System.out.println("actual value: "+actualBorder.getLineWidth()+" "+ actualBorder.getStyle()!=null ? actualBorder.getStyle().toString() :"null");
 			int index = exampleImages.indexOf(actualBorder);
 			if (index != -1) combo.select(index);
 			else combo.select(exampleImages.size());
 		}
 			
-		
+		/**
+		 * Create a command to change a property. The change is done if the new value of the property
+		 * is different from its previous value
+		 * @param property the property to change
+		 * @param newValue the new value for the property
+		 * @param n the element to modify
+		 * @return the command
+		 */
 		protected Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
 			Object oldValue = n.getPropertyValue(property);
 			if (((oldValue == null && newValue != null) || (oldValue != null && newValue == null) || (newValue != null && !newValue
@@ -108,7 +154,12 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			return null;
 		}
 		
-		
+		/**
+		 * For an element change all the properties related to the border: color, style and width
+		 * @param cc CommandCompound where all the command to change a single property are putted
+		 * @param selectedElement selected preset
+		 * @param lp element to change
+		 */
 		private void changeAllProperties(CompoundCommand cc, TemplateBorder selectedElement, MLinePen lp){
 			Command c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_COLOR, selectedElement.getColor(), lp);
 			if (c != null) cc.add(c);
@@ -118,6 +169,10 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			if (c != null) cc.add(c);
 		} 
 		
+		/**
+		 * Return a TemplateBorder that represent the border of the element selected
+		 * @return
+		 */
 		private TemplateBorder getElementAttributes(){
 			MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX); 
 			MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
@@ -131,14 +186,12 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		
 		
 		/**
-		 * Change the property of a linepen
-		 * @param property the property name
-		 * @param newValue the new value
+		 * Change the property of all the linepen of an element
 		 */
 		private void changeProperty() {
 			  if (combo.getSelectionIndex()<exampleImages.size()){
 					TemplateBorder selectedElement = exampleImages.get(combo.getSelectionIndex());
-					CompoundCommand cc = new CompoundCommand("Change border");
+					CompoundCommand cc = new CompoundCommand("Change border"); //$NON-NLS-1$
 					MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 					
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
@@ -175,6 +228,11 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			changeProperty();
 		}
 		
+		/**
+		 * Crate the  control 
+		 * @param parent
+		 * @return a composite with a label and the combo preview inside
+		 */
 		@SuppressWarnings("unchecked")
 		protected Control createControl(Composite parent) {
 			control = new Composite(parent, SWT.None);
@@ -183,7 +241,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			layout.verticalSpacing = 0;
 			control.setLayout(layout);
 			Label label = new Label(control, SWT.None);
-			label.setText("Border presets:");
+			label.setText(Messages.ATableComboContribution_presets_label);
 			combo = new TableCombo(control, SWT.BORDER | SWT.READ_ONLY);
 			combo.setEditable(false);
 			combo.addSelectionListener(new SelectionAdapter() {
@@ -214,7 +272,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			}
 			loadImages();
 			setCorrectValue();
-			return combo;
+			return control;
 		}
 		
 		@Override
@@ -233,6 +291,10 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			}
 		}
 		
+		/**
+		 * Insert the element inside the toolbar
+		 */
+		@Override
 		public void fill(ToolBar parent, int index) {
 			toolitem = new ToolItem(parent, SWT.SEPARATOR, index);
 			createControl(parent);
@@ -241,7 +303,8 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		}
 		
 		public void dispose() {
-		combo = null;
+			combo = null;
+			control = null;
 		}
 		
 		public final void fill(Composite parent) {
@@ -249,10 +312,13 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		}
 		
 		public final void fill(Menu parent, int index) {
-			Assert.isTrue(false, "Can not add to menu"); //$NON-NLS-1$
+			Assert.isTrue(false, Messages.ATableComboContribution_error_message); 
 		}
 		
-		
+		/**
+		 * Called when an element is selected, it add a change listener to element to keep uniformed 
+		 * the toolbar and the properties tab
+		 */
 		@Override
 		public void setSelection(ISelection selection) {
 			this.selection = selection;
@@ -263,6 +329,9 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			
 		}
 		
+		/**
+		 * Load the imege for every preset and insert them into the combo element
+		 */
 		private void loadImages() {
 			TemplateBorder.setWidth(100);
 			for (TemplateBorder border: exampleImages) {

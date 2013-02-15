@@ -12,17 +12,41 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.wb.swt.ResourceManager;
 
-
+/**
+ * an instance of this class represent a border preset. It also provide the method 
+ * to return a sample line of the border
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class TemplateBorder{
 	
+		/**
+		 * The width of the border
+		 */
 		private Float lineWidth;
 		
+		/**
+		 * The linestyle of the border
+		 */
 		private LineStyleEnum lineStyle;
 		
+		/**
+		 * The color of the border
+		 */
 		private Color color;
 		
+		/**
+		 * Width of the line in the sample
+		 */
 		private static int width;
 		
+		/**
+		 * 
+		 * @param lineWidth width of the border
+		 * @param lineStyle style of the border
+		 * @param lineColor color of the border (if null is set to black)
+		 */
 		public TemplateBorder(Float lineWidth, LineStyleEnum lineStyle, RGB lineColor){
 			this.lineStyle = lineStyle;
 			this.lineWidth = lineWidth;
@@ -30,22 +54,42 @@ public class TemplateBorder{
 			else this.color = ColorConstants.black;
 		}
 		
+		/**
+		 * With this constructor the border is set to black
+		 * @param lineWidth width of the border
+		 * @param lineStyle style of the border
+		 */
 		public TemplateBorder(Float lineWidth, LineStyleEnum lineStyle){
 			this(lineWidth, lineStyle, ColorConstants.black.getRGB());
 		}
 		
+		/**
+		 * Return the RGB of the color
+		 * @return and RGB of the color, it can't be null
+		 */
 		public RGB getColor(){
 			return color.getRGB();
 		}
 		
+		/**
+		 * return the style of the line (it can be DOTTED, DASHED, SOLID or DUBLE).
+		 */
 		public LineStyleEnum getStyle(){
 			return lineStyle;
 		}
 		
+		/**
+		 * Return the border width
+		 * @return a float of the border, it can be null
+		 */
 		public Float getLineWidth(){
 			return lineWidth;
 		}
 		
+		/**
+		 * Ovverride of the equals method. Two border presets are equal if they have a lineWidth that make them not visible 
+		 * (null or with width<=0), or if the line is visible they are equals if all the fields (color,width,style) are equals
+		 */
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof TemplateBorder){
@@ -58,6 +102,12 @@ public class TemplateBorder{
 			return false;
 		}
 		
+		/**
+		 * Return a border preview for a not visible border. The image is created only the first time is requested, 
+		 * then it is cached and disposed when the application is closed.
+		 * 
+		 * @return an image with the words "No Borders" rendereized into it
+		 */
 		private Image getNoBordersImage(){
 			String key = "linePreset_noBorders";
 			Image image = ResourceManager.getImage(key);
@@ -76,10 +126,13 @@ public class TemplateBorder{
 		}
 		
 		/**
-		 * Paint the top border
+		 * Return an image that represent a preview of this border preset. The image is created only the first time is requested, 
+		 * then it is cached and disposed when the application is closed.
 		 */
 		public Image getImage(){
+				//If the border is not visible return the NoBorder image
 				if (lineWidth == null || lineWidth<=0) return getNoBordersImage();
+				//The images are cached and disposed at the end
 				String key = "linePreset_"+lineStyle.toString()+lineWidth.toString()+getColor().toString();
 				Image image = ResourceManager.getImage(key);
 				if (image == null){
@@ -126,6 +179,12 @@ public class TemplateBorder{
 				return image;
 		}	
 		
+		/**
+		 * Return a border preview for a custom border (not equals to any preset). The image is created only the first time is requested, 
+		 * then it is cached and disposed when the application is closed.
+		 * 
+		 * @return an image with the words "Custom" rendereized into it
+		 */
 		public static Image getCustomImage()
 		{
 				String key = "linePreset_custom";
@@ -144,11 +203,18 @@ public class TemplateBorder{
 				return image;
 		}	
 		
-		
+		/**
+		 * set the width of the preview, it influence the preview of all presets (since it is static)
+		 * @param newWidth width of the preview, it must be greater than zero
+		 */
 		public static void setWidth(int newWidth){
 			if (newWidth>0) width = newWidth;
 		}
 		
+		/**
+		 * Return the width of the preview
+		 * @return if for some reason the width is <=0 it return a default value of 70.
+		 */
 		public static int getWidth(){
 			if (width <= 0) width = 70;
 			return width;
