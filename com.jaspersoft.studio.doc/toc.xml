@@ -91,10 +91,18 @@
 			<topic href="html/wizard/stylestemplate/createtemplate.html" label="Create a Styles Template"/>
 			<topic href="html/wizard/stylestemplate/usetemplate.html" label="Use a Styles Template" />
 		</topic>
-		<topic label="Working with JasperSoft Studio and JasperReports Server">
+		<topic label="Working with JasperReports Server">
 			<topic href="html/wizard/jasperserver/connection.html" label="Connect to JasperReports Server" />
 			<topic href="html/wizard/jasperserver/publishreport.html" label="Publish a report into JasperReports Server" />
 		</topic>
  </topic>
+  <topic label="Developer Guide">
+     <topic label="Extension Points">
+        <topic href="html/programmers/extensionPoints/toolbaritems.html" label="How to create context tool items">
+        </topic>
+     </topic>
+     <topic href="html/wizard/expressioneditor/extendeditor.html" label="Expression Editor: how to extend it and contribute your own functions">
+     </topic>
+  </topic>
 
 </toc>
