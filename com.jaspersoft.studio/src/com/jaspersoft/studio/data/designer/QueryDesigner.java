@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.designer;
 
@@ -32,6 +27,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 public class QueryDesigner extends AQueryDesigner {
 	private boolean refresh = false;
@@ -117,5 +113,10 @@ public class QueryDesigner extends AQueryDesigner {
 
 	protected void setFieldProviderEnabled(boolean enable) {
 		btn.setEnabled(enable);
+	}
+
+	@Override
+	public String getContextHelpId() {
+		return ContextHelpIDs.WIZARD_QUERY_DIALOG;
 	}
 }
