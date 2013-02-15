@@ -1,14 +1,27 @@
 package com.jaspersoft.studio.help.ovverriders;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
- * This overrider use a regular expression to identify the attributes
- * which link is override.
+ * This overrider use one or more regular expressions to identify the attributes
+ * which link is override. It must match all the regular expressions
  * 
  * @author Orlandin Marco
  *
  */
-public class RegularExpressionOverrider extends GenericOverrider {
+public class RegularExpressionOverrider implements IHelpOverrider {
 
+	/**
+	 * A list of regular expressions
+	 */
+	protected List<String> regularExpressions;
+	
+	/**
+	 * the substitution
+	 */
+	protected String substitutionString;
+	
 	/**
 	 * Build an instance of the class
 	 * 
@@ -17,12 +30,26 @@ public class RegularExpressionOverrider extends GenericOverrider {
 	 * the standard prefix with the substitution String
 	 */
 	public RegularExpressionOverrider(String regEx, String substitution){
-		super(regEx, substitution);
+		this(Collections.singletonList(regEx),substitution);
+	}
+	
+	public RegularExpressionOverrider(List<String> regEx, String substitution){
+		substitutionString = substitution;
+		regularExpressions = regEx;
 	}
 	
 	@Override
+	public String getPropertyURL(String propertyName) {
+		return PREFIX.concat(substitutionString);
+	}
+
+	
+	@Override
 	public boolean isOverrided(String propertyName) {
-		return propertyName.matches(searchedString);
+		for(String expression : regularExpressions){
+			if (!propertyName.matches(expression)) return false;
+		}
+		return true;
 	}
 	
 }

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.help;
 
+import static java.util.Arrays.asList;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +27,10 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.help.ovverriders.GenericOverrider;
 import com.jaspersoft.studio.help.ovverriders.IHelpOverrider;
-import com.jaspersoft.studio.help.ovverriders.LanguageOverrider;
 import com.jaspersoft.studio.help.ovverriders.RegularExpressionOverrider;
 import com.jaspersoft.studio.help.ovverriders.StylesOverrider;
-import com.jaspersoft.studio.help.ovverriders.GenericOverrider;
 
 /**
  * 
@@ -92,7 +93,7 @@ public class TableHelpListener implements Listener {
 					overrideMap.add(new GenericOverrider("net.sf.jasperreports.export.csv.column.names.", "net.sf.jasperreports.csv.column.names.{arbitrary_name}"));
 					overrideMap.add(new GenericOverrider("net.sf.jasperreports.ejbql.query.hint.", "net.sf.jasperreports.ejbql.query.hint.{hint}"));
 					overrideMap.add(new GenericOverrider("net.sf.jasperreports.query.executer.factory.", "net.sf.jasperreports.query.executer.factory.{language}"));
-					overrideMap.add(new LanguageOverrider());
+					overrideMap.add(new RegularExpressionOverrider(asList("net\\.sf\\.jasperreports\\.compiler\\.\\p{Alnum}+", "^(?!net\\.sf\\.jasperreports\\.compiler\\.classpath).*$"), "net.sf.jasperreports.compiler.{language}"));
 					overrideMap.add(new StylesOverrider());
 					overrideMap.add(new GenericOverrider("net.sf.jasperreports.chart.renderer.factory.", "net.sf.jasperreports.chart.renderer.factory.{render_type}"));
 					overrideMap.add(new GenericOverrider("net.sf.jasperreports.markup.processor.factory.", "net.sf.jasperreports.markup.processor.factory.{markup}"));
