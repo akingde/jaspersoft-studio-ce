@@ -128,14 +128,16 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		String chid = dataquery.getContextHelpId();
 		if (chid == null)
 			chid = ContextHelpIDs.WIZARD_QUERY_DIALOG;
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(body, chid);
 		PlatformUI.getWorkbench().getHelpSystem().displayHelp(chid);
 	};
 
 	@Override
 	protected void createFormContent(final IManagedForm mform) {
 		FormToolkit toolkit = mform.getToolkit();
-		Composite body = mform.getForm().getBody();
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(body, ContextHelpIDs.WIZARD_QUERY_DIALOG);
+		body = mform.getForm().getBody();
+
 		setHelpControl(body);
 		body.setLayout(new GridLayout(1, true));
 		background = body.getBackground();
@@ -294,6 +296,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	private DataQueryAdapters dataquery;
 	private WTextExpression filterExpression;
 	private DataPreviewTable dataPreviewTable;
+	private Composite body;
 
 	public void setDataset(JasperDesign jDesign, JRDesignDataset ds) {
 		dataquery.setDataset(jDesign, ds);
