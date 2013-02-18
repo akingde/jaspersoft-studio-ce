@@ -52,9 +52,9 @@ public class CreateColumnEndAction extends ACreateAction {
 		setToolTipText(Messages.CreateColumnAction_create_column_tool_tip);
 		setId(CreateColumnEndAction.ID);
 		setImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-insert-column.png"));
+				Activator.getDefault().getImageDescriptor("icons/table-insert-column-end.png"));
 		setDisabledImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-insert-column.png"));
+				Activator.getDefault().getImageDescriptor("icons/table-insert-column-end.png"));
 		setEnabled(false);
 	}
 

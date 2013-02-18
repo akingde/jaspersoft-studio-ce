@@ -55,9 +55,9 @@ public class CreateColumnBeginAction extends ACreateAction {
 		setToolTipText(Messages.CreateColumnBeginAction_desc);
 		setId(CreateColumnBeginAction.ID);
 		setImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-insert-column.png")); //$NON-NLS-1$
+				Activator.getDefault().getImageDescriptor("icons/table-insert-column-begin.png")); //$NON-NLS-1$
 		setDisabledImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-insert-column.png")); //$NON-NLS-1$
+				Activator.getDefault().getImageDescriptor("icons/table-insert-column-begin.png")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 

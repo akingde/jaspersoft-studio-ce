@@ -649,6 +649,7 @@
          point="com.jaspersoft.studio.toolitems">
       <toolitems
             ActionID="create_table_column_begin"
+            contributionItemClass="CreateColumnEndAction"
             id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction"
             tooltip="Create a column at the beginning of the table">
          <selectedObject
@@ -659,6 +660,14 @@
          </selectedObject>
          <selectedObject
                class="com.jaspersoft.studio.model.MPage">
+         </selectedObject>
+      </toolitems>
+      <toolitems
+            ActionID="create_table_column"
+            id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction"
+            tooltip="Create a column at the end of the table">
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.MTable">
          </selectedObject>
       </toolitems>
    </extension>
@@ -672,6 +681,9 @@
             visibility="true">
          <toolitem
                toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction">
+         </toolitem>
+         <toolitem
+               toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction">
          </toolitem>
       </toolitemsets>
    </extension>
