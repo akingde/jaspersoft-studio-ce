@@ -37,10 +37,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IActionBars2;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartService;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
-import org.eclipse.ui.actions.LabelRetargetAction;
-import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.internal.PartService;
 import org.eclipse.ui.internal.WorkbenchPage;
 
@@ -205,21 +202,16 @@ public class JrxmlSelectionContributor {
 		if (action == null)
 			action = registry.getAction(ti.getActionID());
 		if (action == null) {
-			action = new LabelRetargetAction(ti.getActionID(), ti.getLabel()) {
-				// @Override
-				// public void partDeactivated(IWorkbenchPart part) {
-				// // if (isSameSelection(bars, part.getSite().getSelectionProvider().getSelection()))
-				// // return;
-				// super.partDeactivated(part);
-				// }
+			return;
+			// action = new LabelRetargetAction(ti.getActionID(), ti.getLabel()) {
 
-				@Override
-				public void partBroughtToTop(IWorkbenchPart part) {
-					partActivated(part);
-				}
-			};
+			// @Override
+			// public void partBroughtToTop(IWorkbenchPart part) {
+			// partActivated(part);
+			// }
+			// };
 
-			editorContributor.addRetargetAction((RetargetAction) action);
+			// editorContributor.addRetargetAction((RetargetAction) action);
 		}
 		if (ti.getLabel() != null)
 			action.setText(ti.getLabel());

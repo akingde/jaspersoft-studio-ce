@@ -658,25 +658,7 @@
                class="com.jaspersoft.studio.components.table.model.column.MColumn">
          </selectedObject>
          <selectedObject
-               class="com.jaspersoft.studio.components.table.model.MTableColumnFooter">
-         </selectedObject>
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.MTableColumnHeader">
-         </selectedObject>
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.MTableDetail">
-         </selectedObject>
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.MTableFooter">
-         </selectedObject>
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.MTableHeader">
-         </selectedObject>
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.MTableGroupFooter">
-         </selectedObject>
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.MTableColumnHeader">
+               class="com.jaspersoft.studio.model.MPage">
          </selectedObject>
       </toolitems>
    </extension>
