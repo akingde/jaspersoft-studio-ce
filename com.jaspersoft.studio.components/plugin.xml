@@ -650,10 +650,33 @@
       <toolitems
             ActionID="create_table_column_begin"
             id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction"
-            label="Create column at the start"
             tooltip="Create a column at the beginning of the table">
          <selectedObject
                class="com.jaspersoft.studio.components.table.model.MTable">
+         </selectedObject>
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.column.MColumn">
+         </selectedObject>
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.MTableColumnFooter">
+         </selectedObject>
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.MTableColumnHeader">
+         </selectedObject>
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.MTableDetail">
+         </selectedObject>
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.MTableFooter">
+         </selectedObject>
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.MTableHeader">
+         </selectedObject>
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.MTableGroupFooter">
+         </selectedObject>
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.MTableColumnHeader">
          </selectedObject>
       </toolitems>
    </extension>
