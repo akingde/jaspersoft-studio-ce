@@ -186,19 +186,31 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			if (c != null) cc.add(c);
 		} 
 		
-		/**
-		 * Return a TemplateBorder that represent the border of the element selected
-		 * @return
-		 */
-		private TemplateBorder getElementAttributes(){
-			MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX); 
-			MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
+		private TemplateBorder getElementAttribute(String position, MLineBox lb){
+			MLinePen lp = (MLinePen) lb.getPropertyValue(position);
 			Integer lineStyleNum = ((Integer)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE))-1;
 			LineStyleEnum lineStyle = LineStyleEnum.getByValue(lineStyleNum.byteValue());
 			Float lineWidth = (Float)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
 			RGB lineColor = (RGB)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
 			TemplateBorder result =  new TemplateBorder(lineWidth, lineStyle, lineColor);
 			return result;
+		}
+		
+		/**
+		 * Return a TemplateBorder that represent the border of the element selected. If the figure has not
+		 * an unique border this method return null
+		 * @return
+		 */
+		private TemplateBorder getElementAttributes(){
+			MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX); 
+			TemplateBorder top = getElementAttribute(MLineBox.LINE_PEN_TOP, lb);
+			TemplateBorder left = getElementAttribute(MLineBox.LINE_PEN_RIGHT, lb);
+			if (!top.equals(left)) return null;
+			TemplateBorder right = getElementAttribute(MLineBox.LINE_PEN_RIGHT, lb);
+			if (!top.equals(right)) return null;
+			TemplateBorder bottom = getElementAttribute(MLineBox.LINE_PEN_BOTTOM, lb);
+			if (!top.equals(bottom)) return null;
+			return top;
 	}
 		
 		

@@ -109,7 +109,7 @@ public class TemplateBorder{
 		public boolean equals(Object obj) {
 			if (obj instanceof TemplateBorder){
 				TemplateBorder other = (TemplateBorder) obj;
-				if ((getLineWidth() == null && other.getLineWidth() == null) || (getLineWidth() <=0  && other.getLineWidth() <=0)) return true;
+				if ((getLineWidth() == null && other.getLineWidth() == null) || (getLineWidth()!= null && other.getLineWidth() != null && getLineWidth() <=0  && other.getLineWidth() <=0)) return true;
 				boolean colorEquals = (color == null && other.getColor() == null) || (color != null && getColor().equals(other.getColor()));
 				boolean widthEquals = (getLineWidth() == null && other.getLineWidth() == null) || (getLineWidth() != null && getLineWidth().equals(other.getLineWidth()));
 				return (widthEquals && getStyle() == other.getStyle() && colorEquals);
