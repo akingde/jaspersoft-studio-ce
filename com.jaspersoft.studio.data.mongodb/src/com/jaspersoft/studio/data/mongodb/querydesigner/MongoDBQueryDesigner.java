@@ -22,9 +22,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.data.designer.QueryDesigner;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /**
- * Simple query designer for MongoDB query language that provides syntax highlighting.
+ * Simple query designer for MongoDB query language that provides syntax
+ * highlighting.
  * 
  */
 public class MongoDBQueryDesigner extends QueryDesigner {
@@ -43,4 +45,8 @@ public class MongoDBQueryDesigner extends QueryDesigner {
 		((JRDesignQuery) jDataset.getQuery()).setText(queryTextArea.getText());
 	}
 
+	@Override
+	public String getContextHelpId() {
+		return ContextHelpIDs.PREFIX.concat("query_mongo");
+	}
 }

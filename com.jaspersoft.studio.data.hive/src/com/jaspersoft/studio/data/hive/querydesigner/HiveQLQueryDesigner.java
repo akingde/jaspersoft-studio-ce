@@ -17,16 +17,21 @@ package com.jaspersoft.studio.data.hive.querydesigner;
 
 import com.jaspersoft.studio.data.querydesigner.sql.SQLLineStyler;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /**
  * Simple query designer for Hive-QL that provides syntax highlighting.
  * 
  */
 public class HiveQLQueryDesigner extends SimpleSQLQueryDesigner {
-	
+
 	@Override
 	protected SQLLineStyler getSQLBasedLineStyler() {
 		return new HiveQLLineStyler();
 	}
 
+	@Override
+	public String getContextHelpId() {
+		return ContextHelpIDs.PREFIX.concat("query_HIVE");
+	}
 }
