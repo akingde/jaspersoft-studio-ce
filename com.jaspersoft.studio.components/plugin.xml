@@ -645,4 +645,29 @@
             ClassFactory="com.jaspersoft.studio.components.crosstab.model.cell.command.PostSetSizeCell">
       </postsetvalue>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.toolitems">
+      <toolitems
+            ActionID="create_table_column_begin"
+            id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction"
+            label="Create column at the start"
+            tooltip="Create a column at the beginning of the table">
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.MTable">
+         </selectedObject>
+      </toolitems>
+   </extension>
+   <extension
+         point="com.jaspersoft.studio.toolitemsets">
+      <toolitemsets
+            description="table columns action"
+            id="com.jaspersoft.studio.components.tableactions"
+            name="table actions"
+            toolbaruri="com.jaspersoft.studio.components.tableactions"
+            visibility="true">
+         <toolitem
+               toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction">
+         </toolitem>
+      </toolitemsets>
+   </extension>
 </plugin>

@@ -32,7 +32,7 @@ import com.jaspersoft.studio.jface.dialogs.ImageSelectionDialog;
 import com.jaspersoft.studio.model.image.MImage;
 import com.jaspersoft.studio.utils.UIUtils;
 
-public class ChangeImageExpression  extends SelectionAction implements IGlobalAction {
+public class ChangeImageExpression extends SelectionAction implements IGlobalAction {
 
 	private MImage imageModel;
 	

@@ -44,7 +44,7 @@ public class CreateColumnBeginAction extends ACreateAction {
 		super(part);
 		setCreationFactory(new JDPaletteCreationFactory(MColumn.class));
 	}
-
+	
 	/**
 	 * Initializes this action's text and images.
 	 */
