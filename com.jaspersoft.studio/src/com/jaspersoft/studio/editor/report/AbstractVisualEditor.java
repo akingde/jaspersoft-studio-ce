@@ -79,6 +79,7 @@ import com.jaspersoft.studio.editor.action.band.StretchToContentAction;
 import com.jaspersoft.studio.editor.action.copy.CopyAction;
 import com.jaspersoft.studio.editor.action.copy.CutAction;
 import com.jaspersoft.studio.editor.action.copy.PasteAction;
+import com.jaspersoft.studio.editor.action.exporter.AddExporterPropertyAction;
 import com.jaspersoft.studio.editor.action.image.ChangeImageExpression;
 import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
 import com.jaspersoft.studio.editor.action.order.BringForwardAction;
@@ -593,6 +594,11 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		
 		// --Create image change path action --
 		action = new  ChangeImageExpression(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		// --Create exporter properties action --
+		action = new  AddExporterPropertyAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 

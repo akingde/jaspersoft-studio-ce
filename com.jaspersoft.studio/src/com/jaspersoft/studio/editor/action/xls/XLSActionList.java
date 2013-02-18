@@ -22,10 +22,10 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.editor.action.CustomSelectionAction;
 import com.jaspersoft.studio.editor.action.pdf.PropertiesList;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -36,7 +36,7 @@ import com.jaspersoft.studio.property.SetValueCommand;
  * @author Orlandin Marco
  * 
  */
-public class XLSActionList extends SelectionAction {
+public class XLSActionList extends CustomSelectionAction {
 
 	/**
 	 * The value to set on the attributes

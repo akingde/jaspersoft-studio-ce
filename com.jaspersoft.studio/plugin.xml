@@ -1731,6 +1731,16 @@
                 class="com.jaspersoft.studio.model.image.MImage">
           </selectedObject>
        </toolitems>
+       <toolitems
+             ActionID="exporting_attributes_actions"
+             icon="icons/resources/equalizer--arrow.png"
+             id="com.jaspersoft.studio.editor.action.exporter.AddExporterPropertyAction"
+             label="Exporter Attributes"
+             tooltip="Set the attributes of the exporters">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
     </extension>
     <extension
           point="com.jaspersoft.studio.toolitemsets">
@@ -1844,6 +1854,16 @@
              visibility="true">
           <toolitem
                 toolitemID="com.jaspersoft.studio.editor.action.image.ChangeImageExpression"></toolitem>
+       </toolitemsets>
+       <toolitemsets
+             description="Action for the exporters"
+             id="com.jaspersoft.studio.graphic.exporters"
+             name="Exporter actions"
+             toolbaruri="com.jaspersoft.studio.graphic.exporters"
+             visibility="true">
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.exporter.AddExporterPropertyAction">
+          </toolitem>
        </toolitemsets>
     </extension>
     <extension

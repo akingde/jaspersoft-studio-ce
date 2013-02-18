@@ -32,7 +32,7 @@ import com.jaspersoft.studio.jface.dialogs.ImageSelectionDialog;
 import com.jaspersoft.studio.model.image.MImage;
 import com.jaspersoft.studio.utils.UIUtils;
 
-public class ChangeImageExpression extends SelectionAction implements IGlobalAction {
+public class ChangeImageExpression  extends SelectionAction implements IGlobalAction {
 
 	private MImage imageModel;
 	
@@ -45,7 +45,7 @@ public class ChangeImageExpression extends SelectionAction implements IGlobalAct
 	}
 	
 	private void loadImageModel(){
-		if (getSelection() != null) {
+		if ((getSelection() != null) && (getSelection() instanceof StructuredSelection)) {
 			StructuredSelection ss = (StructuredSelection) getSelection();
 			for (Iterator<Object> it = ss.iterator(); it.hasNext();) {
 				Object obj = it.next();

@@ -144,8 +144,10 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		protected void setCorrectValue(){
 			TemplateBorder actualBorder = getElementAttributes();
 			int index = exampleImages.indexOf(actualBorder);
-			if (index != -1) combo.select(index);
-			else combo.select(exampleImages.size());
+			if (!combo.isDisposed()){
+				if (index != -1) combo.select(index);
+				else combo.select(exampleImages.size());
+			}
 		}
 			
 		/**

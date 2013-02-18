@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.editor.action.border;
+package com.jaspersoft.studio.editor.action.exporter;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -43,15 +43,19 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.forms.widgets.ILayoutExtension;
 import org.eclipse.ui.internal.forms.widgets.FormUtil;
 
+import com.jaspersoft.studio.editor.action.border.TemplateBorder;
 import com.jaspersoft.studio.editor.toolitems.ISelectionContributionItem;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
@@ -72,20 +76,8 @@ public class AComboItemButtonContribution extends ContributionItem implements IS
 	
 	private List<TemplateBorder> exampleImages;
 	
-	protected MGraphicElementLineBox model;
+	protected MGraphicElement model;
 	
-	private ModelListener modelListener = new ModelListener();
-	
-	private class ModelListener implements PropertyChangeListener {
-
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			TemplateBorder actualBorder = getElementAttributes();
-			//int index = exampleImages.indexOf(actualBorder);
-			//if (index != -1) combo.select(index);
-			//else combo.select(exampleImages.size());
-		}
-	}
 	
 		/**
 		* Constructs the action by specifying the report viewer to associate with the item.
@@ -110,7 +102,7 @@ public class AComboItemButtonContribution extends ContributionItem implements IS
 				 */
 				@Override
 				public void exec() {
-					changeProperty();
+					//changeProperty();
 				}
 			});
 			if (selection != null) {
@@ -120,86 +112,14 @@ public class AComboItemButtonContribution extends ContributionItem implements IS
 					if (obj instanceof EditPart)
 						obj = ((EditPart) obj).getModel();
 					if (obj instanceof MGraphicElementLineBox) {
-						model = (MGraphicElementLineBox) obj;
-						model.getPropertyChangeSupport().addPropertyChangeListener(modelListener);
+						model = (MGraphicElement) obj;
 					}
 				}
 			}
-			loadImages();
 			return combo.getControl();
 		}
 		
-		private void loadImages() {
-			List<ComboItem> itemsList = new ArrayList<ComboItem>();
-			int order = 0;
-			for (TemplateBorder border: exampleImages) {
-				itemsList.add(new ComboItem("", true, border.getImage(), order, border, order));
-				order++;
-			}
-			itemsList.add(new ComboItem("", true, null, order, null, order));
-			combo.setItems(itemsList);
-		}		
-		
-		protected Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
-		//	Object oldValue = n.getPropertyValue(property);
-	//		if (((oldValue == null && newValue != null) || (oldValue != null && newValue == null) || (newValue != null && !newValue
-		//			.equals(oldValue))) && workbenchPart!= null) {
-				SetValueCommand setCommand = new SetValueCommand(n.getDisplayText());
-				setCommand.setTarget(n);
-				setCommand.setPropertyId(property);
-				setCommand.setPropertyValue(newValue);
-				return setCommand;
-		//	}
-		//	return null;
-		}
-		
-		
-		private void changeAllProperties(CompoundCommand cc, TemplateBorder selectedElement, MLinePen lp){
-			Command c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_COLOR, selectedElement.getColor(), lp);
-			if (c != null) cc.add(c);
-			c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_STYLE, selectedElement.getStyle(), lp);
-			if (c != null) cc.add(c);
-			c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_STYLE, selectedElement.getLineWidth(), lp);
-			if (c != null) cc.add(c);
-		}
-		
-		private TemplateBorder getElementAttributes(){
-				MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX); 
-				MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
-				LineStyleEnum lineStyle = LineStyleEnum.getByValue(((Integer)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).byteValue());
-				Float lineWidth = (Float)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
-				RGB lineColor = (RGB)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
-				TemplateBorder result =  new TemplateBorder(lineWidth, lineStyle, lineColor);
-				return result;
-		}
-		
-		
-		/**
-		 * Change the property of a linepen
-		 * @param property the property name
-		 * @param newValue the new value
-		 */
-		private void changeProperty() {
-				TemplateBorder selectedElement = exampleImages.get(combo.getSelectionIndex());
-				CompoundCommand cc = new CompoundCommand("Change border");
-				MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
-				
-				MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
-				changeAllProperties(cc,selectedElement,lp);
-				
-				lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
-				changeAllProperties(cc,selectedElement,lp);
-				
-				lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
-				changeAllProperties(cc,selectedElement,lp);
-				
-				lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
-				changeAllProperties(cc,selectedElement,lp);
 
-				CommandStack cs = getCommandStack();
-				cs.execute(cc);
-		}
-		
 		/**
 		 * Returns the editor's command stack. This is done by asking the workbench part for its CommandStack via
 		 * {@link org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)}.
@@ -214,7 +134,7 @@ public class AComboItemButtonContribution extends ContributionItem implements IS
 		* @see org.eclipse.jface.action.ContributionItem#dispose()
 		*/
 		public void dispose() {
-		combo = null;
+			combo = null;
 		}
 		
 		/**
@@ -231,20 +151,31 @@ public class AComboItemButtonContribution extends ContributionItem implements IS
 			Assert.isTrue(false, "Can not add to menu"); //$NON-NLS-1$
 		}
 		
+		private int computeMaximumWidth(Control c) {
+			if (c instanceof Composite) {
+				Layout layout = ((Composite) c).getLayout();
+				if (layout instanceof ILayoutExtension)
+					return ((ILayoutExtension) layout).computeMaximumWidth(
+							(Composite) c, true);
+			}
+			return c.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x;
+		}
+
+		
 		/**
 		* @see org.eclipse.jface.action.IContributionItem#fill(org.eclipse.swt.widgets.ToolBar, int)
 		*/
 		public void fill(ToolBar parent, int index) {
 			toolitem = new ToolItem(parent, SWT.SEPARATOR, index);
 			Control control = createControl(parent);
-			toolitem.setWidth(FormUtil.computeMaximumWidth(combo.getControl(), true));
+			toolitem.setWidth(computeMaximumWidth(combo.getControl()));
 			toolitem.setControl(control);
 		}
 		
 		private void onSelection() {
 			if (selection.isEmpty())
 				return;
-			changeProperty();
+			//changeProperty();
 		}
 
 
@@ -262,10 +193,6 @@ public class AComboItemButtonContribution extends ContributionItem implements IS
 		@Override
 		public void setSelection(ISelection selection) {
 			this.selection = selection;
-			if (model != null) {
-				model.getPropertyChangeSupport().removePropertyChangeListener(modelListener);
-				model = null;
-			}
 		}
 		
 		@Override

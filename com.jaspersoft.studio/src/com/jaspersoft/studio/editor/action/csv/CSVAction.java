@@ -22,10 +22,10 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.editor.action.CustomSelectionAction;
 import com.jaspersoft.studio.editor.action.pdf.PropertiesList;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
@@ -38,8 +38,8 @@ import com.jaspersoft.studio.property.SetValueCommand;
  * @author Orlandin Marco
  *
  */
-public class CSVAction extends SelectionAction{
-	
+public class CSVAction extends CustomSelectionAction{
+
 	/** Embedded attributes ids*/
 	public static String COL_NAME = "net.sf.jasperreports.export.csv.column.name";
 	

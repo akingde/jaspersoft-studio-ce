@@ -155,13 +155,8 @@ public class XLSElementDecorator extends TextElementDecorator {
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
-
-	@Override
-	public void registerActions(ActionRegistry registry, List<String> selectionActions, GraphicalViewer gviewer,
-			AbstractVisualEditor part) {
-		gviewer.setProperty(ShowXLSTagsAction.ID, true);
-		IAction action = new ShowXLSTagsAction(gviewer, part.getJrContext());
-		registry.registerAction(action);
+	
+	public void registerActions(ActionRegistry registry, List<String> selectionActions,	IWorkbenchPart part) {
 		registerFit(registry, part, selectionActions);
 		registerAutoFilter(registry, part, selectionActions);
 		registerBreak(registry, part, selectionActions);
@@ -170,13 +165,15 @@ public class XLSElementDecorator extends TextElementDecorator {
 	}
 
 	@Override
-	public void buildContextMenu(ActionRegistry registry, EditPartViewer viewer, IMenuManager menu) {
-		IStructuredSelection sel = (IStructuredSelection) viewer.getSelection();
-		if (sel.getFirstElement() instanceof EditPart) {
-			EditPart ep = (EditPart) sel.getFirstElement();
-			if (!(ep.getModel() instanceof MGraphicElement))
-				return;
-		}
+	public void registerActions(ActionRegistry registry, List<String> selectionActions, GraphicalViewer gviewer,
+			AbstractVisualEditor part) {
+		gviewer.setProperty(ShowXLSTagsAction.ID, true);
+		IAction action = new ShowXLSTagsAction(gviewer, part.getJrContext());
+		registry.registerAction(action);
+		registerActions(registry, selectionActions, part);
+	}
+	
+	public void fillContextMenu(ActionRegistry registry, IMenuManager menu){
 		MenuManager submenu = new MenuManager("XLS Tags");
 		MenuManager fitMenu = new MenuManager("Fit");
 		MenuManager autoFilterMenu = new MenuManager("Autofilter");
@@ -243,6 +240,17 @@ public class XLSElementDecorator extends TextElementDecorator {
 		freezeColMenu.add(action);
 
 		menu.add(submenu);
+	}
+
+	@Override
+	public void buildContextMenu(ActionRegistry registry, EditPartViewer viewer, IMenuManager menu) {
+		IStructuredSelection sel = (IStructuredSelection) viewer.getSelection();
+		if (sel.getFirstElement() instanceof EditPart) {
+			EditPart ep = (EditPart) sel.getFirstElement();
+			if (!(ep.getModel() instanceof MGraphicElement))
+				return;
+		}
+		fillContextMenu(registry, menu);
 	}
 
 	@Override

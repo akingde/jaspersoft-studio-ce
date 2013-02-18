@@ -22,10 +22,10 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.editor.action.CustomSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -35,7 +35,7 @@ import com.jaspersoft.studio.property.SetValueCommand;
  * The Class PdfActionAbstract implements common action (most UI related) of the 
  * pdf action
  */
-public abstract class PdfActionAbstact extends SelectionAction {
+public abstract class PdfActionAbstact extends CustomSelectionAction {
 
 	/** Id of the actions */
 	public final String ID_Full; //$NON-NLS-1$

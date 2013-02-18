@@ -22,10 +22,10 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.editor.action.CustomSelectionAction;
 import com.jaspersoft.studio.editor.action.pdf.PropertiesList;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -35,7 +35,7 @@ import com.jaspersoft.studio.property.SetValueCommand;
  * @author Orlandin Marco
  *
  */
-public class XLSAction extends SelectionAction{
+public class XLSAction extends CustomSelectionAction{
 	
 	/** Embedded attributes ids*/
 	public static String FIT_COL_ID = "net.sf.jasperreports.export.xls.auto.fit.column";

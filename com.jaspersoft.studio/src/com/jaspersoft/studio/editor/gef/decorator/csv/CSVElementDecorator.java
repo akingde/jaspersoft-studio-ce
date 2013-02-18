@@ -70,7 +70,7 @@ public class CSVElementDecorator extends TextElementDecorator {
 	 * @param part
 	 * @param selectionActions
 	 */
-	private void registerCSVActions(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
+	public void registerActions(ActionRegistry registry, List<String> selectionActions, IWorkbenchPart part) {
 		
 		IAction action = new CSVColDataAction(part, Messages.CSVElementDecorator_CreateColumn);
 		registry.registerAction(action);
@@ -100,12 +100,11 @@ public class CSVElementDecorator extends TextElementDecorator {
 		gviewer.setProperty(ShowCSVTagsAction.ID, true);
 		IAction action = new ShowCSVTagsAction(gviewer, part.getJrContext());
 		registry.registerAction(action);
-		registerCSVActions(registry, part, selectionActions);
+		registerActions(registry, selectionActions, part);
 	}
+	
 
-	@Override
-	public void buildContextMenu(ActionRegistry registry, EditPartViewer viewer, IMenuManager menu) {
-		IStructuredSelection sel = (IStructuredSelection) viewer.getSelection();
+	public void fillContextMenu(ActionRegistry registry, IMenuManager menu, IStructuredSelection sel) {
 		if (sel.getFirstElement() instanceof EditPart) {
 			EditPart ep = (EditPart) sel.getFirstElement();
 			if (ep.getModel() instanceof MTextElement){
@@ -131,6 +130,12 @@ public class CSVElementDecorator extends TextElementDecorator {
 				menu.add(submenu);
 			}
 		}
+	}
+
+	@Override
+	public void buildContextMenu(ActionRegistry registry, EditPartViewer viewer, IMenuManager menu) {
+		IStructuredSelection sel = (IStructuredSelection) viewer.getSelection();
+		fillContextMenu(registry, menu, sel);
 	}
 
 	@Override
