@@ -92,6 +92,11 @@ public class ColorStyledText {
 	private boolean refreshingGuard;
 	
 	/**
+	 * Area where the component is placed
+	 */
+	private Composite paintArea;
+	
+	/**
 	 * Class that handle the editing of the textual value of the color, if the textual
 	 * value is in the expected format the new color will be used and the change will
 	 * be notified to the handler, otherwise the old color will be taken
@@ -150,6 +155,14 @@ public class ColorStyledText {
 		}
 	}
 	
+	public void setBackground(Color color){
+		paintArea.setBackground(color);
+	}
+	
+	public void setLayoutData(Object data){
+		paintArea.setLayoutData(data);
+	}
+	
 	/**
 	 * Check if a keycode, a code associated to a keybord's key, is a number
 	 * @param keyCode the key code
@@ -186,7 +199,7 @@ public class ColorStyledText {
 		refreshingGuard = false;
 		listener = new ArrayList<ModifyListener>();
 		provider = new ColorLabelProvider(NullEnum.NULL);
-		final Composite paintArea = new Composite(parent, SWT.BORDER);
+		paintArea = new Composite(parent, SWT.BORDER);
 		GridLayout layout = new GridLayout(3,false);
 		paintArea.setLayout(layout);
 		layout.horizontalSpacing = 1;
@@ -229,6 +242,7 @@ public class ColorStyledText {
 		textArea.setLayoutData(textData);
 		textArea.setAlignment(SWT.LEFT);
 		textArea.addModifyListener(new EditListener());
+		textArea.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		//Paint the button
 		GridData lineColorData = new GridData();
