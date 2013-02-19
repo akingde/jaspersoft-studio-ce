@@ -8,6 +8,8 @@
 
 	<properties>
 		<tycho-version>0.16.0</tycho-version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<repositories>
@@ -15,14 +17,14 @@
 			Local repository obtained from the target platform, using the following command:
 			./eclipse  -debug -consolelog -nosplash -verbose \
 			-application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher \
-			-metadataRepository file:/tmp/temporaryrepo \
-			-artifactRepository file:/tmp/temporaryrepo \
+			-metadataRepository file:/Users/mrabbi/Sviluppo/jaspersoftstudio/updatesite/jss381target \
+			-artifactRepository file:/Users/mrabbi/Sviluppo/jaspersoftstudio/updatesite/jss381target \
 			-source /Users/mrabbi/Sviluppo/jaspersoftstudio/targetPlatforms/macserver/jss_381 -compress -append -publishArtifacts
 		-->
 		<repository>
 			<id>jss381TargetPlaftorm</id>
 			<layout>p2</layout>
-			<url>file:///tmp/temporaryrepo</url>
+			<url>file://${targetPlatform.repo}</url>
 		</repository>
 		<!-- The online repositories 
 		<repository>
@@ -65,6 +67,16 @@
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<extensions>true</extensions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -124,9 +136,15 @@
 	</build>
 
 	<modules>
+		<!-- All Jaspersoft Studio plug-ins -->
 		<module>plugins</module>
+		<!-- All Jaspersoft Studio features -->
 		<module>features</module>
+		<!-- The plug-in for (old-style) update site: uses eclipse-update-site packaging -->
+		<module>updatesite</module>
+		<!--  The product for different platforms -->
 		<module>product</module>
+		<!--  A P2-like repository -->
 		<module>repository</module>
 	</modules>
 </project>

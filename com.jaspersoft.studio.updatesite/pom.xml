@@ -4,9 +4,9 @@
 
 	<parent>
 		<groupId>com.jaspersoft.studio.community-edition</groupId>
-		<artifactId>plugins</artifactId>
+		<artifactId>updatesite</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../aggregator/plugins/</relativePath>
+		<relativePath>../aggregator/updatesite/</relativePath>
 	</parent>
 
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
@@ -14,6 +14,7 @@
 	<packaging>eclipse-update-site</packaging>
 	<version>2.0.1-SNAPSHOT</version>
 
+	<!--
 	<build>
 		<plugins>
 			<plugin>
@@ -25,4 +26,5 @@
 			</plugin>
 		</plugins>
 	</build>
+	-->
 </project> 

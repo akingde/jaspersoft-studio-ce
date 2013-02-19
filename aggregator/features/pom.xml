@@ -13,6 +13,33 @@
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<build>
+		<plugins>
+			<!-- Signing the features -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<alias>${signing.alias}</alias>
+					<keystore>${signing.keystore}</keystore>
+					<storepass>${signing.storepass}</storepass>
+					<type>${signing.storetype}</type>
+					<verify>true</verify>
+					<jarPath>${project.build.directory}/${project.artifactId}_${buildQualifier}.jar</jarPath>
+					<excludes>*com.jaspersoft.studio.updatesite*</excludes>
+				</configuration>
+			</plugin>		
+		</plugins>
+	</build>
+
 	<modules>
 		<module>../../net.sf.jasperreports.feature</module>
 		<module>../../net.sf.jasperreports.samples.feature</module>
