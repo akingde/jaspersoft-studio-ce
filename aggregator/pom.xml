@@ -24,7 +24,7 @@
 		<repository>
 			<id>jss381TargetPlaftorm</id>
 			<layout>p2</layout>
-			<url>file://${targetPlatform.repo}</url>
+			<url>file://${targetplatform.repo}</url>
 		</repository>
 		<!-- The online repositories 
 		<repository>
