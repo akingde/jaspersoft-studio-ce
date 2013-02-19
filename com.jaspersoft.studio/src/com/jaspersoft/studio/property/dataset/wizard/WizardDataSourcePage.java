@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.wizard;
 
@@ -53,26 +48,23 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.actions.CreateDataAdapterAction;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.MDatasources;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardRunnablePage;
 
-
 /**
  * 
- * This data source wizard page allows to select a data adapter and, if supported by the specific data adapter,
- * edit a query to get the fields. The fields are retrieved with the support of the
- * {@link com.jaspersoft.studio.wizards.JSSWizardRunnablePage JSSWizardRunnablePage} abstract class.</br>
- * </br>
- * The result of the elaboration must be checked by the wizard, which will be in charge to decide or not
- * to display other steps, like Fields selection and Group By fields selection.</br>
- * </br>
- * After the elaboration, this page puts inside the wizard settings map an List of JRDesignField
- * with the key WizardDataSourcePage.DISCOVERED_FIELDS.</br>
- * Any interested step can use this List.</br>
- * The WizardFieldsPage will use this key to populate the list of available fields.</br>
+ * This data source wizard page allows to select a data adapter and, if supported by the specific data adapter, edit a
+ * query to get the fields. The fields are retrieved with the support of the
+ * {@link com.jaspersoft.studio.wizards.JSSWizardRunnablePage JSSWizardRunnablePage} abstract class.</br> </br> The
+ * result of the elaboration must be checked by the wizard, which will be in charge to decide or not to display other
+ * steps, like Fields selection and Group By fields selection.</br> </br> After the elaboration, this page puts inside
+ * the wizard settings map an List of JRDesignField with the key WizardDataSourcePage.DISCOVERED_FIELDS.</br> Any
+ * interested step can use this List.</br> The WizardFieldsPage will use this key to populate the list of available
+ * fields.</br>
  * 
  * @see WizardFieldsPage
  * @see WizardFieldsGroupByPage
@@ -80,27 +72,24 @@ import com.jaspersoft.studio.wizards.JSSWizardRunnablePage;
  * 
  * 
  * @author gtoffoli
- *
+ * 
  */
 public class WizardDataSourcePage extends JSSWizardRunnablePage {
-	
+
 	public static final String DISCOVERED_FIELDS = "discovered_fields"; //$NON-NLS-1$
 	public static final String DATASET_FIELDS = "dataset_fields"; //$NON-NLS-1$
 	public static final String GROUP_FIELDS = "group_fields"; //$NON-NLS-1$
 	public static final String DATASET_QUERY_LANGUAGE = "query_language"; //$NON-NLS-1$
 	public static final String DATASET_QUERY_TEXT = "query_text"; //$NON-NLS-1$
-	
+
 	private Composite composite_editor = null;
 	private AWizardDataEditorComposite activeEditor = null;
 	private Label lblEmptyEditor = null;
 	private Map<DataAdapterDescriptor, AWizardDataEditorComposite> editors = new HashMap<DataAdapterDescriptor, AWizardDataEditorComposite>();
-	
-	
+
 	/**
-	 * This variable is used to initialize this page with all the defaults
-	 * as it gets visible.
-	 * If this is not the first load, the loadSettings method will
-	 * probably do nothing.
+	 * This variable is used to initialize this page with all the defaults as it gets visible. If this is not the first
+	 * load, the loadSettings method will probably do nothing.
 	 * 
 	 */
 	boolean firstLoad = true;
@@ -108,9 +97,9 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 	// Global UI elements;
 	protected Combo dataAdaptersCombo = null;
 	List<DataAdapterDescriptor> dataAdapterDescriptors = new ArrayList<DataAdapterDescriptor>();
-	
+
 	private DataAdapterDescriptor selectedDataAdapterDescriptor = null;
-	
+
 	public WizardDataSourcePage() {
 		super("datasourcepage"); //$NON-NLS-1$
 		setTitle(Messages.WizardDataSourcePage_datasource);
@@ -125,7 +114,7 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 	protected String getContextName() {
 		return ContextHelpIDs.WIZARD_SELECT_DATASET;
 	}
-	
+
 	/**
 	 * Return the selected data adapter...
 	 * 
@@ -139,20 +128,19 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
 		setControl(composite);
-	
-		
+
 		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
-		
+
 		Composite composite_container = new Composite(composite, SWT.NONE);
 		composite_container.setLayout(new FormLayout());
-		
+
 		Label lblDataAdapter = new Label(composite_container, SWT.NONE);
 		FormData fd_lblDataAdapter = new FormData();
 		fd_lblDataAdapter.top = new FormAttachment(0, 24);
 		fd_lblDataAdapter.left = new FormAttachment(0, 10);
 		lblDataAdapter.setLayoutData(fd_lblDataAdapter);
 		lblDataAdapter.setText(Messages.WizardDataSourcePage_lblNewLabel_text);
-		
+
 		Composite composite_dataadapter = new Composite(composite_container, SWT.NONE);
 		GridLayout gl_composite_dataadapter = new GridLayout(2, false);
 		gl_composite_dataadapter.horizontalSpacing = 0;
@@ -165,12 +153,12 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		fd_composite_dataadapter.right = new FormAttachment(100, -10);
 		fd_composite_dataadapter.top = new FormAttachment(0, 15);
 		composite_dataadapter.setLayoutData(fd_composite_dataadapter);
-		
+
 		dataAdaptersCombo = new Combo(composite_dataadapter, SWT.READ_ONLY);
-//  Code used for TableCombo from Nebula, unfortunately on Mac it looks too bad to be used.
-//		dataAdaptersCombo.defineColumns(1);
-//		dataAdaptersCombo.setShowTableHeader(false);
-		
+		// Code used for TableCombo from Nebula, unfortunately on Mac it looks too bad to be used.
+		// dataAdaptersCombo.defineColumns(1);
+		// dataAdaptersCombo.setShowTableHeader(false);
+
 		dataAdaptersCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -178,33 +166,31 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 			}
 		});
 		dataAdaptersCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+
 		Button btnNew = new Button(composite_dataadapter, SWT.NONE);
 		btnNew.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true, 1, 1));
 		btnNew.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-			
+
 				CreateDataAdapterAction cda = new CreateDataAdapterAction();
 				cda.run();
-				
-				if (cda.getNewDataAdapter() != null)
-				{
+
+				if (cda.getNewDataAdapter() != null) {
 					// Force a reload of the settings..
 					firstLoad = true;
 					loadSettings();
-					int index = dataAdapterDescriptors.indexOf( cda.getNewDataAdapter() );
-					if (index >= 0)
-					{
-							dataAdaptersCombo.select(index);
-							handleDataAdapterSelectionEvent(null);
+					int index = dataAdapterDescriptors.indexOf(cda.getNewDataAdapter());
+					if (index >= 0) {
+						dataAdaptersCombo.select(index);
+						handleDataAdapterSelectionEvent(null);
 					}
 				}
-				
+
 			}
 		});
 		btnNew.setText(Messages.WizardDataSourcePage_btnNew_text);
-		
+
 		composite_editor = new Composite(composite_container, SWT.NONE);
 		composite_editor.setLayout(new StackLayout());
 		FormData fd_composite_editor = new FormData();
@@ -213,207 +199,176 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		fd_composite_editor.left = new FormAttachment(0, 10);
 		fd_composite_editor.top = new FormAttachment(0, 89);
 		composite_editor.setLayoutData(fd_composite_editor);
-		
+
 		lblEmptyEditor = new Label(composite_editor, SWT.BORDER);
 		lblEmptyEditor.setText(Messages.WizardDataSourcePage_lblThisDataAdapter_text);
-		
+
 	}
 
 	/**
-	 * This procedure initialize the dialog page with the list of data adapters only
-	 * if this is for real just the first time the page is shown.
+	 * This procedure initialize the dialog page with the list of data adapters only if this is for real just the first
+	 * time the page is shown.
 	 * 
 	 */
 	public void loadSettings() {
-		
-		if (!firstLoad) return;
+
+		if (!firstLoad)
+			return;
 		firstLoad = false;
 
 		dataAdapterDescriptors.clear();
 		dataAdaptersCombo.removeAll();
-		
+
 		// Look if there is a specific project in which we are working...
 		// In other words we assume that the user may have choose a project directory
 		// in a previous step, and this directory has been stored in the
 		// settings with the key "new_file_path"...
 		IProject selectedProject = null;
-		
-		if (getSettings() != null && getSettings().containsKey(JSSWizard.FILE_PATH))
-		{
-			IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember( ((IPath)getSettings().get(JSSWizard.FILE_PATH)).toOSString() );
-			if (resource != null && resource.getProject() != null)
-			{
+
+		if (getSettings() != null && getSettings().containsKey(JSSWizard.FILE_PATH)) {
+			IResource resource = ResourcesPlugin.getWorkspace().getRoot()
+					.findMember(((IPath) getSettings().get(JSSWizard.FILE_PATH)).toOSString());
+			if (resource != null && resource.getProject() != null) {
 				selectedProject = resource.getProject();
 			}
 		}
-		
+
 		List<ADataAdapterStorage> storages = new ArrayList<ADataAdapterStorage>();
 		// Load all the data adapters...
 		// Attention, we are not loading all the possible data storages, but only the ones we know
 		// which are preferences and project. In the future we may have other data storages
-		storages.add( DataAdapterManager.getPreferencesStorage() );
-		
-		if (selectedProject != null)
-		{
-			storages.add( DataAdapterManager.getProjectStorage(selectedProject) );
+		storages.add(DataAdapterManager.getPreferencesStorage());
+
+		if (selectedProject != null) {
+			storages.add(DataAdapterManager.getProjectStorage(selectedProject));
 		}
-		
-		for (ADataAdapterStorage storage : storages)
-		{
-			for (DataAdapterDescriptor d : storage.getDataAdapterDescriptors()) {
+
+		for (ADataAdapterStorage storage : storages) {
+			List<DataAdapterDescriptor> das = new ArrayList<DataAdapterDescriptor>(storage.getDataAdapterDescriptors());
+			// Sort data adapters
+			Collections.sort(das, new Comparator<DataAdapterDescriptor>() {
+				@Override
+				public int compare(DataAdapterDescriptor o1, DataAdapterDescriptor o2) {
+					return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
+				}
+			});
+			for (DataAdapterDescriptor d : das) {
+				DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(d.getDataAdapter().getClass()
+						.getCanonicalName());
+
+				// Code used for TableCombo, not used because the TableCombo looks bad on Mac.
+				// TableItem ti = new TableItem(dataAdaptersCombo.getTable(), SWT.NONE);
+				// ti.setImage(JaspersoftStudioPlugin.getImage(d.getIcon16()));
+				// ti.setText(d.getName());
+
+				// Since we are not showing icons, we append the data adapter type to the name
+				String label = d.getName();
+				if (storage instanceof FileDataAdapterStorage)
+					label += " - [" + storage.getUrl(d) + "]";
+				else if (factory != null)
+					label += " - " + factory.getLabel();
+				dataAdaptersCombo.add(label); //$NON-NLS-1$
 				dataAdapterDescriptors.add(d);
 			}
 		}
-		
-		// Sort data adapters
-		Collections.sort(dataAdapterDescriptors, new Comparator<DataAdapterDescriptor>() {
-			@Override
-			public int compare(DataAdapterDescriptor o1, DataAdapterDescriptor o2) {
-				return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
-			}
-		});
-		
-		for (DataAdapterDescriptor dataAdapterDescriptor : dataAdapterDescriptors)
-		{
-			
-			DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass( dataAdapterDescriptor.getDataAdapter().getClass().getCanonicalName());
 
-			// Code used for TableCombo, not used because the TableCombo looks bad on Mac.
-			//TableItem ti = new TableItem(dataAdaptersCombo.getTable(), SWT.NONE);
-			//ti.setImage(JaspersoftStudioPlugin.getImage(d.getIcon16()));
-			//ti.setText(d.getName());
-
-			// Since we are not showing icons, we append the data adapter type to the name
-			String label = dataAdapterDescriptor.getName();
-			if(factory != null)
-				label += " - " + factory.getLabel();
-			dataAdaptersCombo.add(label   ); //$NON-NLS-1$
-		}
-		
-
-	  if (dataAdapterDescriptors.size() > 0)
-	  {
-	  	dataAdaptersCombo.select(0);
-	  	// update the editor control state
+		if (dataAdapterDescriptors.size() > 0) {
+			dataAdaptersCombo.select(0);
+			// update the editor control state
 			handleDataAdapterSelectionEvent(null);
-	  }
-		
-		
-		
+		}
+
 	}
-	
-	
-	
+
 	/**
 	 * Invoked when a data adapter is selected from the combo box...
 	 */
 	public void handleDataAdapterSelectionEvent(SelectionEvent event) {
-		
-		
+
 		selectedDataAdapterDescriptor = null;
-		
-		if (dataAdaptersCombo.getSelectionIndex() >= 0)
-		{
+
+		if (dataAdaptersCombo.getSelectionIndex() >= 0) {
 			DataAdapterDescriptor da = dataAdapterDescriptors.get(dataAdaptersCombo.getSelectionIndex());
-			
+
 			selectedDataAdapterDescriptor = da;
-			
+
 			AWizardDataEditorComposite editor = null;
-			
-			if (editors.containsKey(da))
-			{
+
+			if (editors.containsKey(da)) {
 				editor = editors.get(da);
-			}
-			else
-			{
-				if (da instanceof IWizardDataEditorProvider)
-				{
-					editor = ((IWizardDataEditorProvider)da).createDataEditorComposite(composite_editor, this);
+			} else {
+				if (da instanceof IWizardDataEditorProvider) {
+					editor = ((IWizardDataEditorProvider) da).createDataEditorComposite(composite_editor, this);
 					editors.put(da, editor);
 				}
 			}
-			
-			if (editor != null)
-			{
-				if (editor != activeEditor)
-				{
+
+			if (editor != null) {
+				if (editor != activeEditor) {
 					activeEditor = editor;
-					((StackLayout)composite_editor.getLayout()).topControl = editor;
+					((StackLayout) composite_editor.getLayout()).topControl = editor;
 					composite_editor.layout();
 				}
-			}
-			else
-			{
+			} else {
 				activeEditor = null;
 				// show default component...
-				((StackLayout)composite_editor.getLayout()).topControl = lblEmptyEditor;
+				((StackLayout) composite_editor.getLayout()).topControl = lblEmptyEditor;
 				composite_editor.layout();
 			}
 		}
-		
+
 		fireChangeEvent();
-}
-	
-	
-	
+	}
+
 	/**
 	 * We use the setVisible(true) entry point to load the UI with loadSettings()...
 	 */
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
-		if (visible == true)
-		{
+		if (visible == true) {
 			loadSettings();
 		}
 	}
 
 	@Override
 	public void run(final IProgressMonitor monitor) throws Exception {
-		
-		if (activeEditor != null)
-		{
-			
+
+		if (activeEditor != null) {
+
 			getSettings().remove(DISCOVERED_FIELDS);
-			getSettings().put( DATASET_QUERY_LANGUAGE , activeEditor.getQueryLanguage());
-			getSettings().put( DATASET_QUERY_TEXT , activeEditor.getQueryString());
-			
-			
+			getSettings().put(DATASET_QUERY_LANGUAGE, activeEditor.getQueryLanguage());
+			getSettings().put(DATASET_QUERY_TEXT, activeEditor.getQueryString());
+
 			Display.getDefault().asyncExec(new Runnable() {
 
 				public void run() {
 					monitor.setTaskName("Getting fields...");
 				}
 			});
-			
+
 			List<JRDesignField> fields = activeEditor.readFields();
 
-			if (fields != null && !fields.isEmpty())
-			{
-				if (getSettings() != null)
-				{
-						getSettings().put(DISCOVERED_FIELDS, fields);
+			if (fields != null && !fields.isEmpty()) {
+				if (getSettings() != null) {
+					getSettings().put(DISCOVERED_FIELDS, fields);
 				}
 			}
-		}
-		else
-		{
-			getSettings().remove( DATASET_QUERY_LANGUAGE );
-			getSettings().remove( DATASET_QUERY_TEXT );
+		} else {
+			getSettings().remove(DATASET_QUERY_LANGUAGE);
+			getSettings().remove(DATASET_QUERY_TEXT);
 		}
 	}
 
 	/**
-	 * We don't want to start an elaboration if there is not
-	 * a suitable editor active...
+	 * We don't want to start an elaboration if there is not a suitable editor active...
 	 * 
-	 * @return boolean true if an elaboration is required, or false if the current status of the page does not require to trigger an elaboration
+	 * @return boolean true if an elaboration is required, or false if the current status of the page does not require to
+	 *         trigger an elaboration
 	 */
 	@Override
 	public boolean requireElaboration() {
 		return activeEditor != null;
 	}
-	
-	
-	
+
 }

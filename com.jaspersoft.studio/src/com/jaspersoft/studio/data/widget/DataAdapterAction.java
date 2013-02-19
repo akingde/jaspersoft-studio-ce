@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.widget;
 
@@ -33,6 +28,7 @@ import com.jasperassistant.designer.viewer.ReportViewerEvent;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 
 public class DataAdapterAction extends Action implements IMenuCreator, PropertyChangeListener, IReportViewerListener {
@@ -90,10 +86,13 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 		};
 		if (dastorages != null) {
 			for (int i = 0; i < dastorages.length; i++) {
-				ADataAdapterStorage s = dastorages[i];
+				final ADataAdapterStorage s = dastorages[i];
 				for (DataAdapterDescriptor d : s.getDataAdapterDescriptors()) {
-					MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
-					m1.setText(d.getName());
+					final MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
+					if (s instanceof FileDataAdapterStorage)
+						m1.setText(d.getName() + " - [" + s.getUrl(d) + "]");
+					else
+						m1.setText(d.getName());
 					m1.setImage(JaspersoftStudioPlugin.getInstance().getImage(d.getIcon16()));
 					m1.addSelectionListener(listener);
 					m1.setData("da.key", d);
