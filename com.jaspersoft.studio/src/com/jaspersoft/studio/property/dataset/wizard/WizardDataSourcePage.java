@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.wizard;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,6 +28,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -158,7 +162,13 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		// Code used for TableCombo from Nebula, unfortunately on Mac it looks too bad to be used.
 		// dataAdaptersCombo.defineColumns(1);
 		// dataAdaptersCombo.setShowTableHeader(false);
+		dataAdaptersCombo.addDisposeListener(new DisposeListener() {
 
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				cleanDataAdapterStorageListeners();
+			}
+		});
 		dataAdaptersCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -232,8 +242,9 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 				selectedProject = resource.getProject();
 			}
 		}
+		cleanDataAdapterStorageListeners();
 
-		List<ADataAdapterStorage> storages = new ArrayList<ADataAdapterStorage>();
+		storages = new ArrayList<ADataAdapterStorage>();
 		// Load all the data adapters...
 		// Attention, we are not loading all the possible data storages, but only the ones we know
 		// which are preferences and project. In the future we may have other data storages
@@ -270,6 +281,7 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 				dataAdaptersCombo.add(label); //$NON-NLS-1$
 				dataAdapterDescriptors.add(d);
 			}
+			storage.addPropertyChangeListener(dsListner);
 		}
 
 		if (dataAdapterDescriptors.size() > 0) {
@@ -279,6 +291,22 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		}
 
 	}
+
+	private void cleanDataAdapterStorageListeners() {
+		if (storages != null) {
+			for (ADataAdapterStorage s : storages)
+				s.removePropertyChangeListener(dsListner);
+		}
+	}
+
+	private PropertyChangeListener dsListner = new PropertyChangeListener() {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent arg0) {
+			loadSettings();
+		}
+	};
+	private List<ADataAdapterStorage> storages;
 
 	/**
 	 * Invoked when a data adapter is selected from the combo box...
