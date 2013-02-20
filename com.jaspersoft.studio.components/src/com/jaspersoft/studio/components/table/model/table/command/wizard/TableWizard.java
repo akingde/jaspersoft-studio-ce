@@ -264,7 +264,6 @@ public class TableWizard extends JSSWizard {
     public List<JRDesignStyle> createStyles(JasperDesign jd, TableStyle style)
     {
     	String baseName = "Table";
-		styleList = new ArrayList<JRDesignStyle>();
 		
 		for (int i = 0;; i++) {
 			String name = baseName;

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,14 +35,18 @@ import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.CalculationEnum;
+import net.sf.jasperreports.engine.type.ModeEnum;
 
 import org.eclipse.jface.wizard.IWizardPage;
 
@@ -49,8 +54,10 @@ import com.jaspersoft.studio.components.crosstab.CrosstabManager;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.command.CreateColumnCommand;
+import com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle;
 import com.jaspersoft.studio.components.crosstab.model.measure.command.CreateMeasureCommand;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.CreateRowCommand;
+import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
@@ -65,11 +72,17 @@ public class CrosstabWizard extends JSSWizard {
 	public static final String CROSSTAB_COLUMNS = "CROSSTAB_COLUMNS";
 	public static final String CROSSTAB_ROWS = "CROSSTAB_ROWS";
 	public static final String CROSSTAB_MEASURES = "CROSSTAB_MEASURES";
+	
+	/**
+	 * The set of styles that will be created as the table is added to the report
+	 */
+	private List<JRDesignStyle> styleList;
 
 	private WizardDatasetPage step1;
 	private WizardFieldsPage step2;
 	private WizardFieldsPage step3;
 	private CrosstabWizardMeasurePage step4;
+	private CrosstabWizardLayoutPage step5;
 
 	// private CrosstabWizardLayoutPage step6;
 	// private WizardConnectionPage step2;
@@ -100,6 +113,9 @@ public class CrosstabWizard extends JSSWizard {
 
 		step4 = new CrosstabWizardMeasurePage();
 		addPage(step4);
+		
+		step5 = new CrosstabWizardLayoutPage();
+		addPage(step5);
 
 		// FIXME: Provide better layout page.
 		// step6 = new CrosstabWizardLayoutPage();
@@ -198,7 +214,7 @@ public class CrosstabWizard extends JSSWizard {
 
 		JRDesignCrosstab jdc = (JRDesignCrosstab) crosstab.getValue();
 		JRDesignDataset dataset = getDataset();
-
+		styleList = createStyles(getConfig().getJasperDesign(), step5.getSelectedStyle());
 		if (dataset.isMainDataset()) {
 			// main dataset selected => dataset run is null
 			((JRDesignCrosstabDataset) jdc.getDataset()).setDatasetRun(null);
@@ -283,11 +299,10 @@ public class CrosstabWizard extends JSSWizard {
 						tf.setY(y);
 						tf.setWidth(c.getWidth());
 						tf.setHeight(h);
-						//			if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) { //$NON-NLS-1$ //$NON-NLS-2$
-						//				tf.setStyle((JRStyle) jasperDesign.getStylesMap().get("Crosstab Data Text")); //$NON-NLS-1$
-						// }
 						tf.setExpression(exp);
 						((JRDesignCellContents) c.getContents()).addElement(tf);
+						if (c.getRowTotalGroup() != null || c.getColumnTotalGroup() != null) ((JRDesignCellContents) c.getContents()).setStyle(styleList.get(1));
+						else ((JRDesignCellContents) c.getContents()).setStyle(styleList.get(2));
 						y += h;
 					}
 				}
@@ -301,12 +316,14 @@ public class CrosstabWizard extends JSSWizard {
 				JRDesignElement el = (JRDesignElement) e;
 				el.setWidth(colGroup.getHeader().getWidth());
 				el.setHeight(colGroup.getHeader().getHeight());
+				el.setStyle(styleList.get(0));
 			}
 
 			for (JRElement e : colGroup.getTotalHeader().getElements()) {
 				JRDesignElement el = (JRDesignElement) e;
 				el.setWidth(colGroup.getTotalHeader().getWidth());
 				el.setHeight(colGroup.getTotalHeader().getHeight());
+				el.setStyle(styleList.get(1));
 			}
 		}
 	}
@@ -318,11 +335,13 @@ public class CrosstabWizard extends JSSWizard {
 				JRDesignElement el = (JRDesignElement) e;
 				el.setWidth(colGroup.getHeader().getWidth());
 				el.setHeight(colGroup.getHeader().getHeight());
+				el.setStyle(styleList.get(0));
 			}
 			for (JRElement e : colGroup.getTotalHeader().getElements()) {
 				JRDesignElement el = (JRDesignElement) e;
 				el.setWidth(colGroup.getTotalHeader().getWidth());
 				el.setHeight(colGroup.getTotalHeader().getHeight());
+				el.setStyle(styleList.get(1));
 			}
 		}
 	}
@@ -629,5 +648,95 @@ public class CrosstabWizard extends JSSWizard {
 			measures = null;
 		}
 	}
+	
+	
+	private void setBorderWidth(JRDesignStyle element, float lineWidth){
+		JRLineBox box = element.getLineBox();
+		box.getPen().setLineWidth(lineWidth);
+		box.getLeftPen().setLineWidth(lineWidth);
+		box.getRightPen().setLineWidth(lineWidth);
+		box.getBottomPen().setLineWidth(lineWidth);
+		box.getTopPen().setLineWidth(lineWidth);
+	}
+	
+	private void setBorderColor(JRDesignStyle element, Color lineColor){
+		JRLineBox box = element.getLineBox();
+		box.getPen().setLineColor(lineColor);
+		box.getLeftPen().setLineColor(lineColor);
+		box.getRightPen().setLineColor(lineColor);
+		box.getBottomPen().setLineColor(lineColor);
+		box.getTopPen().setLineColor(lineColor);
+	}
+	
+	/**
+	 * Starting from a TableStyle it generate a list of styles that will be applied to the table.
+	 * For every style generated will be executed an addCommand to add them to the report
+	 * 
+	 * @param jd the jasperdesign
+	 * @param style the TableStyle from where all the styles for the table will be generated
+	 * @return a list of style that can be applied to the table
+	 */
+    public List<JRDesignStyle> createStyles(JasperDesign jd, CrosstabStyle style)
+    {
+    	String baseName = "Crosstab";
+		
+		for (int i = 0;; i++) {
+			String name = baseName;
+			if (i > 0) {
+				name = baseName + " " + i;
+			}
+
+			if (!(jd.getStylesMap().containsKey(name+"_CH"))) {
+				baseName = name;
+				break;
+			}
+		}
+    	
+        List<JRDesignStyle> styles = new ArrayList<JRDesignStyle>();
+        JRDesignStyle tableHeaderStyle=  new JRDesignStyle();
+        tableHeaderStyle.setName(baseName + "_CH");
+        //tableHeaderStyle.getLineBox().getPen().setLineWidth(0.5f);
+        setBorderWidth(tableHeaderStyle, 0.5f);
+        
+        if (style.getWhiteGrid()) setBorderColor(tableHeaderStyle,Color.white); //tableHeaderStyle.getLineBox().getPen().setLineColor(Color.white);
+        else setBorderColor(tableHeaderStyle,Color.black);
+        
+        tableHeaderStyle.setMode(ModeEnum.OPAQUE);
+        tableHeaderStyle.setBackcolor(style.getColorValue(CrosstabStyle.COLOR_TABLE_HEADER));
+
+        addCommand( new CreateStyleCommand(jd, tableHeaderStyle));
+        styles.add(tableHeaderStyle);
+
+        JRDesignStyle columnHeaderStyle=  new JRDesignStyle();
+        columnHeaderStyle.setName(baseName + "_CT");
+        //columnHeaderStyle.getLineBox().getPen().setLineWidth(0.5f);
+        setBorderWidth(columnHeaderStyle, 0.5f);
+
+        if (style.getWhiteGrid()) setBorderColor(columnHeaderStyle,Color.white); //columnHeaderStyle.getLineBox().getPen().setLineColor(Color.white);
+        else setBorderColor(columnHeaderStyle,Color.black);
+
+        columnHeaderStyle.setMode(ModeEnum.OPAQUE);
+        columnHeaderStyle.setBackcolor(style.getColorValue(CrosstabStyle.COLOR_TOTAL));
+
+        addCommand( new CreateStyleCommand(jd, columnHeaderStyle));
+        styles.add(columnHeaderStyle);
+
+        JRDesignStyle cellStyle=  new JRDesignStyle();
+        cellStyle.setName(baseName + "_TD");
+        //cellStyle.getLineBox().getPen().setLineWidth(0.5f);
+        setBorderWidth(cellStyle, 0.5f);
+
+        if (style.getWhiteGrid()) setBorderColor(cellStyle,Color.white); //cellStyle.getLineBox().getPen().setLineColor(Color.white);
+        else setBorderColor(cellStyle,Color.black);
+
+        cellStyle.setMode(ModeEnum.OPAQUE);
+        cellStyle.setBackcolor(Color.WHITE);
+
+        addCommand( new CreateStyleCommand(jd, cellStyle));
+        styles.add(cellStyle);
+
+        return styles;
+    }	
+	
 
 }
