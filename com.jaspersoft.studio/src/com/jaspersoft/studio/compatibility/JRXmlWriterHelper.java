@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.compatibility;
 
@@ -64,7 +59,7 @@ public class JRXmlWriterHelper {
 		Collections.sort(sl);
 		Collections.reverse(sl);
 		String[][] r = new String[sl.size() + 1][2];
-		r[0] = new String[] { "Last Version", "last" };
+		r[0] = new String[] { "Last Version" + " (" + getInstalledJasperReportsVersion() + ")", "last" };
 		int i = 1;
 		for (String key : sl) {
 			r[i][0] = "JasperReports " + key.replace('_', '.');
@@ -128,4 +123,12 @@ public class JRXmlWriterHelper {
 	}
 
 	public static final String LAST_VERSION = "last";
+
+	public static String getInstalledJasperReportsVersion() {
+		try {
+			return net.sf.jasperreports.engine.JasperCompileManager.class.getPackage().getImplementationVersion();
+		} catch (Throwable nex) {
+			return LAST_VERSION;
+		}
+	}
 }
