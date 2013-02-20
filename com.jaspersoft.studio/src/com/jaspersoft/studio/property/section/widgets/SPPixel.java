@@ -53,7 +53,7 @@ import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.report.util.Unit;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -500,7 +500,7 @@ public class SPPixel extends ASPropertyWidget {
 	 *          number of chars to store (used to choose the size)
 	 */
 	protected void setWidth(Composite parent, int chars) {
-		int w = UIUtils.getCharWidth(insertField) * chars;
+		int w = UIUtil.getCharWidth(insertField) * chars;
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			rd.width = w;

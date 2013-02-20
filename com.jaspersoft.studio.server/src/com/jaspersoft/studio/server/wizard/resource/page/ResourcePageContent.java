@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class ResourcePageContent extends APageContent {
 
@@ -64,14 +64,14 @@ public class ResourcePageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 
-		UIUtils.createLabel(composite, Messages.AResourcePage_parentfolder);
+		UIUtil.createLabel(composite, Messages.AResourcePage_parentfolder);
 		Text tparent = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tparent.setLayoutData(gd);
 		tparent.setEnabled(false);
 
-		UIUtils.createLabel(composite, Messages.AResourcePage_type);
+		UIUtil.createLabel(composite, Messages.AResourcePage_type);
 		Text ttype = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ttype.setEnabled(false);
@@ -80,28 +80,28 @@ public class ResourcePageContent extends APageContent {
 		bisRef.setText("is Reference");
 		bisRef.setEnabled(false);
 
-		UIUtils.createLabel(composite, Messages.AResourcePage_creationdate);
+		UIUtil.createLabel(composite, Messages.AResourcePage_creationdate);
 		Text tcdate = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tcdate.setLayoutData(gd);
 		tcdate.setEnabled(false);
 
-		UIUtils.createSeparator(composite, 3);
+		UIUtil.createSeparator(composite, 3);
 
-		UIUtils.createLabel(composite, Messages.AResourcePage_id);
+		UIUtil.createLabel(composite, Messages.AResourcePage_id);
 		final Text tid = new Text(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tid.setLayoutData(gd);
 
-		UIUtils.createLabel(composite, Messages.AResourcePage_name);
+		UIUtil.createLabel(composite, Messages.AResourcePage_name);
 		final Text tname = new Text(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tname.setLayoutData(gd);
 
-		UIUtils.createLabel(composite, Messages.AResourcePage_description);
+		UIUtil.createLabel(composite, Messages.AResourcePage_description);
 		Text tdesc = new Text(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;

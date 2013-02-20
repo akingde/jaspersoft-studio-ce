@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.util.FileResolver;
@@ -151,6 +152,16 @@ public class SelectionHelper {
 
 	public static final boolean openEditor(FileEditorInput editorInput, String path) {
 		return openEditor(editorInput.getFile(), path);
+	}
+
+	public static final boolean openEditor(IFile file) {
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		try {
+			IDE.openEditor(page, file);
+		} catch (PartInitException e) {
+			UIUtils.showError(e);
+		}
+		return true;
 	}
 
 	public static final boolean openEditor(IFile file, String path) {

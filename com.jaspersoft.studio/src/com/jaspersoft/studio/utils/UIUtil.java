@@ -1,31 +1,18 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.JasperReportsPlugin;
-import net.sf.jasperreports.eclipse.ui.util.ExceptionDetailsErrorDialog;
 
-import org.eclipse.core.commands.operations.OperationStatus;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
@@ -37,7 +24,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTError;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Drawable;
@@ -51,105 +37,23 @@ import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
 
-public class UIUtils {
+public class UIUtil {
 	/** ID for the "Properties View" */
 	public static final String PROPERTIES_VIEW_ID = "org.eclipse.ui.views.PropertySheet"; //$NON-NLS-1$
-
-	public static void showError(final Throwable t) {
-		showError(t.getMessage(), t);
-	}
-
-	public static void showError(final String message, final Throwable t) {
-		t.printStackTrace();
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-
-				showErrorDialog(message, t);
-			}
-
-		});
-
-	}
-
-	public static void showErrorDialog(final String message, final Throwable t) {
-		IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(),
-				OperationStatus.NOTHING_TO_REDO, message, t);
-		new ExceptionDetailsErrorDialog(Display.getDefault().getActiveShell(), Messages.common_exception,
-				Messages.common_exception_detail, status, IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR) {
-			protected void setShellStyle(int newShellStyle) {
-				super.setShellStyle(newShellStyle | SWT.SHEET);
-			};
-		}.open();
-	}
-
-	public static void showWarning(final String message) {
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				MessageDialog.open(MessageDialog.WARNING, Display.getDefault().getActiveShell(), Messages.common_warning,
-						message, SWT.SHEET);
-			}
-		});
-	}
-
-	public static void showInformation(final String message) {
-		showInformation("Information", message);
-	}
-
-	public static void showInformation(final String title, final String message) {
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				MessageDialog.open(MessageDialog.INFORMATION, Display.getDefault().getActiveShell(), title, message, SWT.SHEET);
-			}
-		});
-	}
-
-	/**
-	 * @return true if yes
-	 */
-	public static boolean showConfirmation(String title, String message) {
-		MessageDialog dialog = new MessageDialog(null, title, null, message, MessageDialog.QUESTION, new String[] {
-				Messages.common_yes, Messages.common_no }, 0) {
-
-			@Override
-			protected void setShellStyle(int newShellStyle) {
-				super.setShellStyle(newShellStyle | SWT.SHEET);
-			}
-		};
-		return dialog.open() == 0;
-	}
-
-	/**
-	 * @return true if yes
-	 */
-	public static boolean showDeleteConfirmation() {
-		return showConfirmation(Messages.common_delete.replace("&", ""), Messages.common_confirmdelete);
-	}
-
-	public static String getStackTrace(Throwable aThrowable) {
-		final Writer result = new StringWriter();
-		final PrintWriter printWriter = new PrintWriter(result);
-		aThrowable.printStackTrace(printWriter);
-		return result.toString();
-	}
 
 	/**
 	 * Set the value of a spinner. For convenience this method takes an object as value, but if the obj is null, or if it
@@ -452,55 +356,4 @@ public class UIUtils {
 		item.setImage(standardImg);
 	}
 
-	/**
-	 * Gets a valid {@link Shell} instance trying the following steps:
-	 * <ol>
-	 * 	<li>get shell from the current active workbench window;</li>
-	 *  <li>get active shell from the display instance returned by {@link #getDisplay()};</li>
-	 * </ol>
-	 * 
-	 * @return a valid {@link Shell} instance
-	 */
-	public static Shell getShell() {
-		Shell shell = null;
-
-		IWorkbenchWindow window = JasperReportsPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
-
-		if (window != null) {
-			shell = window.getShell();
-		} else {
-			shell = getDisplay().getActiveShell();
-		}
-
-		return shell;
-	}
-
-	/**
-	 * Gets a valid {@link Display} instance trying the following steps:
-	 * <ol>
-	 * 	<li>get the current display from the UI thread if any;</li>
-	 * 	<li>get the display from the running workbench;</li>
-	 *  <li>get a default display instance;</li>
-	 * </ol>
-	 * 
-	 * @return a valid {@link Display} instance
-	 */
-	public static Display getDisplay() {
-		// If we are in the UI Thread use that
-		if (Display.getCurrent() != null) {
-			return Display.getCurrent();
-		}
-
-		if (PlatformUI.isWorkbenchRunning()) {
-			return PlatformUI.getWorkbench().getDisplay();
-		}
-
-		if (Display.getDefault() != null)
-			return Display.getDefault();
-
-		// Invalid thread access if it is not the UI Thread
-		// and the workbench is not created.
-		throw new SWTError(SWT.ERROR_THREAD_INVALID_ACCESS);
-	}
-	
 }

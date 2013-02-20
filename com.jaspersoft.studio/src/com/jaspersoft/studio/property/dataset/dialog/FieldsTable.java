@@ -55,7 +55,7 @@ import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class FieldsTable {
 	private TableViewer tviewer;
@@ -110,7 +110,7 @@ public class FieldsTable {
 		tviewer.setContentProvider(new ListContentProvider());
 		tviewer.setLabelProvider(new TLabelProvider());
 		attachCellEditors(tviewer, wtable);
-		UIUtils.setViewerCellEditingOnDblClick(tviewer);
+		UIUtil.setViewerCellEditingOnDblClick(tviewer);
 		addDropSupport();
 		
 		Composite bGroup = new Composite(composite, SWT.NONE);

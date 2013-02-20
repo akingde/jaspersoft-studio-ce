@@ -58,7 +58,7 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.EnumHelper;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class SortFieldsTable {
 	private TableViewer tviewer;
@@ -113,7 +113,7 @@ public class SortFieldsTable {
 		tviewer.setContentProvider(new ListContentProvider());
 		tviewer.setLabelProvider(new TLabelProvider());
 		attachCellEditors(tviewer, wtable);
-		UIUtils.setViewerCellEditingOnDblClick(tviewer);
+		UIUtil.setViewerCellEditingOnDblClick(tviewer);
 
 		Composite bGroup = new Composite(composite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));

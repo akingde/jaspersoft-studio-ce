@@ -32,7 +32,7 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class DatasourceMongoDBPageContent extends APageContent {
 
@@ -59,19 +59,19 @@ public class DatasourceMongoDBPageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		UIUtils.createLabel(composite,
+		UIUtil.createLabel(composite,
 				Messages.RDDatasourceMongoDBPage_labelurl);
 
 		Text turi = new Text(composite, SWT.BORDER);
 		turi.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite,
+		UIUtil.createLabel(composite,
 				Messages.RDDatasourceMongoDBPage_username);
 
 		Text tusername = new Text(composite, SWT.BORDER);
 		tusername.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, Messages.RDDatasourceMongoDBPage_pass);
+		UIUtil.createLabel(composite, Messages.RDDatasourceMongoDBPage_pass);
 
 		Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

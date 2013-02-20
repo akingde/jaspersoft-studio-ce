@@ -17,6 +17,8 @@ package com.jaspersoft.studio.server.action.resource;
 
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -33,7 +35,6 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.action.server.EditServerAction;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class RefreshResourcesAction extends Action {
 	private TreeViewer treeViewer;

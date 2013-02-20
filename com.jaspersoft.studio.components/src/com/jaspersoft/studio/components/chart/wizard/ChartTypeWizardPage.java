@@ -38,7 +38,7 @@ import org.eclipse.swt.widgets.Scale;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
@@ -340,7 +340,7 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 	}
 	
 	private static void setGallyeryItemImageInfo(GalleryItem item, String imagePath){
-		UIUtils.setGallyeryItemImageInfo(
+		UIUtil.setGallyeryItemImageInfo(
 				item, Activator.PLUGIN_ID, 
 				imagePath, selectedImages, standardImages);
 	}

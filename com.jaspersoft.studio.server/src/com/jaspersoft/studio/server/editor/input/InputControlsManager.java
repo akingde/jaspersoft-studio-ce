@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRQueryChunk;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
@@ -45,7 +46,6 @@ import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
 import com.jaspersoft.studio.server.editor.input.query.QueryInput;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class InputControlsManager {
 	private HashMap<String, List<String>> cascadingDepMap = new HashMap<String, List<String>>();

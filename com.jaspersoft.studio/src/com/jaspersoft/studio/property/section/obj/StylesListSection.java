@@ -77,7 +77,7 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.GridDataUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 /**
  * Class that paint the widget where are shown the attributes of element, those inherited by the it's styles, and the
@@ -346,7 +346,7 @@ public class StylesListSection extends AbstractSection {
 				lastElementSelected = parentLayout;
 
 			// We must be sure that the properties view is the one that currently is active
-			if (parentLayout.getChildren().length > 1 && UIUtils.isPropertiesViewFocused()) {
+			if (parentLayout.getChildren().length > 1 && UIUtil.isPropertiesViewFocused()) {
 				lastElementSelected.getChildren()[0].setVisible(false);
 				lastElementSelected = parentLayout;
 				parentLayout.getChildren()[0].setVisible(true);

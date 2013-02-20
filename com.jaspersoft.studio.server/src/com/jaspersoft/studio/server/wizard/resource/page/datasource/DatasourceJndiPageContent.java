@@ -36,7 +36,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class DatasourceJndiPageContent extends APageContent {
 
@@ -63,7 +63,7 @@ public class DatasourceJndiPageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		UIUtils.createLabel(composite, Messages.RDDatasourceJNDIPage_JNDIName);
+		UIUtil.createLabel(composite, Messages.RDDatasourceJNDIPage_JNDIName);
 
 		final Text tname = new Text(composite, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

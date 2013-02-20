@@ -19,15 +19,23 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+
+import org.eclipse.core.resources.IFile;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class AExporter {
 	protected static Map<String, String> fileurimap = new HashMap<String, String>();
+
+	public IFile exportToIFile(MResource res, ResourceDescriptor rd,
+			String fkeyname) throws Exception {
+		return FileUtils
+				.getInProjectFile(exportFile(res, rd, fkeyname).toURI());
+	}
 
 	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname)
 			throws Exception {

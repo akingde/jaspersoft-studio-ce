@@ -17,6 +17,7 @@ package com.jaspersoft.studio.server.publish;
 
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,7 +36,6 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class FindReportUnit {
 	public void find(final JrxmlPublishAction action, final JasperDesign jd,

@@ -18,6 +18,8 @@ package com.jaspersoft.studio.data.actions;
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -35,7 +37,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class ExportDataAdapterAction extends Action {
 	public static final String ID = "exportDataAdapteraction"; //$NON-NLS-1$

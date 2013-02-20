@@ -41,7 +41,7 @@ import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
 import com.jaspersoft.studio.swt.widgets.PropertiesComponent;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	private final static JDBCDriverDefinition[] jdbcDefinitions = new JDBCDriverDefinition[] {
@@ -258,7 +258,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 		lbl = new Label(c, SWT.NONE | SWT.BOLD);
 		lbl.setText(Messages.JDBCDataAdapterComposite_attentionlable);
-		UIUtils.setBold(lbl);
+		UIUtil.setBold(lbl);
 
 		lbl = new Label(c, SWT.NONE);
 		lbl.setText(Messages.JDBCDataAdapterComposite_attention);

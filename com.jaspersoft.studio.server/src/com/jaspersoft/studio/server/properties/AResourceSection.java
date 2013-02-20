@@ -17,6 +17,7 @@ package com.jaspersoft.studio.server.properties;
 
 import java.io.File;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.type.ImageTypeEnum;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
@@ -38,7 +39,6 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AFileResource;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class AResourceSection extends ASection {
 	private Text trefuri;

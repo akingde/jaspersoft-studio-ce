@@ -45,7 +45,7 @@ import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionEvent;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 /**
  * Details panel composite for a specific function ({@link JRExprFunctionBean}).
@@ -186,7 +186,7 @@ public class FunctionDetailsComposite extends Composite {
 						true, false);
 				pValueGD.widthHint = 150;
 				paramValue.setLayoutData(pValueGD);
-				UIUtils.addSelectOnFocusToText(paramValue);
+				UIUtil.addSelectOnFocusToText(paramValue);
 				paramValue.addFocusListener(new FocusListener() {
 					public void focusLost(FocusEvent e) {
 					}

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IPageLayout;
@@ -26,7 +28,6 @@ import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.UIUtils;
 
 /*
  * /* The Class BringBackwardAction.

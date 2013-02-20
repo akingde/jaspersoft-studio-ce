@@ -34,7 +34,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorJrxml;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class ReportUnitContent extends APageContent {
 
@@ -83,7 +83,7 @@ public class ReportUnitContent extends APageContent {
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
 
-		UIUtils.createLabel(composite, Messages.RDReportUnitPage_jspforrepview);
+		UIUtil.createLabel(composite, Messages.RDReportUnitPage_jspforrepview);
 
 		Text jspview = new Text(composite, SWT.BORDER);
 		jspview.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

@@ -17,6 +17,8 @@ package com.jaspersoft.studio.server.action.resource;
 
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -33,7 +35,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class DeleteResourceAction extends Action {
 	private TreeViewer treeViewer;

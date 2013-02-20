@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.BundleCommonUtils;
 
 import org.apache.commons.io.IOUtils;
@@ -28,7 +29,6 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.zip.ZipEntry;
 import com.jaspersoft.studio.utils.BrandingInfo;
-import com.jaspersoft.studio.utils.UIUtils;
 
 
 /**

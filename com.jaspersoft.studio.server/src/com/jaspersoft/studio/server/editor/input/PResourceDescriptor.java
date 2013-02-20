@@ -20,10 +20,11 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.input.IParameter;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class PResourceDescriptor implements IParameter {
 	private ResourceDescriptor p;

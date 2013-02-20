@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 
@@ -45,7 +46,6 @@ import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 /**

@@ -32,7 +32,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class QueryPageContent extends APageContent {
 
@@ -64,12 +64,12 @@ public class QueryPageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		UIUtils.createLabel(composite, Messages.RDQueryPage_language);
+		UIUtil.createLabel(composite, Messages.RDQueryPage_language);
 
 		Combo clang = new Combo(composite, SWT.BORDER);
 		clang.setItems(ModelUtils.getQueryLanguages());
 
-		UIUtils.createLabel(composite, Messages.RDQueryPage_query);
+		UIUtil.createLabel(composite, Messages.RDQueryPage_query);
 
 		Text tsql = new Text(composite, SWT.BORDER | SWT.WRAP);
 		GridData gd = new GridData(GridData.FILL_BOTH);

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.text;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 
@@ -31,7 +32,6 @@ import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.UIUtils;
 
 /*
  * The Class FigureEditPart.

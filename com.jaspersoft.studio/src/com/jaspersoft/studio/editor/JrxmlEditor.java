@@ -19,8 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
-import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
-import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -31,7 +31,6 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.eclipse.core.internal.resources.ResourceException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -40,7 +39,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -89,7 +87,6 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.AContributorAction;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.JRXMLUtils;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
@@ -99,8 +96,6 @@ import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
  * order </ul>
  */
 public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker, IJROBjectEditor {
-
-	public static final String DEFAULT_PROJECT = "MyReports";
 
 	private class StateListener implements IElementStateListener {
 
@@ -484,7 +479,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		// FIXME: THIS IS NOT THE RIGHT PLACE TO LOAD MODEL, WE SHOULD LOAD FROM
 		// TEXT EDITOR TO AVOID 2 TIME READING THE FILE
-		editorInput = checkAndConvertEditorInput(editorInput);
+		editorInput = FileUtils.checkAndConvertEditorInput(editorInput);
 		super.init(site, editorInput);
 		setPartName(editorInput.getName());
 		InputStream in = null;
@@ -552,44 +547,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					}
 				});
 		}
-	}
-
-	public static IEditorInput checkAndConvertEditorInput(IEditorInput editorInput) throws PartInitException {
-		if (editorInput instanceof FileStoreEditorInput) {
-			try {
-				FileStoreEditorInput fsei = (FileStoreEditorInput) editorInput;
-				IPath location = new Path(fsei.getURI().getPath());
-				// Create a new temporary project object and open it.
-				IProject project = null;
-				for (IProject prj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-					if (prj.isOpen()) {
-						if (project == null)
-							project = prj;
-						else if (prj.getNature(JasperReportsNature.NATURE_ID) != null)
-							project = prj;
-						if (project != null && project.getName().equals(DEFAULT_PROJECT))
-							break;
-					}
-				}
-				if (project == null)
-					project = ResourcesPlugin.getWorkspace().getRoot().getProject(DEFAULT_PROJECT);
-				// Create a project if one doesn't exist and open it.
-				if (!project.exists()) {
-					project.create(null);
-					ProjectUtil.createJRProject(null, project);
-				}
-				if (!project.isOpen())
-					project.open(null);
-
-				IFile file = project.getFile(location.lastSegment());
-				file.createLink(location, IResource.REPLACE, null);
-
-				editorInput = new FileEditorInput(file);
-			} catch (CoreException e) {
-				throw new PartInitException(e.getMessage(), e);
-			}
-		}
-		return editorInput;
 	}
 
 	public void addFileResolver(FileResolver resolver) {

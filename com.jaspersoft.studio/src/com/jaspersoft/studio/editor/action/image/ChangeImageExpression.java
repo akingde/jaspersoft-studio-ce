@@ -17,6 +17,7 @@ package com.jaspersoft.studio.editor.action.image;
 
 import java.util.Iterator;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 
@@ -30,7 +31,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.jface.dialogs.ImageSelectionDialog;
 import com.jaspersoft.studio.model.image.MImage;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class ChangeImageExpression  extends SelectionAction implements IGlobalAction {
 

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.data.XmlUtil;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
@@ -46,7 +47,6 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class ServerManager {
 	private static final String PREF_TAG = "serverprofiles"; //$NON-NLS-1$

@@ -49,7 +49,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.validator.URLValidator;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class ServerProfilePage extends WizardPage {
 	private MServerProfile sprofile;
@@ -107,7 +107,7 @@ public class ServerProfilePage extends WizardPage {
 		final Section expcmp = new Section(composite,
 				ExpandableComposite.TREE_NODE);
 		expcmp.setTitleBarForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
-		UIUtils.setBold(expcmp);
+		UIUtil.setBold(expcmp);
 		expcmp.setText("Advanced Settings");
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;

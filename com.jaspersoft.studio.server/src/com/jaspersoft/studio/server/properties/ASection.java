@@ -17,6 +17,8 @@ package com.jaspersoft.studio.server.properties;
 
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.runtime.Assert;
@@ -39,7 +41,6 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.properties.action.EditCancelAction;
 import com.jaspersoft.studio.server.properties.action.EditOkAction;
 import com.jaspersoft.studio.server.properties.action.EditPropertyAction;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class ASection extends AbstractPropertySection {
 	public ASection() {

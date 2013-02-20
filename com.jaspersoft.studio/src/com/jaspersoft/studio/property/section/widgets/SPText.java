@@ -27,7 +27,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
 public class SPText extends AHistorySPropertyWidget {
@@ -75,7 +75,7 @@ public class SPText extends AHistorySPropertyWidget {
 	}
 
 	protected void setWidth(Composite parent, int chars) {
-		int w = UIUtils.getCharWidth(ftext) * chars;
+		int w = UIUtil.getCharWidth(ftext) * chars;
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			rd.width = w;

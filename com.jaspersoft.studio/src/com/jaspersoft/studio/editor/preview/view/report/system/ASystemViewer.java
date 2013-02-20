@@ -17,6 +17,7 @@ package com.jaspersoft.studio.editor.preview.view.report.system;
 
 import java.io.File;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.eclipse.swt.program.Program;
@@ -27,7 +28,6 @@ import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class ASystemViewer extends SWTViewer {

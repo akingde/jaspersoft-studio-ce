@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.xml.SourceLocation;
 
 import org.eclipse.jdt.core.compiler.CategorizedProblem;
@@ -48,7 +49,6 @@ import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.ErrorUtil;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VErrorPreview extends APreview {
@@ -228,49 +228,49 @@ public class VErrorPreview extends APreview {
 
 		compilationTime = new Label(statComposite, SWT.BOLD);
 		compilationTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		UIUtils.setBold(compilationTime);
+		com.jaspersoft.studio.utils.UIUtil.setBold(compilationTime);
 		new Label(statComposite, SWT.NONE).setText("sec");
 
 		new Label(statComposite, SWT.NONE).setText("Filling Time");
 
 		fillingTime = new Label(statComposite, SWT.BOLD);
 		fillingTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		UIUtils.setBold(fillingTime);
+		com.jaspersoft.studio.utils.UIUtil.setBold(fillingTime);
 		new Label(statComposite, SWT.NONE).setText("sec");
 
 		new Label(statComposite, SWT.NONE).setText("Report Execution Time");
 
 		execTime = new Label(statComposite, SWT.BOLD);
 		execTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		UIUtils.setBold(execTime);
+		com.jaspersoft.studio.utils.UIUtil.setBold(execTime);
 		new Label(statComposite, SWT.NONE).setText("sec");
 
 		new Label(statComposite, SWT.NONE).setText("Export Time");
 
 		exportTime = new Label(statComposite, SWT.BOLD);
 		exportTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		UIUtils.setBold(exportTime);
+		com.jaspersoft.studio.utils.UIUtil.setBold(exportTime);
 		new Label(statComposite, SWT.NONE).setText("sec");
 
 		new Label(statComposite, SWT.NONE).setText("Total Pages");
 
 		totalPages = new Label(statComposite, SWT.BOLD);
 		totalPages.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		UIUtils.setBold(totalPages);
+		com.jaspersoft.studio.utils.UIUtil.setBold(totalPages);
 		new Label(statComposite, SWT.NONE).setText("pages");
 
 		new Label(statComposite, SWT.NONE).setText("Processed Records Count    ");
 
 		recordCount = new Label(statComposite, SWT.BOLD);
 		recordCount.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		UIUtils.setBold(recordCount);
+		com.jaspersoft.studio.utils.UIUtil.setBold(recordCount);
 		new Label(statComposite, SWT.NONE).setText("records");
 
 		new Label(statComposite, SWT.NONE).setText("Fill Size");
 
 		fillSize = new Label(statComposite, SWT.BOLD);
 		fillSize.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		UIUtils.setBold(fillSize);
+		com.jaspersoft.studio.utils.UIUtil.setBold(fillSize);
 		new Label(statComposite, SWT.NONE).setText("bytes");
 
 		setStats(null);

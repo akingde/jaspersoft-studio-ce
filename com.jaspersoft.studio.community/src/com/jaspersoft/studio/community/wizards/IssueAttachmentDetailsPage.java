@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -44,7 +46,6 @@ import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.utils.CommunityAPIUtils;
 import com.jaspersoft.studio.community.zip.ZipEntry;
 import com.jaspersoft.studio.community.zip.ZipEntryType;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
@@ -119,8 +120,8 @@ public class IssueAttachmentDetailsPage extends JSSHelpWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				hwSwDialog.setLocation(
-						UIUtils.getDisplay().getCursorLocation().x,
-						UIUtils.getDisplay().getCursorLocation().y);
+						UIUtils.getDisplay().getCursorLocation().x, UIUtils
+								.getDisplay().getCursorLocation().y);
 				hwSwDialog.open();
 			}
 		});

@@ -108,30 +108,5 @@ public class JrxmlExporter extends AExporter {
 
 	protected void cacheResource(MResource res, JRExpression imgexp)
 			throws Exception {
-		// if (imgexp != null && imgexp.getText() != null) {
-		// String s = JRExpressionUtil.getSimpleExpressionText(imgexp);
-		// if (s.startsWith("repo:")) {
-		// String uri = s.substring(5);
-
-		// ResourceDescriptor rd = new ResourceDescriptor();
-		// MReportUnit repunit = res.getReportUnit();
-		// if (!uri.startsWith("/") && repunit != null)
-		// uri = repunit.getValue().getUriString() + "_files/" + uri;
-		// rd.setUriString(uri);
-
-		// INode n = res.getRoot();
-		// if (n != null && n instanceof MServerProfile) {
-		// WSClient c = ((MServerProfile) n).getWsClient();
-		// rd = c.get(rd, null);
-		// // String fname = JasperServerManager
-		// // .createTmpFileName("img", "");
-		// // rd = c.get(rd, new File(fname));
-		// // RepoImageCache.getInstance()
-		// // .put(s, new File(fname));
-		//
-		// }
-
-		// }
-		// }
 	}
 }

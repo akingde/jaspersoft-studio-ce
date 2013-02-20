@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.core.resources.IFile;
@@ -35,8 +37,6 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.EditorPart;
 
 import com.jaspersoft.studio.editor.DeltaVisitor;
-import com.jaspersoft.studio.editor.JrxmlEditor;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class ABasicEditor extends EditorPart {
@@ -151,7 +151,7 @@ public abstract class ABasicEditor extends EditorPart {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		IFile file = null;
 		if (input instanceof FileStoreEditorInput) {
-			input = JrxmlEditor.checkAndConvertEditorInput(input);
+			input = FileUtils.checkAndConvertEditorInput(input);
 			init(site, input);
 			return;
 		} else if (input instanceof IFileEditorInput) {

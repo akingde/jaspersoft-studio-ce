@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.community.wizards;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -34,7 +36,6 @@ import com.jaspersoft.studio.community.CommunityConstants;
 import com.jaspersoft.studio.community.JSSCommunityActivator;
 import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.utils.CommunityUser;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**

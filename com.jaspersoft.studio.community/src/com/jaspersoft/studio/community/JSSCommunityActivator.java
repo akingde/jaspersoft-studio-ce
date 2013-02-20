@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.community;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
@@ -24,7 +25,6 @@ import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.utils.CommunityUser;
-import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * Activator class for the <code>com.jaspersoft.studio.community</code> plug-in.

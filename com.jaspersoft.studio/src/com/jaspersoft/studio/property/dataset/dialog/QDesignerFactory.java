@@ -18,6 +18,8 @@ package com.jaspersoft.studio.property.dataset.dialog;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
@@ -25,7 +27,6 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.data.IQueryDesigner;
 import com.jaspersoft.studio.data.designer.QueryDesigner;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class QDesignerFactory {
 	private Composite parent;

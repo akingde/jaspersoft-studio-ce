@@ -17,6 +17,8 @@ package com.jaspersoft.studio.rcp.intro.action;
 
 import java.util.Properties;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -27,8 +29,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.intro.IIntroSite;
 import org.eclipse.ui.intro.config.IIntroAction;
-
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class OpenFileAction implements IIntroAction {
 

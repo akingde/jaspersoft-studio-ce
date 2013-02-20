@@ -18,6 +18,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRTemplate;
@@ -63,7 +65,6 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
@@ -193,7 +194,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		input = JrxmlEditor.checkAndConvertEditorInput(input);
+		input = FileUtils.checkAndConvertEditorInput(input);
 		super.init(site, input);
 		setSite(site);
 		setPartName(input.getName());

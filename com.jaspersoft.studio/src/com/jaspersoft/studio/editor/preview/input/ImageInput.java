@@ -25,6 +25,8 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -42,7 +44,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class ImageInput extends ADataInput {
 	private Button btn;

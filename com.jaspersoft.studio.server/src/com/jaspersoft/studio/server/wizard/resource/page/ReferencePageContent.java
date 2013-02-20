@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.resource.page;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 
 import org.eclipse.core.databinding.Binding;
@@ -46,7 +47,6 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class ReferencePageContent extends APageContent {
 
@@ -73,7 +73,8 @@ public class ReferencePageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 
-		UIUtils.createLabel(composite, Messages.RDReferencePage_referencedesc);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(composite,
+				Messages.RDReferencePage_referencedesc);
 
 		trefuri = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -114,32 +115,38 @@ public class ReferencePageContent extends APageContent {
 		gd.horizontalSpan = 3;
 		cmp.setLayoutData(gd);
 
-		UIUtils.createLabel(cmp, Messages.RDReferencePage_parentfolder);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_parentfolder);
 		tparent = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tparent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tparent.setEnabled(false);
 
-		UIUtils.createLabel(cmp, Messages.RDReferencePage_type);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_type);
 		ttype = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ttype.setEnabled(false);
 
-		UIUtils.createLabel(cmp, Messages.RDReferencePage_creationdate);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_creationdate);
 		tcdate = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tcdate.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tcdate.setEnabled(false);
 
-		UIUtils.createSeparator(cmp, 2);
+		com.jaspersoft.studio.utils.UIUtil.createSeparator(cmp, 2);
 
-		UIUtils.createLabel(cmp, Messages.RDReferencePage_refid);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_refid);
 		tid = new Text(cmp, SWT.BORDER);
 		tid.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(cmp, Messages.RDReferencePage_refname);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_refname);
 		tname = new Text(cmp, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(cmp, Messages.RDReferencePage_refdesc);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_refdesc);
 		tdesc = new Text(cmp, SWT.BORDER | SWT.MULTI | SWT.WRAP);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;

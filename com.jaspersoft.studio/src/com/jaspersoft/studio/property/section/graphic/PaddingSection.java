@@ -33,7 +33,7 @@ import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 /*
  * The location section on the location tab.
@@ -146,11 +146,11 @@ public class PaddingSection extends AbstractSection {
 		isRefreshing = true;
 		APropertyNode element = getElement();
 		if (element != null) {
-			UIUtils.setSpinnerSelection(allPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_PADDING), 0);
-			UIUtils.setSpinnerSelection(bottomPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_BOTTOM_PADDING), 0);
-			UIUtils.setSpinnerSelection(topPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_TOP_PADDING), 0);
-			UIUtils.setSpinnerSelection(leftPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_LEFT_PADDING), 0);
-			UIUtils.setSpinnerSelection(rightPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_RIGHT_PADDING), 0);
+			UIUtil.setSpinnerSelection(allPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_PADDING), 0);
+			UIUtil.setSpinnerSelection(bottomPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_BOTTOM_PADDING), 0);
+			UIUtil.setSpinnerSelection(topPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_TOP_PADDING), 0);
+			UIUtil.setSpinnerSelection(leftPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_LEFT_PADDING), 0);
+			UIUtil.setSpinnerSelection(rightPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_RIGHT_PADDING), 0);
 		}
 		isRefreshing = false;
 	}

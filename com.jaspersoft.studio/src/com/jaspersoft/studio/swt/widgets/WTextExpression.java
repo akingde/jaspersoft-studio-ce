@@ -42,7 +42,7 @@ import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionE
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 /**
  * Expression widget re-usable in custom dialogs and wizards. The text of the expression is represented inside the
@@ -226,7 +226,7 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	 * Sets the layout data information for the custom widget controls.
 	 */
 	private void configureWidgetsLayoutData(int showMode) {
-		int heightHint = UIUtils.getCharHeight(textExpression);
+		int heightHint = UIUtil.getCharHeight(textExpression);
 		if (showMode == LABEL_ON_LEFT) {
 			// Configuration with label on left
 			FormData fd_label = new FormData();

@@ -36,7 +36,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class DatasourceJDBCPageContent extends APageContent {
 
@@ -63,22 +63,22 @@ public class DatasourceJDBCPageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		UIUtils.createLabel(composite, Messages.RDDatasourceJDBCPage_Driver);
+		UIUtil.createLabel(composite, Messages.RDDatasourceJDBCPage_Driver);
 
 		final Text tdriver = new Text(composite, SWT.BORDER);
 		tdriver.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, Messages.RDDatasourceJDBCPage_URL);
+		UIUtil.createLabel(composite, Messages.RDDatasourceJDBCPage_URL);
 
 		final Text turl = new Text(composite, SWT.BORDER);
 		turl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, Messages.RDDatasourceJDBCPage_User);
+		UIUtil.createLabel(composite, Messages.RDDatasourceJDBCPage_User);
 
 		final Text tuser = new Text(composite, SWT.BORDER);
 		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, Messages.RDDatasourceJDBCPage_Password);
+		UIUtil.createLabel(composite, Messages.RDDatasourceJDBCPage_Password);
 
 		final Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.handlers;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -32,7 +34,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.wizards.datatransfer.FileSystemExportWizard;
 
-import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * The command handler that gets invoked when the "Export Files to..." command is invoked.

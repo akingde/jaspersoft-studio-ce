@@ -17,6 +17,7 @@ package com.jaspersoft.studio.model.textfield.command;
 
 import java.math.BigDecimal;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRGroup;
@@ -39,7 +40,6 @@ import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.model.textfield.MPercentage;
 import com.jaspersoft.studio.model.textfield.command.wizard.PercentageWizard;
-import com.jaspersoft.studio.utils.UIUtils;
 
 /*
  * link nodes & together.

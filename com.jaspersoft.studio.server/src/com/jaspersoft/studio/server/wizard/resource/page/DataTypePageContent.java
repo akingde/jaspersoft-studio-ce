@@ -32,7 +32,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class DataTypePageContent extends APageContent {
 
@@ -59,35 +59,35 @@ public class DataTypePageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		UIUtils.createLabel(composite, Messages.RDDataTypePage_datatype);
+		UIUtil.createLabel(composite, Messages.RDDataTypePage_datatype);
 
 		Combo ttype = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setItems(new String[] { Messages.RDDataTypePage_text,
 				Messages.RDDataTypePage_number, Messages.RDDataTypePage_date,
 				Messages.RDDataTypePage_datetime });
 
-		UIUtils.createLabel(composite, Messages.RDDataTypePage_pattern);
+		UIUtil.createLabel(composite, Messages.RDDataTypePage_pattern);
 
 		Text tpattern = new Text(composite, SWT.BORDER);
 		tpattern.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, Messages.RDDataTypePage_minvalue);
+		UIUtil.createLabel(composite, Messages.RDDataTypePage_minvalue);
 
 		Text tmin = new Text(composite, SWT.BORDER);
 		tmin.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, ""); //$NON-NLS-1$
+		UIUtil.createLabel(composite, ""); //$NON-NLS-1$
 
 		Button bmin = new Button(composite, SWT.CHECK);
 		bmin.setText(Messages.RDDataTypePage_strictmin);
 		bmin.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, Messages.RDDataTypePage_maxvalue);
+		UIUtil.createLabel(composite, Messages.RDDataTypePage_maxvalue);
 
 		Text tmax = new Text(composite, SWT.BORDER);
 		tmax.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, ""); //$NON-NLS-1$
+		UIUtil.createLabel(composite, ""); //$NON-NLS-1$
 
 		Button bmax = new Button(composite, SWT.CHECK);
 		bmax.setText(Messages.RDDataTypePage_strictmax);

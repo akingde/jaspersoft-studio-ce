@@ -32,7 +32,7 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class DatasourceHivePageContent extends APageContent {
 
@@ -59,7 +59,7 @@ public class DatasourceHivePageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		UIUtils.createLabel(composite,
+		UIUtil.createLabel(composite,
 				Messages.HiveDataAdapterComposite_labelurl);
 
 		Text tname = new Text(composite, SWT.BORDER);

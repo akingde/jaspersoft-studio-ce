@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.action.server;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -25,7 +27,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class DeleteServerAction extends Action {
 	private TreeViewer treeViewer;

@@ -15,13 +15,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-
-import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * Adapter for the dataset run used in a generic component element (inside the dataset attribute).

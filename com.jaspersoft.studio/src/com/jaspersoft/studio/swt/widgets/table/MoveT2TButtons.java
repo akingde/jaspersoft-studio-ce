@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.swt.events.ChangeEvent;
 import com.jaspersoft.studio.swt.events.ChangeListener;
 import com.jaspersoft.studio.utils.GridDataUtil;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class MoveT2TButtons {
 
@@ -152,7 +152,7 @@ public class MoveT2TButtons {
 
 	public void createButtons(Composite composite, ColumnViewer leftTView, TableViewer rightTView) {
 		Button addField = new Button(composite, SWT.PUSH);
-		int chw = UIUtils.getCharWidth(addField) * 7;
+		int chw = UIUtil.getCharWidth(addField) * 7;
 		addField.setText(" > "); //$NON-NLS-1$
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = chw;
@@ -182,7 +182,7 @@ public class MoveT2TButtons {
 	public void createButtonsShort(Composite composite, ColumnViewer leftTView, TableViewer rightTView,
 			boolean doubleClick) {
 		Button addField = new Button(composite, SWT.PUSH);
-		int chw = UIUtils.getCharWidth(addField) * 7;
+		int chw = UIUtil.getCharWidth(addField) * 7;
 		addField.setText(">"); //$NON-NLS-1$
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = chw;

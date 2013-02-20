@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.community;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -24,7 +26,6 @@ import org.eclipse.swt.SWT;
 
 import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.wizards.IssueCreationWizard;
-import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * Creates the Issue submission dialog and opens it. 

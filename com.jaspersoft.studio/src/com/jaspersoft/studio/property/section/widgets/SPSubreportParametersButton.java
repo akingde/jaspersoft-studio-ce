@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRSubreportParameter;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -31,7 +32,6 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * A button that when clicked open the edit query dialog

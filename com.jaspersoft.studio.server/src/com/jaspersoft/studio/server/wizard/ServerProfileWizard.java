@@ -17,6 +17,8 @@ package com.jaspersoft.studio.server.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -30,7 +32,6 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.wizard.pages.ServerProfilePage;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class ServerProfileWizard extends Wizard {
 	private ServerProfilePage page0;

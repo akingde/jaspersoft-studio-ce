@@ -18,6 +18,8 @@ package com.jaspersoft.studio.property.combomenu;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.SafeRunnable;
@@ -43,7 +45,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.help.HelpSystem;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class ComboButton extends Viewer {
 

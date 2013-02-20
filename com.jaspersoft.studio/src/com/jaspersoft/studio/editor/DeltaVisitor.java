@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
@@ -20,8 +22,6 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
-
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class DeltaVisitor implements IResourceDeltaVisitor {
 	private EditorPart part;

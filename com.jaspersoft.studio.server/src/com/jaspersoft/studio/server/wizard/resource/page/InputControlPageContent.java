@@ -43,7 +43,7 @@ import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDataType;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorLov;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorQuery;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class InputControlPageContent extends APageContent {
 
@@ -86,7 +86,7 @@ public class InputControlPageContent extends APageContent {
 		Button bvisible = new Button(cmp, SWT.CHECK);
 		bvisible.setText(Messages.RDInputControlPage_visible);
 
-		UIUtils.createLabel(composite, Messages.RDInputControlPage_type);
+		UIUtil.createLabel(composite, Messages.RDInputControlPage_type);
 
 		final Combo ctype = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
 		ctype.setItems(new String[] {
@@ -194,7 +194,7 @@ public class InputControlPageContent extends APageContent {
 		cmp.setLayout(new GridLayout(2, false));
 		item.setControl(cmp);
 
-		UIUtils.createLabel(cmp, Messages.RDInputControlPage_valuecolumn);
+		UIUtil.createLabel(cmp, Messages.RDInputControlPage_valuecolumn);
 
 		Text tvalue = new Text(cmp, SWT.BORDER);
 		tvalue.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

@@ -20,6 +20,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -41,7 +44,6 @@ import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.utils.SelectionHelper;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class OpenInEditorAction extends Action {
 	private static final String ID = "OPENINEDITOR"; //$NON-NLS-1$
@@ -120,9 +122,17 @@ public class OpenInEditorAction extends Action {
 				return;
 			String type = rd.getWsType();
 			File f = null;
-			if (type.equals(ResourceDescriptor.TYPE_JRXML))
-				f = new JrxmlExporter().exportFile(res, rd, fkeyname);
-			else if (type.equals(ResourceDescriptor.TYPE_IMAGE))
+			if (type.equals(ResourceDescriptor.TYPE_JRXML)) {
+				final IFile file = new JrxmlExporter().exportToIFile(res, rd,
+						fkeyname);
+				Display.getDefault().asyncExec(new Runnable() {
+
+					public void run() {
+						SelectionHelper.openEditor(file);
+					}
+				});
+				return;
+			} else if (type.equals(ResourceDescriptor.TYPE_IMAGE))
 				f = new ImageExporter().exportFile(res, rd, fkeyname);
 			else if (type.equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE))
 				f = new ResourceBundleExporter().exportFile(res, rd, fkeyname);

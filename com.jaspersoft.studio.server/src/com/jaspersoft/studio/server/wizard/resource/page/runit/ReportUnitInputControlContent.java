@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class ReportUnitInputControlContent extends ReportUnitContent {
 
@@ -63,7 +63,7 @@ public class ReportUnitInputControlContent extends ReportUnitContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		UIUtils.createLabel(composite, Messages.RDReportUnitPage_controlslayout);
+		UIUtil.createLabel(composite, Messages.RDReportUnitPage_controlslayout);
 
 		Combo cictype = new Combo(composite, SWT.BORDER);
 		cictype.setItems(new String[] { Messages.RDReportUnitPage_popupscreen,
@@ -71,13 +71,13 @@ public class ReportUnitInputControlContent extends ReportUnitContent {
 				Messages.RDReportUnitPage_topofpage,
 				Messages.RDReportUnitPage_inpage });
 
-		UIUtils.createLabel(composite, ""); //$NON-NLS-1$
+		UIUtil.createLabel(composite, ""); //$NON-NLS-1$
 
 		Button ispromp = new Button(composite, SWT.CHECK);
 		ispromp.setText(Messages.RDReportUnitPage_alwaysprompt);
 		ispromp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite,
+		UIUtil.createLabel(composite,
 				Messages.RDReportUnitPage_jsptoruninputcontrol);
 
 		Text jspic = new Text(composite, SWT.BORDER);

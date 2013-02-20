@@ -17,6 +17,8 @@ package com.jaspersoft.studio.server.action.resource;
 
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
@@ -32,7 +34,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class PropertiesAction extends Action {
 	private static final String ID = "RESOURCEPROPERTIES";

@@ -26,6 +26,7 @@ import java.util.TreeMap;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.csv.CsvDataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -67,7 +68,6 @@ import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class CSVDataAdapterComposite extends ADataAdapterComposite {
 
@@ -424,21 +424,21 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 
 		Label lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
 		lbl.setText("\\n");
-		UIUtils.setBold(lbl);
+		com.jaspersoft.studio.utils.UIUtil.setBold(lbl);
 
 		new Label(grpSpecialCharacters, SWT.NONE)
 				.setText(Messages.CSVDataAdapterComposite_32);
 
 		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
 		lbl.setText("\\r");
-		UIUtils.setBold(lbl);
+		com.jaspersoft.studio.utils.UIUtil.setBold(lbl);
 
 		Label text_b = new Label(grpSpecialCharacters, SWT.NONE);
 		text_b.setText(Messages.CSVDataAdapterComposite_33);
 
 		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
 		lbl.setText("\\r\\n");
-		UIUtils.setBold(lbl);
+		com.jaspersoft.studio.utils.UIUtil.setBold(lbl);
 
 		Label text_c = new Label(grpSpecialCharacters, SWT.NONE);
 		text_c.setText(Messages.CSVDataAdapterComposite_34);
@@ -448,14 +448,14 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 
 		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
 		lbl.setText("\\t");
-		UIUtils.setBold(lbl);
+		com.jaspersoft.studio.utils.UIUtil.setBold(lbl);
 
 		Label text_d = new Label(grpSpecialCharacters, SWT.NONE);
 		text_d.setText(Messages.CSVDataAdapterComposite_35);
 
 		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
 		lbl.setText("\\\\");
-		UIUtils.setBold(lbl);
+		com.jaspersoft.studio.utils.UIUtil.setBold(lbl);
 
 		Label text_e = new Label(grpSpecialCharacters, SWT.NONE);
 		text_e.setText(Messages.CSVDataAdapterComposite_36);

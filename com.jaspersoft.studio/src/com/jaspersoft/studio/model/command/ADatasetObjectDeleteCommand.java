@@ -13,6 +13,7 @@ package com.jaspersoft.studio.model.command;
 import java.text.MessageFormat;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -21,7 +22,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class ADatasetObjectDeleteCommand extends Command {

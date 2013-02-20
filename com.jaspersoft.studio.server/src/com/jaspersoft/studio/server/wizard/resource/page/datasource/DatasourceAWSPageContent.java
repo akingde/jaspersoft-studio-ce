@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceAWS;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 
@@ -126,37 +126,37 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 			}
 		});
 
-		UIUtils.createLabel(composite, "AWS Access Key");
+		UIUtil.createLabel(composite, "AWS Access Key");
 
 		awsAccessKey = new Text(composite, SWT.BORDER);
 		awsAccessKey.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "AWS Secret Key");
+		UIUtil.createLabel(composite, "AWS Secret Key");
 
 		awsSecretKey = new Text(composite, SWT.BORDER | SWT.PASSWORD);
 		awsSecretKey.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "ARN");
+		UIUtil.createLabel(composite, "ARN");
 
 		awsArn = new Text(composite, SWT.BORDER);
 		awsArn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "AWS Region");
+		UIUtil.createLabel(composite, "AWS Region");
 
 		Text awsRegion = new Text(composite, SWT.BORDER);
 		awsRegion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "AWS Datasource");
+		UIUtil.createLabel(composite, "AWS Datasource");
 
 		Text awsService = new Text(composite, SWT.BORDER);
 		awsService.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "AWS Instance DB Identifier");
+		UIUtil.createLabel(composite, "AWS Instance DB Identifier");
 
 		Text awsDBInstance = new Text(composite, SWT.BORDER);
 		awsDBInstance.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "Data Source DB Name");
+		UIUtil.createLabel(composite, "Data Source DB Name");
 
 		Text awsDSDBName = new Text(composite, SWT.BORDER);
 		awsDSDBName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

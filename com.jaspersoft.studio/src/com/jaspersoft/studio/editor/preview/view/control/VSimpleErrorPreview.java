@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.editor.preview.view.APreview;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VSimpleErrorPreview extends APreview {
@@ -63,7 +63,7 @@ public class VSimpleErrorPreview extends APreview {
 		layoutData.horizontalSpan = 1;
 		layoutData.verticalSpan = 1;
 
-		layoutData.heightHint = UIUtils.getCharHeight(tmessage) * 2 + 50;
+		layoutData.heightHint = UIUtil.getCharHeight(tmessage) * 2 + 50;
 		tmessage.setLayoutData(layoutData);
 	}
 

@@ -34,7 +34,7 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class OLAPXmlaPageContent extends APageContent {
 
@@ -61,27 +61,27 @@ public class OLAPXmlaPageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		UIUtils.createLabel(composite, Messages.OLAPXmlaPageContent_uti);
+		UIUtil.createLabel(composite, Messages.OLAPXmlaPageContent_uti);
 
 		Text turi = new Text(composite, SWT.BORDER);
 		turi.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, Messages.OLAPXmlaPageContent_catalog);
+		UIUtil.createLabel(composite, Messages.OLAPXmlaPageContent_catalog);
 
 		Text tcatalog = new Text(composite, SWT.BORDER);
 		tcatalog.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, Messages.OLAPXmlaPageContent_datasource);
+		UIUtil.createLabel(composite, Messages.OLAPXmlaPageContent_datasource);
 
 		Text tdatasource = new Text(composite, SWT.BORDER);
 		tdatasource.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, Messages.OLAPXmlaPageContent_username);
+		UIUtil.createLabel(composite, Messages.OLAPXmlaPageContent_username);
 
 		Text tuser = new Text(composite, SWT.BORDER);
 		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, Messages.OLAPXmlaPageContent_pass);
+		UIUtil.createLabel(composite, Messages.OLAPXmlaPageContent_pass);
 
 		Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

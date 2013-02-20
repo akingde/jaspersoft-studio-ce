@@ -58,7 +58,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.graphic.LineBoxDrawer.Location;
 import com.jaspersoft.studio.property.section.widgets.SPLineStyleEnum;
 import com.jaspersoft.studio.swt.widgets.ColorStyledText;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 /**
  * The location section on the location tab.
@@ -717,7 +717,7 @@ public class BordersSection extends AbstractSection {
 			if (propertyValue>0){
 				//Set the border data only if it is visible
 				if (lineWidth != null && !lineWidth.isDisposed()) {
-					UIUtils.setSpinnerSelection(lineWidth, null, (int) ((propertyValue == null) ? 0 : propertyValue.doubleValue()
+					UIUtil.setSpinnerSelection(lineWidth, null, (int) ((propertyValue == null) ? 0 : propertyValue.doubleValue()
 							* Math.pow(10, 1)));
 				}
 	

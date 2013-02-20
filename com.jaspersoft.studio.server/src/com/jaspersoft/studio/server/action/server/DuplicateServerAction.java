@@ -18,6 +18,8 @@ package com.jaspersoft.studio.server.action.server;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
@@ -31,7 +33,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class DuplicateServerAction extends Action {
 	public static final String ID = "duplicateServerAction"; //$NON-NLS-1$

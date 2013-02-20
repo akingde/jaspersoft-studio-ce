@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,7 +35,6 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.server.editor.input.IInput;
 import com.jaspersoft.studio.server.editor.input.PResourceDescriptor;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class TableInput implements IInput {
 	private Table table;

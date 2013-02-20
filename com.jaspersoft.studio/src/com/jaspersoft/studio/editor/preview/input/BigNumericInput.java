@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.preview.view.control.VParameters;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class BigNumericInput extends ADataInput {
 	private Text num;
@@ -142,7 +142,7 @@ public class BigNumericInput extends ADataInput {
 			num.addModifyListener(listener);
 			GridData gd = new GridData();
 			gd.horizontalIndent = 8;
-			gd.widthHint = 25 * UIUtils.getCharWidth(num) - 22;
+			gd.widthHint = 25 * UIUtil.getCharWidth(num) - 22;
 			num.setLayoutData(gd);
 		}
 	}

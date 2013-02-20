@@ -34,7 +34,7 @@ import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AVParameters extends APreview {
@@ -96,7 +96,7 @@ public abstract class AVParameters extends APreview {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
 			lbl.setLayoutData(gd);
-			UIUtils.setBold(lbl);
+			UIUtil.setBold(lbl);
 		}
 	}
 

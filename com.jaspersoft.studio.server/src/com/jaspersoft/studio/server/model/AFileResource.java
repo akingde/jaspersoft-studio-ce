@@ -18,11 +18,11 @@ package com.jaspersoft.studio.server.model;
 import java.io.File;
 import java.io.IOException;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class AFileResource extends MResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

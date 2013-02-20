@@ -20,6 +20,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,7 +50,6 @@ import com.jaspersoft.studio.community.utils.CommunityAPIException;
 import com.jaspersoft.studio.community.utils.CommunityAPIUtils;
 import com.jaspersoft.studio.community.utils.CommunityUser;
 import com.jaspersoft.studio.community.zip.ZipEntry;
-import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * Wizard for the issue creation.

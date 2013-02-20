@@ -18,6 +18,7 @@ package com.jaspersoft.studio.rcp;
 import java.util.Arrays;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
@@ -36,7 +37,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.ui.IStartup;
 
-import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.rcp.heartbeat.Heartbeat;
 import com.jaspersoft.studio.rcp.messages.Messages;
 
@@ -47,7 +47,7 @@ public class Startup implements IStartup {
 
 	public void earlyStartup() {
 		IProject project = ResourcesPlugin.getWorkspace().getRoot()
-				.getProject(JrxmlEditor.DEFAULT_PROJECT); //$NON-NLS-1$
+				.getProject(FileUtils.DEFAULT_PROJECT); //$NON-NLS-1$
 		IProgressMonitor monitor = new NullProgressMonitor();
 		try {
 			if (!project.exists()) {
