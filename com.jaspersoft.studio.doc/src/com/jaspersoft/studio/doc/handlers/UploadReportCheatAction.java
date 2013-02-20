@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.doc.handlers;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.action.Action;
@@ -13,7 +14,6 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.publish.wizard.Publish2ServerWizard;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**

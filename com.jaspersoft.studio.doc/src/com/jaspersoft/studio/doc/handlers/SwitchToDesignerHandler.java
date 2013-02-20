@@ -17,6 +17,7 @@ package com.jaspersoft.studio.doc.handlers;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PlatformUI;
+
 import com.jaspersoft.studio.editor.JrxmlEditor;
 
 /**

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.doc.handlers;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -31,7 +32,6 @@ import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.utils.SelectionHelper;
-import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * Open the edit query dialog of a report or a message dialog if the query dialog isn't available for the 
