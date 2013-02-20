@@ -26,9 +26,13 @@ import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.QualifiedName;
+
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -38,6 +42,16 @@ public class JrxmlExporter extends AExporter {
 	public static final String PROP_SERVERURL = "ireport.jasperserver.url";
 	public static final String PROP_REPORTUNIT = "ireport.jasperserver.reportUnit";
 	public static final String PROP_REPORTRESOURCE = "ireport.jasperserver.report.resource";
+	public static final String PROP_REPORT_ISMAIN = "ireport.jasperserver.report.ismain";
+
+	@Override
+	public IFile exportToIFile(MResource res, ResourceDescriptor rd,
+			String fkeyname) throws Exception {
+		IFile f = super.exportToIFile(res, rd, fkeyname);
+		f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID,
+				PROP_REPORT_ISMAIN), Boolean.toString(rd.isMainReport()));
+		return f;
+	}
 
 	@Override
 	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname)

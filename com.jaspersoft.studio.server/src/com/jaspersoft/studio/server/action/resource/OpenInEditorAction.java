@@ -123,14 +123,7 @@ public class OpenInEditorAction extends Action {
 			String type = rd.getWsType();
 			File f = null;
 			if (type.equals(ResourceDescriptor.TYPE_JRXML)) {
-				final IFile file = new JrxmlExporter().exportToIFile(res, rd,
-						fkeyname);
-				Display.getDefault().asyncExec(new Runnable() {
-
-					public void run() {
-						SelectionHelper.openEditor(file);
-					}
-				});
+				openEditor(new JrxmlExporter().exportToIFile(res, rd, fkeyname));
 				return;
 			} else if (type.equals(ResourceDescriptor.TYPE_IMAGE))
 				f = new ImageExporter().exportFile(res, rd, fkeyname);
@@ -141,6 +134,15 @@ public class OpenInEditorAction extends Action {
 			if (f != null)
 				openEditor(f);
 		}
+	}
+
+	private void openEditor(final IFile f) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				SelectionHelper.openEditor(f);
+			}
+		});
 	}
 
 	private void openEditor(final File f) {

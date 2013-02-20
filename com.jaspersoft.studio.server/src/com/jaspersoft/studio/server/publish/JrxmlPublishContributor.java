@@ -34,10 +34,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.QualifiedName;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.plugin.IPublishContributor;
@@ -54,10 +56,11 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			String version, JasperReportsConfiguration jrConfig)
 			throws Exception {
 		init(jrConfig, version);
-
 		publishJrxml(mrunit, monitor, jasper, fileset, file);
-
-		publishParameters(mrunit, monitor, jasper, jrConfig);
+		String val = file.getPersistentProperty(new QualifiedName(
+				Activator.PLUGIN_ID, JrxmlExporter.PROP_REPORT_ISMAIN));
+		if (val == null || val.isEmpty() && Boolean.getBoolean(val))
+			publishParameters(mrunit, monitor, jasper, jrConfig);
 	}
 
 	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor,
