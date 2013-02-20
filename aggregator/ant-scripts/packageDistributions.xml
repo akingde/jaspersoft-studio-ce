@@ -70,7 +70,7 @@
 		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.win32.x86_64}/jaspersoftstudio" />
 
 		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${jssRcpProductFolderPath}/lib/nsisant-1.1.jar" />
-		<nsisant script="${jssRcpProductFolderPath}/resources/JaspersoftStudioInstaller.nsi">
+		<nsisant script="${jssRcpProductFolderPath}/resources/JaspersoftStudioInstaller64.nsi">
 			<define name="PRDUCT_ARCH" value="x86_64" />
 			<define name="PRODUCT_VERSION" value="${jss.version}" />
 			<define name="PRODUCT_WEB_SITE" value="http://community.jaspersoft.com/project/jaspersoft-studio" />
