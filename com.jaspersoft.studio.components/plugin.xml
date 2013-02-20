@@ -649,7 +649,6 @@
          point="com.jaspersoft.studio.toolitems">
       <toolitems
             ActionID="create_table_column_begin"
-            contributionItemClass="CreateColumnEndAction"
             id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction"
             tooltip="Create a column at the beginning of the table">
          <selectedObject
