@@ -22,6 +22,8 @@ public class Messages extends NLS {
 	public static String ApplicationActionBarAdvisor_file;
 	public static String ApplicationActionBarAdvisor_help;
 	public static String ApplicationActionBarAdvisor_window;
+	public static String ApplicationWorkbenchAdvisor_ProductName;
+	public static String ApplicationWorkbenchAdvisor_RepositoryURLReadError;
 	public static String ApplicationWorkbenchWindowAdvisor_jasper_open_studio;
 	public static String InstallNewSoftwareHandler_TaskName;
 	public static String P2Util_ErrorMessage;

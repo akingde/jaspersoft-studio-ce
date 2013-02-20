@@ -35,37 +35,14 @@ import com.jaspersoft.studio.rcp.messages.Messages;
  */
 public class P2Util {
 
-	// Main update site for JSS product 
-	public static String JSS_CE_UPDATE_SITE = "http://jasperstudio.sf.net/jssproductrepo/"; //$NON-NLS-1$
-	  
-	/**
-	 * Sets the default repositories to look into.
-	 * <p>
-	 * 
-	 * We programmatically set the repository as alternative to the p2.inf method.
-	 * In fact, if the RCP application is installed into a user-write protected directory, 
-	 * p2.inf will fail to be able to add the repositories (as it tries to modify the 
-	 * configuration on the first RCP run).
-	 * 
-	 */
-	public static void setRepositories() {
-		try {
-			final MetadataRepositoryElement element = new MetadataRepositoryElement(
-					null, new URI(JSS_CE_UPDATE_SITE), true);
-			ElementUtils.updateRepositoryUsingElements(
-					ProvisioningUI.getDefaultUI(),
-					new MetadataRepositoryElement[] { element }, null);
-		} catch (URISyntaxException e) {
-			Activator.getDefault().logError(Messages.P2Util_ErrorMessage, e);
-		}
-	}
-	
 	/** 
 	 * Sets the defaults repositories to look into.
 	 * <p>
 	 * 
-	 * Differently from the {@link #setRepositories()} method, 
-	 * a custom set of repositories is set.
+	 * We programmatically set the repositories as alternative to the p2.inf method.
+	 * In fact, if the RCP application is installed into a user-write protected directory, 
+	 * p2.inf will fail to be able to add the repositories (as it tries to modify the 
+	 * configuration on the first RCP run).
 	 * 
 	 * @param repositoryURLs the list of repository URLs
 	 */
@@ -83,4 +60,5 @@ public class P2Util {
 			Activator.getDefault().logError(Messages.P2Util_ErrorMessage, e);
 		}
 	}
+	
 }

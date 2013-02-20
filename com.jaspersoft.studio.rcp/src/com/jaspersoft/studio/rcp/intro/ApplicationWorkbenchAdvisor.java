@@ -15,7 +15,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.rcp.intro;
 
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -37,6 +40,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.ReportDesignPerspective;
 import com.jaspersoft.studio.rcp.Activator;
 import com.jaspersoft.studio.rcp.OpenDocumentEventProcessor;
+import com.jaspersoft.studio.rcp.messages.Messages;
 import com.jaspersoft.studio.rcp.p2.P2Util;
 import com.jaspersoft.studio.utils.BrandingInfo;
 
@@ -60,24 +64,24 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		super.initialize(configurer);
 		configurer.setSaveAndRestore(true);
 
-		final String ICONS_PATH = "icons/full/";
-		final String PATH_OBJECT = ICONS_PATH + "obj16/";
+		final String ICONS_PATH = "icons/full/"; //$NON-NLS-1$
+		final String PATH_OBJECT = ICONS_PATH + "obj16/"; //$NON-NLS-1$
 		Bundle ideBundle = Platform.getBundle(IDEWorkbenchPlugin.IDE_WORKBENCH);
 		declareWorkbenchImage(configurer, ideBundle,
-				IDE.SharedImages.IMG_OBJ_PROJECT, PATH_OBJECT + "prj_obj.gif",
+				IDE.SharedImages.IMG_OBJ_PROJECT, PATH_OBJECT + "prj_obj.gif", //$NON-NLS-1$
 				true);
 		declareWorkbenchImage(configurer, ideBundle,
 				IDE.SharedImages.IMG_OBJ_PROJECT_CLOSED, PATH_OBJECT
-						+ "cprj_obj.gif", true);
+						+ "cprj_obj.gif", true); //$NON-NLS-1$
 		declareWorkbenchImage(configurer, ideBundle,
 				IDEInternalWorkbenchImages.IMG_DLGBAN_SAVEAS_DLG, PATH_OBJECT
-						+ "saveas_wiz.png", false);
+						+ "saveas_wiz.png", false); //$NON-NLS-1$
 		declareWorkbenchImage(configurer, ideBundle,
-				IDE.SharedImages.IMG_OBJ_PROJECT, PATH_OBJECT + "prj_obj.gif",
+				IDE.SharedImages.IMG_OBJ_PROJECT, PATH_OBJECT + "prj_obj.gif", //$NON-NLS-1$
 				true);
 		declareWorkbenchImage(configurer, ideBundle,
 				IDE.SharedImages.IMG_OBJ_PROJECT_CLOSED, PATH_OBJECT
-						+ "cprj_obj.gif", true);
+						+ "cprj_obj.gif", true); //$NON-NLS-1$
 
 		// Force the default setting for the help (tray) button in dialogs.
 		// It seems that in Windows and Linux platforms as default this value is set to true.
@@ -86,7 +90,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		
 		// Sets the branding information
 		BrandingInfo info = new BrandingInfo();
-		info.setProductName("Jaspersoft Studio Community Edition");
+		info.setProductName(Messages.ApplicationWorkbenchAdvisor_ProductName);
 		info.setProductVersion(Activator.getDefault().getBundle().getVersion().toString());
 		info.setProductMainBundleID(Activator.PLUGIN_ID);
 		JaspersoftStudioPlugin.getInstance().setBrandingInformation(info);
@@ -123,7 +127,18 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	 * used for the JSS product update. 
 	 */
 	protected void setRepositories(){
-		P2Util.setRepositories();		
+		try {
+			URL siteEntry = Activator.getDefault().getBundle().getEntry("updatesite.properties"); //$NON-NLS-1$
+			InputStream propsIS = siteEntry.openStream();
+			Properties props = new Properties();
+			props.load(propsIS);
+			String urlString = props.getProperty("jaspersoftstudio.ce.updatesite"); //$NON-NLS-1$
+			if(urlString!=null){
+				P2Util.setRepositories(Arrays.asList(urlString));
+			}
+		} catch (Exception e) {
+			Activator.getDefault().logError(Messages.ApplicationWorkbenchAdvisor_RepositoryURLReadError, e);
+		}
 	}
 
 	/**
