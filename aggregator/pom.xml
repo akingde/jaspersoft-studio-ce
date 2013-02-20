@@ -86,7 +86,7 @@
 				<configuration>
 					<!-- Another way to put prefix / suffix <qualifier>I_${buildQualifier}</qualifier> -->
 					<format>'v'yyyyMMddHHmm</format>
-					<finalName>${project.artifactId}_${buildQualifier}</finalName>
+					<finalName>${project.artifactId}_${project.version}.${buildQualifier}</finalName>
 				</configuration>
 			</plugin>
 
