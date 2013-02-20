@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
 package com.jaspersoft.studio.components.table.model.dialog;
 
 import java.awt.Color;
@@ -20,27 +35,51 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 
+/**
+ * Generate a preview of a table with a table style applied on it
+ * 
+ * @author Orlandin Marco & Giulio Toffoli
+ *
+ */
 public class TableStylePreview extends Composite {
 	
+	/**
+	 * The style of the table
+	 */
 	private TableStyle tableStyle;
 	
+	/**
+	 * The parent figure
+	 */
 	private Figure parentFigure;
 	
+	/**
+	 * The area where the table will be inserted
+	 */
 	private Canvas square;
 	
+	/**
+	 * Figure where the table will be painted
+	 */
 	private RectangleFigure borderPreview;
 	
 	private J2DLightweightSystem lws;
 	
-	
+	/**
+	 * Create a preview with a default table style
+	 *
+	 * @param parent
+	 * @param style
+	 */
 	public TableStylePreview(Composite parent, int style){
 		super(parent, style);
-		tableStyle = new TableStyle(ColorConstants.lightBlue.getRGB(), ColorSchemaGenerator.SCHEMA_DEFAULT,0,ColorConstants.black.getRGB(),false);
+		tableStyle = new TableStyle(ColorConstants.lightBlue.getRGB(), ColorSchemaGenerator.SCHEMAS.DEFAULT,BorderStyleEnum.FULL,ColorConstants.black.getRGB(),false);
 		createFigure();
 	}
 	
@@ -50,6 +89,11 @@ public class TableStylePreview extends Composite {
 		createFigure();
 	}
 	
+	/**
+	 * Set the table style and redraw the preview image
+	 * 
+	 * @param style the new table style
+	 */
 	public void setTableStyle(TableStyle style){
 		tableStyle = style;
 		setTBounds();
@@ -85,7 +129,7 @@ public class TableStylePreview extends Composite {
 			    g.setColor(Color.WHITE);
 			    if (tableStyle.hasAlternateColor())
 			    {
-			    	c = tableStyle.getColorValue(TableStyle.COLOR2);
+			    	c = tableStyle.getColorValue(TableStyle.COLOR_DETAIL);
 			        g.setColor(c);
 			    }
 			    g.fill(row_bounds);
@@ -95,7 +139,7 @@ public class TableStylePreview extends Composite {
 
 			    // TABLE HEADER
 			    row_bounds = new Rectangle(x,y + rowHeight*0, w, rowHeight);
-			    c = tableStyle.getColorValue(TableStyle.COLOR3);
+			    c = tableStyle.getColorValue(TableStyle.COLOR_TABLE_HEADER);
 			    g.setColor(c);
 			    g.fill(row_bounds);
 
@@ -107,7 +151,7 @@ public class TableStylePreview extends Composite {
 
 			    // COLUMN HEADER
 			    row_bounds = new Rectangle(x,y + rowHeight*1, w, rowHeight);
-			    c = tableStyle.getColorValue(TableStyle.COLOR2);
+			    c = tableStyle.getColorValue(TableStyle.COLOR_COL_HEADER);
 			    g.setColor(c);
 			    g.fill(row_bounds);
 
@@ -125,7 +169,7 @@ public class TableStylePreview extends Composite {
 			    }
 
 			    h = rowHeight*7;
-			    if (tableStyle.getBorderStyle() == 0)
+			    if (tableStyle.getBorderStyle() == BorderStyleEnum.FULL)
 			    {
 			        for (int i=0; i<3; ++i)
 			        {
@@ -133,7 +177,7 @@ public class TableStylePreview extends Composite {
 			        }
 			        g.drawLine(x+w, y, x+w, y+h-1);
 			    }
-			    if (tableStyle.getBorderStyle() == 2)
+			    if (tableStyle.getBorderStyle() == BorderStyleEnum.ONLY_HORIZONTAL)
 			    {
 			        g.drawLine(x, y, x, y+h);
 			        g.drawLine(x+w, y, x+w, y+h-1);
@@ -156,6 +200,9 @@ public class TableStylePreview extends Composite {
 		});
 	}
 	
+	/**
+	 * Set the size of the preview area and request a redraw
+	 */
 	public void setTBounds() {
 		if (!isDisposed()) {
 			Dimension psize = parentFigure.getSize();

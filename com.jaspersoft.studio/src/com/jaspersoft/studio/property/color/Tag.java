@@ -1,17 +1,49 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
 package com.jaspersoft.studio.property.color;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 /**
+ * This class represent a pair of a String and Object. These are supposed to be the human
+ * name of an element and the value of the element.  For example the name of a color could be 
+ * "Black" and its value could be an SWT or AWT color
  *
- * @author gtoffoli
+ *
+ * @author Giulio Toffoli
  */
 public class Tag {
     
+		/**
+		 * The value of the element
+		 */
     private Object value;
+    
+    /**
+     * The human name of the element
+     */
     private String name = "";
     
+    /**
+     * Build a pair of the value to represent the human readable value of an element and it 
+     * real value.
+     * @param value
+     * @param name
+     */
     public Tag(Object value, String name) {
         setName( name );
         setValue(value);
@@ -60,10 +92,10 @@ public class Tag {
     /**
      * Look for the first tag with the specified name.
      */
-    public static final Tag findTagByName(String name, Collection c)
+    public static final Tag findTagByName(String name, Collection<?> c)
     {
             if (c == null) return null;
-            Iterator i = c.iterator();
+            Iterator<?> i = c.iterator();
             while (i.hasNext())
             {
                 Tag t = (Tag)i.next();
@@ -79,10 +111,10 @@ public class Tag {
     /**
      * Look for the first tag with the specified name.
      */
-    public static final Tag findTagByValue(Object value, Collection c)
+    public static final Tag findTagByValue(Object value, Collection<?> c)
     {
             if (c == null) return null;
-            Iterator i = c.iterator();
+            Iterator<?> i = c.iterator();
             while (i.hasNext())
             {
                 Tag t = (Tag)i.next();

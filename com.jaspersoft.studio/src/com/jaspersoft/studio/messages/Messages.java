@@ -236,6 +236,12 @@ public class Messages extends NLS {
 	public static String ColorsSection_element_forecolor_tool_tip;
 	public static String ColorsSection_transparency;
 	public static String ColorsSection_transparency_tool_tip;
+	public static String ColorSchemaGenerator_schema_contrast;
+	public static String ColorSchemaGenerator_schema_darkpastel;
+	public static String ColorSchemaGenerator_schema_default;
+	public static String ColorSchemaGenerator_schema_lightPastel;
+	public static String ColorSchemaGenerator_schema_pale;
+	public static String ColorSchemaGenerator_schema_pastel;
 	public static String ColorStyledText_LineColor_ToolTip;
 	public static String ColumnsOrderDialog_ColumOrderDialog;
 	public static String CreateBandAction_create_band;

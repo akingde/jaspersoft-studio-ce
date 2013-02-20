@@ -112,7 +112,7 @@ public class TableColumnSize {
 		for (BaseColumn bc : jrTable.getColumns()) {
 			maxh = Math.max(maxh, getColumnHeight(bc, type, grName));
 		}
-		return maxh < 0 ? 40 : maxh;
+		return maxh < 0 ? 30 : maxh;
 	}
 
 	public static int getColumnHeight(BaseColumn bc, int type, String grName) {

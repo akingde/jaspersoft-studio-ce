@@ -22,13 +22,10 @@ import java.util.List;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
-import net.sf.jasperreports.engine.JRDatasetRun;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -42,20 +39,15 @@ import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
-import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
-import com.jaspersoft.studio.model.dataset.MDataset;
-import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
+import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.model.dataset.command.CreateDatasetCommand;
-import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
-import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
-import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 public class TableWizard extends JSSWizard {
@@ -189,8 +181,7 @@ public class TableWizard extends JSSWizard {
 		// Get the connection/datasource expression from the proper wizard step...
 		JasperDesign jd = getConfig().getJasperDesign();
 		
-		createDeafultStyles(jd);
-		
+		styleList = createStyles(jd, step4.getSelectedStyle());
 		if (tbl != null && lst != null) {
 			int colWidth = 40;
 			if (tableWidth < 0)
@@ -252,79 +243,139 @@ public class TableWizard extends JSSWizard {
 
 		return table;
 	}
-	
-	
 
+	/**
+	 * return the list of the styles generated
+	 * 
+	 * @return
+	 */
 	public List<JRDesignStyle> getStylesList() {
 		return styleList;
 	}
-
+	
 	/**
-	 * Create a color array for border and gradient
+	 * Starting from a TableStyle it generate a list of styles that will be applied to the table.
+	 * For every style generated will be executed an addCommand to add them to the report
 	 * 
-	 * @param baseColor
-	 *            value from 0 to 1 that represent the base color H in HSB
-	 *            system
-	 * @return an array of colors, different version of the base color
+	 * @param jd the jasperdesign
+	 * @param style the TableStyle from where all the styles for the table will be generated
+	 * @return a list of style that can be applied to the table
 	 */
-	private Color[] createColor() {
-		Color[] result = { Color.getHSBColor(baseColor, 0.25f, 1.0f),
-				Color.getHSBColor(baseColor, 0.06f, 1.0f) };
-		return result;
-	}
-
-	private void createDeafultStyles(JasperDesign jd) {
-		
-		
-		
-		// Check the first available basename...
-		String basename = "Table";
+    public List<JRDesignStyle> createStyles(JasperDesign jd, TableStyle style)
+    {
+    	String baseName = "Table";
 		styleList = new ArrayList<JRDesignStyle>();
 		
 		for (int i = 0;; i++) {
-			String name = basename;
+			String name = baseName;
 			if (i > 0) {
-				name = basename + " " + i;
+				name = baseName + " " + i;
 			}
 
 			if (!(jd.getStylesMap().containsKey(name))) {
-				basename = name;
+				baseName = name;
 				break;
 			}
 		}
-		
-		JRDesignStyle newStyle = null;
-		Color[] colors = createColor();
-		
-		newStyle = new JRDesignStyle();
-		newStyle.setName(basename);
-		newStyle.setMode(ModeEnum.OPAQUE);
-		addCommand( new CreateStyleCommand(jd, newStyle));
-		styleList.add(newStyle);
+    	
+        List<JRDesignStyle> styles = new ArrayList<JRDesignStyle>();
 
-		newStyle = new JRDesignStyle();
-		newStyle.setName(basename + "_TH");
-		newStyle.setMode(ModeEnum.OPAQUE);
-		newStyle.setBackcolor(colors[1]);
-		addCommand( new CreateStyleCommand(jd, newStyle));
-		styleList.add(newStyle);
-		
-		newStyle = new JRDesignStyle();
-		newStyle.setName(basename + "_CH");
-		newStyle.setMode(ModeEnum.OPAQUE);
-		newStyle.setBackcolor(colors[0]);
-		addCommand( new CreateStyleCommand(jd, newStyle));
-		styleList.add(newStyle);
-		
-		newStyle = new JRDesignStyle();
-		newStyle.setName(basename + "_TD");
-		newStyle.setMode(ModeEnum.OPAQUE);
-		newStyle.setBackcolor(Color.white);
-		addCommand( new CreateStyleCommand(jd, newStyle));
-		styleList.add(newStyle);
+        JRDesignStyle tableStyle=  new JRDesignStyle();
+        tableStyle.setName(baseName);
 
-	}
+        if (style.getBorderStyle() == BorderStyleEnum.FULL || style.getBorderStyle() == BorderStyleEnum.PARTIAL_VERTICAL)
+        {
+            tableStyle.getLineBox().getPen().setLineColor(style.getBorderColor());
+            tableStyle.getLineBox().getPen().setLineWidth(1.0f);
+        }
+        else
+        {
+            tableStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
+            tableStyle.getLineBox().getTopPen().setLineWidth(1.0f);
+            tableStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
+            tableStyle.getLineBox().getBottomPen().setLineWidth(1.0f);
+        }
 
-	
+        addCommand( new CreateStyleCommand(jd, tableStyle));
+        styles.add(tableStyle);
+
+        JRDesignStyle tableHeaderStyle=  new JRDesignStyle();
+        tableHeaderStyle.setName(baseName + "_TH");
+
+        if (style.getBorderStyle() == BorderStyleEnum.FULL)
+        {
+            tableHeaderStyle.getLineBox().getPen().setLineColor(style.getBorderColor());
+            tableHeaderStyle.getLineBox().getPen().setLineWidth(0.5f);
+        }
+        else
+        {
+            tableHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
+            tableHeaderStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
+            tableHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
+            tableHeaderStyle.getLineBox().getTopPen().setLineWidth(0.5f);
+        }
+
+        tableHeaderStyle.setMode(ModeEnum.OPAQUE);
+        tableHeaderStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_TABLE_HEADER));
+
+        addCommand( new CreateStyleCommand(jd, tableHeaderStyle));
+        styles.add(tableHeaderStyle);
+
+        JRDesignStyle columnHeaderStyle=  new JRDesignStyle();
+        columnHeaderStyle.setName(baseName + "_CH");
+
+        if (style.getBorderStyle() == BorderStyleEnum.FULL)
+        {
+            columnHeaderStyle.getLineBox().getPen().setLineColor(style.getBorderColor());
+            columnHeaderStyle.getLineBox().getPen().setLineWidth(0.5f);
+        }
+        else
+        {
+            columnHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
+            columnHeaderStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
+            columnHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
+            columnHeaderStyle.getLineBox().getTopPen().setLineWidth(0.5f);
+        }
+
+        columnHeaderStyle.setMode(ModeEnum.OPAQUE);
+        columnHeaderStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_COL_HEADER));
+
+        addCommand( new CreateStyleCommand(jd, columnHeaderStyle));
+        styles.add(columnHeaderStyle);
+
+        JRDesignStyle cellStyle=  new JRDesignStyle();
+        cellStyle.setName(baseName + "_TD");
+
+        if (style.getBorderStyle() == BorderStyleEnum.FULL)
+        {
+            cellStyle.getLineBox().getPen().setLineColor(style.getBorderColor());
+            cellStyle.getLineBox().getPen().setLineWidth(0.5f);
+        }
+        else
+        {
+            cellStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
+            cellStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
+            cellStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
+            cellStyle.getLineBox().getTopPen().setLineWidth(0.5f);
+        }
+
+        cellStyle.setMode(ModeEnum.OPAQUE);
+        cellStyle.setBackcolor(Color.WHITE);
+
+
+        if (style.hasAlternateColor())
+        {
+            JRDesignConditionalStyle condStyle = new JRDesignConditionalStyle();
+            condStyle.setConditionExpression(ModelUtils.createExpression("new Boolean($V{REPORT_COUNT}.intValue()%2==0)"));
+            condStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_DETAIL));
+            cellStyle.addConditionalStyle(condStyle);
+        }
+
+        addCommand( new CreateStyleCommand(jd, cellStyle));
+        styles.add(cellStyle);
+
+
+        return styles;
+    }	
 	
 }

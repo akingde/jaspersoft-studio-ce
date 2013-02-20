@@ -60,8 +60,16 @@ public class Messages extends NLS {
 	public static String TableWizardLayoutPage_add_group_header;
 	public static String TableWizardLayoutPage_add_table_footer;
 	public static String TableWizardLayoutPage_add_table_header;
+	public static String TableWizardLayoutPage_alternated_rows_label;
+	public static String TableWizardLayoutPage_borders_color_label;
+	public static String TableWizardLayoutPage_borders_style_label;
+	public static String TableWizardLayoutPage_cell_border_group;
+	public static String TableWizardLayoutPage_cell_colors_group;
+	public static String TableWizardLayoutPage_color_schema_label;
 	public static String TableWizardLayoutPage_description;
 	public static String TableWizardLayoutPage_layout;
+	public static String TableWizardLayoutPage_style_preview_group;
+	public static String TableWizardLayoutPage_variations_label;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

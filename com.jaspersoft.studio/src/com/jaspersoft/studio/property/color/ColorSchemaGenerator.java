@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
+
 package com.jaspersoft.studio.property.color;
 
 import java.awt.Color;
@@ -15,19 +31,27 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.studio.messages.Messages;
+
 /**
+ * This class provide some methods to easily define Colors and Gradiations, and in general to generate 
+ * colors. It also embed a series of common colors, with their name and hexadecimal code.
  *
- * @author gtoffoli
+ * @author Giulio Toffoli & Orlandin Marco
  */
 public class ColorSchemaGenerator {
-
-    public final static String SCHEMA_DEFAULT = "default";
-    public final static String SCHEMA_PASTEL = "pastel";
-    public final static String SCHEMA_SOFT = "soft";
-    public final static String SCHEMA_HARD = "hard";
-    public final static String SCHEMA_LIGHT = "light";
-    public final static String SCHEMA_PALE = "pale";
     
+		/**
+		 * the available values for the gradation
+		 * 
+		 * @author Orlandin Marco
+		 *
+		 */
+    public static enum SCHEMAS{DEFAULT, PASTEL, SOFT, HARD, LIGHT, PALE};
+    
+    /**
+     * Alteration value for every schema available
+     */
     private static float[] schema_default = new float[]{ -1f,-1f, 1f,-0.7f, 0.25f,1f, 0.5f,1f };
     private static float[] schema_pastel = new float[]{ 0.5f,-0.9f, 0.5f,0.5f, 0.1f,0.9f, 0.75f,0.75f };
     private static float[] schema_soft = new float[]{ 0.3f,-0.8f, 0.3f,0.5f, 0.1f,0.9f, 0.5f,0.75f };
@@ -35,32 +59,32 @@ public class ColorSchemaGenerator {
     private static float[] schema_light = new float[]{ 0.25f,1f, 0.5f,0.75f, 0.1f,1f, 0.5f,1f };
     private static float[] schema_pale = new float[]{ 0.1f,-0.85f, 0.1f,0.5f, 0.1f,1f, 0.1f,0.75f };
     
-    private static java.util.Map<String, float[]> schemas = new HashMap<String, float[]>();
+    private static java.util.Map<SCHEMAS, float[]> schemas = new HashMap<SCHEMAS, float[]>();
     
     static {
         
-        schemas.put(SCHEMA_DEFAULT, schema_default);
-        schemas.put(SCHEMA_PASTEL, schema_pastel);
-        schemas.put(SCHEMA_SOFT, schema_soft);
-        schemas.put(SCHEMA_HARD, schema_hard);
-        schemas.put(SCHEMA_LIGHT, schema_light);
-        schemas.put(SCHEMA_PALE, schema_pale);
+        schemas.put(SCHEMAS.DEFAULT, schema_default);
+        schemas.put(SCHEMAS.PASTEL, schema_pastel);
+        schemas.put(SCHEMAS.SOFT, schema_soft);
+        schemas.put(SCHEMAS.HARD, schema_hard);
+        schemas.put(SCHEMAS.LIGHT, schema_light);
+        schemas.put(SCHEMAS.PALE, schema_pale);
         
     }
     
     /**
-     * Create the schema color.
+     * Create a gradation of a color
      * 
-     * @param base
-     * @param i (a color between 0 and 3)
-     * @param schemaName
-     * @return
+     * @param base the base color
+     * @param i the gradation of the color (a number between 0 and 3)
+     * @param schemaName the variation of the color 
+     * @return the generated color, as an AWT Color
      */
-    public static Color createColor(Color base, int i, String schemaName)
+    public static Color createColor(Color base, int i, SCHEMAS schemaName)
     {
         
         i = Math.abs(i %= 3); 
-        if (schemaName == null) schemaName = SCHEMA_SOFT;
+        if (schemaName == null) schemaName = SCHEMAS.SOFT;
         float[] schema = schemas.get(schemaName);
         
         float[] components = Color.RGBtoHSB(base.getRed(), base.getGreen(), base.getBlue(), null);
@@ -77,11 +101,23 @@ public class ColorSchemaGenerator {
         return new Color( Color.HSBtoRGB(components[0], components[1], components[2]));
     }
     
-    public static RGB createColor(RGB base, int i, String schemaName){
+    /**
+     * Create a gradation of a color
+     * 
+     * @param base the base color
+     * @param i the gradation of the color (a number between 0 and 3)
+     * @param schemaName the variation of the color 
+     * @return the generated color, as an SWT RGB
+     */
+    public static RGB createColor(RGB base, int i, SCHEMAS schemaName){
     		Color createdColor =  createColor(new Color(base.red, base.green, base.blue), i, schemaName);
     		return new RGB(createdColor.getRed(), createdColor.getGreen(), createdColor.getBlue());
     }
     
+    /**
+     * Return a list of string of all the available colors embedded in the class
+     * @return a list with the human name of the color
+     */
     public static List<String> getColors()
     {
         if (colorsList == null)
@@ -98,16 +134,25 @@ public class ColorSchemaGenerator {
         
         return colorsList;
     }
-    
-  	public static Image getImagePreview(String colorName){
+
+    /**
+     * Return a a preview image of an embedded color. The image will have size of 
+     * 20x10. The image are cached, so it will be generated only the first time that are 
+     * requested.
+     * 
+     * @param colorName the human name of the color
+     * @return an SWT image, preview of the color. It can be null if the human name dosen't match 
+     * none of the embedded colors.
+     */
+    public static Image getImagePreview(String colorName){
 			//The images are cached and disposed at the end
-			String key = "colorPreview_"+colorName;
+			String key = "colorPreview_"+colorName; //$NON-NLS-1$
 			Image image = ResourceManager.getImage(key);
 			if (image == null){
 				if (colorsMap == null) getColors();
 				String colorCode = colorsMap.get(colorName);
 				if (colorCode != null){
-					Color color = decodeColor("#"+colorCode);
+					Color color = decodeColor("#"+colorCode); //$NON-NLS-1$
 					RGB colorRGB = new RGB(color.getRed(), color.getGreen(), color.getBlue());
 					ImageData data = new ImageData(20, 10, 1, new PaletteData(new RGB[]{colorRGB}));
 					image = new Image(null,data); 
@@ -122,12 +167,12 @@ public class ColorSchemaGenerator {
   	}
 				
     
-    public static String[] getColorsArray()
-    {
-        return colors.clone();
-    }
-    
-    
+    /**
+     * Return an embedded color, starting from it embedded human name
+     * 
+     * @param name the human name of an embedded color
+     * @return the AWT color, or null if the provided name doesn't math any embedded color
+     */
     public static Color getColor(String name)
     {
         if (colorsMap == null)
@@ -135,13 +180,22 @@ public class ColorSchemaGenerator {
             getColors();
         }
         String rgb = colorsMap.get(name);
-        return decodeColor("#"+rgb);
+        return decodeColor("#"+rgb); //$NON-NLS-1$
     }
     
     
-    public static java.awt.Color decodeColor(String colorString)
+    /**
+     * Given the hexadecimal value of a color, it will be converted into an AWT color object
+     * 
+     * @param colorString a string representing the hexadecimal value of a color, it can have or not the 
+     * starting symbol "#".
+     * 
+     * @return an AWT color
+     */
+    public static Color decodeColor(String colorString)
     {
         java.awt.Color color = null;
+        if (colorString == null) return null;
         char firstChar = colorString.charAt(0);
         if (firstChar == '#')
         {
@@ -166,25 +220,30 @@ public class ColorSchemaGenerator {
 
     }
     
+    /**
+     * Return a list of all the available variations with their name and value
+     * @return a list of pairs, where every pair is composed of the name of a variations and its enumeration value
+     */
     static public List<Tag> getVariants()
     {
         List<Tag> variants = new ArrayList<Tag>();
-        variants.add(new Tag(SCHEMA_DEFAULT, "Default"));
-        variants.add(new Tag(SCHEMA_PASTEL, "Pastel"));
-        variants.add(new Tag(SCHEMA_SOFT, "Dark Pastel"));
-        variants.add(new Tag(SCHEMA_HARD, "Light Pastel"));
-        variants.add(new Tag(SCHEMA_LIGHT, "Contrast"));
-        variants.add(new Tag(SCHEMA_PALE, "Pale"));
+        variants.add(new Tag(SCHEMAS.DEFAULT, Messages.ColorSchemaGenerator_schema_default));
+        variants.add(new Tag(SCHEMAS.PASTEL, Messages.ColorSchemaGenerator_schema_pastel));
+        variants.add(new Tag(SCHEMAS.SOFT, Messages.ColorSchemaGenerator_schema_darkpastel));
+        variants.add(new Tag(SCHEMAS.HARD, Messages.ColorSchemaGenerator_schema_lightPastel));
+        variants.add(new Tag(SCHEMAS.LIGHT, Messages.ColorSchemaGenerator_schema_contrast));
+        variants.add(new Tag(SCHEMAS.PALE, Messages.ColorSchemaGenerator_schema_pale));
         return variants;
     }
 
     /**
-     * Saturates the color and return  a new color.
-     * @param colorString
-     * @param value (0-1.0)
-     * @return
+     * saturates the color and return a new color.
+     * 
+     * @param color the base color
+     * @param value (0-1.0) value of the saturation
+     * @return the new Color
      */
-    public static java.awt.Color desaturate(java.awt.Color color, float value)
+    public static Color desaturate(Color color, float value)
     {
 
          float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
@@ -194,12 +253,13 @@ public class ColorSchemaGenerator {
     }
 
     /**
-     * Saturates the color and return  a new color.
-     * @param colorString
-     * @param value (0-1.0)
-     * @return
+     * change the brightness of a color an return a new color
+     * 
+     * @param color the base color
+     * @param value (0-1.0) value of the brightness
+     * @return the new Color
      */
-    public static java.awt.Color bright(java.awt.Color color, float value)
+    public static Color bright(Color color, float value)
     {
 
          float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
@@ -210,22 +270,32 @@ public class ColorSchemaGenerator {
 
 
     /**
-     * Saturates the color and return  a new color.
-     * @param colorString
-     * @param value (0-1.0)
-     * @return
+     * Make a color brighter and return a new color
+     * @param color the base color 
+     * @return the new color
      */
-    public static java.awt.Color overlayWhite(java.awt.Color color)
+    public static java.awt.Color overlayWhite(Color color)
     {
 
          return new Color((color.getRed()+255)/2, (color.getGreen()+255)/2, (color.getBlue()+255)/2);
     }
     
+    /**
+     * The human name list of all the color embedded in the class
+     */
     static private List<String> colorsList = null;
+    
+    /**
+     * Hashmap where at every human name of a color is associated it hexadecimal value
+     */
     static private HashMap<String, String> colorsMap = null;
     
+    /**
+     * Array of string where every odd position is the human name of a color, and the pair position 
+     * are the hexadecimal value associated at the name of the precedent position
+     */
     static private String[] colors = new String[]{
-            "Aliceblue","F0F8FF",
+            "Aliceblue","F0F8FF", 
             "Antiquewhite","FAEBD7",
             "Aqua","00FFFF",
             "Aquamarine","7FFFD4",
@@ -365,5 +435,4 @@ public class ColorSchemaGenerator {
             "Whitesmoke","F5F5F5",
             "Yellow","FFFF00",
             "Yellowgreen","9ACD32"};
-    
 }

@@ -53,6 +53,7 @@ import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
@@ -213,6 +214,20 @@ public class ModelUtils {
 		}
 		return new ArrayList<JRField>();
 	}
+	
+	/**
+	 * Create an expression from a textual string, that is the content of the expression
+	 * 
+	 * @param text the content of the expression
+	 * @return the jasperreports element that represent an expression
+	 */
+  public static JRDesignExpression createExpression(String text)
+  {
+      if (text == null || text.trim().length() == 0) return null;
+      JRDesignExpression exp = new JRDesignExpression();
+      exp.setText(text);
+      return exp;
+  }
 
 	private static Map<String, String> mp = new HashMap<String, String>();
 	private static java.util.List<String> pdfencodings;

@@ -1,18 +1,18 @@
-/****************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
- *	Marty Jones <martybjones@gmail.com> - initial API and implementation
- *  Enrico Schnepel <enrico.schnepel@randomice.net> - clear selectedImage bug 297209
- *  Enrico Schnepel <enrico.schnepel@randomice.net> - disable selectedImage bug 297327
- *  Wolfgang Schramm <wschramm@ch.ibm.com> - added vertical alignment of text for selected table item.
- *  Enrico Schnepel <enrico.schnepel@randomice.net> - help event listener bug 326285
- *****************************************************************************/
-
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
 package org.eclipse.nebula.widgets.tablecombo;
 
 import java.lang.reflect.InvocationTargetException;

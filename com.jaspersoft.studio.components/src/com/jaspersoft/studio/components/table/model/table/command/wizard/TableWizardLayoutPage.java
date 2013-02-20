@@ -42,8 +42,8 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
-import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
+import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.components.table.model.dialog.TableStylePreview;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 import com.jaspersoft.studio.property.color.Tag;
@@ -51,9 +51,18 @@ import com.jaspersoft.studio.swt.widgets.ColorStyledText;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
+/**
+ * Step of the wizard where you can define style of the table
+ * 
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class TableWizardLayoutPage extends JSSHelpWizardPage {
-	private MTable table = new MTable();
-
+	
+	/**
+	 * Table section option
+	 */
 	private boolean isTableHeader = true;
 	private boolean isTableFooter = true;
 	private boolean isColumnHeader = true;
@@ -61,20 +70,50 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	private boolean isGroupHeader = true;
 	private boolean isGroupFooter = true;
 	
+	/**
+	 * Base color of the table
+	 */
 	private TableCombo colorScheme;
 	
+	/**
+	 * Variations scheme for the color
+	 */
 	private Combo variations;
 	
+	/**
+	 * Checkbox for the rows alternated color
+	 */
 	private Button alternateColor;
 
+	/**
+	 * Widget for the border color
+	 */
 	private ColorStyledText borderColor;
 	
+	/**
+	 * List of the available schemes for the variations
+	 */
 	private List<Tag> variants;
 
-	private int borderStyle;
+	/**
+	 * Style of the border of the table
+	 */
+	private BorderStyleEnum borderStyle;
 	
+	/**
+	 * Table preview widget
+	 */
 	private TableStylePreview preview;
 	
+	/**
+	 * Last style generated
+	 */
+	private TableStyle lastGeneratedStyle;
+	
+	/**
+	 * Listener called when a control is modified, cause the regeneration of the 
+	 * lastGeneratedStyle and the update of the preview
+	 */
 	private ModifyListener modifyListener = new ModifyListener() {
 		
 		@Override
@@ -83,6 +122,10 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		}
 	};
 	
+	/**
+	 * Listener called when a control get a selection event, cause the regeneration of the 
+	 * lastGeneratedStyle and the update of the preview
+	 */
 	private SelectionAdapter selectionListener = new SelectionAdapter() {
 		
 		@Override
@@ -91,12 +134,8 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		}
 	};
 	
-	public MTable getTable() {
-		return table;
-	}
-
 	protected TableWizardLayoutPage() {
-		super("tablepage"); //$NON-NLS-1$
+		super("tablepage"); 
 		setTitle(Messages.TableWizardLayoutPage_layout);
 		setDescription(Messages.TableWizardLayoutPage_description);
 	}
@@ -111,10 +150,15 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 
 	@Override
 	public void dispose() {
-
 		super.dispose();
 	}
 	
+	/**
+	 * Return an array of string that represents the human name of the 
+	 * color variations
+	 * 
+	 * @return array of the color variations name
+	 */
 	private String[] getVariantsName(){
 		variants = ColorSchemaGenerator.getVariants();
 		String[] variantsName = new String[variants.size()];
@@ -123,15 +167,19 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		return variantsName;
 	}
 	
-	
+	/**
+	 * Create the group with the controls for the cell colors
+	 * 
+	 * @param parent parent composite of the group 
+	 */
 	private void createCellColors(Composite parent){
 		Group group = new Group(parent, SWT.NONE);
-		group.setText("Cell colors");
+		group.setText(Messages.TableWizardLayoutPage_cell_colors_group);
 		group.setLayout(new GridLayout(2,false));
 		group.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		Label firstLabel = new Label(group,SWT.NONE);
-		firstLabel.setText("Color scheme");
+		firstLabel.setText(Messages.TableWizardLayoutPage_color_schema_label);
 		
 		colorScheme = new TableCombo(group, SWT.BORDER);
 		List<String> colors = ColorSchemaGenerator.getColors();
@@ -145,7 +193,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		colorScheme.setEditable(false);
 		
 		Label secondLabel = new Label(group,SWT.NONE);
-		secondLabel.setText("Variations");
+		secondLabel.setText(Messages.TableWizardLayoutPage_variations_label);
 		
 		variations = new Combo(group,SWT.NONE);
 		variations.setItems(getVariantsName());
@@ -153,27 +201,31 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		variations.select(0);
 		
 		alternateColor = new Button(group, SWT.CHECK);
-		alternateColor.setText("Use alternated detail rows background");
+		alternateColor.setText(Messages.TableWizardLayoutPage_alternated_rows_label);
 		GridData checkBoxData = new GridData(GridData.FILL_HORIZONTAL);
 		checkBoxData.horizontalSpan = 2;
 		alternateColor.setLayoutData(checkBoxData);
 		
 		variations.addModifyListener(modifyListener);
 		alternateColor.addSelectionListener(selectionListener);
-		//colorScheme.addModifyListener(modifyListener);
 		colorScheme.addSelectionListener(selectionListener);
 	}
 	
+	/**
+	 * Create the group with the controls for the cell borders
+	 * 
+	 * @param parent parent composite of the group 
+	 */
 	private void createCellBorders(Composite parent){
 		Group group = new Group(parent, SWT.NONE);
-		group.setText("Cell borders");
+		group.setText(Messages.TableWizardLayoutPage_cell_border_group);
 		group.setLayout(new GridLayout(2,false));
 		group.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		Label firstLabel = new Label(group,SWT.NONE);
-		firstLabel.setText("Borders color");
+		firstLabel.setText(Messages.TableWizardLayoutPage_borders_color_label);
 		Label secondLabel = new Label(group,SWT.NONE);
-		secondLabel.setText("Borders style");
+		secondLabel.setText(Messages.TableWizardLayoutPage_borders_style_label);
 		
 		borderColor = new ColorStyledText(group);
 		borderColor.setColor(ColorConstants.black);
@@ -185,17 +237,17 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		ToolBar toolBar = new ToolBar (group, SWT.FLAT);
 		
 		final ToolItem buttonFull = new ToolItem (toolBar, SWT.RADIO);
-		buttonFull.setImage (Activator.getDefault().getImage("icons/full_borders.png"));
+		buttonFull.setImage (Activator.getDefault().getImage("icons/full_borders.png")); //$NON-NLS-1$
 		
 		final ToolItem buttonHorizontal1 = new ToolItem (toolBar, SWT.RADIO);
-		buttonHorizontal1.setImage (Activator.getDefault().getImage("icons/horizontal_borders.png"));
+		buttonHorizontal1.setImage (Activator.getDefault().getImage("icons/horizontal_borders.png")); //$NON-NLS-1$
 		
 		final ToolItem buttonHorizontal2 = new ToolItem (toolBar, SWT.RADIO);
-		buttonHorizontal2.setImage (Activator.getDefault().getImage("icons/horizontal_borders2.png"));
+		buttonHorizontal2.setImage (Activator.getDefault().getImage("icons/horizontal_borders2.png")); //$NON-NLS-1$
 		
 		toolBar.pack ();
 		buttonFull.setSelection(true);
-		borderStyle = 0;
+		borderStyle = BorderStyleEnum.FULL;
 		
 		borderColor.addListener(modifyListener);
 		
@@ -203,7 +255,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (!buttonFull.getSelection()){ 
-					borderStyle = 0;
+					borderStyle = BorderStyleEnum.FULL;
 					buttonFull.setSelection(true);
 					buttonHorizontal1.setSelection(false);
 					buttonHorizontal2.setSelection(false);
@@ -216,7 +268,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (!buttonHorizontal1.getSelection()){ 
-					borderStyle = 1;
+					borderStyle = BorderStyleEnum.PARTIAL_VERTICAL;
 					buttonHorizontal1.setSelection(true);
 					buttonFull.setSelection(false);
 					buttonHorizontal2.setSelection(false);
@@ -229,7 +281,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (!buttonHorizontal2.getSelection()){ 
-					borderStyle = 2;
+					borderStyle = BorderStyleEnum.ONLY_HORIZONTAL;
 					buttonHorizontal2.setSelection(true);
 					buttonFull.setSelection(false);
 					buttonHorizontal1.setSelection(false);
@@ -239,6 +291,12 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		});
 	}
 	
+	/**
+	 * Create the control ad the left of the preview, so the cell color and 
+	 * border groups
+	 * 
+	 * @param parent parent of the composite
+	 */
 	private void createLeftCol(Composite parent){
 		Composite leftCol = new Composite(parent, SWT.NONE);
 		leftCol.setLayout(new GridLayout(1,false));
@@ -250,6 +308,12 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		leftCol.setLayoutData(leftPanelData);
 	}
 	
+	/**
+	 * Create the bottom area of the dialog, where there are the option on the section 
+	 * that will be created
+	 * 
+	 * @param parent parent of the bottom area
+	 */
 	private void createBottom(Composite parent){
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData bottomData = new GridData(GridData.FILL_HORIZONTAL);
@@ -345,18 +409,36 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		});
 	}
 	
-	private void notifyChange(){
-		colorScheme.getItem(5);
-		String colorName =colorScheme.getItem(colorScheme.getSelectionIndex());
-		Color color = ColorSchemaGenerator.getColor(colorName);
-		String variantKey = variants.get(variations.getSelectionIndex()).getValue().toString();
-		TableStyle tableStyle = new TableStyle(new RGB(color.getRed(), color.getGreen(), color.getBlue()),variantKey, borderStyle, borderColor.getColor(), alternateColor.getSelection());
-		preview.setTableStyle(tableStyle);
+	/**
+	 * Return the last generated style for the table, that is the effective one when 
+	 * the dialog was closed
+	 * 
+	 * @return the style to apply to the table
+	 */
+	public TableStyle getSelectedStyle(){
+		return lastGeneratedStyle;
 	}
 	
+	/**
+	 * Called when some property change, rebuild the table style with the actual state of the control
+	 * and request the redraw of the preview
+	 */
+	private void notifyChange(){
+		String colorName =colorScheme.getItem(colorScheme.getSelectionIndex());
+		Color color = ColorSchemaGenerator.getColor(colorName);
+		ColorSchemaGenerator.SCHEMAS variantKey = (ColorSchemaGenerator.SCHEMAS)variants.get(variations.getSelectionIndex()).getValue();
+		lastGeneratedStyle = new TableStyle(new RGB(color.getRed(), color.getGreen(), color.getBlue()),variantKey, borderStyle, borderColor.getColor(), alternateColor.getSelection());
+		preview.setTableStyle(lastGeneratedStyle);
+	}
+	
+	/**
+	 * Generate the preview area
+	 * 
+	 * @param parent
+	 */
 	private void createPreview(Composite parent){
 		Group group = new Group(parent, SWT.NONE);
-		group.setText("Style preview");
+		group.setText(Messages.TableWizardLayoutPage_style_preview_group);
 		group.setLayout(new GridLayout(1,false));
 		group.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
@@ -364,6 +446,9 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		preview.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
+	/**
+	 * Create all the controls of the dialog
+	 */
 	public void createControl(Composite parent) {
 		
 		Composite dialog = new Composite(parent, SWT.NONE);
@@ -383,26 +468,56 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		notifyChange();
 	}
 
+	/**
+	 * Return if the table has a table header
+	 * 
+	 * @return true if the table has a table header, false otherwise
+	 */
 	public boolean isTableHeader() {
 		return isTableHeader;
 	}
 
+	/**
+	 * Return if the table has a table footer
+	 * 
+	 * @return true if the table has a table footer, false otherwise
+	 */
 	public boolean isTableFooter() {
 		return isTableFooter;
 	}
 
+	/**
+	 * Return if the table has a column header
+	 * 
+	 * @return true if the table has a column header, false otherwise
+	 */
 	public boolean isColumnHeader() {
 		return isColumnHeader;
 	}
 
+	/**
+	 * Return if the table has a column footer
+	 * 
+	 * @return true if the table has a column footer, false otherwise
+	 */
 	public boolean isColumnFooter() {
 		return isColumnFooter;
 	}
 
+	/**
+	 * Return if the table has a group header
+	 * 
+	 * @return true if the table has a group header, false otherwise
+	 */
 	public boolean isGroupHeader() {
 		return isGroupHeader;
 	}
 
+	/**
+	 * Return if the table has a group footer
+	 * 
+	 * @return true if the table has a group footer, false otherwise
+	 */
 	public boolean isGroupFooter() {
 		return isGroupFooter;
 	}
