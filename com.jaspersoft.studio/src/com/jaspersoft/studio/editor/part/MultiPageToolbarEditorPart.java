@@ -1,22 +1,19 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.part;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -241,9 +238,14 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 				container.setSelection(newPageIndex);
 				pageChange(newPageIndex);
 				// TODO, workaround here, after selection, container is not refreshed
-				Point size = parent.getParent().getSize();
-				parent.getParent().setSize(size.x - 1, size.y - 1);
-				parent.getParent().setSize(size.x, size.y);
+				final Point size = parent.getParent().getSize();
+				parent.getParent().setSize(size.x - 2, size.y - 2);
+				UIUtils.getDisplay().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						parent.getParent().setSize(size.x, size.y);
+					}
+				});
 			}
 		});
 		newContainer.addTraverseListener(new TraverseListener() {
@@ -1102,31 +1104,30 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 			});
 		}
 	}
-	
+
 	public INestable getActiveServiceLocator() {
 		return activeServiceLocator;
 	}
-	
+
 	/*
 	 * Closes the editor when the IServiceLocator is disposed.
 	 */
-	void close(){
+	void close() {
 		// Ugly fix that does not check if widget/control is already disposed
 		// This in order not to break compilation in Juno
 		// In Eclipse Juno 4.2.x give a look at MultipageEditorPart#close()
-		try{
-			if(getSite()!=null && getSite().getPage()!=null){
+		try {
+			if (getSite() != null && getSite().getPage() != null) {
 				getSite().getPage().closeEditor(MultiPageToolbarEditorPart.this, true);
 			}
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			// do nothing...
-		}	
+		}
 		// Original code that breaks compilation in Juno (Eclipse 4).
 		// final Control control = ((PartSite) getSite()).getPane().getControl();
 		// if (control != null && !control.isDisposed()) {
-		// 	((PartSite) getSite()).getPane().doHide();
+		// ((PartSite) getSite()).getPane().doHide();
 		// }
 	}
-	
+
 }
