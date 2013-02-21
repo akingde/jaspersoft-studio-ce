@@ -18,6 +18,8 @@ package com.jaspersoft.studio.components.table.model.column.command;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Column;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
@@ -113,19 +115,29 @@ public class CreateColumnCommand extends Command {
 	public StandardBaseColumn createColumn(JasperDesign jrDesign,
 			StandardTable jrTable) {
 		return CreateColumnCommand.addColumn(jrDesign, jrTable, true, true,
-				true, true, true, true);
+				true, true, true, true, index);
 	}
 
 	public static StandardColumn addColumn(JasperDesign jrDesign,
 			StandardTable jrTable, boolean isTHead, boolean isTFoot,
-			boolean isCHead, boolean isCFoot, boolean isGHead, boolean isGFoot) {
+			boolean isCHead, boolean isCFoot, boolean isGHead, boolean isGFoot, int index) {
 		StandardColumn col = new StandardColumn();
 		col.setWidth(40);
 
+		List<BaseColumn> columns = TableUtil.getAllColumns(jrTable);
+		BaseColumn sibling = null;
+		if (columns.size()>0){
+			if (index >= columns.size()) sibling = columns.get(columns.size()-1);
+			else if (index<=0) sibling = columns.get(columns.size()-1);
+			else sibling = columns.get(index);
+		}
+		
+		
 		if (isTHead) {
 			DesignCell cell = new DesignCell();
 			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
 					TableUtil.TABLE_HEADER, null));
+			if (sibling!=null) cell.setStyle(sibling.getTableHeader().getStyle());
 			col.setTableHeader(cell);
 		}
 
@@ -133,6 +145,7 @@ public class CreateColumnCommand extends Command {
 			DesignCell cell = new DesignCell();
 			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
 					TableUtil.TABLE_FOOTER, null));
+			if (sibling!=null) cell.setStyle(sibling.getTableFooter().getStyle());
 			col.setTableFooter(cell);
 		}
 
@@ -140,6 +153,7 @@ public class CreateColumnCommand extends Command {
 			DesignCell cell = new DesignCell();
 			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
 					TableUtil.COLUMN_HEADER, null));
+			if (sibling!=null) cell.setStyle(sibling.getColumnHeader().getStyle());
 			col.setColumnHeader(cell);
 		}
 
@@ -147,6 +161,7 @@ public class CreateColumnCommand extends Command {
 			DesignCell cell = new DesignCell();
 			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
 					TableUtil.COLUMN_FOOTER, null));
+			if (sibling!=null) cell.setStyle(sibling.getColumnFooter().getStyle());
 			col.setColumnFooter(cell);
 		}
 
@@ -154,6 +169,8 @@ public class CreateColumnCommand extends Command {
 		cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
 				TableUtil.COLUMN_DETAIL, null));
 		col.setDetailCell(cell);
+		if ((sibling != null) && (sibling instanceof Column)) cell.setStyle(((Column)sibling).getDetailCell().getStyle());
+
 
 		List<?> groupsList = TableUtil.getGroupList(jrTable, jrDesign);
 		if (groupsList != null)
@@ -163,12 +180,14 @@ public class CreateColumnCommand extends Command {
 					cell = new DesignCell();
 					cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
 							TableUtil.COLUMN_GROUP_HEADER, jrGroup.getName()));
+					if (sibling!=null) cell.setStyle(sibling.getGroupHeader(jrGroup.getName()).getStyle());
 					col.setGroupHeader(jrGroup.getName(), cell);
 				}
 				if (isGFoot) {
 					cell = new DesignCell();
 					cell.setHeight(TableColumnSize.getInitTableHeight(jrTable,
 							TableUtil.COLUMN_GROUP_FOOTER, jrGroup.getName()));
+					if (sibling!=null) cell.setStyle(sibling.getGroupFooter(jrGroup.getName()).getStyle());
 					col.setGroupFooter(jrGroup.getName(), cell);
 				}
 			}

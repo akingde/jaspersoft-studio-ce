@@ -23,6 +23,7 @@ import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
@@ -192,7 +193,7 @@ public class TableWizard extends JSSWizard {
 				StandardColumn col = CreateColumnCommand.addColumn(jd, tbl,
 						step4.isTableHeader(), step4.isTableFooter(),
 						step4.isColumnHeader(), step4.isColumnFooter(),
-						step4.isGroupHeader(), step4.isGroupFooter());
+						step4.isGroupHeader(), step4.isGroupFooter(), -1);
 				col.setWidth(colWidth);
 				// Set the cel color
 				DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
@@ -253,6 +254,37 @@ public class TableWizard extends JSSWizard {
 		return styleList;
 	}
 	
+	
+	/**
+	 * Set all the borders of a JR style to a precise width
+	 * 
+	 * @param element a JR style
+	 * @param lineWidth the width
+	 */
+	private void setBorderWidth(JRDesignStyle element, float lineWidth){
+		JRLineBox box = element.getLineBox();
+		box.getPen().setLineWidth(lineWidth);
+		box.getLeftPen().setLineWidth(lineWidth);
+		box.getRightPen().setLineWidth(lineWidth);
+		box.getBottomPen().setLineWidth(lineWidth);
+		box.getTopPen().setLineWidth(lineWidth);
+	}
+	
+	/**
+	 * Set all the borders of a JR style to a precise color
+	 * 
+	 * @param element a JR style
+	 * @param lineWidth the width
+	 */
+	private void setBorderColor(JRDesignStyle element, Color lineColor){
+		JRLineBox box = element.getLineBox();
+		box.getPen().setLineColor(lineColor);
+		box.getLeftPen().setLineColor(lineColor);
+		box.getRightPen().setLineColor(lineColor);
+		box.getBottomPen().setLineColor(lineColor);
+		box.getTopPen().setLineColor(lineColor);
+	}
+	
 	/**
 	 * Starting from a TableStyle it generate a list of styles that will be applied to the table.
 	 * For every style generated will be executed an addCommand to add them to the report
@@ -284,8 +316,8 @@ public class TableWizard extends JSSWizard {
 
         if (style.getBorderStyle() == BorderStyleEnum.FULL || style.getBorderStyle() == BorderStyleEnum.PARTIAL_VERTICAL)
         {
-            tableStyle.getLineBox().getPen().setLineColor(style.getBorderColor());
-            tableStyle.getLineBox().getPen().setLineWidth(1.0f);
+            setBorderColor(tableStyle, style.getBorderColor());
+            setBorderWidth(tableStyle, 1.0f);
         }
         else
         {
@@ -303,8 +335,8 @@ public class TableWizard extends JSSWizard {
 
         if (style.getBorderStyle() == BorderStyleEnum.FULL)
         {
-            tableHeaderStyle.getLineBox().getPen().setLineColor(style.getBorderColor());
-            tableHeaderStyle.getLineBox().getPen().setLineWidth(0.5f);
+            setBorderColor(tableHeaderStyle, style.getBorderColor());
+            setBorderWidth(tableHeaderStyle, 0.5f);
         }
         else
         {
@@ -325,8 +357,8 @@ public class TableWizard extends JSSWizard {
 
         if (style.getBorderStyle() == BorderStyleEnum.FULL)
         {
-            columnHeaderStyle.getLineBox().getPen().setLineColor(style.getBorderColor());
-            columnHeaderStyle.getLineBox().getPen().setLineWidth(0.5f);
+            setBorderColor(columnHeaderStyle, style.getBorderColor());
+            setBorderWidth(columnHeaderStyle, 0.5f);
         }
         else
         {
@@ -347,8 +379,8 @@ public class TableWizard extends JSSWizard {
 
         if (style.getBorderStyle() == BorderStyleEnum.FULL)
         {
-            cellStyle.getLineBox().getPen().setLineColor(style.getBorderColor());
-            cellStyle.getLineBox().getPen().setLineWidth(0.5f);
+            setBorderColor(cellStyle, style.getBorderColor());
+            setBorderWidth(cellStyle, 0.5f);
         }
         else
         {

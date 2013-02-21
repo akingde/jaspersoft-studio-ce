@@ -108,7 +108,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	/**
 	 * Last style generated
 	 */
-	private TableStyle lastGeneratedStyle;
+	private TableStyle lastGeneratedStyle = null;
 	
 	/**
 	 * Listener called when a control is modified, cause the regeneration of the 
@@ -411,11 +411,18 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	
 	/**
 	 * Return the last generated style for the table, that is the effective one when 
-	 * the dialog was closed
+	 * the dialog was closed. If the last generated style is null (maybe because the wizard 
+	 * was finished without reach the last step), the default one is provided
 	 * 
 	 * @return the style to apply to the table
 	 */
 	public TableStyle getSelectedStyle(){
+		if (lastGeneratedStyle == null) {
+			String firstColor = ColorSchemaGenerator.getColors().get(0);
+			Color color = ColorSchemaGenerator.getColor(firstColor);
+			RGB rgbColor = new RGB(color.getRed(), color.getGreen(), color.getBlue());
+			lastGeneratedStyle = new TableStyle(rgbColor, ColorSchemaGenerator.SCHEMAS.DEFAULT, BorderStyleEnum.FULL, ColorConstants.black.getRGB(), false);
+		}
 		return lastGeneratedStyle;
 	}
 	

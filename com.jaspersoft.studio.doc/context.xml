@@ -294,4 +294,7 @@
  	<context id="preferences_properties_tab" title="Manage the properties configuration">
       <description>In this page you can set some properties that will be used to configure JasperReports. To get information on what a property does, select it from the list and press the help key (on linux and windows it is the key F1).</description>
    </context>
+   <context id="wizard_crosstab_layout" title="Define the crosstab layout">
+      <description>In this step you can define the crosstab layout, this include the color schema of the crosstab and the color of the grid.</description>
+   </context>
 </contexts>
