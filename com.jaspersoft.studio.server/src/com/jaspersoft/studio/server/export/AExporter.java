@@ -33,8 +33,8 @@ public abstract class AExporter {
 
 	public IFile exportToIFile(MResource res, ResourceDescriptor rd,
 			String fkeyname) throws Exception {
-		return FileUtils
-				.getInProjectFile(exportFile(res, rd, fkeyname).toURI());
+		File f = exportFile(res, rd, fkeyname);
+		return FileUtils.getInProjectFile(f.toURI());
 	}
 
 	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname)

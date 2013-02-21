@@ -29,11 +29,11 @@ import com.jaspersoft.studio.server.ServerIconDescriptor;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class MDataAdapter extends AFileResource {
+public class MRDataAdapter extends AFileResource {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MDataAdapter(ANode parent, ResourceDescriptor rd, int index) {
+	public MRDataAdapter(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
 	}
 	

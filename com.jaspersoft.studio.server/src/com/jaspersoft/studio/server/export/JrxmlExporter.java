@@ -56,7 +56,6 @@ public class JrxmlExporter extends AExporter {
 	@Override
 	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname)
 			throws Exception {
-
 		File f = super.exportFile(res, rd, fkeyname);
 		if (f != null) {
 			try {

@@ -18,10 +18,12 @@ package com.jaspersoft.studio.server.publish;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -87,6 +89,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 						version);
 			}
 		}
+		// publishDataAdapters(mrunit, monitor, jasper, fileset, file, version);
 		publishTemplates(mrunit, monitor, jasper, fileset, file, version);
 		// here extend and give possibility to contribute to plugins
 		Activator.getExtManager().publishJrxml(mrunit, monitor, jasper,
@@ -139,9 +142,27 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		}
 	}
 
+	protected void publishDataAdapters(MReportUnit mrunit,
+			IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset,
+			IFile file, String version) throws Exception {
+		List<JRDataset> ds = new ArrayList<JRDataset>();
+		ds.add(jasper.getMainDataset());
+		List<JRDataset> datasetsList = jasper.getDatasetsList();
+		if (datasetsList != null && datasetsList.isEmpty())
+			ds.addAll(datasetsList);
+		for (JRDataset d : ds) {
+			String dapath = d.getPropertiesMap().getProperty(
+					"net.sf.jasperreports.data.adapter");
+			if (dapath == null || dapath.isEmpty())
+				continue;
+			impDa.publish(jasper, dapath, mrunit, monitor, fileset, file);
+		}
+	}
+
 	private void init(JasperReportsConfiguration jrConfig, String version) {
 		this.jrConfig = jrConfig;
 		this.version = version;
+		impDa = new ImpDataAdapter(jrConfig);
 		impStyle = new ImpStyleTemplate(jrConfig);
 		impImg = new ImpImage(jrConfig);
 		impSRP = new ImpSubreport(jrConfig);
@@ -149,6 +170,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	}
 
 	private IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+	private ImpDataAdapter impDa;
 	private ImpStyleTemplate impStyle;
 	private ImpImage impImg;
 	private ImpSubreport impSRP;

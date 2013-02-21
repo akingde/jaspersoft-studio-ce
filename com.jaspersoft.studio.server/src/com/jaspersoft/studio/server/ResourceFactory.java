@@ -23,7 +23,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MDataAdapter;
+import com.jaspersoft.studio.server.model.MRDataAdapter;
 import com.jaspersoft.studio.server.model.MDataType;
 import com.jaspersoft.studio.server.model.MDummy;
 import com.jaspersoft.studio.server.model.MFolder;
@@ -200,7 +200,7 @@ public class ResourceFactory {
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),
 							new StyleTemplatePageContent(parent, resource));
-				else if (resource instanceof MDataAdapter)
+				else if (resource instanceof MRDataAdapter)
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),
 							new DataAdapterPageContent(parent, resource));
