@@ -40,6 +40,7 @@ import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
+import com.jaspersoft.studio.components.table.model.dialog.ApplyTableStyleAction;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.model.dataset.command.CreateDatasetCommand;
@@ -58,10 +59,6 @@ public class TableWizard extends JSSWizard {
 	private TableWizardLayoutPage step4;
 	private MTable table = null;;
 	
-	/**
-	 * The set of styles that will be created as the table is added to the report
-	 */
-	private List<JRDesignStyle> styleList;
 	
 	
 	float baseColor = new Float(Math.tan(Math.toRadians(208.0)));
@@ -175,14 +172,9 @@ public class TableWizard extends JSSWizard {
 		datasetRun.setDatasetName( dataset.isMainDataset() ? null : dataset.getName() );
 		tbl.setDatasetRun(datasetRun);
 		
-		
-		// Create a command to add the styles...
-		
-		
 		// Get the connection/datasource expression from the proper wizard step...
 		JasperDesign jd = getConfig().getJasperDesign();
-		
-		styleList = createStyles(jd, step4.getSelectedStyle());
+
 		if (tbl != null && lst != null) {
 			int colWidth = 40;
 			if (tableWidth < 0)
@@ -195,23 +187,8 @@ public class TableWizard extends JSSWizard {
 						step4.isColumnHeader(), step4.isColumnFooter(),
 						step4.isGroupHeader(), step4.isGroupFooter(), -1);
 				col.setWidth(colWidth);
-				// Set the cel color
 				DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
-				if (colHeadCell != null)
-					colHeadCell.setStyle(styleList.get(2));
 				DesignCell detCell = (DesignCell) col.getDetailCell();
-				if (detCell != null)
-					detCell.setStyle(styleList.get(3));
-				DesignCell tblHeadCell = (DesignCell) col.getTableHeader();
-				if (tblHeadCell != null)
-					tblHeadCell.setStyle(styleList.get(1));
-				DesignCell tblFooterCell = (DesignCell) col.getTableFooter();
-				if (tblFooterCell != null)
-					tblFooterCell.setStyle(styleList.get(1));
-				DesignCell colFooterCell = (DesignCell) col.getColumnFooter();
-				if (colFooterCell != null)
-					colFooterCell.setStyle(styleList.get(2));
-				// Color setted
 				if (step4.isColumnHeader()) {
 					JRDesignStaticText sText = (JRDesignStaticText) new MStaticText()
 							.createJRElement(jd);
@@ -242,18 +219,13 @@ public class TableWizard extends JSSWizard {
 					.getName());
 		}
 
+		//Apply the style to the table
+		ApplyTableStyleAction applyAction = new ApplyTableStyleAction(step4.getSelectedStyle(), table);
+		applyAction.applayStyle(jd);
 		return table;
 	}
 
-	/**
-	 * return the list of the styles generated
-	 * 
-	 * @return
-	 */
-	public List<JRDesignStyle> getStylesList() {
-		return styleList;
-	}
-	
+
 	
 	/**
 	 * Set all the borders of a JR style to a precise width
