@@ -92,6 +92,8 @@
 		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />
+		<!-- rename the folder -->
+		<move file="${dirlocation.linux.x86}/${productRootFolder}" tofile="${dirlocation.linux.x86}/${jss.distro.folder}" />
 		<!-- create tar.gz file -->
 		<tar destfile="${dist}/${jss.linux.x86.tgz}" basedir="${dirlocation.linux.x86}/" compression="gzip" longfile="gnu" />
 		<!-- create debian package -->
@@ -112,7 +114,9 @@
 		<copy file="${jssRcpProductFolderPath}/resources/notice.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
-		<chmod file="${dirlocation.linux.x86_64}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />
+		<chmod file="${dirlocation.linux.x86_64}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />	
+		<!-- rename the folder -->
+		<move file="${dirlocation.linux.x86_64}/${productRootFolder}" tofile="${dirlocation.linux.x86_64}/${jss.distro.folder}" />
 		<!-- create tar.gz file -->
 		<tar destfile="${dist}/${jss.linux.x86_64.tgz}" basedir="${dirlocation.linux.x86_64}/" compression="gzip" longfile="gnu" />
 		<!-- create debian package -->
