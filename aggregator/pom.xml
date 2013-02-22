@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>aggregator</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -79,12 +79,50 @@
 				</configuration>
 			</plugin>
 
+			<!-- Use this to retrieve the SVN revision number in order to build the final name -->
+			<!--  
+			<plugin>
+				<groupId>com.google.code.maven-svn-revision-number-plugin</groupId>
+				<artifactId>svn-revision-number-maven-plugin</artifactId>
+				<version>1.13</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<entries>
+						<entry>
+							<prefix>prefix</prefix>
+						</entry>
+					</entries>
+				</configuration>
+			</plugin>
+			-->
+			
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-packaging-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<!-- Another way to put prefix / suffix <qualifier>I_${buildQualifier}</qualifier> -->
+					<!-- 
+						DIFFERENT WAYS TO PRODUCE QUALIFIERS AND FINAL FILE NAME.
+						PAY ATTENTION THAT ALSO THE SIGNING INFORMATION IN plugins/pom.xml, features/pom.xml
+						MUST HAVE A COHERENT JARPATH INFORMATION.
+						 
+						1. When producing SNAPSHOT use this snippet to have a formatted qualifier and
+						a coherent output file name.
+						<format>'v'yyyyMMddHHmm</format>
+						<finalName>${project.artifactId}_${project.version}.${buildQualifier}</finalName>
+						
+						2. Use this snippet to have a qualifier, plus final name, svnrevision-related.
+						<qualifier>r${prefix.revision}</qualifier>
+						<finalName>${project.artifactId}_${project.version}-r${prefix.revision}</finalName>
+						
+						3. Comment lines below when performing official releases.
+					-->
 					<format>'v'yyyyMMddHHmm</format>
 					<finalName>${project.artifactId}_${project.version}.${buildQualifier}</finalName>
 				</configuration>
