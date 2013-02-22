@@ -128,7 +128,7 @@ public class TemplateBorder{
 			Image image = ResourceManager.getImage(key);
 			if (image == null){
 				ImageData data = new ImageData(getWidth(), 15, 1, new PaletteData(new RGB[]{ColorConstants.white.getRGB()}));
-				data.transparentPixel = data.getPixel(0, 0);
+				//data.transparentPixel = data.getPixel(0, 0);
 		    image = new Image(null,data);
 				GC graphics = new GC(image);
 				//graphics.setTextAntialias(SWT.ON);
@@ -152,7 +152,7 @@ public class TemplateBorder{
 				Image image = ResourceManager.getImage(key);
 				if (image == null){
 					ImageData data = new ImageData(getWidth(), 20, 1, new PaletteData(new RGB[]{ColorConstants.white.getRGB()}));
-					data.transparentPixel = data.getPixel(0, 0);
+					//data.transparentPixel = data.getPixel(0, 0);
 			    image = new Image(null,data); 
 					GC graphics = new GC(image);
 					int width = image.getBounds().width-5;
@@ -206,7 +206,7 @@ public class TemplateBorder{
 				Image image = ResourceManager.getImage(key);
 				if (image == null){
 					ImageData data = new ImageData(getWidth(), 15, 1, new PaletteData(new RGB[]{ColorConstants.white.getRGB()}));
-					data.transparentPixel = data.getPixel(0, 0);
+					//data.transparentPixel = data.getPixel(0, 0);
 			    image = new Image(null,data);
 					GC graphics = new GC(image);
 					graphics.setFont(ResourceManager.getFont("Time New Roman", 10, SWT.NORMAL));

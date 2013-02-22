@@ -284,6 +284,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			comboData.grabExcessVerticalSpace = true;
 			comboData.grabExcessHorizontalSpace = true;
 			comboData.widthHint = 130;
+			comboData.minimumWidth = 130;
 			comboData.minimumHeight = 20;
 			combo.setLayoutData(comboData);
 			
@@ -327,7 +328,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		public void fill(ToolBar parent, int index) {
 			toolitem = new ToolItem(parent, SWT.SEPARATOR, index);
 			createControl(parent);
-			toolitem.setWidth(225);
+			toolitem.setWidth(250);
 			toolitem.setControl(control);
 		}
 		
