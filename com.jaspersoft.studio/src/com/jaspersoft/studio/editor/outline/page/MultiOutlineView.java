@@ -1,21 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.page;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.IMenuManager;
@@ -35,6 +31,8 @@ import org.eclipse.ui.part.Page;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import com.jaspersoft.studio.editor.IGraphicalEditor;
+import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 
 public class MultiOutlineView extends Page implements IContentOutlinePage, ISelectionProvider,
@@ -45,25 +43,37 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 	private IContentOutlinePage currentPage;
 	private IContentOutlinePage emptyPage;
 	private IActionBars actionBars;
-
-	// private EditorPart editor;
+	private EditorPart editor;
 
 	public MultiOutlineView(EditorPart editor) {
-		// this.editor = editor;
-		listeners = new ArrayList<ISelectionChangedListener>();
+		getListeners();
+		this.editor = editor;
+	}
 
+	private List<ISelectionChangedListener> getListeners() {
+		if (listeners == null)
+			listeners = new ArrayList<ISelectionChangedListener>();
+		return listeners;
 	}
 
 	public void addFocusListener(FocusListener listener) {
 	}
 
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
-		listeners.add(listener);
+		if (listeners != null)
+			listeners.add(listener);
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 		pagebook = new PageBook(parent, SWT.NONE);
+
+		if (editor instanceof JrxmlEditor) {
+			JrxmlEditor ed = (JrxmlEditor) editor;
+			IContentOutlinePage cop = (IContentOutlinePage) ed.getActiveEditor().getAdapter(IContentOutlinePage.class);
+			if (cop != null)
+				setPageActive(cop);
+		}
 	}
 
 	@Override
@@ -104,7 +114,8 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 	}
 
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
-		listeners.remove(listener);
+		if (listeners != null)
+			listeners.remove(listener);
 	}
 
 	public void selectionChanged(SelectionChangedEvent event) {
@@ -136,7 +147,12 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 		return emptyPage;
 	}
 
+	private boolean isRefresh = false;
+
 	public void setPageActive(IContentOutlinePage page) {
+		if (isRefresh)
+			return;
+		isRefresh = true;
 		if (page == null) {
 			page = getEmptyPage();
 		}
@@ -145,8 +161,15 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 		}
 		if (getActionBars() != null && getActionBars().getToolBarManager() != null)
 			getActionBars().getToolBarManager().removeAll();
-		if (getSite() != null && page instanceof JDReportOutlineView)
+		if (getSite() != null && page instanceof JDReportOutlineView) {
+			if (page.getControl() != null && page.getControl().isDisposed()) {
+				IGraphicalEditor ed = ((JDReportOutlineView) page).getEditor();
+				if (ed instanceof IAdaptable)
+					page = (IContentOutlinePage) ((IAdaptable) ed).getAdapter(IContentOutlinePage.class);
+			}
+
 			((JDReportOutlineView) page).init(getSite());
+		}
 
 		page.addSelectionChangedListener(this);
 		this.currentPage = page;
@@ -158,12 +181,15 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 		if (control == null || control.isDisposed()) {
 			// first time
 			page.createControl(pagebook);
-			page.setActionBars(getActionBars());
+			if (getActionBars() != null)
+				page.setActionBars(getActionBars());
 			control = page.getControl();
 		}
 		pagebook.showPage(control);
 		setSelection(page.getSelection());
-		getActionBars().getToolBarManager().update(true);
+		if (getActionBars() != null && getActionBars().getToolBarManager() != null)
+			getActionBars().getToolBarManager().update(true);
+		isRefresh = false;
 	}
 
 	/**
@@ -171,7 +197,7 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 	 */
 	public void setSelection(ISelection selection) {
 		this.selection = selection;
-		if (listeners == null)
+		if (listeners == null || selection == null)
 			return;
 		SelectionChangedEvent e = new SelectionChangedEvent(this, selection);
 		for (int i = 0; i < listeners.size(); i++) {
@@ -188,7 +214,7 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 	}
 
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
-		if (currentPage instanceof IAdaptable)
+		if (currentPage instanceof IAdaptable && currentPage != this)
 			return ((IAdaptable) currentPage).getAdapter(adapter);
 		return null;
 	}

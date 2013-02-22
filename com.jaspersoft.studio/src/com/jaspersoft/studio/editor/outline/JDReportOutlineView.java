@@ -112,6 +112,10 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		this.editor = editor;
 	}
 
+	public IGraphicalEditor getEditor() {
+		return editor;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -135,8 +139,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	}
 
 	protected ContextMenuProvider getMenuContentProvider() {
-		ContextMenuProvider provider = new AppContextMenuProvider(getViewer(), editor.getActionRegistry());
-		return provider;
+		return new AppContextMenuProvider(getViewer(), editor.getActionRegistry());
 	}
 
 	/**
@@ -206,6 +209,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	@Override
 	public void createControl(Composite parent) {
 		pageBook = new PageBook(parent, SWT.NONE);
+
 		outline = getViewer().createControl(pageBook);
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(outline, "com.jaspersoft.studio.doc.view_outline");
@@ -265,9 +269,8 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	@Override
 	public void dispose() {
 		unhookOutlineViewer();
-		if (thumbnail != null) {
+		if (thumbnail != null)
 			thumbnail = null;
-		}
 		super.dispose();
 	}
 
@@ -358,7 +361,6 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 			if (!tree.isDisposed() && tree.getItems() != null && tree.getItems().length > 0)
 				tree.getItem(0).setExpanded(true);
 		}
-
 	}
 
 	/**
