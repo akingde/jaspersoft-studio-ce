@@ -46,6 +46,7 @@ import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -300,7 +301,8 @@ public class MTable extends MGraphicElement implements IContainer,
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt instanceof CollectionElementAddedEvent
+		if (getParent() instanceof MPage
+				&& evt instanceof CollectionElementAddedEvent
 				|| evt instanceof CollectionElementRemovedEvent
 				|| evt.getOldValue() instanceof DesignCell
 				|| evt.getNewValue() instanceof DesignCell)

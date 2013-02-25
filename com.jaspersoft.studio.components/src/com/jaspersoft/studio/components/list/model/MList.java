@@ -54,6 +54,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -375,8 +376,9 @@ public class MList extends MGraphicElement implements IPastable,
 					.getComponent();
 			((DesignListContents) jrList.getContents()).setWidth((Integer) evt
 					.getNewValue());
-		} else if (evt.getPropertyName().equals(
-				JRDesignElementGroup.PROPERTY_CHILDREN)) {
+		} else if (getParent() instanceof MPage
+				&& evt.getPropertyName().equals(
+						JRDesignElementGroup.PROPERTY_CHILDREN)) {
 			if (evt.getSource() == getJRElementGroup()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;

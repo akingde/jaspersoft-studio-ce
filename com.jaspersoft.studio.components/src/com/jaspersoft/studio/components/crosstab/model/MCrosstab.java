@@ -53,6 +53,7 @@ import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -412,51 +413,54 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 				}
 			}
 			getCrosstabManager().refresh();
-		} else if (pname.equals(JRDesignCrosstab.PROPERTY_WHEN_NO_DATA_CELL)) {
-			if (evt.getSource() == getValue()) {
-				if (oldValue != null && newValue == null) {
-					List<INode> child = this.getChildren();
-					for (int i = 0; i < child.size(); i++) {
-						INode n = child.get(i);
-						if (n instanceof MCrosstabWhenNoDataCell) {
-							removeChild((ANode) n);
-							new MCrosstabWhenNoData(this, i);
+		} else if (getParent() instanceof MPage) {
+			if (pname.equals(JRDesignCrosstab.PROPERTY_WHEN_NO_DATA_CELL)) {
+				if (evt.getSource() == getValue()) {
+					if (oldValue != null && newValue == null) {
+						List<INode> child = this.getChildren();
+						for (int i = 0; i < child.size(); i++) {
+							INode n = child.get(i);
+							if (n instanceof MCrosstabWhenNoDataCell) {
+								removeChild((ANode) n);
+								new MCrosstabWhenNoData(this, i);
+							}
 						}
-					}
-				} else {
-					// add the node to this parent
-					List<INode> child = this.getChildren();
-					for (int i = 0; i < child.size(); i++) {
-						INode n = child.get(i);
-						if (n instanceof MCrosstabWhenNoData) {
-							removeChild((ANode) n);
-							new MCrosstabWhenNoDataCell(this,
-									(JRCellContents) newValue, i);
+					} else {
+						// add the node to this parent
+						List<INode> child = this.getChildren();
+						for (int i = 0; i < child.size(); i++) {
+							INode n = child.get(i);
+							if (n instanceof MCrosstabWhenNoData) {
+								removeChild((ANode) n);
+								new MCrosstabWhenNoDataCell(this,
+										(JRCellContents) newValue, i);
+							}
 						}
 					}
 				}
-			}
-			getCrosstabManager().refresh();
-		} else if (pname.equals(JRDesignCrosstab.PROPERTY_CELLS)
-				|| pname.equals(JRDesignCrosstab.PROPERTY_ROW_GROUPS)
-				|| pname.equals(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS)) {
-			if (evt.getSource() == getValue() && getValue() != null
-					&& !flagRefreshCells) {
-				flagRefreshCells = true;
-				CrosstabComponentFactory.deleteCellNodes(MCrosstab.this);
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						CrosstabComponentFactory.createCellNodes(
-								(JRDesignCrosstab) getValue(), MCrosstab.this);
-						getCrosstabManager().refresh();
-						flagRefreshCells = false;
-						MCrosstab.super.propertyChange(evt);
-					}
-				});
-				return;
-			}
-		} else if (pname.equals(JRDesignCrosstab.PROPERTY_MEASURES))
-			getCrosstabManager().refresh();
+				getCrosstabManager().refresh();
+			} else if (pname.equals(JRDesignCrosstab.PROPERTY_CELLS)
+					|| pname.equals(JRDesignCrosstab.PROPERTY_ROW_GROUPS)
+					|| pname.equals(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS)) {
+				if (evt.getSource() == getValue() && getValue() != null
+						&& !flagRefreshCells) {
+					flagRefreshCells = true;
+					CrosstabComponentFactory.deleteCellNodes(MCrosstab.this);
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							CrosstabComponentFactory.createCellNodes(
+									(JRDesignCrosstab) getValue(),
+									MCrosstab.this);
+							getCrosstabManager().refresh();
+							flagRefreshCells = false;
+							MCrosstab.super.propertyChange(evt);
+						}
+					});
+					return;
+				}
+			} else if (pname.equals(JRDesignCrosstab.PROPERTY_MEASURES))
+				getCrosstabManager().refresh();
+		}
 		super.propertyChange(evt);
 	}
 
