@@ -145,8 +145,7 @@ public class CreateColumnCommand extends Command {
 			String name, CrosstabTotalPositionEnum total) {
 		JRDesignCrosstabColumnGroup jrGroup = new JRDesignCrosstabColumnGroup();
 		jrGroup.setTotalPosition(total);
-		jrGroup.setName(ModelUtils.getDefaultName(
-				jrCrosstab.getColumnGroupIndicesMap(), name));
+		jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab, name));
 		jrGroup.setHeight(20);
 
 		JRDesignExpression exp = new JRDesignExpression();

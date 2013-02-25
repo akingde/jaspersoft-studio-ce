@@ -122,8 +122,7 @@ public class CreateMeasureCommand extends Command {
 	public static JRDesignCrosstabMeasure createMesure(
 			JRDesignCrosstab jrCrosstab, String name) {
 		JRDesignCrosstabMeasure jrMeasure = new JRDesignCrosstabMeasure();
-		jrMeasure.setName(ModelUtils.getDefaultName(
-				jrCrosstab.getMeasureIndicesMap(), name));
+		jrMeasure.setName(ModelUtils.getDefaultName(jrCrosstab, name));
 		return jrMeasure;
 	}
 

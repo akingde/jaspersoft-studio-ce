@@ -32,6 +32,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class CrosstabManager {
@@ -410,19 +411,23 @@ public class CrosstabManager {
 			}
 		}
 		g = cc.getSouth();
-		int h = -g.getY();
-		for (CrosstabCell c : g.getPrev()) {
-			if (c.cell != null) {
-				List<JRChild> cells = c.cell.getChildren();
-				if (!cells.isEmpty()) {
-					int height = ModelUtils.getContainerSize(cells,
-							new Dimension(0, 0)).height;
+		int h = 0;
+		if (g != null) {
+			h = -g.getY();
+			for (CrosstabCell c : g.getPrev()) {
+				if (c.cell != null) {
+					List<JRChild> cells = c.cell.getChildren();
+					if (!cells.isEmpty()) {
+						int height = ModelUtils.getContainerSize(cells,
+								new Dimension(0, 0)).height;
 
-					h = Math.max(h, height - c.cell.getHeight());
+						h = Math.max(h, height - c.cell.getHeight());
+					}
 				}
 			}
 		}
 		Rectangle b = cc.getBounds();
+
 		return new Dimension(b.width + w, b.height + h);
 	}
 

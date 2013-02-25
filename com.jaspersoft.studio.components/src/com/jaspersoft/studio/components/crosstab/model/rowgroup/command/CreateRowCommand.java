@@ -137,8 +137,7 @@ public class CreateRowCommand extends Command {
 			String name, CrosstabTotalPositionEnum total) {
 		JRDesignCrosstabRowGroup jrGroup = new JRDesignCrosstabRowGroup();
 		jrGroup.setTotalPosition(total);
-		jrGroup.setName(ModelUtils.getDefaultName(
-				jrCrosstab.getRowGroupIndicesMap(), name));
+		jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab, name));
 		jrGroup.setWidth(60);
 
 		JRDesignExpression exp = new JRDesignExpression();

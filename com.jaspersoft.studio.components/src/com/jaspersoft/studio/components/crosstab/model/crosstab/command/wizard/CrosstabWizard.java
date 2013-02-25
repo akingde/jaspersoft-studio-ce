@@ -66,7 +66,7 @@ public class CrosstabWizard extends JSSWizard {
 	public static final String CROSSTAB_COLUMNS = "CROSSTAB_COLUMNS";
 	public static final String CROSSTAB_ROWS = "CROSSTAB_ROWS";
 	public static final String CROSSTAB_MEASURES = "CROSSTAB_MEASURES";
-	
+
 	private WizardDatasetPage step1;
 	private WizardFieldsPage step2;
 	private WizardFieldsPage step3;
@@ -102,7 +102,7 @@ public class CrosstabWizard extends JSSWizard {
 
 		step4 = new CrosstabWizardMeasurePage();
 		addPage(step4);
-		
+
 		step5 = new CrosstabWizardLayoutPage();
 		addPage(step5);
 	}
@@ -193,16 +193,15 @@ public class CrosstabWizard extends JSSWizard {
 		// }
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public MCrosstab getCrosstab() {
 
 		JRDesignCrosstab jdc = (JRDesignCrosstab) crosstab.getValue();
 		JRDesignDataset dataset = getDataset();
-		
+
 		getAvailableColumnGroups();
 		getAvailableRowGroups();
-		
+
 		if (dataset.isMainDataset()) {
 			// main dataset selected => dataset run is null
 			((JRDesignCrosstabDataset) jdc.getDataset()).setDatasetRun(null);
@@ -225,7 +224,9 @@ public class CrosstabWizard extends JSSWizard {
 		if (measures != null) {
 			for (Object obj : measures) {
 				try {
-					jdc.addMeasure((JRDesignCrosstabMeasure) obj);
+					JRDesignCrosstabMeasure m = (JRDesignCrosstabMeasure) obj;
+					m.setName(ModelUtils.getDefaultName(jdc, m.getName()));
+					jdc.addMeasure(m);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -238,8 +239,9 @@ public class CrosstabWizard extends JSSWizard {
 		if (columnGroups != null) {
 			for (Object obj : columnGroups) {
 				try {
-					CreateColumnCommand.addColumnGroup(jdc,
-							(JRDesignCrosstabColumnGroup) obj, -1);
+					JRDesignCrosstabColumnGroup c = (JRDesignCrosstabColumnGroup) obj;
+					c.setName(ModelUtils.getDefaultName(jdc, c.getName()));
+					CreateColumnCommand.addColumnGroup(jdc, c, -1);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -252,8 +254,9 @@ public class CrosstabWizard extends JSSWizard {
 		if (rowGroups != null) {
 			for (Object obj : rowGroups) {
 				try {
-					CreateRowCommand.addRowGroup(jdc,
-							(JRDesignCrosstabRowGroup) obj, -1);
+					JRDesignCrosstabRowGroup r = (JRDesignCrosstabRowGroup) obj;
+					r.setName(ModelUtils.getDefaultName(jdc, r.getName()));
+					CreateRowCommand.addRowGroup(jdc, r, -1);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -265,10 +268,11 @@ public class CrosstabWizard extends JSSWizard {
 		createDetailCells(jdc);
 		crosstab.getValue().preprocess();
 		setupMeasures(jdc);
-		//Apply the template style to the crosstab
-		ApplyCrosstabStyleAction applyAction = new ApplyCrosstabStyleAction(step5.getSelectedStyle(), crosstab);
+		// Apply the template style to the crosstab
+		ApplyCrosstabStyleAction applyAction = new ApplyCrosstabStyleAction(
+				step5.getSelectedStyle(), crosstab);
 		applyAction.applayStyle(getConfig().getJasperDesign());
-		
+
 		return crosstab;
 	}
 
@@ -339,12 +343,12 @@ public class CrosstabWizard extends JSSWizard {
 		if (f instanceof JRField) {
 			JRField fi = (JRField) f;
 			name = fi.getName();
-			txt = "$F{" + name + "}"; 
+			txt = "$F{" + name + "}";
 			vclass = fi.getValueClassName();
 		} else if (f instanceof JRParameter) {
 			JRParameter fi = (JRParameter) f;
 			name = fi.getName();
-			txt = "$P{" + name + "}"; 
+			txt = "$P{" + name + "}";
 			vclass = fi.getValueClassName();
 		} else if (f instanceof JRVariable) {
 			JRVariable fi = (JRVariable) f;
@@ -353,7 +357,8 @@ public class CrosstabWizard extends JSSWizard {
 			vclass = fi.getValueClassName();
 		}
 
-		CrosstabTotalPositionEnum total = step5.isAddRowTotal() ? CrosstabTotalPositionEnum.END : CrosstabTotalPositionEnum.NONE;
+		CrosstabTotalPositionEnum total = step5.isAddRowTotal() ? CrosstabTotalPositionEnum.END
+				: CrosstabTotalPositionEnum.NONE;
 
 		JRDesignCrosstabRowGroup rowGroup = CreateRowCommand.createRowGroup(
 				getConfig().getJasperDesign(), jdc, name, total);
@@ -387,10 +392,12 @@ public class CrosstabWizard extends JSSWizard {
 			vclass = fi.getValueClassName();
 		}
 
-		CrosstabTotalPositionEnum total = step5.isAddColTotal() ? CrosstabTotalPositionEnum.END : CrosstabTotalPositionEnum.NONE;
+		CrosstabTotalPositionEnum total = step5.isAddColTotal() ? CrosstabTotalPositionEnum.END
+				: CrosstabTotalPositionEnum.NONE;
 
 		JRDesignCrosstabColumnGroup colGroup = CreateColumnCommand
-				.createColumnGroup(getConfig().getJasperDesign(), jdc, name, total);
+				.createColumnGroup(getConfig().getJasperDesign(), jdc, name,
+						total);
 
 		((JRDesignExpression) colGroup.getBucket().getExpression())
 				.setText(txt);
@@ -400,7 +407,6 @@ public class CrosstabWizard extends JSSWizard {
 		return colGroup;
 	}
 
-	
 	private JRDesignCrosstabMeasure createMesures(JRDesignCrosstab jdc, Object f) {
 
 		JRDesignExpression jre = new JRDesignExpression();
@@ -410,17 +416,17 @@ public class CrosstabWizard extends JSSWizard {
 			JRField fi = (JRField) f;
 			name = fi.getName();
 			classname = fi.getValueClassName();
-			jre.setText("$F{" + name + "}"); 
+			jre.setText("$F{" + name + "}");
 		} else if (f instanceof JRParameter) {
 			JRParameter fi = (JRParameter) f;
 			name = fi.getName();
 			classname = fi.getValueClassName();
-			jre.setText("$P{" + name + "}"); 
+			jre.setText("$P{" + name + "}");
 		} else if (f instanceof JRVariable) {
 			JRVariable fi = (JRVariable) f;
 			classname = fi.getValueClassName();
 			name = fi.getName();
-			jre.setText("$V{" + name + "}"); 
+			jre.setText("$V{" + name + "}");
 		}
 
 		JRDesignCrosstabMeasure m = CreateMeasureCommand.createMesure(jdc, name
@@ -628,5 +634,5 @@ public class CrosstabWizard extends JSSWizard {
 			measures = null;
 		}
 	}
-	
+
 }

@@ -432,7 +432,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 						(MParameter) child, newIndex);
 		}
 		if (child instanceof MMeasure) {
-			if (parent instanceof MCell)
+			if (parent instanceof MCell
+					&& ((MCell) parent).getMCrosstab() != null)
 				return new CreateMeasureCommand((MCell) parent,
 						(MMeasure) child, newIndex);
 			if (parent instanceof MCrosstab)
@@ -443,7 +444,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 						(MMeasure) child, newIndex);
 		}
 		if (child instanceof MColumnGroup) {
-			if (parent instanceof MCell)
+			if (parent instanceof MCell
+					&& ((MCell) parent).getMCrosstab() != null)
 				return new CreateColumnCommand((MCell) parent,
 						(MColumnGroup) child, newIndex);
 			if (parent instanceof MColumnGroup)
@@ -457,7 +459,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 						(MColumnGroup) child, newIndex);
 		}
 		if (child instanceof MRowGroup) {
-			if (parent instanceof MCell)
+			if (parent instanceof MCell
+					&& ((MCell) parent).getMCrosstab() != null)
 				return new CreateRowCommand((MCell) parent, (MRowGroup) child,
 						newIndex);
 			if (parent instanceof MRowGroup)
@@ -701,6 +704,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	public Command getStretchToContent(ANode node) {
 		if (node instanceof MCell) {
 			MCell model = (MCell) node;
+			if (model.getMCrosstab() == null)
+				return null;
 			Dimension d = model.getMCrosstab().getCrosstabManager()
 					.getCellPackSize(new CrosstabCell(model.getValue()));
 			if (d != null && d.height > 0 && d.width > 0) {
