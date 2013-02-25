@@ -1749,7 +1749,7 @@
              id="com.jaspersoft.studio.graphic.bring"
              name="Element Order"
              toolbaruri="com.jaspersoft.studio.graphic.bring"
-             visibility="true">
+             visibility="false">
           <toolitem
                 toolitemID="com.jaspersoft.studio.graphic.bringforward"></toolitem>
           <toolitem
@@ -1800,7 +1800,7 @@
              id="com.jaspersoft.studio.graphic.align"
              name="Element Alignement"
              toolbaruri="com.jaspersoft.studio.graphic.align"
-             visibility="true">
+             visibility="false">
           <toolitem
                 toolitemID="com.jaspersoft.studio.editor.action.align.Align2BorderAction_bottom">
           </toolitem>
@@ -1841,7 +1841,7 @@
              id="com.jaspersoft.studio.graphic.borders"
              name="Borders"
              toolbaruri="com.jaspersoft.studio.graphic.borders"
-             visibility="true">
+             visibility="false">
           <toolitem
                 toolitemID="com.jaspersoft.studio.editor.action.border.AComboItemButtonContribution">
           </toolitem>
@@ -1860,7 +1860,7 @@
              id="com.jaspersoft.studio.graphic.exporters"
              name="Exporter actions"
              toolbaruri="com.jaspersoft.studio.graphic.exporters"
-             visibility="true">
+             visibility="false">
           <toolitem
                 toolitemID="com.jaspersoft.studio.editor.action.exporter.AddExporterPropertyAction">
           </toolitem>

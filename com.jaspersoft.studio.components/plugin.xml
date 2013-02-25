@@ -669,6 +669,22 @@
                class="com.jaspersoft.studio.components.table.model.MTable">
          </selectedObject>
       </toolitems>
+      <toolitems
+            ActionID="create_rowgroup"
+            id="com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateRowGroupAction"
+            tooltip="Create a new row group">
+         <selectedObject
+               class="com.jaspersoft.studio.components.crosstab.model.MCrosstab">
+         </selectedObject>
+      </toolitems>
+      <toolitems
+            ActionID="create_crosstab_columngroup"
+            id="com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateColumnGroupAction"
+            tooltip="Create a new column group">
+         <selectedObject
+               class="com.jaspersoft.studio.components.crosstab.model.MCrosstab">
+         </selectedObject>
+      </toolitems>
    </extension>
    <extension
          point="com.jaspersoft.studio.toolitemsets">
@@ -677,12 +693,25 @@
             id="com.jaspersoft.studio.components.tableactions"
             name="table actions"
             toolbaruri="com.jaspersoft.studio.components.tableactions"
-            visibility="true">
+            visibility="false">
          <toolitem
                toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction">
          </toolitem>
          <toolitem
                toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction">
+         </toolitem>
+      </toolitemsets>
+      <toolitemsets
+            description="action on the crosstab element"
+            id="com.jaspersoft.studio.components.crosstabaction"
+            name="crosstab actions"
+            toolbaruri="com.jaspersoft.studio.components.tableactions"
+            visibility="false">
+         <toolitem
+               toolitemID="com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateRowGroupAction">
+         </toolitem>
+         <toolitem
+               toolitemID="com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateColumnGroupAction">
          </toolitem>
       </toolitemsets>
    </extension>
