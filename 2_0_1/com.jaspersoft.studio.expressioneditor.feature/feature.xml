@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.jaspersoft.studio.expressioneditor.feature"
+      label="Jaspersoft Studio Expression Editor"
+      version="2.0.1"
+      provider-name="Jaspersoft Corporation"
+      plugin="net.sf.jasperreports"
+      os="linux,macosx,win32"
+      ws="carbon,cocoa,gtk,win32">
+
+   <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
+      Expression Editor for the Eclipse-based JasperReports Designer
+   </description>
+
+   <copyright url="http://www.jaspersoft.com/legal-notices">
+      Copyright © 2010 - 2013 Jaspersoft Corporation
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <requires>
+      <import feature="org.eclipse.xtext.ui" version="2.2.1" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="com.jaspersoft.studio.editor.jrexpressions"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.jaspersoft.studio.editor.jrexpressions.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.itemis.xtext.utils.jface"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.201205141449"
+         unpack="false"/>
+
+</feature>
