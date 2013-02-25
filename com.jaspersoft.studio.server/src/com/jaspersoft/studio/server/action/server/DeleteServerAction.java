@@ -23,9 +23,9 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.actions.ActionFactory;
 
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class DeleteServerAction extends Action {
@@ -35,11 +35,11 @@ public class DeleteServerAction extends Action {
 		super();
 		this.treeViewer = treeViewer;
 		setId(ActionFactory.DELETE.getId());
-		setText(Messages.common_delete);
-		setDescription("Delete JasperServer Connection");
-		setToolTipText("Delete JasperServer connection");
-		setImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/server--minus.png")); //$NON-NLS-1$
+		setText(com.jaspersoft.studio.messages.Messages.common_delete);
+		setDescription(Messages.DeleteServerAction_desc);
+		setToolTipText(Messages.DeleteServerAction_desc); //$NON-NLS-1$
+		setImageDescriptor(Activator.getDefault().getImageDescriptor(
+				"icons/server--minus.png")); //$NON-NLS-1$
 	}
 
 	@Override

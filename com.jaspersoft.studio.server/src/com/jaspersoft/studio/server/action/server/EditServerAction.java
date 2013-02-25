@@ -35,6 +35,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MDummy;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
@@ -49,11 +50,11 @@ public class EditServerAction extends Action {
 		super();
 		this.treeViewer = treeViewer;
 		setId(ID);
-		setText("Edit JasperServer Connection");
-		setDescription("Edit JasperServer Connection");
-		setToolTipText("Edit JasperServer Connection");
-		setImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/server--pencil.png")); //$NON-NLS-1$
+		setText(Messages.EditServerAction_title);
+		setDescription(Messages.EditServerAction_desc);
+		setToolTipText(Messages.EditServerAction_desc);
+		setImageDescriptor(Activator.getDefault().getImageDescriptor(
+				"icons/server--pencil.png")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -96,12 +97,12 @@ public class EditServerAction extends Action {
 
 	public static void fillServerProfile(final MServerProfile mspold,
 			final TreeViewer treeViewer) {
-		Job job = new Job("Connect To JasperReports Server") {
+		Job job = new Job(Messages.EditServerAction_jobname) {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					monitor.beginTask("Connecting to the server",
+					monitor.beginTask(Messages.EditServerAction_taskname,
 							IProgressMonitor.UNKNOWN);
 					mspold.removeChildren();
 					new MDummy(mspold);

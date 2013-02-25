@@ -31,6 +31,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.actions.DuplicateDataAdapterAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
@@ -43,9 +44,9 @@ public class DuplicateServerAction extends Action {
 		super();
 		this.treeViewer = treeViewer;
 		setId(ID);
-		setText("Duplicate JasperServer Connection");
-		setDescription("Duplicate JasperServer Connection");
-		setToolTipText("Duplicate JasperServer connection");
+		setText(Messages.DuplicateServerAction_title);
+		setDescription(Messages.DuplicateServerAction_desc);
+		setToolTipText(Messages.DuplicateServerAction_desc);
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance()
 				.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
 		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance()

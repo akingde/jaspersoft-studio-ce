@@ -29,6 +29,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
@@ -46,9 +47,9 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 	public CreateServerAction(TreeViewer treeViewer) {
 		super();
 		setId(ID);
-		setText("Create JasperServer Connection");
-		setDescription("Create JasperServer connection");
-		setToolTipText("Create JasperServer connection");
+		setText(Messages.CreateServerAction_title);
+		setDescription(Messages.CreateServerAction_desc);
+		setToolTipText(Messages.CreateServerAction_desc);
 		setImageDescriptor(
 				Activator.getDefault().getImageDescriptor("icons/server--plus.png")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
@@ -66,9 +67,9 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 		for (INode n : lst) {
 			if (n instanceof MServers) {
 				ServerProfile srv = new ServerProfile();
-				srv.setName("JasperReports Server");
-				srv.setUrl("http://localhost:8080/jasperserver/services/repository");
-				srv.setUser("username");
+				srv.setName(Messages.CreateServerAction_name);
+				srv.setUrl("http://localhost:8080/jasperserver/services/repository"); //$NON-NLS-1$
+				srv.setUser("username"); //$NON-NLS-1$
 				ServerProfileWizard wizard = new ServerProfileWizard(
 						new MServerProfile(null, srv));
 				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(
