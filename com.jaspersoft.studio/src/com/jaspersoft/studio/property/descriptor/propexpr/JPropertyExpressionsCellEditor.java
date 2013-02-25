@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.propexpr;
 
@@ -39,9 +34,8 @@ public class JPropertyExpressionsCellEditor extends DialogCellEditor {
 		wizard.setValue((PropertyExpressionsDTO) getValue());
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
-		if (dialog.open() == Dialog.OK) {
-			return wizard.getValue() ;
-		}
+		if (dialog.open() == Dialog.OK)
+			return wizard.getValue();
 		return null;
 	}
 
@@ -49,9 +43,8 @@ public class JPropertyExpressionsCellEditor extends DialogCellEditor {
 
 	@Override
 	protected void updateContents(Object value) {
-		if (getDefaultLabel() == null) {
+		if (getDefaultLabel() == null)
 			return;
-		}
 		if (labelProvider == null)
 			labelProvider = new JPropertyExpressionsLabelProvider();
 		String text = labelProvider.getText(value);
