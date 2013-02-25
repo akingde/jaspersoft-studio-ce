@@ -48,6 +48,7 @@ import com.jaspersoft.studio.editor.toolitems.ToolItem;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsSet;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JrxmlSelectionContributor {
@@ -68,19 +69,18 @@ public class JrxmlSelectionContributor {
 					.getParent();
 			for (String baritem : cbaritemID) {
 				String[] bt = baritem.split(";");
-				IContributionItem ictb = findToolbar(cbm2, bt[0]);
+				IContributionItem ictb = ToolItemsManager.findToolbar(cbm2, bt[0]);
 				if (ictb instanceof IToolBarContributionItem) {
 					IToolBarManager tbmanager = ((IToolBarContributionItem) ictb).getToolBarManager();
 					for (IContributionItem ci : tbmanager.getItems()) {
 						if (ci.equals(bt[1]))
 							tbmanager.remove(ci);
 					}
-
 					tbmanager.update(true);
 				}
 			}
 			for (String id : cbarID) {
-				IContributionItem ic = findToolbar(cbm2, id);
+				IContributionItem ic = ToolItemsManager.findToolbar(cbm2, id);
 				if (ic != null)
 					cbm2.remove(ic);
 			}
@@ -161,11 +161,11 @@ public class JrxmlSelectionContributor {
 
 			ToolItemsManager tm = JaspersoftStudioPlugin.getToolItemsManager();
 			for (ToolItemsSet ts : tm.getSets()) {
-				if (!isToolbarVisible(ts))
+				if (!ToolItemsManager.isToolbarVisible(ts, sobjects))
 					continue;
 				if (ts.getToolbarUri() != null) {
 					for (ToolItem ti : ts.getToolItems()) {
-						if (!isSelected(selection, ti.getClasses()))
+						if (!SelectionHelper.isSelected(selection, ti.getClasses()))
 							continue;
 						if (ti.getContributionItem() != null)
 							addContributionToCoolbar(cbm2, ts, ti, selection);
@@ -228,11 +228,13 @@ public class JrxmlSelectionContributor {
 			IToolBarContributionItem tbitem = (IToolBarContributionItem) item;
 			tbitem.getToolBarManager().add(action);
 			cbaritemID.add(tbarid + ";" + ti.getId());
+
+			tbitem.getToolBarManager().update(true);
 		}
 	}
 
 	private IContributionItem getToolbarContributionItem(ICoolBarManager2 cbm2, String tbarid) {
-		IContributionItem item = findToolbar(cbm2, tbarid);
+		IContributionItem item = ToolItemsManager.findToolbar(cbm2, tbarid);
 		// IContributionItem item = cbm2.find(tbarid);
 		if (item == null) {
 			item = new ToolBarContributionItem2(new ToolBarManager(), tbarid);
@@ -243,14 +245,6 @@ public class JrxmlSelectionContributor {
 		return item;
 	}
 
-	private IContributionItem findToolbar(ICoolBarManager2 cbm2, String tbarid) {
-		for (IContributionItem ci : cbm2.getItems()) {
-			if (ci.getId().equals(tbarid))
-				return ci;
-		}
-		return null;
-	}
-
 	public void contributeToContextToolBar(IToolBarManager tbm, ISelection selection) {
 	}
 
@@ -258,25 +252,6 @@ public class JrxmlSelectionContributor {
 	}
 
 	public void contributeToContextStatusLine(IStatusLineManager statusLineManager, ISelection selection) {
-	}
-
-	private boolean isSelected(ISelection selection, List<Class<?>> classes) {
-		StructuredSelection sel = (StructuredSelection) selection;
-		for (Iterator<?> it = sel.iterator(); it.hasNext();) {
-			Object obj = it.next();
-			if (obj instanceof EditPart)
-				obj = ((EditPart) obj).getModel();
-			boolean iscompatible = false;
-			for (Class<?> c : classes) {
-				if (c.isAssignableFrom(obj.getClass())) {
-					iscompatible = iscompatible || true;
-					break;
-				}
-			}
-			if (!iscompatible)
-				return false;
-		}
-		return true;
 	}
 
 	private boolean isSameSelection(IActionBars bars, ISelection selection) {
@@ -305,15 +280,4 @@ public class JrxmlSelectionContributor {
 		return isSame;
 	}
 
-	private boolean isToolbarVisible(ToolItemsSet ts) {
-		if (sobjects != null && !sobjects.isEmpty()) {
-			Object obj = sobjects.get(0);
-			if (obj instanceof APropertyNode) {
-				JasperReportsConfiguration jConfig = ((APropertyNode) obj).getJasperConfiguration();
-				if (jConfig != null)
-					return jConfig.getPropertyBoolean(ts.getId(), true);
-			}
-		}
-		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(ts.getId());
-	}
 }

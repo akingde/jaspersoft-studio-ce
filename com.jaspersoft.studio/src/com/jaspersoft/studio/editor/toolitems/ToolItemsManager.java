@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.toolitems;
 
@@ -24,8 +19,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.internal.provisional.action.ICoolBarManager2;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ToolItemsManager {
 	public void init() {
@@ -71,7 +69,7 @@ public class ToolItemsManager {
 					tis.addToolItems(ti);
 			}
 			sets.add(tis);
-		} 
+		}
 	}
 
 	private List<ToolItemsSet> sets = new ArrayList<ToolItemsSet>();
@@ -79,5 +77,25 @@ public class ToolItemsManager {
 
 	public List<ToolItemsSet> getSets() {
 		return sets;
+	}
+
+	public static boolean isToolbarVisible(ToolItemsSet ts, List<?> sobjects) {
+		if (sobjects != null && !sobjects.isEmpty()) {
+			Object obj = sobjects.get(0);
+			if (obj instanceof APropertyNode) {
+				JasperReportsConfiguration jConfig = ((APropertyNode) obj).getJasperConfiguration();
+				if (jConfig != null)
+					return jConfig.getPropertyBoolean(ts.getId(), true);
+			}
+		}
+		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(ts.getId());
+	}
+
+	public static IContributionItem findToolbar(ICoolBarManager2 cbm2, String tbarid) {
+		for (IContributionItem ci : cbm2.getItems()) {
+			if (ci.getId().equals(tbarid))
+				return ci;
+		}
+		return null;
 	}
 }

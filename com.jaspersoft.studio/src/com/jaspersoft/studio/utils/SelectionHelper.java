@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IStorageEditorInput;
@@ -235,4 +237,24 @@ public class SelectionHelper {
 		}
 		return null;
 	}
+
+	public static boolean isSelected(ISelection selection, List<Class<?>> classes) {
+		StructuredSelection sel = (StructuredSelection) selection;
+		for (Iterator<?> it = sel.iterator(); it.hasNext();) {
+			Object obj = it.next();
+			if (obj instanceof EditPart)
+				obj = ((EditPart) obj).getModel();
+			boolean iscompatible = false;
+			for (Class<?> c : classes) {
+				if (c.isAssignableFrom(obj.getClass())) {
+					iscompatible = iscompatible || true;
+					break;
+				}
+			}
+			if (!iscompatible)
+				return false;
+		}
+		return true;
+	}
+
 }
