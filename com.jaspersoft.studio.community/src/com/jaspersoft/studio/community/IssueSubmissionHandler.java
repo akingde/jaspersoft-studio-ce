@@ -23,6 +23,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.wizards.IssueCreationWizard;
@@ -40,13 +41,16 @@ public class IssueSubmissionHandler extends AbstractHandler {
 		IssueCreationWizard newWizard = IssueCreationWizard.createWizard();
 		if(newWizard!=null){
 			newWizard.setNeedsProgressMonitor(true);
-			WizardDialog issueCreationDialog = new WizardDialog(UIUtils.getShell(), newWizard){
+			Shell newShell = new Shell(UIUtils.getDisplay());
+			WizardDialog issueCreationDialog = new WizardDialog(newShell, newWizard){
 				@Override
 				protected void setShellStyle(int newShellStyle) {
-					super.setShellStyle(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MODELESS);
+					super.setShellStyle(SWT.SHELL_TRIM | SWT.MODELESS);
 				}
 			};
 			issueCreationDialog.open();
+			// Dispose the shell after the dialog has been closed
+			newShell.dispose();
 		}
 		else {
 			MessageDialog.openWarning(UIUtils.getShell(),
