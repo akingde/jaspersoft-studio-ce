@@ -15,6 +15,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/itext-asian.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/itext-asiancmaps.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/itext-hyph-xml.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/iText-2.1.7.js1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/iText-2.1.7.js2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
