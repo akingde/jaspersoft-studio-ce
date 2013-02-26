@@ -89,7 +89,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 						version);
 			}
 		}
-		// publishDataAdapters(mrunit, monitor, jasper, fileset, file, version);
+		publishDataAdapters(mrunit, monitor, jasper, fileset, file, version);
 		publishTemplates(mrunit, monitor, jasper, fileset, file, version);
 		// here extend and give possibility to contribute to plugins
 		Activator.getExtManager().publishJrxml(mrunit, monitor, jasper,

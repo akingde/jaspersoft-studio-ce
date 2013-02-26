@@ -45,6 +45,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MJrxml;
+import com.jaspersoft.studio.server.model.MRDataAdapter;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -73,8 +74,8 @@ public class JrxmlPublishAction extends AContributorAction {
 	public JrxmlPublishAction() {
 		super(ID, Messages.JrxmlPublishAction_title);
 		setToolTipText(Messages.JrxmlPublishAction_tooltip);
-		ImageDescriptor icon16 = 
-				Activator.getDefault().getImageDescriptor("icons/server--upload.png"); //$NON-NLS-1$
+		ImageDescriptor icon16 = Activator.getDefault().getImageDescriptor(
+				"icons/server--upload.png"); //$NON-NLS-1$
 		setImageDescriptor(icon16);
 		setDisabledImageDescriptor(icon16);
 	}

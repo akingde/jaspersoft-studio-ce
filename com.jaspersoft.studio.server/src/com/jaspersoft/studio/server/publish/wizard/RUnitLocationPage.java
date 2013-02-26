@@ -47,12 +47,14 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.server.ServerProvider;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.utils.ValidationUtils;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
@@ -271,7 +273,10 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 	private void fillInput() {
 		if (n != null) {
-			treeViewer.setInput(n.getRoot());
+			INode root = n.getRoot();
+			if (root instanceof MServerProfile)
+				root = ((MServerProfile) root).getRoot();
+			treeViewer.setInput(root);
 			setSelection(n);
 		}
 	}

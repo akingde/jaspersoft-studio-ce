@@ -38,11 +38,15 @@ import com.jaspersoft.studio.server.export.ImageExporter;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.export.ResourceBundleExporter;
 import com.jaspersoft.studio.server.export.StyleTemplateExporter;
+import com.jaspersoft.studio.server.export.XmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MRImage;
+import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
+import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class OpenInEditorAction extends Action {
@@ -74,7 +78,9 @@ public class OpenInEditorAction extends Action {
 	}
 
 	private boolean isFileResource(Object obj) {
-		return (obj != null && (obj instanceof MRImage || obj instanceof MJrxml || obj instanceof MResourceBundle));
+		return (obj != null && (obj instanceof MJrxml
+				|| obj instanceof MXmlFile || obj instanceof MRImage
+				|| obj instanceof MResourceBundle || obj instanceof MRStyleTemplate));
 	}
 
 	@Override
@@ -131,6 +137,8 @@ public class OpenInEditorAction extends Action {
 				f = new ResourceBundleExporter().exportFile(res, rd, fkeyname);
 			else if (type.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
 				f = new StyleTemplateExporter().exportFile(res, rd, fkeyname);
+			else if (type.equals(ResourceDescriptor.TYPE_XML_FILE))
+				f = new XmlExporter().exportFile(res, rd, fkeyname);
 			if (f != null)
 				openEditor(f);
 		}

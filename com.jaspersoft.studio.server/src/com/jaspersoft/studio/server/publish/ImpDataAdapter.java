@@ -29,6 +29,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MRDataAdapter;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImpDataAdapter extends AImpObject {
@@ -42,7 +43,10 @@ public class ImpDataAdapter extends AImpObject {
 		File f = findFile(file, dpath);
 		if (f != null && f.exists()) {
 			fileset.add(f.getAbsolutePath());
-			addResource(mrunit, fileset, f, new PublishOptions());
+			AFileResource fr = addResource(mrunit, fileset, f,
+					new PublishOptions());
+			jd.setProperty("net.sf.jasperreports.data.adapter", "repo:"
+					+ fr.getValue().getUriString());
 		}
 		return f;
 	}
@@ -64,4 +68,26 @@ public class ImpDataAdapter extends AImpObject {
 		return null;
 	}
 
+	@Override
+	protected AFileResource addResource(MReportUnit mrunit,
+			Set<String> fileset, File f, PublishOptions popt) {
+		ResourceDescriptor runit = mrunit.getValue();
+		String rname = f.getName();
+		ResourceDescriptor rd = null;
+		if (rd == null) {
+			rd = createResource(mrunit);
+			rd.setName(rname);
+			rd.setLabel(rname);
+
+			rd.setParentFolder(runit.getParentFolder());
+			rd.setUriString(runit.getParentFolder() + "/" + rd.getName());
+		}
+
+		AFileResource mres = new MRDataAdapter(mrunit, rd, -1);
+		mres.setFile(f);
+		mres.setPublishOptions(popt);
+
+		JrxmlPublishAction.getResources(jrConfig).add(mres);
+		return mres;
+	}
 }

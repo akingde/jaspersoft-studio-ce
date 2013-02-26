@@ -23,11 +23,11 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
 /**
- * Model node that represents a data adapter resource that 
- * can be persisted on a JasperServer instance.
+ * Model node that represents a data adapter resource that can be persisted on a
+ * JasperServer instance.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
 public class MRDataAdapter extends AFileResource {
 
@@ -36,7 +36,7 @@ public class MRDataAdapter extends AFileResource {
 	public MRDataAdapter(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
 	}
-	
+
 	private static IIconDescriptor iconDescriptor;
 
 	public static IIconDescriptor getIconDescriptor() {
@@ -55,5 +55,10 @@ public class MRDataAdapter extends AFileResource {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_XML_FILE);
 		return rd;
+	}
+
+	@Override
+	public MReportUnit getReportUnit() {
+		return null;
 	}
 }

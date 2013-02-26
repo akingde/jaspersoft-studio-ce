@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.editor.ReportUnitEditor;
@@ -39,11 +40,31 @@ public class RunReportUnitAction extends Action {
 		setText("Run Report Unit");
 		setDescription("Run Report Unit");
 		setToolTipText("Run the report unit");
-		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance()
+				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance()
+				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return super.isEnabled() && isRunnable();
+	}
+
+	private boolean isRunnable() {
+		final TreeSelection s = (TreeSelection) treeViewer.getSelection();
+		TreePath[] p = s.getPaths();
+		for (int i = 0; i < p.length; i++) {
+			if (!isInReportUnit(p[i].getLastSegment()))
+				return false;
+		}
+		return true;
+	}
+
+	private boolean isInReportUnit(Object obj) {
+		return (obj != null && obj instanceof MReportUnit || ((ANode) obj)
+				.getParent() instanceof MReportUnit);
 	}
 
 	@Override
