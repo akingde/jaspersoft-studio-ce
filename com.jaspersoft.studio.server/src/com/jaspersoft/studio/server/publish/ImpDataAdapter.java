@@ -18,6 +18,7 @@ package com.jaspersoft.studio.server.publish;
 import java.io.File;
 import java.util.Set;
 
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -45,8 +46,9 @@ public class ImpDataAdapter extends AImpObject {
 			fileset.add(f.getAbsolutePath());
 			AFileResource fr = addResource(mrunit, fileset, f,
 					new PublishOptions());
-			jd.setProperty("net.sf.jasperreports.data.adapter", "repo:"
-					+ fr.getValue().getUriString());
+			jd.setProperty(
+					DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
+					"repo:" + fr.getValue().getUriString());
 		}
 		return f;
 	}

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRReportTemplate;
@@ -151,8 +152,10 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		if (datasetsList != null && datasetsList.isEmpty())
 			ds.addAll(datasetsList);
 		for (JRDataset d : ds) {
-			String dapath = d.getPropertiesMap().getProperty(
-					"net.sf.jasperreports.data.adapter");
+			String dapath = d
+					.getPropertiesMap()
+					.getProperty(
+							DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
 			if (dapath == null || dapath.isEmpty())
 				continue;
 			impDa.publish(jasper, dapath, mrunit, monitor, fileset, file);
