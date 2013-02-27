@@ -215,5 +215,45 @@
 				</mediaobject>
 			</screenshot>
 	  </figure>
+	  <para>
+			At this point you can use this new data adapter inside a report. Create a new report from the report wizard (File -> New -> Jasper Report), for this example use the template Coffee. Place it 
+			in the same Project folder of the data adapter (MyReports) and as data adapter select MyCustomSource. At this point the new datasource should be recognized as a fields provider and you will see the following image:
+	  </para>
+   	  <figure>
+			<title>Select the previously created datasource</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="5.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</screenshot>
+	  </figure>
+	  <para>
+			and hit Next. Now to the provider will be requested the available fields, and they will be shown in the left list (in this example Name and Age), add them all to the report and then hit Finish.
+	  </para>
+   	  <figure>
+			<title>Add all the fields to the report</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="6.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</screenshot>
+	  </figure>
+  	  <para>
+			ow your report will be generated with the two fields already in it. Switch to the preview tab to see the result:
+	  </para>
+   	  <figure>
+			<title>Report compiled</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="7.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</screenshot>
+	  </figure>
      </section>
 </section>
