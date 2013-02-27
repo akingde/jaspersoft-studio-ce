@@ -1912,4 +1912,21 @@
 			</command>
 		</menuContribution>
 	</extension>
+	
+	<extension
+         point="org.eclipse.ui.intro.configExtension">
+      <configExtension
+            configId="org.eclipse.ui.intro.universalConfig"
+            content="intro/jssPluginCommunityIntro.xml">
+      </configExtension>
+      <configExtension
+            configId="org.eclipse.ui.intro.universalConfig"
+            content="intro/jssPluginTutorialsIntro.xml">
+      </configExtension>
+      <configExtension
+            configId="org.eclipse.ui.intro.universalConfig"
+            content="intro/jssPluginSamplesIntro.xml">
+      </configExtension>
+   </extension>
+	
 </plugin>
