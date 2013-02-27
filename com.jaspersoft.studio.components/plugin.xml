@@ -648,7 +648,7 @@
    <extension
          point="com.jaspersoft.studio.toolitems">
       <toolitems
-            ActionID="create_table_column_begin"
+            ActionID="create_table_column_after"
             id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction"
             tooltip="Create a column at the beginning of the table">
          <selectedObject
@@ -685,6 +685,22 @@
                class="com.jaspersoft.studio.components.crosstab.model.MCrosstab">
          </selectedObject>
       </toolitems>
+      <toolitems
+            ActionID="create_table_column_before"
+            id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeforeAction"
+            tooltip="Create a new column before the selected one">
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.column.MCell">
+         </selectedObject>
+      </toolitems>
+      <toolitems
+            ActionID="create_table_column_after"
+            id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction"
+            tooltip="Create a new column after the selected one">
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.column.MCell">
+         </selectedObject>
+      </toolitems>
    </extension>
    <extension
          point="com.jaspersoft.studio.toolitemsets">
@@ -693,12 +709,18 @@
             id="com.jaspersoft.studio.components.tableactions"
             name="table actions"
             toolbaruri="com.jaspersoft.studio.components.tableactions"
-            visibility="false">
+            visibility="true">
          <toolitem
                toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction">
          </toolitem>
          <toolitem
                toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction">
+         </toolitem>
+         <toolitem
+               toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeforeAction">
+         </toolitem>
+         <toolitem
+               toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction">
          </toolitem>
       </toolitemsets>
       <toolitemsets
@@ -706,7 +728,7 @@
             id="com.jaspersoft.studio.components.crosstabaction"
             name="crosstab actions"
             toolbaruri="com.jaspersoft.studio.components.tableactions"
-            visibility="false">
+            visibility="true">
          <toolitem
                toolitemID="com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateRowGroupAction">
          </toolitem>

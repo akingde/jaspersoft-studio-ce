@@ -220,7 +220,7 @@ public class TableWizard extends JSSWizard {
 		}
 
 		//Apply the style to the table
-		ApplyTableStyleAction applyAction = new ApplyTableStyleAction(step4.getSelectedStyle(), table);
+		ApplyTableStyleAction applyAction = new ApplyTableStyleAction(step4.getSelectedStyle(), table.getValue());
 		applyAction.applayStyle(jd);
 		return table;
 	}

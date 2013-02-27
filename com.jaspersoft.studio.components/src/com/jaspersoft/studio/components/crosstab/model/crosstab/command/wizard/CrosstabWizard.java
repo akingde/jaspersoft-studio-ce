@@ -270,7 +270,7 @@ public class CrosstabWizard extends JSSWizard {
 		setupMeasures(jdc);
 		// Apply the template style to the crosstab
 		ApplyCrosstabStyleAction applyAction = new ApplyCrosstabStyleAction(
-				step5.getSelectedStyle(), crosstab);
+				step5.getSelectedStyle(), crosstab.getValue());
 		applyAction.applayStyle(getConfig().getJasperDesign());
 
 		return crosstab;

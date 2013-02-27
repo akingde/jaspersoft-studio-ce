@@ -18,11 +18,10 @@ package com.jaspersoft.studio.editor.style;
 import java.awt.Color;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
-
-import com.jaspersoft.studio.model.APropertyNode;
 
 /**
  * Abstract action to apply a TemplateStyle to an element
@@ -40,9 +39,9 @@ public abstract class ApplyStyleAction {
 	/**
 	 * Target element of the TemplateStyle
 	 */
-	private APropertyNode element;
+	private JRElement element;
 	
-	public ApplyStyleAction(TemplateStyle style, APropertyNode element){
+	public ApplyStyleAction(TemplateStyle style, JRElement element){
 		this.style = style;
 		this.element = element;
 	}
@@ -61,7 +60,7 @@ public abstract class ApplyStyleAction {
 	 * 
 	 * @return the model of the element
 	 */
-	protected APropertyNode getElement(){
+	protected JRElement getElement(){
 		return element;
 	}
 	

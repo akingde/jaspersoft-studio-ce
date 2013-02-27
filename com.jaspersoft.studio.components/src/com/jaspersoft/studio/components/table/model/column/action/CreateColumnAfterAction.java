@@ -58,9 +58,9 @@ public class CreateColumnAfterAction extends ACreateAction {
 		setToolTipText(com.jaspersoft.studio.components.table.model.column.action.Messages.CreateColumnAfterAction_desc);
 		setId(CreateColumnAfterAction.ID);
 		setImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-insert-column.png")); //$NON-NLS-1$
+				Activator.getDefault().getImageDescriptor("icons/table-insert-column-after.png")); //$NON-NLS-1$
 		setDisabledImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-insert-column.png")); //$NON-NLS-1$
+				Activator.getDefault().getImageDescriptor("icons/table-insert-column-after.png")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 

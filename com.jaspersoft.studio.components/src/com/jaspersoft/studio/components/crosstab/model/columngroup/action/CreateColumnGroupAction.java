@@ -15,12 +15,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.columngroup.action;
 
+import org.eclipse.gef.EditPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroup;
+import com.jaspersoft.studio.components.crosstab.model.dialog.ApplyCrosstabStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 /*
@@ -41,6 +45,22 @@ public class CreateColumnGroupAction extends ACreateAction {
 		super(part);
 		setCreationFactory(new JDPaletteCreationFactory(MColumnGroup.class));
 	}
+	
+	@Override
+	public void run() {
+		super.run();
+		MCrosstab crosstab = null;
+		Object selected = getSelectedObjects().get(0);
+		if (selected instanceof EditPart) {
+			EditPart part = (EditPart) selected;
+			if (part.getModel() instanceof MCrosstab) crosstab = (MCrosstab)part.getModel();
+		} 
+		if (crosstab != null){
+			ApplyCrosstabStyleAction applyStyle = new ApplyCrosstabStyleAction(null, crosstab.getValue());
+			applyStyle.rebuildStylesFromCrosstab();
+			applyStyle.applayStyle(crosstab.getJasperDesign());
+		}
+	}
 
 	/**
 	 * Initializes this action's text and images.
@@ -52,8 +72,8 @@ public class CreateColumnGroupAction extends ACreateAction {
 		setToolTipText(Messages.CreateColumnGroupAction_create_column_group_tool_tip);
 		setId(CreateColumnGroupAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
-		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED));
+		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/add-crosstabcolumns-16.png"));
+		setDisabledImageDescriptor(Activator.getDefault().getImageDescriptor("icons/add-crosstabcolumns-16.png"));
 		setEnabled(false);
 	}
 
