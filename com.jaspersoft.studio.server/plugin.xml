@@ -213,6 +213,14 @@
          </selection>
       </wizard>
    </extension>
+   <extension
+         id="server.hyperlinkTypes"
+         point="com.jaspersoft.studio.hyperlinkTypes">
+      <hyperlinkType
+            id="com.jaspersoft.studio.server.hyperlink.types.reportExecution"
+            type="ReportExecution">
+      </hyperlinkType>
+   </extension>
 
 
 </plugin>
