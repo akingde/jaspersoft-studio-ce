@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 public class Obj2TextPage extends WizardPage {
 	private CalculationEnum calculation;
@@ -54,7 +55,9 @@ public class Obj2TextPage extends WizardPage {
 
 			public void widgetSelected(SelectionEvent e) {
 				int sel = lst.getSelectionIndex();
-				calculation = CalculationEnum.getByName(names[sel]);
+				// recall that we are using TRANSLATED names!
+				calculation = 
+						(CalculationEnum) EnumHelper.getEnumByTranslatedName(CalculationEnum.values(), names[sel]);
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {

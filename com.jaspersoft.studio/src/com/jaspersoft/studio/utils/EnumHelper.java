@@ -21,6 +21,8 @@ import java.util.List;
 import net.sf.jasperreports.engine.type.EnumUtil;
 import net.sf.jasperreports.engine.type.JREnum;
 
+import org.eclipse.core.runtime.Assert;
+
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 
@@ -109,6 +111,25 @@ public class EnumHelper {
 				else
 					offset = 0;
 				return EnumUtil.getByValue(values, ((Number) value).intValue() + offset);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieves the correct {@link JREnum} instance which name translation matches the specified one.
+	 * 
+	 * @param enums
+	 *          a list of enumerations to look into
+	 * @param translatedName
+	 *          the translated name to match
+	 * @return the correct enum, <code>null</code> otherwise
+	 */
+	public static JREnum getEnumByTranslatedName(JREnum[] enums, String translatedName) {
+		Assert.isNotNull(translatedName);
+		for(JREnum e : enums){
+			if (translatedName.equals(Messages.getString(e.getName()))){
+				return e;
 			}
 		}
 		return null;
