@@ -27,8 +27,6 @@ import net.sf.jasperreports.engine.type.HyperlinkTargetEnum;
 import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -60,6 +58,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.jface.dialogs.ElementWithValueExpressionDialog;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * Hyperlink widget re-usable in custom wizards/dialogs/panels.
@@ -110,26 +109,11 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 	private static String[] linkTypeItems;
 	
 	static {
-		// Standard hyperlink types
-		List<String> alltypes=new ArrayList<String>();
-		alltypes.add(HyperlinkTypeEnum.NONE.getName());
-		alltypes.add(HyperlinkTypeEnum.REFERENCE.getName());
-		alltypes.add(HyperlinkTypeEnum.LOCAL_ANCHOR.getName());
-		alltypes.add(HyperlinkTypeEnum.LOCAL_PAGE.getName());
-		alltypes.add(HyperlinkTypeEnum.REMOTE_ANCHOR.getName());
-		alltypes.add(HyperlinkTypeEnum.REMOTE_PAGE.getName());
-		
-		// Add also the contributed hyperlink types
-		IConfigurationElement[] contributedElements = 
-				Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.hyperlinkTypes");
-		if(contributedElements!=null){
-			for (IConfigurationElement el : contributedElements){
-				String type = el.getAttribute("type");
-				alltypes.add(type);
-			}
-		}		
-		
-		linkTypeItems=alltypes.toArray(new String[]{});
+		ArrayList<HyperlinkTypeEnum> filteredTypes = new ArrayList<HyperlinkTypeEnum>(2);
+		filteredTypes.add(HyperlinkTypeEnum.CUSTOM);	// Will be used automatically when user write a custom entry
+		filteredTypes.add(HyperlinkTypeEnum.NULL);		// Makes no much sense into this widget
+		List<String> alltypes=ModelUtils.getHyperlinkTypeNames4Widget(filteredTypes);		
+		linkTypeItems=alltypes.toArray(new String[alltypes.size()]);
 	}
 	
 

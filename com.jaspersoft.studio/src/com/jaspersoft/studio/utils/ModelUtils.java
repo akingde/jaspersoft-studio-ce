@@ -62,12 +62,15 @@ import net.sf.jasperreports.engine.fonts.FontUtil;
 import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
+import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -1292,4 +1295,41 @@ public class ModelUtils {
 			return null;
 		}
 	}
+	
+	/**
+	 * Returns the list with the names of different hyperlink types. 
+	 * This list includes possibly contributed types via dedicated extension point.
+	 * <p>
+	 * 
+	 * Clients can specify to exclude some types through the input list.
+	 * 
+	 * @param filteredTypes
+	 *         a list of types that should be filtered out from the final list, 
+	 *         it can be <code>null</code>
+	 * @return the list of hyperlink type names
+	 */
+	public static List<String> getHyperlinkTypeNames4Widget(List<HyperlinkTypeEnum> filteredTypes){
+		// Standard hyperlink types
+		List<String> alltypes=new ArrayList<String>();
+		for(HyperlinkTypeEnum type : HyperlinkTypeEnum.values()){
+			alltypes.add(type.getName());
+		}
+		// Add also the contributed hyperlink types
+		IConfigurationElement[] contributedElements = 
+				Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.hyperlinkTypes");
+		if(contributedElements!=null){
+			for (IConfigurationElement el : contributedElements){
+				String type = el.getAttribute("type");
+				alltypes.add(type);
+			}
+		}
+		
+		// Remove filtered types
+		for(HyperlinkTypeEnum t : filteredTypes){
+			alltypes.remove(t.getName());
+		}
+		
+		return alltypes;
+	}
+	
 }
