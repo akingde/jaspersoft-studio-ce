@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.pattern.dialog;
 
@@ -39,6 +34,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.Misc;
 
 public class PatternPage extends WizardPage implements PropertyChangeListener {
 
@@ -85,7 +81,7 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		list = new List(composite, SWT.BORDER);
+		list = new List(composite, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 3;
 		gd.heightHint = 200;
@@ -131,11 +127,11 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 		list.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				String[] sel = list.getSelection();
-				if (sel.length > 0) {
-					APattern p = map.get(sel[0]);
+				int sel = list.getSelectionIndex();
+				if (sel >= 0) {
+					APattern p = map.get(list.getItem(sel));
 
-					descriptionLabel.setText(p.getDescription() != null ? p.getDescription() : ""); //$NON-NLS-1$
+					descriptionLabel.setText(Misc.nvl(p.getDescription()));
 					descriptionLabel.pack();
 
 					stackLayout.topControl = p.getControl();
@@ -182,9 +178,8 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 
 		createNumberPatterns(parent);
 
-		for (String key : map.keySet()) {
+		for (String key : map.keySet())
 			map.get(key).getPropertyChangeSupport().addPropertyChangeListener(this);
-		}
 	}
 
 	private void createNumberPatterns(Composite parent) {
@@ -206,14 +201,13 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 	private void processFormat(APattern p) {
 		try {
 			if (p.getFormatter() != null && p.getSample() != null) {
-
 				setErrorMessage(null);
 				Format formatter = p.getFormatter();
-				if (formatter instanceof SimpleDateFormat) {
+				if (formatter instanceof SimpleDateFormat)
 					((SimpleDateFormat) formatter).applyPattern(p.getPattern());
-				} else if (formatter instanceof DecimalFormat) {
+				else if (formatter instanceof DecimalFormat)
 					((DecimalFormat) formatter).applyPattern(p.getPattern());
-				}
+
 				sampleLabel.setText(formatter.format(p.getSample()));
 				setValue(p.getPattern());
 			}
@@ -230,6 +224,5 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 		pa.setSample(p.getSample());
 		patternText.setText(p.getPattern());
 		processFormat(p);
-
 	}
 }
