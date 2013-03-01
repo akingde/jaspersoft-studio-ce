@@ -544,6 +544,15 @@
                   type="com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes">
             </input>
          </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.chart.property.section.ChartAxisSection"
+               class="com.jaspersoft.studio.components.chart.property.section.ChartAxisGraphicSection"
+               id="com.jaspersoft.studio.components.chart.property.section.ChartAxisGraphicSection"
+               tab="com.jaspersoft.studio.components.chartaxis">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension
