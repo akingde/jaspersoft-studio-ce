@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
+import net.sf.jasperreports.charts.type.TimePeriodEnum;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
@@ -30,7 +31,8 @@ import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ReportFactory;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MChartTimeSeriesDataset extends MChartDataset {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -71,9 +73,10 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ClassTypePropertyDescriptor timePeriodD = new ClassTypePropertyDescriptor(
+		JSSEnumPropertyDescriptor timePeriodD = new JSSEnumPropertyDescriptor(
 				JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD,
-				Messages.MChartTimeSeriesDataset_time_period);
+				Messages.MChartTimeSeriesDataset_time_period,
+				TimePeriodEnum.class, NullEnum.NULL);
 		timePeriodD
 				.setDescription(Messages.MChartTimeSeriesDataset_time_period_description);
 		desc.add(timePeriodD);
@@ -81,7 +84,8 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 		timePeriodD
 				.setCategory(Messages.MChartTimeSeriesDataset_chart_time_period_dataset_category);
 
-		defaultsMap.put(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD, null);
+		defaultsMap.put(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD,
+				TimePeriodEnum.DAY.getTimePeriod());
 
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#timeSeriesDataset");
@@ -92,10 +96,19 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 		JRDesignTimeSeriesDataset jrElement = (JRDesignTimeSeriesDataset) getValue();
 		if (jrElement != null)
 			if (id.equals(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD)) {
-				Class<?> timePeriod = jrElement.getTimePeriod();
-				if (timePeriod != null)
-					return timePeriod.toString();
-				return null;
+				if (jrElement.getTimePeriod() == null)
+					return 0;
+				TimePeriodEnum tpe = TimePeriodEnum.getByValue(jrElement
+						.getTimePeriod());
+				TimePeriodEnum[] tpevalues = TimePeriodEnum.values();
+				for (int i = 0; i < tpevalues.length; i++) {
+					if (tpe.equals(tpevalues[i]))
+						return i + 1;
+				}
+				// Class<?> timePeriod = jrElement.getTimePeriod();
+				// if (timePeriod != null)
+				// return timePeriod.toString();
+				// return null;
 			}
 
 		return super.getPropertyValue(id);
@@ -108,6 +121,14 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 		if (id.equals(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD)) {
 			if (value instanceof Class<?>) {
 				jrElement.setTimePeriod((Class<?>) value);
+			} else if (value instanceof Integer) {
+				Integer v = (Integer) value;
+				if (v == 0)
+					jrElement.setTimePeriod(null);
+				else {
+					TimePeriodEnum tpe = TimePeriodEnum.values()[v - 1];
+					jrElement.setTimePeriod(tpe.getTimePeriod());
+				}
 			} else {
 				Class<?> v = null;
 				if (value != null) {

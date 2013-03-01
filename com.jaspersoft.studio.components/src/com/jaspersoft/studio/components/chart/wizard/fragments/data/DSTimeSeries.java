@@ -76,7 +76,7 @@ public class DSTimeSeries extends ADSComponent {
 
 		TimePeriodEnum tpe = TimePeriodEnum.getByValue(dataset.getTimePeriod());
 		if (tpe == null) {
-			timePeriodCombo.select(0);
+			timePeriodCombo.select(5);
 		} else {
 			TimePeriodEnum[] tpevalues = TimePeriodEnum.values();
 			for (int i = 0; i < tpevalues.length; i++) {

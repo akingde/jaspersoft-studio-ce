@@ -46,6 +46,7 @@ import net.sf.jasperreports.charts.design.JRDesignXySeries;
 import net.sf.jasperreports.charts.design.JRDesignXyzDataset;
 import net.sf.jasperreports.charts.design.JRDesignXyzSeries;
 import net.sf.jasperreports.charts.type.EdgeEnum;
+import net.sf.jasperreports.charts.type.TimePeriodEnum;
 import net.sf.jasperreports.charts.type.ValueLocationEnum;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRChartPlot;
@@ -194,7 +195,9 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				Messages.MChart_title_position, EdgeEnum.class, NullEnum.NULL);
 		titlePositionD
 				.setDescription(Messages.MChart_title_position_description);
-		titlePositionD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartTitle_position"));
+		titlePositionD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartTitle_position"));
 		desc.add(titlePositionD);
 
 		evaluationTimeD = new JSSEnumPropertyDescriptor(
@@ -332,7 +335,9 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				Messages.MChart_legend_position, EdgeEnum.class, NullEnum.NULL);
 		legendPositionD
 				.setDescription(Messages.MChart_legend_position_description);
-		legendPositionD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartLegend_position"));
+		legendPositionD
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartLegend_position"));
 		desc.add(legendPositionD);
 
 		setHelpPrefix(desc,
@@ -708,6 +713,8 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			JRDesignTimeSeries series = new TimeSerie().createSerie();
 			((JRDesignTimeSeriesDataset) jrChart.getDataset())
 					.addTimeSeries(series);
+			((JRDesignTimeSeriesDataset) jrChart.getDataset())
+					.setTimePeriod(TimePeriodEnum.DAY.getTimePeriod());
 		} else if (jrChart.getDataset() instanceof JRDesignTimePeriodDataset) {
 			JRDesignTimePeriodSeries series = new TimePeriodSerie()
 					.createSerie();
