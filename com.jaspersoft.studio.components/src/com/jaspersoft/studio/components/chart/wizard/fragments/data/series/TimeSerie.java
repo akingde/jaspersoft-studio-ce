@@ -28,15 +28,22 @@ import org.eclipse.swt.widgets.TableItem;
 public class TimeSerie implements ISeriesFactory<JRTimeSeries> {
 
 	public JRDesignTimeSeries createSerie() {
-		return createSerie(new JRDesignExpression("\"SERIE 1\""));
+		return createSerie(new JRDesignExpression("\"SERIE 1\""), null);
 	}
 
 	@Override
-	public JRDesignTimeSeries createSerie(JRDesignExpression expr) {
+	public JRDesignTimeSeries createSerie(JRDesignExpression expr,
+			JRTimeSeries prev) {
 		JRDesignTimeSeries f = new JRDesignTimeSeries();
 		f.setSeriesExpression(expr);
-		f.setTimePeriodExpression(new JRDesignExpression("new Double(0)"));
-		f.setValueExpression(new JRDesignExpression("new Double(0)"));
+		if (prev == null) {
+			f.setTimePeriodExpression(new JRDesignExpression("new Double(0)"));
+			f.setValueExpression(new JRDesignExpression("new Double(0)"));
+		} else {
+			f.setTimePeriodExpression(prev.getTimePeriodExpression());
+			f.setValueExpression(prev.getValueExpression());
+			f.setLabelExpression(prev.getLabelExpression());
+		}
 		return f;
 	}
 
@@ -51,7 +58,7 @@ public class TimeSerie implements ISeriesFactory<JRTimeSeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public Object getValue(Object element, String property) {
+	public Object getValue(JRTimeSeries element, String property) {
 		JRTimeSeries prop = (JRTimeSeries) element;
 		if ("NAME".equals(property)) { //$NON-NLS-1$
 			return prop.getSeriesExpression();
@@ -59,7 +66,7 @@ public class TimeSerie implements ISeriesFactory<JRTimeSeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public void modify(Object element, String property, Object value) {
+	public void modify(JRTimeSeries element, String property, Object value) {
 		TableItem tableItem = (TableItem) element;
 		JRDesignTimeSeries data = (JRDesignTimeSeries) tableItem.getData();
 		if ("NAME".equals(property) && value instanceof JRExpression) {//$NON-NLS-1$

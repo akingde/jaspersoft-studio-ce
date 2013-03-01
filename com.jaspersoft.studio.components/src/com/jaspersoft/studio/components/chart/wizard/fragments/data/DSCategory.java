@@ -129,7 +129,8 @@ public class DSCategory extends ADSComponent {
 
 			public void widgetSelected(SelectionEvent e) {
 				CategorySerie serie = new CategorySerie();
-				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
+				SeriesDialog<JRCategorySeries> dlg = new SeriesDialog<JRCategorySeries>(
+						btn.getShell(), serie);
 				dlg.setExpressionContext(expContext);
 				List<JRCategorySeries> oldList = dataset.getSeriesList();
 				int oldsel = seriesCombo.getSelectionIndex();
@@ -195,5 +196,5 @@ public class DSCategory extends ADSComponent {
 		this.labelWidget.setExpressionContext(expContext);
 		this.valueWidget.setExpressionContext(expContext);
 	}
-	
+
 }

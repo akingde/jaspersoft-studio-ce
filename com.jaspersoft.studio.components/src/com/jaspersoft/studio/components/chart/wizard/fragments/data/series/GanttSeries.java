@@ -28,17 +28,28 @@ import org.eclipse.swt.widgets.TableItem;
 public class GanttSeries implements ISeriesFactory<JRGanttSeries> {
 
 	public JRDesignGanttSeries createSerie() {
-		return createSerie(new JRDesignExpression("\"SERIE 1\""));
+		return createSerie(new JRDesignExpression("\"SERIE 1\""), null);
 	}
 
 	@Override
-	public JRDesignGanttSeries createSerie(JRDesignExpression expr) {
+	public JRDesignGanttSeries createSerie(JRDesignExpression expr,
+			JRGanttSeries prev) {
 		JRDesignGanttSeries f = new JRDesignGanttSeries();
 		f.setSeriesExpression(expr);
-		f.setPercentExpression(new JRDesignExpression("new Double(0)"));
-		f.setStartDateExpression(new JRDesignExpression("new java.util.Date()"));
-		f.setEndDateExpression(new JRDesignExpression("new java.util.Date()"));
-		f.setTaskExpression(new JRDesignExpression("\"Task\""));
+		if (prev == null) {
+			f.setPercentExpression(new JRDesignExpression("new Double(0)"));
+			f.setStartDateExpression(new JRDesignExpression(
+					"new java.util.Date()"));
+			f.setEndDateExpression(new JRDesignExpression(
+					"new java.util.Date()"));
+			f.setTaskExpression(new JRDesignExpression("\"Task\""));
+		} else {
+			f.setPercentExpression(prev.getPercentExpression());
+			f.setStartDateExpression(prev.getStartDateExpression());
+			f.setEndDateExpression(prev.getEndDateExpression());
+			f.setTaskExpression(prev.getTaskExpression());
+			f.setLabelExpression(prev.getLabelExpression());
+		}
 		return f;
 	}
 
@@ -54,7 +65,7 @@ public class GanttSeries implements ISeriesFactory<JRGanttSeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public Object getValue(Object element, String property) {
+	public Object getValue(JRGanttSeries element, String property) {
 		JRGanttSeries prop = (JRGanttSeries) element;
 		if ("NAME".equals(property)) { //$NON-NLS-1$
 			return prop.getSeriesExpression();
@@ -62,7 +73,7 @@ public class GanttSeries implements ISeriesFactory<JRGanttSeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public void modify(Object element, String property, Object value) {
+	public void modify(JRGanttSeries element, String property, Object value) {
 		TableItem tableItem = (TableItem) element;
 		JRDesignGanttSeries data = (JRDesignGanttSeries) tableItem.getData();
 		if ("NAME".equals(property) && value instanceof JRExpression) {//$NON-NLS-1$

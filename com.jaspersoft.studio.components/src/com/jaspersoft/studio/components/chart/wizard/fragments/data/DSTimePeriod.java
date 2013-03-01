@@ -131,7 +131,8 @@ public class DSTimePeriod extends ADSComponent {
 
 			public void widgetSelected(SelectionEvent e) {
 				TimePeriodSerie serie = new TimePeriodSerie();
-				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
+				SeriesDialog<JRTimePeriodSeries> dlg = new SeriesDialog<JRTimePeriodSeries>(
+						btn.getShell(), serie);
 				dlg.setExpressionContext(expContext);
 				List<JRTimePeriodSeries> oldList = dataset.getSeriesList();
 				int oldsel = seriesCombo.getSelectionIndex();

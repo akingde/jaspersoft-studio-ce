@@ -28,16 +28,22 @@ import org.eclipse.swt.widgets.TableItem;
 public class XySerie implements ISeriesFactory<JRXySeries> {
 
 	public JRDesignXySeries createSerie() {
-		return createSerie(new JRDesignExpression("\"SERIE 1\""));
+		return createSerie(new JRDesignExpression("\"SERIE 1\""), null);
 	}
 
 	@Override
-	public JRDesignXySeries createSerie(JRDesignExpression expr) {
+	public JRDesignXySeries createSerie(JRDesignExpression expr, JRXySeries prev) {
 		JRDesignXySeries f = new JRDesignXySeries();
 		f.setAutoSort(true);
 		f.setSeriesExpression(expr);
-		f.setXValueExpression(new JRDesignExpression("new Double(0)"));
-		f.setYValueExpression(new JRDesignExpression("new Double(0)"));
+		if (prev == null) {
+			f.setXValueExpression(new JRDesignExpression("new Double(0)"));
+			f.setYValueExpression(new JRDesignExpression("new Double(0)"));
+		} else {
+			f.setXValueExpression(prev.getXValueExpression());
+			f.setYValueExpression(prev.getYValueExpression());
+			f.setLabelExpression(prev.getLabelExpression());
+		}
 		return f;
 	}
 
@@ -52,7 +58,7 @@ public class XySerie implements ISeriesFactory<JRXySeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public Object getValue(Object element, String property) {
+	public Object getValue(JRXySeries element, String property) {
 		JRXySeries prop = (JRXySeries) element;
 		if ("NAME".equals(property)) { //$NON-NLS-1$
 			return prop.getSeriesExpression();
@@ -60,7 +66,7 @@ public class XySerie implements ISeriesFactory<JRXySeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public void modify(Object element, String property, Object value) {
+	public void modify(JRXySeries element, String property, Object value) {
 		TableItem tableItem = (TableItem) element;
 		JRDesignXySeries data = (JRDesignXySeries) tableItem.getData();
 		if ("NAME".equals(property) && value instanceof JRExpression) {//$NON-NLS-1$

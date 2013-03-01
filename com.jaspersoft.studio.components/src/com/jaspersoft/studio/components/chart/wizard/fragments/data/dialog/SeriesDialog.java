@@ -50,7 +50,7 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
-public class SeriesDialog extends FormDialog implements
+public class SeriesDialog<T> extends FormDialog implements
 		IExpressionContextSetter {
 	private final class TLabelProvider extends LabelProvider implements
 			ITableLabelProvider {
@@ -66,10 +66,10 @@ public class SeriesDialog extends FormDialog implements
 
 	private Table table;
 	private TableViewer tableViewer;
-	private ISeriesFactory<?> serie;
+	private ISeriesFactory<T> serie;
 	private ExpressionContext expContext;
 
-	public SeriesDialog(Shell parentShellProvider, ISeriesFactory<?> serie) {
+	public SeriesDialog(Shell parentShellProvider, ISeriesFactory<T> serie) {
 		super(parentShellProvider);
 		this.serie = serie;
 	}
@@ -99,13 +99,18 @@ public class SeriesDialog extends FormDialog implements
 
 					public Object newElement(List<?> input, int pos) {
 						JRExpressionEditor wizard = new JRExpressionEditor();
-						wizard.setValue(new JRDesignExpression());
+						wizard.setValue(new JRDesignExpression("\"SERIE "
+								+ (input.size() + 1) + "\""));
 						wizard.setExpressionContext(expContext);
 						WizardDialog dialog = new WizardDialog(bGroup
 								.getShell(), wizard);
 						dialog.create();
-						if (dialog.open() == Dialog.OK)
-							return serie.createSerie(wizard.getValue());
+						if (dialog.open() == Dialog.OK) {
+							T prev = null;
+							if (input.size() > 0)
+								prev = (T) input.get(input.size() - 1);
+							return serie.createSerie(wizard.getValue(), prev);
+						}
 						return null;
 					}
 
@@ -163,11 +168,11 @@ public class SeriesDialog extends FormDialog implements
 			}
 
 			public Object getValue(Object element, String property) {
-				return serie.getValue(element, property);
+				return serie.getValue((T) element, property);
 			}
 
 			public void modify(Object element, String property, Object value) {
-				serie.modify(element, property, value);
+				serie.modify((T) element, property, value);
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
 			}

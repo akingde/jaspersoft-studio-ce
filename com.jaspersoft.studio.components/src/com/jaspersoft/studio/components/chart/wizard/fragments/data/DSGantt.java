@@ -135,7 +135,8 @@ public class DSGantt extends ADSComponent {
 
 			public void widgetSelected(SelectionEvent e) {
 				GanttSeries serie = new GanttSeries();
-				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
+				SeriesDialog<JRGanttSeries> dlg = new SeriesDialog<JRGanttSeries>(
+						btn.getShell(), serie);
 				dlg.setExpressionContext(expContext);
 				List<JRGanttSeries> oldList = dataset.getSeriesList();
 				int oldsel = seriesCombo.getSelectionIndex();
@@ -207,5 +208,5 @@ public class DSGantt extends ADSComponent {
 		this.task.setExpressionContext(expContext);
 		this.percent.setExpressionContext(expContext);
 	}
-	
+
 }

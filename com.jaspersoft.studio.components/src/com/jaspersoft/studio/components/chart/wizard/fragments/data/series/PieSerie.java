@@ -28,14 +28,20 @@ import org.eclipse.swt.widgets.TableItem;
 public class PieSerie implements ISeriesFactory<JRPieSeries> {
 
 	public JRDesignPieSeries createSerie() {
-		return createSerie(new JRDesignExpression("\"SERIE 1\""));
+		return createSerie(new JRDesignExpression("\"SERIE 1\""), null);
 	}
 
 	@Override
-	public JRDesignPieSeries createSerie(JRDesignExpression expr) {
+	public JRDesignPieSeries createSerie(JRDesignExpression expr,
+			JRPieSeries prev) {
 		JRDesignPieSeries f = new JRDesignPieSeries();
 		f.setKeyExpression(expr);
-		f.setValueExpression(new JRDesignExpression("new Double(0)"));
+		if (prev == null)
+			f.setValueExpression(new JRDesignExpression("new Double(0)"));
+		else {
+			f.setValueExpression(prev.getValueExpression());
+			f.setLabelExpression(prev.getLabelExpression());
+		}
 		return f;
 	}
 
@@ -50,7 +56,7 @@ public class PieSerie implements ISeriesFactory<JRPieSeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public Object getValue(Object element, String property) {
+	public Object getValue(JRPieSeries element, String property) {
 		JRDesignPieSeries prop = (JRDesignPieSeries) element;
 		if ("NAME".equals(property)) { //$NON-NLS-1$
 			return prop.getKeyExpression();
@@ -58,7 +64,7 @@ public class PieSerie implements ISeriesFactory<JRPieSeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public void modify(Object element, String property, Object value) {
+	public void modify(JRPieSeries element, String property, Object value) {
 		TableItem tableItem = (TableItem) element;
 		JRDesignPieSeries data = (JRDesignPieSeries) tableItem.getData();
 		if ("NAME".equals(property) && value instanceof JRExpression) {//$NON-NLS-1$

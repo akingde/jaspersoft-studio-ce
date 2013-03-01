@@ -22,13 +22,13 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 public interface ISeriesFactory<T> {
 	public Object createSerie();
 
-	public Object createSerie(JRDesignExpression expr);
+	public T createSerie(JRDesignExpression expr, T prevValue);
 
 	public String getColumnText(Object element, int columnIndex);
 
-	public Object getValue(Object element, String property);
+	public Object getValue(T element, String property);
 
-	public void modify(Object element, String property, Object value);
+	public void modify(T element, String property, Object value);
 
 	public List<T> getList();
 

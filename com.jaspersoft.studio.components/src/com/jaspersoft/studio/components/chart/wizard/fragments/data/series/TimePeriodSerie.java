@@ -28,15 +28,26 @@ import org.eclipse.swt.widgets.TableItem;
 public class TimePeriodSerie implements ISeriesFactory<JRTimePeriodSeries> {
 
 	public JRDesignTimePeriodSeries createSerie() {
-		return createSerie(new JRDesignExpression("\"SERIE 1\""));
+		return createSerie(new JRDesignExpression("\"SERIE 1\""), null);
 	}
 
 	@Override
-	public JRDesignTimePeriodSeries createSerie(JRDesignExpression expr) {
+	public JRDesignTimePeriodSeries createSerie(JRDesignExpression expr,
+			JRTimePeriodSeries prev) {
 		JRDesignTimePeriodSeries f = new JRDesignTimePeriodSeries();
 		f.setSeriesExpression(expr);
-		f.setValueExpression(new JRDesignExpression("new Double(0)"));
-		f.setStartDateExpression(new JRDesignExpression("new java.util.Date()"));
+		if (prev == null) {
+			f.setValueExpression(new JRDesignExpression("new Double(0)"));
+			f.setStartDateExpression(new JRDesignExpression(
+					"new java.util.Date()"));
+			f.setEndDateExpression(new JRDesignExpression(
+					"new java.util.Date()"));
+		} else {
+			f.setValueExpression(prev.getValueExpression());
+			f.setStartDateExpression(prev.getStartDateExpression());
+			f.setEndDateExpression(prev.getEndDateExpression());
+			f.setLabelExpression(prev.getLabelExpression());
+		}
 		return f;
 	}
 
@@ -51,7 +62,7 @@ public class TimePeriodSerie implements ISeriesFactory<JRTimePeriodSeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public Object getValue(Object element, String property) {
+	public Object getValue(JRTimePeriodSeries element, String property) {
 		JRTimePeriodSeries prop = (JRTimePeriodSeries) element;
 		if ("NAME".equals(property)) { //$NON-NLS-1$
 			return prop.getSeriesExpression();
@@ -59,7 +70,7 @@ public class TimePeriodSerie implements ISeriesFactory<JRTimePeriodSeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public void modify(Object element, String property, Object value) {
+	public void modify(JRTimePeriodSeries element, String property, Object value) {
 		TableItem tableItem = (TableItem) element;
 		JRDesignTimePeriodSeries data = (JRDesignTimePeriodSeries) tableItem
 				.getData();

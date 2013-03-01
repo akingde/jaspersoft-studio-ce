@@ -146,7 +146,8 @@ public class DSPie extends ADSComponent {
 
 			public void widgetSelected(SelectionEvent e) {
 				PieSerie serie = new PieSerie();
-				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
+				SeriesDialog<JRPieSeries> dlg = new SeriesDialog<JRPieSeries>(
+						btn.getShell(), serie);
 				dlg.setExpressionContext(expContext);
 				List<JRPieSeries> oldList = dataset.getSeriesList();
 				int oldsel = seriesCombo.getSelectionIndex();
@@ -280,5 +281,5 @@ public class DSPie extends ADSComponent {
 		this.labelWidget.setExpressionContext(expContext);
 		this.valueWidget.setExpressionContext(expContext);
 	}
-	
+
 }

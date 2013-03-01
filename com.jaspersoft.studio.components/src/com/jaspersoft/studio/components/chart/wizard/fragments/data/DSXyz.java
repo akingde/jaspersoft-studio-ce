@@ -130,7 +130,8 @@ public class DSXyz extends ADSComponent {
 
 			public void widgetSelected(SelectionEvent e) {
 				XyzSerie serie = new XyzSerie();
-				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
+				SeriesDialog<JRXyzSeries> dlg = new SeriesDialog<JRXyzSeries>(
+						btn.getShell(), serie);
 				dlg.setExpressionContext(expContext);
 				List<JRXyzSeries> oldList = dataset.getSeriesList();
 				int oldsel = seriesCombo.getSelectionIndex();

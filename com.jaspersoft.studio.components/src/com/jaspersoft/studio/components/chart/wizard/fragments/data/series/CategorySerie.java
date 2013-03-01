@@ -28,15 +28,22 @@ import org.eclipse.swt.widgets.TableItem;
 public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 
 	public JRDesignCategorySeries createSerie() {
-		return createSerie(new JRDesignExpression("\"SERIE 1\""));
+		return createSerie(new JRDesignExpression("\"SERIE 1\""), null);
 	}
 
 	@Override
-	public JRDesignCategorySeries createSerie(JRDesignExpression expr) {
+	public JRDesignCategorySeries createSerie(JRDesignExpression expr,
+			JRCategorySeries prev) {
 		JRDesignCategorySeries f = new JRDesignCategorySeries();
 		f.setSeriesExpression(expr);
-		f.setCategoryExpression(new JRDesignExpression("new Double(0)"));
-		f.setValueExpression(new JRDesignExpression("new Double(0)"));
+		if (prev == null) {
+			f.setCategoryExpression(new JRDesignExpression("new Double(0)"));
+			f.setValueExpression(new JRDesignExpression("new Double(0)"));
+		} else {
+			f.setCategoryExpression(prev.getCategoryExpression());
+			f.setValueExpression(prev.getValueExpression());
+			f.setLabelExpression(prev.getLabelExpression());
+		}
 		return f;
 	}
 
@@ -51,7 +58,7 @@ public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public Object getValue(Object element, String property) {
+	public Object getValue(JRCategorySeries element, String property) {
 		JRCategorySeries prop = (JRCategorySeries) element;
 		if ("NAME".equals(property)) { //$NON-NLS-1$
 			return prop.getSeriesExpression();
@@ -59,7 +66,7 @@ public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public void modify(Object element, String property, Object value) {
+	public void modify(JRCategorySeries element, String property, Object value) {
 		TableItem tableItem = (TableItem) element;
 		JRDesignCategorySeries data = (JRDesignCategorySeries) tableItem
 				.getData();

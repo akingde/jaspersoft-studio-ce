@@ -147,7 +147,8 @@ public class DSTimeSeries extends ADSComponent {
 
 			public void widgetSelected(SelectionEvent e) {
 				TimeSerie serie = new TimeSerie();
-				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
+				SeriesDialog<JRTimeSeries> dlg = new SeriesDialog<JRTimeSeries>(
+						btn.getShell(), serie);
 				dlg.setExpressionContext(expContext);
 				List<JRTimeSeries> oldList = dataset.getSeriesList();
 				int oldsel = seriesCombo.getSelectionIndex();
@@ -237,5 +238,5 @@ public class DSTimeSeries extends ADSComponent {
 		this.timePeriod.setExpressionContext(expContext);
 		this.valueWidget.setExpressionContext(expContext);
 	}
-	
+
 }

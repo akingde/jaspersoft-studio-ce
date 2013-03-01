@@ -28,16 +28,23 @@ import org.eclipse.swt.widgets.TableItem;
 public class XyzSerie implements ISeriesFactory<JRXyzSeries> {
 
 	public JRDesignXyzSeries createSerie() {
-		return createSerie(new JRDesignExpression("\"SERIE 1\""));
+		return createSerie(new JRDesignExpression("\"SERIE 1\""), null);
 	}
 
 	@Override
-	public JRDesignXyzSeries createSerie(JRDesignExpression expr) {
+	public JRDesignXyzSeries createSerie(JRDesignExpression expr,
+			JRXyzSeries prev) {
 		JRDesignXyzSeries f = new JRDesignXyzSeries();
 		f.setSeriesExpression(expr);
-		f.setXValueExpression(new JRDesignExpression("new Double(0)"));
-		f.setYValueExpression(new JRDesignExpression("new Double(0)"));
-		f.setZValueExpression(new JRDesignExpression("new Double(0)"));
+		if (prev == null) {
+			f.setXValueExpression(new JRDesignExpression("new Double(0)"));
+			f.setYValueExpression(new JRDesignExpression("new Double(0)"));
+			f.setZValueExpression(new JRDesignExpression("new Double(0)"));
+		} else {
+			f.setXValueExpression(prev.getXValueExpression());
+			f.setYValueExpression(prev.getYValueExpression());
+			f.setZValueExpression(prev.getZValueExpression());
+		}
 		return f;
 	}
 
@@ -52,7 +59,7 @@ public class XyzSerie implements ISeriesFactory<JRXyzSeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public Object getValue(Object element, String property) {
+	public Object getValue(JRXyzSeries element, String property) {
 		JRXyzSeries prop = (JRXyzSeries) element;
 		if ("NAME".equals(property)) { //$NON-NLS-1$
 			return prop.getSeriesExpression();
@@ -60,7 +67,7 @@ public class XyzSerie implements ISeriesFactory<JRXyzSeries> {
 		return ""; //$NON-NLS-1$
 	}
 
-	public void modify(Object element, String property, Object value) {
+	public void modify(JRXyzSeries element, String property, Object value) {
 		TableItem tableItem = (TableItem) element;
 		JRDesignXyzSeries data = (JRDesignXyzSeries) tableItem.getData();
 		if ("NAME".equals(property) && value instanceof JRExpression) {//$NON-NLS-1$
