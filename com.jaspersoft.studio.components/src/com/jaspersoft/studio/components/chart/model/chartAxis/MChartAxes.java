@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
@@ -39,7 +38,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MChartAxes extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -110,10 +109,10 @@ public class MChartAxes extends APropertyNode {
 			Map<String, Object> defaultsMap) {
 		// super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor positionD = new ComboBoxPropertyDescriptor(
+		positionD = new JSSEnumPropertyDescriptor(
 				JRDesignChartAxis.PROPERTY_POSITION,
-				Messages.MChartAxes_position, EnumHelper.getEnumNames(
-						AxisPositionEnum.values(), NullEnum.NOTNULL));
+				Messages.MChartAxes_position, AxisPositionEnum.class,
+				NullEnum.NOTNULL);
 		positionD.setDescription(Messages.MChartAxes_position_description);
 		desc.add(positionD);
 
@@ -155,38 +154,30 @@ public class MChartAxes extends APropertyNode {
 	}
 
 	private MChart mChart;
+	private static JSSEnumPropertyDescriptor positionD;
 
 	public Object getPropertyValue(Object id) {
 		JRDesignChartAxis jrElement = (JRDesignChartAxis) getValue();
 
 		if (id.equals(JRDesignChartAxis.PROPERTY_POSITION))
-			return EnumHelper.getValue(jrElement.getPositionValue(), 1, false);
+			return positionD.getEnumValue(jrElement.getPositionValue());
 
 		if (id.equals(JRDesignChartAxis.PROPERTY_CHART)) {
 			if (mChart == null)
 				mChart = new MChart();
+			mChart.setJasperConfiguration(getJasperConfiguration());
 			setChildListener(mChart);
 			mChart.setValue(jrElement.getChart());
 			return mChart;
 		}
-
-		// if (mChart == null) {
-		// mChart = new MChart();
-		// mChart.setValue(((JRChartAxis) getValue()).getChart());
-		// }
-		//
-		// Object val = mChart.getPropertyValue(id);
-		// if (val != null)
-		// return val;
-
 		return null;
 	}
 
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignChartAxis jrElement = (JRDesignChartAxis) getValue();
 		if (id.equals(JRDesignChartAxis.PROPERTY_POSITION))
-			jrElement.setPosition((AxisPositionEnum) EnumHelper.getSetValue(
-					AxisPositionEnum.values(), value, 1, false));
+			jrElement.setPosition((AxisPositionEnum) positionD
+					.getEnumValue(value));
 		else if (mChart != null) {
 			mChart.setPropertyValue(id, value);
 		}

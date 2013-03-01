@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.property.section;
 
+import net.sf.jasperreports.charts.design.JRDesignChartAxis;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 
@@ -23,7 +24,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
@@ -42,32 +45,46 @@ public class LegendSection extends AbstractRealValueSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite group = getWidgetFactory().createSection(parent, Messages.LegendSection_Legend_Label,
-				true, 2);
+		Composite group = getWidgetFactory().createSection(parent,
+				Messages.LegendSection_Legend_Label, true, 2);
 
 		createWidget4Property(group, JRBaseChart.PROPERTY_SHOW_LEGEND);
 
-		getWidgetFactory().createCLabel(group, Messages.LegendSection_Position_Label);
+		getWidgetFactory().createCLabel(group,
+				Messages.LegendSection_Position_Label);
 		createWidget4Property(group, JRBaseChart.PROPERTY_LEGEND_POSITION,
 				false);
 
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
-		
-		Composite colorComposite = new Composite(group, SWT.NONE);
-		colorComposite.setLayout(new GridLayout(4,false));
-		colorComposite.setLayoutData(gd);
-		
-		getWidgetFactory().createCLabel(colorComposite, Messages.LegendSection_Forecolor_Label);
-		createWidget4Property(colorComposite, JRBaseChart.PROPERTY_LEGEND_COLOR, false);
 
-		getWidgetFactory().createCLabel(colorComposite, Messages.LegendSection_Backcolor_Label);
-		createWidget4Property(colorComposite, JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR, false);
+		Composite colorComposite = new Composite(group, SWT.NONE);
+		colorComposite.setLayout(new GridLayout(4, false));
+		colorComposite.setLayoutData(gd);
+
+		getWidgetFactory().createCLabel(colorComposite,
+				Messages.LegendSection_Forecolor_Label);
+		createWidget4Property(colorComposite,
+				JRBaseChart.PROPERTY_LEGEND_COLOR, false);
+
+		getWidgetFactory().createCLabel(colorComposite,
+				Messages.LegendSection_Backcolor_Label);
+		createWidget4Property(colorComposite,
+				JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR, false);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		createWidget4Property(group, JRDesignChart.PROPERTY_LEGEND_FONT, false).getControl().setLayoutData(gd);
+		createWidget4Property(group, JRDesignChart.PROPERTY_LEGEND_FONT, false)
+				.getControl().setLayoutData(gd);
+	}
 
+	@Override
+	protected APropertyNode getModelFromEditPart(Object item) {
+		APropertyNode md = super.getModelFromEditPart(item);
+		if (md instanceof MChartAxes)
+			return (APropertyNode) md
+					.getPropertyValue(JRDesignChartAxis.PROPERTY_CHART);
+		return md;
 	}
 
 }

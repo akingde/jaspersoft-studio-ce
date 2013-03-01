@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.property.section;
 
+import net.sf.jasperreports.charts.design.JRDesignChartAxis;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 
 import org.eclipse.swt.layout.GridData;
@@ -22,6 +23,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.chart.model.MChart;
+import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
 import com.jaspersoft.studio.components.chart.property.section.plot.PlotFactory;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -58,28 +60,38 @@ public class ChartPlotSection extends AbstractRealValueSection {
 
 		getWidgetFactory().createCLabel(group, "Backcolor");
 
-		createWidget4Property(group, JRBaseChartPlot.PROPERTY_BACKCOLOR, false).getControl().setLayoutData(gd);
-		
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		createWidget4Property(group, JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA).getControl().setLayoutData(gd);
+		createWidget4Property(group, JRBaseChartPlot.PROPERTY_BACKCOLOR, false)
+				.getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		createWidget4Property(group, JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA).getControl().setLayoutData(gd);
+		createWidget4Property(group, JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA)
+				.getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		createWidget4Property(group, JRBaseChartPlot.PROPERTY_SERIES_COLORS).getControl().setLayoutData(gd);
+		createWidget4Property(group, JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA)
+				.getControl().setLayoutData(gd);
+
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		createWidget4Property(group, JRBaseChartPlot.PROPERTY_SERIES_COLORS)
+				.getControl().setLayoutData(gd);
 
 		gd = new GridData();
 		gd.horizontalSpan = 2;
-		createWidget4Property(group, JRBaseChartPlot.PROPERTY_ORIENTATION).getControl().setLayoutData(gd);;
+		createWidget4Property(group, JRBaseChartPlot.PROPERTY_ORIENTATION)
+				.getControl().setLayoutData(gd);
+		;
 	}
 
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {
 		APropertyNode md = super.getModelFromEditPart(item);
+		if (md instanceof MChartAxes) {
+			md = (APropertyNode) md
+					.getPropertyValue(JRDesignChartAxis.PROPERTY_CHART);
+		}
 		if (md instanceof MChart) {
 			MChartPlot chartplot = (MChartPlot) md
 					.getPropertyValue(MChart.PLOTPROPERTY);

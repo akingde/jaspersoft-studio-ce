@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.components.chart.property.section;
 
 import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
+import net.sf.jasperreports.charts.design.JRDesignChartAxis;
 import net.sf.jasperreports.charts.design.JRDesignGanttSeries;
 import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
 import net.sf.jasperreports.charts.design.JRDesignPieDataset;
@@ -25,6 +26,7 @@ import net.sf.jasperreports.charts.design.JRDesignTimeSeries;
 import net.sf.jasperreports.charts.design.JRDesignXySeries;
 import net.sf.jasperreports.charts.design.JRDesignXyzSeries;
 
+import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
 import com.jaspersoft.studio.components.chart.model.dataset.MChartHighLowDataset;
 import com.jaspersoft.studio.components.chart.model.dataset.MChartPieDataset;
 import com.jaspersoft.studio.components.chart.model.series.category.MCategorySeries;
@@ -41,6 +43,9 @@ public class ChartHyperlinkSection extends HyperlinkSection {
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {
 		APropertyNode md = super.getModelFromEditPart(item);
+		if (md instanceof MChartAxes)
+			return (APropertyNode) md
+					.getPropertyValue(JRDesignChartAxis.PROPERTY_CHART);
 		if (md instanceof MChartHighLowDataset)
 			return (APropertyNode) md
 					.getPropertyValue(JRDesignHighLowDataset.PROPERTY_ITEM_HYPERLINK);

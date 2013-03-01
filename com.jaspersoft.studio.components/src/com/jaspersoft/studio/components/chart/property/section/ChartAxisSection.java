@@ -16,15 +16,10 @@
 package com.jaspersoft.studio.components.chart.property.section;
 
 import net.sf.jasperreports.charts.design.JRDesignChartAxis;
-import net.sf.jasperreports.engine.base.JRBaseChart;
-import net.sf.jasperreports.engine.design.JRDesignChart;
 
-import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
@@ -33,7 +28,7 @@ import com.jaspersoft.studio.property.section.AbstractRealValueSection;
  * 
  * @author Chicu Veaceslav
  */
-public class SubTitleSection extends AbstractRealValueSection {
+public class ChartAxisSection extends AbstractRealValueSection {
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -43,31 +38,9 @@ public class SubTitleSection extends AbstractRealValueSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite group = getWidgetFactory().createSection(parent,
-				Messages.SubTitleSection_Subtitle_Label, true, 2);
+		parent.setLayout(new GridLayout(2, false));
 
-		getWidgetFactory().createCLabel(group,
-				Messages.SubTitleSection_Expression_Label);
-		createWidget4Property(group,
-				JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION, false);
-
-		getWidgetFactory().createCLabel(group,
-				Messages.SubTitleSection_Color_Label);
-		createWidget4Property(group, JRBaseChart.PROPERTY_SUBTITLE_COLOR, false);
-
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		createWidget4Property(group, JRDesignChart.PROPERTY_SUBTITLE_FONT,
-				false).getControl().setLayoutData(gd);
-	}
-
-	@Override
-	protected APropertyNode getModelFromEditPart(Object item) {
-		APropertyNode md = super.getModelFromEditPart(item);
-		if (md instanceof MChartAxes)
-			return (APropertyNode) md
-					.getPropertyValue(JRDesignChartAxis.PROPERTY_CHART);
-		return md;
+		createWidget4Property(parent, JRDesignChartAxis.PROPERTY_POSITION);
 	}
 
 }

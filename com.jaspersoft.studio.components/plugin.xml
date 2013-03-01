@@ -75,6 +75,9 @@
             <input
                   type="com.jaspersoft.studio.components.chart.model.MChart">
             </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes">
+            </input>
          </propertySection>
          <propertySection
                class="com.jaspersoft.studio.model.dataset.descriptor.DatasetSection"
@@ -420,6 +423,9 @@
             <input
                   type="com.jaspersoft.studio.components.chart.model.series.xyzseries.MXYZSeries">
             </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes">
+            </input>
          </propertySection>
          <propertySection
                class="com.jaspersoft.studio.components.map.property.MapSection"
@@ -530,6 +536,14 @@
                   type="com.jaspersoft.studio.components.map.model.MMap">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.chart.property.section.ChartAxisSection"
+               id="com.jaspersoft.studio.components.chart.property.section.ChartAxisSection"
+               tab="com.jaspersoft.studio.components.chartaxis">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension
@@ -625,6 +639,13 @@
                id="com.jaspersoft.studio.components.map"
                image="icons/map-16.png"
                label="Markers">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               category="element"
+               id="com.jaspersoft.studio.components.chartaxis"
+               image="icons/chart-16.png"
+               label="Chart Axis">
          </propertyTab>
       </propertyTabs>
    </extension>

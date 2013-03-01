@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.property.section;
 
+import net.sf.jasperreports.charts.design.JRDesignChartAxis;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 
@@ -23,6 +24,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
@@ -60,6 +63,15 @@ public class ChartSection extends AbstractSection {
 		IPropertyDescriptor gpd = getPropertyDesriptor(JRDesignChart.PROPERTY_EVALUATION_GROUP);
 		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
 		widgets.put(pd.getId(), new SPEvaluationTime(parent, this, pd, gpd));
+	}
+
+	@Override
+	protected APropertyNode getModelFromEditPart(Object item) {
+		APropertyNode md = super.getModelFromEditPart(item);
+		if (md instanceof MChartAxes)
+			return (APropertyNode) md
+					.getPropertyValue(JRDesignChartAxis.PROPERTY_CHART);
+		return md;
 	}
 
 }
