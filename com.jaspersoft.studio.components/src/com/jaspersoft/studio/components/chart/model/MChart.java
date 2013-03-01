@@ -159,6 +159,11 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		setValue(jrChart);
 	}
 
+	@Override
+	public JRDesignChart getValue() {
+		return (JRDesignChart) super.getValue();
+	}
+
 	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 

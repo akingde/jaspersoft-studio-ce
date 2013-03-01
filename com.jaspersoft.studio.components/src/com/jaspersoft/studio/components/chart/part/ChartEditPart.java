@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.part;
 
+import net.sf.jasperreports.engine.JRChart;
+
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -34,6 +36,8 @@ public class ChartEditPart extends FigureEditPart {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			Command cmd = null;
 			MChart mchart = (MChart) getModel();
+			if (mchart.getValue().getChartType() == JRChart.CHART_TYPE_MULTI_AXIS)
+				return;
 			INode parent = mchart.getParent();
 			if (parent instanceof MFrame)
 				cmd = new EditChartCommand((MFrame) parent, mchart);
