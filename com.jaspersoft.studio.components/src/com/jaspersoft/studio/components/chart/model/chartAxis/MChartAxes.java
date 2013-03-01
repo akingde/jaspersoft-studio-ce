@@ -21,6 +21,7 @@ import java.util.Map;
 import net.sf.jasperreports.charts.JRChartAxis;
 import net.sf.jasperreports.charts.design.JRDesignChartAxis;
 import net.sf.jasperreports.charts.type.AxisPositionEnum;
+import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignChart;
@@ -59,8 +60,11 @@ public class MChartAxes extends APropertyNode {
 	public String getDisplayText() {
 		JRChartAxis ca = (JRChartAxis) getValue();
 		if (ca != null) {
-			return PlotFactory.getChartPlot(ca.getChart().getPlot())
-					.getDisplayText();
+			JRChart c = ca.getChart();
+			String dt = PlotFactory.getChartPlot(c.getPlot()).getDisplayText();
+			if (c.getKey() != null && !c.getKey().trim().isEmpty())
+				dt += " (" + c.getKey() + ")";
+			return dt;
 		}
 		return getIconDescriptor().getTitle();
 	}
