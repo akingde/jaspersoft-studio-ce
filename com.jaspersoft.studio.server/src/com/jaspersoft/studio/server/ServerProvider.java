@@ -310,4 +310,10 @@ public class ServerProvider implements IRepositoryViewProvider {
 		}
 		return Status.CANCEL_STATUS;
 	}
+
+	@Override
+	public void addDragListener(TreeViewer treeViewer) {}
+
+	@Override
+	public void addDropListener(TreeViewer treeViewer) {}
 }

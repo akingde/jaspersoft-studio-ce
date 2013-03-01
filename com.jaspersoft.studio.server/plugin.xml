@@ -8,6 +8,9 @@
       <repositoryview
             ClassFactory="com.jaspersoft.studio.server.ServerProvider">
       </repositoryview>
+      <repositoryview
+            ClassFactory="com.jaspersoft.studio.server.ReportUnitProvider">
+      </repositoryview>
    </extension>
    <extension
          point="com.jaspersoft.studio.properties.propertyTabs">

@@ -201,9 +201,7 @@ public class ApplyCrosstabStyleAction extends ApplyStyleAction {
                       }
                   }
             	}
-            	catch(NullPointerException e){
-            		System.out.println("bubba");
-            	}
+            	catch(NullPointerException e){}
             }
 	    }
 	}

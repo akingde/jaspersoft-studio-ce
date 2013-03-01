@@ -36,6 +36,16 @@ public interface IRepositoryViewProvider {
 	public void hookKeyEvent(TreeViewer treeViewer, KeyEvent event);
 
 	public void doubleClick(TreeViewer treeViewer);
+	
+	/**
+	 * Used to add a drag listener on the treeview
+	 */
+	public void addDragListener(TreeViewer treeViewer);
+	
+	/**
+	 * Used to add a drop listener on the treeview
+	 */
+	public void addDropListener(TreeViewer treeViewer);
 
 	public void handleTreeEvent(TreeExpansionEvent event);
 

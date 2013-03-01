@@ -461,6 +461,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	protected void initializeEditor() {
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		graphicalViewer.addDropTargetListener(new JSSTemplateTransferDropTargetListener(graphicalViewer));
+		graphicalViewer.addDropTargetListener(new ReportUnitDropTargetListener(graphicalViewer));
 		getEditorSite().getActionBarContributor();
 	}
 

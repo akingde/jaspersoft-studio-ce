@@ -71,6 +71,8 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 				treeViewer.refresh(true);
 		}
 	};
+	
+	
 
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -153,6 +155,7 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 				}
 			}
 		});
+		
 
 		// Create menu and toolbars.
 		createActions();
@@ -160,12 +163,15 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		createToolbar();
 		createContextMenu();
 		hookGlobalActions();
-
+		addDaDListener();
+		
 		rprovs = getExtensionManager();
 		for (IRepositoryViewProvider rp : rprovs) {
 			rp.addPropertyChangeListener(propChangeListener);
 		}
 	}
+
+	
 
 	@Override
 	public void dispose() {
@@ -239,6 +245,16 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 
 		// Register menu for extension.
 		getSite().registerContextMenu(menuMgr, treeViewer);
+	}
+	
+	/**
+	 * Add the listners for the drag and drop
+	 */
+	private void addDaDListener(){
+		for (IRepositoryViewProvider rp : rprovs) {
+				rp.addDragListener(treeViewer);
+				rp.addDropListener(treeViewer);
+		}
 	}
 
 	private List<IAction> fillContextMenu() {

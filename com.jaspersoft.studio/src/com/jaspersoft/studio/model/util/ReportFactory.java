@@ -279,7 +279,8 @@ public class ReportFactory {
 		ANode nVariables = new MVariables(nDataset, dataSet);
 		if (dataSet.getVariablesList() != null)
 			for (JRVariable jrVar : dataSet.getVariablesList())
-				createNode(nVariables, jrVar, -1);
+				//if (!jrVar.isSystemDefined()) 
+						createNode(nVariables, jrVar, -1);
 
 		// create scriplets
 		ANode nScriptlets = new MScriptlets(nDataset, dataSet);

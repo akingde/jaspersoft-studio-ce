@@ -125,4 +125,10 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 
 	}
 
+	@Override
+	public void addDragListener(TreeViewer treeViewer) {}
+
+	@Override
+	public void addDropListener(TreeViewer treeViewer) {}
+
 }
