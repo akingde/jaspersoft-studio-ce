@@ -15,6 +15,9 @@ package org.eclipse.nebula.widgets.gallery;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.ControlAdapter;
@@ -40,6 +43,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.TypedListener;
 
@@ -152,6 +156,9 @@ public class Gallery extends Canvas {
 	AbstractGalleryItemRenderer itemRenderer;
 
 	AbstractGalleryGroupRenderer groupRenderer;
+
+	private boolean showItemsTooltip = true;
+	private ToolTip itemsTooltip;
 
 	/**
 	 * Return the number of root-level items in the receiver. Does not include
@@ -512,6 +519,44 @@ public class Gallery extends Canvas {
 		updateStructuralValues(null, false);
 		updateScrollBarsProperties();
 		redraw();
+		
+		// Attach a tooltip for the items
+		itemsTooltip = createTooltipForItems();
+		itemsTooltip.activate();
+	}
+
+	/*
+	 * Creates ToolTip instance associated to the current Gallery widget.
+	 */
+	private ToolTip createTooltipForItems() {
+		return new ToolTip(this) {
+			@Override
+			protected boolean shouldCreateToolTip(Event event) {
+				GalleryItem gi = Gallery.this.getItem(new Point(event.x, event.y));
+				if(gi == null || gi.getParentItem() == null){
+					//avoid tooltip on Group
+					return false;
+				}
+				return super.shouldCreateToolTip(event);
+			}
+
+			@Override
+			protected Composite createToolTipContentArea(Event event, Composite parent) {
+				GalleryItem gi = Gallery.this.getItem(new Point(event.x, event.y));
+				if(gi != null && !gi.getText().isEmpty()){ 
+					Label nameLabel = new Label(parent, SWT.BORDER);
+					nameLabel.setText(gi.getText());
+					// Shift a bit the tooltip position
+					Point[] cursorSizes = UIUtils.getDisplay().getCursorSizes();
+					if(cursorSizes.length>0){
+						this.setShift(new Point(cursorSizes[0].x/2, cursorSizes[0].y/2));
+					}
+					return parent;
+				} else {
+					return null;
+				}
+			}
+		};
 	}
 
 	private void _setDefaultRenderers() {
@@ -683,7 +728,34 @@ public class Gallery extends Canvas {
 		redraw();
 
 	}
-
+	
+	/**
+	 * Decides if a tooltip with the {@link GalleryItem} name should
+	 * be shown when hover the item. This will activate/deactivate
+	 * the tooltip associated to the Gallery widget.
+	 * <p>
+	 * 
+	 * By default the tooltips are shown.
+	 * 
+	 * @param showItemsTooltip
+	 */
+	public void enableItemsTooltip(boolean showItemsTooltip){
+		this.showItemsTooltip=showItemsTooltip;
+		if(this.showItemsTooltip) {
+			itemsTooltip.activate();
+		}
+		else{
+			itemsTooltip.deactivate();
+		}
+	}
+	
+	/**
+	 * @return <code>true</code> if the tooltip hover items is shown, <code>false</code> otherwise
+	 */
+	public boolean isItemsToolipEnabled(){
+		return this.showItemsTooltip;
+	}
+	
 	/**
 	 * Add internal mouse listeners to this gallery.
 	 */
