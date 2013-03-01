@@ -17,6 +17,8 @@ package com.jaspersoft.studio.components.chart.wizard.action;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRChart;
+
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.SelectionAction;
@@ -64,6 +66,9 @@ public class ChartWizardAction extends SelectionAction {
 			EditPart object = (EditPart) objects.get(i);
 			ANode node = (ANode) object.getModel();
 			if (node instanceof MChart) {
+				MChart n = (MChart) node;
+				if (n.getValue().getChartType() == JRChart.CHART_TYPE_MULTI_AXIS)
+					continue;
 				INode parent = node.getParent();
 				if (parent instanceof MFrame)
 					return new EditChartCommand((MFrame) parent, (MChart) node);
