@@ -20,6 +20,8 @@ import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.util.TransferDragSourceListener;
+import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.events.KeyEvent;
@@ -38,14 +40,14 @@ public interface IRepositoryViewProvider {
 	public void doubleClick(TreeViewer treeViewer);
 	
 	/**
-	 * Used to add a drag listener on the treeview
+	 * Returns the list of {@link TransferDragSourceListener}s that should be added to the viewer.
 	 */
-	public void addDragListener(TreeViewer treeViewer);
+	public List<TransferDragSourceListener> getTransferDragSourceListeners(TreeViewer treeViewer);
 	
 	/**
-	 * Used to add a drop listener on the treeview
+	 * Returns the list of {@link TransferDropTargetListener}s that should be added to the viewer.
 	 */
-	public void addDropListener(TreeViewer treeViewer);
+	public List<TransferDropTargetListener> getTransferDropTargetListeners(TreeViewer treeViewer);
 
 	public void handleTreeEvent(TreeExpansionEvent event);
 

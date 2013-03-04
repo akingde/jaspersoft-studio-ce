@@ -27,6 +27,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.util.TransferDragSourceListener;
+import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -49,6 +51,8 @@ import com.jaspersoft.studio.server.action.server.CreateServerAction;
 import com.jaspersoft.studio.server.action.server.DeleteServerAction;
 import com.jaspersoft.studio.server.action.server.DuplicateServerAction;
 import com.jaspersoft.studio.server.action.server.EditServerAction;
+import com.jaspersoft.studio.server.drag.RepositoryImageDragSourceListener;
+import com.jaspersoft.studio.server.drag.UnitDragSourceListener;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
@@ -312,8 +316,15 @@ public class ServerProvider implements IRepositoryViewProvider {
 	}
 
 	@Override
-	public void addDragListener(TreeViewer treeViewer) {}
+	public List<TransferDragSourceListener> getTransferDragSourceListeners(TreeViewer treeViewer) {
+		List<TransferDragSourceListener> dragListeners = new ArrayList<TransferDragSourceListener>(2);
+		dragListeners.add(new RepositoryImageDragSourceListener(treeViewer));
+		dragListeners.add(new UnitDragSourceListener(treeViewer));
+		return dragListeners; 
+	}
 
 	@Override
-	public void addDropListener(TreeViewer treeViewer) {}
+	public List<TransferDropTargetListener> getTransferDropTargetListeners(TreeViewer treeViewer) {
+		return new ArrayList<TransferDropTargetListener>(0);
+	}
 }

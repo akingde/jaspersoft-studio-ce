@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -31,6 +34,20 @@ import org.eclipse.swt.widgets.Display;
  *
  */
 public class ImageUtils {
+	
+	private static final List<String> IMG_FILE_EXTENSIONS;
+	
+	static {
+		// A list of the most common image file extension
+		IMG_FILE_EXTENSIONS=new ArrayList<String>();
+		IMG_FILE_EXTENSIONS.add("png");
+		IMG_FILE_EXTENSIONS.add("gif");
+		IMG_FILE_EXTENSIONS.add("jpg");
+		IMG_FILE_EXTENSIONS.add("jpeg");
+		IMG_FILE_EXTENSIONS.add("bmp");
+		IMG_FILE_EXTENSIONS.add("tiff");
+	}
+	
 	private ImageUtils(){
 	}
 	
@@ -59,5 +76,18 @@ public class ImageUtils {
 		gc.drawImage(originalImage, 0, 0, originalImage.getBounds().width, originalImage.getBounds().height,0, 0, width, height);
 		gc.dispose();
 		return scaled;
+	}
+	
+	/**
+	 * Checks if the specified extension is a valid one for a potential image file.
+	 * 
+	 * @param extension 
+	 * @return <code>true</code> if it is a valid extension, <code>false</code> otherwise
+	 */
+	public static boolean hasValidFileImageExtension(String extension) {
+		for(String ext : IMG_FILE_EXTENSIONS){
+			if (ext.equalsIgnoreCase(extension)) return true;
+		}
+		return false;
 	}
 }

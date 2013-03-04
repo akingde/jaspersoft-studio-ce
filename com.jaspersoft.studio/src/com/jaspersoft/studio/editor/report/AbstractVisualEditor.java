@@ -58,6 +58,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -66,6 +67,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
+import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -97,6 +99,8 @@ import com.jaspersoft.studio.editor.action.text.BoldAction;
 import com.jaspersoft.studio.editor.action.text.ItalicAction;
 import com.jaspersoft.studio.editor.action.text.StrikethroughAction;
 import com.jaspersoft.studio.editor.action.text.UnderlineAction;
+import com.jaspersoft.studio.editor.dnd.ImageResourceDropTargetListener;
+import com.jaspersoft.studio.editor.dnd.ImageURLTransfer;
 import com.jaspersoft.studio.editor.dnd.JSSTemplateTransferDropTargetListener;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerComposite;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
@@ -462,6 +466,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		graphicalViewer.addDropTargetListener(new JSSTemplateTransferDropTargetListener(graphicalViewer));
 		graphicalViewer.addDropTargetListener(new ReportUnitDropTargetListener(graphicalViewer));
+		graphicalViewer.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer,ResourceTransfer.getInstance()));
+		graphicalViewer.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer,FileTransfer.getInstance()));
+		graphicalViewer.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer,ImageURLTransfer.getInstance()));
 		getEditorSite().getActionBarContributor();
 	}
 

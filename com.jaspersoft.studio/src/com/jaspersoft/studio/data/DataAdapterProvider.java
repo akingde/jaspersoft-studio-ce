@@ -21,6 +21,8 @@ import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.util.TransferDragSourceListener;
+import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -126,9 +128,13 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 	}
 
 	@Override
-	public void addDragListener(TreeViewer treeViewer) {}
+	public List<TransferDragSourceListener> getTransferDragSourceListeners(TreeViewer treeViewer) {
+		return new ArrayList<TransferDragSourceListener>(0);
+	}
 
 	@Override
-	public void addDropListener(TreeViewer treeViewer) {}
+	public List<TransferDropTargetListener> getTransferDropTargetListeners(TreeViewer treeViewer) {
+		return new ArrayList<TransferDropTargetListener>(0);
+	}
 
 }

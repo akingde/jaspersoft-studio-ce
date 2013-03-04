@@ -38,7 +38,7 @@ public class CreateImageCommand extends CreateElementCommand implements DialogEn
 	public CreateImageCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
-
+	
 	public CreateImageCommand(MBand destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
 	}
@@ -81,5 +81,9 @@ public class CreateImageCommand extends CreateElementCommand implements DialogEn
 		int dialogResult = d.open();
 		imageExpression = d.getImageExpression();
 		return dialogResult;
+	}
+	
+	public void setImageExpression(JRDesignExpression imageExpression){
+		this.imageExpression=imageExpression;
 	}
 }

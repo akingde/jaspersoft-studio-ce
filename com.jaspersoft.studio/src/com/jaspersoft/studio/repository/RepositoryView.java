@@ -15,12 +15,16 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.gef.dnd.DelegatingDragAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.util.DelegatingDropAdapter;
+import org.eclipse.jface.util.TransferDragSourceListener;
+import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -32,6 +36,7 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.GridData;
@@ -163,7 +168,7 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		createToolbar();
 		createContextMenu();
 		hookGlobalActions();
-		addDaDListener();
+		addDNDListeners();
 		
 		rprovs = getExtensionManager();
 		for (IRepositoryViewProvider rp : rprovs) {
@@ -248,12 +253,30 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 	}
 	
 	/**
-	 * Add the listners for the drag and drop
+	 * Add the listeners for the drag and drop
 	 */
-	private void addDaDListener(){
+	private void addDNDListeners(){
+		int operations = DND.DROP_COPY | DND.DROP_MOVE;
+		List<TransferDragSourceListener> dragListeners = new ArrayList<TransferDragSourceListener>();
+		List<TransferDropTargetListener> dropListeners = new ArrayList<TransferDropTargetListener>();
 		for (IRepositoryViewProvider rp : rprovs) {
-				rp.addDragListener(treeViewer);
-				rp.addDropListener(treeViewer);
+			dragListeners.addAll(rp.getTransferDragSourceListeners(treeViewer));
+			dropListeners.addAll(rp.getTransferDropTargetListeners(treeViewer));
+		}
+		// In case its needed add the related delegating adapter for both drag and drop operations
+		if(!dragListeners.isEmpty()){
+			DelegatingDragAdapter dragAdapter = new DelegatingDragAdapter();
+			for(TransferDragSourceListener dragListener : dragListeners){
+				dragAdapter.addDragSourceListener(dragListener);
+			}
+			treeViewer.addDragSupport(operations, dragAdapter.getTransfers(), dragAdapter);
+		}
+		if(!dropListeners.isEmpty()){
+			DelegatingDropAdapter dropAdapter = new DelegatingDropAdapter();
+			for(TransferDropTargetListener dropListener : dropListeners){
+				dropAdapter.addDropTargetListener(dropListener);
+			}
+			treeViewer.addDropSupport(operations, dropAdapter.getTransfers(), dropAdapter);
 		}
 	}
 
