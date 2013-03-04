@@ -20,10 +20,10 @@ import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
+import com.jaspersoft.studio.server.protocol.IConnection;
 
 /* 
  * 
@@ -96,13 +96,13 @@ public class MServerProfile extends ANode {
 		return CastorUtil.write(getValue(), MAPPINGFILE);
 	}
 
-	private WSClient wsClient;
+	private IConnection wsClient;
 
-	public WSClient getWsClient() {
+	public IConnection getWsClient() {
 		return wsClient;
 	}
 
-	public void setWsClient(WSClient wsClient) {
+	public void setWsClient(IConnection wsClient) {
 		this.wsClient = wsClient;
 	}
 

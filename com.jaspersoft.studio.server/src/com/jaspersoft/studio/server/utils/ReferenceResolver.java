@@ -17,12 +17,12 @@ package com.jaspersoft.studio.server.utils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class ReferenceResolver {
 	public static ResourceDescriptor resolveReference(MResource res,
@@ -46,7 +46,7 @@ public class ReferenceResolver {
 		return null;
 	}
 
-	public static ResourceDescriptor resolveReference(WSClient wsc,
+	public static ResourceDescriptor resolveReference(IConnection wsc,
 			ResourceDescriptor refrd, IProgressMonitor monitor)
 			throws Exception {
 		ResourceDescriptor rd = new ResourceDescriptor();

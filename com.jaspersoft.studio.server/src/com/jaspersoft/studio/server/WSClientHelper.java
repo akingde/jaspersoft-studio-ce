@@ -28,14 +28,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.axis.AxisProperties;
-import org.apache.axis.components.net.DefaultCommonsHTTPClientProperties;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
-import com.jaspersoft.ireport.jasperserver.ws.JServer;
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
@@ -47,62 +43,43 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.ProxyConnection;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
 public class WSClientHelper {
-	private static Map<WSClient, ServerProfile> clients = new HashMap<WSClient, ServerProfile>();
+	private static Map<IConnection, ServerProfile> clients = new HashMap<IConnection, ServerProfile>();
 
-	public static ServerProfile getServerProfile(WSClient cli) {
+	public static ServerProfile getServerProfile(IConnection cli) {
 		return clients.get(cli);
 	}
 
-	public static WSClient connect(MServerProfile msp, IProgressMonitor monitor)
-			throws Exception {
+	public static IConnection connect(MServerProfile msp,
+			IProgressMonitor monitor) throws Exception {
 		if (monitor != null)
 			monitor.subTask("Connecting");
-		JServer server = msp.getWsClient() == null ? new JServer() : msp
-				.getWsClient().getServer();
-		ServerProfile sp = msp.getValue();
-		setupJServer(server, sp);
-		if (msp.getWsClient() == null)
-			msp.setWsClient(server.getWSClient());
-		WSClient wsclient = msp.getWsClient();
-		clients.put(wsclient, sp);
-		return wsclient;
+		IConnection c = new ProxyConnection();
+		boolean cres = c.connect(msp.getValue());
+		if (cres) {
+			monitor.subTask("Connected");
+			msp.setWsClient(c);
+			clients.put(c, msp.getValue());
+			return c;
+		} else
+			monitor.subTask("Not Connected");
+		return null;
 	}
 
 	public static boolean checkConnection(MServerProfile msp,
 			IProgressMonitor monitor) throws Exception {
-		ResourceDescriptor rd = new ResourceDescriptor();
-		rd.setWsType(ResourceDescriptor.TYPE_FOLDER);
-		rd.setUriString("/");
-
-		ServerProfile sp = msp.getValue();
-		JServer server = new JServer();
-		setupJServer(server, sp);
-
-		WSClient client = server.getWSClient();
-		if (client.list(rd) == null)
-			return false;
-		monitor.subTask("Connected");
-		return true;
-	}
-
-	private static void setupJServer(JServer server, ServerProfile sp) {
-		AxisProperties
-				.setProperty(
-						DefaultCommonsHTTPClientProperties.MAXIMUM_CONNECTIONS_PER_HOST_PROPERTY_KEY,
-						"4");
-		server.setName(sp.getName());
-		server.setUrl(sp.getUrl());
-		String username = sp.getUser();
-		if (sp.getOrganisation() != null
-				&& !sp.getOrganisation().trim().isEmpty())
-			username += "|" + sp.getOrganisation();
-		server.setUsername(username);
-		server.setPassword(sp.getPass());
-		server.setTimeout(sp.getTimeout());
-		server.setChunked(sp.isChunked());
+		monitor.subTask("Connecting");
+		IConnection c = new ProxyConnection();
+		boolean cres = c.connect(msp.getValue());
+		if (cres)
+			monitor.subTask("Connected");
+		else
+			monitor.subTask("Not Connected");
+		return cres;
 	}
 
 	public static void connectGetData(MServerProfile msp,
@@ -122,7 +99,7 @@ public class WSClientHelper {
 	 * @throws IOException
 	 */
 	public static List<ResourceDescriptor> listFolder(ANode parent,
-			WSClient client, String folderUri, IProgressMonitor monitor,
+			IConnection client, String folderUri, IProgressMonitor monitor,
 			int depth) throws Exception {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setWsType(ResourceDescriptor.TYPE_FOLDER);
@@ -135,8 +112,8 @@ public class WSClientHelper {
 	}
 
 	private static List<ResourceDescriptor> listFolder(ANode parent, int index,
-			WSClient client, IProgressMonitor monitor, ResourceDescriptor rd,
-			int depth) throws Exception {
+			IConnection client, IProgressMonitor monitor,
+			ResourceDescriptor rd, int depth) throws Exception {
 		monitor.subTask("Listing " + rd.getUriString());
 		depth++;
 
@@ -214,7 +191,7 @@ public class WSClientHelper {
 		return sp.getWsClient().get(rd, f);
 	}
 
-	public static ResourceDescriptor getResource(WSClient cl,
+	public static ResourceDescriptor getResource(IConnection cl,
 			ResourceDescriptor rd, File f) throws Exception {
 		return cl.get(rd, f);
 	}
@@ -258,7 +235,7 @@ public class WSClientHelper {
 			rd.setHasData(file != null);
 
 			MReportUnit mru = res.getReportUnit();
-			WSClient cli = sp.getWsClient();
+			IConnection cli = sp.getWsClient();
 			System.out.println("saving: " + rd.getUriString());
 			if (mru != null && res != mru) {
 				String ruuri = mru.getValue().getUriString();
@@ -289,7 +266,7 @@ public class WSClientHelper {
 		MServerProfile sp = (MServerProfile) res.getRoot();
 		if (!rd.getIsNew()) {
 			MReportUnit n = res.getReportUnit();
-			WSClient wsClient = sp.getWsClient();
+			IConnection wsClient = sp.getWsClient();
 			if (n != null && !(res instanceof MReportUnit))
 				wsClient.delete(rd, ((MReportUnit) n).getValue().getUriString());
 			else
@@ -368,13 +345,13 @@ public class WSClientHelper {
 		return uri.substring(uri.indexOf(":") + 1);
 	}
 
-	public static WSClient getClient(String uri) {
+	public static IConnection getClient(String uri) {
 		MServerProfile sp = ServerManager.getServerProfile(uri);
 		return sp.getWsClient();
 	}
 
 	public static MResource findSelected(List<INode> list,
-			IProgressMonitor monitor, String prunit, WSClient cli)
+			IProgressMonitor monitor, String prunit, IConnection cli)
 			throws Exception {
 		int maxl = 0;
 		int pos = -1;
@@ -401,7 +378,7 @@ public class WSClientHelper {
 		return null;
 	}
 
-	public static List<ResourceDescriptor> getDatasourceList(WSClient c,
+	public static List<ResourceDescriptor> getDatasourceList(IConnection c,
 			IDatasourceFilter f) throws Exception {
 		List<ResourceDescriptor> list = c.listDatasources();
 		if (f != null) {

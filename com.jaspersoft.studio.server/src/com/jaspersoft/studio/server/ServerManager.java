@@ -34,7 +34,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.model.ANode;
@@ -47,6 +46,7 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class ServerManager {
 	private static final String PREF_TAG = "serverprofiles"; //$NON-NLS-1$
@@ -189,11 +189,11 @@ public class ServerManager {
 		return null;
 	}
 
-	public static WSClient getServer(String url, IProgressMonitor monitor)
+	public static IConnection getServer(String url, IProgressMonitor monitor)
 			throws Exception {
 		for (MServerProfile sp : serverProfiles) {
 			if (sp.getValue().getUrl().equals(url)) {
-				WSClient wsClient = sp.getWsClient();
+				IConnection wsClient = sp.getWsClient();
 				if (wsClient == null)
 					wsClient = WSClientHelper.connect(sp, monitor);
 				return wsClient;

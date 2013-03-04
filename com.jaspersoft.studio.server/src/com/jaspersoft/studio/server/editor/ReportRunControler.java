@@ -36,7 +36,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
@@ -47,6 +46,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
 import com.jaspersoft.studio.server.editor.input.VInputControls;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -113,10 +113,12 @@ public class ReportRunControler {
 	public LinkedHashMap<String, APreview> createControls(Composite composite,
 			JasperReportsConfiguration jContext) {
 		viewmap = new LinkedHashMap<String, APreview>();
-		viewmap.put(FORM_PARAMETERS, new VInputControls(composite, jContext)); 
-		viewmap.put(ReportControler.FORM_EXPORTER, new VExporter(composite, jContext));
+		viewmap.put(FORM_PARAMETERS, new VInputControls(composite, jContext));
+		viewmap.put(ReportControler.FORM_EXPORTER, new VExporter(composite,
+				jContext));
 		return viewmap;
 	}
+
 	public void viewerChanged(APreview view) {
 		VExporter vs = (VExporter) viewmap.get(ReportControler.FORM_EXPORTER);
 		vs.setPreferencesPage(view);
@@ -129,7 +131,7 @@ public class ReportRunControler {
 
 	private Console c;
 
-	private WSClient cli;
+	private IConnection cli;
 
 	private Statistics stats;
 

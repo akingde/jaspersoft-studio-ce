@@ -35,7 +35,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -46,6 +45,7 @@ import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class PasteResourceAction extends Action {
 	private TreeViewer treeViewer;
@@ -132,7 +132,7 @@ public class PasteResourceAction extends Action {
 			throws Exception {
 		MServerProfile sp = (MServerProfile) parent.getRoot();
 		String dURI = ((MResource) parent).getValue().getUriString();
-		WSClient ws = sp.getWsClient();
+		IConnection ws = sp.getWsClient();
 
 		monitor.beginTask("Paste elements to: " + dURI, list.size());
 		for (Object obj : list) {

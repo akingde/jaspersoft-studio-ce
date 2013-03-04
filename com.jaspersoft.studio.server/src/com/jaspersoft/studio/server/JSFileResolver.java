@@ -28,9 +28,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.utils.ReferenceResolver;
 import com.jaspersoft.studio.utils.CacheMap;
 
@@ -41,7 +41,7 @@ import com.jaspersoft.studio.utils.CacheMap;
  * 
  */
 public class JSFileResolver extends SimpleFileResolver {
-	private WSClient c;
+	private IConnection c;
 	private String serverUri;
 	private JasperDesign jDesign;
 	private String runitUri;

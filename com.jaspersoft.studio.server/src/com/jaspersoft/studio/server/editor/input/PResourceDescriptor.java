@@ -22,9 +22,9 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.input.IParameter;
+import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class PResourceDescriptor implements IParameter {
 	private ResourceDescriptor p;
@@ -72,7 +72,7 @@ public class PResourceDescriptor implements IParameter {
 		return p;
 	}
 
-	public WSClient getWsClient() {
+	public IConnection getWsClient() {
 		return icm.getWsClient();
 	}
 

@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -44,6 +43,7 @@ import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
 import com.jaspersoft.studio.server.editor.input.query.QueryInput;
+import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -51,18 +51,18 @@ public class InputControlsManager {
 	private HashMap<String, List<String>> cascadingDepMap = new HashMap<String, List<String>>();
 	private List<ResourceDescriptor> inputcontrols;
 	private Map<String, Object> defaults;
-	private WSClient wsclient;
+	private IConnection wsclient;
 	private String reportUnit;
 
 	public InputControlsManager(String reportUnit) {
 		this.reportUnit = reportUnit;
 	}
 
-	public WSClient getWsClient() {
+	public IConnection getWsClient() {
 		return wsclient;
 	}
 
-	public void setWsclient(WSClient wsclient) {
+	public void setWsclient(IConnection wsclient) {
 		this.wsclient = wsclient;
 	}
 
@@ -95,7 +95,7 @@ public class InputControlsManager {
 	}
 
 	public List<ResourceDescriptor> getInputControls(
-			List<ResourceDescriptor> list, WSClient cl) throws Exception {
+			List<ResourceDescriptor> list, IConnection cl) throws Exception {
 		this.wsclient = cl;
 		inputcontrols = new java.util.ArrayList<ResourceDescriptor>();
 		for (ResourceDescriptor sub_rd : list) {

@@ -56,6 +56,8 @@ public class ServerProfile implements Resource, Cloneable {
 	}
 
 	public String getUrl() {
+		if (!url.endsWith("/"))
+			url += "/";
 		return url;
 	}
 
