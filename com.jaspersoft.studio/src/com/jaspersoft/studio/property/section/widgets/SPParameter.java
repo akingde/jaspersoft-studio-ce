@@ -22,6 +22,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
@@ -32,6 +33,8 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPParameter extends SPText {
 
+	private Button btn;
+	
 	public SPParameter(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -40,7 +43,7 @@ public class SPParameter extends SPText {
 		super.createComponent(parent);
 		ftext.setEnabled(false);
 
-		Button btn = section.getWidgetFactory().createButton(parent, "...", SWT.PUSH);
+		btn = section.getWidgetFactory().createButton(parent, "...", SWT.PUSH);
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -63,5 +66,9 @@ public class SPParameter extends SPText {
 		parameterDTO = (ParameterDTO) b;
 		ParameterPropertyDescriptor pd = (ParameterPropertyDescriptor) pDescriptor;
 		super.setData(pnode, pd.getLabelProvider().getText(b));
+	}
+	
+	public Control getButton(){
+		return btn;
 	}
 }

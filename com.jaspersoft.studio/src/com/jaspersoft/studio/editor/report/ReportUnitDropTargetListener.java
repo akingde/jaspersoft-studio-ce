@@ -28,8 +28,9 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
 import org.eclipse.swt.dnd.DropTargetEvent;
 
+import com.jaspersoft.studio.editor.gef.parts.ImageFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.text.TextFieldFigureEditPart;
-import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 
 /**
@@ -90,8 +91,8 @@ public class ReportUnitDropTargetListener extends AbstractTransferDropTargetList
 	 */
 	@Override
 	protected void handleDrop() {
-		if (getTargetEditPart() instanceof TextFieldFigureEditPart){
-		  MTextField textField = (MTextField)getTargetEditPart().getModel();
+		if (getTargetEditPart() instanceof TextFieldFigureEditPart || getTargetEditPart() instanceof ImageFigureEditPart){
+		  APropertyNode textField = (APropertyNode)getTargetEditPart().getModel();
 		  if (textField != null){
 		  	ParameterDTO parameters = (ParameterDTO)textField.getPropertyValue(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS);
 		    if (parameters.getValue()== null){
@@ -108,6 +109,7 @@ public class ReportUnitDropTargetListener extends AbstractTransferDropTargetList
 		    }
 		    parameters.setValue(newParams.toArray(new JRHyperlinkParameter[newParams.size()]));
 		    textField.setPropertyValue(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS, parameters);
+		    textField.setPropertyValue(JRDesignHyperlink.PROPERTY_LINK_TYPE, "ReportExecution");
 		  }
 		}
 	}
@@ -121,7 +123,7 @@ public class ReportUnitDropTargetListener extends AbstractTransferDropTargetList
 	 */
 	protected EditPart calculateTargetEditPart() {
 		EditPart ep = getViewer().findObjectAt(getDropLocation());
-		if (ep instanceof TextFieldFigureEditPart) {
+		if (ep instanceof TextFieldFigureEditPart || ep instanceof ImageFigureEditPart) {
 			return ep;
 		}
 		return null;
