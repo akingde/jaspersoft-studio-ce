@@ -34,12 +34,13 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -197,40 +198,69 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 		table.setLayoutData(gd);
 		table.setHeaderVisible(true);
 
-		TableColumn[] col = new TableColumn[1];
-		col[0] = new TableColumn(table, SWT.NONE);
-		col[0].setText(Messages.CSVDataAdapterComposite_6);
-		col[0].pack();
-
 		TableLayout tlayout = new TableLayout();
 		tlayout.addColumnData(new ColumnWeightData(100, false));
 		table.setLayout(tlayout);
 
 		tableViewer = new TableViewer(table);
+
+		TableViewerColumn vcol = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn col = vcol.getColumn();
+		col.setText(Messages.CSVDataAdapterComposite_6);
+
 		tableViewer.setContentProvider(new ListContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
-		tableViewer.setCellModifier(new ICellModifier() {
-			public boolean canModify(Object element, String property) {
+		vcol.setEditingSupport(new EditingSupport(tableViewer) {
+
+			@Override
+			protected CellEditor getCellEditor(Object element) {
+				return new TextCellEditor(tableViewer.getTable());
+			}
+
+			@Override
+			protected boolean canEdit(Object element) {
 				return true;
 			}
 
-			public Object getValue(Object element, String property) {
-				String prop = (String) element;
-				if ("NAME".equals(property)) //$NON-NLS-1$
-					return prop;
-				return ""; //$NON-NLS-1$
+			@Override
+			protected Object getValue(Object element) {
+				return element;
 			}
 
-			public void modify(Object element, String property, Object value) {
-				// TableItem tableItem = (TableItem) element;
-				tableViewer.update(element, new String[] { property });
-				tableViewer.refresh();
+			@Override
+			protected void setValue(Object element, Object value) {
+				int s = table.getSelectionIndex();
+				List<String> lstr = (List<String>) tableViewer.getInput();
+				lstr.set(s, (String) value);
+				tableViewer.refresh(true);
 			}
+
 		});
 
-		tableViewer
-				.setCellEditors(new CellEditor[] { new TextCellEditor(table) });
-		tableViewer.setColumnProperties(new String[] { "NAME" }); //$NON-NLS-1$ //$NON-NLS-2$
+		// tableViewer.setCellModifier(new ICellModifier() {
+		// public boolean canModify(Object element, String property) {
+		// return true;
+		// }
+		//
+		// public Object getValue(Object element, String property) {
+		// String prop = (String) element;
+		//				if ("NAME".equals(property)) //$NON-NLS-1$
+		// return prop;
+		//				return ""; //$NON-NLS-1$
+		// }
+		//
+		// public void modify(Object element, String property, Object value) {
+		// TableItem tableItem = (TableItem) element;
+		// tableItem.setText((String) value);
+		//
+		// tableViewer.update(element, new String[] { property });
+		// tableViewer.refresh();
+		// }
+		// });
+		//
+		// tableViewer
+		// .setCellEditors(new CellEditor[] { new TextCellEditor(table) });
+		//		tableViewer.setColumnProperties(new String[] { "NAME" }); //$NON-NLS-1$ //$NON-NLS-2$
 
 		tableViewer.setInput(rows);
 
@@ -1196,9 +1226,9 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 
 		return true;
 	}
-	
+
 	@Override
 	public String getHelpContextId() {
-		return PREFIX.concat("adapter_csv"); 
+		return PREFIX.concat("adapter_csv");
 	}
 }
