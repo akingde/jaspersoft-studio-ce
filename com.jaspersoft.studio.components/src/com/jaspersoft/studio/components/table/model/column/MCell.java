@@ -60,6 +60,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 public class MCell extends MColumn implements IGraphicElement,
 		IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable,
@@ -153,7 +154,7 @@ public class MCell extends MColumn implements IGraphicElement,
 		styleD.setDescription(Messages.MCell_parent_style_description);
 		desc.add(styleD);
 
-		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(
+		PixelPropertyDescriptor hD = new PixelPropertyDescriptor(
 				DesignCell.PROPERTY_HEIGHT, Messages.MCell_height);
 		desc.add(hD);
 

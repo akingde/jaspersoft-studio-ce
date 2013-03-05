@@ -61,8 +61,8 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 public class MList extends MGraphicElement implements IPastable,
 		IPastableGraphic, IContainerLayout, IContainer, IContainerEditPart,
@@ -171,7 +171,7 @@ public class MList extends MGraphicElement implements IPastable,
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/components.schema.reference.html#list");
 
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(
 				PREFIX + DesignListContents.PROPERTY_HEIGHT,
 				Messages.MList_cell_height);
 		heightD.setCategory(Messages.MList_list_properties_category);
@@ -180,7 +180,7 @@ public class MList extends MGraphicElement implements IPastable,
 		heightD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/components.schema.reference.html#listContents_height"));
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(PREFIX
+		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(PREFIX
 				+ DesignListContents.PROPERTY_WIDTH, Messages.MList_cell_width);
 		widthD.setCategory(Messages.MList_list_properties_category);
 		widthD.setDescription(Messages.MList_cell_width_description);

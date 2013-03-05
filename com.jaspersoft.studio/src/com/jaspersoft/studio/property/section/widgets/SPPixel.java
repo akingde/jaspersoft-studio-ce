@@ -119,7 +119,7 @@ public class SPPixel extends ASPropertyWidget {
 	protected void handleFocusLost() {
 		super.handleFocusLost();
 		// Focus lost, do the change only if the text is changed
-		if (!lastSetValue.equals(insertField.getText()))
+		if (lastSetValue == null || !lastSetValue.equals(insertField.getText()))
 			updateValue();
 	}
 

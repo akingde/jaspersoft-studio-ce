@@ -37,6 +37,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 /*
  * The Class MBarcode.
@@ -175,7 +176,7 @@ public class MBarcode4j extends MBarcode {
 		quiteZoneD.setDescription(Messages.MBarcode4j_quiet_zone_description);
 		desc.add(quiteZoneD);
 
-		DoublePropertyDescriptor moduleWidthD = new DoublePropertyDescriptor(
+		PixelPropertyDescriptor moduleWidthD = new PixelPropertyDescriptor(
 				BarcodeComponent.PROPERTY_MODULE_WIDTH,
 				Messages.MBarcode4j_module_width);
 		moduleWidthD
@@ -209,7 +210,7 @@ public class MBarcode4j extends MBarcode {
 			return jrList.getEvaluationGroup();
 
 		if (id.equals(BarcodeComponent.PROPERTY_MODULE_WIDTH))
-			return jrList.getModuleWidth();
+			return jrList.getModuleWidth() != null ? jrList.getModuleWidth().intValue() : null;
 		if (id.equals(BarcodeComponent.PROPERTY_QUIET_ZONE))
 			return jrList.getQuietZone();
 		if (id.equals(BarcodeComponent.PROPERTY_VERTICAL_QUIET_ZONE))
@@ -238,7 +239,8 @@ public class MBarcode4j extends MBarcode {
 			jrList.setEvaluationGroup((String) value);
 
 		else if (id.equals(BarcodeComponent.PROPERTY_MODULE_WIDTH))
-			jrList.setModuleWidth((Double) value);
+			if (value instanceof Integer) jrList.setModuleWidth(((Integer)value).doubleValue());
+			else jrList.setModuleWidth((Double) value);
 		else if (id.equals(BarcodeComponent.PROPERTY_QUIET_ZONE))
 			jrList.setQuietZone((Double) value);
 		else if (id.equals(BarcodeComponent.PROPERTY_VERTICAL_QUIET_ZONE))

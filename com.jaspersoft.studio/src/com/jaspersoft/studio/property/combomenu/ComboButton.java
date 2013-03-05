@@ -300,13 +300,11 @@ public class ComboButton extends Viewer {
 					handleFocusIn();
 					break;
 				case SWT.HELP:
-					System.out.println("bubba");
 					break;
 				case SWT.FocusOut:
 					handleFocusOut();
 					break;
 				default:
-					System.out.println("cacca "+event.type);
 				}
 			}
 		};
