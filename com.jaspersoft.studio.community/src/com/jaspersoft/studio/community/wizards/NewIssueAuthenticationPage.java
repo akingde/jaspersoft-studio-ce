@@ -121,30 +121,7 @@ public class NewIssueAuthenticationPage extends JSSHelpWizardPage {
 		btnReuseStoredCredentials.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(btnReuseStoredCredentials.getSelection()){
-					btnStoreCommunityUserCredentials.setEnabled(false);
-					btnStoreCommunityUserCredentials.setSelection(false);
-					communityUserInformation = JSSCommunityActivator.getDefault().getCommunityUserInformation();
-					if(communityUserInformation==null){
-						MessageDialog.openWarning(UIUtils.getShell(), Messages.NewIssueAuthenticationPage_WarningDialogTitle, Messages.NewIssueAuthenticationPage_WarningDialogMsg);
-						btnReuseStoredCredentials.setSelection(false);
-						btnStoreCommunityUserCredentials.setEnabled(true);
-					}
-					else{
-						username.setEnabled(false);
-						username.setText(communityUserInformation.getUsername());
-						password.setEnabled(false);
-						password.setText(communityUserInformation.getPassword());
-					}
-				}
-				else {
-					btnStoreCommunityUserCredentials.setSelection(false);
-					btnStoreCommunityUserCredentials.setEnabled(true);
-					username.setEnabled(true);
-					password.setEnabled(true);
-					communityUserInformation=null;
-				}
-				checkForPageComplete();
+				reuseCredentialsSelected();
 			}
 		});
 		
@@ -160,13 +137,50 @@ public class NewIssueAuthenticationPage extends JSSHelpWizardPage {
 				checkForPageComplete();
 			}
 		});
+
+		setPageComplete(false);
 		
 		// Check for existing credentials
 		if(JSSCommunityActivator.getDefault().getCommunityUserInformation() == null){
 			btnReuseStoredCredentials.setEnabled(false);
 		}
+		else{
+			// preselect the re-use of credentials
+			btnReuseStoredCredentials.setSelection(true);
+			// need to force the method invocation
+			reuseCredentialsSelected();
+		}
 		
-		setPageComplete(false);
+	}
+	
+	/*
+	 * Invoked when the "Re-use stored credentials" checkbox is selected.
+	 */
+	private void reuseCredentialsSelected() {
+		if(btnReuseStoredCredentials.getSelection()){
+			btnStoreCommunityUserCredentials.setEnabled(false);
+			btnStoreCommunityUserCredentials.setSelection(false);
+			communityUserInformation = JSSCommunityActivator.getDefault().getCommunityUserInformation();
+			if(communityUserInformation==null){
+				MessageDialog.openWarning(UIUtils.getShell(), Messages.NewIssueAuthenticationPage_WarningDialogTitle, Messages.NewIssueAuthenticationPage_WarningDialogMsg);
+				btnReuseStoredCredentials.setSelection(false);
+				btnStoreCommunityUserCredentials.setEnabled(true);
+			}
+			else{
+				username.setEnabled(false);
+				username.setText(communityUserInformation.getUsername());
+				password.setEnabled(false);
+				password.setText(communityUserInformation.getPassword());
+			}
+		}
+		else {
+			btnStoreCommunityUserCredentials.setSelection(false);
+			btnStoreCommunityUserCredentials.setEnabled(true);
+			username.setEnabled(true);
+			password.setEnabled(true);
+			communityUserInformation=null;
+		}
+		checkForPageComplete();
 	}
 	
 	@Override
