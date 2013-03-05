@@ -47,7 +47,12 @@ public class SoapConnection implements IConnection {
 						DefaultCommonsHTTPClientProperties.MAXIMUM_CONNECTIONS_PER_HOST_PROPERTY_KEY,
 						"4");
 		server.setName(sp.getName());
-		server.setUrl(sp.getUrl() + "services/repository");
+		String rurl = sp.getUrl();
+		if (rurl.endsWith("services/repository/"))
+			rurl = rurl.substring(0, rurl.length() - 1);
+		if (!rurl.endsWith("services/repository"))
+			rurl += "services/repository";
+		server.setUrl(rurl);
 		String username = sp.getUser();
 		if (sp.getOrganisation() != null
 				&& !sp.getOrganisation().trim().isEmpty())
