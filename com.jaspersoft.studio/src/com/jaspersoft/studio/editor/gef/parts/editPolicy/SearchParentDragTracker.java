@@ -23,6 +23,7 @@ import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.tools.DragEditPartsTracker;
 
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 
@@ -141,7 +142,8 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 
 		/**
 		 * Returns <code>true</code> if the given point is outside the viewport or near its edge. Scrolls the viewport by a
-		 * calculated (time based) amount in the current direction.
+		 * calculated (time based) amount in the current direction. To avoid infinite autoscroll a there is a bound, calculated 
+		 * on the dragged element size
 		 * 
 		 * @param where
 		 *          the current location of the mouse in the viewer
@@ -156,17 +158,18 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 			port.translateToAbsolute(rect);
 			Point loc = port.getViewLocation();
 			Point targetloc = port.getViewLocation();
-
+			Rectangle dragSize = ((FigureEditPart)getSourceEditPart()).getFigure().getBounds();
+			//The autoscroll bounds are calculated on the size of the element dragged
+			int elementSizeOffset = (dragSize.x + dragSize.y)*2;
 			if (needToWait())
 				return true;
-
-			if (where.x >= rect.width - threshold)
+			if (where.x >= rect.width - threshold && loc.x< elementSizeOffset)
 				targetloc.x += threshold * 2;
-			if (where.y >= rect.height - threshold)
+			if (where.y >= rect.height - threshold && loc.y<elementSizeOffset)
 				targetloc.y += threshold * 2;
-			if (where.x < threshold)
+			if (where.x < threshold && loc.x> -elementSizeOffset)
 				targetloc.x -= threshold * 2;
-			if (where.y < threshold)
+			if (where.y < threshold && loc.y + elementSizeOffset >0)
 				targetloc.y -= threshold * 2;
 			if (!loc.equals(targetloc)) {
 				port.setViewLocation(targetloc);
