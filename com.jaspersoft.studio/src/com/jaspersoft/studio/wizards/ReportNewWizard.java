@@ -243,6 +243,12 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 			// Store the report bundle on file system
 			IContainer container = (IContainer) resource;
 			reportFile = container.getFile(new Path(fileName));
+			String repname = reportFile.getName();
+			int lindx = repname.lastIndexOf(".");
+			if (lindx > 0 && lindx < repname.length() - 1)
+				repname = repname.substring(0, lindx);
+
+			reportBundle.getJasperDesign().setName(repname);
 
 			// Save the all the files...
 			String contents = JRXmlWriterHelper.writeReport(getConfig(), reportBundle.getJasperDesign(), reportFile, false);

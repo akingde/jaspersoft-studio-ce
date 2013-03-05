@@ -284,8 +284,7 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 
 		bf = new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_WRAP_TEXT, Messages.ExcelExporterPreferencePage_58, sc);
 		addField(bf);
-		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
+		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED,
 				Messages.ExcelExporterPreferencePage_59, sc);
