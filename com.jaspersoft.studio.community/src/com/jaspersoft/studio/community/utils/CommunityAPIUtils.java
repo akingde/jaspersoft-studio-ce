@@ -25,6 +25,7 @@ import org.eclipse.wb.internal.core.utils.IOUtils2;
 import org.eclipse.wb.internal.core.utils.platform.PlatformInfo;
 import org.eclipse.wb.internal.core.utils.platform.PluginUtilities;
 
+import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.zip.ZipEntry;
@@ -242,5 +243,13 @@ public class CommunityAPIUtils {
 			}
 		}
 		return ""; //$NON-NLS-1$
+	}
+	
+	/**
+	 * Sanitize a string to be used in JSON data.
+	 */
+	public static String jsonStringSanitize(String inputString) {
+		char[] stringChars = JsonStringEncoder.getInstance().quoteAsString(inputString);
+		return new String(stringChars);
 	}
 }

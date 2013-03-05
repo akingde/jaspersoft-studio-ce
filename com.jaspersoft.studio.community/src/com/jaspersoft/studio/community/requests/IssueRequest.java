@@ -17,6 +17,7 @@ package com.jaspersoft.studio.community.requests;
 
 import com.jaspersoft.studio.community.issues.IssueBody;
 import com.jaspersoft.studio.community.issues.IssueField;
+import com.jaspersoft.studio.community.utils.CommunityAPIUtils;
 
 /**
  * Request data for new issue submission to the community tracker.
@@ -136,7 +137,7 @@ public class IssueRequest {
 		StringBuffer jsonBuf = new StringBuffer();
 		jsonBuf.append("{"); //$NON-NLS-1$
 		jsonBuf.append("\"node\":{"); //$NON-NLS-1$
-		jsonBuf.append("\"title\": \"").append(nodeTitle).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
+		jsonBuf.append("\"title\": \"").append(CommunityAPIUtils.jsonStringSanitize(nodeTitle)).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
 		jsonBuf.append("\"status\": \"").append(nodeStatus).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
 		jsonBuf.append("\"comment\": \"").append(nodeComment).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
 		jsonBuf.append("\"promote\": \"").append(nodePromote).append("\","); //$NON-NLS-1$ //$NON-NLS-2$
