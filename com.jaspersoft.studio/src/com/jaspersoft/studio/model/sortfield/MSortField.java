@@ -248,8 +248,8 @@ public class MSortField extends APropertyNode implements ICopyable {
 				jrField.setName((String) value);
 				JRDesignDataset d = ModelUtils.getDataset(this);
 				if (d != null) {
-					// d.getSortFieldsMap().remove(jrField);
-					// d.getSortFieldsMap().put(jrField.getName(), jrField);
+					d.getSortFieldsMap().remove(jrField);
+					d.getSortFieldsMap().put(jrField.getName(), jrField);
 				}
 			}
 		} else if (id.equals(JRDesignSortField.PROPERTY_ORDER))

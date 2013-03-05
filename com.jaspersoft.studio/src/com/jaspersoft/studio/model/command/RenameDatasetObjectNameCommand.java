@@ -32,6 +32,7 @@ public class RenameDatasetObjectNameCommand extends Command {
 	private String newvalue;
 	private String oldvalue;
 	private String type;
+	private String type1;
 
 	private JasperDesign jd;
 	private JasperReportsContext jContext;
@@ -44,6 +45,7 @@ public class RenameDatasetObjectNameCommand extends Command {
 		jContext = mfield.getJasperConfiguration();
 		dataset = ModelUtils.getDataset(mfield);
 		type = "\\$F\\{";
+		type1 = "$F{";
 		this.newvalue = mfield.getValue().getName();
 		this.oldvalue = oldvalue;
 	}
@@ -54,6 +56,7 @@ public class RenameDatasetObjectNameCommand extends Command {
 		jContext = mvar.getJasperConfiguration();
 		dataset = ModelUtils.getDataset(mvar);
 		type = "\\$V\\{";
+		type1 = "$V{";
 		this.newvalue = mvar.getValue().getName();
 		this.oldvalue = oldvalue;
 	}
@@ -64,6 +67,7 @@ public class RenameDatasetObjectNameCommand extends Command {
 		jContext = mparam.getJasperConfiguration();
 		dataset = ModelUtils.getDataset(mparam);
 		type = "\\$P\\{";
+		type1 = "$P{";
 		this.newvalue = mparam.getValue().getName();
 		this.oldvalue = oldvalue;
 	}
@@ -77,7 +81,7 @@ public class RenameDatasetObjectNameCommand extends Command {
 		// update expressions
 		for (JRExpression expr : datasetExpressions) {
 			String s = expr.getText();
-			if (s != null && s.length() > 4 && s.contains("$F{" + oldvalue + "}")) {
+			if (s != null && s.length() > 4 && s.contains(type1 + oldvalue + "}")) {
 				s = s.replaceAll(type + oldvalue + "}", type + newvalue + "}");
 
 				JRDesignExpression dexpr = (JRDesignExpression) expr;
