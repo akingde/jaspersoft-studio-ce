@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.sortfield;
 
@@ -47,6 +42,7 @@ import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The Class MField.
@@ -179,19 +175,7 @@ public class MSortField extends APropertyNode implements ICopyable {
 	protected JRDesignDataset getDataSet() {
 		if (dataset != null)
 			return dataset;
-		ANode n = (ANode) getParent();
-		while (true) {
-			if (n == null)
-				break;
-			else if (n instanceof MDataset) {
-				dataset = (JRDesignDataset) ((MDataset) n).getValue();
-				break;
-			}
-			n = (ANode) n.getParent();
-		}
-		if (dataset == null)
-			dataset = getJasperDesign().getMainDesignDataset();
-		return dataset;
+		return ModelUtils.getDataset(this);
 	}
 
 	/**
@@ -209,7 +193,7 @@ public class MSortField extends APropertyNode implements ICopyable {
 		typeD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_TYPE, "Type", SortFieldTypeEnum.class,
 				NullEnum.NOTNULL) {
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				Image[] images = new Image[] { 
+				Image[] images = new Image[] {
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/fields-sort-16.png"),
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/variables-sort-16.png") };
 				return new SPToolBarEnum(parent, section, this, images, false);
@@ -221,7 +205,7 @@ public class MSortField extends APropertyNode implements ICopyable {
 		orderD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER, Messages.common_order,
 				SortOrderEnum.class, NullEnum.NOTNULL) {
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				Image[] images = new Image[] { 
+				Image[] images = new Image[] {
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/sort-number-column.png"),
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/sort-number-descending.png") };
 				return new SPToolBarEnum(parent, section, this, images, false);
@@ -262,6 +246,11 @@ public class MSortField extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignSortField.PROPERTY_NAME)) {
 			if (!value.equals("")) { //$NON-NLS-1$
 				jrField.setName((String) value);
+				JRDesignDataset d = ModelUtils.getDataset(this);
+				if (d != null) {
+					// d.getSortFieldsMap().remove(jrField);
+					// d.getSortFieldsMap().put(jrField.getName(), jrField);
+				}
 			}
 		} else if (id.equals(JRDesignSortField.PROPERTY_ORDER))
 			jrField.setOrder((SortOrderEnum) orderD.getEnumValue(value));

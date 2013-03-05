@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -180,9 +181,15 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignVariable jrVariable = (JRDesignVariable) getValue();
 		if (id.equals(JRDesignVariable.PROPERTY_NAME))
-			jrVariable.setName((String) value);
-		else if (id.equals(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME))
-			jrVariable.setValueClassName((String) value);
+			if (!value.equals("")) {
+				jrVariable.setName((String) value);
+				JRDesignDataset d = ModelUtils.getDataset(this);
+				if (d != null) {
+					d.getVariablesMap().remove(jrVariable);
+					d.getVariablesMap().put(jrVariable.getName(), jrVariable);
+				}
+			} else if (id.equals(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME))
+				jrVariable.setValueClassName((String) value);
 	}
 
 	/**

@@ -83,7 +83,9 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -94,6 +96,18 @@ public class ModelUtils {
 
 	public static final String MAIN_DATASET = "[Main Dataset]";
 
+	public static JRDesignDataset getDataset(ANode node){
+		ANode n = node.getParent();
+		while (n != null) {
+			if (n instanceof MDataset)
+				return ((MDataset) n).getValue();
+			if (n instanceof MReport)
+				return (JRDesignDataset) ((MReport) n).getValue().getMainDataset();
+			n = n.getParent();
+		}
+		return null;
+	}
+	
 	public static ANode getFirstChild(ANode parent) {
 		List<INode> children = parent.getChildren();
 		if (children != null && !children.isEmpty())

@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -26,8 +25,6 @@ import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
-import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -230,15 +227,4 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		return false;
 	}
 
-	public JRDataset getJRDataset() {
-		ANode n = getParent();
-		while (n != null) {
-			if (n instanceof MDataset)
-				return ((MDataset) n).getValue();
-			if (n instanceof MReport)
-				return ((MReport) n).getValue().getMainDataset();
-			n = n.getParent();
-		}
-		return null;
-	}
 }

@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -29,8 +28,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
-import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
@@ -197,9 +194,16 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignField jrField = (JRDesignField) getValue();
-		if (id.equals(JRDesignParameter.PROPERTY_NAME))
-			jrField.setName((String) value);
-		else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME))
+		if (id.equals(JRDesignParameter.PROPERTY_NAME)) {
+			if (!value.equals("")) {
+				jrField.setName((String) value);
+				JRDesignDataset d = ModelUtils.getDataset(this);
+				if (d != null) {
+					d.getFieldsMap().remove(jrField);
+					d.getFieldsMap().put(jrField.getName(), jrField);
+				}
+			}
+		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME))
 			jrField.setValueClassName((String) value);
 		else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION))
 			jrField.setDescription((String) value);
@@ -235,15 +239,4 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		return false;
 	}
 
-	public JRDataset getJRDataset() {
-		ANode n = getParent();
-		while (n != null) {
-			if (n instanceof MDataset)
-				return ((MDataset) n).getValue();
-			if (n instanceof MReport)
-				return ((MReport) n).getValue().getMainDataset();
-			n = n.getParent();
-		}
-		return null;
-	}
 }

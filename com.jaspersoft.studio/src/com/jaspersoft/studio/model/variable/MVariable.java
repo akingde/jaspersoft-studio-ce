@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
@@ -30,8 +29,6 @@ import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
-import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -303,19 +300,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	protected JRDesignDataset getDataSet() {
 		if (dataset != null)
 			return dataset;
-		ANode n = (ANode) getParent();
-		while (true) {
-			if (n == null)
-				break;
-			else if (n instanceof MDataset) {
-				dataset = (JRDesignDataset) ((MDataset) n).getValue();
-				break;
-			}
-			n = (ANode) n.getParent();
-		}
-		if (dataset == null)
-			dataset = getJasperDesign().getMainDesignDataset();
-		return dataset;
+		return ModelUtils.getDataset(this);
 	}
 
 	/**
@@ -346,15 +331,4 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		return super.getAdapter(adapter);
 	}
 
-	public JRDataset getJRDataset() {
-		ANode n = getParent();
-		while (n != null) {
-			if (n instanceof MDataset)
-				return ((MDataset) n).getValue();
-			if (n instanceof MReport)
-				return ((MReport) n).getValue().getMainDataset();
-			n = n.getParent();
-		}
-		return null;
-	}
 }

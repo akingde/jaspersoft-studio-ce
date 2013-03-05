@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.command;
 
@@ -31,6 +26,7 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.variable.MVariable;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class RenameDatasetObjectNameCommand extends Command {
 	private String newvalue;
@@ -46,7 +42,7 @@ public class RenameDatasetObjectNameCommand extends Command {
 		super();
 		jd = mfield.getJasperDesign();
 		jContext = mfield.getJasperConfiguration();
-		dataset = mfield.getJRDataset();
+		dataset = ModelUtils.getDataset(mfield);
 		type = "\\$F\\{";
 		this.newvalue = mfield.getValue().getName();
 		this.oldvalue = oldvalue;
@@ -56,7 +52,7 @@ public class RenameDatasetObjectNameCommand extends Command {
 		super();
 		jd = mvar.getJasperDesign();
 		jContext = mvar.getJasperConfiguration();
-		dataset = mvar.getJRDataset();
+		dataset = ModelUtils.getDataset(mvar);
 		type = "\\$V\\{";
 		this.newvalue = mvar.getValue().getName();
 		this.oldvalue = oldvalue;
@@ -66,7 +62,7 @@ public class RenameDatasetObjectNameCommand extends Command {
 		super();
 		jd = mparam.getJasperDesign();
 		jContext = mparam.getJasperConfiguration();
-		dataset = mparam.getJRDataset();
+		dataset = ModelUtils.getDataset(mparam);
 		type = "\\$P\\{";
 		this.newvalue = mparam.getValue().getName();
 		this.oldvalue = oldvalue;
