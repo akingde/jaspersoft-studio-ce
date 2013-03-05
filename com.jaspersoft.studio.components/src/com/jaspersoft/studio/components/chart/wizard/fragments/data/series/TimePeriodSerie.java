@@ -37,7 +37,7 @@ public class TimePeriodSerie implements ISeriesFactory<JRTimePeriodSeries> {
 		JRDesignTimePeriodSeries f = new JRDesignTimePeriodSeries();
 		f.setSeriesExpression(expr);
 		if (prev == null) {
-			f.setValueExpression(new JRDesignExpression("new Double(0)"));
+			f.setValueExpression(new JRDesignExpression("0"));
 			f.setStartDateExpression(new JRDesignExpression(
 					"new java.util.Date()"));
 			f.setEndDateExpression(new JRDesignExpression(

@@ -605,24 +605,28 @@ public class TableComponentFactory implements IComponentFactory {
 		}
 		if (parent instanceof MTable && child instanceof MGraphicElement) {
 			MTable mt = (MTable) parent;
-			final Cell cell = mt.getTableManager().getCell(
-					new Point(location.x, location.y));
-			if (cell != null) {
-				Rectangle r = mt.getTableManager().getCellBounds(cell);
-				int x = r != null ? r.x : 0;
-				int y = r != null ? r.y : 0;
-				location = location.setLocation(location.x - x, location.y - y);
-				ModelVisitor<MCell> mv = new ModelVisitor<MCell>(parent) {
-					@Override
-					public boolean visit(INode n) {
-						if (n instanceof MCell && ((MCell) n).getCell() == cell)
-							setObject((MCell) n);
-						return true;
-					}
-				};
-				MCell mcell = (MCell) mv.getObject();
-				return new CreateElementCommand(mcell, (MGraphicElement) child,
-						location, newIndex);
+			if (location != null) {
+				final Cell cell = mt.getTableManager().getCell(
+						new Point(location.x, location.y));
+				if (cell != null) {
+					Rectangle r = mt.getTableManager().getCellBounds(cell);
+					int x = r != null ? r.x : 0;
+					int y = r != null ? r.y : 0;
+					location = location.setLocation(location.x - x, location.y
+							- y);
+					ModelVisitor<MCell> mv = new ModelVisitor<MCell>(parent) {
+						@Override
+						public boolean visit(INode n) {
+							if (n instanceof MCell
+									&& ((MCell) n).getCell() == cell)
+								setObject((MCell) n);
+							return true;
+						}
+					};
+					MCell mcell = (MCell) mv.getObject();
+					return new CreateElementCommand(mcell,
+							(MGraphicElement) child, location, newIndex);
+				}
 			}
 		}
 		return null;

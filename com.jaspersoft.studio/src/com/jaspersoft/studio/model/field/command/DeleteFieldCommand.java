@@ -46,6 +46,7 @@ public class DeleteFieldCommand extends ADatasetObjectDeleteCommand {
 	public DeleteFieldCommand(JasperReportsConfiguration jContext, JRDesignDataset destNode, JRDesignField srcNode,
 			Boolean canceled) {
 		super(canceled);
+		this.jContext = jContext;
 		jd = jContext.getJasperDesign();
 		this.jrDataset = destNode;
 		this.jrField = srcNode;

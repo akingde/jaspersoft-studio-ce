@@ -37,8 +37,8 @@ public class TimeSerie implements ISeriesFactory<JRTimeSeries> {
 		JRDesignTimeSeries f = new JRDesignTimeSeries();
 		f.setSeriesExpression(expr);
 		if (prev == null) {
-			f.setTimePeriodExpression(new JRDesignExpression("new Double(0)"));
-			f.setValueExpression(new JRDesignExpression("new Double(0)"));
+			f.setTimePeriodExpression(new JRDesignExpression("0"));
+			f.setValueExpression(new JRDesignExpression("0"));
 		} else {
 			f.setTimePeriodExpression(prev.getTimePeriodExpression());
 			f.setValueExpression(prev.getValueExpression());

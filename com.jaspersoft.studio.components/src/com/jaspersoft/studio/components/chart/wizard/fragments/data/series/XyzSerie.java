@@ -37,9 +37,9 @@ public class XyzSerie implements ISeriesFactory<JRXyzSeries> {
 		JRDesignXyzSeries f = new JRDesignXyzSeries();
 		f.setSeriesExpression(expr);
 		if (prev == null) {
-			f.setXValueExpression(new JRDesignExpression("new Double(0)"));
-			f.setYValueExpression(new JRDesignExpression("new Double(0)"));
-			f.setZValueExpression(new JRDesignExpression("new Double(0)"));
+			f.setXValueExpression(new JRDesignExpression("0"));
+			f.setYValueExpression(new JRDesignExpression("0"));
+			f.setZValueExpression(new JRDesignExpression("0"));
 		} else {
 			f.setXValueExpression(prev.getXValueExpression());
 			f.setYValueExpression(prev.getYValueExpression());

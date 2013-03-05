@@ -37,7 +37,7 @@ public class PieSerie implements ISeriesFactory<JRPieSeries> {
 		JRDesignPieSeries f = new JRDesignPieSeries();
 		f.setKeyExpression(expr);
 		if (prev == null)
-			f.setValueExpression(new JRDesignExpression("new Double(0)"));
+			f.setValueExpression(new JRDesignExpression("0"));
 		else {
 			f.setValueExpression(prev.getValueExpression());
 			f.setLabelExpression(prev.getLabelExpression());

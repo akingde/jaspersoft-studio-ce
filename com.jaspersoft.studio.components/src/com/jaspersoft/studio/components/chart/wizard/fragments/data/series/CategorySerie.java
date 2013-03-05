@@ -37,8 +37,8 @@ public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 		JRDesignCategorySeries f = new JRDesignCategorySeries();
 		f.setSeriesExpression(expr);
 		if (prev == null) {
-			f.setCategoryExpression(new JRDesignExpression("new Double(0)"));
-			f.setValueExpression(new JRDesignExpression("new Double(0)"));
+			f.setCategoryExpression(new JRDesignExpression("0"));
+			f.setValueExpression(new JRDesignExpression("0"));
 		} else {
 			f.setCategoryExpression(prev.getCategoryExpression());
 			f.setValueExpression(prev.getValueExpression());

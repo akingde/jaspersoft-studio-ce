@@ -37,8 +37,8 @@ public class XySerie implements ISeriesFactory<JRXySeries> {
 		f.setAutoSort(true);
 		f.setSeriesExpression(expr);
 		if (prev == null) {
-			f.setXValueExpression(new JRDesignExpression("new Double(0)"));
-			f.setYValueExpression(new JRDesignExpression("new Double(0)"));
+			f.setXValueExpression(new JRDesignExpression("0"));
+			f.setYValueExpression(new JRDesignExpression("0"));
 		} else {
 			f.setXValueExpression(prev.getXValueExpression());
 			f.setYValueExpression(prev.getYValueExpression());

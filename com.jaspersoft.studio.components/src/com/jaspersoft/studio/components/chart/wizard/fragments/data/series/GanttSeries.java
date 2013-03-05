@@ -37,7 +37,7 @@ public class GanttSeries implements ISeriesFactory<JRGanttSeries> {
 		JRDesignGanttSeries f = new JRDesignGanttSeries();
 		f.setSeriesExpression(expr);
 		if (prev == null) {
-			f.setPercentExpression(new JRDesignExpression("new Double(0)"));
+			f.setPercentExpression(new JRDesignExpression("0"));
 			f.setStartDateExpression(new JRDesignExpression(
 					"new java.util.Date()"));
 			f.setEndDateExpression(new JRDesignExpression(
