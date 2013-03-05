@@ -13,7 +13,7 @@ import com.jaspersoft.studio.server.protocol.soap.SoapConnection;
 
 public class ProxyConnection implements IConnection {
 
-	private IConnection[] cons = new IConnection[] { new RestV2Connection(),
+	private IConnection[] cons = new IConnection[] { //new RestV2Connection(),
 			new SoapConnection() };
 
 	private IConnection c;
