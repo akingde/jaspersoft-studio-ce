@@ -31,57 +31,124 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.image.MImage;
+import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.ParameterPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPParameter;
 import com.jaspersoft.studio.utils.ModelUtils;
 
+/**
+ * This class paint the controls for the hyperlink section
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class HyperlinkSection extends AbstractSection {
 	
+	/**
+	 * Element hider for the elements related to the anchor, so the label an the expression field\button
+	 */
 	private ElementHider anchor;
 	
+	/**
+	 * Element hider for the elements related to the page, so the label an the expression field\button
+	 */
 	private ElementHider page;
 	
+	/**
+	 * Element hider for the elements related to the reference, so the label an the expression field\button
+	 */
 	private ElementHider reference;
 	
+	/**
+	 * Element hider for the elements related to the when field, so the label an the expression field\button
+	 */
 	private ElementHider when;
 
+	/**
+	 * Element hider for the elements related to the tooltip, so the label an the expression field\button
+	 */
 	private ElementHider tooltip;
 	
+	/**
+	 * Element hider for the elements related to the parameters, so the label an the expression field\button
+	 */
 	private ElementHider parameters;
 	
+	/**
+	 * Widget of the anchor field (only the field to insert the data, not the label with the name of the field)
+	 */
 	private ASPropertyWidget anchorWidget;
 	
+	/**
+	 * Widget of the reference field (only the field to insert the data, not the label with the name of the field)
+	 */
 	private ASPropertyWidget referenceWidget;
 	
+	/**
+	 * Widget of the parameters field (only the field to insert the data, not the label with the name of the field)
+	 */
 	private ASPropertyWidget parametersWidget;
 	
+	/**
+	 * Widget of the when field (only the field to insert the data, not the label with the name of the field)
+	 */
 	private ASPropertyWidget whenWidget;
 	
+	/**
+	 * Widget of the tooltip field (only the field to insert the data, not the label with the name of the field)
+	 */
 	private ASPropertyWidget tooltipWidget;
 	
+	/**
+	 * Widget of the page field (only the field to insert the data, not the label with the name of the field)
+	 */
 	private ASPropertyWidget pageWidget;
 	
+	/**
+	 * Control of the target selection field (only the field to insert the data, not the label with the name of the field)
+	 */
 	private Combo targetCombo;
 	
+	/**
+	 * Control of the type selection field (only the field to insert the data, not the label with the name of the field)
+	 */
 	private Combo typeCombo;
 	
+	/**
+	 * composite where all the elements are placed
+	 */
 	private Composite mainComposite;
 	
+	/**
+	 * Hashmap that contains, for every hyperlink type, a list of hiders. Every one of these hider contains one or 
+	 * more controls that should be visible with the type.
+	 * 
+	 */
 	private HashMap<String, ElementHider[]> hideList = null;
 	
+	/**
+	 * Array with the predefined target
+	 */
 	private static String[] linkTargetItems=new String[]{
 		HyperlinkTargetEnum.SELF.getName(),
 		HyperlinkTargetEnum.BLANK.getName(),
 		HyperlinkTargetEnum.TOP.getName(),
 		HyperlinkTargetEnum.PARENT.getName(),};
+	
+	/**
+	 * Array that will contains the available link type values
+	 */
 	private static String[] linkTypeItems;
 	
+	/**
+	 * Initialize the link type array
+	 */
 	static {
 		ArrayList<HyperlinkTypeEnum> filteredTypes = new ArrayList<HyperlinkTypeEnum>(2);
 		filteredTypes.add(HyperlinkTypeEnum.CUSTOM);	// Will be used automatically when user write a custom entry
@@ -91,14 +158,34 @@ public class HyperlinkSection extends AbstractSection {
 		
 	}
 	
+	/**
+	 * This class can contains an array of controls and provide the methods to easily show 
+	 * or hide that controls. The controls must be inside a grid layout
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
 	private class ElementHider {
 		
+		/**
+		 * The array of controls
+		 */
 		private Control[] controls;
 		
+		/**
+		 * 
+		 * @param controls the controls to show or hide, they must be into a grid layout. Since 
+		 * the grid data is needed, if the control has not a grid data then a default one will be
+		 * assigned
+		 */
 		public ElementHider(Control[] controls){
 			this.controls = controls;
 		}
 		
+		/**
+		 * Set the visibility of the stored control
+		 * @param visible true if the control should be visible, false otherwise
+		 */
 		public void setVisibility(boolean visible){
 			for(Control control : controls){
 				if (!control.isDisposed()) {
@@ -110,16 +197,27 @@ public class HyperlinkSection extends AbstractSection {
 			}
 		}
 		
+		/**
+		 * Show all the stored controls
+		 */
 		public void showAll(){
 			setVisibility(true);
 		}
 		
+		/**
+		 * Hide all the stored controls
+		 */
 		public void hideAll(){
 			setVisibility(false);
 		}
 		
 	}
 	
+	/**
+	 * Generate a standard grid data, useful for most of the control
+	 * @return a grid data with an horizontal span of two, and an horizontal filling.
+	 * At every call it is returned a new instance of the grid data
+	 */
 	private GridData gridDataGenerator(){
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -127,6 +225,9 @@ public class HyperlinkSection extends AbstractSection {
 		return gd;
 	}
 
+	/**
+	 * Refresh the contents of the controls, setting into them the data of the selected element
+	 */
 	@Override
 	public void refresh() {
 		isRefreshing = true;
@@ -146,6 +247,9 @@ public class HyperlinkSection extends AbstractSection {
 		isRefreshing = false;
 	}
 	
+	/**
+	 * Create the hiders map
+	 */
 	private void createMap(){
 		if (hideList == null){
 			hideList = new HashMap<String, HyperlinkSection.ElementHider[]>();
@@ -160,8 +264,11 @@ public class HyperlinkSection extends AbstractSection {
 		}
 	}
 	
+	/**
+	 * Show or hide the visible controls using the  the link type actual selection to choose which show
+	 */
 	private void refreshVisibleComponents(){
-		ElementHider[] hiders = new ElementHider[]{anchor, page, reference, when, tooltip, parameters};
+		ElementHider[] hiders = new ElementHider[]{anchor, page, reference, tooltip, parameters};
 		for(ElementHider hider : hiders)
 			hider.hideAll();
 		String selectedValue = typeCombo.getText();
@@ -172,91 +279,103 @@ public class HyperlinkSection extends AbstractSection {
 		mainComposite.layout();
 	}
 	
+	/**
+	 * Read the textual value of a combo and set it into a property inside the element
+	 * 
+	 * @param combo combo from where the value is read
+	 * @param property name of the property to set
+	 */
 	private void readValueFromCombo(Combo combo, String property){
 		APropertyNode element = getElement();
 		if (element != null) {
 			element.setPropertyValue(property, combo.getText());
 			int stringLength = combo.getText ().length (); 
+			//Since it is called even on the combo modify it will move the cursor on the start at every call
+			//causing that every character typed reset the cursor on the beginning. This will put the cursor on the end
 			combo.setSelection(new Point (stringLength, stringLength));
 		}
 	}
 	
+	private Label createLabel(Composite parent, String toolTip, String text){
+		Label newLabel = new Label(parent, SWT.NONE);
+		newLabel.setText(text);
+		newLabel.setToolTipText(toolTip);
+		return newLabel;
+	}
+	
+	/**
+	 * Set the help for the custom components (the two combos)
+	 */
+	private void setHelp(){
+		String prefix = "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#";
+		if (getElement() instanceof MImage){
+			HelpSystem.setHelp(typeCombo, prefix+"image_hyperlinkType"); 
+			HelpSystem.setHelp(targetCombo, prefix+"image_hyperlinkTarget");
+		} else if (getElement() instanceof MTextField){
+			HelpSystem.setHelp(typeCombo, prefix+"textField_hyperlinkType"); 
+			HelpSystem.setHelp(targetCombo, prefix+"textField_hyperlinkTarget");
+		} else {
+			HelpSystem.setHelp(typeCombo, prefix+"sectionHyperlink_hyperlinkType"); 
+			HelpSystem.setHelp(targetCombo, prefix+"sectionHyperlink_hyperlinkTarget");
+		}
+	}
+	
+	/**
+	 * Create all the controls
+	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		
 		mainComposite = new Composite(parent, SWT.NONE);
 		mainComposite.setLayout(new GridLayout(3, false));
 		GridData parentData = new GridData(SWT.FILL,SWT.FILL, true, true);
+		//the composite must have a fixed height because for some reason, when the components are hided it 
+		//is resized to a smaller dimension, but when components are shown it is not resized to a bigger one
 		parentData.minimumHeight = 250;
 		mainComposite.setLayoutData(parentData);
 		
-		Label targrtLabel = new Label(mainComposite, SWT.NONE);
-		targrtLabel.setText("Link Target");
+		createLabel(mainComposite, Messages.MHyperLink_link_target_description, Messages.MHyperLink_link_target);
 		targetCombo = new Combo(mainComposite, SWT.NONE);
 		targetCombo.setLayoutData(gridDataGenerator()); 
 		targetCombo.setItems(linkTargetItems);
 		
-		Label typeLabel = new Label(mainComposite, SWT.NONE);
-		typeLabel.setText("Link Type");
+		createLabel(mainComposite, Messages.MHyperLink_link_type_description, Messages.MHyperLink_link_type);
 		typeCombo = new Combo(mainComposite, SWT.NONE);
 		typeCombo.setLayoutData(gridDataGenerator()); 
 		typeCombo.setItems(linkTypeItems);
 		
-		Label anchorLabel = new Label(mainComposite, SWT.NONE);
-		anchorLabel.setText("Anchor");
-		JRExpressionPropertyDescriptor anchorExpressionD = new JRExpressionPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION, Messages.MHyperLink_hyperlink_anchor_expression);
-		anchorExpressionD.setDescription(Messages.MHyperLink_hyperlink_anchor_expression_description);
-		anchorWidget = anchorExpressionD.createWidget(mainComposite, this);
+		Label anchorLabel = createLabel(mainComposite, Messages.MHyperLink_hyperlink_anchor_expression_description, Messages.MHyperLink_hyperlink_anchor_expression);
+		anchorWidget = createWidget4Property(mainComposite, JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION, false);
 		anchorWidget.getControl().setLayoutData(gridDataGenerator());
 		anchor = new ElementHider(new Control[]{anchorLabel, anchorWidget.getControl()});
 		
-		Label pageLabel = new Label(mainComposite, SWT.NONE);
-		pageLabel.setText("Page");
-		JRExpressionPropertyDescriptor pageExpressionD = new JRExpressionPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION, Messages.MHyperLink_hyperlink_page_expression);
-		pageExpressionD.setDescription(Messages.MHyperLink_hyperlink_page_expression_description);
-		pageWidget = pageExpressionD.createWidget(mainComposite, this);
+		Label pageLabel = createLabel(mainComposite, Messages.MHyperLink_hyperlink_page_expression_description, Messages.MHyperLink_hyperlink_page_expression);
+		pageWidget = createWidget4Property(mainComposite,JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION,false);  
 		pageWidget.getControl().setLayoutData(gridDataGenerator());		
 		page = new ElementHider(new Control[]{pageLabel, pageWidget.getControl()});
 		
-		Label referenceLabel = new Label(mainComposite, SWT.NONE);
-		referenceLabel.setText("Reference");
-		JRExpressionPropertyDescriptor referenceExpressionD = new JRExpressionPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION, Messages.MHyperLink_hyperlink_reference_expression);
-		referenceExpressionD.setDescription(Messages.MHyperLink_hyperlink_reference_expression_description);
-		referenceWidget = referenceExpressionD.createWidget(mainComposite, this);
+		Label referenceLabel = createLabel(mainComposite, Messages.MHyperLink_hyperlink_reference_expression_description, Messages.MHyperLink_hyperlink_reference_expression);
+		referenceWidget = createWidget4Property(mainComposite,JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION,false); 
 		referenceWidget.getControl().setLayoutData(gridDataGenerator());		
 		reference = new ElementHider(new Control[]{referenceLabel, referenceWidget.getControl()});
 		
-		Label whenLabel = new Label(mainComposite, SWT.NONE);
-		whenLabel.setText("When");
-		JRExpressionPropertyDescriptor whenExpressionD = new JRExpressionPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION, Messages.MHyperLink_whenexpr);
-		whenExpressionD.setDescription(Messages.MHyperLink_whenexpr_desc);
-		whenWidget = whenExpressionD.createWidget(mainComposite, this);
+		Label whenLabel = createLabel(mainComposite, Messages.MHyperLink_whenexpr_desc, Messages.MHyperLink_whenexpr);
+		whenWidget = createWidget4Property(mainComposite,JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION,false); 
 		whenWidget.getControl().setLayoutData(gridDataGenerator());		
 		when = new ElementHider(new Control[]{whenLabel, whenWidget.getControl()});
 		
-		Label tooltipLabel = new Label(mainComposite, SWT.NONE);
-		tooltipLabel.setText("ToolTip");
-		JRExpressionPropertyDescriptor toolTipExpressionD = new JRExpressionPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION, Messages.MHyperLink_hyperlink_tooltip_expression);
-		toolTipExpressionD.setDescription(Messages.MHyperLink_hyperlink_tooltip_expression_description);
-		tooltipWidget = toolTipExpressionD.createWidget(mainComposite, this);
+		Label tooltipLabel = createLabel(mainComposite, Messages.MHyperLink_hyperlink_tooltip_expression_description, Messages.MHyperLink_hyperlink_tooltip_expression);
+		tooltipWidget = createWidget4Property(mainComposite,JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION,false); 
 		tooltipWidget.getControl().setLayoutData(gridDataGenerator());	
 		tooltip = new ElementHider(new Control[]{tooltipLabel, tooltipWidget.getControl()});
 		
-		Label parametersLabel = new Label(mainComposite, SWT.NONE);
-		parametersLabel.setText("Parameters");
-		ParameterPropertyDescriptor propertiesD = new ParameterPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS, Messages.common_parameters);
-		propertiesD.setDescription(Messages.MHyperLink_parameters_description);
-		parametersWidget = propertiesD.createWidget(mainComposite, this);	
+		Label parametersLabel = createLabel(mainComposite, Messages.MHyperLink_parameters_description, Messages.common_parameters);
+		parametersWidget = createWidget4Property(mainComposite,JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS,false); 
 		Control button = ((SPParameter)parametersWidget).getButton();
 		parameters = new ElementHider(new Control[]{parametersLabel, parametersWidget.getControl(), button});
 		
 		createMap();
+		setHelp();
 		
 		targetCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -286,45 +405,6 @@ public class HyperlinkSection extends AbstractSection {
 				readValueFromCombo(typeCombo, JRDesignHyperlink.PROPERTY_LINK_TYPE);
 			}
 		});
-		/*
-		GridData gd = new GridData();
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_HYPERLINK_TARGET).getControl().setLayoutData(gd);
-		gd = new GridData();
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_LINK_TYPE).getControl().setLayoutData(gd);
-
-		getWidgetFactory().createCLabel(parent, "Anchor");
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION, false).getControl()
-				.setLayoutData(gd);
-
-		getWidgetFactory().createCLabel(parent, "Page");
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION, false).getControl()
-				.setLayoutData(gd);
-
-		getWidgetFactory().createCLabel(parent, "Reference");
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION, false).getControl()
-				.setLayoutData(gd);
-
-		getWidgetFactory().createCLabel(parent, "When");
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION, false).getControl()
-				.setLayoutData(gd);
-
-		getWidgetFactory().createCLabel(parent, "Tooltip");
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION, false).getControl()
-				.setLayoutData(gd);
-
-		createWidget4Property(parent, JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS);*/
 	}
 
 }

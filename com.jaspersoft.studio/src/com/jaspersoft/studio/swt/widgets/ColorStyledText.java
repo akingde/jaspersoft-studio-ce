@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
@@ -65,6 +68,11 @@ public class ColorStyledText {
 	 * Last valid textual value inserted for the color
 	 */
 	private String lastValidText;
+	
+	/**
+	 * The buttons
+	 */
+	private Button lineColor;
 	
 	/**
 	 * Listener called when the color is edited with the button or by editing it's textual value
@@ -144,7 +152,8 @@ public class ColorStyledText {
 				if (newColor != null){
 					color = newColor;
 					textArea.setText(getHexFromRGB(color));
-					colorButton.setImage(provider.getImage(color.getRGB(),18,14));
+					if (colorButton != null) colorButton.setImage(provider.getImage(color.getRGB(),18,14));
+					if (lineColor != null) lineColor.setImage(provider.getImage(color.getRGB(),18,14));
 					if (raiseEvents)
 						for(ModifyListener element : listener){
 							element.modifyText(e);
@@ -200,39 +209,14 @@ public class ColorStyledText {
 		listener = new ArrayList<ModifyListener>();
 		provider = new ColorLabelProvider(NullEnum.NULL);
 		paintArea = new Composite(parent, SWT.BORDER);
-		GridLayout layout = new GridLayout(3,false);
+		GridLayout layout = new GridLayout(2,false);
 		paintArea.setLayout(layout);
 		layout.horizontalSpacing = 1;
 		layout.verticalSpacing = 0;
 		layout.marginHeight = 1;
 		layout.marginWidth = 1;
 		
-		//Paint the preview box
-		GridData previewData = new GridData();
-		previewData.heightHint = 20;
-		previewData.widthHint = 20;
-		previewData.verticalAlignment = SWT.CENTER;
-		previewData.horizontalAlignment = SWT.RIGHT;
-		colorButton = new Label( paintArea, SWT.FILL);
-		colorButton.setLayoutData(previewData);
-		colorButton.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
-		colorButton.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseUp(MouseEvent e) {}
-			
-			@Override
-			public void mouseDown(MouseEvent e) {
-				ColorDialog cd = new ColorDialog(colorButton.getDisplay().getActiveShell());
-				cd.setText(Messages.common_line_color);
-				RGB newColor = cd.open();
-				if (newColor != null){
-					setColor(newColor,true);
-				}
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {}
-		});
+		createButton();
 
 		//Paint the text area
 		GridData textData = new GridData();
@@ -244,29 +228,73 @@ public class ColorStyledText {
 		textArea.addModifyListener(new EditListener());
 		textArea.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		//Paint the button
-		GridData lineColorData = new GridData();
-		lineColorData.heightHint = 20;
-		lineColorData.widthHint = 35;
-		lineColorData.verticalAlignment = SWT.CENTER;
-		lineColorData.horizontalAlignment = SWT.RIGHT;
-		final Button lineColor = new Button(paintArea, SWT.PUSH | SWT.FILL);
-		lineColor.setLayoutData(lineColorData);
-		lineColor.setText("..."); 
-		lineColor.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
 		
-		//Open the color selection window when the button is pushed
-		lineColor.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				ColorDialog cd = new ColorDialog(colorButton.getDisplay().getActiveShell());
-				cd.setText(Messages.common_line_color);
-				RGB newColor = cd.open();
-				if (newColor != null){
-					lineColor.setSelection(false);
-					setColor(newColor,true);
+	}
+	
+	/**
+	 * Create the label to open the dialog of selection color. The label has painted inside a preview of the color.
+	 * Now it is unused because we show only the button
+	 */
+	@SuppressWarnings("unused")
+	private void createPreview(){
+			//Paint the preview box
+			GridData previewData = new GridData();
+			previewData.heightHint = 20;
+			previewData.widthHint = 20;
+			previewData.verticalAlignment = SWT.CENTER;
+			previewData.horizontalAlignment = SWT.RIGHT;
+			colorButton = new Label( paintArea, SWT.FILL);
+			colorButton.setLayoutData(previewData);
+			colorButton.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
+			colorButton.addMouseListener(new MouseListener() {
+				@Override
+				public void mouseUp(MouseEvent e) {}
+				
+				@Override
+				public void mouseDown(MouseEvent e) {
+					ColorDialog cd = new ColorDialog(colorButton.getDisplay().getActiveShell());
+					cd.setText(Messages.common_line_color);
+					RGB newColor = cd.open();
+					if (newColor != null){
+						setColor(newColor,true);
+					}
 				}
-			}
-		});
+
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {}
+			});
+	}
+	
+	/**
+	 * Create the button to open the dialog of selection color. The button has painted inside a preview of the color
+	 */
+	private void createButton(){
+			//Paint the button
+			GridData lineColorData = new GridData();
+			lineColorData.heightHint = 20;
+			lineColorData.widthHint = 24;
+			lineColorData.verticalAlignment = SWT.CENTER;
+			lineColorData.horizontalAlignment = SWT.RIGHT;
+			lineColor = new Button(paintArea, SWT.PUSH | SWT.FILL);
+			lineColor.setLayoutData(lineColorData);
+			//lineColor.setText("..."); 
+			lineColor.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
+			
+			//Open the color selection window when the button is pushed
+			lineColor.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					Shell centerShell = new Shell(paintArea.getDisplay().getActiveShell(), SWT.NO_TRIM); 
+					Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+					centerShell.setLocation(mouseLocation.x, mouseLocation.y);
+					ColorDialog cd = new ColorDialog(centerShell);
+					cd.setText(Messages.common_line_color);
+					RGB newColor = cd.open();
+					if (newColor != null){
+						lineColor.setSelection(false);
+						setColor(newColor,true);
+					}
+				}
+			});
 	}
 	
 	/**

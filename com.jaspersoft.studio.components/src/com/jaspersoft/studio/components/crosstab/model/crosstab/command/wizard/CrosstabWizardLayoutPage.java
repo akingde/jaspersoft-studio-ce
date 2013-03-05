@@ -163,7 +163,7 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		Label secondLabel = new Label(group,SWT.NONE);
 		secondLabel.setText(Messages.CrosstabWizardLayoutPage_variations_combo);
 		
-		variations = new Combo(group,SWT.NONE);
+		variations = new Combo(group,SWT.READ_ONLY);
 		variations.setItems(getVariantsName());
 		variations.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		variations.select(0);
