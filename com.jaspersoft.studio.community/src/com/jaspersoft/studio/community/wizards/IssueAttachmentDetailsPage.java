@@ -24,6 +24,7 @@ import java.util.Iterator;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -178,9 +179,7 @@ public class IssueAttachmentDetailsPage extends JSSHelpWizardPage {
 		zipFileContent = new List(groupZipContent, SWT.BORDER);
 		standardListFont = zipFileContent.getFont();
 
-		// Preselect 1) log file and 2) software/hardware summary
-		btnLogFile.setSelection(true);
-		logFileSelectionPerformed();
+		// Preselect software/hardware summary
 		btnSoftwareAndHardware.setSelection(true);
 		hwSwInfoSelectionPerformed();
 	}
@@ -231,6 +230,9 @@ public class IssueAttachmentDetailsPage extends JSSHelpWizardPage {
 	 */
 	private void logFileSelectionPerformed() {
 		if(btnLogFile.getSelection()){
+			MessageDialog.openWarning(getShell(), 
+					Messages.IssueAttachmentDetailsPage_WarningLogFileAttachmentTitle, 
+					Messages.IssueAttachmentDetailsPage_WarningLogFileAttachmentMsg);
 			// Add log file to final zip attachment
 			zipEntries.add(
 					new ZipEntry("jss_logfile.txt",CommunityAPIUtils.getJaspersoftStudioLogFileLocation(),ZipEntryType.LOG)); //$NON-NLS-1$

@@ -36,6 +36,8 @@ public class Messages extends NLS {
 	public static String IssueAttachmentDetailsPage_SwAndHwSummaryCheckbox;
 	public static String IssueAttachmentDetailsPage_Title;
 	public static String IssueAttachmentDetailsPage_ViewLink;
+	public static String IssueAttachmentDetailsPage_WarningLogFileAttachmentMsg;
+	public static String IssueAttachmentDetailsPage_WarningLogFileAttachmentTitle;
 	public static String IssueAttachmentDetailsPage_ZipContentsGroup;
 	public static String IssueCreationWizard_InfoDialogMessage;
 	public static String IssueCreationWizard_InfoDialogTitle;
