@@ -73,10 +73,10 @@ public class NewIssueAuthenticationPage extends JSSHelpWizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 
 		setControl(container);
-		GridLayout gl_container = new GridLayout(2, false);
-		gl_container.verticalSpacing = 10;
-		gl_container.horizontalSpacing = 10;
-		container.setLayout(gl_container);
+		GridLayout glContainer = new GridLayout(2, false);
+		glContainer.verticalSpacing = 10;
+		glContainer.horizontalSpacing = 10;
+		container.setLayout(glContainer);
 		
 		Link communityLink = new Link(container,SWT.NONE);
 		communityLink.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));

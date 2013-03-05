@@ -27,7 +27,7 @@ import org.osgi.framework.Version;
  * 
  * @author Dan Rubel
  */
-public class PlatformInfo {
+public final class PlatformInfo {
   /**
    * The name displayed for an unknown IDE
    */

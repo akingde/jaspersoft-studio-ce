@@ -21,7 +21,7 @@ package com.jaspersoft.studio.community;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class CommunityConstants {
+public final class CommunityConstants {
 
 	public static final String LOGIN_URL = "http://community.jaspersoft.com/community-api/user/login"; //$NON-NLS-1$
 	public static final String FILE_UPLOAD_URL = "http://community.jaspersoft.com/community-api/file.json"; //$NON-NLS-1$

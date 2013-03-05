@@ -38,6 +38,11 @@ public class JSSCommunityActivator extends AbstractJRUIPlugin {
 	public static final String PLUGIN_ID = "com.jaspersoft.studio.community"; //$NON-NLS-1$
 	// The shared instance
 	private static JSSCommunityActivator plugin;
+	// Constants
+	private static final String NOT_AVAILABLE_VALUE = "n/a";	//$NON-NLS-1$
+	private static final String USERNAME_KEY = "username";		//$NON-NLS-1$
+	private static final String PASSWORD_KEY = "password";		//$NON-NLS-1$
+
 	
 	/**
 	 * The constructor
@@ -91,8 +96,8 @@ public class JSSCommunityActivator extends AbstractJRUIPlugin {
 		ISecurePreferences secPrefs = SecurePreferencesFactory.getDefault();
 		ISecurePreferences node = secPrefs.node(CommunityConstants.SECURE_PREFSTORE_PATHNAME);
 		try {
-			node.put("username", user.getUsername(), true); //$NON-NLS-1$
-			node.put("password", user.getPassword(), true); //$NON-NLS-1$
+			node.put(USERNAME_KEY, user.getUsername(), true);
+			node.put(PASSWORD_KEY, user.getPassword(), true);
 		}
 		catch (StorageException ex){
 			logError(Messages.JSSCommunityActivator_CredentialsStoreError, ex);
@@ -109,9 +114,9 @@ public class JSSCommunityActivator extends AbstractJRUIPlugin {
          if (preferences.nodeExists(CommunityConstants.SECURE_PREFSTORE_PATHNAME)) {
              ISecurePreferences node = preferences.node(CommunityConstants.SECURE_PREFSTORE_PATHNAME);
              try {
-                 String username = node.get("username", "n/a"); //$NON-NLS-1$ //$NON-NLS-2$
-                 String password = node.get("password", "n/a"); //$NON-NLS-1$ //$NON-NLS-2$
-                 if(username.equals("n/a") || password.equals("n/a")){ //$NON-NLS-1$ //$NON-NLS-2$
+                 String username = node.get(USERNAME_KEY, NOT_AVAILABLE_VALUE); //$NON-NLS-1$ //$NON-NLS-2$
+                 String password = node.get(PASSWORD_KEY, NOT_AVAILABLE_VALUE); //$NON-NLS-1$ //$NON-NLS-2$
+                 if(username.equals(NOT_AVAILABLE_VALUE) || password.equals(NOT_AVAILABLE_VALUE)){ //$NON-NLS-1$ //$NON-NLS-2$
                 	 return null;
                  }
                  return new CommunityUser(username,password);

@@ -42,7 +42,11 @@ import org.eclipse.core.runtime.Path;
  * 
  * @author scheglov_ke
  */
-public class IOUtils2 {
+public final class IOUtils2 {
+	
+  private IOUtils2(){
+  }
+  
   ////////////////////////////////////////////////////////////////////////////
   //
   // Directory
@@ -135,8 +139,10 @@ public class IOUtils2 {
 
   /**
    * @return the {@link String} content of given {@link IFile}.
+ * @throws CoreException 
+ * @throws IOException 
    */
-  public static String readString(IFile file) throws Exception {
+  public static String readString(IFile file) throws IOException, CoreException {
     return readString(file.getContents(true));
   }
 

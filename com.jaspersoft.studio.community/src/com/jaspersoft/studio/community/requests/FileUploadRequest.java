@@ -28,7 +28,7 @@ public class FileUploadRequest {
 	public FileUploadRequest(String filename, byte[] encodedFileData) {
 		super();
 		this.filename = filename;
-		this.encodedFileData = encodedFileData;
+		this.encodedFileData = encodedFileData.clone();
 	}
 
 	public String getAsJSON(){

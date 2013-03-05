@@ -23,7 +23,7 @@ import org.osgi.framework.Version;
  * @author Brian Wilkerson
  * @version $Revision$
  */
-public class PluginUtilities {
+public final class PluginUtilities {
   ////////////////////////////////////////////////////////////////////////////
   //
   // Constructors

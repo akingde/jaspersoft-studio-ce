@@ -46,7 +46,7 @@ public class IssueRequest {
 	private IssueField resolution;
 	private IssueField status;
 	private IssueField project;
-	private IssueField assigned_user;
+	private IssueField assignedUser;
 	private IssueField attachments;
 	
 	public IssueRequest(String title,String text){
@@ -117,12 +117,12 @@ public class IssueRequest {
 		this.project = project;
 	}
 
-	public IssueField getAssigned_user() {
-		return assigned_user;
+	public IssueField getAssignedUser() {
+		return assignedUser;
 	}
 
-	public void setAssigned_user(IssueField assigned_user) {
-		this.assigned_user = assigned_user;
+	public void setAssignedUser(IssueField assignedUser) {
+		this.assignedUser = assignedUser;
 	}
 
 	public IssueField getAttachments() {
@@ -152,8 +152,8 @@ public class IssueRequest {
 		jsonBuf.append(resolution.asJsonString()).append(FIELD_SEPARATOR);
 		jsonBuf.append(status.asJsonString()).append(FIELD_SEPARATOR);
 		jsonBuf.append(project.asJsonString());
-		if(assigned_user!=null && !assigned_user.asJsonString().isEmpty()){
-			jsonBuf.append(FIELD_SEPARATOR).append(assigned_user.asJsonString());
+		if(assignedUser!=null && !assignedUser.asJsonString().isEmpty()){
+			jsonBuf.append(FIELD_SEPARATOR).append(assignedUser.asJsonString());
 		}
 		if(attachments!=null && !attachments.asJsonString().isEmpty()){
 			jsonBuf.append(FIELD_SEPARATOR).append(attachments.asJsonString());

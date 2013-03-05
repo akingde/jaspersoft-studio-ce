@@ -51,7 +51,7 @@ import com.jaspersoft.studio.community.utils.CommunityAPIException;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class RESTCommunityHelper {
+public final class RESTCommunityHelper {
 	
 	private static final Log log = LogFactory.getLog(RESTCommunityHelper.class);
 

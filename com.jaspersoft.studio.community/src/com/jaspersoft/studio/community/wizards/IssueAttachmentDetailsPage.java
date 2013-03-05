@@ -89,10 +89,10 @@ public class IssueAttachmentDetailsPage extends JSSHelpWizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 
 		setControl(container);
-		GridLayout gl_container = new GridLayout(4, false);
-		gl_container.horizontalSpacing = 10;
-		gl_container.verticalSpacing = 10;
-		container.setLayout(gl_container);
+		GridLayout glContainer = new GridLayout(4, false);
+		glContainer.horizontalSpacing = 10;
+		glContainer.verticalSpacing = 10;
+		container.setLayout(glContainer);
 		
 		// Metadata log file
 		btnLogFile = new Button(container, SWT.CHECK);
@@ -173,9 +173,9 @@ public class IssueAttachmentDetailsPage extends JSSHelpWizardPage {
 		Group groupZipContent = new Group(container, SWT.NONE);
 		groupZipContent.setText(Messages.IssueAttachmentDetailsPage_ZipContentsGroup);
 		groupZipContent.setLayout(new FillLayout(SWT.HORIZONTAL));
-		GridData gd_groupZipContent = new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1);
-		gd_groupZipContent.widthHint = 579;
-		groupZipContent.setLayoutData(gd_groupZipContent);
+		GridData gdGroupZipContent = new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1);
+		gdGroupZipContent.widthHint = 579;
+		groupZipContent.setLayoutData(gdGroupZipContent);
 		zipFileContent = new List(groupZipContent, SWT.BORDER);
 		standardListFont = zipFileContent.getFont();
 

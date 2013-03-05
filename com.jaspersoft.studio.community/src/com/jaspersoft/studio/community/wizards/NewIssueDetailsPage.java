@@ -81,10 +81,10 @@ public class NewIssueDetailsPage extends JSSHelpWizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 
 		setControl(container);
-		GridLayout gl_container = new GridLayout(4, false);
-		gl_container.verticalSpacing = 10;
-		gl_container.horizontalSpacing = 10;
-		container.setLayout(gl_container);
+		GridLayout glContainer = new GridLayout(4, false);
+		glContainer.verticalSpacing = 10;
+		glContainer.horizontalSpacing = 10;
+		container.setLayout(glContainer);
 		
 		Label lblTitle = new Label(container, SWT.NONE);
 		lblTitle.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -104,9 +104,9 @@ public class NewIssueDetailsPage extends JSSHelpWizardPage {
 		lblDescription.setText(Messages.NewIssueDetailsPage_IssueDescription);
 		
 		description = new Text(container, SWT.BORDER | SWT.MULTI | SWT.WRAP);
-		GridData gd_description = new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1);
-		gd_description.heightHint = 150;
-		description.setLayoutData(gd_description);
+		GridData gdDescription = new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1);
+		gdDescription.heightHint = 150;
+		description.setLayoutData(gdDescription);
 		description.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {

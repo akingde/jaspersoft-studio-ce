@@ -42,8 +42,8 @@ import com.jaspersoft.studio.community.utils.CommunityAPIUtils;
  */
 public class HwSwDetailsDialog extends Dialog {
 
-	protected Object result;
-	protected Shell shell;
+	private Object result;
+	private Shell shell;
 	private int locationY;
 	private int locationX;
 

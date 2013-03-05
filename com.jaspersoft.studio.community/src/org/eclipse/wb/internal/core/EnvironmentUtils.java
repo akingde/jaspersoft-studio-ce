@@ -236,10 +236,10 @@ public final class EnvironmentUtils extends AbstractUIPlugin {
    * IBM Java has its own glitches.
    */
   public static boolean isJavaIBM() {
-    return getTestSensetive_JAVA_VM_VENDOR().toUpperCase(Locale.ENGLISH).contains("IBM");
+    return getTestSensitiveJavaVMVendor().toUpperCase(Locale.ENGLISH).contains("IBM");
   }
 
-  private static String getTestSensetive_JAVA_VM_VENDOR() {
+  private static String getTestSensitiveJavaVMVendor() {
     String forcedVendor = System.getProperty(WBP_JAVA_VM_VENDOR);
     if (forcedVendor != null) {
       return forcedVendor;

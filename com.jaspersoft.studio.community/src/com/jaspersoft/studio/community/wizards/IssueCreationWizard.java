@@ -57,7 +57,7 @@ import com.jaspersoft.studio.community.zip.ZipEntry;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class IssueCreationWizard extends Wizard {
+public final class IssueCreationWizard extends Wizard {
 	
 	private static IssueCreationWizard instance = null;
 	private NewIssueDetailsPage page1;

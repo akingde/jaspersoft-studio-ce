@@ -21,7 +21,11 @@ package com.jaspersoft.studio.community.wizards;
  * @author Orlandin Marco
  *
  */
-public class ContextHelpIDs {
+public final class ContextHelpIDs {
+	
+	private ContextHelpIDs(){
+		// Private constructor for utility class
+	}
 	
 	public static final String PREFIX = "com.jaspersoft.studio.doc.";
 	

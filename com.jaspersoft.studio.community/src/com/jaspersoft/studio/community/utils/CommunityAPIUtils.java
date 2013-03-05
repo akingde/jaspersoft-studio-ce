@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 
@@ -27,6 +28,7 @@ import org.eclipse.wb.internal.core.utils.platform.PluginUtilities;
 
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.community.JSSCommunityActivator;
 import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.zip.ZipEntry;
 import com.jaspersoft.studio.utils.BrandingInfo;
@@ -166,7 +168,8 @@ public class CommunityAPIUtils {
 					installationPath = installationPath.substring(1);
 				}
 			}
-		} catch (Throwable e) {
+		} catch (IOException e) {
+			JSSCommunityActivator.getDefault().logError(Messages.CommunityAPIUtils_ErrorMsgProductPath , e);
 		}
 		return installationPath;
 	}
@@ -202,8 +205,9 @@ public class CommunityAPIUtils {
 							result.append(version);
 							result.append("\n"); //$NON-NLS-1$
 						}
-					} catch (Throwable e) {
-						// just ignore
+					} catch (IOException e) {
+						JSSCommunityActivator.getDefault().logError(
+								MessageFormat.format(Messages.CommunityAPIUtils_ErrorMsgReadingFile, new Object[]{file.getAbsolutePath()}) , e);
 					}
 				}
 			}

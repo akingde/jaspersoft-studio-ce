@@ -25,6 +25,8 @@ public class Messages extends NLS {
 	public static String Category_General;
 	public static String Category_Patch;
 	public static String Category_Task;
+	public static String CommunityAPIUtils_ErrorMsgProductPath;
+	public static String CommunityAPIUtils_ErrorMsgReadingFile;
 	public static String CommunityAPIUtils_ZipCreationError;
 	public static String HwSwDetailsDialog_Title;
 	public static String IssueAttachmentDetailsPage_AddLink;
