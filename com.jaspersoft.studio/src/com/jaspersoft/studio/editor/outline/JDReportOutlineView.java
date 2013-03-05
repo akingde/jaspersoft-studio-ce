@@ -37,6 +37,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -51,8 +52,11 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageBook;
+import org.eclipse.ui.part.ResourceTransfer;
 
 import com.jaspersoft.studio.editor.IGraphicalEditor;
+import com.jaspersoft.studio.editor.dnd.ImageResourceDropTargetListener;
+import com.jaspersoft.studio.editor.dnd.ImageURLTransfer;
 import com.jaspersoft.studio.editor.dnd.JSSTemplateTransferDropTargetListener;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
@@ -146,13 +150,14 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * Configure outline viewer.
 	 */
 	protected void configureOutlineViewer() {
-		getViewer().setEditDomain(editor.getEditDomain());
-		getViewer().setEditPartFactory(getEditPartFactory());
+		final EditPartViewer viewer = getViewer();
+		viewer.setEditDomain(editor.getEditDomain());
+		viewer.setEditPartFactory(getEditPartFactory());
 		ContextMenuProvider provider = getMenuContentProvider();
-		getViewer().setContextMenu(provider);
+		viewer.setContextMenu(provider);
 
-		getViewer().addDropTargetListener(new JSSTemplateTransferDropTargetListener(getViewer()));
-		getViewer().addDragSourceListener(new TemplateTransferDragSourceListener(getViewer()) {
+		viewer.addDropTargetListener(new JSSTemplateTransferDropTargetListener(viewer));
+		viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer) {
 			@Override
 			protected Object getTemplate() {
 				List<Object> models = new ArrayList<Object>();
@@ -171,6 +176,10 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 				return models;
 			}
 		});
+		// Add images drop listeners
+		viewer.addDropTargetListener(new ImageResourceDropTargetListener(viewer,ResourceTransfer.getInstance()));
+		viewer.addDropTargetListener(new ImageResourceDropTargetListener(viewer,FileTransfer.getInstance()));
+		viewer.addDropTargetListener(new ImageResourceDropTargetListener(viewer,ImageURLTransfer.getInstance()));
 
 		IPageSite site = getSite();
 		site.registerContextMenu(provider.getId(), provider, site.getSelectionProvider());
