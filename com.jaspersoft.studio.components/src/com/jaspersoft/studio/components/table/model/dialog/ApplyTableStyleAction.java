@@ -139,7 +139,7 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 				}
 			}
 	    	
-	        List<JRDesignStyle> styles = new ArrayList<JRDesignStyle>();
+	        styles = new ArrayList<JRDesignStyle>();
 	
 	        JRDesignStyle tableStyle=  new JRDesignStyle();
 	        tableStyle.setName(baseName);
