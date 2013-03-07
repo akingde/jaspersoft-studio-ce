@@ -15,14 +15,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.model.cell.command;
 
+import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.command.Tag;
@@ -30,12 +34,21 @@ import com.jaspersoft.studio.model.command.Tag;
 public class CreateE4ObjectCommand extends CreateElementCommand {
 	protected ANode child;
 	protected ANode parent;
-	protected JasperDesign jDesign;
+	protected JRDesignDataset jDataset;
 
 	public CreateE4ObjectCommand(ANode child, MCell parent, Rectangle location,
 			int index) {
 		super(parent, null, location, index);
-		jDesign = parent.getJasperDesign();
+		JasperDesign jd = parent.getJasperDesign();
+		jDataset = jd.getMainDesignDataset();
+		StandardTable st = TableManager.getTable(parent.getMTable());
+		JRDatasetRun dr = st.getDatasetRun();
+		if (dr != null) {
+			String dbname = dr.getDatasetName();
+			if (dbname != null)
+				jDataset = (JRDesignDataset) jd.getDatasetMap().get(dbname);
+		}
+
 		this.child = child;
 		this.parent = parent;
 	}
@@ -49,19 +62,19 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 			case TableUtil.COLUMN_HEADER:
 			case TableUtil.COLUMN_FOOTER:
 				var = Tag.createVariable(tag, ResetTypeEnum.COLUMN, null,
-						jDesign);
+						jDataset);
 				srcNode = Tag.createTextField(
 						tag.txt.replaceAll("%", tag.name), tag.classname);
 				break;
 			case TableUtil.COLUMN_GROUP_HEADER:
 				var = Tag.createVariable(tag, ResetTypeEnum.GROUP,
-						mparent.getJrGroup(), jDesign);
+						mparent.getJrGroup(), jDataset);
 				srcNode = Tag.createTextField(
 						tag.txt.replaceAll("%", tag.name), tag.classname);
 				break;
 			case TableUtil.COLUMN_GROUP_FOOTER:
 				var = Tag.createVariable(tag, ResetTypeEnum.GROUP,
-						mparent.getJrGroup(), jDesign);
+						mparent.getJrGroup(), jDataset);
 				srcNode = Tag.createTextField(
 						tag.txt.replaceAll("%", tag.name), tag.classname);
 				break;
@@ -72,7 +85,7 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 			case TableUtil.TABLE_FOOTER:
 			case TableUtil.TABLE_HEADER:
 				var = Tag.createVariable(tag, ResetTypeEnum.REPORT, null,
-						jDesign);
+						jDataset);
 				srcNode = Tag.createTextField(
 						tag.txt.replaceAll("%", tag.name), tag.classname);
 				break;
@@ -93,7 +106,7 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 		super.execute();
 		try {
 			if (var != null)
-				jDesign.addVariable((JRDesignVariable) var);
+				jDataset.addVariable((JRDesignVariable) var);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
@@ -103,6 +116,6 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 	public void undo() {
 		super.undo();
 		if (var != null)
-			jDesign.removeVariable(var);
+			jDataset.removeVariable(var);
 	}
 }

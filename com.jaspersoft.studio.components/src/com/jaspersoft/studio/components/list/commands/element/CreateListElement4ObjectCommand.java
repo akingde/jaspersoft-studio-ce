@@ -15,7 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.list.commands.element;
 
+import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
@@ -29,12 +31,18 @@ import com.jaspersoft.studio.model.command.Tag;
 public class CreateListElement4ObjectCommand extends CreateElementCommand {
 	protected ANode child;
 	protected ANode parent;
-	protected JasperDesign jDesign;
+	protected JRDesignDataset jDataset;
 
 	public CreateListElement4ObjectCommand(ANode child, MList parent,
 			Rectangle location, int index) {
 		super(parent, null, location, index);
-		jDesign = parent.getJasperDesign();
+		JasperDesign jd = parent.getJasperDesign();
+		JRDatasetRun dr = parent.getList().getDatasetRun();
+		if (dr != null) {
+			String dbname = dr.getDatasetName();
+			if (dbname != null)
+				jDataset = (JRDesignDataset) jd.getDatasetMap().get(dbname);
+		}
 		this.child = child;
 		this.parent = parent;
 	}
@@ -44,7 +52,7 @@ public class CreateListElement4ObjectCommand extends CreateElementCommand {
 		try {
 			Tag tag = Tag.getExpression(child);
 
-			var = Tag.createVariable(tag, ResetTypeEnum.REPORT, null, jDesign);
+			var = Tag.createVariable(tag, ResetTypeEnum.REPORT, null, jDataset);
 			srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name),
 					tag.classname);
 
@@ -62,7 +70,7 @@ public class CreateListElement4ObjectCommand extends CreateElementCommand {
 		super.execute();
 		try {
 			if (var != null)
-				jDesign.addVariable((JRDesignVariable) var);
+				jDataset.addVariable((JRDesignVariable) var);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
@@ -72,6 +80,6 @@ public class CreateListElement4ObjectCommand extends CreateElementCommand {
 	public void undo() {
 		super.undo();
 		if (var != null)
-			jDesign.removeVariable(var);
+			jDataset.removeVariable(var);
 	}
 }

@@ -316,4 +316,5 @@ public class MTable extends MGraphicElement implements IContainer,
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };
 	}
+	
 }
