@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Html Component
 Bundle-SymbolicName: com.jaspersoft.studio.html;singleton:=true
-Bundle-Version: 2.0.1
+Bundle-Version: 2.0.1.qualifier
 Bundle-Activator: com.jaspersoft.studio.html.Activator
 Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: com.jaspersoft.studio;bundle-version="2.0.1"
