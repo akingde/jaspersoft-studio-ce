@@ -15,29 +15,30 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
-import java.util.List;
-
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
-import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
+import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportEditor;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class DatasetAction extends SelectionAction {
 	public static final String ID = "datasetAction"; //$NON-NLS-1$
@@ -58,10 +59,10 @@ public class DatasetAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Dataset && Query ...");
-		setToolTipText("DataSet and Query editor dialog");
+		setText(Messages.DatasetAction_Title);
+		setToolTipText(Messages.DatasetAction_Tooltip);
 		setImageDescriptor(ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID,
-				"icons/resources/dataset-16.png"));
+				"icons/resources/dataset-16.png")); //$NON-NLS-1$
 		setId(ID);
 		setEnabled(false);
 	}
@@ -71,91 +72,83 @@ public class DatasetAction extends SelectionAction {
 	 */
 	public void run() {
 		try {
-			final AbstractVisualEditor part = (AbstractVisualEditor) getWorkbenchPart();
-			MDataset mdataset = null;
-			if (part instanceof ReportEditor) {
-				MReport mreport = (MReport) part.getModel().getChildren().get(0);
-				// First check if any MDataset element is selected
-				mdataset = getSelectedMDataset();
-				if (mdataset == null) {
-					// if we return the main dataset element
-					mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
-				}
-			} else {
-				// Handle custom editors for elements like table, crosstab and list
-				// FIXME - Now this solution works because list/crosstab/table editors will
-				// have only one child MDataset element. Once this will be no longer valid,
-				// the code below must be changed
-				if (part.getModel().getChildren().size() > 0) {
-					INode firstChild = part.getModel().getChildren().get(0);
-					if (firstChild instanceof MPage) {
-						for (INode c : firstChild.getChildren()) {
-							if (c instanceof MDataset) {
-								mdataset = (MDataset) c;
-								break;
-							}
-						}
-					}
-				}
-			}
-
-			IContentOutlinePage cop = (IContentOutlinePage) part.getAdapter(IContentOutlinePage.class);
-			if (cop != null) {
-				IStructuredSelection sel = (IStructuredSelection) cop.getSelection();
-				if (sel.getFirstElement() instanceof TreeEditPart) {
-					Object obj = ((TreeEditPart) sel.getFirstElement()).getModel();
-					if (obj instanceof MDataset)
-						mdataset = (MDataset) obj;
-				}
-			}
-
-			part.getAdapter(String.class);
-
+			MDataset mdataset = getMDatasetToShow();
 			final DatasetDialog dlg = new DatasetDialog(Display.getDefault().getActiveShell(), mdataset,
 					mdataset.getJasperConfiguration());
 			if (dlg.open() == Window.OK) {
 				Display.getCurrent().asyncExec(new Runnable() {
-
 					public void run() {
 						execute(dlg.getCommand());
 					}
 				});
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			UIUtils.showError(Messages.DatasetAction_ErrorMsg,e);
 		}
+	}
+
+	/*
+	 * Gets the MDataset instance for which we should open the "Dataset & Query" dialog.
+	 */
+	private MDataset getMDatasetToShow() {
+		ISelection selection = getSelection(); 
+		if(selection instanceof IStructuredSelection){
+			Object firstElement = ((IStructuredSelection) selection).getFirstElement();
+			// Selection of an EditPart that wraps the MDataset element, or one of its children.
+			// Example: selecting an Dataset from the Outline view, or its fields
+			if(firstElement instanceof EditPart && 
+					((EditPart) firstElement).getModel() instanceof ANode){ 
+					ANode currentNode = (ANode) ((EditPart) firstElement).getModel();
+					while (currentNode!=null){
+						if(currentNode instanceof MDataset){
+							return (MDataset) currentNode;
+						}
+						else{
+							currentNode=currentNode.getParent();
+						}
+					}
+			}
+		}
+		
+		final AbstractVisualEditor part = (AbstractVisualEditor) getWorkbenchPart();
+		if (part instanceof ReportEditor) {
+			MReport mreport = (MReport) part.getModel().getChildren().get(0);
+			// get report main dataset
+			return (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+		} else {
+			// Handle custom editors for elements like table, crosstab and list
+			// FIXME - Now this solution works because list/crosstab/table editors will
+			// have only one child MDataset element. Once this will be no longer valid,
+			// the code below must be changed
+			if (part.getModel().getChildren().size() > 0) {
+				INode firstChild = part.getModel().getChildren().get(0);
+				if (firstChild instanceof MPage) {
+					for (INode c : firstChild.getChildren()) {
+						if (c instanceof MDataset) {
+							return (MDataset) c;
+						}
+					}
+				}
+			}
+		}
+		
+		// Try a fallback solution in order to be sure to have a valid dataset
+		// Get it from the currently opened active editor
+		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
+		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
+			final ANode mroot = (ANode) ((JrxmlEditor) activeJRXMLEditor).getModel();
+			if (mroot != null) {
+				final ANode mreport = (ANode) mroot.getChildren().get(0);
+				return (MDataset) ((MReport)mreport).getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+			}
+		}
+		
+		return null;
 	}
 
 	@Override
 	protected boolean calculateEnabled() {
-		List<Object> selection = getSelectedObjects();
-		if (!selection.isEmpty() && selection.size() == 1) {
-			Object obj = selection.get(0);
-			if (obj instanceof IDatasetDialogSupport) {
-				return true;
-			}
-			if (obj instanceof EditPart) {
-				if (((EditPart) obj).getModel() instanceof MDataset || ((EditPart) obj).getModel() instanceof MBand
-						|| ((EditPart) obj).getModel() instanceof MReport || ((EditPart) obj).getParent() instanceof PageEditPart)
-					return true;
-			}
-		}
-
-		return false;
-	}
-
-	/*
-	 * Returns the currently selected MDataset object (i.e: in the Outline) if any.
-	 */
-	private MDataset getSelectedMDataset() {
-		List<Object> selection = getSelectedObjects();
-		if (!selection.isEmpty() && selection.size() == 1) {
-			Object obj = selection.get(0);
-			if (obj instanceof EditPart && ((EditPart) obj).getModel() instanceof MDataset) {
-				return (MDataset) ((EditPart) obj).getModel();
-			}
-		}
-		return null;
+		return true;
 	}
 
 }

@@ -323,6 +323,9 @@ public class Messages extends NLS {
 	public static String DataQueryAdapters_languagetitle;
 	public static String DataQueryAdapters_newaction;
 	public static String DataQueryAdapters_querytab;
+	public static String DatasetAction_ErrorMsg;
+	public static String DatasetAction_Title;
+	public static String DatasetAction_Tooltip;
 	public static String DatasetDialog_datapreviewtab;
 	public static String DatasetDialog_DataPreviewTab;
 	public static String DatasetDialog_fieldstab;
