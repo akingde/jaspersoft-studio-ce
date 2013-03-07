@@ -71,7 +71,7 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
 
 	public ElementDatasetWidget(Composite parent) {
-		this.dsRunSelectionListeners=new ArrayList<DatasetRunSelectionListener>();
+		this.dsRunSelectionListeners = new ArrayList<DatasetRunSelectionListener>();
 		createDataset(parent);
 		bindData();
 	}
@@ -101,6 +101,7 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		enableMainDatasetRun();
 		fillIncrement();
 		fillResetGroup();
+		dsCombo.getParent().layout(true);
 	}
 
 	private void fillIncrement() {
@@ -326,13 +327,16 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 				wizard.setValue((JRDesignExpression) eDataset
 						.getIncrementWhenExpression());
-				// Increment when expression should rely on the dataset run information.
+				// Increment when expression should rely on the dataset run
+				// information.
 				JRDatasetRun datasetRun = eDataset.getDatasetRun();
-				JRDesignDataset dds=jrDesign.getMainDesignDataset();
-				if(datasetRun!=null && datasetRun.getDatasetName()!=null){
-					dds=ModelUtils.getDesignDatasetByName(jrDesign, datasetRun.getDatasetName());
+				JRDesignDataset dds = jrDesign.getMainDesignDataset();
+				if (datasetRun != null && datasetRun.getDatasetName() != null) {
+					dds = ModelUtils.getDesignDatasetByName(jrDesign,
+							datasetRun.getDatasetName());
 				}
-				ExpressionContext ec=new ExpressionContext(dds,expContext.getJasperReportsConfiguration());
+				ExpressionContext ec = new ExpressionContext(dds, expContext
+						.getJasperReportsConfiguration());
 				wizard.setExpressionContext(ec);
 				WizardDialog dialog = new WizardDialog(btnIncrement.getShell(),
 						wizard);
@@ -407,21 +411,21 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		bptab.setControl(composite);
 	}
 
-//	private void createFields(CTabFolder tabFolder) {
-//		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-//		bptab.setText("Fields");
-//
-//		Composite composite = new Composite(tabFolder, SWT.NONE);
-//		composite.setLayout(new GridLayout());
-//
-//		Label lbl = new Label(composite, SWT.NONE);
-//		lbl.setText("[dataset fields table here]");
-//		lbl.setLayoutData(new GridData(GridData.FILL_BOTH
-//				| GridData.HORIZONTAL_ALIGN_CENTER
-//				| GridData.VERTICAL_ALIGN_CENTER));
-//
-//		bptab.setControl(composite);
-//	}
+	// private void createFields(CTabFolder tabFolder) {
+	// CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+	// bptab.setText("Fields");
+	//
+	// Composite composite = new Composite(tabFolder, SWT.NONE);
+	// composite.setLayout(new GridLayout());
+	//
+	// Label lbl = new Label(composite, SWT.NONE);
+	// lbl.setText("[dataset fields table here]");
+	// lbl.setLayoutData(new GridData(GridData.FILL_BOTH
+	// | GridData.HORIZONTAL_ALIGN_CENTER
+	// | GridData.VERTICAL_ALIGN_CENTER));
+	//
+	// bptab.setControl(composite);
+	// }
 
 	// private void createData(CTabFolder tabFolder) {
 	// CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
@@ -466,19 +470,21 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {
-		this.expContext=expContext;
+		this.expContext = expContext;
 	}
-	
-	public void addDatasetRunSelectionListener(DatasetRunSelectionListener listener){
+
+	public void addDatasetRunSelectionListener(
+			DatasetRunSelectionListener listener) {
 		dsRunSelectionListeners.add(listener);
 	}
-	
-	public void removeDatasetRunSelectionListener(DatasetRunSelectionListener listener){
+
+	public void removeDatasetRunSelectionListener(
+			DatasetRunSelectionListener listener) {
 		dsRunSelectionListeners.remove(listener);
 	}
-	
-	private void notifyDatasetRunSelectionChanged(){
-		for(DatasetRunSelectionListener l : dsRunSelectionListeners){
+
+	private void notifyDatasetRunSelectionChanged() {
+		for (DatasetRunSelectionListener l : dsRunSelectionListeners) {
 			l.selectionChanged();
 		}
 	}
