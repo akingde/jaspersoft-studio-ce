@@ -180,7 +180,7 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignVariable jrVariable = (JRDesignVariable) getValue();
-		if (id.equals(JRDesignVariable.PROPERTY_NAME))
+		if (id.equals(JRDesignVariable.PROPERTY_NAME)){
 			if (!value.equals("")) {
 				jrVariable.setName((String) value);
 				JRDesignDataset d = ModelUtils.getDataset(this);
@@ -188,7 +188,8 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 					d.getVariablesMap().remove(jrVariable);
 					d.getVariablesMap().put(jrVariable.getName(), jrVariable);
 				}
-			} else if (id.equals(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME))
+			}
+		} else if (id.equals(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME))
 				jrVariable.setValueClassName((String) value);
 	}
 
