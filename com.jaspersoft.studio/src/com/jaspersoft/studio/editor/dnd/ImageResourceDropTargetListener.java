@@ -75,30 +75,32 @@ public class ImageResourceDropTargetListener extends AbstractTransferDropTargetL
 	 */
 	private boolean isDroppedDataAnImage(DropTargetEvent event) {
 		if (ResourceTransfer.getInstance().isSupportedType(event.currentDataType)){
-			// Dropping an image resource from inside workspace
-			IResource imgResource = ((IResource[])event.data)[0];
-			return ImageUtils.hasValidFileImageExtension(
-					imgResource.getProjectRelativePath().getFileExtension());				
+			if(event.data instanceof IResource[]){
+				// Dropping an image resource from inside workspace
+				IResource imgResource = ((IResource[])event.data)[0];
+				return ImageUtils.hasValidFileImageExtension(
+						imgResource.getProjectRelativePath().getFileExtension());
+			}
 		}
 		else if(FileTransfer.getInstance().isSupportedType(event.currentDataType)){
 			// Dropping an image resource from outside workspace
-			String filepath = ((String[])event.data)[0];
-			if(filepath!=null){
-				int lastIndexOfDot = filepath.lastIndexOf(".");
-				if(lastIndexOfDot!=-1){
-					String extension = filepath.substring(lastIndexOfDot+1);
-					return ImageUtils.hasValidFileImageExtension(extension);				
+			if(event.data instanceof String[]){
+				String filepath = ((String[])event.data)[0];
+				if(filepath!=null){
+					int lastIndexOfDot = filepath.lastIndexOf(".");
+					if(lastIndexOfDot!=-1){
+						String extension = filepath.substring(lastIndexOfDot+1);
+						return ImageUtils.hasValidFileImageExtension(extension);				
+					}
 				}
 			}
-			return false;
 		}
 		else if(ImageURLTransfer.getInstance().isSupportedType(event.currentDataType)){
 			// Dropping an image dropped from a contributed view (i.e: repository view)
-			return event.data != null;
+			return (event.data instanceof String);
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
