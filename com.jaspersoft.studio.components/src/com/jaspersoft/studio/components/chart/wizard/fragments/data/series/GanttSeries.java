@@ -74,12 +74,9 @@ public class GanttSeries implements ISeriesFactory<JRGanttSeries> {
 	}
 
 	public void modify(JRGanttSeries element, String property, Object value) {
-		TableItem tableItem = (TableItem) element;
-		JRDesignGanttSeries data = (JRDesignGanttSeries) tableItem.getData();
-		if ("NAME".equals(property) && value instanceof JRExpression) {//$NON-NLS-1$
+		JRDesignGanttSeries data = (JRDesignGanttSeries) element;
+		if ("NAME".equals(property) && value instanceof JRExpression) //$NON-NLS-1$
 			data.setSeriesExpression((JRExpression) value);
-		}
-
 	}
 
 	private List<JRGanttSeries> vlist;

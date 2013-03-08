@@ -23,8 +23,6 @@ import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.swt.widgets.TableItem;
-
 public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 
 	public JRDesignCategorySeries createSerie() {
@@ -67,13 +65,9 @@ public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 	}
 
 	public void modify(JRCategorySeries element, String property, Object value) {
-		TableItem tableItem = (TableItem) element;
-		JRDesignCategorySeries data = (JRDesignCategorySeries) tableItem
-				.getData();
-		if ("NAME".equals(property) && value instanceof JRExpression) {//$NON-NLS-1$
+		JRDesignCategorySeries data = (JRDesignCategorySeries) element;
+		if ("NAME".equals(property) && value instanceof JRExpression) //$NON-NLS-1$
 			data.setSeriesExpression((JRExpression) value);
-		}
-
 	}
 
 	private List<JRCategorySeries> vlist;

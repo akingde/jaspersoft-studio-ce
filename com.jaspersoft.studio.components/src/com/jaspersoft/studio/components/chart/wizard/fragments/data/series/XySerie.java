@@ -67,12 +67,9 @@ public class XySerie implements ISeriesFactory<JRXySeries> {
 	}
 
 	public void modify(JRXySeries element, String property, Object value) {
-		TableItem tableItem = (TableItem) element;
-		JRDesignXySeries data = (JRDesignXySeries) tableItem.getData();
-		if ("NAME".equals(property) && value instanceof JRExpression) {//$NON-NLS-1$
+		JRDesignXySeries data = (JRDesignXySeries) element;
+		if ("NAME".equals(property) && value instanceof JRExpression) //$NON-NLS-1$
 			data.setSeriesExpression((JRExpression) value);
-		}
-
 	}
 
 	private List<JRXySeries> vlist;

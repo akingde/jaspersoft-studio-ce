@@ -23,8 +23,6 @@ import net.sf.jasperreports.charts.design.JRDesignTimePeriodSeries;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.swt.widgets.TableItem;
-
 public class TimePeriodSerie implements ISeriesFactory<JRTimePeriodSeries> {
 
 	public JRDesignTimePeriodSeries createSerie() {
@@ -71,13 +69,9 @@ public class TimePeriodSerie implements ISeriesFactory<JRTimePeriodSeries> {
 	}
 
 	public void modify(JRTimePeriodSeries element, String property, Object value) {
-		TableItem tableItem = (TableItem) element;
-		JRDesignTimePeriodSeries data = (JRDesignTimePeriodSeries) tableItem
-				.getData();
-		if ("NAME".equals(property) && value instanceof JRExpression) {//$NON-NLS-1$
+		JRDesignTimePeriodSeries data = (JRDesignTimePeriodSeries) element;
+		if ("NAME".equals(property) && value instanceof JRExpression) //$NON-NLS-1$
 			data.setSeriesExpression((JRExpression) value);
-		}
-
 	}
 
 	private List<JRTimePeriodSeries> vlist;

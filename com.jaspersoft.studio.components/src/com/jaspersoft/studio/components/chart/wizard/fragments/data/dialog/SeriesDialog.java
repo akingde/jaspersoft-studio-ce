@@ -17,6 +17,7 @@ package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 
 import java.util.List;
 
+import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -36,6 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 
@@ -172,7 +174,8 @@ public class SeriesDialog<T> extends FormDialog implements
 			}
 
 			public void modify(Object element, String property, Object value) {
-				serie.modify((T) element, property, value);
+				TableItem tableItem = (TableItem) element;
+				serie.modify((T) tableItem.getData(), property, value);
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
 			}

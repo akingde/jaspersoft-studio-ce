@@ -23,8 +23,6 @@ import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.swt.widgets.TableItem;
-
 public class PieSerie implements ISeriesFactory<JRPieSeries> {
 
 	public JRDesignPieSeries createSerie() {
@@ -65,12 +63,9 @@ public class PieSerie implements ISeriesFactory<JRPieSeries> {
 	}
 
 	public void modify(JRPieSeries element, String property, Object value) {
-		TableItem tableItem = (TableItem) element;
-		JRDesignPieSeries data = (JRDesignPieSeries) tableItem.getData();
-		if ("NAME".equals(property) && value instanceof JRExpression) {//$NON-NLS-1$
+		JRDesignPieSeries data = (JRDesignPieSeries) element;
+		if ("NAME".equals(property) && value instanceof JRExpression) //$NON-NLS-1$
 			data.setKeyExpression((JRExpression) value);
-		}
-
 	}
 
 	private List<JRPieSeries> vlist;
