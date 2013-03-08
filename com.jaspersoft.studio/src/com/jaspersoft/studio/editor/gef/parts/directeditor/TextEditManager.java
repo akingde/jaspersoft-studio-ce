@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.directeditor;
 
@@ -46,7 +41,7 @@ public class TextEditManager extends DirectEditManager {
 	private MTextElement textElement;
 	private CellEditorActionHandler actionHandler;
 	private IAction copy, cut, paste, undo, redo, find, selectAll, delete;
-//	private double cachedZoom = -1.0;
+	// private double cachedZoom = -1.0;
 	private Font scaledFont;
 	private ZoomListener zoomListener = new ZoomListener() {
 		public void zoomChanged(double newZoom) {
@@ -87,32 +82,31 @@ public class TextEditManager extends DirectEditManager {
 		}
 	}
 
-	protected void initCellEditor() { 
+	protected void initCellEditor() {
 		// update text
-		
+
 		try {
-		MStaticText model = (MStaticText)((FigureEditPart)getEditPart()).getModel();
-		getCellEditor().setValue(model.getPropertyValue(JRBaseStaticText.PROPERTY_TEXT));
-		getCellEditor().getControl().setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-		
-		// update font
-		ZoomManager zoomMgr = (ZoomManager)getEditPart().getViewer().getProperty(ZoomManager.class.toString());
-		if (zoomMgr != null) { // this will force the font to be set cachedZoom = -1.0;
-			updateScaledFont(zoomMgr.getZoom(), model);
-			zoomMgr.addZoomListener(zoomListener);
-		} // else
-			// getCellEditor().getControl().setFont(stickyNote.getFont());
-		// Hook the cell editor's copy/paste actions to the actionBars so that they can 
-		// be invoked via keyboard
-		// shortcuts. 
-		actionBars = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorSite().getActionBars();
-		saveCurrentActions(actionBars);
-		actionHandler = new CellEditorActionHandler(actionBars);
-		actionHandler.addCellEditor(getCellEditor());
-		actionBars.updateActionBars();
-		
-		} catch (Exception ex)
-		{
+			MStaticText model = (MStaticText) ((FigureEditPart) getEditPart()).getModel();
+			getCellEditor().setValue(model.getPropertyValue(JRBaseStaticText.PROPERTY_TEXT));
+			getCellEditor().getControl().setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+
+			// update font
+			ZoomManager zoomMgr = (ZoomManager) getEditPart().getViewer().getProperty(ZoomManager.class.toString());
+			if (zoomMgr != null) { // this will force the font to be set cachedZoom = -1.0;
+				updateScaledFont(zoomMgr.getZoom(), model);
+				zoomMgr.addZoomListener(zoomListener);
+			} // else
+				// getCellEditor().getControl().setFont(stickyNote.getFont());
+			// Hook the cell editor's copy/paste actions to the actionBars so that they can
+			// be invoked via keyboard
+			// shortcuts.
+			actionBars = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+					.getEditorSite().getActionBars();
+			saveCurrentActions(actionBars);
+			actionHandler = new CellEditorActionHandler(actionBars);
+			actionHandler.addCellEditor(getCellEditor());
+			actionBars.updateActionBars();
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
@@ -140,47 +134,40 @@ public class TextEditManager extends DirectEditManager {
 	}
 
 	private void updateScaledFont(double zoom, MTextElement model) {
-		//if (cachedZoom == zoom)
-		//	return;
-		
+		// if (cachedZoom == zoom)
+		// return;
+
 		int fontSize = 1;
-		Object fontSizeValue = model == null ? null : model.getPropertyValue(JRBaseFont.PROPERTY_FONT_SIZE);
-		
+		Object fontSizeValue = model == null ? null : model.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
+
 		try {
-		if (fontSizeValue != null)
-		{
-			 if (fontSizeValue instanceof String)
-			 {
-				 fontSize = Integer.parseInt((String)fontSizeValue);
-			 }
-			 else if (fontSizeValue instanceof Integer)
-			 {
-				 fontSize = ((Integer)fontSizeValue).intValue();
-			 }
-			 
+			if (fontSizeValue != null) {
+				if (fontSizeValue instanceof String) {
+					fontSize = Integer.parseInt((String) fontSizeValue);
+				} else if (fontSizeValue instanceof Integer) {
+					fontSize = ((Integer) fontSizeValue).intValue();
+				}
+
+			}
+		} catch (Exception ex) {
+
 		}
-		} catch (Exception ex)
-		{
-			
-		}
-		
-		String fontName = model == null ? null : (String)model.getPropertyValue(JRBaseFont.PROPERTY_FONT_NAME);
-		
+
+		String fontName = model == null ? null : (String) model.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_NAME);
+
 		Text text = (Text) getCellEditor().getControl();
 		Font font = getEditPart().getFigure().getFont();
-		
+
 		disposeScaledFont();
-		
+
 		try {
-		FontData fd = font.getFontData()[0];
-		fd.setHeight((int) (zoom * fontSize * 0.75)); //fd.getHeight()
-		if (fontName != null && fontName.length() > 0)
-		{
-			fd.setName( fontName );
-		}
-	  text.setFont(scaledFont = new Font(null, fd));
-		} catch (Exception ex)
-		{
+			FontData fd = font.getFontData()[0];
+			fd.setHeight(Math.max(12, (int) (zoom * fontSize * 0.75))); // fd.getHeight()
+			if (fontName != null && fontName.length() > 0) {
+				fd.setName(fontName);
+			}
+			text.setFont(scaledFont = new Font(null, fd));
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
