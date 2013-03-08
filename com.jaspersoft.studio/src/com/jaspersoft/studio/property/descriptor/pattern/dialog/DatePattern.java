@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -52,13 +52,10 @@ public class DatePattern extends APattern {
 			f.applyPattern(s);
 			list.add(f.format(getSample()));
 		}
-		list.addSelectionListener(new SelectionListener() {
+		list.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				formatChanged();
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-
 			}
 		});
 		return container;

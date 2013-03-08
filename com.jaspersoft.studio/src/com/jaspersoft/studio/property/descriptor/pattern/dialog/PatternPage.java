@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.text.Format;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,12 +24,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
@@ -42,7 +42,7 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 	private List list;
 	private Map<String, APattern> map;
 	private Text patternText;
-	private Label sampleLabel;
+	private Text sampleLabel;
 	private APattern pattern;
 	private Label descriptionLabel;
 	private StackLayout stackLayout;
@@ -64,7 +64,7 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 
 	public APattern getPattern() {
 		if (pattern == null)
-			pattern = new CustomPattern(configComposite, value, null, null);
+			pattern = new CustomPattern(configComposite, value, new MessageFormat(value), null);
 		return pattern;
 	}
 
@@ -88,19 +88,20 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 		gd.widthHint = 100;
 		list.setLayoutData(gd);
 
-		Group patternGroup = new Group(composite, SWT.NONE);
-		patternGroup.setText(" " + Messages.common_pattern + " ");
+		Composite patternGroup = new Composite(composite, SWT.NONE);
 		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.widthHint = 200;
 		patternGroup.setLayoutData(gd);
 		patternGroup.setLayout(new GridLayout(1, true));
+
+		new Label(patternGroup, SWT.NONE).setText(Messages.common_pattern);
 
 		patternText = new Text(patternGroup, SWT.SINGLE | SWT.BORDER);
 		patternText.setText(getValue() != null ? getValue() : ""); //$NON-NLS-1$
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		patternText.setLayoutData(gd);
 
-		sampleLabel = new Label(patternGroup, SWT.BORDER | SWT.FLAT | SWT.CENTER);
+		sampleLabel = new Text(patternGroup, SWT.FLAT | SWT.CENTER | SWT.READ_ONLY);
 		sampleLabel.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		sampleLabel.setLayoutData(gd);
@@ -124,8 +125,8 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 		gd.heightHint = 30;
 		descriptionLabel.setLayoutData(gd);
 
-		list.addSelectionListener(new SelectionListener() {
-
+		list.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int sel = list.getSelectionIndex();
 				if (sel >= 0) {
@@ -137,10 +138,6 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 					stackLayout.topControl = p.getControl();
 					configComposite.layout();
 				}
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				e.getSource();
 			}
 		});
 		patternText.addModifyListener(new ModifyListener() {
@@ -209,8 +206,8 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 					((DecimalFormat) formatter).applyPattern(p.getPattern());
 
 				sampleLabel.setText(formatter.format(p.getSample()));
-				setValue(p.getPattern());
 			}
+			setValue(p.getPattern());
 		} catch (Exception ex) {
 			setErrorMessage(ex.getMessage());
 		}
