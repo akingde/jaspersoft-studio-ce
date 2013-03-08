@@ -59,21 +59,28 @@ public class CSVFieldsProvider implements IFieldsProvider {
 			ds = (JRCsvDataSource) parameters
 					.get(JRParameter.REPORT_DATA_SOURCE);
 		}
+		List<JRDesignField> columns = new ArrayList<JRDesignField>();
+		if (da.getColumnNames() != null && !da.getColumnNames().isEmpty()) {
+			for (String key : da.getColumnNames())
+				createColumn(columns, key);
+			return columns;
+		}
 		if (ds != null) {
 			ds.setUseFirstRowAsHeader(true);
 			ds.next();
 			Map<String, Integer> map = ds.getColumnNames();
-			List<JRDesignField> columns = new ArrayList<JRDesignField>(map
-					.keySet().size());
-			for (String key : map.keySet()) {
-				JRDesignField field = new JRDesignField();
-				field.setName(key);
-				field.setValueClass(String.class);
-				columns.add(field);
-			}
+			for (String key : map.keySet())
+				createColumn(columns, key);
 			return columns;
 		}
 		return null;
+	}
+
+	private void createColumn(List<JRDesignField> columns, String key) {
+		JRDesignField field = new JRDesignField();
+		field.setName(key);
+		field.setValueClass(String.class);
+		columns.add(field);
 	}
 
 	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
