@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog;
 
@@ -65,6 +60,7 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -85,7 +81,7 @@ public class RVPropertyPage extends JSSHelpWizardPage {
 			case 2:
 				return val.getCalculationValue().getName();
 			case 3:
-				return val.getIncrementerFactoryClassName();
+				return Misc.nvl(val.getIncrementerFactoryClassName());
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -136,7 +132,7 @@ public class RVPropertyPage extends JSSHelpWizardPage {
 		setTitle(Messages.RVPropertyPage_subreport_return_values);
 		setDescription(Messages.RVPropertyPage_description);
 	}
-	
+
 	/**
 	 * Return the context name for the help of this page
 	 */
@@ -181,7 +177,6 @@ public class RVPropertyPage extends JSSHelpWizardPage {
 					if (!vExists) {
 						p.setToVariable(toV[j]);
 						p.setCalculation(CalculationEnum.NOTHING);
-						p.setIncrementerFactoryClassName(" "); //$NON-NLS-1$
 						return p;
 					}
 				}
@@ -295,7 +290,7 @@ public class RVPropertyPage extends JSSHelpWizardPage {
 				if ("CALCULATIONTYPE".equals(property)) //$NON-NLS-1$
 					return EnumHelper.getValue(prop.getCalculationValue(), 0, false);
 				if ("INCREMENTERFACTORYCLASS".equals(property)) //$NON-NLS-1$
-					return prop.getIncrementerFactoryClassName();
+					return Misc.nvl(prop.getIncrementerFactoryClassName());
 				return ""; //$NON-NLS-1$
 			}
 
