@@ -209,7 +209,6 @@ public class MarkerPropertyDialog extends Dialog {
 		stackComposite.layout();
 		if (buseexpr.getSelection()) {
 			value.setValueExpression(evalue.getExpression());
-			value.setValue(null);
 		} else
 			value.setValue(tvalue.getText());
 	}
