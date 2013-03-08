@@ -23,11 +23,15 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapter;
 import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImplementation;
+import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -38,7 +42,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  */
 public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements
-		IFieldsProvider {
+		IFieldsProvider, IWizardDataEditorProvider {
 	private HiveDataAdapter dataAdapter = new HiveDataAdapterImplementation();
 
 	private IFieldsProvider fieldsProvider;
@@ -81,5 +85,11 @@ public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements
 	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		getFieldProvider();
 		return fieldsProvider.supportsGetFieldsOperation(jConfig);
+	}
+
+	@Override
+	public AWizardDataEditorComposite createDataEditorComposite(
+			Composite parent, WizardPage page) {
+		return new HiveWizardDataEditorComposite(parent, page, this);
 	}
 }

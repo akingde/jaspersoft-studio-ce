@@ -42,11 +42,15 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.cassandra.adapter.CassandraDataAdapter;
 import com.jaspersoft.cassandra.adapter.CassandraDataAdapterImplementation;
+import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -57,7 +61,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  */
 public class CassandraDataAdapterDescriptor extends DataAdapterDescriptor
-		implements IFieldsProvider {
+		implements IFieldsProvider, IWizardDataEditorProvider {
 	private CassandraDataAdapter dataAdapter = new CassandraDataAdapterImplementation();
 
 	private IFieldsProvider fieldsProvider;
@@ -100,5 +104,11 @@ public class CassandraDataAdapterDescriptor extends DataAdapterDescriptor
 	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		getFieldProvider();
 		return fieldsProvider.supportsGetFieldsOperation(jConfig);
+	}
+
+	@Override
+	public AWizardDataEditorComposite createDataEditorComposite(
+			Composite parent, WizardPage page) {
+		return new CassandraWizardDataEditorComposite(parent, page, this);
 	}
 }

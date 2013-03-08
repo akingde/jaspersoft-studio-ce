@@ -23,11 +23,15 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.mongodb.adapter.MongoDbDataAdapter;
 import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterImplementation;
+import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -37,47 +41,55 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Eric Diaz
  * 
  */
-public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider {
-    private MongoDbDataAdapter dataAdapter = new MongoDbDataAdapterImplementation();
+public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor
+		implements IFieldsProvider, IWizardDataEditorProvider {
+	private MongoDbDataAdapter dataAdapter = new MongoDbDataAdapterImplementation();
 
-    private IFieldsProvider fieldsProvider;
+	private IFieldsProvider fieldsProvider;
 
-    @Override
-    public MongoDbDataAdapter getDataAdapter() {
-        return dataAdapter;
-    }
+	@Override
+	public MongoDbDataAdapter getDataAdapter() {
+		return dataAdapter;
+	}
 
-    @Override
-    public void setDataAdapter(DataAdapter dataAdapter) {
-        this.dataAdapter = (MongoDbDataAdapter) dataAdapter;
-    }
+	@Override
+	public void setDataAdapter(DataAdapter dataAdapter) {
+		this.dataAdapter = (MongoDbDataAdapter) dataAdapter;
+	}
 
-    @Override
-    public MongoDbDataAdapterEditor getEditor() {
-        return new MongoDbDataAdapterEditor();
-    }
+	@Override
+	public MongoDbDataAdapterEditor getEditor() {
+		return new MongoDbDataAdapterEditor();
+	}
 
-    @Override
-    public Image getIcon(int size) {
-        if (size == 16) {
-            return Activator.getDefault().getImage(Activator.ICON_NAME);
-        }
-        return null;
-    }
+	@Override
+	public Image getIcon(int size) {
+		if (size == 16) {
+			return Activator.getDefault().getImage(Activator.ICON_NAME);
+		}
+		return null;
+	}
 
-    public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig,
-            JRDataset reportDataset) throws JRException, UnsupportedOperationException {
-        getFieldProvider();
-        return fieldsProvider.getFields(con, jConfig, reportDataset);
-    }
+	public List<JRDesignField> getFields(DataAdapterService con,
+			JasperReportsConfiguration jConfig, JRDataset reportDataset)
+			throws JRException, UnsupportedOperationException {
+		getFieldProvider();
+		return fieldsProvider.getFields(con, jConfig, reportDataset);
+	}
 
-    private void getFieldProvider() {
-        if (fieldsProvider == null)
-            fieldsProvider = new MongoDbFieldsProvider();
-    }
+	private void getFieldProvider() {
+		if (fieldsProvider == null)
+			fieldsProvider = new MongoDbFieldsProvider();
+	}
 
-    public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
-        getFieldProvider();
-        return fieldsProvider.supportsGetFieldsOperation(jConfig);
-    }
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
+		getFieldProvider();
+		return fieldsProvider.supportsGetFieldsOperation(jConfig);
+	}
+
+	@Override
+	public AWizardDataEditorComposite createDataEditorComposite(
+			Composite parent, WizardPage page) {
+		return new MongoDBWizardDataEditorComposite(parent, page, this);
+	}
 }
