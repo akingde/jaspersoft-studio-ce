@@ -203,10 +203,12 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 					d.getFieldsMap().put(jrField.getName(), jrField);
 				}
 			}
-		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME))
+		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME)){
 			jrField.setValueClassName((String) value);
-		else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION))
+		}
+		else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION)){
 			jrField.setDescription((String) value);
+		}
 		else if (id.equals(PROPERTY_MAP)) {
 			JRPropertiesMap v = (JRPropertiesMap) value;
 			String[] names = jrField.getPropertiesMap().getPropertyNames();

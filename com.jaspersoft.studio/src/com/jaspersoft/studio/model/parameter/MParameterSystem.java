@@ -176,7 +176,7 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignParameter jrParameter = (JRDesignParameter) getValue();
-		if (id.equals(JRDesignParameter.PROPERTY_NAME))
+		if (id.equals(JRDesignParameter.PROPERTY_NAME)){
 			if (!value.equals("")) {
 				jrParameter.setName((String) value);
 				JRDesignDataset d = ModelUtils.getDataset(this);
@@ -184,8 +184,10 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 					d.getParametersMap().remove(jrParameter);
 					d.getParametersMap().put(jrParameter.getName(), jrParameter);
 				}
-			} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME))
+			} 
+		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME)){
 				jrParameter.setValueClassName((String) value);
+		}
 	}
 
 	/**
