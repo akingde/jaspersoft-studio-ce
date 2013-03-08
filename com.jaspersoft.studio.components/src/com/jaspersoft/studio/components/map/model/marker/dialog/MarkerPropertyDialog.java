@@ -207,9 +207,10 @@ public class MarkerPropertyDialog extends Dialog {
 	public void changeValueOrExpression() {
 		stackLayout.topControl = buseexpr.getSelection() ? vexp : vcmp;
 		stackComposite.layout();
-		if (buseexpr.getSelection())
+		if (buseexpr.getSelection()) {
 			value.setValueExpression(evalue.getExpression());
-		else
+			value.setValue(null);
+		} else
 			value.setValue(tvalue.getText());
 	}
 
