@@ -15,17 +15,23 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.list.part;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.SnapToGrid;
+import org.eclipse.gef.SnapToGuides;
+import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.CreateRequest;
@@ -40,6 +46,7 @@ import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.SnapToGeometryThreshold;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
@@ -47,6 +54,7 @@ import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
+import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 
 /**
  * 
@@ -209,5 +217,47 @@ public class ListEditPart extends EditableFigureEditPart {
 				getViewer().getEditDomain().getCommandStack().execute(c);
 		}
 		super.performRequest(req);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Object getAdapter(Class key) {
+		if (key == SnapToHelper.class) {
+			List<SnapToHelper> snapStrategies = new ArrayList<SnapToHelper>();
+			Boolean val = jConfig.getPropertyBoolean(
+					RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER,
+					Boolean.TRUE);
+			Boolean stg = jConfig.getPropertyBoolean(
+					RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGUIDES,
+					Boolean.TRUE);
+			if (val.booleanValue() && stg != null && stg.booleanValue())
+				snapStrategies.add(new SnapToGuides(this));
+			val = jConfig.getPropertyBoolean(
+					RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGEOMETRY,
+					Boolean.TRUE);
+			if (val.booleanValue()) {
+
+				SnapToGeometryThreshold snapper = new SnapToGeometryThreshold(
+						this);
+				snapper.setThreshold(2.0);
+				snapStrategies.add(snapper);
+			}
+			val = jConfig.getPropertyBoolean(
+					RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGRID,
+					Boolean.TRUE);
+			if (val.booleanValue())
+				snapStrategies.add(new SnapToGrid(this));
+
+			if (snapStrategies.size() == 0)
+				return null;
+			if (snapStrategies.size() == 1)
+				return snapStrategies.get(0);
+
+			SnapToHelper ss[] = new SnapToHelper[snapStrategies.size()];
+			for (int i = 0; i < snapStrategies.size(); i++)
+				ss[i] = snapStrategies.get(i);
+			return new CompoundSnapToHelper(ss);
+		}
+		return super.getAdapter(key);
 	}
 }
