@@ -35,7 +35,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.internal.KeyBindingService;
-import org.eclipse.ui.internal.PartSite;
 import org.eclipse.ui.internal.PopupMenuExtender;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.services.INestable;
@@ -452,7 +451,9 @@ public class MultiPageToolbarEditorSite implements IEditorSite, INestable {
 		if (menuExtenders == null) {
 			menuExtenders = new ArrayList<PopupMenuExtender>(1);
 		}
-		PartSite.registerContextMenu(menuID, menuMgr, selProvider, true, editor, menuExtenders);
+		// The line below is the original call that was compiling fine till 4.2.1
+		// PartSite.registerContextMenu(menuID, menuMgr, selProvider, true, editor, menuExtenders);
+		getMultiPageEditor().getSite().registerContextMenu(menuID, menuMgr, selProvider);
 	}
 
 	public final void registerContextMenu(final String menuId, final MenuManager menuManager,
@@ -460,7 +461,9 @@ public class MultiPageToolbarEditorSite implements IEditorSite, INestable {
 		if (menuExtenders == null) {
 			menuExtenders = new ArrayList<PopupMenuExtender>(1);
 		}
-		PartSite.registerContextMenu(menuId, menuManager, selectionProvider, includeEditorInput, editor, menuExtenders);
+		// The line below is the original call that was compiling fine till 4.2.1
+		// PartSite.registerContextMenu(menuId, menuManager, selectionProvider, includeEditorInput, editor, menuExtenders);
+		getMultiPageEditor().getSite().registerContextMenu(menuId, menuManager, selectionProvider);
 	}
 
 	/**
