@@ -12,9 +12,9 @@ public class HttpUtils {
 	public static HttpMethod get(HttpClient client, String url)
 			throws HttpException, IOException {
 		HttpMethod method = new GetMethod(url);
-		method.setRequestHeader("Content-Type", "application/json");
+		method.setRequestHeader("Accept", "application/json");
 
-		method.toString();
+		System.out.println(method.getURI());
 		int statusCode = client.executeMethod(method);
 		if (statusCode != HttpStatus.SC_OK)
 			System.err.println("Method failed: " + method.getStatusLine());
