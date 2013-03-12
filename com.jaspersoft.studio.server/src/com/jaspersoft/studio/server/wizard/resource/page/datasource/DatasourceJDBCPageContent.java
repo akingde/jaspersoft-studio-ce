@@ -108,13 +108,12 @@ public class DatasourceJDBCPageContent extends APageContent {
 		importDA.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ImportDataSourceInfoFromDA dialog = new ImportDataSourceInfoFromDA(
+				ImportDataSourceInfoFromDA<JdbcDataAdapter> dialog = new ImportDataSourceInfoFromDA<JdbcDataAdapter>(
 						Display.getDefault().getActiveShell(),
 						"JDBC", JdbcDataAdapter.class); //$NON-NLS-1$
 				if (dialog.open() == Window.OK) {
 					// get information from the selected DA
-					JdbcDataAdapter da = (JdbcDataAdapter) dialog
-							.getSelectedDataAdapter();
+					JdbcDataAdapter da = dialog.getSelectedDataAdapter();
 					if (da != null) {
 						tdriver.setText(da.getDriver());
 						turl.setText(da.getUrl());

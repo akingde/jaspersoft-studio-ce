@@ -44,17 +44,17 @@ import com.jaspersoft.studio.server.messages.Messages;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class ImportDataSourceInfoFromDA extends Dialog {
-
+public class ImportDataSourceInfoFromDA<T extends DataAdapter> extends Dialog {
+	private static final String _DA = "_DA";
 	/* selected data adapter */
-	private DataAdapter selectedDA;
+	private T selectedDA;
 	/* text info on data adapter kind */
 	private String daKind;
 	/* class type for the kind of data adapter(s) we are looking for */
-	private Class<?> daClass;
+	private Class<T> daClass;
 
 	public ImportDataSourceInfoFromDA(Shell parentShell, String daKind,
-			Class<?> daClass) {
+			Class<T> daClass) {
 		super(parentShell);
 		this.daKind = daKind;
 		this.daClass = daClass;
@@ -85,25 +85,24 @@ public class ImportDataSourceInfoFromDA extends Dialog {
 			DataAdapter dataAdapter = da.getDataAdapter();
 			if (daClass.isInstance(dataAdapter)) {
 				combo.add(da.getName());
-				combo.setData(combo.getItemCount() - 1 + "_DA", dataAdapter); //$NON-NLS-1$
+				combo.setData(combo.getItemCount() - 1 + _DA, dataAdapter);
 			}
 		}
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				selectedDA = (DataAdapter) combo.getData(combo
-						.getSelectionIndex() + "_DA"); //$NON-NLS-1$
+				selectedDA = (T) combo.getData(combo.getSelectionIndex() + _DA);
 			}
 		});
 		if (combo.getItemCount() > 0) {
 			combo.select(0);
-			selectedDA = (DataAdapter) combo.getData("1_DA"); //$NON-NLS-1$
+			selectedDA = (T) combo.getData("0" + _DA);
 		}
 
 		return container;
 	}
 
-	public DataAdapter getSelectedDataAdapter() {
+	public T getSelectedDataAdapter() {
 		return selectedDA;
 	}
 }

@@ -76,13 +76,12 @@ public class DatasourceJndiPageContent extends APageContent {
 		importDA.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ImportDataSourceInfoFromDA dialog = new ImportDataSourceInfoFromDA(
+				ImportDataSourceInfoFromDA<JndiDataAdapter> dialog = new ImportDataSourceInfoFromDA<JndiDataAdapter>(
 						Display.getDefault().getActiveShell(),
 						"JNDI", JndiDataAdapter.class); //$NON-NLS-1$
 				if (dialog.open() == Window.OK) {
 					// get information from the selected DA
-					JndiDataAdapter da = (JndiDataAdapter) dialog
-							.getSelectedDataAdapter();
+					JndiDataAdapter da = dialog.getSelectedDataAdapter();
 					if (da != null) {
 						tname.setText(da.getDataSourceName());
 					} else {

@@ -81,13 +81,12 @@ public class DatasourceBeanPageContent extends APageContent {
 		importDA.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ImportDataSourceInfoFromDA dialog = new ImportDataSourceInfoFromDA(
+				ImportDataSourceInfoFromDA<BeanDataAdapter> dialog = new ImportDataSourceInfoFromDA<BeanDataAdapter>(
 						Display.getDefault().getActiveShell(),
 						"Bean", BeanDataAdapter.class); //$NON-NLS-1$
 				if (dialog.open() == Window.OK) {
 					// get information from the selected DA
-					BeanDataAdapter da = (BeanDataAdapter) dialog
-							.getSelectedDataAdapter();
+					BeanDataAdapter da = dialog.getSelectedDataAdapter();
 					if (da != null) {
 						tname.setText(da.getFactoryClass());
 						tmethod.setText(da.getMethodName());
