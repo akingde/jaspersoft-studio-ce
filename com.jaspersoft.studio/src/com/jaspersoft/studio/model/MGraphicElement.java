@@ -41,6 +41,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -297,24 +298,23 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		defaultsMap = defaultsMap1;
 	}
 
+	private String[] styleitems;
+
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
 		// initialize style
-		JasperDesign jasperDesign = getJasperDesign();
-		if (jasperDesign != null) {
+		JasperDesign jd = getJasperDesign();
+		if (jd != null) {
 			if (styleD != null) {
-				JRDesignElement jrElement = (JRDesignElement) getValue();
-				JRStyle[] styles = jasperDesign.getStyles();
-				String[] items = new String[styles.length + 1];
-				items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""; //$NON-NLS-1$
-				for (int j = 0; j < styles.length; j++) {
-					items[j + 1] = styles[j].getName();
+				String[] newitems = StyleTemplateFactory.getAllStyles(getJasperConfiguration(), getValue());
+				if (styleitems == null || newitems != styleitems) {
+					styleD.setItems(newitems);
+					styleitems = newitems;
 				}
-				styleD.setItems(items);
 			}
 			// initialize groups
-			JRGroup[] groups = jasperDesign.getGroups();
+			JRGroup[] groups = jd.getGroups();
 			String[] items = new String[groups.length + 1];
 			items[0] = ""; //$NON-NLS-1$
 			for (int j = 0; j < groups.length; j++) {

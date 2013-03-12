@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.style;
 
@@ -19,14 +14,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRConditionalStyle;
+import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplateReference;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 
@@ -41,6 +40,8 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.plugin.IEditorContributor;
+import com.jaspersoft.studio.utils.CacheMap;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -76,13 +77,15 @@ public class StyleTemplateFactory {
 		return null;
 	}
 
+	public static final File getFile(String location, IFile file) {
+		return SelectionHelper.getFileResolver(file).resolveFile(location);
+	}
+
 	public static void createTemplateReference(ANode parent, String location, int newIndex, Set<String> set,
 			boolean editable, IFile file) {
 		if (file == null)
 			return;
-		FileResolver fileResolver = SelectionHelper.getFileResolver(file);
-
-		File fileToBeOpened = fileResolver.resolveFile(location);
+		File fileToBeOpened = getFile(location, file);
 		if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
 			JRSimpleTemplate jrst = (JRSimpleTemplate) JRXmlTemplateLoader.load(fileToBeOpened);
 			createTemplate(parent, set, editable, file, fileToBeOpened, jrst);
@@ -154,6 +157,59 @@ public class StyleTemplateFactory {
 		JRDesignReportTemplate drt = (JRDesignReportTemplate) mst.getValue();
 
 		return resolveTemplates(refFile, plist, jConfig, drt);
+	}
+
+	private static Map<JasperDesign, String[]> cstyles = new CacheMap<JasperDesign, String[]>(2000);
+
+	public static String[] getAllStyles(JasperReportsConfiguration jConf, JRDesignElement jrElement) {
+		// IMPROVEMENT: listen for all file changes, and update only when needed
+		JasperDesign jd = jConf.getJasperDesign();
+		String[] items = cstyles.get(jd);
+		if (items == null) {
+			JRStyle[] styles = jd.getStyles();
+			List<JRStyle> slist = getStyles(jConf, jd, (IFile) jConf.get(IEditorContributor.KEY_FILE));
+			int size = 1;
+			if (styles != null)
+				size += styles.length;
+			if (slist != null)
+				size += slist.size();
+			items = new String[size];
+			items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""; //$NON-NLS-1$
+			for (int j = 0; j < styles.length; j++)
+				items[j + 1] = styles[j].getName();
+			for (int j = 0; j < slist.size(); j++)
+				items[styles.length + j + 1] = slist.get(j).getName();
+			cstyles.put(jd, items);
+		}
+		return items;
+	}
+
+	private static List<JRStyle> getStyles(JasperReportsConfiguration jConfig, JasperDesign jd, IFile file) {
+		List<JRStyle> list = new ArrayList<JRStyle>();
+		for (JRReportTemplate t : jd.getTemplatesList())
+			getStylesReference(file, ExpressionUtil.eval(t.getSourceExpression(), jConfig), list, new HashSet<File>());
+		return list;
+	}
+
+	public static void getStylesReference(IFile file, String location, List<JRStyle> list, Set<File> files) {
+		if (location == null)
+			return;
+		File fileToBeOpened = getFile(location, file);
+		if (files.contains(fileToBeOpened))
+			return;
+		if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
+			files.add(fileToBeOpened);
+			JRSimpleTemplate jrst = (JRSimpleTemplate) JRXmlTemplateLoader.load(fileToBeOpened);
+			list.addAll(jrst.getStylesList());
+			List<JRTemplateReference> tlist = jrst.getIncludedTemplatesList();
+			if (tlist != null && !tlist.isEmpty()) {
+				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+				IFile[] fs = root.findFilesForLocationURI(fileToBeOpened.toURI());
+				if (fs != null && fs[0] != null)
+					for (JRTemplateReference tr : tlist)
+						getStylesReference(fs[0], tr.getLocation(), list, files);
+			}
+		}
 	}
 
 	protected static IFile resolveTemplates(IFile refFile, List<Object> plist, JasperReportsConfiguration jConfig,
