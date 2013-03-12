@@ -89,12 +89,14 @@ public class JRXmlWriterHelper {
 		jrContext.removeProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION);
 		if (writers.containsKey(version))
 			jrContext.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION, version);
-
-		// jrContext.setProperty("net.sf.jasperreports.components.table.version", version);
-		String xml = new JRXmlWriter(jrContext).write(report, encoding);
-		xml = xml.replaceFirst(
-				"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + version + "-->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
-		return xml;
+		if (report != null) {
+			// jrContext.setProperty("net.sf.jasperreports.components.table.version", version);
+			String xml = new JRXmlWriter(jrContext).write(report, encoding);
+			xml = xml.replaceFirst(
+					"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + version + "-->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
+			return xml;
+		}
+		return null;
 	}
 
 	public static String fixencoding(String encoding) {

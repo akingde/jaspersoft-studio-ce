@@ -333,76 +333,81 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		isRefresh = true;
+		try { 
+			isRefresh = true;
 
-		// Check for function library static imports (see issue #0005771)
-		// It's better to put the check here instead on the JRExpressionEditor dialog close.
-		// This allow for example to "fix" the report, depending on the preference setting,
-		// also when simply saving the JRXML file without having edited an expression.
-		JasperDesign jd = getJasperDesign();
-		if (jd != null)
-			ExpressionEditorSupportUtil.updateFunctionsLibraryImports(jd, jrContext);
+			// Check for function library static imports (see issue #0005771)
+			// It's better to put the check here instead on the JRExpressionEditor dialog close.
+			// This allow for example to "fix" the report, depending on the preference setting,
+			// also when simply saving the JRXML file without having edited an expression.
+			JasperDesign jd = getJasperDesign();
+			if (jd != null)
+				ExpressionEditorSupportUtil.updateFunctionsLibraryImports(jd, jrContext);
 
-		IFile resource = getCurrentFile();
-		try {
-			if (!resource.exists())
-				resource.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
-
-			resource.setCharset("UTF-8", monitor);
-			((IStorageDocumentProvider) xmlEditor.getDocumentProvider()).setEncoding(getEditorInput(), "UTF-8");
-		} catch (CoreException e) {
-			UIUtils.showError(e);
-		} catch (UnsupportedEncodingException e) {
-			UIUtils.showError(e);
-		}
-		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor) {
-			version = JRXmlWriterHelper.getVersion(resource, jrContext, true);
-			model2xml(version);
-		} else {
-			try { // just go thru the model, to look what happend with our markers
-				resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-				xml2model();
-			} catch (Exception e) {
-				if (e instanceof JRException && e.getCause() instanceof SAXParseException) {
-					SAXParseException se = (SAXParseException) e.getCause();
-					try {
-						// resource.deleteMarkers(JasperReportsBuilder.MARKER_TYPE, includeSubtypes, depth)
-						IMarker marker = resource.createMarker(JasperReportsBuilder.MARKER_TYPE);
-						marker.setAttribute(IMarker.MESSAGE, se.getMessage());
-						marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-						marker.setAttribute(IMarker.USER_EDITABLE, false);
-						marker.setAttribute(IMarker.LINE_NUMBER, se.getLineNumber());
-						marker.setAttribute(IMarker.CHAR_END, se.getColumnNumber());
-					} catch (CoreException ce) {
-					}
-				}
-				xmlEditor.doSave(monitor);
-				return;
-			}
-		}
-		if (getFileExtension(getEditorInput()).equals("")) { //$NON-NLS-1$
-			// save binary
+			IFile resource = getCurrentFile();
 			try {
-				new JasperReportsBuilder().compileJRXML(resource, monitor);
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
-		Display.getDefault().syncExec(new Runnable() {
+				if (!resource.exists())
+					resource.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
 
-			@Override
-			public void run() {
-				JaspersoftStudioPlugin.getExtensionManager().onSave(jrContext, monitor);
+				resource.setCharset("UTF-8", monitor);
+				((IStorageDocumentProvider) xmlEditor.getDocumentProvider()).setEncoding(getEditorInput(), "UTF-8");
+			} catch (CoreException e) {
+				UIUtils.showError(e);
+			} catch (UnsupportedEncodingException e) {
+				UIUtils.showError(e);
+			}
+			if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor) {
+				version = JRXmlWriterHelper.getVersion(resource, jrContext, true); 
+				model2xml(version);
+			} else {
+				try { // just go thru the model, to look what happend with our markers
+					resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+					xml2model();
+				} catch (Throwable e) {
+					if (e instanceof JRException && e.getCause() instanceof SAXParseException) {
+						SAXParseException se = (SAXParseException) e.getCause();
+						try {
+							// resource.deleteMarkers(JasperReportsBuilder.MARKER_TYPE, includeSubtypes, depth)
+							IMarker marker = resource.createMarker(JasperReportsBuilder.MARKER_TYPE);
+							marker.setAttribute(IMarker.MESSAGE, se.getMessage());
+							marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+							marker.setAttribute(IMarker.USER_EDITABLE, false);
+							marker.setAttribute(IMarker.LINE_NUMBER, se.getLineNumber());
+							marker.setAttribute(IMarker.CHAR_END, se.getColumnNumber());
+						} catch (CoreException ce) {
+						}
+					}
+					xmlEditor.doSave(monitor);
+					return;
+				}
+			}
+			if (getFileExtension(getEditorInput()).equals("")) { //$NON-NLS-1$
+				// save binary
 				try {
-					model2xml(version);
-					doSaveEditors(monitor);
-				} catch (Exception e) {
+					new JasperReportsBuilder().compileJRXML(resource, monitor);
+				} catch (Throwable e) {
 					e.printStackTrace();
 				}
 			}
-		});
+			Display.getDefault().syncExec(new Runnable() {
 
-		// doSaveEditors(monitor);
+				@Override
+				public void run() {
+					JaspersoftStudioPlugin.getExtensionManager().onSave(jrContext, monitor);
+					try {
+						String xml = model2xml(version);
+						doSaveEditors(monitor);
+						// on eclipse 4.2.1 on first first save, for some reasons save is not working .., so we'll do it manually
+						getCurrentFile().setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")),
+								IFile.KEEP_HISTORY | IFile.FORCE, monitor);
+					} catch (Throwable e) {
+						UIUtils.showError(e);
+					}
+				}
+			});
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
 	}
 
 	private IFile getCurrentFile() {
@@ -611,13 +616,15 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			marker.setAttribute(IMarker.TRANSIENT, true);
 			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 			marker.setAttribute(IMarker.USER_EDITABLE, false);
-			isRefresh = false;
+
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					gotoMarker(marker);
 					setActivePage(PAGE_XMLEDITOR);
+					isRefresh = false;
 				}
 			});
+
 		} catch (CoreException e1) {
 			e1.printStackTrace();
 		}
@@ -745,7 +752,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	/**
 	 * Model2xml.
 	 */
-	private void model2xml(String version) {
+	private String model2xml(String version) {
+		String xml = null;
 		try {
 			JasperDesign report = null;
 			MReport mReport = getMReport();
@@ -759,15 +767,17 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				}
 			}
 
-			String xml = JRXmlWriterHelper.writeReport(jrContext, report, "UTF-8", version);
+			xml = JRXmlWriterHelper.writeReport(jrContext, report, "UTF-8", version);
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
-			if (!Arrays.equals(doc.get().getBytes(), xml.getBytes()))
-				doc.set(xml);
+			if (xml != null && !Arrays.equals(doc.get().getBytes(), xml.getBytes())) {
+				doc.set(xml); 
+			}
 			xmlFresh = true;
-		} catch (final Exception e) {
+		} catch (Throwable e) {
 			UIUtils.showError(e);
 		}
+		return xml;
 	}
 
 	protected JasperDesign getJasperDesign() {
