@@ -16,6 +16,8 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -42,6 +44,11 @@ public class SPRWCombo extends ASPropertyWidget {
 
 	protected void createComponent(Composite parent) {
 		combo = section.getWidgetFactory().createCombo(parent, SWT.FLAT);
+		if (parent.getLayout() instanceof GridLayout) {
+			GridData gd = new GridData();
+			gd.minimumWidth = 100;
+			combo.setLayoutData(gd);
+		}
 		setNewItems((RWComboBoxPropertyDescriptor) pDescriptor);
 		combo.addSelectionListener(new SelectionListener() {
 
