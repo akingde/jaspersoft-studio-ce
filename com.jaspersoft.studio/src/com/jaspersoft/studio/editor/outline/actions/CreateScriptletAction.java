@@ -25,7 +25,7 @@ import com.jaspersoft.studio.model.scriptlet.MScriptlet;
 /*/*
  * The Class CreateScriptletAction.
  */
-public class CreateScriptletAction extends ACreateAction {
+public class CreateScriptletAction extends ACreateAndSelectAction {
 
 	/** The Constant ID. */
 	public static final String ID = "create_scriptlet"; //$NON-NLS-1$
