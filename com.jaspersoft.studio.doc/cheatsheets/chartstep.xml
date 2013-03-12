@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cheatsheet
-      title="Creation of a chart">
+      title="Create of a chart">
    <intro>
       <description>
          JasperReports supports a large number of built-in charts created using the popular open source library JFreeChart. Chart types include Pie, Bar, Stacked Bar, Line, Area, Bubble, Gantt, Thermometer and Meter. In this tutorial we will learn how to add a bar chart to a report.

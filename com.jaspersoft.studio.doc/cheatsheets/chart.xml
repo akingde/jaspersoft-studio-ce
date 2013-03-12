@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<compositeCheatsheet name="Creation of a report with a chart">
+<compositeCheatsheet name="Create a report with a chart">
    <taskGroup kind="sequence" name="Create a report with a dataset and a chart" skip="false">
       <intro>
          In this cheatsheet is explained how to create a report from scratch, add a dataset, a chart and execute it.

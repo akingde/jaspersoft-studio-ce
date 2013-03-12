@@ -43,14 +43,14 @@
             composite="false"
             contentFile="cheatsheets/content.xml"
             id="com.jaspersoft.studio.cheatsheets.datasource"
-            name=" Manage Data Adapters">
+            name="Manage Data Connections">
       </cheatsheet>
       <cheatsheet
             category="com.jaspersoft.studio.cheatsheets.reports"
             composite="false"
             contentFile="cheatsheets/designreports.xml"
             id="com.jaspersoft.studio.cheatsheets.designreport"
-            name="Start Designing Reports">
+            name="Start Designing a report">
       </cheatsheet>
       <cheatsheet
             category="com.jaspersoft.studio.cheatsheets.reports"
@@ -64,14 +64,14 @@
             composite="true"
             contentFile="cheatsheets/createchart.xml"
             id="com.jaspersoft.studio.cheatsheets.createchart"
-            name="Using charts inside a report">
+            name="Create a chart inside a report">
       </cheatsheet>
       <cheatsheet
            	category="com.jaspersoft.studio.cheatsheets.elements"
             composite="false"
             contentFile="cheatsheets/createdataset.xml"
             id="com.jaspersoft.studio.cheatsheets.createdataset"
-            name="Create a Dataset">
+            name="Create a dataset">
       </cheatsheet>
       <cheatsheet
            	category="com.jaspersoft.studio.cheatsheets.reports"

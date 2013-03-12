@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<compositeCheatsheet name="Create a chart for a report">
+<compositeCheatsheet name="Create a chart inside a report">
    <taskGroup kind="sequence" name="Create a chart for a report" skip="false">
       <intro>
          In this cheatsheet will be explained how to insert a chart into a raport, that use its own dataset.

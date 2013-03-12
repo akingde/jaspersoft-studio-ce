@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cheatsheet
-      title="Creating a dataset with Jaspersoft Studio">
+      title="Create a dataset">
    <intro>
       <description>
          Every report has a main dataset defined during its creation but some times we need fields that are not returned by the query of  the main dataset or the fields needed could also be in a different datasource. For this reason we can use the element <b>Dataset</b>: this element permit to define many dataset inside the report, each one with its fields and datasource. Obviously every dataset is independent from the others, so its fields are separated from the ones of the main dataset, and also from the ones of the other datasets.

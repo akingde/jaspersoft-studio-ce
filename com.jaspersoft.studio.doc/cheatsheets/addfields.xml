@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cheatsheet
-      title="Add Fields to the Report">
+      title="Add fields to a report">
    <intro>
       <description>
          In this cheatsheet we will see how to add a field to a report by editing the query of its main dataset. To add a field we have to edit the query of the main dataset of the report.
