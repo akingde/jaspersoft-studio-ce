@@ -56,18 +56,22 @@ public class FindReportUnit {
 		}
 	}
 
-	private ANode find(IProgressMonitor monitor, JasperDesign jd) {
+	private ANode find(final IProgressMonitor monitor, JasperDesign jd) {
 		final MRoot root = new MRoot(null, null);
 		ANode sp = null;
 		List<ServerProfile> servers = ServerManager.getServerList();
 		for (ServerProfile s : servers) {
 			sp = new MServerProfile(root, s);
 			new MDummy(sp);
-			try {
-				WSClientHelper.connect((MServerProfile) sp, monitor);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			// try {
+			// monitor.subTask("Connect to: [" + s.getName() + "] "
+			// + s.getUrl());
+			// WSClientHelper.connect((MServerProfile) sp, monitor);
+			if (monitor.isCanceled())
+				return sp;
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// }
 		}
 
 		final String prop = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
@@ -77,6 +81,8 @@ public class FindReportUnit {
 
 				@Override
 				public boolean visit(INode n) {
+					if (monitor.isCanceled())
+						return false;
 					if (n instanceof MServerProfile
 							&& ((MServerProfile) n).getValue().getUrl()
 									.equals(prop)) {
@@ -86,10 +92,13 @@ public class FindReportUnit {
 					return false;
 				}
 			}.getObject();
-
-			sp = findReportUnit(mserv, monitor, jd);
+			try {
+				WSClientHelper.connect(mserv, monitor);
+				sp = findReportUnit(mserv, monitor, jd);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-
 		return sp;
 	}
 
@@ -103,11 +112,13 @@ public class FindReportUnit {
 				if (prunit != null) {
 					WSClientHelper.connectGetData(mserv, monitor);
 					// We can try to locate a previous existing Report Unit.
-					// If not possible we will popup the selection tree as usual.
-					MResource selectedRepoUnit = WSClientHelper.findSelected(mserv.getChildren(),
-							monitor, prunit, mserv.getWsClient());
-					if(selectedRepoUnit!=null){
-						sp=selectedRepoUnit;
+					// If not possible we will popup the selection tree as
+					// usual.
+					MResource selectedRepoUnit = WSClientHelper.findSelected(
+							mserv.getChildren(), monitor, prunit,
+							mserv.getWsClient());
+					if (selectedRepoUnit != null) {
+						sp = selectedRepoUnit;
 					}
 				}
 
