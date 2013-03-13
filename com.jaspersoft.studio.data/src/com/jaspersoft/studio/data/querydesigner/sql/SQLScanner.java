@@ -255,7 +255,7 @@ public class SQLScanner {
 							"fillfactor", "floppy", "for", "foreign", "forward_only",
 							"freetext", "freetexttable", "from", "full", "function",
 							"goto", "grant", "group", "having", "holdlock", "identity",
-							"identity_insert", "identitycol", "if", "in", "index",
+							"identity_insert", "identitycol", "if", "in", "index", "inner",
 							"insensitive", "insert", "instead", "intersect", "into", "is",
 							"isolation", "join", "key", "keyset", "kill", "left", "level",
 							"like", "lineno", "load", "mirrorexit", "national", "nocheck",
