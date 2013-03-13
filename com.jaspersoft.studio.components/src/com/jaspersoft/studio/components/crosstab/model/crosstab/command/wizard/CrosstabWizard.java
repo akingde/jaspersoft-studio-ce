@@ -225,7 +225,7 @@ public class CrosstabWizard extends JSSWizard {
 			for (Object obj : measures) {
 				try {
 					JRDesignCrosstabMeasure m = (JRDesignCrosstabMeasure) obj;
-					m.setName(ModelUtils.getDefaultName(jdc, m.getName()));
+					// m.setName(ModelUtils.getDefaultName(jdc, m.getName()));
 					jdc.addMeasure(m);
 				} catch (JRException e) {
 					e.printStackTrace();
@@ -240,7 +240,7 @@ public class CrosstabWizard extends JSSWizard {
 			for (Object obj : columnGroups) {
 				try {
 					JRDesignCrosstabColumnGroup c = (JRDesignCrosstabColumnGroup) obj;
-					c.setName(ModelUtils.getDefaultName(jdc, c.getName()));
+					// c.setName(ModelUtils.getDefaultName(jdc, c.getName()));
 					CreateColumnCommand.addColumnGroup(jdc, c, -1);
 				} catch (JRException e) {
 					e.printStackTrace();
@@ -255,7 +255,7 @@ public class CrosstabWizard extends JSSWizard {
 			for (Object obj : rowGroups) {
 				try {
 					JRDesignCrosstabRowGroup r = (JRDesignCrosstabRowGroup) obj;
-					r.setName(ModelUtils.getDefaultName(jdc, r.getName()));
+					// r.setName(ModelUtils.getDefaultName(jdc, r.getName()));
 					CreateRowCommand.addRowGroup(jdc, r, -1);
 				} catch (JRException e) {
 					e.printStackTrace();
