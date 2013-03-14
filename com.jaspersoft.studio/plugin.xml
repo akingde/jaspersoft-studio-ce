@@ -879,8 +879,8 @@
             </input>
          </propertySection>
          <propertySection
-               class="com.jaspersoft.studio.property.section.obj.StyleSection"
-               id="com.jaspersoft.studio.property.section.obj.StyleSection"
+               class="com.jaspersoft.studio.property.section.style.StyleSection"
+               id="com.jaspersoft.studio.property.section.style.StyleSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Style">
             <input
                   type="com.jaspersoft.studio.model.style.MStyle">
@@ -889,13 +889,29 @@
          <!--End of MStyle properties-->
          <!--MConditionalStyle properties-->ù
 		 <propertySection
-               class="com.jaspersoft.studio.property.section.obj.StyleConditionalSection"
-               id="com.jaspersoft.studio.property.section.obj.StyleConditionalSection"
+               class="com.jaspersoft.studio.property.section.style.StyleConditionalSection"
+               id="com.jaspersoft.studio.property.section.style.StyleConditionalSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Style">
             <input
                   type="com.jaspersoft.studio.model.style.MConditionalStyle">
             </input>
          </propertySection>
+   <propertySection
+         class="com.jaspersoft.studio.property.section.style.StyleTemplateSection"
+         id="com.jaspersoft.studio.property.section.style.StyleTemplateSection"
+         tab="com.jaspersoft.studio.editor.JrxmlEditor.Style">
+      <input
+            type="com.jaspersoft.studio.model.style.MStyleTemplate">
+      </input>
+   </propertySection>
+   <propertySection
+         class="com.jaspersoft.studio.property.section.style.StyleTemplateReferenceSection"
+         id="com.jaspersoft.studio.property.section.style.StyleTemplateReferenceSection"
+         tab="com.jaspersoft.studio.editor.JrxmlEditor.Style">
+      <input
+            type="com.jaspersoft.studio.model.style.MStyleTemplateReference">
+      </input>
+   </propertySection>
          <!--End of MConditionalStyle properties--> 
          <!--MImage properties-->
          <propertySection
@@ -919,8 +935,8 @@
          <!--MBreak properties-->
          <propertySection
                afterSection="com.jaspersoft.studio.property.section.text.FontSection"
-               class="com.jaspersoft.studio.property.section.obj.BreakSection"
-               id="com.jaspersoft.studio.property.section.obj.BreakSection"
+               class="com.jaspersoft.studio.property.section.components.BreakSection"
+               id="com.jaspersoft.studio.property.section.components.BreakSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Break">
             <input
                   type="com.jaspersoft.studio.model.MBreak">
@@ -930,8 +946,8 @@
          <!--MRectangle properties-->
          <propertySection
                afterSection="com.jaspersoft.studio.property.section.text.FontSection"
-               class="com.jaspersoft.studio.property.section.obj.RectangleSection"
-               id="com.jaspersoft.studio.property.section.obj.RectangleSection"
+               class="com.jaspersoft.studio.property.section.components.RectangleSection"
+               id="com.jaspersoft.studio.property.section.components.RectangleSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Rectangle">
             <input
                   type="com.jaspersoft.studio.model.MRectangle">
@@ -941,8 +957,8 @@
          <!--MLine properties-->
          <propertySection
                afterSection="com.jaspersoft.studio.property.section.text.FontSection"
-               class="com.jaspersoft.studio.property.section.obj.LineSection"
-               id="com.jaspersoft.studio.property.section.obj.LineSection"
+               class="com.jaspersoft.studio.property.section.components.LineSection"
+               id="com.jaspersoft.studio.property.section.components.LineSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Line">
             <input
                   type="com.jaspersoft.studio.model.MLine">
@@ -952,7 +968,7 @@
          <!--MGenericElement properties-->
          <propertySection
                afterSection="com.jaspersoft.studio.property.section.text.FontSection"
-               class="com.jaspersoft.studio.property.section.obj.GenericElementSection"
+               class="com.jaspersoft.studio.property.section.components.GenericElementSection"
                id="com.jaspersoft.studio.property.section.obj.GenericElementSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.GenericElement">
             <input
@@ -963,8 +979,8 @@
          <!--MSubreport properties-->
          <propertySection
                afterSection="com.jaspersoft.studio.property.section.text.FontSection"
-               class="com.jaspersoft.studio.property.section.obj.SubreportSection"
-               id="com.jaspersoft.studio.property.section.obj.SubreportSection"
+               class="com.jaspersoft.studio.property.section.components.SubreportSection"
+               id="com.jaspersoft.studio.property.section.components.SubreportSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Subreport">
             <input
                   type="com.jaspersoft.studio.model.subreport.MSubreport">
@@ -1003,7 +1019,7 @@
          <propertySection
                afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.ColorSection"
                class="com.jaspersoft.studio.property.section.graphic.LinePenSection"
-               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
+               id="com.jaspersoft.studio.property.section.graphic.LinePenSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Borders">
             <input
                   type="com.jaspersoft.studio.model.style.MStyle">
@@ -1094,7 +1110,7 @@
             </input>
          </propertySection>
           <propertySection
-               class="com.jaspersoft.studio.property.section.obj.StylesListSection"
+               class="com.jaspersoft.studio.property.section.style.StylesListSection"
                id="com.jaspersoft.studio.property.section.obj.StylesListSection"
                tab="com.jaspersoft.studio.editor.propertyTab.style">
             <input

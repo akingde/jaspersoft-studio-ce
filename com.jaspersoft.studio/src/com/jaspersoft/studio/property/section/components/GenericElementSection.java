@@ -8,7 +8,7 @@
  * 
  * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.property.section.obj;
+package com.jaspersoft.studio.property.section.components;
 
 import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 

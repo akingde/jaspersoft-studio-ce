@@ -13,9 +13,9 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.property.section.obj;
+package com.jaspersoft.studio.property.section.style;
 
-import net.sf.jasperreports.engine.base.JRBaseBreak;
+import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -23,13 +23,12 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class BreakSection extends AbstractSection {
+public class StyleConditionalSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent.setLayout(new GridLayout(2, false));
 
-		createWidget4Property(parent, JRBaseBreak.PROPERTY_TYPE);
-
+		createWidget4Property(parent, JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION);
 	}
 }

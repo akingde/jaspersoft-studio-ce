@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.style;
 
@@ -24,7 +19,6 @@ import net.sf.jasperreports.engine.JRTemplateReference;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -32,12 +26,15 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+
 /*
  * The Class MStyleTemplateReference.
  * 
  * @author Chicu Veaceslav
  */
 public class MStyleTemplateReference extends APropertyNode implements IPropertySource, ICopyable {
+	public static final String PROPERTY_LOCATION = "location";
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -127,7 +124,7 @@ public class MStyleTemplateReference extends APropertyNode implements IPropertyS
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor("location", Messages.MStyleTemplateReference_location); //$NON-NLS-1$
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(PROPERTY_LOCATION, Messages.MStyleTemplateReference_location); //$NON-NLS-1$
 		nameD.setDescription(Messages.MStyleTemplateReference_location_description);
 		desc.add(nameD);
 	}
@@ -139,7 +136,7 @@ public class MStyleTemplateReference extends APropertyNode implements IPropertyS
 	 */
 	public Object getPropertyValue(Object id) {
 		JRTemplateReference jrTemplate = (JRTemplateReference) getValue();
-		if (id.equals("location")) { //$NON-NLS-1$
+		if (id.equals(PROPERTY_LOCATION)) { //$NON-NLS-1$
 			return jrTemplate.getLocation();
 		}
 		return null;
@@ -153,7 +150,7 @@ public class MStyleTemplateReference extends APropertyNode implements IPropertyS
 	public void setPropertyValue(Object id, Object value) {
 		if (isEditable()) {
 			JRTemplateReference jrTemplate = (JRTemplateReference) getValue();
-			if (id.equals("location")) //$NON-NLS-1$
+			if (id.equals(PROPERTY_LOCATION)) //$NON-NLS-1$
 				jrTemplate.setLocation((String) value);
 		}
 	}
