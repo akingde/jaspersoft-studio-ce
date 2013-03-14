@@ -49,20 +49,23 @@ public class ImpStyleTemplate extends AImpObject {
 			IFile file) throws Exception {
 		AFileResource fres = findFile(mrunit, monitor, jd, fileset,
 				getExpression(img), file);
-
-		JRSimpleTemplate jrt = (JRSimpleTemplate) JRXmlTemplateLoader.load(fres
-				.getFile());
-		for (JRTemplateReference r : jrt.getIncludedTemplatesList()) {
-			IFile[] fs = root.findFilesForLocationURI(fres.getFile().toURI());
-			if (fs != null && fs.length > 0) {
-				File ftr = findFile(file, r.getLocation());
-				if (ftr != null && ftr.exists()) {
-					fileset.add(ftr.getAbsolutePath());
-					addResource(mrunit, fileset, ftr, new PublishOptions());
+		if (fres != null) {
+			JRSimpleTemplate jrt = (JRSimpleTemplate) JRXmlTemplateLoader
+					.load(fres.getFile());
+			for (JRTemplateReference r : jrt.getIncludedTemplatesList()) {
+				IFile[] fs = root.findFilesForLocationURI(fres.getFile()
+						.toURI());
+				if (fs != null && fs.length > 0) {
+					File ftr = findFile(file, r.getLocation());
+					if (ftr != null && ftr.exists()) {
+						fileset.add(ftr.getAbsolutePath());
+						addResource(mrunit, fileset, ftr, new PublishOptions());
+					}
 				}
 			}
+			return fres.getFile();
 		}
-		return fres.getFile();
+		return null;
 	}
 
 	@Override
