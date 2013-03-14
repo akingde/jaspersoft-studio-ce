@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data;
 
@@ -28,6 +23,7 @@ import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
@@ -74,26 +70,26 @@ public class DataAdapterManager {
 	 * Return a copy of the list of DataAdapterFactories in JaspersoftStudio.
 	 */
 	public static synchronized List<DataAdapterFactory> getDataAdapterFactories() {
-		
+
 		// Let's sort the list based on the description. Please note that the description may be localized,
 		// so not all the languages have the same order if assumptions are done.
-		
-		DataAdapterFactory[] factories = dataAdapterFactories.toArray(new DataAdapterFactory[dataAdapterFactories.size()]);
-		
-		Arrays.sort(factories, new Comparator<DataAdapterFactory>(){
 
-				@Override
-				public int compare(DataAdapterFactory df1, DataAdapterFactory df2) {
-					
-					String name1 = (df1 == null) ? "" : df1.getLabel();
-					String name2 = (df2 == null) ? "" : df2.getLabel();
-					return name1.compareTo(name2);
-				}
+		DataAdapterFactory[] factories = dataAdapterFactories.toArray(new DataAdapterFactory[dataAdapterFactories.size()]);
+
+		Arrays.sort(factories, new Comparator<DataAdapterFactory>() {
+
+			@Override
+			public int compare(DataAdapterFactory df1, DataAdapterFactory df2) {
+
+				String name1 = (df1 == null) ? "" : df1.getLabel();
+				String name2 = (df2 == null) ? "" : df2.getLabel();
+				return name1.compareTo(name2);
+			}
 		});
-		
+
 		List<DataAdapterFactory> listOfDataAdapterFactories = new ArrayList<DataAdapterFactory>();
 		listOfDataAdapterFactories.addAll(Arrays.asList(factories));
-		
+
 		return listOfDataAdapterFactories;
 	}
 
@@ -123,7 +119,7 @@ public class DataAdapterManager {
 			st[1] = getProjectStorage(file.getProject());
 		return st;
 	}
-	
+
 	public static ADataAdapterStorage getProjectStorage(IProject key) {
 		ADataAdapterStorage s = storages.get(key);
 		if (s == null) {
@@ -142,6 +138,15 @@ public class DataAdapterManager {
 			s.getDataAdapterDescriptors();
 		}
 		return s;
+	}
+
+	public static List<ADataAdapterStorage> getProjectStorages() {
+		List<ADataAdapterStorage> das = new ArrayList<ADataAdapterStorage>();
+		for (IProject prj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+			if (prj.exists() && prj.isOpen())
+				das.add(getProjectStorage(prj));
+		}
+		return das;
 	}
 
 	/***********************
@@ -181,5 +186,4 @@ public class DataAdapterManager {
 		copy.setDataAdapter(srcDataAdapter);
 		return copy;
 	}
-
 }

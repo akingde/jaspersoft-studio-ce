@@ -47,12 +47,10 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.actions.CreateDataAdapterAction;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
-import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.MDatasources;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
@@ -264,21 +262,13 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 				}
 			});
 			for (DataAdapterDescriptor d : das) {
-				DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(d.getDataAdapter().getClass()
-						.getCanonicalName());
-
 				// Code used for TableCombo, not used because the TableCombo looks bad on Mac.
 				// TableItem ti = new TableItem(dataAdaptersCombo.getTable(), SWT.NONE);
 				// ti.setImage(JaspersoftStudioPlugin.getImage(d.getIcon16()));
 				// ti.setText(d.getName());
 
 				// Since we are not showing icons, we append the data adapter type to the name
-				String label = d.getName();
-				if (storage instanceof FileDataAdapterStorage)
-					label += " - [" + storage.getUrl(d) + "]";
-				else if (factory != null)
-					label += " - " + factory.getLabel();
-				dataAdaptersCombo.add(label); //$NON-NLS-1$
+				dataAdaptersCombo.add(storage.getLabel(d));
 				dataAdapterDescriptors.add(d);
 			}
 			storage.addPropertyChangeListener(dsListner);

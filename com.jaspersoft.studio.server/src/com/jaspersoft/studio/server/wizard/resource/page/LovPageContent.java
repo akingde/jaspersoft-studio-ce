@@ -50,6 +50,9 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class LovPageContent extends APageContent {
 
+	private static final String VALUE = "VALUE";
+	private static final String KEY = "KEY";
+
 	public LovPageContent(ANode parent, MResource resource,
 			DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
@@ -114,7 +117,21 @@ public class LovPageContent extends APageContent {
 		bnew.createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				return new ListItem();
+				ListItem li = new ListItem();
+				li.setLabel(getName());
+				li.setValue("value");
+
+				return li;
+			}
+
+			private String getName() {
+				String name = "name";
+				if (exists(name))
+					for (int i = 0; i < 1000; i++) {
+						if (!exists(name + "_" + i))
+							return name + "_" + i;
+					}
+				return name;
 			}
 
 		});
@@ -172,18 +189,18 @@ public class LovPageContent extends APageContent {
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
-				if (property.equals("KEY")) //$NON-NLS-1$
+				if (property.equals(KEY))
 					return true;
-				if (property.equals("VALUE")) //$NON-NLS-1$
+				if (property.equals(VALUE))
 					return true;
 				return false;
 			}
 
 			public Object getValue(Object element, String property) {
 				ListItem mi = (ListItem) element;
-				if (property.equals("KEY"))//$NON-NLS-1$
+				if (property.equals(KEY))
 					return Misc.nvl(mi.getLabel());
-				if (property.equals("VALUE"))//$NON-NLS-1$
+				if (property.equals(VALUE))
 					return Misc.nvl(mi.getValue(), "");
 				return null;
 			}
@@ -192,9 +209,12 @@ public class LovPageContent extends APageContent {
 				TableItem ti = (TableItem) element;
 				ListItem mi = (ListItem) ti.getData();
 
-				if (property.equals("KEY")) //$NON-NLS-1$
+				if (property.equals(KEY)) {
+					if (exists((String) value))
+						return;
 					mi.setLabel((String) value);
-				if (property.equals("VALUE")) //$NON-NLS-1$
+				}
+				if (property.equals(VALUE))
 					mi.setValue((String) value);
 
 				tableViewer.update(element, new String[] { property });
@@ -204,6 +224,15 @@ public class LovPageContent extends APageContent {
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
 				new TextCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "KEY", "VALUE" }); //$NON-NLS-1$  
+		viewer.setColumnProperties(new String[] { KEY, VALUE });
+	}
+
+	private boolean exists(String value) {
+		List<ListItem> v = (List<ListItem>) tableViewer.getInput();
+		for (ListItem li : v) {
+			if (li.getLabel().equals(value))
+				return true;
+		}
+		return false;
 	}
 }

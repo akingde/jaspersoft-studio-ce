@@ -20,8 +20,8 @@ import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -39,13 +39,16 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.utils.IPageCompleteListener;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.ASelector;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDataType;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorLov;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorQuery;
 import com.jaspersoft.studio.utils.UIUtil;
 
-public class InputControlPageContent extends APageContent {
+public class InputControlPageContent extends APageContent implements
+		IPageCompleteListener {
 
 	public InputControlPageContent(ANode parent, MResource resource,
 			DataBindingContext bindingContext) {
@@ -58,7 +61,7 @@ public class InputControlPageContent extends APageContent {
 
 	@Override
 	public String getPageName() {
-		return "com.jaspersoft.studio.server.page.ice";
+		return "com.jaspersoft.studio.server.page.ice"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -89,8 +92,8 @@ public class InputControlPageContent extends APageContent {
 		UIUtil.createLabel(composite, Messages.RDInputControlPage_type);
 
 		final Combo ctype = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
-		ctype.setItems(new String[] {
-				"Boolean", "Single Value", //$NON-NLS-1$ //$NON-NLS-2$
+		ctype.setItems(new String[] { Messages.InputControlPageContent_boolean,
+				Messages.InputControlPageContent_singleValue,
 				Messages.RDInputControlPage_singlselectlistofvalues,
 				Messages.RDInputControlPage_singleselectlovradio,
 				Messages.RDInputControlPage_multiselectlov,
@@ -112,7 +115,7 @@ public class InputControlPageContent extends APageContent {
 		createLOV(stackComposite);
 		createQuery(stackComposite);
 
-		ctype.addSelectionListener(new SelectionAdapter() {
+		ctype.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleTypeChanged(ctype, stackLayout);
@@ -142,16 +145,39 @@ public class InputControlPageContent extends APageContent {
 
 	protected void handleTypeChanged(Combo ctype, StackLayout stackLayout) {
 		int s = ctype.getSelectionIndex();
+		if (cSelector != null) {
+			cSelector.resetResource();
+			cSelector.removePageCompleteListener(this);
+		}
+		cSelector = null;
 		if (s < 1)
 			stackLayout.topControl = cvalue;
-		else if (s < 2)
-			stackLayout.topControl = csinglevalue;
-		else if (s < 6)
-			stackLayout.topControl = clov;
-		else
-			stackLayout.topControl = cquery;
+		else {
+			if (s < 2) {
+				stackLayout.topControl = csinglevalue;
+				cSelector = sDataType;
+			} else if (s < 6) {
+				stackLayout.topControl = clov;
+				cSelector = sLov;
+			} else {
+				stackLayout.topControl = cquery;
+				cSelector = sQuery;
+			}
+			cSelector.addPageCompleteListener(this);
+			setPageComplete(cSelector.isPageComplete());
+		}
 		stackComposite.layout();
 	}
+
+	@Override
+	public void pageCompleted(boolean completed) {
+		setPageComplete(cSelector.isPageComplete());
+	}
+
+	private ASelector cSelector;
+	private SelectorDataType sDataType;
+	private SelectorLov sLov;
+	private SelectorQuery sQuery;
 
 	private Composite stackComposite;
 	private Composite cvalue;
@@ -164,7 +190,8 @@ public class InputControlPageContent extends APageContent {
 		csinglevalue.setText(Messages.RDInputControlPage_datatype);
 		csinglevalue.setLayout(new GridLayout(3, false));
 
-		new SelectorDataType().createControls(csinglevalue, pnode, res);
+		sDataType = new SelectorDataType();
+		sDataType.createControls(csinglevalue, pnode, res);
 	}
 
 	protected void createLOV(Composite composite) {
@@ -172,7 +199,8 @@ public class InputControlPageContent extends APageContent {
 		clov.setText(Messages.RDInputControlPage_lov);
 		clov.setLayout(new GridLayout(3, false));
 
-		new SelectorLov().createControls(clov, pnode, res);
+		sLov = new SelectorLov();
+		sLov.createControls(clov, pnode, res);
 	}
 
 	protected void createQuery(Composite composite) {
@@ -185,7 +213,8 @@ public class InputControlPageContent extends APageContent {
 		cmp.setLayout(new GridLayout(2, false));
 		item.setControl(cmp);
 
-		new SelectorQuery().createControls(cmp, pnode, res);
+		sQuery = new SelectorQuery();
+		sQuery.createControls(cmp, pnode, res);
 
 		item = new TabItem(cquery, SWT.NONE);
 		item.setText(Messages.RDInputControlPage_valueandvisiblecolumns);
@@ -216,6 +245,8 @@ public class InputControlPageContent extends APageContent {
 	public void dispose() {
 		if (qvct != null)
 			qvct.dispose();
+		if (cSelector != null)
+			cSelector.removePageCompleteListener(this);
 		super.dispose();
 	}
 

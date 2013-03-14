@@ -24,6 +24,7 @@ import com.jaspersoft.studio.server.ServerIconDescriptor;
 
 public class MDataType extends MResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MDataType(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
 	}
@@ -43,6 +44,7 @@ public class MDataType extends MResource {
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		rd.setDataType((byte) 1);
 		rd.setWsType(ResourceDescriptor.TYPE_DATA_TYPE);
 		return rd;
 	}

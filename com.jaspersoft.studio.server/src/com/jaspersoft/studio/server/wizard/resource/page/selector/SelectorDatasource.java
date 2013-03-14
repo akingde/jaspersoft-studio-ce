@@ -101,64 +101,10 @@ public class SelectorDatasource {
 	public static ResourceDescriptor getDatasource(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (isDatasource(r)) {
+			if (isDatasource(r))
 				return r;
-			}
 		}
 		return null;
-	}
-
-	/**
-	 * Clones the input {@link ResourceDescriptor} instance.
-	 * 
-	 * @param rd
-	 *            the resource descriptor to clone
-	 * @return the cloned resource descriptor
-	 */
-	public static ResourceDescriptor cloneResource(ResourceDescriptor rd) {
-		ResourceDescriptor rnew = new ResourceDescriptor();
-		rnew.setIsNew(rd.getIsNew());
-		rnew.setIsReference(rd.getIsReference());
-		rnew.setName(rd.getName());
-		rnew.setLabel(rd.getLabel());
-		rnew.setDescription(rd.getDescription());
-		rnew.setUriString(rd.getUriString());
-		rnew.setParentFolder(rd.getParentFolder());
-		rnew.setDataSourceType(rd.getDataSourceType());
-		rnew.setWsType(rd.getWsType());
-
-		rnew.setJndiName(rd.getJndiName());
-
-		rnew.setBeanMethod(rd.getBeanMethod());
-		rnew.setBeanName(rd.getBeanName());
-
-		rnew.setDriverClass(rd.getDriverClass());
-		rnew.setUsername(rd.getUsername());
-		rnew.setPassword(rd.getPassword());
-		rnew.setConnectionUrl(rd.getConnectionUrl());
-		return rnew;
-	}
-
-	/**
-	 * Copies the information from a source {@link ResourceDescriptor} to a
-	 * target one.
-	 * 
-	 * @param rd
-	 *            the source target descriptor
-	 * @param rnew
-	 *            the target resource descriptor
-	 */
-	public static void copyDSFields(ResourceDescriptor rd,
-			ResourceDescriptor rnew) {
-		rnew.setJndiName(rd.getJndiName());
-
-		rnew.setBeanMethod(rd.getBeanMethod());
-		rnew.setBeanName(rd.getBeanName());
-
-		rnew.setDriverClass(rd.getDriverClass());
-		rnew.setUsername(rd.getUsername());
-		rnew.setPassword(rd.getPassword());
-		rnew.setConnectionUrl(rd.getConnectionUrl());
 	}
 
 	/**

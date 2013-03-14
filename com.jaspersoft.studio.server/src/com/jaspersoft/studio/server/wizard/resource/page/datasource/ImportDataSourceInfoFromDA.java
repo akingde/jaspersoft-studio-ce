@@ -17,6 +17,7 @@ package com.jaspersoft.studio.server.wizard.resource.page.datasource;
 
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapter;
 
@@ -34,6 +35,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.server.messages.Messages;
 
 /**
@@ -79,14 +81,10 @@ public class ImportDataSourceInfoFromDA<T extends DataAdapter> extends Dialog {
 
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Collection<DataAdapterDescriptor> dataAdapterDescriptors = DataAdapterManager
-				.getPreferencesStorage().getDataAdapterDescriptors();
-		for (DataAdapterDescriptor da : dataAdapterDescriptors) {
-			DataAdapter dataAdapter = da.getDataAdapter();
-			if (daClass.isInstance(dataAdapter)) {
-				combo.add(da.getName());
-				combo.setData(combo.getItemCount() - 1 + _DA, dataAdapter);
-			}
+		addAdapters(DataAdapterManager.getPreferencesStorage(), combo);
+		List<ADataAdapterStorage> das = DataAdapterManager.getProjectStorages();
+		for (ADataAdapterStorage d : das) {
+			addAdapters(d, combo);
 		}
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -100,6 +98,18 @@ public class ImportDataSourceInfoFromDA<T extends DataAdapter> extends Dialog {
 		}
 
 		return container;
+	}
+
+	private void addAdapters(ADataAdapterStorage das, Combo combo) {
+		Collection<DataAdapterDescriptor> dataAdapterDescriptors = das
+				.getDataAdapterDescriptors();
+		for (DataAdapterDescriptor da : dataAdapterDescriptors) {
+			DataAdapter dataAdapter = da.getDataAdapter();
+			if (daClass.isInstance(dataAdapter)) {
+				combo.add(das.getLabel(da));
+				combo.setData(combo.getItemCount() - 1 + _DA, dataAdapter);
+			}
+		}
 	}
 
 	public T getSelectedDataAdapter() {

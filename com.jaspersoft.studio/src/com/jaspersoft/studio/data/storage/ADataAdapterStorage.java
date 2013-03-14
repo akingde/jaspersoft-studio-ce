@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.storage;
 
@@ -23,6 +18,8 @@ import java.util.Map;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.DataAdapterManager;
 
 public abstract class ADataAdapterStorage {
 	public static final String PROP_DATAADAPTERS = "DATAADAPTERS";
@@ -113,4 +110,14 @@ public abstract class ADataAdapterStorage {
 		return null;
 	}
 
+	public String getLabel(DataAdapterDescriptor d) {
+		String label = d.getName();
+		DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(d.getDataAdapter().getClass()
+				.getCanonicalName());
+		if (this instanceof FileDataAdapterStorage)
+			label += " - [" + getUrl(d) + "]";
+		else if (factory != null)
+			label += " - " + factory.getLabel();
+		return label;
+	}
 }
