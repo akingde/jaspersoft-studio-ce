@@ -18,7 +18,6 @@ package com.jaspersoft.studio.components.map.model.marker.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.Marker;
 import net.sf.jasperreports.components.map.MarkerProperty;
 import net.sf.jasperreports.components.map.StandardMarker;
 import net.sf.jasperreports.components.map.StandardMarkerProperty;
@@ -40,6 +39,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import com.jaspersoft.studio.components.map.model.marker.MarkerCoordinatesType;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
@@ -50,6 +50,9 @@ import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
 public class MarkerDialog extends Dialog {
+	
+	private MarkerCoordinatesType coordinatesType=MarkerCoordinatesType.LATITUDE_LONGITUDE;	
+	
 	private final class EditElement implements IEditElement<MarkerProperty> {
 		@Override
 		public void editElement(List<MarkerProperty> input, int pos) {
@@ -68,18 +71,21 @@ public class MarkerDialog extends Dialog {
 	}
 
 	private boolean isPropertyMandatory(MarkerProperty mprop) {
-		return mprop.getName().equals(Marker.PROPERTY_longitude)
-				|| mprop.getName().equals(Marker.PROPERTY_latitude);
+		return coordinatesType.isMandatoryProperty(mprop.getName());
 	}
 
 	private StandardMarker value;
-
 	private Table table;
 	private TableViewer tableViewer;
 	private EditButton<MarkerProperty> editButton;
 
-	protected MarkerDialog(Shell parentShell) {
+	public MarkerDialog(Shell parentShell) {
+		this(parentShell,MarkerCoordinatesType.LATITUDE_LONGITUDE);
+	}
+	
+	public MarkerDialog(Shell parentShell, MarkerCoordinatesType coordinatesType) {
 		super(parentShell);
+		this.coordinatesType = coordinatesType;
 	}
 
 	/*
@@ -150,10 +156,7 @@ public class MarkerDialog extends Dialog {
 		new DeleteButton() {
 			protected boolean canRemove(Object obj) {
 				if (obj instanceof MarkerProperty) {
-					String name = ((MarkerProperty) obj).getName();
-					if (name.equals(Marker.PROPERTY_longitude)
-							|| name.equals(Marker.PROPERTY_latitude))
-						return false;
+					return !isPropertyMandatory((MarkerProperty) obj);
 				}
 				return super.canRemove(obj);
 			};
@@ -218,5 +221,5 @@ public class MarkerDialog extends Dialog {
 		}
 		tableViewer.setInput(mprops);
 	}
-
+	
 }

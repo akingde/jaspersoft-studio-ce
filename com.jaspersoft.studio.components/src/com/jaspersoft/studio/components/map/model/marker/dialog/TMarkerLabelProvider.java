@@ -24,8 +24,21 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import com.jaspersoft.studio.components.map.model.marker.MarkerCoordinatesType;
+
 public class TMarkerLabelProvider extends LabelProvider implements
 		ITableLabelProvider {
+
+	private MarkerCoordinatesType coordinatesType=MarkerCoordinatesType.LATITUDE_LONGITUDE;	
+	
+	public TMarkerLabelProvider() {
+		super();
+	}
+	
+	public TMarkerLabelProvider(MarkerCoordinatesType coordinatesType) {
+		super();
+		this.coordinatesType = coordinatesType;
+	}
 
 	public Image getColumnImage(Object element, int columnIndex) {
 		return null;
@@ -36,14 +49,28 @@ public class TMarkerLabelProvider extends LabelProvider implements
 		List<MarkerProperty> prp = dto.getProperties();
 		switch (columnIndex) {
 		case 1:
-			for (MarkerProperty mp : prp)
-				if (mp.getName().equals(Marker.PROPERTY_longitude))
+			for (MarkerProperty mp : prp){
+				if (coordinatesType==MarkerCoordinatesType.LATITUDE_LONGITUDE &&
+					mp.getName().equals(Marker.PROPERTY_longitude)){
 					return getValue(mp);
+				}
+				if (coordinatesType==MarkerCoordinatesType.XY &&
+						mp.getName().equals("y")){
+					return getValue(mp);
+				} 
+			}
 			return "null";
 		case 0:
-			for (MarkerProperty mp : prp)
-				if (mp.getName().equals(Marker.PROPERTY_latitude))
+			for (MarkerProperty mp : prp){
+				if (coordinatesType==MarkerCoordinatesType.LATITUDE_LONGITUDE &&
+					mp.getName().equals(Marker.PROPERTY_latitude)){
 					return getValue(mp);
+				}
+				if (coordinatesType==MarkerCoordinatesType.XY &&
+					mp.getName().equals("x")){
+					return getValue(mp);
+				}
+			}
 			return "null";
 		}
 		return ""; //$NON-NLS-1$

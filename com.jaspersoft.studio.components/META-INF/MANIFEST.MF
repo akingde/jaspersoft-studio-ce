@@ -11,3 +11,5 @@ Eclipse-RegisterBuddy: com.jaspersoft.studio
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
+Export-Package: com.jaspersoft.studio.components.map.model.marker,
+ com.jaspersoft.studio.components.map.model.marker.dialog

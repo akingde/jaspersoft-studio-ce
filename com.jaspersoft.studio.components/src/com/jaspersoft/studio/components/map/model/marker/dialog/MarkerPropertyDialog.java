@@ -51,7 +51,7 @@ public class MarkerPropertyDialog extends Dialog {
 	private Text cprop;
 	private ExpressionContext expContext;
 
-	protected MarkerPropertyDialog(Shell parentShell) {
+	public MarkerPropertyDialog(Shell parentShell) {
 		super(parentShell);
 	}
 
