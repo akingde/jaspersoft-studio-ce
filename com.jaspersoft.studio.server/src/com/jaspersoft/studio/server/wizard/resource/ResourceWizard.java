@@ -24,12 +24,29 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 
 public class ResourceWizard extends Wizard {
+	private boolean skipFirstPage = false;
+
+	public ResourceWizard(ANode parent, MResource resource,
+			boolean skipFirstPage) {
+		this(parent, resource);
+		this.skipFirstPage = skipFirstPage;
+	}
 
 	public ResourceWizard(ANode parent, MResource resource) {
 		super();
 		setWindowTitle(Messages.ResourceWizard_windowtitle);
 		this.resource = resource;
 		this.parent = parent;
+	}
+
+	@Override
+	public IWizardPage getStartingPage() {
+		IWizardPage[] pages = getPages();
+		if (skipFirstPage && pages.length > 1)
+			return pages[1];
+		else if (pages.length == 1 && pages[0] instanceof EditResourcePage)
+			((EditResourcePage) pages[0]).setFirstPage(1);
+		return super.getStartingPage();
 	}
 
 	private ResourceFactory rfactory = new ResourceFactory();

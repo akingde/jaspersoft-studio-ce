@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.TabItem;
 
 public class EditResourcePage extends AWizardPage {
 	private APageContent[] rcontent;
+	private TabFolder tabFolder;
 
 	public EditResourcePage(APageContent... rcontent) {
 		super("editresourcepage");
@@ -37,7 +38,7 @@ public class EditResourcePage extends AWizardPage {
 	}
 
 	public void createControl(Composite parent) {
-		TabFolder tabFolder = new TabFolder(parent, SWT.TOP);
+		tabFolder = new TabFolder(parent, SWT.TOP);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		DataBindingContext bindingContext = new DataBindingContext();
@@ -55,6 +56,11 @@ public class EditResourcePage extends AWizardPage {
 			item.setControl(cmp);
 		}
 		setControl(tabFolder);
+	}
+
+	public void setFirstPage(int indx) {
+		if (tabFolder.getItemCount() > indx)
+			tabFolder.setSelection(indx);
 	}
 
 	@Override

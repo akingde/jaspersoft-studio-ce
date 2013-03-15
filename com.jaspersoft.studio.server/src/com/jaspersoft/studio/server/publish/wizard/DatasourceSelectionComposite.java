@@ -248,7 +248,7 @@ public class DatasourceSelectionComposite extends Composite {
 		} else {
 			MResource r = ResourceFactory.getResource(null,
 					ASelector.cloneResource(ref), -1);
-			ResourceWizard wizard = new ResourceWizard(parent, r);
+			ResourceWizard wizard = new ResourceWizard(parent, r, true);
 			WizardDialog dialog = new WizardDialog(shell, wizard);
 			dialog.create();
 			if (dialog.open() != Dialog.OK)

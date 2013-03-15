@@ -170,7 +170,7 @@ public abstract class ASelector {
 					newref = true;
 				}
 				MResource r = ResourceFactory.getResource(null, ref, -1);
-				ResourceWizard wizard = new ResourceWizard(pnode, r);
+				ResourceWizard wizard = new ResourceWizard(pnode, r, true);
 				WizardDialog dialog = new WizardDialog(bLoc.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() != Dialog.OK)

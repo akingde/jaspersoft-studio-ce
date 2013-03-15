@@ -91,6 +91,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			}
 		}
 		publishDataAdapters(mrunit, monitor, jasper, fileset, file, version);
+		publishBundles(mrunit, monitor, jasper, fileset, file, version);
 		publishTemplates(mrunit, monitor, jasper, fileset, file, version);
 		// here extend and give possibility to contribute to plugins
 		Activator.getExtManager().publishJrxml(mrunit, monitor, jasper,
@@ -162,10 +163,28 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		}
 	}
 
+	protected void publishBundles(MReportUnit mrunit, IProgressMonitor monitor,
+			JasperDesign jasper, Set<String> fileset, IFile file, String version)
+			throws Exception {
+		List<JRDataset> ds = new ArrayList<JRDataset>();
+		ds.add(jasper.getMainDataset());
+		List<JRDataset> datasetsList = jasper.getDatasetsList();
+		if (datasetsList != null && datasetsList.isEmpty())
+			ds.addAll(datasetsList);
+		for (JRDataset d : ds) {
+			String dapath = d.getResourceBundle();
+			if (dapath == null || dapath.isEmpty())
+				continue;
+			impBundle.publish(jrConfig, jasper, dapath, mrunit, monitor,
+					fileset, file);
+		}
+	}
+
 	private void init(JasperReportsConfiguration jrConfig, String version) {
 		this.jrConfig = jrConfig;
 		this.version = version;
 		impDa = new ImpDataAdapter(jrConfig);
+		impBundle = new ImpResourceBundle(jrConfig);
 		impStyle = new ImpStyleTemplate(jrConfig);
 		impImg = new ImpImage(jrConfig);
 		impSRP = new ImpSubreport(jrConfig);
@@ -173,6 +192,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	}
 
 	private IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+	private ImpResourceBundle impBundle;
 	private ImpDataAdapter impDa;
 	private ImpStyleTemplate impStyle;
 	private ImpImage impImg;
