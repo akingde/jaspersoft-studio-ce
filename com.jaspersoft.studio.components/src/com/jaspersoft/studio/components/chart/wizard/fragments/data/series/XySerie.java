@@ -23,7 +23,7 @@ import net.sf.jasperreports.charts.design.JRDesignXySeries;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.swt.widgets.TableItem;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 
 public class XySerie implements ISeriesFactory<JRXySeries> {
 
@@ -40,9 +40,9 @@ public class XySerie implements ISeriesFactory<JRXySeries> {
 			f.setXValueExpression(new JRDesignExpression("0"));
 			f.setYValueExpression(new JRDesignExpression("0"));
 		} else {
-			f.setXValueExpression(prev.getXValueExpression());
-			f.setYValueExpression(prev.getYValueExpression());
-			f.setLabelExpression(prev.getLabelExpression());
+			f.setXValueExpression(ExprUtil.clone(prev.getXValueExpression()));
+			f.setYValueExpression(ExprUtil.clone(prev.getYValueExpression()));
+			f.setLabelExpression(ExprUtil.clone(prev.getLabelExpression()));
 		}
 		return f;
 	}
@@ -51,8 +51,7 @@ public class XySerie implements ISeriesFactory<JRXySeries> {
 		JRXySeries dcs = (JRXySeries) element;
 		switch (columnIndex) {
 		case 0:
-			if (dcs.getSeriesExpression() != null
-					&& dcs.getSeriesExpression().getText() != null)
+			if (dcs.getSeriesExpression() != null && dcs.getSeriesExpression().getText() != null)
 				return dcs.getSeriesExpression().getText();
 		}
 		return ""; //$NON-NLS-1$

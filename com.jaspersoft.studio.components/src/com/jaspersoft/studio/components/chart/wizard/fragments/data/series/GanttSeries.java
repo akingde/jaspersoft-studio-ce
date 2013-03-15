@@ -23,7 +23,7 @@ import net.sf.jasperreports.charts.design.JRDesignGanttSeries;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.swt.widgets.TableItem;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 
 public class GanttSeries implements ISeriesFactory<JRGanttSeries> {
 
@@ -32,23 +32,20 @@ public class GanttSeries implements ISeriesFactory<JRGanttSeries> {
 	}
 
 	@Override
-	public JRDesignGanttSeries createSerie(JRDesignExpression expr,
-			JRGanttSeries prev) {
+	public JRDesignGanttSeries createSerie(JRDesignExpression expr, JRGanttSeries prev) {
 		JRDesignGanttSeries f = new JRDesignGanttSeries();
 		f.setSeriesExpression(expr);
 		if (prev == null) {
 			f.setPercentExpression(new JRDesignExpression("0"));
-			f.setStartDateExpression(new JRDesignExpression(
-					"new java.util.Date()"));
-			f.setEndDateExpression(new JRDesignExpression(
-					"new java.util.Date()"));
+			f.setStartDateExpression(new JRDesignExpression("new java.util.Date()"));
+			f.setEndDateExpression(new JRDesignExpression("new java.util.Date()"));
 			f.setTaskExpression(new JRDesignExpression("\"Task\""));
 		} else {
-			f.setPercentExpression(prev.getPercentExpression());
-			f.setStartDateExpression(prev.getStartDateExpression());
-			f.setEndDateExpression(prev.getEndDateExpression());
-			f.setTaskExpression(prev.getTaskExpression());
-			f.setLabelExpression(prev.getLabelExpression());
+			f.setPercentExpression(ExprUtil.clone(prev.getPercentExpression()));
+			f.setStartDateExpression(ExprUtil.clone(prev.getStartDateExpression()));
+			f.setEndDateExpression(ExprUtil.clone(prev.getEndDateExpression()));
+			f.setTaskExpression(ExprUtil.clone(prev.getTaskExpression()));
+			f.setLabelExpression(ExprUtil.clone(prev.getLabelExpression()));
 		}
 		return f;
 	}
@@ -58,8 +55,7 @@ public class GanttSeries implements ISeriesFactory<JRGanttSeries> {
 		JRGanttSeries dcs = (JRGanttSeries) element;
 		switch (columnIndex) {
 		case 0:
-			if (dcs.getSeriesExpression() != null
-					&& dcs.getSeriesExpression().getText() != null)
+			if (dcs.getSeriesExpression() != null && dcs.getSeriesExpression().getText() != null)
 				return dcs.getSeriesExpression().getText();
 		}
 		return ""; //$NON-NLS-1$

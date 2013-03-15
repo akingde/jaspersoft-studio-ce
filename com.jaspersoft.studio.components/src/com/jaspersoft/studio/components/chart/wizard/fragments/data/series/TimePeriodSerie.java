@@ -23,6 +23,8 @@ import net.sf.jasperreports.charts.design.JRDesignTimePeriodSeries;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+
 public class TimePeriodSerie implements ISeriesFactory<JRTimePeriodSeries> {
 
 	public JRDesignTimePeriodSeries createSerie() {
@@ -30,21 +32,18 @@ public class TimePeriodSerie implements ISeriesFactory<JRTimePeriodSeries> {
 	}
 
 	@Override
-	public JRDesignTimePeriodSeries createSerie(JRDesignExpression expr,
-			JRTimePeriodSeries prev) {
+	public JRDesignTimePeriodSeries createSerie(JRDesignExpression expr, JRTimePeriodSeries prev) {
 		JRDesignTimePeriodSeries f = new JRDesignTimePeriodSeries();
 		f.setSeriesExpression(expr);
 		if (prev == null) {
 			f.setValueExpression(new JRDesignExpression("0"));
-			f.setStartDateExpression(new JRDesignExpression(
-					"new java.util.Date()"));
-			f.setEndDateExpression(new JRDesignExpression(
-					"new java.util.Date()"));
+			f.setStartDateExpression(new JRDesignExpression("new java.util.Date()"));
+			f.setEndDateExpression(new JRDesignExpression("new java.util.Date()"));
 		} else {
-			f.setValueExpression(prev.getValueExpression());
-			f.setStartDateExpression(prev.getStartDateExpression());
-			f.setEndDateExpression(prev.getEndDateExpression());
-			f.setLabelExpression(prev.getLabelExpression());
+			f.setValueExpression(ExprUtil.clone(prev.getValueExpression()));
+			f.setStartDateExpression(ExprUtil.clone(prev.getStartDateExpression()));
+			f.setEndDateExpression(ExprUtil.clone(prev.getEndDateExpression()));
+			f.setLabelExpression(ExprUtil.clone(prev.getLabelExpression()));
 		}
 		return f;
 	}
@@ -53,8 +52,7 @@ public class TimePeriodSerie implements ISeriesFactory<JRTimePeriodSeries> {
 		JRTimePeriodSeries dcs = (JRTimePeriodSeries) element;
 		switch (columnIndex) {
 		case 0:
-			if (dcs.getSeriesExpression() != null
-					&& dcs.getSeriesExpression().getText() != null)
+			if (dcs.getSeriesExpression() != null && dcs.getSeriesExpression().getText() != null)
 				return dcs.getSeriesExpression().getText();
 		}
 		return ""; //$NON-NLS-1$

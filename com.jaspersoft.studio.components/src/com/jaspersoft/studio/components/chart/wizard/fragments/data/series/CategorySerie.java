@@ -23,6 +23,8 @@ import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+
 public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 
 	public JRDesignCategorySeries createSerie() {
@@ -30,17 +32,16 @@ public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 	}
 
 	@Override
-	public JRDesignCategorySeries createSerie(JRDesignExpression expr,
-			JRCategorySeries prev) {
+	public JRDesignCategorySeries createSerie(JRDesignExpression expr, JRCategorySeries prev) {
 		JRDesignCategorySeries f = new JRDesignCategorySeries();
 		f.setSeriesExpression(expr);
 		if (prev == null) {
 			f.setCategoryExpression(new JRDesignExpression("0"));
 			f.setValueExpression(new JRDesignExpression("0"));
 		} else {
-			f.setCategoryExpression(prev.getCategoryExpression());
-			f.setValueExpression(prev.getValueExpression());
-			f.setLabelExpression(prev.getLabelExpression());
+			f.setCategoryExpression(ExprUtil.clone(prev.getCategoryExpression()));
+			f.setValueExpression(ExprUtil.clone(prev.getValueExpression()));
+			f.setLabelExpression(ExprUtil.clone(prev.getLabelExpression()));
 		}
 		return f;
 	}
@@ -49,8 +50,7 @@ public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 		JRCategorySeries dcs = (JRCategorySeries) element;
 		switch (columnIndex) {
 		case 0:
-			if (dcs.getSeriesExpression() != null
-					&& dcs.getSeriesExpression().getText() != null)
+			if (dcs.getSeriesExpression() != null && dcs.getSeriesExpression().getText() != null)
 				return dcs.getSeriesExpression().getText();
 		}
 		return ""; //$NON-NLS-1$

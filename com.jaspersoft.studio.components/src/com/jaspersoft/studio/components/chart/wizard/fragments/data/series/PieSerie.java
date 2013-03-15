@@ -23,6 +23,8 @@ import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+
 public class PieSerie implements ISeriesFactory<JRPieSeries> {
 
 	public JRDesignPieSeries createSerie() {
@@ -30,15 +32,14 @@ public class PieSerie implements ISeriesFactory<JRPieSeries> {
 	}
 
 	@Override
-	public JRDesignPieSeries createSerie(JRDesignExpression expr,
-			JRPieSeries prev) {
+	public JRDesignPieSeries createSerie(JRDesignExpression expr, JRPieSeries prev) {
 		JRDesignPieSeries f = new JRDesignPieSeries();
 		f.setKeyExpression(expr);
 		if (prev == null)
 			f.setValueExpression(new JRDesignExpression("0"));
 		else {
-			f.setValueExpression(prev.getValueExpression());
-			f.setLabelExpression(prev.getLabelExpression());
+			f.setValueExpression(ExprUtil.clone(prev.getValueExpression()));
+			f.setLabelExpression(ExprUtil.clone(prev.getLabelExpression()));
 		}
 		return f;
 	}
@@ -47,8 +48,7 @@ public class PieSerie implements ISeriesFactory<JRPieSeries> {
 		JRPieSeries dcs = (JRPieSeries) element;
 		switch (columnIndex) {
 		case 0:
-			if (dcs.getKeyExpression() != null
-					&& dcs.getKeyExpression().getText() != null)
+			if (dcs.getKeyExpression() != null && dcs.getKeyExpression().getText() != null)
 				return dcs.getKeyExpression().getText();
 		}
 		return ""; //$NON-NLS-1$

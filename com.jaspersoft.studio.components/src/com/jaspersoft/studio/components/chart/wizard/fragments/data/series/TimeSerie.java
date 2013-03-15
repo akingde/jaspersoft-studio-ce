@@ -23,6 +23,8 @@ import net.sf.jasperreports.charts.design.JRDesignTimeSeries;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+
 public class TimeSerie implements ISeriesFactory<JRTimeSeries> {
 
 	public JRDesignTimeSeries createSerie() {
@@ -30,17 +32,16 @@ public class TimeSerie implements ISeriesFactory<JRTimeSeries> {
 	}
 
 	@Override
-	public JRDesignTimeSeries createSerie(JRDesignExpression expr,
-			JRTimeSeries prev) {
+	public JRDesignTimeSeries createSerie(JRDesignExpression expr, JRTimeSeries prev) {
 		JRDesignTimeSeries f = new JRDesignTimeSeries();
 		f.setSeriesExpression(expr);
 		if (prev == null) {
 			f.setTimePeriodExpression(new JRDesignExpression("0"));
 			f.setValueExpression(new JRDesignExpression("0"));
 		} else {
-			f.setTimePeriodExpression(prev.getTimePeriodExpression());
-			f.setValueExpression(prev.getValueExpression());
-			f.setLabelExpression(prev.getLabelExpression());
+			f.setTimePeriodExpression(ExprUtil.clone(prev.getTimePeriodExpression()));
+			f.setValueExpression(ExprUtil.clone(prev.getValueExpression()));
+			f.setLabelExpression(ExprUtil.clone(prev.getLabelExpression()));
 		}
 		return f;
 	}
@@ -49,8 +50,7 @@ public class TimeSerie implements ISeriesFactory<JRTimeSeries> {
 		JRTimeSeries dcs = (JRTimeSeries) element;
 		switch (columnIndex) {
 		case 0:
-			if (dcs.getSeriesExpression() != null
-					&& dcs.getSeriesExpression().getText() != null)
+			if (dcs.getSeriesExpression() != null && dcs.getSeriesExpression().getText() != null)
 				return dcs.getSeriesExpression().getText();
 		}
 		return ""; //$NON-NLS-1$

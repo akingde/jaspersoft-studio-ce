@@ -23,6 +23,8 @@ import net.sf.jasperreports.charts.design.JRDesignXyzSeries;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+
 public class XyzSerie implements ISeriesFactory<JRXyzSeries> {
 
 	public JRDesignXyzSeries createSerie() {
@@ -30,8 +32,7 @@ public class XyzSerie implements ISeriesFactory<JRXyzSeries> {
 	}
 
 	@Override
-	public JRDesignXyzSeries createSerie(JRDesignExpression expr,
-			JRXyzSeries prev) {
+	public JRDesignXyzSeries createSerie(JRDesignExpression expr, JRXyzSeries prev) {
 		JRDesignXyzSeries f = new JRDesignXyzSeries();
 		f.setSeriesExpression(expr);
 		if (prev == null) {
@@ -39,9 +40,9 @@ public class XyzSerie implements ISeriesFactory<JRXyzSeries> {
 			f.setYValueExpression(new JRDesignExpression("0"));
 			f.setZValueExpression(new JRDesignExpression("0"));
 		} else {
-			f.setXValueExpression(prev.getXValueExpression());
-			f.setYValueExpression(prev.getYValueExpression());
-			f.setZValueExpression(prev.getZValueExpression());
+			f.setXValueExpression(ExprUtil.clone(prev.getXValueExpression()));
+			f.setYValueExpression(ExprUtil.clone(prev.getYValueExpression()));
+			f.setZValueExpression(ExprUtil.clone(prev.getZValueExpression()));
 		}
 		return f;
 	}
@@ -50,8 +51,7 @@ public class XyzSerie implements ISeriesFactory<JRXyzSeries> {
 		JRXyzSeries dcs = (JRXyzSeries) element;
 		switch (columnIndex) {
 		case 0:
-			if (dcs.getSeriesExpression() != null
-					&& dcs.getSeriesExpression().getText() != null)
+			if (dcs.getSeriesExpression() != null && dcs.getSeriesExpression().getText() != null)
 				return dcs.getSeriesExpression().getText();
 		}
 		return ""; //$NON-NLS-1$
