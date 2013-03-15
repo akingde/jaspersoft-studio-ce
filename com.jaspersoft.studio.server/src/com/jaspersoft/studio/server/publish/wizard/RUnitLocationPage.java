@@ -292,8 +292,10 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			INode root = n.getRoot();
 			if (root instanceof MServerProfile)
 				root = ((MServerProfile) root).getRoot();
-			treeViewer.setInput(root);
-			setSelection(n);
+			if (!treeViewer.getTree().isDisposed()) {
+				treeViewer.setInput(root);
+				setSelection(n);
+			}
 		}
 	}
 

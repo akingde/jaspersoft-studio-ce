@@ -201,14 +201,14 @@ public class DatasourceSelectionComposite extends Composite {
 		case REMOTE_DATASOURCE:
 			rbDSFromRepo.setSelection(true);
 			btnSelectDSFromRepo.setEnabled(true);
-			textDSFromRepo.setEnabled(true);
+			// textDSFromRepo.setEnabled(true);
 			if (r != null)
 				textDSFromRepo.setText(Misc.nvl(r.getReferenceUri()));
 			break;
 		case LOCAL_DATASOURCE:
 			rbLocalDS.setSelection(true);
 			btnSelectLocalDS.setEnabled(true);
-			textLocalDS.setEnabled(true);
+			// textLocalDS.setEnabled(true);
 			if (r != null)
 				textLocalDS.setText(Misc.nvl(r.getName()));
 			break;
@@ -225,7 +225,7 @@ public class DatasourceSelectionComposite extends Composite {
 	private void selectLocalDatasource() {
 		ResourceDescriptor runit = res.getValue();
 		ResourceDescriptor ref = SelectorDatasource.getDatasource(runit);
-		if (ref != null && ref.getIsReference())
+		if (ASelector.isReference(ref))
 			ref = null;
 
 		Shell shell = Display.getDefault().getActiveShell();
@@ -239,10 +239,10 @@ public class DatasourceSelectionComposite extends Composite {
 			ref = wizard.getResource().getValue();
 
 			ref.setIsReference(false);
-			ref.setParentFolder(runit.getUriString() + "_files"); //$NON-NLS-1$
+			ref.setParentFolder(runit.getParentFolder()
+					+ "/" + runit.getName() + "_files"); //$NON-NLS-1$
 			// ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
-			ref.setUriString(ref.getParentFolder() + "/" //$NON-NLS-1$
-					+ ref.getName());
+			ref.setUriString(ref.getParentFolder() + "/" + ref.getName());//$NON-NLS-1$
 
 			SelectorDatasource.replaceDatasource(res, ref);
 		} else {

@@ -153,9 +153,7 @@ public abstract class ASelector {
 			public void widgetSelected(SelectionEvent e) {
 				ResourceDescriptor runit = res.getValue();
 				ResourceDescriptor ref = getResourceDescriptor(runit);
-				if (ref != null
-						&& (ref.getIsReference() || ref.getWsType().equals(
-								ResourceDescriptor.TYPE_REFERENCE)))
+				if (isReference(ref))
 					ref = null;
 				boolean newref = false;
 				if (ref != null)
@@ -184,6 +182,12 @@ public abstract class ASelector {
 				firePageComplete();
 			}
 		});
+	}
+
+	public static boolean isReference(ResourceDescriptor ref) {
+		return ref != null
+				&& (ref.getIsReference() || ref.getWsType().equals(
+						ResourceDescriptor.TYPE_REFERENCE));
 	}
 
 	protected abstract ResourceDescriptor createLocal(MResource res);
