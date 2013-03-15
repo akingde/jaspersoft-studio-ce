@@ -57,7 +57,7 @@ public class WSClientHelper {
 	public static IConnection connect(MServerProfile msp,
 			IProgressMonitor monitor) throws Exception {
 		if (monitor != null)
-			monitor.subTask("Connecting");
+			monitor.subTask("Connecting to " + msp.getDisplayText());
 		IConnection c = new ProxyConnection();
 		boolean cres = c.connect(msp.getValue());
 		if (cres) {
@@ -72,7 +72,7 @@ public class WSClientHelper {
 
 	public static boolean checkConnection(MServerProfile msp,
 			IProgressMonitor monitor) throws Exception {
-		monitor.subTask("Connecting");
+		monitor.subTask("Connecting to " + msp.getDisplayText());
 		IConnection c = new ProxyConnection();
 		boolean cres = c.connect(msp.getValue());
 		if (cres)

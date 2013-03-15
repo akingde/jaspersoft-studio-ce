@@ -21,6 +21,9 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -55,6 +58,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.publish.FindReportUnit;
 import com.jaspersoft.studio.server.utils.ValidationUtils;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
@@ -272,6 +276,18 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 	}
 
 	private void fillInput() {
+		setSelectedNode();
+		if (n instanceof MServerProfile)
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					look4SelectedUnit((MServerProfile) n);
+				}
+			});
+	}
+
+	private void setSelectedNode() {
 		if (n != null) {
 			INode root = n.getRoot();
 			if (root instanceof MServerProfile)
@@ -353,5 +369,38 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		}
 		setErrorMessage(errorMsg);
 		setPageComplete(errorMsg == null);
+	}
+
+	private void look4SelectedUnit(final MServerProfile mres) {
+
+		Job job = new Job(Messages.FindReportUnit_jobname) {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask(Messages.Publish2ServerWizard_MonitorName,
+						IProgressMonitor.UNKNOWN);
+				try {
+					ANode node = FindReportUnit.findReportUnit(mres, monitor,
+							jDesign);
+					if (monitor.isCanceled())
+						return Status.CANCEL_STATUS;
+					if (n != mres)
+						return Status.CANCEL_STATUS;
+					n = node;
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							setSelectedNode();
+						}
+					});
+				} finally {
+					monitor.done();
+				}
+				return Status.OK_STATUS;
+			}
+
+		};
+		job.setPriority(Job.LONG);
+		job.schedule();
 	}
 }

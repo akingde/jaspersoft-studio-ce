@@ -63,21 +63,13 @@ public class FindReportUnit {
 		for (ServerProfile s : servers) {
 			sp = new MServerProfile(root, s);
 			new MDummy(sp);
-			// try {
-			// monitor.subTask("Connect to: [" + s.getName() + "] "
-			// + s.getUrl());
-			// WSClientHelper.connect((MServerProfile) sp, monitor);
 			if (monitor.isCanceled())
 				return sp;
-			// } catch (Exception e) {
-			// e.printStackTrace();
-			// }
 		}
 
 		final String prop = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
 		if (prop != null) {
-			final MServerProfile mserv = (MServerProfile) new ModelVisitor<MServerProfile>(
-					root) {
+			sp = new ModelVisitor<MServerProfile>(root) {
 
 				@Override
 				public boolean visit(INode n) {
@@ -92,22 +84,15 @@ public class FindReportUnit {
 					return false;
 				}
 			}.getObject();
-			try {
-				WSClientHelper.connect(mserv, monitor);
-				sp = findReportUnit(mserv, monitor, jd);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 		return sp;
 	}
 
-	protected ANode findReportUnit(ANode sp, IProgressMonitor monitor,
-			JasperDesign jd) {
+	public static ANode findReportUnit(MServerProfile mserv,
+			IProgressMonitor monitor, JasperDesign jd) {
 		try {
-			MServerProfile mserv = (MServerProfile) sp;
 			WSClientHelper.connect(mserv, monitor);
-			if (sp != null && sp instanceof MServerProfile) {
+			if (mserv != null) {
 				String prunit = jd.getProperty(JrxmlExporter.PROP_REPORTUNIT);
 				if (prunit != null) {
 					WSClientHelper.connectGetData(mserv, monitor);
@@ -118,7 +103,7 @@ public class FindReportUnit {
 							mserv.getChildren(), monitor, prunit,
 							mserv.getWsClient());
 					if (selectedRepoUnit != null) {
-						sp = selectedRepoUnit;
+						return selectedRepoUnit;
 					}
 				}
 
@@ -126,6 +111,6 @@ public class FindReportUnit {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sp;
+		return mserv;
 	}
 }
