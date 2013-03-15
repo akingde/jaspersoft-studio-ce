@@ -51,8 +51,10 @@ public class DeleteElementCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		elementPosition = jrCell.getChildren().indexOf(jrElement);
-		jrCell.removeElement(jrElement);
+		if (jrCell != null && jrCell.getChildren() != null) {
+			elementPosition = jrCell.getChildren().indexOf(jrElement);
+			jrCell.removeElement(jrElement);
+		}
 	}
 
 	/*
@@ -74,9 +76,11 @@ public class DeleteElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		if (elementPosition >= 0 && elementPosition <= jrCell.getChildren().size())
-			jrCell.addElement(elementPosition, jrElement);
-		else
-			jrCell.addElement(jrElement);
+		if (jrCell != null && jrCell.getChildren() != null) {
+			if (elementPosition >= 0 && elementPosition <= jrCell.getChildren().size())
+				jrCell.addElement(elementPosition, jrElement);
+			else
+				jrCell.addElement(jrElement);
+		}
 	}
 }

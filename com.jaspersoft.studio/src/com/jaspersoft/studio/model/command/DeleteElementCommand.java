@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.command;
 
@@ -77,35 +72,37 @@ public class DeleteElementCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		elementPosition = jrGroup.getChildren().indexOf(jrElement);
-		if (jrGroup instanceof JRDesignElementGroup) {
-			((JRDesignElementGroup) jrGroup).removeElement(jrElement);
-		} else if (jrGroup instanceof JRDesignFrame) {
-			((JRDesignFrame) jrGroup).removeElement(jrElement);
-		}
-		if (jrGroup instanceof JRPropertiesHolder) {
-			String uuid = null;
-			if (jrGroup instanceof JRBaseElement)
-				uuid = ((JRBaseElement) jrGroup).getUUID().toString();
-			Dimension d = new Dimension(0, 0);
-			if (jrGroup instanceof JRCommonElement) {
-				JRCommonElement jce = (JRCommonElement) jrGroup;
-				// Commented for back-compatibility in 3.6. 
-				// Replaced with the following line.
-				// d.setSize(jce.getWidth(), jce.getHeight());
-				d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+		if (jrGroup != null && jrGroup.getChildren() != null) {
+			elementPosition = jrGroup.getChildren().indexOf(jrElement);
+			if (jrGroup instanceof JRDesignElementGroup) {
+				((JRDesignElementGroup) jrGroup).removeElement(jrElement);
+			} else if (jrGroup instanceof JRDesignFrame) {
+				((JRDesignFrame) jrGroup).removeElement(jrElement);
 			}
-			if (jrGroup instanceof JRDesignBand) {
-				int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
-				// Commented for back-compatibility in 3.6. 
-				// Replaced with the following line.
-				// d.setSize(w, ((JRDesignBand) jrGroup).getHeight());
-				d.setSize(new Dimension(w, ((JRDesignBand) jrGroup).getHeight()));
-			}
-			if (lCmd == null) {
-				ILayout layout = LayoutManager.getLayout(pholder, jDesign, uuid);
-				lCmd = new LayoutCommand(jrGroup, layout, d);
-				lCmd.execute();
+			if (jrGroup instanceof JRPropertiesHolder) {
+				String uuid = null;
+				if (jrGroup instanceof JRBaseElement)
+					uuid = ((JRBaseElement) jrGroup).getUUID().toString();
+				Dimension d = new Dimension(0, 0);
+				if (jrGroup instanceof JRCommonElement) {
+					JRCommonElement jce = (JRCommonElement) jrGroup;
+					// Commented for back-compatibility in 3.6.
+					// Replaced with the following line.
+					// d.setSize(jce.getWidth(), jce.getHeight());
+					d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+				}
+				if (jrGroup instanceof JRDesignBand) {
+					int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
+					// Commented for back-compatibility in 3.6.
+					// Replaced with the following line.
+					// d.setSize(w, ((JRDesignBand) jrGroup).getHeight());
+					d.setSize(new Dimension(w, ((JRDesignBand) jrGroup).getHeight()));
+				}
+				if (lCmd == null) {
+					ILayout layout = LayoutManager.getLayout(pholder, jDesign, uuid);
+					lCmd = new LayoutCommand(jrGroup, layout, d);
+					lCmd.execute();
+				}
 			}
 		}
 	}
@@ -131,17 +128,20 @@ public class DeleteElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		lCmd.undo();
-		if (jrGroup instanceof JRDesignElementGroup) {
-			if (elementPosition > ((JRDesignElementGroup) jrGroup).getChildren().size())
-				((JRDesignElementGroup) jrGroup).addElement(jrElement);
-			else
-				((JRDesignElementGroup) jrGroup).addElement(elementPosition, jrElement);
-		} else if (jrGroup instanceof JRDesignFrame) {
-			if (elementPosition > ((JRDesignFrame) jrGroup).getChildren().size())
-				((JRDesignFrame) jrGroup).addElement(jrElement);
-			else
-				((JRDesignFrame) jrGroup).addElement(elementPosition, jrElement);
+		if (lCmd != null)
+			lCmd.undo();
+		if (jrGroup != null && jrGroup.getChildren() != null) {
+			if (jrGroup instanceof JRDesignElementGroup) {
+				if (elementPosition > ((JRDesignElementGroup) jrGroup).getChildren().size())
+					((JRDesignElementGroup) jrGroup).addElement(jrElement);
+				else
+					((JRDesignElementGroup) jrGroup).addElement(elementPosition, jrElement);
+			} else if (jrGroup instanceof JRDesignFrame) {
+				if (elementPosition > ((JRDesignFrame) jrGroup).getChildren().size())
+					((JRDesignFrame) jrGroup).addElement(jrElement);
+				else
+					((JRDesignFrame) jrGroup).addElement(elementPosition, jrElement);
+			}
 		}
 	}
 }
