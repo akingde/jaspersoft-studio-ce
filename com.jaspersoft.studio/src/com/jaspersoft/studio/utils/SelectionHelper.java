@@ -38,6 +38,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
@@ -145,6 +146,10 @@ public class SelectionHelper {
 			window = PlatformUI.getWorkbench().getWorkbenchWindows()[0];
 		IWorkbenchPage page = window.getActivePage();
 		try {
+			IEditorReference[] er = page.findEditors(input, name, IWorkbenchPage.MATCH_ID);
+			if (er != null)
+				page.closeEditors(er, false);
+
 			page.openEditor(input, name);
 		} catch (PartInitException e) {
 			UIUtils.showError(e);
