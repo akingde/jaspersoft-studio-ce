@@ -238,7 +238,7 @@ public class MMap extends MGraphicElement {
 		desc.add(datasetRunD);
 
 		MarkerDescriptor markersD = new MarkerDescriptor(
-				StandardMarkerDataset.PROPERTY_MARKER, "Markers");
+				StandardMarkerDataset.PROPERTY_MARKER_LIST, "Markers");
 		markersD.setDescription("Markers");
 		desc.add(markersD);
 
@@ -272,7 +272,7 @@ public class MMap extends MGraphicElement {
 	public Object getPropertyValue(Object id) {
 		StandardMapComponent component = getMapComponent();
 
-		if (id.equals(StandardMarkerDataset.PROPERTY_MARKER)) {
+		if (id.equals(StandardMarkerDataset.PROPERTY_MARKER_LIST)) {
 			MarkerDataset markerdataset = component.getMarkerDataset();
 			List<Marker> markers = null;
 			if (markerdataset != null)
@@ -332,7 +332,7 @@ public class MMap extends MGraphicElement {
 
 		StandardMarkerDataset markerdataset = (StandardMarkerDataset) component
 				.getMarkerDataset();
-		if (id.equals(StandardMarkerDataset.PROPERTY_MARKER)) {
+		if (id.equals(StandardMarkerDataset.PROPERTY_MARKER_LIST)) {
 			if (value instanceof MarkersDTO) {
 				if (markerdataset == null) {
 					markerdataset = new StandardMarkerDataset();
@@ -445,6 +445,7 @@ public class MMap extends MGraphicElement {
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement designMap = new JRDesignComponentElement();
 		StandardMapComponent component = new StandardMapComponent();
+		component.setMarkerDataset(new StandardMarkerDataset());
 		JRDesignExpression exp1 = new JRDesignExpression();
 		exp1.setText("0f"); //$NON-NLS-1$
 		JRDesignExpression exp2 = new JRDesignExpression();

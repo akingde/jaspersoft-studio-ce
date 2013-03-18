@@ -57,7 +57,7 @@ public class SPMarker extends ASPropertyWidget {
 				dialog.create();
 				if (dialog.open() == Dialog.OK)
 					section.changeProperty(
-							StandardMarkerDataset.PROPERTY_MARKER,
+							StandardMarkerDataset.PROPERTY_MARKER_LIST,
 							wizard.getValue());
 			}
 

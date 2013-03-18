@@ -34,7 +34,7 @@ public class MapDatasetSection extends AbstractSection {
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		createWidget4Property(parent, StandardMarkerDataset.PROPERTY_MARKER,
+		createWidget4Property(parent, StandardMarkerDataset.PROPERTY_MARKER_LIST,
 				false).getControl().setLayoutData(gd);
 
 		Composite group = getWidgetFactory().createSection(parent,
