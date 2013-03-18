@@ -333,7 +333,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		try { 
+		try {
 			isRefresh = true;
 
 			// Check for function library static imports (see issue #0005771)
@@ -357,7 +357,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				UIUtils.showError(e);
 			}
 			if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor) {
-				version = JRXmlWriterHelper.getVersion(resource, jrContext, true); 
+				version = JRXmlWriterHelper.getVersion(resource, jrContext, true);
 				model2xml(version);
 			} else {
 				try { // just go thru the model, to look what happend with our markers
@@ -620,6 +620,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					gotoMarker(marker);
+					toXML = true;
 					setActivePage(PAGE_XMLEDITOR);
 					isRefresh = false;
 				}
@@ -651,6 +652,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	private boolean xmlFresh = true;
 
 	private PreviewEditor previewEditor;
+	private boolean toXML = false;
 
 	/**
 	 * Calculates the contents of page 2 when the it is activated.
@@ -669,6 +671,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					try {
 						xml2model();
 					} catch (Exception e) {
+						toXML = true;
 						handleJRException(getEditorInput(), e, false);
 					}
 					updateVisualView();
@@ -688,7 +691,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				break;
 			case PAGE_XMLEDITOR:
 				// if (reportContainer.isDirty())
-				model2xml();
+				if (toXML)
+					toXML = false;
+				else
+					model2xml();
 				break;
 			case PAGE_PREVIEW:
 				if (activePage == PAGE_XMLEDITOR)
@@ -771,7 +777,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 			if (xml != null && !Arrays.equals(doc.get().getBytes(), xml.getBytes())) {
-				doc.set(xml); 
+				doc.set(xml);
 			}
 			xmlFresh = true;
 		} catch (Throwable e) {
