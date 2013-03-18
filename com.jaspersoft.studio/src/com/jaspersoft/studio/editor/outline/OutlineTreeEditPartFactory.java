@@ -18,6 +18,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
@@ -419,7 +420,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			}
 		} else {
 			if (child instanceof MConditionalStyle) {
-				if (parent instanceof MStyle)
+				if (parent instanceof MStyle && parent.getValue() instanceof JRDesignStyle)
 					return new CreateConditionalStyleCommand((MStyle) parent, (MConditionalStyle) child, newIndex);
 				return null;
 			} else if (child instanceof MStyle) {
