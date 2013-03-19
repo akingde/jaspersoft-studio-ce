@@ -86,6 +86,9 @@ public class ElementDialog extends Dialog {
 		putMap(new TimeElement());
 
 		putMap(new BooleanElement());
+
+		putMap(new FileElement());
+		putMap(new ImageElement());
 	}
 
 	private void putMap(AWElement widget) {

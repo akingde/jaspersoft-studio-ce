@@ -99,7 +99,7 @@ public class ImageInput extends ADataInput {
 			setButtonImage(btn, (Image) value);
 	}
 
-	private void setButtonImage(final Button txt, Image image) {
+	public static void setButtonImage(final Button txt, Image image) {
 		org.eclipse.swt.graphics.Image img = new org.eclipse.swt.graphics.Image(txt.getDisplay(), convertAWTImageToSWT(
 				image).scaledTo(50, 50));
 
