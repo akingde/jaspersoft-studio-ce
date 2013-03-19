@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.obj;
 
@@ -30,7 +25,19 @@ public class ParameterSection extends AbstractSection {
 
 		parent.setLayout(new GridLayout(2, false));
 
+		Composite cmp = getWidgetFactory().createComposite(parent);
+		GridLayout layout = new GridLayout(3, false);
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		cmp.setLayout(layout);
+
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		cmp.setLayoutData(gd);
+
+		createWidget4Property(cmp, JRDesignParameter.PROPERTY_NESTED_TYPE_NAME);
+
+		gd = new GridData(GridData.FILL_HORIZONTAL);
 		createWidget4Property(parent, JRDesignParameter.PROPERTY_DESCRIPTION).getControl().setLayoutData(gd);
 		createWidget4Property(parent, JRDesignParameter.PROPERTY_FOR_PROMPTING);
 		createWidget4Property(parent, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION);
