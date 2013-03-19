@@ -1,0 +1,38 @@
+package com.jaspersoft.studio.editor.preview.input.array;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
+
+import com.jaspersoft.studio.utils.Misc;
+
+public class StringElement extends AWElement {
+
+	protected Text text;
+
+	@Override
+	public Class<?> getSupportedType() {
+		return String.class;
+	}
+
+	protected int getStyle() {
+		return SWT.BORDER;
+	}
+
+	@Override
+	public Control createControl(Composite parent) {
+		text = new Text(parent, getStyle());
+		text.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				setValue(Misc.nvl(text.getText()));
+			}
+		});
+		return text;
+	}
+
+}

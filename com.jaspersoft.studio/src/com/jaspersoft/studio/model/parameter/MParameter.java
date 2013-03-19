@@ -149,6 +149,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		desc.add(classD);
 
 		defaultsMap.put(JRDesignParameter.PROPERTY_FOR_PROMPTING, Boolean.TRUE);
+		defaultsMap.put(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME, null);
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameter");
 	}

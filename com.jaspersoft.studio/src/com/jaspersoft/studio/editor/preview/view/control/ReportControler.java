@@ -62,6 +62,7 @@ import com.jaspersoft.studio.editor.preview.input.ImageInput;
 import com.jaspersoft.studio.editor.preview.input.LocaleInput;
 import com.jaspersoft.studio.editor.preview.input.TextInput;
 import com.jaspersoft.studio.editor.preview.input.TimeZoneInput;
+import com.jaspersoft.studio.editor.preview.input.array.CollectionInput;
 import com.jaspersoft.studio.editor.preview.jive.Context;
 import com.jaspersoft.studio.editor.preview.jive.JettyUtil;
 import com.jaspersoft.studio.editor.preview.jive.servlet.SReportServlet;
@@ -104,6 +105,7 @@ public class ReportControler {
 		inputs.add(new BigNumericInput());
 		inputs.add(new DateInput());
 		inputs.add(new ImageInput());
+		inputs.add(new CollectionInput());
 	}
 
 	private List<JRParameter> prompts;
