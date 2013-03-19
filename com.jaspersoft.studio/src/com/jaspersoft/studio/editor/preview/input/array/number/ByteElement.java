@@ -14,4 +14,9 @@ public class ByteElement extends ANumberElement {
 	protected boolean isValid(String number) {
 		return ByteValidator.getInstance().isValid(number, Locale.US);
 	}
+
+	@Override
+	protected Object convertString(String str) {
+		return new Byte(str);
+	}
 }

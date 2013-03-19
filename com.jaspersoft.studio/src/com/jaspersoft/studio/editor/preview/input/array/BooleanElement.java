@@ -7,6 +7,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.utils.Misc;
+
 public class BooleanElement extends AWElement {
 
 	private Button bbuton;
@@ -26,6 +28,8 @@ public class BooleanElement extends AWElement {
 				updateLabel();
 			}
 		});
+		if (getValue() != null && getValue() instanceof Boolean)
+			bbuton.setSelection((Boolean) Misc.nvl(getValue(), Boolean.FALSE));
 		updateLabel();
 		return bbuton;
 	}

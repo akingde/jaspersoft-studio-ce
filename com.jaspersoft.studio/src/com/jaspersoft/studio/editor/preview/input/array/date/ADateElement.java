@@ -33,7 +33,8 @@ public abstract class ADateElement extends AWElement {
 				setValue(getDate());
 			}
 		});
-
+		if (getValue() != null && getValue() instanceof Date)
+			date.setSelection((Date) getValue());
 		return date;
 	}
 }

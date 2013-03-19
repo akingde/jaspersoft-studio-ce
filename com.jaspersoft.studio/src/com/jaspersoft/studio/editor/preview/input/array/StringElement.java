@@ -25,14 +25,20 @@ public class StringElement extends AWElement {
 	@Override
 	public Control createControl(Composite parent) {
 		text = new Text(parent, getStyle());
+		text.setText(Misc.nvl(getValue(), ""));
 		text.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				setValue(Misc.nvl(text.getText()));
+				setValue(convertString(text.getText()));
 			}
 		});
+
 		return text;
+	}
+
+	protected Object convertString(String str) {
+		return Misc.nvl(str);
 	}
 
 }

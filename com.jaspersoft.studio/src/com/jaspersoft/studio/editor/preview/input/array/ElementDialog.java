@@ -47,6 +47,25 @@ public class ElementDialog extends Dialog {
 		return null;
 	}
 
+	public void setValue(Object v) {
+		for (AWElement key : map.values()) {
+			if (key.getSupportedType().isAssignableFrom(v.getClass())) {
+				current = key;
+				current.setValue(v);
+				break;
+			}
+		}
+	}
+
+	public void setType(Object v) {
+		for (AWElement key : map.values()) {
+			if (key.getSupportedType().isAssignableFrom(v.getClass())) {
+				current = key;
+				break;
+			}
+		}
+	}
+
 	public ElementDialog(Shell parentShell, IParameter prm) {
 		super(parentShell);
 		this.prm = prm;
@@ -105,10 +124,12 @@ public class ElementDialog extends Dialog {
 				if (key.getSupportedType().isAssignableFrom(c)) {
 					// this means all are only of this type
 					current = key;
+					break;
 				}
 			}
 		}
-		if (current == null) {
+
+		if (c == null || current == null) {
 			new Label(cmp, SWT.WRAP).setText("Type");
 
 			cmb = new Combo(cmp, SWT.READ_ONLY | SWT.SINGLE);
@@ -119,8 +140,16 @@ public class ElementDialog extends Dialog {
 					handleTypeChanged();
 				}
 			});
-			cmb.setItems(getTypes());
-			cmb.select(0);
+			String[] types = getTypes();
+			cmb.setItems(types);
+			if (current != null) {
+				for (int i = 0; i < types.length; i++)
+					if (types[i].equals(current.getSupportedType().getCanonicalName())) {
+						cmb.select(i);
+						break;
+					}
+			} else
+				cmb.select(0);
 		}
 
 		cstack = new Composite(cmp, SWT.NONE);
@@ -132,7 +161,7 @@ public class ElementDialog extends Dialog {
 		gd.horizontalSpan = 2;
 		cstack.setLayoutData(gd);
 
-		if (current != null)
+		if (c != null && current != null)
 			current.create(cstack);
 		else {
 			for (AWElement awe : map.values())

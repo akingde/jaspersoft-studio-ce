@@ -14,4 +14,9 @@ public class FloatElement extends ANumberElement {
 	protected boolean isValid(String number) {
 		return FloatValidator.getInstance().isValid(number, Locale.US);
 	}
+
+	@Override
+	protected Object convertString(String str) {
+		return new Float(str);
+	}
 }

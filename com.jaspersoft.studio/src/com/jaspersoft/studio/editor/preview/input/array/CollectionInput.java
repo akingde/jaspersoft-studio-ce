@@ -73,7 +73,6 @@ public class CollectionInput extends ADataInput {
 							else if (param.getValueClass().isAssignableFrom(Set.class))
 								value = new HashSet();
 						} catch (IllegalAccessException ex) {
-							ex.printStackTrace();
 						}
 					} else if (value.getClass().isArray()) {
 						value = Arrays.asList((Object[]) value);

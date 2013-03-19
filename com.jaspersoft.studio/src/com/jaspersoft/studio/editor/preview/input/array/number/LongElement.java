@@ -11,4 +11,9 @@ public class LongElement extends ANumberElement {
 		Long.parseLong(number);
 		return true;
 	}
+
+	@Override
+	protected Object convertString(String str) {
+		return new Long(str);
+	}
 }

@@ -14,4 +14,9 @@ public class IntegerElement extends ANumberElement {
 	protected boolean isValid(String number) {
 		return IntegerValidator.getInstance().isValid(number, Locale.US);
 	}
+
+	@Override
+	protected Object convertString(String str) {
+		return new Integer(str);
+	}
 }

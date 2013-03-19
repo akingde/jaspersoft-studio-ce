@@ -14,4 +14,9 @@ public class ShortElement extends ANumberElement {
 	protected boolean isValid(String number) {
 		return ShortValidator.getInstance().isValid(number, Locale.US);
 	}
+
+	@Override
+	protected Object convertString(String str) {
+		return new Short(str);
+	}
 }

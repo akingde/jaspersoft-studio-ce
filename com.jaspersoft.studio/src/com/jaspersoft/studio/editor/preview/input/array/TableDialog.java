@@ -11,9 +11,13 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -26,6 +30,8 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
+import com.jaspersoft.studio.swt.widgets.table.EditButton;
+import com.jaspersoft.studio.swt.widgets.table.IEditElement;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
@@ -55,6 +61,7 @@ public class TableDialog extends Dialog {
 
 	private List<?> value;
 	private Object oldValue;
+	private EditElement editElement;
 
 	@Override
 	protected void setReturnCode(int code) {
@@ -116,17 +123,37 @@ public class TableDialog extends Dialog {
 
 			public Object newElement(List<?> input, int pos) {
 				ElementDialog d = new ElementDialog(parent.getShell(), prm);
+				if (input != null && !input.isEmpty()) {
+					int indx = table.getSelectionIndex();
+					if (indx >= 0 && indx < input.size())
+						d.setType(input.get(indx));
+				}
 				if (d.open() == Dialog.OK)
 					return d.getValue();
 				return null;
 			}
 
 		});
-
+		editElement = new EditElement();
+		new EditButton<Object>().createEditButtons(bGroup, tableViewer, editElement);
 		new DeleteButton().createDeleteButton(bGroup, tableViewer);
 		if (prm.getValueClass().isArray() || prm.getValueClass().isAssignableFrom(List.class))
 			new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
 		return cmp;
+	}
+
+	private final class EditElement implements IEditElement<Object> {
+		@Override
+		public void editElement(List<Object> input, int pos) {
+			Object v = input.get(pos);
+			if (v == null)
+				return;
+
+			ElementDialog dialog = new ElementDialog(table.getShell(), prm);
+			dialog.setValue(v);
+			if (dialog.open() == Window.OK)
+				input.set(pos, dialog.getValue());
+		}
 	}
 
 	private void buildTable(Composite composite) {
@@ -150,6 +177,38 @@ public class TableDialog extends Dialog {
 		column.pack();
 
 		tableViewer.setInput(value);
+
+		table.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
+
+				List<Object> inlist = (List<Object>) tableViewer.getInput();
+				if (inlist == null) {
+					inlist = new ArrayList<Object>();
+					tableViewer.setInput(inlist);
+				}
+				int index = -1;
+				if (!s.isEmpty())
+					index = inlist.indexOf(s.getFirstElement());
+				else
+					return;
+				editElement.editElement(inlist, index);
+
+				tableViewer.refresh();
+				tableViewer.setSelection(s);
+				tableViewer.reveal(s.getFirstElement());
+			}
+		});
 	}
 
 }

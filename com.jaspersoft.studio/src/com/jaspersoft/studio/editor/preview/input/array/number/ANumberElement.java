@@ -1,5 +1,7 @@
 package com.jaspersoft.studio.editor.preview.input.array.number;
 
+import java.text.NumberFormat;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -47,6 +49,11 @@ public abstract class ANumberElement extends StringElement {
 				}
 			}
 		});
+		try {
+			if (getValue() != null && getValue() instanceof Number)
+				text.setText(NumberFormat.getInstance().format(getValue()));
+		} catch (Throwable e) {
+		}
 		return text;
 	}
 

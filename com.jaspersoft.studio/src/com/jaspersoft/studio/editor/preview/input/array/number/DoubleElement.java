@@ -14,4 +14,9 @@ public class DoubleElement extends ANumberElement {
 	protected boolean isValid(String number) {
 		return DoubleValidator.getInstance().isValid(number, Locale.US);
 	}
+
+	@Override
+	protected Object convertString(String str) {
+		return new Double(str);
+	}
 }

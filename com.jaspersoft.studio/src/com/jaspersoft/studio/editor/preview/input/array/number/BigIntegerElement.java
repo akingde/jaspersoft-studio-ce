@@ -13,4 +13,9 @@ public class BigIntegerElement extends ANumberElement {
 		new BigInteger(number);
 		return true;
 	}
+
+	@Override
+	protected Object convertString(String str) {
+		return new BigInteger(str);
+	}
 }
