@@ -1,6 +1,9 @@
 package com.jaspersoft.studio.editor.preview.input.array;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +31,7 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
-public class TableDialog<T> extends Dialog {
+public class TableDialog extends Dialog {
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
@@ -50,21 +53,33 @@ public class TableDialog<T> extends Dialog {
 	private Table table;
 	private TableViewer tableViewer;
 
-	private T value;
+	private List<?> value;
+	private Object oldValue;
 
 	@Override
-	public boolean close() {
-		value = (T) tableViewer.getInput();
-		return super.close();
+	protected void setReturnCode(int code) {
+		super.setReturnCode(code);
+		if (code == Dialog.OK) {
+			value = (List<?>) tableViewer.getInput();
+			if (oldValue instanceof Collection) {
+				((Collection) oldValue).clear();
+				((Collection) oldValue).addAll(value);
+			} else if (oldValue.getClass().isArray())
+				oldValue = value.toArray();
+		}
 	}
 
-	public T getValue() {
-		return value;
+	public Object getValue() {
+		return oldValue;
 	}
 
-	public TableDialog(Shell parentShell, T value, IParameter prm) {
+	public TableDialog(Shell parentShell, Object value, IParameter prm) {
 		super(parentShell);
-		this.value = value;
+		this.oldValue = value;
+		if (value.getClass().isArray())
+			this.value = new ArrayList(Arrays.asList(value));
+		else if (value instanceof Collection)
+			this.value = new ArrayList((Collection) value);
 		this.prm = prm;
 	}
 

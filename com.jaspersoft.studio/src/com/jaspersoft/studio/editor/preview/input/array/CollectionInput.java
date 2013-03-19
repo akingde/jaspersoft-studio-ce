@@ -80,10 +80,8 @@ public class CollectionInput extends ADataInput {
 					}
 					TableDialog d = new TableDialog(bbuton.getShell(), value, param);
 					if (d.open() == Dialog.OK) {
-						Object v = d.getValue();
-						if (param.getValueClass().isArray())
-							v = ((Collection) v).toArray();
-						updateModel(v);
+						updateModel(d.getValue());
+						updateInput();
 					}
 				}
 			});
