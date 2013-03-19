@@ -504,6 +504,7 @@ public class Messages extends NLS {
 	public static String FileDatasourcePage_description;
 	public static String FileDatasourcePage_file_datasource;
 	public static String FileDatasourcePage_use_first_row_as_header;
+	public static String FileInput_selectfile;
 	public static String FloatCellEditorValidator_this_is_not_a_float_number;
 	public static String FontSection_bold_tool_tip;
 	public static String FontSection_font_name_tool_tip;
