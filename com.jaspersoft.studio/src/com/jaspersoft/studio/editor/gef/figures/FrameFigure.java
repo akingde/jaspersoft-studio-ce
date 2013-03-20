@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.figures;
 
@@ -19,10 +14,11 @@ import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JRLineBox;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
+
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 /*
  * The Class FrameFigure.
@@ -47,7 +43,7 @@ public class FrameFigure extends AHandleBoundsFigure {
 	 * net.sf.jasperreports.engine.JRElement)
 	 */
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 		drawVisitor.visitFrame((JRFrame) jrElement);
 	}
 
@@ -58,7 +54,7 @@ public class FrameFigure extends AHandleBoundsFigure {
 	 * net.sf.jasperreports.engine.export.draw.DrawVisitor)
 	 */
 	@Override
-	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor) {
+	public void setJRElement(JRElement jrElement, JSSDrawVisitor drawVisitor) {
 		super.setJRElement(jrElement, drawVisitor);
 		// set bounds + 1/2 border
 		Rectangle o = calcBorder(getLineBox());

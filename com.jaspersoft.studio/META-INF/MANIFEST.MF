@@ -367,6 +367,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    org.eclipse.ui,
    org.eclipse.core.resources",
  com.jaspersoft.studio.help,
+ com.jaspersoft.studio.jasper,
  com.jaspersoft.studio.jface;uses:="org.eclipse.jface.viewers,com.jaspersoft.studio.property.descriptor",
  com.jaspersoft.studio.jface.dialogs;
   uses:="org.eclipse.core.runtime,

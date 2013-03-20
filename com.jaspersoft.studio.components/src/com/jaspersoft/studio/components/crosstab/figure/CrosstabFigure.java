@@ -17,11 +17,11 @@ package com.jaspersoft.studio.components.crosstab.figure;
 
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.XYLayout;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 public class CrosstabFigure extends FrameFigure {
 
@@ -42,7 +42,7 @@ public class CrosstabFigure extends FrameFigure {
 	 * net.sf.jasperreports.engine.JRElement)
 	 */
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 		drawVisitor.visitCrosstab((JRCrosstab) jrElement);
 	}
 

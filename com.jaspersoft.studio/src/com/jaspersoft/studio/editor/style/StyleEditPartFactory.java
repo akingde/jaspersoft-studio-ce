@@ -21,13 +21,13 @@ import java.util.List;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.EditPartViewer;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -42,20 +42,20 @@ import com.jaspersoft.studio.model.util.ModelVisitor;
  * @author Chicu Veaceslav
  */
 public class StyleEditPartFactory implements EditPartFactory {
-	private DrawVisitor drawVisitor;
+	private JSSDrawVisitor drawVisitor;
 	private JasperDesign jDesign;
 	private JasperReportsContext jrContext;
 
-	public DrawVisitor getDrawVisitor(ANode model) {
+	public JSSDrawVisitor getDrawVisitor(ANode model) {
 		if (model == null)
 			return null;
 		JasperDesign tjd = model.getJasperDesign();
 		if (tjd != jDesign) {
 			jDesign = tjd;
-			drawVisitor = new DrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
+			drawVisitor = new JSSDrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
 		}
 		if (drawVisitor == null) {
-			drawVisitor = new DrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
+			drawVisitor = new JSSDrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
 		}
 		return drawVisitor;
 	}

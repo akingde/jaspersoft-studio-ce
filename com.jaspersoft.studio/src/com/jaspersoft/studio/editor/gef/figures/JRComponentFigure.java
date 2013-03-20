@@ -17,7 +17,8 @@ package com.jaspersoft.studio.editor.gef.figures;
 
 import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 public class JRComponentFigure extends FrameFigure {
 	public JRComponentFigure() {
@@ -25,7 +26,7 @@ public class JRComponentFigure extends FrameFigure {
 	}
 
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 		drawVisitor.visitComponentElement((JRComponentElement) jrElement);
 	}
 }

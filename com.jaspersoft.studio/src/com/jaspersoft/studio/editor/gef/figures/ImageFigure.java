@@ -19,9 +19,10 @@ import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRPen;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 /*
  * The Class ChartFigure.
  */
@@ -42,7 +43,7 @@ public class ImageFigure extends FrameFigure {
 	 * net.sf.jasperreports.engine.JRElement)
 	 */
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 		drawVisitor.visitImage((JRImage) jrElement);
 	}
 

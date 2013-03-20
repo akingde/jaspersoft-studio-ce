@@ -22,7 +22,6 @@ import net.sf.jasperreports.charts.JRPieSeries;
 import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.apache.commons.validator.routines.FloatValidator;
 import org.eclipse.core.runtime.Assert;
@@ -48,6 +47,7 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.Serie
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.PieSerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -71,7 +71,7 @@ public class DSPie extends ADSComponent {
 	}
 
 	@Override
-	public void setData(DrawVisitor drawVisitor, JRDesignElement jrChart,
+	public void setData(JSSDrawVisitor drawVisitor, JRDesignElement jrChart,
 			JRDesignElementDataset eDataset,
 			JasperReportsConfiguration jrContext) {
 		Assert.isTrue(eDataset instanceof JRDesignPieDataset);

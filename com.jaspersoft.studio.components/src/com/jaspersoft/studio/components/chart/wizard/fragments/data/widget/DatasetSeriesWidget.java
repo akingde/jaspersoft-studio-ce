@@ -32,7 +32,6 @@ import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -52,6 +51,7 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSXyz;
 import com.jaspersoft.studio.components.chartspider.wizard.action.DSSpider;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DatasetSeriesWidget implements IExpressionContextSetter{
@@ -61,7 +61,7 @@ public class DatasetSeriesWidget implements IExpressionContextSetter{
 	private Map<Class<? extends JRDesignElementDataset>, ADSComponent> map = new HashMap<Class<? extends JRDesignElementDataset>, ADSComponent>();
 	private StackLayout stacklayout;
 	private Composite sComposite;
-	private DrawVisitor dv;
+	private JSSDrawVisitor dv;
 	private JasperReportsConfiguration jrContext;
 	private ExpressionContext expContext;
 	
@@ -119,7 +119,7 @@ public class DatasetSeriesWidget implements IExpressionContextSetter{
 		if (eDataset != null)
 			c = map.get(eDataset.getClass());
 		if (c != null) {
-			dv = new DrawVisitor(
+			dv = new JSSDrawVisitor(
 					new ReportConverter(jrContext, jrDesign, true),
 					c.getGraphics2D());
 			c.setData(dv, jrChart, eDataset, jrContext);

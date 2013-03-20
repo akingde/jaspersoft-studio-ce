@@ -19,7 +19,6 @@ import java.awt.Graphics2D;
 import java.awt.TexturePaint;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
@@ -30,6 +29,7 @@ import org.eclipse.gef.handles.HandleBounds;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 import com.jaspersoft.studio.editor.gef.texture.EmptyTexture;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 public class EmptyCellFigure extends FrameFigure {
 
@@ -44,8 +44,7 @@ public class EmptyCellFigure extends FrameFigure {
 
 	private Dimension d;
 
-	public void setJRElement(JRDesignCellContents column,
-			DrawVisitor drawVisitor, Dimension d) {
+	public void setJRElement(JRDesignCellContents column, JSSDrawVisitor drawVisitor, Dimension d) {
 		this.d = d;
 		super.setJRElement(null, drawVisitor);
 		setSize(getElementWidth() + 3, getElementHeight() + 3);
@@ -63,8 +62,7 @@ public class EmptyCellFigure extends FrameFigure {
 
 	@Override
 	public void paint(Graphics graphics) {
-		Rectangle b = (this instanceof HandleBounds) ? ((HandleBounds) this)
-				.getHandleBounds() : this.getBounds();
+		Rectangle b = (this instanceof HandleBounds) ? ((HandleBounds) this).getHandleBounds() : this.getBounds();
 
 		Graphics2D g = ComponentFigure.getG2D(graphics);
 		if (g != null) {

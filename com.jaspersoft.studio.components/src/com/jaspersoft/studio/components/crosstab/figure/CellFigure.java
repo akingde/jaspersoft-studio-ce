@@ -18,9 +18,9 @@ package com.jaspersoft.studio.components.crosstab.figure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRLineBox;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 public class CellFigure extends FrameFigure {
 	private JRDesignCellContents cell;
@@ -29,8 +29,7 @@ public class CellFigure extends FrameFigure {
 		super();
 	}
 
-	public void setJRElement(JRDesignCellContents jrElement,
-			DrawVisitor drawVisitor) {
+	public void setJRElement(JRDesignCellContents jrElement, JSSDrawVisitor drawVisitor) {
 		this.cell = jrElement;
 		super.setJRElement(null, drawVisitor);
 		setSize(getElementWidth(), getElementHeight());
@@ -57,6 +56,6 @@ public class CellFigure extends FrameFigure {
 	}
 
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 	}
 }

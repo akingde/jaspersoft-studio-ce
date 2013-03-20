@@ -19,11 +19,11 @@ import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRLineBox;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.LineBorder;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 public class CellFigure extends FrameFigure {
 	private DesignCell cell;
@@ -34,8 +34,7 @@ public class CellFigure extends FrameFigure {
 		setBorder(new LineBorder(1));
 	}
 
-	public void setJRElement(DesignCell cell, StandardBaseColumn column,
-			DrawVisitor drawVisitor) {
+	public void setJRElement(DesignCell cell, StandardBaseColumn column, JSSDrawVisitor drawVisitor) {
 		this.cell = cell;
 		this.column = column;
 		super.setJRElement(null, drawVisitor);
@@ -63,7 +62,7 @@ public class CellFigure extends FrameFigure {
 	}
 
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 
 	}
 }

@@ -14,7 +14,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -41,6 +40,7 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPol
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.SearchParentDragTracker;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
@@ -52,9 +52,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class FigureEditPart extends AJDEditPart implements PropertyChangeListener, IRulerUpdatable {
 
-	protected DrawVisitor drawVisitor;
+	protected JSSDrawVisitor drawVisitor;
 
-	public DrawVisitor getDrawVisitor() {
+	public JSSDrawVisitor getDrawVisitor() {
 		return drawVisitor;
 	}
 
@@ -91,7 +91,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		super.deactivate();
 	}
 
-	public void setDrawVisitor(DrawVisitor drawVisitor) {
+	public void setDrawVisitor(JSSDrawVisitor drawVisitor) {
 		this.drawVisitor = drawVisitor;
 	}
 

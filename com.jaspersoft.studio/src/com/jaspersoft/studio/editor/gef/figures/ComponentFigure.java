@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.figures;
 
@@ -21,7 +16,6 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.Graphics;
@@ -32,6 +26,7 @@ import org.eclipse.gef.handles.HandleBounds;
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DScaledGraphics;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 /*
  * The Class GenericFigure.
@@ -42,7 +37,7 @@ public class ComponentFigure extends RectangleFigure {
 	protected JRElement jrElement;
 
 	/** The draw visitor. */
-	protected DrawVisitor drawVisitor;
+	protected JSSDrawVisitor drawVisitor;
 
 	/**
 	 * Instantiates a new generic figure.
@@ -60,7 +55,7 @@ public class ComponentFigure extends RectangleFigure {
 	 * @param drawVisitor
 	 *          the draw visitor
 	 */
-	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor) {
+	public void setJRElement(JRElement jrElement, JSSDrawVisitor drawVisitor) {
 		this.drawVisitor = drawVisitor;
 		this.jrElement = jrElement;
 		if (jrElement != null)
@@ -116,7 +111,7 @@ public class ComponentFigure extends RectangleFigure {
 	 * @param jrElement
 	 *          the jr element
 	 */
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 		if (jrElement instanceof JRComponentElement)
 			drawVisitor.visitComponentElement((JRComponentElement) jrElement);
 	}
@@ -144,16 +139,18 @@ public class ComponentFigure extends RectangleFigure {
 			decorators = new ArrayList<IDecorator>();
 		decorators.add(decorator);
 	}
-	
+
 	/**
-	 * Add a decorator to the decorators list, but only if it isn't 
-	 * already present
-	 * @param decorator the decorator to add
+	 * Add a decorator to the decorators list, but only if it isn't already present
+	 * 
+	 * @param decorator
+	 *          the decorator to add
 	 */
-	public void addDecoratorOnce(IDecorator decorator){
+	public void addDecoratorOnce(IDecorator decorator) {
 		if (decorators == null)
 			decorators = new ArrayList<IDecorator>();
-		if (!decorators.contains(decorator)) decorators.add(decorator);
+		if (!decorators.contains(decorator))
+			decorators.add(decorator);
 	}
 
 	public void removeDecorator(IDecorator decorator) {

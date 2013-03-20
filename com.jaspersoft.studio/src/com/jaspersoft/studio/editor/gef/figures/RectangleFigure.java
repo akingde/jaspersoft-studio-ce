@@ -17,7 +17,8 @@ package com.jaspersoft.studio.editor.gef.figures;
 
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRRectangle;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 /*
  * The Class RectangleFigure.
  */
@@ -30,7 +31,7 @@ public class RectangleFigure extends LineFigure {
 	 * net.sf.jasperreports.engine.JRElement)
 	 */
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 		drawVisitor.visitRectangle((JRRectangle) jrElement);
 	}
 

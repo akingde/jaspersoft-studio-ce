@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts;
 
@@ -20,7 +15,6 @@ import java.util.List;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
@@ -34,6 +28,7 @@ import com.jaspersoft.studio.callout.pin.PinEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.text.StaticTextFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.text.TextFieldFigureEditPart;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
@@ -54,20 +49,20 @@ import com.jaspersoft.studio.plugin.ExtensionManager;
  * @author Chicu Veaceslav
  */
 public class JasperDesignEditPartFactory implements EditPartFactory {
-	private DrawVisitor drawVisitor;
+	private JSSDrawVisitor drawVisitor;
 	private JasperDesign jDesign;
 	private JasperReportsContext jrContext;
 
-	public DrawVisitor getDrawVisitor(ANode model) {
+	public JSSDrawVisitor getDrawVisitor(ANode model) {
 		if (model == null)
 			return null;
 		JasperDesign tjd = model.getJasperDesign();
 		if (tjd != jDesign) {
 			jDesign = tjd;
-			drawVisitor = new DrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
+			drawVisitor = new JSSDrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
 		}
 		if (drawVisitor == null) {
-			drawVisitor = new DrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
+			drawVisitor = new JSSDrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
 		}
 		drawVisitor.setClip(false);
 		return drawVisitor;

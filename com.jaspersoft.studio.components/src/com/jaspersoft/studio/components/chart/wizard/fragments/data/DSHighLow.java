@@ -18,7 +18,6 @@ package com.jaspersoft.studio.components.chart.wizard.fragments.data;
 import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;
@@ -29,6 +28,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -52,7 +52,7 @@ public class DSHighLow extends ADSComponent {
 	}
 
 	@Override
-	public void setData(DrawVisitor drawVisitor, JRDesignElement jrChart,
+	public void setData(JSSDrawVisitor drawVisitor, JRDesignElement jrChart,
 			JRDesignElementDataset eDataset,
 			JasperReportsConfiguration jrContext) {
 		Assert.isTrue(eDataset instanceof JRDesignHighLowDataset);

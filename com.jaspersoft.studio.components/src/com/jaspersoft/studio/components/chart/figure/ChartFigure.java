@@ -17,9 +17,9 @@ package com.jaspersoft.studio.components.chart.figure;
 
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 /*
  * The Class ChartFigure.
  */
@@ -40,7 +40,7 @@ public class ChartFigure extends FrameFigure {
 	 * net.sf.jasperreports.engine.JRElement)
 	 */
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 		drawVisitor.visitChart((JRChart) jrElement);
 	}
 

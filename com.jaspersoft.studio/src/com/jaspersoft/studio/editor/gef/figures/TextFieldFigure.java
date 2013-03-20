@@ -17,7 +17,8 @@ package com.jaspersoft.studio.editor.gef.figures;
 
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRTextField;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 /*
  * The Class TextFieldFigure.
  * 
@@ -40,7 +41,7 @@ public class TextFieldFigure extends FrameFigure {
 	 * net.sf.jasperreports.engine.JRElement)
 	 */
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 		drawVisitor.visitTextField((JRTextField) jrElement);
 	}
 

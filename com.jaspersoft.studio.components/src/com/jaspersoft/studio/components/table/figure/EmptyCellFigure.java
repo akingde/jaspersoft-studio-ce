@@ -19,7 +19,6 @@ import java.awt.Graphics2D;
 import java.awt.TexturePaint;
 
 import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
@@ -29,6 +28,7 @@ import org.eclipse.gef.handles.HandleBounds;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 import com.jaspersoft.studio.editor.gef.texture.EmptyTexture;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 public class EmptyCellFigure extends FrameFigure {
 	private StandardBaseColumn column;
@@ -42,8 +42,7 @@ public class EmptyCellFigure extends FrameFigure {
 		createTexture();
 	}
 
-	public void setJRElement(StandardBaseColumn column,
-			DrawVisitor drawVisitor, int height) {
+	public void setJRElement(StandardBaseColumn column, JSSDrawVisitor drawVisitor, int height) {
 		this.column = column;
 		this.height = height;
 		super.setJRElement(null, drawVisitor);
@@ -64,8 +63,7 @@ public class EmptyCellFigure extends FrameFigure {
 
 	@Override
 	public void paint(Graphics graphics) {
-		Rectangle b = (this instanceof HandleBounds) ? ((HandleBounds) this)
-				.getHandleBounds() : this.getBounds();
+		Rectangle b = (this instanceof HandleBounds) ? ((HandleBounds) this).getHandleBounds() : this.getBounds();
 
 		Graphics2D g = ComponentFigure.getG2D(graphics);
 		if (g != null) {

@@ -17,7 +17,8 @@ package com.jaspersoft.studio.editor.gef.figures;
 
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JREllipse;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 /*
  * The Class EllipseFigure.
  */
@@ -31,7 +32,7 @@ public class EllipseFigure extends LineFigure {
 	 * net.sf.jasperreports.engine.JRElement)
 	 */
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 		drawVisitor.visitEllipse((JREllipse) jrElement);
 	}
 
