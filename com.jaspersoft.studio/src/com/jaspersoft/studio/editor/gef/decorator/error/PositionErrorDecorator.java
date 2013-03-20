@@ -21,6 +21,7 @@ import java.util.List;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPartViewer;
@@ -40,6 +41,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.band.MBand;
 
 public class PositionErrorDecorator implements IElementDecorator {
@@ -94,6 +96,17 @@ public class PositionErrorDecorator implements IElementDecorator {
 				JRDesignBand band = ((MBand) itemModel.getParent()).getValue();
 				fh = band.getHeight();
 				fw = itemModel.getJasperDesign().getPageWidth();
+			} else if  (itemModel.getParent() instanceof MPage){
+				if (fig.getParent() != null){
+					Rectangle r = fig.getParent().getBounds();
+				  fh = r.height;
+					fw = r.width;
+				} else {
+					MPage ge = (MPage) itemModel.getParent();
+					JasperDesign jd = (JasperDesign)ge.getValue();
+					fh = jd.getPageHeight();
+					fw = jd.getPageWidth();
+				}
 			} else if (itemModel.getParent() instanceof IGraphicElement) {
 				IGraphicElement ge = (IGraphicElement) itemModel.getParent();
 				Rectangle r = ge.getBounds();
