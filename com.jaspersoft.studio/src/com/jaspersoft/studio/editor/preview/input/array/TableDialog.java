@@ -122,7 +122,8 @@ public class TableDialog extends Dialog {
 		((GridLayout) cmp.getLayout()).makeColumnsEqualWidth = false;
 
 		Label lbl = new Label(cmp, SWT.WRAP);
-		lbl.setText(prm.getDescription());
+		String prmDescription = prm.getDescription();
+		lbl.setText(prmDescription != null ? prmDescription : "");
 		lbl.setToolTipText(prm.getDescription());
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
