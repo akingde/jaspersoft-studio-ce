@@ -297,4 +297,8 @@
    <context id="wizard_crosstab_layout" title="Define the crosstab layout">
       <description>In this step you can define the crosstab layout, this include the color schema of the crosstab and the color of the grid.</description>
    </context>
+   <context id="wizard_pattern" title="Define a pattern for the field">
+      <description>In this dialog you can insert a pattern to format your value. If can select from a list of default patterns or write a new one. In every case you can see a preview of the pattern applied to an example value. The pattern symbols changes according to the data type, so you must select the type of the field you want to format, available types are: Percentage, Time, Date, Numbers, Currency and Scientific Numbers</description>
+  	  <topic href="http://docs.oracle.com/javase/tutorial/i18n/format/index.html" label="Java official tutorial on the data formatting" />
+   </context>
 </contexts>

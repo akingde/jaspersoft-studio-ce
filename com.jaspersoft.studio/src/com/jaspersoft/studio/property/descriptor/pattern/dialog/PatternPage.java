@@ -35,8 +35,10 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class PatternPage extends WizardPage implements PropertyChangeListener {
+public class PatternPage extends JSSHelpWizardPage implements PropertyChangeListener {
 
 	private String value;
 	private List list;
@@ -56,6 +58,7 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 	 * Displays the help
 	 */
 	public void performHelp() {
+		
 	}
 
 	public void setValue(String value) {
@@ -221,5 +224,10 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 		pa.setSample(p.getSample());
 		patternText.setText(p.getPattern());
 		processFormat(p);
+	}
+
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_PATTERN;
 	}
 }
