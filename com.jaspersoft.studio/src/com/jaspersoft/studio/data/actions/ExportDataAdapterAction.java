@@ -32,9 +32,11 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.dialogs.SaveAsDialog;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DataAdapterEditorPart;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
 
@@ -94,6 +96,9 @@ public class ExportDataAdapterAction extends Action {
 								file.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, true, monitor);
 							else
 								file.create(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, monitor);
+							// Force the default editor for the data adapter file
+							// so that it can be opened with the same one in the future
+							IDE.setDefaultEditor(file, DataAdapterEditorPart.ID);
 						} catch (Throwable e) {
 							throw new InvocationTargetException(e);
 						} finally {
