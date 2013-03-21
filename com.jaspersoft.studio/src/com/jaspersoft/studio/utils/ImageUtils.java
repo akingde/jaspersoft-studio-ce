@@ -90,4 +90,11 @@ public class ImageUtils {
 		}
 		return false;
 	}
+	
+	/**
+	 * @return the list of allowed file extensions for images
+	 */
+	public static List<String> getAllowedImageFileExtensions(){
+		return IMG_FILE_EXTENSIONS;
+	}
 }
