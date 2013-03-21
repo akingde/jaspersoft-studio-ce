@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.drag;
+package com.jaspersoft.studio.server.dnd;
 
 import java.util.ArrayList;
 import java.util.List;

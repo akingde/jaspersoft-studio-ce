@@ -438,4 +438,26 @@ public class WSClientHelper {
 		}
 
 	}
+	
+	/**
+	 * Returns a valid {@link IConnection} associated to the specified
+	 * {@link MResource} instance.
+	 * <p>
+	 * 
+	 * Usually the resource root element is an {@link MServerProfile} instance
+	 * that holds a valid connection.
+	 * 
+	 * @param resource
+	 *            the remote resource
+	 * @return a valid {@link IConnection} if any associated, <code>null</code>
+	 *         otherwise
+	 */
+	public static IConnection getClient(MResource resource) {
+		INode root = resource.getRoot();
+		if(root instanceof MServerProfile){
+			return ((MServerProfile)root).getWsClient();
+		}
+		return null;
+	}
+
 }

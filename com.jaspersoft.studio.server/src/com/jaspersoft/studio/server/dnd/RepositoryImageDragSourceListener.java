@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.drag;
+package com.jaspersoft.studio.server.dnd;
 
 import org.eclipse.jface.util.TransferDragSourceListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
