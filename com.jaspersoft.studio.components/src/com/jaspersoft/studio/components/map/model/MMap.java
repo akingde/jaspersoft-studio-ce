@@ -48,6 +48,7 @@ import com.jaspersoft.studio.components.map.MapNodeIconDescriptor;
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.marker.MarkerDescriptor;
 import com.jaspersoft.studio.components.map.model.marker.MarkersDTO;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
@@ -175,18 +176,22 @@ public class MMap extends MGraphicElement {
 		JRExpressionPropertyDescriptor latitudeExprD = new JRExpressionPropertyDescriptor(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, Messages.MMap_latitude);
 		latitudeExprD.setDescription(Messages.MMap_latitude_description);
 		desc.add(latitudeExprD);
+		latitudeExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#latitudeExpression"));
 
 		JRExpressionPropertyDescriptor longitudeExprD = new JRExpressionPropertyDescriptor(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION, Messages.MMap_longitude);
 		longitudeExprD.setDescription(Messages.MMap_longitude_description);
 		desc.add(longitudeExprD);
+		longitudeExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#longitudeExpression"));
 
 		JRExpressionPropertyDescriptor zoomExprD = new JRExpressionPropertyDescriptor(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION, Messages.MMap_zoom);
 		zoomExprD.setDescription(Messages.MMap_zoom_description);
 		desc.add(zoomExprD);
+		zoomExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#zoomExpression"));
 
 		JRExpressionPropertyDescriptor langExprD = new JRExpressionPropertyDescriptor(StandardMapComponent.PROPERTY_LANGUAGE_EXPRESSION, "Language Expression");
 		langExprD.setDescription("Language Expression");
 		desc.add(langExprD);
+		langExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#languageExpression"));
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(StandardMapComponent.PROPERTY_EVALUATION_TIME, Messages.MMap_evaluation_time, EnumHelper.getEnumNames(
 				EvaluationTimeEnum.values(), NullEnum.NOTNULL));
@@ -216,6 +221,9 @@ public class MMap extends MGraphicElement {
 		MarkerDescriptor markersD = new MarkerDescriptor(StandardItemData.PROPERTY_ITEMS, "Markers");
 		markersD.setDescription("Markers");
 		desc.add(markersD);
+		markersD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#markerDataset"));
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/components.schema.reference.html#");
 
 		markersD.setCategory(Messages.MMap_common_map_properties);
 		langExprD.setCategory(Messages.MMap_common_map_properties);

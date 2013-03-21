@@ -57,6 +57,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.jasper.MapDesignConverter;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
@@ -414,9 +415,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 					Set<ComponentsBundle> components = new LinkedHashSet<ComponentsBundle>(bundles);
 					bundles = new ArrayList<ComponentsBundle>(components);
 					for (ComponentsBundle cb : bundles) {
-						ComponentManager cm = cb.getComponentManager(ComponentsExtensionsRegistryFactory.MAP_COMPONENT_NAME);
-						if (cm != null && cm instanceof ComponentsManager)
-							((ComponentsManager) cm).setDesignConverter(MapDesignConverter.getInstance());
+						try {
+							ComponentManager cm = cb.getComponentManager(ComponentsExtensionsRegistryFactory.MAP_COMPONENT_NAME);
+							if (cm != null && cm instanceof ComponentsManager)
+								((ComponentsManager) cm).setDesignConverter(MapDesignConverter.getInstance());
+						} catch (Exception e) {
+						}
 					}
 					refreshBundles = false;
 				}
