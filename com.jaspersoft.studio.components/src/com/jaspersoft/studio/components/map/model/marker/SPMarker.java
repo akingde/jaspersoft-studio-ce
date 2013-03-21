@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.model.marker;
 
-import net.sf.jasperreports.components.map.StandardMarkerDataset;
+import net.sf.jasperreports.components.map.StandardItemData;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -37,8 +37,7 @@ public class SPMarker extends ASPropertyWidget {
 
 	private Button btn;
 
-	public SPMarker(Composite parent, AbstractSection section,
-			IPropertyDescriptor pDescriptor) {
+	public SPMarker(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 
@@ -52,13 +51,10 @@ public class SPMarker extends ASPropertyWidget {
 			public void widgetSelected(SelectionEvent e) {
 				MarkerEditor wizard = new MarkerEditor();
 				wizard.setValue(dto);
-				WizardDialog dialog = new WizardDialog(Display.getDefault()
-						.getActiveShell(), wizard);
+				WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK)
-					section.changeProperty(
-							StandardMarkerDataset.PROPERTY_MARKER_LIST,
-							wizard.getValue());
+					section.changeProperty(StandardItemData.PROPERTY_ITEMS, wizard.getValue());
 			}
 
 			@Override

@@ -17,25 +17,25 @@ package com.jaspersoft.studio.components.map.model.marker;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.map.Marker;
+import net.sf.jasperreports.components.map.Item;
 
 import com.jaspersoft.studio.model.ANode;
 
 public class MarkersDTO {
-	private List<Marker> marker;
+	private List<Item> marker;
 	private ANode pnode;
 
-	public MarkersDTO(List<Marker> propExpressions, ANode pnode) {
+	public MarkersDTO(List<Item> propExpressions, ANode pnode) {
 		super();
 		this.marker = propExpressions;
 		this.pnode = pnode;
 	}
 
-	public List<Marker> getMarkers() {
+	public List<Item> getMarkers() {
 		return marker;
 	}
 
-	public void setMarkers(List<Marker> propExpressions) {
+	public void setMarkers(List<Item> propExpressions) {
 		this.marker = propExpressions;
 	}
 

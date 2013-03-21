@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.model.marker.dialog;
 
-import net.sf.jasperreports.components.map.StandardMarkerProperty;
+import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -41,7 +41,7 @@ import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.Misc;
 
 public class MarkerPropertyDialog extends Dialog {
-	private StandardMarkerProperty value;
+	private StandardItemProperty value;
 	private Composite vexp;
 	private Composite vcmp;
 	private StackLayout stackLayout;
@@ -58,8 +58,7 @@ public class MarkerPropertyDialog extends Dialog {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
+	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
 	 * .Shell)
 	 */
 	protected void configureShell(Shell newShell) {
@@ -86,8 +85,7 @@ public class MarkerPropertyDialog extends Dialog {
 		label.setText("Property Name");
 
 		cprop = new Text(composite, SWT.BORDER);
-		cprop.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
-				| GridData.HORIZONTAL_ALIGN_FILL));
+		cprop.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 		cprop.addModifyListener(new ModifyListener() {
 
 			@Override
@@ -138,8 +136,7 @@ public class MarkerPropertyDialog extends Dialog {
 		label.setText("Value Expression");
 
 		evalue = new WTextExpression(composite, SWT.NONE, 1);
-		evalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
-				| GridData.HORIZONTAL_ALIGN_FILL));
+		evalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 		evalue.addModifyListener(new ExpressionModifiedListener() {
 			@Override
 			public void expressionModified(ExpressionModifiedEvent event) {
@@ -159,8 +156,7 @@ public class MarkerPropertyDialog extends Dialog {
 		label.setText("Value");
 
 		tvalue = new Text(composite, SWT.BORDER);
-		tvalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
-				| GridData.HORIZONTAL_ALIGN_FILL));
+		tvalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 		tvalue.addModifyListener(new ModifyListener() {
 
 			@Override
@@ -176,8 +172,7 @@ public class MarkerPropertyDialog extends Dialog {
 
 	private boolean isMandatory = false;
 
-	public void setValue(StandardMarkerProperty value,
-			ExpressionContext expContext, boolean isMandatory) {
+	public void setValue(StandardItemProperty value, ExpressionContext expContext, boolean isMandatory) {
 		this.value = value;
 		this.expContext = expContext;
 		this.isMandatory = isMandatory;
@@ -186,7 +181,7 @@ public class MarkerPropertyDialog extends Dialog {
 	private boolean isRefresh = false;
 	private Composite stackComposite;
 
-	private void fillValue(StandardMarkerProperty value) {
+	private void fillValue(StandardItemProperty value) {
 		isRefresh = true;
 		if (isMandatory)
 			cprop.setEnabled(false);
@@ -194,8 +189,7 @@ public class MarkerPropertyDialog extends Dialog {
 		cprop.setText(Misc.nvl(value.getName()));
 		if (value.getValueExpression() != null) {
 			buseexpr.setSelection(true);
-			evalue.setExpression((JRDesignExpression) value
-					.getValueExpression());
+			evalue.setExpression((JRDesignExpression) value.getValueExpression());
 		} else {
 			buseexpr.setSelection(false);
 			tvalue.setText(Misc.nvl(value.getValue()));

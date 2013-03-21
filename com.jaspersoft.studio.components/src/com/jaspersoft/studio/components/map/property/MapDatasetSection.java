@@ -15,30 +15,29 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.property;
 
-import net.sf.jasperreports.components.map.StandardMarkerDataset;
+import net.sf.jasperreports.components.map.StandardItemData;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class MapDatasetSection extends AbstractSection {
 	@Override
-	public void createControls(Composite parent,
-			TabbedPropertySheetPage tabbedPropertySheetPage) {
+	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent.setLayout(new GridLayout(2, false));
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		createWidget4Property(parent, StandardMarkerDataset.PROPERTY_MARKER_LIST,
-				false).getControl().setLayoutData(gd);
+		createWidget4Property(parent, StandardItemData.PROPERTY_ITEMS, false).getControl().setLayoutData(gd);
 
-		Composite group = getWidgetFactory().createSection(parent,
-				"Dataset Run", true, 2, 2);
-		createWidget4Property(group, StandardMarkerDataset.PROPERTY_DATASET_RUN);
+		Composite group = getWidgetFactory().createSection(parent, Messages.MElementDataset_dataset_run, true, 2, 2);
+		createWidget4Property(group, JRDesignElementDataset.PROPERTY_DATASET_RUN);
 	}
 }

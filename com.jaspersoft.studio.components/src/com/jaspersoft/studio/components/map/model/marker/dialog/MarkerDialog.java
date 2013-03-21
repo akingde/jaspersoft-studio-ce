@@ -18,9 +18,9 @@ package com.jaspersoft.studio.components.map.model.marker.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.MarkerProperty;
-import net.sf.jasperreports.components.map.StandardMarker;
-import net.sf.jasperreports.components.map.StandardMarkerProperty;
+import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.map.StandardItem;
+import net.sf.jasperreports.components.map.StandardItemProperty;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -50,39 +50,37 @@ import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
 public class MarkerDialog extends Dialog {
-	
-	private MarkerCoordinatesType coordinatesType=MarkerCoordinatesType.LATITUDE_LONGITUDE;	
-	
-	private final class EditElement implements IEditElement<MarkerProperty> {
+
+	private MarkerCoordinatesType coordinatesType = MarkerCoordinatesType.LATITUDE_LONGITUDE;
+
+	private final class EditElement implements IEditElement<ItemProperty> {
 		@Override
-		public void editElement(List<MarkerProperty> input, int pos) {
-			StandardMarkerProperty v = (StandardMarkerProperty) input.get(pos);
+		public void editElement(List<ItemProperty> input, int pos) {
+			StandardItemProperty v = (StandardItemProperty) input.get(pos);
 			if (v == null)
 				return;
-			v = (StandardMarkerProperty) v.clone();
-			MarkerPropertyDialog dialog = new MarkerPropertyDialog(Display
-					.getDefault().getActiveShell());
+			v = (StandardItemProperty) v.clone();
+			MarkerPropertyDialog dialog = new MarkerPropertyDialog(Display.getDefault().getActiveShell());
 
-			dialog.setValue((StandardMarkerProperty) v, expContext,
-					isPropertyMandatory(v));
+			dialog.setValue((StandardItemProperty) v, expContext, isPropertyMandatory(v));
 			if (dialog.open() == Window.OK)
 				input.set(pos, v);
 		}
 	}
 
-	private boolean isPropertyMandatory(MarkerProperty mprop) {
+	private boolean isPropertyMandatory(ItemProperty mprop) {
 		return coordinatesType.isMandatoryProperty(mprop.getName());
 	}
 
-	private StandardMarker value;
+	private StandardItem value;
 	private Table table;
 	private TableViewer tableViewer;
-	private EditButton<MarkerProperty> editButton;
+	private EditButton<ItemProperty> editButton;
 
 	public MarkerDialog(Shell parentShell) {
-		this(parentShell,MarkerCoordinatesType.LATITUDE_LONGITUDE);
+		this(parentShell, MarkerCoordinatesType.LATITUDE_LONGITUDE);
 	}
-	
+
 	public MarkerDialog(Shell parentShell, MarkerCoordinatesType coordinatesType) {
 		super(parentShell);
 		this.coordinatesType = coordinatesType;
@@ -91,8 +89,7 @@ public class MarkerDialog extends Dialog {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
+	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
 	 * .Shell)
 	 */
 	protected void configureShell(Shell newShell) {
@@ -108,7 +105,7 @@ public class MarkerDialog extends Dialog {
 	@Override
 	public boolean close() {
 		value.getProperties().clear();
-		List<MarkerProperty> in = (List<MarkerProperty>) tableViewer.getInput();
+		List<ItemProperty> in = (List<ItemProperty>) tableViewer.getInput();
 		value.getProperties().addAll(in);
 		return super.close();
 	}
@@ -135,28 +132,25 @@ public class MarkerDialog extends Dialog {
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		new NewButton().createNewButtons(bGroup, tableViewer,
-				new INewElement() {
+		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
-					public Object newElement(List<?> input, int pos) {
-						StandardMarkerProperty v = new StandardMarkerProperty(
-								"property", "value", null);
+			public Object newElement(List<?> input, int pos) {
+				StandardItemProperty v = new StandardItemProperty("property", "value", null);
 
-						MarkerPropertyDialog dialog = new MarkerPropertyDialog(
-								Display.getDefault().getActiveShell());
-						dialog.setValue(v, expContext, isPropertyMandatory(v));
-						if (dialog.open() == Window.OK)
-							return v;
-						return null;
-					}
-				});
+				MarkerPropertyDialog dialog = new MarkerPropertyDialog(Display.getDefault().getActiveShell());
+				dialog.setValue(v, expContext, isPropertyMandatory(v));
+				if (dialog.open() == Window.OK)
+					return v;
+				return null;
+			}
+		});
 
-		editButton = new EditButton<MarkerProperty>();
+		editButton = new EditButton<ItemProperty>();
 		editButton.createEditButtons(bGroup, tableViewer, new EditElement());
 		new DeleteButton() {
 			protected boolean canRemove(Object obj) {
-				if (obj instanceof MarkerProperty) {
-					return !isPropertyMandatory((MarkerProperty) obj);
+				if (obj instanceof ItemProperty) {
+					return !isPropertyMandatory((ItemProperty) obj);
 				}
 				return super.canRemove(obj);
 			};
@@ -168,8 +162,7 @@ public class MarkerDialog extends Dialog {
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE
-				| SWT.FULL_SELECTION | SWT.V_SCROLL);
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
 		table.addMouseListener(new MouseListener() {
 
@@ -209,17 +202,17 @@ public class MarkerDialog extends Dialog {
 
 	private ExpressionContext expContext;
 
-	public void setValue(StandardMarker value, ExpressionContext expContext) {
+	public void setValue(StandardItem value, ExpressionContext expContext) {
 		this.value = value;
 		this.expContext = expContext;
 	}
 
-	private void fillValue(StandardMarker value) {
-		List<MarkerProperty> mprops = new ArrayList<MarkerProperty>();
-		for (MarkerProperty smp : value.getProperties()) {
+	private void fillValue(StandardItem value) {
+		List<ItemProperty> mprops = new ArrayList<ItemProperty>();
+		for (ItemProperty smp : value.getProperties()) {
 			mprops.add(smp);
 		}
 		tableViewer.setInput(mprops);
 	}
-	
+
 }

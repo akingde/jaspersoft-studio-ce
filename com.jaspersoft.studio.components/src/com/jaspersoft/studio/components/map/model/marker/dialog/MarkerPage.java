@@ -37,9 +37,9 @@ package com.jaspersoft.studio.components.map.model.marker.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.Marker;
-import net.sf.jasperreports.components.map.MarkerProperty;
-import net.sf.jasperreports.components.map.StandardMarker;
+import net.sf.jasperreports.components.map.Item;
+import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.map.StandardItem;
 import net.sf.jasperreports.components.map.StandardMarkerProperty;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -68,20 +68,16 @@ import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MarkerPage extends WizardPage {
-	private final class EditElement implements IEditElement<Marker> {
+	private final class EditElement implements IEditElement<Item> {
 		@Override
-		public void editElement(List<Marker> input, int pos) {
-			Marker v = (Marker) input.get(pos);
+		public void editElement(List<Item> input, int pos) {
+			Item v = (Item) input.get(pos);
 			if (v == null)
 				return;
-			v = (Marker) v.clone();
-			MarkerDialog dialog = new MarkerDialog(Display.getDefault()
-					.getActiveShell());
+			v = (Item) v.clone();
+			MarkerDialog dialog = new MarkerDialog(Display.getDefault().getActiveShell());
 
-			dialog.setValue(
-					(StandardMarker) v,
-					ModelUtils.getElementExpressionContext(null,
-							value.getPnode()));
+			dialog.setValue((StandardItem) v, ModelUtils.getElementExpressionContext(null, value.getPnode()));
 			if (dialog.open() == Window.OK)
 				input.set(pos, v);
 		}
@@ -90,7 +86,7 @@ public class MarkerPage extends WizardPage {
 	private MarkersDTO value;
 	private Table table;
 	private TableViewer tableViewer;
-	private EditButton<Marker> editButton;
+	private EditButton<Item> editButton;
 
 	public MarkersDTO getValue() {
 		return new MarkersDTO(value.getMarkers(), value.getPnode());
@@ -99,7 +95,7 @@ public class MarkerPage extends WizardPage {
 	@Override
 	public void dispose() {
 		// clear all properties
-		List<Marker> props = (List<Marker>) tableViewer.getInput();
+		List<Item> props = (List<Item>) tableViewer.getInput();
 		value.setMarkers(props);
 		super.dispose();
 	}
@@ -132,38 +128,31 @@ public class MarkerPage extends WizardPage {
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		new NewButton().createNewButtons(bGroup, tableViewer,
-				new INewElement() {
+		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
-					public Object newElement(List<?> input, int pos) {
-						ArrayList<MarkerProperty> props = new ArrayList<MarkerProperty>();
+			public Object newElement(List<?> input, int pos) {
+				ArrayList<ItemProperty> props = new ArrayList<ItemProperty>();
 
-						props.add(new StandardMarkerProperty(
-								Marker.PROPERTY_latitude, "0", null));
-						props.add(new StandardMarkerProperty(
-								Marker.PROPERTY_longitude, "0", null));
+				props.add(new StandardMarkerProperty("latitude", "0", null));
+				props.add(new StandardMarkerProperty("longitude", "0", null));
 
-						StandardMarker v = new StandardMarker(props);
-						MarkerDialog dialog = new MarkerDialog(Display
-								.getDefault().getActiveShell());
-						dialog.setValue(v, ModelUtils
-								.getElementExpressionContext(null,
-										value.getPnode()));
-						if (dialog.open() == Window.OK)
-							return v;
-						return null;
-					}
-				});
+				StandardItem v = new StandardItem(props);
+				MarkerDialog dialog = new MarkerDialog(Display.getDefault().getActiveShell());
+				dialog.setValue(v, ModelUtils.getElementExpressionContext(null, value.getPnode()));
+				if (dialog.open() == Window.OK)
+					return v;
+				return null;
+			}
+		});
 
-		editButton = new EditButton<Marker>();
+		editButton = new EditButton<Item>();
 		editButton.createEditButtons(bGroup, tableViewer, new EditElement());
 		new DeleteButton().createDeleteButton(bGroup, tableViewer);
 		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE
-				| SWT.FULL_SELECTION | SWT.V_SCROLL);
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
 		table.addMouseListener(new MouseListener() {
 
@@ -205,7 +194,7 @@ public class MarkerPage extends WizardPage {
 	}
 
 	private void fillTable(Table table) {
-		List<Marker> props = new ArrayList<Marker>();
+		List<Item> props = new ArrayList<Item>();
 		props.addAll(value.getMarkers());
 		tableViewer.setInput(props);
 	}
