@@ -360,8 +360,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				version = JRXmlWriterHelper.getVersion(resource, jrContext, true);
 				model2xml(version);
 			} else {
+				IDocumentProvider dp = xmlEditor.getDocumentProvider();
+				IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 				try { // just go thru the model, to look what happend with our markers
 					resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+
 					xml2model();
 				} catch (Throwable e) {
 					if (e instanceof JRException && e.getCause() instanceof SAXParseException) {
@@ -377,7 +380,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						} catch (CoreException ce) {
 						}
 					}
-					xmlEditor.doSave(monitor);
+					doSaveEditors(monitor);// on eclipse 4.2.1 on first first save, for some reasons save is not working .., so
+																	// we'll do it manually
+					getCurrentFile().setContents(new ByteArrayInputStream(doc.get().getBytes("UTF-8")),
+							IFile.KEEP_HISTORY | IFile.FORCE, monitor);
 					return;
 				}
 			}
@@ -735,11 +741,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		try {
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
-
 			in = new ByteArrayInputStream(doc.get().getBytes());
+
 			InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
 
-			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
+			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(in);
 			jrContext.setJasperDesign(jd);
 			setModel(ReportFactory.createReport(jrContext));
 		} finally {
