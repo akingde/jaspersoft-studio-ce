@@ -50,8 +50,9 @@ public class TableWizardFieldsPage extends WizardFieldsPage {
 		if (getWizard() instanceof TableWizard)
 		{
 			setAvailableFields(((TableWizard)getWizard()).getDataset().getFieldsList());
-		}
-		else
+		} else if (getWizard() instanceof ReportTableWizard){
+			setAvailableFields(((ReportTableWizard)getWizard()).getDataset().getFieldsList());
+		} else
 		{
 			setAvailableFields(null);
 		}

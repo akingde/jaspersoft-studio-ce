@@ -212,6 +212,16 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	}
 	
 	/**
+	 * Return a class that identify which are the visible section of the table
+	 * 
+	 * @return a TemplateSections class, that contains a series of boolean flags used to know 
+	 * which sections of the table are visible.
+	 */
+	public TableSections getVisibileSections(){
+		return new TableSections(isTableHeader, isTableFooter, isColumnHeader, isColumnFooter, isGroupHeader, isGroupFooter);
+	}
+	
+	/**
 	 * Create the group with the controls for the cell borders
 	 * 
 	 * @param parent parent composite of the group 
