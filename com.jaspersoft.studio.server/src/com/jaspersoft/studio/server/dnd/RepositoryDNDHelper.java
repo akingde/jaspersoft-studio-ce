@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MJar;
 import com.jaspersoft.studio.server.model.MJrxml;
@@ -50,13 +51,13 @@ import com.jaspersoft.studio.utils.Misc;
  */
 public final class RepositoryDNDHelper {
 	
-	private static final String JRML_EXTENSION = "jrxml";
-	private static final String XML_EXTENSION = "xml";
-	private static final String DATA_ADAPTER_EXTENSION = "xml";
-	private static final String RESOURCE_BUNDLE_EXTENSION = "properties";
-	private static final String JAR_EXTENSION = "jar";
-	private static final String FONT_EXTENSION = "ttf";
-	private static final String TEMPLATE_EXTENSION = "jrtx";
+	private static final String JRML_EXTENSION = "jrxml"; //$NON-NLS-1$
+	private static final String XML_EXTENSION = "xml"; //$NON-NLS-1$
+	private static final String DATA_ADAPTER_EXTENSION = "xml"; //$NON-NLS-1$
+	private static final String RESOURCE_BUNDLE_EXTENSION = "properties"; //$NON-NLS-1$
+	private static final String JAR_EXTENSION = "jar"; //$NON-NLS-1$
+	private static final String FONT_EXTENSION = "ttf"; //$NON-NLS-1$
+	private static final String TEMPLATE_EXTENSION = "jrtx"; //$NON-NLS-1$
 	private static final List<String> ALLOWED_EXTENSIONS;
 	
 	static {
@@ -153,7 +154,7 @@ public final class RepositoryDNDHelper {
 		}
 		throw new UnsupportedOperationException(
 				MessageFormat.format(
-						"Unable to create a File Resource for the following file extension type: {0}.", 
+						Messages.RepositoryDNDHelper_NewFileResourceErrMsg, 
 						new Object[]{fileExt}));
 	}
 
@@ -196,7 +197,7 @@ public final class RepositoryDNDHelper {
 		}
 		throw new UnsupportedOperationException(
 				MessageFormat.format(
-						"Unable to create a Resource Descriptor for the following file extension type: {0}.", 
+						Messages.RepositoryDNDHelper_NewResourceDescriptorErrMsg, 
 						new Object[]{fileExt}));
 	}
 }
