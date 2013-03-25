@@ -47,7 +47,7 @@ public class TMarkerLabelProvider extends LabelProvider implements ITableLabelPr
 		Item dto = (Item) element;
 		List<ItemProperty> prp = dto.getProperties();
 		switch (columnIndex) {
-		case 1:
+		case 2:
 			for (ItemProperty mp : prp) {
 				if (coordinatesType == MarkerCoordinatesType.LATITUDE_LONGITUDE && mp.getName().equals("longitude")) {
 					return getValue(mp);
@@ -57,12 +57,19 @@ public class TMarkerLabelProvider extends LabelProvider implements ITableLabelPr
 				}
 			}
 			return "null";
-		case 0:
+		case 1:
 			for (ItemProperty mp : prp) {
 				if (coordinatesType == MarkerCoordinatesType.LATITUDE_LONGITUDE && mp.getName().equals("latitude")) {
 					return getValue(mp);
 				}
 				if (coordinatesType == MarkerCoordinatesType.XY && mp.getName().equals("x")) {
+					return getValue(mp);
+				}
+			}
+			return "null";
+		case 0:
+			for (ItemProperty mp : prp) {
+				if (mp.getName().equals("id")) {
 					return getValue(mp);
 				}
 			}

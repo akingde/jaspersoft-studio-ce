@@ -40,7 +40,7 @@ import java.util.List;
 import net.sf.jasperreports.components.map.Item;
 import net.sf.jasperreports.components.map.ItemProperty;
 import net.sf.jasperreports.components.map.StandardItem;
-import net.sf.jasperreports.components.map.StandardMarkerProperty;
+import net.sf.jasperreports.components.map.StandardItemProperty;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
@@ -133,8 +133,9 @@ public class MarkerPage extends WizardPage {
 			public Object newElement(List<?> input, int pos) {
 				ArrayList<ItemProperty> props = new ArrayList<ItemProperty>();
 
-				props.add(new StandardMarkerProperty("latitude", "0", null));
-				props.add(new StandardMarkerProperty("longitude", "0", null));
+				props.add(new StandardItemProperty("id", "CHANGE_ME", null));
+				props.add(new StandardItemProperty("latitude", "0", null));
+				props.add(new StandardItemProperty("longitude", "0", null));
 
 				StandardItem v = new StandardItem(props);
 				MarkerDialog dialog = new MarkerDialog(Display.getDefault().getActiveShell());
@@ -175,21 +176,25 @@ public class MarkerPage extends WizardPage {
 		tableViewer.setLabelProvider(new TMarkerLabelProvider());
 		// attachCellEditors(tableViewer, table);
 
-		TableColumn[] column = new TableColumn[2];
+		TableColumn[] column = new TableColumn[3];
 
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Latitude");
-
+		column[0].setText("Id");
+		
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Longitude");
+		column[1].setText("Latitude");
+
+		column[2] = new TableColumn(table, SWT.NONE);
+		column[2].setText("Longitude");
 
 		fillTable(table);
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
 
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(50, true));
-		tlayout.addColumnData(new ColumnWeightData(50, true));
+		tlayout.addColumnData(new ColumnWeightData(30, true));
+		tlayout.addColumnData(new ColumnWeightData(35, true));
+		tlayout.addColumnData(new ColumnWeightData(35, true));
 		table.setLayout(tlayout);
 	}
 

@@ -62,9 +62,12 @@ public class NewButton {
 				if (selement instanceof Object[]) {
 					for (Object se : (Object[]) selement) {
 						addElement(index, inlist, se);
+						afterElementAdded(se);
 					}
-				} else
+				} else {
 					addElement(index, inlist, selement);
+					afterElementAdded(selement);
+				}
 				tableViewer.refresh();
 				tableViewer.setSelection(new StructuredSelection(selement));
 				tableViewer.reveal(selement);
@@ -92,5 +95,14 @@ public class NewButton {
 	}
 	public void setEnabled(boolean enable) {
 		newB.setEnabled(enable);
+	}
+	
+	/**
+	 * Additional operations to be performed once 
+	 * the new element has been added.
+	 * @param selement 
+	 */
+	protected void afterElementAdded(Object selement){
+		// empty...
 	}
 }

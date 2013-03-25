@@ -59,7 +59,7 @@ public class EditButton<T> {
 			else
 				return;
 			editElement.editElement(inlist, index);
-
+			afterElementModified(s.getFirstElement());
 			tableViewer.refresh();
 			tableViewer.setSelection(s);
 			tableViewer.reveal(s.getFirstElement());
@@ -85,5 +85,13 @@ public class EditButton<T> {
 
 	public void setEnabled(boolean enable) {
 		editB.setEnabled(enable);
+	}
+	
+	/**
+	 * Additional operations to be performed once the element has been modified.
+	 * @param object 
+	 */
+	protected void afterElementModified(Object element){
+		// empty...
 	}
 }

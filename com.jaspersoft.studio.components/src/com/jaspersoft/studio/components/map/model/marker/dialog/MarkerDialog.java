@@ -69,7 +69,7 @@ public class MarkerDialog extends Dialog {
 	}
 
 	private boolean isPropertyMandatory(ItemProperty mprop) {
-		return coordinatesType.isMandatoryProperty(mprop.getName());
+		return "id".equals(mprop.getName()) || coordinatesType.isMandatoryProperty(mprop.getName());
 	}
 
 	private StandardItem value;

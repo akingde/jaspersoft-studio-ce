@@ -60,6 +60,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * 
@@ -251,7 +252,7 @@ public class MMap extends MGraphicElement {
 		StandardMapComponent component = getMapComponent();
 
 		if (id.equals(StandardItemData.PROPERTY_ITEMS)) {
-			List<Item> markers = component.getMarkerData().getItems();
+			List<Item> markers = ModelUtils.safeGetMarkerData(component,false).getItems();
 			if (markers == null)
 				markers = new ArrayList<Item>();
 			else {
@@ -260,7 +261,7 @@ public class MMap extends MGraphicElement {
 			return new MarkersDTO(markers, this);
 		}
 		if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
-			JRElementDataset markerdataset = component.getMarkerData().getDataset();
+			JRElementDataset markerdataset = ModelUtils.safeGetMarkerData(component,false).getDataset();
 			JRDatasetRun j = null;
 			if (markerdataset != null)
 				j = markerdataset.getDatasetRun();
@@ -305,37 +306,37 @@ public class MMap extends MGraphicElement {
 	public void setPropertyValue(Object id, Object value) {
 		StandardMapComponent component = getMapComponent();
 
-		StandardItemData markerdataset = (StandardItemData) component.getMarkerData();
+		StandardItemData markerdata = (StandardItemData) component.getMarkerData();
 		if (id.equals(StandardItemData.PROPERTY_ITEMS)) {
 			if (value instanceof MarkersDTO) {
-				if (markerdataset == null) {
-					markerdataset = new StandardItemData();
-					component.setMarkerData(markerdataset);
+				if (markerdata == null) {
+					markerdata = new StandardItemData();
+					component.setMarkerData(markerdata);
 					listenMap();
 				}
-				List<Item> markers = markerdataset.getItems();
+				List<Item> markers = markerdata.getItems();
 				if (!markers.isEmpty()) {
 					Item[] marray = markers.toArray(new Item[markers.size()]);
 					for (Item m : marray)
-						markerdataset.removeItem(m);
+						markerdata.removeItem(m);
 				}
 				MarkersDTO mdto = (MarkersDTO) value;
 				if (mdto.getMarkers() != null)
 					for (Item m : mdto.getMarkers())
-						markerdataset.addItem(m);
+						markerdata.addItem(m);
 			}
 		} else if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			MDatasetRun mdr = (MDatasetRun) value;
 			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
-			if (markerdataset == null) {
-				markerdataset = new StandardItemData();
-				component.setMarkerData(markerdataset);
+			if (markerdata == null) {
+				markerdata = new StandardItemData();
+				component.setMarkerData(markerdata);
 				listenMap();
 			}
 			if (dr.getDatasetName() != null)
-				((JRDesignElementDataset) markerdataset.getDataset()).setDatasetRun(dr);
+				((JRDesignElementDataset) markerdata.getDataset()).setDatasetRun(dr);
 			else
-				((JRDesignElementDataset) markerdataset.getDataset()).setDatasetRun(null);
+				((JRDesignElementDataset) markerdata.getDataset()).setDatasetRun(null);
 		} else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME))
 			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
 		else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_GROUP))

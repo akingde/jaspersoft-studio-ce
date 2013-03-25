@@ -53,8 +53,10 @@ public class DeleteButton {
 						continue;
 					int ind = inlist.indexOf(obj);
 					inlist.remove(obj);
-					if (ind < inlist.size())
+					afterElementDeleted(obj);
+					if (ind < inlist.size()) {
 						selement = inlist.get(ind);
+					}
 				}
 				tableViewer.refresh();
 				if (selement != null)
@@ -99,5 +101,14 @@ public class DeleteButton {
 		} else
 			enable = true;
 		delB.setEnabled(enable);
+	}
+	
+	/**
+	 * Additional operations to be performed once 
+	 * the element has been deleted.
+	 * @param element 
+	 */
+	protected void afterElementDeleted(Object element){
+		// empty...
 	}
 }

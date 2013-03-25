@@ -77,7 +77,10 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 						JasperReportsConfiguration jConfig = (JasperReportsConfiguration) reportConverter.getJasperReportsContext();
 						JasperDesign jd = jConfig.getJasperDesign();
 						JRDataset jrd = jd.getMainDataset();
-						JRElementDataset dataset = map.getMarkerData().getDataset();
+						JRElementDataset dataset = null;
+						if(map.getMarkerData()!=null){
+							dataset = map.getMarkerData().getDataset();
+						}
 						if (dataset != null && dataset.getDatasetRun() != null) {
 							String dname = dataset.getDatasetRun().getDatasetName();
 							if (dname != null)

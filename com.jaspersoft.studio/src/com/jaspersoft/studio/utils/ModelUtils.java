@@ -25,6 +25,10 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.jasperreports.components.map.ItemData;
+import net.sf.jasperreports.components.map.MapComponent;
+import net.sf.jasperreports.components.map.StandardItemData;
+import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
@@ -1344,6 +1348,29 @@ public class ModelUtils {
 		}
 		
 		return alltypes;
+	}
+	
+	/**
+	 * Gets a valid {@link ItemData} instance, representing the Marker Data
+	 * information associated to the Fusion Map component.
+	 * If needed it creates a new one.
+	 * 
+	 * @param mapComponent
+	 *            the map component to look into
+	 * @param update 
+	 * 						specifies to update the original map component or not
+	 * @return the marker data information associated to the map
+	 */
+	public static ItemData safeGetMarkerData(MapComponent mapComponent, boolean update){
+		StandardMapComponent map = ((StandardMapComponent)mapComponent);
+		ItemData markerData = map.getMarkerData();
+		if(markerData==null){
+			markerData = new StandardItemData();
+			if(update){
+				map.setMarkerData(markerData);
+			}
+		}
+		return markerData;
 	}
 	
 }
