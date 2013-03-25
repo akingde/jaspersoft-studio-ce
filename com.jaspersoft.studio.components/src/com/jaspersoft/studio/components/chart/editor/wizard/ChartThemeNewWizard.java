@@ -8,17 +8,15 @@
  * 
  * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.editor.style.wizard;
+package com.jaspersoft.studio.components.chart.editor.wizard;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRSimpleTemplate;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
+import net.sf.jasperreports.chartthemes.simple.ChartThemeSettings;
+import net.sf.jasperreports.chartthemes.simple.XmlChartTheme;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -57,10 +55,9 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.components.chart.ContextHelpIDs;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.wizards.ContextData;
-import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /*
  * This is a sample new wizard. Its role is to create a new file resource in the provided container. If the container
@@ -69,25 +66,26 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
  * available as a template) is registered for the same extension, it will be able to open it.
  */
 
-public class StyleTemplateNewWizard extends Wizard implements INewWizard {
-	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.StyleTemplateNewWizard";
-	private static final String NEW_STYLE_NAME = "NEW_STYLE";//$NON-NLS-1$
-	private static final String NEW_STYLE_EXT = ".jrtx";//$NON-NLS-1$
-	private static final String NEW_STYLE_JRTX = NEW_STYLE_NAME + NEW_STYLE_EXT;
+public class ChartThemeNewWizard extends Wizard implements INewWizard {
+	public static final String WIZARD_ID = "com.jaspersoft.studio.components.chart.editor.wizard.ChartThemeNewWizard";
+	private static final String NEW_NAME = "chart_template";//$NON-NLS-1$
+	private static final String NEW_EXT = ".jrctx";//$NON-NLS-1$
+	private static final String NEW_FILENAME = NEW_NAME + NEW_EXT;
 	private WizardNewFileCreationPage step1;
 	private ISelection selection;
 
 	/**
 	 * Constructor for ReportNewWizard.
 	 */
-	public StyleTemplateNewWizard() {
+	public ChartThemeNewWizard() {
 		super();
-		setWindowTitle(Messages.StyleTemplateNewWizard_wizardtitle);
+		setWindowTitle("New Chart Theme Wizard");
 		setNeedsProgressMonitor(true);
 	}
 
 	/**
-	 * Extends the original WizardNewFileCreationPage to implements the method to have a contextual help
+	 * Extends the original WizardNewFileCreationPage to implements the method to
+	 * have a contextual help
 	 * 
 	 * @author Orlandin Marco
 	 * 
@@ -103,7 +101,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		 */
 		@Override
 		public void performHelp() {
-			PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.WIZARD_STYLE_TEMPLATE_PATH);
+			PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.WIZARD_CHART_THEME_PATH);
 		}
 
 		/**
@@ -111,7 +109,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		 */
 		@Override
 		public void setHelpData() {
-			PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.WIZARD_STYLE_TEMPLATE_PATH);
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.WIZARD_CHART_THEME_PATH);
 		}
 
 		@Override
@@ -132,15 +130,15 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	 */
 	public void addPages() {
 		step1 = new WizardHelpNewFileCreationPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
-		step1.setTitle(Messages.StyleTemplateNewWizard_title);
-		step1.setDescription(Messages.StyleTemplateNewWizard_description);
-		step1.setFileExtension("jrtx");//$NON-NLS-1$
+		step1.setTitle("Chart Theme File");
+		step1.setDescription("New Chart Theme Wizard");
+		step1.setFileExtension("jrctx");//$NON-NLS-1$
 		setupNewFileName();
 		addPage(step1);
 	}
 
 	public void setupNewFileName() {
-		String filename = NEW_STYLE_JRTX;
+		String filename = NEW_FILENAME;
 		if (selection != null) {
 			if (selection instanceof TreeSelection) {
 				TreeSelection s = (TreeSelection) selection;
@@ -151,7 +149,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 
 					int i = 1;
 					while (file.getProject().getFile(f).exists()) {
-						filename = NEW_STYLE_NAME + i + NEW_STYLE_EXT;
+						filename = NEW_NAME + i + NEW_EXT;
 						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;//$NON-NLS-1$
 						i++;
 					}
@@ -162,8 +160,8 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	}
 
 	/**
-	 * This method is called when 'Finish' button is pressed in the wizard. We will create an operation and run it using
-	 * wizard as execution context.
+	 * This method is called when 'Finish' button is pressed in the wizard. We
+	 * will create an operation and run it using wizard as execution context.
 	 */
 	public boolean performFinish() {
 		final String containerName = step1.getContainerFullPath().toPortableString();
@@ -192,8 +190,9 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	}
 
 	/**
-	 * The worker method. It will find the container, create the file if missing or just replace its contents, and open
-	 * the editor on the newly created file.
+	 * The worker method. It will find the container, create the file if missing
+	 * or just replace its contents, and open the editor on the newly created
+	 * file.
 	 */
 
 	private void doFinish(String containerName, String fileName, IProgressMonitor monitor) throws CoreException {
@@ -201,9 +200,8 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		monitor.beginTask("Creating " + fileName, 2); //$NON-NLS-1$
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
-		if (!resource.exists() || !(resource instanceof IContainer)) {
+		if (!resource.exists() || !(resource instanceof IContainer))
 			throwCoreException("Container \"" + containerName + "\" does not exist."); //$NON-NLS-1$ //$NON-NLS-2$
-		}
 		IContainer container = (IContainer) resource;
 		final IFile file = container.getFile(new Path(fileName));
 		InputStream in = null;
@@ -249,18 +247,9 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	 */
 
 	private InputStream openContentStream() {
-		try {
-			JRSimpleTemplate tmp = new JRSimpleTemplate();
-
-			JRDesignStyle jrDesignStyle = new JRDesignStyle();
-			jrDesignStyle.setName("SimpleStyle"); //$NON-NLS-1$
-			tmp.addStyle(jrDesignStyle);
-			String contents = JRXmlTemplateWriter.writeTemplate(tmp);
-			return new ByteArrayInputStream(contents.getBytes());
-		} catch (JRException e) {
-			e.printStackTrace();
-		}
-		return null;
+		String contents = XmlChartTheme.saveSettings(new ChartThemeSettings());
+		// SimpleSettingsFactory.createChartThemeSettings());
+		return new ByteArrayInputStream(contents.getBytes());
 	}
 
 	private void throwCoreException(String message) throws CoreException {
@@ -270,8 +259,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
-			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile
-					|| selection.getFirstElement() instanceof IFolder) {
+			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile || selection.getFirstElement() instanceof IFolder) {
 				this.selection = selection;
 				return;
 			}
@@ -290,7 +278,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 				try {
 					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_STYLE_JRTX) }));
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_FILENAME) }));
 						return;
 					}
 				} catch (CoreException e) {
@@ -301,7 +289,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 				try {
 					if (p.isAccessible()) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_STYLE_JRTX) }));
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_FILENAME) }));
 						return;
 					}
 				} catch (CoreException e) {

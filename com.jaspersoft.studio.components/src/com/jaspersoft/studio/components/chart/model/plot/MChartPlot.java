@@ -74,7 +74,7 @@ public class MChartPlot extends APropertyNode {
 		orientationD = new JSSEnumPropertyDescriptor(
 				JRBaseChartPlot.PROPERTY_ORIENTATION,
 				Messages.MChartPlot_orientation,
-				com.jaspersoft.studio.components.chart.model.PlotOrientationEnum.class,
+				com.jaspersoft.studio.components.chart.model.enums.PlotOrientationEnum.class,
 				NullEnum.NULL);
 		orientationD
 				.setDescription(Messages.MChartPlot_orientation_description);

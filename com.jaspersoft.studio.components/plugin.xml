@@ -767,4 +767,29 @@
          </toolitem>
       </toolitemsets>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.jaspersoft.studio.components.chart.editor.JRctxEditor"
+            contributorClass="com.jaspersoft.studio.components.chart.editor.JrctxEditorContributor"
+            default="false"
+            extensions="jrctx"
+            icon="icons/chart-16.png"
+            id="com.jaspersoft.studio.components.editor1"
+            name="Chart Theme Editor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="com.jaspersoft.studio"
+            class="com.jaspersoft.studio.components.chart.editor.wizard.ChartThemeNewWizard"
+            icon="icons/chart-16.png"
+            id="com.jaspersoft.studio.components.chart.editor.wizard.ChartThemeNewWizard"
+            name="Chart Themes">
+         <description>
+            Create a new Chart Theme
+         </description>
+      </wizard>
+   </extension>
 </plugin>

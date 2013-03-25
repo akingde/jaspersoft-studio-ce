@@ -63,6 +63,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.CongratulationsWizardPage;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.NewFileCreationWizard;
+import com.jaspersoft.studio.wizards.ReportNewWizard;
 import com.jaspersoft.studio.wizards.ReportTemplatesWizardPage;
 import com.jaspersoft.studio.wizards.WizardUtils;
 import com.jaspersoft.templates.ReportBundle;
@@ -71,7 +72,6 @@ import com.jaspersoft.templates.TemplateBundle;
 public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, INewWizard {
 
 	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.ReportNewWizard";
-	private static final String NEW_REPORT_JRXML = Messages.ReportNewWizard_8;
 
 	private ReportTemplatesWizardPage step0;
 	private NewFileCreationWizard step1;
@@ -133,75 +133,66 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 
 		step4Table = new TableWizardLayoutPage();
 		addPage(step4Table);
-		
+
 		if (showCongratulationsStep) {
 			congratulationsStep = new CongratulationsWizardPage();
 			addPage(congratulationsStep);
 		}
-		
+
 	}
-	
-	private JRDesignDataset createTableDataset(Map<String,Object> settings)
-	{
-		
+
+	private JRDesignDataset createTableDataset(Map<String, Object> settings) {
+
 		// Create a new dataset
-			JRDesignDataset dataset = new JRDesignDataset(false);
-			JRDesignQuery query = new JRDesignQuery();
-			dataset.setQuery(query);
-			
-			// Get values from the settings...
-			if (settings != null)
-			{
-				
-				if (settings.containsKey( WizardDatasetNewPage.DATASET_NAME ))
-				{
-					dataset.setName( (String)settings.get(WizardDatasetNewPage.DATASET_NAME));
-				}
-				
-				// If the user specified to use an empty dataset, return the dataset as it is...
-				if (settings.containsKey( WizardDatasetNewPage.DATASET_EMPTY))
-				{
-					Boolean b = (Boolean)settings.get(WizardDatasetNewPage.DATASET_EMPTY);
-					if (b.booleanValue() == true)
-					{
-						return dataset;
-					}
-				}
-				
-				if (settings.containsKey( WizardDataSourcePage.DATASET_QUERY_LANGUAGE))
-				{
-					query.setLanguage( (String)settings.get(WizardDataSourcePage.DATASET_QUERY_LANGUAGE) );
-				}
-				
-				
-				if (settings.containsKey( WizardDataSourcePage.DATASET_QUERY_TEXT))
-				{
-					query.setText((String)settings.get(WizardDataSourcePage.DATASET_QUERY_TEXT) );
-				}
-				
-				
-			  // Check for fields...
-				if (settings.containsKey( WizardDataSourcePage.DISCOVERED_FIELDS))
-				{
-					List<JRDesignField> fields = (List<JRDesignField>)(settings.get(WizardDataSourcePage.DISCOVERED_FIELDS));
-					for (JRDesignField f : fields)
-					{
-						try {
-							dataset.addField(f);
-						} catch (JRException ex) { 
-							// Let's ignore exceptions here, the worst case would be a duplicated fields name not getting
-							// in the dataset, situation that should be checked upfront, not now.
-							ex.printStackTrace();
-						}
-					}
-					
+		JRDesignDataset dataset = new JRDesignDataset(false);
+		JRDesignQuery query = new JRDesignQuery();
+		dataset.setQuery(query);
+
+		// Get values from the settings...
+		if (settings != null) {
+
+			if (settings.containsKey(WizardDatasetNewPage.DATASET_NAME)) {
+				dataset.setName((String) settings.get(WizardDatasetNewPage.DATASET_NAME));
+			}
+
+			// If the user specified to use an empty dataset, return the dataset as it
+			// is...
+			if (settings.containsKey(WizardDatasetNewPage.DATASET_EMPTY)) {
+				Boolean b = (Boolean) settings.get(WizardDatasetNewPage.DATASET_EMPTY);
+				if (b.booleanValue() == true) {
+					return dataset;
 				}
 			}
-			
-			return dataset;
+
+			if (settings.containsKey(WizardDataSourcePage.DATASET_QUERY_LANGUAGE)) {
+				query.setLanguage((String) settings.get(WizardDataSourcePage.DATASET_QUERY_LANGUAGE));
+			}
+
+			if (settings.containsKey(WizardDataSourcePage.DATASET_QUERY_TEXT)) {
+				query.setText((String) settings.get(WizardDataSourcePage.DATASET_QUERY_TEXT));
+			}
+
+			// Check for fields...
+			if (settings.containsKey(WizardDataSourcePage.DISCOVERED_FIELDS)) {
+				List<JRDesignField> fields = (List<JRDesignField>) (settings.get(WizardDataSourcePage.DISCOVERED_FIELDS));
+				for (JRDesignField f : fields) {
+					try {
+						dataset.addField(f);
+					} catch (JRException ex) {
+						// Let's ignore exceptions here, the worst case would be a
+						// duplicated fields name not getting
+						// in the dataset, situation that should be checked upfront, not
+						// now.
+						ex.printStackTrace();
+					}
+				}
+
+			}
+		}
+
+		return dataset;
 	}
-	
-	
+
 	public JRDesignDataset getDataset() {
 		JRDesignDataset ds = createTableDataset(getSettings());
 		if (step2 != null && step2.getDataAdapter() != null) {
@@ -212,27 +203,29 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 		return ds;
 	}
 
-
 	/**
 	 * This method drive the logic to just skip steps.
 	 * 
-	 * The getNextPage method is generally used to get stuff from a page and configure the next one creating more logic
-	 * between pages. This logic has been moved elsewhere: the glue used in JSSWizard is acutally the settings map, which
-	 * is passed along the way, since stored inside the wizard. A mechanism to load and store settings allow the pages to
-	 * act in a consistent way without having to put any logic here, even if logic can still be added in case of special
-	 * behaviours (just like it would be possible to extend the relevant pages).
+	 * The getNextPage method is generally used to get stuff from a page and
+	 * configure the next one creating more logic between pages. This logic has
+	 * been moved elsewhere: the glue used in JSSWizard is acutally the settings
+	 * map, which is passed along the way, since stored inside the wizard. A
+	 * mechanism to load and store settings allow the pages to act in a consistent
+	 * way without having to put any logic here, even if logic can still be added
+	 * in case of special behaviours (just like it would be possible to extend the
+	 * relevant pages).
 	 * 
-	 * An interesting example is the JSSWizardPage and JSSWizardRunnablePage which provide the base pages to JSS based
-	 * wizard. In particular the JSSWizardRunnablePage allows to execute a process on next, which can be used for time
-	 * consuming tasks (like read fields).
+	 * An interesting example is the JSSWizardPage and JSSWizardRunnablePage which
+	 * provide the base pages to JSS based wizard. In particular the
+	 * JSSWizardRunnablePage allows to execute a process on next, which can be
+	 * used for time consuming tasks (like read fields).
 	 * 
 	 */
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 
 		if (page == step2) {
-			if (!getSettings().containsKey(WizardDataSourcePage.DISCOVERED_FIELDS)
-					|| ((List<?>) getSettings().get(WizardDataSourcePage.DISCOVERED_FIELDS)).isEmpty()) {
+			if (!getSettings().containsKey(WizardDataSourcePage.DISCOVERED_FIELDS) || ((List<?>) getSettings().get(WizardDataSourcePage.DISCOVERED_FIELDS)).isEmpty()) {
 				if (!showCongratulationsStep) {
 					// ask for the next page by giving the last page available...
 					return super.getNextPage(getPageList().get(getPageList().size() - 1));
@@ -244,8 +237,8 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 	}
 
 	/**
-	 * This method is called when 'Finish' button is pressed in the wizard. We will create an operation and run it using
-	 * wizard as execution context.
+	 * This method is called when 'Finish' button is pressed in the wizard. We
+	 * will create an operation and run it using wizard as execution context.
 	 */
 	@Override
 	public boolean performFinish() {
@@ -273,16 +266,16 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 		}
 		return super.performFinish();
 	}
-	
-	/*private JRBand getDetail(JRBand[] bands) {
-		for(JRBand band : bands){
-			band.get
-		}
-	}*/
+
+	/*
+	 * private JRBand getDetail(JRBand[] bands) { for(JRBand band : bands){
+	 * band.get } }
+	 */
 
 	/**
-	 * The worker method. It will find the container, create the file if missing or just replace its contents, and open
-	 * the editor on the newly created file.
+	 * The worker method. It will find the container, create the file if missing
+	 * or just replace its contents, and open the editor on the newly created
+	 * file.
 	 */
 	private void doFinish(String containerName, String fileName, IProgressMonitor monitor) throws CoreException {
 		monitor.beginTask(Messages.ReportNewWizard_3 + fileName, 2);
@@ -298,7 +291,7 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 		TemplateBundle templateBundle = step0.getTemplateBundle();
 
 		JRDesignDataset dataset = WizardUtils.createDataset(true, getSettings());
-		
+
 		templateSettings.put(DefaultTemplateEngine.DATASET, dataset);
 		if (getSettings().containsKey(WizardDataSourcePage.DATASET_FIELDS)) {
 			templateSettings.put(DefaultTemplateEngine.FIELDS, getSettings().get(WizardDataSourcePage.DATASET_FIELDS));
@@ -308,24 +301,23 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 			templateSettings.put(DefaultTemplateEngine.GROUP_FIELDS, getSettings().get(WizardDataSourcePage.GROUP_FIELDS));
 		}
 
-		templateSettings.put(TableTemplateEngine.TABLE_FIELDS,step3Table.getSelectedFields());
-		
+		templateSettings.put(TableTemplateEngine.TABLE_FIELDS, step3Table.getSelectedFields());
+
 		templateSettings.put(TableTemplateEngine.TABLE_STYLE, step4Table.getSelectedStyle());
-		
+
 		templateSettings.put(TableTemplateEngine.TABLE_SECTIONS, step4Table.getVisibileSections());
-		
+
 		TableTemplateEngine templateEngine = new TableTemplateEngine();
 		ByteArrayInputStream stream = null;
 		try {
-			
+
 			ReportBundle reportBundle = templateEngine.generateReportBundle(templateBundle, templateSettings);
 
 			// Save the data adapter used...
 			if (step2.getDataAdapter() != null) {
-				reportBundle.getJasperDesign().setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER,
-						step2.getDataAdapter().getName());
+				reportBundle.getJasperDesign().setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, step2.getDataAdapter().getName());
 			}
-			
+
 			// Store the report bundle on file system
 			IContainer container = (IContainer) resource;
 			reportFile = container.getFile(new Path(fileName));
@@ -337,7 +329,7 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 			reportBundle.getJasperDesign().setName(repname);
 			// Save the all the files...
 			String contents = JRXmlWriterHelper.writeReport(getConfig(), reportBundle.getJasperDesign(), reportFile, false);
-			
+
 			stream = new ByteArrayInputStream(contents.getBytes());
 
 			if (reportFile.exists()) {
@@ -377,7 +369,8 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 	}
 
 	/**
-	 * Store all the resources provided by the report bundle in the same folder as the new report.
+	 * Store all the resources provided by the report bundle in the same folder as
+	 * the new report.
 	 * 
 	 * @param monitor
 	 * @param reportBundle
@@ -417,14 +410,14 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 	}
 
 	/**
-	 * We will accept the selection in the workbench to see if we can initialize from it.
+	 * We will accept the selection in the workbench to see if we can initialize
+	 * from it.
 	 * 
 	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		if (selection instanceof StructuredSelection) {
-			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile
-					|| selection.getFirstElement() instanceof IFolder) {
+			if (selection.getFirstElement() instanceof IProject || selection.getFirstElement() instanceof IFile || selection.getFirstElement() instanceof IFolder) {
 				this.selection = selection;
 				return;
 			}
@@ -443,7 +436,7 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 				try {
 					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_REPORT_JRXML) }));
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(ReportNewWizard.NEW_REPORT_JRXML) }));
 						return;
 					}
 				} catch (CoreException e) {
@@ -454,7 +447,7 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 				try {
 					if (p.isAccessible()) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(Messages.ReportNewWizard_19) }));
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(ReportNewWizard.NEW_REPORT_JRXML) }));
 						return;
 					}
 				} catch (CoreException e) {
@@ -466,13 +459,14 @@ public class ReportTableWizard extends JSSWizard implements IWorkbenchWizard, IN
 	}
 
 	/**
-	 * We don't want to finish the wizard at "any" time. This methods allows to decide when we can and when we cannot
-	 * finish...
+	 * We don't want to finish the wizard at "any" time. This methods allows to
+	 * decide when we can and when we cannot finish...
 	 * 
 	 */
 	@Override
 	public boolean canFinish() {
-		if (getContainer().getCurrentPage() == congratulationsStep || getContainer().getCurrentPage() == step4Table) return true;
+		if (getContainer().getCurrentPage() == congratulationsStep || getContainer().getCurrentPage() == step4Table)
+			return true;
 		return false;
 	}
 

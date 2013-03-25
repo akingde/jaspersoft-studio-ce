@@ -137,6 +137,14 @@
 		<topic href="html/wizard/stylestemplate/createtemplate.html" label="Create a Styles Template"/>
 		<topic href="html/wizard/stylestemplate/usetemplate.html" label="Use a Styles Template" />
    </context>
+   <context id="select_chart_theme_path" title="Select location and name of the new chart theme file">
+      <description>A chart theme is a style that could be applied to a charts. In these step you can define location and name of the chart theme file.</description>
+		<topic href="html/wizard/createreport/addfolder.html" label="Create a Project Folder" /> 
+   </context>
+   <context id="select_chart_theme_load" title="Select the chart theme">
+      <description>Here you can select a chart theme to include in your report.</description>
+		<topic href="html/wizard/createreport/addfolder.html" label="Create a Project Folder" /> 
+   </context>
    <context id="select_expression" title="Compose your expression">
       <description>Here you can define an expression and use it inside your report. This powerfull expression editor allows the edit and composing an expression with a graphical interface that suggest the available fields, variables, function and their parameters.</description>
 		<topic href="html/wizard/expressioneditor/useexpressioneditor.html" label="Expression Editor: what it is and how it works" />

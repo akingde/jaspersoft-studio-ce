@@ -342,7 +342,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 				try {
 					if (p.isAccessible()) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(Messages.ReportNewWizard_19) }));
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_DATAADAPTER_XML) }));
 						return;
 					}
 				} catch (CoreException e) {

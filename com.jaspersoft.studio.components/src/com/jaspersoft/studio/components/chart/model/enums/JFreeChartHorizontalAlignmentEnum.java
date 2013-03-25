@@ -13,22 +13,17 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.components.chart.model;
+package com.jaspersoft.studio.components.chart.model.enums;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.type.EnumUtil;
 import net.sf.jasperreports.engine.type.JREnum;
 
-public enum PlotOrientationEnum implements JREnum {
-	/**
-	 * Specifies that the element is opaque.
-	 */
-	HORIZONTAL((byte) 1, "Horizontal"),
+import org.jfree.ui.HorizontalAlignment;
 
-	/**
-	 * Specifies that the element is transparent.
-	 */
-	VERTICAL((byte) 2, "Vertical");
+public enum JFreeChartHorizontalAlignmentEnum implements JREnum {
+
+	CENTER((byte) 0, "Center"), LEFT((byte) 1, "Left"), RIGHT((byte) 2, "Right");
 
 	/**
 	 *
@@ -37,9 +32,31 @@ public enum PlotOrientationEnum implements JREnum {
 	private final transient byte value;
 	private final transient String name;
 
-	private PlotOrientationEnum(byte value, String name) {
+	private JFreeChartHorizontalAlignmentEnum(byte value, String name) {
 		this.value = value;
 		this.name = name;
+	}
+
+	public static JFreeChartHorizontalAlignmentEnum getValue(HorizontalAlignment ha) {
+		if (ha != null) {
+			if (ha.equals(HorizontalAlignment.CENTER))
+				return CENTER;
+			if (ha.equals(HorizontalAlignment.LEFT))
+				return LEFT;
+			if (ha.equals(HorizontalAlignment.RIGHT))
+				return RIGHT;
+		}
+		return LEFT;
+	}
+
+	public HorizontalAlignment getJFreeChartValue() {
+		if (value == 0)
+			return HorizontalAlignment.CENTER;
+		if (value == 1)
+			return HorizontalAlignment.LEFT;
+		if (value == 2)
+			return HorizontalAlignment.RIGHT;
+		return null;
 	}
 
 	/**
@@ -66,21 +83,21 @@ public enum PlotOrientationEnum implements JREnum {
 	/**
 	 *
 	 */
-	public static PlotOrientationEnum getByName(String name) {
-		return (PlotOrientationEnum) EnumUtil.getByName(values(), name);
+	public static JFreeChartHorizontalAlignmentEnum getByName(String name) {
+		return (JFreeChartHorizontalAlignmentEnum) EnumUtil.getByName(values(), name);
 	}
 
 	/**
 	 *
 	 */
-	public static PlotOrientationEnum getByValue(Byte value) {
-		return (PlotOrientationEnum) EnumUtil.getByValue(values(), value);
+	public static JFreeChartHorizontalAlignmentEnum getByValue(Byte value) {
+		return (JFreeChartHorizontalAlignmentEnum) EnumUtil.getByValue(values(), value);
 	}
 
 	/**
 	 *
 	 */
-	public static PlotOrientationEnum getByValue(byte value) {
+	public static JFreeChartHorizontalAlignmentEnum getByValue(byte value) {
 		return getByValue(new Byte(value));
 	}
 

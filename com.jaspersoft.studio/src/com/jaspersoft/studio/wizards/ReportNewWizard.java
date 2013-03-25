@@ -75,10 +75,10 @@ import com.jaspersoft.templates.TemplateEngine;
  * @author gtoffoli
  * 
  */
-public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INewWizard {
+public class ReportNewWizard extends JSSWizard implements INewWizard {
 
 	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.ReportNewWizard";
-	private static final String NEW_REPORT_JRXML = Messages.ReportNewWizard_8;
+	public static final String NEW_REPORT_JRXML = "report.jrxml";
 
 	private ReportTemplatesWizardPage step0;
 	private NewFileCreationWizard step1;
@@ -368,7 +368,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 				try {
 					if (p.isAccessible()) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(Messages.ReportNewWizard_19) }));
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_REPORT_JRXML) }));
 						return;
 					}
 				} catch (CoreException e) {

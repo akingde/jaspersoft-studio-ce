@@ -134,7 +134,7 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 
 		firstLoad = false;
 
-		String baseName = Messages.ReportNewWizard_8;
+		String baseName = ReportNewWizard.NEW_REPORT_JRXML;
 		System.out.println("Seeting up the file name");
 
 		// If a template has been selected, let's try use its name as file name...

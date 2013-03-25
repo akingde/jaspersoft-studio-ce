@@ -1145,14 +1145,12 @@ public class Messages extends NLS {
 	public static String ReportNewWizard_16;
 	public static String ReportNewWizard_17;
 	public static String ReportNewWizard_18;
-	public static String ReportNewWizard_19;
 	public static String ReportNewWizard_2;
 	public static String ReportNewWizard_3;
 	public static String ReportNewWizard_4;
 	public static String ReportNewWizard_5;
 	public static String ReportNewWizard_6;
 	public static String ReportNewWizard_7;
-	public static String ReportNewWizard_8;
 	public static String ReportNewWizard_new_report;
 	public static String ReportNewWizard_title;
 	public static String ReportNewWizardPage_container;
@@ -1236,12 +1234,6 @@ public class Messages extends NLS {
 	public static String StylesListSection_Warning_Box_Message;
 	public static String StylesSectionList_Element_Attributes;
 	public static String StylesSectionList_Inherited_From_Style;
-	public static String StyleTemplateNewWizard_0;
-	public static String StyleTemplateNewWizard_2;
-	public static String StyleTemplateNewWizard_3;
-	public static String StyleTemplateNewWizard_4;
-	public static String StyleTemplateNewWizard_5;
-	public static String StyleTemplateNewWizard_6;
 	public static String StyleTemplateNewWizard_description;
 	public static String StyleTemplateNewWizard_title;
 	public static String StyleTemplateNewWizard_wizardtitle;
