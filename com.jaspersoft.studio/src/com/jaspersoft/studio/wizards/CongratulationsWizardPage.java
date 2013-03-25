@@ -26,7 +26,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 public class CongratulationsWizardPage extends JSSWizardPage {
 
-	protected CongratulationsWizardPage() {
+	public CongratulationsWizardPage() {
 		super("congratulations_page"); //$NON-NLS-1$
 		setTitle("Finish");
 		setMessage("We are ready to create your report");
