@@ -52,6 +52,7 @@ public class Messages extends NLS {
 	public static String ReorderColumnCommand_reorder_columns;
 	public static String ReorderColumnGroupCommand_reorder_column_group;
 	public static String TableEditor_table;
+	public static String TableTemplateBunlde_tableBasedString;
 	public static String TableWizardFieldsPage_description;
 	public static String TableWizardFieldsPage_title;
 	public static String TableWizardLayoutPage_add_column_footer;

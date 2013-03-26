@@ -18,6 +18,7 @@ package com.jaspersoft.studio.templates;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.templates.TemplateBundle;
 import com.jaspersoft.templates.TemplateManager;
 
@@ -42,6 +43,9 @@ public class StudioTemplateManager implements TemplateManager{
 		templateProviders = new ArrayList<TemplateProvider>();
 		templateProviders.add(new DefaultTemplateProvider());
 		
+		//Add the contributed providers
+		templateProviders.addAll(JaspersoftStudioPlugin.getExtensionManager().getTemplateProviders());
+	
 	}
 
 	

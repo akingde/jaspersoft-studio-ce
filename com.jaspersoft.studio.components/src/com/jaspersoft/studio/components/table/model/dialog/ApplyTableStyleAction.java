@@ -47,10 +47,32 @@ import com.jaspersoft.studio.utils.ModelUtils;
  */
 public class ApplyTableStyleAction extends ApplyStyleAction {
 	
+	/**
+	 * Styles that will be applied to the table
+	 */
 	private List<JRDesignStyle> styles = null;
 	
+	/**
+	 * Build the class
+	 * 
+	 * @param style the table style used to generate the styles
+	 * @param table the table to witch the styles will be applied
+	 */
 	public ApplyTableStyleAction(TableStyle style, JRElement table){
 		super(style, table);
+	}
+	
+	/**
+	 * Build the class, instead to build the styles from a table style 
+	 * it receive directly the styles for the table
+	 * 
+	 * @param styles list of styles that will be applied on the table, the order is important
+	 * and it should be: Table Style, Table Header, Column Header and Detail.
+	 * @param table the table to witch the styles will be applied
+	 */
+	public ApplyTableStyleAction(List<JRDesignStyle> styles, JRElement table){
+		super(null, table);
+		this.styles = styles;
 	}
 
 	/**
@@ -86,7 +108,9 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 		}
 	}
 	
-	
+	/**
+	 * Use the table to reabuild the styles list from it
+	 */
     public void rebuildStylesFromTable()
     {
     	StandardTable jrTable = (StandardTable)((JRDesignComponentElement)getElement()).getComponent();
@@ -106,6 +130,12 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	    styles = new ArrayList<JRDesignStyle>(Arrays.asList(stylesArray));
     }
 	
+    /**
+     * Extract the standard table from a JRDesignComponentElement
+     * 
+     * @param element an element with static type JRElement and dynamic type JRDesignComponentElement
+     * @return a StandardTable
+     */
 	private StandardTable getStandardTable(JRElement element) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) element;
 		StandardTable jrTable = (StandardTable) jrElement.getComponent();

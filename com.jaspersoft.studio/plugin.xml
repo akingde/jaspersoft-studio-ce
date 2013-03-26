@@ -39,6 +39,7 @@
 <extension-point id="expressionEditorSupport" name="JRExpression Editor Support" schema="schema/expressionEditorSupport.exsd"/>
 <extension-point id="toolitemsets" name="Tolitems sets" schema="schema/toolitemsets.exsd"/>
 <extension-point id="toolitems" name="Toolitems" schema="schema/toolitems.exsd"/>
+<extension-point id="templateProviderSupport" name="Template Provider Support" schema="schema/templateProviderSupport.exsd"/>
 
 
    <extension

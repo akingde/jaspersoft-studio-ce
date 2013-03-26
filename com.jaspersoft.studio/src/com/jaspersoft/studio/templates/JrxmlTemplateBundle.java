@@ -55,7 +55,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 	private String category = null;
 	private JasperDesign jasperDesign = null;
 	
-	private TemplateEngine templateEngine = null;
+	protected TemplateEngine templateEngine = null;
 	
 	
 	/**

@@ -52,7 +52,7 @@ public class DefaultTemplateProvider implements TemplateProvider {
 		{
 			  cache =  new ArrayList<TemplateBundle>();
 			  
-				Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle().findEntries("templates", "*.jrxml", true); //$NON-NLS-1$ //$NON-NLS-2$
+				Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle().findEntries("templates", "*.jrxml", false); //$NON-NLS-1$ //$NON-NLS-2$
 				while (en.hasMoreElements()) {
 					URL templateURL = (URL) en.nextElement();
 					

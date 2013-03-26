@@ -419,6 +419,18 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		});
 	}
 	
+	
+	public static TableStyle getDefaultStyle(){
+		String firstColor = ColorSchemaGenerator.getColors().get(0);
+		Color color = ColorSchemaGenerator.getColor(firstColor);
+		RGB rgbColor = new RGB(color.getRed(), color.getGreen(), color.getBlue());
+		return new TableStyle(rgbColor, ColorSchemaGenerator.SCHEMAS.DEFAULT, BorderStyleEnum.FULL, ColorConstants.black.getRGB(), false);
+	}
+	
+	public static TableSections getDefaultSection(){
+		return new TableSections(true, true, true, true, true, true); 
+	}
+	
 	/**
 	 * Return the last generated style for the table, that is the effective one when 
 	 * the dialog was closed. If the last generated style is null (maybe because the wizard 
@@ -428,10 +440,8 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	 */
 	public TableStyle getSelectedStyle(){
 		if (lastGeneratedStyle == null) {
-			String firstColor = ColorSchemaGenerator.getColors().get(0);
-			Color color = ColorSchemaGenerator.getColor(firstColor);
-			RGB rgbColor = new RGB(color.getRed(), color.getGreen(), color.getBlue());
-			lastGeneratedStyle = new TableStyle(rgbColor, ColorSchemaGenerator.SCHEMAS.DEFAULT, BorderStyleEnum.FULL, ColorConstants.black.getRGB(), false);
+			
+			lastGeneratedStyle = getDefaultStyle();
 		}
 		return lastGeneratedStyle;
 	}

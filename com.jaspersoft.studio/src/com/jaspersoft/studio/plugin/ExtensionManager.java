@@ -40,6 +40,7 @@ import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
+import com.jaspersoft.studio.templates.TemplateProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExtensionManager {
@@ -154,6 +155,37 @@ public class ExtensionManager {
 		return defaultFactory;
 	}
 
+	
+	/**
+	 * Returns the list of contributed template provider, on the extension point templateProviderSupport
+	 * 
+	 * @return the list of contributed template provider, it can be empty but not null
+	 */
+	public List<TemplateProvider> getTemplateProviders() {
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				JaspersoftStudioPlugin.PLUGIN_ID, "templateProviderSupport"); //$NON-NLS-1$ 
+
+		ArrayList<TemplateProvider> providersList = new ArrayList<TemplateProvider>();
+		for (IConfigurationElement el : config) {
+				
+				Object defaultSupportClazz;
+				try {
+					defaultSupportClazz = el.createExecutableExtension("providerClass");
+					if (defaultSupportClazz instanceof TemplateProvider) {
+						providersList.add((TemplateProvider) defaultSupportClazz);
+					}
+				} catch (CoreException e) {
+					JaspersoftStudioPlugin
+							.getInstance()
+							.getLog()
+							.log(
+									new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+											"An error occurred while trying to create the new class.", e));
+				}
+		}
+		return providersList;
+	}
+	
 	public List<PaletteGroup> getPaletteGroups() {
 		List<PaletteGroup> paletteGroup = new ArrayList<PaletteGroup>();
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(

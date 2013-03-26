@@ -316,7 +316,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 				UIUtils.showError(e);
 			} finally {
 				try {
-					is.close();
+					if (is != null) is.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

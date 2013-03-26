@@ -792,4 +792,11 @@
          </description>
       </wizard>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.templateProviderSupport">
+      <templateProvider
+            id="ExtendedTableProvider"
+            providerClass="com.jaspersoft.studio.components.engine.ExtendedTemplateProvider">
+      </templateProvider>
+   </extension>
 </plugin>
