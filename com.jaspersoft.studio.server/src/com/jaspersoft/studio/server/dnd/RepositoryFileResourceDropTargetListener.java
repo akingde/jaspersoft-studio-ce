@@ -65,19 +65,16 @@ public class RepositoryFileResourceDropTargetListener implements TransferDropTar
 
 	@Override
 	public void drop(DropTargetEvent event) {
-		// Last check before performing the drop...
-		String fileExt = Misc.nvl(FilenameUtils.getExtension(((String[])event.data)[0]).toLowerCase());
-		if(RepositoryDNDHelper.isDropOperationAllowed(fileExt) && 
-				event.item!=null && event.item.getData() instanceof MResource && 
-				event.data instanceof String[]){
-			MResource targetParentResource = (MResource) event.item.getData();
-			// FIXME - we should handle multiple files!
-			String fullFilename = ((String[])event.data)[0];
-			RepositoryDNDHelper.performDropOperation(targetParentResource, fullFilename);
-		} 
-		else {
-			event.feedback = DND.FEEDBACK_NONE;
-			event.detail = DND.DROP_NONE;
+		// Drop only the allowed items
+		String[] items = (String[])event.data;
+		for(String item : items){
+			String fileExt = Misc.nvl(FilenameUtils.getExtension(item).toLowerCase());
+			if(RepositoryDNDHelper.isDropOperationAllowed(fileExt) && 
+					event.item!=null && event.item.getData() instanceof MResource && 
+					event.data instanceof String[]){
+				MResource targetParentResource = (MResource) event.item.getData();
+				RepositoryDNDHelper.performDropOperation(targetParentResource, item);
+			} 
 		}
 	}
 

@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.server.dnd;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,11 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.osgi.util.NLS;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.WSClientHelper;
@@ -87,7 +92,7 @@ public final class RepositoryDNDHelper {
 		return ALLOWED_EXTENSIONS.contains(extension.toLowerCase());		
 	}
 
-	public static void performDropOperation(MResource targetParentResource, String fullFilename){
+	public static void performDropOperation(MResource targetParentResource, final String fullFilename){
 		File file = new File(fullFilename);
 		String suggestedId = FilenameUtils.removeExtension(file.getName());
 		String suggestedName = FilenameUtils.removeExtension(file.getName());
@@ -105,10 +110,24 @@ public final class RepositoryDNDHelper {
 			ResourceDescriptorUtil.setProposedResourceDescriptorIDAndName(
 					childrenDescriptors, newRD, suggestedId, suggestedName);
 			// Create and save the resource
-			AFileResource fileResource = createNewFileResource(targetParentResource,newRD, fileExt);
+			final AFileResource fileResource = createNewFileResource(targetParentResource,newRD, fileExt);
 			fileResource.setFile(file);
-			// FIXME - We should use a better progress monitor...
-			WSClientHelper.saveResource(fileResource, new NullProgressMonitor());
+			ProgressMonitorDialog pm = new ProgressMonitorDialog(UIUtils.getShell());
+			pm.run(true, true, new IRunnableWithProgress() {
+				public void run(IProgressMonitor monitor)
+						throws InvocationTargetException, InterruptedException {
+					try {
+						monitor.beginTask(
+								NLS.bind(Messages.RepositoryDNDHelper_SavingResourceTask,fullFilename), IProgressMonitor.UNKNOWN);
+						WSClientHelper.saveResource(fileResource, new NullProgressMonitor());
+					} catch (Throwable e) {
+						throw new InvocationTargetException(e);
+					} finally {
+						monitor.done();
+					}
+				}
+
+			});
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}

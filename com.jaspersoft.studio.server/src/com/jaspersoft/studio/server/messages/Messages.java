@@ -193,6 +193,7 @@ public class Messages extends NLS {
 	public static String ReportRunControler_totaltime;
 	public static String RepositoryDNDHelper_NewFileResourceErrMsg;
 	public static String RepositoryDNDHelper_NewResourceDescriptorErrMsg;
+	public static String RepositoryDNDHelper_SavingResourceTask;
 	public static String RUnitLocationPage_addreportunit_button;
 	public static String RUnitLocationPage_description;
 	public static String RUnitLocationPage_lblreportunit;
