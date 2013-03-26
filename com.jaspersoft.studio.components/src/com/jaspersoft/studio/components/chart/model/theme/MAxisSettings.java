@@ -124,6 +124,8 @@ public class MAxisSettings extends APropertyNode {
 		tc.setDescription("Tick Count");
 		desc.add(tc);
 
+		PadUtil.createPropertyDescriptors(desc, defaultsMap, PROP_LABEL, "Label Inset");
+
 		PadUtil.createPropertyDescriptors(desc, defaultsMap, "Tick Label Inset");
 
 		defaultsMap.put(AxisSettings.PROPERTY_visible, Boolean.TRUE);
@@ -134,6 +136,7 @@ public class MAxisSettings extends APropertyNode {
 		defaultsMap.put(AxisSettings.PROPERTY_axisIntegerUnit, Boolean.TRUE);
 	}
 
+	private static final String PROP_LABEL = "LABEL";
 	private MFont lFont;
 	private MFont tlFont;
 
@@ -174,6 +177,9 @@ public class MAxisSettings extends APropertyNode {
 		Object pad = PadUtil.getPropertyValue(id, ts.getTickLabelInsets());
 		if (pad != null)
 			return pad;
+		pad = PadUtil.getPropertyValue(id, ts.getLabelInsets(), PROP_LABEL);
+		if (pad != null)
+			return pad;
 		return null;
 	}
 
@@ -210,6 +216,10 @@ public class MAxisSettings extends APropertyNode {
 		RectangleInsets ri = PadUtil.setPropertyValue(id, value, ts.getTickLabelInsets());
 		if (ri != null)
 			ts.setTickLabelInsets(ri);
+
+		ri = PadUtil.setPropertyValue(id, value, ts.getLabelInsets());
+		if (ri != null)
+			ts.setLabelInsets(ri);
 	}
 
 }

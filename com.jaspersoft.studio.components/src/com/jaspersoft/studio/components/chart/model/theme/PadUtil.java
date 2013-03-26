@@ -24,52 +24,64 @@ public class PadUtil {
 	}
 
 	public static void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap, String prefix) {
-		DoublePropertyDescriptor padTopD = new DoublePropertyDescriptor(PadUtil.PADDING_TOP, prefix + " Top");
+		createPropertyDescriptors(desc, defaultsMap, "", prefix);
+	}
+
+	public static void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap, String preID, String prefix) {
+		DoublePropertyDescriptor padTopD = new DoublePropertyDescriptor(preID + PadUtil.PADDING_TOP, prefix + " Top");
 		padTopD.setDescription(Messages.common_padding);
 		desc.add(padTopD);
 
-		DoublePropertyDescriptor padBottomD = new DoublePropertyDescriptor(PadUtil.PADDING_BOTTOM, prefix + " Bottom");
+		DoublePropertyDescriptor padBottomD = new DoublePropertyDescriptor(preID + PadUtil.PADDING_BOTTOM, prefix + " Bottom");
 		padBottomD.setDescription(Messages.common_padding);
 		desc.add(padBottomD);
 
-		DoublePropertyDescriptor padLeftD = new DoublePropertyDescriptor(PadUtil.PADDING_LEFT, prefix + " Left");
+		DoublePropertyDescriptor padLeftD = new DoublePropertyDescriptor(preID + PadUtil.PADDING_LEFT, prefix + " Left");
 		padLeftD.setDescription(Messages.common_padding);
 		desc.add(padLeftD);
 
-		DoublePropertyDescriptor padRightD = new DoublePropertyDescriptor(PadUtil.PADDING_RIGHT, prefix + " Right");
+		DoublePropertyDescriptor padRightD = new DoublePropertyDescriptor(preID + PadUtil.PADDING_RIGHT, prefix + " Right");
 		padRightD.setDescription(Messages.common_padding);
 		desc.add(padRightD);
 
-		defaultsMap.put(PadUtil.PADDING_TOP, 0.0d);
-		defaultsMap.put(PadUtil.PADDING_BOTTOM, 0.0d);
-		defaultsMap.put(PadUtil.PADDING_LEFT, 0.0d);
-		defaultsMap.put(PadUtil.PADDING_RIGHT, 0.0d);
+		defaultsMap.put(preID + PadUtil.PADDING_TOP, 0.0d);
+		defaultsMap.put(preID + PadUtil.PADDING_BOTTOM, 0.0d);
+		defaultsMap.put(preID + PadUtil.PADDING_LEFT, 0.0d);
+		defaultsMap.put(preID + PadUtil.PADDING_RIGHT, 0.0d);
 	}
 
 	public static Object getPropertyValue(Object id, RectangleInsets ri) {
+		return getPropertyValue(id, ri, "");
+	}
+
+	public static Object getPropertyValue(Object id, RectangleInsets ri, String preID) {
 		if (ri == null)
 			ri = PadUtil.RECTANGLE_INSETS;
-		if (id.equals(PadUtil.PADDING_TOP))
+		if (id.equals(preID + PadUtil.PADDING_TOP))
 			return ri.getTop();
-		if (id.equals(PadUtil.PADDING_BOTTOM))
+		if (id.equals(preID + PadUtil.PADDING_BOTTOM))
 			return ri.getBottom();
-		if (id.equals(PadUtil.PADDING_LEFT))
+		if (id.equals(preID + PadUtil.PADDING_LEFT))
 			return ri.getLeft();
-		if (id.equals(PadUtil.PADDING_RIGHT))
+		if (id.equals(preID + PadUtil.PADDING_RIGHT))
 			return ri.getRight();
 		return null;
 	}
 
 	public static RectangleInsets setPropertyValue(Object id, Object value, RectangleInsets ri) {
+		return setPropertyValue(id, value, ri, "");
+	}
+
+	public static RectangleInsets setPropertyValue(Object id, Object value, RectangleInsets ri, String preID) {
 		if (ri == null)
 			ri = PadUtil.RECTANGLE_INSETS;
-		if (id.equals(PadUtil.PADDING_TOP))
+		if (id.equals(preID + PadUtil.PADDING_TOP))
 			return new RectangleInsets((Double) value, ri.getLeft(), ri.getBottom(), ri.getRight());
-		else if (id.equals(PadUtil.PADDING_BOTTOM))
+		else if (id.equals(preID + PadUtil.PADDING_BOTTOM))
 			return new RectangleInsets(ri.getTop(), ri.getLeft(), (Double) value, ri.getRight());
-		else if (id.equals(PadUtil.PADDING_LEFT))
+		else if (id.equals(preID + PadUtil.PADDING_LEFT))
 			return new RectangleInsets(ri.getTop(), (Double) value, ri.getBottom(), ri.getRight());
-		else if (id.equals(PadUtil.PADDING_RIGHT))
+		else if (id.equals(preID + PadUtil.PADDING_RIGHT))
 			return new RectangleInsets(ri.getTop(), ri.getLeft(), ri.getBottom(), (Double) value);
 		return null;
 	}
