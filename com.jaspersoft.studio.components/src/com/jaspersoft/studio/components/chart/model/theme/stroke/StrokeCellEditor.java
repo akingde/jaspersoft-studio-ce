@@ -20,7 +20,6 @@ import java.awt.Stroke;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -36,13 +35,10 @@ public class StrokeCellEditor extends DialogCellEditor {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		StrokeEditor wizard = new StrokeEditor();
-		wizard.setValue((Stroke) getValue());
-		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
-		dialog.create();
-		if (dialog.open() == Dialog.OK) {
-			return wizard.getValue();
-		}
+		StrokeDialog dialog = new StrokeDialog(cellEditorWindow.getShell());
+		dialog.setValue((Stroke) getValue());
+		if (dialog.open() == Dialog.OK)
+			return dialog.getValue();
 		return null;
 	}
 

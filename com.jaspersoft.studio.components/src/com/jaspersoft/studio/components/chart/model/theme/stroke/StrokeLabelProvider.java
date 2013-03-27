@@ -15,8 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.theme.stroke;
 
-import net.sf.jasperreports.chartthemes.simple.ColorProvider;
-import net.sf.jasperreports.chartthemes.simple.GradientPaintProvider;
+import java.awt.BasicStroke;
 
 import org.eclipse.jface.viewers.LabelProvider;
 
@@ -34,10 +33,14 @@ public class StrokeLabelProvider extends LabelProvider {
 	public String getText(Object element) {
 		if (element == null)
 			return "";
-		if (element instanceof ColorProvider)
-			return "[Color: " + ((ColorProvider) element).getColor() + "]";
-		if (element instanceof GradientPaintProvider)
-			return "[Color: " + ((GradientPaintProvider) element).getColor1() + ", " + ((GradientPaintProvider) element).getColor2() + "]";
+		if (element instanceof BasicStroke) {
+			BasicStroke bs = (BasicStroke) element;
+			float d = 1f;
+			float[] da = bs.getDashArray();
+			if (da != null && da.length > 0)
+				d = da[0];
+			return "[" + ((BasicStroke) element).getLineWidth() + "," + d + "," + ((BasicStroke) element).getDashPhase() + "]";
+		}
 		return element.toString();
 	}
 
