@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.callout.MCallout;
+import com.jaspersoft.studio.components.table.action.EditStyleAction;
 import com.jaspersoft.studio.components.table.editor.TableEditor;
 import com.jaspersoft.studio.components.table.figure.CellFigure;
 import com.jaspersoft.studio.components.table.figure.EmptyCellFigure;
@@ -611,6 +612,7 @@ public class TableComponentFactory implements IComponentFactory {
 		// lst.add(new CreateColumnAction(part));
 		// lst.add(new CreateColumnGroupAction(part));
 		// lst.add(new CreateColumnCellAction(part));
+		lst.add(new EditStyleAction(part));
 		return lst;
 	}
 
@@ -629,6 +631,7 @@ public class TableComponentFactory implements IComponentFactory {
 		lst.add(AppContextMenuProvider.SEPARATOR);
 		lst.add(DeleteColumnAction.ID);
 		lst.add(DeleteColumnCellAction.ID);
+		lst.add(EditStyleAction.ID);
 		return lst;
 	}
 

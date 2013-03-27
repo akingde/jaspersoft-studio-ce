@@ -56,6 +56,15 @@ public abstract class ApplyStyleAction {
 	}
 	
 	/**
+	 * Set a new style
+	 * 
+	 * @param style the new TemplateStyle
+	 */
+	protected void setStyle(TemplateStyle style){
+		this.style = style;
+	}
+	
+	/**
 	 * Return the target element
 	 * 
 	 * @return the model of the element

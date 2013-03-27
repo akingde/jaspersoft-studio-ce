@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
@@ -26,6 +27,7 @@ import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -40,7 +42,7 @@ import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
- * class to apply a TemplateStyle (with type TableStyle) to a Table
+ * class to apply a TemplateStyle (with type TableStyle) to a Table or to update it 
  * 
  * @author Orlandin Marco
  *
@@ -63,8 +65,8 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	}
 	
 	/**
-	 * Build the class, instead to build the styles from a table style 
-	 * it receive directly the styles for the table
+	 * Build the class, instead to build the styles from a TableStyle
+	 * it receive directly the list of styles to apply the table
 	 * 
 	 * @param styles list of styles that will be applied on the table, the order is important
 	 * and it should be: Table Style, Table Header, Column Header and Detail.
@@ -84,10 +86,21 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	public void applayStyle(JasperDesign design) 
 	{	
 		List<JRDesignStyle> styleList = createStyles(design); 
+		setCellStyles(styleList);
+	}
+	
+	/**
+	 * 
+	 * Applay the list of styles to the cell of the table
+	 * 
+	 * @param styleList list of styles that will be applied on the table, the order is important
+	 * and it should be: Table Style (unused), Table Header, Column Header and Detail.
+	 */
+	private void setCellStyles(List<JRDesignStyle> styleList){
 		StandardTable table = getStandardTable(getElement());
 		List<BaseColumn> columns = TableUtil.getAllColumns(table);
 		for(BaseColumn col : columns){
-			// Set the cel color
+			// Seting the cell style
 			DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
 			if (colHeadCell != null)
 				colHeadCell.setStyle(styleList.get(2));
@@ -104,30 +117,40 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 				DesignCell detCell = (DesignCell) ((StandardColumn)col).getDetailCell();
 				if (detCell != null) detCell.setStyle(styleList.get(3));
 			}
-			// Color setted
+			// Style set
 		}
 	}
 	
 	/**
-	 * Use the table to reabuild the styles list from it
+	 * Extract the list of styles actually used on the table 
+	 * 
+	 * @return the list of styles actually used in the cell of the table in this order 
+	 * null (for retrocompatibility), Table Header, Column Header and Detail.
 	 */
-    public void rebuildStylesFromTable()
-    {
-    	StandardTable jrTable = (StandardTable)((JRDesignComponentElement)getElement()).getComponent();
-    	List<BaseColumn> columns = TableUtil.getAllColumns(jrTable);
+	public JRDesignStyle[] getStylesFromTable(){
+		StandardTable jrTable = getStandardTable(getElement());
+		List<BaseColumn> columns = TableUtil.getAllColumns(jrTable);
     	JRDesignStyle[] stylesArray = new JRDesignStyle[4];
     	if (columns.size()>0){
     		BaseColumn standardCol = columns.get(0);
     		if (standardCol.getColumnFooter() != null) stylesArray[2] = (JRDesignStyle)standardCol.getColumnFooter().getStyle();
     		if (standardCol.getColumnHeader() != null) stylesArray[2] = (JRDesignStyle)standardCol.getColumnFooter().getStyle();
-    		if (standardCol.getTableHeader() != null) stylesArray[1] = (JRDesignStyle)standardCol.getColumnFooter().getStyle();
-    		if (standardCol.getTableFooter() != null) stylesArray[1] = (JRDesignStyle)standardCol.getColumnFooter().getStyle();
+    		if (standardCol.getTableHeader() != null) stylesArray[1] = (JRDesignStyle)standardCol.getTableHeader().getStyle();
+    		if (standardCol.getTableFooter() != null) stylesArray[1] = (JRDesignStyle)standardCol.getTableFooter().getStyle();
     		if (standardCol instanceof StandardColumn){
 				DesignCell detCell = (DesignCell) ((StandardColumn)standardCol).getDetailCell();
 				if (detCell != null)  stylesArray[3] = (JRDesignStyle)detCell.getStyle();
     		}
     	}
-	    styles = new ArrayList<JRDesignStyle>(Arrays.asList(stylesArray));
+	    return stylesArray;
+	}
+	
+	/**
+	 * Use the table to rebuild the styles list from it
+	 */
+    public void rebuildStylesFromTable()
+    {
+    	styles =  new ArrayList<JRDesignStyle>(Arrays.asList(getStylesFromTable()));
     }
 	
     /**
@@ -141,132 +164,189 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 		StandardTable jrTable = (StandardTable) jrElement.getComponent();
 		return jrTable;
 	}
+	
+	/**
+	 * Update the style of the table with a new TableStyle
+	 * 
+	 * @param design the JasperDesign of the report
+	 * @param newStyles the new style template for the table
+	 * @param updateOldStyles true if the new styles will overwrite the old ones, false if the old ones will keep and 
+	 * the new ones will have a different name and will be applied to the table with the different name
+	 * @param removeOldStyles if updateOldStyles is false, after the new styles are created the old one are deleted
+	 */
+	public void updateStyle(JasperDesign design, TableStyle newStyles, boolean updatOldStyles, boolean removeOldStyles){
+		updateStyle(design, createStyles(design, false), updatOldStyles, removeOldStyles);
+	}
+	
+	/**
+	 * Update the style of the table with a new list of styles
+	 * 
+	 * @param design the JasperDesign of the report
+	 * @param newStyles list of styles that will be applied on the table, the order is important
+	 * and it should be: Table Style, Table Header, Column Header and Detail.
+	 * @param updateOldStyles true if the new styles will overwrite the old ones, false if the old ones will keep and 
+	 * the new ones will have a different name and will be applied to the table with the different name
+	 * @param removeOldStyles if updateOldStyles is false, after the new styles are created the old one are deleted
+	 */
+	public void updateStyle(JasperDesign design, List<JRDesignStyle> newStyles, boolean updatOldStyles, boolean removeOldStyles){
+		JRDesignStyle[] actualStyles = getStylesFromTable();
+		CompoundCommand commands = new CompoundCommand();
+		if (updatOldStyles){
+			for(int i=0; i<actualStyles.length; i++){
+				JRDesignStyle style = actualStyles[i];
+				if (style != null){
+					JRDesignStyle updatedStyle = newStyles.get(i);
+					updatedStyle.setName(style.getName());
+					design.removeStyle(style.getName());
+					commands.add(new CreateStyleCommand(design, updatedStyle));
+				}
+			}
+		} else {
+			styles = newStyles;
+			Map<String,JRStyle> stylesMap = design.getStylesMap();
+			if (removeOldStyles){
+				JRDesignStyle[] oldStyles = getStylesFromTable();
+				for(JRDesignStyle style : oldStyles){
+					if (style != null) design.removeStyle(style);
+				}
+			}
+			for(JRDesignStyle style : newStyles){
+				if (style != null && stylesMap.containsKey(style.getName())) commands.add(new CreateStyleCommand(design, style));
+			}
+		}
+		commands.execute();
+		setCellStyles(newStyles);
+	}
+		
+	/**
+	 * Get a base name and check if  one the composed names of the single styles (basename + _TH or _CD or _TD) are already used
+	 * 
+	 * @param styleMap the style map
+	 * @param baseName the base name
+	 * @return true if all the composed names are available, false otherwise
+	 */
+	private boolean stylePresent(Map<String,JRStyle> styleMap, String baseName){
+		return (styleMap.containsKey(baseName+"_TH") || styleMap.containsKey(baseName+"_CH") || styleMap.containsKey(baseName+"_TD"));
+	}
+
+	/**
+	 * Starting from a TableStyle it generate a list of styles that will be applied to the table.
+	 * It can also add them to the report
+	 * 
+	 * @param jd the jasperdesign
+	 * @param addStylesToReport true if the generated styles will also be added to the report, otherwise false
+	 * @return a list of style that can be applied to the table
+	 */
+	private List<JRDesignStyle> createStyles(JasperDesign jd, boolean addStylesToReport) 
+	{
+    	String baseName = "Table";
+    	TableStyle style = (TableStyle)getStyle();
+    	CompoundCommand commands = new CompoundCommand();
+		for (int i = 0;; i++) {
+			String name = baseName;
+			if (i > 0) {
+				name = baseName + " " + i;
+			}
+
+			if (!(stylePresent(jd.getStylesMap(),name))) {
+				baseName = name;
+				break;
+			}
+		}
+    	
+		ArrayList<JRDesignStyle> result = new ArrayList<JRDesignStyle>();
+
+		result.add(null);
+
+        JRDesignStyle tableHeaderStyle=  new JRDesignStyle();
+        tableHeaderStyle.setName(baseName + "_TH");
+
+        if (style.getBorderStyle() == BorderStyleEnum.FULL)
+        {
+            setBorderColor(tableHeaderStyle, style.getBorderColor());
+            setBorderWidth(tableHeaderStyle, 0.5f);
+        }
+        else
+        {
+            tableHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
+            tableHeaderStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
+            tableHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
+            tableHeaderStyle.getLineBox().getTopPen().setLineWidth(0.5f);
+        }
+
+        tableHeaderStyle.setMode(ModeEnum.OPAQUE);
+        tableHeaderStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_TABLE_HEADER));
+
+        commands.add(new CreateStyleCommand(jd, tableHeaderStyle));
+        result.add(tableHeaderStyle);
+
+        JRDesignStyle columnHeaderStyle=  new JRDesignStyle();
+        columnHeaderStyle.setName(baseName + "_CH");
+
+        if (style.getBorderStyle() == BorderStyleEnum.FULL)
+        {
+            setBorderColor(columnHeaderStyle, style.getBorderColor());
+            setBorderWidth(columnHeaderStyle, 0.5f);
+        }
+        else
+        {
+            columnHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
+            columnHeaderStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
+            columnHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
+            columnHeaderStyle.getLineBox().getTopPen().setLineWidth(0.5f);
+        }
+
+        columnHeaderStyle.setMode(ModeEnum.OPAQUE);
+        columnHeaderStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_COL_HEADER));
+
+        commands.add(new CreateStyleCommand(jd, columnHeaderStyle));
+        result.add(columnHeaderStyle);
+
+        JRDesignStyle cellStyle=  new JRDesignStyle();
+        cellStyle.setName(baseName + "_TD");
+
+        if (style.getBorderStyle() == BorderStyleEnum.FULL)
+        {
+            setBorderColor(cellStyle, style.getBorderColor());
+            setBorderWidth(cellStyle, 0.5f);
+        }
+        else
+        {
+            cellStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
+            cellStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
+            cellStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
+            cellStyle.getLineBox().getTopPen().setLineWidth(0.5f);
+        }
+
+        cellStyle.setMode(ModeEnum.OPAQUE);
+        cellStyle.setBackcolor(Color.WHITE);
+
+
+        if (style.hasAlternateColor())
+        {
+            JRDesignConditionalStyle condStyle = new JRDesignConditionalStyle();
+            condStyle.setConditionExpression(ModelUtils.createExpression("new Boolean($V{REPORT_COUNT}.intValue()%2==0)"));
+            condStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_DETAIL));
+            cellStyle.addConditionalStyle(condStyle);
+        }
+
+        commands.add(new CreateStyleCommand(jd, cellStyle));
+        result.add(cellStyle);
+        if (addStylesToReport) commands.execute();
+        return result;
+	}
 
 	/**
 	 * Starting from a TableStyle it generate a list of styles that will be applied to the table.
 	 * For every style generated will be executed an addCommand to add them to the report
 	 * 
 	 * @param jd the jasperdesign
-	 * @param style the TableStyle from where all the styles for the table will be generated
 	 * @return a list of style that can be applied to the table
 	 */
 	@Override
-	public List<JRDesignStyle> createStyles(JasperDesign jd) 
-	{
-		if (styles == null){
-	    	String baseName = "Table";
-	    	TableStyle style = (TableStyle)getStyle();
-	    	CompoundCommand commands = new CompoundCommand();
-			for (int i = 0;; i++) {
-				String name = baseName;
-				if (i > 0) {
-					name = baseName + " " + i;
-				}
-	
-				if (!(jd.getStylesMap().containsKey(name))) {
-					baseName = name;
-					break;
-				}
-			}
-	    	
-	        styles = new ArrayList<JRDesignStyle>();
-	
-	        JRDesignStyle tableStyle=  new JRDesignStyle();
-	        tableStyle.setName(baseName);
-	
-	        if (style.getBorderStyle() == BorderStyleEnum.FULL || style.getBorderStyle() == BorderStyleEnum.PARTIAL_VERTICAL)
-	        {
-	            setBorderColor(tableStyle, style.getBorderColor());
-	            setBorderWidth(tableStyle, 1.0f);
-	        }
-	        else
-	        {
-	            tableStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
-	            tableStyle.getLineBox().getTopPen().setLineWidth(1.0f);
-	            tableStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
-	            tableStyle.getLineBox().getBottomPen().setLineWidth(1.0f);
-	        }
-	
-	        commands.add(new CreateStyleCommand(jd, tableStyle));
-	        styles.add(tableStyle);
-	
-	        JRDesignStyle tableHeaderStyle=  new JRDesignStyle();
-	        tableHeaderStyle.setName(baseName + "_TH");
-	
-	        if (style.getBorderStyle() == BorderStyleEnum.FULL)
-	        {
-	            setBorderColor(tableHeaderStyle, style.getBorderColor());
-	            setBorderWidth(tableHeaderStyle, 0.5f);
-	        }
-	        else
-	        {
-	            tableHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
-	            tableHeaderStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
-	            tableHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
-	            tableHeaderStyle.getLineBox().getTopPen().setLineWidth(0.5f);
-	        }
-	
-	        tableHeaderStyle.setMode(ModeEnum.OPAQUE);
-	        tableHeaderStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_TABLE_HEADER));
-	
-	        commands.add(new CreateStyleCommand(jd, tableHeaderStyle));
-	        styles.add(tableHeaderStyle);
-	
-	        JRDesignStyle columnHeaderStyle=  new JRDesignStyle();
-	        columnHeaderStyle.setName(baseName + "_CH");
-	
-	        if (style.getBorderStyle() == BorderStyleEnum.FULL)
-	        {
-	            setBorderColor(columnHeaderStyle, style.getBorderColor());
-	            setBorderWidth(columnHeaderStyle, 0.5f);
-	        }
-	        else
-	        {
-	            columnHeaderStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
-	            columnHeaderStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
-	            columnHeaderStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
-	            columnHeaderStyle.getLineBox().getTopPen().setLineWidth(0.5f);
-	        }
-	
-	        columnHeaderStyle.setMode(ModeEnum.OPAQUE);
-	        columnHeaderStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_COL_HEADER));
-	
-	        commands.add(new CreateStyleCommand(jd, columnHeaderStyle));
-	        styles.add(columnHeaderStyle);
-	
-	        JRDesignStyle cellStyle=  new JRDesignStyle();
-	        cellStyle.setName(baseName + "_TD");
-	
-	        if (style.getBorderStyle() == BorderStyleEnum.FULL)
-	        {
-	            setBorderColor(cellStyle, style.getBorderColor());
-	            setBorderWidth(cellStyle, 0.5f);
-	        }
-	        else
-	        {
-	            cellStyle.getLineBox().getBottomPen().setLineColor(style.getBorderColor());
-	            cellStyle.getLineBox().getBottomPen().setLineWidth(0.5f);
-	            cellStyle.getLineBox().getTopPen().setLineColor(style.getBorderColor());
-	            cellStyle.getLineBox().getTopPen().setLineWidth(0.5f);
-	        }
-	
-	        cellStyle.setMode(ModeEnum.OPAQUE);
-	        cellStyle.setBackcolor(Color.WHITE);
-	
-	
-	        if (style.hasAlternateColor())
-	        {
-	            JRDesignConditionalStyle condStyle = new JRDesignConditionalStyle();
-	            condStyle.setConditionExpression(ModelUtils.createExpression("new Boolean($V{REPORT_COUNT}.intValue()%2==0)"));
-	            condStyle.setBackcolor(style.getColorValue(TableStyle.COLOR_DETAIL));
-	            cellStyle.addConditionalStyle(condStyle);
-	        }
-	
-	        commands.add(new CreateStyleCommand(jd, cellStyle));
-	        styles.add(cellStyle);
-	        commands.execute();
-		}
-        return styles;
+	public List<JRDesignStyle> createStyles(JasperDesign jd) {
+		if (styles == null) return createStyles(jd, true);
+		return styles;
 	}
 
 }

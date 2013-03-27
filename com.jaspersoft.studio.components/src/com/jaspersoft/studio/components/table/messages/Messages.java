@@ -31,6 +31,13 @@ public class Messages extends NLS {
 	public static String CreateColumnAction_create_column_tool_tip;
 	public static String CreateColumnCellAction_create_column;
 	public static String CreateColumnCellAction_create_column_tool_tip;
+	public static String EditStyleAction_actionName;
+	public static String EditStyleAction_dialogCancelButton;
+	public static String EditStyleAction_dialogNewButton;
+	public static String EditStyleAction_dialogText;
+	public static String EditStyleAction_dialogTitle;
+	public static String EditStyleAction_dialogUpdateButton;
+	public static String EditStyleAction_okButton;
 	public static String MCell_cell_properties_category;
 	public static String MCell_height;
 	public static String MCell_line_box;

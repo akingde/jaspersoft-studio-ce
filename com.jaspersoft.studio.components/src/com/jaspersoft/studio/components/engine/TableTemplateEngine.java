@@ -191,13 +191,13 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		JRDesignStyle[] result = new JRDesignStyle[4];
 		for(JRStyle style : styleArray){
 			if(style instanceof JRDesignStyle){
-				if (style.getName().equals("Table")) result[0] = (JRDesignStyle)style;
-				else if (style.getName().equals("Table_TH")) result[1] = (JRDesignStyle)style;
+				//if (style.getName().equals("Table")) result[0] = (JRDesignStyle)style; else
+				if (style.getName().equals("Table_TH")) result[1] = (JRDesignStyle)style;
 				else if (style.getName().equals("Table_CH")) result[2] = (JRDesignStyle)style;
 				else if (style.getName().equals("Table_TD")) result[3] = (JRDesignStyle)style;
 			}
 		}
-		if (result[0] == null || result[1] == null || result[2] == null || result[3] == null ) return null;
+		if (result[1] == null || result[2] == null || result[3] == null ) return null;
 		else return new ArrayList<JRDesignStyle>(Arrays.asList(result));
 	}
 	

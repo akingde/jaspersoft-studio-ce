@@ -111,6 +111,11 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	private TableStyle lastGeneratedStyle = null;
 	
 	/**
+	 * Composite of the bottom area (the table section)
+	 */
+	private Composite bottomComposite;
+	
+	/**
 	 * Listener called when a control is modified, cause the regeneration of the 
 	 * lastGeneratedStyle and the update of the preview
 	 */
@@ -319,22 +324,31 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	}
 	
 	/**
+	 * Enable or disable the bottom composite where are the table sections
+	 * 
+	 * @param enabled true if it is enabled, false otherwise
+	 */
+	public void setEnabledBottomPanel(boolean enabled){
+		bottomComposite.setEnabled(enabled);
+	}
+	
+	/**
 	 * Create the bottom area of the dialog, where there are the option on the section 
 	 * that will be created
 	 * 
 	 * @param parent parent of the bottom area
 	 */
 	private void createBottom(Composite parent){
-		Composite composite = new Composite(parent, SWT.NONE);
+		bottomComposite = new Composite(parent, SWT.NONE);
 		GridData bottomData = new GridData(GridData.FILL_HORIZONTAL);
 		bottomData.horizontalSpan = 2;
-		composite.setLayoutData(bottomData);
+		bottomComposite.setLayoutData(bottomData);
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
-		composite.setLayout(layout);
+		bottomComposite.setLayout(layout);
 		
 
-		final Button addTHeader = new Button(composite, SWT.CHECK);
+		final Button addTHeader = new Button(bottomComposite, SWT.CHECK);
 		addTHeader.setText(Messages.TableWizardLayoutPage_add_table_header);
 		addTHeader.setSelection(isTableHeader);
 		addTHeader.addSelectionListener(new SelectionListener() {
@@ -348,7 +362,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 			}
 		});
 
-		final Button addCHeader = new Button(composite, SWT.CHECK);
+		final Button addCHeader = new Button(bottomComposite, SWT.CHECK);
 		addCHeader.setText(Messages.TableWizardLayoutPage_add_column_header);
 		addCHeader.setSelection(isColumnHeader);
 		addCHeader.addSelectionListener(new SelectionListener() {
@@ -362,7 +376,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 			}
 		});
 
-		final Button addGHeader = new Button(composite, SWT.CHECK);
+		final Button addGHeader = new Button(bottomComposite, SWT.CHECK);
 		addGHeader.setText(Messages.TableWizardLayoutPage_add_group_header);
 		addGHeader.setSelection(isGroupHeader);
 		addGHeader.addSelectionListener(new SelectionListener() {
@@ -376,7 +390,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 			}
 		});
 
-		final Button addGFooter = new Button(composite, SWT.CHECK);
+		final Button addGFooter = new Button(bottomComposite, SWT.CHECK);
 		addGFooter.setText(Messages.TableWizardLayoutPage_add_group_footer);
 		addGFooter.setSelection(isGroupFooter);
 		addGFooter.addSelectionListener(new SelectionListener() {
@@ -390,7 +404,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 			}
 		});
 
-		final Button addCFooter = new Button(composite, SWT.CHECK);
+		final Button addCFooter = new Button(bottomComposite, SWT.CHECK);
 		addCFooter.setText(Messages.TableWizardLayoutPage_add_column_footer);
 		addCFooter.setSelection(isColumnFooter);
 		addCFooter.addSelectionListener(new SelectionListener() {
@@ -404,7 +418,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 			}
 		});
 
-		final Button addTFooter = new Button(composite, SWT.CHECK);
+		final Button addTFooter = new Button(bottomComposite, SWT.CHECK);
 		addTFooter.setText(Messages.TableWizardLayoutPage_add_table_footer);
 		addTFooter.setSelection(isTableFooter);
 		addTFooter.addSelectionListener(new SelectionListener() {
