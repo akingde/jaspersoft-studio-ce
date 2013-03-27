@@ -35,6 +35,7 @@ import com.jaspersoft.studio.data.actions.EditDataAdapterAction;
 import com.jaspersoft.studio.data.actions.ExportDataAdapterAction;
 import com.jaspersoft.studio.data.actions.ImportDataAdapterAction;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.dnd.DataAdapterDragSourceListener;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.repository.actions.Separator;
@@ -129,7 +130,9 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 
 	@Override
 	public List<TransferDragSourceListener> getTransferDragSourceListeners(TreeViewer treeViewer) {
-		return new ArrayList<TransferDragSourceListener>(0);
+		ArrayList<TransferDragSourceListener> dragListeners = new ArrayList<TransferDragSourceListener>(1);
+		dragListeners.add(new DataAdapterDragSourceListener());
+		return dragListeners;
 	}
 
 	@Override
