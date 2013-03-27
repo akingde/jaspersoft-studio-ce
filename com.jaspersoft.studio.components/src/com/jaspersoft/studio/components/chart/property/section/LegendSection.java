@@ -46,7 +46,7 @@ public class LegendSection extends AbstractRealValueSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		Composite group = getWidgetFactory().createSection(parent,
-				Messages.LegendSection_Legend_Label, true, 2);
+				Messages.common_legend, true, 2);
 
 		createWidget4Property(group, JRBaseChart.PROPERTY_SHOW_LEGEND);
 

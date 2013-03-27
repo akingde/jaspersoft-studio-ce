@@ -37,6 +37,7 @@ public class Messages extends NLS {
 	public static String common_chart_wizard;
 	public static String common_chartaxis_wizard;
 	public static String common_circular;
+	public static String common_color;
 	public static String common_data_range_high_expression;
 	public static String common_data_range_low_expression;
 	public static String common_domain_axis_maxvalue_expression;
@@ -44,6 +45,7 @@ public class Messages extends NLS {
 	public static String common_end_date_expression;
 	public static String common_gantt;
 	public static String common_highlow_chart;
+	public static String common_imageprovider;
 	public static String common_item_hyperlink;
 	public static String common_item_label;
 	public static String common_key_expression;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.type.EdgeEnum;
+import net.sf.jasperreports.chartthemes.simple.PaintProvider;
 import net.sf.jasperreports.chartthemes.simple.TitleSettings;
 import net.sf.jasperreports.engine.JRConstants;
 
@@ -13,6 +14,8 @@ import org.jfree.ui.RectangleInsets;
 
 import com.jaspersoft.studio.components.chart.model.enums.JFreeChartHorizontalAlignmentEnum;
 import com.jaspersoft.studio.components.chart.model.enums.JFreeChartVerticalAlignmentEnum;
+import com.jaspersoft.studio.components.chart.model.theme.paintprovider.PaintProviderPropertyDescriptor;
+import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
@@ -95,6 +98,14 @@ public class MTittleSettings extends APropertyNode {
 
 		PadUtil.createPropertyDescriptors(desc, defaultsMap);
 
+		PaintProviderPropertyDescriptor fgPaint = new PaintProviderPropertyDescriptor(TitleSettings.PROPERTY_foregroundPaint, "Foreground Paint");
+		fgPaint.setDescription("Foreground paint");
+		desc.add(fgPaint);
+
+		PaintProviderPropertyDescriptor bgPaint = new PaintProviderPropertyDescriptor(TitleSettings.PROPERTY_backgroundPaint, "Background Paint");
+		bgPaint.setDescription("Background paint");
+		desc.add(bgPaint);
+
 		defaultsMap.put(TitleSettings.PROPERTY_showTitle, Boolean.TRUE);
 		defaultsMap.put(TitleSettings.PROPERTY_position, EdgeEnum.TOP);
 		defaultsMap.put(TitleSettings.PROPERTY_horizontalAlignment, JFreeChartHorizontalAlignmentEnum.LEFT);
@@ -121,6 +132,10 @@ public class MTittleSettings extends APropertyNode {
 			return hp.getEnumValue(JFreeChartHorizontalAlignmentEnum.getValue(ts.getHorizontalAlignment()));
 		if (id.equals(TitleSettings.PROPERTY_verticalAlignment))
 			return vp.getEnumValue(JFreeChartVerticalAlignmentEnum.getValue(ts.getVerticalAlignment()));
+		if (id.equals(TitleSettings.PROPERTY_backgroundPaint))
+			return ts.getBackgroundPaint();
+		if (id.equals(TitleSettings.PROPERTY_foregroundPaint))
+			return ts.getForegroundPaint();
 
 		Object pad = PadUtil.getPropertyValue(id, ts.getPadding());
 		if (pad != null)
@@ -141,6 +156,10 @@ public class MTittleSettings extends APropertyNode {
 			ts.setHorizontalAlignment(((JFreeChartHorizontalAlignmentEnum) posD.getEnumValue(value)).getJFreeChartValue());
 		else if (id.equals(TitleSettings.PROPERTY_verticalAlignment))
 			ts.setVerticalAlignment(((JFreeChartVerticalAlignmentEnum) posD.getEnumValue(value)).getJFreeChartValue());
+		else if (id.equals(TitleSettings.PROPERTY_backgroundPaint))
+			ts.setBackgroundPaint((PaintProvider) value);
+		else if (id.equals(TitleSettings.PROPERTY_foregroundPaint))
+			ts.setForegroundPaint((PaintProvider) value);
 
 		RectangleInsets ri = PadUtil.setPropertyValue(id, value, ts.getPadding());
 		if (ri != null)

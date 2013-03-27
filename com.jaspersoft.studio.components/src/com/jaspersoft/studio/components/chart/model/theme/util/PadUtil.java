@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.components.chart.model.theme;
+package com.jaspersoft.studio.components.chart.model.theme.util;
 
 import java.util.List;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.Map;
 import net.sf.jasperreports.chartthemes.simple.ChartSettings;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.jfree.ui.RectangleInsets;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -14,35 +15,39 @@ import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 public class PadUtil {
 
 	public static final RectangleInsets RECTANGLE_INSETS = new RectangleInsets(0, 0, 0, 0);
-	public static final String PADDING_RIGHT = ChartSettings.PROPERTY_padding + "RIGHT";
-	public static final String PADDING_LEFT = ChartSettings.PROPERTY_padding + "LEFT";
-	public static final String PADDING_BOTTOM = ChartSettings.PROPERTY_padding + "BOTTOM";
-	public static final String PADDING_TOP = ChartSettings.PROPERTY_padding + "TOP";
+	public static final String PADDING_RIGHT = ChartSettings.PROPERTY_padding + "RIGHT";//$NON-NLS-1$
+	public static final String PADDING_LEFT = ChartSettings.PROPERTY_padding + "LEFT";//$NON-NLS-1$
+	public static final String PADDING_BOTTOM = ChartSettings.PROPERTY_padding + "BOTTOM";//$NON-NLS-1$
+	public static final String PADDING_TOP = ChartSettings.PROPERTY_padding + "TOP";//$NON-NLS-1$
 
 	public static void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		createPropertyDescriptors(desc, defaultsMap, "Padding");
+		createPropertyDescriptors(desc, defaultsMap, Messages.common_padding);
 	}
 
 	public static void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap, String prefix) {
-		createPropertyDescriptors(desc, defaultsMap, "", prefix);
+		createPropertyDescriptors(desc, defaultsMap, "", prefix);//$NON-NLS-1$
 	}
 
 	public static void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap, String preID, String prefix) {
-		DoublePropertyDescriptor padTopD = new DoublePropertyDescriptor(preID + PadUtil.PADDING_TOP, prefix + " Top");
-		padTopD.setDescription(Messages.common_padding);
-		desc.add(padTopD);
+		PropertyDescriptor pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_TOP, Messages.common_top);
+		pd.setDescription(Messages.common_padding);
+		pd.setCategory(prefix);
+		desc.add(pd);
 
-		DoublePropertyDescriptor padBottomD = new DoublePropertyDescriptor(preID + PadUtil.PADDING_BOTTOM, prefix + " Bottom");
-		padBottomD.setDescription(Messages.common_padding);
-		desc.add(padBottomD);
+		pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_BOTTOM, Messages.common_bottom);
+		pd.setDescription(Messages.common_padding);
+		pd.setCategory(prefix);
+		desc.add(pd);
 
-		DoublePropertyDescriptor padLeftD = new DoublePropertyDescriptor(preID + PadUtil.PADDING_LEFT, prefix + " Left");
-		padLeftD.setDescription(Messages.common_padding);
-		desc.add(padLeftD);
+		pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_LEFT, Messages.common_left);
+		pd.setDescription(Messages.common_padding);
+		pd.setCategory(prefix);
+		desc.add(pd);
 
-		DoublePropertyDescriptor padRightD = new DoublePropertyDescriptor(preID + PadUtil.PADDING_RIGHT, prefix + " Right");
-		padRightD.setDescription(Messages.common_padding);
-		desc.add(padRightD);
+		pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_RIGHT, Messages.common_right);
+		pd.setDescription(Messages.common_padding);
+		pd.setCategory(prefix);
+		desc.add(pd);
 
 		defaultsMap.put(preID + PadUtil.PADDING_TOP, 0.0d);
 		defaultsMap.put(preID + PadUtil.PADDING_BOTTOM, 0.0d);
@@ -69,7 +74,7 @@ public class PadUtil {
 	}
 
 	public static RectangleInsets setPropertyValue(Object id, Object value, RectangleInsets ri) {
-		return setPropertyValue(id, value, ri, "");
+		return setPropertyValue(id, value, ri, "");//$NON-NLS-1$
 	}
 
 	public static RectangleInsets setPropertyValue(Object id, Object value, RectangleInsets ri, String preID) {

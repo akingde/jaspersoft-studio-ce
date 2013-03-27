@@ -203,7 +203,7 @@ public class Messages extends NLS {
 	public static String BordersSection_all_borders_tool_tip;
 	public static String BordersSection_border;
 	public static String BordersSection_bottom_border_tool_tip;
-	public static String BordersSection_Bottom_Label;
+	public static String common_bottom;
 	public static String BordersSection_box;
 	public static String BordersSection_Default_Label;
 	public static String BordersSection_left_border_tool_tip;
@@ -214,7 +214,7 @@ public class Messages extends NLS {
 	public static String BordersSection_padding_tool_tip;
 	public static String BordersSection_preview_ToolTip;
 	public static String BordersSection_right_border_tool_tip;
-	public static String BordersSection_Right_Label;
+	public static String common_right;
 	public static String BordersSection_Same_Padding_Value_Check;
 	public static String BordersSection_top_border_tool_tip;
 	public static String BordersSection_Top_Bottom_Borders;
@@ -624,7 +624,7 @@ public class Messages extends NLS {
 	public static String LeftToolBarManager_pintooltip;
 	public static String LegendSection_Backcolor_Label;
 	public static String LegendSection_Forecolor_Label;
-	public static String LegendSection_Legend_Label;
+	public static String common_legend;
 	public static String LegendSection_Position_Label;
 	public static String LinePenSection_pen_width_tool_tip;
 	public static String LocaleDialog_0;

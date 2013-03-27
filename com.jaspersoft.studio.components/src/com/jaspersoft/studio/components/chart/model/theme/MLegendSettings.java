@@ -5,15 +5,21 @@ import java.util.Map;
 
 import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.chartthemes.simple.LegendSettings;
-import net.sf.jasperreports.chartthemes.simple.TitleSettings;
+import net.sf.jasperreports.chartthemes.simple.PaintProvider;
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.jfree.chart.block.BlockBorder;
+import org.jfree.chart.block.BlockFrame;
 import org.jfree.ui.RectangleInsets;
 
 import com.jaspersoft.studio.components.chart.model.enums.JFreeChartHorizontalAlignmentEnum;
 import com.jaspersoft.studio.components.chart.model.enums.JFreeChartVerticalAlignmentEnum;
+import com.jaspersoft.studio.components.chart.model.theme.paintprovider.PaintProviderPropertyDescriptor;
+import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
@@ -42,7 +48,7 @@ public class MLegendSettings extends APropertyNode {
 
 	@Override
 	public String getDisplayText() {
-		return "Legend";
+		return Messages.common_legend;
 	}
 
 	private IPropertyDescriptor[] descriptors;
@@ -72,13 +78,13 @@ public class MLegendSettings extends APropertyNode {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		CheckBoxPropertyDescriptor showTitleD = new CheckBoxPropertyDescriptor(LegendSettings.PROPERTY_showLegend, "Show Legend");
-		showTitleD.setDescription("Show Title");
-		desc.add(showTitleD);
+		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(LegendSettings.PROPERTY_showLegend, "Show Legend");
+		pd.setDescription("Show Title");
+		desc.add(pd);
 
-		FontPropertyDescriptor fontD = new FontPropertyDescriptor(LegendSettings.PROPERTY_font, com.jaspersoft.studio.messages.Messages.common_font);
-		fontD.setDescription(com.jaspersoft.studio.messages.Messages.common_font);
-		desc.add(fontD);
+		pd = new FontPropertyDescriptor(LegendSettings.PROPERTY_font, com.jaspersoft.studio.messages.Messages.common_font);
+		pd.setDescription(com.jaspersoft.studio.messages.Messages.common_font);
+		desc.add(pd);
 
 		posD = new JSSEnumPropertyDescriptor(LegendSettings.PROPERTY_position, "Position", EdgeEnum.class, NullEnum.NULL);
 		posD.setDescription("Position");
@@ -94,10 +100,20 @@ public class MLegendSettings extends APropertyNode {
 
 		PadUtil.createPropertyDescriptors(desc, defaultsMap);
 
+		pd = new PaintProviderPropertyDescriptor(LegendSettings.PROPERTY_foregroundPaint, "Foreground Paint");
+		pd.setDescription("Foreground paint");
+		desc.add(pd);
+
+		pd = new PaintProviderPropertyDescriptor(LegendSettings.PROPERTY_backgroundPaint, "Background Paint");
+		pd.setDescription("Background paint");
+		desc.add(pd);
+
+		PadUtil.createPropertyDescriptors(desc, defaultsMap, LegendSettings.PROPERTY_blockFrame, "Block Frame");
+
 		defaultsMap.put(LegendSettings.PROPERTY_showLegend, Boolean.TRUE);
 		defaultsMap.put(LegendSettings.PROPERTY_position, EdgeEnum.TOP);
-		defaultsMap.put(TitleSettings.PROPERTY_horizontalAlignment, JFreeChartHorizontalAlignmentEnum.LEFT);
-		defaultsMap.put(TitleSettings.PROPERTY_verticalAlignment, JFreeChartVerticalAlignmentEnum.TOP);
+		defaultsMap.put(LegendSettings.PROPERTY_horizontalAlignment, JFreeChartHorizontalAlignmentEnum.LEFT);
+		defaultsMap.put(LegendSettings.PROPERTY_verticalAlignment, JFreeChartVerticalAlignmentEnum.TOP);
 	}
 
 	private static JSSEnumPropertyDescriptor posD;
@@ -120,10 +136,20 @@ public class MLegendSettings extends APropertyNode {
 			return hp.getEnumValue(JFreeChartHorizontalAlignmentEnum.getValue(ts.getHorizontalAlignment()));
 		if (id.equals(LegendSettings.PROPERTY_verticalAlignment))
 			return vp.getEnumValue(JFreeChartVerticalAlignmentEnum.getValue(ts.getVerticalAlignment()));
+		if (id.equals(LegendSettings.PROPERTY_backgroundPaint))
+			return ts.getBackgroundPaint();
+		if (id.equals(LegendSettings.PROPERTY_foregroundPaint))
+			return ts.getForegroundPaint();
 
 		Object pad = PadUtil.getPropertyValue(id, ts.getPadding());
 		if (pad != null)
 			return pad;
+		BlockFrame bf = ts.getBlockFrame();
+		if (bf != null) {
+			pad = PadUtil.getPropertyValue(id, bf.getInsets(), LegendSettings.PROPERTY_blockFrame);
+			if (pad != null)
+				return pad;
+		}
 		return null;
 	}
 
@@ -140,9 +166,19 @@ public class MLegendSettings extends APropertyNode {
 			ts.setHorizontalAlignment(((JFreeChartHorizontalAlignmentEnum) posD.getEnumValue(value)).getJFreeChartValue());
 		else if (id.equals(LegendSettings.PROPERTY_verticalAlignment))
 			ts.setVerticalAlignment(((JFreeChartVerticalAlignmentEnum) posD.getEnumValue(value)).getJFreeChartValue());
+		else if (id.equals(LegendSettings.PROPERTY_backgroundPaint))
+			ts.setBackgroundPaint((PaintProvider) value);
+		else if (id.equals(LegendSettings.PROPERTY_foregroundPaint))
+			ts.setForegroundPaint((PaintProvider) value);
+		else if (id.equals(LegendSettings.PROPERTY_blockFrame))
+			ts.setBlockFrame((BlockFrame) value);
 
 		RectangleInsets ri = PadUtil.setPropertyValue(id, value, ts.getPadding());
 		if (ri != null)
 			ts.setPadding(ri);
+		BlockFrame bf = ts.getBlockFrame();
+		ri = PadUtil.setPropertyValue(id, value, bf == null ? null : bf.getInsets(), LegendSettings.PROPERTY_blockFrame);
+		if (ri != null)
+			ts.setBlockFrame(new BlockBorder(ri.getTop(), ri.getLeft(), ri.getBottom(), ri.getRight()));
 	}
 }

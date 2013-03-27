@@ -322,7 +322,7 @@ public class BordersSection extends AbstractSection {
 			}
 		});
 		
-		getWidgetFactory().createCLabel(composite, Messages.BordersSection_Right_Label, SWT.RIGHT); 
+		getWidgetFactory().createCLabel(composite, Messages.common_right, SWT.RIGHT); 
 		
 		paddingRight = new Spinner(composite, SWT.BORDER | SWT.FLAT);
 		paddingRight.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
@@ -346,7 +346,7 @@ public class BordersSection extends AbstractSection {
 			}
 		});
 		
-		getWidgetFactory().createCLabel(composite, Messages.BordersSection_Bottom_Label, SWT.RIGHT); 
+		getWidgetFactory().createCLabel(composite, Messages.common_bottom, SWT.RIGHT); 
 		
 		paddingBottom = new Spinner(composite, SWT.BORDER | SWT.FLAT);
 		paddingBottom.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
