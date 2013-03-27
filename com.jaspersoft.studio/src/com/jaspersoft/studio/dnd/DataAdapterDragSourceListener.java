@@ -54,7 +54,7 @@ public class DataAdapterDragSourceListener implements TransferDragSourceListener
 
 	@Override
 	public void dragStart(DragSourceEvent event) {
-		event.doit = getDragSelection(event) != null;	
+		event.doit = !getDragSelection(event).isEmpty();	
 	}
 
 	@Override
@@ -70,6 +70,7 @@ public class DataAdapterDragSourceListener implements TransferDragSourceListener
 		}
 		else {
 			dataAdapterFilesLocations = new String[0];
+			event.data = null;
 		}
 	}
 
