@@ -35,10 +35,9 @@ public class PaintProviderLabelProvider extends LabelProvider {
 		if (element == null)
 			return "";
 		if (element instanceof ColorProvider)
-			return "[Color: " + ((ColorProvider) element).getColor() + "]";
+			return ColorWidget.cprovider.getText(((ColorProvider) element).getColor());
 		if (element instanceof GradientPaintProvider)
-			return "[Color: " + ((GradientPaintProvider) element).getColor1() + ", " + ((GradientPaintProvider) element).getColor2() + "]";
+			return ColorWidget.cprovider.getText(((GradientPaintProvider) element).getColor1()) + ", " + ColorWidget.cprovider.getText(((GradientPaintProvider) element).getColor2());
 		return element.toString();
 	}
-
 }

@@ -1,19 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.color;
+
+import java.awt.Color;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -24,6 +21,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.utils.Colors;
 
 /*
  * @author Chicu Veaceslav
@@ -61,7 +59,7 @@ public class ColorLabelProvider extends LabelProvider {
 		}
 		return super.getImage(element);
 	}
-	
+
 	public Image getImage(Object element, int width, int height) {
 		if (element == null)
 			return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/nocolor.png");
@@ -88,10 +86,15 @@ public class ColorLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if (element == null || !(element instanceof RGB))
+		if (element == null)
 			return canBeNull.getName();
-		RGB rgb = (RGB) element;
-		return "RGB (" + rgb.red + "," + rgb.green + "," + rgb.blue + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		if (element instanceof Color)
+			element = Colors.getRGB4AWTColor((Color) element);
+		if (element instanceof RGB) {
+			RGB rgb = (RGB) element;
+			return "RGB (" + rgb.red + "," + rgb.green + "," + rgb.blue + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		}
+		return canBeNull.getName();
 	}
 
 }
