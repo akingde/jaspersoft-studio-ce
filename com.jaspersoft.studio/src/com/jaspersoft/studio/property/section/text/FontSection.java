@@ -1,21 +1,14 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.text;
-
-
 
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 
@@ -44,21 +37,21 @@ public class FontSection extends AbstractRealValueSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite group = getWidgetFactory().createSection(parent, Messages.common_font, true, 4);
+		Composite group = createFontSection(parent);
 
-		
 		createWidget4Property(group, JRBaseStyle.PROPERTY_FONT_NAME, false);
 
 		Composite testLayout = new Composite(group, SWT.NONE);
 		GridData fontSizeData = new GridData();
 		fontSizeData.widthHint = 65;
 		fontSizeData.minimumWidth = 65;
-		testLayout.setLayout(new GridLayout(1,false));
+		testLayout.setLayout(new GridLayout(1, false));
 		testLayout.setLayoutData(fontSizeData);
-		createWidget4Property(testLayout, JRBaseStyle.PROPERTY_FONT_SIZE, false).getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+		createWidget4Property(testLayout, JRBaseStyle.PROPERTY_FONT_SIZE, false).getControl().setLayoutData(
+				new GridData(GridData.FILL_HORIZONTAL));
+
 		createWidget4Property(group, MFont.FONT_INCREMENT, false);
-		
+
 		createWidget4Property(group, MFont.FONT_DECREMENT, false);
 
 		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.WRAP | SWT.LEFT);
@@ -69,6 +62,10 @@ public class FontSection extends AbstractRealValueSection {
 		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_ITALIC, false);
 		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_UNDERLINE, false);
 		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_STRIKE_THROUGH, false);
+	}
+
+	protected Composite createFontSection(Composite parent) {
+		return getWidgetFactory().createSection(parent, Messages.common_font, true, 4);
 	}
 
 }

@@ -88,39 +88,39 @@ public class MChartSettings extends APropertyNode {
 
 		pd = new CheckBoxPropertyDescriptor(ChartSettings.PROPERTY_borderVisible, "Visible");
 		pd.setDescription("Border Visible");
-		pd.setCategory(Messages.BordersSection_border);
+		pd.setCategory(Messages.common_borders);
 		desc.add(pd);
 
 		pd = new TransparencyPropertyDescriptor(ChartSettings.PROPERTY_backgroundImageAlpha, "Image Alpha");
 		pd.setDescription("Background Image Alpha");
-		pd.setCategory("Background");
+		pd.setCategory(Messages.common_background);
 		desc.add(pd);
 
 		bia = new JSSEnumPropertyDescriptor(ChartSettings.PROPERTY_backgroundImageAlignment, "Image Alignment", JFreeChartAlignEnum.class, NullEnum.NOTNULL);
 		bia.setDescription("Background Image Alignment");
-		bia.setCategory("Background");
+		bia.setCategory(Messages.common_background);
 		desc.add(bia);
 
 		PadUtil.createPropertyDescriptors(desc, defaultsMap);
 
 		pd = new PaintProviderPropertyDescriptor(ChartSettings.PROPERTY_backgroundPaint, "Paint");
 		pd.setDescription("Background paint");
-		pd.setCategory("Background");
+		pd.setCategory(Messages.common_background);
 		desc.add(pd);
 
 		pd = new PaintProviderPropertyDescriptor(ChartSettings.PROPERTY_borderPaint, "Paint");
 		pd.setDescription("Border paint");
-		pd.setCategory(Messages.BordersSection_border);
+		pd.setCategory(Messages.common_borders);
 		desc.add(pd);
 
 		pd = new ImageProviderPropertyDescriptor(ChartSettings.PROPERTY_backgroundImage, "Image");
 		pd.setDescription("Background Image");
-		pd.setCategory("Background");
+		pd.setCategory(Messages.common_background);
 		desc.add(pd);
 
 		pd = new StrokePropertyDescriptor(ChartSettings.PROPERTY_borderStroke, "Stroke");
 		pd.setDescription("Border Stroke");
-		pd.setCategory(Messages.BordersSection_border);
+		pd.setCategory(Messages.common_borders);
 		desc.add(pd);
 
 		defaultsMap.put(ChartSettings.PROPERTY_textAntiAlias, Boolean.TRUE);

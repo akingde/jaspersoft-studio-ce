@@ -177,7 +177,7 @@ public class BordersSection extends AbstractSection {
 		createPaddingPanel(mainLayout);
 		
 		Group rightPanel = new Group(mainLayout, SWT.NONE);
-		rightPanel.setText(Messages.BordersSection_border);
+		rightPanel.setText(Messages.common_borders);
 		rightPanel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		rightPanel.setLayout(new GridLayout(2,false));
 				

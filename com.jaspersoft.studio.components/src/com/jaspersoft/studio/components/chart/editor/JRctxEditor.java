@@ -57,6 +57,7 @@ import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
@@ -99,7 +100,9 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	private void xml2model(InputStream in) {
 		ChartThemeSettings cts = XmlChartTheme.loadSettings(in);
-		setModel(ChartSettingsFactory.createModel(cts));
+		MRoot root = ChartSettingsFactory.createModel(cts);
+		root.setJasperConfiguration(jrContext);
+		setModel(root);
 	}
 
 	private void model2xml() {
@@ -196,6 +199,7 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 			} else {
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 			}
+			getJrContext(file);
 			xml2model(in);
 		} catch (CoreException e) {
 			e.printStackTrace();

@@ -23,6 +23,7 @@ import com.jaspersoft.studio.components.chart.model.theme.paintproviders.PaintPr
 import com.jaspersoft.studio.components.chart.model.theme.stroke.StrokePropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.strokes.StrokesPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
@@ -109,7 +110,7 @@ public class MPlotSettings extends APropertyNode {
 
 		pd = new TransparencyPropertyDescriptor(PlotSettings.PROPERTY_backgroundImageAlpha, "Alpha");
 		pd.setDescription("Background  Alpha");
-		pd.setCategory("Background");
+		pd.setCategory(Messages.common_background);
 		desc.add(pd);
 
 		pd = new TransparencyPropertyDescriptor(PlotSettings.PROPERTY_foregroundAlpha, "Foreground Alpha");
@@ -122,7 +123,7 @@ public class MPlotSettings extends APropertyNode {
 
 		bia = new JSSEnumPropertyDescriptor(PlotSettings.PROPERTY_backgroundImageAlignment, "Image Alignment", JFreeChartAlignEnum.class, NullEnum.NOTNULL);
 		bia.setDescription("Background Image Alignment");
-		bia.setCategory("Background");
+		bia.setCategory(Messages.common_background);
 		desc.add(bia);
 
 		orientation = new JSSEnumPropertyDescriptor(PlotSettings.PROPERTY_orientation, "Orientation", JFreeChartPlotOrientationEnum.class, NullEnum.NOTNULL);
@@ -131,7 +132,7 @@ public class MPlotSettings extends APropertyNode {
 
 		pd = new PaintProviderPropertyDescriptor(PlotSettings.PROPERTY_backgroundPaint, "Paint");
 		pd.setDescription("Background paint");
-		pd.setCategory("Background");
+		pd.setCategory(Messages.common_background);
 		desc.add(pd);
 
 		pd = new PaintProviderPropertyDescriptor(PlotSettings.PROPERTY_outlinePaint, "Paint");
@@ -151,7 +152,7 @@ public class MPlotSettings extends APropertyNode {
 
 		pd = new ImageProviderPropertyDescriptor(PlotSettings.PROPERTY_backgroundImage, "Image");
 		pd.setDescription("Background Image");
-		pd.setCategory("Background");
+		pd.setCategory(Messages.common_background);
 		desc.add(pd);
 
 		pd = new StrokePropertyDescriptor(PlotSettings.PROPERTY_outlineStroke, "Stroke");

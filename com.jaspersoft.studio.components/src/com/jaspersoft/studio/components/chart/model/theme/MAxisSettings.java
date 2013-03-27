@@ -178,7 +178,7 @@ public class MAxisSettings extends APropertyNode {
 		defaultsMap.put(AxisSettings.PROPERTY_axisIntegerUnit, Boolean.TRUE);
 	}
 
-	private static final String PROP_LABEL = "LABEL";
+	public static final String PROP_LABEL = "LABEL";
 	private MFont lFont;
 	private MFont tlFont;
 	private static JSSEnumPropertyDescriptor location;

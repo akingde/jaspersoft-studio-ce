@@ -553,6 +553,100 @@
                   type="com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.chart.property.section.theme.ChartSettingsSection"
+               id="com.jaspersoft.studio.components.chart.property.section.theme.ChartSettingsSection"
+               tab="com.jaspersoft.studio.components.chart">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.theme.MChartSettings">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.chart.property.section.theme.TitleSettingsSection"
+               id="com.jaspersoft.studio.components.chart.property.section.theme.TitleSettingsSection"
+               tab="com.jaspersoft.studio.components.chart.title">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.theme.MTitleSettings">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.chart.property.section.theme.TitleSettingsSection"
+               class="com.jaspersoft.studio.components.chart.property.section.theme.CTFontSection"
+               id="com.jaspersoft.studio.components.chart.property.section.theme.CTFontSection"
+               tab="com.jaspersoft.studio.components.chart.title">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.theme.MTitleSettings">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.chart.property.section.theme.LegendSettingsSection"
+               id="com.jaspersoft.studio.components.chart.property.section.theme.LegendSettingsSection"
+               tab="com.jaspersoft.studio.components.chart.legend">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.theme.MLegendSettings">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.chart.property.section.theme.LegendSettingsSection"
+               class="com.jaspersoft.studio.components.chart.property.section.theme.CTFontSection"
+               id="com.jaspersoft.studio.components.chart.property.section.theme.CTFontSectionLegend"
+               tab="com.jaspersoft.studio.components.chart.legend">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.theme.MLegendSettings">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.chart.property.section.theme.PlotSettingsSection"
+               id="com.jaspersoft.studio.components.chart.property.section.theme.PlotSettingsSection"
+               tab="com.jaspersoft.studio.components.chart.plot">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.theme.MPlotSettings">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.chart.property.section.theme.PlotSettingsSection"
+               class="com.jaspersoft.studio.components.chart.property.section.theme.CTTickLabelFontSection"
+               id="com.jaspersoft.studio.components.chart.property.section.theme.CTPlotTickLabelFontSection"
+               tab="com.jaspersoft.studio.components.chart.plot">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.theme.MPlotSettings">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.chart.property.section.theme.PlotSettingsSection"
+               class="com.jaspersoft.studio.components.chart.property.section.theme.CTPlotDisplayFontSection"
+               id="com.jaspersoft.studio.components.chart.property.section.theme.CTPlotDisplayFontSection"
+               tab="com.jaspersoft.studio.components.chart.plot">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.theme.MPlotSettings">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.chart.property.section.theme.AxisSettingsSection"
+               id="com.jaspersoft.studio.components.chart.property.section.theme.AxisSettingsSection"
+               tab="com.jaspersoft.studio.components.chart.axis">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.theme.MAxisSettings">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.chart.property.section.theme.AxisSettingsSection"
+               class="com.jaspersoft.studio.components.chart.property.section.theme.CTTickLabelFontSection"
+               id="com.jaspersoft.studio.components.chart.property.section.theme.CTAxisTickLabelFontSection"
+               tab="com.jaspersoft.studio.components.chart.axis">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.theme.MAxisSettings">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.chart.property.section.theme.AxisSettingsSection"
+               class="com.jaspersoft.studio.components.chart.property.section.theme.CTLabelFontSection"
+               id="com.jaspersoft.studio.components.chart.property.section.theme.CTLabelFontSection"
+               tab="com.jaspersoft.studio.components.chart.axis">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.theme.MAxisSettings">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension
@@ -655,6 +749,13 @@
                id="com.jaspersoft.studio.components.chartaxis"
                image="icons/chart-16.png"
                label="Chart Axis">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.components.chart.title"
+               category="element"
+               id="com.jaspersoft.studio.components.chart.axis"
+               indented="true"
+               label="Axis">
          </propertyTab>
       </propertyTabs>
    </extension>

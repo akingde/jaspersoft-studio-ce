@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.messages;
 
@@ -35,6 +30,7 @@ public class Messages extends NLS {
 	public static String common_band;
 	public static String common_blank_when_null;
 	public static String common_bold;
+	public static String common_background;
 	public static String common_browse;
 	public static String common_class;
 	public static String common_column_names;
@@ -201,7 +197,7 @@ public class Messages extends NLS {
 	public static String BandSection_split_type_tool_tip;
 	public static String BooleanCellEditorValidator_value_is_not_instance_of_boolean;
 	public static String BordersSection_all_borders_tool_tip;
-	public static String BordersSection_border;
+	public static String common_borders;
 	public static String BordersSection_bottom_border_tool_tip;
 	public static String common_bottom;
 	public static String BordersSection_box;

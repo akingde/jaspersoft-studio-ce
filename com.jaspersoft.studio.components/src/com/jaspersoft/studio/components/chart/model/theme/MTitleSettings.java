@@ -24,11 +24,11 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
-public class MTittleSettings extends APropertyNode {
+public class MTitleSettings extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private String displayText;
 
-	public MTittleSettings(MChartThemeSettings parent, TitleSettings ts, String displayText) {
+	public MTitleSettings(MChartThemeSettings parent, TitleSettings ts, String displayText) {
 		super(parent, -1);
 		setValue(ts);
 		this.displayText = displayText;

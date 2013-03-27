@@ -5,12 +5,15 @@ import java.util.Map;
 
 import net.sf.jasperreports.chartthemes.simple.ChartSettings;
 
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.jfree.ui.RectangleInsets;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class PadUtil {
 
@@ -30,22 +33,22 @@ public class PadUtil {
 
 	public static void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap, String preID, String prefix) {
 		PropertyDescriptor pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_TOP, Messages.common_top);
-		pd.setDescription(Messages.common_padding);
+		pd.setDescription(Messages.common_top);
 		pd.setCategory(prefix);
 		desc.add(pd);
 
 		pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_BOTTOM, Messages.common_bottom);
-		pd.setDescription(Messages.common_padding);
+		pd.setDescription(Messages.common_bottom);
 		pd.setCategory(prefix);
 		desc.add(pd);
 
 		pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_LEFT, Messages.common_left);
-		pd.setDescription(Messages.common_padding);
+		pd.setDescription(Messages.common_left);
 		pd.setCategory(prefix);
 		desc.add(pd);
 
 		pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_RIGHT, Messages.common_right);
-		pd.setDescription(Messages.common_padding);
+		pd.setDescription(Messages.common_right);
 		pd.setCategory(prefix);
 		desc.add(pd);
 
@@ -89,5 +92,15 @@ public class PadUtil {
 		else if (id.equals(preID + PadUtil.PADDING_RIGHT))
 			return new RectangleInsets(ri.getTop(), ri.getLeft(), ri.getBottom(), (Double) value);
 		return null;
+	}
+
+	public static void createWidgets4Property(Composite parent, String preID, String prefix, AbstractSection section) {
+		Composite group = section.getWidgetFactory().createSection(parent, prefix, true, 4);
+		((Section) group.getParent()).setExpanded(false);
+
+		section.createWidget4Property(group, preID + PadUtil.PADDING_TOP);
+		section.createWidget4Property(group, preID + PadUtil.PADDING_BOTTOM);
+		section.createWidget4Property(group, preID + PadUtil.PADDING_LEFT);
+		section.createWidget4Property(group, preID + PadUtil.PADDING_RIGHT);
 	}
 }

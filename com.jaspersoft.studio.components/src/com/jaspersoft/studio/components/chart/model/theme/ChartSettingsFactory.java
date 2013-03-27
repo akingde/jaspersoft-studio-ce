@@ -9,8 +9,8 @@ public class ChartSettingsFactory {
 		MRoot root = new MRoot(null, null);
 		MChartThemeSettings n = new MChartThemeSettings(root, cts);
 		new MChartSettings(n, cts.getChartSettings());
-		new MTittleSettings(n, cts.getTitleSettings(), "Title");
-		new MTittleSettings(n, cts.getSubtitleSettings(), "Subtitle");
+		new MTitleSettings(n, cts.getTitleSettings(), "Title");
+		new MTitleSettings(n, cts.getSubtitleSettings(), "Subtitle");
 		new MLegendSettings(n, cts.getLegendSettings());
 		new MPlotSettings(n, cts.getPlotSettings());
 		new MAxisSettings(n, cts.getDomainAxisSettings(), "Domain Axis");
