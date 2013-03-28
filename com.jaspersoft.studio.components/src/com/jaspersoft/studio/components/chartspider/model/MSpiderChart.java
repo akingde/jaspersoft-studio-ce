@@ -470,6 +470,9 @@ public class MSpiderChart extends MGraphicElement {
 			return ExprUtil.getExpression(cs.getHyperlinkReferenceExpression());
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 			return ExprUtil.getExpression(cs.getHyperlinkTooltipExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
+			return ExprUtil.getExpression(cs.getHyperlinkWhenExpression());
+		}
 
 		if (id.equals(StandardChartSettings.PROPERTY_TITLE_FONT)) {
 			tFont = MFontUtil.getMFont(tFont, cs.getTitleFont(),
@@ -639,6 +642,11 @@ public class MSpiderChart extends MGraphicElement {
 				.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 			cs.setHyperlinkTooltipExpression(ExprUtil.setValues(
 					cs.getHyperlinkTooltipExpression(), value));
+		else if (id
+				.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
+			cs.setHyperlinkWhenExpression(ExprUtil.setValues(
+					cs.getHyperlinkWhenExpression(), value));
+		}
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;

@@ -477,6 +477,9 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 			return ExprUtil.getExpression(jrElement
 					.getHyperlinkTooltipExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
+			return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
+		}
 
 		if (id.equals(PLOTPROPERTY)) { //$NON-NLS-1$
 			if (mChartPlot == null) {
@@ -625,6 +628,11 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 			jrElement.setHyperlinkTooltipExpression(ExprUtil.setValues(
 					jrElement.getHyperlinkTooltipExpression(), value));
+		else if (id
+				.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)){
+			jrElement.setHyperlinkWhenExpression(ExprUtil.setValues(
+					jrElement.getHyperlinkWhenExpression(), value));
+		}
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;

@@ -274,6 +274,9 @@ public class MImage extends MGraphicElementLineBox {
 			return ExprUtil.getExpression(jrElement.getHyperlinkReferenceExpression());
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
+			return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
+		}
 		return super.getPropertyValue(id);
 	}
 
@@ -326,6 +329,8 @@ public class MImage extends MGraphicElementLineBox {
 			return ExprUtil.getExpression(jrElement.getHyperlinkReferenceExpression());
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
 		return super.getPropertyActualValue(id);
 	}
 
@@ -367,6 +372,9 @@ public class MImage extends MGraphicElementLineBox {
 			jrElement.setHyperlinkReferenceExpression(ExprUtil.setValues(jrElement.getHyperlinkReferenceExpression(), value));
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 			jrElement.setHyperlinkTooltipExpression(ExprUtil.setValues(jrElement.getHyperlinkTooltipExpression(), value));
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
+			jrElement.setHyperlinkWhenExpression(ExprUtil.setValues(jrElement.getHyperlinkWhenExpression(), value));
+		}
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;
