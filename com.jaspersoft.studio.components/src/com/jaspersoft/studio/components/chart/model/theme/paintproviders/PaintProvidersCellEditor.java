@@ -22,7 +22,6 @@ import net.sf.jasperreports.chartthemes.simple.PaintProvider;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -38,13 +37,10 @@ public class PaintProvidersCellEditor extends DialogCellEditor {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		PaintProvidersEditor wizard = new PaintProvidersEditor();
-		wizard.setValue((List<PaintProvider>) getValue());
-		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
-		dialog.create();
-		if (dialog.open() == Dialog.OK) {
-			return wizard.getValue();
-		}
+		PaintProvidersDialog dialog = new PaintProvidersDialog(cellEditorWindow.getShell());
+		dialog.setValue((List<PaintProvider>) getValue());
+		if (dialog.open() == Dialog.OK)
+			return dialog.getValue();
 		return null;
 	}
 

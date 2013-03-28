@@ -15,8 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.theme.paintproviders;
 
-import net.sf.jasperreports.chartthemes.simple.ColorProvider;
-import net.sf.jasperreports.chartthemes.simple.GradientPaintProvider;
+import java.util.Collection;
 
 import org.eclipse.jface.viewers.LabelProvider;
 
@@ -34,10 +33,8 @@ public class PaintProvidersLabelProvider extends LabelProvider {
 	public String getText(Object element) {
 		if (element == null)
 			return "";
-		if (element instanceof ColorProvider)
-			return "[Color: " + ((ColorProvider) element).getColor() + "]";
-		if (element instanceof GradientPaintProvider)
-			return "[Color: " + ((GradientPaintProvider) element).getColor1() + ", " + ((GradientPaintProvider) element).getColor2() + "]";
+		if (element instanceof Collection)
+			return "[Size: " + ((Collection) element).size() + "]";
 		return element.toString();
 	}
 

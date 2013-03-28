@@ -16,12 +16,11 @@
 package com.jaspersoft.studio.components.chart.model.theme.paintproviders;
 
 import java.util.Collection;
-import java.util.SortedSet;
+import java.util.List;
 
-import net.sf.jasperreports.engine.base.JRBaseChartPlot.JRBaseSeriesColor;
+import net.sf.jasperreports.chartthemes.simple.PaintProvider;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -35,8 +34,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.SeriesColorPropertyDescriptor;
-import com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.dialog.SeriesColorEditor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -45,8 +42,7 @@ import com.jaspersoft.studio.utils.UIUtil;
 public class SPPaintProviders extends ASPropertyWidget {
 	protected Composite composite;
 
-	public SPPaintProviders(Composite parent, AbstractSection section,
-			IPropertyDescriptor pDescriptor) {
+	public SPPaintProviders(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 
@@ -56,8 +52,7 @@ public class SPPaintProviders extends ASPropertyWidget {
 	}
 
 	protected void createComponent(Composite parent) {
-		composite = section.getWidgetFactory().createComposite(parent,
-				SWT.READ_ONLY);
+		composite = section.getWidgetFactory().createComposite(parent, SWT.READ_ONLY);
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
@@ -66,24 +61,19 @@ public class SPPaintProviders extends ASPropertyWidget {
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		ftext = section.getWidgetFactory().createText(composite, "", SWT.LEFT);
+		ftext = section.getWidgetFactory().createText(composite, "", SWT.LEFT | SWT.READ_ONLY);
 		ftext.setToolTipText(pDescriptor.getDescription());
 		setWidth(composite, 20);
 
-		Button btn = section.getWidgetFactory().createButton(composite, "...",
-				SWT.PUSH);
+		Button btn = section.getWidgetFactory().createButton(composite, "...", SWT.PUSH);
 		btn.setToolTipText(pDescriptor.getDescription());
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SeriesColorEditor wizard = new SeriesColorEditor();
-				wizard.setValue(series);
-				WizardDialog dialog = new WizardDialog(composite.getShell(),
-						wizard);
-				dialog.create();
+				PaintProvidersDialog dialog = new PaintProvidersDialog(composite.getShell());
+				dialog.setValue(series);
 				if (dialog.open() == Dialog.OK) {
-					handleTextChanged(section, pDescriptor.getId(),
-							wizard.getValue());
+					handleTextChanged(section, pDescriptor.getId(), dialog.getValue());
 				}
 			}
 		});
@@ -102,18 +92,16 @@ public class SPPaintProviders extends ASPropertyWidget {
 		}
 	}
 
-	protected void handleTextChanged(final AbstractSection section,
-			final Object property, Collection<?> text) {
+	protected void handleTextChanged(final AbstractSection section, final Object property, Collection<?> text) {
 		section.changeProperty(property, text);
 	}
 
-	private SortedSet<JRBaseSeriesColor> series;
+	private List<PaintProvider> series;
 	private Text ftext;
 
 	public void setData(APropertyNode pnode, Object b) {
-		series = (SortedSet<JRBaseSeriesColor>) b;
-		SeriesColorPropertyDescriptor pd = (SeriesColorPropertyDescriptor) pDescriptor;
-		ftext.setText(pd.getLabelProvider().getText(series));
+		series = (List<PaintProvider>) b;
+		ftext.setText(pDescriptor.getLabelProvider().getText(b));
 	}
 
 }

@@ -58,7 +58,7 @@ public class SPPaintProvider extends ASPropertyWidget {
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		ftext = section.getWidgetFactory().createText(composite, "", SWT.LEFT);
+		ftext = section.getWidgetFactory().createText(composite, "", SWT.LEFT | SWT.READ_ONLY);
 		ftext.setToolTipText(pDescriptor.getDescription());
 		setWidth(composite, 20);
 
@@ -97,8 +97,7 @@ public class SPPaintProvider extends ASPropertyWidget {
 
 	public void setData(APropertyNode pnode, Object b) {
 		pprovider = (PaintProvider) b;
-		PaintProviderPropertyDescriptor pd = (PaintProviderPropertyDescriptor) pDescriptor;
-		ftext.setText(pd.getLabelProvider().getText(pprovider));
+		ftext.setText(pDescriptor.getLabelProvider().getText(pprovider));
 	}
 
 }

@@ -58,7 +58,7 @@ public class SPStroke extends ASPropertyWidget {
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		ftext = section.getWidgetFactory().createText(composite, "", SWT.LEFT);
+		ftext = section.getWidgetFactory().createText(composite, "", SWT.LEFT | SWT.READ_ONLY);
 		ftext.setToolTipText(pDescriptor.getDescription());
 		setWidth(composite, 20);
 
@@ -98,8 +98,7 @@ public class SPStroke extends ASPropertyWidget {
 
 	public void setData(APropertyNode pnode, Object b) {
 		series = (Stroke) b;
-		StrokePropertyDescriptor pd = (StrokePropertyDescriptor) pDescriptor;
-		ftext.setText(pd.getLabelProvider().getText(series));
+		ftext.setText(pDescriptor.getLabelProvider().getText(series));
 	}
 
 }

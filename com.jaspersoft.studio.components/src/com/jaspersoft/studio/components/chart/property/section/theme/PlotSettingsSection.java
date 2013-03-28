@@ -54,5 +54,12 @@ public class PlotSettingsSection extends AbstractSection {
 		createWidget4Property(group, PlotSettings.PROPERTY_outlineVisible, false).getControl().setLayoutData(gd);
 		createWidget4Property(group, PlotSettings.PROPERTY_outlinePaint);
 		createWidget4Property(group, PlotSettings.PROPERTY_outlineStroke);
+
+		group = getWidgetFactory().createSection(parent, "Series", true, 2);
+		createWidget4Property(group, PlotSettings.PROPERTY_seriesStrokeSequence);
+		createWidget4Property(group, PlotSettings.PROPERTY_seriesColorSequence);
+		createWidget4Property(group, PlotSettings.PROPERTY_seriesGradientPaintSequence);
+		createWidget4Property(group, PlotSettings.PROPERTY_seriesOutlinePaintSequence);
+		createWidget4Property(group, PlotSettings.PROPERTY_seriesOutlineStrokeSequence);
 	}
 }
