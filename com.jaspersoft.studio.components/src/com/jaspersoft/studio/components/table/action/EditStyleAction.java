@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.action;
 
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
@@ -35,7 +36,6 @@ import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
 import com.jaspersoft.studio.components.table.model.table.command.UpdateStyleCommand;
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableStyleWizard;
-import com.jaspersoft.studio.components.table.part.TableEditPart;
 
 /**
  * Action to open the Style dialog and use it to change the style of a table
@@ -65,8 +65,8 @@ public class EditStyleAction extends SelectionAction {
 	protected boolean calculateEnabled() {
 		if (getSelectedObjects().size() >=1){
 			Object selectedObject = getSelectedObjects().get(0);
-			if (selectedObject instanceof TableEditPart){
-				TableEditPart editPart = (TableEditPart)selectedObject;
+			if (selectedObject instanceof EditPart){
+				EditPart editPart = (EditPart)selectedObject;
 				if (editPart != null){
 					return (editPart.getModel() instanceof MTable);
 				}
@@ -100,7 +100,7 @@ public class EditStyleAction extends SelectionAction {
 			//response == 0 update the old styles, response == 1 create new styles, response == 2 cancel the operation
 			if (response == 0 || response == 1){
 				TableStyle selectedStyle = wizard.getTableStyle();
-				TableEditPart editPart = (TableEditPart)getSelectedObjects().get(0);
+				EditPart editPart = (EditPart)getSelectedObjects().get(0);
 				MTable tableModel = (MTable)editPart.getModel();
 				execute(changeStyleCommand(tableModel, selectedStyle,response == 0));
 			} 

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.action;
 
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
@@ -35,7 +36,6 @@ import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.crosstab.command.UpdateCrosstabStyleCommand;
 import com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabStyleWizard;
 import com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle;
-import com.jaspersoft.studio.components.crosstab.part.CrosstabEditPart;
 
 /**
  * Action to open the Style dialog and use it to change the style of a Crosstab
@@ -65,8 +65,8 @@ public class EditCrosstabStyleAction extends SelectionAction {
 	protected boolean calculateEnabled() {
 		if (getSelectedObjects().size() >=1){
 			Object selectedObject = getSelectedObjects().get(0);
-			if (selectedObject instanceof CrosstabEditPart){
-				CrosstabEditPart editPart = (CrosstabEditPart)selectedObject;
+			if (selectedObject instanceof EditPart){
+				EditPart editPart = (EditPart)selectedObject;
 				if (editPart != null){
 					return (editPart.getModel() instanceof MCrosstab);
 				}
@@ -102,7 +102,7 @@ public class EditCrosstabStyleAction extends SelectionAction {
 			//response == 0 update the old styles, response == 1 create new styles, response == 2 cancel the operation
 			if (response == 0 || response == 1){
 				CrosstabStyle selectedStyle = wizard.getTableStyle();
-				CrosstabEditPart editPart = (CrosstabEditPart)getSelectedObjects().get(0);
+				EditPart editPart = (EditPart)getSelectedObjects().get(0);
 				MCrosstab tableModel = (MCrosstab)editPart.getModel();
 				execute(changeStyleCommand(tableModel, selectedStyle,response == 0));
 			} 
