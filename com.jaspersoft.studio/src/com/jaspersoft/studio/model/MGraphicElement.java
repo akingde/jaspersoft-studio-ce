@@ -585,7 +585,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		if (id.equals(JRDesignElement.PROPERTY_KEY))
 			jrElement.setKey((String) value);
 		else if (id.equals(JRDesignElement.PROPERTY_PARENT_STYLE)) {
-			if (value != null) {
+			if (value != null && !((String) value).trim().isEmpty()) {
 				if (!value.equals("")) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
