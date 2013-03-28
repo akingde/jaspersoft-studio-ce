@@ -111,6 +111,58 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	private int tableY = 0;
 	
 	/**
+	 * Section to display of the table
+	 */
+	private TableSections sections;
+	
+	/**
+	 * Create a column for a table
+	 *  
+	 * @param tbl the column 
+	 * @param jd the jasper design
+	 * @param fieldName the column header
+	 * @param fieldValue the field value
+	 * @param colWidth the column width
+	 */
+	private void createColumn(StandardTable tbl, JasperDesign jd, String fieldName, String fieldValue, int colWidth){
+		StandardColumn col = CreateColumnCommand.addColumn(jd, tbl,
+				sections.isTableHeader(), sections.isTableFooter(),
+				sections.isColumnHeader(), sections.isColumnFooter(),
+				sections.isGroupHeader(), sections.isGroupFooter(), -1);
+		col.setWidth(colWidth);
+		DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
+		DesignCell detCell = (DesignCell) col.getDetailCell();
+		
+		//Create the column header
+		if (sections.isColumnHeader()) {
+			JRDesignStaticText sText = null;
+			//Create the cell detail by duplicating the sample content if it exist
+			if (colHeaderLabel != null) sText = (JRDesignStaticText)colHeaderLabel.clone();
+			else sText = (JRDesignStaticText) new MStaticText().createJRElement(jd);
+			sText.setWidth(col.getWidth());
+			sText.setHeight(colHeadCell.getHeight());
+			sText.setX(0);
+			sText.setY(0);
+			sText.setText(fieldName);
+			colHeadCell.addElement(sText);
+		}
+		
+		JRDesignTextField fText = null;
+		//Create the cell detail by duplicating the sample content if it exist
+		if (cellField != null) fText = (JRDesignTextField) cellField.clone();
+		else fText = (JRDesignTextField) new MTextField().createJRElement(jd);
+		fText.setWidth(col.getWidth());
+		fText.setHeight(detCell.getHeight());
+		fText.setX(0);
+		fText.setY(0);
+		JRDesignExpression jre = new JRDesignExpression();
+		jre.setText(fieldValue);
+		fText.setExpression(jre);
+		detCell.addElement(fText);
+		tbl.addColumn(col);
+	}
+	
+	/**
 	 * Build the table JRElement and return it
 	 * 
 	 * @param jd The JasperDesign of the report where the table will be placed
@@ -130,44 +182,12 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		if (tableFields != null) {
 			int colWidth = 40;
 			if (tableFields.size() > 0)	colWidth = tableWidth / tableFields.size();
-			TableSections sections = TableWizardLayoutPage.getDefaultSection();
+			if (sections == null) sections = TableWizardLayoutPage.getDefaultSection();
 			for (Object f : tableFields) {
-				StandardColumn col = CreateColumnCommand.addColumn(jd, tbl,
-						sections.isTableHeader(), sections.isTableFooter(),
-						sections.isColumnHeader(), sections.isColumnFooter(),
-						sections.isGroupHeader(), sections.isGroupFooter(), -1);
-				col.setWidth(colWidth);
-				DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
-				DesignCell detCell = (DesignCell) col.getDetailCell();
-				
-				//Create the column header
-				if (sections.isColumnHeader()) {
-					JRDesignStaticText sText = null;
-					//Create the cell detail by duplicating the sample content if it exist
-					if (colHeaderLabel != null) sText = (JRDesignStaticText)colHeaderLabel.clone();
-					else sText = (JRDesignStaticText) new MStaticText().createJRElement(jd);
-					sText.setWidth(col.getWidth());
-					sText.setHeight(colHeadCell.getHeight());
-					sText.setX(0);
-					sText.setY(0);
-					sText.setText(((JRField) f).getName());
-					colHeadCell.addElement(sText);
-				}
-				
-				JRDesignTextField fText = null;
-				//Create the cell detail by duplicating the sample content if it exist
-				if (cellField != null) fText = (JRDesignTextField) cellField.clone();
-				else fText = (JRDesignTextField) new MTextField().createJRElement(jd);
-				fText.setWidth(col.getWidth());
-				fText.setHeight(detCell.getHeight());
-				fText.setX(0);
-				fText.setY(0);
-				JRDesignExpression jre = new JRDesignExpression();
-				jre.setText("$F{" + ((JRField) f).getName() + "}");
-				fText.setExpression(jre);
-				detCell.addElement(fText);
-				tbl.addColumn(col);
+				createColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth);
 			}
+		} else {
+			createColumn(tbl,jd,"","\"\"",160);
 		}
 		//Create and apply the styles to the table. The styles should be read from the template report
 		//if for some reason this styles are not present then a default set of styles will be used
@@ -239,6 +259,18 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 			tableHeight = tableComponent.getHeight();
 			tableX = tableComponent.getX();
 			tableY = tableComponent.getY();
+			if (table.getColumns().size()>0){
+				StandardColumn col = (StandardColumn) table.getColumns().get(0);
+				boolean tableHeader = col.getTableHeader() != null;
+				boolean tableFooter = col.getTableFooter() != null;
+				boolean columnHeader = col.getColumnHeader() != null;
+				boolean columnFooter = col.getColumnFooter() != null;
+				boolean groupHeader = col.getGroupHeaders() != null && col.getGroupHeaders().size()>0; 
+				boolean groupFooter = col.getGroupFooters() != null && col.getGroupFooters().size()>0; 
+				sections = new TableSections(tableHeader, tableFooter, columnHeader, columnFooter, groupHeader, groupFooter);
+			}
+				
+			
 			removeElement(jd.getSummary(), tableComponent);
 		}
 		
@@ -248,12 +280,16 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		JRDesignSection bandSection = (JRDesignSection)jd.getDetailSection();
 		for(JRBand actualDetail : jd.getDetailSection().getBands())
 			bandSection.removeBand(actualDetail);
+		/*
+		//Delete the groups
 		while (jd.getGroupsList().size()>0)
 			jd.getGroupsList().remove(0);
+		
 		jd.setPageHeader(null);
 		jd.setColumnHeader(null);
 		jd.setColumnFooter(null);
 		jd.setLastPageFooter(null);
+		*/
 		jd.removeDataset("tableDataset");
 	}
 	
@@ -315,12 +351,14 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 			query.setText(dataset.getQuery().getText());
 		}
 		tableDataset.setQuery(query);
-		//Add the fields to the dataset
-		for(Object field : tableFields){
-			try {
-				tableDataset.addField((JRDesignField)field);
-			} catch (JRException e) {
-				e.printStackTrace();
+		//Add the fields to the dataset, check if i have an empty dataset
+		if (tableFields != null){
+			for(Object field : tableFields){
+				try {
+					tableDataset.addField((JRDesignField)field);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();

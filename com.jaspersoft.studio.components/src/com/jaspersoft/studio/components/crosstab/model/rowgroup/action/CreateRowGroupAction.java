@@ -15,6 +15,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.rowgroup.action;
 
+import java.util.ArrayList;
+
+import net.sf.jasperreports.engine.design.JRDesignStyle;
+
 import org.eclipse.gef.EditPart;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -54,7 +58,7 @@ public class CreateRowGroupAction extends ACreateAction {
 			if (part.getModel() instanceof MCrosstab) crosstab = (MCrosstab)part.getModel();
 		} 
 		if (crosstab != null){
-			ApplyCrosstabStyleAction applyStyle = new ApplyCrosstabStyleAction(null, crosstab.getValue());
+			ApplyCrosstabStyleAction applyStyle = new ApplyCrosstabStyleAction(new ArrayList<JRDesignStyle>(), crosstab.getValue());
 			applyStyle.rebuildStylesFromCrosstab();
 			applyStyle.applayStyle(crosstab.getJasperDesign());
 		}

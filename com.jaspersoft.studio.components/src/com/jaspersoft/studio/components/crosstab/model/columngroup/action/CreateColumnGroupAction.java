@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.columngroup.action;
 
+import java.util.ArrayList;
+
+import net.sf.jasperreports.engine.design.JRDesignStyle;
+
 import org.eclipse.gef.EditPart;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
@@ -56,7 +58,7 @@ public class CreateColumnGroupAction extends ACreateAction {
 			if (part.getModel() instanceof MCrosstab) crosstab = (MCrosstab)part.getModel();
 		} 
 		if (crosstab != null){
-			ApplyCrosstabStyleAction applyStyle = new ApplyCrosstabStyleAction(null, crosstab.getValue());
+			ApplyCrosstabStyleAction applyStyle = new ApplyCrosstabStyleAction(new ArrayList<JRDesignStyle>(), crosstab.getValue());
 			applyStyle.rebuildStylesFromCrosstab();
 			applyStyle.applayStyle(crosstab.getJasperDesign());
 		}
@@ -71,7 +73,6 @@ public class CreateColumnGroupAction extends ACreateAction {
 		setText(Messages.CreateColumnGroupAction_create_column_group);
 		setToolTipText(Messages.CreateColumnGroupAction_create_column_group_tool_tip);
 		setId(CreateColumnGroupAction.ID);
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/add-crosstabcolumns-16.png"));
 		setDisabledImageDescriptor(Activator.getDefault().getImageDescriptor("icons/add-crosstabcolumns-16.png"));
 		setEnabled(false);

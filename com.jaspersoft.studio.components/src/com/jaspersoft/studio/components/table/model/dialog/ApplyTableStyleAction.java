@@ -136,7 +136,7 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	/**
 	 * Extract the list of styles actually used on the table 
 	 * 
-	 * @return the list of styles actually used in the cell of the table in this order 
+	 * @return the list of styles actually used in the cells of the table in this order 
 	 * null (for retrocompatibility), Table Header, Column Header and Detail.
 	 */
 	public JRDesignStyle[] getStylesFromTable(){
@@ -202,9 +202,9 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	 * @param removeOldStyles if updateOldStyles is false, after the new styles are created the old one are deleted
 	 */
 	public void updateStyle(JasperDesign design, List<JRDesignStyle> newStyles, boolean updatOldStyles, boolean removeOldStyles){
-		JRDesignStyle[] actualStyles = getStylesFromTable();
 		CompoundCommand commands = new CompoundCommand();
 		if (updatOldStyles){
+			JRDesignStyle[] actualStyles = getStylesFromTable();
 			for(int i=0; i<actualStyles.length; i++){
 				JRDesignStyle style = actualStyles[i];
 				if (style != null){

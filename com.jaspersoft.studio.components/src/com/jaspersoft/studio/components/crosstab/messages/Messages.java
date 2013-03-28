@@ -56,6 +56,8 @@ public class Messages extends NLS {
 	public static String CrosstabComponentFactory_detail;
 	public static String CrosstabComponentFactory_header;
 	public static String CrosstabEditor_crosstab;
+	public static String CrosstabStyleWizard_actionName;
+	public static String CrosstabStyleWizard_styleWizardTitle;
 	public static String CrosstabWizardColumnPage_columns;
 	public static String CrosstabWizardColumnPage_description;
 	public static String CrosstabWizardLayoutPage_add_column_group_totals;
@@ -77,6 +79,12 @@ public class Messages extends NLS {
 	public static String CrosstabWizardMeasurePage_measures;
 	public static String CrosstabWizardRowPage_description;
 	public static String CrosstabWizardRowPage_rows;
+	public static String EditCrosstabStyleAction_okButton;
+	public static String EditCrosstabStyleAction_questionCancel;
+	public static String EditCrosstabStyleAction_questionNewStyles;
+	public static String EditCrosstabStyleAction_questionText;
+	public static String EditCrosstabStyleAction_questionTitle;
+	public static String EditCrosstabStyleAction_questionUpdate;
 	public static String MBucket_comparator_expression;
 	public static String MBucket_comparator_expression_description;
 	public static String MBucket_expression;

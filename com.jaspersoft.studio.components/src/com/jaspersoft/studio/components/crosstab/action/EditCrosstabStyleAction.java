@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.components.table.action;
+package com.jaspersoft.studio.components.crosstab.action;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -30,45 +30,45 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.components.Activator;
-import com.jaspersoft.studio.components.table.messages.Messages;
-import com.jaspersoft.studio.components.table.model.MTable;
-import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
-import com.jaspersoft.studio.components.table.model.table.command.UpdateStyleCommand;
-import com.jaspersoft.studio.components.table.model.table.command.wizard.TableStyleWizard;
-import com.jaspersoft.studio.components.table.part.TableEditPart;
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.components.crosstab.model.crosstab.command.UpdateCrosstabStyleCommand;
+import com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabStyleWizard;
+import com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle;
+import com.jaspersoft.studio.components.crosstab.part.CrosstabEditPart;
 
 /**
- * Action to open the Style dialog and use it to change the style of a table
+ * Action to open the Style dialog and use it to change the style of a Crosstab
  * 
  * @author Orlandin Marco
  *
  */
-public class EditStyleAction extends SelectionAction {
+public class EditCrosstabStyleAction extends SelectionAction {
 	
 	/**
 	 * The id of the action
 	 */
-	public static final String ID = "com.jaspersoft.studio.components.table.action.EditStyle"; 
+	public static final String ID = "com.jaspersoft.studio.components.crosstab.action.EditStyle";  //$NON-NLS-1$
 	
-	public EditStyleAction(IWorkbenchPart part) {
+	public EditCrosstabStyleAction(IWorkbenchPart part) {
 		super(part);
-		setText(Messages.EditStyleAction_actionName);
+		setText(Messages.CrosstabStyleWizard_actionName);
 		setId(ID);
-		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/table-style-16.png"));
+		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/crosstab-style-16.png")); //$NON-NLS-1$
 	}
 
 	/**
 	 * The action is enable only if enabled if and only if the first element of the selection 
-	 * is a TableEditPart with inside an MTable
+	 * is a CrosstabEditPart with inside an MCrosstab
 	 */
 	@Override
 	protected boolean calculateEnabled() {
 		if (getSelectedObjects().size() >=1){
 			Object selectedObject = getSelectedObjects().get(0);
-			if (selectedObject instanceof TableEditPart){
-				TableEditPart editPart = (TableEditPart)selectedObject;
+			if (selectedObject instanceof CrosstabEditPart){
+				CrosstabEditPart editPart = (CrosstabEditPart)selectedObject;
 				if (editPart != null){
-					return (editPart.getModel() instanceof MTable);
+					return (editPart.getModel() instanceof MCrosstab);
 				}
 			}
 		}
@@ -81,27 +81,29 @@ public class EditStyleAction extends SelectionAction {
 	@Override
 	public void run() {
 		//Create the wizard
-		TableStyleWizard wizard = new TableStyleWizard();
+		CrosstabStyleWizard wizard = new CrosstabStyleWizard();
 		WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard){
 			//Ovverride this method to change the default text of the finish button with another text
 			@Override
 			protected Button createButton(Composite parent, int id, String label, boolean defaultButton) {
 				Button button = super.createButton(parent, id, label, defaultButton);
-				if (id == IDialogConstants.FINISH_ID) button.setText(Messages.EditStyleAction_okButton);
+				if (id == IDialogConstants.FINISH_ID) button.setText(Messages.EditCrosstabStyleAction_okButton);
 				return button;
 			}
 		};
 		if (dialog.open() == Dialog.OK){
 			//If the user close the dialog with ok then a message box is shown to ask how to edit the styles
 			Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
-			MessageDialog question = new MessageDialog(shell, Messages.EditStyleAction_dialogTitle, null, Messages.EditStyleAction_dialogText, MessageDialog.QUESTION, 
-														new String[]{Messages.EditStyleAction_dialogUpdateButton, Messages.EditStyleAction_dialogNewButton, Messages.EditStyleAction_dialogCancelButton}, 0);
+			MessageDialog question = new MessageDialog(shell, Messages.EditCrosstabStyleAction_questionTitle, null, Messages.EditCrosstabStyleAction_questionText, MessageDialog.QUESTION, 
+														new String[]{Messages.EditCrosstabStyleAction_questionUpdate, 
+																	 Messages.EditCrosstabStyleAction_questionNewStyles, 
+																	 Messages.EditCrosstabStyleAction_questionCancel}, 0);
 			int response = question.open();
 			//response == 0 update the old styles, response == 1 create new styles, response == 2 cancel the operation
 			if (response == 0 || response == 1){
-				TableStyle selectedStyle = wizard.getTableStyle();
-				TableEditPart editPart = (TableEditPart)getSelectedObjects().get(0);
-				MTable tableModel = (MTable)editPart.getModel();
+				CrosstabStyle selectedStyle = wizard.getTableStyle();
+				CrosstabEditPart editPart = (CrosstabEditPart)getSelectedObjects().get(0);
+				MCrosstab tableModel = (MCrosstab)editPart.getModel();
 				execute(changeStyleCommand(tableModel, selectedStyle,response == 0));
 			} 
 		}
@@ -110,18 +112,18 @@ public class EditStyleAction extends SelectionAction {
 	
 	/**
 	 * 
-	 * Return the command to change the table style
+	 * Return the command to change the crosstab style
 	 * 
-	 * @param table the model of the table
-	 * @param newStyle the new TableStyle defined by the user
+	 * @param crosstab the model of the crosstab
+	 * @param newStyle the new CrosstabStyle defined by the user
 	 * @param updateOldStyles true if the new styles will overwrite the old ones, false if the old ones will keep and 
 	 * the new ones will have a different name
-	 * @return the command to update the styles of the table
+	 * @return the command to update the styles of the crosstab
 	 */
-	protected Command changeStyleCommand(MTable table, TableStyle newStyle, boolean updateOldStyles) {
+	protected Command changeStyleCommand(MCrosstab crosstab, CrosstabStyle newStyle, boolean updateOldStyles) {
 		CompoundCommand command = new CompoundCommand();
 		command.setDebugLabel(getText());
-		UpdateStyleCommand updateCommand = new UpdateStyleCommand(table, newStyle,updateOldStyles);
+		UpdateCrosstabStyleCommand updateCommand = new UpdateCrosstabStyleCommand(crosstab, newStyle,updateOldStyles);
 		command.add(updateCommand);
 		return command;
 	}

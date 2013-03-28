@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
@@ -46,10 +47,32 @@ import com.jaspersoft.studio.utils.ModelUtils;
  */
 public class ApplyCrosstabStyleAction extends ApplyStyleAction {
 
+	/**
+	 * The list of style to apply to the crosstab
+	 */
 	private List<JRDesignStyle> styles = null;
 	
+	/**
+	 * Build the class
+	 * 
+	 * @param style the crosstab style used to generate the styles
+	 * @param element the crosstab to witch the styles will be applied
+	 */
 	public ApplyCrosstabStyleAction(CrosstabStyle style, JRElement element) {
 		super(style, element);
+	}
+	
+	/**
+	 * Build the class, instead to build the styles from a CrosstabStyle
+	 * it receive directly the list of styles that applied to the crosstab
+	 * 
+	 * @param styles list of styles that will be applied on the table, the order is important
+	 * and it should be: crosstab header, group, total and detail
+	 * @param crosstab the crosstab to witch the styles will be applied
+	 */
+	public ApplyCrosstabStyleAction(List<JRDesignStyle> styles, JRElement crosstab){
+		super(null, crosstab);
+		this.styles = styles;
 	}
 
 	
@@ -104,6 +127,13 @@ public class ApplyCrosstabStyleAction extends ApplyStyleAction {
         return null;
     }
     
+    /**
+     * Return the index of the style that will be applied to a cell of the crosstab
+     * 
+     * @param crosstab the crosstab
+     * @param origin the origin
+     * @return the index of the style for the cell where 0=crosstab header, 1=group, 2=total and 3=detail
+     */
     private int getBackgroundIndex(JRDesignCrosstab crosstab, JRCrosstabOrigin origin) {
         
         int c_index = -1;
@@ -149,10 +179,21 @@ public class ApplyCrosstabStyleAction extends ApplyStyleAction {
         return -1;
     }
     
-    
+	/**
+	 * Use the crosstab to rebuild the styles list from it
+	 */
     public void rebuildStylesFromCrosstab(){
-    	
-    	JRDesignCrosstab crosstab = (JRDesignCrosstab)getElement();
+	    styles = new ArrayList<JRDesignStyle>(Arrays.asList(getStylesFromCrosstab()));
+    }
+    
+	/**
+	 * Extract the list of styles actually used on the crosstab 
+	 * 
+	 * @return the list of styles actually used in the cells of the crosstab in this order 
+	 * crosstab header, group, total and detail
+	 */
+	public JRDesignStyle[] getStylesFromCrosstab(){
+		JRDesignCrosstab crosstab = (JRDesignCrosstab)getElement();
     	List<JRDesignCellContents> contents = ModelUtils.getAllCells(crosstab);
     	JRDesignStyle[] stylesArray = new JRDesignStyle[4];
 	    for (JRDesignCellContents content : contents)
@@ -164,8 +205,8 @@ public class ApplyCrosstabStyleAction extends ApplyStyleAction {
 	        	if (index != -1) stylesArray[index] = (JRDesignStyle)actualStyle;
 	        }
 	    }
-	    styles = new ArrayList<JRDesignStyle>(Arrays.asList(stylesArray));
-    }
+	    return stylesArray;
+	}
 	
     /**
      * Apply the correct style to every cell in the crosstab
@@ -174,123 +215,213 @@ public class ApplyCrosstabStyleAction extends ApplyStyleAction {
      */
 	@Override
 	public void applayStyle(JasperDesign design) {
-		JRDesignCrosstab crosstab = (JRDesignCrosstab)getElement();
-		List<JRDesignCellContents> contents = ModelUtils.getAllCells(crosstab);
-		List<JRDesignStyle> styles = createStyles(design);
-	    for (JRDesignCellContents content : contents)
-	    {
-	        if (content == null) continue;
-	        JRDesignStyle style = getCellBackgroundColor(crosstab, content.getOrigin(), styles);
-            if (style != null)
-            {
-            	try{
-            	  content.setStyle(style);
-        		  content.setMode( ModeEnum.OPAQUE);
-                  //Set the text white if the background color its color is too similar to the background
-                  Color backGround = style.getBackcolor();                
-                  int luminance = (30*backGround.getRed() + 59*backGround.getGreen() + 11*backGround.getBlue())/255;
-                  if (luminance < 50 ) 
-                  {
-                      JRElement[] elements = content.getElements();
-                      for (int i=0; i<elements.length; ++i)
-                      {
-                          if (elements[i] instanceof JRDesignTextElement)
-                          {
-                              ((JRDesignTextElement)elements[i]).setForecolor(Color.WHITE);
-                          }
-                      }
-                  }
-            	}
-            	catch(NullPointerException e){}
-            }
-	    }
+		List<JRDesignStyle> styleList = createStyles(design);
+		setCellStyles(styleList);
 	}
+	
+	/**
+	 * 
+	 * Apply the list of styles to the cell of the crosstab. The styles are first set to null and then at
+	 * the style value, to force a graphical update (the style are not update if the name is the same)
+	 * 
+	 * @param styleList list of styles that will be applied on the crosstab, the order is important
+	 * and it should be: crosstab header, group, total and detail
+	 */
+	private void setCellStyles(List<JRDesignStyle> styleList) {
+		JRDesignCrosstab crosstab = (JRDesignCrosstab) getElement();
+		List<JRDesignCellContents> contents = ModelUtils.getAllCells(crosstab);
+		for (JRDesignCellContents content : contents) 
+		{
+			if (content == null) continue;
+			JRDesignStyle style = getCellBackgroundColor(crosstab, content.getOrigin(), styleList);
+			if (style != null) {
+				try {
+					content.setStyle(null);
+					content.setStyle(style);
+					content.setMode(ModeEnum.OPAQUE);
+					// Set the text white if the background color its color is
+					// too similar to the background
+					Color backGround = style.getBackcolor();
+					int luminance = (30 * backGround.getRed() + 59
+							* backGround.getGreen() + 11 * backGround.getBlue()) / 255;
+					if (luminance < 50) {
+						JRElement[] elements = content.getElements();
+						for (int i = 0; i < elements.length; ++i) {
+							if (elements[i] instanceof JRDesignTextElement) {
+								((JRDesignTextElement) elements[i])
+										.setForecolor(Color.WHITE);
+							}
+						}
+					}
+				} catch (NullPointerException e) {
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Update the style of the crosstab with a new CrosstabStyle
+	 * 
+	 * @param design the JasperDesign of the report
+	 * @param newStyles the new style template for the crosstab
+	 * @param updateOldStyles true if the new styles will overwrite the old ones, false if the old ones will keep and 
+	 * the new ones will have a different name and will be applied to the table with the different name
+	 * @param removeOldStyles if updateOldStyles is false, after the new styles are created the old one are deleted. 
+	 * if updateOldStyles is true this attribute is ignored
+	 */
+	public void updateStyle(JasperDesign design, CrosstabStyle newStyles, boolean updatOldStyles, boolean removeOldStyles){
+		updateStyle(design, createStyles(design, false), updatOldStyles, removeOldStyles);
+	}
+	
+	/**
+	 * Update the style of the crosstab with a new list of styles
+	 * 
+	 * @param design the JasperDesign of the report
+	 * @param newStyles list of styles that will be applied on the crosstab, the order is important
+	 * and it should be: crosstab header, group, total and detail.
+	 * @param updateOldStyles true if the new styles will overwrite the old ones, false if the old ones will keep and 
+	 * the new ones will have a different name and will be applied to the table with the different name
+	 * @param removeOldStyles if updateOldStyles is false, after the new styles are created the old one are deleted
+	 */
+	public void updateStyle(JasperDesign design, List<JRDesignStyle> newStyles, boolean updatOldStyles, boolean removeOldStyles){
+		CompoundCommand commands = new CompoundCommand();
+		if (updatOldStyles){
+			JRDesignStyle[] actualStyles = getStylesFromCrosstab();
+			for(int i=0; i<actualStyles.length; i++){
+				JRDesignStyle style = actualStyles[i];
+				if (style != null){
+					JRDesignStyle updatedStyle = newStyles.get(i);
+					updatedStyle.setName(style.getName());
+					design.removeStyle(style.getName());
+					commands.add(new CreateStyleCommand(design, updatedStyle));
+				}
+			}
+		} else {
+			styles = newStyles;
+			Map<String,JRStyle> stylesMap = design.getStylesMap();
+			if (removeOldStyles){
+				JRDesignStyle[] oldStyles = getStylesFromCrosstab();
+				for(JRDesignStyle style : oldStyles){
+					if (style != null) design.removeStyle(style);
+				}
+			}
+			for(JRDesignStyle style : newStyles){
+				if (style != null && !stylesMap.containsKey(style.getName())) commands.add(new CreateStyleCommand(design, style));
+			}
+		}
+		commands.execute();
+		setCellStyles(newStyles);
+	}
+	
+	
+	/**
+	 * Get a base name and check if  one the composed names of the single styles (basename + _TH or _CD or _TD) are already used
+	 * 
+	 * @param styleMap the style map
+	 * @param baseName the base name
+	 * @return true if all the composed names are available, false otherwise
+	 */
+	private boolean stylePresent(Map<String,JRStyle> styleMap, String baseName){
+		return (styleMap.containsKey(baseName+"_CH") || styleMap.containsKey(baseName+"_CG") || styleMap.containsKey(baseName+"_CT") || styleMap.containsKey(baseName+"_CD"));
+	}
+	
 
 	/**
 	 * Starting from a CrosstabStyle it generate a list of styles that will be applied to the crosstab.
+	 * It can also add them to the report
+	 * 
+	 * @param jd the jasperdesign
+	 * @param addStylesToReport true if the generated styles will also be added to the report, otherwise false
+	 * @return a list of style that can be applied to the crosstab
+	 */
+	public List<JRDesignStyle> createStyles(JasperDesign jd, boolean addStylesToReport) 
+	{
+		CompoundCommand commands = new CompoundCommand();
+		
+		CrosstabStyle style = (CrosstabStyle)getStyle();
+		String baseName = "Crosstab";
+		for (int i = 0;; i++) {
+			String name = baseName;
+			if (i > 0) {
+				name = baseName + " " + i;
+			}
+	
+			if (!(stylePresent(jd.getStylesMap(),name))) {
+				baseName = name;
+				break;
+			}
+		}
+		
+		float gridSize = style.isShowGrid() ? 0.5f : 0f;
+		
+		List<JRDesignStyle> result = new ArrayList<JRDesignStyle>();
+	    JRDesignStyle tableHeaderStyle=  new JRDesignStyle();
+	    tableHeaderStyle.setName(baseName + "_CH");
+	    setBorderWidth(tableHeaderStyle, gridSize);
+	    
+	    if (style.getWhiteGrid()) setBorderColor(tableHeaderStyle,Color.white);
+	    else setBorderColor(tableHeaderStyle,Color.black);
+	    
+	    tableHeaderStyle.setMode(ModeEnum.OPAQUE);
+	    tableHeaderStyle.setBackcolor(style.getColorValue(CrosstabStyle.COLOR_MEASURES));
+	
+	    commands.add(new CreateStyleCommand(jd, tableHeaderStyle));
+	    result.add(tableHeaderStyle);
+	    
+	    JRDesignStyle groupStyle =  new JRDesignStyle();
+	    groupStyle.setName(baseName + "_CG");
+	    setBorderWidth(groupStyle, gridSize);
+	
+	    if (style.getWhiteGrid()) setBorderColor(groupStyle,Color.white);
+	    else setBorderColor(groupStyle,Color.black);
+	
+	    groupStyle.setMode(ModeEnum.OPAQUE);
+	    groupStyle.setBackcolor(style.getColorValue(CrosstabStyle.COLOR_GROUP));
+	
+	    commands.add(new CreateStyleCommand(jd, groupStyle));
+	    result.add(groupStyle);
+	
+	    JRDesignStyle columnHeaderStyle=  new JRDesignStyle();
+	    columnHeaderStyle.setName(baseName + "_CT");
+	    setBorderWidth(columnHeaderStyle, gridSize);
+	
+	    if (style.getWhiteGrid()) setBorderColor(columnHeaderStyle,Color.white);
+	    else setBorderColor(columnHeaderStyle,Color.black);
+	
+	    columnHeaderStyle.setMode(ModeEnum.OPAQUE);
+	    columnHeaderStyle.setBackcolor(style.getColorValue(CrosstabStyle.COLOR_TOTAL));
+	
+	    commands.add(new CreateStyleCommand(jd, columnHeaderStyle));
+	    result.add(columnHeaderStyle);
+	    
+	    JRDesignStyle cellStyle=  new JRDesignStyle();
+	    cellStyle.setName(baseName + "_CD");
+	    setBorderWidth(cellStyle, gridSize);
+	
+	    if (style.getWhiteGrid()) setBorderColor(cellStyle,Color.white);
+	    else setBorderColor(cellStyle,Color.black);
+	
+	    cellStyle.setMode(ModeEnum.OPAQUE);
+	    cellStyle.setBackcolor(style.getColorValue(CrosstabStyle.COLOR_DETAIL));
+	
+	    commands.add(new CreateStyleCommand(jd, cellStyle));
+	    result.add(cellStyle);
+	   
+	    if (addStylesToReport) commands.execute();
+	    return result;
+	}
+	
+	/**
+	 * Starting from a TableStyle it generate a list of styles that will be applied to the table.
 	 * For every style generated will be executed an addCommand to add them to the report
 	 * 
 	 * @param jd the jasperdesign
-	 * @return a list of style that can be applied to the crosstab
+	 * @return a list of style that can be applied to the table
 	 */
 	@Override
-	public List<JRDesignStyle> createStyles(JasperDesign jd) 
-	{
-		if (styles == null){
-			CompoundCommand commands = new CompoundCommand();
-			
-			CrosstabStyle style = (CrosstabStyle)getStyle();
-			String baseName = "Crosstab";
-			for (int i = 0;; i++) {
-				String name = baseName;
-				if (i > 0) {
-					name = baseName + " " + i;
-				}
-		
-				if (!(jd.getStylesMap().containsKey(name+"_CH"))) {
-					baseName = name;
-					break;
-				}
-			}
-			
-			float gridSize = style.isShowGrid() ? 0.5f : 0f;
-			
-		    styles = new ArrayList<JRDesignStyle>();
-		    JRDesignStyle tableHeaderStyle=  new JRDesignStyle();
-		    tableHeaderStyle.setName(baseName + "_CH");
-		    setBorderWidth(tableHeaderStyle, gridSize);
-		    
-		    if (style.getWhiteGrid()) setBorderColor(tableHeaderStyle,Color.white);
-		    else setBorderColor(tableHeaderStyle,Color.black);
-		    
-		    tableHeaderStyle.setMode(ModeEnum.OPAQUE);
-		    tableHeaderStyle.setBackcolor(style.getColorValue(CrosstabStyle.COLOR_MEASURES));
-		
-		    commands.add(new CreateStyleCommand(jd, tableHeaderStyle));
-		    styles.add(tableHeaderStyle);
-		    
-		    JRDesignStyle groupStyle =  new JRDesignStyle();
-		    groupStyle.setName(baseName + "_CG");
-		    setBorderWidth(groupStyle, gridSize);
-		
-		    if (style.getWhiteGrid()) setBorderColor(groupStyle,Color.white);
-		    else setBorderColor(groupStyle,Color.black);
-		
-		    groupStyle.setMode(ModeEnum.OPAQUE);
-		    groupStyle.setBackcolor(style.getColorValue(CrosstabStyle.COLOR_GROUP));
-		
-		    commands.add(new CreateStyleCommand(jd, groupStyle));
-		    styles.add(groupStyle);
-		
-		    JRDesignStyle columnHeaderStyle=  new JRDesignStyle();
-		    columnHeaderStyle.setName(baseName + "_CT");
-		    setBorderWidth(columnHeaderStyle, gridSize);
-		
-		    if (style.getWhiteGrid()) setBorderColor(columnHeaderStyle,Color.white);
-		    else setBorderColor(columnHeaderStyle,Color.black);
-		
-		    columnHeaderStyle.setMode(ModeEnum.OPAQUE);
-		    columnHeaderStyle.setBackcolor(style.getColorValue(CrosstabStyle.COLOR_TOTAL));
-		
-		    commands.add(new CreateStyleCommand(jd, columnHeaderStyle));
-		    styles.add(columnHeaderStyle);
-		    
-		    JRDesignStyle cellStyle=  new JRDesignStyle();
-		    cellStyle.setName(baseName + "_CD");
-		    setBorderWidth(cellStyle, gridSize);
-		
-		    if (style.getWhiteGrid()) setBorderColor(cellStyle,Color.white);
-		    else setBorderColor(cellStyle,Color.black);
-		
-		    cellStyle.setMode(ModeEnum.OPAQUE);
-		    cellStyle.setBackcolor(style.getColorValue(CrosstabStyle.COLOR_DETAIL));
-		
-		    commands.add(new CreateStyleCommand(jd, cellStyle));
-		    styles.add(cellStyle);
-		    
-		    commands.execute();
-		}
-	    return styles;
+	public List<JRDesignStyle> createStyles(JasperDesign jd) {
+		if (styles == null) return createStyles(jd, true);
+		return styles;
 	}
 
 }
