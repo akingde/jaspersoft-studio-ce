@@ -42,10 +42,7 @@ public class SoapConnection implements IConnection {
 	}
 
 	private static void setupJServer(JServer server, ServerProfile sp) {
-		AxisProperties
-				.setProperty(
-						DefaultCommonsHTTPClientProperties.MAXIMUM_CONNECTIONS_PER_HOST_PROPERTY_KEY,
-						"4");
+		AxisProperties.setProperty(DefaultCommonsHTTPClientProperties.MAXIMUM_CONNECTIONS_PER_HOST_PROPERTY_KEY, "4");
 		server.setName(sp.getName());
 		String rurl = sp.getUrl();
 		if (rurl.endsWith("services/repository/"))
@@ -54,8 +51,7 @@ public class SoapConnection implements IConnection {
 			rurl += "services/repository";
 		server.setUrl(rurl);
 		String username = sp.getUser();
-		if (sp.getOrganisation() != null
-				&& !sp.getOrganisation().trim().isEmpty())
+		if (sp.getOrganisation() != null && !sp.getOrganisation().trim().isEmpty())
 			username += "|" + sp.getOrganisation();
 		server.setUsername(username);
 		server.setPassword(sp.getPass());
@@ -64,44 +60,37 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor get(ResourceDescriptor rd, File f)
-			throws Exception {
+	public ResourceDescriptor get(ResourceDescriptor rd, File f) throws Exception {
 		return client.get(rd, f);
 	}
 
 	@Override
-	public List<ResourceDescriptor> list(ResourceDescriptor rd)
-			throws Exception {
+	public List<ResourceDescriptor> list(ResourceDescriptor rd) throws Exception {
 		return client.list(rd);
 	}
 
 	@Override
-	public ResourceDescriptor get(ResourceDescriptor rd, File outFile,
-			List<Argument> args) throws Exception {
-		return client.get(rd, outFile);
+	public ResourceDescriptor get(ResourceDescriptor rd, File outFile, List<Argument> args) throws Exception {
+		return client.get(rd, outFile, args);
 	}
 
 	@Override
-	public void move(ResourceDescriptor rd, String destFolderURI)
-			throws Exception {
+	public void move(ResourceDescriptor rd, String destFolderURI) throws Exception {
 		client.move(rd, destFolderURI);
 	}
 
 	@Override
-	public ResourceDescriptor copy(ResourceDescriptor rd, String destFolderURI)
-			throws Exception {
+	public ResourceDescriptor copy(ResourceDescriptor rd, String destFolderURI) throws Exception {
 		return client.copy(rd, destFolderURI);
 	}
 
 	@Override
-	public ResourceDescriptor addOrModifyResource(ResourceDescriptor rd,
-			File inputFile) throws Exception {
+	public ResourceDescriptor addOrModifyResource(ResourceDescriptor rd, File inputFile) throws Exception {
 		return client.addOrModifyResource(rd, inputFile);
 	}
 
 	@Override
-	public ResourceDescriptor modifyReportUnitResource(String rUnitUri,
-			ResourceDescriptor rd, File inFile) throws Exception {
+	public ResourceDescriptor modifyReportUnitResource(String rUnitUri, ResourceDescriptor rd, File inFile) throws Exception {
 		return client.modifyReportUnitResource(rUnitUri, rd, inFile);
 	}
 
@@ -111,14 +100,12 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public void delete(ResourceDescriptor rd, String reportUnitUri)
-			throws Exception {
+	public void delete(ResourceDescriptor rd, String reportUnitUri) throws Exception {
 		client.delete(rd, reportUnitUri);
 	}
 
 	@Override
-	public Map<String, FileContent> runReport(ResourceDescriptor rd,
-			Map<String, Object> prm, List<Argument> args) throws Exception {
+	public Map<String, FileContent> runReport(ResourceDescriptor rd, Map<String, Object> prm, List<Argument> args) throws Exception {
 		return client.runReport(rd, prm, args);
 	}
 
