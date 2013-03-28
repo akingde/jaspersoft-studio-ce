@@ -56,20 +56,16 @@ public class PasteResourceAction extends Action {
 		setId(ActionFactory.PASTE.getId());
 		setText(Messages.common_paste);
 		setToolTipText(Messages.common_paste);
-		ISharedImages sharedImages = PlatformUI.getWorkbench()
-				.getSharedImages();
-		setImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
-		setDisabledImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
+		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));
 		this.treeViewer = treeViewer;
 	}
 
 	@Override
 	public boolean isEnabled() {
 		boolean res = super.isEnabled();
-		if (res && Clipboard.getDefault().getContents() != null
-				&& Clipboard.getDefault().getContents() instanceof List<?>) {
+		if (res && Clipboard.getDefault().getContents() != null && Clipboard.getDefault().getContents() instanceof List<?>) {
 			List<?> list = (List<?>) Clipboard.getDefault().getContents();
 			ANode parent = getSelected();
 			for (Object obj : list)
@@ -98,12 +94,10 @@ public class PasteResourceAction extends Action {
 	public void run() {
 		final ANode parent = getSelected();
 		final List<?> list = (List<?>) Clipboard.getDefault().getContents();
-		ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
-				.getDefault().getActiveShell());
+		ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
 			pm.run(true, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					try {
 						doWork(monitor, parent, list);
 						Display.getDefault().asyncExec(new Runnable() {
@@ -122,14 +116,13 @@ public class PasteResourceAction extends Action {
 
 			});
 		} catch (InvocationTargetException e) {
-			UIUtils.showError(e);
+			UIUtils.showError(e.getCause());
 		} catch (InterruptedException e) {
 			UIUtils.showError(e);
 		}
 	}
 
-	private void doWork(IProgressMonitor monitor, ANode parent, List<?> list)
-			throws Exception {
+	private void doWork(IProgressMonitor monitor, ANode parent, List<?> list) throws Exception {
 		MServerProfile sp = (MServerProfile) parent.getRoot();
 		String dURI = ((MResource) parent).getValue().getUriString();
 		IConnection ws = sp.getWsClient();
@@ -149,9 +142,7 @@ public class PasteResourceAction extends Action {
 							ResourceDescriptor newrd = ws.copy(origin, newname);
 							try {
 								newrd.setLabel(newrd.getName());
-								String newuri = dURI
-										+ (dURI.endsWith("/") ? "" : "/")
-										+ newrd.getName();
+								String newuri = dURI + (dURI.endsWith("/") ? "" : "/") + newrd.getName();
 								newrd.setUriString(newuri);
 
 								ws.addOrModifyResource(newrd, null);
@@ -160,12 +151,10 @@ public class PasteResourceAction extends Action {
 							}
 						}
 					} else if (parent instanceof MReportUnit) {
-						ResourceDescriptor prd = (ResourceDescriptor) parent
-								.getValue();
+						ResourceDescriptor prd = (ResourceDescriptor) parent.getValue();
 
 						String ruuri = prd.getUriString();
-						origin.setParentFolder(ruuri + "_files/"
-								+ origin.getName());
+						origin.setParentFolder(ruuri + "_files/" + origin.getName());
 						origin.setIsNew(true);
 						String oldName = origin.getName();
 						String oldLabel = origin.getLabel();
@@ -181,8 +170,7 @@ public class PasteResourceAction extends Action {
 							e.printStackTrace();
 							file = null;
 						}
-						ws.modifyReportUnitResource(prd.getUriString(), origin,
-								file);
+						ws.modifyReportUnitResource(prd.getUriString(), origin, file);
 
 						origin.setName(oldName);
 						origin.setLabel(oldLabel);
@@ -215,13 +203,11 @@ public class PasteResourceAction extends Action {
 		return n;
 	}
 
-	private void refreshNode(INode p, IProgressMonitor monitor)
-			throws Exception {
+	private void refreshNode(INode p, IProgressMonitor monitor) throws Exception {
 		if (p instanceof MResource)
 			WSClientHelper.refreshResource((MResource) p, monitor);
 		else if (p instanceof MServerProfile) {
-			WSClientHelper.listFolder(((MServerProfile) p),
-					((MServerProfile) p).getWsClient(), "/", monitor, 2);
+			WSClientHelper.listFolder(((MServerProfile) p), ((MServerProfile) p).getWsClient(), "/", monitor, 2);
 		}
 	}
 }
