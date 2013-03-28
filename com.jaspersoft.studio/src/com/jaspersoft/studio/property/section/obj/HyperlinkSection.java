@@ -242,7 +242,9 @@ public class HyperlinkSection extends AbstractSection {
 			Object propertyValue = element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_LINK_TARGET);
 			targetCombo.setText(propertyValue != null ? propertyValue.toString() : linkTargetItems[0]);
 			propertyValue = element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_LINK_TYPE);
-			typeCombo.setText(propertyValue != null ? propertyValue.toString() : linkTypeItems[0]);
+			String typeValue = propertyValue != null ? propertyValue.toString() : linkTypeItems[0];
+			//I don't set the text on the combo if it has already the right value to avoid to raise the panel refresh
+			if (!typeValue.equals(typeCombo.getText())) typeCombo.setText(typeValue);
 		}
 		isRefreshing = false;
 	}
