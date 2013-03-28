@@ -99,6 +99,9 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 	private Composite anchorContent;
 	private Composite referenceContent;
 	private Composite pageContent;
+//	private TabItem tbtmWhenExpression;
+//	private Composite whenExprContent;
+//	private WTextExpression whenExpr;
 	
 	// Enumeration combo stuff
 	private static String[] linkTargetItems=new String[]{
@@ -107,9 +110,6 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 		HyperlinkTargetEnum.TOP.getName(),
 		HyperlinkTargetEnum.PARENT.getName(),};
 	private static String[] linkTypeItems;
-	private TabItem tbtmWhenExpression;
-	private Composite whenExprContent;
-	private WTextExpression whenExpr;
 	
 	static {
 		ArrayList<HyperlinkTypeEnum> filteredTypes = new ArrayList<HyperlinkTypeEnum>(2);
@@ -360,21 +360,21 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 		};
 		tooltipExpr.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 		
-		tbtmWhenExpression = new TabItem(tabFolder, SWT.NONE);
-		tbtmWhenExpression.setText("When Expression");
-		whenExprContent = new Composite(tabFolder, SWT.NONE);
-		tbtmWhenExpression.setControl(whenExprContent);
-		whenExprContent.setLayout(new GridLayout(1, true));
-		whenExpr = new WTextExpression(whenExprContent, SWT.NONE,"Hyperlink When Expression", WTextExpression.LABEL_ON_TOP){
-			@Override
-			public void setExpression(JRDesignExpression exp) {
-				super.setExpression(exp);
-				if(!init){
-					hyperlink.setHyperlinkWhenExpression(exp);
-				}
-			}
-		};
-		whenExpr.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+//		tbtmWhenExpression = new TabItem(tabFolder, SWT.NONE);
+//		tbtmWhenExpression.setText("When Expression");
+//		whenExprContent = new Composite(tabFolder, SWT.NONE);
+//		tbtmWhenExpression.setControl(whenExprContent);
+//		whenExprContent.setLayout(new GridLayout(1, true));
+//		whenExpr = new WTextExpression(whenExprContent, SWT.NONE,"Hyperlink When Expression", WTextExpression.LABEL_ON_TOP){
+//			@Override
+//			public void setExpression(JRDesignExpression exp) {
+//				super.setExpression(exp);
+//				if(!init){
+//					hyperlink.setHyperlinkWhenExpression(exp);
+//				}
+//			}
+//		};
+//		whenExpr.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 			
 		if(hyperlink==null){
 			hyperlink=new JRDesignHyperlink();
@@ -424,8 +424,8 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 		// Hyperlink tooltip
 		tooltipExpr.setExpression((JRDesignExpression)hyperlink.getHyperlinkTooltipExpression());
 		
-		// Hyperlink when expression
-		whenExpr.setExpression((JRDesignExpression)hyperlink.getHyperlinkWhenExpression());
+//		// Hyperlink when expression
+//		whenExpr.setExpression((JRDesignExpression)hyperlink.getHyperlinkWhenExpression());
 	}
 	
 	/*
@@ -652,7 +652,7 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 		anchorExpr.setExpressionContext(expContext);
 		pageExpr.setExpressionContext(expContext);
 		tooltipExpr.setExpressionContext(expContext);
-		whenExpr.setExpressionContext(expContext);
+//		whenExpr.setExpressionContext(expContext);
 	}
 	
 }
