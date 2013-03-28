@@ -34,6 +34,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableItem;
@@ -324,12 +325,30 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	}
 	
 	/**
+	 * Recursive method to change the enable state of a control, if the control
+	 * is a composite it will drill down to disable its children
+	 * 
+	 * @param ctrl the actual control
+	 * @param enabled true if the control should be enabled, false otherwise
+	 */
+	public void recursiveSetEnabled(Control ctrl, boolean enabled) {
+		   if (ctrl instanceof Composite) {
+		      Composite comp = (Composite) ctrl;
+		      for (Control c : comp.getChildren())
+		         recursiveSetEnabled(c, enabled);
+		   } else {
+		      ctrl.setEnabled(enabled);
+		   }
+		}
+	
+	/**
 	 * Enable or disable the bottom composite where are the table sections
 	 * 
 	 * @param enabled true if it is enabled, false otherwise
 	 */
 	public void setEnabledBottomPanel(boolean enabled){
-		bottomComposite.setEnabled(enabled);
+		for (Control c : bottomComposite.getChildren())
+	         recursiveSetEnabled(c, enabled);
 	}
 	
 	/**

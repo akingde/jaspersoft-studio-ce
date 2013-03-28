@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
@@ -53,6 +54,7 @@ public class EditStyleAction extends SelectionAction {
 		super(part);
 		setText(Messages.EditStyleAction_actionName);
 		setId(ID);
+		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/table-style-16.png"));
 	}
 
 	/**

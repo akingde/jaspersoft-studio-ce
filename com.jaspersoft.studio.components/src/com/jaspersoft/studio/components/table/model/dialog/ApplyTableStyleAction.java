@@ -91,10 +91,11 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	
 	/**
 	 * 
-	 * Applay the list of styles to the cell of the table
+	 * Apply the list of styles to the cell of the table. The styles are first set to null and then at
+	 * the style value, to force a graphical update (the style are not update if the name is the same)
 	 * 
 	 * @param styleList list of styles that will be applied on the table, the order is important
-	 * and it should be: Table Style (unused), Table Header, Column Header and Detail.
+	 * and it should be: Table Style (unused), Table Header, Column Header and Detail. 
 	 */
 	private void setCellStyles(List<JRDesignStyle> styleList){
 		StandardTable table = getStandardTable(getElement());
@@ -102,20 +103,31 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 		for(BaseColumn col : columns){
 			// Seting the cell style
 			DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
-			if (colHeadCell != null)
+			if (colHeadCell != null){
+				colHeadCell.setStyle(null);
 				colHeadCell.setStyle(styleList.get(2));
+			}
 			DesignCell tblHeadCell = (DesignCell) col.getTableHeader();
-			if (tblHeadCell != null)
+			if (tblHeadCell != null){
+				tblHeadCell.setStyle(null);
 				tblHeadCell.setStyle(styleList.get(1));
+			}
 			DesignCell tblFooterCell = (DesignCell) col.getTableFooter();
-			if (tblFooterCell != null)
+			if (tblFooterCell != null){
+				tblFooterCell.setStyle(null);
 				tblFooterCell.setStyle(styleList.get(1));
+			}
 			DesignCell colFooterCell = (DesignCell) col.getColumnFooter();
-			if (colFooterCell != null)
+			if (colFooterCell != null){
+				colFooterCell.setStyle(null);
 				colFooterCell.setStyle(styleList.get(2));
+			}
 			if (col instanceof StandardColumn){
 				DesignCell detCell = (DesignCell) ((StandardColumn)col).getDetailCell();
-				if (detCell != null) detCell.setStyle(styleList.get(3));
+				if (detCell != null) {
+					detCell.setStyle(null);
+					detCell.setStyle(styleList.get(3));
+				}
 			}
 			// Style set
 		}
@@ -172,7 +184,8 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	 * @param newStyles the new style template for the table
 	 * @param updateOldStyles true if the new styles will overwrite the old ones, false if the old ones will keep and 
 	 * the new ones will have a different name and will be applied to the table with the different name
-	 * @param removeOldStyles if updateOldStyles is false, after the new styles are created the old one are deleted
+	 * @param removeOldStyles if updateOldStyles is false, after the new styles are created the old one are deleted. 
+	 * if updateOldStyles is true this attribute is ignored
 	 */
 	public void updateStyle(JasperDesign design, TableStyle newStyles, boolean updatOldStyles, boolean removeOldStyles){
 		updateStyle(design, createStyles(design, false), updatOldStyles, removeOldStyles);
@@ -211,7 +224,7 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 				}
 			}
 			for(JRDesignStyle style : newStyles){
-				if (style != null && stylesMap.containsKey(style.getName())) commands.add(new CreateStyleCommand(design, style));
+				if (style != null && !stylesMap.containsKey(style.getName())) commands.add(new CreateStyleCommand(design, style));
 			}
 		}
 		commands.execute();
