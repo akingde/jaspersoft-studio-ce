@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.report;
 
@@ -44,6 +39,8 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorPart;
@@ -425,6 +422,16 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 				int index = editors.indexOf(ave);
 				if (index > 0 && index <= editors.size() - 1) {
 					setActivePage(index);
+					final Composite prnt = getContainer().getParent();
+					final Point size = prnt.getSize();
+					prnt.getParent().setSize(size.x - 2, size.y - 2);
+					UIUtils.getDisplay().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							prnt.getParent().setSize(size.x, size.y);
+						}
+					});
+
 					// if (obj instanceof JRDesignElement)
 					// SelectionHelper.setSelection((JRDesignElement) obj, true);
 					// ave.getGraphicalViewer().setSelection(new StructuredSelection(obj));

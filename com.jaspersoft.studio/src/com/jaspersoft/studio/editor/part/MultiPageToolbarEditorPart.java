@@ -905,9 +905,9 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		Assert.isTrue(pageIndex >= 0 && pageIndex < getPageCount());
 		getTabFolder().setSelection(pageIndex);
 		pageChange(pageIndex);
-		Composite prnt = getContainer().getParent();
-		Point size = prnt.getSize();
-		prnt.getParent().setSize(size.x - 1, size.y - 1);
+		final Composite prnt = getContainer().getParent();
+		final Point size = prnt.getSize();
+		prnt.getParent().setSize(size.x - 2, size.y - 2);
 		prnt.getParent().setSize(size.x, size.y);
 	}
 
