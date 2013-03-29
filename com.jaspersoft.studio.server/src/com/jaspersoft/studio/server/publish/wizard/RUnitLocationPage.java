@@ -60,6 +60,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.publish.FindReportUnit;
 import com.jaspersoft.studio.server.utils.ValidationUtils;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -79,6 +80,12 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		this.n = n;
 	}
 
+	public void setValue(JasperDesign jDesign, ANode n) {
+		this.jDesign = jDesign;
+		this.n = n;
+		fillInput();
+	}
+
 	/**
 	 * Return the context name for the help of this page
 	 */
@@ -88,7 +95,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 	}
 
 	public MReportUnit getReportUnit() {
-		if (reportUnit != null) {
+		if (reportUnit != null && jDesign != null) {
 			ResourceDescriptor runitvalue = reportUnit.getValue();
 			if (runitvalue.getName() == null || runitvalue.getName().isEmpty()) {
 				runitvalue.setName(jDesign.getName());
@@ -100,9 +107,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 	@Override
 	public boolean canFlipToNextPage() {
-		return super.canFlipToNextPage()
-				&& (getReportUnit() instanceof MReportUnit)
-				&& getErrorMessage() == null;
+		return super.canFlipToNextPage() && (getReportUnit() instanceof MReportUnit) && getErrorMessage() == null;
 	}
 
 	@Override
@@ -155,8 +160,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 		// Report Unit ID (resource descriptor name)
 		Label lblRepoUnitID = new Label(composite, SWT.NONE);
-		lblRepoUnitID.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
-				false));
+		lblRepoUnitID.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		lblRepoUnitID.setText(Messages.RUnitLocationPage_lblreportunit);
 		ruID = new Text(composite, SWT.BORDER);
 		ruID.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -168,28 +172,30 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				}
 			}
 		});
-		ruID.setText(jDesign.getName().replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		// Report Unit shown label (resource descriptor label)
 		Label lblRepoUnitName = new Label(composite, SWT.NONE);
-		lblRepoUnitName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
-				false));
+		lblRepoUnitName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		lblRepoUnitName.setText(Messages.RUnitLocationPage_reportunitlabel);
 		ruLabel = new Text(composite, SWT.BORDER);
 		ruLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ruLabel.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
+				if (isRefresh)
+					return;
 				String rtext = ruLabel.getText();
 				ResourceDescriptor ru = getNewRunit().getValue();
 				ru.setLabel(rtext);
 				setErrorMessage(ValidationUtils.validateLabel(rtext));
 			}
 		});
-		ruLabel.setText(jDesign.getName());
+
 		ruID.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
+				if (isRefresh)
+					return;
 				String rtext = ruID.getText();
 				ResourceDescriptor ru = getNewRunit().getValue();
 				ru.setName(rtext.replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -202,8 +208,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		Label lblRepoUnitDescription = new Label(composite, SWT.NONE);
 		GridData descLblGD = new GridData(SWT.FILL, SWT.TOP, false, false);
 		lblRepoUnitDescription.setLayoutData(descLblGD);
-		lblRepoUnitDescription
-				.setText(Messages.RUnitLocationPage_reportunitdesc_label);
+		lblRepoUnitDescription.setText(Messages.RUnitLocationPage_reportunitdesc_label);
 		ruDescription = new Text(composite, SWT.BORDER | SWT.MULTI);
 		GridData descGD = new GridData(SWT.FILL, SWT.TOP, true, true);
 		descGD.minimumHeight = 50;
@@ -211,6 +216,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		ruDescription.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
+				if (isRefresh)
+					return;
 				String rtext = ruDescription.getText();
 				ResourceDescriptor ru = getNewRunit().getValue();
 				ru.setDescription(rtext);
@@ -235,29 +242,23 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			public void treeExpanded(final TreeExpansionEvent event) {
 				if (!skipEvents) {
 					try {
-						getContainer().run(false, true,
-								new IRunnableWithProgress() {
-									public void run(IProgressMonitor monitor)
-											throws InvocationTargetException,
-											InterruptedException {
-										monitor.beginTask(
-												Messages.Publish2ServerWizard_MonitorName,
-												IProgressMonitor.UNKNOWN);
-										try {
-											if (serverProvider == null)
-												serverProvider = new ServerProvider();
-											serverProvider.handleTreeEvent(
-													event, monitor);
-										} catch (Exception e) {
-											if (e instanceof InterruptedException)
-												throw (InterruptedException) e;
-											else
-												UIUtils.showError(e);
-										} finally {
-											monitor.done();
-										}
-									}
-								});
+						getContainer().run(false, true, new IRunnableWithProgress() {
+							public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+								monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
+								try {
+									if (serverProvider == null)
+										serverProvider = new ServerProvider();
+									serverProvider.handleTreeEvent(event, monitor);
+								} catch (Exception e) {
+									if (e instanceof InterruptedException)
+										throw (InterruptedException) e;
+									else
+										UIUtils.showError(e);
+								} finally {
+									monitor.done();
+								}
+							}
+						});
 					} catch (InvocationTargetException e) {
 						UIUtils.showError(e.getCause());
 					} catch (InterruptedException e) {
@@ -275,7 +276,11 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		fillInput();
 	}
 
-	private void fillInput() {
+	public void fillInput() {
+		if (jDesign != null) {
+			ruID.setText(jDesign.getName().replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
+			ruLabel.setText(jDesign.getName());
+		}
 		setSelectedNode();
 		if (n instanceof MServerProfile)
 			Display.getDefault().asyncExec(new Runnable() {
@@ -312,7 +317,12 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		return newrunit;
 	}
 
+	private boolean isRefresh = false;
+
 	protected void handleSelectionChanged(Object obj) {
+		if (isRefresh)
+			return;
+		isRefresh = true;
 		boolean isFolder = obj instanceof MFolder;
 		bnRunit.setSelection(isFolder);
 		bnRunit.setEnabled(isFolder);
@@ -322,9 +332,12 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 		reportUnit = getNewRunit();
 		performPageChecks();
-		if (obj instanceof MReportUnit)
+		if (obj instanceof MReportUnit) {
 			reportUnit = (MReportUnit) obj;
-		else if (obj instanceof MFolder) {
+			ruLabel.setText(Misc.nvl(reportUnit.getValue().getLabel()));
+			ruID.setText(Misc.nvl(reportUnit.getValue().getName()));
+			ruDescription.setText(Misc.nvl(reportUnit.getValue().getDescription()));
+		} else if (obj instanceof MFolder) {
 			reportUnit.setParent((ANode) obj, -1);
 			ResourceDescriptor nrd = reportUnit.getValue();
 			nrd.setName(ruID.getText());
@@ -336,6 +349,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		} else {
 			setPageComplete(false);
 		}
+		isRefresh = false;
 	}
 
 	private boolean skipEvents = false;
@@ -378,11 +392,9 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		Job job = new Job(Messages.FindReportUnit_jobname) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				monitor.beginTask(Messages.Publish2ServerWizard_MonitorName,
-						IProgressMonitor.UNKNOWN);
+				monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
 				try {
-					ANode node = FindReportUnit.findReportUnit(mres, monitor,
-							jDesign);
+					ANode node = FindReportUnit.findReportUnit(mres, monitor, jDesign);
 					if (monitor.isCanceled())
 						return Status.CANCEL_STATUS;
 					if (n != mres)

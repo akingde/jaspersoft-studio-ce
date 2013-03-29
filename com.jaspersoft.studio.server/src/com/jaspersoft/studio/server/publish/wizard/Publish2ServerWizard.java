@@ -16,9 +16,13 @@
 package com.jaspersoft.studio.server.publish.wizard;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -47,8 +51,13 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.MDummy;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.publish.FindResources;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -56,6 +65,7 @@ import com.jaspersoft.studio.wizards.ReportNewWizard;
 
 public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	private JasperDesign jDesign;
+	private FileSelectionPage page_1;
 	private RUnitLocationPage page0;
 	private ResourcesPage page1;
 	private DatasourceSelectionPage page2;
@@ -75,11 +85,53 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 		this.page = page;
 		this.n = n;
 		this.jrConfig = jrConfig;
+	}
 
+	private void init() {
+		if (selection instanceof IStructuredSelection) {
+			Object obj = ((IStructuredSelection) selection).getFirstElement();
+			if (obj instanceof IFile) {
+				IFile file = (IFile) obj;
+				jrConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
+				if (file.getFileExtension().equals("jrxml") || file.getFileExtension().equals("jasper"))
+					initJDesign(file);
+			}
+		}
+	}
+
+	private void initJDesign(IFile file) {
+		try {
+			if (file.exists()) {
+				jrConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
+				jDesign = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(file.getContents());
+				createRoot();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void createRoot() {
+		n = new MRoot(null, jDesign);
+		ANode sp = null;
+		List<ServerProfile> servers = ServerManager.getServerList();
+		for (ServerProfile s : servers) {
+			sp = new MServerProfile(n, s);
+			new MDummy(sp);
+		}
 	}
 
 	@Override
 	public void addPages() {
+		if (selection != null)
+			init();
+		if (jDesign == null) {
+			page_1 = new FileSelectionPage(jrConfig);
+			addPage(page_1);
+		}
+		if (n == null)
+			createRoot();
+
 		page0 = new RUnitLocationPage(jDesign, n);
 		addPage(page0);
 
@@ -92,6 +144,10 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
+		if (page == page0 && page_1 != null && jDesign == null) {
+			initJDesign(page_1.getFile());
+			page0.setValue(jDesign, n);
+		}
 		final MReportUnit rpunit = getReportUnit();
 		if (page == page1) {
 			try {
