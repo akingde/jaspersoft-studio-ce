@@ -73,6 +73,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	private int page;
 	private ANode n;
 	private JasperReportsConfiguration jrConfig;
+	private boolean doFinish = true;
 
 	public Publish2ServerWizard() {
 		super();
@@ -86,6 +87,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 		this.page = page;
 		this.n = n;
 		this.jrConfig = jrConfig;
+		doFinish = false;
 	}
 
 	private void init() {
@@ -226,6 +228,8 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public boolean performFinish() {
+		if (!doFinish)
+			return true;
 		try {
 			getContainer().run(false, true, new IRunnableWithProgress() {
 
