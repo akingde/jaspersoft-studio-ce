@@ -22,7 +22,7 @@
    <item
          title="Add the series and labels for the cities">
       <description>
-         In the fields <b>Series</b> and <b>Label</b> add the value <b>F{SHIPCITY}</b>.
+         In the fields <b>Series</b> and <b>Label</b> add the value <b>$F{SHIPCITY}</b>.
       </description>
    </item>
    <item
@@ -41,6 +41,18 @@
          title="Complete the wizard">
       <description>
          The category is not needed, so in the field <b>Category</b> insert an empty string with a double quote. Then hit the button <b>Finish</b>.
+      </description>
+   </item>
+   <item
+         title="Change the size of the summary">
+      <description>
+         Select the summary band and set its height to 500.
+      </description>
+   </item>
+   <item
+         title="Resize the chart">
+      <description>
+         Resize the chart to fill the summary band, you can right click on the chart , go under <b>Size To Container</b> and select <b>Fit Both</b>.
       </description>
    </item>
 </cheatsheet>
