@@ -59,6 +59,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.publish.FindResources;
+import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
@@ -101,9 +102,10 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 	private void initJDesign(IFile file) {
 		try {
-			if (file.exists()) {
+			if (file != null && file.exists()) {
 				jrConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
 				jDesign = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(file.getContents());
+				jrConfig.setJasperDesign(jDesign);
 				createRoot();
 			}
 		} catch (Exception e) {
@@ -144,7 +146,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		if (page == page0 && page_1 != null && jDesign == null) {
+		if (page_1 != null && jDesign == null && page == page_1) {
 			initJDesign(page_1.getFile());
 			page0.setValue(jDesign, n);
 		}
@@ -224,6 +226,24 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public boolean performFinish() {
+		try {
+			getContainer().run(false, true, new IRunnableWithProgress() {
+
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					MReportUnit mru = page0.getReportUnit();
+					JrxmlPublishAction action = new JrxmlPublishAction();
+					action.setJrConfig(jrConfig);
+					action.setMrunit(mru);
+					action.publish(mru, jDesign, monitor);
+				}
+			});
+		} catch (InvocationTargetException e) {
+			UIUtils.showError(e.getCause());
+		} catch (InterruptedException e) {
+			UIUtils.showError(e.getCause());
+		}
+
 		return true;
 	}
 

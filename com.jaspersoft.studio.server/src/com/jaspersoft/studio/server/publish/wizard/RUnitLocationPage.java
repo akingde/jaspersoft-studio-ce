@@ -314,6 +314,13 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
 			newrunit = new MReportUnit(null, rd, -1);
 		}
+		if (jDesign != null) {
+			ResourceDescriptor rd = newrunit.getValue();
+			if (rd.getName() == null) {
+				rd.setName(jDesign.getName());
+				rd.setLabel(jDesign.getName());
+			}
+		}
 		return newrunit;
 	}
 

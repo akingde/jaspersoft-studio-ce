@@ -73,10 +73,13 @@ public class JrxmlPublishAction extends AContributorAction {
 	public JrxmlPublishAction() {
 		super(ID, Messages.JrxmlPublishAction_title);
 		setToolTipText(Messages.JrxmlPublishAction_tooltip);
-		ImageDescriptor icon16 = Activator.getDefault().getImageDescriptor(
-				"icons/server--upload.png"); //$NON-NLS-1$
+		ImageDescriptor icon16 = Activator.getDefault().getImageDescriptor("icons/server--upload.png"); //$NON-NLS-1$
 		setImageDescriptor(icon16);
 		setDisabledImageDescriptor(icon16);
+	}
+
+	public void setMrunit(MReportUnit mrunit) {
+		this.mrunit = mrunit;
 	}
 
 	@Override
@@ -84,14 +87,12 @@ public class JrxmlPublishAction extends AContributorAction {
 		try {
 			final JasperDesign jasperDesign = getJasperDesign();
 			if (monitor != null)
-				new FindReportUnit().find(this, jasperDesign, startpage,
-						monitor);
+				new FindReportUnit().find(this, jasperDesign, startpage, monitor);
 			else {
 				Job job = new Job(Messages.FindReportUnit_jobname) {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
-						new FindReportUnit().find(JrxmlPublishAction.this,
-								jasperDesign, startpage, monitor);
+						new FindReportUnit().find(JrxmlPublishAction.this, jasperDesign, startpage, monitor);
 						return Status.OK_STATUS;
 					}
 
@@ -104,8 +105,7 @@ public class JrxmlPublishAction extends AContributorAction {
 		}
 	}
 
-	public void publishReportUnit(final ANode node, final JasperDesign jd,
-			int startpage, IProgressMonitor monitor) {
+	public void publishReportUnit(final ANode node, final JasperDesign jd, int startpage, IProgressMonitor monitor) {
 		boolean silent = jrConfig.get(KEY_PUBLISH2JSSWIZARD_SILENT, false);
 		if (node == null || !(node instanceof MReportUnit)) {
 			if (!createDialog(node, jd, 1))
@@ -118,6 +118,11 @@ public class JrxmlPublishAction extends AContributorAction {
 				return;
 		}
 
+		publish(node, jd, monitor);
+
+	}
+
+	public void publish(final ANode node, final JasperDesign jd, IProgressMonitor monitor) {
 		try {
 			publishResources(monitor, jd, node);
 			if (monitor.isCanceled())
@@ -130,13 +135,11 @@ public class JrxmlPublishAction extends AContributorAction {
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}
-
 	}
 
 	private boolean createDialog(ANode n, JasperDesign jd, int page) {
 		Shell shell = Display.getDefault().getActiveShell();
-		Publish2ServerWizard wizard = new Publish2ServerWizard(n, jd, jrConfig,
-				page);
+		Publish2ServerWizard wizard = new Publish2ServerWizard(n, jd, jrConfig, page);
 		WizardDialog dialog = new WizardDialog(shell, wizard);
 		dialog.create();
 		if (dialog.open() != Dialog.OK)
@@ -149,8 +152,7 @@ public class JrxmlPublishAction extends AContributorAction {
 		return ModelUtils.copyJasperDesign(jrConfig.getJasperDesign());
 	}
 
-	protected IStatus publishResources(IProgressMonitor monitor,
-			JasperDesign jd, ANode parent) throws Exception {
+	protected IStatus publishResources(IProgressMonitor monitor, JasperDesign jd, ANode parent) throws Exception {
 		if (mrunit == null || !(mrunit instanceof MReportUnit)) {
 			ResourceDescriptor rd = MReportUnit.createDescriptor(parent);
 			mrunit = new MReportUnit(parent, rd);
@@ -160,8 +162,7 @@ public class JrxmlPublishAction extends AContributorAction {
 		File file = FileUtils.createTempFile("jrsres", ".jrxml"); //$NON-NLS-1$ //$NON-NLS-2$
 		String version = ServerManager.getVersion(mrunit);
 
-		List<MResource> files = jrConfig.get(KEY_PUBLISH2JSS_DATA,
-				new ArrayList<MResource>());
+		List<MResource> files = jrConfig.get(KEY_PUBLISH2JSS_DATA, new ArrayList<MResource>());
 		for (MResource f : files) {
 			PublishOptions popt = f.getPublishOptions();
 			if (popt.isOverwrite() && popt.getjExpression() != null)
@@ -169,8 +170,7 @@ public class JrxmlPublishAction extends AContributorAction {
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;
 		}
-		FileUtils.writeFile(file,
-				JRXmlWriterHelper.writeReport(null, jd, version));
+		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(null, jd, version));
 		jrxml.setFile(file);
 		mrunit.setFile(file);
 		mrunit.getValue().getChildren().add(jrxml.getValue());
@@ -188,8 +188,7 @@ public class JrxmlPublishAction extends AContributorAction {
 		return Status.OK_STATUS;
 	}
 
-	protected ResourceDescriptor save(IProgressMonitor monitor, MResource f)
-			throws Exception {
+	protected ResourceDescriptor save(IProgressMonitor monitor, MResource f) throws Exception {
 		try {
 			return WSClientHelper.saveResource(f, monitor, false);
 		} catch (Exception e) {
@@ -205,9 +204,7 @@ public class JrxmlPublishAction extends AContributorAction {
 		String jrxmln = jd.getProperty(JrxmlExporter.PROP_REPORTRESOURCE);
 		if (jrxmln != null) {
 			String unit = mrunit.getValue().getUriString() + "_files/";
-			if (unit != null && jrxmln.startsWith(unit)
-					&& jrxmln.length() > unit.length()
-					&& jrxmln.substring(unit.length()).indexOf('/') < 0) {
+			if (unit != null && jrxmln.startsWith(unit) && jrxmln.length() > unit.length() && jrxmln.substring(unit.length()).indexOf('/') < 0) {
 				MServerProfile sp = (MServerProfile) mrunit.getRoot();
 				if (sp != null) {
 					ResourceDescriptor rd = new ResourceDescriptor();
@@ -253,16 +250,12 @@ public class JrxmlPublishAction extends AContributorAction {
 				MServerProfile server = (MServerProfile) n;
 				ServerProfile srvrd = server.getValue();
 				rpt.setProperty(JrxmlExporter.PROP_SERVERURL, srvrd.getUrl());
-
 			}
 		}
 	}
 
-	public static List<MResource> getResources(
-			JasperReportsConfiguration jrConfig) {
-		List<MResource> resources = jrConfig.get(
-				JrxmlPublishAction.KEY_PUBLISH2JSS_DATA,
-				new ArrayList<MResource>());
+	public static List<MResource> getResources(JasperReportsConfiguration jrConfig) {
+		List<MResource> resources = jrConfig.get(JrxmlPublishAction.KEY_PUBLISH2JSS_DATA, new ArrayList<MResource>());
 		jrConfig.put(JrxmlPublishAction.KEY_PUBLISH2JSS_DATA, resources);
 
 		return resources;
