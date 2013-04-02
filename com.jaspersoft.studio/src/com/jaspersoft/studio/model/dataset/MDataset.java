@@ -87,6 +87,12 @@ public class MDataset extends APropertyNode implements ICopyable {
 		setValue(jrDataset);
 	}
 
+	public boolean isMainDataset() {
+		if (getJasperDesign().getMainDataset() == getValue())
+			return true;
+		return false;
+	}
+
 	/**
 	 * Instantiates a new m dataset.
 	 * 

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
@@ -75,7 +70,7 @@ import com.jaspersoft.studio.editor.preview.stats.RecordCountScriptletFactory;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
-import com.jaspersoft.studio.editor.preview.view.report.html.JiveViewer;
+import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage;
 import com.jaspersoft.studio.preferences.execution.VirtualizerHelper;
@@ -367,7 +362,7 @@ public class ReportControler {
 					Context.putContext(randomUUID.toString(), prm);
 
 					String url = JettyUtil.getURL(file, randomUUID.toString(), jrContext);
-					JiveViewer jiveViewer = pcontainer.getJiveViewer();
+					ABrowserViewer jiveViewer = pcontainer.getJiveViewer();
 					jiveViewer.setURL(url);
 					pcontainer.getRightContainer().switchView(null, jiveViewer);
 

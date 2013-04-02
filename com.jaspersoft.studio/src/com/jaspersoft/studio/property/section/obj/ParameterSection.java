@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -39,7 +40,11 @@ public class ParameterSection extends AbstractSection {
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		createWidget4Property(parent, JRDesignParameter.PROPERTY_DESCRIPTION).getControl().setLayoutData(gd);
-		createWidget4Property(parent, JRDesignParameter.PROPERTY_FOR_PROMPTING);
+		if (getElement() instanceof MParameter) {
+			MParameter p = (MParameter) getElement();
+			if (p.isMainDataset())
+				createWidget4Property(parent, JRDesignParameter.PROPERTY_FOR_PROMPTING);
+		}
 		createWidget4Property(parent, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION);
 
 	}

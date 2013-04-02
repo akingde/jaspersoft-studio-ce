@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
@@ -61,9 +56,11 @@ public class ParametersTable {
 	private Composite composite;
 	private JRDesignDataset dataset;
 	private Color background;
+	private boolean isMainDataset;
 
-	public ParametersTable(Composite parent, JRDesignDataset dataset, Color background) {
+	public ParametersTable(Composite parent, JRDesignDataset dataset, Color background, boolean isMainDataset) {
 		this.background = background;
+		this.isMainDataset = isMainDataset;
 		this.dataset = dataset;
 		createControl(parent);
 	}
@@ -159,7 +156,7 @@ public class ParametersTable {
 
 			public void selectionChanged(SelectionChangedEvent event) {
 				StructuredSelection sel = (StructuredSelection) event.getSelection();
-				if(!sel.isEmpty()){
+				if (!sel.isEmpty()) {
 					JRDesignParameter prm = (JRDesignParameter) sel.getFirstElement();
 					delb.setEnabled(!prm.isSystemDefined());
 				}
@@ -212,7 +209,7 @@ public class ParametersTable {
 				JRDesignParameter field = (JRDesignParameter) tableItem.getData();
 				if ("NAME".equals(property)) { //$NON-NLS-1$
 					field.setName((String) value);
-				} else if ("ISFORPROMPT".equals(property)) { //$NON-NLS-1$
+				} else if ("ISFORPROMPT".equals(property) && isMainDataset) { //$NON-NLS-1$
 					field.setForPrompting((Boolean) value);
 				} else if ("TYPE".equals(property)) { //$NON-NLS-1$
 					field.setValueClassName((String) value);

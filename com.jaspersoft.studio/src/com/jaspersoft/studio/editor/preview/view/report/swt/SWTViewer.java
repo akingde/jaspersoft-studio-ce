@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.swt;
 
@@ -68,11 +63,8 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 		return composite;
 	}
 
-	private IToolBarManager tmanager;
-
 	@Override
 	public void contribute2ToolBar(IToolBarManager tmanager) {
-		this.tmanager = tmanager;
 		tmanager.add(new FirstPageAction(rptviewer));
 		tmanager.add(new PreviousPageAction(rptviewer));
 		tmanager.add(new PageNumberContributionItem(rptviewer));
@@ -96,15 +88,13 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 
 	public void setJRPRint(Statistics stats, JasperPrint jrprint) {
 		int ind = Math.max(0, rptviewer.getPageIndex());
-		if (jrprint != null) {
+		if (jrprint != null)
 			ind = Math.max(ind, jrprint.getPages().size());
-
-		}
-//		if (tmanager != null) {
-//			contribute2ToolBar(tmanager);
-//			tmanager.update(true);
-//			((ToolBarManager) tmanager).getControl().pack();
-//		}
+		// if (tmanager != null) {
+		// contribute2ToolBar(tmanager);
+		// tmanager.update(true);
+		// ((ToolBarManager) tmanager).getControl().pack();
+		// }
 		rptviewer.setDocument(jrprint);
 		rptviewer.setPageIndex(ind);
 		rptviewer.gotoFirstPage();

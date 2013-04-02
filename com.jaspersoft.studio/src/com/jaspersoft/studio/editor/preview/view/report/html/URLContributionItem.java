@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.html;
 
@@ -36,9 +31,11 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IPartListener;
 
+import com.jaspersoft.studio.utils.Misc;
+
 public class URLContributionItem extends ContributionItem implements PropertyChangeListener, Listener {
 
-	private Text combo;
+	private Text txt;
 	private ToolItem toolitem;
 	private IPartListener partListener;
 	private String url;
@@ -47,10 +44,10 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 		super("urlitem");
 		this.url = url;
 	}
-	
-	public void setUrl(String url){
+
+	public void setUrl(String url) {
 		this.url = url;
-		refresh();
+		// refresh();
 	}
 
 	/**
@@ -72,10 +69,8 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 	 * @return the new control
 	 */
 	protected Control createControl(Composite parent) {
-
-		combo = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
-
-		combo.addSelectionListener(new SelectionListener() {
+		txt = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
+		txt.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 				handleWidgetSelected(e);
 			}
@@ -84,7 +79,7 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 				handleWidgetDefaultSelected(e);
 			}
 		});
-		combo.addFocusListener(new FocusListener() {
+		txt.addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent e) {
 				// do nothing
 			}
@@ -94,9 +89,9 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 			}
 		});
 		refresh();
-		toolitem.setWidth(computeWidth(combo));
-
-		return combo;
+		toolitem.setWidth(computeWidth(txt));
+		txt.pack();
+		return txt;
 	}
 
 	/**
@@ -107,7 +102,7 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 		if (partListener == null)
 			return;
 
-		combo = null;
+		txt = null;
 		partListener = null;
 	}
 
@@ -149,9 +144,12 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 	 */
 	@Override
 	public void fill(ToolBar parent, int index) {
-		toolitem = new ToolItem(parent, SWT.SEPARATOR, index);
-		Control control = createControl(parent);
-		toolitem.setControl(control);
+		if (toolitem == null || txt == null || txt.isDisposed()) {
+			toolitem = new ToolItem(parent, SWT.SEPARATOR, index);
+			Control control = createControl(parent);
+			toolitem.setControl(control);
+		} else
+			toolitem.setWidth(computeWidth(txt));
 	}
 
 	/**
@@ -190,13 +188,13 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 	}
 
 	public void refresh() {
-		if (combo == null || combo.isDisposed())
+		if (txt == null || txt.isDisposed())
 			return;
 		// $TODO GTK workaround
 		try {
-			String strurl = url != null ? url : "";
-			combo.setText(strurl);
-			combo.setToolTipText(strurl);
+			String strurl = Misc.nvl(url);
+			txt.setText(strurl);
+			txt.setToolTipText(strurl);
 		} catch (SWTException exception) {
 			if (!SWT.getPlatform().equals("gtk")) //$NON-NLS-1$
 				throw exception;
@@ -204,7 +202,7 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 	}
 
 	public void setEnabled(boolean enabled) {
-		combo.setEnabled(enabled);
+		txt.setEnabled(enabled);
 	}
 
 }

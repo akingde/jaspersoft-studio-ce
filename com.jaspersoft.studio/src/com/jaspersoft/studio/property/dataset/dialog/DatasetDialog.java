@@ -236,7 +236,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText(Messages.DatasetDialog_ParametersTab);
 
-		ptable = new ParametersTable(tabFolder, newdataset, background);
+		ptable = new ParametersTable(tabFolder, newdataset, background, mdataset.isMainDataset());
 
 		bptab.setControl(ptable.getControl());
 	}

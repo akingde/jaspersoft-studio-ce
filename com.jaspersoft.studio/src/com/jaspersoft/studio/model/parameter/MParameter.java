@@ -64,6 +64,16 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		super();
 	}
 
+	public boolean isMainDataset() {
+		if (getParent() instanceof MParameters) {
+			MParameters prms = (MParameters) getParent();
+			if (prms.getValue() instanceof JRDesignDataset)
+				if (getJasperDesign().getMainDataset() == prms.getValue())
+					return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Instantiates a new m parameter.
 	 * 
@@ -188,7 +198,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		JRDesignParameter jrParameter = (JRDesignParameter) getValue();
 		if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION))
 			jrParameter.setDescription((String) value);
-		else if (id.equals(JRDesignParameter.PROPERTY_FOR_PROMPTING))
+		else if (id.equals(JRDesignParameter.PROPERTY_FOR_PROMPTING) && isMainDataset())
 			jrParameter.setForPrompting(((Boolean) value).booleanValue());
 		else if (id.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME))
 			jrParameter.setNestedTypeName((String) value);

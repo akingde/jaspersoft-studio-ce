@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.util;
 
@@ -255,7 +250,7 @@ public class ReportFactory {
 	 */
 	public static void createDataset(ANode nDataset, JRDesignDataset dataSet, boolean showGroups) {
 		// create parameters
-		ANode nParameters = new MParameters(nDataset, dataSet, JRDesignDataset.PROPERTY_PARAMETERS);
+		ANode nParameters = new MParameters<JRDesignDataset>(nDataset, dataSet, JRDesignDataset.PROPERTY_PARAMETERS);
 		if (dataSet.getParametersList() != null) {
 			for (JRParameter jrparam : dataSet.getParametersList()) {
 				createNode(nParameters, jrparam, -1);
@@ -279,8 +274,8 @@ public class ReportFactory {
 		ANode nVariables = new MVariables(nDataset, dataSet);
 		if (dataSet.getVariablesList() != null)
 			for (JRVariable jrVar : dataSet.getVariablesList())
-				//if (!jrVar.isSystemDefined()) 
-						createNode(nVariables, jrVar, -1);
+				// if (!jrVar.isSystemDefined())
+				createNode(nVariables, jrVar, -1);
 
 		// create scriplets
 		ANode nScriptlets = new MScriptlets(nDataset, dataSet);
