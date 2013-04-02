@@ -34,9 +34,9 @@ public class VInputControls extends AVParameters {
 	public static List<IDataInput> inputs = new ArrayList<IDataInput>();
 	static {
 		inputs.add(new DateInput());
-		inputs.addAll(ReportControler.inputs);
 		inputs.add(new ListOfValuesInput());
 		inputs.add(new QueryInput());
+		inputs.addAll(ReportControler.inputs);
 	}
 
 	private InputControlsManager icm;
@@ -81,15 +81,13 @@ public class VInputControls extends AVParameters {
 	public boolean checkFieldsFilled() {
 		if (icm.isAnyVisible()) {
 			for (ResourceDescriptor p : icm.getInputControls())
-				if (p.isMandatory() && p.isVisible() && !p.isReadOnly()
-						&& icm.getParameters().get(p.getName()) == null)
+				if (p.isMandatory() && p.isVisible() && !p.isReadOnly() && icm.getParameters().get(p.getName()) == null)
 					return false;
 		}
 		return true;
 	}
 
-	protected boolean createInput(Composite sectionClient,
-			ResourceDescriptor p, InputControlsManager icm, boolean first) {
+	protected boolean createInput(Composite sectionClient, ResourceDescriptor p, InputControlsManager icm, boolean first) {
 		PResourceDescriptor pres = new PResourceDescriptor(p, icm);
 		Class<?> vclass = pres.getValueClass();
 		if (vclass != null)
