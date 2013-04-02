@@ -2,7 +2,6 @@ package com.jaspersoft.studio.editor.preview.view.report.html;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.layout.GridData;
@@ -43,7 +42,7 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 	public void contribute2ToolBar(IToolBarManager tmanager) {
 		tmanager.add(new URLContributionItem(url));
 		tmanager.add(new Action("", JaspersoftStudioPlugin.getInstance().getImageDescriptor(
-				"icons/resources/refresh-16.png")) {
+				JaspersoftStudioPlugin.ICONS_RESOURCES_REFRESH_16_PNG)) {
 			@Override
 			public void run() {
 				browser.refresh();

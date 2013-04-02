@@ -52,6 +52,8 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		// at startup.
 	}
 
+	public static final String ICONS_RESOURCES_REFRESH_16_PNG = "icons/resources/refresh-16.png";
+
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
