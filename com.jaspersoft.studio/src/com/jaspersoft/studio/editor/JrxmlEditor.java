@@ -703,7 +703,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					model2xml();
 				break;
 			case PAGE_PREVIEW:
-				if (activePage == PAGE_XMLEDITOR)
+				if (activePage == PAGE_XMLEDITOR && !xmlFresh)
 					try {
 						xml2model();
 					} catch (Exception e) {
@@ -741,9 +741,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		try {
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
-			in = new ByteArrayInputStream(doc.get().getBytes());
-
-			InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
+			in = new ByteArrayInputStream(doc.get().getBytes("UTF-8"));
 
 			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(in);
 			jrContext.setJasperDesign(jd);
