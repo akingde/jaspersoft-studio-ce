@@ -88,7 +88,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 	}
 
 	public boolean isMainDataset() {
-		if (getJasperDesign().getMainDataset() == getValue())
+		if (getJasperDesign() != null && getJasperDesign().getMainDataset() == getValue())
 			return true;
 		return false;
 	}
