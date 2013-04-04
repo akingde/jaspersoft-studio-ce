@@ -48,7 +48,7 @@ public class ColorWidget extends Composite {
 		layout.marginWidth = 0;
 		setLayout(layout);
 
-		tcolor = new Text(this, SWT.BORDER | SWT.READ_ONLY);
+		tcolor = new Text(this, SWT.BORDER | SWT.READ_ONLY | SWT.CENTER);
 		tcolor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tcolor.addModifyListener(new ModifyListener() {
 

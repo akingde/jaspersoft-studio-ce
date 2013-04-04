@@ -56,11 +56,11 @@ public class SPPaintProvider extends ASPropertyWidget {
 		layout.marginLeft = 1;
 		layout.marginRight = 5;
 		composite.setLayout(layout);
-		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		// composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		ftext = section.getWidgetFactory().createText(composite, "...", SWT.LEFT | SWT.READ_ONLY);
+		ftext = section.getWidgetFactory().createText(composite, "...", SWT.CENTER | SWT.READ_ONLY);
 		ftext.setToolTipText(pDescriptor.getDescription());
-		setWidth(composite, 20);
+		setWidth(composite, 25);
 
 		btn = section.getWidgetFactory().createButton(composite, null, SWT.PUSH);
 		btn.setImage(pDescriptor.getLabelProvider().getImage(pprovider));

@@ -39,9 +39,18 @@ public abstract class ASPropertyWidget {
 		this.pDescriptor = pDescriptor;
 		this.section = section;
 		createComponent(parent);
-		if (getControl() != null) {
-			getControl().addFocusListener(focusListener);
-			HelpSystem.bindToHelp(pDescriptor, getControl());
+		if (getControl() != null)
+			setupFocusControl(pDescriptor, getControl());
+	}
+
+	protected void setupFocusControl(IPropertyDescriptor pDescriptor, Control c) {
+		if (c.isEnabled()) {
+			c.addFocusListener(focusListener);
+			HelpSystem.bindToHelp(pDescriptor, c);
+		}
+		if (c instanceof Composite) {
+			for (Control cc : ((Composite) c).getChildren())
+				setupFocusControl(pDescriptor, cc);
 		}
 	}
 

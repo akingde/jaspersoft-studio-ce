@@ -30,7 +30,7 @@ public class ChartSettingsSection extends AbstractSection {
 		createWidget4Property(group, ChartSettings.PROPERTY_borderStroke);
 
 		group = getWidgetFactory().createSection(parent, Messages.common_background, true, 3);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd = new GridData();
 		gd.horizontalSpan = 2;
 		createWidget4Property(group, ChartSettings.PROPERTY_backgroundPaint).getControl().setLayoutData(gd);
 		createWidget4Property(group, ChartSettings.PROPERTY_backgroundImage);

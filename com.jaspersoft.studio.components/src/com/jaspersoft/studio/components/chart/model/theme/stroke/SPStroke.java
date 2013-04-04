@@ -56,11 +56,10 @@ public class SPStroke extends ASPropertyWidget {
 		layout.marginLeft = 1;
 		layout.marginRight = 5;
 		composite.setLayout(layout);
-		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		ftext = section.getWidgetFactory().createText(composite, "", SWT.LEFT | SWT.READ_ONLY);
+		ftext = section.getWidgetFactory().createText(composite, "", SWT.CENTER | SWT.READ_ONLY);
 		ftext.setToolTipText(pDescriptor.getDescription());
-		setWidth(composite, 20);
+		setWidth(composite, 25);
 
 		Button btn = section.getWidgetFactory().createButton(composite, "...", SWT.PUSH);
 		btn.setToolTipText(pDescriptor.getDescription());

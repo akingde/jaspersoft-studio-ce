@@ -23,7 +23,7 @@ public class PlotSettingsSection extends AbstractSection {
 		createWidget4Property(group, PlotSettings.PROPERTY_orientation);
 
 		group = getWidgetFactory().createSection(parent, Messages.common_background, true, 3);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		createWidget4Property(group, PlotSettings.PROPERTY_backgroundPaint).getControl().setLayoutData(gd);
 		createWidget4Property(group, PlotSettings.PROPERTY_backgroundImage);
