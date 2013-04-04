@@ -18,8 +18,8 @@ package com.jaspersoft.studio.components.chart.editor;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
-import com.jaspersoft.studio.editor.style.AStyleContainerTreeEditPart;
-import com.jaspersoft.studio.editor.style.AStyleTreeEditPart;
+import com.jaspersoft.studio.components.chart.editor.tree.ChartThemeContainerTreeEditPart;
+import com.jaspersoft.studio.components.chart.editor.tree.ChartThemeTreeEditPart;
 import com.jaspersoft.studio.model.IContainerEditPart;
 
 /*
@@ -37,9 +37,9 @@ public class ChartThemeTreeEditPartFactory implements EditPartFactory {
 	public EditPart createEditPart(EditPart context, Object model) {
 		EditPart editPart = null;
 		if (model instanceof IContainerEditPart)
-			editPart = new AStyleContainerTreeEditPart();
+			editPart = new ChartThemeContainerTreeEditPart();
 		else
-			editPart = new AStyleTreeEditPart();
+			editPart = new ChartThemeTreeEditPart();
 		if (editPart != null)
 			editPart.setModel(model);
 		return editPart;

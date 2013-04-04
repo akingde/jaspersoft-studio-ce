@@ -16,7 +16,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
+import net.sf.jasperreports.charts.ChartThemeBundle;
 import net.sf.jasperreports.chartthemes.simple.ChartThemeSettings;
 import net.sf.jasperreports.chartthemes.simple.XmlChartTheme;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -82,12 +85,29 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 		super.pageChange(newPageIndex);
 	}
 
+	private IFile getCurrentFile() {
+		return ((IFileEditorInput) getEditorInput()).getFile();
+	}
+
+	private boolean isRefresh = false;
+
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		model2xml();
+		isRefresh = true;
+		String xml = model2xml();
 		ctEditor.doSave(monitor);
 		xmlEditor.doSave(monitor);
-		firePropertyChange(PROP_DIRTY);
+		try {
+			getCurrentFile().setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE, monitor);
+		} catch (Throwable e) {
+			UIUtils.showError(e);
+		}
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				isRefresh = false;
+				firePropertyChange(ISaveablePart.PROP_DIRTY);
+			}
+		});
 	}
 
 	private void xml2model() {
@@ -98,26 +118,32 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 		xml2model(in);
 	}
 
-	private void xml2model(InputStream in) {
+	private ChartThemeSettings xml2model(InputStream in) {
 		ChartThemeSettings cts = XmlChartTheme.loadSettings(in);
 		MRoot root = ChartSettingsFactory.createModel(cts);
 		root.setJasperConfiguration(jrContext);
+		List<ChartThemeBundle> lst = new ArrayList<ChartThemeBundle>();
+		lst.add(new JRCTXExtensionsRegistryFactory(cts));
+		jrContext.setExtensions(ChartThemeBundle.class, lst);
 		setModel(root);
+		return cts;
 	}
 
-	private void model2xml() {
+	private String model2xml() {
 		try {
 			if (model != null) {
 				ChartThemeSettings cts = (ChartThemeSettings) model.getChildren().get(0).getValue();
 				String xml = XmlChartTheme.saveSettings(cts);
-				xml = xml.replaceFirst("<chart-theme ", "<!-- Created with Jaspersoft Studio -->\n<chart-theme "); //$NON-NLS-1$ //$NON-NLS-2$
+				xml = xml.replaceFirst("<chart-theme>", "<!-- Created with Jaspersoft Studio -->\n<chart-theme>"); //$NON-NLS-1$ //$NON-NLS-2$
 				IDocumentProvider dp = xmlEditor.getDocumentProvider();
 				IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 				doc.set(xml);
+				return xml;
 			}
 		} catch (final Exception e) {
 			UIUtils.showError(e);
 		}
+		return null;
 	}
 
 	/**
@@ -127,6 +153,8 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *          the event
 	 */
 	public void resourceChanged(final IResourceChangeEvent event) {
+		if (isRefresh)
+			return;
 		switch (event.getType()) {
 		case IResourceChangeEvent.PRE_CLOSE:
 			Display.getDefault().asyncExec(new Runnable() {
@@ -199,8 +227,10 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 			} else {
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 			}
-			getJrContext(file);
-			xml2model(in);
+			if (!isRefresh) {
+				getJrContext(file);
+				xml2model(in);
+			}
 		} catch (CoreException e) {
 			e.printStackTrace();
 			throw new PartInitException(e.getMessage(), e);
@@ -226,6 +256,8 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	@Override
 	public void dispose() {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
+		setModel(null);
 		if (jrContext != null)
 			jrContext.dispose();
 		super.dispose();
@@ -372,4 +404,5 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 			UIUtils.showError(e);
 		}
 	}
+
 }

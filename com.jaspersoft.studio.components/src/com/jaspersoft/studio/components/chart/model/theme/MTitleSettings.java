@@ -168,9 +168,9 @@ public class MTitleSettings extends APropertyNode {
 		else if (id.equals(TitleSettings.PROPERTY_position))
 			ts.setPosition((EdgeEnum) posD.getEnumValue(value));
 		else if (id.equals(TitleSettings.PROPERTY_horizontalAlignment))
-			ts.setHorizontalAlignment(((JFreeChartHorizontalAlignmentEnum) posD.getEnumValue(value)).getJFreeChartValue());
+			ts.setHorizontalAlignment(((JFreeChartHorizontalAlignmentEnum) hp.getEnumValue(value)).getJFreeChartValue());
 		else if (id.equals(TitleSettings.PROPERTY_verticalAlignment))
-			ts.setVerticalAlignment(((JFreeChartVerticalAlignmentEnum) posD.getEnumValue(value)).getJFreeChartValue());
+			ts.setVerticalAlignment(((JFreeChartVerticalAlignmentEnum) vp.getEnumValue(value)).getJFreeChartValue());
 		else if (id.equals(TitleSettings.PROPERTY_backgroundPaint))
 			ts.setBackgroundPaint((PaintProvider) value);
 		else if (id.equals(TitleSettings.PROPERTY_foregroundPaint))

@@ -37,6 +37,11 @@ public class MChartThemeSettings extends ANode {
 	}
 
 	@Override
+	public ChartThemeSettings getValue() {
+		return (ChartThemeSettings) super.getValue();
+	}
+
+	@Override
 	public String getDisplayText() {
 		return "Chart Theme";
 	}

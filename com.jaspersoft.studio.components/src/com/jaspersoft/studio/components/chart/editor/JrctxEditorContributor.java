@@ -41,6 +41,8 @@ import org.eclipse.ui.editors.text.TextEditorActionContributor;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import com.jaspersoft.studio.components.Activator;
+import com.jaspersoft.studio.components.chart.editor.action.ExportJar;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.messages.Messages;
@@ -99,6 +101,9 @@ public class JrctxEditorContributor extends MultiPageEditorActionBarContributor 
 		addRetargetAction(new ZoomInRetargetAction());
 		addRetargetAction(new ZoomOutRetargetAction());
 
+		RetargetAction raction = new RetargetAction(ExportJar.ID, "Export Chart Theme jar");
+		raction.setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/charttheme_export-16.png"));
+		addRetargetAction(raction);
 	}
 
 	/**
@@ -231,6 +236,7 @@ public class JrctxEditorContributor extends MultiPageEditorActionBarContributor 
 
 		tbm.add(new Separator());
 
+		tbm.add(getAction(ExportJar.ID));
 		addZoom(tbm);
 	}
 
@@ -255,7 +261,9 @@ public class JrctxEditorContributor extends MultiPageEditorActionBarContributor 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToMenu(org.eclipse.jface.action.IMenuManager)
+	 * @see
+	 * org.eclipse.ui.part.EditorActionBarContributor#contributeToMenu(org.eclipse
+	 * .jface.action.IMenuManager)
 	 */
 	public void contributeToMenu(IMenuManager manager) {
 		super.contributeToMenu(manager);
@@ -272,7 +280,8 @@ public class JrctxEditorContributor extends MultiPageEditorActionBarContributor 
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.eclipse.ui.part.EditorActionBarContributor#contributeToStatusLine(org.eclipse.jface.action.IStatusLineManager)
+	 * org.eclipse.ui.part.EditorActionBarContributor#contributeToStatusLine(org
+	 * .eclipse.jface.action.IStatusLineManager)
 	 */
 	@Override
 	public void contributeToStatusLine(IStatusLineManager statusLineManager) {
@@ -284,8 +293,10 @@ public class JrctxEditorContributor extends MultiPageEditorActionBarContributor 
 	}
 
 	/**
-	 * Disposes the contributor. Removes all {@link RetargetAction}s that were {@link org.eclipse.ui.IPartListener}s on
-	 * the {@link org.eclipse.ui.IWorkbenchPage} and disposes them. Also disposes the action registry.
+	 * Disposes the contributor. Removes all {@link RetargetAction}s that were
+	 * {@link org.eclipse.ui.IPartListener}s on the
+	 * {@link org.eclipse.ui.IWorkbenchPage} and disposes them. Also disposes the
+	 * action registry.
 	 * <P>
 	 * Subclasses may extend this method to perform additional cleanup.
 	 * 

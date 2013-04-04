@@ -42,6 +42,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 
 public class MLegendSettings extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -140,7 +141,7 @@ public class MLegendSettings extends APropertyNode {
 	public Object getPropertyValue(Object id) {
 		LegendSettings ts = getValue();
 		if (id.equals(LegendSettings.PROPERTY_showLegend))
-			return ts.getShowLegend();
+			return Misc.nvl(ts.getShowLegend(), Boolean.TRUE);
 		if (id.equals(LegendSettings.PROPERTY_font)) {
 			clFont = MFontUtil.getMFont(clFont, ts.getFont(), null, this);
 			return clFont;
@@ -178,9 +179,9 @@ public class MLegendSettings extends APropertyNode {
 		else if (id.equals(LegendSettings.PROPERTY_position))
 			ts.setPosition((EdgeEnum) posD.getEnumValue(value));
 		else if (id.equals(LegendSettings.PROPERTY_horizontalAlignment))
-			ts.setHorizontalAlignment(((JFreeChartHorizontalAlignmentEnum) posD.getEnumValue(value)).getJFreeChartValue());
+			ts.setHorizontalAlignment(((JFreeChartHorizontalAlignmentEnum) hp.getEnumValue(value)).getJFreeChartValue());
 		else if (id.equals(LegendSettings.PROPERTY_verticalAlignment))
-			ts.setVerticalAlignment(((JFreeChartVerticalAlignmentEnum) posD.getEnumValue(value)).getJFreeChartValue());
+			ts.setVerticalAlignment(((JFreeChartVerticalAlignmentEnum) vp.getEnumValue(value)).getJFreeChartValue());
 		else if (id.equals(LegendSettings.PROPERTY_backgroundPaint))
 			ts.setBackgroundPaint((PaintProvider) value);
 		else if (id.equals(LegendSettings.PROPERTY_foregroundPaint))

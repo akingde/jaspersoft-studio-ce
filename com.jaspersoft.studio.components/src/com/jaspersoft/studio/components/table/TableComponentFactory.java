@@ -106,8 +106,8 @@ import com.jaspersoft.studio.components.table.model.table.command.CreateTableCom
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.components.table.part.TableEditPart;
 import com.jaspersoft.studio.components.table.part.TablePageEditPart;
+import com.jaspersoft.studio.editor.AContextMenuProvider;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
@@ -622,13 +622,13 @@ public class TableComponentFactory implements IComponentFactory {
 		lst.add(CreateColumnBeforeAction.ID);
 		lst.add(CreateColumnBeginAction.ID);
 		lst.add(CreateColumnEndAction.ID);
-		lst.add(AppContextMenuProvider.SEPARATOR);
+		lst.add(AContextMenuProvider.SEPARATOR);
 
 		lst.add(CreateColumnGroupAction.ID);
 		lst.add(UnGroupColumnsAction.ID);
 		lst.add(CreateColumnCellAction.ID);
 
-		lst.add(AppContextMenuProvider.SEPARATOR);
+		lst.add(AContextMenuProvider.SEPARATOR);
 		lst.add(DeleteColumnAction.ID);
 		lst.add(DeleteColumnCellAction.ID);
 		lst.add(EditStyleAction.ID);
