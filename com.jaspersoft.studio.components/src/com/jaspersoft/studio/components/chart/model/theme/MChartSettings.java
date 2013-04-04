@@ -138,10 +138,15 @@ public class MChartSettings extends APropertyNode {
 		pd.setCategory(Messages.common_borders);
 		desc.add(pd);
 
+		defaultsMap.put(ChartSettings.PROPERTY_backgroundPaint, null);
+		defaultsMap.put(ChartSettings.PROPERTY_borderPaint, null);
+		defaultsMap.put(ChartSettings.PROPERTY_backgroundImage, null);
+		defaultsMap.put(ChartSettings.PROPERTY_borderStroke, null);
+
 		defaultsMap.put(ChartSettings.PROPERTY_textAntiAlias, Boolean.TRUE);
 		defaultsMap.put(ChartSettings.PROPERTY_antiAlias, Boolean.TRUE);
 		defaultsMap.put(ChartSettings.PROPERTY_borderVisible, Boolean.TRUE);
-		defaultsMap.put(ChartSettings.PROPERTY_backgroundImageAlignment, JFreeChartAlignEnum.NORTH_WEST);
+		defaultsMap.put(ChartSettings.PROPERTY_backgroundImageAlignment, JFreeChartAlignEnum.TOP_LEFT);
 	}
 
 	private static JSSEnumPropertyDescriptor bia;
@@ -158,7 +163,7 @@ public class MChartSettings extends APropertyNode {
 		if (id.equals(ChartSettings.PROPERTY_backgroundImageAlpha))
 			return cs.getBackgroundImageAlpha();
 		if (id.equals(ChartSettings.PROPERTY_backgroundImageAlignment))
-			return Misc.nvl(cs.getBackgroundImageAlignment(), new Integer(JFreeChartAlignEnum.NORTH_WEST.getValue()));
+			return Misc.nvl(cs.getBackgroundImageAlignment(), new Integer(JFreeChartAlignEnum.TOP_LEFT.getValue()));
 
 		Object pad = PadUtil.getPropertyValue(id, cs.getPadding());
 		if (pad != null)

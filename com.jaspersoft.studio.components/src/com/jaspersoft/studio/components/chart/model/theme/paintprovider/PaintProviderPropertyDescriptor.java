@@ -41,7 +41,7 @@ public class PaintProviderPropertyDescriptor extends NTextPropertyDescriptor {
 	public ILabelProvider getLabelProvider() {
 		if (isLabelProviderSet())
 			return super.getLabelProvider();
-		return new PaintProviderLabelProvider();
+		return ColorWidget.cprovider;
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {

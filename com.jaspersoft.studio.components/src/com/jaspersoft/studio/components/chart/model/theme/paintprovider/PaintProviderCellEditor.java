@@ -49,7 +49,7 @@ public class PaintProviderCellEditor extends DialogCellEditor {
 		if (getDefaultLabel() == null)
 			return;
 		if (labelProvider == null)
-			labelProvider = new PaintProviderLabelProvider();
+			labelProvider = ColorWidget.cprovider;
 		String text = labelProvider.getText(value);
 		getDefaultLabel().setText(text);
 	}

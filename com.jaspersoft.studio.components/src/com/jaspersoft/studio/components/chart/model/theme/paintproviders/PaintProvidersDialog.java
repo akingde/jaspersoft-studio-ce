@@ -18,8 +18,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import com.jaspersoft.studio.components.chart.model.theme.paintprovider.ColorWidget;
 import com.jaspersoft.studio.components.chart.model.theme.paintprovider.PaintProviderDialog;
-import com.jaspersoft.studio.components.chart.model.theme.paintprovider.PaintProviderLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
 import com.jaspersoft.studio.swt.widgets.table.IEditElement;
@@ -115,7 +115,7 @@ public class PaintProvidersDialog extends Dialog {
 		});
 		tableViewer = new TableViewer(table);
 		tableViewer.setContentProvider(new ListContentProvider());
-		tableViewer.setLabelProvider(new PaintProviderLabelProvider());
+		tableViewer.setLabelProvider(ColorWidget.cprovider);
 
 		TableColumn column = new TableColumn(table, SWT.NONE);
 		column.setText("Stroke");

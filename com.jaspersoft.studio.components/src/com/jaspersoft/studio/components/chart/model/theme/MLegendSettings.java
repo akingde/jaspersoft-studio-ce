@@ -126,6 +126,9 @@ public class MLegendSettings extends APropertyNode {
 
 		PadUtil.createPropertyDescriptors(desc, defaultsMap, LegendSettings.PROPERTY_blockFrame, "Block Frame");
 
+		defaultsMap.put(LegendSettings.PROPERTY_backgroundPaint, null);
+		defaultsMap.put(LegendSettings.PROPERTY_foregroundPaint, null);
+
 		defaultsMap.put(LegendSettings.PROPERTY_showLegend, Boolean.TRUE);
 		defaultsMap.put(LegendSettings.PROPERTY_position, EdgeEnum.TOP);
 		defaultsMap.put(LegendSettings.PROPERTY_horizontalAlignment, JFreeChartHorizontalAlignmentEnum.LEFT);

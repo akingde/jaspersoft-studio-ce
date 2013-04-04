@@ -185,6 +185,11 @@ public class MAxisSettings extends APropertyNode {
 		location.setDescription("Location");
 		desc.add(location);
 
+		defaultsMap.put(AxisSettings.PROPERTY_linePaint, null);
+		defaultsMap.put(AxisSettings.PROPERTY_labelPaint, null);
+		defaultsMap.put(AxisSettings.PROPERTY_tickLabelPaint, null);
+		defaultsMap.put(AxisSettings.PROPERTY_tickMarksPaint, null);
+
 		defaultsMap.put(AxisSettings.PROPERTY_visible, Boolean.TRUE);
 		defaultsMap.put(AxisSettings.PROPERTY_lineVisible, Boolean.TRUE);
 		defaultsMap.put(AxisSettings.PROPERTY_labelVisible, Boolean.TRUE);
@@ -210,7 +215,7 @@ public class MAxisSettings extends APropertyNode {
 		if (id.equals(AxisSettings.PROPERTY_tickLabelsVisible))
 			return ts.getTickLabelsVisible();
 		if (id.equals(AxisSettings.PROPERTY_tickMarksVisible))
-			return ts.getTickLabelsVisible();
+			return ts.getTickMarksVisible();
 		if (id.equals(AxisSettings.PROPERTY_axisIntegerUnit))
 			return ts.getAxisIntegerUnit();
 		if (id.equals(AxisSettings.PROPERTY_labelFont)) {

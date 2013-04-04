@@ -121,6 +121,9 @@ public class MTitleSettings extends APropertyNode {
 		bgPaint.setDescription("Background paint");
 		desc.add(bgPaint);
 
+		defaultsMap.put(TitleSettings.PROPERTY_backgroundPaint, null);
+		defaultsMap.put(TitleSettings.PROPERTY_foregroundPaint, null);
+
 		defaultsMap.put(TitleSettings.PROPERTY_showTitle, Boolean.TRUE);
 		defaultsMap.put(TitleSettings.PROPERTY_position, EdgeEnum.TOP);
 		defaultsMap.put(TitleSettings.PROPERTY_horizontalAlignment, JFreeChartHorizontalAlignmentEnum.LEFT);

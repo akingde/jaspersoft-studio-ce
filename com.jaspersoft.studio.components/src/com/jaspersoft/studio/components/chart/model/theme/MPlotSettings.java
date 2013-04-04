@@ -212,6 +212,21 @@ public class MPlotSettings extends APropertyNode {
 
 		PadUtil.createPropertyDescriptors(desc, defaultsMap);
 
+		defaultsMap.put(PlotSettings.PROPERTY_backgroundPaint, null);
+		defaultsMap.put(PlotSettings.PROPERTY_outlinePaint, null);
+		defaultsMap.put(PlotSettings.PROPERTY_domainGridlinePaint, null);
+		defaultsMap.put(PlotSettings.PROPERTY_rangeGridlinePaint, null);
+		defaultsMap.put(PlotSettings.PROPERTY_backgroundPaint, null);
+		defaultsMap.put(PlotSettings.PROPERTY_backgroundImage, null);
+		defaultsMap.put(PlotSettings.PROPERTY_outlineStroke, null);
+		defaultsMap.put(PlotSettings.PROPERTY_domainGridlineStroke, null);
+		defaultsMap.put(PlotSettings.PROPERTY_rangeGridlineStroke, null);
+		defaultsMap.put(PlotSettings.PROPERTY_seriesStrokeSequence, null);
+		defaultsMap.put(PlotSettings.PROPERTY_seriesOutlineStrokeSequence, null);
+		defaultsMap.put(PlotSettings.PROPERTY_seriesColorSequence, null);
+		defaultsMap.put(PlotSettings.PROPERTY_seriesGradientPaintSequence, null);
+		defaultsMap.put(PlotSettings.PROPERTY_seriesOutlinePaintSequence, null);
+
 		defaultsMap.put(PlotSettings.PROPERTY_outlineVisible, Boolean.TRUE);
 		defaultsMap.put(PlotSettings.PROPERTY_domainGridlineVisible, Boolean.TRUE);
 		defaultsMap.put(PlotSettings.PROPERTY_rangeGridlineVisible, Boolean.TRUE);
@@ -246,7 +261,7 @@ public class MPlotSettings extends APropertyNode {
 		if (id.equals(PlotSettings.PROPERTY_labelRotation))
 			return ps.getLabelRotation();
 		if (id.equals(PlotSettings.PROPERTY_backgroundImageAlignment))
-			return Misc.nvl(ps.getBackgroundImageAlignment(), new Integer(JFreeChartAlignEnum.NORTH_WEST.getValue()));
+			return bia.getEnumValue(Misc.nvl(JFreeChartAlignEnum.getValue(ps.getBackgroundImageAlignment()), JFreeChartAlignEnum.TOP_LEFT));
 		if (id.equals(PlotSettings.PROPERTY_orientation))
 			return orientation.getEnumValue(JFreeChartPlotOrientationEnum.getValue(ps.getOrientation()));
 		if (id.equals(PlotSettings.PROPERTY_backgroundPaint))
@@ -304,7 +319,7 @@ public class MPlotSettings extends APropertyNode {
 		else if (id.equals(PlotSettings.PROPERTY_labelRotation))
 			ps.setLabelRotation((Double) value);
 		else if (id.equals(PlotSettings.PROPERTY_backgroundImageAlignment))
-			ps.setBackgroundImageAlignment((Integer) value);
+			ps.setBackgroundImageAlignment(JFreeChartAlignEnum.getJFreeChartValue((Integer) value));
 		else if (id.equals(PlotSettings.PROPERTY_orientation))
 			ps.setOrientation(((JFreeChartPlotOrientationEnum) orientation.getEnumValue(value)).getJFreeChartValue());
 		else if (id.equals(PlotSettings.PROPERTY_backgroundPaint))

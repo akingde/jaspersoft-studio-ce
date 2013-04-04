@@ -32,7 +32,6 @@ import net.sf.jasperreports.charts.design.JRDesignTimeSeriesPlot;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
@@ -43,15 +42,11 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.swt.graphics.Point;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.chart.figure.ChartFigure;
 import com.jaspersoft.studio.components.chart.model.MChart;
-import com.jaspersoft.studio.editor.gef.figures.borders.CornerBorder;
-import com.jaspersoft.studio.editor.gef.figures.borders.ElementLineBorder;
+import com.jaspersoft.studio.components.chart.model.theme.MChartThemeSettings;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
-import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 
 public class ChartThemeEditPart extends FigureEditPart {
 
@@ -64,7 +59,7 @@ public class ChartThemeEditPart extends FigureEditPart {
 		RectangleFigure rf = new RectangleFigure();
 		rf.setBorder(new LineBorder(ColorConstants.white));
 		GridLayout lm = new GridLayout(3, false);
-		lm.marginHeight = 20;
+		lm.marginHeight = 10;
 		lm.marginWidth = 20;
 		lm.horizontalSpacing = 20;
 		rf.setLayoutManager(lm);
@@ -231,7 +226,7 @@ public class ChartThemeEditPart extends FigureEditPart {
 	}
 
 	private void setupSize(JRDesignChart jdc, GridLayout lm, ChartFigure cf) {
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData();
 		gd.heightHint = jdc.getHeight();
 		gd.widthHint = jdc.getWidth();
 		lm.setConstraint(cf, gd);
@@ -256,7 +251,8 @@ public class ChartThemeEditPart extends FigureEditPart {
 					setupSize(jdc, lm, cf);
 
 					((GraphicalViewer) getViewer()).reveal(ChartThemeEditPart.this);
-					rf.setSize(jdc.getWidth() + 50, jdc.getHeight() + 50);
+					cf.setLocation(new org.eclipse.draw2d.geometry.Point(5, 5));
+					rf.setSize(jdc.getWidth() + 30, jdc.getHeight() + 30);
 				} else {
 					setupChartSize(jdc, lm, cf);
 					rf.removeAll();
@@ -280,18 +276,15 @@ public class ChartThemeEditPart extends FigureEditPart {
 	}
 
 	public void setPrefsBorder(IFigure rect) {
-		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(), DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null); //$NON-NLS-1$
-		for (IFigure cf : charts) {
-			if (pref.equals("rectangle")) //$NON-NLS-1$
-				cf.setBorder(new ElementLineBorder(ColorConstants.black));
-			else
-				cf.setBorder(new CornerBorder(ColorConstants.black, 5));
-		}
+	}
+
+	@Override
+	public MChartThemeSettings getModel() {
+		return (MChartThemeSettings) super.getModel();
 	}
 
 	@Override
 	protected void setupFigure(IFigure rect) {
-		Point p = ((GraphicalViewer) getViewer()).getControl().getSize();
 	}
 
 	@Override

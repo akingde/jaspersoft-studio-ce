@@ -53,6 +53,10 @@ public class PaintProviderDialog extends Dialog {
 	}
 
 	public PaintProvider getValue() {
+		if (value instanceof ColorProvider)
+			value = new ColorProvider(((ColorProvider) value).getColor());
+		else if (value instanceof GradientPaintProvider)
+			value = new GradientPaintProvider(((GradientPaintProvider) value).getColor1(), ((GradientPaintProvider) value).getColor2());
 		return value;
 	}
 

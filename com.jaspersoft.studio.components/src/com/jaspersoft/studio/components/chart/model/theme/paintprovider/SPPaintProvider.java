@@ -58,11 +58,12 @@ public class SPPaintProvider extends ASPropertyWidget {
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		ftext = section.getWidgetFactory().createText(composite, "", SWT.LEFT | SWT.READ_ONLY);
+		ftext = section.getWidgetFactory().createText(composite, "...", SWT.LEFT | SWT.READ_ONLY);
 		ftext.setToolTipText(pDescriptor.getDescription());
 		setWidth(composite, 20);
 
-		Button btn = section.getWidgetFactory().createButton(composite, "...", SWT.PUSH);
+		btn = section.getWidgetFactory().createButton(composite, null, SWT.PUSH);
+		btn.setImage(pDescriptor.getLabelProvider().getImage(pprovider));
 		btn.setToolTipText(pDescriptor.getDescription());
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -94,10 +95,12 @@ public class SPPaintProvider extends ASPropertyWidget {
 
 	private PaintProvider pprovider;
 	private Text ftext;
+	private Button btn;
 
 	public void setData(APropertyNode pnode, Object b) {
 		pprovider = (PaintProvider) b;
 		ftext.setText(pDescriptor.getLabelProvider().getText(pprovider));
+		btn.setImage(pDescriptor.getLabelProvider().getImage(pprovider));
 	}
 
 }

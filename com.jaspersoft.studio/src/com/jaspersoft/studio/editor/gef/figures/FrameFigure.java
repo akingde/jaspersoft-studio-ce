@@ -91,8 +91,6 @@ public class FrameFigure extends AHandleBoundsFigure {
 		Rectangle b = getBounds();
 		Rectangle o = calcBorder(getLineBox());
 		return new Rectangle(b.x + o.x, b.y + o.y, getElementWidth() + 1, getElementHeight() + 1);
-		// return new Rectangle(b.x + o.x, b.y + o.y, getJrElement().getWidth() + o.width - 1, getJrElement().getHeight()
-		// + o.height - 1);
 	}
 
 	protected int getElementWidth() {
