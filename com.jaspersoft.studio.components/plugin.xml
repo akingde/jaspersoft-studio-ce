@@ -29,6 +29,12 @@
             ClassFactory="com.jaspersoft.studio.components.chartspider.SpiderChartComponentFactory">
       </component>
    </extension>
+   <extension point="org.eclipse.ui.dropActions">
+      <action
+            class="com.jaspersoft.studio.components.table.TableStylePluginDrop"
+            id="com.jaspersoft.studio.components.table.TableStylePluginDrop">
+      </action>
+   </extension>
    <extension
          point="com.jaspersoft.studio.properties.propertySections">
       <propertySections
@@ -899,5 +905,16 @@
             id="ExtendedTableProvider"
             providerClass="com.jaspersoft.studio.components.engine.ExtendedTemplateProvider">
       </templateProvider>
+   </extension>
+   <extension
+         point="com.jaspersoft.studio.stylesViewContributor">
+      <styleViewProvider
+            id="tableStyleViewContributor"
+            providerClass="com.jaspersoft.studio.components.table.figure.TableStyleView">
+      </styleViewProvider>
+      <styleViewProvider
+            id="crosstabStyleViewContributor"
+            providerClass="com.jaspersoft.studio.components.crosstab.figure.CrosstabStyleView">
+      </styleViewProvider>
    </extension>
 </plugin>

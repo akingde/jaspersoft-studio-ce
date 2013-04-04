@@ -33,6 +33,7 @@ import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
+import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -113,6 +114,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+import com.jaspersoft.studio.style.view.TemplateViewProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -469,6 +471,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		graphicalViewer.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer,ResourceTransfer.getInstance()));
 		graphicalViewer.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer,FileTransfer.getInstance()));
 		graphicalViewer.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer,ImageURLTransfer.getInstance()));
+		
+		//Load the contributed drop providers for the contributed template styles
+		List<TemplateViewProvider> dropProviders = JaspersoftStudioPlugin.getExtensionManager().getStylesViewProvider();
+		for(TemplateViewProvider provider : dropProviders){
+			AbstractTransferDropTargetListener listener = provider.getDropListener(graphicalViewer);
+			if (listener != null) graphicalViewer.addDropTargetListener(listener);
+		}
+		
 		getEditorSite().getActionBarContributor();
 	}
 

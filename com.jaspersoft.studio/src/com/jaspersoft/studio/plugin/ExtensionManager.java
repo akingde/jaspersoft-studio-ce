@@ -40,6 +40,7 @@ import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
+import com.jaspersoft.studio.style.view.TemplateViewProvider;
 import com.jaspersoft.studio.templates.TemplateProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -162,6 +163,7 @@ public class ExtensionManager {
 	 * @return the list of contributed template provider, it can be empty but not null
 	 */
 	public List<TemplateProvider> getTemplateProviders() {
+		
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				JaspersoftStudioPlugin.PLUGIN_ID, "templateProviderSupport"); //$NON-NLS-1$ 
 
@@ -186,6 +188,44 @@ public class ExtensionManager {
 		return providersList;
 	}
 	
+	/**
+	 * A list of the contributed Tab to visualize a series of Template Styles
+	 */
+	private ArrayList<TemplateViewProvider> stylesViewList = null;
+	
+	/**
+	 * Return a list of the contributed Tab to visualize a series of Template Styles. The read styles
+	 * are cached after the first time they are red
+	 * 
+	 * @return a list of TemplateViewProvider
+	 */
+	public List<TemplateViewProvider> getStylesViewProvider() {
+		if (stylesViewList == null){
+			IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+					JaspersoftStudioPlugin.PLUGIN_ID, "stylesViewContributor"); 
+			stylesViewList = new ArrayList<TemplateViewProvider>();
+			for (IConfigurationElement el : config) {
+					
+					Object defaultSupportClazz;
+					try {
+						defaultSupportClazz = el.createExecutableExtension("providerClass");
+						if (defaultSupportClazz instanceof TemplateViewProvider) {
+							stylesViewList.add((TemplateViewProvider) defaultSupportClazz);
+						}
+					} catch (CoreException e) {
+						JaspersoftStudioPlugin
+								.getInstance()
+								.getLog()
+								.log(
+										new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+												"An error occurred while trying to create the new class.", e));
+					}
+			}
+		}
+		return stylesViewList;
+	}
+	
+
 	public List<PaletteGroup> getPaletteGroups() {
 		List<PaletteGroup> paletteGroup = new ArrayList<PaletteGroup>();
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(

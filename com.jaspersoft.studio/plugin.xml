@@ -40,6 +40,7 @@
 <extension-point id="toolitemsets" name="Tolitems sets" schema="schema/toolitemsets.exsd"/>
 <extension-point id="toolitems" name="Toolitems" schema="schema/toolitems.exsd"/>
 <extension-point id="templateProviderSupport" name="Template Provider Support" schema="schema/templateProviderSupport.exsd"/>
+<extension-point id="stylesViewContributor" name="Template Styles View Contributor" schema="schema/stylesViewContributor.exsd"/>
 
 
    <extension
@@ -1279,6 +1280,14 @@
             icon="icons/jrxml_icon.png"
             id="com.jaspersoft.studio.editor.preview.reportstate"
             name="Report State"
+            restorable="true">
+      </view>
+      <view
+            category="net.sf.jasperreports"
+            class="com.jaspersoft.studio.style.view.TemplateStyleView"
+            icon="icons/resources/style-16.png"
+            id="com.jaspersoft.studio.templateStyleView"
+            name="Template View"
             restorable="true">
       </view>
    </extension>

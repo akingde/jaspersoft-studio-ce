@@ -191,6 +191,7 @@ public class JSSSnapFeedBackPolicy extends GraphicalEditPolicy {
 	 * @see org.eclipse.gef.EditPolicy#showTargetFeedback(org.eclipse.gef.Request)
 	 */
 	public void showTargetFeedback(Request req) {
+		if (req.getType() == null) return;
 		if (req.getType().equals(REQ_MOVE) || req.getType().equals(REQ_RESIZE) || req.getType().equals(REQ_CLONE)
 				|| req.getType().equals(REQ_ADD) || req.getType().equals(REQ_CREATE)) {
 

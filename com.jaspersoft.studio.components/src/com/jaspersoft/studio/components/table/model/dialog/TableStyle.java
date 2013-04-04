@@ -13,15 +13,17 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-
 package com.jaspersoft.studio.components.table.model.dialog;
 
 import java.awt.Color;
 
 import org.eclipse.swt.graphics.RGB;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
+import com.jaspersoft.studio.property.color.ColorSchemaGenerator.SCHEMAS;
 
 /**
  * 
@@ -32,6 +34,11 @@ import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
  *
  */
 public class TableStyle extends TemplateStyle {
+
+	/**
+	 * id for serialization
+	 */
+	private static final long serialVersionUID = -6611750741729597106L;
 
 	/**
 	 * Key for the border style attribute
@@ -48,6 +55,7 @@ public class TableStyle extends TemplateStyle {
 	 * is alternated
 	 */
 	public final static String ALTERNATE_COLOR_KEY = "alternate_corlor";
+	
 	
 	/**
 	 * Key for the color detail attribute, it will be used only if the attribute identified 
@@ -101,6 +109,10 @@ public class TableStyle extends TemplateStyle {
 		storeColor (COLOR_DETAIL, new RGB(detail.getRed(), detail.getGreen(), detail.getBlue()));
 	}
 	
+	public TableStyle(){
+		super(null,null);
+	}
+	
 	/**
 	 * Set the border style
 	 * 
@@ -113,7 +125,7 @@ public class TableStyle extends TemplateStyle {
 	/**
 	 * get the border of the table
 	 * 
-	 * @return return the enumeration value that rapresent the style of the borders
+	 * @return return the enumeration value that represent the style of the borders
 	 */
 	public BorderStyleEnum getBorderStyle(){
 		return (BorderStyleEnum)getProperty(BORDER_STYLE_KEY);
@@ -139,6 +151,16 @@ public class TableStyle extends TemplateStyle {
 	}
 	
 	/**
+	 * Return the borders color
+	 * 
+	 * @return an AWT color
+	 */
+	public RGB getRGBBorderColor(){
+		RGB rgbColor =  super.getColor(BORDER_COLOR_KEY);
+		return rgbColor;
+	}
+	
+	/**
 	 * Set if the color of the detail rows are alternated
 	 * 
 	 * @param value true if the color of the detail rows are alternated, 
@@ -154,7 +176,7 @@ public class TableStyle extends TemplateStyle {
 	 * @return true if the color of the detail rows are alternated, 
 	 * false otherwise
 	 */
-	public boolean hasAlternateColor(){
+	public Boolean hasAlternateColor(){
 		return (Boolean)getProperty(ALTERNATE_COLOR_KEY);
 	}
 	
@@ -167,6 +189,84 @@ public class TableStyle extends TemplateStyle {
 	public Color getColorValue(String name){
 		RGB rgbColor =  super.getColor(name);
 		return new Color(rgbColor.red, rgbColor.green, rgbColor.blue);
+	}
+	
+	
+	/**
+	 * Return a string unique representation for the style
+	 */
+	@Override
+	public String toString() {
+		String colorSchema = variation.name();
+		Boolean alternate = hasAlternateColor();
+		String borderStyle = getBorderStyle().toString();
+		return baseColor.toString().concat(getRGBBorderColor().toString()) 
+				.concat(colorSchema).concat(borderStyle).concat(alternate.toString());
+	}
+	
+	/**
+	 * Return an XML representation of the template style
+	 * 
+	 * @return a string containing the xml representation of the style
+	 */
+	@Override
+	public String getXMLData() {
+		String result = "<"+getTemplateName()+" type=\"" + getTemplateName() +"\" ";
+		result += "alternateColor=\""+hasAlternateColor().toString()+"\" colorSchema=\"" + variation.name();
+		result += "\" borderStyle=\""+getBorderStyle().name();
+		result += "\"><description>".concat(getDescription()).concat("</description>");
+		result += xmlColor("baseColor", baseColor);
+		result += xmlColor("borderColor", getRGBBorderColor());
+		result += "</"+getTemplateName()+">";
+		return result;
+	}
+	
+	/**
+	 * Rebuild a TableStyle from its XML representation
+	 * 
+	 * @param xmlNode an XML node with the representation of a TableStyle
+	 * @return the TemplateStyle builded from the xmlNode, or null if something goes wrong during the rebuilding
+	 */
+	@Override
+	public TemplateStyle buildFromXML(Node xmlNode) {
+		try{
+			NamedNodeMap rootAttributes = xmlNode.getAttributes();
+			boolean alternateColor = rootAttributes.getNamedItem("alternateColor").getNodeValue().equals("true"); 
+			SCHEMAS variation = SCHEMAS.valueOf(rootAttributes.getNamedItem("colorSchema").getNodeValue());
+			BorderStyleEnum borderStyle = BorderStyleEnum.valueOf(rootAttributes.getNamedItem("borderStyle").getNodeValue());
+			Node firstChild = xmlNode.getFirstChild();
+			String description = null;
+			RGB baseColor = null;
+			RGB borderColor = null;
+			while(firstChild!=null){
+				if (firstChild.getNodeName().equals("baseColor")){
+					baseColor = rgbColor(firstChild);
+				} else if (firstChild.getNodeName().equals("borderColor")){
+					borderColor = rgbColor(firstChild);
+				} else if (firstChild.getNodeName().equals("description")) {
+					Node descriptionNode = firstChild.getChildNodes().item(0);
+					description = descriptionNode != null ? descriptionNode.getNodeValue() : "";		
+				}
+				firstChild = firstChild.getNextSibling();
+			}
+			TableStyle result = new TableStyle(baseColor, variation, borderStyle, borderColor, alternateColor);
+			result.setDescription(description);
+			return result;
+		} catch(Exception ex){
+			System.out.println("Unable to rebuild the table style");
+			ex.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Return an unique identifier of the table template type
+	 * 
+	 * @return a string representing the type of the table template
+	 */
+	@Override
+	public String getTemplateName() {
+		return "tableStyle";
 	}
 
 }

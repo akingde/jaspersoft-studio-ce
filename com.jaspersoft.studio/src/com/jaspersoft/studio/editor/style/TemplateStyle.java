@@ -1,10 +1,13 @@
 package com.jaspersoft.studio.editor.style;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.swt.graphics.RGB;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 
@@ -17,18 +20,28 @@ import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
  * @author Orlandin Marco
  *
  */
-public class TemplateStyle {
+public abstract class TemplateStyle implements Serializable {
+	
+	/**
+	 * serial id for the serialization
+	 */
+	private static final long serialVersionUID = -7918944412275638526L;
+
+	/**
+	 * Key for the optional description of the style
+	 */
+	public final static String DESCRIPTION_KEY = "style_description";
 	
 	/**
 	 * The base color of the style
 	 */
-	private RGB baseColor;
+	protected RGB baseColor;
 	
 	/**
 	 * A key of a variation, for informations on the available variation look at the class 
 	 * ColorSchemaGenerator
 	 */
-	private ColorSchemaGenerator.SCHEMAS variation;
+	protected ColorSchemaGenerator.SCHEMAS variation;
 	
 	/**
 	 * An has map to store color, with the pair key of the color and the SWT RGB of the color
@@ -169,6 +182,80 @@ public class TemplateStyle {
 		return storedColor.get(name);
 	}
 	
+	/**
+	 * Set the description of the style
+	 * 
+	 * @param description text of the description
+	 */
+	public void setDescription(String description){
+		storedProperties.put(DESCRIPTION_KEY, description);
+	}
 	
+	/**
+	 * Return the description of the file
+	 * 
+	 * @return the textual description. since it isn't mandatory to provide a 
+	 * description, if it wasn't set the and empty string is returned.
+	 */
+	public String getDescription(){
+		Object value = storedProperties.get(DESCRIPTION_KEY);
+		if (value != null) return value.toString();
+		else return "";
+	}
 	
+	/**
+	 * Return a XML representation of an rgb color. This consist into 
+	 * a tag with a custom name with three attribute, r, g, and b. Each of the
+	 * contains a color component
+	 * 
+	 * @param tagName the name of the tag that will contain the three components of the color
+	 * @param color the color to convert
+	 * @return A string that contains the XML representation of the color as <tagName r="red_value" g="green_value" b="blue_value"/>
+	 */
+	public static String xmlColor(String tagName, RGB color){
+		String colorString ="<".concat(tagName).concat(" r=\"");
+		colorString += color.red;
+		colorString = colorString.concat("\" g=\"");
+		colorString += color.green;
+		colorString = colorString.concat("\" b=\"");
+		colorString += color.blue;
+		colorString = colorString.concat("\"/>");
+		return colorString;
+	}
+	
+	/**
+	 * From an xml representation of a rgb color build an object of type RGB and return it
+	 * 
+	 * @param xmlColorNode  an xml node representation of a rgb color. This node must have three attribute named r, g and b
+	 * @return an rgb color
+	 */
+	public static RGB rgbColor(Node xmlColorNode){
+		NamedNodeMap colorAttributes = xmlColorNode.getAttributes();
+		int r = Integer.parseInt(colorAttributes.getNamedItem("r").getNodeValue());
+		int g = Integer.parseInt(colorAttributes.getNamedItem("g").getNodeValue());
+		int b = Integer.parseInt(colorAttributes.getNamedItem("b").getNodeValue());
+		return new RGB(r,g,b);
+	}
+	
+	/**
+	 * Return an XML representation of the template style
+	 * 
+	 * @return a string containing the xml representation of the style
+	 */
+	public abstract String getXMLData();
+	
+	/**
+	 * Return an unique identifier of the template type
+	 * 
+	 * @return a string representing the type of the template
+	 */
+	public abstract String getTemplateName();
+	
+	/**
+	 * Rebuild a TemplateStyle from its XML representation
+	 * 
+	 * @param xmlNode an XML node with the representation of a template style
+	 * @return the TemplateStyle builded from the xmlNode
+	 */
+	public abstract TemplateStyle buildFromXML(Node xmlNode);
 }

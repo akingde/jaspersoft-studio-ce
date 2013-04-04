@@ -13,7 +13,6 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-
 package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
 import org.eclipse.swt.widgets.Composite;

@@ -3,10 +3,10 @@
 <schema targetNamespace="com.jaspersoft.studio" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="com.jaspersoft.studio" id="templateProviderSupport" name="Tempalte Providers Extension"/>
+         <meta.schema plugin="com.jaspersoft.studio" id="stylesViewContributor" name="Template Styles View contributor"/>
       </appInfo>
       <documentation>
-         Provide a list of Template Provider
+         Create a tab for the view of the Template Styles
       </documentation>
    </annotation>
 
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="templateProvider" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="styleViewProvider" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="templateProvider">
+   <element name="styleViewProvider">
       <complexType>
          <attribute name="id" type="string">
             <annotation>
@@ -62,7 +62,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="com.jaspersoft.studio.editor.style.TemplateStyle:"/>
+                  <meta.attribute kind="java" basedOn=":com.jaspersoft.studio.style.view.TemplateViewProvider"/>
                </appInfo>
             </annotation>
          </attribute>

@@ -98,6 +98,8 @@ public class TableStylePreview extends Composite {
 		tableStyle = style;
 		setTBounds();
 	}
+	
+
 
 	private void createFigure(){
 		setLayout(new GridLayout(1,false));

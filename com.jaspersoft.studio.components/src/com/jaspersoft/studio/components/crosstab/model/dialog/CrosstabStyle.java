@@ -19,6 +19,8 @@ import java.awt.Color;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.graphics.RGB;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator.SCHEMAS;
@@ -31,6 +33,11 @@ import com.jaspersoft.studio.property.color.ColorSchemaGenerator.SCHEMAS;
  *
  */
 public class CrosstabStyle extends TemplateStyle {
+
+	/**
+	 * id for serialization
+	 */
+	private static final long serialVersionUID = -2866538585051431701L;
 
 	/**
 	 * Key for the boolean attribute that specify when the grid is white
@@ -72,12 +79,16 @@ public class CrosstabStyle extends TemplateStyle {
 		storeColor(COLOR_DETAIL, ColorConstants.white.getRGB());
 	}
 	
+	public CrosstabStyle(){
+		super(null,null);
+	}
+	
 	/**
 	 * Check if the crosstab has a white grid
 	 * 
 	 * @return true if the corsstab has a white grid, false otherwise
 	 */
-	public boolean getWhiteGrid(){
+	public Boolean getWhiteGrid(){
 		return (Boolean)getProperty(WHITE_GRID);
 	}
 	
@@ -86,7 +97,7 @@ public class CrosstabStyle extends TemplateStyle {
 	 * 
 	 * @return true if the corsstab has to show, false otherwise
 	 */
-	public boolean isShowGrid(){
+	public Boolean isShowGrid(){
 		return (Boolean)getProperty(SHOW_GRID);
 	}
 	
@@ -118,5 +129,72 @@ public class CrosstabStyle extends TemplateStyle {
 		RGB rgbColor =  super.getColor(name);
 		return new Color(rgbColor.red, rgbColor.green, rgbColor.blue);
 	}
+	
+	/**
+	 * Return a string unique representation for the crosstab style
+	 */
+	@Override
+	public String toString() {
+		return baseColor.toString() + variation.toString() + getWhiteGrid();
+	}
+	
+	/**
+	 * Return an XML representation of the crosstab style
+	 * 
+	 * @return a string containing the xml representation of the crosstab style
+	 */
+	@Override
+	public String getXMLData() {
+		String result = "<"+getTemplateName()+" type=\"" + getTemplateName() +"\" ";
+		result += "whiteGrid=\""+getWhiteGrid().toString()+"\" colorSchema=\"" + variation.name() + "\">";
+		result += "<description>".concat(getDescription()).concat("</description>");
+		result += xmlColor("baseColor", baseColor);
+		result += "</"+getTemplateName()+">";
+		return result;
+	}
 
+
+	/**
+	 * Rebuild a CrosstabStyle from its XML representation
+	 * 
+	 * @param xmlNode an XML node with the representation of a CrosstabStyle
+	 * @return the CrosstabStyle builded from the xmlNode, or null if something goes wrong during the rebuilding
+	 */
+	@Override
+	public TemplateStyle buildFromXML(Node xmlNode) {
+		try{
+			NamedNodeMap rootAttributes = xmlNode.getAttributes();
+			boolean whiteGrid = rootAttributes.getNamedItem("whiteGrid").getNodeValue().equals("true"); 
+			SCHEMAS variation = SCHEMAS.valueOf(rootAttributes.getNamedItem("colorSchema").getNodeValue());
+			Node firstChild = xmlNode.getFirstChild();
+			String description = null;
+			RGB baseColor = null;
+			while(firstChild!=null){
+				if (firstChild.getNodeName().equals("baseColor")){
+					baseColor = rgbColor(firstChild);
+				} else if (firstChild.getNodeName().equals("description")) {
+					Node descriptionNode = firstChild.getChildNodes().item(0);
+					description = descriptionNode != null ? descriptionNode.getNodeValue() : "";				
+				}			
+				firstChild = firstChild.getNextSibling();
+			}
+			CrosstabStyle result = new CrosstabStyle(baseColor, variation, whiteGrid);
+			result.setDescription(description);
+			return result;
+		} catch(Exception ex){
+			System.out.println("Unable to rebuild the crosstab style");
+			ex.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Return an unique identifier of the crosstab template type
+	 * 
+	 * @return a string representing the type of the crosstab template
+	 */
+	@Override
+	public String getTemplateName() {
+		return "crosstabStyle";
+	}
 }
