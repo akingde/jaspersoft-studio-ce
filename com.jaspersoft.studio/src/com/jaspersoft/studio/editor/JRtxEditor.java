@@ -246,6 +246,8 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 
 	@Override
 	public void dispose() {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
+		setModel(null);
 		if (jrContext != null)
 			jrContext.dispose();
 		super.dispose();

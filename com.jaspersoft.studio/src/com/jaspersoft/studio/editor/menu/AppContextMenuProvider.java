@@ -1,23 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.menu;
 
 import java.util.List;
 
-import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.internal.InternalImages;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -30,6 +24,7 @@ import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.action.CreatePinAction;
+import com.jaspersoft.studio.editor.AContextMenuProvider;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
@@ -64,15 +59,7 @@ import com.jaspersoft.studio.property.section.report.action.PageRemoveMarginsAct
 /*
  * The Class AppContextMenuProvider.
  */
-public class AppContextMenuProvider extends ContextMenuProvider {
-	public static final String SEPARATOR = "menuseparatornonaction";
-
-	public String getID() {
-		return "com.jaspersoft.studio.outline.contextmenu";
-	}
-
-	/** The action registry. */
-	private ActionRegistry actionRegistry;
+public class AppContextMenuProvider extends AContextMenuProvider {
 
 	/**
 	 * Instantiates a new app context menu provider.
@@ -83,8 +70,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 	 *          the registry
 	 */
 	public AppContextMenuProvider(EditPartViewer viewer, ActionRegistry registry) {
-		super(viewer);
-		setActionRegistry(registry);
+		super(viewer, registry);
 	}
 
 	/*
@@ -172,7 +158,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<String> lst = m.getActionIDs();
 		for (String ids : lst) {
-			if (ids.equals(SEPARATOR)) {
+			if (ids.equals(AContextMenuProvider.SEPARATOR)) {
 				menu.appendToGroup(IComponentFactory.GROUP_COMPONENT, new Separator());
 				continue;
 			}
@@ -351,25 +337,6 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		action = getActionRegistry().getAction(DatasetAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
-	}
-
-	/**
-	 * Gets the action registry.
-	 * 
-	 * @return the action registry
-	 */
-	public ActionRegistry getActionRegistry() {
-		return actionRegistry;
-	}
-
-	/**
-	 * Sets the action registry.
-	 * 
-	 * @param actionRegistry
-	 *          the new action registry
-	 */
-	public void setActionRegistry(ActionRegistry actionRegistry) {
-		this.actionRegistry = actionRegistry;
 	}
 
 }

@@ -25,6 +25,8 @@ import com.jaspersoft.studio.editor.style.command.CreateStyleCommand;
 import com.jaspersoft.studio.editor.style.command.CreateStyleTemplateReferenceCommand;
 import com.jaspersoft.studio.editor.style.command.DeleteStyleCommand;
 import com.jaspersoft.studio.editor.style.command.DeleteStyleTemplateCommand;
+import com.jaspersoft.studio.editor.style.tree.StyleContainerTreeEditPart;
+import com.jaspersoft.studio.editor.style.tree.StyleTreeEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
@@ -44,9 +46,9 @@ public class StyleTreeEditPartFactory implements EditPartFactory {
 	public EditPart createEditPart(EditPart context, Object model) {
 		EditPart editPart = null;
 		if (model instanceof IContainerEditPart)
-			editPart = new AStyleContainerTreeEditPart();
+			editPart = new StyleContainerTreeEditPart();
 		else
-			editPart = new AStyleTreeEditPart();
+			editPart = new StyleTreeEditPart();
 		if (editPart != null)
 			editPart.setModel(model);
 		return editPart;

@@ -177,9 +177,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 			}
 		});
 		// Add images drop listeners
-		viewer.addDropTargetListener(new ImageResourceDropTargetListener(viewer,ResourceTransfer.getInstance()));
-		viewer.addDropTargetListener(new ImageResourceDropTargetListener(viewer,FileTransfer.getInstance()));
-		viewer.addDropTargetListener(new ImageResourceDropTargetListener(viewer,ImageURLTransfer.getInstance()));
+		viewer.addDropTargetListener(new ImageResourceDropTargetListener(viewer, ResourceTransfer.getInstance()));
+		viewer.addDropTargetListener(new ImageResourceDropTargetListener(viewer, FileTransfer.getInstance()));
+		viewer.addDropTargetListener(new ImageResourceDropTargetListener(viewer, ImageURLTransfer.getInstance()));
 
 		IPageSite site = getSite();
 		site.registerContextMenu(provider.getId(), provider, site.getSelectionProvider());

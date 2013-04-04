@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.editor.style;
+package com.jaspersoft.studio.editor.style.tree;
 
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.RootEditPart;
@@ -24,7 +24,7 @@ import com.jaspersoft.studio.editor.style.editpolicy.JDStyleTreeContainerEditPol
 /*
  * The Class AContainerTreeEditPart.
  */
-public class AStyleContainerTreeEditPart extends AStyleTreeEditPart {
+public class StyleContainerTreeEditPart extends StyleTreeEditPart {
 
 	/**
 	 * Creates and installs pertinent EditPolicies.

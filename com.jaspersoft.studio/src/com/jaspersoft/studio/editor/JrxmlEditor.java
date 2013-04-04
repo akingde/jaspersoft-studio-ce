@@ -13,7 +13,6 @@ package com.jaspersoft.studio.editor;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
@@ -509,19 +508,19 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 
 			getJrContext(file);
-
-			in = getXML(jrContext, editorInput, file.getCharset(true), in, version);
-
-			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(new InputSource(in));
-			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
-			// NO LONGER AVAILABLE IN GLOBAL TOOLBAR SINCE
-			// THEY WILL BE VISIBLE IN THE ReportContainer toolbar.
-			// editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
-			// for (AContributorAction a : editorActions) {
-			// a.setJrConfig(jrContext);
-			// ((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
-			// }
 			if (!isRefresh) {
+				in = getXML(jrContext, editorInput, file.getCharset(true), in, version);
+
+				JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(new InputSource(in));
+				JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
+				// NO LONGER AVAILABLE IN GLOBAL TOOLBAR SINCE
+				// THEY WILL BE VISIBLE IN THE ReportContainer toolbar.
+				// editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
+				// for (AContributorAction a : editorActions) {
+				// a.setJrConfig(jrContext);
+				// ((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
+				// }
+
 				jrContext.setJasperDesign(jd);
 				setModel(ReportFactory.createReport(jrContext));
 			}
