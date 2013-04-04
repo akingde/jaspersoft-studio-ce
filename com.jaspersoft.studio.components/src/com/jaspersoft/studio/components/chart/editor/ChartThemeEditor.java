@@ -27,6 +27,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IActionBars;
 
 import com.jaspersoft.studio.components.chart.editor.action.ExportJar;
+import com.jaspersoft.studio.components.chart.editor.part.ChartThemeEditPartFactory;
 import com.jaspersoft.studio.components.chart.model.theme.MChartThemeSettings;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
 import com.jaspersoft.studio.editor.AGraphicEditor;

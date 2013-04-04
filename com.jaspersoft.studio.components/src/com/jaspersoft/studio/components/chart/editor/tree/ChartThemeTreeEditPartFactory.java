@@ -13,13 +13,11 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.components.chart.editor;
+package com.jaspersoft.studio.components.chart.editor.tree;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
-import com.jaspersoft.studio.components.chart.editor.tree.ChartThemeContainerTreeEditPart;
-import com.jaspersoft.studio.components.chart.editor.tree.ChartThemeTreeEditPart;
 import com.jaspersoft.studio.model.IContainerEditPart;
 
 /*

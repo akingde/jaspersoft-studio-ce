@@ -82,8 +82,10 @@ public class PaintProviderDialog extends Dialog {
 			@Override
 			public void propertyChange(PropertyChangeEvent arg0) {
 				c1 = Colors.getAWT4SWTRGBColor((RGB) arg0.getNewValue());
-				if (gpp == null && cp == null)
+				if (gpp == null && cp == null) {
 					cp = new ColorProvider(c1);
+					value = cp;
+				}
 				if (cp != null)
 					cp.setColor(c1);
 				if (gpp != null)

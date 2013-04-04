@@ -58,7 +58,7 @@ public class SPImageProvider extends SPText {
 				if (dialog.open() == Window.OK) {
 					IFile file = (IFile) dialog.getFirstResult();
 					if (file != null)
-						handleTextChanged(section, pDescriptor.getId(), file.getProjectRelativePath().toOSString());
+						handleTextChanged(section, pDescriptor.getId(), file.getRawLocation().toOSString());
 				}
 			}
 		});

@@ -8,7 +8,7 @@
  * 
  * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.components.chart.editor;
+package com.jaspersoft.studio.components.chart.editor.part;
 
 import org.eclipse.gef.EditPart;
 

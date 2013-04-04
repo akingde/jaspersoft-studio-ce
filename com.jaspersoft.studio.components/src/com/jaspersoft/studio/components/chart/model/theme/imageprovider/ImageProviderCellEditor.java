@@ -48,7 +48,7 @@ public class ImageProviderCellEditor extends ATextDialogCellEditor {
 		if (dialog.open() == Window.OK) {
 			IFile file = (IFile) dialog.getFirstResult();
 			if (file != null)
-				return file.getProjectRelativePath().toOSString();
+				return file.getRawLocation().toOSString();
 		}
 		return null;
 	}
