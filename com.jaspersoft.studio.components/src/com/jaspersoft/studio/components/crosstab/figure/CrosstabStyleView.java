@@ -40,6 +40,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.PlatformUI;
@@ -47,6 +48,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.commonstyles.CommonViewProvider;
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabStyleWizard;
 import com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
@@ -86,6 +88,8 @@ public class CrosstabStyleView extends CommonViewProvider{
 	 */
 	@Override
 	public void createControls(Composite parent) {
+		Label dragLabel = new Label(parent, SWT.NONE);
+		dragLabel.setText(Messages.CrosstabStyleView_0);
 		crosstabGallery = new Gallery(parent, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
 		final NoGroupRenderer gr = new NoGroupRenderer();
 		gr.setMinMargin(2);
@@ -98,10 +102,10 @@ public class CrosstabStyleView extends CommonViewProvider{
 		ir.setShowLabels(true);
 		crosstabGallery.setItemRenderer(ir);
 		addDragSupport();
-		
+		crosstabGallery.enableItemsTooltip(false);
 	    Menu popupMenu = new Menu(crosstabGallery);
 	    MenuItem newItem = new MenuItem(popupMenu, SWT.NONE);
-	    newItem.setText("Create style");
+	    newItem.setText(Messages.CrosstabStyleView_1);
 	    newItem.setImage(getNewStyleImage());
 	    newItem.addSelectionListener(new SelectionAdapter() {
 	    	@Override
@@ -126,7 +130,7 @@ public class CrosstabStyleView extends CommonViewProvider{
 	 */
 	@Override
 	public String getTabName() {
-		return "Crosstab Styles";
+		return "Crosstab Styles"; //$NON-NLS-1$
 	}
 
 	/**
@@ -152,7 +156,7 @@ public class CrosstabStyleView extends CommonViewProvider{
 	 */
 	@Override
 	public Image generatePreviewFigure(final TemplateStyle style){
-		String key = "crosstabTemplates_"+style.toString();
+		String key = "crosstabTemplates_"+style.toString(); //$NON-NLS-1$
 		Image image = ResourceManager.getImage(key);
 		if (image == null && style instanceof CrosstabStyle){
 			CrosstabStyle crosstabStyle = (CrosstabStyle)style;
@@ -273,10 +277,10 @@ public class CrosstabStyleView extends CommonViewProvider{
 	 */
 	@Override
 	public Image getTabImage() {
-		Image image = ResourceManager.getImage("crosstab-style-16");
+		Image image = ResourceManager.getImage("crosstab-style-16"); //$NON-NLS-1$
 		if (image == null){
-			image = Activator.getDefault().getImageDescriptor("icons/crosstab-style-16.png").createImage();
-			ResourceManager.addImage("crosstab-style-16", image);
+			image = Activator.getDefault().getImageDescriptor("icons/crosstab-style-16.png").createImage(); //$NON-NLS-1$
+			ResourceManager.addImage("crosstab-style-16", image); //$NON-NLS-1$
 		}
 		return image;
 	}

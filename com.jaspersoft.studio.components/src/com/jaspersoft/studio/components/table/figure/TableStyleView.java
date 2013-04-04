@@ -40,6 +40,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.PlatformUI;
@@ -47,6 +48,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.commonstyles.CommonViewProvider;
+import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableStyleWizard;
@@ -87,6 +89,8 @@ public class TableStyleView extends CommonViewProvider {
 	 */
 	@Override
 	public void createControls(Composite parent) {
+		Label dragLabel = new Label(parent, SWT.NONE);
+		dragLabel.setText(Messages.TableStyleView_labelText);
 		tableGallery = new Gallery(parent, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
 		final NoGroupRenderer gr = new NoGroupRenderer();
 		gr.setMinMargin(2);
@@ -95,6 +99,7 @@ public class TableStyleView extends CommonViewProvider {
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		tableGallery.setLayoutData(gd);
 		tableGallery.setGroupRenderer(gr);
+		tableGallery.enableItemsTooltip(false);
 		RoundedGalleryItemRenderer ir = new RoundedGalleryItemRenderer();
 		ir.setShowLabels(true);
 		tableGallery.setItemRenderer(ir);
@@ -102,7 +107,7 @@ public class TableStyleView extends CommonViewProvider {
 		
 	    Menu popupMenu = new Menu(tableGallery);
 	    MenuItem newItem = new MenuItem(popupMenu, SWT.NONE);
-	    newItem.setText("Create style");
+	    newItem.setText(Messages.TableStyleView_createStyleActionText);
 	    newItem.setImage(getNewStyleImage());
 	    newItem.addSelectionListener(new SelectionAdapter() {
 	    	@Override
@@ -127,7 +132,7 @@ public class TableStyleView extends CommonViewProvider {
 	 */
 	@Override
 	public String getTabName() {
-		return "Table Styles";
+		return "Table Styles"; //$NON-NLS-1$
 	}
 
 	/**
@@ -163,7 +168,7 @@ public class TableStyleView extends CommonViewProvider {
 	 * @return a preview SWT image of the table
 	 */
 	public Image generatePreviewFigure(final TemplateStyle style){
-		String key = "tableTemplates_"+style.toString();
+		String key = "tableTemplates_"+style.toString(); //$NON-NLS-1$
 		Image image = ResourceManager.getImage(key);
 		if (image == null && style instanceof TableStyle){
 			TableStyle tableStyle = (TableStyle)style;
@@ -285,10 +290,10 @@ public class TableStyleView extends CommonViewProvider {
 	 */
 	@Override
 	public Image getTabImage() {
-		Image image = ResourceManager.getImage("table-style-16");
+		Image image = ResourceManager.getImage("table-style-16"); //$NON-NLS-1$
 		if (image == null){
-			image = Activator.getDefault().getImageDescriptor("icons/table-style-16.png").createImage();
-			ResourceManager.addImage("table-style-16", image);
+			image = Activator.getDefault().getImageDescriptor("icons/table-style-16.png").createImage(); //$NON-NLS-1$
+			ResourceManager.addImage("table-style-16", image); //$NON-NLS-1$
 		}
 		return image;
 	}
