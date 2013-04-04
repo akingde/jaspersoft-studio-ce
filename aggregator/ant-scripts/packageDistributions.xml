@@ -5,6 +5,7 @@
 	<property name="jssRcpProductFolderPath" value="${basedir}/../../${jssRcpProductFolderName}" />
 	<property name="dist" value="${basedir}/../product/dist"/>
 	<property name="productRootFolder" value="jaspersoftstudio" />
+	<property name="productVersionFile" value="buildversion.properties" />
 	<!-- import properties for mac machine producing the DMG -->
 	<property file="authenticationInfo.properties"/>
 
@@ -23,7 +24,7 @@
 		</antcall>
 	</target>
 
-	<target name="prepareEnvironment" description="Prepare the environment for the packages" depends="readProductManifest">
+	<target name="prepareEnvironment" description="Prepare the environment for the packages" depends="readProductVersion">
 		<property file="jss.properties"/>
 		<delete dir="${dist}" includeemptydirs="true" defaultexcludes="false"/>
 		<mkdir dir="${dist}"/>
@@ -151,12 +152,29 @@
 	</target>
 
 	<!-- ================================= 
-          target: readProductManifest                      
+          target: readProductVersion                      
          ================================= -->
-	<target name="readProductManifest" description="Read the version for the product to be packed directly from the product plugin manifest.">
-		<property name="manifestFilePosition" value="../../${jssRcpPluginName}/META-INF/MANIFEST.MF"/>
-		<readBundleVersion fileposition="${manifestFilePosition}"/>
-		<property name="jss.version" value="${Bundle-Version}"/>
+	<target name="readProductVersion" description="Read the version for the product to be packed.">
+		<!-- need this to be able to use the if -->
+		<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+		<if>
+			<available file="${productVersionFile}"/>
+			<then>
+				<property file="${productVersionFile}"/>
+				<!-- we replace the "-SNAPSHOT" with ".SNAPSHOT" otherwise while generating the 
+					deb file an exception will be raised: Upstream version can contain hyphens only if debian version is specified! -->
+				<propertyregex property="jss.version"
+				               input="${productBuildQualifier}"
+				               regexp="-"
+				               replace="."
+				               global="true" />
+			</then>
+			<else>
+				<property name="manifestFilePosition" value="../../${jssRcpPluginName}/META-INF/MANIFEST.MF"/>
+				<readBundleVersion fileposition="${manifestFilePosition}"/>
+				<property name="jss.version" value="${Bundle-Version}"/>
+			</else>
+		</if>
 	</target>
 
 	<!-- = = = = = = = = = = = = = = = = =

@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.jaspersoft.studio.community-edition</groupId>
 		<artifactId>product</artifactId>
-		<version>1.0.0</version>
+		<version>5.1.0-SNAPSHOT</version>
 		<relativePath>../aggregator/product/</relativePath>
 	</parent>
 
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>com.jaspersoft.studio.rcp.product</artifactId>
-	<version>2.0.2</version>
+	<version>5.1.0-SNAPSHOT</version>
 	<packaging>eclipse-repository</packaging>
 	<build>
 		<plugins>
@@ -56,4 +56,40 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<!-- Profile for saving the build qualifier -->
+		<profile>
+			<id>saveBuildVersion</id>
+			<activation>
+				<property>
+					<name>saveProductVersion</name>			
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<phase>generate-resources</phase>
+								<configuration>
+									<target name="generatePropertiesFile">
+										<propertyfile file="${basedir}/../aggregator/ant-scripts/buildversion.properties" 
+										comment="This file generated during Tycho build contains the build qualifier for the product.">
+											<entry key="productBuildQualifier" value="${project.version}.${buildQualifier}" />
+										</propertyfile>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project> 

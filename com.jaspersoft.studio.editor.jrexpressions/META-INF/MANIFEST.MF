@@ -2,13 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.jaspersoft.studio.editor.jrexpressions
 Bundle-Vendor: Jaspersoft Corporation
-Bundle-Version: 2.0.2
+Bundle-Version: 5.1.0.qualifier
 Bundle-SymbolicName: com.jaspersoft.studio.editor.jrexpressions; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext.xbase;bundle-version="2.2.1";resolution:=optional;visibility:=reexport,
  org.eclipse.xtext.generator;bundle-version="2.2.1";resolution:=optional,
  org.eclipse.emf.mwe2.launch;bundle-version="2.2.0";resolution:=optional,
- com.jaspersoft.studio;bundle-version="2.0.2";visibility:=reexport
+ com.jaspersoft.studio;bundle-version="5.1.0";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.jaspersoft.studio.editor.jrexpressions,
  com.jaspersoft.studio.editor.jrexpressions.formatting,
