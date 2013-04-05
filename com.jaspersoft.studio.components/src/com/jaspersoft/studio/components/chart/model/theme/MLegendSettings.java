@@ -189,8 +189,6 @@ public class MLegendSettings extends APropertyNode {
 			ts.setBackgroundPaint((PaintProvider) value);
 		else if (id.equals(LegendSettings.PROPERTY_foregroundPaint))
 			ts.setForegroundPaint((PaintProvider) value);
-		else if (id.equals(LegendSettings.PROPERTY_blockFrame))
-			ts.setBlockFrame((BlockFrame) value);
 
 		RectangleInsets ri = PadUtil.setPropertyValue(id, value, ts.getPadding());
 		if (ri != null)

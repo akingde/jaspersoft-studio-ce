@@ -331,7 +331,10 @@ public class MPlotSettings extends APropertyNode {
 		else if (id.equals(PlotSettings.PROPERTY_rangeGridlinePaint))
 			ps.setRangeGridlinePaint((PaintProvider) value);
 		else if (id.equals(PlotSettings.PROPERTY_backgroundImage))
-			ps.setBackgroundImage(new FileImageProvider((String) value));
+			if (value == null)
+				ps.setBackgroundImage(null);
+			else
+				ps.setBackgroundImage(new FileImageProvider((String) value));
 		else if (id.equals(PlotSettings.PROPERTY_outlineStroke))
 			ps.setOutlineStroke((Stroke) value);
 		else if (id.equals(PlotSettings.PROPERTY_domainGridlineStroke))

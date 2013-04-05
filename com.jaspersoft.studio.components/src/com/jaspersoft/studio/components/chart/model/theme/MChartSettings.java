@@ -202,7 +202,10 @@ public class MChartSettings extends APropertyNode {
 		else if (id.equals(ChartSettings.PROPERTY_borderPaint))
 			cs.setBorderPaint((PaintProvider) value);
 		else if (id.equals(ChartSettings.PROPERTY_backgroundImage))
-			cs.setBackgroundImage(new FileImageProvider((String) value));
+			if (value == null)
+				cs.setBackgroundImage(null);
+			else
+				cs.setBackgroundImage(new FileImageProvider((String) value));
 		else if (id.equals(ChartSettings.PROPERTY_borderStroke))
 			cs.setBorderStroke((Stroke) value);
 
