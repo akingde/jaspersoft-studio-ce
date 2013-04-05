@@ -18,6 +18,7 @@ package com.jaspersoft.studio.utils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
 
@@ -47,5 +48,12 @@ public class ExpressionUtil {
 	public static final Object eval(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig, JasperDesign jd) {
 		ExpressionInterpreter ei = new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConfig);
 		return ei.interpretExpression(expr.getText());
+	}
+	
+	/**
+	 * @return an expression with empty string
+	 */
+	public static final JRDesignExpression getEmptyStringExpression(){
+		return new JRDesignExpression("\"\"");
 	}
 }
