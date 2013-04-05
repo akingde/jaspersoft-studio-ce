@@ -34,10 +34,20 @@ public class TableStyleWizard extends JSSWizard {
 	 */
 	private TableWizardLayoutPage layoutPage;
 	
-	public TableStyleWizard() {
+	/**
+	 * True if the dialog should have the title field
+	 */
+	private boolean showTitle;
+	
+	public TableStyleWizard(boolean showTitle) {
 		super();
 		setWindowTitle(Messages.common_table_wizard);
 		setNeedsProgressMonitor(true);
+		this.showTitle = showTitle;
+	}
+	
+	public TableStyleWizard() {
+		this(false);
 	}
 
 	/**
@@ -57,7 +67,7 @@ public class TableStyleWizard extends JSSWizard {
 
 	@Override
 	public void addPages() {
-		layoutPage = new TableWizardLayoutPage();
+		layoutPage = new TableWizardLayoutPage(showTitle);
 		addPage(layoutPage);
 		//Hide the Next and Previous buttons
 		setForcePreviousAndNextButtons(false);

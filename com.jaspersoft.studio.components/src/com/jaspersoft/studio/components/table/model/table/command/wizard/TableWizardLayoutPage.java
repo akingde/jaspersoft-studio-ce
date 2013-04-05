@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -85,6 +86,11 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	 * Checkbox for the rows alternated color
 	 */
 	private Button alternateColor;
+	
+	/**
+	 * the textfield of the title
+	 */
+	private Text titleText = null;
 
 	/**
 	 * Widget for the border color
@@ -117,6 +123,11 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	private Composite bottomComposite;
 	
 	/**
+	 * True if also the title area is created, false otherwise
+	 */
+	private boolean createTitle;
+	
+	/**
 	 * Listener called when a control is modified, cause the regeneration of the 
 	 * lastGeneratedStyle and the update of the preview
 	 */
@@ -140,11 +151,17 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		}
 	};
 	
-	protected TableWizardLayoutPage() {
+	protected TableWizardLayoutPage(boolean createTitle) {
 		super("tablepage"); 
 		setTitle(Messages.TableWizardLayoutPage_layout);
 		setDescription(Messages.TableWizardLayoutPage_description);
+		this.createTitle = createTitle;
 	}
+	
+	protected TableWizardLayoutPage(){
+		this(false);
+	}
+	
 	
 	/**
 	 * Return the context name for the help of this page
@@ -488,7 +505,9 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		Color color = ColorSchemaGenerator.getColor(colorName);
 		ColorSchemaGenerator.SCHEMAS variantKey = (ColorSchemaGenerator.SCHEMAS)variants.get(variations.getSelectionIndex()).getValue();
 		lastGeneratedStyle = new TableStyle(new RGB(color.getRed(), color.getGreen(), color.getBlue()),variantKey, borderStyle, borderColor.getColor(), alternateColor.getSelection());
+		if (titleText != null) lastGeneratedStyle.setDescription(titleText.getText());
 		preview.setTableStyle(lastGeneratedStyle);
+
 	}
 	
 	/**
@@ -505,6 +524,24 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		preview = new TableStylePreview(group, SWT.NONE);
 		preview.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
+	
+	private void createTitleLabel(Composite parent){
+		Composite titleComposite = new Composite(parent, SWT.NONE);
+		titleComposite.setLayout(new GridLayout(2,false));
+		GridData titleCompositeData = new GridData();
+		titleCompositeData.horizontalSpan = 2;
+		titleCompositeData.grabExcessHorizontalSpace=true;
+		titleCompositeData.horizontalAlignment = SWT.FILL;
+		titleComposite.setLayoutData(titleCompositeData);
+		Label descriptionLabel = new Label(titleComposite, SWT.NONE);
+		descriptionLabel.setText("Name of the style");
+		titleText = new Text(titleComposite, SWT.BORDER);
+		titleText.addModifyListener(modifyListener);
+		GridData textData = new GridData();
+		textData.grabExcessHorizontalSpace = true;
+		textData.horizontalAlignment = SWT.FILL;
+		titleText.setLayoutData(textData);
+	}
 
 	/**
 	 * Create all the controls of the dialog
@@ -515,6 +552,9 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		GridLayout generalLayout = new GridLayout(2,false);
 		dialog.setLayout(generalLayout);
 		setControl(dialog);
+		
+		//Create the title
+		if (createTitle) createTitleLabel(dialog);
 		
 		//Creating the left col
 		createLeftCol(dialog);

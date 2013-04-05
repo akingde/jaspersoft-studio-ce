@@ -31,8 +31,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -42,7 +40,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.ResourceManager;
 
@@ -74,11 +71,6 @@ public class CrosstabStyleView extends CommonViewProvider{
 	private static final int GALLERY_WIDTH = 100;
 	
 	/**
-	 * The gallery
-	 */
-	private Gallery crosstabGallery;
-	
-	/**
 	 * The gallery root item
 	 */
 	private GalleryItem tableGroup;
@@ -90,37 +82,35 @@ public class CrosstabStyleView extends CommonViewProvider{
 	public void createControls(Composite parent) {
 		Label dragLabel = new Label(parent, SWT.NONE);
 		dragLabel.setText(Messages.CrosstabStyleView_0);
-		crosstabGallery = new Gallery(parent, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
+		checkedGallery = new Gallery(parent, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
 		final NoGroupRenderer gr = new NoGroupRenderer();
 		gr.setMinMargin(2);
 		gr.setItemSize(GALLERY_WIDTH, GALLERY_HEIGHT);
 		gr.setAutoMargin(true);
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		crosstabGallery.setLayoutData(gd);
-		crosstabGallery.setGroupRenderer(gr);
+		checkedGallery.setLayoutData(gd);
+		checkedGallery.setGroupRenderer(gr);
 		RoundedGalleryItemRenderer ir = new RoundedGalleryItemRenderer();
 		ir.setShowLabels(true);
-		crosstabGallery.setItemRenderer(ir);
+		checkedGallery.setItemRenderer(ir);
 		addDragSupport();
-		crosstabGallery.enableItemsTooltip(false);
-	    Menu popupMenu = new Menu(crosstabGallery);
-	    MenuItem newItem = new MenuItem(popupMenu, SWT.NONE);
-	    newItem.setText(Messages.CrosstabStyleView_1);
-	    newItem.setImage(getNewStyleImage());
-	    newItem.addSelectionListener(new SelectionAdapter() {
-	    	@Override
-	    	public void widgetSelected(SelectionEvent e) {
-	    		CrosstabStyleWizard wizard = new CrosstabStyleWizard();
-	    		WizardDialog dialog = getEditorDialog(wizard);
-	    		if (dialog.open() == Dialog.OK){
-	    			CrosstabStyle newStyle = wizard.getTableStyle();
-	    			TemplateStyleView.getTemplateStylesStorage().addStyle(newStyle);
-	    			getItem(newStyle, tableGroup);
-	    			crosstabGallery.redraw();
-	    		}
-	    	}
-		});
-	    crosstabGallery.setMenu(popupMenu);
+		checkedGallery.enableItemsTooltip(false);
+	    Menu popupMenu = new Menu(checkedGallery);
+	    checkedGallery.setMenu(popupMenu);
+	    checkedGallery.addMouseListener(new GalleryRightClick());
+	    initializeCreateAction();
+	    initializeDeleteAction();
+	}
+	
+	protected void doCreate(){
+		CrosstabStyleWizard wizard = new CrosstabStyleWizard(true);
+		WizardDialog dialog = getEditorDialog(wizard);
+		if (dialog.open() == Dialog.OK){
+			CrosstabStyle newStyle = wizard.getTableStyle();
+			TemplateStyleView.getTemplateStylesStorage().addStyle(newStyle);
+			getItem(newStyle, tableGroup);
+			checkedGallery.redraw();
+		}
 	}
 	
 	/**
@@ -141,11 +131,11 @@ public class CrosstabStyleView extends CommonViewProvider{
 	 */
 	@Override
 	public void fillStyles(Collection<TemplateStyle> styles) {
-		tableGroup = new GalleryItem(crosstabGallery, SWT.NONE);
-		crosstabGallery.setRedraw(false);
+		tableGroup = new GalleryItem(checkedGallery, SWT.NONE);
+		checkedGallery.setRedraw(false);
 		for(TemplateStyle style : styles)
 			if (style instanceof CrosstabStyle) getItem(style, tableGroup);
-		crosstabGallery.setRedraw(true);
+		checkedGallery.setRedraw(true);
 	}
 	
 	/**
@@ -164,16 +154,24 @@ public class CrosstabStyleView extends CommonViewProvider{
 			GC graphics = new GC(image);
 			int y = 1;
 			int x = 1;
-			int w = GALLERY_WIDTH-2;
-			int h = GALLERY_HEIGHT-2;
+			int w = GALLERY_WIDTH-6;
+			int h = GALLERY_HEIGHT-6;
 		    int rowHeight = h/4;
 		    int rowWidth = w/4;
 	        //I recalculate the total width and height with the rounded values;
 	        w = rowWidth*4;
 	        h = rowHeight*4;
+	        //Draw the shadow
+		    Rectangle bounds = new Rectangle(x,y,w,h);
+		    fillRoundRectangleDropShadow(graphics, bounds, 6, 4, 4); 
 		    RGB c = null;
 		    Color swtColor;
 		    Display disp = PlatformUI.getWorkbench().getDisplay();
+		    //First square
+		    Rectangle firstSquare = new Rectangle(x, y, rowWidth, rowHeight);
+		    graphics.setBackground(checkedGallery.getBackground());
+		    graphics.fillRectangle(firstSquare.x,firstSquare.y,firstSquare.width,firstSquare.width);
+		    
 	        //Last row and column
 	        Rectangle lastRow = new Rectangle(x, y+rowHeight*3, w, rowHeight);
 	        Rectangle lastCol = new Rectangle(x+rowWidth*3, y, rowWidth, h);
@@ -244,9 +242,9 @@ public class CrosstabStyleView extends CommonViewProvider{
 	private void addDragSupport(){
 		int operations = DND.DROP_MOVE;
 		final Transfer[] types = new Transfer[] { CrosstrabRestrictedTransferType.getInstance() };
-		DragSource source = new DragSource(crosstabGallery, operations);
+		DragSource source = new DragSource(checkedGallery, operations);
 		source.setTransfer(types);
-		source.addDragListener(new StyleDragListener(crosstabGallery));
+		source.addDragListener(new StyleDragListener());
 	}
 
 	/**

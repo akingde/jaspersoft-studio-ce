@@ -31,8 +31,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -42,7 +40,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.ResourceManager;
 
@@ -75,15 +72,11 @@ public class TableStyleView extends CommonViewProvider {
 	private static final int GALLERY_WIDTH = 100;
 	
 	/**
-	 * The gallery
-	 */
-	private Gallery tableGallery;	
-	
-	/**
 	 * The gallery root item
 	 */
 	private GalleryItem tableGroup;
 	
+
 	/**
 	 * Create a gallery with inside all the table styles with their previews
 	 */
@@ -91,38 +84,39 @@ public class TableStyleView extends CommonViewProvider {
 	public void createControls(Composite parent) {
 		Label dragLabel = new Label(parent, SWT.NONE);
 		dragLabel.setText(Messages.TableStyleView_labelText);
-		tableGallery = new Gallery(parent, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
+		checkedGallery = new Gallery(parent, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
 		final NoGroupRenderer gr = new NoGroupRenderer();
 		gr.setMinMargin(2);
 		gr.setItemSize(GALLERY_WIDTH, GALLERY_HEIGHT);
 		gr.setAutoMargin(true);
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		tableGallery.setLayoutData(gd);
-		tableGallery.setGroupRenderer(gr);
-		tableGallery.enableItemsTooltip(false);
+		checkedGallery.setLayoutData(gd);
+		checkedGallery.setGroupRenderer(gr);
+		checkedGallery.enableItemsTooltip(false);
 		RoundedGalleryItemRenderer ir = new RoundedGalleryItemRenderer();
 		ir.setShowLabels(true);
-		tableGallery.setItemRenderer(ir);
+		checkedGallery.setItemRenderer(ir);
 		addDragSupport();
 		
-	    Menu popupMenu = new Menu(tableGallery);
-	    MenuItem newItem = new MenuItem(popupMenu, SWT.NONE);
-	    newItem.setText(Messages.TableStyleView_createStyleActionText);
-	    newItem.setImage(getNewStyleImage());
-	    newItem.addSelectionListener(new SelectionAdapter() {
-	    	@Override
-	    	public void widgetSelected(SelectionEvent e) {
-	    		TableStyleWizard wizard = new TableStyleWizard();
-	    		WizardDialog dialog = getEditorDialog(wizard);
-	    		if (dialog.open() == Dialog.OK){
-	    			TableStyle newStyle = wizard.getTableStyle();
-	    			TemplateStyleView.getTemplateStylesStorage().addStyle(newStyle);
-	    			getItem(newStyle, tableGroup);
-	    			tableGallery.redraw();
-	    		}
-	    	}
-		});
-	    tableGallery.setMenu(popupMenu);
+	    Menu popupMenu = new Menu(checkedGallery);
+	    checkedGallery.setMenu(popupMenu);
+	    checkedGallery.addMouseListener(new GalleryRightClick());
+	    initializeCreateAction();
+	    initializeDeleteAction();
+	}
+	
+	/**
+	 * Open the TableStyle wizard to create a style
+	 */
+	protected void doCreate(){
+		TableStyleWizard wizard = new TableStyleWizard(true);
+		WizardDialog dialog = getEditorDialog(wizard);
+		if (dialog.open() == Dialog.OK){
+			TableStyle newStyle = wizard.getTableStyle();
+			TemplateStyleView.getTemplateStylesStorage().addStyle(newStyle);
+			getItem(newStyle, tableGroup);
+			checkedGallery.redraw();
+		}
 	}
 
 	/**
@@ -143,11 +137,11 @@ public class TableStyleView extends CommonViewProvider {
 	 */
 	@Override
 	public void fillStyles(Collection<TemplateStyle> styles) {
-		tableGroup = new GalleryItem(tableGallery, SWT.NONE);
-		tableGallery.setRedraw(false);
+		tableGroup = new GalleryItem(checkedGallery, SWT.NONE);
+		checkedGallery.setRedraw(false);
 		for(TemplateStyle style : styles)
 			if (style instanceof TableStyle) getItem(style, tableGroup);
-		tableGallery.setRedraw(true);
+		checkedGallery.setRedraw(true);
 	}
 	
 	/**
@@ -156,9 +150,9 @@ public class TableStyleView extends CommonViewProvider {
 	private void addDragSupport(){
 		int operations = DND.DROP_MOVE;
 		final Transfer[] types = new Transfer[] { TableRestrictedTransferType.getInstance() };
-		DragSource source = new DragSource(tableGallery, operations);
+		DragSource source = new DragSource(checkedGallery, operations);
 		source.setTransfer(types);
-		source.addDragListener(new StyleDragListener(tableGallery));
+		source.addDragListener(new StyleDragListener());
 	}
 
 	/**
@@ -176,9 +170,13 @@ public class TableStyleView extends CommonViewProvider {
 			GC graphics = new GC(image);
 			int y = 1;
 		    int x = 1;
-		    int w = GALLERY_WIDTH-2;
-		    int h = GALLERY_HEIGHT-2;
+		    int w = GALLERY_WIDTH-6;
+		    int h = GALLERY_HEIGHT-6;
 	        int rowHeight = h/7;
+	        
+		    //Draw the shadow
+		    Rectangle bounds = new Rectangle(x,y,w,h);
+		    fillRoundRectangleDropShadow(graphics, bounds, 6, 4, 4); 
 	        
 	        Rectangle row_bounds = new Rectangle(x,y + rowHeight*2, w, rowHeight);
 	        graphics.setForeground(ColorConstants.white);
@@ -255,12 +253,15 @@ public class TableStyleView extends CommonViewProvider {
 		    	graphics.drawLine(x+w, y, x+w, y+h-1);
 		    }
 		    swtColor.dispose();
+;
+
 			graphics.dispose();
 			ResourceManager.addImage(key, image);
 			
 		}
 		return image;
 	}
+
 
 	/**
 	 * Return the drop listener to handle the drag and drop of an element from the tab to the editor, it can be null

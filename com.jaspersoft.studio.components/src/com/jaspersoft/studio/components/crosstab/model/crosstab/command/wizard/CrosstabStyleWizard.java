@@ -34,10 +34,20 @@ public class CrosstabStyleWizard extends JSSWizard {
 	 */
 	private CrosstabWizardLayoutPage layoutPage;
 	
-	public CrosstabStyleWizard() {
+	/**
+	 * True if the dialog should have the title field
+	 */
+	private boolean showTitle;
+	
+	public CrosstabStyleWizard(boolean showTitle) {
 		super();
 		setWindowTitle(Messages.CrosstabStyleWizard_styleWizardTitle);
 		setNeedsProgressMonitor(true);
+		this.showTitle = showTitle;
+	}
+	
+	public CrosstabStyleWizard() {
+		this(false);
 	}
 
 	/**
@@ -56,7 +66,7 @@ public class CrosstabStyleWizard extends JSSWizard {
 
 	@Override
 	public void addPages() {
-		layoutPage = new CrosstabWizardLayoutPage();
+		layoutPage = new CrosstabWizardLayoutPage(showTitle);
 		addPage(layoutPage);
 		//Hide the Next and Previous buttons
 		setForcePreviousAndNextButtons(false);

@@ -15,22 +15,36 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.commonstyles;
 
+import java.awt.Rectangle;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.nebula.widgets.gallery.Gallery;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
+import com.jaspersoft.studio.style.view.TemplateStyleView;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
 import com.jaspersoft.studio.utils.IOUtils;
 import com.jaspersoft.studio.wizards.JSSWizard;
@@ -45,6 +59,28 @@ import com.jaspersoft.studio.wizards.JSSWizard;
 public abstract class CommonViewProvider implements TemplateViewProvider{
 	
 	/**
+	 * The gallery that show the element
+	 */
+	protected Gallery checkedGallery;
+	
+	
+	/**
+	 * The common delete action
+	 */
+	protected MenuItem deleteAction = null;
+	
+	/**
+	 * The common edit action
+	 */
+	protected MenuItem editAction = null;
+	
+	/**
+	 * The standard create action
+	 */
+	protected MenuItem createAction = null;
+	
+	
+	/**
 	 * Drag listener for the drag and drop of a style from a gallery 
 	 * control
 	 * 
@@ -53,18 +89,8 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 	 */
 	protected class StyleDragListener implements DragSourceListener{
 		
-		/**
-		 * The gallery where the drag start
-		 */
-		private Gallery checkedGallery;
-		
-		/**
-		 * Create an instance of the class
-		 * 
-		 * @param checkedGallery the gallery where the drag start
-		 */
-		public StyleDragListener(Gallery checkedGallery){
-			this.checkedGallery = checkedGallery;
+		public StyleDragListener(){
+			
 		}
 		
 		@Override
@@ -92,16 +118,109 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 	}
 	
 	/**
+	 * Handler for the right click of the gallery, if the right click is outside an element then
+	 * the selected element will be deselected and the delete and update actions (if present) will 
+	 * be disabled
+	 */
+	protected class GalleryRightClick implements MouseListener {
+
+		public GalleryRightClick(){}
+		
+		@Override
+		public void mouseUp(MouseEvent e) {	
+		}
+		
+		@Override
+		public void mouseDown(MouseEvent e) {
+			if (e.button == 3 && checkedGallery.getItem(new Point(e.x,e.y))==null){
+				checkedGallery.deselectAll();
+				if (deleteAction != null) deleteAction.setEnabled(false);
+				if (editAction != null) editAction.setEnabled(false);
+			} else {
+				if (deleteAction != null) deleteAction.setEnabled(true);
+				if (editAction != null) editAction.setEnabled(true);
+			}
+		}
+		
+		@Override
+		public void mouseDoubleClick(MouseEvent e) {
+		}
+	}
+	
+	/**
+	 * Create a standard contextual delete action
+	 */
+	protected void initializeDeleteAction(){
+	    deleteAction = new MenuItem(checkedGallery.getMenu(), SWT.NONE);
+	    deleteAction.setText(com.jaspersoft.studio.components.commonstyles.messages.Messages.CommonViewProvider_deleteStyleLabel);
+	    deleteAction.setImage(getDeleteStyleImage());
+	    deleteAction.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		doDelete();
+	    	}
+		});   
+	}
+	
+	/**
+	 * Code to execute when the delete contextual action is called
+	 */
+	protected void doDelete(){
+		Shell actualShell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
+		if (MessageDialog.openQuestion(actualShell, com.jaspersoft.studio.components.commonstyles.messages.Messages.CommonViewProvider_deleteStyleQuestionTitle, com.jaspersoft.studio.components.commonstyles.messages.Messages.CommonViewProvider_deleteStyleQuestionText)){
+			GalleryItem selectedItem = checkedGallery.getSelection()[0];
+			TemplateStyleView.getTemplateStylesStorage().removeStyle((TemplateStyle)selectedItem.getData());
+			checkedGallery.remove(selectedItem);
+			checkedGallery.redraw();
+		}
+	}
+	
+	/**
+	 * Create a standard contextual delete action
+	 */
+	protected void initializeCreateAction(){
+		createAction = new MenuItem(checkedGallery.getMenu(), SWT.NONE);
+		createAction.setText(com.jaspersoft.studio.components.commonstyles.messages.Messages.CommonViewProvider_createStyleLabel);
+		createAction.setImage(getNewStyleImage());
+		createAction.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		doCreate();
+	    	}
+		});
+	}
+	
+	/**
+	 * Code to execute when the delete contextual action is called
+	 */
+	protected void doCreate(){}
+	
+	/**
 	 * Return an image that can be used as icon for the create style action
 	 * 
 	 * @return an SWT image
 	 * 
 	 */
 	public Image getNewStyleImage() {
-		Image image = ResourceManager.getImage("create-style");
+		Image image = ResourceManager.getImage("create-style"); //$NON-NLS-1$
 		if (image == null){
-			image = Activator.getDefault().getImageDescriptor("icons/create-style.png").createImage();
-			ResourceManager.addImage("create-style", image);
+			image = Activator.getDefault().getImageDescriptor("icons/create-style.png").createImage(); //$NON-NLS-1$
+			ResourceManager.addImage("create-style", image); //$NON-NLS-1$
+		}
+		return image;
+	}
+	
+	/**
+	 * Return an image that can be used as icon for the delete style action
+	 * 
+	 * @return an SWT image
+	 * 
+	 */
+	public Image getDeleteStyleImage() {
+		Image image = ResourceManager.getImage("delete-style"); //$NON-NLS-1$
+		if (image == null){
+			image = Activator.getDefault().getImageDescriptor("icons/delete_style.gif").createImage(); //$NON-NLS-1$
+			ResourceManager.addImage("delete-style", image); //$NON-NLS-1$
 		}
 		return image;
 	}
@@ -136,7 +255,7 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 	protected GalleryItem getItem(TemplateStyle style, GalleryItem rootItem) {
 		GalleryItem ti = new GalleryItem(rootItem, SWT.NONE);
 		String description = style.getDescription();
-		ti.setText(description.isEmpty() ? " " : description);
+		ti.setText(description.isEmpty() ? " " : description); //$NON-NLS-1$
 		Image previewImage = generatePreviewFigure(style);
 		ti.setImage(previewImage);
 		ti.setSelectedImage(previewImage);
@@ -144,6 +263,32 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 		ti.setData(style);
 		return ti;
 	}
+	
+	/**
+	 * Create a shadow effect on a Rectangle
+	 * 
+	 * @param gc the graphics used to design
+	 * @param bounds bounds of the element where to create the shadow
+	 * @param xOffset how much the shadow is translated of the x axe
+	 * @param yOffset how much the shadow is translated of the y axe
+	 * @param radius the radious of the shadow
+	 */
+	public static void fillRoundRectangleDropShadow(GC gc, Rectangle bounds, int xOffset, int yOffset, int radius) {
+		gc.setAdvanced(true);
+		gc.setAntialias(SWT.ON);
+		Color oldColor = gc.getBackground();
+		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		gc.setAlpha(0x8f / radius);
+
+		for (int i = 0; i < radius; i++) {
+			Rectangle shadowBounds = new Rectangle(bounds.x + xOffset, bounds.y + yOffset, bounds.width - i, bounds.height - i);
+
+			gc.fillRoundRectangle(shadowBounds.x, shadowBounds.y, shadowBounds.width, shadowBounds.height, radius, radius);
+		}
+		gc.setBackground(oldColor);
+		gc.setAlpha(0xff);
+	}
+	
 	
 	/**
 	 * Build a preview image of a TempalteStyle

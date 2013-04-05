@@ -98,6 +98,19 @@ public class PreferencesTemplateStylesStorage {
 	}
 	
 	/**
+	 * Remove a style from the properties file
+	 * 
+	 * @param style the Template style to remove
+	 */
+	public void removeStyle(TemplateStyle style) {
+		String name = style.toString();
+		if (styleDescriptors.containsKey(name)) {
+			styleDescriptors.remove(name);
+		}
+		save();
+	}
+	
+	/**
 	 * Read all the styles from the properties file
 	 */
 	private void findAll() {

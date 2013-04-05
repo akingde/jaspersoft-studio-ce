@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
@@ -86,6 +87,17 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 	private Button showGrid;
 	
 	/**
+	 * the textfield of the title
+	 */
+	private Text titleText = null;
+	
+	/**
+	 * True if also the title area is created, false otherwise
+	 */
+	private boolean createTitle;
+	
+	
+	/**
 	 * Listener called when a control is modified, cause the regeneration of the 
 	 * lastGeneratedStyle and the update of the preview
 	 */
@@ -126,12 +138,17 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		return crosstab;
 	}
 
-	protected CrosstabWizardLayoutPage() {
-		super("crosstablayoutpage");  //$NON-NLS-1$
+	protected CrosstabWizardLayoutPage(boolean createTitle) {
+		super("crosstablayoutpage");  
 		setTitle(Messages.CrosstabWizardLayoutPage_layout);
 		setImageDescriptor(
 				Activator.getDefault().getImageDescriptor("icons/wizard_preview.png")); //$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardLayoutPage_description);
+		this.createTitle = createTitle;
+	}
+	
+	protected CrosstabWizardLayoutPage() {
+		this(false);
 	}
 	
 	/**
@@ -293,6 +310,7 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		ColorSchemaGenerator.SCHEMAS variantKey = (ColorSchemaGenerator.SCHEMAS)variants.get(variations.getSelectionIndex()).getValue();
 		lastGeneratedStyle = new CrosstabStyle(new RGB(color.getRed(), color.getGreen(), color.getBlue()),variantKey, whiteGrid.getSelection());
 		lastGeneratedStyle.setShowGrid(showGrid.getSelection());
+		if (titleText != null) lastGeneratedStyle.setDescription(titleText.getText());
 		preview.setTableStyle(lastGeneratedStyle);
 	}
 	
@@ -312,39 +330,36 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		}
 		return lastGeneratedStyle;
 	}
+	
+	private void createTitleLabel(Composite parent){
+		Composite titleComposite = new Composite(parent, SWT.NONE);
+		titleComposite.setLayout(new GridLayout(2,false));
+		GridData titleCompositeData = new GridData();
+		titleCompositeData.horizontalSpan = 2;
+		titleCompositeData.grabExcessHorizontalSpace=true;
+		titleCompositeData.horizontalAlignment = SWT.FILL;
+		titleComposite.setLayoutData(titleCompositeData);
+		Label descriptionLabel = new Label(titleComposite, SWT.NONE);
+		descriptionLabel.setText("Name of the style");
+		titleText = new Text(titleComposite, SWT.BORDER);
+		titleText.addModifyListener(modifyListener);
+		GridData textData = new GridData();
+		textData.grabExcessHorizontalSpace = true;
+		textData.horizontalAlignment = SWT.FILL;
+		titleText.setLayoutData(textData);
+	}
 
 	public void createControl(Composite parent) {
 		Composite dialog = new Composite(parent, SWT.NONE);
 		GridLayout generalLayout = new GridLayout(2,false);
 		dialog.setLayout(generalLayout);
 		setControl(dialog);
-		
+		//Create the title
+		if (createTitle) createTitleLabel(dialog);
 		createLeftCol(dialog);
 		createPreview(dialog);
 		notifyChange();
-		// Label lbl = new Label(composite, SWT.NONE);
-		// lbl.setText("Color scheme");
-		//
-		// CCombo colorScheme = new CCombo(composite, SWT.BORDER);
-		// // colorScheme.setItems(ModelUtils.getDataSources(jasperDesign));
-		// // colorScheme.select(0);
-		//
-		// lbl = new Label(composite, SWT.NONE);
-		// lbl.setText("Variations");
-		//
-		// CCombo variations = new CCombo(composite, SWT.BORDER);
 
-		// Button useWhiteGrid = new Button(composite, SWT.CHECK);
-		// useWhiteGrid.setText("Use white grid");
-		// GridData gd = new GridData();
-		// gd.horizontalSpan = 2;
-		// useWhiteGrid.setLayoutData(gd);
-		//
-		// Button showGridLines = new Button(composite, SWT.CHECK);
-		// showGridLines.setText("Show grid lines (adding cell border)");
-		// gd = new GridData();
-		// gd.horizontalSpan = 2;
-		// showGridLines.setLayoutData(gd);
 	}
 
 	/**
