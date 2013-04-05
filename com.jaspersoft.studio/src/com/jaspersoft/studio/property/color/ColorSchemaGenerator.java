@@ -124,11 +124,13 @@ public class ColorSchemaGenerator {
         {
             colorsList = new ArrayList<String>();
             colorsMap = new HashMap<String,String>();
+            namesMap = new HashMap<String, String>();
             
             for (int i=0; i<colors.length/2; ++i)
             {
                 colorsList.add( colors[i*2] );
                 colorsMap.put(colors[i*2], colors[(i*2)+1]);
+                namesMap.put(colors[(i*2)+1], colors[i*2]);
             }
         }
         
@@ -181,6 +183,18 @@ public class ColorSchemaGenerator {
         }
         String rgb = colorsMap.get(name);
         return decodeColor("#"+rgb); //$NON-NLS-1$
+    }
+    
+    /**
+     * From a color return its name
+     * 
+     * @param color the color 
+     * @return the name of the color, or null if the color is unsopported
+     */
+    public static String getName(RGB color){
+      String hex = Integer.toHexString(color.red) + Integer.toHexString(color.green) +  
+          						Integer.toHexString(color.blue);
+      return namesMap.get(hex.toUpperCase());
     }
     
     
@@ -289,6 +303,11 @@ public class ColorSchemaGenerator {
      * Hashmap where at every human name of a color is associated it hexadecimal value
      */
     static private HashMap<String, String> colorsMap = null;
+    
+    /**
+     * Hashmap where at every supported color is associated its name
+     */
+    static private HashMap<String, String> namesMap = null;
     
     /**
      * Array of string where every odd position is the human name of a color, and the pair position 

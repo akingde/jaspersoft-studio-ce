@@ -196,6 +196,26 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 	protected void doCreate(){}
 	
 	/**
+	 * Create a standard contextual delete action
+	 */
+	protected void initializeEditAction(){
+		editAction = new MenuItem(checkedGallery.getMenu(), SWT.NONE);
+		editAction.setText("Edit Style");
+		editAction.setImage(getEditStyleImage());
+		editAction.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		doEdit();
+	    	}
+		});
+	}
+	
+	/**
+	 * Code to execute when the delete contextual action is called
+	 */
+	protected void doEdit(){}
+	
+	/**
 	 * Return an image that can be used as icon for the create style action
 	 * 
 	 * @return an SWT image
@@ -221,6 +241,21 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 		if (image == null){
 			image = Activator.getDefault().getImageDescriptor("icons/delete_style.gif").createImage(); //$NON-NLS-1$
 			ResourceManager.addImage("delete-style", image); //$NON-NLS-1$
+		}
+		return image;
+	}
+	
+	/**
+	 * Return an image that can be used as icon for the edit style action
+	 * 
+	 * @return an SWT image
+	 * 
+	 */
+	public Image getEditStyleImage() {
+		Image image = ResourceManager.getImage("edit-style"); //$NON-NLS-1$
+		if (image == null){
+			image = Activator.getDefault().getImageDescriptor("icons/edit-style.png").createImage(); //$NON-NLS-1$
+			ResourceManager.addImage("edit-style", image); //$NON-NLS-1$
 		}
 		return image;
 	}
@@ -264,6 +299,23 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 		return ti;
 	}
 	
+	
+	/**
+	 * Update a gallery item for a TemplateStyle
+	 * 
+	 * @param style the style
+	 * @param itemToUpdate the item to update
+	 */
+	protected void updateItem(TemplateStyle style, GalleryItem itemToUpdate) {
+		String description = style.getDescription();
+		itemToUpdate.setText(description.isEmpty() ? " " : description); //$NON-NLS-1$
+		Image previewImage = generatePreviewFigure(style);
+		itemToUpdate.setImage(previewImage);
+		itemToUpdate.setSelectedImage(previewImage);
+		itemToUpdate.setStandardImage(previewImage);
+		itemToUpdate.setData(style);
+	}
+	
 	/**
 	 * Create a shadow effect on a Rectangle
 	 * 
@@ -277,6 +329,7 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 		gc.setAdvanced(true);
 		gc.setAntialias(SWT.ON);
 		Color oldColor = gc.getBackground();
+		int oldAlpha = gc.getAlpha();
 		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 		gc.setAlpha(0x8f / radius);
 
@@ -286,7 +339,7 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 			gc.fillRoundRectangle(shadowBounds.x, shadowBounds.y, shadowBounds.width, shadowBounds.height, radius, radius);
 		}
 		gc.setBackground(oldColor);
-		gc.setAlpha(0xff);
+		gc.setAlpha(oldAlpha);
 	}
 	
 	

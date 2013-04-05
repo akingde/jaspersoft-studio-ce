@@ -18,6 +18,7 @@ package com.jaspersoft.studio.components.table.model.table.command.wizard;
 
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -47,6 +48,7 @@ import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.components.table.model.dialog.TableStylePreview;
+import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 import com.jaspersoft.studio.property.color.Tag;
 import com.jaspersoft.studio.swt.widgets.ColorStyledText;
@@ -126,6 +128,17 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	 * True if also the title area is created, false otherwise
 	 */
 	private boolean createTitle;
+	
+	/**
+	 * Template used to initialize the data of the dialog with the 
+	 * same of the template, useful for edit
+	 */
+	private TemplateStyle templateToOpen;
+	
+	/**
+	 * List of the buttons that represent the border style
+	 */
+	private List<ToolItem> borderStyleButtons = new ArrayList<ToolItem>();
 	
 	/**
 	 * Listener called when a control is modified, cause the regeneration of the 
@@ -234,6 +247,50 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		colorScheme.addSelectionListener(selectionListener);
 	}
 	
+	private void setColor(String colorName){
+		for(int i=0; i<colorScheme.getItemCount(); i++){
+			if (colorScheme.getItem(i).equals(colorName)){
+				colorScheme.select(i);
+				return;
+			}
+		}
+	}
+	
+	private void setVariations(ColorSchemaGenerator.SCHEMAS schema){
+		for(int i=0; i<variants.size(); i++){
+			if (variants.get(i).getValue().equals(schema)){
+				variations.select(i);
+				return;
+			}
+		}
+	}
+	
+	private void setBorderButtons(BorderStyleEnum loadedStyle){
+		borderStyle = loadedStyle;
+		ToolItem buttonFull = borderStyleButtons.get(0);
+		ToolItem buttonHorizontal1 = borderStyleButtons.get(1);
+		ToolItem buttonHorizontal2 = borderStyleButtons.get(2);
+		buttonFull.setSelection(false);
+		buttonHorizontal1.setSelection(false);
+		buttonHorizontal2.setSelection(false);
+		if (borderStyle.equals(BorderStyleEnum.FULL)) buttonFull.setSelection(true);
+		else if (borderStyle.equals(BorderStyleEnum.PARTIAL_VERTICAL)) buttonHorizontal1.setSelection(true);
+		else buttonHorizontal2.setSelection(true);
+	}
+	
+	private void setData(){
+		if (templateToOpen instanceof TableStyle){
+			TableStyle cStyle = (TableStyle)templateToOpen;
+			String colorName = ColorSchemaGenerator.getName(cStyle.getBaseColor());
+			setColor(colorName);
+			setVariations(cStyle.getVariation());
+			alternateColor.setSelection(cStyle.hasAlternateColor());
+			borderColor.setColor(cStyle.getRGBBorderColor());
+			setBorderButtons(cStyle.getBorderStyle());
+			if (titleText != null) titleText.setText(cStyle.getDescription());		
+		}
+	}
+	
 	/**
 	 * Return a class that identify which are the visible section of the table
 	 * 
@@ -269,14 +326,17 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		
 		ToolBar toolBar = new ToolBar (group, SWT.FLAT);
 		
-		final ToolItem buttonFull = new ToolItem (toolBar, SWT.RADIO);
-		buttonFull.setImage (Activator.getDefault().getImage("icons/full_borders.png")); //$NON-NLS-1$
+		ToolItem buttonFull = new ToolItem (toolBar, SWT.RADIO);
+		buttonFull.setImage (Activator.getDefault().getImage("icons/full_borders.png")); 
+		borderStyleButtons.add(buttonFull);
 		
-		final ToolItem buttonHorizontal1 = new ToolItem (toolBar, SWT.RADIO);
-		buttonHorizontal1.setImage (Activator.getDefault().getImage("icons/horizontal_borders.png")); //$NON-NLS-1$
+		ToolItem buttonHorizontal1 = new ToolItem (toolBar, SWT.RADIO);
+		buttonHorizontal1.setImage (Activator.getDefault().getImage("icons/horizontal_borders.png")); 
+		borderStyleButtons.add(buttonHorizontal1);
 		
-		final ToolItem buttonHorizontal2 = new ToolItem (toolBar, SWT.RADIO);
-		buttonHorizontal2.setImage (Activator.getDefault().getImage("icons/horizontal_borders2.png")); //$NON-NLS-1$
+		ToolItem buttonHorizontal2 = new ToolItem (toolBar, SWT.RADIO);
+		buttonHorizontal2.setImage (Activator.getDefault().getImage("icons/horizontal_borders2.png"));
+		borderStyleButtons.add(buttonHorizontal2);
 		
 		toolBar.pack ();
 		buttonFull.setSelection(true);
@@ -287,6 +347,9 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		buttonFull.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				ToolItem buttonFull = borderStyleButtons.get(0);
+				ToolItem buttonHorizontal1 = borderStyleButtons.get(1);
+				ToolItem buttonHorizontal2 = borderStyleButtons.get(2);
 				if (!buttonFull.getSelection()){ 
 					borderStyle = BorderStyleEnum.FULL;
 					buttonFull.setSelection(true);
@@ -300,6 +363,9 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		buttonHorizontal1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				ToolItem buttonFull = borderStyleButtons.get(0);
+				ToolItem buttonHorizontal1 = borderStyleButtons.get(1);
+				ToolItem buttonHorizontal2 = borderStyleButtons.get(2);
 				if (!buttonHorizontal1.getSelection()){ 
 					borderStyle = BorderStyleEnum.PARTIAL_VERTICAL;
 					buttonHorizontal1.setSelection(true);
@@ -313,6 +379,9 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		buttonHorizontal2.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				ToolItem buttonFull = borderStyleButtons.get(0);
+				ToolItem buttonHorizontal1 = borderStyleButtons.get(1);
+				ToolItem buttonHorizontal2 = borderStyleButtons.get(2);
 				if (!buttonHorizontal2.getSelection()){ 
 					borderStyle = BorderStyleEnum.ONLY_HORIZONTAL;
 					buttonHorizontal2.setSelection(true);
@@ -564,10 +633,21 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		
 		//Create the bottom band
 		createBottom(dialog);
-		
+		if (templateToOpen != null) setData();
 		notifyChange();
 	}
 
+	/**
+	 * Set a template that will be used to initialize (if possible) the 
+	 * control of the wizard with the value of the template
+	 * 
+	 * @param template template used to initialize the value
+	 */
+	public void setTemplateToOpen(TemplateStyle template){
+		this.templateToOpen = template;
+	}
+	
+	
 	/**
 	 * Return if the table has a table header
 	 * 

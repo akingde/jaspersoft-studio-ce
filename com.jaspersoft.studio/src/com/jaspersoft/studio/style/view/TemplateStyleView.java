@@ -51,6 +51,11 @@ public class TemplateStyleView extends ViewPart implements IContributedContentsV
 	 */
 	private CTabFolder folder;
 	
+	/**
+	 * Return the Style storage
+	 * 
+	 * @return and instance of the style storage, can't be null
+	 */
 	public static PreferencesTemplateStylesStorage getTemplateStylesStorage(){
 		return savedStylesStorage;
 	}

@@ -53,12 +53,23 @@ public class PreferencesTemplateStylesStorage {
 	/**
 	 * Here are saved all the TemplateStyle read from the properties file
 	 */
-	protected Map<String, TemplateStyle> styleDescriptors;
+	protected Map<Integer, TemplateStyle> styleDescriptors;
 	
 	/**
 	 * A map with all the registered type of styles
 	 */
 	private static Map<String, TemplateStyle> availableStyles = null;
+	
+	/**
+	 * Name of the id property of the style. It include a random number to be easly an unique
+	 * property name
+	 */
+	private final static String STYLE_ID = "STYLE_ID6358649593550007203L";
+	
+	/**
+	 * sequential number to assign an unique id to every read style
+	 */
+	private static int assignId = 0;
 	
 	/**
 	 * Build the class and initialize the properties file
@@ -89,12 +100,23 @@ public class PreferencesTemplateStylesStorage {
 	 * @param style the Template style to add
 	 */
 	public void addStyle(TemplateStyle style) {
-		String name = style.toString();
-		if (styleDescriptors.containsKey(name)) {
-			styleDescriptors.remove(name);
-		}
-		styleDescriptors.put(name, style);
+		Integer id = getId();
+		style.storePropertiy(STYLE_ID, id);
+		styleDescriptors.put(id, style);
 		save();
+	}
+	
+	/**
+	 * Change the value of a style
+	 * 
+	 * @param style the Template style to add
+	 */
+	public void editStyle(TemplateStyle oldStyle, TemplateStyle newStyle) {
+		Integer id = (Integer)oldStyle.getProperty(STYLE_ID);
+		if (id != null && styleDescriptors.containsKey(id)){
+			styleDescriptors.put(id, newStyle);
+			save();
+		}
 	}
 	
 	/**
@@ -103,11 +125,22 @@ public class PreferencesTemplateStylesStorage {
 	 * @param style the Template style to remove
 	 */
 	public void removeStyle(TemplateStyle style) {
-		String name = style.toString();
-		if (styleDescriptors.containsKey(name)) {
-			styleDescriptors.remove(name);
+		Integer id = (Integer)style.getProperty(STYLE_ID);
+		if (styleDescriptors.containsKey(id)) {
+			styleDescriptors.remove(id);
+			save();
 		}
-		save();
+	}
+	
+	/**
+	 * Return an unique id of the session
+	 * 
+	 * @return
+	 */
+	private Integer getId(){
+		Integer id = assignId;
+		assignId++;
+		return id;
 	}
 	
 	/**
@@ -128,7 +161,9 @@ public class PreferencesTemplateStylesStorage {
 						TemplateStyle factory = getBuilder(className); 
 						if (factory != null){
 							TemplateStyle readStyle = factory.buildFromXML(adapterNode);
-							styleDescriptors.put(readStyle.toString(), readStyle);
+							Integer uniequeTemplateId = getId();
+							readStyle.storePropertiy(STYLE_ID, uniequeTemplateId);
+							styleDescriptors.put(uniequeTemplateId, readStyle);
 						}
 					}
 				}
@@ -149,7 +184,7 @@ public class PreferencesTemplateStylesStorage {
 	 */
 	public Collection<TemplateStyle> getStylesDescriptors() {
 		if (styleDescriptors == null) {
-			styleDescriptors = new LinkedHashMap<String, TemplateStyle>();
+			styleDescriptors = new LinkedHashMap<Integer, TemplateStyle>();
 			findAll();
 		}
 		return styleDescriptors.values();

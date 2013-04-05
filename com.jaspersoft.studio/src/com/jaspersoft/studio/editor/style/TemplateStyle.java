@@ -61,6 +61,24 @@ public abstract class TemplateStyle implements Serializable {
 	}
 	
 	/**
+	 * Return the base color
+	 * 
+	 * @return an rgb representing the base color
+	 */
+	public RGB getBaseColor(){
+		return baseColor;
+	}
+	
+	/**
+	 * Return the color variation
+	 * 
+	 * @return the variation
+	 */
+	public ColorSchemaGenerator.SCHEMAS getVariation(){
+		return variation;
+	}
+	
+	/**
 	 * Return a list of all the key of the properties stored
 	 * 
 	 * @return A list of string where every string is a key of a stored property

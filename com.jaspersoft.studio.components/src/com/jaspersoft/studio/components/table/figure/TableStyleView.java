@@ -102,6 +102,7 @@ public class TableStyleView extends CommonViewProvider {
 	    checkedGallery.setMenu(popupMenu);
 	    checkedGallery.addMouseListener(new GalleryRightClick());
 	    initializeCreateAction();
+	    initializeEditAction();
 	    initializeDeleteAction();
 	}
 	
@@ -109,7 +110,7 @@ public class TableStyleView extends CommonViewProvider {
 	 * Open the TableStyle wizard to create a style
 	 */
 	protected void doCreate(){
-		TableStyleWizard wizard = new TableStyleWizard(true);
+		TableStyleWizard wizard = new TableStyleWizard(true, null);
 		WizardDialog dialog = getEditorDialog(wizard);
 		if (dialog.open() == Dialog.OK){
 			TableStyle newStyle = wizard.getTableStyle();
@@ -118,6 +119,24 @@ public class TableStyleView extends CommonViewProvider {
 			checkedGallery.redraw();
 		}
 	}
+	
+	/**
+	 * Open the style dialog to edit the selected Template Style
+	 */
+	@Override
+	protected void doEdit(){
+		GalleryItem selectedItem = checkedGallery.getSelection()[0];
+		TemplateStyle oldStyle = (TemplateStyle)selectedItem.getData();
+		TableStyleWizard wizard = new TableStyleWizard(true, oldStyle);
+		WizardDialog dialog = getEditorDialog(wizard);
+		if (dialog.open() == Dialog.OK){
+			TableStyle newStyle = wizard.getTableStyle();
+			TemplateStyleView.getTemplateStylesStorage().editStyle(oldStyle, newStyle) ;
+			updateItem(newStyle, selectedItem);
+			checkedGallery.redraw();
+		}
+	}
+	
 
 	/**
 	 * The name of the tab

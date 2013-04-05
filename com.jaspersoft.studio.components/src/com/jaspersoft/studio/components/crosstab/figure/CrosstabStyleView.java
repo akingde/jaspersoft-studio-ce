@@ -99,16 +99,34 @@ public class CrosstabStyleView extends CommonViewProvider{
 	    checkedGallery.setMenu(popupMenu);
 	    checkedGallery.addMouseListener(new GalleryRightClick());
 	    initializeCreateAction();
+	    initializeEditAction();
 	    initializeDeleteAction();
 	}
 	
 	protected void doCreate(){
-		CrosstabStyleWizard wizard = new CrosstabStyleWizard(true);
+		CrosstabStyleWizard wizard = new CrosstabStyleWizard(true, null);
 		WizardDialog dialog = getEditorDialog(wizard);
 		if (dialog.open() == Dialog.OK){
 			CrosstabStyle newStyle = wizard.getTableStyle();
 			TemplateStyleView.getTemplateStylesStorage().addStyle(newStyle);
 			getItem(newStyle, tableGroup);
+			checkedGallery.redraw();
+		}
+	}
+	
+	/**
+	 * Open the style dialog to edit the selected Template Style
+	 */
+	@Override
+	protected void doEdit(){
+		GalleryItem selectedItem = checkedGallery.getSelection()[0];
+		TemplateStyle oldStyle = (TemplateStyle)selectedItem.getData();
+		CrosstabStyleWizard wizard = new CrosstabStyleWizard(true, oldStyle);
+		WizardDialog dialog = getEditorDialog(wizard);
+		if (dialog.open() == Dialog.OK){
+			CrosstabStyle newStyle = wizard.getTableStyle();
+			TemplateStyleView.getTemplateStylesStorage().editStyle(oldStyle, newStyle);
+			updateItem(newStyle, selectedItem);
 			checkedGallery.redraw();
 		}
 	}

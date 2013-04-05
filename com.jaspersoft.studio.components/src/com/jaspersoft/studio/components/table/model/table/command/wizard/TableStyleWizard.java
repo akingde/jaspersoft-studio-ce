@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
+import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 /**
@@ -35,19 +36,21 @@ public class TableStyleWizard extends JSSWizard {
 	private TableWizardLayoutPage layoutPage;
 	
 	/**
-	 * True if the dialog should have the title field
+	 * Create the class
+	 * @param showTitle True if the dialog should have the title field
+	 * @param templateToOpen open the dialog in edit mode, with the field set at the value 
+	 * of this template. Pass null if you don't want to edit an existing template
 	 */
-	private boolean showTitle;
-	
-	public TableStyleWizard(boolean showTitle) {
+	public TableStyleWizard(boolean showTitle, TemplateStyle templateToOpen) {
 		super();
 		setWindowTitle(Messages.common_table_wizard);
 		setNeedsProgressMonitor(true);
-		this.showTitle = showTitle;
+		layoutPage = new TableWizardLayoutPage(showTitle);
+		if (templateToOpen != null) layoutPage.setTemplateToOpen(templateToOpen);
 	}
 	
 	public TableStyleWizard() {
-		this(false);
+		this(false, null);
 	}
 
 	/**
@@ -67,7 +70,6 @@ public class TableStyleWizard extends JSSWizard {
 
 	@Override
 	public void addPages() {
-		layoutPage = new TableWizardLayoutPage(showTitle);
 		addPage(layoutPage);
 		//Hide the Next and Previous buttons
 		setForcePreviousAndNextButtons(false);

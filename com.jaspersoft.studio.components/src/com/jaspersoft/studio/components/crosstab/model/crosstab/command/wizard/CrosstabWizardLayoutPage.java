@@ -41,6 +41,7 @@ import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle;
 import com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStylePreview;
+import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 import com.jaspersoft.studio.property.color.Tag;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
@@ -96,6 +97,12 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 	 */
 	private boolean createTitle;
 	
+	/**
+	 * Template used to initialize the data of the dialog with the 
+	 * same of the template, useful for edit
+	 */
+	private TemplateStyle templateToOpen;
+	
 	
 	/**
 	 * Listener called when a control is modified, cause the regeneration of the 
@@ -145,6 +152,7 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 				Activator.getDefault().getImageDescriptor("icons/wizard_preview.png")); //$NON-NLS-1$
 		setDescription(Messages.CrosstabWizardLayoutPage_description);
 		this.createTitle = createTitle;
+		this.templateToOpen = null;
 	}
 	
 	protected CrosstabWizardLayoutPage() {
@@ -202,6 +210,36 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		whiteGrid.addSelectionListener(selectionListener);
 		showGrid.addSelectionListener(selectionListener);
 		colorScheme.addSelectionListener(selectionListener);
+	}
+	
+	private void setColor(String colorName){
+		for(int i=0; i<colorScheme.getItemCount(); i++){
+			if (colorScheme.getItem(i).equals(colorName)){
+				colorScheme.select(i);
+				return;
+			}
+		}
+	}
+	
+	private void setVariations(ColorSchemaGenerator.SCHEMAS schema){
+		for(int i=0; i<variants.size(); i++){
+			if (variants.get(i).getValue().equals(schema)){
+				variations.select(i);
+				return;
+			}
+		}
+	}
+	
+	private void setData(){
+		if (templateToOpen instanceof CrosstabStyle){
+			CrosstabStyle cStyle = (CrosstabStyle)templateToOpen;
+			String colorName = ColorSchemaGenerator.getName(cStyle.getBaseColor());
+			setColor(colorName);
+			setVariations(cStyle.getVariation());
+			whiteGrid.setSelection(cStyle.getWhiteGrid());
+			showGrid.setSelection(cStyle.isShowGrid());
+			if (titleText != null) titleText.setText(cStyle.getDescription());		
+		}
 	}
 	
 	/**
@@ -270,6 +308,16 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		leftCol.setLayoutData(leftPanelData);
 	}
 	
+	/**
+	 * Set a template that will be used to initialize (if possible) the 
+	 * control of the wizard with the value of the template
+	 * 
+	 * @param template template used to initialize the value
+	 */
+	public void setTemplateToOpen(TemplateStyle template){
+		this.templateToOpen = template;
+	}
+	
 	
 	/**
 	 * Return an array of string that represents the human name of the 
@@ -305,7 +353,7 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 	 * and request the redraw of the preview
 	 */
 	private void notifyChange(){
-		String colorName =colorScheme.getItem(colorScheme.getSelectionIndex());
+		String colorName = colorScheme.getItem(colorScheme.getSelectionIndex());
 		Color color = ColorSchemaGenerator.getColor(colorName);
 		ColorSchemaGenerator.SCHEMAS variantKey = (ColorSchemaGenerator.SCHEMAS)variants.get(variations.getSelectionIndex()).getValue();
 		lastGeneratedStyle = new CrosstabStyle(new RGB(color.getRed(), color.getGreen(), color.getBlue()),variantKey, whiteGrid.getSelection());
@@ -358,8 +406,9 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		if (createTitle) createTitleLabel(dialog);
 		createLeftCol(dialog);
 		createPreview(dialog);
+		if (templateToOpen != null) setData();
 		notifyChange();
-
+		
 	}
 
 	/**
