@@ -210,7 +210,7 @@ public class ChartThemeEditPart extends FigureEditPart {
 
 		addChart(rf, lm, jdc);
 
-		rf.setSize(3 * jdc.getWidth() + 50, (jdc.getHeight() + 20) * rf.getChildren().size() / 3 + 100);
+		rf.setSize(3 * jdc.getWidth() + 80, (jdc.getHeight() + 20) * rf.getChildren().size() / 3 + 50);
 
 		setPrefsBorder(rf);
 		return rf;
@@ -252,13 +252,13 @@ public class ChartThemeEditPart extends FigureEditPart {
 
 					((GraphicalViewer) getViewer()).reveal(ChartThemeEditPart.this);
 					cf.setLocation(new org.eclipse.draw2d.geometry.Point(5, 5));
-					rf.setSize(jdc.getWidth() + 30, jdc.getHeight() + 30);
+					rf.setSize(jdc.getWidth() + 50, jdc.getHeight() + 50);
 				} else {
 					setupChartSize(jdc, lm, cf);
 					rf.removeAll();
 					for (IFigure f : charts)
 						rf.add(f);
-					rf.setSize(3 * jdc.getWidth() + 50, (jdc.getHeight() + 20) * rf.getChildren().size() / 3 + 100);
+					rf.setSize(3 * jdc.getWidth() + 80, (jdc.getHeight() + 20) * rf.getChildren().size() / 3 + 50);
 				}
 			}
 

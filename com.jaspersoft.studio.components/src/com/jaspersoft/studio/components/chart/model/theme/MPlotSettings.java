@@ -38,6 +38,7 @@ import com.jaspersoft.studio.components.chart.model.theme.paintproviders.PaintPr
 import com.jaspersoft.studio.components.chart.model.theme.stroke.StrokePropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.strokes.StrokesPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
+import com.jaspersoft.studio.jasper.CachedImageProvider;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
@@ -331,10 +332,10 @@ public class MPlotSettings extends APropertyNode {
 		else if (id.equals(PlotSettings.PROPERTY_rangeGridlinePaint))
 			ps.setRangeGridlinePaint((PaintProvider) value);
 		else if (id.equals(PlotSettings.PROPERTY_backgroundImage))
-			if (value == null)
+			if (value == null || ((String) value).trim().isEmpty())
 				ps.setBackgroundImage(null);
 			else
-				ps.setBackgroundImage(new FileImageProvider((String) value));
+				ps.setBackgroundImage(new CachedImageProvider((String) value));
 		else if (id.equals(PlotSettings.PROPERTY_outlineStroke))
 			ps.setOutlineStroke((Stroke) value);
 		else if (id.equals(PlotSettings.PROPERTY_domainGridlineStroke))

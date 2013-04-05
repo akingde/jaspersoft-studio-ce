@@ -35,6 +35,7 @@ import com.jaspersoft.studio.components.chart.model.theme.imageprovider.ImagePro
 import com.jaspersoft.studio.components.chart.model.theme.paintprovider.PaintProviderPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.stroke.StrokePropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
+import com.jaspersoft.studio.jasper.CachedImageProvider;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -202,10 +203,10 @@ public class MChartSettings extends APropertyNode {
 		else if (id.equals(ChartSettings.PROPERTY_borderPaint))
 			cs.setBorderPaint((PaintProvider) value);
 		else if (id.equals(ChartSettings.PROPERTY_backgroundImage))
-			if (value == null)
+			if (value == null || ((String) value).trim().isEmpty())
 				cs.setBackgroundImage(null);
 			else
-				cs.setBackgroundImage(new FileImageProvider((String) value));
+				cs.setBackgroundImage(new CachedImageProvider((String) value));
 		else if (id.equals(ChartSettings.PROPERTY_borderStroke))
 			cs.setBorderStroke((Stroke) value);
 

@@ -433,4 +433,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		}
 		return result;
 	}
+
+	private Map<Object, Object> map;
+
+	public Map<Object, Object> getMap() {
+		if (map == null)
+			map = new HashMap<Object, Object>();
+		return map;
+	}
 }

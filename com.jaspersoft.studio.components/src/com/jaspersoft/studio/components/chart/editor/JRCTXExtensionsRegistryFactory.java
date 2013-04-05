@@ -48,10 +48,12 @@ public class JRCTXExtensionsRegistryFactory implements ExtensionsRegistryFactory
 		return new String[] { "" };
 	}
 
+	private SimpleChartTheme sct;
+
 	public ChartTheme getChartTheme(String themeName) {
-		if (cts != null)
-			return new SimpleChartTheme(cts);
-		return null;
+		if (sct == null && cts != null)
+			sct = new SimpleChartTheme(cts);
+		return sct;
 	}
 
 	private final ExtensionsRegistry extensionsRegistry = new ExtensionsRegistry() {

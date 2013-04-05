@@ -21,6 +21,8 @@ import java.util.List;
 
 import net.sf.jasperreports.charts.ChartThemeBundle;
 import net.sf.jasperreports.chartthemes.simple.ChartThemeSettings;
+import net.sf.jasperreports.chartthemes.simple.FileImageProvider;
+import net.sf.jasperreports.chartthemes.simple.ImageProvider;
 import net.sf.jasperreports.chartthemes.simple.XmlChartTheme;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -58,6 +60,7 @@ import com.jaspersoft.studio.components.chart.model.theme.ChartSettingsFactory;
 import com.jaspersoft.studio.editor.DeltaVisitor;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
+import com.jaspersoft.studio.jasper.CachedImageProvider;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -129,10 +132,21 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 		return cts;
 	}
 
+	private ImageProvider getImageProvider(ImageProvider ip) {
+		if (ip != null)
+			if (ip instanceof CachedImageProvider)
+				return new FileImageProvider(((CachedImageProvider) ip).getFile());
+		return ip;
+	}
+
 	private String model2xml() {
 		try {
 			if (model != null) {
 				ChartThemeSettings cts = (ChartThemeSettings) model.getChildren().get(0).getValue();
+
+				cts.getChartSettings().setBackgroundImage(getImageProvider(cts.getChartSettings().getBackgroundImage()));
+				cts.getPlotSettings().setBackgroundImage(getImageProvider(cts.getPlotSettings().getBackgroundImage()));
+
 				String xml = XmlChartTheme.saveSettings(cts);
 				xml = xml.replaceFirst("<chart-theme>", "<!-- Created with Jaspersoft Studio -->\n<chart-theme>"); //$NON-NLS-1$ //$NON-NLS-2$
 				IDocumentProvider dp = xmlEditor.getDocumentProvider();
