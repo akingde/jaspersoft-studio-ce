@@ -133,6 +133,8 @@ public class MLegendSettings extends APropertyNode {
 		defaultsMap.put(LegendSettings.PROPERTY_position, EdgeEnum.TOP);
 		defaultsMap.put(LegendSettings.PROPERTY_horizontalAlignment, JFreeChartHorizontalAlignmentEnum.LEFT);
 		defaultsMap.put(LegendSettings.PROPERTY_verticalAlignment, JFreeChartVerticalAlignmentEnum.TOP);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes");
 	}
 
 	private static JSSEnumPropertyDescriptor posD;

@@ -233,6 +233,8 @@ public class MPlotSettings extends APropertyNode {
 		defaultsMap.put(PlotSettings.PROPERTY_rangeGridlineVisible, Boolean.TRUE);
 		defaultsMap.put(PlotSettings.PROPERTY_backgroundImageAlignment, JFreeChartAlignEnum.TOP_LEFT);
 		defaultsMap.put(PlotSettings.PROPERTY_orientation, JFreeChartPlotOrientationEnum.HORIZONTAL);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes");
 	}
 
 	private static JSSEnumPropertyDescriptor orientation;

@@ -196,6 +196,8 @@ public class MAxisSettings extends APropertyNode {
 		defaultsMap.put(AxisSettings.PROPERTY_tickLabelsVisible, Boolean.TRUE);
 		defaultsMap.put(AxisSettings.PROPERTY_tickMarksVisible, Boolean.TRUE);
 		defaultsMap.put(AxisSettings.PROPERTY_axisIntegerUnit, Boolean.TRUE);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes");
 	}
 
 	public static final String PROP_LABEL = "LABEL";

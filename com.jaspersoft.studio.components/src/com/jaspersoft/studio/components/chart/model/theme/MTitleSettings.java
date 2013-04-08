@@ -128,6 +128,8 @@ public class MTitleSettings extends APropertyNode {
 		defaultsMap.put(TitleSettings.PROPERTY_position, EdgeEnum.TOP);
 		defaultsMap.put(TitleSettings.PROPERTY_horizontalAlignment, JFreeChartHorizontalAlignmentEnum.LEFT);
 		defaultsMap.put(TitleSettings.PROPERTY_verticalAlignment, JFreeChartVerticalAlignmentEnum.TOP);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes");
 	}
 
 	private static JSSEnumPropertyDescriptor posD;

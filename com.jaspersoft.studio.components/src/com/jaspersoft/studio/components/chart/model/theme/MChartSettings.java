@@ -148,6 +148,8 @@ public class MChartSettings extends APropertyNode {
 		defaultsMap.put(ChartSettings.PROPERTY_antiAlias, Boolean.TRUE);
 		defaultsMap.put(ChartSettings.PROPERTY_borderVisible, Boolean.TRUE);
 		defaultsMap.put(ChartSettings.PROPERTY_backgroundImageAlignment, JFreeChartAlignEnum.TOP_LEFT);
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes");
 	}
 
 	private static JSSEnumPropertyDescriptor bia;
