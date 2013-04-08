@@ -90,8 +90,7 @@ public class WSClient {
 	/**
 	 * List all datasources. It returns a list of resourceDescriptors.
 	 */
-	public java.util.List<ResourceDescriptor> listDatasources()
-			throws Exception {
+	public java.util.List<ResourceDescriptor> listDatasources() throws Exception {
 
 		Request req = new Request();
 
@@ -99,8 +98,7 @@ public class WSClient {
 		req.setResourceDescriptor(null);
 		req.setLocale(getServer().getLocale());
 
-		req.getArguments().add(
-				new Argument(Argument.LIST_DATASOURCES, Argument.VALUE_TRUE));
+		req.getArguments().add(new Argument(Argument.LIST_DATASOURCES, Argument.VALUE_TRUE));
 
 		StringWriter xmlStringWriter = new StringWriter();
 		Marshaller.marshal(req, xmlStringWriter);
@@ -111,8 +109,7 @@ public class WSClient {
 	/**
 	 * It returns a list of resourceDescriptors.
 	 */
-	public java.util.List<ResourceDescriptor> list(ResourceDescriptor descriptor)
-			throws Exception {
+	public java.util.List<ResourceDescriptor> list(ResourceDescriptor descriptor) throws Exception {
 		Request req = new Request();
 
 		req.setOperationName(Request.OPERATION_LIST);
@@ -157,8 +154,7 @@ public class WSClient {
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - "
-						+ or.getMessage());
+				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
 
 			cachedServerVersion = or.getVersion();
 			return cachedServerVersion;
@@ -172,8 +168,7 @@ public class WSClient {
 	/**
 	 * It returns a list of resourceDescriptors.
 	 */
-	public java.util.List<ResourceDescriptor> list(String xmlRequest)
-			throws Exception {
+	public java.util.List<ResourceDescriptor> list(String xmlRequest) throws Exception {
 		try {
 
 			String result = getManagementService().list(xmlRequest);
@@ -181,8 +176,7 @@ public class WSClient {
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - "
-						+ or.getMessage());
+				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
 
 			return or.getResourceDescriptors();
 
@@ -201,8 +195,7 @@ public class WSClient {
 	 * deleting something inside this report unit.
 	 * 
 	 */
-	public void delete(ResourceDescriptor descriptor, String reportUnitUri)
-			throws Exception {
+	public void delete(ResourceDescriptor descriptor, String reportUnitUri) throws Exception {
 
 		try {
 			Request req = new Request();
@@ -211,19 +204,15 @@ public class WSClient {
 			req.setLocale(getServer().getLocale());
 
 			if (reportUnitUri != null && reportUnitUri.length() > 0) {
-				req.getArguments()
-						.add(new Argument(Argument.MODIFY_REPORTUNIT,
-								reportUnitUri));
+				req.getArguments().add(new Argument(Argument.MODIFY_REPORTUNIT, reportUnitUri));
 			}
 
-			String result = getManagementService().delete(
-					marshaller.marshal(req));
+			String result = getManagementService().delete(marshaller.marshal(req));
 
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - "
-						+ or.getMessage());
+				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -238,8 +227,7 @@ public class WSClient {
 	 * trasmission.
 	 * 
 	 */
-	public ResourceDescriptor get(ResourceDescriptor descriptor, File outputFile)
-			throws Exception {
+	public ResourceDescriptor get(ResourceDescriptor descriptor, File outputFile) throws Exception {
 		return get(descriptor, outputFile, null);
 	}
 
@@ -250,8 +238,7 @@ public class WSClient {
 	 * trasmission.
 	 * 
 	 */
-	public ResourceDescriptor get(ResourceDescriptor descriptor,
-			File outputFile, java.util.List<Argument> args) throws Exception {
+	public ResourceDescriptor get(ResourceDescriptor descriptor, File outputFile, java.util.List<Argument> args) throws Exception {
 		ResourceDescriptor rd = null;
 		java.io.InputStream is = null;
 		OutputStream os = null;
@@ -270,9 +257,7 @@ public class WSClient {
 			}
 
 			if (outputFile == null) {
-				req.getArguments()
-						.add(new Argument(Argument.NO_RESOURCE_DATA_ATTACHMENT,
-								null));
+				req.getArguments().add(new Argument(Argument.NO_RESOURCE_DATA_ATTACHMENT, null));
 			}
 
 			String result = getManagementService().get(marshaller.marshal(req));
@@ -280,14 +265,11 @@ public class WSClient {
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - "
-						+ or.getMessage());
+				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
 
-			Object[] resAtts = ((org.apache.axis.client.Stub) getManagementService())
-					.getAttachments();
+			Object[] resAtts = ((org.apache.axis.client.Stub) getManagementService()).getAttachments();
 			if (resAtts != null && resAtts.length > 0 && outputFile != null) {
-				is = ((org.apache.axis.attachments.AttachmentPart) resAtts[0])
-						.getDataHandler().getInputStream();
+				is = ((org.apache.axis.attachments.AttachmentPart) resAtts[0]).getDataHandler().getInputStream();
 
 				byte[] buffer = new byte[1024];
 				os = new FileOutputStream(outputFile);
@@ -316,9 +298,8 @@ public class WSClient {
 	/*
 	 * public JasperPrint runReport(ResourceDescriptor descriptor, java.util.Map
 	 * parameters) throws Exception { List args = new ArrayList(1); args.add(new
-	 * Argument(Argument.RUN_OUTPUT_FORMAT,
-	 * Argument.RUN_OUTPUT_FORMAT_JRPRINT)); Map attachments =
-	 * runReport(descriptor, parameters, args);
+	 * Argument(Argument.RUN_OUTPUT_FORMAT, Argument.RUN_OUTPUT_FORMAT_JRPRINT));
+	 * Map attachments = runReport(descriptor, parameters, args);
 	 * 
 	 * FileContent content = null; if (attachments != null &&
 	 * !attachments.isEmpty()) {
@@ -333,8 +314,7 @@ public class WSClient {
 	 * 
 	 * InputStream is = new ByteArrayInputStream(content.getData());
 	 * 
-	 * JasperPrint print = (JasperPrint) JRLoader.loadObject(is); return print;
-	 * }
+	 * JasperPrint print = (JasperPrint) JRLoader.loadObject(is); return print; }
 	 */
 
 	/**
@@ -348,17 +328,15 @@ public class WSClient {
 	 * 
 	 * 
 	 * 
-	 * The request must contains the descriptor of the report to execute (only
-	 * the URI is used). Arguments can be attached to the descriptor as childs.
-	 * Each argument is a ListItem, with the parameter name as Name and the
-	 * object rapresenting the value as Value.
+	 * The request must contains the descriptor of the report to execute (only the
+	 * URI is used). Arguments can be attached to the descriptor as childs. Each
+	 * argument is a ListItem, with the parameter name as Name and the object
+	 * rapresenting the value as Value.
 	 * 
 	 * Operation result Codes: 0 - Success 1 - Generic error
 	 * 
 	 */
-	public Map<String, FileContent> runReport(ResourceDescriptor descriptor,
-			java.util.Map<String, Object> parameters, List<Argument> args)
-			throws Exception {
+	public Map<String, FileContent> runReport(ResourceDescriptor descriptor, java.util.Map<String, Object> parameters, List<Argument> args) throws Exception {
 
 		try {
 			Request req = new Request();
@@ -366,8 +344,7 @@ public class WSClient {
 			req.setLocale(getServer().getLocale());
 			ResourceDescriptor newRUDescriptor = new ResourceDescriptor();
 			newRUDescriptor.setUriString(descriptor.getUriString());
-			for (Iterator<String> i = parameters.keySet().iterator(); i
-					.hasNext();) {
+			for (Iterator<String> i = parameters.keySet().iterator(); i.hasNext();) {
 				String key = "" + i.next();
 				Object value = parameters.get(key);
 				if (value instanceof java.util.Collection) {
@@ -379,35 +356,29 @@ public class WSClient {
 						newRUDescriptor.getParameters().add(l);
 					}
 				} else {
-					newRUDescriptor.getParameters().add(
-							new ListItem(key + "", parameters.get(key)));
+					newRUDescriptor.getParameters().add(new ListItem(key + "", parameters.get(key)));
 				}
 			}
 
 			req.setResourceDescriptor(newRUDescriptor);
 			req.getArguments().addAll(args);
 
-			String result = getManagementService().runReport(
-					marshaller.marshal(req));
+			String result = getManagementService().runReport(marshaller.marshal(req));
 
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - "
-						+ or.getMessage());
+				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
 
 			Map<String, FileContent> results = new HashMap<String, FileContent>();
 
-			Object[] resAtts = ((org.apache.axis.client.Stub) getManagementService())
-					.getAttachments();
+			Object[] resAtts = ((org.apache.axis.client.Stub) getManagementService()).getAttachments();
 			boolean attachFound = false;
 			for (int i = 0; resAtts != null && i < resAtts.length; ++i) {
 				attachFound = true;
-				DataHandler actualDH = (DataHandler) ((org.apache.axis.attachments.AttachmentPart) resAtts[i])
-						.getDataHandler();
+				DataHandler actualDH = (DataHandler) ((org.apache.axis.attachments.AttachmentPart) resAtts[i]).getDataHandler();
 				String name = actualDH.getName(); // ((org.apache.axis.attachments.AttachmentPart)resAtts[i]).getAttachmentFile();
-				String contentId = ((org.apache.axis.attachments.AttachmentPart) resAtts[i])
-						.getContentId();
+				String contentId = ((org.apache.axis.attachments.AttachmentPart) resAtts[i]).getContentId();
 				if (name == null)
 					name = "attachment-" + i;
 				if (contentId == null)
@@ -450,13 +421,11 @@ public class WSClient {
 	 * Add or Modify a resource. Return the updated ResourceDescriptor
 	 * 
 	 */
-	public ResourceDescriptor addOrModifyResource(
-			ResourceDescriptor descriptor, File inputFile) throws Exception {
+	public ResourceDescriptor addOrModifyResource(ResourceDescriptor descriptor, File inputFile) throws Exception {
 		return modifyReportUnitResource(null, descriptor, inputFile);
 	}
 
-	public ResourceDescriptor putResource(ResourceDescriptor descriptor,
-			RequestAttachment[] attachments) throws Exception {
+	public ResourceDescriptor putResource(ResourceDescriptor descriptor, RequestAttachment[] attachments) throws Exception {
 		return putReportUnitResource(null, descriptor, attachments);
 	}
 
@@ -484,8 +453,7 @@ public class WSClient {
 		return getServer().isChunked();
 	}
 
-	public ResourceDescriptor modifyReportUnitResource(String reportUnitUri,
-			ResourceDescriptor descriptor, File inputFile) throws Exception {
+	public ResourceDescriptor modifyReportUnitResource(String reportUnitUri, ResourceDescriptor descriptor, File inputFile) throws Exception {
 		RequestAttachment[] attachments;
 		if (inputFile == null) {
 			attachments = new RequestAttachment[0];
@@ -507,9 +475,7 @@ public class WSClient {
 		return putReportUnitResource(reportUnitUri, descriptor, attachments);
 	}
 
-	public ResourceDescriptor putReportUnitResource(String reportUnitUri,
-			ResourceDescriptor descriptor, RequestAttachment[] attachments)
-			throws Exception {
+	public ResourceDescriptor putReportUnitResource(String reportUnitUri, ResourceDescriptor descriptor, RequestAttachment[] attachments) throws Exception {
 
 		try {
 			Request req = new Request();
@@ -517,9 +483,7 @@ public class WSClient {
 			req.setLocale(getServer().getLocale());
 
 			if (reportUnitUri != null && reportUnitUri.length() > 0) {
-				req.getArguments()
-						.add(new Argument(Argument.MODIFY_REPORTUNIT,
-								reportUnitUri));
+				req.getArguments().add(new Argument(Argument.MODIFY_REPORTUNIT, reportUnitUri));
 			}
 
 			ManagementService ms = getManagementService();
@@ -538,23 +502,18 @@ public class WSClient {
 
 				// Tell the stub that the message being formed also contains an
 				// attachment, and it is of type MIME encoding.
-				((org.apache.axis.client.Stub) ms)._setProperty(
-						Call.ATTACHMENT_ENCAPSULATION_FORMAT,
-						Call.ATTACHMENT_ENCAPSULATION_FORMAT_DIME);
+				((org.apache.axis.client.Stub) ms)._setProperty(Call.ATTACHMENT_ENCAPSULATION_FORMAT, Call.ATTACHMENT_ENCAPSULATION_FORMAT_DIME);
 
 				for (int i = 0; i < attachments.length; i++) {
 					RequestAttachment attachment = attachments[i];
-					DataHandler attachmentHandler = new DataHandler(
-							attachment.getDataSource());
-					AttachmentPart attachmentPart = new AttachmentPart(
-							attachmentHandler);
+					DataHandler attachmentHandler = new DataHandler(attachment.getDataSource());
+					AttachmentPart attachmentPart = new AttachmentPart(attachmentHandler);
 					if (attachment.getContentID() != null) {
 						attachmentPart.setContentId(attachment.getContentID());
 					}
 
 					// Add the attachment to the message
-					((org.apache.axis.client.Stub) ms)
-							.addAttachment(attachmentPart);
+					((org.apache.axis.client.Stub) ms).addAttachment(attachmentPart);
 				}
 			}
 
@@ -565,8 +524,7 @@ public class WSClient {
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - "
-						+ or.getMessage());
+				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
 
 			return (ResourceDescriptor) or.getResourceDescriptors().get(0);
 
@@ -576,23 +534,18 @@ public class WSClient {
 		}
 	}
 
-	public void move(ResourceDescriptor resource, String destinationFolderURI)
-			throws Exception {
+	public void move(ResourceDescriptor resource, String destinationFolderURI) throws Exception {
 		try {
 			Request req = new Request();
 			req.setOperationName("move");
 			req.setResourceDescriptor(resource);
 			req.setLocale(getServer().getLocale());
-			req.getArguments()
-					.add(new Argument(Argument.DESTINATION_URI,
-							destinationFolderURI));
+			req.getArguments().add(new Argument(Argument.DESTINATION_URI, destinationFolderURI));
 
-			String result = getManagementService()
-					.move(marshaller.marshal(req));
+			String result = getManagementService().move(marshaller.marshal(req));
 			OperationResult or = (OperationResult) unmarshal(result);
 			if (or.getReturnCode() != OperationResult.SUCCESS) {
-				throw new Exception(or.getReturnCode() + " - "
-						+ or.getMessage());
+				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -600,23 +553,18 @@ public class WSClient {
 		}
 	}
 
-	public ResourceDescriptor copy(ResourceDescriptor resource,
-			String destinationFolderURI) throws Exception {
+	public ResourceDescriptor copy(ResourceDescriptor resource, String destinationFolderURI) throws Exception {
 		try {
 			Request req = new Request();
 			req.setOperationName("copy");
 			req.setResourceDescriptor(resource);
 			req.setLocale(getServer().getLocale());
-			req.getArguments()
-					.add(new Argument(Argument.DESTINATION_URI,
-							destinationFolderURI));
+			req.getArguments().add(new Argument(Argument.DESTINATION_URI, destinationFolderURI));
 
-			String result = getManagementService()
-					.copy(marshaller.marshal(req));
+			String result = getManagementService().copy(marshaller.marshal(req));
 			OperationResult or = (OperationResult) unmarshal(result);
 			if (or.getReturnCode() != OperationResult.SUCCESS) {
-				throw new Exception(or.getReturnCode() + " - "
-						+ or.getMessage());
+				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
 			}
 
 			ResourceDescriptor copyDescriptor;
@@ -642,37 +590,36 @@ public class WSClient {
 	}
 
 	public ManagementService getManagementService() throws Exception {
-        
-        if (managementService == null)
-        {
-            ManagementServiceServiceLocator rsl = new ManagementServiceServiceLocator(getEngineConfiguration());
-            managementService = rsl.getrepository(new java.net.URL( getWebservicesUri() ) );
-            ((org.apache.axis.client.Stub)managementService).setUsername( getUsername() );
-            ((org.apache.axis.client.Stub)managementService).setPassword( getPassword() );
-            ((org.apache.axis.client.Stub)managementService).setMaintainSession( true );
-            ((org.apache.axis.client.Stub)managementService).setTimeout( getTimeout()); 
-             
-        	Hashtable headers = (Hashtable) ((org.apache.axis.client.Stub)managementService)._getProperty(HTTPConstants.REQUEST_HEADERS);
-        	if (headers == null)   
-        		headers = new Hashtable();  
-            headers.put(HTTPConstants.HEADER_TRANSFER_ENCODING_CHUNKED, isChuncked() ? Boolean.TRUE: Boolean.FALSE);
-            ((org.apache.axis.client.Stub)managementService)._setProperty(HTTPConstants.REQUEST_HEADERS, headers); 
-            
-            System.out.println("Client: "+ managementService);
-        }
 
-        //int timeout = IReportManager.getPreferences().getInt("client_timeout", 0) * 1000;
-        //if (timeout != ((org.apache.axis.client.Stub)managementService).getTimeout())
-        //{
-        //    ((org.apache.axis.client.Stub)managementService).setTimeout(timeout);
-        //}
-        return managementService;
-    }
+		if (managementService == null) {
+			ManagementServiceServiceLocator rsl = new ManagementServiceServiceLocator(getEngineConfiguration());
+			managementService = rsl.getrepository(new java.net.URL(getWebservicesUri()));
+			((org.apache.axis.client.Stub) managementService).setUsername(getUsername());
+			((org.apache.axis.client.Stub) managementService).setPassword(getPassword());
+			((org.apache.axis.client.Stub) managementService).setMaintainSession(true);
+			((org.apache.axis.client.Stub) managementService).setTimeout(getTimeout());
+
+			Hashtable headers = (Hashtable) ((org.apache.axis.client.Stub) managementService)._getProperty(HTTPConstants.REQUEST_HEADERS);
+			if (headers == null)
+				headers = new Hashtable();
+			headers.put(HTTPConstants.HEADER_TRANSFER_ENCODING_CHUNKED, isChuncked() ? Boolean.TRUE : Boolean.FALSE);
+			((org.apache.axis.client.Stub) managementService)._setProperty(HTTPConstants.REQUEST_HEADERS, headers);
+
+		}
+
+		// int timeout = IReportManager.getPreferences().getInt("client_timeout", 0)
+		// * 1000;
+		// if (timeout !=
+		// ((org.apache.axis.client.Stub)managementService).getTimeout())
+		// {
+		// ((org.apache.axis.client.Stub)managementService).setTimeout(timeout);
+		// }
+		return managementService;
+	}
 
 	protected EngineConfiguration getEngineConfiguration() {
 		try {
-			return new ResourceConfigurationProvider(
-					AXIS_CONFIGURATION_RESOURCE);
+			return new ResourceConfigurationProvider(AXIS_CONFIGURATION_RESOURCE);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -685,8 +632,7 @@ public class WSClient {
 
 	protected Object unmarshal(String xml) throws Exception {
 		Object obj = null;
-		ClassLoader oldClassLoader = Thread.currentThread()
-				.getContextClassLoader();
+		ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 		try {
 			// Thread.currentThread().setContextClassLoader(DOMParser.class.getClassLoader());
 			obj = unmarshaller.unmarshal(xml);
@@ -701,21 +647,21 @@ public class WSClient {
 	private File patchJRXML(File inputFile) throws Exception {
 
 		/*
-		 * String content = ""; FileInputStream is = new
-		 * FileInputStream(inputFile); byte[] buffer = new byte[1024]; int
-		 * bcount = 0; while ( (bcount = is.read(buffer)) > 0) { content += new
-		 * String(buffer,0,bcount); } is.close();
+		 * String content = ""; FileInputStream is = new FileInputStream(inputFile);
+		 * byte[] buffer = new byte[1024]; int bcount = 0; while ( (bcount =
+		 * is.read(buffer)) > 0) { content += new String(buffer,0,bcount); }
+		 * is.close();
 		 * 
 		 * if (content.indexOf(
-		 * "xmlns=\"http://jasperreports.sourceforge.net/jasperreports\"") > 0)
-		 * { content = Misc.string_replace(
+		 * "xmlns=\"http://jasperreports.sourceforge.net/jasperreports\"") > 0) {
+		 * content = Misc.string_replace(
 		 * "<!DOCTYPE jasperReport PUBLIC \"-//JasperReports//DTD Report Design//EN\" \"http://jasperreports.sourceforge.net/dtds/jasperreport.dtd\">\n<jasperReport "
 		 * ,
 		 * "<jasperReport xmlns=\"http://jasperreports.sourceforge.net/jasperreports\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd\""
 		 * , content); File newFile = new File(
-		 * JasperServerManager.createTmpFileName(null, null)); FileOutputStream
-		 * os = new FileOutputStream(newFile); os.write( content.getBytes());
-		 * os.close(); return newFile; }
+		 * JasperServerManager.createTmpFileName(null, null)); FileOutputStream os =
+		 * new FileOutputStream(newFile); os.write( content.getBytes()); os.close();
+		 * return newFile; }
 		 */
 		return inputFile;
 	}
@@ -723,32 +669,23 @@ public class WSClient {
 	/**
 	 * @return the userAndRoleManagementService
 	 */
-	public UserAndRoleManagement getUserAndRoleManagementService()
-			throws Exception {
+	public UserAndRoleManagement getUserAndRoleManagementService() throws Exception {
 
 		if (userAndRoleManagementService == null) {
-			UserAndRoleManagementServiceLocator rsl = new UserAndRoleManagementServiceLocator(
-					getEngineConfiguration());
+			UserAndRoleManagementServiceLocator rsl = new UserAndRoleManagementServiceLocator(getEngineConfiguration());
 			String uriString = getWebservicesUri();
-			uriString = uriString.replace("/repository",
-					"/UserAndRoleManagementService");
+			uriString = uriString.replace("/repository", "/UserAndRoleManagementService");
 
-			userAndRoleManagementService = rsl
-					.getUserAndRoleManagementServicePort(new java.net.URL(
-							uriString));
-			((org.apache.axis.client.Stub) userAndRoleManagementService)
-					.setUsername(getUsername());
-			((org.apache.axis.client.Stub) userAndRoleManagementService)
-					.setPassword(getPassword());
-			((org.apache.axis.client.Stub) userAndRoleManagementService)
-					.setMaintainSession(true);
-			((org.apache.axis.client.Stub) userAndRoleManagementService)
-					.setTimeout(getTimeout());
-			Hashtable headers = (Hashtable) ((org.apache.axis.client.Stub)userAndRoleManagementService)._getProperty(HTTPConstants.REQUEST_HEADERS);
-        	if (headers == null)   
-        		headers = new Hashtable();  
-            headers.put(HTTPConstants.HEADER_TRANSFER_ENCODING_CHUNKED, isChuncked() ? Boolean.TRUE: Boolean.FALSE);
-            ((org.apache.axis.client.Stub)userAndRoleManagementService)._setProperty(HTTPConstants.REQUEST_HEADERS, headers); 
+			userAndRoleManagementService = rsl.getUserAndRoleManagementServicePort(new java.net.URL(uriString));
+			((org.apache.axis.client.Stub) userAndRoleManagementService).setUsername(getUsername());
+			((org.apache.axis.client.Stub) userAndRoleManagementService).setPassword(getPassword());
+			((org.apache.axis.client.Stub) userAndRoleManagementService).setMaintainSession(true);
+			((org.apache.axis.client.Stub) userAndRoleManagementService).setTimeout(getTimeout());
+			Hashtable headers = (Hashtable) ((org.apache.axis.client.Stub) userAndRoleManagementService)._getProperty(HTTPConstants.REQUEST_HEADERS);
+			if (headers == null)
+				headers = new Hashtable();
+			headers.put(HTTPConstants.HEADER_TRANSFER_ENCODING_CHUNKED, isChuncked() ? Boolean.TRUE : Boolean.FALSE);
+			((org.apache.axis.client.Stub) userAndRoleManagementService)._setProperty(HTTPConstants.REQUEST_HEADERS, headers);
 		}
 
 		// int timeout =
@@ -763,10 +700,9 @@ public class WSClient {
 
 	/**
 	 * @param userAndRoleManagementService
-	 *            the userAndRoleManagementService to set
+	 *          the userAndRoleManagementService to set
 	 */
-	public void setUserAndRoleManagementService(
-			UserAndRoleManagement userAndRoleManagementService) {
+	public void setUserAndRoleManagementService(UserAndRoleManagement userAndRoleManagementService) {
 		this.userAndRoleManagementService = userAndRoleManagementService;
 	}
 
@@ -775,28 +711,20 @@ public class WSClient {
 	 */
 	public PermissionsManagement getPermissionsManagement() throws Exception {
 		if (permissionsManagement == null) {
-			PermissionsManagementServiceLocator rsl = new PermissionsManagementServiceLocator(
-					getEngineConfiguration());
+			PermissionsManagementServiceLocator rsl = new PermissionsManagementServiceLocator(getEngineConfiguration());
 			String uriString = getWebservicesUri();
-			uriString = uriString.replace("/repository",
-					"/PermissionsManagementService");
+			uriString = uriString.replace("/repository", "/PermissionsManagementService");
 
-			permissionsManagement = rsl
-					.getPermissionsManagementServicePort(new java.net.URL(
-							uriString));
-			((org.apache.axis.client.Stub) permissionsManagement)
-					.setUsername(getUsername());
-			((org.apache.axis.client.Stub) permissionsManagement)
-					.setPassword(getPassword());
-			((org.apache.axis.client.Stub) permissionsManagement)
-					.setMaintainSession(true);
-			((org.apache.axis.client.Stub) permissionsManagement)
-					.setTimeout(getTimeout());
-			Hashtable headers = (Hashtable) ((org.apache.axis.client.Stub)permissionsManagement)._getProperty(HTTPConstants.REQUEST_HEADERS);
-        	if (headers == null)   
-        		headers = new Hashtable();  
-            headers.put(HTTPConstants.HEADER_TRANSFER_ENCODING_CHUNKED, isChuncked() ? Boolean.TRUE: Boolean.FALSE);
-            ((org.apache.axis.client.Stub)permissionsManagement)._setProperty(HTTPConstants.REQUEST_HEADERS, headers); 
+			permissionsManagement = rsl.getPermissionsManagementServicePort(new java.net.URL(uriString));
+			((org.apache.axis.client.Stub) permissionsManagement).setUsername(getUsername());
+			((org.apache.axis.client.Stub) permissionsManagement).setPassword(getPassword());
+			((org.apache.axis.client.Stub) permissionsManagement).setMaintainSession(true);
+			((org.apache.axis.client.Stub) permissionsManagement).setTimeout(getTimeout());
+			Hashtable headers = (Hashtable) ((org.apache.axis.client.Stub) permissionsManagement)._getProperty(HTTPConstants.REQUEST_HEADERS);
+			if (headers == null)
+				headers = new Hashtable();
+			headers.put(HTTPConstants.HEADER_TRANSFER_ENCODING_CHUNKED, isChuncked() ? Boolean.TRUE : Boolean.FALSE);
+			((org.apache.axis.client.Stub) permissionsManagement)._setProperty(HTTPConstants.REQUEST_HEADERS, headers);
 		}
 
 		// int timeout =
@@ -811,10 +739,9 @@ public class WSClient {
 
 	/**
 	 * @param permissionsManagement
-	 *            the permissionsManagement to set
+	 *          the permissionsManagement to set
 	 */
-	public void setPermissionsManagement(
-			PermissionsManagement permissionsManagement) {
+	public void setPermissionsManagement(PermissionsManagement permissionsManagement) {
 		this.permissionsManagement = permissionsManagement;
 	}
 
@@ -823,26 +750,20 @@ public class WSClient {
 	 */
 	public ReportScheduler getReportScheduler() throws Exception {
 		if (reportScheduler == null) {
-			ReportSchedulerServiceLocator rsl = new ReportSchedulerServiceLocator(
-					getEngineConfiguration());
+			ReportSchedulerServiceLocator rsl = new ReportSchedulerServiceLocator(getEngineConfiguration());
 			String uriString = getWebservicesUri();
 			uriString = uriString.replace("/repository", "/ReportScheduler");
 
-			reportScheduler = rsl
-					.getReportScheduler(new java.net.URL(uriString));
-			((org.apache.axis.client.Stub) reportScheduler)
-					.setUsername(getUsername());
-			((org.apache.axis.client.Stub) reportScheduler)
-					.setPassword(getPassword());
-			((org.apache.axis.client.Stub) reportScheduler)
-					.setMaintainSession(true);
-			((org.apache.axis.client.Stub) reportScheduler)
-					.setTimeout(getTimeout());
-			Hashtable headers = (Hashtable) ((org.apache.axis.client.Stub)reportScheduler)._getProperty(HTTPConstants.REQUEST_HEADERS);
-        	if (headers == null)   
-        		headers = new Hashtable();  
-            headers.put(HTTPConstants.HEADER_TRANSFER_ENCODING_CHUNKED, isChuncked() ? Boolean.TRUE: Boolean.FALSE);
-            ((org.apache.axis.client.Stub)reportScheduler)._setProperty(HTTPConstants.REQUEST_HEADERS, headers); 
+			reportScheduler = rsl.getReportScheduler(new java.net.URL(uriString));
+			((org.apache.axis.client.Stub) reportScheduler).setUsername(getUsername());
+			((org.apache.axis.client.Stub) reportScheduler).setPassword(getPassword());
+			((org.apache.axis.client.Stub) reportScheduler).setMaintainSession(true);
+			((org.apache.axis.client.Stub) reportScheduler).setTimeout(getTimeout());
+			Hashtable headers = (Hashtable) ((org.apache.axis.client.Stub) reportScheduler)._getProperty(HTTPConstants.REQUEST_HEADERS);
+			if (headers == null)
+				headers = new Hashtable();
+			headers.put(HTTPConstants.HEADER_TRANSFER_ENCODING_CHUNKED, isChuncked() ? Boolean.TRUE : Boolean.FALSE);
+			((org.apache.axis.client.Stub) reportScheduler)._setProperty(HTTPConstants.REQUEST_HEADERS, headers);
 		}
 
 		// int timeout =
@@ -857,7 +778,7 @@ public class WSClient {
 
 	/**
 	 * @param reportSchedulerService
-	 *            the reportSchedulerService to set
+	 *          the reportSchedulerService to set
 	 */
 	public void setReportScheduler(ReportScheduler reportScheduler) {
 		this.reportScheduler = reportScheduler;

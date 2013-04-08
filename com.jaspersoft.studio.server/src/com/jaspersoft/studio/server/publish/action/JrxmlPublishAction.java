@@ -194,6 +194,10 @@ public class JrxmlPublishAction extends AContributorAction {
 		} catch (Exception e) {
 			if (f.getValue().getIsNew()) {
 				f.getValue().setIsNew(false);
+				ResourceDescriptor prd = ((MResource) f.getParent()).getValue();
+				f.getValue().setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");//$NON-NLS-1$ $NON-NLS-2$
+				ResourceDescriptor v = f.getValue();
+				f.getValue().setUriString(v.getParentFolder() + "/" + f.getValue().getName());//$NON-NLS-1$
 				return WSClientHelper.saveResource(f, monitor, false);
 			}
 			throw e;
