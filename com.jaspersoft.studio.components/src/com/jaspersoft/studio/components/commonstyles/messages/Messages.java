@@ -12,7 +12,14 @@ public class Messages extends NLS {
 	public static String CommonViewProvider_deleteStyleToolButton;
 	public static String CommonViewProvider_editStyleLabel;
 	public static String CommonViewProvider_editStyleToolButton;
+	public static String CommonViewProvider_exportStylesToolTip;
 	public static String CommonViewProvider_finishLabel;
+	public static String ImportExportDialog_browseButtonText;
+	public static String ImportExportDialog_destinationText;
+	public static String ImportExportDialog_labelText;
+	public static String ImportExportDialog_titleText;
+	public static String ImportExportDialog_warningText;
+	public static String ImportExportDialog_warningTitle;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

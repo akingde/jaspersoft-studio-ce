@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.nebula.widgets.gallery.Gallery;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
@@ -54,7 +53,6 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.commonstyles.messages.Messages;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
-import com.jaspersoft.studio.property.dataset.dialog.DatasetDialog;
 import com.jaspersoft.studio.style.view.TemplateStyleView;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
 import com.jaspersoft.studio.utils.IOUtils;
@@ -270,6 +268,16 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 		return image;
 	}
 	
+	
+	public Image getExportStylesImage() {
+		Image image = ResourceManager.getImage("export-styles"); //$NON-NLS-1$
+		if (image == null){
+			image = Activator.getDefault().getImageDescriptor("icons/table-export.png").createImage(); //$NON-NLS-1$
+			ResourceManager.addImage("export-styles", image); //$NON-NLS-1$
+		}
+		return image;
+	}
+	
 	/**
 	 * Return an image that can be used as icon for the edit style action
 	 * 
@@ -425,8 +433,8 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 		});
 		
 		ToolItem exportItem = new ToolItem (toolBar, SWT.PUSH);
-		exportItem.setImage (getDeleteStyleImage());
-		exportItem.setToolTipText(Messages.CommonViewProvider_deleteStyleToolButton);
+		exportItem.setImage (getExportStylesImage());
+		exportItem.setToolTipText(Messages.CommonViewProvider_exportStylesToolTip);
 		final CommonViewProvider provider = this;
 		exportItem.addSelectionListener(new SelectionAdapter() {
 	    	@Override
