@@ -71,6 +71,10 @@
       <description>Style Templates Editor</description>
       <topic href="html/editors/jrtx/jrtx.html" label="Style Templates Editor"/>
    </context>
+    <context id="editor_jrctx" title="Chart Theme Editor">
+      <description>Chart Theme Editor</description>
+      <topic href="html/editors/jrctx/jrctx.html" label="Chart Theme Editor"/>
+   </context>
     <context id="editor_dataadapter" title="Data Adapter Editor">
       <description>Data Adapter Editor</description>
       <topic href="html/dataAdapters/dataadapters.html" label="Data Adapters" />
