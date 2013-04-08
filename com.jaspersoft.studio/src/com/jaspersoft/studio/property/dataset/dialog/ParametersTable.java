@@ -13,6 +13,7 @@ package com.jaspersoft.studio.property.dataset.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -122,6 +123,10 @@ public class ParametersTable {
 				JRDesignParameter f = new JRDesignParameter();
 				f.setName(getName());
 				f.setValueClass(String.class);
+				try {
+					dataset.addParameter(f);
+				} catch (JRException e) {
+				}
 				return f;
 			}
 
@@ -144,7 +149,13 @@ public class ParametersTable {
 				return tmp;
 			}
 		});
-		final DeleteButton delb = new DeleteButton();
+		final DeleteButton delb = new DeleteButton() {
+			@Override
+			protected void afterElementDeleted(Object element) {
+				super.afterElementDeleted(element);
+				dataset.removeParameter((JRDesignParameter) element);
+			}
+		};
 		delb.createDeleteButton(bGroup, tviewer);
 
 		List<JRParameter> fields = dataset.getParametersList();
