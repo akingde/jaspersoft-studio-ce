@@ -16,12 +16,16 @@
 package com.jaspersoft.studio.components.commonstyles;
 
 import java.awt.Rectangle;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.nebula.widgets.gallery.Gallery;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
+import org.eclipse.nebula.widgets.gallery.NoGroupRenderer;
+import org.eclipse.nebula.widgets.gallery.RoundedGalleryItemRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
@@ -33,17 +37,24 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.components.Activator;
-import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.commonstyles.messages.Messages;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
+import com.jaspersoft.studio.property.dataset.dialog.DatasetDialog;
 import com.jaspersoft.studio.style.view.TemplateStyleView;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
 import com.jaspersoft.studio.utils.IOUtils;
@@ -63,7 +74,6 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 	 */
 	protected Gallery checkedGallery;
 	
-	
 	/**
 	 * The common delete action
 	 */
@@ -78,6 +88,21 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 	 * The standard create action
 	 */
 	protected MenuItem createAction = null;
+	
+	/**
+	 * Toolbar button to create a template style
+	 */
+	private ToolItem createStyle = null;
+	
+	/**
+	 * Toolbar button to edit a template style
+	 */
+	private ToolItem editStyle = null;
+	
+	/**
+	 * Toolbar button to delete a template style
+	 */
+	private ToolItem deleteStyle = null;
 	
 	
 	/**
@@ -132,14 +157,11 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 		
 		@Override
 		public void mouseDown(MouseEvent e) {
-			if (e.button == 3 && checkedGallery.getItem(new Point(e.x,e.y))==null){
-				checkedGallery.deselectAll();
-				if (deleteAction != null) deleteAction.setEnabled(false);
-				if (editAction != null) editAction.setEnabled(false);
-			} else {
-				if (deleteAction != null) deleteAction.setEnabled(true);
-				if (editAction != null) editAction.setEnabled(true);
-			}
+			boolean allDeselected = (e.button == 3 && checkedGallery.getItem(new Point(e.x,e.y))==null);
+			if (allDeselected) checkedGallery.deselectAll();
+			if (deleteAction != null) deleteAction.setEnabled(!allDeselected);
+			if (editAction != null) editAction.setEnabled(!allDeselected);
+			updateToolBartSelection();
 		}
 		
 		@Override
@@ -158,6 +180,7 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 	    	@Override
 	    	public void widgetSelected(SelectionEvent e) {
 	    		doDelete();
+	    		updateToolBartSelection();
 	    	}
 		});   
 	}
@@ -186,6 +209,7 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 	    	@Override
 	    	public void widgetSelected(SelectionEvent e) {
 	    		doCreate();
+	    		updateToolBartSelection();
 	    	}
 		});
 	}
@@ -200,12 +224,13 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 	 */
 	protected void initializeEditAction(){
 		editAction = new MenuItem(checkedGallery.getMenu(), SWT.NONE);
-		editAction.setText("Edit Style");
+		editAction.setText(com.jaspersoft.studio.components.commonstyles.messages.Messages.CommonViewProvider_editStyleLabel);
 		editAction.setImage(getEditStyleImage());
 		editAction.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent e) {
 	    		doEdit();
+	    		updateToolBartSelection();
 	    	}
 		});
 	}
@@ -273,7 +298,7 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 			@Override
 			protected Button createButton(Composite parent, int id, String label, boolean defaultButton) {
 				Button button = super.createButton(parent, id, label, defaultButton);
-				if (id == IDialogConstants.FINISH_ID) button.setText(Messages.EditCrosstabStyleAction_okButton);
+				if (id == IDialogConstants.FINISH_ID) button.setText(Messages.CommonViewProvider_finishLabel);
 				return button;
 			}
 		};
@@ -342,13 +367,144 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 		gc.setAlpha(oldAlpha);
 	}
 	
+	/**
+	 * Enable or disable the edit and delete toolbar buttons according to the selection
+	 */
+	private void updateToolBartSelection(){
+		boolean selectionState = checkedGallery.getSelectionCount()>0;
+		if (editStyle != null) editStyle.setEnabled(selectionState);
+		if (deleteStyle != null) deleteStyle.setEnabled(selectionState);
+	}
+	
+	/**
+	 * Crate the toolbar with three button to add, edit or delete template styles
+	 * @param parent the container of the toolbar
+	 */
+	protected void createToolBar(Composite parent){
+		checkedGallery.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateToolBartSelection();
+			}
+		});
+		
+		ToolBar toolBar = new ToolBar (parent, SWT.FLAT);
+		createStyle = new ToolItem (toolBar, SWT.PUSH);
+		createStyle.setImage (getNewStyleImage());
+		createStyle.setToolTipText(Messages.CommonViewProvider_createStyleToolButton);
+		createStyle.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		doCreate();
+	    		updateToolBartSelection();
+	    	}
+		});
+		
+		editStyle = new ToolItem (toolBar, SWT.PUSH);
+		editStyle.setImage (getEditStyleImage());
+		editStyle.setToolTipText(Messages.CommonViewProvider_editStyleToolButton);
+		editStyle.setEnabled(false);
+		editStyle.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		doEdit();
+	    		updateToolBartSelection();
+	    	}
+		});
+		
+		deleteStyle = new ToolItem (toolBar, SWT.PUSH);
+		deleteStyle.setImage (getDeleteStyleImage());
+		deleteStyle.setToolTipText(Messages.CommonViewProvider_deleteStyleToolButton);
+		deleteStyle.setEnabled(false);
+		deleteStyle.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		doDelete();
+	    		updateToolBartSelection();
+	    	}
+		});
+		
+		ToolItem exportItem = new ToolItem (toolBar, SWT.PUSH);
+		exportItem.setImage (getDeleteStyleImage());
+		exportItem.setToolTipText(Messages.CommonViewProvider_deleteStyleToolButton);
+		final CommonViewProvider provider = this;
+		exportItem.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		ImportExportDialog dlg = new ImportExportDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(),provider);
+	    		dlg.open();
+	    	}
+		});
+		
+		GridData toolButtonData = new GridData();
+		toolButtonData.horizontalAlignment = SWT.END;
+		toolBar.setLayoutData(toolButtonData);
+	}
+	
+	/**
+	 * Create all the visible controls
+	 * 
+	 * @param parent the container of all the controls
+	 * @param imageWidth the width of images of the gallery
+	 * @param imageHeight the height of the images of the gallery
+	 * @param labelText the text on the description label
+	 */
+	protected void createControls(Composite parent, int imageWidth, int imageHeight, String labelText) {
+		Composite firstLine = new Composite(parent, SWT.NONE);
+		GridLayout firstLineLayout = new GridLayout(2,false);
+		firstLineLayout.verticalSpacing = 0;
+		firstLineLayout.marginHeight = 0;
+		firstLine.setLayout(firstLineLayout);
+		GridData firstLineData = new GridData();
+		firstLineData.grabExcessHorizontalSpace=true;
+		firstLineData.horizontalAlignment = SWT.FILL;
+		firstLine.setLayoutData(firstLineData);
+		
+		Label dragLabel = new Label(firstLine, SWT.NONE);
+		dragLabel.setText(labelText);
+		GridData labelData = new GridData();
+		labelData.grabExcessHorizontalSpace = true;
+		labelData.horizontalAlignment = SWT.FILL;
+		dragLabel.setLayoutData(labelData);
+		
+		checkedGallery = new Gallery(parent, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
+		final NoGroupRenderer gr = new NoGroupRenderer();
+		gr.setMinMargin(2);
+		gr.setItemSize(imageWidth, imageHeight);
+		gr.setAutoMargin(true);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		checkedGallery.setLayoutData(gd);
+		checkedGallery.setGroupRenderer(gr);
+		checkedGallery.enableItemsTooltip(false);
+		RoundedGalleryItemRenderer ir = new RoundedGalleryItemRenderer();
+		ir.setShowLabels(true);
+		checkedGallery.setItemRenderer(ir);
+		GridData galleryData = new GridData();
+		galleryData.grabExcessHorizontalSpace = true;
+		galleryData.grabExcessVerticalSpace = true;
+		galleryData.horizontalAlignment = SWT.FILL;
+		galleryData.verticalAlignment = SWT.FILL;
+		checkedGallery.setLayoutData(galleryData);
+		
+	    Menu popupMenu = new Menu(checkedGallery);
+	    checkedGallery.setMenu(popupMenu);
+	    checkedGallery.addMouseListener(new GalleryRightClick());
+	    
+	    initializeCreateAction();
+	    initializeEditAction();
+	    initializeDeleteAction();
+		createToolBar(firstLine);
+	}
+	
 	
 	/**
 	 * Build a preview image of a TempalteStyle
 	 * 
 	 * @param style the style
-	 * @return a previw SWT image of the style
+	 * @return a preview SWT image of the style
 	 */
 	public abstract Image generatePreviewFigure(final TemplateStyle style);
+	
+	public abstract  List<TemplateStyle> getStylesList();
 	
 }

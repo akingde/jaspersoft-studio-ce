@@ -16,17 +16,16 @@
 package com.jaspersoft.studio.components.table.figure;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.nebula.widgets.gallery.Gallery;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
-import org.eclipse.nebula.widgets.gallery.NoGroupRenderer;
-import org.eclipse.nebula.widgets.gallery.RoundedGalleryItemRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -35,11 +34,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.ResourceManager;
 
@@ -82,28 +78,16 @@ public class TableStyleView extends CommonViewProvider {
 	 */
 	@Override
 	public void createControls(Composite parent) {
-		Label dragLabel = new Label(parent, SWT.NONE);
-		dragLabel.setText(Messages.TableStyleView_labelText);
-		checkedGallery = new Gallery(parent, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
-		final NoGroupRenderer gr = new NoGroupRenderer();
-		gr.setMinMargin(2);
-		gr.setItemSize(GALLERY_WIDTH, GALLERY_HEIGHT);
-		gr.setAutoMargin(true);
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		checkedGallery.setLayoutData(gd);
-		checkedGallery.setGroupRenderer(gr);
-		checkedGallery.enableItemsTooltip(false);
-		RoundedGalleryItemRenderer ir = new RoundedGalleryItemRenderer();
-		ir.setShowLabels(true);
-		checkedGallery.setItemRenderer(ir);
-		addDragSupport();
-		
-	    Menu popupMenu = new Menu(checkedGallery);
-	    checkedGallery.setMenu(popupMenu);
-	    checkedGallery.addMouseListener(new GalleryRightClick());
-	    initializeCreateAction();
-	    initializeEditAction();
-	    initializeDeleteAction();
+	    super.createControls(parent, GALLERY_WIDTH, GALLERY_HEIGHT, Messages.TableStyleView_labelText);
+	    addDragSupport();
+	}
+	
+	public List<TemplateStyle> getStylesList(){
+		List<TemplateStyle> result = new ArrayList<TemplateStyle>();
+		Collection<TemplateStyle> savedStyles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors();
+		for (TemplateStyle style : savedStyles)
+			if (style instanceof TableStyle) result.add(style);
+		return result;
 	}
 	
 	/**
