@@ -51,7 +51,7 @@ public class ChartThemeEditor extends AGraphicEditor {
 	}
 
 	protected JDReportOutlineView createOutline(TreeViewer viewer) {
-		JDReportOutlineView outlinePage = new JDReportOutlineView(this, viewer) {
+		outlinePage = new JDReportOutlineView(this, viewer) {
 			protected void initActions(ActionRegistry registry, IActionBars bars) {
 			}
 
@@ -64,7 +64,8 @@ public class ChartThemeEditor extends AGraphicEditor {
 	}
 
 	@Override
-	protected AContextMenuProvider createContextMenuProvider(EditPartViewer graphicalViewer) {
+	protected AContextMenuProvider createContextMenuProvider(
+			EditPartViewer graphicalViewer) {
 		return new AContextMenuProvider(graphicalViewer, getActionRegistry());
 	}
 
@@ -79,7 +80,8 @@ public class ChartThemeEditor extends AGraphicEditor {
 	}
 
 	public ChartThemeSettings getChartThemeSettings() {
-		return ((MChartThemeSettings) getModel().getChildren().get(0)).getValue();
+		return ((MChartThemeSettings) getModel().getChildren().get(0))
+				.getValue();
 	}
 
 }

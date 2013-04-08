@@ -94,7 +94,7 @@ import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
  * text editor. <li>page 1 allows you to change the font used in page 2 <li>page 2 shows the words in page 0 in sorted
  * order </ul>
  */
-public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker, IJROBjectEditor {
+public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker, IJROBjectEditor, IMultiEditor {
 
 	private class StateListener implements IElementStateListener {
 

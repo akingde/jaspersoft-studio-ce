@@ -44,7 +44,7 @@ public class StyleTemplateEditor extends AGraphicEditor {
 	}
 
 	protected JDReportOutlineView createOutline(TreeViewer viewer) {
-		JDReportOutlineView outlinePage = new JDReportOutlineView(this, viewer) {
+		outlinePage = new JDReportOutlineView(this, viewer) {
 			protected void initActions(ActionRegistry registry, IActionBars bars) {
 				String id = CreateStyleTemplateReferenceAction.ID;
 				bars.setGlobalActionHandler(id, registry.getAction(id));

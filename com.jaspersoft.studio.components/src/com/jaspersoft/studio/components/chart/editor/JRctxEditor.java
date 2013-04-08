@@ -10,12 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.editor;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,103 +20,31 @@ import net.sf.jasperreports.chartthemes.simple.FileImageProvider;
 import net.sf.jasperreports.chartthemes.simple.ImageProvider;
 import net.sf.jasperreports.chartthemes.simple.XmlChartTheme;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.util.FileResolver;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IDocumentListener;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.ISaveablePart;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.SaveAsDialog;
-import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
-import org.eclipse.ui.texteditor.IElementStateListener;
-import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.components.chart.model.theme.ChartSettingsFactory;
-import com.jaspersoft.studio.editor.DeltaVisitor;
-import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
-import com.jaspersoft.studio.editor.xml.XMLEditor;
+import com.jaspersoft.studio.editor.AMultiEditor;
 import com.jaspersoft.studio.jasper.CachedImageProvider;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
-public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeListener {
-	private JasperReportsConfiguration jrContext;
+public class JRctxEditor extends AMultiEditor {
 
 	public JRctxEditor() {
 		super();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 	}
 
 	@Override
-	protected void pageChange(int newPageIndex) {
-		switch (newPageIndex) {
-		case 0:
-			xml2model();
-			break;
-		case 1:
-			model2xml();
-			break;
-		}
-		super.pageChange(newPageIndex);
-	}
-
-	private IFile getCurrentFile() {
-		return ((IFileEditorInput) getEditorInput()).getFile();
-	}
-
-	private boolean isRefresh = false;
-
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-		isRefresh = true;
-		String xml = model2xml();
+	public void doSaveParticipate(IProgressMonitor monitor) {
 		ctEditor.doSave(monitor);
-		xmlEditor.doSave(monitor);
-		try {
-			getCurrentFile().setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE, monitor);
-		} catch (Throwable e) {
-			UIUtils.showError(e);
-		}
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				isRefresh = false;
-				firePropertyChange(ISaveablePart.PROP_DIRTY);
-			}
-		});
 	}
 
-	private void xml2model() {
-		IDocumentProvider dp = xmlEditor.getDocumentProvider();
-		IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
-
-		InputStream in = new ByteArrayInputStream(doc.get().getBytes());
-		xml2model(in);
-	}
-
-	private ChartThemeSettings xml2model(InputStream in) {
+	protected void xml2model(InputStream in) {
 		ChartThemeSettings cts = XmlChartTheme.loadSettings(in);
 		MRoot root = ChartSettingsFactory.createModel(cts);
 		root.setJasperConfiguration(jrContext);
@@ -129,26 +52,33 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 		lst.add(new JRCTXExtensionsRegistryFactory(cts));
 		jrContext.setExtensions(ChartThemeBundle.class, lst);
 		setModel(root);
-		return cts;
 	}
 
 	private ImageProvider getImageProvider(ImageProvider ip) {
 		if (ip != null)
 			if (ip instanceof CachedImageProvider)
-				return new FileImageProvider(((CachedImageProvider) ip).getFile());
+				return new FileImageProvider(
+						((CachedImageProvider) ip).getFile());
 		return ip;
 	}
 
-	private String model2xml() {
+	protected String model2xml() {
 		try {
 			if (model != null) {
-				ChartThemeSettings cts = (ChartThemeSettings) model.getChildren().get(0).getValue();
+				ChartThemeSettings cts = (ChartThemeSettings) model
+						.getChildren().get(0).getValue();
 
-				cts.getChartSettings().setBackgroundImage(getImageProvider(cts.getChartSettings().getBackgroundImage()));
-				cts.getPlotSettings().setBackgroundImage(getImageProvider(cts.getPlotSettings().getBackgroundImage()));
+				cts.getChartSettings().setBackgroundImage(
+						getImageProvider(cts.getChartSettings()
+								.getBackgroundImage()));
+				cts.getPlotSettings().setBackgroundImage(
+						getImageProvider(cts.getPlotSettings()
+								.getBackgroundImage()));
 
 				String xml = XmlChartTheme.saveSettings(cts);
-				xml = xml.replaceFirst("<chart-theme>", "<!-- Created with Jaspersoft Studio -->\n<chart-theme>"); //$NON-NLS-1$ //$NON-NLS-2$
+				xml = xml
+						.replaceFirst(
+								"<chart-theme>", "<!-- Created with Jaspersoft Studio -->\n<chart-theme>"); //$NON-NLS-1$ //$NON-NLS-2$
 				IDocumentProvider dp = xmlEditor.getDocumentProvider();
 				IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 				doc.set(xml);
@@ -160,198 +90,25 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 		return null;
 	}
 
-	/**
-	 * Closes all project files on project close.
-	 * 
-	 * @param event
-	 *          the event
-	 */
-	public void resourceChanged(final IResourceChangeEvent event) {
-		if (isRefresh)
-			return;
-		switch (event.getType()) {
-		case IResourceChangeEvent.PRE_CLOSE:
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					IWorkbenchPage[] pages = getSite().getWorkbenchWindow().getPages();
-					for (int i = 0; i < pages.length; i++) {
-						if (((FileEditorInput) xmlEditor.getEditorInput()).getFile().getProject().equals(event.getResource())) {
-							IEditorPart editorPart = pages[i].findEditor(xmlEditor.getEditorInput());
-							pages[i].closeEditor(editorPart, true);
-						}
-					}
-				}
-			});
-			break;
-		case IResourceChangeEvent.PRE_DELETE:
-			break;
-		case IResourceChangeEvent.POST_CHANGE:
-			try {
-				DeltaVisitor visitor = new DeltaVisitor(this);
-				event.getDelta().accept(visitor);
-			} catch (CoreException e) {
-				UIUtils.showError(e);
-			}
-			break;
-		case IResourceChangeEvent.PRE_BUILD:
-		case IResourceChangeEvent.POST_BUILD:
-			break;
-		}
-	}
-
-	@Override
-	public void doSaveAs() {
-		SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
-		saveAsDialog.open();
-		IPath path = saveAsDialog.getResult();
-		if (path != null) {
-			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-			if (file != null) {
-				IProgressMonitor monitor = getActiveEditor().getEditorSite().getActionBars().getStatusLineManager().getProgressMonitor();
-				try {
-					file.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
-					IFileEditorInput modelFile = new FileEditorInput(file);
-					setInputWithNotify(modelFile);
-					xmlEditor.setInput(modelFile);
-					setPartName(file.getName());
-
-					doSave(monitor);
-				} catch (CoreException e) {
-					UIUtils.showError(e);
-				} catch (UnsupportedEncodingException e) {
-					UIUtils.showError(e);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		input = FileUtils.checkAndConvertEditorInput(input);
-		super.init(site, input);
-		setSite(site);
-		setPartName(input.getName());
-		setInput(input);
-
-		InputStream in = null;
-		try {
-			IFile file = ((IFileEditorInput) input).getFile();
-			if (input instanceof IFileEditorInput) {
-				in = file.getContents();
-			} else {
-				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
-			}
-			if (!isRefresh) {
-				getJrContext(file);
-				xml2model(in);
-			}
-		} catch (CoreException e) {
-			e.printStackTrace();
-			throw new PartInitException(e.getMessage(), e);
-		} finally {
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException e) {
-					setModel(null);
-					throw new PartInitException("error closing input stream", e); //$NON-NLS-1$
-				}
-		}
-	}
-
-	public void addFileResolver(FileResolver resolver) {
-		((ProxyFileResolver) jrContext.getFileResolver()).addResolver(resolver);
-	}
-
-	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
-		if (jrContext == null)
-			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
-	}
-
-	@Override
-	public void dispose() {
-		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
-		setModel(null);
-		if (jrContext != null)
-			jrContext.dispose();
-		super.dispose();
-	}
-
-	/** The model. */
-	private INode model = null;
-
 	public void setModel(INode model) {
-		if (this.model != null && this.model.getChildren() != null && !this.model.getChildren().isEmpty())
-			this.model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropertyChangeListener);
-		if (model != null && model.getChildren() != null && !model.getChildren().isEmpty())
-			model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropertyChangeListener);
-		this.model = model;
+		super.setModel(model);
 		if (ctEditor != null)
 			ctEditor.setModel(model);
 	}
 
-	private ModelPropertyChangeListener modelPropertyChangeListener = new ModelPropertyChangeListener();
-
-	private final class ModelPropertyChangeListener implements PropertyChangeListener {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.
-		 * PropertyChangeEvent)
-		 */
-		public void propertyChange(PropertyChangeEvent evt) {
-			getSite().getWorkbenchWindow().getShell().getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					firePropertyChange(ISaveablePart.PROP_DIRTY);
-				}
-			});
-
-		}
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return true;
-	}
-
 	@Override
 	protected void createPages() {
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getContainer(), "com.jaspersoft.studio.doc.editor_jrctx");
+		PlatformUI
+				.getWorkbench()
+				.getHelpSystem()
+				.setHelp(getContainer(),
+						"com.jaspersoft.studio.doc.editor_jrctx");
 
 		createPage0();
-		createPage1();
+		createPageXML();
 	}
 
-	private XMLEditor xmlEditor;
 	private ChartThemeEditor ctEditor;
-	private MultiOutlineView outlinePage;
-
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Object getAdapter(Class type) {
-		if (type == IContentOutlinePage.class) {
-			outlinePage = new MultiOutlineView(this);
-			Display.getDefault().asyncExec(new Runnable() {
-
-				public void run() {
-					updateContentOutline(getActivePage());
-				}
-			});
-			return outlinePage;
-		}
-		return super.getAdapter(type);
-	}
-
-	private void updateContentOutline(int page) {
-		if (outlinePage == null)
-			return;
-		IContentOutlinePage outline = null;
-		if (page == 0)
-			outline = (IContentOutlinePage) ctEditor.getAdapter(IContentOutlinePage.class);
-		outlinePage.setPageActive(outline);
-
-	}
 
 	/**
 	 * Creates page 1 of the multi-page editor, which allows you to change the
@@ -363,57 +120,6 @@ public class JRctxEditor extends MultiPageEditorPart implements IResourceChangeL
 
 			int index = addPage(ctEditor, getEditorInput());
 			setPageText(index, "Preview");
-		} catch (PartInitException e) {
-			UIUtils.showError(e);
-		}
-	}
-
-	private class StateListener implements IElementStateListener {
-
-		public void elementDirtyStateChanged(Object element, boolean isDirty) {
-
-		}
-
-		public void elementContentAboutToBeReplaced(Object element) {
-
-		}
-
-		public void elementContentReplaced(Object element) {
-
-		}
-
-		public void elementDeleted(Object element) {
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					getSite().getPage().closeEditor(JRctxEditor.this, false);
-				}
-			});
-		}
-
-		public void elementMoved(Object originalElement, Object movedElement) {
-
-		}
-
-	}
-
-	/**
-	 * Creates page 0 of the multi-page editor, which contains a text editor.
-	 */
-	void createPage1() {
-		try {
-			xmlEditor = new XMLEditor(jrContext);
-			int index = addPage(xmlEditor, getEditorInput());
-			setPageText(index, Messages.common_source);
-			xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput()).addDocumentListener(new IDocumentListener() {
-
-				public void documentChanged(DocumentEvent event) {
-				}
-
-				public void documentAboutToBeChanged(DocumentEvent event) {
-
-				}
-			});
-			xmlEditor.getDocumentProvider().addElementStateListener(new StateListener());
 		} catch (PartInitException e) {
 			UIUtils.showError(e);
 		}

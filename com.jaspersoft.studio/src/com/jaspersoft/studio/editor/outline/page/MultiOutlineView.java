@@ -32,6 +32,7 @@ import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.editor.IGraphicalEditor;
+import com.jaspersoft.studio.editor.IMultiEditor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 
@@ -68,8 +69,8 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 	public void createControl(Composite parent) {
 		pagebook = new PageBook(parent, SWT.NONE);
 
-		if (editor instanceof JrxmlEditor) {
-			JrxmlEditor ed = (JrxmlEditor) editor;
+		if (editor instanceof IMultiEditor) {
+			IMultiEditor ed = (IMultiEditor) editor;
 			IContentOutlinePage cop = (IContentOutlinePage) ed.getActiveEditor().getAdapter(IContentOutlinePage.class);
 			if (cop != null)
 				setPageActive(cop);
