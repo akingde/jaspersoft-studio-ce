@@ -73,6 +73,7 @@ import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.data.general.Dataset;
 
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -87,6 +88,8 @@ public final class ChartConverter extends ElementConverter {
 	 *
 	 */
 	private final static ChartConverter INSTANCE = new ChartConverter();
+	private JFreeChart jfreeChart;
+	private Dataset dataset;
 
 	/**
 	 *
@@ -141,6 +144,8 @@ public final class ChartConverter extends ElementConverter {
 	 * 
 	 */
 	private Renderable getRenderer(ReportConverter reportConverter, JRChart chart) {
+		if (dataset != null && jfreeChart != null)
+			dataset.removeChangeListener(jfreeChart.getPlot());
 		JasperReportsConfiguration jContext = (JasperReportsConfiguration) reportConverter.getJasperReportsContext();
 		String renderType = chart.getRenderType();// FIXMETHEME try reuse this sequence
 		if (renderType == null) {
@@ -160,16 +165,14 @@ public final class ChartConverter extends ElementConverter {
 			sct.getPlotSettings().setBackgroundImage(getCachedImageProvider(sct.getPlotSettings().getBackgroundImage()));
 		}
 		ChartContext chartContext = null;
-		Object cc = jContext.getMap().get(chart);
-		if (cc != null && cc instanceof ChartContext)
-			chartContext = (ChartContext) cc;
-		else {
-			chartContext = new ConvertChartContext(chart, jContext);
-			jContext.getMap().put(chart, chartContext);
-		}
-		JFreeChart jfreeChart = null;
+		// Object cc = jContext.getMap().get(chart);
+		// if (cc != null && cc instanceof ChartContext)
+		// chartContext = (ChartContext) cc;
+		// else {
+		chartContext = new ConvertChartContext(chart, jContext);
 		try {
 			jfreeChart = theme.createChart(chartContext);
+			dataset = chartContext.getDataset();
 			if (jfreeChart == null && chart.getChartType() == JRChart.CHART_TYPE_MULTI_AXIS) {
 				List<JRChartAxis> axis = ((JRDesignMultiAxisPlot) chart.getPlot()).getAxes();
 				Plot mainPlot = null;
