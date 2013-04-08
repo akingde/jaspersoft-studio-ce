@@ -228,8 +228,8 @@ public abstract class DataQueryAdapters {
 
 	public Composite createToolbar(Composite parent) {
 		final Composite comp = new Composite(parent, SWT.NONE);
-		comp.setLayout(new GridLayout(5, false));
-		comp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comp.setLayout(new GridLayout(4, false));
+		comp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		comp.setBackgroundMode(SWT.INHERIT_FORCE);
 
 		Label lbl = new Label(comp, SWT.NONE);
@@ -244,6 +244,7 @@ public abstract class DataQueryAdapters {
 				if (da != null)
 					newdataset.setProperty(DEFAULT_DATAADAPTER, da.getName());
 				currentDesigner.setDataAdapter(da);
+				qStatus.showInfo("");
 			}
 
 			public boolean isNotRunning() {

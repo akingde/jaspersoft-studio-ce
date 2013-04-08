@@ -89,6 +89,7 @@ public class QueryStatus {
 		msgItem.setToolTipText(Misc.nvl(msg));
 		msgItem.setEnabled(enabled);
 		toolBar.setVisible(msg != null && !msg.trim().isEmpty());
+		toolBar.getParent().layout();
 	}
 
 	protected void createStatusBar(final Composite comp) {
@@ -129,6 +130,10 @@ public class QueryStatus {
 			int w = toolBar.getBounds().width - 70;
 			GC gc = new GC(toolBar);
 			endIndex = Math.max(w / gc.getFontMetrics().getAverageCharWidth(), 0);
+			if(str.contains("\n")){
+				// avoid new line
+				endIndex = Math.min(str.indexOf('\n'), endIndex);
+			}
 			if (endIndex < str.length()) {
 				msgItem.setText(str.substring(0, endIndex) + "...");
 				return;
