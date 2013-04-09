@@ -1,5 +1,7 @@
 package com.jaspersoft.studio.community.utils;
 
+import com.jaspersoft.studio.utils.Misc;
+
 /**
  * Custom exception suitable to notify errors during operations with the
  * Community tracker.
@@ -49,6 +51,14 @@ public class CommunityAPIException extends Exception {
 
 	public void setResponseBodyAsString(String responseBodyAsString) {
 		this.responseBodyAsString = responseBodyAsString;
+	}
+	
+	@Override
+	public String getMessage() {
+		String message = super.getMessage();
+		message+= "\nHttp Status Code: " + ((httpStatusCode==-1) ? "<no status code>" : httpStatusCode);
+		message+= "\nHttp Response Code: " + Misc.nvl(responseBodyAsString,"<empty body>");
+		return message;
 	}
 	
 }
