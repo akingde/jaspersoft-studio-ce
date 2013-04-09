@@ -97,6 +97,8 @@ import com.jaspersoft.studio.editor.action.snap.SnapToGeometryAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.action.text.BoldAction;
+import com.jaspersoft.studio.editor.action.text.ConvertStaticIntoText;
+import com.jaspersoft.studio.editor.action.text.ConvertTextIntoStatic;
 import com.jaspersoft.studio.editor.action.text.ItalicAction;
 import com.jaspersoft.studio.editor.action.text.StrikethroughAction;
 import com.jaspersoft.studio.editor.action.text.UnderlineAction;
@@ -731,6 +733,17 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new CreatePinAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
+		
+		//Start of the convert action
+		action = new ConvertTextIntoStatic(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new ConvertStaticIntoText(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		//End of the convert actions
+		
 	}
 
 	protected void createEditorActions(ActionRegistry registry) {

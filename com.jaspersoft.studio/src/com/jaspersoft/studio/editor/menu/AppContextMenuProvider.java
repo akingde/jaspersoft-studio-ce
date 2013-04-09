@@ -36,6 +36,8 @@ import com.jaspersoft.studio.editor.action.order.BringToBackAction;
 import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
 import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
+import com.jaspersoft.studio.editor.action.text.ConvertStaticIntoText;
+import com.jaspersoft.studio.editor.action.text.ConvertTextIntoStatic;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
@@ -308,6 +310,17 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action.isEnabled())
 			menu.add(action);
 
+		//Start of the convert actions
+		action = getActionRegistry().getAction(ConvertTextIntoStatic.ID);;
+		if (action.isEnabled())
+			menu.add(action);
+		
+		action = getActionRegistry().getAction(ConvertStaticIntoText.ID);;
+		if (action.isEnabled())
+			menu.add(action);
+		
+		//End of the convert actions
+		
 		action = getActionRegistry().getAction(StretchToContentAction.ID);
 		if (action.isEnabled())
 			menu.add(action);
@@ -337,6 +350,8 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(DatasetAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
+		
+
 	}
 
 }
