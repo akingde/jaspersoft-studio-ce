@@ -8,13 +8,13 @@ Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: com.jaspersoft.studio;bundle-version="5.1.0";visibility:=reexport,
  org.apache.commons.pool;bundle-version="1.6.0";visibility:=reexport,
  org.apache.commons.lang;bundle-version="2.6.0";visibility:=reexport,
- org.apache.commons.math;bundle-version="2.1.0";visibility:=reexport,
  org.slf4j.api;bundle-version="1.6.4";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: com.jaspersoft.studio
 Eclipse-BuddyPolicy: registered
 Bundle-ClassPath: lib/mondrian-3.2.0-13661-JS.jar,
+ lib/commons-math-1.0.jar,
  lib/olap4j-0.9.7.309-JS.jar,
  lib/rex-20080421.jar,
  lib/commons-vfs-1.0.jar,

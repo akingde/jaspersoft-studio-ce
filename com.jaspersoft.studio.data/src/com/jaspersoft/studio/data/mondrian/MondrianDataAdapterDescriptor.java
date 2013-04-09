@@ -19,6 +19,7 @@ import net.sf.jasperreports.data.mondrian.MondrianDataAdapterImpl;
 
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * @author gtoffoli
@@ -39,6 +40,11 @@ public class MondrianDataAdapterDescriptor extends JDBCDataAdapterDescriptor {
 	protected void getFieldProvider() {
 		if (fprovider == null)
 			fprovider = new MondrianFieldsProvider();
+	}
+	
+	@Override
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
+		return false;
 	}
 
 }

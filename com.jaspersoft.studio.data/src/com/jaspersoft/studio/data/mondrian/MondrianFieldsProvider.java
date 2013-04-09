@@ -59,7 +59,8 @@ public class MondrianFieldsProvider implements IFieldsProvider {
 		JRMondrianQueryExecuter qe = new JRMondrianQueryExecuter(jConfig,
 				jDataset, tmpMap);
 		qe.createDatasource();
-
+		
+		// FIXME - We need to implement this!
 		return null;
 	}
 
