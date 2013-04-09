@@ -102,8 +102,6 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				runitvalue.setLabel(jDesign.getName());
 			}
 		}
-		if (reportUnit.getParent() == null)
-			System.out.println("abcd");
 		return reportUnit;
 	}
 
