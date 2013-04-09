@@ -105,7 +105,7 @@ public class UndoRedoImpl implements KeyListener, ExtendedModifyListener {
 
         this.editor = editor;
         stack = new UndoRedoStack<ExtendedModifyEvent>();
-        if ("carbon".equals(SWT.getPlatform())) undoKey = SWT.COMMAND;
+        if ("cocoa".equals(SWT.getPlatform())) undoKey = SWT.COMMAND;
         else undoKey = SWT.CTRL;
     }
 
