@@ -200,6 +200,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				String rtext = ruID.getText();
 				ResourceDescriptor ru = getNewRunit().getValue();
 				ru.setName(rtext.replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
+				ru.setLabel(ru.getName());
 				setErrorMessage(ValidationUtils.validateName(rtext));
 				ruLabel.setText(rtext);
 				isRefresh = false;
