@@ -16,7 +16,6 @@
 package com.jaspersoft.studio.components.commonstyles;
 
 import java.awt.Rectangle;
-import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -65,7 +64,7 @@ import com.jaspersoft.studio.wizards.JSSWizard;
  * @author Orlandin Marco
  *
  */
-public abstract class CommonViewProvider implements TemplateViewProvider{
+public abstract class CommonViewProvider implements TemplateViewProvider, ViewProviderInterface{
 	
 	/**
 	 * The gallery that show the element
@@ -191,8 +190,8 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 		if (MessageDialog.openQuestion(actualShell, com.jaspersoft.studio.components.commonstyles.messages.Messages.CommonViewProvider_deleteStyleQuestionTitle, com.jaspersoft.studio.components.commonstyles.messages.Messages.CommonViewProvider_deleteStyleQuestionText)){
 			GalleryItem selectedItem = checkedGallery.getSelection()[0];
 			TemplateStyleView.getTemplateStylesStorage().removeStyle((TemplateStyle)selectedItem.getData());
-			checkedGallery.remove(selectedItem);
-			checkedGallery.redraw();
+			//checkedGallery.remove(selectedItem);
+			//checkedGallery.redraw();
 		}
 	}
 	
@@ -268,12 +267,32 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 		return image;
 	}
 	
-	
+	/**
+	 * Return an image that can be used as icon for the export styles action
+	 * 
+	 * @return an SWT image
+	 * 
+	 */
 	public Image getExportStylesImage() {
 		Image image = ResourceManager.getImage("export-styles"); //$NON-NLS-1$
 		if (image == null){
 			image = Activator.getDefault().getImageDescriptor("icons/table-export.png").createImage(); //$NON-NLS-1$
 			ResourceManager.addImage("export-styles", image); //$NON-NLS-1$
+		}
+		return image;
+	}
+	
+	/**
+	 * Return an image that can be used as icon for the import styles action
+	 * 
+	 * @return an SWT image
+	 * 
+	 */
+	public Image getImportStylesImage() {
+		Image image = ResourceManager.getImage("import-styles"); //$NON-NLS-1$
+		if (image == null){
+			image = Activator.getDefault().getImageDescriptor("icons/table-import.png").createImage(); //$NON-NLS-1$
+			ResourceManager.addImage("import-styles", image); //$NON-NLS-1$
 		}
 		return image;
 	}
@@ -435,11 +454,23 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 		ToolItem exportItem = new ToolItem (toolBar, SWT.PUSH);
 		exportItem.setImage (getExportStylesImage());
 		exportItem.setToolTipText(Messages.CommonViewProvider_exportStylesToolTip);
-		final CommonViewProvider provider = this;
+		final CommonViewProvider exportProvider = this;
 		exportItem.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent e) {
-	    		ImportExportDialog dlg = new ImportExportDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(),provider);
+	    		ExportDialog dlg = new ExportDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(),exportProvider);
+	    		dlg.open();
+	    	}
+		});
+		
+		ToolItem importItem = new ToolItem (toolBar, SWT.PUSH);
+		importItem.setImage (getImportStylesImage());
+		importItem.setToolTipText("Import the styles from an XML file");
+		final CommonViewProvider importProvider = this;
+		importItem.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		ImportDialog dlg = new ImportDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(),importProvider);
 	    		dlg.open();
 	    	}
 		});
@@ -503,16 +534,5 @@ public abstract class CommonViewProvider implements TemplateViewProvider{
 	    initializeDeleteAction();
 		createToolBar(firstLine);
 	}
-	
-	
-	/**
-	 * Build a preview image of a TempalteStyle
-	 * 
-	 * @param style the style
-	 * @return a preview SWT image of the style
-	 */
-	public abstract Image generatePreviewFigure(final TemplateStyle style);
-	
-	public abstract  List<TemplateStyle> getStylesList();
 	
 }

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.style.view;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.List;
 
@@ -52,6 +54,11 @@ public class TemplateStyleView extends ViewPart implements IContributedContentsV
 	private CTabFolder folder;
 	
 	/**
+	 * The list of the contributed providers
+	 */
+	private List<TemplateViewProvider> viewProviders;
+	
+	/**
 	 * Return the Style storage
 	 * 
 	 * @return and instance of the style storage, can't be null
@@ -74,12 +81,23 @@ public class TemplateStyleView extends ViewPart implements IContributedContentsV
 		folder.setMaximizeVisible(false);
 		folder.setBorderVisible(true);
 		
-		List<TemplateViewProvider> viewProviders = JaspersoftStudioPlugin.getExtensionManager().getStylesViewProvider();
+		viewProviders = JaspersoftStudioPlugin.getExtensionManager().getStylesViewProvider();
 		Collection<TemplateStyle> savedStyles = savedStylesStorage.getStylesDescriptors();
 		for(TemplateViewProvider viewProvider : viewProviders){
 			createTab(viewProvider);
 			viewProvider.fillStyles(savedStyles);
 		}
+		
+		savedStylesStorage.addPropertyChangeListener(PreferencesTemplateStylesStorage.PROPERTY_CHANGE_NAME, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent arg0) {
+				for(TemplateViewProvider viewProvider : viewProviders){
+					viewProvider.notifyChange(arg0);
+				}
+			}
+		});
+		
 		if (folder.getSelectionIndex() == -1) folder.setSelection(0);
 	}
 	

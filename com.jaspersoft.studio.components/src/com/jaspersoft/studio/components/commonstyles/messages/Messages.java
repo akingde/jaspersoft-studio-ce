@@ -14,6 +14,13 @@ public class Messages extends NLS {
 	public static String CommonViewProvider_editStyleToolButton;
 	public static String CommonViewProvider_exportStylesToolTip;
 	public static String CommonViewProvider_finishLabel;
+	public static String ExportDialog_fileErrorMessage;
+	public static String ExportDialog_fileErrorTitle;
+	public static String ImportDialog_deselectAllButton;
+	public static String ImportDialog_dialogLabel;
+	public static String ImportDialog_dialogName;
+	public static String ImportDialog_pathLabel;
+	public static String ImportDialog_selectAllButton;
 	public static String ImportExportDialog_browseButtonText;
 	public static String ImportExportDialog_destinationText;
 	public static String ImportExportDialog_labelText;

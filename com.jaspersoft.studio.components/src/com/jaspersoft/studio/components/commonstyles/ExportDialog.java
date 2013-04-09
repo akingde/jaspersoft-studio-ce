@@ -43,23 +43,80 @@ import org.eclipse.ui.forms.IManagedForm;
 import com.jaspersoft.studio.components.commonstyles.messages.Messages;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 
-
-public class ImportExportDialog extends FormDialog {
-
+/**
+ * Dialog to export a series of TemplateStyles to an XML file
+ * 
+ * @author Orlandin Marco
+ *
+ */
+public class ExportDialog extends FormDialog {
+	
+	/**
+	 * The body composite
+	 */
 	private Composite body;
 	
-	private CommonViewProvider styleProvider;
-	
+	/**
+	 * Text field used for the path
+	 */
 	private Text pathText;
 	
+	/**
+	 * List of all the checkbox in the composite
+	 */
 	private List<Button> buttons;
 	
-	public ImportExportDialog(Shell shell, CommonViewProvider styleProvider) {
+	/**
+	 * The style provider used for this import operation
+	 */
+	private ViewProviderInterface styleProvider;
+	
+	/**
+	 * 
+	 * Used when the Select All or the Select None button is 
+	 * pressed, it select or deselect all the checkboxs associated 
+	 * to a style
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class SelectItemsAdapter extends SelectionAdapter{
+		
+		private boolean selectionValue;
+		
+		/**
+		 * 
+		 * 
+		 * @param selectAll True if the checkbox need to be selected false otherwise
+		 */
+		public SelectItemsAdapter(boolean selectAll){
+			selectionValue = selectAll;
+		}
+		
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			for(Button check : buttons){
+				check.setSelection(selectionValue);
+			}
+		}
+		
+	}
+	
+	/**
+	 * Create an instance of the class
+	 * 
+	 * @param shell
+	 * @param styleProvider The provider for the type of style that are exported
+	 */
+	public ExportDialog(Shell shell, ViewProviderInterface styleProvider) {
 		super(shell);
 		this.styleProvider = styleProvider;
-		buttons = new ArrayList<Button>();
+		buttons = new ArrayList<Button>(); 
 	}
 
+	/**
+	 * Set the shell title and attribute
+	 */
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
@@ -67,6 +124,33 @@ public class ImportExportDialog extends FormDialog {
 		setShellStyle(getShellStyle() | SWT.MIN | SWT.MAX | SWT.RESIZE);
 	}
 	
+	/**
+	 * Create a file dialog that can handle only xml files
+	 * 
+	 * @param shell
+	 * @return the file or path selected using this dialog
+	 */
+	private String selectPathDialog(Shell shell){
+		FileDialog dialog = new FileDialog (shell, SWT.SAVE);
+		String [] filterNames = new String [] {"XML files"};  //$NON-NLS-1$
+		String [] filterExtensions = new String [] {"*.xml;"};  //$NON-NLS-1$
+		String filterPath = "/"; //$NON-NLS-1$
+		String platform = SWT.getPlatform();
+		if (platform.equals("win32") || platform.equals("wpf")) { //$NON-NLS-1$ //$NON-NLS-2$
+			filterNames = new String [] {"XML files"};  //$NON-NLS-1$
+			filterExtensions = new String [] {"*.xml;"};  //$NON-NLS-1$
+			filterPath = "c:\\"; //$NON-NLS-1$
+		}
+		dialog.setFilterNames (filterNames);
+		dialog.setFilterExtensions (filterExtensions);
+		dialog.setFilterPath (filterPath);
+		dialog.setFileName ("MyTemplates"); //$NON-NLS-1$
+		return dialog.open();
+	}
+	
+	/**
+	 * Called when ok is pressed, save the selected styles as an XML file
+	 */
 	@Override
 	protected void okPressed() {
 		
@@ -90,38 +174,18 @@ public class ImportExportDialog extends FormDialog {
 				file.close();
 				super.okPressed();
 			} catch (Exception e) {
-				e.printStackTrace();
+				MessageDialog.openWarning(getShell(), Messages.ExportDialog_fileErrorTitle, Messages.ExportDialog_fileErrorMessage);
 			}
 		} else MessageDialog.openWarning(getShell(), Messages.ImportExportDialog_warningTitle, Messages.ImportExportDialog_warningText);
 	};
 	
-	private String selectPathDialog(Shell shell){
-		FileDialog dialog = new FileDialog (shell, SWT.SAVE);
-		String [] filterNames = new String [] {"XML files"}; //$NON-NLS-1$
-		String [] filterExtensions = new String [] {"*.xml;"}; //$NON-NLS-1$
-		String filterPath = "/"; //$NON-NLS-1$
-		String platform = SWT.getPlatform();
-		if (platform.equals("win32") || platform.equals("wpf")) { //$NON-NLS-1$ //$NON-NLS-2$
-			filterNames = new String [] {"XML files"}; //$NON-NLS-1$
-			filterExtensions = new String [] {"*.xml;"}; //$NON-NLS-1$
-			filterPath = "c:\\"; //$NON-NLS-1$
-		}
-		dialog.setFilterNames (filterNames);
-		dialog.setFilterExtensions (filterExtensions);
-		dialog.setFilterPath (filterPath);
-		dialog.setFileName ("MyTemplates"); //$NON-NLS-1$
-		return dialog.open();
-	}
-	
-	@Override
-	protected void createFormContent(final IManagedForm mform) {
-		body = mform.getForm().getBody();
-		body.setLayout(new GridLayout(1, true));
-		body.setBackground(body.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-
-		Label bodyLabel = new Label(body, SWT.NONE);
-		bodyLabel.setText(Messages.ImportExportDialog_labelText);
-		final ScrolledComposite scrollComposite = new ScrolledComposite(body, SWT.V_SCROLL | SWT.BORDER);
+	/**
+	 * Generate the composite with the previews
+	 * 
+	 * @param bodyParent container
+	 */
+	private void generateStylesComposite(Composite bodyParent){
+		final ScrolledComposite scrollComposite = new ScrolledComposite(bodyParent, SWT.V_SCROLL | SWT.BORDER);
 		GridData scrolledData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		scrolledData.heightHint = 400;
 		scrolledData.widthHint = 600;
@@ -133,8 +197,7 @@ public class ImportExportDialog extends FormDialog {
 		dataComposite.setLayout(new GridLayout(3,false));
 		GridData tableData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		dataComposite.setLayoutData(tableData);
-		List<TemplateStyle> availableStyles =  styleProvider.getStylesList();
-		for(TemplateStyle style : availableStyles){
+		for(TemplateStyle style : styleProvider.getStylesList()){
 			Button checkBox = new Button(dataComposite, SWT.CHECK);
 			checkBox.setData(style);
 			buttons.add(checkBox);
@@ -159,6 +222,7 @@ public class ImportExportDialog extends FormDialog {
 			descriptionLabel.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true, false));
 		}
 		
+		
 		scrollComposite.setContent(dataComposite);
 		scrollComposite.setExpandVertical(true);
 		scrollComposite.setExpandHorizontal(true);
@@ -168,7 +232,34 @@ public class ImportExportDialog extends FormDialog {
 		        scrollComposite.setMinSize(dataComposite.computeSize(r.width,
 		            SWT.DEFAULT));
 		      }
-		    });
+		});
+	}
+
+	
+	@Override
+	protected void createFormContent(final IManagedForm mform) {
+		body = mform.getForm().getBody();
+		body.setLayout(new GridLayout(1, true));
+		body.setBackground(body.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));	
+		
+		Label bodyLabel = new Label(body, SWT.NONE);
+		bodyLabel.setText(Messages.ImportExportDialog_labelText);
+		
+		Composite mainComposite = new Composite(body, SWT.NONE);
+		mainComposite.setLayout(new GridLayout(2,false));
+		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		generateStylesComposite(mainComposite);
+		Composite buttonComposite = new Composite(mainComposite, SWT.NONE);
+		buttonComposite.setLayout(new GridLayout(1,false));
+		buttonComposite.setLayoutData(new GridData(SWT.LEFT,SWT.FILL,false,true));
+		Button selectAll = new Button(buttonComposite, SWT.NONE);
+		selectAll.setText(Messages.ImportDialog_selectAllButton);
+		selectAll.addSelectionListener(new SelectItemsAdapter(true));
+		selectAll.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		Button deselectAll = new Button(buttonComposite, SWT.NONE);
+		deselectAll.setText(Messages.ImportDialog_deselectAllButton);
+		deselectAll.addSelectionListener(new SelectItemsAdapter(false));
+		deselectAll.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		
 		Composite pathComposite = new Composite(body, SWT.NONE);
 		pathComposite.setLayout(new GridLayout(3,false));
@@ -179,6 +270,7 @@ public class ImportExportDialog extends FormDialog {
 		Label pathLabel = new Label(pathComposite, SWT.NONE);
 		pathLabel.setText(Messages.ImportExportDialog_destinationText);
 		pathText = new Text(pathComposite, SWT.BORDER);
+		pathText.setEditable(false);
 		GridData textData = new GridData();
 		textData.grabExcessHorizontalSpace = true;
 		textData.horizontalAlignment = SWT.FILL;

@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.components.crosstab.figure;
 
 import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -44,6 +45,7 @@ import com.jaspersoft.studio.components.commonstyles.CommonViewProvider;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabStyleWizard;
 import com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle;
+import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.style.view.TemplateStyleView;
 
@@ -86,8 +88,8 @@ public class CrosstabStyleView extends CommonViewProvider{
 		if (dialog.open() == Dialog.OK){
 			CrosstabStyle newStyle = wizard.getTableStyle();
 			TemplateStyleView.getTemplateStylesStorage().addStyle(newStyle);
-			getItem(newStyle, tableGroup);
-			checkedGallery.redraw();
+			//getItem(newStyle, tableGroup);
+			//checkedGallery.redraw();
 		}
 	}
 	
@@ -103,8 +105,8 @@ public class CrosstabStyleView extends CommonViewProvider{
 		if (dialog.open() == Dialog.OK){
 			CrosstabStyle newStyle = wizard.getTableStyle();
 			TemplateStyleView.getTemplateStylesStorage().editStyle(oldStyle, newStyle);
-			updateItem(newStyle, selectedItem);
-			checkedGallery.redraw();
+			//updateItem(newStyle, selectedItem);
+			//checkedGallery.redraw();
 		}
 	}
 	
@@ -285,6 +287,27 @@ public class CrosstabStyleView extends CommonViewProvider{
 			ResourceManager.addImage("crosstab-style-16", image); //$NON-NLS-1$
 		}
 		return image;
+	}
+	
+	@Override
+	public List<TemplateStyle> getStylesList(List<TemplateStyle> mixedList) {
+		List<TemplateStyle> result = new ArrayList<TemplateStyle>();
+		for(TemplateStyle style: mixedList){
+			if (style instanceof CrosstabStyle) result.add(style);
+		}
+		return result;
+	}
+	
+	@Override
+	public void notifyChange(PropertyChangeEvent e) {
+		if (e.getNewValue() instanceof CrosstabStyle){
+			checkedGallery.clearAll();
+			tableGroup = new GalleryItem(checkedGallery, SWT.NONE);
+			checkedGallery.setRedraw(false);
+			for(TemplateStyle style : getStylesList())
+				if (style instanceof TableStyle) getItem(style, tableGroup);
+			checkedGallery.setRedraw(true);
+		}
 	}
 }
 

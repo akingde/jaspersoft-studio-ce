@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.style.view;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Collection;
 
 import org.eclipse.gef.EditPartViewer;
@@ -79,5 +80,12 @@ public interface TemplateViewProvider {
 	 * @return
 	 */
 	public TemplateStyle getBuilder();
+	
+	/**
+	 * Method to notify a change in the styles storage
+	 * 
+	 * @param e the event
+	 */
+	public void notifyChange(PropertyChangeEvent e);
 	
 }

@@ -15,10 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.storage;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.util.JRXmlUtils;
@@ -45,6 +49,8 @@ public class PreferencesTemplateStylesStorage {
 	
 	private static final String PREF_KEYS_STYLES = "templateStyles";
 	
+	public static final String PROPERTY_CHANGE_NAME = "TEMPLATESTYLES";
+	
 	/**
 	 * The properties file
 	 */
@@ -59,6 +65,11 @@ public class PreferencesTemplateStylesStorage {
 	 * A map with all the registered type of styles
 	 */
 	private static Map<String, TemplateStyle> availableStyles = null;
+	
+	/**
+	 * The notifier of the property changes
+	 */
+	private PropertyChangeSupport propChangeSupport = new PropertyChangeSupport(JaspersoftStudioPlugin.getInstance());
 	
 	/**
 	 * Name of the id property of the style. It include a random number to be easly an unique
@@ -93,6 +104,27 @@ public class PreferencesTemplateStylesStorage {
 		}
 		return availableStyles.get(className);
 	}
+	
+	/**
+	 * Add a change listener for the add, delete or edit of a style
+	 * 
+	 * @param propertyName
+	 * @param listener
+	 */
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propChangeSupport.addPropertyChangeListener(propertyName, listener);
+	}
+
+	/**
+	 * remove a change listener for the add, delete or edit of a style
+	 * 
+	 * @param propertyName
+	 * @param listener
+	 */
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propChangeSupport.removePropertyChangeListener(listener);
+	}
+
 
 	/**
 	 * Add a template style to the properties file
@@ -104,6 +136,7 @@ public class PreferencesTemplateStylesStorage {
 		style.storePropertiy(STYLE_ID, id);
 		styleDescriptors.put(id, style);
 		save();
+		propChangeSupport.firePropertyChange(PROPERTY_CHANGE_NAME, "ADD", style);
 	}
 	
 	/**
@@ -116,6 +149,7 @@ public class PreferencesTemplateStylesStorage {
 		if (id != null && styleDescriptors.containsKey(id)){
 			styleDescriptors.put(id, newStyle);
 			save();
+			propChangeSupport.firePropertyChange(PROPERTY_CHANGE_NAME, "ADD", newStyle);
 		}
 	}
 	
@@ -129,6 +163,7 @@ public class PreferencesTemplateStylesStorage {
 		if (styleDescriptors.containsKey(id)) {
 			styleDescriptors.remove(id);
 			save();
+			propChangeSupport.firePropertyChange(PROPERTY_CHANGE_NAME, "ADD", style);
 		}
 	}
 	
@@ -175,6 +210,34 @@ public class PreferencesTemplateStylesStorage {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public List<TemplateStyle> readTemplateFromFile(String xml) {
+		List<TemplateStyle> result = new ArrayList<TemplateStyle>();
+		try {
+			if (xml != null) {
+				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xml)));
+				NodeList adapterNodes = document.getDocumentElement().getChildNodes();
+				for (int i = 0; i < adapterNodes.getLength(); ++i) {
+					Node adapterNode = adapterNodes.item(i);
+					if (adapterNode.getNodeType() == Node.ELEMENT_NODE && adapterNode.getAttributes().getNamedItem("type")!=null) {
+						// 1. Find out the class of this styles...
+						String className = adapterNode.getAttributes().getNamedItem("type").getNodeValue(); //$NON-NLS-1$
+						TemplateStyle factory = getBuilder(className); 
+						if (factory != null){
+							TemplateStyle readStyle = factory.buildFromXML(adapterNode);
+							Integer uniequeTemplateId = getId();
+							readStyle.storePropertiy(STYLE_ID, uniequeTemplateId);
+							result.add(readStyle);
+						}
+					}
+				}
+
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	/**

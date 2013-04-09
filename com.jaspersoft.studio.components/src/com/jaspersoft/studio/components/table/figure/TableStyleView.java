@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.components.table.figure;
 
 import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -99,8 +100,8 @@ public class TableStyleView extends CommonViewProvider {
 		if (dialog.open() == Dialog.OK){
 			TableStyle newStyle = wizard.getTableStyle();
 			TemplateStyleView.getTemplateStylesStorage().addStyle(newStyle);
-			getItem(newStyle, tableGroup);
-			checkedGallery.redraw();
+			//getItem(newStyle, tableGroup);
+			//checkedGallery.redraw();
 		}
 	}
 	
@@ -116,8 +117,8 @@ public class TableStyleView extends CommonViewProvider {
 		if (dialog.open() == Dialog.OK){
 			TableStyle newStyle = wizard.getTableStyle();
 			TemplateStyleView.getTemplateStylesStorage().editStyle(oldStyle, newStyle) ;
-			updateItem(newStyle, selectedItem);
-			checkedGallery.redraw();
+			//updateItem(newStyle, selectedItem);
+			//checkedGallery.redraw();
 		}
 	}
 	
@@ -300,5 +301,26 @@ public class TableStyleView extends CommonViewProvider {
 			ResourceManager.addImage("table-style-16", image); //$NON-NLS-1$
 		}
 		return image;
+	}
+
+	@Override
+	public List<TemplateStyle> getStylesList(List<TemplateStyle> mixedList) {
+		List<TemplateStyle> result = new ArrayList<TemplateStyle>();
+		for(TemplateStyle style: mixedList){
+			if (style instanceof TableStyle) result.add(style);
+		}
+		return result;
+	}
+
+	@Override
+	public void notifyChange(PropertyChangeEvent e) {
+		if (e.getNewValue() instanceof TableStyle){
+			checkedGallery.clearAll();
+			tableGroup = new GalleryItem(checkedGallery, SWT.NONE);
+			checkedGallery.setRedraw(false);
+			for(TemplateStyle style : getStylesList())
+				if (style instanceof TableStyle) getItem(style, tableGroup);
+			checkedGallery.setRedraw(true);
+		}
 	}
 }
