@@ -73,8 +73,10 @@ public class ImportDataAdapterAction extends Action {
 				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
 					IWorkspace workspace = ResourcesPlugin.getWorkspace();
 					IProject[] projects = workspace.getRoot().getProjects();
-					for (IProject prj : projects)
-						scanFolder(prj.members());
+					for (IProject prj : projects) {
+						if (prj.isOpen())
+							scanFolder(prj.members());
+					}
 
 					return Status.OK_STATUS;
 				}
