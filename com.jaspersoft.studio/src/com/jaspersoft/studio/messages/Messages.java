@@ -1101,6 +1101,9 @@ public class Messages extends NLS {
 	public static String PDFExporterPreferencePage_83;
 	public static String PDFExporterPreferencePage_84;
 	public static String PercentagePattern_description;
+	public static String PreferencesUtils_CannotLoadJRPRopertiesError;
+	public static String PreferencesUtils_CannotReadJRPropertyError;
+	public static String PreferencesUtils_CannotStoreJRPropertyError;
 	public static String PreviewContainer_javatitle;
 	public static String PreviewContainer_resetactiontitle;
 	public static String PreviewContainer_resetactiontooltip;
