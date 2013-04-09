@@ -125,12 +125,12 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	 * Set and show the help data if a context, that bind this wizard with the data, is provided
 	 */
 	public void performHelp() {
-		String chid = dataquery.getContextHelpId();
-		if (chid == null)
-			chid = ContextHelpIDs.WIZARD_QUERY_DIALOG;
+		String child = dataquery.getContextHelpId();
+		if (child == null)
+			child = ContextHelpIDs.WIZARD_QUERY_DIALOG;
 
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(body, chid);
-		PlatformUI.getWorkbench().getHelpSystem().displayHelp(chid);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(body, child);
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp(child);
 	};
 
 	@Override

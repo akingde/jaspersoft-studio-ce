@@ -313,4 +313,10 @@
       <description>In this dialog you can insert a pattern to format your value. If can select from a list of default patterns or write a new one. In every case you can see a preview of the pattern applied to an example value. The pattern symbols changes according to the data type, so you must select the type of the field you want to format, available types are: Percentage, Time, Date, Numbers, Currency and Scientific Numbers</description>
   	  <topic href="http://docs.oracle.com/javase/tutorial/i18n/format/index.html" label="Java official tutorial on the data formatting" />
    </context>
+   <context id="ImportStyleDialog" title="Define the styles you want to import">
+      <description>Select an XML file containing one or more Template Style. Then you will be able to select the templates found inside this file and import only the selected ones</description>
+   </context>
+   <context id="ExportStyleDialog" title="Define the styles you want to export">
+      <description>Select one or more styles and a valid location to save them. The exported templates can be acquired in any moments using the import procedure</description>
+   </context>
 </contexts>

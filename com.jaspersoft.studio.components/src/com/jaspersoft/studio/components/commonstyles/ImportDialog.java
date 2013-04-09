@@ -35,10 +35,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 
@@ -189,12 +192,34 @@ public class ImportDialog extends FormDialog {
 		super.okPressed();
 	};
 	
+	/**
+	 * Set the root control of the wizard, and also add a listener to do the perform help action and set the context of
+	 * the top control.
+	 */
+	protected void setHelpControl(Control newControl) {
+		newControl.addListener(SWT.Help, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				performHelp();
+			}
+		});
+	};
+
+	/**
+	 * Set and show the help data on the provided context
+	 */
+	public void performHelp() {
+		String id = "com.jaspersoft.studio.doc.ImportStyleDialog";
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(body, id);
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp(id);
+	};
 	
 	@Override
 	protected void createFormContent(final IManagedForm mform) {
 		body = mform.getForm().getBody();
 		body.setLayout(new GridLayout(1, true));
 		body.setBackground(body.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		setHelpControl(body);
 		
 		//Create the path section
 		Composite pathComposite = new Composite(body, SWT.NONE);
@@ -299,6 +324,8 @@ public class ImportDialog extends FormDialog {
 						descriptionLabel.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true, false));
 					}
 					dataComposite.layout();
+					Rectangle r = scrollComposite.getClientArea();
+					scrollComposite.setMinSize(dataComposite.computeSize(r.width, SWT.DEFAULT));
 				}
 			}
 		});
