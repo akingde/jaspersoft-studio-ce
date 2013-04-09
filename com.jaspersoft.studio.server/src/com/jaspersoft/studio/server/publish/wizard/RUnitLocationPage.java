@@ -102,6 +102,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				runitvalue.setLabel(jDesign.getName());
 			}
 		}
+		if (reportUnit.getParent() == null)
+			System.out.println("abcd");
 		return reportUnit;
 	}
 
@@ -196,11 +198,13 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			public void modifyText(ModifyEvent e) {
 				if (isRefresh)
 					return;
+				isRefresh = true;
 				String rtext = ruID.getText();
 				ResourceDescriptor ru = getNewRunit().getValue();
 				ru.setName(rtext.replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
 				setErrorMessage(ValidationUtils.validateName(rtext));
 				ruLabel.setText(rtext);
+				isRefresh = false;
 			}
 		});
 
@@ -248,7 +252,25 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 								try {
 									if (serverProvider == null)
 										serverProvider = new ServerProvider();
+									Object element = event.getElement();
+									boolean be = reportUnit.getParent() == element;
 									serverProvider.handleTreeEvent(event, monitor);
+									if (be) {
+										MFolder f = (MFolder) element;
+										String nm = reportUnit.getValue().getName();
+										boolean isnew = true;
+										for (INode n : f.getChildren()) {
+											if (n instanceof MReportUnit) {
+												if (((MReportUnit) n).getValue().getName().equals(nm)) {
+													reportUnit = (MReportUnit) n;
+													isnew = false;
+													break;
+												}
+											}
+										}
+										if (isnew)
+											reportUnit.setParent(f, -1);
+									}
 								} catch (Exception e) {
 									if (e instanceof InterruptedException)
 										throw (InterruptedException) e;
@@ -338,7 +360,6 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		ruDescription.setEnabled(bnRunit.getSelection() && isFolder);
 
 		reportUnit = getNewRunit();
-		performPageChecks();
 		if (obj instanceof MReportUnit) {
 			reportUnit = (MReportUnit) obj;
 			ruLabel.setText(Misc.nvl(reportUnit.getValue().getLabel()));
@@ -356,6 +377,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		} else {
 			setPageComplete(false);
 		}
+		performPageChecks();
 		isRefresh = false;
 	}
 

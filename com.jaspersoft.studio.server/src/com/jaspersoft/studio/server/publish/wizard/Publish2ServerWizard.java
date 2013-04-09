@@ -159,7 +159,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
 						try {
-							MReportUnit mrunit = page0.getReportUnit();
+							MReportUnit mrunit = getReportUnit();
 							n = mrunit;
 
 							if (new FindResources().find(monitor, mrunit, jrConfig, jDesign)) {
