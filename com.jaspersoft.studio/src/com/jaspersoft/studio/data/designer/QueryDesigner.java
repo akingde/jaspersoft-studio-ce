@@ -46,6 +46,7 @@ public class QueryDesigner extends AQueryDesigner {
 	protected StyledText control;
 	private Composite tbCompo;
 	private Button btn;
+	private UndoRedoImpl undoHandlrer;
 
 	public QueryDesigner() {
 	}
@@ -66,6 +67,7 @@ public class QueryDesigner extends AQueryDesigner {
 	public Control createControl(Composite parent) {
 		control = new StyledText(parent, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		control.addModifyListener(new QueryListener());
+		undoHandlrer = new UndoRedoImpl(control);
 		return control;
 	}
 
@@ -78,6 +80,7 @@ public class QueryDesigner extends AQueryDesigner {
 		super.setQuery(jDesign, jDataset);
 		refresh = true;
 		control.setText(jDataset.getQuery().getText());
+		undoHandlrer.clearStack();
 		refresh = false;
 	}
 

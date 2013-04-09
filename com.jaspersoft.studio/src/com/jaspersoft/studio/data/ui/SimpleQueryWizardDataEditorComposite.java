@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.MessageBox;
 
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.designer.UndoRedoImpl;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
@@ -140,6 +141,8 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 		}
 		
 		styledText = new StyledText(this, SWT.BORDER);
+		new UndoRedoImpl(styledText);
+		
 		FormData fd_styledText = new FormData();
 		fd_styledText.bottom = new FormAttachment(100);
 		fd_styledText.right = new FormAttachment(100);
