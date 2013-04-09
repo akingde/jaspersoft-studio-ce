@@ -219,6 +219,7 @@ public abstract class DataQueryAdapters {
 			designer.setQuery(jDesign, newdataset);
 
 			currentDesigner = designer;
+			currentDesigner.setDataAdapter(dscombo.getSelected());
 		}
 	}
 
