@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 
@@ -26,6 +27,8 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
@@ -158,6 +161,7 @@ public class IssueAttachmentDetailsPage extends JSSHelpWizardPage {
 				refreshZipEntriesList();
 			}
 		});
+		addAttachments.setEnabled(false);
 		
 		btnJaspersoftStudioPreferences = new Button(container, SWT.CHECK);
 		btnJaspersoftStudioPreferences.setText(Messages.IssueAttachmentDetailsPage_JSSPreferencesCheckbox);
@@ -176,8 +180,17 @@ public class IssueAttachmentDetailsPage extends JSSHelpWizardPage {
 		GridData gdGroupZipContent = new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1);
 		gdGroupZipContent.widthHint = 579;
 		groupZipContent.setLayoutData(gdGroupZipContent);
-		zipFileContent = new List(groupZipContent, SWT.BORDER);
+		zipFileContent = new List(groupZipContent, SWT.BORDER | SWT.MULTI);
 		standardListFont = zipFileContent.getFont();
+		zipFileContent.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.character == SWT.DEL){
+					removeZipEntries(Arrays.asList(zipFileContent.getSelection()));
+					refreshZipEntriesList();
+				}
+			}
+		});
 
 		// Preselect software/hardware summary
 		btnSoftwareAndHardware.setSelection(true);
@@ -263,6 +276,33 @@ public class IssueAttachmentDetailsPage extends JSSHelpWizardPage {
 		else {
 			zipFileContent.add(Messages.IssueAttachmentDetailsPage_NoAttachments);
 			zipFileContent.setFont(ResourceManager.getItalicFont(standardListFont));
+		}
+	}
+	
+	/*
+	 * Removes all zip entries selected in the list widget.
+	 */
+	private void removeZipEntries(java.util.List<String> entries) {
+		if(!zipEntries.isEmpty()){
+			for (Iterator<ZipEntry> it = zipEntries.iterator(); it.hasNext(); ){
+				ZipEntry ze = it.next();
+				if(entries.contains(ze.getLocation())){
+					switch (ze.getType()) {
+					case HW_SW_INFO:
+						btnSoftwareAndHardware.setSelection(false);
+						break;
+					case LOG:
+						btnLogFile.setSelection(false);
+						break;
+					case PREFS:
+						btnJaspersoftStudioPreferences.setSelection(false);
+						break;
+					default:
+						break;
+					}
+					it.remove();
+				}
+			}
 		}
 	}
 	
