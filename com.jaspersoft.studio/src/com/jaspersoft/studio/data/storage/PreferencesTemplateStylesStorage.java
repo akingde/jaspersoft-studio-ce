@@ -147,9 +147,10 @@ public class PreferencesTemplateStylesStorage {
 	public void editStyle(TemplateStyle oldStyle, TemplateStyle newStyle) {
 		Integer id = (Integer)oldStyle.getProperty(STYLE_ID);
 		if (id != null && styleDescriptors.containsKey(id)){
+			newStyle.storePropertiy(STYLE_ID, id);
 			styleDescriptors.put(id, newStyle);
 			save();
-			propChangeSupport.firePropertyChange(PROPERTY_CHANGE_NAME, "ADD", newStyle);
+			propChangeSupport.firePropertyChange(PROPERTY_CHANGE_NAME, "EDIT", newStyle);
 		}
 	}
 	
@@ -163,7 +164,7 @@ public class PreferencesTemplateStylesStorage {
 		if (styleDescriptors.containsKey(id)) {
 			styleDescriptors.remove(id);
 			save();
-			propChangeSupport.firePropertyChange(PROPERTY_CHANGE_NAME, "ADD", style);
+			propChangeSupport.firePropertyChange(PROPERTY_CHANGE_NAME, "DELETE", style);
 		}
 	}
 	

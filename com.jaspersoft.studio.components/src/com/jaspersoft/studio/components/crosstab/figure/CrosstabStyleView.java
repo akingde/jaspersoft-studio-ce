@@ -305,7 +305,7 @@ public class CrosstabStyleView extends CommonViewProvider{
 			tableGroup = new GalleryItem(checkedGallery, SWT.NONE);
 			checkedGallery.setRedraw(false);
 			for(TemplateStyle style : getStylesList())
-				if (style instanceof TableStyle) getItem(style, tableGroup);
+				if (style instanceof CrosstabStyle) getItem(style, tableGroup);
 			checkedGallery.setRedraw(true);
 		}
 	}
