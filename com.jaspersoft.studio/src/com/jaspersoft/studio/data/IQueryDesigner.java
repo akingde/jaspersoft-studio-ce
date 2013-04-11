@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public interface IQueryDesigner {
 
@@ -34,7 +35,7 @@ public interface IQueryDesigner {
 
 	public void dispose();
 
-	public void setQuery(JasperDesign jDesign, JRDataset jDataset);
+	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig);
 
 	public String getQuery();
 

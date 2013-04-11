@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 public class QueryDesigner extends AQueryDesigner {
@@ -76,8 +77,8 @@ public class QueryDesigner extends AQueryDesigner {
 	 * 
 	 * @see com.jaspersoft.studio.data.IQueryDesigner#setQuery(java.lang.String)
 	 */
-	public void setQuery(JasperDesign jDesign, JRDataset jDataset) {
-		super.setQuery(jDesign, jDataset);
+	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig) {
+		super.setQuery(jDesign, jDataset, jConfig);
 		refresh = true;
 		control.setText(jDataset.getQuery().getText());
 		undoHandlrer.clearStack();

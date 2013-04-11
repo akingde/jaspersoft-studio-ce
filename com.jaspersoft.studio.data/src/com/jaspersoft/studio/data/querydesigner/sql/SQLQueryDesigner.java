@@ -30,6 +30,7 @@ import org.eclipse.ui.IEditorPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.designer.QueryDesigner;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SQLQueryDesigner extends QueryDesigner {
 	public SQLQueryDesigner() {
@@ -137,12 +138,12 @@ public class SQLQueryDesigner extends QueryDesigner {
 	// private SQLEditor sqleditor;
 
 	@Override
-	public void setQuery(JasperDesign jDesign, JRDataset jDataset) {
+	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig) {
 		// if (sqleditor != null) {
 		// sqleditor.setInput(createSQLEditorInput(query));
 		// this.query = query;
 		// } else
-		super.setQuery(jDesign, jDataset);
+		super.setQuery(jDesign, jDataset, jConfig);
 	}
 
 	// private QDSQLEditorInput createSQLEditorInput(String query) {

@@ -39,6 +39,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.AQueryDesigner;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * A generic abstract query designer that allows to represent
@@ -190,8 +191,8 @@ public abstract class TreeBasedQueryDesigner extends AQueryDesigner {
 	}
 
 	@Override
-	public void setQuery(JasperDesign jDesign, JRDataset jDataset) {
-		super.setQuery(jDesign, jDataset);
+	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig) {
+		super.setQuery(jDesign, jDataset, jConfig);
 		queryTextArea.setText(jDataset.getQuery().getText());
 		refreshTreeViewerContent(this.container.getDataAdapter());
 	}

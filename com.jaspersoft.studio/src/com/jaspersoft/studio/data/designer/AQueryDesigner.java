@@ -27,11 +27,13 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.jaspersoft.studio.data.IQueryDesigner;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext {
 	protected DataQueryAdapters container;
 	protected JasperDesign jDesign;
 	protected JRDesignDataset jDataset;
+	protected JasperReportsConfiguration jConfig;
 
 	public AQueryDesigner() {
 	}
@@ -58,9 +60,10 @@ public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext
 	 * 
 	 * @see com.jaspersoft.studio.data.IQueryDesigner#setQuery(java.lang.String)
 	 */
-	public void setQuery(JasperDesign jDesign, JRDataset jDataset) {
+	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig) {
 		this.jDesign = jDesign;
 		this.jDataset = (JRDesignDataset) jDataset;
+		this.jConfig = jConfig;
 	}
 
 	public String getQuery() {

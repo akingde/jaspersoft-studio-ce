@@ -216,7 +216,7 @@ public abstract class DataQueryAdapters {
 			tbLayout.topControl = designer.getToolbarControl();
 			tbCompo.layout();
 			langComposite.layout();
-			designer.setQuery(jDesign, newdataset);
+			designer.setQuery(jDesign, newdataset, jConfig);
 
 			currentDesigner = designer;
 			currentDesigner.setDataAdapter(dscombo.getSelected());
