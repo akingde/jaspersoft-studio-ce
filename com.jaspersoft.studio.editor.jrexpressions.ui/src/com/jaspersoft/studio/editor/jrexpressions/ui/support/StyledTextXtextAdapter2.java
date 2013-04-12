@@ -20,12 +20,14 @@ import java.lang.reflect.Method;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.TextViewer;
+import org.eclipse.swt.custom.StyledText;
 
 import com.google.inject.Injector;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
+import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
 import de.itemis.xtext.utils.jface.viewers.StyledTextXtextAdapter;
 
@@ -83,6 +85,25 @@ public class StyledTextXtextAdapter2 extends StyledTextXtextAdapter {
 			JRExpressionsActivator.getInstance().getLog().log(
 					new Status(IStatus.ERROR, JRExpressionsUIPlugin.PLUGIN_ID, 
 							Messages.StyledTextXtextAdapter2_AutoEditStrategiesError, e));
+		}
+	}
+	
+	/**
+	 * Adapt the XText editor behavior to the specified {@link StyledText} widget.
+	 * <p>
+	 * It also allows to perform additional operation based on the input expression
+	 * context.
+	 * 
+	 * @param styledText the widget to be adapted
+	 * @param exprContext the current expression context available
+	 */
+	public void adapt(StyledText styledText, ExpressionContext exprContext) {
+		super.adapt(styledText);
+		if(exprContext!=null){
+			styledText.setFont(FontUtils.getEditorsFont(exprContext.getJasperReportsConfiguration()));
+		}
+		else {
+			styledText.setFont(FontUtils.getEditorsFont(null));
 		}
 	}
 }

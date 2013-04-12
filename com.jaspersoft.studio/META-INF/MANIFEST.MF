@@ -527,6 +527,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    org.eclipse.swt.graphics,
    org.eclipse.swt.widgets,
    com.jaspersoft.studio.preferences.editor.sorttable.model",
+ com.jaspersoft.studio.preferences.fonts.utils,
  com.jaspersoft.studio.preferences.templates,
  com.jaspersoft.studio.preferences.util;
   uses:="org.eclipse.core.runtime,

@@ -31,9 +31,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.preferences.ITooltipSupport;
 import com.jaspersoft.studio.utils.Misc;
 
-public class NStringFieldEditor extends FieldEditor {
+public class NStringFieldEditor extends FieldEditor implements ITooltipSupport{
+	
+	private String tooltipText;
 
 	/**
 	 * Validation strategy constant (value <code>0</code>) indicating that the editor should perform validation after
@@ -538,6 +541,14 @@ public class NStringFieldEditor extends FieldEditor {
 	public void setEnabled(boolean enabled, Composite parent) {
 		super.setEnabled(enabled, parent);
 		getTextControl(parent).setEnabled(enabled);
+	}
+
+	@Override
+	public void setTooltipText(String tooltipText) {
+		this.tooltipText=tooltipText;
+		if(getLabelControl()!=null){
+			getLabelControl().setToolTipText(this.tooltipText);
+		}
 	}
 
 }

@@ -374,6 +374,10 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_element_design_border_style;
 	public static String DesignerPreferencePage_elementbordercolor;
 	public static String DesignerPreferencePage_fancy_shadow;
+	public static String DesignerPreferencePage_InternalEditorsFontFamily;
+	public static String DesignerPreferencePage_InternalEditorsFontFamilyTooltip;
+	public static String DesignerPreferencePage_InternalEditorsFontHeight;
+	public static String DesignerPreferencePage_InternalEditorsFontHeightTooltip;
 	public static String DesignerPreferencePage_page_border_style;
 	public static String DesignerPreferencePage_pagebackground;
 	public static String DesignerPreferencePage_pageprintmargincolor;

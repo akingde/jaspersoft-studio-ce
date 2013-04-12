@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.AQueryDesigner;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -103,6 +104,7 @@ public abstract class TreeBasedQueryDesigner extends AQueryDesigner {
 				queryTextAreaModified();
 			}
 		});
+		queryTextArea.setFont(FontUtils.getEditorsFont(jConfig));
 	}
 	
 	/**

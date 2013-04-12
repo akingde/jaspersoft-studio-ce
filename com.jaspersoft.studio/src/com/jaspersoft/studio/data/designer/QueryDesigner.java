@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
@@ -68,6 +69,7 @@ public class QueryDesigner extends AQueryDesigner {
 	public Control createControl(Composite parent) {
 		control = new StyledText(parent, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		control.addModifyListener(new QueryListener());
+		control.setFont(FontUtils.getEditorsFont(jConfig));
 		undoHandlrer = new UndoRedoImpl(control);
 		return control;
 	}

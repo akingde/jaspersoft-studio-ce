@@ -23,6 +23,8 @@ import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.editor.font.FontsComboFieldEditor;
+import com.jaspersoft.studio.preferences.editor.text.NStringFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.property.section.report.util.Unit;
 
@@ -48,6 +50,12 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_PAGE_BACKGROUND = "pageBackground"; //$NON-NLS-1$
 
 	public static final String P_ELEMENT_DESIGN_BORDER_COLOR = "elementDesignBorderColor"; //$NON-NLS-1$
+
+	// editors font information
+	public static final String P_EDITORS_FONT_FAMILY = "editorsFontFamily"; //$NON-NLS-1$
+	public static final String P_EDITORS_FONT_HEIGHT = "editorsFontHeight"; //$NON-NLS-1$
+	public static final String DEFAULT_EDITORS_FONT_FAMILY = "Monospaced"; //$NON-NLS-1$
+	public static final String DEFAULT_EDITORS_FONT_HEIGHT = "12"; //$NON-NLS-1$
 
 	public DesignerPreferencePage() {
 		super(GRID);
@@ -82,6 +90,14 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new ColorFieldEditor(P_PAGE_BACKGROUND, Messages.DesignerPreferencePage_pagebackground,
 				getFieldEditorParent()));
+		FontsComboFieldEditor fontFamilyFieldEditor = new FontsComboFieldEditor(
+				P_EDITORS_FONT_FAMILY, Messages.DesignerPreferencePage_InternalEditorsFontFamily, getFieldEditorParent());
+		fontFamilyFieldEditor.setTooltipText(Messages.DesignerPreferencePage_InternalEditorsFontFamilyTooltip);
+		addField(fontFamilyFieldEditor);
+		NStringFieldEditor fontHeightEditor = new NStringFieldEditor(
+				P_EDITORS_FONT_HEIGHT, Messages.DesignerPreferencePage_InternalEditorsFontHeight, 3, getFieldEditorParent());
+		fontHeightEditor.setTooltipText(Messages.DesignerPreferencePage_InternalEditorsFontHeightTooltip);
+		addField(fontHeightEditor);
 	}
 
 	/*
@@ -93,14 +109,16 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		store.setDefault(P_PAGE_DESIGN_BORDER_STYLE, DEFAULT_BORDERSTYLE); //$NON-NLS-1$
-		store.setDefault(P_ELEMENT_DESIGN_BORDER_COLOR, DEFAULT_ELEMENT_DESIGN_BORDER_COLOR); //$NON-NLS-1$
+		store.setDefault(P_PAGE_DESIGN_BORDER_STYLE, DEFAULT_BORDERSTYLE);
+		store.setDefault(P_ELEMENT_DESIGN_BORDER_COLOR, DEFAULT_ELEMENT_DESIGN_BORDER_COLOR);
 		store.setDefault(P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
-		store.setDefault(P_PAGE_DEFAULT_UNITS, "px"); //$NON-NLS-1$=
-		store.setDefault(P_CONTAINER_MARGIN_COLOR, DEFAULT_MARGINCOLOR); //$NON-NLS-1$
-		store.setDefault(P_PAGE_MARGIN_COLOR, DEFAULT_MARGINCOLOR); //$NON-NLS-1$
-		store.setDefault(P_SHOW_REPORT_BAND_NAMES, true); //$NON-NLS-1$
-		store.setDefault(P_PAGE_BACKGROUND, DEFAULT_PAGE_BACKGROUND); //$NON-NLS-1$
+		store.setDefault(P_PAGE_DEFAULT_UNITS, "px"); //$NON-NLS-1$
+		store.setDefault(P_CONTAINER_MARGIN_COLOR, DEFAULT_MARGINCOLOR);
+		store.setDefault(P_PAGE_MARGIN_COLOR, DEFAULT_MARGINCOLOR);
+		store.setDefault(P_SHOW_REPORT_BAND_NAMES, true);
+		store.setDefault(P_PAGE_BACKGROUND, DEFAULT_PAGE_BACKGROUND); 
+		store.setDefault(P_EDITORS_FONT_FAMILY, DEFAULT_EDITORS_FONT_FAMILY);
+		store.setDefault(P_EDITORS_FONT_HEIGHT, DEFAULT_EDITORS_FONT_HEIGHT);
 	}
 
 	@Override

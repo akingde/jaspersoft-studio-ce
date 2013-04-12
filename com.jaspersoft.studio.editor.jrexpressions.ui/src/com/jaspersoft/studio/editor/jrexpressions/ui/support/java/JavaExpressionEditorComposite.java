@@ -213,8 +213,9 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 				performUpdate();
 			}
 		});
+		
 		xtextAdapter = new StyledTextXtextAdapter2(getInjector());
-		xtextAdapter.adapt(editorArea);
+		xtextAdapter.adapt(editorArea, exprContext);
 
 		editingAreaInfo = new EditingAreaHelper(xtextAdapter, editorArea);
 		editingAreaInfo
