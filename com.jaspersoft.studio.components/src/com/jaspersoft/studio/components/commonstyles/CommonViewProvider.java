@@ -163,6 +163,8 @@ public abstract class CommonViewProvider implements TemplateViewProvider, ViewPr
 		
 		@Override
 		public void mouseDoubleClick(MouseEvent e) {
+			boolean isEdit = (e.button == 1 && checkedGallery.getSelectionCount()>0);
+			if (isEdit) doEdit();
 		}
 	}
 	
