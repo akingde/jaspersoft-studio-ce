@@ -41,8 +41,7 @@ import com.jaspersoft.studio.server.model.MResource;
 
 public class ImagePageContent extends AFileResourcePageContent {
 
-	public ImagePageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public ImagePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -63,8 +62,7 @@ public class ImagePageContent extends AFileResourcePageContent {
 	@Override
 	protected void createFileTab(Composite composite) {
 		final Point origin = new Point(0, 0);
-		canvas = new Canvas(composite, SWT.NO_BACKGROUND | SWT.NO_REDRAW_RESIZE
-				| SWT.V_SCROLL | SWT.H_SCROLL);
+		canvas = new Canvas(composite, SWT.NO_BACKGROUND | SWT.NO_REDRAW_RESIZE | SWT.V_SCROLL | SWT.H_SCROLL);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 3;
 		canvas.setLayoutData(gd);
@@ -141,6 +139,7 @@ public class ImagePageContent extends AFileResourcePageContent {
 
 	@Override
 	protected void handleFileChange() {
+		super.handleFileChange();
 		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
@@ -153,8 +152,7 @@ public class ImagePageContent extends AFileResourcePageContent {
 						WSClientHelper.getResource(res, res.getValue(), f);
 					}
 					if (f != null && f.exists()) {
-						img = new Image(Display.getDefault(), f
-								.getAbsolutePath());
+						img = new Image(Display.getDefault(), f.getAbsolutePath());
 						resizeListener.handleEvent(null);
 
 					}

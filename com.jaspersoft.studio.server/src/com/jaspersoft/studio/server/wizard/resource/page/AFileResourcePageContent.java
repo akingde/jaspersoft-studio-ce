@@ -23,8 +23,6 @@ import net.sf.jasperreports.engine.type.ImageTypeEnum;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.beans.PojoObservables;
-import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -44,11 +42,12 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
+import com.jaspersoft.studio.utils.Misc;
 
 public abstract class AFileResourcePageContent extends APageContent {
+	protected Text trefuri;
 
-	public AFileResourcePageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public AFileResourcePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -63,13 +62,11 @@ public abstract class AFileResourcePageContent extends APageContent {
 		if (!res.getValue().getIsNew()) {
 			Button bexport = new Button(composite, SWT.PUSH | SWT.LEFT);
 			bexport.setText(Messages.AFileResourcePage_downloadfilebutton);
-			bexport.setImage(Activator.getDefault().getImage(
-					"icons/drive-download.png")); //$NON-NLS-1$
+			bexport.setImage(Activator.getDefault().getImage("icons/drive-download.png")); //$NON-NLS-1$
 			bexport.addSelectionListener(new SelectionAdapter() {
 
 				public void widgetSelected(SelectionEvent e) {
-					FileDialog fd = new FileDialog(Display.getDefault()
-							.getActiveShell(), SWT.SAVE);
+					FileDialog fd = new FileDialog(Display.getDefault().getActiveShell(), SWT.SAVE);
 					fd.setFilterExtensions(getFilter());
 					fd.setFileName(res.getValue().getName());
 					fd.setText(Messages.AFileResourcePage_filedialogtitle);
@@ -82,31 +79,19 @@ public abstract class AFileResourcePageContent extends APageContent {
 
 		Button bimport = new Button(composite, SWT.PUSH | SWT.LEFT);
 		bimport.setText(Messages.AFileResourcePage_uploadfile);
-		bimport.setImage(Activator.getDefault().getImage(
-				"icons/drive-upload.png")); //$NON-NLS-1$
+		bimport.setImage(Activator.getDefault().getImage("icons/drive-upload.png")); //$NON-NLS-1$
 		bimport.addSelectionListener(new SelectionAdapter() {
-
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell(), SWT.OPEN);
-				fd.setFilterExtensions(getFilter());
-				fd.setText(Messages.AFileResourcePage_selectresourcefile);
-				String filename = fd.open();
-				if (filename != null) {
+				String filename = getFileDialog();
+				if (filename != null)
 					((AFileResource) res).setFile(new File(filename));
-					AFileResourcePageContent.this.bindingContext
-							.updateTargets();
-				}
 				handleFileChange();
 			}
-
 		});
 
-		Text trefuri = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
+		trefuri = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE),
-				PojoObservables.observeValue(res, "fileName")); //$NON-NLS-1$
 
 		createFileTab(composite);
 
@@ -116,7 +101,7 @@ public abstract class AFileResourcePageContent extends APageContent {
 	}
 
 	protected void handleFileChange() {
-
+		trefuri.setText(Misc.nvl(((AFileResource) res).getFileName()));
 	}
 
 	protected void createFileTab(Composite tabFolder) {
@@ -128,13 +113,11 @@ public abstract class AFileResourcePageContent extends APageContent {
 	protected void doSaveFile(String filename) {
 		if (filename != null) {
 			try {
-				WSClientHelper.getResource(AFileResourcePageContent.this.res,
-						res.getValue(), filename);
+				WSClientHelper.getResource(AFileResourcePageContent.this.res, res.getValue(), filename);
 				File file = new File(filename);
 				int dotPos = filename.lastIndexOf("."); //$NON-NLS-1$
 				String strFilename = filename.substring(0, dotPos);
-				ImageTypeEnum itype = JRTypeSniffer.getImageTypeValue(FileUtils
-						.getBytes(file));
+				ImageTypeEnum itype = JRTypeSniffer.getImageTypeValue(FileUtils.getBytes(file));
 				if (itype == ImageTypeEnum.GIF) {
 					file = FileUtils.fileRenamed(file, strFilename, ".gif"); //$NON-NLS-1$
 				} else if (itype == ImageTypeEnum.JPEG) {
@@ -150,5 +133,13 @@ public abstract class AFileResourcePageContent extends APageContent {
 			}
 			handleFileChange();
 		}
+	}
+
+	protected String getFileDialog() {
+		FileDialog fd = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN);
+		fd.setFilterExtensions(getFilter());
+		fd.setText(Messages.AFileResourcePage_selectresourcefile);
+		String filename = fd.open();
+		return filename;
 	}
 }

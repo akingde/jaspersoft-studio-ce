@@ -16,6 +16,11 @@
 package com.jaspersoft.studio.server.wizard.resource.page;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.window.Window;
+import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
@@ -23,8 +28,7 @@ import com.jaspersoft.studio.server.model.MResource;
 
 public class JrxmlPageContent extends AFileResourcePageContent {
 
-	public JrxmlPageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public JrxmlPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -47,4 +51,15 @@ public class JrxmlPageContent extends AFileResourcePageContent {
 		return new String[] { "*.jrxml" }; //$NON-NLS-1$
 	}
 
+	@Override
+	protected String getFileDialog() {
+		FilteredResourcesSelectionDialog dialog = new FilteredResourcesSelectionDialog(trefuri.getShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+		dialog.setTitle(com.jaspersoft.studio.messages.Messages.ResourceCellEditor_open_resource);
+		dialog.setInitialPattern("*.jrxml"); //$NON-NLS-1$
+		if (dialog.open() == Window.OK) {
+			IFile file = (IFile) dialog.getFirstResult();
+			return file.getLocation().toPortableString();
+		}
+		return null;
+	}
 }

@@ -34,8 +34,7 @@ import com.jaspersoft.studio.server.model.MResource;
 
 public class ResourceBundlePageContent extends AFileResourcePageContent {
 
-	public ResourceBundlePageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public ResourceBundlePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -62,8 +61,7 @@ public class ResourceBundlePageContent extends AFileResourcePageContent {
 
 	@Override
 	protected void createFileTab(Composite composite) {
-		txt = new Text(composite, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP
-				| SWT.READ_ONLY);
+		txt = new Text(composite, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 3;
 		txt.setLayoutData(gd);
@@ -71,6 +69,7 @@ public class ResourceBundlePageContent extends AFileResourcePageContent {
 
 	@Override
 	protected void handleFileChange() {
+		super.handleFileChange();
 		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
