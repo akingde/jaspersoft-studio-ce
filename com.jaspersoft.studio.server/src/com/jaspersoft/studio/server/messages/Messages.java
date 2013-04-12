@@ -60,6 +60,7 @@ public class Messages extends NLS {
 	public static String JrxmlPublishAction_defaultresourcelabel;
 	public static String JrxmlPublishAction_defaultresourcename;
 	public static String JrxmlPublishAction_jobname;
+	public static String JrxmlPublishAction_successpublishing;
 	public static String JrxmlPublishAction_title;
 	public static String JrxmlPublishAction_tooltip;
 	public static String LovPageContent_lov;

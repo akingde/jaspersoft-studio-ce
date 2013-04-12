@@ -127,7 +127,7 @@ public class JrxmlPublishAction extends AContributorAction {
 			publishResources(monitor, jd, node);
 			if (monitor.isCanceled())
 				return;
-			UIUtils.showInformation("Your report was published to JasperReports Server with success!\nPlease refresh Repository View to see changes.");
+			UIUtils.showInformation(Messages.JrxmlPublishAction_successpublishing);
 
 			// clean
 			jrConfig.remove(KEY_PUBLISH2JSS_DATA);
@@ -195,7 +195,7 @@ public class JrxmlPublishAction extends AContributorAction {
 			if (f.getValue().getIsNew()) {
 				f.getValue().setIsNew(false);
 				ResourceDescriptor prd = ((MResource) f.getParent()).getValue();
-				f.getValue().setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");//$NON-NLS-1$ $NON-NLS-2$
+				f.getValue().setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");//$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
 				ResourceDescriptor v = f.getValue();
 				f.getValue().setUriString(v.getParentFolder() + "/" + f.getValue().getName());//$NON-NLS-1$
 				return WSClientHelper.saveResource(f, monitor, false);
@@ -207,7 +207,7 @@ public class JrxmlPublishAction extends AContributorAction {
 	private ResourceDescriptor getMainReport(MReportUnit mrunit, JasperDesign jd) {
 		String jrxmln = jd.getProperty(JrxmlExporter.PROP_REPORTRESOURCE);
 		if (jrxmln != null) {
-			String unit = mrunit.getValue().getUriString() + "_files/";
+			String unit = mrunit.getValue().getUriString() + "_files/"; //$NON-NLS-1$
 			if (unit != null && jrxmln.startsWith(unit) && jrxmln.length() > unit.length() && jrxmln.substring(unit.length()).indexOf('/') < 0) {
 				MServerProfile sp = (MServerProfile) mrunit.getRoot();
 				if (sp != null) {
@@ -215,7 +215,7 @@ public class JrxmlPublishAction extends AContributorAction {
 					rd.setName(jrxmln.substring(unit.length()));
 					rd.setLabel(jrxmln.substring(unit.length()));
 					rd.setUriString(jrxmln);
-					rd.setParentFolder(unit + "_files/" + rd.getName());
+					rd.setParentFolder(unit + "_files/" + rd.getName()); //$NON-NLS-1$
 					rd.setIsNew(true);
 					rd.setWsType(ResourceDescriptor.TYPE_JRXML);
 					rd.setIsReference(false);
