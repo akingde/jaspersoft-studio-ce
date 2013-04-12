@@ -94,7 +94,7 @@ public class DeleteResourceAction extends Action {
 
 					});
 				} catch (InvocationTargetException e) {
-					UIUtils.showError(e);
+					UIUtils.showError(e.getCause());
 				} catch (InterruptedException e) {
 					UIUtils.showError(e);
 				}
