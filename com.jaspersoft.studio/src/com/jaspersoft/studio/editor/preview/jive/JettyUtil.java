@@ -37,6 +37,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 import com.jaspersoft.studio.editor.preview.jive.servlet.SReportServlet;
 import com.jaspersoft.studio.editor.preview.jive.servlet.SResourceServlet;
+import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -52,7 +53,12 @@ public final class JettyUtil {
 	public static void startJetty(IProject project, JasperReportsConfiguration jContext) {
 		try {
 			if (server == null) {
-				port = SocketUtil.findFreePort();
+				Integer p = jContext.getPropertyInteger(GlobalPreferencePage.JSS_JETTY_PORT);
+				if (p == null || p.intValue() <= 0)
+					port = SocketUtil.findFreePort();
+				else
+					port = p;
+
 				if (port == -1)
 					port = 8888;
 				server = new Server(port);

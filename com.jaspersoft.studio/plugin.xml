@@ -211,6 +211,12 @@
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.GlobalPreferencePage"
+            id="com.jaspersoft.studio.preferences.GlobalPreferencePage"
+            name="Global Settings">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
             class="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             id="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             name="Report Designer">

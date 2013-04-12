@@ -49,6 +49,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	}
 
 	public static void initDefaultProperties(IPreferenceStore store) {
+		GlobalPreferencePage.getDefaults(store);
 		PropertiesPreferencePage.getDefaults(store);
 
 		DesignerPreferencePage.getDefaults(store);
