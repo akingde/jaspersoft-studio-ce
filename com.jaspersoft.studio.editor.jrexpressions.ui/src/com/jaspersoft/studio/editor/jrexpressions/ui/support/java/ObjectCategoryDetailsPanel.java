@@ -384,6 +384,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				List<String> methodFirms = getExpObjectMethodFirms((ExpObject)selItem);
 				tv.setContentProvider(new TreeArrayContentProvider());
 				tv.setLabelProvider(new ObjectItemStyledLabelProvider());
+				Collections.sort(methodFirms);
 				tv.setInput(methodFirms.toArray());
 				
 				tv.addDoubleClickListener(new IDoubleClickListener() {
