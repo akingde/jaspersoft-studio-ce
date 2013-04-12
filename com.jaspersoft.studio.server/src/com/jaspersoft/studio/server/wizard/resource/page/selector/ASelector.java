@@ -38,8 +38,7 @@ public abstract class ASelector {
 	protected Button bRef;
 	protected MResource res;
 
-	public void createControls(Composite cmp, final ANode parent,
-			final MResource res) {
+	public void createControls(Composite cmp, final ANode parent, final MResource res) {
 		this.res = res;
 
 		Composite composite = new Composite(cmp, SWT.NONE);
@@ -75,10 +74,7 @@ public abstract class ASelector {
 		bRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				RepositoryDialog rd = new RepositoryDialog(bRef.getShell(),
-						ServerManager
-								.getMServerProfileCopy((MServerProfile) pnode
-										.getRoot())) {
+				RepositoryDialog rd = new RepositoryDialog(bRef.getShell(), ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot())) {
 
 					@Override
 					public boolean isResourceCompatible(MResource r) {
@@ -94,8 +90,7 @@ public abstract class ASelector {
 							ref = WSClientHelper.getResource(pnode, ref);
 							ref.setIsReference(false);
 							ref.setReferenceUri(ref.getUriString());
-							ref.setParentFolder(runit.getParentFolder()
-									+ "/" + runit.getName() + "_files"); //$NON-NLS-1$
+							ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$
 							ref.setUriString(ref.getParentFolder() + "/" //$NON-NLS-1$
 									+ ref.getName());
 							ref.setWsType(ResourceDescriptor.TYPE_REFERENCE);
@@ -162,8 +157,7 @@ public abstract class ASelector {
 					ref = createLocal(res);
 					ref.setIsNew(true);
 					ref.setIsReference(false);
-					ref.setParentFolder(runit.getParentFolder()
-							+ "/" + runit.getName() + "_files"); //$NON-NLS-1$
+					ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$
 
 					newref = true;
 				}
@@ -177,7 +171,8 @@ public abstract class ASelector {
 				if (newref)
 					replaceChildren(res, ref);
 				else
-					ASelector.copyFields(res.getValue(), ref);
+					ASelector.copyFields(ref, r.getValue());
+				// ASelector.copyFields(res.getValue(), ref);
 				jsLocDS.setText(Misc.nvl(ref.getName()));
 				firePageComplete();
 			}
@@ -185,18 +180,14 @@ public abstract class ASelector {
 	}
 
 	public static boolean isReference(ResourceDescriptor ref) {
-		return ref != null
-				&& (ref.getIsReference() || ref.getWsType().equals(
-						ResourceDescriptor.TYPE_REFERENCE));
+		return ref != null && (ref.getIsReference() || ref.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE));
 	}
 
 	protected abstract ResourceDescriptor createLocal(MResource res);
 
 	protected void init() {
 		ResourceDescriptor r = getResourceDescriptor(res.getValue());
-		if (r != null
-				&& (r.getIsReference() || r.getWsType().equals(
-						ResourceDescriptor.TYPE_REFERENCE)))
+		if (r != null && (r.getIsReference() || r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)))
 			setEnabled(0);
 		setEnabled(1);
 	}
@@ -221,8 +212,7 @@ public abstract class ASelector {
 		listeners.remove(listener);
 	}
 
-	protected abstract ResourceDescriptor getResourceDescriptor(
-			ResourceDescriptor ru);
+	protected abstract ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru);
 
 	protected void setEnabled(int pos) {
 		bRef.setEnabled(false);
@@ -243,17 +233,14 @@ public abstract class ASelector {
 			bRef.setEnabled(true);
 			brRepo.setSelection(true);
 			// jsRefDS.setEnabled(true);
-			if (r != null
-					&& (r.getIsReference() || r.getWsType().equals(
-							ResourceDescriptor.TYPE_REFERENCE)))
+			if (r != null && (r.getIsReference() || r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)))
 				jsRefDS.setText(Misc.nvl(r.getReferenceUri()));
 			break;
 		case 1:
 			brLocal.setSelection(true);
 			bLoc.setEnabled(true);
 			// jsLocDS.setEnabled(true);
-			if (r != null && !r.getIsReference()
-					&& !r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
+			if (r != null && !r.getIsReference() && !r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
 				jsLocDS.setText(Misc.nvl(r.getName()));
 			break;
 		}
