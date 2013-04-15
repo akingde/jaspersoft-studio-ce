@@ -37,12 +37,12 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public class ResourcePageContent extends APageContent {
 
-	public ResourcePageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public ResourcePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -109,48 +109,49 @@ public class ResourcePageContent extends APageContent {
 		tdesc.setLayoutData(gd);
 
 		final ResourceDescriptor rd = res.getValue();
-		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE),
-				PojoObservables.observeValue(rd, "parentFolder")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE), PojoObservables.observeValue(rd, "parentFolder")); //$NON-NLS-1$
 
-		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE),
-				PojoObservables.observeValue(rd, "creationDate")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(rd, "creationDate")); //$NON-NLS-1$
 
-		bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE),
-				PojoObservables.observeValue(rd, "wsType")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE), PojoObservables.observeValue(rd, "wsType")); //$NON-NLS-1$
 
-		bindingContext.bindValue(SWTObservables.observeSelection(bisRef),
-				PojoObservables.observeValue(rd, "isReference")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(bisRef), PojoObservables.observeValue(rd, "isReference")); //$NON-NLS-1$
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(tid, SWT.Modify),
-				PojoObservables.observeValue(rd, "name"), //$NON-NLS-1$
-				new UpdateValueStrategy()
-						.setAfterConvertValidator(new IDStringValidator()),
-				null);
+		bindingContext.bindValue(SWTObservables.observeText(tid, SWT.Modify), PojoObservables.observeValue(rd, "name"), //$NON-NLS-1$
+				new UpdateValueStrategy().setAfterConvertValidator(new IDStringValidator()), null);
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(tname, SWT.Modify),
-				PojoObservables.observeValue(rd, "label"), //$NON-NLS-1$
-				new UpdateValueStrategy()
-						.setAfterConvertValidator(new EmptyStringValidator()),
-				null);
-		bindingContext.bindValue(SWTObservables.observeText(tdesc, SWT.Modify),
-				PojoObservables.observeValue(rd, "description")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(rd, "label"), //$NON-NLS-1$
+				new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
+		bindingContext.bindValue(SWTObservables.observeText(tdesc, SWT.Modify), PojoObservables.observeValue(rd, "description")); //$NON-NLS-1$
 
 		tid.setEditable(rd.getIsNew());
 		if (rd.getIsNew()) {
-			rd.setLabel(rd.getName());
-			tid.addModifyListener(new ModifyListener() {
+			rd.setName(rd.getLabel());
+			tname.addModifyListener(new ModifyListener() {
 
 				@Override
 				public void modifyText(ModifyEvent e) {
-					tname.setText(tid.getText());
+					tid.setText(safeChar(Misc.nvl(tname.getText())));
 				}
 			});
 		}
 		bindingContext.updateTargets();
 		bindingContext.updateModels();
 
+		tname.setFocus();
 		return composite;
+	}
+
+	public static String safeChar(String input) {
+		char[] allowed = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_./".toCharArray();
+		char[] charArray = input.toString().toCharArray();
+		StringBuilder result = new StringBuilder();
+		for (char c : charArray) {
+			for (char a : allowed) {
+				if (c == a)
+					result.append(a);
+			}
+		}
+		return result.toString();
 	}
 }
