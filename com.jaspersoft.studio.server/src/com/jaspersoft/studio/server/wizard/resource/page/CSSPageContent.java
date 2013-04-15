@@ -22,8 +22,7 @@ import com.jaspersoft.studio.server.model.MResource;
 
 public class CSSPageContent extends AFileResourcePageContent {
 
-	public CSSPageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public CSSPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 

@@ -23,6 +23,8 @@ import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -99,12 +101,7 @@ public class NodeIconDescriptor implements IIconDescriptor {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
-				try {
-					if (inputStream != null)
-						inputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				FileUtils.closeStream(inputStream);
 			}
 		}
 		return getResourceBundleIcons();

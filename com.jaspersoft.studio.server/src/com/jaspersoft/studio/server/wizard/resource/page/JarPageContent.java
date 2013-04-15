@@ -23,8 +23,7 @@ import com.jaspersoft.studio.server.model.MResource;
 
 public class JarPageContent extends AFileResourcePageContent {
 
-	public JarPageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public JarPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 

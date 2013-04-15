@@ -48,4 +48,9 @@ public class MRCSS extends AFileResource {
 		rd.setWsType(WSTYPE_CSS);
 		return rd;
 	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return "css";
+	}
 }

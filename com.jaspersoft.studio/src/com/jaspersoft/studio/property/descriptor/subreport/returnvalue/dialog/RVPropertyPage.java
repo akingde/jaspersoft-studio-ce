@@ -10,13 +10,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.JRSubreportReturnValue;
@@ -391,12 +391,7 @@ public class RVPropertyPage extends JSSHelpWizardPage {
 		} catch (Exception e) {
 			// e.printStackTrace();
 		} finally {
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			FileUtils.closeStream(in);
 		}
 		return jd;
 	}
@@ -413,12 +408,7 @@ public class RVPropertyPage extends JSSHelpWizardPage {
 		} catch (Exception e) {
 			// e.printStackTrace();
 		} finally {
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			FileUtils.closeStream(in);
 		}
 		return jd;
 	}

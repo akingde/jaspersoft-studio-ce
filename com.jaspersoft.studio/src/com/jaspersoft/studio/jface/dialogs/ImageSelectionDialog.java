@@ -15,13 +15,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.jface.dialogs;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.core.filesystem.EFS;
@@ -526,13 +526,7 @@ public class ImageSelectionDialog extends Dialog {
 			grpImagePreviewLayout.topControl=cmpNoImgPreview;
 			grpImagePreview.layout();
 		} finally {
-			if(imageIS!=null){
-				try {
-					imageIS.close();
-				} catch (IOException e) {
-					// Ignore...
-				}
-			}
+			FileUtils.closeStream(imageIS);
 		}
 	}
 	

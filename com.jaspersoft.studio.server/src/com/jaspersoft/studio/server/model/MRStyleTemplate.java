@@ -43,4 +43,9 @@ public class MRStyleTemplate extends AFileResource {
 		rd.setWsType(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
 		return rd;
 	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return ".jrctx";
+	}
 }

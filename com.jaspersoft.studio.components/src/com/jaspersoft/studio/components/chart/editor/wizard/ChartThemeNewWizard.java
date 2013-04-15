@@ -11,12 +11,12 @@
 package com.jaspersoft.studio.components.chart.editor.wizard;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.chartthemes.simple.SimpleSettingsFactory;
 import net.sf.jasperreports.chartthemes.simple.XmlChartTheme;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -214,12 +214,7 @@ public class ChartThemeNewWizard extends Wizard implements INewWizard {
 			}
 			reportFile = file;
 		} finally {
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			FileUtils.closeStream(in);
 		}
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing..."); //$NON-NLS-1$

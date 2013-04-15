@@ -11,7 +11,6 @@
 package com.jaspersoft.studio.wizards;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
@@ -259,7 +259,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 			} else {
 				reportFile.create(stream, true, monitor);
 			}
-			stream.close();
+			FileUtils.closeStream(stream);
 			saveReportBundleResources(monitor, reportBundle, container);
 
 			monitor.setTaskName(Messages.ReportNewWizard_5);
@@ -276,11 +276,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		} finally {
-			try {
-				stream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			FileUtils.closeStream(stream);
 		}
 	}
 
@@ -315,11 +311,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 			} catch (Exception e) {
 				UIUtils.showError(e);
 			} finally {
-				try {
-					if (is != null) is.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				FileUtils.closeStream(is);
 			}
 		}
 		monitor.done();

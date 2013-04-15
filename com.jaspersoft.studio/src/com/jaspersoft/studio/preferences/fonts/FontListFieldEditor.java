@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.fonts.FontFace;
@@ -233,7 +234,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 			zipos.finish();
 		} finally {
-			fos.close();
+			FileUtils.closeStream(fos);
 		}
 	}
 
@@ -250,7 +251,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 			FileInputStream in = new FileInputStream(font.getFile()); // Stream to read file
 			while ((bytesRead = in.read(buffer)) != -1)
 				zipos.write(buffer, 0, bytesRead);
-			in.close();
+			FileUtils.closeStream(in);
 			return name;
 		}
 		return null;

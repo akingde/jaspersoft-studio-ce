@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -72,7 +73,7 @@ public class JrxmlExporter extends AExporter {
 								.getValue().getJrVersion()));
 					}
 				} finally {
-					fw.close();
+					FileUtils.closeStream(fw);
 				}
 			} catch (Exception e) {
 

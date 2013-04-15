@@ -47,4 +47,9 @@ public class MJar extends AFileResource {
 		rd.setWsType(ResourceDescriptor.TYPE_CLASS_JAR);
 		return rd;
 	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return "jar";
+	}
 }

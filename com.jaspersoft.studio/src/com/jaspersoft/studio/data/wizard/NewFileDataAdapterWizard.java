@@ -11,10 +11,10 @@
 package com.jaspersoft.studio.data.wizard;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.core.resources.IContainer;
@@ -284,12 +284,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 			else
 				file.create(in, true, monitor);
 		} finally {
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			FileUtils.closeStream(in);
 		}
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing..."); //$NON-NLS-1$

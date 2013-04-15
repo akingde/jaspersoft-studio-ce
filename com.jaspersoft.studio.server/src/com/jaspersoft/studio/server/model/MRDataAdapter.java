@@ -61,4 +61,9 @@ public class MRDataAdapter extends AFileResource {
 	public MReportUnit getReportUnit() {
 		return null;
 	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return "xml";
+	}
 }

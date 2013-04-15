@@ -47,4 +47,9 @@ public class MXmlFile extends AFileResource {
 		rd.setWsType(ResourceDescriptor.TYPE_XML_FILE);
 		return rd;
 	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return "xml";
+	}
 }

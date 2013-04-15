@@ -23,8 +23,7 @@ import com.jaspersoft.studio.server.model.MResource;
 
 public class StyleTemplatePageContent extends AFileResourcePageContent {
 
-	public StyleTemplatePageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public StyleTemplatePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 

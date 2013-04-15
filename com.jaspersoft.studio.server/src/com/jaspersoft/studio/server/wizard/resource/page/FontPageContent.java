@@ -23,8 +23,7 @@ import com.jaspersoft.studio.server.model.MResource;
 
 public class FontPageContent extends AFileResourcePageContent {
 
-	public FontPageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public FontPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 

@@ -47,4 +47,9 @@ public class MResourceBundle extends AFileResource {
 		rd.setWsType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
 		return rd;
 	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return "properties";
+	}
 }

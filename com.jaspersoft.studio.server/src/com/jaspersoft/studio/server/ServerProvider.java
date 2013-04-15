@@ -43,6 +43,7 @@ import com.jaspersoft.studio.server.action.resource.AddResourceAction;
 import com.jaspersoft.studio.server.action.resource.CopyResourceAction;
 import com.jaspersoft.studio.server.action.resource.CutResourceAction;
 import com.jaspersoft.studio.server.action.resource.DeleteResourceAction;
+import com.jaspersoft.studio.server.action.resource.DownloadFileAction;
 import com.jaspersoft.studio.server.action.resource.OpenInEditorAction;
 import com.jaspersoft.studio.server.action.resource.PasteResourceAction;
 import com.jaspersoft.studio.server.action.resource.PropertiesAction;
@@ -55,6 +56,7 @@ import com.jaspersoft.studio.server.action.server.EditServerAction;
 import com.jaspersoft.studio.server.dnd.RepositoryFileResourceDropTargetListener;
 import com.jaspersoft.studio.server.dnd.RepositoryImageDragSourceListener;
 import com.jaspersoft.studio.server.dnd.UnitDragSourceListener;
+import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
@@ -79,6 +81,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 	private RunReportUnitAction runReportUnitAction;
 	private OpenInEditorAction openInEditorAction;
+	private DownloadFileAction downloadFileAction;
 
 	public Action[] getActions(TreeViewer treeViewer) {
 		createActions(treeViewer);
@@ -116,6 +119,9 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 		if (openInEditorAction == null)
 			openInEditorAction = new OpenInEditorAction(treeViewer);
+
+		if (downloadFileAction == null)
+			downloadFileAction = new DownloadFileAction(treeViewer);
 	}
 
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
@@ -146,18 +152,19 @@ public class ServerProvider implements IRepositoryViewProvider {
 			if (deleteServerAction.isEnabled())
 				lst.add(deleteServerAction);
 		} else if (node instanceof MResource) {
-			if (addAction.isEnabled()
-					&& (node instanceof MFolder || node instanceof MReportUnit))
+			if (addAction.isEnabled() && (node instanceof MFolder || node instanceof MReportUnit))
 				lst.add(addAction);
 			lst.add(new Separator());
 
-			if (((MResource) node).isInsideReportUnit()
-					&& runReportUnitAction.isEnabled())
+			if (((MResource) node).isInsideReportUnit() && runReportUnitAction.isEnabled())
 				lst.add(runReportUnitAction);
 			lst.add(new Separator());
 
 			if (openInEditorAction.isEnabled())
 				lst.add(openInEditorAction);
+
+			if (node instanceof AFileResource && downloadFileAction.isEnabled() && !(node instanceof MReportUnit))
+				lst.add(downloadFileAction);
 
 			lst.add(new Separator());
 
@@ -217,8 +224,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 	}
 
 	public void removePropertyChangeListener(PropertyChangeListener pcl) {
-		ServerManager.getPropertyChangeSupport().removePropertyChangeListener(
-				pcl);
+		ServerManager.getPropertyChangeSupport().removePropertyChangeListener(pcl);
 	}
 
 	public void handleTreeEvent(TreeExpansionEvent event) {
@@ -229,8 +235,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 		}
 	}
 
-	public void handleTreeEvent(TreeExpansionEvent event,
-			IProgressMonitor monitor) {
+	public void handleTreeEvent(TreeExpansionEvent event, IProgressMonitor monitor) {
 		if (event.getElement() instanceof MServerProfile) {
 			listServer(event, monitor);
 		} else if (event.getElement() instanceof MResource) {
@@ -264,8 +269,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 		job.schedule();
 	}
 
-	public IStatus lazyLoadResource(final TreeExpansionEvent event,
-			IProgressMonitor monitor) {
+	public IStatus lazyLoadResource(final TreeExpansionEvent event, IProgressMonitor monitor) {
 		MResource r = (MResource) event.getElement();
 		try {
 			WSClientHelper.refreshResource(r, monitor);
@@ -281,8 +285,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 			Display.getDefault().syncExec(new Runnable() {
 
 				public void run() {
-					event.getTreeViewer()
-							.collapseToLevel(event.getElement(), 1);
+					event.getTreeViewer().collapseToLevel(event.getElement(), 1);
 					UIUtils.showErrorDialog(e.getMessage(), e);
 				}
 			});
@@ -291,8 +294,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 		return Status.CANCEL_STATUS;
 	}
 
-	private IStatus listServer(final TreeExpansionEvent event,
-			IProgressMonitor monitor) {
+	private IStatus listServer(final TreeExpansionEvent event, IProgressMonitor monitor) {
 		MServerProfile r = (MServerProfile) event.getElement();
 		try {
 			WSClientHelper.connectGetData(r, monitor);
@@ -308,8 +310,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 			Display.getDefault().syncExec(new Runnable() {
 
 				public void run() {
-					event.getTreeViewer().collapseToLevel(
-							(MServerProfile) event.getElement(), 1);
+					event.getTreeViewer().collapseToLevel((MServerProfile) event.getElement(), 1);
 					UIUtils.showErrorDialog(e.getMessage(), e);
 				}
 			});
@@ -322,7 +323,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 		List<TransferDragSourceListener> dragListeners = new ArrayList<TransferDragSourceListener>(2);
 		dragListeners.add(new RepositoryImageDragSourceListener(treeViewer));
 		dragListeners.add(new UnitDragSourceListener(treeViewer));
-		return dragListeners; 
+		return dragListeners;
 	}
 
 	@Override

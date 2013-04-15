@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.Enumeration;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.util.CastorUtil;
 
@@ -116,12 +117,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
-				if (in != null)
-					try {
-						in.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				FileUtils.closeStream(in);
 			}
 		}
 	}

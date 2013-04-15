@@ -11,10 +11,10 @@
 package com.jaspersoft.studio.editor.style.wizard;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -216,12 +216,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 			}
 			reportFile = file;
 		} finally {
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			FileUtils.closeStream(in);
 		}
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing..."); //$NON-NLS-1$

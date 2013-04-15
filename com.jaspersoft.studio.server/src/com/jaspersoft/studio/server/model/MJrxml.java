@@ -47,4 +47,9 @@ public class MJrxml extends AFileResource {
 		rd.setWsType(ResourceDescriptor.TYPE_JRXML);
 		return rd;
 	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return "jrxml";
+	}
 }

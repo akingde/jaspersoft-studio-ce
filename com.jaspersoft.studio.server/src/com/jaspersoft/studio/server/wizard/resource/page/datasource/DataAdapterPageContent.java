@@ -24,8 +24,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.AFileResourcePageConten
 
 public class DataAdapterPageContent extends AFileResourcePageContent {
 
-	public DataAdapterPageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public DataAdapterPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 

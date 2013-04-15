@@ -31,6 +31,8 @@ public abstract class AFileResource extends MResource {
 		super(parent, rd, index);
 	}
 
+	public abstract String getDefaultFileExtension();
+
 	private File file;
 
 	public File getFile() {

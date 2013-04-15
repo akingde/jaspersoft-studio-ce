@@ -47,4 +47,9 @@ public class MRFont extends AFileResource {
 		rd.setWsType(ResourceDescriptor.TYPE_FONT);
 		return rd;
 	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return "ttf";
+	}
 }

@@ -23,6 +23,10 @@ import net.sf.jasperreports.engine.type.ImageTypeEnum;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -34,6 +38,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.SaveAsDialog;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.Activator;
@@ -66,14 +71,17 @@ public abstract class AFileResourcePageContent extends APageContent {
 			bexport.addSelectionListener(new SelectionAdapter() {
 
 				public void widgetSelected(SelectionEvent e) {
-					FileDialog fd = new FileDialog(Display.getDefault().getActiveShell(), SWT.SAVE);
-					fd.setFilterExtensions(getFilter());
-					fd.setFileName(res.getValue().getName());
-					fd.setText(Messages.AFileResourcePage_filedialogtitle);
-					String filename = fd.open();
-					doSaveFile(filename);
+					SaveAsDialog saveAsDialog = new SaveAsDialog(trefuri.getShell());
+					saveAsDialog.setOriginalName(res.getValue().getName() + "." + ((AFileResource) res).getDefaultFileExtension());
+					if (saveAsDialog.open() == Dialog.OK) {
+						IPath path = saveAsDialog.getResult();
+						if (path != null) {
+							IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+							if (file != null)
+								doSaveFile(file.getLocation().toPortableString());
+						}
+					}
 				}
-
 			});
 		}
 

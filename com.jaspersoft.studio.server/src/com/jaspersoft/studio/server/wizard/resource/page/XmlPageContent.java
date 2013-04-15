@@ -23,8 +23,7 @@ import com.jaspersoft.studio.server.model.MResource;
 
 public class XmlPageContent extends AFileResourcePageContent {
 
-	public XmlPageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public XmlPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 

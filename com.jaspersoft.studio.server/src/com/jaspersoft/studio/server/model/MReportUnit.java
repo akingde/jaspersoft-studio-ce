@@ -59,4 +59,9 @@ public class MReportUnit extends AFileResource {
 		rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
 		return rd;
 	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return "";
+	}
 }

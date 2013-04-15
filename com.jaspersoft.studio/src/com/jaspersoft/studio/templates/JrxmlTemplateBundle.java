@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.JRReportTemplate;
@@ -282,7 +283,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 		try {
 				this.jasperDesign = JRXmlLoader.load(is);
 		} finally {
-			if (is != null) is.close();
+			FileUtils.closeStream(is);
 		}
 			
 	  if (this.jasperDesign != null)

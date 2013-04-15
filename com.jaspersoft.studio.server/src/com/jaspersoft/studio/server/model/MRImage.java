@@ -47,4 +47,9 @@ public class MRImage extends AFileResource {
 		rd.setWsType(ResourceDescriptor.TYPE_IMAGE);
 		return rd;
 	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return "png";
+	}
 }
