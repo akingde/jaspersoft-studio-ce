@@ -60,8 +60,7 @@ public class XLSFieldsProvider implements IFieldsProvider {
 					.get(JRParameter.REPORT_DATA_SOURCE);
 		}
 		if (ds != null) {
-			ds.setUseFirstRowAsHeader(true);
-
+			ds.setUseFirstRowAsHeader(da.isUseFirstRowAsHeader());
 			ds.next();
 			Map<String, Integer> map = ds.getColumnNames();
 			List<JRDesignField> columns = new ArrayList<JRDesignField>(map
@@ -69,7 +68,7 @@ public class XLSFieldsProvider implements IFieldsProvider {
 			for (String key : map.keySet()) {
 				JRDesignField field = new JRDesignField();
 				field.setName(key);
-				field.setValueClass(Object.class);
+				field.setValueClass(String.class);
 				columns.add(field);
 			}
 			return columns;
