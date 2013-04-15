@@ -20,6 +20,8 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.JRLineBox;
+import net.sf.jasperreports.engine.JRParagraph;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
@@ -77,6 +79,34 @@ public class ConvertTextIntoStatic extends SelectionAction {
 			if (part instanceof TextFieldFigureEditPart) return true;
 		return false;
 	}
+	
+	private void cloneBox(JRLineBox fieldBox, JRLineBox staticBox){
+		if (fieldBox == null || staticBox == null) return;
+		fieldBox.setBottomPadding(staticBox.getBottomPadding());
+		fieldBox.setLeftPadding(staticBox.getLeftPadding());
+		fieldBox.setPadding(staticBox.getPadding());
+		fieldBox.setRightPadding(staticBox.getRightPadding());
+		fieldBox.setTopPadding(staticBox.getTopPadding());
+		
+		fieldBox.copyTopPen(staticBox.getTopPen());
+		fieldBox.copyBottomPen(staticBox.getBottomPen());
+		fieldBox.copyLeftPen(staticBox.getLeftPen());
+		fieldBox.copyRightPen(staticBox.getRightPen());
+		fieldBox.copyPen(staticBox.getPen());
+	}
+	
+	private void cloneParagraph(JRParagraph fieldBox, JRParagraph staticBox){
+			if (fieldBox == null || staticBox == null) return;
+			fieldBox.setFirstLineIndent(staticBox.getFirstLineIndent());
+			fieldBox.setLeftIndent(staticBox.getLeftIndent());
+			fieldBox.setLineSpacing(staticBox.getLineSpacing());
+			fieldBox.setLineSpacingSize(staticBox.getLineSpacingSize());
+			fieldBox.setRightIndent(staticBox.getRightIndent());
+			fieldBox.setSpacingAfter(staticBox.getSpacingAfter());
+			fieldBox.setSpacingBefore(staticBox.getSpacingBefore());
+			fieldBox.setTabStopWidth(staticBox.getTabStopWidth());
+	}
+	
 
 	/**
 	 * Copy all the common attributes from the text field to the new static text element 
@@ -118,6 +148,10 @@ public class ConvertTextIntoStatic extends SelectionAction {
 		labelObject.setPrintInFirstWholeBand(textObject.isPrintInFirstWholeBand());
 		labelObject.setPrintRepeatedValues(textObject.isPrintRepeatedValues());
 		labelObject.setPrintWhenDetailOverflows(textObject.isPrintWhenDetailOverflows());
+		
+		cloneBox(labelObject.getLineBox(), textObject.getLineBox());
+
+		cloneParagraph(labelObject.getParagraph(), textObject.getParagraph());
 		
 		JRExpression originExpression = textObject.getPrintWhenExpression();
 		labelObject.setPrintWhenExpression(originExpression != null ? (JRExpression)originExpression.clone() : null);

@@ -20,6 +20,8 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.JRLineBox;
+import net.sf.jasperreports.engine.JRParagraph;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
@@ -94,6 +96,34 @@ public class ConvertStaticIntoText extends SelectionAction {
 		return false;
 	}
 	
+	
+	private void cloneBox(JRLineBox fieldBox, JRLineBox staticBox){
+		if (fieldBox == null || staticBox == null) return;
+		fieldBox.setBottomPadding(staticBox.getBottomPadding());
+		fieldBox.setLeftPadding(staticBox.getLeftPadding());
+		fieldBox.setPadding(staticBox.getPadding());
+		fieldBox.setRightPadding(staticBox.getRightPadding());
+		fieldBox.setTopPadding(staticBox.getTopPadding());
+		
+		fieldBox.copyTopPen(staticBox.getTopPen());
+		fieldBox.copyBottomPen(staticBox.getBottomPen());
+		fieldBox.copyLeftPen(staticBox.getLeftPen());
+		fieldBox.copyRightPen(staticBox.getRightPen());
+		fieldBox.copyPen(staticBox.getPen());
+	}
+	
+	private void cloneParagraph(JRParagraph fieldBox, JRParagraph staticBox){
+			if (fieldBox == null || staticBox == null) return;
+			fieldBox.setFirstLineIndent(staticBox.getFirstLineIndent());
+			fieldBox.setLeftIndent(staticBox.getLeftIndent());
+			fieldBox.setLineSpacing(staticBox.getLineSpacing());
+			fieldBox.setLineSpacingSize(staticBox.getLineSpacingSize());
+			fieldBox.setRightIndent(staticBox.getRightIndent());
+			fieldBox.setSpacingAfter(staticBox.getSpacingAfter());
+			fieldBox.setSpacingBefore(staticBox.getSpacingBefore());
+			fieldBox.setTabStopWidth(staticBox.getTabStopWidth());
+	}
+	
 	/**
 	 * Copy all the common attributes from the static text to the new text field element 
 	 * 
@@ -142,6 +172,10 @@ public class ConvertStaticIntoText extends SelectionAction {
 		textObject.setPrintRepeatedValues(labelObject.isPrintRepeatedValues());
 		textObject.setPrintWhenDetailOverflows(labelObject.isPrintWhenDetailOverflows());
 		
+		cloneBox(textObject.getLineBox(),labelObject.getLineBox());
+
+		cloneParagraph(textObject.getParagraph(), labelObject.getParagraph());
+		
 		JRExpression originExpression = labelObject.getPrintWhenExpression();
 		textObject.setPrintWhenExpression(originExpression != null ? (JRExpression)originExpression.clone() : null);
 		
@@ -166,20 +200,19 @@ public class ConvertStaticIntoText extends SelectionAction {
 		for(Object part : editparts){
 			if (part instanceof StaticTextFigureEditPart){
 				StaticTextFigureEditPart editPart = (StaticTextFigureEditPart)part;
-				MStaticText textField = (MStaticText)editPart.getModel();
-				DeleteElementCommand deleteCommand = new DeleteElementCommand(null, textField);
+				MStaticText staticText = (MStaticText)editPart.getModel();
+				DeleteElementCommand deleteCommand = new DeleteElementCommand(null, staticText);
 				MTextField modelText = new MTextField();
 				
-				JRDesignStaticText labelObject = (JRDesignStaticText)textField.getValue();
-				JRDesignTextField textObject =  (JRDesignTextField)modelText.createJRElement(textField.getJasperDesign());
+				JRDesignStaticText labelObject = (JRDesignStaticText)staticText.getValue();
+				JRDesignTextField textObject =  (JRDesignTextField)modelText.createJRElement(staticText.getJasperDesign());
 
 				cloneTextField(textObject, labelObject);
-				
 				
 				modelText.setValue(textObject);
 				Rectangle position = new Rectangle(labelObject.getX(),labelObject.getY(),labelObject.getWidth(),labelObject.getHeight());
 
-				CreateElementCommand createCommand = new CreateElementCommand(textField.getParent(), modelText, position, -1);
+				CreateElementCommand createCommand = new CreateElementCommand(staticText.getParent(), modelText, position, -1);
 				
 				command.add(deleteCommand);
 				command.add(createCommand);
