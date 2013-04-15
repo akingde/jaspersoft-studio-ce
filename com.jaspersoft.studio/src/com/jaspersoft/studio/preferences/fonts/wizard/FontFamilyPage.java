@@ -218,7 +218,7 @@ public class FontFamilyPage extends WizardPage {
 					} else if (type.equals(BOLDITALIC)) {
 						fontFamily.setBoldItalic(selected);
 						if (fontFamily.getBoldItalicFace() != null)
-							fontFamily.setBoldItalic(fontFamily.getBoldItalicFace().getName());
+							fontFamily.setBoldItalicPdfFont(fontFamily.getBoldItalicFace().getName());
 						txt.setText(fontFamily.getBoldItalicFace().getName());
 					}
 				}
