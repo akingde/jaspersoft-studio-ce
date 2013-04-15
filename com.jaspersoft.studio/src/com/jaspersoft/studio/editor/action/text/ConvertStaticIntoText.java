@@ -212,7 +212,8 @@ public class ConvertStaticIntoText extends SelectionAction {
 				modelText.setValue(textObject);
 				Rectangle position = new Rectangle(labelObject.getX(),labelObject.getY(),labelObject.getWidth(),labelObject.getHeight());
 
-				CreateElementCommand createCommand = new CreateElementCommand(staticText.getParent(), modelText, position, -1);
+				int oldIndex = staticText.getParent().getChildren().indexOf(staticText);
+				CreateElementCommand createCommand = new CreateElementCommand(staticText.getParent(), modelText, position, oldIndex);
 				
 				command.add(deleteCommand);
 				command.add(createCommand);
