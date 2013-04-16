@@ -142,11 +142,11 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 * image will be used
 		 */
 		protected void setCorrectValue(){
-			TemplateBorder actualBorder = getElementAttributes();
-			int index = exampleImages.indexOf(actualBorder);
-			if (!combo.isDisposed()){
-				if (index != -1) combo.select(index);
-				else combo.select(exampleImages.size());
+			if (!combo.isDisposed() && model != null){
+				TemplateBorder actualBorder = getElementAttributes();
+				int index = exampleImages.indexOf(actualBorder);
+					if (index != -1) combo.select(index);
+					else combo.select(exampleImages.size());
 			}
 		}
 			
