@@ -23,7 +23,10 @@ public class SelectorLov extends ASelector {
 
 	@Override
 	protected ResourceDescriptor createLocal(MResource res) {
-		return MListOfValues.createDescriptor(res);
+		ResourceDescriptor rd = MListOfValues.createDescriptor(res);
+		rd.setName("ListOfValues");
+		rd.setLabel(rd.getName());
+		return rd;
 	}
 
 	@Override

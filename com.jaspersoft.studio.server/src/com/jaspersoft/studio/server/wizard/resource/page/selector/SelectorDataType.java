@@ -23,7 +23,10 @@ public class SelectorDataType extends ASelector {
 
 	@Override
 	protected ResourceDescriptor createLocal(MResource res) {
-		return MDataType.createDescriptor(res);
+		ResourceDescriptor rd = MDataType.createDescriptor(res);
+		rd.setName("DataType");
+		rd.setLabel(rd.getName());
+		return rd;
 	}
 
 	@Override

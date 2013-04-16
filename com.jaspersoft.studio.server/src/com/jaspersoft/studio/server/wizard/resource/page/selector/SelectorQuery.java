@@ -23,7 +23,10 @@ public class SelectorQuery extends ASelector {
 
 	@Override
 	protected ResourceDescriptor createLocal(MResource res) {
-		return MRQuery.createDescriptor(res);
+		ResourceDescriptor rd = MRQuery.createDescriptor(res);
+		rd.setName("Query");
+		rd.setLabel(rd.getName());
+		return rd;
 	}
 
 	@Override
