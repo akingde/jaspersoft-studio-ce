@@ -385,6 +385,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 																	// we'll do it manually
 					getCurrentFile().setContents(new ByteArrayInputStream(doc.get().getBytes("UTF-8")),
 							IFile.KEEP_HISTORY | IFile.FORCE, monitor);
+					finishSave();
 					return;
 				}
 			}
@@ -407,6 +408,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						// on eclipse 4.2.1 on first first save, for some reasons save is not working .., so we'll do it manually
 						getCurrentFile().setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")),
 								IFile.KEEP_HISTORY | IFile.FORCE, monitor);
+						finishSave();
 					} catch (Throwable e) {
 						UIUtils.showError(e);
 					}
@@ -430,14 +432,16 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		reportContainer.isDirty();
 		previewEditor.isDirty();
 
+		xmlFresh = true;
+	}
+
+	protected void finishSave() {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				isRefresh = false;
 				firePropertyChange(ISaveablePart.PROP_DIRTY);
 			}
 		});
-
-		xmlFresh = true;
 	}
 
 	/**
