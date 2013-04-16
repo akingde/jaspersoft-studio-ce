@@ -413,9 +413,9 @@ public class MMap extends MGraphicElement {
 		StandardMapComponent component = new StandardMapComponent();
 		component.setMarkerDataset(new StandardMarkerDataset());
 		JRDesignExpression exp1 = new JRDesignExpression();
-		exp1.setText("0f"); //$NON-NLS-1$
+		exp1.setText("45.433967f"); //$NON-NLS-1$
 		JRDesignExpression exp2 = new JRDesignExpression();
-		exp2.setText("0f"); //$NON-NLS-1$
+		exp2.setText("12.337967f"); //$NON-NLS-1$
 		component.setLatitudeExpression(exp1);
 		component.setLongitudeExpression(exp2);
 		JRDesignExpression exp3 = new JRDesignExpression();
