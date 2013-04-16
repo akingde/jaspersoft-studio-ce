@@ -55,7 +55,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_EDITORS_FONT_FAMILY = "editorsFontFamily"; //$NON-NLS-1$
 	public static final String P_EDITORS_FONT_HEIGHT = "editorsFontHeight"; //$NON-NLS-1$
 	public static final String DEFAULT_EDITORS_FONT_FAMILY = "Monospaced"; //$NON-NLS-1$
-	public static final String DEFAULT_EDITORS_FONT_HEIGHT = "12"; //$NON-NLS-1$
+	public static final String DEFAULT_EDITORS_FONT_HEIGHT = "10"; //$NON-NLS-1$
 
 	public DesignerPreferencePage() {
 		super(GRID);
