@@ -40,8 +40,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class MapDesignConverter extends ElementIconConverter implements ComponentDesignConverter {
 
-	private static final Float DEFAULT_LONGITUDE = new Float(12.482944);
-	private static final Float DEFAULT_LATITUDE = new Float(41.894291);
+	private static final Float DEFAULT_LONGITUDE = new Float(45.433967);
+	private static final Float DEFAULT_LATITUDE = new Float(12.337967);
 	/**
 	 *
 	 */
