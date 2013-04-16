@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.HashSet;
 
@@ -23,11 +22,9 @@ import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.editor.style.StyleTemplateEditor;
@@ -60,22 +57,12 @@ public class JRtxEditor extends AMultiEditor {
 		setModel(m);
 	}
 
-	protected String model2xml() {
-		try {
-			if (model != null) {
-				JRSimpleTemplate report = (JRSimpleTemplate) model.getChildren().get(0).getValue();
-				IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-				String xml = JRXmlTemplateWriter.writeTemplate(report, JRXmlWriterHelper.fixencoding(file.getCharset(true)));
-				xml = xml.replaceFirst("<jasperTemplate ", "<!-- Created with Jaspersoft Studio -->\n<jasperTemplate "); //$NON-NLS-1$ //$NON-NLS-2$
-				IDocumentProvider dp = xmlEditor.getDocumentProvider();
-				IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
-				doc.set(xml);
-				return xml;
-			}
-		} catch (final Exception e) {
-			UIUtils.showError(e);
-		}
-		return null;
+	protected String doModel2xml() throws Exception {
+		JRSimpleTemplate report = (JRSimpleTemplate) model.getChildren().get(0).getValue();
+		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+		String xml = JRXmlTemplateWriter.writeTemplate(report, JRXmlWriterHelper.fixencoding(file.getCharset(true)));
+		xml = xml.replaceFirst("<jasperTemplate ", "<!-- Created with Jaspersoft Studio -->\n<jasperTemplate "); //$NON-NLS-1$ //$NON-NLS-2$
+		return xml;
 	}
 
 	public void setModel(INode model) {

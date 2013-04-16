@@ -6,7 +6,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
+import net.sf.jasperreports.chartthemes.simple.ChartThemeSettings;
+import net.sf.jasperreports.chartthemes.simple.XmlChartTheme;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -23,6 +26,8 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -57,16 +62,42 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 
 	@Override
 	protected void pageChange(int newPageIndex) {
+		if (activePage == 0) {
+			if (outlinePage != null)
+				tmpselection = outlinePage.getSite().getSelectionProvider().getSelection();
+			else
+				tmpselection = getActiveEditor().getSite().getSelectionProvider().getSelection();
+		}
 		switch (newPageIndex) {
 		case 0:
-			xml2model();
+			if (activePage == 1 && !xmlFresh)
+				xml2model();
+			setModel(model);
+			Display.getDefault().syncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					ISelectionProvider sp = null;
+					if (outlinePage != null)
+						sp = outlinePage.getSite().getSelectionProvider();
+					else
+						sp = getActiveEditor().getSite().getSelectionProvider();
+
+					sp.setSelection(tmpselection);
+				}
+			});
 			break;
 		case 1:
 			model2xml();
 			break;
 		}
 		super.pageChange(newPageIndex);
+		updateContentOutline(getActivePage());
+		activePage = newPageIndex;
 	}
+
+	private ISelection tmpselection;
+	private int activePage = 0;
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
@@ -74,6 +105,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 		String xml = model2xml();
 		doSaveParticipate(monitor);
 		xmlEditor.doSave(monitor);
+
 		try {
 			getCurrentFile().setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,
 					monitor);
@@ -86,6 +118,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 				firePropertyChange(ISaveablePart.PROP_DIRTY);
 			}
 		});
+		xmlFresh = true;
 	}
 
 	protected abstract void doSaveParticipate(IProgressMonitor monitor);
@@ -100,7 +133,24 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 
 	protected abstract void xml2model(InputStream in);
 
-	protected abstract String model2xml();
+	protected String model2xml() {
+		try {
+			if (model != null) {
+				String xml = doModel2xml();
+				IDocumentProvider dp = xmlEditor.getDocumentProvider();
+				IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
+				if (xml != null && !Arrays.equals(doc.get().getBytes(), xml.getBytes()))
+					doc.set(xml);
+				xmlFresh = true;
+				return xml;
+			}
+		} catch (final Exception e) {
+			UIUtils.showError(e);
+		}
+		return null;
+	}
+
+	protected abstract String doModel2xml() throws Exception;
 
 	/**
 	 * Closes all project files on project close.
@@ -228,6 +278,8 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 	protected INode model = null;
 
 	public void setModel(INode model) {
+		if (model == this.model)
+			return;
 		if (this.model != null && this.model.getChildren() != null && !this.model.getChildren().isEmpty())
 			this.model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropertyChangeListener);
 		if (model != null && model.getChildren() != null && !model.getChildren().isEmpty())
@@ -326,6 +378,8 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 
 	}
 
+	protected boolean xmlFresh = true;
+
 	/**
 	 * Creates page 0 of the multi-page editor, which contains a text editor.
 	 */
@@ -338,6 +392,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 					.addDocumentListener(new IDocumentListener() {
 
 						public void documentChanged(DocumentEvent event) {
+							xmlFresh = false;
 						}
 
 						public void documentAboutToBeChanged(DocumentEvent event) {

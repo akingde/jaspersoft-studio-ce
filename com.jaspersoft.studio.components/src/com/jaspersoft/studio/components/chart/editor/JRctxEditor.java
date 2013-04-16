@@ -22,10 +22,8 @@ import net.sf.jasperreports.chartthemes.simple.XmlChartTheme;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import com.jaspersoft.studio.components.chart.model.theme.ChartSettingsFactory;
 import com.jaspersoft.studio.editor.AMultiEditor;
@@ -62,32 +60,20 @@ public class JRctxEditor extends AMultiEditor {
 		return ip;
 	}
 
-	protected String model2xml() {
-		try {
-			if (model != null) {
-				ChartThemeSettings cts = (ChartThemeSettings) model
-						.getChildren().get(0).getValue();
+	protected String doModel2xml() throws Exception {
+		ChartThemeSettings cts = (ChartThemeSettings) model.getChildren()
+				.get(0).getValue();
 
-				cts.getChartSettings().setBackgroundImage(
-						getImageProvider(cts.getChartSettings()
-								.getBackgroundImage()));
-				cts.getPlotSettings().setBackgroundImage(
-						getImageProvider(cts.getPlotSettings()
-								.getBackgroundImage()));
+		cts.getChartSettings().setBackgroundImage(
+				getImageProvider(cts.getChartSettings().getBackgroundImage()));
+		cts.getPlotSettings().setBackgroundImage(
+				getImageProvider(cts.getPlotSettings().getBackgroundImage()));
 
-				String xml = XmlChartTheme.saveSettings(cts);
-				xml = xml
-						.replaceFirst(
-								"<chart-theme>", "<!-- Created with Jaspersoft Studio -->\n<chart-theme>"); //$NON-NLS-1$ //$NON-NLS-2$
-				IDocumentProvider dp = xmlEditor.getDocumentProvider();
-				IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
-				doc.set(xml);
-				return xml;
-			}
-		} catch (final Exception e) {
-			UIUtils.showError(e);
-		}
-		return null;
+		String xml = XmlChartTheme.saveSettings(cts);
+		xml = xml
+				.replaceFirst(
+						"<chart-theme>", "<!-- Created with Jaspersoft Studio -->\n<chart-theme>"); //$NON-NLS-1$ //$NON-NLS-2$
+		return xml;
 	}
 
 	public void setModel(INode model) {
