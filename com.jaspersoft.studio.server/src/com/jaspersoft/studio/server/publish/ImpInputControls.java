@@ -40,9 +40,7 @@ public class ImpInputControls {
 		this.jrConfig = jrConfig;
 	}
 
-	public void publish(MReportUnit mrunit, IProgressMonitor monitor,
-			JasperDesign jasper, JasperReportsConfiguration jrConfig)
-			throws Exception {
+	public void publish(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, JasperReportsConfiguration jrConfig) throws Exception {
 		for (JRParameter p : jasper.getParametersList()) {
 			if (p.isSystemDefined() || !p.isForPrompting())
 				continue;
@@ -55,13 +53,11 @@ public class ImpInputControls {
 			rd.setVisible(true);
 			rd.setReadOnly(false);
 			rd.setMandatory(false);
-			rd.setResourceProperty(ResourceDescriptor.PROP_INPUTCONTROL_TYPE,
-					ResourceDescriptor.IC_TYPE_SINGLE_VALUE);
+			rd.setResourceProperty(ResourceDescriptor.PROP_INPUTCONTROL_TYPE, ResourceDescriptor.IC_TYPE_SINGLE_VALUE);
 			rd.setParentFolder(runit.getUriString() + "_files");
 			rd.setUriString(runit.getUriString() + "_files/" + rd.getName());
 
-			MInputControl mres = (MInputControl) ResourceFactory.getResource(
-					mrunit, rd, -1);
+			MInputControl mres = (MInputControl) ResourceFactory.getResource(mrunit, rd, -1);
 
 			if (Boolean.class.isAssignableFrom(p.getValueClass())) {
 				rd.setControlType(ResourceDescriptor.IC_TYPE_BOOLEAN);
@@ -86,16 +82,14 @@ public class ImpInputControls {
 		}
 	}
 
-	protected static void addType(ResourceDescriptor rd, MInputControl mres,
-			byte type) {
+	protected static void addType(ResourceDescriptor rd, MInputControl mres, byte type) {
 		ResourceDescriptor rdtype = MDataType.createDescriptor(mres);
 		String name = "myDatatype";
 		rdtype.setName(name);
 		rdtype.setLabel(name);
 		rdtype.setIsNew(true);
 		rdtype.setDataType(type);
-		rdtype.setUriString(String.format("%s/%s/%s", rd.getParentFolder(),
-				rd.getName(), name));
+		rdtype.setUriString(String.format("%s/%s/%s", rd.getParentFolder(), rd.getName(), name));
 
 		rd.getChildren().add(rdtype);
 	}
