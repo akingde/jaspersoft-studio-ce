@@ -199,6 +199,19 @@ public class ModelUtils {
 		}
 		return new ArrayList<JRParameter>();
 	}
+	
+	/**
+	 * Return the position of a child in the children list of the parent
+	 * 
+	 * @param child
+	 * @return the position of the child, or -1 if the child or its parent are null, or 
+	 * if the the children it isn't present in the parent's children lists
+	 */
+	public static int getChildrenPosition(INode child){
+		if (child != null && child.getParent() != null)
+			return child.getParent().getChildren().indexOf(child);
+		return -1;
+	}
 
 	public static List<JRVariable> getVariables4Datasource(JasperDesign jd, String ds) {
 		if (ds == null || ds.equals("")) {

@@ -40,6 +40,7 @@ import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * 
@@ -80,6 +81,12 @@ public class ConvertTextIntoStatic extends SelectionAction {
 		return false;
 	}
 	
+	/**
+	 * Copy the box section from the a linebox to another
+	 * 
+	 * @param fieldBox destination
+	 * @param staticBox source
+	 */
 	private void cloneBox(JRLineBox fieldBox, JRLineBox staticBox){
 		if (fieldBox == null || staticBox == null) return;
 		fieldBox.setBottomPadding(staticBox.getBottomPadding());
@@ -190,7 +197,7 @@ public class ConvertTextIntoStatic extends SelectionAction {
 				modelText.setValue(labelObject);
 				Rectangle position = new Rectangle(textObject.getX(),textObject.getY(),textObject.getWidth(),textObject.getHeight());
 
-				int oldIndex = textField.getParent().getChildren().indexOf(textField);
+				int oldIndex = ModelUtils.getChildrenPosition(textField);
 				CreateElementCommand createCommand = new CreateElementCommand(textField.getParent(), modelText, position, oldIndex);
 				
 				command.add(deleteCommand);
