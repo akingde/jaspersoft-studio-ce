@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 /*
  * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2013 Jaspersoft Corporation. All rights reserved.
@@ -116,35 +111,36 @@ public class ConvertChartContext implements ChartContext {
 
 	public Dataset getDataset() {// FIXMETHEME make different datasets
 		Dataset dataset = null;
-		switch (chart.getDataset().getDatasetType()) {
-		case JRChartDataset.CATEGORY_DATASET:
-			dataset = createCategoryDataset();
-			break;
-		case JRChartDataset.GANTT_DATASET:
-			dataset = createGanttDataset();
-			break;
-		case JRChartDataset.HIGHLOW_DATASET:
-			dataset = createHighLowDataset();
-			break;
-		case JRChartDataset.PIE_DATASET:
-			dataset = createPieDataset();
-			break;
-		case JRChartDataset.TIMEPERIOD_DATASET:
-			dataset = createTimePeriodDataset();
-			break;
-		case JRChartDataset.TIMESERIES_DATASET:
-			dataset = createTimeSeriesDataset();
-			break;
-		case JRChartDataset.VALUE_DATASET:
-			dataset = new DefaultValueDataset(50);
-			break;
-		case JRChartDataset.XY_DATASET:
-			dataset = createXyDataset();
-			break;
-		case JRChartDataset.XYZ_DATASET:
-			dataset = createXyzDataset();
-			break;
-		}
+		if (chart.getDataset() != null)
+			switch (chart.getDataset().getDatasetType()) {
+			case JRChartDataset.CATEGORY_DATASET:
+				dataset = createCategoryDataset();
+				break;
+			case JRChartDataset.GANTT_DATASET:
+				dataset = createGanttDataset();
+				break;
+			case JRChartDataset.HIGHLOW_DATASET:
+				dataset = createHighLowDataset();
+				break;
+			case JRChartDataset.PIE_DATASET:
+				dataset = createPieDataset();
+				break;
+			case JRChartDataset.TIMEPERIOD_DATASET:
+				dataset = createTimePeriodDataset();
+				break;
+			case JRChartDataset.TIMESERIES_DATASET:
+				dataset = createTimeSeriesDataset();
+				break;
+			case JRChartDataset.VALUE_DATASET:
+				dataset = new DefaultValueDataset(50);
+				break;
+			case JRChartDataset.XY_DATASET:
+				dataset = createXyDataset();
+				break;
+			case JRChartDataset.XYZ_DATASET:
+				dataset = createXyzDataset();
+				break;
+			}
 		return dataset;
 	}
 

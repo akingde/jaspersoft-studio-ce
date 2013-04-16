@@ -36,6 +36,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.events.DisposeEvent;
@@ -403,5 +405,37 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		FigureCanvas editor2 = editor.getEditor();
 		if (disposeListener != null && editor2 != null && !editor2.isDisposed())
 			editor2.removeDisposeListener(disposeListener);
+	}
+
+	public void setTreeSelection(ISelection s) {
+		if (s != null && s instanceof StructuredSelection && outline instanceof Tree) {
+			StructuredSelection sel = (StructuredSelection) s;
+			List<?> sobj = sel.toList();
+			List<TreeItem> toSelect = new ArrayList<TreeItem>();
+			Tree tree = (Tree) outline;
+			tree.getItemCount();
+			checkItems(tree.getItems(), toSelect, sobj);
+			if (!toSelect.isEmpty())
+				tree.setSelection(toSelect.toArray(new TreeItem[toSelect.size()]));
+		} else
+			setSelection(s);
+	}
+
+	public void checkItems(TreeItem[] items, List<TreeItem> toSelect, List<?> sobj) {
+		if (items == null)
+			return;
+		for (TreeItem ti : items) {
+			for (Object obj : sobj) {
+				if (obj != null && ti.getData() != null) {
+					if (obj == ti.getData())
+						toSelect.add(ti);
+					else if (obj instanceof EditPart && ti.getData() instanceof EditPart) {
+						if (((EditPart) obj).getModel() == ((EditPart) ti.getData()).getModel())
+							toSelect.add(ti);
+					}
+				}
+			}
+			checkItems(ti.getItems(), toSelect, sobj);
+		}
 	}
 }

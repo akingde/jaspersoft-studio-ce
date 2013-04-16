@@ -33,7 +33,6 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.IMultiEditor;
-import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 
 public class MultiOutlineView extends Page implements IContentOutlinePage, ISelectionProvider,
@@ -138,8 +137,11 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 
 	@Override
 	public void setFocus() {
-		if (currentPage != null)
-			currentPage.setFocus();
+		try {
+			if (currentPage != null)
+				currentPage.setFocus();
+		} catch (Throwable t) {
+		}
 	}
 
 	private IContentOutlinePage getEmptyPage() {
@@ -154,22 +156,20 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 		if (isRefresh)
 			return;
 		isRefresh = true;
-		if (page == null) {
+		if (page == null)
 			page = getEmptyPage();
-		}
-		if (currentPage != null) {
+		if (currentPage != null)
 			currentPage.removeSelectionChangedListener(this);
-		}
 		if (getActionBars() != null && getActionBars().getToolBarManager() != null)
 			getActionBars().getToolBarManager().removeAll();
 		if (getSite() != null && page instanceof JDReportOutlineView) {
+			JDReportOutlineView jdoutpage = (JDReportOutlineView) page;
 			if (page.getControl() != null && page.getControl().isDisposed()) {
-				IGraphicalEditor ed = ((JDReportOutlineView) page).getEditor();
+				IGraphicalEditor ed = jdoutpage.getEditor();
 				if (ed instanceof IAdaptable)
 					page = (IContentOutlinePage) ((IAdaptable) ed).getAdapter(IContentOutlinePage.class);
 			}
-
-			((JDReportOutlineView) page).init(getSite());
+			jdoutpage.init(getSite());
 		}
 
 		page.addSelectionChangedListener(this);
@@ -187,7 +187,11 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 			control = page.getControl();
 		}
 		pagebook.showPage(control);
-		setSelection(page.getSelection());
+		if (page instanceof JDReportOutlineView) {
+			JDReportOutlineView jdoutpage = (JDReportOutlineView) page;
+			jdoutpage.setTreeSelection(selection);
+		} else
+			setSelection(page.getSelection());
 		if (getActionBars() != null && getActionBars().getToolBarManager() != null)
 			getActionBars().getToolBarManager().update(true);
 		isRefresh = false;

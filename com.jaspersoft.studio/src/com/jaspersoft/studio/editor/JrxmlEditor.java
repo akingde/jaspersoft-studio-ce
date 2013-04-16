@@ -46,6 +46,7 @@ import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -669,8 +670,12 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	protected void pageChange(int newPageIndex) {
 		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_XMLEDITOR || newPageIndex == PAGE_PREVIEW) {
-			if (activePage == PAGE_DESIGNER)
-				tmpselection = reportContainer.getActiveEditor().getSite().getSelectionProvider().getSelection();
+			if (activePage == PAGE_DESIGNER) {
+				if (outlinePage != null)
+					tmpselection = outlinePage.getSite().getSelectionProvider().getSelection();
+				else
+					tmpselection = reportContainer.getActiveEditor().getSite().getSelectionProvider().getSelection();
+			}
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
 				if (activePage == PAGE_XMLEDITOR && !xmlFresh) {
@@ -691,7 +696,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 					@Override
 					public void run() {
-						reportContainer.getActiveEditor().getSite().getSelectionProvider().setSelection(tmpselection);
+						ISelectionProvider sp = null;
+						if (outlinePage != null)
+							sp = outlinePage.getSite().getSelectionProvider();
+						else
+							sp = reportContainer.getActiveEditor().getSite().getSelectionProvider();
+
+						sp.setSelection(tmpselection);
 					}
 				});
 				break;
