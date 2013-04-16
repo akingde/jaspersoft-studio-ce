@@ -431,9 +431,11 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		JasperDesign jrDesign = (JasperDesign) getValue();
 		if (id.equals(JasperDesign.PROPERTY_NAME))
 			jrDesign.setName((String) value);
-		else if (id.equals(JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS))
+		else if (id.equals(JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS)) {
+			if (value instanceof String && ((String) value).trim().isEmpty())
+				value = null;
 			jrDesign.setFormatFactoryClass((String) value);
-		else if (id.equals(JasperDesign.PROPERTY_IMPORTS)) {
+		} else if (id.equals(JasperDesign.PROPERTY_IMPORTS)) {
 			String[] imports = jrDesign.getImports();
 			if (imports != null) {
 				int lenght = imports.length;
