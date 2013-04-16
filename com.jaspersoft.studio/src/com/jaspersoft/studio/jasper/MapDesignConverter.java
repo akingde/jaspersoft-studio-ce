@@ -40,8 +40,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class MapDesignConverter extends ElementIconConverter implements ComponentDesignConverter {
 
-	private static final Float DEFAULT_LONGITUDE = new Float(45.433967);
-	private static final Float DEFAULT_LATITUDE = new Float(12.337967);
+	public static final Float DEFAULT_LONGITUDE = new Float(12.337967);
+	public static final Float DEFAULT_LATITUDE = new Float(45.433967);
 	/**
 	 *
 	 */
@@ -78,7 +78,7 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 						JasperDesign jd = jConfig.getJasperDesign();
 						JRDataset jrd = jd.getMainDataset();
 						JRElementDataset dataset = null;
-						if(map.getMarkerData()!=null){
+						if (map.getMarkerData() != null) {
 							dataset = map.getMarkerData().getDataset();
 						}
 						if (dataset != null && dataset.getDatasetRun() != null) {

@@ -49,6 +49,7 @@ import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.marker.MarkerDescriptor;
 import com.jaspersoft.studio.components.map.model.marker.MarkersDTO;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
+import com.jaspersoft.studio.jasper.MapDesignConverter;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
@@ -252,7 +253,7 @@ public class MMap extends MGraphicElement {
 		StandardMapComponent component = getMapComponent();
 
 		if (id.equals(StandardItemData.PROPERTY_ITEMS)) {
-			List<Item> markers = ModelUtils.safeGetMarkerData(component,false).getItems();
+			List<Item> markers = ModelUtils.safeGetMarkerData(component, false).getItems();
 			if (markers == null)
 				markers = new ArrayList<Item>();
 			else {
@@ -261,7 +262,7 @@ public class MMap extends MGraphicElement {
 			return new MarkersDTO(markers, this);
 		}
 		if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
-			JRElementDataset markerdataset = ModelUtils.safeGetMarkerData(component,false).getDataset();
+			JRElementDataset markerdataset = ModelUtils.safeGetMarkerData(component, false).getDataset();
 			JRDatasetRun j = null;
 			if (markerdataset != null)
 				j = markerdataset.getDatasetRun();
@@ -413,9 +414,9 @@ public class MMap extends MGraphicElement {
 		StandardMapComponent component = new StandardMapComponent();
 		component.setMarkerDataset(new StandardMarkerDataset());
 		JRDesignExpression exp1 = new JRDesignExpression();
-		exp1.setText("45.433967f"); //$NON-NLS-1$
+		exp1.setText(MapDesignConverter.DEFAULT_LATITUDE.toString() + "f"); //$NON-NLS-1$
 		JRDesignExpression exp2 = new JRDesignExpression();
-		exp2.setText("12.337967f"); //$NON-NLS-1$
+		exp2.setText(MapDesignConverter.DEFAULT_LONGITUDE.toString() + "f"); //$NON-NLS-1$
 		component.setLatitudeExpression(exp1);
 		component.setLongitudeExpression(exp2);
 		JRDesignExpression exp3 = new JRDesignExpression();
