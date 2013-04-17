@@ -14,8 +14,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
