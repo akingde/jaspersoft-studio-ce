@@ -215,6 +215,11 @@ public class Messages extends NLS {
 	public static String ServerProfilePage_4;
 	public static String ServerProfilePage_8;
 	public static String ServerProfilePage_9;
+	public static String ServerProfilePage_advancedsettings;
+	public static String ServerProfilePage_chunkedrequest;
+	public static String ServerProfilePage_connectiontimeout;
+	public static String ServerProfilePage_daterangeexpression;
+	public static String ServerProfilePage_jrversion;
 	public static String ValidationUtils_DescriptionTooLongErr;
 	public static String ValidationUtils_LabelEmptyErr;
 	public static String ValidationUtils_LabelTooLongErr;

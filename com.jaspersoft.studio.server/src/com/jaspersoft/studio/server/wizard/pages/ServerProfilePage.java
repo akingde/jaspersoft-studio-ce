@@ -108,7 +108,7 @@ public class ServerProfilePage extends WizardPage {
 				ExpandableComposite.TREE_NODE);
 		expcmp.setTitleBarForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 		UIUtil.setBold(expcmp);
-		expcmp.setText("Advanced Settings");
+		expcmp.setText(Messages.ServerProfilePage_advancedsettings);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		expcmp.setLayoutData(gd);
@@ -131,24 +131,24 @@ public class ServerProfilePage extends WizardPage {
 			}
 		});
 
-		new Label(cmp, SWT.NONE).setText("JasperReports Library Version");
+		new Label(cmp, SWT.NONE).setText(Messages.ServerProfilePage_jrversion);
 
 		VersionCombo cversion = new VersionCombo(cmp);
 		cversion.setVersion(JRXmlWriterHelper.LAST_VERSION);
 
-		new Label(cmp, SWT.NONE).setText("Connection Timeout [ms]");
+		new Label(cmp, SWT.NONE).setText(Messages.ServerProfilePage_connectiontimeout);
 
 		Text ttimeout = new Text(cmp, SWT.BORDER);
 		ttimeout.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button bchunked = new Button(cmp, SWT.CHECK);
-		bchunked.setText("Http Chuncked Requests");
+		bchunked.setText(Messages.ServerProfilePage_chunkedrequest);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bchunked.setLayoutData(gd);
 
 		Button bdaterange = new Button(cmp, SWT.CHECK);
-		bdaterange.setText("Supports DateRange Expressions");
+		bdaterange.setText(Messages.ServerProfilePage_daterangeexpression);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bdaterange.setLayoutData(gd);
@@ -217,6 +217,6 @@ public class ServerProfilePage extends WizardPage {
 	@Override
 	public void performHelp() {
 		PlatformUI.getWorkbench().getHelpSystem()
-				.displayHelp("com.jaspersoft.studio.doc.jaspersoftserver");
+				.displayHelp("com.jaspersoft.studio.doc.jaspersoftserver"); //$NON-NLS-1$
 	}
 }

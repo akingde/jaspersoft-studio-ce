@@ -50,8 +50,7 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 		setText(Messages.CreateServerAction_title);
 		setDescription(Messages.CreateServerAction_desc);
 		setToolTipText(Messages.CreateServerAction_desc);
-		setImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/server--plus.png")); //$NON-NLS-1$
+		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/server--plus.png")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 
@@ -70,16 +69,14 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 				srv.setName(Messages.CreateServerAction_name);
 				srv.setUrl("http://localhost:8080/jasperserver/services/repository"); //$NON-NLS-1$
 				srv.setUser("username"); //$NON-NLS-1$
-				ServerProfileWizard wizard = new ServerProfileWizard(
-						new MServerProfile(null, srv));
-				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(
-						Display.getDefault().getActiveShell(), wizard);
+				srv.setSupportsDateRanges(true);
+				ServerProfileWizard wizard = new ServerProfileWizard(new MServerProfile(null, srv));
+				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(Display.getDefault().getActiveShell(), wizard);
 				wizard.bindTestButton(dialog);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
 					mservprof = wizard.getServerProfile();
-					MServerProfile newprofile = new MServerProfile(
-							(MServers) n, mservprof.getValue());
+					MServerProfile newprofile = new MServerProfile((MServers) n, mservprof.getValue());
 					for (INode cn : mservprof.getChildren())
 						newprofile.addChild((ANode) cn);
 					newprofile.setWsClient(mservprof.getWsClient());
