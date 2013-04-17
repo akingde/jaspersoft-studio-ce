@@ -384,8 +384,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		objectsNavigator.setInput(rootCategories
 				.toArray(new ObjectCategoryItem[rootCategories.size()]));
 		objectsNavigator.expandAll();
-		objectsNavigator.setSelection(new StructuredSelection(objectsNavigator
-				.getTree().getItem(0).getData()), true);
+		performCategorySelection(null);
 	}
 
 	public void addExpressionStatusChangeListener(
@@ -487,6 +486,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 				objectsNavigator.setSelection(new StructuredSelection(
 						parametersCategoryItem), true);
 			}
+			return;
 		}
 		// Choose the right category
 		for (TreeItem item : objectsNavigator.getTree().getItems()) {
@@ -576,5 +576,5 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		}
 		super.dispose();
 	}
-
+	
 }
