@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.tools.mapping;
 
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -47,6 +48,12 @@ public class BeanMappingTool implements IMappingTool {
 	private Composite control;
 	private org.eclipse.swt.widgets.List methods;
 	private PropertyDescriptor[] methodsarray;
+	
+	/**
+	 * Map to bind a primitive type name to its wrapper class name
+	 */
+	private static HashMap<String, String> primitiveTypeMap = null;
+	
 
 	public String getName() {
 		return Messages.BeanMappingTool_toolname;
@@ -54,6 +61,30 @@ public class BeanMappingTool implements IMappingTool {
 
 	public Control getControl() {
 		return control;
+	}
+	
+	/**
+	 * Take a class and return the name of the type. If the name is 
+	 * a primitive type, then the name of the wrapper is returned
+	 * 
+	 * @param propertyType a not null property type
+	 * @return a class name
+	 */
+	private static String getClassName(Class<?> propertyType){
+		if (primitiveTypeMap == null){
+			primitiveTypeMap = new HashMap<String, String>();
+			primitiveTypeMap.put("byte", "java.lang.Byte");
+			primitiveTypeMap.put("short", "java.lang.Short");
+			primitiveTypeMap.put("int", "java.lang.Integer");
+			primitiveTypeMap.put("long", "java.lang.Long");
+			primitiveTypeMap.put("float", "java.lang.Float");
+			primitiveTypeMap.put("double", "java.lang.Double");
+			primitiveTypeMap.put("char", "java.lang.Character");
+			primitiveTypeMap.put("boolean", "java.lang.Boolean");
+		}
+		String className = propertyType.getCanonicalName();
+		if (primitiveTypeMap.containsKey(className)) className = primitiveTypeMap.get(className);
+		return className;
 	}
 
 	public Control createControl(Composite parent) {
@@ -112,7 +143,7 @@ public class BeanMappingTool implements IMappingTool {
 						Class<?> propertyType = methodsarray[items[i]]
 								.getPropertyType();
 						if (propertyType != null)
-							f.setValueClassName(propertyType.getCanonicalName());
+							f.setValueClassName(getClassName(propertyType));
 						else
 							f.setValueClass(Object.class);
 						String description = methodsarray[items[i]]
