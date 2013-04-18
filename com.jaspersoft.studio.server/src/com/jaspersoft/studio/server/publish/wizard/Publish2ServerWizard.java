@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
@@ -96,7 +97,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 			if (obj instanceof IFile) {
 				IFile file = (IFile) obj;
 				jrConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
-				if (file.getFileExtension().equals("jrxml") || file.getFileExtension().equals("jasper"))
+				if (file.getFileExtension().equalsIgnoreCase(FileExtension.JRXML) || file.getFileExtension().equalsIgnoreCase(FileExtension.JASPER))
 					initJDesign(file);
 			}
 		}

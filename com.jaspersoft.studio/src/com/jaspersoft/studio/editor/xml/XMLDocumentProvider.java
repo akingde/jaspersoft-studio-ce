@@ -25,6 +25,7 @@ import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnmappableCharacterException;
 import java.nio.charset.UnsupportedCharsetException;
 
+import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 
@@ -97,7 +98,7 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 		try {
 			if (editorInput instanceof IFileEditorInput) {
 				String fileExtention = JrxmlEditor.getFileExtension(editorInput);
-				if (fileExtention.equals("jasper")) { //$NON-NLS-1$
+				if (fileExtention.equals(FileExtension.JASPER)) {
 					IFile file = ((IFileEditorInput) editorInput).getFile();
 					stream = file.getContents(false);
 					setDocumentContent(document,
@@ -122,7 +123,7 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	@Override
 	protected void doSaveDocument(IProgressMonitor monitor, Object element, IDocument document, boolean overwrite)
 			throws CoreException {
-		if (JrxmlEditor.getFileExtension((IEditorInput) element).equals("jasper")) { //$NON-NLS-1$
+		if (JrxmlEditor.getFileExtension((IEditorInput) element).equals(FileExtension.JASPER)) {
 			return; // do not save .jasper files, they are binary
 		}
 		if (element instanceof FileStoreEditorInput) {

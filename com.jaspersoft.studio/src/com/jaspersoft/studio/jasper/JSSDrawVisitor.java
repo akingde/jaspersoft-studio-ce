@@ -73,7 +73,11 @@ public class JSSDrawVisitor extends UniformElementVisitor {
 	@Override
 	protected void visitElement(JRElement element) {
 		JRPrintElement printElement = convertVisitor.getVisitPrintElement(element);
+		try {
 		printElement.accept(drawVisitor, elementOffset(element));
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
 	}
 
 	protected Offset elementOffset(JRElement element) {

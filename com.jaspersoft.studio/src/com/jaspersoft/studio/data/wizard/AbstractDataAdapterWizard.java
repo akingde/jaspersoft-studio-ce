@@ -142,7 +142,7 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 						monitor.beginTask("Testing DataAdapter", SWT.INDETERMINATE);
 						ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 						try {
-							ClassLoader cl = null;
+							ClassLoader cl = Thread.currentThread().getContextClassLoader();
 							IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 							for (IProject p : prjs) {
 								if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
