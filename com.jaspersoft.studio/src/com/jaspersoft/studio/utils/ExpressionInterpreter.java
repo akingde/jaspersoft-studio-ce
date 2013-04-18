@@ -27,12 +27,11 @@ public class ExpressionInterpreter {
 	private AInterpreter interpreter;
 
 	public ExpressionInterpreter(JRDesignDataset dataset, JasperReportsConfiguration jConfig) {
-		this(dataset, null, jConfig);
+		this(dataset, jConfig.getJasperDesign(), jConfig);
 	}
 
 	public ExpressionInterpreter(JRDesignDataset dataset, JasperDesign jasperDesign, JasperReportsConfiguration jConfig) {
 		try {
-
 			if (jasperDesign.getLanguage().equalsIgnoreCase(JRReport.LANGUAGE_JAVA))
 				interpreter = new JavaInterpreter();
 			else if (jasperDesign.getLanguage().equalsIgnoreCase(JRReport.LANGUAGE_GROOVY))
