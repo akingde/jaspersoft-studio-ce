@@ -37,10 +37,12 @@ import com.jaspersoft.studio.model.MGraphicElement;
 public class PasteCommand extends Command {
 	private Map<ANode, Command> list = new HashMap<ANode, Command>();
 	private IPastable parent;
+	private int createdNodes;
 
 	public PasteCommand(IPastable parent) {
 		super();
 		this.parent = parent;
+		createdNodes = 0;
 	}
 
 	@Override
@@ -69,6 +71,7 @@ public class PasteCommand extends Command {
 	public void execute() {
 		if (!canExecute())
 			return;
+		createdNodes = 0;
 		for (ANode node : list.keySet()) {
 			CompoundCommand cmd = new CompoundCommand();
 			// create new Node put, clone into it
@@ -94,8 +97,10 @@ public class PasteCommand extends Command {
 					}
 					// create command
 					Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, rect, -1);
-					if (cmdc != null)
+					if (cmdc != null){
 						cmd.add(cmdc);
+						createdNodes ++;
+					}
 
 					if (!cmd.isEmpty())
 						list.put(node, cmd);
@@ -118,6 +123,14 @@ public class PasteCommand extends Command {
 				cmd.execute();
 		}
 	}
+	
+	public int getCreatedNodesNumber(){
+		return createdNodes;
+	}
+	
+	public IPastable getPasteParent(){
+		return parent;
+	}
 
 	@Override
 	public boolean canUndo() {
@@ -131,6 +144,7 @@ public class PasteCommand extends Command {
 			Command cmd = it.next();
 			cmd.undo();
 		}
+		createdNodes = 0;
 	}
 
 	public boolean isPastableNode(Object node) {

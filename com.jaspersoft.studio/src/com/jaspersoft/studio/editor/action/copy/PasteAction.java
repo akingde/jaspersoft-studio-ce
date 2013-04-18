@@ -15,10 +15,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.copy;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -29,6 +32,7 @@ import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 
 public class PasteAction extends SelectionAction {
@@ -52,9 +56,9 @@ public class PasteAction extends SelectionAction {
 
 	}
 
-	private Command createPasteCommand(List<?> selectedObjects) {
+	private PasteCommand createPasteCommand(List<?> selectedObjects) {
 		for (Object selection : selectedObjects) {
-			Command cmd = getPasteComand(selection);
+			PasteCommand cmd = getPasteComand(selection);
 			if (cmd != null)
 				return cmd;
 			if (selection instanceof StructuredSelection) {
@@ -70,7 +74,7 @@ public class PasteAction extends SelectionAction {
 		return null;
 	}
 
-	private Command getPasteComand(Object selection) {
+	private PasteCommand getPasteComand(Object selection) {
 		if (selection instanceof EditPart) {
 			ANode n = (ANode) ((EditPart) selection).getModel();
 			IPastable past = getParent2Paste(n);
@@ -95,13 +99,57 @@ public class PasteAction extends SelectionAction {
 
 	@Override
 	protected boolean calculateEnabled() {
+		
 		Command command = createPasteCommand(getSelectedObjects());
 		return command != null && command.canExecute();
 	}
 
 	@Override
 	public void run() {
-		execute(createPasteCommand(getSelectedObjects()));
+		PasteCommand command = createPasteCommand(getSelectedObjects());
+		execute(command);
+		
+		//Select the pasted edit part
+		GraphicalViewer viewer = (GraphicalViewer) getWorkbenchPart().getAdapter(GraphicalViewer.class);
+		if (viewer != null) {
+			viewer.setSelection(new StructuredSelection(
+					getSelectableEditParts(viewer, command.getPasteParent(), command.getCreatedNodesNumber())));
+		}
+	}
+	
+	/**
+	 * Return a list of the edit part created because the past operation
+	 * 
+	 * @param viewer
+	 * @param pasteParent parent of the pasted elements
+	 * @param createdElements number of pasted elements
+	 * @return the editpart created for the paste operation, so they can be selected
+	 */
+	@SuppressWarnings("rawtypes")
+	private List<EditPart> getSelectableEditParts(GraphicalViewer viewer, IPastable pasteParent, int createdElements) {
+		List<EditPart> selectableChildren = new ArrayList<EditPart>();
+		if (!(pasteParent instanceof ANode)) return selectableChildren;
+		
+		ANode parentModel = (ANode) pasteParent;
+		HashSet<INode> pastedModels = new HashSet<INode>();
+		int elementsToInsert = createdElements;
+		List<INode> childrens = parentModel.getChildren();
+		while (elementsToInsert>0) {
+			pastedModels.add(childrens.get(childrens.size()-elementsToInsert));
+			elementsToInsert--;	
+		}
+		
+		List children = viewer.getContents().getChildren();
+		for (Iterator iter = children.iterator(); iter.hasNext();) {
+			Object child = iter.next();
+			if (child instanceof EditPart) {
+				EditPart part = (EditPart) child;
+				if (pastedModels.contains(part.getModel()) && part.isSelectable()){
+						selectableChildren.add(part);
+				}
+			}
+		}
+		return selectableChildren;
 	}
 
 }
