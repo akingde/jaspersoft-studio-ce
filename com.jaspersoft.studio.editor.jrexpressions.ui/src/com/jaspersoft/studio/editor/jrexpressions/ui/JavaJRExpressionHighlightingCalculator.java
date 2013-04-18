@@ -22,13 +22,18 @@ import org.eclipse.xtext.nodemodel.ILeafNode;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultHighlightingConfiguration;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightedPositionAcceptor;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.DoubleLiteral;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FloatLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.IntLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRFieldObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRParameterObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRVariableObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.LongLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StringLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.util.JRExpressionsModelUtil;
 
@@ -70,7 +75,20 @@ public class JavaJRExpressionHighlightingCalculator implements ISemanticHighligh
 					acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.FUNCTION_METHOD);
 				}
 			}
+			else if(isNumberElement(semanticElement)){
+				acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), DefaultHighlightingConfiguration.NUMBER_ID);
+			}
 		}
+	}
+	
+	/*
+	 * Checks if the semantic element can be a "Number".
+	 */
+	private static final boolean isNumberElement(EObject element){
+		return element instanceof IntLiteral ||
+				element instanceof LongLiteral ||
+				element instanceof FloatLiteral ||
+				element instanceof DoubleLiteral;
 	}
 
 }
