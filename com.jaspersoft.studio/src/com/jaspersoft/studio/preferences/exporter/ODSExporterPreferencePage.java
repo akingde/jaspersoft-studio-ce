@@ -1,16 +1,20 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: Jaspersoft Studio Team - initial API and implementation
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
-import net.sf.jasperreports.engine.export.JExcelApiExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
 
@@ -43,9 +47,11 @@ import com.jaspersoft.studio.utils.Misc;
 /*
  * 
  */
-public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
+public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 	// jexcelapi
-	public static final String NSF_EXPORT_XLS_USE_TIMEZONE = "net.sf.jasperreports.export.xls.use.timezone"; //$NON-NLS-1$ 
+	public static final String NSF_EXPORT_XLS_USE_TMP_FILE = "net.sf.jasperreports.export.xls.use.temp.file"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_XLS_USE_TIMEZONE = "net.sf.jasperreports.export.xls.use.timezone"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT = "net.sf.jasperreports.export.xls.cell.complex.format"; //$NON-NLS-1$
 
 	// sheet
 	public static final String NSF_EXPORT_XLS_SHEET_DIRECTION = "net.sf.jasperreports.export.xls.sheet.direction"; //$NON-NLS-1$
@@ -71,10 +77,10 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 
 	public static final String NSF_EXPORT_XLS_COLUMN_WIDTH_RATIO = "net.sf.jasperreports.export.xls.column.width.ratio";//$NON-NLS-1$
 
-	public ExcelExporterPreferencePage() {
+	public ODSExporterPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription(Messages.ExcelExporterPreferencePage_title);
+		setDescription("ODS Exporter Parameters");
 	}
 
 	/**
@@ -309,10 +315,8 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		addField(new BooleanFieldEditor(JExcelApiExporter.PROPERTY_USE_TEMP_FILE, Messages.ExcelExporterPreferencePage_62,
-				sc));
-		addField(new BooleanFieldEditor(JExcelApiExporter.PROPERTY_COMPLEX_FORMAT, Messages.ExcelExporterPreferencePage_63,
-				sc));
+		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_USE_TMP_FILE, Messages.ExcelExporterPreferencePage_62, sc));
+		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT, Messages.ExcelExporterPreferencePage_63, sc));
 
 		scompo.setMinSize(sc.getSize());
 		scompo.setContent(sc);
@@ -325,13 +329,13 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE));
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD))); //$NON-NLS-1$
-		store.setDefault(JExcelApiExporter.PROPERTY_USE_TEMP_FILE,
-				Misc.nvl(PropertiesHelper.DPROP.getProperty(JExcelApiExporter.PROPERTY_USE_TEMP_FILE), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_USE_TMP_FILE,
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_USE_TMP_FILE), "")); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_USE_TIMEZONE,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_USE_TIMEZONE), "")); //$NON-NLS-1$
 
-		store.setDefault(JExcelApiExporter.PROPERTY_COMPLEX_FORMAT,
-				Misc.nvl(PropertiesHelper.DPROP.getProperty(JExcelApiExporter.PROPERTY_COMPLEX_FORMAT))); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT,
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT))); //$NON-NLS-1$
 		// COMMON
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN,
 				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN));

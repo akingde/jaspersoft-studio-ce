@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
-import com.jaspersoft.studio.editor.preview.actions.export.ExportAsHtmlAction;
+import com.jaspersoft.studio.editor.preview.actions.export.html.ExportAsHtmlAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;

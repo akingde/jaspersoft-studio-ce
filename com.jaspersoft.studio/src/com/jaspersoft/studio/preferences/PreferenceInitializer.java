@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
@@ -27,6 +22,7 @@ import com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.ODSExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage;
@@ -63,6 +59,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		XMLExporterPreferencePage.getDefaults(store);
 		TextExporterPreferencePage.getDefaults(store);
 
+		ODSExporterPreferencePage.getDefaults(store);
 		DOCXExporterPreferencePage.getDefaults(store);
 		G2DExporterPreferencePage.getDefaults(store);
 

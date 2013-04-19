@@ -13,33 +13,34 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.editor.preview.actions.export;
+package com.jaspersoft.studio.editor.preview.actions.export.html;
 
 import net.sf.jasperreports.engine.JRAbstractExporter;
-import net.sf.jasperreports.engine.export.HtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
+import net.sf.jasperreports.engine.export.JRXhtmlExporter;
 
+import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class ExportAsLHtmlAction extends AbstractExportAction {
+public class ExportAsXHtmlAction extends AbstractExportAction {
 
-	public ExportAsLHtmlAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+	public ExportAsXHtmlAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
 		super(viewer, jContext);
 
-		setText(Messages.ExportAsLHtmlAction_title);
-		setToolTipText(Messages.ExportAsLHtmlAction_title);
+		setText(Messages.ExportAsXHtmlAction_title);
+		setToolTipText(Messages.ExportAsXHtmlAction_tooltip);
 
-		setFileExtensions(new String[] { "*.html" }); //$NON-NLS-1$ //$NON-NLS-2$
-		setFilterNames(new String[] { Messages.ExportAsHtmlAction_filternames1 });
-		setDefaultFileExtension("html"); //$NON-NLS-1$
+		setFileExtensions(new String[] { "*.xhtml" }); //$NON-NLS-1$ //$NON-NLS-2$
+		setFilterNames(new String[] { Messages.ExportAsXHtmlAction_filternames });
+		setDefaultFileExtension("xhtml"); //$NON-NLS-1$
 	}
 
 	@Override
 	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
-		HtmlExporter exp = new HtmlExporter(jContext);
+		JRXhtmlExporter exp = new JRXhtmlExporter(jContext);
 
 		exp.setParameter(JRHtmlExporterParameter.FLUSH_OUTPUT,
 				jContext.getPropertyBoolean(JRHtmlExporterParameter.PROPERTY_FLUSH_OUTPUT));

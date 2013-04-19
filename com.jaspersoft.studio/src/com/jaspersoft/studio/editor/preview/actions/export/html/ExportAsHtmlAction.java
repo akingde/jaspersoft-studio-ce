@@ -13,12 +13,13 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.editor.preview.actions.export;
+package com.jaspersoft.studio.editor.preview.actions.export.html;
 
 import net.sf.jasperreports.engine.JRAbstractExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 
+import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage;
