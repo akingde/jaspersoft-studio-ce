@@ -18,13 +18,14 @@ package com.jaspersoft.studio.preferences;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.FontFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.editor.font.FontsComboFieldEditor;
-import com.jaspersoft.studio.preferences.editor.text.NStringFieldEditor;
+import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.property.section.report.util.Unit;
 
@@ -52,10 +53,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_ELEMENT_DESIGN_BORDER_COLOR = "elementDesignBorderColor"; //$NON-NLS-1$
 
 	// editors font information
-	public static final String P_EDITORS_FONT_FAMILY = "editorsFontFamily"; //$NON-NLS-1$
-	public static final String P_EDITORS_FONT_HEIGHT = "editorsFontHeight"; //$NON-NLS-1$
-	public static final String DEFAULT_EDITORS_FONT_FAMILY = "Monospaced"; //$NON-NLS-1$
-	public static final String DEFAULT_EDITORS_FONT_HEIGHT = "10"; //$NON-NLS-1$
+	public static final String P_INTERNAL_EDITORS_FONT = "internalEditorsFont"; //$NON-NLS-1$
 
 	public DesignerPreferencePage() {
 		super(GRID);
@@ -90,14 +88,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new ColorFieldEditor(P_PAGE_BACKGROUND, Messages.DesignerPreferencePage_pagebackground,
 				getFieldEditorParent()));
-		FontsComboFieldEditor fontFamilyFieldEditor = new FontsComboFieldEditor(
-				P_EDITORS_FONT_FAMILY, Messages.DesignerPreferencePage_InternalEditorsFontFamily, getFieldEditorParent());
-		fontFamilyFieldEditor.setTooltipText(Messages.DesignerPreferencePage_InternalEditorsFontFamilyTooltip);
-		addField(fontFamilyFieldEditor);
-		NStringFieldEditor fontHeightEditor = new NStringFieldEditor(
-				P_EDITORS_FONT_HEIGHT, Messages.DesignerPreferencePage_InternalEditorsFontHeight, 3, getFieldEditorParent());
-		fontHeightEditor.setTooltipText(Messages.DesignerPreferencePage_InternalEditorsFontHeightTooltip);
-		addField(fontHeightEditor);
+		addField(new FontFieldEditor(P_INTERNAL_EDITORS_FONT, Messages.DesignerPreferencePage_InternalEditorsFont, getFieldEditorParent()));		
 	}
 
 	/*
@@ -117,8 +108,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_PAGE_MARGIN_COLOR, DEFAULT_MARGINCOLOR);
 		store.setDefault(P_SHOW_REPORT_BAND_NAMES, true);
 		store.setDefault(P_PAGE_BACKGROUND, DEFAULT_PAGE_BACKGROUND); 
-		store.setDefault(P_EDITORS_FONT_FAMILY, DEFAULT_EDITORS_FONT_FAMILY);
-		store.setDefault(P_EDITORS_FONT_HEIGHT, DEFAULT_EDITORS_FONT_HEIGHT);
+		PreferenceConverter.setDefault(store,P_INTERNAL_EDITORS_FONT, FontUtils.getTextEditorFontData());	
 	}
 
 	@Override

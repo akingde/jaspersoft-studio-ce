@@ -18,8 +18,11 @@ package com.jaspersoft.studio.preferences.fonts.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.swt.SWT;
+import org.eclipse.jdt.ui.PreferenceConstants;
+import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
@@ -74,21 +77,43 @@ public class FontUtils {
 	 * @return the shared font for JSS editors
 	 */
 	public static Font getEditorsFont(JasperReportsConfiguration jconfig){
+		String fontDataStr = null;
 		if(jconfig!=null){
-			String fontFamily = jconfig.getProperty(
-					DesignerPreferencePage.P_EDITORS_FONT_FAMILY,
-					DesignerPreferencePage.DEFAULT_EDITORS_FONT_FAMILY);
-			String fontHeight = jconfig.getProperty(
-					DesignerPreferencePage.P_EDITORS_FONT_HEIGHT,
-					DesignerPreferencePage.DEFAULT_EDITORS_FONT_HEIGHT);
-			return ResourceManager.getFont(fontFamily, Integer.valueOf(fontHeight), SWT.NONE);
+			fontDataStr = jconfig.getProperty(
+					DesignerPreferencePage.P_INTERNAL_EDITORS_FONT, getTextEditorFontDataAsString());
 		}
 		else {
 			// Gets default from JaspersoftStudio plugin
-			return ResourceManager.getFont(
-					PreferencesUtils.getJaspersoftStudioPrefStore().getString(DesignerPreferencePage.P_EDITORS_FONT_FAMILY), 
-					PreferencesUtils.getJaspersoftStudioPrefStore().getInt(DesignerPreferencePage.P_EDITORS_FONT_HEIGHT), SWT.NONE);
+			fontDataStr = PreferencesUtils.getJaspersoftStudioPrefStore().getString(
+					DesignerPreferencePage.P_INTERNAL_EDITORS_FONT);
 		}
+		FontData[] fontDataArray = PreferenceConverter.basicGetFontData(fontDataStr);
+		return ResourceManager.getFont(fontDataArray[0].getName(), fontDataArray[0].getHeight(), fontDataArray[0].getStyle());
+
+	}
+	
+	/**
+	 * Gets the {@link FontData} instance representing the basic text font.
+	 * 
+	 * @see JFaceResources#TEXT_FONT 
+	 */
+	public static FontData getTextEditorFontData(){
+		FontData textFontData=PreferenceConverter.getFontData(
+				PreferenceConstants.getPreferenceStore(), JFaceResources.TEXT_FONT);
+		return textFontData;
+	}
+	
+	/**
+	 * Gets the string preference property representing the basic text font.
+	 * 
+	 * @see JFaceResources#TEXT_FONT 
+	 */
+	public static String getTextEditorFontDataAsString(){
+		FontData editorTextFontData = getTextEditorFontData();
+		if(editorTextFontData!=null){
+			return PreferenceConverter.getStoredRepresentation(new FontData[]{editorTextFontData});
+		}
+		return null;
 	}
 	
 }
