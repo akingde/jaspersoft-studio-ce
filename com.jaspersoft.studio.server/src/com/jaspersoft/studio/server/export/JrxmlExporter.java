@@ -46,17 +46,15 @@ public class JrxmlExporter extends AExporter {
 	public static final String PROP_REPORT_ISMAIN = "ireport.jasperserver.report.ismain";
 
 	@Override
-	public IFile exportToIFile(MResource res, ResourceDescriptor rd,
-			String fkeyname) throws Exception {
+	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname) throws Exception {
 		IFile f = super.exportToIFile(res, rd, fkeyname);
-		f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID,
-				PROP_REPORT_ISMAIN), Boolean.toString(rd.isMainReport()));
+		if (f != null)
+			f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_REPORT_ISMAIN), Boolean.toString(rd.isMainReport()));
 		return f;
 	}
 
 	@Override
-	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname)
-			throws Exception {
+	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname) throws Exception {
 		File f = super.exportFile(res, rd, fkeyname);
 		if (f != null) {
 			try {
@@ -69,8 +67,7 @@ public class JrxmlExporter extends AExporter {
 				try {
 					MServerProfile sp = (MServerProfile) res.getRoot();
 					if (sp != null) {
-						fw.write(JRXmlWriterHelper.writeReport(null, jd, sp
-								.getValue().getJrVersion()));
+						fw.write(JRXmlWriterHelper.writeReport(null, jd, sp.getValue().getJrVersion()));
 					}
 				} finally {
 					FileUtils.closeStream(fw);
@@ -120,7 +117,6 @@ public class JrxmlExporter extends AExporter {
 		}
 	}
 
-	protected void cacheResource(MResource res, JRExpression imgexp)
-			throws Exception {
+	protected void cacheResource(MResource res, JRExpression imgexp) throws Exception {
 	}
 }

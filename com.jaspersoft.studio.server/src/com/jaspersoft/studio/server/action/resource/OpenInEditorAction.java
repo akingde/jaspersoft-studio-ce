@@ -40,7 +40,6 @@ import com.jaspersoft.studio.server.export.ResourceBundleExporter;
 import com.jaspersoft.studio.server.export.StyleTemplateExporter;
 import com.jaspersoft.studio.server.export.XmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
@@ -78,9 +77,7 @@ public class OpenInEditorAction extends Action {
 	}
 
 	private boolean isFileResource(Object obj) {
-		return (obj != null && (obj instanceof MJrxml
-				|| obj instanceof MXmlFile || obj instanceof MRImage
-				|| obj instanceof MResourceBundle || obj instanceof MRStyleTemplate));
+		return (obj != null && (obj instanceof MJrxml || obj instanceof MXmlFile || obj instanceof MRImage || obj instanceof MResourceBundle || obj instanceof MRStyleTemplate));
 	}
 
 	@Override
@@ -90,13 +87,10 @@ public class OpenInEditorAction extends Action {
 		for (int i = 0; i < p.length; i++) {
 			final Object obj = p[i].getLastSegment();
 			if (obj instanceof MResource) {
-				ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
-						.getDefault().getActiveShell());
+				ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 				try {
 					pm.run(true, true, new IRunnableWithProgress() {
-						public void run(IProgressMonitor monitor)
-								throws InvocationTargetException,
-								InterruptedException {
+						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 							try {
 								dorun(obj);
 							} catch (Throwable e) {
@@ -117,8 +111,7 @@ public class OpenInEditorAction extends Action {
 		}
 	}
 
-	protected void dorun(final Object obj) throws Exception,
-			FileNotFoundException, IOException {
+	protected void dorun(final Object obj) throws Exception, FileNotFoundException, IOException {
 		if (isFileResource(obj)) {
 			MResource res = (MResource) obj;
 			ResourceDescriptor rd = res.getValue();
@@ -129,7 +122,9 @@ public class OpenInEditorAction extends Action {
 			String type = rd.getWsType();
 			File f = null;
 			if (type.equals(ResourceDescriptor.TYPE_JRXML)) {
-				openEditor(new JrxmlExporter().exportToIFile(res, rd, fkeyname));
+				IFile file = new JrxmlExporter().exportToIFile(res, rd, fkeyname);
+				if (file != null)
+					openEditor(file);
 				return;
 			} else if (type.equals(ResourceDescriptor.TYPE_IMAGE))
 				f = new ImageExporter().exportFile(res, rd, fkeyname);

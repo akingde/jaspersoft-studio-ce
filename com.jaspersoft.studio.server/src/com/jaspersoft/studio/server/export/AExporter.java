@@ -31,14 +31,14 @@ import com.jaspersoft.studio.server.model.MResource;
 public abstract class AExporter {
 	protected static Map<String, String> fileurimap = new HashMap<String, String>();
 
-	public IFile exportToIFile(MResource res, ResourceDescriptor rd,
-			String fkeyname) throws Exception {
+	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname) throws Exception {
 		File f = exportFile(res, rd, fkeyname);
-		return FileUtils.getInProjectFile(f.toURI());
+		if (f != null)
+			return FileUtils.getInProjectFile(f.toURI());
+		return null;
 	}
 
-	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname)
-			throws Exception {
+	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname) throws Exception {
 		File f = getTempFile(res, rd, fkeyname, getExtension());
 		if (f != null)
 			fileurimap.put(fkeyname, f.getAbsolutePath());
@@ -47,8 +47,7 @@ public abstract class AExporter {
 
 	public abstract String getExtension();
 
-	private File getTempFile(MResource res, ResourceDescriptor rd,
-			String fkeyname, String dextention) throws Exception {
+	private File getTempFile(MResource res, ResourceDescriptor rd, String fkeyname, String dextention) throws Exception {
 		String filename = fileurimap.get(fkeyname);
 
 		File f = null;
