@@ -4,10 +4,10 @@
    <description name="Jaspersoft Studio" url="http://jasperstudio.sf.net/updates">
       Jaspersoft Studio Update Site
    </description>
-   <feature url="features/com.jaspersoft.studio.expressioneditor.feature_5.1.0.qualifier.jar" id="com.jaspersoft.studio.expressioneditor.feature" version="5.1.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32">
+   <feature url="features/com.jaspersoft.studio.expressioneditor.feature_5.1.0.jar" id="com.jaspersoft.studio.expressioneditor.feature" version="5.1.0" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32">
       <category name="com.jaspersoft.studio.category"/>
    </feature>
-   <feature url="features/com.jaspersoft.studio.feature_5.1.0.qualifier.jar" id="com.jaspersoft.studio.feature" version="5.1.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32">
+   <feature url="features/com.jaspersoft.studio.feature_5.1.0.jar" id="com.jaspersoft.studio.feature" version="5.1.0" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32">
       <category name="com.jaspersoft.studio.category"/>
    </feature>
    <category-def name="com.jaspersoft.studio.category" label="Business Intelligence, Reporting Tools"/>
