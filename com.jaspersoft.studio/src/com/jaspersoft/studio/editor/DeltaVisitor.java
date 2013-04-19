@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
@@ -62,7 +63,10 @@ public class DeltaVisitor implements IResourceDeltaVisitor {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				try {
+					ISelectionProvider selectionProvider = part.getSite().getSelectionProvider();
 					part.init(part.getEditorSite(), new FileEditorInput(newFile));
+					if (selectionProvider != null)
+						part.getSite().setSelectionProvider(selectionProvider);
 				} catch (PartInitException e) {
 					UIUtils.showError(e);
 				}
