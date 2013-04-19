@@ -471,6 +471,7 @@ public class Messages extends NLS {
 	public static String ExportAsJasperReportsAction_filtername;
 	public static String ExportAsJasperReportsAction_title;
 	public static String ExportAsJasperReportsAction_tooltip;
+	public static String ExportAsLHtmlAction_title;
 	public static String ExportAsOdsAction_filtername;
 	public static String ExportAsOdsAction_title;
 	public static String ExportAsOdsAction_tooltip;

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view;
 
@@ -25,6 +20,7 @@ import com.jaspersoft.studio.editor.preview.view.report.file.TXTViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.XMLImagesViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.XMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.html.HTMLViewer;
+import com.jaspersoft.studio.editor.preview.view.report.html.LayeredHTMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.html.XHTMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.DocxViewer;
@@ -45,13 +41,16 @@ public class ViewsFactory {
 		LinkedHashMap<String, APreview> pmap = new LinkedHashMap<String, APreview>();
 		pmap.put(VIEWER_JAVA, new SWTViewer(composite, jContext));
 
+		pmap.put("SEPARATOR1", null);
+
+		pmap.put("Layered HTML", new LayeredHTMLViewer(composite, jContext));
 		pmap.put("HTML", new HTMLViewer(composite, jContext));
 		pmap.put("xHTML", new XHTMLViewer(composite, jContext));
 		pmap.put("SEPARATOR1", null);
 		pmap.put("SEPARATOR1", null);
 		pmap.put("PDF", new PdfViewer(composite, jContext));
 
-		pmap.put("SEPARATOR1", null);
+		pmap.put("SEPARATOR2", null);
 
 		pmap.put("RTF", new RTFViewer(composite, jContext));
 		pmap.put("DOCx", new DocxViewer(composite, jContext));
@@ -60,7 +59,7 @@ public class ViewsFactory {
 		pmap.put("PPTx", new PowerPointViewer(composite, jContext));
 		pmap.put("Text", new TXTViewer(composite, jContext));
 
-		pmap.put("SEPARATOR2", null);
+		pmap.put("SEPARATOR3", null);
 
 		pmap.put("XLS", new XlsViewer(composite, jContext));
 		pmap.put("XLSx", new XlsxViewer(composite, jContext));
@@ -68,7 +67,7 @@ public class ViewsFactory {
 		pmap.put("CSV", new CSVViewer(composite, jContext));
 		pmap.put("CSV Metadata", new CSVMetadataViewer(composite, jContext));
 
-		pmap.put("SEPARATOR3", null);
+		pmap.put("SEPARATOR4", null);
 
 		pmap.put("XML", new XMLViewer(composite, jContext));
 		pmap.put("XML With Images", new XMLImagesViewer(composite, jContext));

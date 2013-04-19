@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report;
 
@@ -24,6 +19,7 @@ import com.jaspersoft.studio.editor.preview.actions.export.ExportAsDocxAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsExcelAPIAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsHtmlAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsJasperReportsAction;
+import com.jaspersoft.studio.editor.preview.actions.export.ExportAsLHtmlAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsOdsAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsOdtAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsPdfAction;
@@ -48,6 +44,7 @@ public class ExportMenu {
 		mm.add(new Separator());
 
 		mm.add(new ExportAsPdfAction(rptviewer, jContext));
+		mm.add(new ExportAsLHtmlAction(rptviewer, jContext));
 		mm.add(new ExportAsHtmlAction(rptviewer, jContext));
 		mm.add(new ExportAsXHtmlAction(rptviewer, jContext));
 		mm.add(new Separator());
