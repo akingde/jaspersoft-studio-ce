@@ -80,9 +80,12 @@ public class VInputControls extends AVParameters {
 
 	public boolean checkFieldsFilled() {
 		if (icm.isAnyVisible()) {
-			for (ResourceDescriptor p : icm.getInputControls())
-				if (p.isMandatory() && p.isVisible() && !p.isReadOnly() && icm.getParameters().get(p.getName()) == null)
-					return false;
+			for (ResourceDescriptor p : icm.getInputControls()) {
+				String pname = p.getName();
+				if (p.isVisible() && !p.isReadOnly() && incontrols.containsKey(pname))
+					if (p.isMandatory() && icm.getParameters().containsKey(pname) && !incontrols.get(pname).isDirty())
+						return false;
+			}
 		}
 		return true;
 	}

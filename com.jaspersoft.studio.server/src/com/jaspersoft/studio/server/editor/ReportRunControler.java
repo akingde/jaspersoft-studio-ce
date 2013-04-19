@@ -18,11 +18,13 @@ package com.jaspersoft.studio.server.editor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.util.JRLoader;
 
@@ -69,16 +71,12 @@ public class ReportRunControler {
 		if (viewmap != null && prmInput == null) {
 			cli = WSClientHelper.getClient(reportUnit);
 			icm = new InputControlsManager(reportUnit);
-			ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
-					.getDefault().getActiveShell());
+			ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 			try {
 				pm.run(true, true, new IRunnableWithProgress() {
-					public void run(IProgressMonitor monitor)
-							throws InvocationTargetException,
-							InterruptedException {
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						try {
-							rdrepunit = WSClientHelper
-									.getReportUnit(reportUnit);
+							rdrepunit = WSClientHelper.getReportUnit(reportUnit);
 							List<ResourceDescriptor> list = cli.list(rdrepunit);
 							icm.getInputControls(list, cli);
 
@@ -110,12 +108,10 @@ public class ReportRunControler {
 		}
 	}
 
-	public LinkedHashMap<String, APreview> createControls(Composite composite,
-			JasperReportsConfiguration jContext) {
+	public LinkedHashMap<String, APreview> createControls(Composite composite, JasperReportsConfiguration jContext) {
 		viewmap = new LinkedHashMap<String, APreview>();
 		viewmap.put(FORM_PARAMETERS, new VInputControls(composite, jContext));
-		viewmap.put(ReportControler.FORM_EXPORTER, new VExporter(composite,
-				jContext));
+		viewmap.put(ReportControler.FORM_EXPORTER, new VExporter(composite, jContext));
 		return viewmap;
 	}
 
@@ -138,8 +134,7 @@ public class ReportRunControler {
 	public void runReport() {
 		VSimpleErrorPreview errorView = pcontainer.getErrorView();
 		pcontainer.getRightContainer().switchView(null, errorView);
-		errorView
-				.setMessage(com.jaspersoft.studio.messages.Messages.ReportControler_generating);
+		errorView.setMessage(com.jaspersoft.studio.messages.Messages.ReportControler_generating);
 
 		c = pcontainer.getConsole();
 		c.showConsole();
@@ -152,38 +147,40 @@ public class ReportRunControler {
 
 		pcontainer.setNotRunning(false);
 
-		Job job = new Job(
-				com.jaspersoft.studio.messages.Messages.PreviewEditor_preview_a
-						+ ": " + reportUnit + com.jaspersoft.studio.messages.Messages.PreviewEditor_preview_b) { //$NON-NLS-1$ 
+		Job job = new Job(com.jaspersoft.studio.messages.Messages.PreviewEditor_preview_a + ": " + reportUnit + com.jaspersoft.studio.messages.Messages.PreviewEditor_preview_b) { //$NON-NLS-1$ 
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					if (!prmInput.checkFieldsFilled())
 						return Status.CANCEL_STATUS;
+					Map<String, Object> prmcopy = new HashMap<String, Object>();
+					for (ResourceDescriptor p : icm.getInputControls()) {
+						if (p.isVisible() && !p.isReadOnly()) {
+							if (p.isMandatory())
+								prmcopy.put(p.getName(), icm.getParameters().get(p.getName()));
+							else if (icm.getParameters().get(p.getName()) != null)
+								prmcopy.put(p.getName(), icm.getParameters().get(p.getName()));
+						}
+					}
 
-					Map<String, FileContent> files = WSClientHelper
-							.runReportUnit(reportUnit, icm.getParameters());
+					Map<String, FileContent> files = WSClientHelper.runReportUnit(reportUnit, prmcopy);
 					stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
 					for (String key : files.keySet()) {
 						FileContent fc = (FileContent) files.get(key);
 						if (key.equals("jasperPrint")) { //$NON-NLS-1$
-							final File f = File.createTempFile(
-									"jrprint", ".jrprint"); //$NON-NLS-1$ //$NON-NLS-2$
+							final File f = File.createTempFile(FileExtension.JRPRINT, "." + FileExtension.JRPRINT); //$NON-NLS-1$  
 							f.deleteOnExit();
 							f.createNewFile();
 							FileOutputStream htmlFile = new FileOutputStream(f);
 							htmlFile.write(fc.getData());
 							htmlFile.close();
 							stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
-							stats.setValue(ReportControler.ST_REPORTSIZE,
-									f.length());
+							stats.setValue(ReportControler.ST_REPORTSIZE, f.length());
 							Object obj = JRLoader.loadObject(f);
 							if (obj instanceof JasperPrint) {
-								stats.setValue(ReportControler.ST_PAGECOUNT,
-										((JasperPrint) obj).getPages().size());
-								pcontainer.setJasperPrint(stats,
-										(JasperPrint) obj);
+								stats.setValue(ReportControler.ST_PAGECOUNT, ((JasperPrint) obj).getPages().size());
+								pcontainer.setJasperPrint(stats, (JasperPrint) obj);
 							}
 
 							break;

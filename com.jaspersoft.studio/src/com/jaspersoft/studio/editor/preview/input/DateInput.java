@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.input;
 
@@ -43,7 +38,7 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public class DateInput extends ADataInput {
-	private boolean supportDateRange;
+	protected boolean supportDateRange;
 
 	public DateInput() {
 		this(false, true);
@@ -69,11 +64,10 @@ public class DateInput extends ADataInput {
 		} else if (java.sql.Timestamp.class.isAssignableFrom(valueClass)
 				|| java.util.Date.class.isAssignableFrom(valueClass)) {
 			createTimestamp(parent, param, params);
-		} else if (TimestampRange.class.isAssignableFrom(valueClass)) {
+		} else if (TimestampRange.class.isAssignableFrom(valueClass))
 			createTimestampRange(parent, param, params);
-		} else if (DateRange.class.isAssignableFrom(valueClass)) {
+		else if (DateRange.class.isAssignableFrom(valueClass))
 			createDateRange(parent, param, params);
-		}
 		date.setToolTipText(VParameters.createToolTip(param));
 		date.addFocusListener(focusListener);
 	}
@@ -100,7 +94,7 @@ public class DateInput extends ADataInput {
 		listener.modifyText(null);
 	}
 
-	private void handleDateRangeChange(Class<? extends Date> clazz) {
+	protected void handleDateRangeChange(Class<? extends Date> clazz) {
 		try {
 			DateRangeBuilder drb = null;
 			if (date.getSelection() != null)
@@ -235,7 +229,7 @@ public class DateInput extends ADataInput {
 	}
 
 	private boolean isNumeric = false;
-	private CDateTime date;
+	protected CDateTime date;
 
 	public boolean isSupportDateRange() {
 		return supportDateRange;

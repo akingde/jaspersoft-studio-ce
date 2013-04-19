@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
@@ -95,20 +90,17 @@ public class VParameters extends AVParameters {
 	public boolean checkFieldsFilled() {
 		int count = 0;
 		if (prompts != null)
-			for (JRParameter p : prompts)
-				if (p.isForPrompting() && !p.isSystemDefined() && haveWidget4Type(p)) {
+			for (JRParameter p : prompts) {
+				String pname = p.getName();
+				if (p.isForPrompting() && !p.isSystemDefined() && incontrols.containsKey(pname)) {
 					count++;
-					String pname = p.getName();
 					if (params.containsKey(pname) && incontrols.get(pname).isDirty())
 						return true;
 				}
+			}
 		if (count > 0)
 			return false;
 		return true;
-	}
-
-	protected boolean haveWidget4Type(JRParameter p) {
-		return incontrols.containsKey(p.getName());
 	}
 
 	protected boolean createInput(Composite sectionClient, JRDesignParameter p, Map<String, Object> params, boolean first)
