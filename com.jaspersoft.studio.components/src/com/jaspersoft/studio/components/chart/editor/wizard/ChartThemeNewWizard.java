@@ -17,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.chartthemes.simple.SimpleSettingsFactory;
 import net.sf.jasperreports.chartthemes.simple.XmlChartTheme;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -270,7 +271,7 @@ public class ChartThemeNewWizard extends Wizard implements INewWizard {
 			IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 			for (IProject p : prjs) {
 				try {
-					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
+					if (ProjectUtil.isOpen(p) && p.getNature(JavaCore.NATURE_ID) != null) {
 						p.open(progressMonitor);
 						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_FILENAME) }));
 						return;
@@ -281,7 +282,7 @@ public class ChartThemeNewWizard extends Wizard implements INewWizard {
 			}
 			for (IProject p : prjs) {
 				try {
-					if (p.isAccessible()) {
+					if (ProjectUtil.isOpen(p)) {
 						p.open(progressMonitor);
 						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_FILENAME) }));
 						return;

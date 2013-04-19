@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.core.resources.IContainer;
@@ -324,7 +325,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 			IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 			for (IProject p : prjs) {
 				try {
-					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
+					if (ProjectUtil.isOpen(p) && p.getNature(JavaCore.NATURE_ID) != null) {
 						p.open(progressMonitor);
 						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_DATAADAPTER_XML) }));
 						return;

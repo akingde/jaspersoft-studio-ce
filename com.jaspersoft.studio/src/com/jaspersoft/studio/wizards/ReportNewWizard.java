@@ -19,6 +19,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
@@ -347,7 +348,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 			IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 			for (IProject p : prjs) {
 				try {
-					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
+					if (ProjectUtil.isOpen(p) && p.getNature(JavaCore.NATURE_ID) != null) {
 						p.open(progressMonitor);
 						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_REPORT_JRXML) }));
 						return;
@@ -358,7 +359,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 			}
 			for (IProject p : prjs) {
 				try {
-					if (p.isAccessible()) {
+					if (ProjectUtil.isOpen(p)) {
 						p.open(progressMonitor);
 						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_REPORT_JRXML) }));
 						return;

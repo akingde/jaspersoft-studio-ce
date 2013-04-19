@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
@@ -288,7 +289,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 			IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 			for (IProject p : prjs) {
 				try {
-					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
+					if (ProjectUtil.isOpen(p) && p.getNature(JavaCore.NATURE_ID) != null) {
 						p.open(progressMonitor);
 						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(ReportNewWizard.NEW_REPORT_JRXML) }));
 						return;
@@ -299,7 +300,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 			}
 			for (IProject p : prjs) {
 				try {
-					if (p.isAccessible()) {
+					if (ProjectUtil.isOpen(p)) {
 						p.open(progressMonitor);
 						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(ReportNewWizard.NEW_REPORT_JRXML) }));
 						return;

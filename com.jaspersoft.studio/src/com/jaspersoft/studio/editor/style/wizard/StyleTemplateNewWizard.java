@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -283,7 +284,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 			IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 			for (IProject p : prjs) {
 				try {
-					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
+					if (ProjectUtil.isOpen(p) && p.getNature(JavaCore.NATURE_ID) != null) {
 						p.open(progressMonitor);
 						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_STYLE_JRTX) }));
 						return;
@@ -294,7 +295,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 			}
 			for (IProject p : prjs) {
 				try {
-					if (p.isAccessible()) {
+					if (ProjectUtil.isOpen(p)) {
 						p.open(progressMonitor);
 						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_STYLE_JRTX) }));
 						return;

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
@@ -143,7 +144,7 @@ public class DataAdapterManager {
 	public static List<ADataAdapterStorage> getProjectStorages() {
 		List<ADataAdapterStorage> das = new ArrayList<ADataAdapterStorage>();
 		for (IProject prj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-			if (prj.exists() && prj.isOpen())
+			if (ProjectUtil.isOpen(prj))
 				das.add(getProjectStorage(prj));
 		}
 		return das;

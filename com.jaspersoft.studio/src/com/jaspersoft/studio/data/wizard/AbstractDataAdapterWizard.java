@@ -16,6 +16,7 @@ import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 
 import org.eclipse.core.resources.IProject;
@@ -145,7 +146,7 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 							ClassLoader cl = Thread.currentThread().getContextClassLoader();
 							IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 							for (IProject p : prjs) {
-								if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
+								if (ProjectUtil.isOpen(p) && p.getNature(JavaCore.NATURE_ID) != null) {
 									if (cl == null)
 										cl = JavaProjectClassLoader.instance(JavaCore.create(p));
 									else
