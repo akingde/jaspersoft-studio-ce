@@ -228,7 +228,7 @@ public class DateInput extends ADataInput {
 		}
 	}
 
-	private boolean isNumeric = false;
+	protected boolean isNumeric = false;
 	protected CDateTime date;
 
 	public boolean isSupportDateRange() {

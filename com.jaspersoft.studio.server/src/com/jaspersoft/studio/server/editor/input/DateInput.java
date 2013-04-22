@@ -68,9 +68,14 @@ public class DateInput extends com.jaspersoft.studio.editor.preview.input.DateIn
 
 	@Override
 	protected void handleDateRangeChange(Class<? extends Date> clazz) {
-		if (date.getSelection() != null)
-			updateModel(date.getSelection());
-		else {
+		if (date.getSelection() != null) {
+			Date d = date.getSelection();
+			if (d != null)
+				if (isNumeric)
+					updateModel(d.getTime());
+				else
+					updateModel(d);
+		} else {
 			String ntxt = date.getNullText();
 			if (ntxt.equals(DRDateTime.NULLTEXT))
 				updateModel(null);
