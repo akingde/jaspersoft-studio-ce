@@ -152,9 +152,10 @@ public class InputControlPageContent extends APageContent implements IPageComple
 			setPageComplete(newSelector.isPageComplete());
 		}
 		if (newSelector != cSelector) {
-			if (cSelector != null)
+			if (cSelector != null) {
 				cSelector.resetResource();
-			cleanResource();
+				cleanResource();
+			}
 			cSelector = newSelector;
 		}
 		stackComposite.layout();

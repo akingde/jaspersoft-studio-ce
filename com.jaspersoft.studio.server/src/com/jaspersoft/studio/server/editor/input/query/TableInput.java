@@ -40,8 +40,7 @@ public class TableInput implements IInput {
 	private Map<String, Object> params;
 	private IParameter param;
 
-	public TableInput(QueryInput dataInput, IParameter param,
-			Map<String, Object> params) {
+	public TableInput(QueryInput dataInput, IParameter param, Map<String, Object> params) {
 		this.dataInput = dataInput;
 		this.param = param;
 		this.params = params;
@@ -59,15 +58,12 @@ public class TableInput implements IInput {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem[] ti = table.getSelection();
-				if (dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
-						|| dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
-					List<Object> lst = new ArrayList<Object>();
-					for (TableItem item : ti)
-						lst.add(item.getData());
-					dataInput.updateModel(lst);
-				} else
-					dataInput.updateModel(ti.length > 0 ? ti[0].getData()
-							: null);
+				if (dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX)
+					doUpdateModel(getCheckedElements(table));
+				else if (dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY)
+					doUpdateModel(ti);
+				else
+					dataInput.updateModel(ti.length > 0 ? ti[0].getData() : null);
 			}
 		};
 		table.addSelectionListener(listener);
@@ -75,9 +71,26 @@ public class TableInput implements IInput {
 		listener.widgetSelected(null);
 	}
 
+	private void doUpdateModel(TableItem[] ti) {
+		List<Object> lst = new ArrayList<Object>();
+		for (TableItem item : ti)
+			lst.add(item.getData());
+		dataInput.updateModel(lst);
+	}
+
+	public static TableItem[] getCheckedElements(Table tbl) {
+		TableItem[] children = tbl.getItems();
+		List<TableItem> v = new ArrayList<TableItem>(children.length);
+		for (int i = 0; i < children.length; i++) {
+			TableItem item = children[i];
+			if (item.getChecked())
+				v.add(item);
+		}
+		return v.toArray(new TableItem[v.size()]);
+	}
+
 	protected void createTable(Composite parent, int style) {
-		table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL
-				| SWT.BORDER);
+		table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(false);
 	}
@@ -86,8 +99,7 @@ public class TableInput implements IInput {
 		table.select(-1);
 		table.removeAll();
 
-		List<InputControlQueryDataRow> qvalues = dataInput.getRD()
-				.getQueryData();
+		List<InputControlQueryDataRow> qvalues = dataInput.getRD().getQueryData();
 		String[] qcolumns = dataInput.getRD().getQueryVisibleColumns();
 
 		for (TableColumn tc : table.getColumns())
@@ -119,16 +131,14 @@ public class TableInput implements IInput {
 	public void updateInput() {
 		Object value = params.get(param.getName());
 		if (value != null) {
-			if (dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
-					|| dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
+			if (dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY || dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
 				if (value instanceof List) {
 					List<TableItem> titems = new ArrayList<TableItem>();
 					List<Object> lst = (List<Object>) value;
 					for (TableItem ti : table.getItems())
 						if (lst.contains(ti.getData()))
 							titems.add(ti);
-					table.setSelection(titems.toArray(new TableItem[titems
-							.size()]));
+					table.setSelection(titems.toArray(new TableItem[titems.size()]));
 				}
 			} else
 				for (TableItem ti : table.getItems()) {

@@ -42,16 +42,14 @@ public class TableInput implements IInput {
 	private Map<String, Object> params;
 	private IParameter param;
 
-	public TableInput(ListOfValuesInput dataInput, IParameter param,
-			Map<String, Object> params) {
+	public TableInput(ListOfValuesInput dataInput, IParameter param, Map<String, Object> params) {
 		this.dataInput = dataInput;
 		this.param = param;
 		this.params = params;
 	}
 
 	public void createControl(Composite parent, int style) {
-		table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL
-				| SWT.BORDER);
+		table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalIndent = 8;
 		gd.minimumHeight = 100;
@@ -62,12 +60,10 @@ public class TableInput implements IInput {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem[] ti = table.getSelection();
-				if (dataInput.getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES
-						|| dataInput.getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
-					List<Object> lst = new ArrayList<Object>();
-					for (TableItem item : ti)
-						lst.add(item.getData());
-					dataInput.updateModel(lst);
+				if (dataInput.getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX)
+					doUpdateModel(com.jaspersoft.studio.server.editor.input.query.TableInput.getCheckedElements(table));
+				else if (dataInput.getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES) {
+					doUpdateModel(ti);
 				} else if (ti.length > 0) {
 					dataInput.updateModel(ti[0].getData());
 				}
@@ -78,11 +74,17 @@ public class TableInput implements IInput {
 		listener.widgetSelected(null);
 	}
 
+	private void doUpdateModel(TableItem[] ti) {
+		List<Object> lst = new ArrayList<Object>();
+		for (TableItem item : ti)
+			lst.add(item.getData());
+		dataInput.updateModel(lst);
+	}
+
 	public void fillControl() {
 		PResourceDescriptor rdprm = (PResourceDescriptor) param;
 
-		ResourceDescriptor rd2 = (ResourceDescriptor) dataInput.getRd()
-				.getChildren().get(0);
+		ResourceDescriptor rd2 = (ResourceDescriptor) dataInput.getRd().getChildren().get(0);
 		List<ListItem> items = null;
 
 		if (rd2.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
@@ -123,8 +125,7 @@ public class TableInput implements IInput {
 					for (TableItem ti : table.getItems())
 						if (lst.contains(ti.getData()))
 							titems.add(ti);
-					table.setSelection(titems.toArray(new TableItem[titems
-							.size()]));
+					table.setSelection(titems.toArray(new TableItem[titems.size()]));
 				}
 			} else
 				for (TableItem ti : table.getItems()) {
