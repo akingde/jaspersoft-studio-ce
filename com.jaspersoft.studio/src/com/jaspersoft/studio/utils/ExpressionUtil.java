@@ -41,6 +41,8 @@ public class ExpressionUtil {
 	}
 
 	public static final Object eval(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig, JasperDesign jd) {
+		if (expr == null)
+			return null;
 		return new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConfig).interpretExpression(expr.getText());
 	}
 
