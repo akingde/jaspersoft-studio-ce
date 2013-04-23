@@ -189,7 +189,8 @@ public abstract class ASelector {
 		ResourceDescriptor r = getResourceDescriptor(res.getValue());
 		if (r != null && (r.getIsReference() || r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)))
 			setEnabled(0);
-		setEnabled(1);
+		else
+			setEnabled(1);
 	}
 
 	public boolean isPageComplete() {
