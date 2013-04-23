@@ -109,6 +109,7 @@ public abstract class ASelector {
 
 	public void resetResource() {
 		replaceChildren(res, null);
+		setEnabled(isReference(res.getValue()) ? 0 : 1);
 	}
 
 	protected void replaceChildren(final MResource res, ResourceDescriptor rd) {
@@ -186,11 +187,7 @@ public abstract class ASelector {
 	protected abstract ResourceDescriptor createLocal(MResource res);
 
 	protected void init() {
-		ResourceDescriptor r = getResourceDescriptor(res.getValue());
-		if (r != null && (r.getIsReference() || r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)))
-			setEnabled(0);
-		else
-			setEnabled(1);
+		setEnabled(isReference(getResourceDescriptor(res.getValue())) ? 0 : 1);
 	}
 
 	public boolean isPageComplete() {
@@ -234,7 +231,7 @@ public abstract class ASelector {
 			bRef.setEnabled(true);
 			brRepo.setSelection(true);
 			// jsRefDS.setEnabled(true);
-			if (r != null && (r.getIsReference() || r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)))
+			if (isReference(r))
 				jsRefDS.setText(Misc.nvl(r.getReferenceUri()));
 			break;
 		case 1:
