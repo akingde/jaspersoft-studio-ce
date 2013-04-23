@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
@@ -51,6 +52,7 @@ import com.jaspersoft.studio.components.table.model.table.command.wizard.TableWi
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.templates.ReportBundle;
 import com.jaspersoft.templates.TemplateBundle;
@@ -328,6 +330,72 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		}
 		return null;
 	}
+	
+	/**
+	 * Handle the groups bands
+	 */
+	protected void createGroups(JasperDesign jd, List<Object> groupFields) {
+		// Adjusting groups
+		if (groupFields != null){
+			for (int i = 0; i < groupFields.size(); ++i) 
+			{
+				if (jd.getGroupsList().size() <= i) {
+					try {
+						// Add a new group on the fly...
+						JRDesignGroup g = new JRDesignGroup();
+						String name = ((JRField) groupFields.get(i)).getName();
+						g.setName(name);
+						JRDesignExpression jre = new JRDesignExpression();
+						jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+						g.setExpression(jre);
+						jd.addGroup(g);
+					} catch (JRException e) {}
+				}
+
+				JRField gr = (JRField) groupFields.get(i);
+				JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(i);
+
+				// find the two elements having as expression: G1Label and G1Field
+				if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
+					JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
+					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}", gr.getValueClassName());
+					group.setExpression(groupExpression);
+					JRDesignStaticText st = findStaticTextElement(groupHeaderSection, "G" + (i + 1) + "Label"); //$NON-NLS-1$ $NON-NLS-2$
+					if (st == null)
+						st = findStaticTextElement(groupHeaderSection, "GroupLabel"); //$NON-NLS-1$ 
+					if (st == null)
+						st = findStaticTextElement(groupHeaderSection, "Group Label"); //$NON-NLS-1$ 
+					if (st == null)
+						st = findStaticTextElement(groupHeaderSection, "Label"); //$NON-NLS-1$ 
+					if (st == null)
+						st = findStaticTextElement(groupHeaderSection, "Group name"); //$NON-NLS-1$ 
+					if (st != null)
+						st.setText(gr.getName());
+
+					JRDesignTextField tf = findTextFieldElement(groupHeaderSection, "G" + (i + 1) + "Field"); //$NON-NLS-1$ $NON-NLS-2$
+					if (tf == null)
+						tf = findTextFieldElement(groupHeaderSection, "GroupField"); //$NON-NLS-1$ 
+					if (tf == null)
+						tf = findTextFieldElement(groupHeaderSection, "Group Field"); //$NON-NLS-1$ 
+					if (tf == null)
+						tf = findTextFieldElement(groupHeaderSection, "Field"); //$NON-NLS-1$ 
+
+					if (tf != null) {
+						JRDesignExpression expression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}", //$NON-NLS-1$ $NON-NLS-2$
+								gr.getValueClassName());
+						tf.setExpression(expression);
+					}
+				}
+			}
+
+			// Remove extra groups...
+			if (groupFields != null) {
+				while (groupFields.size() < jd.getGroupsList().size()) {
+					jd.removeGroup((JRDesignGroup) jd.getGroupsList().get(groupFields.size()));
+				}
+			}
+		}
+	}
 
 	/**
 	 * Create the report with the table inside
@@ -388,6 +456,9 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		table.setY(tableY);
 		summaryBand.addElement(table);
 		jd.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL); 
+		
+		//createGroups(jd,(List<Object>) settings.get(DefaultTemplateEngine.GROUP_FIELDS));
+		
 		return reportBundle;
 	}
 	

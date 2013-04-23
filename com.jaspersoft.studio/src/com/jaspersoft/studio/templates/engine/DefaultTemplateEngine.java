@@ -120,9 +120,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 						jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 						g.setExpression(jre);
 						jd.addGroup(g);
-					} catch (JRException e) {
-						// Duplicate group name should never occur
-					}
+					} catch (JRException e) {}
 				}
 
 				JRField gr = (JRField) groupFields.get(i);
@@ -131,6 +129,8 @@ public class DefaultTemplateEngine implements TemplateEngine {
 				// find the two elements having as expression: G1Label and G1Field
 				if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
 					JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
+					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}", gr.getValueClassName());
+					group.setExpression(groupExpression);
 					JRDesignStaticText st = findStaticTextElement(groupHeaderSection, "G" + (i + 1) + "Label"); //$NON-NLS-1$ $NON-NLS-2$
 					if (st == null)
 						st = findStaticTextElement(groupHeaderSection, "GroupLabel"); //$NON-NLS-1$ 

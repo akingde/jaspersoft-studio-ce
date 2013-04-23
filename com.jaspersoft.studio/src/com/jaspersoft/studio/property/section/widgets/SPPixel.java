@@ -21,9 +21,12 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
@@ -380,55 +383,120 @@ public class SPPixel extends ASPropertyWidget {
 		}
 		return arg;
 	}
+	
+	
+	protected Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
+		Object oldValue = n.getPropertyValue(property);
+		if (((oldValue == null && newValue != null) || (oldValue != null && newValue == null) || (newValue != null && !newValue
+				.equals(oldValue)))) {
+			SetValueCommand setCommand = new SetValueCommand(n.getDisplayText());
+			setCommand.setTarget(n);
+			setCommand.setPropertyId(property);
+			setCommand.setPropertyValue(newValue);
+			return setCommand;
+		}
+		return null;
+	}
+
+	/**
+	 * Calculate the percentage of a value
+	 */
+	private Long getNewValue(Double percentage, APropertyNode pnode, String property){
+		String oldValue = pnode.getPropertyActualValue(property).toString();
+		Integer oldNumericValue = Integer.parseInt(oldValue);
+		Double newValueLong = (oldNumericValue.doubleValue()*percentage)/100d;
+		Long newValue = Math.round(newValueLong);
+		return newValue;
+	}
+	
+	/**
+	 * This method do a percentage resize of one or more elements. If the resize is done on the height or width, and 
+	 * are selected more than one element, then the coordinate X and Y of the element are translated to try to keep the same aspect ratio
+	 * between them
+	 */
+	private void percentageResize(){
+		String text = insertField.getText().trim().toLowerCase();
+		int percPosition = text.indexOf("%");
+		if (percPosition>0){
+			try{
+				Double value = Double.parseDouble(text.substring(0,percPosition)); 
+				CommandStack cs = section.getEditDomain().getCommandStack();
+				CompoundCommand cc = new CompoundCommand("Set " + pDescriptor.getId());
+				for (APropertyNode pnode : section.getElements()) {
+					try {
+						Long newValue = getNewValue(value, pnode, pDescriptor.getId().toString());
+						Command c = getChangePropertyCommand(pDescriptor.getId(), newValue.intValue(), pnode);
+						if (c != null) cc.add(c);
+						if (pDescriptor.getId().equals(JRDesignElement.PROPERTY_HEIGHT) && section.getElements().size()>1){
+							newValue = getNewValue(value, pnode, JRDesignElement.PROPERTY_Y);
+							c = getChangePropertyCommand(JRDesignElement.PROPERTY_Y, newValue.intValue(), pnode);
+							if (c != null) cc.add(c);
+						}
+						if (pDescriptor.getId().equals(JRDesignElement.PROPERTY_WIDTH) && section.getElements().size()>1){
+							newValue = getNewValue(value, pnode, JRDesignElement.PROPERTY_X);
+							c = getChangePropertyCommand(JRDesignElement.PROPERTY_X, newValue.intValue(), pnode);
+							if (c != null) cc.add(c);
+						}
+					} catch (NumberFormatException ex) {}
+				}
+				cs.execute(cc);
+				APropertyNode firstNode = section.getElements().get(0);
+				setData(firstNode, firstNode.getPropertyActualValue(pDescriptor.getId()));
+			} catch (NumberFormatException ex) {}
+		}
+	}
 
 	/**
 	 * Read the value in the textfield and update it in the model, but before the value is converted to pixel, and in the
 	 * textbox is displayed as default type
 	 */
 	private void updateValue() {
-		String text = insertField.getText().trim().toLowerCase();
-		String key = getMeasureUnit(text);
-		MeasureUnit defaultUnit = getDefaultMeasure();
-		String value;
-		MeasureUnit unit;
-		if (key == null) {
-			unit = defaultUnit;
-			value = text;
-		} else {
-			unit = unitsMap.get(Unit.getKeyFromAlias(key));
-			value = text.substring(0, text.indexOf(key));
-		}
-		if (unit != null) {
-			setLocalValue(unit.getKeyName());
-			String convertedValue = unit.doConversionFromThis(defaultUnit, value);
-			insertField.setText(convertedValue.concat(defaultUnit.getKeyName()));
-			try {
-				Integer newValue = Integer.parseInt(getText());
-				// let's look at our units
-				String dunit = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
-				List<Command> commands = new ArrayList<Command>();
-				for (APropertyNode pnode : section.getElements()) {
-					if (pnode.getValue() != null && pnode.getValue() instanceof JRPropertiesHolder) {
-						JRPropertiesMap pmap = (JRPropertiesMap) pnode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-						if (pmap != null
-								&& PHolderUtil.setProperty(false, pmap, (String) pDescriptor.getId(), unit.getUnitName(), dunit)) {
-							SetValueCommand cmd = new SetValueCommand();
-							cmd.setTarget(pnode);
-							cmd.setPropertyId(MGraphicElement.PROPERTY_MAP);
-							cmd.setPropertyValue(pmap);
-							commands.add(cmd);
+		if (insertField.getText().contains("%")) percentageResize();
+		else {
+			String text = insertField.getText().trim().toLowerCase();
+			String key = getMeasureUnit(text);
+			MeasureUnit defaultUnit = getDefaultMeasure();
+			String value;
+			MeasureUnit unit;
+			if (key == null) {
+				unit = defaultUnit;
+				value = text;
+			} else {
+				unit = unitsMap.get(Unit.getKeyFromAlias(key));
+				value = text.substring(0, text.indexOf(key));
+			}
+			if (unit != null) {
+				setLocalValue(unit.getKeyName());
+				String convertedValue = unit.doConversionFromThis(defaultUnit, value);
+				insertField.setText(convertedValue.concat(defaultUnit.getKeyName()));
+				try {
+					Integer newValue = Integer.parseInt(getText());
+					// let's look at our units
+					String dunit = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
+					List<Command> commands = new ArrayList<Command>();
+					for (APropertyNode pnode : section.getElements()) {
+						if (pnode.getValue() != null && pnode.getValue() instanceof JRPropertiesHolder) {
+							JRPropertiesMap pmap = (JRPropertiesMap) pnode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+							if (pmap != null
+									&& PHolderUtil.setProperty(false, pmap, (String) pDescriptor.getId(), unit.getUnitName(), dunit)) {
+								SetValueCommand cmd = new SetValueCommand();
+								cmd.setTarget(pnode);
+								cmd.setPropertyId(MGraphicElement.PROPERTY_MAP);
+								cmd.setPropertyValue(pmap);
+								commands.add(cmd);
+							}
 						}
 					}
+					if (!section.changeProperty(pDescriptor.getId(), newValue, commands)) {
+						setData(section.getElement(), newValue);
+					}
+					insertField.setBackground(null);
+				} catch (NumberFormatException ex) {
+					insertField.setBackground(ColorConstants.red);
 				}
-				if (!section.changeProperty(pDescriptor.getId(), newValue, commands)) {
-					setData(section.getElement(), newValue);
-				}
-				insertField.setBackground(null);
-			} catch (NumberFormatException ex) {
+			} else {
 				insertField.setBackground(ColorConstants.red);
 			}
-		} else {
-			insertField.setBackground(ColorConstants.red);
 		}
 	}
 
