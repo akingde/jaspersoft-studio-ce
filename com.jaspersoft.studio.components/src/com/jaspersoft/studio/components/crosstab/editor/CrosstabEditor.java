@@ -30,6 +30,7 @@ import org.eclipse.jface.action.Separator;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.components.crosstab.model.cell.action.CreateColumnCrosstabHeaderAction;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.action.CreateColumnGroupAction;
 import com.jaspersoft.studio.components.crosstab.model.header.action.CreateCrosstabHeaderAction;
 import com.jaspersoft.studio.components.crosstab.model.measure.action.CreateMeasureAction;
@@ -54,8 +55,7 @@ public class CrosstabEditor extends AbstractVisualEditor {
 	public CrosstabEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
 		setPartName(Messages.CrosstabEditor_crosstab);
-		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MCrosstab
-				.getIconDescriptor().getIcon16()));
+		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MCrosstab.getIconDescriptor().getIcon16()));
 	}
 
 	/*
@@ -76,24 +76,18 @@ public class CrosstabEditor extends AbstractVisualEditor {
 		graphicalViewer.setEditPartFactory(new JasperDesignEditPartFactory());
 
 		// set rulers providers
-		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true,
-				RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER,
-				provider);
+		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true, RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER, provider);
 
-		provider = new ReportRulerProvider(new ReportRuler(false,
-				RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,
-				provider);
+		provider = new ReportRulerProvider(new ReportRuler(false, RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
 
 		Boolean isRulerVisible = jrContext.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
-				isRulerVisible);
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, isRulerVisible);
 
 		createAdditionalActions();
-		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(
-				graphicalViewer));
+		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(graphicalViewer));
 	}
 
 	@Override
@@ -116,6 +110,10 @@ public class CrosstabEditor extends AbstractVisualEditor {
 		registry.registerAction(action);
 		selectionActions.add(CreateColumnGroupAction.ID);
 
+		action = new CreateColumnCrosstabHeaderAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateColumnCrosstabHeaderAction.ID);
+
 		action = new CreateRowGroupAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateRowGroupAction.ID);
@@ -131,7 +129,7 @@ public class CrosstabEditor extends AbstractVisualEditor {
 		action = new CreateCrosstabParameterAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateCrosstabParameterAction.ID);
-		
+
 		action = new DatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());

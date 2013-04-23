@@ -119,8 +119,7 @@ public class CrosstabMatrix {
 			if (cg.hasTotal())
 				cc = addCell4ColTotal(west, east, cg);
 
-			cc = createCell((JRDesignCellContents) cg.getHeader(),
-					JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER);
+			cc = createCell((JRDesignCellContents) cg.getHeader(), JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER);
 			west.addEast(cc);
 
 			Guide teast = null;
@@ -135,49 +134,46 @@ public class CrosstabMatrix {
 		return east;
 	}
 
-	public Guide fillColumnGroupV(Guide west, Guide east,
-			JRDesignCrosstab crosstab) {
+	public Guide fillColumnGroupV(Guide west, Guide east, JRDesignCrosstab crosstab) {
 		JRCrosstabColumnGroup[] cols = crosstab.getColumnGroups();
+		CrosstabCell hcc = createCell((JRDesignCellContents) crosstab.getHeaderCell(), JRCrosstabOrigin.TYPE_HEADER_CELL);
 		for (int i = 0; i < cols.length; i++) {
 			JRCrosstabColumnGroup cg = cols[i];
+
+			CrosstabCell cc = createCell((JRDesignCellContents) cg.getCrosstabHeader(), JRCrosstabOrigin.TYPE_COLUMN_GROUP_CROSSTAB_HEADER);
+			cc.setEast(hcc.getEast());
+			cc.setWest(hcc.getWest());
+
 			if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.START) {
-				CrosstabCell cc = createCell(
-						(JRDesignCellContents) cg.getTotalHeader(),
-						JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER);
+				cc = createCell((JRDesignCellContents) cg.getTotalHeader(), JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER);
 				west.addEast(cc);
 
 				Guide teast = cg.hasTotal() ? addNext(west, vGuides) : east;
 				teast.addWest(cc);
 				teast.setX(west, cc.cell);
 
-				cc = createCell((JRDesignCellContents) cg.getHeader(),
-						JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER);
+				cc = createCell((JRDesignCellContents) cg.getHeader(), JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER);
 				teast.addEast(cc);
 				east.addWest(cc);
 				east.setX(teast, cc.cell);
 
 				west = teast;
 			} else if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.END) {
-				CrosstabCell cc = createCell(
-						(JRDesignCellContents) cg.getHeader(),
-						JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER);
+				cc = createCell((JRDesignCellContents) cg.getHeader(), JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER);
 				west.addEast(cc);
 
 				Guide teast = cg.hasTotal() ? addNext(west, vGuides) : east;
 				teast.addWest(cc);
 				teast.setX(west, cc.cell);
 
-				cc = createCell((JRDesignCellContents) cg.getTotalHeader(),
-						JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER);
+				cc = createCell((JRDesignCellContents) cg.getTotalHeader(), JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER);
 				teast.addEast(cc);
 				east.addWest(cc);
 				east.setX(teast, cc.cell);
 
 				east = teast;
 			} else {
-				CrosstabCell cc = createCell(
-						(JRDesignCellContents) cg.getHeader(),
-						JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER);
+				cc = createCell((JRDesignCellContents) cg.getHeader(), JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER);
 				west.addEast(cc);
 				east.addWest(cc);
 				east.setX(west, cc.cell);
@@ -194,8 +190,7 @@ public class CrosstabMatrix {
 				Guide west = gwest;
 				Guide east = vGuides.get(vGuides.size() - 1);
 
-				List<JRCrosstabColumnGroup> cols = crosstab
-						.getColumnGroupsList();
+				List<JRCrosstabColumnGroup> cols = crosstab.getColumnGroupsList();
 				for (int k = 0; k < cols.size(); k++) {
 					JRCrosstabColumnGroup cg = cols.get(k);
 					boolean last = k == cols.size() - 1;
@@ -215,18 +210,14 @@ public class CrosstabMatrix {
 			}
 	}
 
-	private void addDetailCellV(JRCrosstabCell[] rowcells, Guide west,
-			Guide east, String name) {
+	private void addDetailCellV(JRCrosstabCell[] rowcells, Guide west, Guide east, String name) {
 		for (int j = 0; j < rowcells.length; j++) {
 			JRCrosstabCell rc = rowcells[j];
 			if (rc == null)
 				continue;
 			String ctg = rc.getColumnTotalGroup();
-			if ((ctg != null && ctg.equals(name))
-					|| (ctg == null && name == null)) {
-				CrosstabCell cc = createCell(
-						(JRDesignCellContents) rc.getContents(),
-						JRCrosstabOrigin.TYPE_DATA_CELL);
+			if ((ctg != null && ctg.equals(name)) || (ctg == null && name == null)) {
+				CrosstabCell cc = createCell((JRDesignCellContents) rc.getContents(), JRCrosstabOrigin.TYPE_DATA_CELL);
 				west.addEast(cc);
 				east.addWest(cc);
 				break;
@@ -261,17 +252,13 @@ public class CrosstabMatrix {
 			}
 	}
 
-	private void addDetailCellH(JRCrosstabCell[][] cells, int i, Guide north,
-			Guide south, String name) {
+	private void addDetailCellH(JRCrosstabCell[][] cells, int i, Guide north, Guide south, String name) {
 		for (int j = 0; j < cells.length; j++) {
 			JRCrosstabCell rc = cells[j][i];
 			if (rc != null) {
 				String rtg = rc.getRowTotalGroup();
-				if ((rtg != null && rtg.equals(name))
-						|| (rtg == null && name == null)) {
-					CrosstabCell cc = createCell(
-							(JRDesignCellContents) rc.getContents(),
-							JRCrosstabOrigin.TYPE_DATA_CELL);
+				if ((rtg != null && rtg.equals(name)) || (rtg == null && name == null)) {
+					CrosstabCell cc = createCell((JRDesignCellContents) rc.getContents(), JRCrosstabOrigin.TYPE_DATA_CELL);
 					north.addSouth(cc);
 					south.addNorth(cc);
 					break;
@@ -280,8 +267,7 @@ public class CrosstabMatrix {
 		}
 	}
 
-	public Guide fillColumnGroupH(Guide north, Guide south,
-			JRDesignCrosstab crosstab) {
+	public Guide fillColumnGroupH(Guide north, Guide south, JRDesignCrosstab crosstab) {
 		JRCrosstabColumnGroup[] columns = crosstab.getColumnGroups();
 		for (int i = 0; i < columns.length; i++) {
 			JRCrosstabColumnGroup cg = columns[i];
@@ -289,8 +275,7 @@ public class CrosstabMatrix {
 			if (cg.hasTotal())
 				cc = addCell4ColTotal(north, south, cg);
 
-			cc = createCell((JRDesignCellContents) cg.getHeader(),
-					JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER);
+			cc = createCell((JRDesignCellContents) cg.getHeader(), JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER);
 			north.addSouth(cc);
 
 			Guide tsouth = null;
@@ -301,53 +286,48 @@ public class CrosstabMatrix {
 			tsouth.addNorth(cc);
 			tsouth.setY(north, cc.cell);
 			north = tsouth;
+
+			CrosstabCell hcc = createCell((JRDesignCellContents) cg.getCrosstabHeader(), JRCrosstabOrigin.TYPE_COLUMN_GROUP_CROSSTAB_HEADER);
+			hcc.setSouth(cc.getSouth());
+			hcc.setNorth(cc.getNorth());
 		}
 		return south;
 	}
 
-	public Guide fillRowGroupH(Guide north, Guide south,
-			JRDesignCrosstab crosstab) {
+	public Guide fillRowGroupH(Guide north, Guide south, JRDesignCrosstab crosstab) {
 		JRCrosstabRowGroup[] rows = crosstab.getRowGroups();
 		for (int i = 0; i < rows.length; i++) {
 			JRCrosstabRowGroup cg = rows[i];
 			if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.START) {
-				CrosstabCell cc = createCell(
-						(JRDesignCellContents) cg.getTotalHeader(),
-						JRCrosstabOrigin.TYPE_ROW_GROUP_TOTAL_HEADER);
+				CrosstabCell cc = createCell((JRDesignCellContents) cg.getTotalHeader(), JRCrosstabOrigin.TYPE_ROW_GROUP_TOTAL_HEADER);
 				north.addSouth(cc);
 
 				Guide tsouth = cg.hasTotal() ? addNext(north, hGuides) : south;
 				tsouth.addNorth(cc);
 				tsouth.setY(north, cc.cell);
 
-				cc = createCell((JRDesignCellContents) cg.getHeader(),
-						JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER);
+				cc = createCell((JRDesignCellContents) cg.getHeader(), JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER);
 				tsouth.addSouth(cc);
 				south.addNorth(cc);
 				south.setY(tsouth, cc.cell);
 
 				north = tsouth;
 			} else if (cg.getTotalPositionValue() == CrosstabTotalPositionEnum.END) {
-				CrosstabCell cc = createCell(
-						(JRDesignCellContents) cg.getHeader(),
-						JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER);
+				CrosstabCell cc = createCell((JRDesignCellContents) cg.getHeader(), JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER);
 				north.addSouth(cc);
 
 				Guide tsouth = cg.hasTotal() ? addNext(north, hGuides) : south;
 				tsouth.addNorth(cc);
 				tsouth.setY(north, cc.cell);
 
-				cc = createCell((JRDesignCellContents) cg.getTotalHeader(),
-						JRCrosstabOrigin.TYPE_ROW_GROUP_TOTAL_HEADER);
+				cc = createCell((JRDesignCellContents) cg.getTotalHeader(), JRCrosstabOrigin.TYPE_ROW_GROUP_TOTAL_HEADER);
 				tsouth.addSouth(cc);
 				south.addNorth(cc);
 				south.setY(tsouth, cc.cell);
 
 				south = tsouth;
 			} else {
-				CrosstabCell cc = createCell(
-						(JRDesignCellContents) cg.getHeader(),
-						JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER);
+				CrosstabCell cc = createCell((JRDesignCellContents) cg.getHeader(), JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER);
 				north.addSouth(cc);
 				south.addNorth(cc);
 				south.setY(north, cc.cell);
@@ -356,44 +336,34 @@ public class CrosstabMatrix {
 		return south;
 	}
 
-	public Guide fillHeaderCellH(Guide north, Guide south,
-			JRDesignCrosstab crosstab) {
+	public Guide fillHeaderCellH(Guide north, Guide south, JRDesignCrosstab crosstab) {
 		JRCellContents c = crosstab.getHeaderCell();
-		CrosstabCell cc = createCell((JRDesignCellContents) c,
-				JRCrosstabOrigin.TYPE_HEADER_CELL);
+		CrosstabCell cc = createCell((JRDesignCellContents) c, JRCrosstabOrigin.TYPE_HEADER_CELL);
 		north.addSouth(cc);
 		south.addNorth(cc);
 		south.setY(north, c);
 		return south;
 	}
 
-	public Guide fillHeaderCellV(Guide west, Guide east,
-			JRDesignCrosstab crosstab) {
+	public Guide fillHeaderCellV(Guide west, Guide east, JRDesignCrosstab crosstab) {
 		JRCellContents c = crosstab.getHeaderCell();
-		CrosstabCell cc = createCell((JRDesignCellContents) c,
-				JRCrosstabOrigin.TYPE_HEADER_CELL);
+		CrosstabCell cc = createCell((JRDesignCellContents) c, JRCrosstabOrigin.TYPE_HEADER_CELL);
 		west.addEast(cc);
 		east.addWest(cc);
 		east.setX(west, c);
 		return east;
 	}
 
-	public CrosstabCell addCell4ColTotal(Guide north, Guide south,
-			JRCrosstabColumnGroup cg) {
-		CrosstabCell cc = createCell(
-				(JRDesignCellContents) cg.getTotalHeader(),
-				JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER);
+	public CrosstabCell addCell4ColTotal(Guide north, Guide south, JRCrosstabColumnGroup cg) {
+		CrosstabCell cc = createCell((JRDesignCellContents) cg.getTotalHeader(), JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER);
 		north.addSouth(cc);
 		south.addNorth(cc);
 		south.setY(north, cc.cell);
 		return cc;
 	}
 
-	public CrosstabCell addCell4ColTotal(Guide west, Guide east,
-			JRCrosstabRowGroup cg) {
-		CrosstabCell cc = createCell(
-				(JRDesignCellContents) cg.getTotalHeader(),
-				JRCrosstabOrigin.TYPE_ROW_GROUP_TOTAL_HEADER);
+	public CrosstabCell addCell4ColTotal(Guide west, Guide east, JRCrosstabRowGroup cg) {
+		CrosstabCell cc = createCell((JRDesignCellContents) cg.getTotalHeader(), JRCrosstabOrigin.TYPE_ROW_GROUP_TOTAL_HEADER);
 		west.addEast(cc);
 		east.addWest(cc);
 		east.setX(west, cc.cell);

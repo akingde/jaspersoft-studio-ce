@@ -23,7 +23,7 @@ import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 public class CellFigure extends FrameFigure {
-	private JRDesignCellContents cell;
+	protected JRDesignCellContents cell;
 
 	public CellFigure() {
 		super();
@@ -32,14 +32,16 @@ public class CellFigure extends FrameFigure {
 	public void setJRElement(JRDesignCellContents jrElement, JSSDrawVisitor drawVisitor) {
 		this.cell = jrElement;
 		super.setJRElement(null, drawVisitor);
-		setSize(getElementWidth(), getElementHeight());
+		if (cell != null)
+			setSize(getElementWidth(), getElementHeight());
 	}
 
 	@Override
 	protected JRLineBox getLineBox() {
 		JRLineBox box = null;
-		box = cell.getLineBox();
-		if (box == null && cell.getStyle() != null)
+		if (cell != null)
+			box = cell.getLineBox();
+		if (box == null && cell != null && cell.getStyle() != null)
 			box = cell.getStyle().getLineBox();
 
 		return box;
@@ -47,12 +49,16 @@ public class CellFigure extends FrameFigure {
 
 	@Override
 	protected int getElementHeight() {
-		return cell.getHeight();
+		if (cell != null)
+			return cell.getHeight();
+		return getSize().width;
 	}
 
 	@Override
 	protected int getElementWidth() {
-		return cell.getWidth();
+		if (cell != null)
+			return cell.getWidth();
+		return getSize().width;
 	}
 
 	@Override

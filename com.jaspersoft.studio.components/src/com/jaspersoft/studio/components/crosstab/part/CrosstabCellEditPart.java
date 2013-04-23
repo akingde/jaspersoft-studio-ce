@@ -78,8 +78,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 	@Override
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
-			Command c = CrosstabComponentFactory.INST().getStretchToContent(
-					getModel());
+			Command c = CrosstabComponentFactory.INST().getStretchToContent(getModel());
 			if (c != null)
 				getViewer().getEditDomain().getCommandStack().execute(c);
 		}
@@ -116,8 +115,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 						if (ep instanceof CrosstabCellEditPart)
 							return null;
 					}
-				} else if (request instanceof CreateRequest
-						&& !(getModel() instanceof MCell))
+				} else if (request instanceof CreateRequest && !(getModel() instanceof MCell))
 					return null;
 				if (targetFeedback == null) {
 					targetFeedback = new RectangleFigure();
@@ -132,8 +130,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 					getFeedbackLayer().translateToRelative(rect);
 
 					targetFeedback.setBounds(rect.shrink(2, 2));
-					targetFeedback.setBorder(new LineBorder(
-							ColorConstants.lightBlue, 3));
+					targetFeedback.setBorder(new LineBorder(ColorConstants.lightBlue, 3));
 					addFeedback(targetFeedback);
 				}
 				return targetFeedback;
@@ -144,15 +141,13 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 				getLayoutTargetFeedback(request);
 			}
 
-			protected Command getCreateCommand(ANode parent, Object obj,
-					Rectangle constraint, int index) {
+			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
 				if (parent instanceof MPage)
 					parent = getModel();
 				Rectangle b = getModel().getBounds();
 				int x = constraint.x - b.x - ReportPageFigure.PAGE_BORDER.left;
 				int y = constraint.y - b.y - ReportPageFigure.PAGE_BORDER.top;
-				constraint = new Rectangle(x, y, constraint.width,
-						constraint.height);
+				constraint = new Rectangle(x, y, constraint.width, constraint.height);
 
 				return super.getCreateCommand(parent, obj, constraint, index);
 			}
@@ -165,47 +160,39 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 					MCell cparent = (MCell) cmodel.getParent();
 					if (cparent == getModel()) {
 						SetPageConstraintCommand cmd = new SetPageConstraintCommand();
-						MGraphicElement model = (MGraphicElement) child
-								.getModel();
+						MGraphicElement model = (MGraphicElement) child.getModel();
 						Rectangle r = model.getBounds();
 
-						JRDesignElement jde = (JRDesignElement) model
-								.getValue();
+						JRDesignElement jde = (JRDesignElement) model.getValue();
 						int x = r.x + rect.x - jde.getX() + 1;
 						int y = r.y + rect.y - jde.getY() + 1;
 						rect.setLocation(x, y);
-						cmd.setContext(getModel(), (ANode) child.getModel(),
-								rect);
+						cmd.setContext(getModel(), (ANode) child.getModel(), rect);
 
 						return cmd;
 					} else {
 						CompoundCommand c = new CompoundCommand();
 
 						c.add(new OrphanElementCommand(cparent, cmodel));
-						c.add(new CreateElementCommand(getModel(), cmodel,
-								rect, -1));
+						c.add(new CreateElementCommand(getModel(), cmodel, rect, -1));
 						return c;
 					}
 				} else if (child instanceof CalloutEditPart) {
-					return new CalloutSetConstraintCommand(
-							((CalloutEditPart) child).getModel(),
-							adaptConstraint(constraint));
+					return new CalloutSetConstraintCommand(((CalloutEditPart) child).getModel(), adaptConstraint(constraint));
 				} else if (child instanceof PinEditPart) {
-					return new PinSetConstraintCommand(((PinEditPart) child)
-							.getModel(), adaptConstraint(constraint));
+					return new PinSetConstraintCommand(((PinEditPart) child).getModel(), adaptConstraint(constraint));
 				}
 				return null;
 			}
 
 		});
-		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
-				new CrosstabCellResizableEditPolicy() {
-					@Override
-					protected void showSelection() {
-						super.showSelection();
-						updateRulers();
-					}
-				});
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new CrosstabCellResizableEditPolicy() {
+			@Override
+			protected void showSelection() {
+				super.showSelection();
+				updateRulers();
+			}
+		});
 	}
 
 	@Override
@@ -215,6 +202,8 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 		rect.setToolTip(new Label(model.getToolTip()));
 		if (model.getValue() != null) {
 			Rectangle bounds = ((IGraphicElement) model).getBounds();
+			if (bounds == null)
+				bounds = new Rectangle(0, 0, 0, 0);
 			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
 			int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
 
@@ -222,14 +211,13 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 
 			if (model instanceof MCell) {
 				CellFigure f = (CellFigure) rect;
-				f.setJRElement((JRDesignCellContents) model.getValue(),
-						getDrawVisitor());
+				f.setJRElement((JRDesignCellContents) model.getValue(), getDrawVisitor());
 			} else {
 				rect.setSize(bounds.width, bounds.height);
 			}
 			updateRulers();
 		} else {
-			System.out.println("EMPTy");
+			// System.out.println("EMPTy");
 		}
 		if (getSelected() == 1)
 			updateRulers();
