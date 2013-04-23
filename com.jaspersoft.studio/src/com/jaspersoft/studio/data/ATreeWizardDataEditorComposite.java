@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Label;
 import com.jaspersoft.studio.data.designer.QueryStatus;
 import com.jaspersoft.studio.data.ui.SimpleQueryWizardDataEditorComposite;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
 /**
  * 
@@ -88,6 +89,7 @@ public abstract class ATreeWizardDataEditorComposite extends SimpleQueryWizardDa
 	 */
 	protected void createQueryTextArea(Composite parent) {
 		queryTextArea = new StyledText(parent, SWT.BORDER);
+		queryTextArea.setFont(FontUtils.getEditorsFont(getJasperReportsConfiguration()));
 		queryTextArea.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				queryTextAreaModified();

@@ -82,7 +82,7 @@ public class FontUtils {
 			fontDataStr = jconfig.getProperty(
 					DesignerPreferencePage.P_INTERNAL_EDITORS_FONT, getTextEditorFontDataAsString());
 		}
-		else {
+		if(fontDataStr==null) {
 			// Gets default from JaspersoftStudio plugin
 			fontDataStr = PreferencesUtils.getJaspersoftStudioPrefStore().getString(
 					DesignerPreferencePage.P_INTERNAL_EDITORS_FONT);

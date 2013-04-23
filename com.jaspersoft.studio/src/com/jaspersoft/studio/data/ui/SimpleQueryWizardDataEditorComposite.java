@@ -41,6 +41,7 @@ import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.UndoRedoImpl;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardRunnablePage;
@@ -149,7 +150,7 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 		fd_styledText.top = new FormAttachment(lblTitle, 6);
 		fd_styledText.left = new FormAttachment(lblTitle, 0, SWT.LEFT);
 		styledText.setLayoutData(fd_styledText);
-		
+		styledText.setFont(FontUtils.getEditorsFont(getJasperReportsConfiguration()));
 		styledText.addModifyListener(new ModifyListener() {
 			
 			@Override
