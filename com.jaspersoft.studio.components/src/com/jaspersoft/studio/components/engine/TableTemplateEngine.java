@@ -393,11 +393,10 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		JRDesignSection bandSection = (JRDesignSection)jd.getDetailSection();
 		for(JRBand actualDetail : jd.getDetailSection().getBands())
 			bandSection.removeBand(actualDetail);
-		/*
 		//Delete the groups
 		while (jd.getGroupsList().size()>0)
 			jd.getGroupsList().remove(0);
-		
+		/*
 		jd.setPageHeader(null);
 		jd.setColumnHeader(null);
 		jd.setColumnFooter(null);
