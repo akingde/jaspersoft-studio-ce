@@ -221,6 +221,12 @@
             type="ReportExecution">
       </hyperlinkType>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.inputcontroltypes">
+      <inputcontroltypes
+            InputControlProvider="com.jaspersoft.studio.server.editor.input.main.InputControlTypesProvider">
+      </inputcontroltypes>
+   </extension>
 
 
 </plugin>

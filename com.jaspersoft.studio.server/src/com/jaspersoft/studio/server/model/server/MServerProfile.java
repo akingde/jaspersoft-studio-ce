@@ -87,8 +87,14 @@ public class MServerProfile extends ANode {
 	@Override
 	public String getToolTip() {
 		ServerProfile v = getValue();
-		if (v != null && v.getName() != null && !v.getName().isEmpty())
-			return v.getName();
+		if (v != null && v.getName() != null && !v.getName().isEmpty()) {
+			String tt = v.getName();
+			if (v.getUrl() != null)
+				tt += "\n" + v.getUrl();
+			if (v.getUser() != null)
+				tt += "\nUser: " + v.getUser();
+			return tt;
+		}
 		return getIconDescriptor().getTitle();
 	}
 

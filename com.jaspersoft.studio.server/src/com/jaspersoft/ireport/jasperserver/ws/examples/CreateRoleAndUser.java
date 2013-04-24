@@ -87,7 +87,8 @@ public class CreateRoleAndUser {
 
         // Use this method to delete a user
         client.getUserAndRoleManagementService().deleteUser(newUser);
-
+		// new WSUserSearchCriteria(name, tenantId, includeSubOrgs, requiredRoles,
+		// maxRecords);
         client.getUserAndRoleManagementService().putUser(newUser);
 
         

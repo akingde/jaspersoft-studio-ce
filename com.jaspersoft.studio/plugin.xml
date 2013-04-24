@@ -41,6 +41,7 @@
 <extension-point id="toolitems" name="Toolitems" schema="schema/toolitems.exsd"/>
 <extension-point id="templateProviderSupport" name="Template Provider Support" schema="schema/templateProviderSupport.exsd"/>
 <extension-point id="stylesViewContributor" name="Template Styles View Contributor" schema="schema/stylesViewContributor.exsd"/>
+<extension-point id="inputcontroltypes" name="inputcontroltypes" schema="schema/inputcontroltypes.exsd"/>
 
 
    <extension

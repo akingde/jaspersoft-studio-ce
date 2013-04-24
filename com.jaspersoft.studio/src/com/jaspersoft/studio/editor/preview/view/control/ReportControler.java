@@ -48,6 +48,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
 import com.jaspersoft.studio.editor.preview.IParametrable;
@@ -106,6 +107,9 @@ public class ReportControler {
 		inputs.add(new DateInput());
 		inputs.add(new ImageInput());
 		inputs.add(new CollectionInput());
+		List<IDataInput> ict = JaspersoftStudioPlugin.getInputControlTypeManager().getInputControlTypes();
+		if (ict != null && !ict.isEmpty())
+			inputs.addAll(ict);
 	}
 
 	private List<JRParameter> prompts;

@@ -20,6 +20,7 @@ import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
+import com.jaspersoft.studio.editor.preview.input.ext.InputControlTypeManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.property.PostSetValueManager;
@@ -135,6 +136,16 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 			postSetValueManager.init();
 		}
 		return postSetValueManager;
+	}
+
+	private static InputControlTypeManager inputControlTypeManager;
+
+	public static InputControlTypeManager getInputControlTypeManager() {
+		if (inputControlTypeManager == null) {
+			inputControlTypeManager = new InputControlTypeManager();
+			inputControlTypeManager.init();
+		}
+		return inputControlTypeManager;
 	}
 
 	@Override
