@@ -10,10 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.subreport;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRException;
@@ -234,15 +232,12 @@ public class MSubreport extends MGraphicElement {
 		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
 			if (value.getClass().isArray()) {
 				JRSubreportParameter[] v = (JRSubreportParameter[]) value;
-				Set<String> names = new HashSet<String>();
-				for (JRSubreportParameter prm : v)
-					names.add(prm.getName());
-				for (String name : names)
-					jrElement.removeParameter(name);
-
-				for (JRSubreportParameter param : v)
+				JRSubreportParameter[] old = jrElement.getParameters();
+				for (JRSubreportParameter p : old)
+					jrElement.removeParameter(p.getName());
+				for (JRSubreportParameter p : v)
 					try {
-						jrElement.addParameter(param);
+						jrElement.addParameter(p);
 					} catch (JRException e) {
 						e.printStackTrace();
 					}
