@@ -164,7 +164,8 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 							MReportUnit mrunit = getReportUnit();
 							n = mrunit;
 
-							if (new FindResources().find(monitor, mrunit, jrConfig, jDesign)) {
+							boolean find = new FindResources().find(monitor, mrunit, jrConfig, jDesign);
+							if (find) {
 								Display.getDefault().syncExec(new Runnable() {
 									public void run() {
 										page1.fillData();

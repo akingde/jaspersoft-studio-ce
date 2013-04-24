@@ -107,7 +107,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 	@Override
 	public boolean canFlipToNextPage() {
-		return super.canFlipToNextPage() && (getReportUnit() instanceof MReportUnit) && getErrorMessage() == null;
+		return super.canFlipToNextPage() && (getReportUnit() instanceof MReportUnit && getReportUnit().getParent() != null) && getErrorMessage() == null;
 	}
 
 	@Override
