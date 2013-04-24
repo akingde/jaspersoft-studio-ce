@@ -20,8 +20,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRChild;
@@ -78,6 +81,11 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	private List<Object> tableFields;
 	
 	/**
+	 * The list of group of the table
+	 */
+	private List<Object> groupFields;
+	
+	/**
 	 * Sample of the Static Text element that should be used inside the column header\footer cells
 	 */
 	private JRDesignStaticText colHeaderLabel;
@@ -118,15 +126,15 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	private TableSections sections;
 	
 	/**
-	 * Create a column for a table
+	 * Create a column 
 	 *  
-	 * @param tbl the column 
+	 * @param tbl the table 
 	 * @param jd the jasper design
 	 * @param fieldName the column header
 	 * @param fieldValue the field value
 	 * @param colWidth the column width
 	 */
-	private void createColumn(StandardTable tbl, JasperDesign jd, String fieldName, String fieldValue, int colWidth){
+	private StandardColumn generateColumn(StandardTable tbl, JasperDesign jd, String fieldName, String fieldValue, int colWidth){
 		StandardColumn col = CreateColumnCommand.addColumn(jd, tbl,
 				sections.isTableHeader(), sections.isTableFooter(),
 				sections.isColumnHeader(), sections.isColumnFooter(),
@@ -161,7 +169,68 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		jre.setText(fieldValue);
 		fText.setExpression(jre);
 		detCell.addElement(fText);
-		tbl.addColumn(col);
+			
+		return col;
+	}
+	
+	/**
+	 * Request the creation of a column and add it to a Column Group
+	 *  
+	 * @param tbl the table 
+	 * @param jd the jasper design
+	 * @param fieldName the column header
+	 * @param fieldValue the field value
+	 * @param colWidth the column width
+	 * @param parentCol the group where the column will be add
+	 */
+	protected void createGroupColumn(StandardTable tbl, JasperDesign jd, String fieldName, String fieldValue, int colWidth, StandardColumnGroup parentCol){
+		parentCol.addColumn(generateColumn(tbl, jd, fieldName, fieldValue, colWidth));
+	}
+	
+	/**
+	 * Request the creation of a column and add it to a table
+	 *  
+	 * @param tbl the table 
+	 * @param jd the jasper design
+	 * @param fieldName the column header
+	 * @param fieldValue the field value
+	 * @param colWidth the column width
+	 */
+	private void createColumn(StandardTable tbl, JasperDesign jd, String fieldName, String fieldValue, int colWidth){
+		tbl.addColumn(generateColumn(tbl, jd, fieldName, fieldValue, colWidth));
+	}
+	
+	
+	/**
+	 * Return the real column height, necessary to show all the cells
+	 * 
+	 * @param col a column, used to calculate the height
+	 * @return the table height
+	 */
+	private int getTableHeight(BaseColumn col){
+		int height = 0;
+		
+		if (col.getTableHeader() != null) height += col.getTableHeader().getHeight();
+		if (col.getTableFooter() != null) height += col.getTableFooter().getHeight();
+		if (col.getColumnHeader()!= null) height += col.getColumnHeader().getHeight();
+		if (col.getColumnFooter() != null) height += col.getColumnFooter().getHeight();
+		for(GroupCell cell : col.getGroupFooters()){
+			height += cell.getCell().getHeight();
+		}
+		for(GroupCell cell : col.getGroupHeaders()){
+			height += cell.getCell().getHeight();
+		}
+		
+		if (col instanceof StandardColumnGroup){
+			StandardColumnGroup groupCol = (StandardColumnGroup)col;
+			height += getTableHeight(groupCol.getColumns().get(0));
+		}
+		
+		if (col instanceof StandardColumn){
+			StandardColumn standardCol = (StandardColumn)col;
+			if (standardCol.getDetailCell() != null) height += standardCol.getDetailCell().getHeight();
+		}
+		return height;
 	}
 	
 	/**
@@ -181,22 +250,64 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		tbl.setDatasetRun(datasetRun);
 		
 		
-		if (tableFields != null) {
+		if (tableFields != null && tableFields.size()>0) {
 			int colWidth = 40;
 			if (tableFields.size() > 0)	colWidth = tableWidth / tableFields.size();
 			if (sections == null) sections = TableWizardLayoutPage.getDefaultSection();
-			for (Object f : tableFields) {
-				createColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth);
+			
+			//If there are at least one group then a Group column will be build
+			if (groupFields!= null && groupFields.size()>0)
+			{	
+				//The group col is wide like all the other cells of a row together
+				int groupColWidth = colWidth*tableFields.size();
+				StandardColumnGroup parentCol = new StandardColumnGroup();
+				parentCol.setWidth(groupColWidth);
+				//Create the column for the group column
+				for (Object f : tableFields) {
+					createGroupColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth,parentCol);
+				}
+				//Use col header as sample for the group cells
+				int height = parentCol.getColumns().get(0).getColumnHeader().getHeight();
+				//Create a spanned cell inside the column group, that take the field with the name of the group
+				for(Object field : groupFields){
+					JRDesignField groupField = (JRDesignField) field;
+					DesignCell cell = new DesignCell();
+					cell.setHeight(height);
+					JRDesignTextField sText = (JRDesignTextField) new MTextField().createJRElement(jd);
+					sText.setWidth(parentCol.getWidth());
+					sText.setHeight(cell.getHeight());
+					sText.setX(0);
+					sText.setY(0);
+					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + groupField.getName() + "}", groupField.getValueClassName());
+					sText.setExpression(groupExpression);
+					cell.addElement(sText);
+					parentCol.setGroupHeader(groupField.getName(), cell);
+					//cell = new DesignCell();
+					//cell.setHeight(height);
+					//parentCol.setGroupFooter(groupField.getName(), cell);
+				}
+				tbl.addColumn(parentCol);
+				tableHeight = getTableHeight(parentCol);
+			} else {
+				//There are no groups, so will not be created group columns
+				for (Object f : tableFields) {
+					createColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth);
+				}
+				tableHeight = getTableHeight((StandardColumn)tbl.getColumns().get(0));
 			}
 		} else {
+			//If there are no fields defined create an empty column
 			createColumn(tbl,jd,"","\"\"",160);
 		}
+				
 		//Create and apply the styles to the table. The styles should be read from the template report
 		//if for some reason this styles are not present then a default set of styles will be used
 		ApplyTableStyleAction applyAction;
 		if (stylesList != null) applyAction = new ApplyTableStyleAction(stylesList, jrElement);
 		else  applyAction = new ApplyTableStyleAction(TableWizardLayoutPage.getDefaultStyle(), jrElement);
 		applyAction.applayStyle(jd);
+		
+		//Recalculate the real table height
 		return jrElement;
 	}
 	
@@ -331,71 +442,8 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		return null;
 	}
 	
-	/**
-	 * Handle the groups bands
-	 */
-	protected void createGroups(JasperDesign jd, List<Object> groupFields) {
-		// Adjusting groups
-		if (groupFields != null){
-			for (int i = 0; i < groupFields.size(); ++i) 
-			{
-				if (jd.getGroupsList().size() <= i) {
-					try {
-						// Add a new group on the fly...
-						JRDesignGroup g = new JRDesignGroup();
-						String name = ((JRField) groupFields.get(i)).getName();
-						g.setName(name);
-						JRDesignExpression jre = new JRDesignExpression();
-						jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
-						g.setExpression(jre);
-						jd.addGroup(g);
-					} catch (JRException e) {}
-				}
 
-				JRField gr = (JRField) groupFields.get(i);
-				JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(i);
-
-				// find the two elements having as expression: G1Label and G1Field
-				if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
-					JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
-					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}", gr.getValueClassName());
-					group.setExpression(groupExpression);
-					JRDesignStaticText st = findStaticTextElement(groupHeaderSection, "G" + (i + 1) + "Label"); //$NON-NLS-1$ $NON-NLS-2$
-					if (st == null)
-						st = findStaticTextElement(groupHeaderSection, "GroupLabel"); //$NON-NLS-1$ 
-					if (st == null)
-						st = findStaticTextElement(groupHeaderSection, "Group Label"); //$NON-NLS-1$ 
-					if (st == null)
-						st = findStaticTextElement(groupHeaderSection, "Label"); //$NON-NLS-1$ 
-					if (st == null)
-						st = findStaticTextElement(groupHeaderSection, "Group name"); //$NON-NLS-1$ 
-					if (st != null)
-						st.setText(gr.getName());
-
-					JRDesignTextField tf = findTextFieldElement(groupHeaderSection, "G" + (i + 1) + "Field"); //$NON-NLS-1$ $NON-NLS-2$
-					if (tf == null)
-						tf = findTextFieldElement(groupHeaderSection, "GroupField"); //$NON-NLS-1$ 
-					if (tf == null)
-						tf = findTextFieldElement(groupHeaderSection, "Group Field"); //$NON-NLS-1$ 
-					if (tf == null)
-						tf = findTextFieldElement(groupHeaderSection, "Field"); //$NON-NLS-1$ 
-
-					if (tf != null) {
-						JRDesignExpression expression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}", //$NON-NLS-1$ $NON-NLS-2$
-								gr.getValueClassName());
-						tf.setExpression(expression);
-					}
-				}
-			}
-
-			// Remove extra groups...
-			if (groupFields != null) {
-				while (groupFields.size() < jd.getGroupsList().size()) {
-					jd.removeGroup((JRDesignGroup) jd.getGroupsList().get(groupFields.size()));
-				}
-			}
-		}
-	}
+	
 
 	/**
 	 * Create the report with the table inside
@@ -429,6 +477,24 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 				}
 			}
 		}
+		
+		//Create the groups into the dataset
+		groupFields = (List<Object>) settings.get(DefaultTemplateEngine.GROUP_FIELDS);
+		if (groupFields != null){
+			for(Object field : groupFields){
+				try {
+					JRDesignGroup newGroup = new JRDesignGroup();
+					JRDesignField groupField = (JRDesignField)field;
+					newGroup.setName(groupField.getName());
+					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" +groupField.getName() + "}", groupField.getValueClassName());
+					newGroup.setExpression(groupExpression);
+					tableDataset.addGroup(newGroup);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
 		JRDesignExpression exp = new JRDesignExpression();
 		exp.setText("$P{REPORT_CONNECTION}");
@@ -441,23 +507,25 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		}
 		
 		JasperDesign jd = reportBundle.getJasperDesign();
-		JRDesignBand summaryBand =  (JRDesignBand)jd.getSummary();
+		jd.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL); 
+		
+		//Build the table and recalculate the table height
+		JRDesignElement table = getTable(jd,datasetRun);
+		
 		//If the summary doesn't exist it will be created
+		JRDesignBand summaryBand =  (JRDesignBand)jd.getSummary();
 		if (summaryBand == null) {
 			summaryBand = MBand.createJRBand();
 			jd.setSummary(summaryBand);
-			summaryBand.setHeight(tableHeight);
 		}
-		//Build the table and add it to the report
-		JRDesignElement table = getTable(jd,datasetRun);
+		
+		//Set the summary and table height and width according to the new value, and add the table to the report
+		summaryBand.setHeight(tableHeight);
 		table.setWidth(tableWidth);
 		table.setHeight(tableHeight);
 		table.setX(tableX);
 		table.setY(tableY);
 		summaryBand.addElement(table);
-		jd.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL); 
-		
-		//createGroups(jd,(List<Object>) settings.get(DefaultTemplateEngine.GROUP_FIELDS));
 		
 		return reportBundle;
 	}

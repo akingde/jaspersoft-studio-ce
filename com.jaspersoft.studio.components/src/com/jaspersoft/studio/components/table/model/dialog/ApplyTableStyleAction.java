@@ -23,7 +23,9 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.JRElement;
@@ -101,37 +103,71 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 		StandardTable table = getStandardTable(getElement());
 		List<BaseColumn> columns = TableUtil.getAllColumns(table);
 		for(BaseColumn col : columns){
-			// Seting the cell style
-			DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
-			if (colHeadCell != null){
-				colHeadCell.setStyle(null);
-				colHeadCell.setStyle(styleList.get(2));
-			}
-			DesignCell tblHeadCell = (DesignCell) col.getTableHeader();
-			if (tblHeadCell != null){
-				tblHeadCell.setStyle(null);
-				tblHeadCell.setStyle(styleList.get(1));
-			}
-			DesignCell tblFooterCell = (DesignCell) col.getTableFooter();
-			if (tblFooterCell != null){
-				tblFooterCell.setStyle(null);
-				tblFooterCell.setStyle(styleList.get(1));
-			}
-			DesignCell colFooterCell = (DesignCell) col.getColumnFooter();
-			if (colFooterCell != null){
-				colFooterCell.setStyle(null);
-				colFooterCell.setStyle(styleList.get(2));
-			}
-			if (col instanceof StandardColumn){
-				DesignCell detCell = (DesignCell) ((StandardColumn)col).getDetailCell();
-				if (detCell != null) {
-					detCell.setStyle(null);
-					detCell.setStyle(styleList.get(3));
-				}
-			}
-			// Style set
+			setColumnStyles(col, styleList);
 		}
+		
+		for(BaseColumn baseCol : table.getColumns()){
+			if (baseCol instanceof StandardColumnGroup){
+				StandardColumnGroup columnGroup = (StandardColumnGroup)baseCol;
+				setColumnStyles(columnGroup,styleList);
+			}
+		}
+		
 	}
+	
+	/**
+	 * Set the styles on a set of columns
+	 */
+	private void setColumnStyles(BaseColumn col, List<JRDesignStyle> styleList)
+	{
+		// Seting the cell style
+		DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
+		if (colHeadCell != null){
+			colHeadCell.setStyle(null);
+			colHeadCell.setStyle(styleList.get(2));
+		}
+		DesignCell tblHeadCell = (DesignCell) col.getTableHeader();
+		if (tblHeadCell != null){
+			tblHeadCell.setStyle(null);
+			tblHeadCell.setStyle(styleList.get(1));
+		}
+		DesignCell tblFooterCell = (DesignCell) col.getTableFooter();
+		if (tblFooterCell != null){
+			tblFooterCell.setStyle(null);
+			tblFooterCell.setStyle(styleList.get(1));
+		}
+		DesignCell colFooterCell = (DesignCell) col.getColumnFooter();
+		if (colFooterCell != null){
+			colFooterCell.setStyle(null);
+			colFooterCell.setStyle(styleList.get(2));
+		}
+		if (col instanceof StandardColumn){
+			DesignCell detCell = (DesignCell) ((StandardColumn)col).getDetailCell();
+			if (detCell != null) {
+				detCell.setStyle(null);
+				detCell.setStyle(styleList.get(3));
+			}
+		}
+		
+		for(GroupCell cell : col.getGroupHeaders()){
+			DesignCell grCell = (DesignCell) cell.getCell();
+			if (grCell != null) {
+				grCell.setStyle(null);
+				grCell.setStyle(styleList.get(2));
+			}
+		}
+		
+		for(GroupCell cell : col.getGroupFooters()){
+			DesignCell grCell = (DesignCell) cell.getCell();
+			if (grCell != null) {
+				grCell.setStyle(null);
+				grCell.setStyle(styleList.get(2));
+			}
+		}
+		
+		// Style set
+	}
+	
 	
 	/**
 	 * Extract the list of styles actually used on the table 
