@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
@@ -112,7 +107,7 @@ public class FieldsTable {
 		attachCellEditors(tviewer, wtable);
 		UIUtil.setViewerCellEditingOnDblClick(tviewer);
 		addDropSupport();
-		
+
 		Composite bGroup = new Composite(composite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
@@ -157,24 +152,21 @@ public class FieldsTable {
 
 	private void addDropSupport() {
 		int ops = DND.DROP_COPY | DND.DROP_MOVE;
-		Transfer[] transfers = new Transfer[] { NodeTransfer.getInstance(),
-				PluginTransfer.getInstance() };
-		tviewer.addDragSupport(ops, transfers, new NodeDragListener(
-				tviewer));
+		Transfer[] transfers = new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() };
+		tviewer.addDragSupport(ops, transfers, new NodeDragListener(tviewer));
 
 		transfers = new Transfer[] { NodeTransfer.getInstance() };
 		NodeTableDropAdapter dropAdapter = new NodeTableDropAdapter(tviewer) {
 			@Override
 			public boolean performDrop(Object data) {
-				if (data instanceof ANode[]){
+				if (data instanceof ANode[]) {
 					ANode[] nodes = (ANode[]) data;
-					List<JRField> fields=(List<JRField>) tviewer.getInput();
-					for(ANode n : nodes){
+					List<JRField> fields = (List<JRField>) tviewer.getInput();
+					for (ANode n : nodes) {
 						JRDesignField f = (JRDesignField) n.getAdapter(JRDesignField.class);
-						if(f!=null){
+						if (f != null) {
 							// be sure that the name is ok
-							f.setName(
-									ModelUtils.getNameForField((List<JRDesignField>) tviewer.getInput(), f.getName()));
+							f.setName(ModelUtils.getNameForField((List<JRDesignField>) tviewer.getInput(), f.getName()));
 							fields.add(f);
 						}
 					}
@@ -184,7 +176,7 @@ public class FieldsTable {
 				return false;
 			}
 		};
-		tviewer.addDropSupport(ops, transfers, dropAdapter);		
+		tviewer.addDropSupport(ops, transfers, dropAdapter);
 	}
 
 	public <T extends JRField> void setFields(List<T> fields) {
@@ -231,8 +223,11 @@ public class FieldsTable {
 						if (exists)
 							break;
 					}
-					if (!exists)
+					if (!exists) {
+						dataset.getFieldsMap().remove(field.getName());
 						field.setName((String) value);
+						dataset.getFieldsMap().put(field.getName(), field);
+					}
 				} else if ("TYPE".equals(property)) { //$NON-NLS-1$
 					field.setValueClassName((String) value);
 				} else if ("DESCRIPTION".equals(property)) { //$NON-NLS-1$

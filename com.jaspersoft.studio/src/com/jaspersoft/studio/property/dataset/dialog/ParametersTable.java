@@ -215,7 +215,11 @@ public class ParametersTable {
 				TableItem tableItem = (TableItem) element;
 				JRDesignParameter field = (JRDesignParameter) tableItem.getData();
 				if ("NAME".equals(property)) { //$NON-NLS-1$
-					field.setName((String) value);
+					if (dataset.getParametersMap().get(field.getName()) != null) {
+						dataset.getParametersMap().remove(field.getName());
+						field.setName((String) value);
+						dataset.getParametersMap().put(field.getName(), field);
+					}
 				} else if ("ISFORPROMPT".equals(property) && isMainDataset) { //$NON-NLS-1$
 					field.setForPrompting((Boolean) value);
 				} else if ("TYPE".equals(property)) { //$NON-NLS-1$
