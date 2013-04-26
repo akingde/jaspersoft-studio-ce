@@ -164,4 +164,10 @@ public class Misc {
 			return a.equals(b);
 		return a.equalsIgnoreCase(b);
 	}
+
+	public static String getBase(String resid) {
+		if (resid.indexOf(".") > 0)
+			return resid.substring(0, resid.indexOf("."));
+		return resid;
+	}
 }
