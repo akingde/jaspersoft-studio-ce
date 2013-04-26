@@ -226,7 +226,7 @@ public class CreateElementCommand extends Command {
 			if (jrElement != null)
 				location = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
 			else
-				location = new Rectangle(0, 0, 50, 30);
+				location = new Rectangle(band.getBounds().x, band.getBounds().y, 50, 30);
 		}
 		location = fixLocation(location, band, jrElement);
 	}
