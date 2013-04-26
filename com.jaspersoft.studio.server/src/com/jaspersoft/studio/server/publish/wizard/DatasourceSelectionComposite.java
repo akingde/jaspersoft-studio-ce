@@ -84,20 +84,16 @@ public class DatasourceSelectionComposite extends Composite {
 				setEnabled(SelectorDatasource.SelectionType.REMOTE_DATASOURCE);
 			}
 		});
-		rbDSFromRepo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
-				false, 2, 1));
-		rbDSFromRepo
-				.setText(Messages.DatasourceSelectionComposite_FromRepository);
+		rbDSFromRepo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
+		rbDSFromRepo.setText(Messages.DatasourceSelectionComposite_FromRepository);
 
 		textDSFromRepo = new Text(this, SWT.BORDER);
 		textDSFromRepo.setEnabled(false);
-		textDSFromRepo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				false, 1, 1));
+		textDSFromRepo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
 		btnSelectDSFromRepo = new Button(this, SWT.ARROW | SWT.DOWN);
 		btnSelectDSFromRepo.setEnabled(false);
-		GridData gd_btnSelectDSFromRepo = new GridData(SWT.FILL, SWT.FILL,
-				false, false, 1, 1);
+		GridData gd_btnSelectDSFromRepo = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_btnSelectDSFromRepo.widthHint = 20;
 		btnSelectDSFromRepo.setLayoutData(gd_btnSelectDSFromRepo);
 		btnSelectDSFromRepo.addSelectionListener(new SelectionAdapter() {
@@ -114,20 +110,16 @@ public class DatasourceSelectionComposite extends Composite {
 				setEnabled(SelectorDatasource.SelectionType.LOCAL_DATASOURCE);
 			}
 		});
-		rbLocalDS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 2, 1));
-		rbLocalDS
-				.setText(Messages.DatasourceSelectionComposite_LocalDatasource);
+		rbLocalDS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+		rbLocalDS.setText(Messages.DatasourceSelectionComposite_LocalDatasource);
 
 		textLocalDS = new Text(this, SWT.BORDER);
 		textLocalDS.setEnabled(false);
-		textLocalDS.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
-				1, 1));
+		textLocalDS.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
 		btnSelectLocalDS = new Button(this, SWT.ARROW | SWT.DOWN);
 		btnSelectLocalDS.setEnabled(false);
-		GridData gd_btnSelectLocalDS = new GridData(SWT.FILL, SWT.FILL, false,
-				false, 1, 1);
+		GridData gd_btnSelectLocalDS = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_btnSelectLocalDS.widthHint = 20;
 		btnSelectLocalDS.setLayoutData(gd_btnSelectLocalDS);
 		btnSelectLocalDS.addSelectionListener(new SelectionAdapter() {
@@ -138,8 +130,7 @@ public class DatasourceSelectionComposite extends Composite {
 		});
 
 		rbNoDS = new Button(this, SWT.RADIO);
-		rbNoDS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false,
-				2, 1));
+		rbNoDS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		rbNoDS.setSelection(true);
 		rbNoDS.setText(Messages.DatasourceSelectionComposite_NoDatasource);
 		rbNoDS.addSelectionListener(new SelectionAdapter() {
@@ -153,13 +144,13 @@ public class DatasourceSelectionComposite extends Composite {
 	}
 
 	/**
-	 * Configures the information needed to correctly use the datasource
-	 * selection widget.
+	 * Configures the information needed to correctly use the datasource selection
+	 * widget.
 	 * 
 	 * @param parent
-	 *            the parent anode from which retrieve a {@link MServerProfile}
+	 *          the parent anode from which retrieve a {@link MServerProfile}
 	 * @param resource
-	 *            the resource for which we are configuring the datasource
+	 *          the resource for which we are configuring the datasource
 	 */
 	public void configurePage(ANode parent, MResource resource) {
 		this.parent = parent;
@@ -219,8 +210,8 @@ public class DatasourceSelectionComposite extends Composite {
 	}
 
 	/*
-	 * Performs the selection of a local datasource. Shows a dialog where the
-	 * user can choose the right one.
+	 * Performs the selection of a local datasource. Shows a dialog where the user
+	 * can choose the right one.
 	 */
 	private void selectLocalDatasource() {
 		ResourceDescriptor runit = res.getValue();
@@ -239,15 +230,13 @@ public class DatasourceSelectionComposite extends Composite {
 			ref = wizard.getResource().getValue();
 
 			ref.setIsReference(false);
-			ref.setParentFolder(runit.getParentFolder()
-					+ "/" + runit.getName() + "_files"); //$NON-NLS-1$
+			ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$
 			// ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
 			ref.setUriString(ref.getParentFolder() + "/" + ref.getName());//$NON-NLS-1$
 
 			SelectorDatasource.replaceDatasource(res, ref);
 		} else {
-			MResource r = ResourceFactory.getResource(null,
-					ASelector.cloneResource(ref), -1);
+			MResource r = ResourceFactory.getResource(null, ASelector.cloneResource(ref), -1);
 			ResourceWizard wizard = new ResourceWizard(parent, r, true);
 			WizardDialog dialog = new WizardDialog(shell, wizard);
 			dialog.create();
@@ -267,10 +256,7 @@ public class DatasourceSelectionComposite extends Composite {
 		// order
 		// to avoid problem of refreshing (children/parent relationship changes)
 		// due to tree viewer node expansion...
-		RepositoryDialog rd = new RepositoryDialog(Display.getDefault()
-				.getActiveShell(),
-				ServerManager.getMServerProfileCopy((MServerProfile) parent
-						.getRoot())) {
+		RepositoryDialog rd = new RepositoryDialog(Display.getDefault().getActiveShell(), ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot())) {
 			@Override
 			public boolean isResourceCompatible(MResource r) {
 				return SelectorDatasource.isDatasource(r.getValue());
@@ -285,14 +271,13 @@ public class DatasourceSelectionComposite extends Composite {
 					ref = WSClientHelper.getResource(parent, ref);
 					ref.setIsReference(true);
 					ref.setReferenceUri(ref.getUriString());
-					ref.setParentFolder(runit.getParentFolder()
-							+ "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+					ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
 					ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
 					ref.setUriString(ref.getParentFolder() + "/" //$NON-NLS-1$
 							+ ref.getName());
 					SelectorDatasource.replaceDatasource(res, ref);
 
-					textDSFromRepo.setText(ref.getUriString());
+					textDSFromRepo.setText(ref.getReferenceUri());
 				} catch (Exception e1) {
 					UIUtils.showError(e1);
 				}
@@ -305,8 +290,7 @@ public class DatasourceSelectionComposite extends Composite {
 	 * specified.
 	 */
 	private void removeDatasource(final MResource res) {
-		ResourceDescriptor rdel = SelectorDatasource.getDatasource(res
-				.getValue());
+		ResourceDescriptor rdel = SelectorDatasource.getDatasource(res.getValue());
 		if (rdel != null)
 			res.getValue().getChildren().remove(rdel);
 	}

@@ -96,7 +96,7 @@ public abstract class ASelector {
 							ref.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 							replaceChildren(res, ref);
 
-							jsRefDS.setText(ref.getUriString());
+							jsRefDS.setText(ref.getReferenceUri());
 						} catch (Exception e1) {
 							UIUtils.showError(e1);
 						}
