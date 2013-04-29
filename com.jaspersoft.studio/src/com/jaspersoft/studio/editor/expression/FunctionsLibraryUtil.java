@@ -24,9 +24,9 @@ import java.util.Map;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.expressions.JRExprFunctions;
 import net.sf.jasperreports.expressions.annotations.JRExprAnnotationsUtils;
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
+import net.sf.jasperreports.functions.FunctionsBundle;
 
 import org.eclipse.ui.IEditorPart;
 
@@ -46,7 +46,7 @@ public class FunctionsLibraryUtil {
 	private static Map<String, List<JRExprFunctionBean>> functionsByCategory = null;
 	private static List<JRExprFunctionBean> allFunctions = null;
 	private static List<String> libraryClassNames = null;
-	private static List<JRExprFunctions> currentExtensionObjects = null;
+	private static List<FunctionsBundle> currentExtensionObjects = null;
 
 	// Prefix and suffix support data
 	private static String[] PREFIX_STRINGS = new String[] { "(", "+", "-", "/", "*", "!", "&", "|", "[", "{" };
@@ -67,13 +67,13 @@ public class FunctionsLibraryUtil {
 		functionsByCategory = new HashMap<String, List<JRExprFunctionBean>>();
 		allFunctions = new ArrayList<JRExprFunctionBean>();
 		libraryClassNames = new ArrayList<String>();
-		currentExtensionObjects = new ArrayList<JRExprFunctions>();
+		currentExtensionObjects = new ArrayList<FunctionsBundle>();
 
 		// Try to load the JR extensions
 		currentExtensionObjects.addAll(getFunctionsExtensions());
 		List<Class<?>> foundClasses = new ArrayList<Class<?>>();
-		for (JRExprFunctions extObj : currentExtensionObjects) {
-			for (Class<?> fc : extObj.getFunctionsClasses()) {
+		for (FunctionsBundle extObj : currentExtensionObjects) {
+			for (Class<?> fc : extObj.getFunctionClasses()) {
 				if (!foundClasses.contains(fc))
 					foundClasses.add(fc);
 			}
@@ -264,7 +264,7 @@ public class FunctionsLibraryUtil {
 			initLibrary();
 			return false;
 		}
-		List<JRExprFunctions> newExtensionsObjects = getFunctionsExtensions();
+		List<FunctionsBundle> newExtensionsObjects = getFunctionsExtensions();
 		return !currentExtensionObjects.equals(newExtensionsObjects);
 	}
 
@@ -289,7 +289,7 @@ public class FunctionsLibraryUtil {
 	/*
 	 * Gets all the possible references to functions. The current active editor is used.
 	 */
-	private static List<JRExprFunctions> getFunctionsExtensions() {
+	private static List<FunctionsBundle> getFunctionsExtensions() {
 		JasperReportsContext jrContext = null;
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
 		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
@@ -300,6 +300,6 @@ public class FunctionsLibraryUtil {
 		if (jrContext == null) {
 			jrContext = DefaultJasperReportsContext.getInstance();
 		}
-		return jrContext.getExtensions(JRExprFunctions.class);
+		return jrContext.getExtensions(FunctionsBundle.class);
 	}
 }
