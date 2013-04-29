@@ -55,17 +55,17 @@ public abstract class ADataAdapterStorage {
 	public void removeDataAdapter(DataAdapterDescriptor da) {
 		String key = getUrl(da);
 		if (key != null) {
-			delete(key);
 			daDescriptors.remove(key);
+			delete(key);
 			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
 		}
 	}
 
 	public void removeDataAdapter(String key) {
 		if (key != null) {
-			delete(key);
 			DataAdapterDescriptor da = daDescriptors.get(key);
 			daDescriptors.remove(key);
+			delete(key);
 			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
 		}
 	}
