@@ -59,4 +59,10 @@ public class SPResourceType extends SPText {
 		});
 	}
 
+	protected void handleTextChanged(final AbstractSection section, final Object property, String text) {
+		if (text != null && text.trim().isEmpty())
+			text = null;
+		section.changeProperty(property, text);
+	}
+
 }
