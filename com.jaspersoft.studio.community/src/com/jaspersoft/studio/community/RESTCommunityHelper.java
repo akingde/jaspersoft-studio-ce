@@ -154,6 +154,7 @@ public final class RESTCommunityHelper {
 			FileInputStream fin = new FileInputStream(attachment);
 			byte fileContent[] = new byte[(int)attachment.length()];
 			fin.read(fileContent);
+			fin.close();
 			
 			byte[] encodedFileContent = Base64.encodeBase64(fileContent);
 			FileUploadRequest uploadReq = new FileUploadRequest(attachment.getName(),encodedFileContent);
@@ -176,7 +177,7 @@ public final class RESTCommunityHelper {
 				mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 				JsonNode jsonRoot = mapper.readTree(responseBodyAsString);
 				String fid = jsonRoot.get("fid").asText(); //$NON-NLS-1$
-				String uri = jsonRoot.get("uri").asText(); //$NON-NLS-1$
+				//String uri = jsonRoot.get("uri").asText(); //$NON-NLS-1$
 				releaseConnectionAndClearCookies(fileupload, client);
 				return fid;
 			}
