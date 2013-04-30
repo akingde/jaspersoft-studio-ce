@@ -14,7 +14,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -47,9 +46,7 @@ import com.jaspersoft.studio.editor.toolitems.ISelectionContributionItem;
 import com.jaspersoft.studio.editor.toolitems.ToolItem;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsSet;
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.utils.SelectionHelper;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JrxmlSelectionContributor {
 	private ActionRegistry registry;

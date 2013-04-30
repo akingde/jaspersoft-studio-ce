@@ -12,7 +12,6 @@ package com.jaspersoft.studio.utils;
 
 import java.util.Map;
 
-
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;

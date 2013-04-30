@@ -16,7 +16,6 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRAbstractScriptlet;
 import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDefaultScriptlet;
 import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -31,8 +30,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
-import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;

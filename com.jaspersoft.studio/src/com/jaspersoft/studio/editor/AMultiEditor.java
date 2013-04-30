@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-import net.sf.jasperreports.chartthemes.simple.ChartThemeSettings;
-import net.sf.jasperreports.chartthemes.simple.XmlChartTheme;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;

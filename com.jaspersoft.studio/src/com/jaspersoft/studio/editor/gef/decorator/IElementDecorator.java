@@ -22,7 +22,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.RetargetAction;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;

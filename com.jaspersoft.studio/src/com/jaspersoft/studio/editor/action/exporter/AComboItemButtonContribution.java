@@ -15,31 +15,19 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.exporter;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.PaletteData;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -50,17 +38,11 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.forms.widgets.ILayoutExtension;
-import org.eclipse.ui.internal.forms.widgets.FormUtil;
 
 import com.jaspersoft.studio.editor.action.border.TemplateBorder;
 import com.jaspersoft.studio.editor.toolitems.ISelectionContributionItem;
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
-import com.jaspersoft.studio.model.MLineBox;
-import com.jaspersoft.studio.model.MLinePen;
-import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboItemAction;
 import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
 
