@@ -21,6 +21,7 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -39,16 +40,16 @@ public class LocationSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = getWidgetFactory().createSection(parent, "Location", true, 4);
+		parent = getWidgetFactory().createSection(parent, Messages.LocationSection_locationLabel, true, 4);
 
 		ASPropertyWidget pw = createWidget4Property(parent, JRDesignElement.PROPERTY_X);
 		CLabel lbl = pw.getLabel();
-		lbl.setText("x");
+		lbl.setText(Messages.LocationSection_xCoordinateLabel);
 		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
 		pw = createWidget4Property(parent, JRDesignElement.PROPERTY_Y);
 		lbl = pw.getLabel();
-		lbl.setText("y");
+		lbl.setText(Messages.LocationSection_yCoordinateLabel);
 		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
 		ASPropertyWidget w = createWidget4Property(parent, JRDesignElement.PROPERTY_POSITION_TYPE);

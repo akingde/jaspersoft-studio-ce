@@ -853,7 +853,7 @@ public class StylesListSection extends AbstractSection {
 	 *          map of the default values
 	 */
 	private void printDefaultValues(Composite parent, Map<String, Object> defaultValues) {
-		printTitle(parent, "Default attributes"); //$NON-NLS-1$
+		printTitle(parent, Messages.StylesListSection_defaultAttributesTitle);
 		GridData sameSizeGridData = new GridData();
 		sameSizeGridData.verticalAlignment = SWT.CENTER;
 		sameSizeGridData.heightHint = 20;

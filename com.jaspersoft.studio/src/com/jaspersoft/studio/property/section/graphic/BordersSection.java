@@ -43,7 +43,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.forms.widgets.ColumnLayout;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
@@ -186,7 +185,7 @@ public class BordersSection extends AbstractSection {
 		createStyle(rightPanel, JRBaseLineBox.PROPERTY_PADDING);
 		
 		Composite toolBarLayout = new Composite(rightPanel, SWT.NONE);
-		toolBarLayout.setLayout(new ColumnLayout());
+		toolBarLayout.setLayout(new GridLayout(1,false));
 		GridData toolBardGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, false);
 		toolBardGridData.horizontalSpan = 2;
 		toolBardGridData.widthHint = 200;

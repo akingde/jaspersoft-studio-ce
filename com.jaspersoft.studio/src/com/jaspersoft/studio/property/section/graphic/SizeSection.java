@@ -21,6 +21,7 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -39,16 +40,16 @@ public class SizeSection extends AbstractRealValueSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = getWidgetFactory().createSection(parent, "Size", true, 4);
+		parent = getWidgetFactory().createSection(parent, Messages.SizeSection_sizeSectionTitle, true, 4);
 
 		ASPropertyWidget hw = createWidget4Property(parent, JRDesignElement.PROPERTY_WIDTH);
 		CLabel lbl = hw.getLabel();
-		lbl.setText("w");
+		lbl.setText(Messages.SizeSection_widthLabel);
 		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
 		hw = createWidget4Property(parent, JRDesignElement.PROPERTY_HEIGHT);
 		lbl = hw.getLabel();
-		lbl.setText("h");
+		lbl.setText(Messages.SizeSection_heightLabel);
 		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
 		ASPropertyWidget w = createWidget4Property(parent, JRDesignElement.PROPERTY_STRETCH_TYPE);

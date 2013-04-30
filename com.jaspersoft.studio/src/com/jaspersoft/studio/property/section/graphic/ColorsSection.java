@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
@@ -39,7 +40,7 @@ public class ColorsSection extends AbstractRealValueSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = getWidgetFactory().createSection(parent, "Color", true, 4);
+		parent = getWidgetFactory().createSection(parent, Messages.ColorsSection_colorSectionTitle, true, 4);
 		
 		//parent.setLayout(new GridLayout(4, false));
 		

@@ -23,6 +23,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLinePen;
 import com.jaspersoft.studio.model.style.MStyle;
@@ -58,7 +59,7 @@ public class LinePenSection extends AbstractRealValueSection {
 		panel.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		panel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		panel.setLayout(new GridLayout(2,false));
-		panel.setText("Line");
+		panel.setText(Messages.LinePenSection_lineSectionName);
 		
 		ASPropertyWidget returnedWidget = createWidget4Property(panel, JRBasePen.PROPERTY_LINE_COLOR);
 		returnedWidget = createWidget4Property(panel, JRBasePen.PROPERTY_LINE_STYLE);

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.text.MessageFormat;
+
 import net.sf.jasperreports.engine.base.JRBaseFont;
 
 import org.eclipse.swt.SWT;
@@ -83,9 +85,9 @@ public class SPButton extends ASPropertyWidget {
 	 */
 	public SPButton(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, APropertyNode fontValue){
 		super(parent, section, pDescriptor);
-		messageIncrement = Messages.SPButon_Size_Increment.concat(factor.toString());
+		messageIncrement = MessageFormat.format(Messages.SPButon_Size_Increment, new Object[]{factor.toString()});
 		imageValueIncrement = JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/edit-size-up.png"); 
-		messageDecrement = Messages.SPButon_Size_Decrement.concat(factor.toString());
+		messageDecrement = MessageFormat.format(Messages.SPButon_Size_Decrement, new Object[]{factor.toString()}); 
 		imageValueDecrement = JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/edit-size-down.png"); 
 		this.fontValue = fontValue;
 		createComponent(parent);

@@ -35,6 +35,7 @@ import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
@@ -66,92 +67,92 @@ public class XLSElementDecorator extends TextElementDecorator {
 	}
 
 	private void registerFit(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
-		IAction action = new XLSAction(part, XLSAction.FIT_ROW_ID, "true", "Fit Row");
+		IAction action = new XLSAction(part, XLSAction.FIT_ROW_ID, "true", Messages.XLSElementDecorator_fitRowAction); //$NON-NLS-1$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.FIT_COL_ID, "true", "Fit Column");
+		action = new XLSAction(part, XLSAction.FIT_COL_ID, "true", Messages.XLSElementDecorator_fitColAction); //$NON-NLS-1$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSActionList(part, "XLS_Fit_None", new String[] { XLSAction.FIT_ROW_ID, XLSAction.FIT_COL_ID },
-				new String[] { null, null }, "None");
+		action = new XLSActionList(part, "XLS_Fit_None", new String[] { XLSAction.FIT_ROW_ID, XLSAction.FIT_COL_ID }, //$NON-NLS-1$
+				new String[] { null, null }, Messages.XLSElementDecorator_nonAction);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
 
 	private void registerAutoFilter(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
-		IAction action = new XLSAction(part, XLSAction.AUTOFILTER_ID.concat("start"), XLSAction.AUTOFILTER_ID, "start",
-				"Start");
+		IAction action = new XLSAction(part, XLSAction.AUTOFILTER_ID.concat("start"), XLSAction.AUTOFILTER_ID, "start", //$NON-NLS-1$ //$NON-NLS-2$
+				Messages.XLSElementDecorator_startAction);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.AUTOFILTER_ID.concat("end"), XLSAction.AUTOFILTER_ID, "end", "End");
+		action = new XLSAction(part, XLSAction.AUTOFILTER_ID.concat("end"), XLSAction.AUTOFILTER_ID, "end", Messages.XLSElementDecorator_endAction); //$NON-NLS-1$ //$NON-NLS-2$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.AUTOFILTER_ID.concat("none"), XLSAction.AUTOFILTER_ID, null, "None");
+		action = new XLSAction(part, XLSAction.AUTOFILTER_ID.concat("none"), XLSAction.AUTOFILTER_ID, null, Messages.XLSElementDecorator_nonAction); //$NON-NLS-1$ //$NON-NLS-2$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
 
 	private void registerBreak(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
-		IAction action = new XLSAction(part, XLSAction.BREAK_AFTER_ROW_ID, XLSAction.BREAK_AFTER_ROW_ID, "true",
-				"Break After Row", new String[] { XLSAction.BREAK_BEFORE_ROW_ID });
+		IAction action = new XLSAction(part, XLSAction.BREAK_AFTER_ROW_ID, XLSAction.BREAK_AFTER_ROW_ID, "true", //$NON-NLS-1$
+				Messages.XLSElementDecorator_breakAfterAction, new String[] { XLSAction.BREAK_BEFORE_ROW_ID });
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.BREAK_BEFORE_ROW_ID, XLSAction.BREAK_BEFORE_ROW_ID, "true",
-				"Break Before Row", new String[] { XLSAction.BREAK_AFTER_ROW_ID });
+		action = new XLSAction(part, XLSAction.BREAK_BEFORE_ROW_ID, XLSAction.BREAK_BEFORE_ROW_ID, "true", //$NON-NLS-1$
+				Messages.XLSElementDecorator_breakBeforeAction, new String[] { XLSAction.BREAK_AFTER_ROW_ID });
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSActionList(part, "XSL_Break_None", new String[] { XLSAction.BREAK_AFTER_ROW_ID,
-				XLSAction.BREAK_BEFORE_ROW_ID }, new String[] { null, null }, "None");
+		action = new XLSActionList(part, "XSL_Break_None", new String[] { XLSAction.BREAK_AFTER_ROW_ID, //$NON-NLS-1$
+				XLSAction.BREAK_BEFORE_ROW_ID }, new String[] { null, null }, Messages.XLSElementDecorator_nonAction); //$NON-NLS-1$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
 
 	private void registerCellProperties(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
-		IAction action = new XLSAction(part, XLSAction.CELL_HIDDEN_ID, XLSAction.CELL_HIDDEN_ID, "true", "Cell Hidden");
+		IAction action = new XLSAction(part, XLSAction.CELL_HIDDEN_ID, XLSAction.CELL_HIDDEN_ID, "true", Messages.XLSElementDecorator_hiddenCellAction); //$NON-NLS-1$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.CELL_LOCKED_ID, XLSAction.CELL_LOCKED_ID, "true", "Cell Locked");
+		action = new XLSAction(part, XLSAction.CELL_LOCKED_ID, XLSAction.CELL_LOCKED_ID, "true", Messages.XLSElementDecorator_lockCellAction); //$NON-NLS-1$
 
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSActionList(part, "XSL_Cell_None",
-				new String[] { XLSAction.CELL_HIDDEN_ID, XLSAction.CELL_LOCKED_ID }, new String[] { null, null }, "None");
+		action = new XLSActionList(part, "XSL_Cell_None", //$NON-NLS-1$
+				new String[] { XLSAction.CELL_HIDDEN_ID, XLSAction.CELL_LOCKED_ID }, new String[] { null, null }, Messages.XLSElementDecorator_nonAction); //$NON-NLS-1$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
 
 	private void registerFreezeProperties(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
 
-		IAction action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("Left"), XLSAction.FREEZE_COL_ID, "Left",
-				"Left");
+		IAction action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("Left"), XLSAction.FREEZE_COL_ID, "Left",  //$NON-NLS-1$ //$NON-NLS-2$
+				Messages.XLSElementDecorator_leftAction); 
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("Right"), XLSAction.FREEZE_COL_ID, "Right", "Right");
+		action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("Right"), XLSAction.FREEZE_COL_ID, "Right", Messages.XLSElementDecorator_rightAction);  //$NON-NLS-1$ //$NON-NLS-2$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("None"), XLSAction.FREEZE_COL_ID, null, "None");
+		action = new XLSAction(part, XLSAction.FREEZE_COL_ID.concat("None"), XLSAction.FREEZE_COL_ID, null, Messages.XLSElementDecorator_nonAction); //$NON-NLS-1$ //$NON-NLS-2$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("Top"), XLSAction.FREEZE_ROW_ID, "Top", "Top");
+		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("Top"), XLSAction.FREEZE_ROW_ID, "Top", Messages.XLSElementDecorator_topAction); //$NON-NLS-1$ //$NON-NLS-2$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("Bottom"), XLSAction.FREEZE_ROW_ID, "Bottom", "Bottom");
+		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("Bottom"), XLSAction.FREEZE_ROW_ID, "Bottom", Messages.XLSElementDecorator_bottomAction); //$NON-NLS-1$ //$NON-NLS-2$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("None"), XLSAction.FREEZE_ROW_ID, null, "None");
+		action = new XLSAction(part, XLSAction.FREEZE_ROW_ID.concat("None"), XLSAction.FREEZE_ROW_ID, null, Messages.XLSElementDecorator_nonAction); //$NON-NLS-1$ //$NON-NLS-2$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
@@ -174,14 +175,14 @@ public class XLSElementDecorator extends TextElementDecorator {
 	}
 	
 	public void fillContextMenu(ActionRegistry registry, IMenuManager menu){
-		MenuManager submenu = new MenuManager("XLS Tags");
-		MenuManager fitMenu = new MenuManager("Fit");
-		MenuManager autoFilterMenu = new MenuManager("Autofilter");
-		MenuManager breakMenu = new MenuManager("Break");
-		MenuManager freezeMenu = new MenuManager("Freeze");
-		MenuManager freezeRowMenu = new MenuManager("Rows");
-		MenuManager freezeColMenu = new MenuManager("Columns");
-		MenuManager propertiesMenu = new MenuManager("Cell Properties");
+		MenuManager submenu = new MenuManager(Messages.XLSElementDecorator_xlsTagsMenu);
+		MenuManager fitMenu = new MenuManager(Messages.XLSElementDecorator_fitMenu);
+		MenuManager autoFilterMenu = new MenuManager(Messages.XLSElementDecorator_autoFilterMenu);
+		MenuManager breakMenu = new MenuManager(Messages.XLSElementDecorator_breakMenu);
+		MenuManager freezeMenu = new MenuManager(Messages.XLSElementDecorator_freezeMenu);
+		MenuManager freezeRowMenu = new MenuManager(Messages.XLSElementDecorator_rowsMenu);
+		MenuManager freezeColMenu = new MenuManager(Messages.XLSElementDecorator_columnsMenu);
+		MenuManager propertiesMenu = new MenuManager(Messages.XLSElementDecorator_cellPropertiesMenu);
 
 		submenu.add(fitMenu);
 		submenu.add(autoFilterMenu);
@@ -197,15 +198,15 @@ public class XLSElementDecorator extends TextElementDecorator {
 		fitMenu.add(action);
 		action = registry.getAction(XLSAction.FIT_COL_ID);
 		fitMenu.add(action);
-		action = registry.getAction("XLS_Fit_None");
+		action = registry.getAction("XLS_Fit_None"); //$NON-NLS-1$
 		fitMenu.add(action);
 
 		// Adding actions for the autofilter
-		action = registry.getAction(XLSAction.AUTOFILTER_ID.concat("start"));
+		action = registry.getAction(XLSAction.AUTOFILTER_ID.concat("start")); //$NON-NLS-1$
 		autoFilterMenu.add(action);
-		action = registry.getAction(XLSAction.AUTOFILTER_ID.concat("end"));
+		action = registry.getAction(XLSAction.AUTOFILTER_ID.concat("end")); //$NON-NLS-1$
 		autoFilterMenu.add(action);
-		action = registry.getAction(XLSAction.AUTOFILTER_ID.concat("none"));
+		action = registry.getAction(XLSAction.AUTOFILTER_ID.concat("none")); //$NON-NLS-1$
 		autoFilterMenu.add(action);
 
 		// Adding actions for the break
@@ -213,7 +214,7 @@ public class XLSElementDecorator extends TextElementDecorator {
 		breakMenu.add(action);
 		action = registry.getAction(XLSAction.BREAK_AFTER_ROW_ID);
 		breakMenu.add(action);
-		action = registry.getAction("XSL_Break_None");
+		action = registry.getAction("XSL_Break_None"); //$NON-NLS-1$
 		breakMenu.add(action);
 
 		// Adding actions for the cell properties
@@ -221,22 +222,22 @@ public class XLSElementDecorator extends TextElementDecorator {
 		propertiesMenu.add(action);
 		action = registry.getAction(XLSAction.CELL_LOCKED_ID);
 		propertiesMenu.add(action);
-		action = registry.getAction("XSL_Cell_None");
+		action = registry.getAction("XSL_Cell_None"); //$NON-NLS-1$
 		propertiesMenu.add(action);
 
 		// Adding the freeze properties
-		action = registry.getAction(XLSAction.FREEZE_ROW_ID.concat("Top"));
+		action = registry.getAction(XLSAction.FREEZE_ROW_ID.concat("Top")); //$NON-NLS-1$
 		freezeRowMenu.add(action);
-		action = registry.getAction(XLSAction.FREEZE_ROW_ID.concat("Bottom"));
+		action = registry.getAction(XLSAction.FREEZE_ROW_ID.concat("Bottom")); //$NON-NLS-1$
 		freezeRowMenu.add(action);
-		action = registry.getAction(XLSAction.FREEZE_ROW_ID.concat("None"));
+		action = registry.getAction(XLSAction.FREEZE_ROW_ID.concat("None")); //$NON-NLS-1$
 		freezeRowMenu.add(action);
 
-		action = registry.getAction(XLSAction.FREEZE_COL_ID.concat("Left"));
+		action = registry.getAction(XLSAction.FREEZE_COL_ID.concat("Left")); //$NON-NLS-1$
 		freezeColMenu.add(action);
-		action = registry.getAction(XLSAction.FREEZE_COL_ID.concat("Right"));
+		action = registry.getAction(XLSAction.FREEZE_COL_ID.concat("Right")); //$NON-NLS-1$
 		freezeColMenu.add(action);
-		action = registry.getAction(XLSAction.FREEZE_COL_ID.concat("None"));
+		action = registry.getAction(XLSAction.FREEZE_COL_ID.concat("None")); //$NON-NLS-1$
 		freezeColMenu.add(action);
 
 		menu.add(submenu);
@@ -255,7 +256,7 @@ public class XLSElementDecorator extends TextElementDecorator {
 
 	@Override
 	public RetargetAction[] buildMenuActions() {
-		return new RetargetAction[] { new RetargetAction(ShowXLSTagsAction.ID, "Show XLS Tags", IAction.AS_CHECK_BOX) };
+		return new RetargetAction[] { new RetargetAction(ShowXLSTagsAction.ID, Messages.XLSElementDecorator_showXLSTagsLabel, IAction.AS_CHECK_BOX) };
 	}
 
 	@Override

@@ -76,7 +76,7 @@ public class CSVElementDecorator extends TextElementDecorator {
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		
-		action = new CSVColOrderAction(part, "Change the columns order");
+		action = new CSVColOrderAction(part, Messages.CSVElementDecorator_changeColumnsOrder);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		
@@ -88,7 +88,7 @@ public class CSVElementDecorator extends TextElementDecorator {
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		
-		action = new CSVAction(part, CSVAction.WRITE_HEADER, "Print the columns header"); //$NON-NLS-1$
+		action = new CSVAction(part, CSVAction.WRITE_HEADER, Messages.CSVElementDecorator_printColumnsHeder); 
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
