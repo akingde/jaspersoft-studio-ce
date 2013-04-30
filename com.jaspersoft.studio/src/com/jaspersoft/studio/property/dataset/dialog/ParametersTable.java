@@ -13,6 +13,7 @@ package com.jaspersoft.studio.property.dataset.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -116,7 +117,16 @@ public class ParametersTable {
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		bGroup.setBackground(background);
 
-		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
+		new NewButton() {
+			@Override
+			protected void afterElementAdded(Object selement) {
+				try {
+					dataset.addParameter((JRDesignParameter) selement);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			}
+		}.createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
 				JRDesignParameter f = new JRDesignParameter();
@@ -172,7 +182,7 @@ public class ParametersTable {
 	}
 
 	public <T extends JRParameter> void setFields(List<T> fields) {
-		tviewer.setInput(fields);
+		tviewer.setInput(new ArrayList(fields));
 		tviewer.refresh();
 	}
 

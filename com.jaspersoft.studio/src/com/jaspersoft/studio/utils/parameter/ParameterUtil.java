@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.utils.parameter;
 
@@ -30,8 +25,8 @@ public class ParameterUtil {
 	public static void setParameters(JasperReportsConfiguration jConfig, JRDataset dataset, Map<String, Object> inmap) {
 		Map<String, Object> map = jConfig.getJRParameters();
 		for (JRParameter p : dataset.getParameters()) {
-			if (!p.isSystemDefined() && p.isForPrompting()) {
-				if (map != null) {
+			if (!p.isSystemDefined()) {
+				if (map != null && p.isForPrompting()) {
 					Object val = map.get(p.getName());
 					if (val != null) {
 						inmap.put(p.getName(), val);
@@ -40,17 +35,15 @@ public class ParameterUtil {
 				}
 
 				if (p.getDefaultValueExpression() != null) {
-					Object val;
 					try {
-						val = p.getValueClass().newInstance();
+						Object val = p.getValueClass().newInstance();
 						inmap.put(p.getName(), val);
 					} catch (InstantiationException e) {
 						inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
 					} catch (IllegalAccessException e) {
 						inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
 					}
-				}
-				else {
+				} else {
 					// Even if no default value expression was specified, tries
 					// to provide a default value based on class type of the parameter.
 					inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));

@@ -47,9 +47,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 		return true;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset jDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		con.contributeParameters(parameters);
 
@@ -58,19 +56,14 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
 
 		try {
-			Connection c = (Connection) parameters
-					.get(JRParameter.REPORT_CONNECTION);
+			Connection c = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
 
 			// JasperReports query executer instances require
 			// REPORT_PARAMETERS_MAP parameter to be defined and not null
-			Map<String, JRValueParameter> tmpMap = ParameterUtil
-					.convertMap(parameters);
-			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP,
-					new SimpleValueParameter(
-							new HashMap<String, JRValueParameter>()));
+			Map<String, JRValueParameter> tmpMap = ParameterUtil.convertMap(parameters);
+			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(new HashMap<String, JRValueParameter>()));
 
-			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(jConfig, jDataset,
-					tmpMap);
+			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(jConfig, jDataset, tmpMap);
 			qe.createDatasource();
 			ResultSet rs = qe.getResultSet();
 			if (rs != null) {
@@ -91,8 +84,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 						String catalog = metaData.getCatalogName(i);
 						String schema = metaData.getSchemaName(i);
 						String table = metaData.getTableName(i);
-						ResultSet rsmc = c.getMetaData().getColumns(catalog,
-								schema, table, name);
+						ResultSet rsmc = c.getMetaData().getColumns(catalog, schema, table, name);
 						while (rsmc.next()) {
 							field.setDescription(rsmc.getString("REMARKS"));
 							break;
