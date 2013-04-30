@@ -13,9 +13,9 @@ package com.jaspersoft.studio.compatibility;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRConstants;
@@ -39,23 +39,24 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class JRXmlWriterHelper {
 
-	private static final Map<String, Class<? extends JRXmlWriter>> writers = new HashMap<String, Class<? extends JRXmlWriter>>();
+	private static final Set<String> writers = new HashSet<String>();
 
 	static {
 		for (Field f : JRConstants.class.getFields()) {
 			if (f.getName().startsWith("VERSION_"))
 				try {
-					writers.put((String) f.get(null), JRXmlWriter.class);
+					writers.add((String) f.get(null));
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}
 		}
+		writers.add(VersionConstants.VERSION_5_1_0);
 	}
 
 	public static String[][] getVersions() {
-		List<String> sl = new ArrayList<String>(writers.keySet());
+		List<String> sl = new ArrayList<String>(writers);
 		Collections.sort(sl);
 		Collections.reverse(sl);
 		String[][] r = new String[sl.size() + 1][2];
@@ -82,12 +83,12 @@ public class JRXmlWriterHelper {
 	public static String writeReport(JasperReportsContext jrContext, JRReport report, String encoding, String version)
 			throws Exception {
 		encoding = fixencoding(encoding);
-		if (!writers.containsKey(version))
+		if (!writers.contains(version))
 			version = LAST_VERSION;
 		if (jrContext == null)
 			jrContext = DefaultJasperReportsContext.getInstance();
 		jrContext.removeProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION);
-		if (writers.containsKey(version))
+		if (writers.contains(version))
 			jrContext.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION, version);
 		if (report != null) {
 			// jrContext.setProperty("net.sf.jasperreports.components.table.version", version);
