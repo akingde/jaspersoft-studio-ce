@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.messages.Messages;
@@ -31,7 +32,9 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.publish.PublishOptions;
@@ -43,6 +46,7 @@ import com.jaspersoft.studio.utils.Misc;
  *
  */
 public class MResource extends APropertyNode implements ICopyable {
+	private static final ImageDescriptor LINK_DECORATOR = Activator.getDefault().getImageDescriptor("/icons/link_decorator.png");
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MResource(ANode parent, ResourceDescriptor rd, int index) {
@@ -51,7 +55,7 @@ public class MResource extends APropertyNode implements ICopyable {
 	}
 
 	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor;
+	private static NodeIconDescriptor iconDescriptor;
 
 	/**
 	 * Gets the icon descriptor.
@@ -97,7 +101,16 @@ public class MResource extends APropertyNode implements ICopyable {
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
 	public ImageDescriptor getImagePath() {
-		return getThisIconDescriptor().getIcon16();
+		ImageDescriptor icon16 = getThisIconDescriptor().getIcon16();
+		if (getParent() instanceof MReportUnit) {
+			MReportUnit mrunit = (MReportUnit) getParent();
+			if (mrunit.getValue() != null && getValue() != null) {
+				String par = mrunit.getValue().getUriString() + "_files";
+				if (!par.equals(getValue().getParentFolder()))
+					return ResourceManager.decorateImage(icon16, LINK_DECORATOR, ResourceManager.BOTTOM_LEFT);
+			}
+		}
+		return icon16;
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -114,17 +127,14 @@ public class MResource extends APropertyNode implements ICopyable {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(
-				"SOMEPROPERTIES", Messages.common_datasource_name);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor("SOMEPROPERTIES", Messages.common_datasource_name);
 		desc.add(textD);
 	}
 
@@ -162,9 +172,7 @@ public class MResource extends APropertyNode implements ICopyable {
 	@Override
 	public INode getRoot() {
 		INode node = this;
-		while (node != null && node.getParent() != null
-				&& !(node instanceof MServerProfile)
-				&& !(node instanceof MRoot)) {
+		while (node != null && node.getParent() != null && !(node instanceof MServerProfile) && !(node instanceof MRoot)) {
 			node = node.getParent();
 		}
 		return node;
@@ -176,9 +184,7 @@ public class MResource extends APropertyNode implements ICopyable {
 
 	public MReportUnit getReportUnit() {
 		INode node = this;
-		while (node != null && node.getParent() != null
-				&& !(node instanceof MServerProfile)
-				&& !(node instanceof MRoot) && !(node instanceof MReportUnit)) {
+		while (node != null && node.getParent() != null && !(node instanceof MServerProfile) && !(node instanceof MRoot) && !(node instanceof MReportUnit)) {
 			node = node.getParent();
 		}
 		if (node instanceof MReportUnit)
@@ -187,8 +193,7 @@ public class MResource extends APropertyNode implements ICopyable {
 	}
 
 	public boolean isCopyable2(Object parent) {
-		if (parent instanceof MFolder || parent instanceof MReportUnit
-				|| parent instanceof MServerProfile)
+		if (parent instanceof MFolder || parent instanceof MReportUnit || parent instanceof MServerProfile)
 			return true;
 		return false;
 	}
