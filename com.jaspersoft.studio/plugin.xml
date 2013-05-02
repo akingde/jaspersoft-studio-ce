@@ -582,7 +582,7 @@
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                image="icons/resources/field-16.png"
-               label="Object">
+               label="%labelObject">
          </propertyTab>
          <propertyTab
                afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
@@ -608,7 +608,7 @@
                category="element"
                id="com.jaspersoft.studio.propertyTab.report"
                image="icons/report.png"
-               label="Report">
+               label="%labelReport">
          </propertyTab>
          <propertyTab
                afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
@@ -706,32 +706,32 @@
                category="element"
                id="com.jaspersoft.studio.editor.section.DATASET"
                image="icons/resources/dataset-16.png"
-               label="Dataset">
+               label="%labelDataset">
          </propertyTab>
          <propertyTab
                afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Text"
                category="element"
                id="com.jaspersoft.studio.editor.section.HYPERLINK"
                image="icons/resources/dataset-16.png"
-               label="Hyperlink">
+               label="%labelHyperlink">
          </propertyTab>
          <propertyTab
                category="element"
                id="com.jaspersoft.studio.editor.section.GROUP"
                image="icons/resources/groups-16.png"
-               label="Group">
+               label="%labelGroup">
          </propertyTab>
          <propertyTab
                category="element"
                id="com.jaspersoft.studio.editor.section.SCRIPTLET"
                image="icons/resources/scriptlet-16.png"
-               label="Scriptlet">
+               label="%labelScriptlet">
          </propertyTab>
          <propertyTab
                category="element"
                id="com.jaspersoft.studio.callou.CALLOUT"
                image="icons/callout-16.png"
-               label="Callout">
+               label="%labelCallout">
          </propertyTab>
       </propertyTabs>
    </extension>
@@ -1557,8 +1557,8 @@
              ActionID="bring_forward"
              icon="icons/eclipseapps/elcl16/bring_forward.gif"
              id="com.jaspersoft.studio.graphic.bringforward"
-             label="Bring Forward"
-             tooltip="Bring Forward">
+             label="%bringForwardLabel"
+             tooltip="%bringForwardTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1567,8 +1567,8 @@
              ActionID="bring_back"
              icon="icons/eclipseapps/elcl16/send_to_back.gif"
              id="com.jaspersoft.studio.graphic.bringback"
-             label="Send To Back"
-             tooltip="Send To Back">
+             label="%sendToBackLabel"
+             tooltip="%sendToBackTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1577,8 +1577,8 @@
              ActionID="bring_front"
              icon="icons/eclipseapps/elcl16/bring_to_front.gif"
              id="com.jaspersoft.studio.graphic.bringfront"
-             label="Bring To Front"
-             tooltip="Bring To Front">
+             label="%bringToFrontLabel"
+             tooltip="%bringToFrontTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1587,8 +1587,8 @@
              ActionID="bring_backward"
              icon="icons/eclipseapps/elcl16/send_backward.gif"
              id="com.jaspersoft.studio.graphic.bringbackward"
-             label="Send Backward"
-             tooltip="Send Backward">
+             label="%bringBackwardLabel"
+             tooltip="%bringBackwardTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1597,8 +1597,8 @@
              ActionID="com.jaspersoft.studio.editor.action.text.bold"
              icon="icons/resources/eclipse/font-bold.gif"
              id="com.jaspersoft.studio.editor.action.text.bold"
-             label="Bold"
-             tooltip="Set font to Bold">
+             label="%boldLabel"
+             tooltip="%boldTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.text.MTextElement">
           </selectedObject>
@@ -1607,8 +1607,8 @@
              ActionID="com.jaspersoft.studio.editor.action.text.italic"
              icon="icons/resources/eclipse/font-italic.gif"
              id="com.jaspersoft.studio.editor.action.text.italic"
-             label="Bold"
-             tooltip="Set font to Italic">
+             label="%italicLabel"
+             tooltip="%italicTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.text.MTextElement">
           </selectedObject>
@@ -1617,8 +1617,8 @@
              ActionID="com.jaspersoft.studio.editor.action.text.underline"
              icon="icons/resources/eclipse/font-underline.gif"
              id="com.jaspersoft.studio.editor.action.text.underline"
-             label="Underline"
-             tooltip="Set font to underline">
+             label="%underlineLabel"
+             tooltip="%underlineTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.text.MTextElement">
           </selectedObject>
@@ -1627,8 +1627,8 @@
              ActionID="com.jaspersoft.studio.editor.action.text.strike"
              icon="icons/resources/edit-strike.png"
              id="com.jaspersoft.studio.editor.action.text.strike"
-             label="Strikethrough"
-             tooltip="Set font to strikethrough">
+             label="%strikeLabel"
+             tooltip="%strikeTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.text.MTextElement">
           </selectedObject>
@@ -1636,7 +1636,7 @@
        <toolitems
              contributionItemClass="com.jaspersoft.studio.editor.action.text.FontNameComboContributionItem"
              id="com.jaspersoft.studio.editor.action.text.fontname"
-             tooltip="Font Name">
+             tooltip="%fontNameTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.text.MTextElement">
           </selectedObject>
@@ -1644,7 +1644,7 @@
        <toolitems
              contributionItemClass="com.jaspersoft.studio.editor.action.text.FontSizeComboContributionItem"
              id="com.jaspersoft.studio.editor.action.text.fontsize"
-             tooltip="Font Size">
+             tooltip="%fontSizeTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.text.MTextElement">
           </selectedObject>
@@ -1653,8 +1653,8 @@
              ActionID="com.jaspersoft.studio.callout.action.CreatePinAction"
              icon="icons/pin-16.png"
              id="com.jaspersoft.studio.callout.action.CreatePinAction"
-             label="Create Pin"
-             tooltip="Create pin for selected callout">
+             label="%createPinLabel"
+             tooltip="%createPinTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.callout.MCallout">
           </selectedObject>
@@ -1663,8 +1663,8 @@
              ActionID="band_org.eclipse.gef.align_bottom"
              icon="icons/resources/eclipse/align-band-bottom.gif"
              id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_bottom"
-             label="Align to bottom"
-             tooltip="Align the element to the bottom">
+             label="%alignBottomLabel"
+             tooltip="%alignBottomTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1673,8 +1673,8 @@
              ActionID="band_org.eclipse.gef.align_top"
              icon="icons/resources/eclipse/align-band-top.gif"
              id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_top"
-             label="Align to top"
-             tooltip="Align the element to the top">
+             label="%alignTopLabel"
+             tooltip="%alignTopTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1683,8 +1683,8 @@
              ActionID="band_org.eclipse.gef.align_left"
              icon="icons/resources/eclipse/align-band-left.gif"
              id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_left"
-             label="Align to left"
-             tooltip="Align the element to the left">
+             label="%alignLeftLabel"
+             tooltip="%alignLeftTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1693,8 +1693,8 @@
              ActionID="band_org.eclipse.gef.align_right"
              icon="icons/resources/eclipse/align-band-right.gif"
              id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_right"
-             label="Align to right"
-             tooltip="Align the element to the right">
+             label="%alignRightLabel"
+             tooltip="%alignRightTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1703,8 +1703,8 @@
              ActionID="band_org.eclipse.gef.align_center"
              icon="icons/resources/eclipse/align-band-center.gif"
              id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_center"
-             label="Align to center"
-             tooltip="Align the element to the center (horizontally)">
+             label="%alignCenterLabel"
+             tooltip="%alignCenterTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1713,8 +1713,8 @@
              ActionID="band_org.eclipse.gef.align_middle"
              icon="icons/resources/eclipse/align-band-middle.gif"
              id="com.jaspersoft.studio.editor.action.align.Align2BorderAction_middle"
-             label="Align to middle"
-             tooltip="Align the element to the middle (vertically)">
+             label="%alignMiddleLabel"
+             tooltip="%alignMiddleTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1723,8 +1723,8 @@
              ActionID="band_WIDTH"
              icon="icons/eclipseapps/size_to_control_width.gif"
              id="com.jaspersoft.studio.editor.action.size.Size2BorderAction_width"
-             label="Fit to width"
-             tooltip="Fit the element to the band width">
+             label="%fitWidthLabel"
+             tooltip="%fitWidthTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1733,8 +1733,8 @@
              ActionID="band_HEIGHT"
              icon="icons/eclipseapps/size_to_control_height.gif"
              id="com.jaspersoft.studio.editor.action.size.Size2BorderAction_height"
-             label="Fit to height"
-             tooltip="Fit the element to the band height">
+             label="%fitHeightLabel"
+             tooltip="%fitHeightTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1743,8 +1743,8 @@
              ActionID="band_BOTH"
              icon="icons/eclipseapps/size_to_control.gif"
              id="com.jaspersoft.studio.editor.action.size.Size2BorderAction_both"
-             label="Fit to both"
-             tooltip="Fit the element to the band both height and width">
+             label="%fitBothLabel"
+             tooltip="%fitBothTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
@@ -1752,8 +1752,8 @@
        <toolitems
              contributionItemClass="com.jaspersoft.studio.editor.action.border.ATableComboContribution"
              id="com.jaspersoft.studio.editor.action.border.AComboItemButtonContribution"
-             label="Borders template"
-             tooltip="Borders template">
+             label="%bordersTemplateLabel"
+             tooltip="%bordersTemplateTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElementLineBox">
           </selectedObject>
@@ -1762,8 +1762,8 @@
              ActionID="ActionImageChangeExpression"
              icon="icons/resources/blue-folder-open-image.png"
              id="com.jaspersoft.studio.editor.action.image.ChangeImageExpression"
-             label="Change Source"
-             tooltip="Change the source of the image">
+             label="%changeSourceLabel"
+             tooltip="%changeSourceTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.image.MImage">
           </selectedObject>
@@ -1772,8 +1772,8 @@
              ActionID="exporting_attributes_actions"
              icon="icons/resources/equalizer--arrow.png"
              id="com.jaspersoft.studio.editor.action.exporter.AddExporterPropertyAction"
-             label="Exporter Attributes"
-             tooltip="Set the attributes of the exporters">
+             label="%exporterAttributesLabel"
+             tooltip="%exporterAttributesTooltip">
           <selectedObject
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>

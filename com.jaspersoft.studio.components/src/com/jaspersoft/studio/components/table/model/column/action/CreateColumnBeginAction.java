@@ -21,6 +21,7 @@ import java.util.Map;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.components.Activator;
+import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.gef.util.CreateRequestUtil;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;

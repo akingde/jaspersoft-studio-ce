@@ -22,6 +22,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.components.Activator;
+import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.gef.util.CreateRequestUtil;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
@@ -54,8 +55,8 @@ public class CreateColumnAfterAction extends ACreateAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText(com.jaspersoft.studio.components.table.model.column.action.Messages.CreateColumnAfterAction_title);
-		setToolTipText(com.jaspersoft.studio.components.table.model.column.action.Messages.CreateColumnAfterAction_desc);
+		setText(Messages.CreateColumnAfterAction_title);
+		setToolTipText(Messages.CreateColumnAfterAction_desc);
 		setId(CreateColumnAfterAction.ID);
 		setImageDescriptor(
 				Activator.getDefault().getImageDescriptor("icons/table-insert-column-after.png")); //$NON-NLS-1$

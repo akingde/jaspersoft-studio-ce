@@ -80,6 +80,12 @@ public class Messages extends NLS {
 	public static String TableWizardLayoutPage_layout;
 	public static String TableWizardLayoutPage_style_preview_group;
 	public static String TableWizardLayoutPage_variations_label;
+	public static String CreateColumnAfterAction_desc;
+	public static String CreateColumnAfterAction_title;
+	public static String CreateColumnBeforeAction_desc;
+	public static String CreateColumnBeforeAction_title;
+	public static String CreateColumnBeginAction_desc;
+	public static String CreateColumnBeginAction_title;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
