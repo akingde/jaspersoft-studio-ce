@@ -134,4 +134,71 @@ public class JRXmlWriterHelper {
 			return LAST_VERSION;
 		}
 	}
+	
+	/**
+	 * Checks if the compatible version specified in the Jaspersoft Studio 
+	 * preference page is greater, or even equal, than the one passed as parameter.
+	 * 
+	 * @param jconfig the JasperReports context
+	 * @param compareVersion the version to compare with
+	 * @param equalToo flag that specifies if also equal version is accepted
+	 * @return <code>true</code> if compatible version is greater (or equal), <code>false</code> otherwise
+	 */
+	public static boolean isCompatibleVersionGreater(JasperReportsConfiguration jconfig, String compareVersion, boolean equalToo) {
+		boolean verified = false;
+		if (equalToo) {
+			verified = getCompatibleVersion(jconfig).compareTo(compareVersion) >= 0;
+		} else {
+			verified = getCompatibleVersion(jconfig).compareTo(compareVersion) > 0;
+		}
+		return verified;
+	}
+	
+	/**
+	 * Checks if the compatible version specified in the Jaspersoft Studio 
+	 * preference page is minor, or even equal, than the one passed as parameter.
+	 * 
+	 * @param jconfig the JasperReports context
+	 * @param compareVersion the version to compare with
+	 * @param equalToo flag that specifies if also equal version is accepted
+	 * @return <code>true</code> if compatible version is minor (or equal), <code>false</code> otherwise
+	 */
+	public static boolean isCompatibleVersionMinor(JasperReportsConfiguration jconfig, String compareVersion, boolean equalToo) {
+		boolean verified = false;
+		if (equalToo) {
+			verified = getCompatibleVersion(jconfig).compareTo(compareVersion) <= 0;
+		} else {
+			verified = getCompatibleVersion(jconfig).compareTo(compareVersion) < 0;
+		}
+		return verified;
+	}
+	
+	/**
+	 * Checks if the compatible version specified in the Jaspersoft Studio 
+	 * preference page is equal to the one passed as parameter.
+	 * 
+	 * @param jconfig the JasperReports context
+	 * @param compareVersion the version to compare with
+	 * @param equalToo flag that specifies if also equal version is accepted
+	 * @return <code>true</code> if compatible version is equal, <code>false</code> otherwise
+	 */
+	public static boolean isCompatibleVersionEqual(JasperReportsConfiguration jconfig, String compareVersion) {
+		return getCompatibleVersion(jconfig).compareTo(compareVersion)==0;
+	}
+	
+	/**
+	 * Reads the information about the compatible version of JasperReports to be used.
+	 * 
+	 * @param jconfig the JasperReports context
+	 * @return the compatible version
+	 */
+	private static String getCompatibleVersion(JasperReportsConfiguration jconfig) {
+		String ver = jconfig.getProperty(StudioPreferencePage.JSS_COMPATIBILITY_VERSION);
+		if(ver.equals(LAST_VERSION)){
+			return net.sf.jasperreports.engine.JasperCompileManager.class.getPackage().getImplementationVersion();
+		}
+		else {
+			return ver;
+		}
+	}
 }

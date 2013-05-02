@@ -29,6 +29,8 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.ui.IEditorPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+import com.jaspersoft.studio.compatibility.VersionConstants;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage;
@@ -196,7 +198,7 @@ public class ExpressionEditorSupportUtil {
 		// Add the imports needed for the functions library, if preference is set
 		boolean useImports = jrContext
 				.getPropertyBoolean(ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS);
-		if (useImports) {
+		if (useImports && JRXmlWriterHelper.isCompatibleVersionMinor(jrContext, VersionConstants.VERSION_5_1_0, true)) {
 			ExpressionEditorSupportUtil.addFunctionsLibraryImports(jasperDesign, jrContext);
 		}
 	}
