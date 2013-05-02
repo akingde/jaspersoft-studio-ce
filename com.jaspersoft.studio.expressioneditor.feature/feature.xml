@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.expressioneditor.feature"
       label="Jaspersoft Studio Expression Editor"
-      version="5.1.0"
+      version="5.1.1.qualifier"
       provider-name="Jaspersoft Corporation"
       plugin="net.sf.jasperreports"
       os="linux,macosx,win32"

@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.jaspersoft.studio.community-edition</groupId>
 		<artifactId>aggregator</artifactId>
-		<version>5.1.0</version>
+		<version>5.1.1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>updatesite</artifactId>
 	<packaging>pom</packaging>
-	<version>5.1.0</version>
+	<version>5.1.1-SNAPSHOT</version>
 
 	<modules>
 		<module>../../com.jaspersoft.studio.updatesite</module>
