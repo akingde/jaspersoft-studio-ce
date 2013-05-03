@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 
@@ -36,7 +37,7 @@ public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getLabel() {
-		return "XML document (remote)";
+		return Messages.RemoteXMLDataAdapterFactory_label;
 	}
 
 	/*
@@ -46,7 +47,7 @@ public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public String getDescription() {
 
-		return "Use an XML document loaded using an URL";
+		return Messages.RemoteXMLDataAdapterFactory_description;
 	}
 
 	/*
@@ -57,7 +58,7 @@ public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 	public Image getIcon(int size) {
 
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/blue-document-code.png");
+			return Activator.getDefault().getImage("icons/blue-document-code.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

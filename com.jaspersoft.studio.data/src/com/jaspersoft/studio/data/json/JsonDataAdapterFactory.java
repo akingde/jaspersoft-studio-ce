@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 public class JsonDataAdapterFactory implements DataAdapterFactory {
 
@@ -36,7 +37,7 @@ public class JsonDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getLabel() {
-		return "JSON File";
+		return Messages.JsonDataAdapterFactory_label;
 	}
 
 	/*
@@ -45,7 +46,7 @@ public class JsonDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "JSON File";
+		return Messages.JsonDataAdapterFactory_description;
 	}
 
 	/*
@@ -55,7 +56,7 @@ public class JsonDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/json.png");
+			return Activator.getDefault().getImage("icons/json.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

@@ -32,6 +32,7 @@ import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.wizard.DataAdapterWizard;
 import com.jaspersoft.studio.data.wizard.DataAdapterWizardDialog;
+import com.jaspersoft.studio.messages.Messages;
 
 public class CreateDataAdapterAction extends Action implements ICheatSheetAction {
 	public static final String ID = "createdataAdapteraction"; //$NON-NLS-1$
@@ -46,9 +47,9 @@ public class CreateDataAdapterAction extends Action implements ICheatSheetAction
 		super();
 		this.treeViewer = treeViewer;
 		setId(ID);
-		setText("Create DataAdapter");
-		setDescription("Create DataAdapter");
-		setToolTipText("Create DataAdapter");
+		setText(Messages.CreateDataAdapterAction_actionName);
+		setDescription(Messages.CreateDataAdapterAction_actionDescription);
+		setToolTipText(Messages.CreateDataAdapterAction_actionToolTip);
 		setImageDescriptor(
 				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/data_source_add.png")); //$NON-NLS-1$
 		setDisabledImageDescriptor(
@@ -80,7 +81,7 @@ public class CreateDataAdapterAction extends Action implements ICheatSheetAction
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
 			newDataAdapter = wizard.getDataAdapter();
-			DataAdapterManager.getPreferencesStorage().addDataAdapter("", newDataAdapter);
+			DataAdapterManager.getPreferencesStorage().addDataAdapter("", newDataAdapter); //$NON-NLS-1$
 		}
 	}
 

@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 public class XmlaDataAdapterFactory implements DataAdapterFactory {
 
@@ -36,7 +37,7 @@ public class XmlaDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getLabel() {
-		return "XMLA Server";
+		return Messages.XmlaDataAdapterFactory_label;
 	}
 
 	/*
@@ -45,7 +46,7 @@ public class XmlaDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "Connect to XMLA Server";
+		return Messages.XmlaDataAdapterFactory_description;
 	}
 
 	/*
@@ -55,7 +56,7 @@ public class XmlaDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/database.png");
+			return Activator.getDefault().getImage("icons/database.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

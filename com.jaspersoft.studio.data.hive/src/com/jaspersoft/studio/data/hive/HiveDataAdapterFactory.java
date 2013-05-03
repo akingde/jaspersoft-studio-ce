@@ -26,6 +26,7 @@ import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImplementation;
 import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.hive.messages.Messages;
 
 /**
  * @author gtoffoli
@@ -41,7 +42,7 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	public DataAdapterDescriptor createDataAdapter() {
 		HiveDataAdapterDescriptor descriptor = new HiveDataAdapterDescriptor();
 		descriptor.getDataAdapter().setUrl(
-				"jdbc:hive://localhost:10000/default");
+				"jdbc:hive://localhost:10000/default"); //$NON-NLS-1$
 		return descriptor;
 	}
 
@@ -61,7 +62,7 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getLabel() {
-		return "Hive Connection";
+		return Messages.HiveDataAdapterFactory_label;
 	}
 
 	/*
@@ -70,7 +71,7 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "Use HiveQL queries to get data from a hive instance";
+		return Messages.HiveDataAdapterFactory_description;
 	}
 
 	/*
@@ -80,7 +81,7 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/hive.png");
+			return Activator.getDefault().getImage("icons/hive.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 public class XLSXDataAdapterFactory implements DataAdapterFactory {
 
@@ -36,7 +37,7 @@ public class XLSXDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getLabel() {
-		return "Microsoft Excel (XLSX)";
+		return Messages.XLSXDataAdapterFactory_label;
 	}
 
 	/*
@@ -46,7 +47,7 @@ public class XLSXDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public String getDescription() {
 
-		return "Use a Microsoft Excel document as data";
+		return Messages.ExcelDataAdapterFactory_description;
 	}
 
 	/*
@@ -56,7 +57,7 @@ public class XLSXDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/document-excel.png");
+			return Activator.getDefault().getImage("icons/document-excel.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

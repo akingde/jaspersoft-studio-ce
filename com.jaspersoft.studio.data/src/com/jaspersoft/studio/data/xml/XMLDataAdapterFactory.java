@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 public class XMLDataAdapterFactory implements DataAdapterFactory {
 
@@ -36,7 +37,7 @@ public class XMLDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getLabel() {
-		return "XML document";
+		return Messages.XMLDataAdapterFactory_label;
 	}
 
 	/*
@@ -46,7 +47,7 @@ public class XMLDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public String getDescription() {
 
-		return "Use an XML document as data";
+		return Messages.XMLDataAdapterFactory_description;
 	}
 
 	/*
@@ -56,7 +57,7 @@ public class XMLDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/blue-document-code.png");
+			return Activator.getDefault().getImage("icons/blue-document-code.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

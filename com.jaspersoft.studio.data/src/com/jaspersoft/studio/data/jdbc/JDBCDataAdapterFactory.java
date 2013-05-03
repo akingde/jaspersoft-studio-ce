@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 /*
  * @author gtoffoli
@@ -56,7 +57,7 @@ public class JDBCDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getLabel() {
-		return "Database JDBC Connection";
+		return Messages.JDBCDataAdapterFactory_label;
 	}
 
 	/*
@@ -65,7 +66,7 @@ public class JDBCDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "Use SQL queries to get data from a database";
+		return Messages.JDBCDataAdapterFactory_description;
 	}
 
 	/*
@@ -75,7 +76,7 @@ public class JDBCDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/database.png");
+			return Activator.getDefault().getImage("icons/database.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

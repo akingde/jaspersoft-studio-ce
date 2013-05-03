@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 public class JndiDataAdapterFactory implements DataAdapterFactory {
 
@@ -36,7 +37,7 @@ public class JndiDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getLabel() {
-		return "JNDI Data Source";
+		return Messages.JndiDataAdapterFactory_label;
 	}
 
 	/*
@@ -45,7 +46,7 @@ public class JndiDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "JNDI Data Source";
+		return Messages.JndiDataAdapterFactory_description;
 	}
 
 	/*
@@ -55,7 +56,7 @@ public class JndiDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/datasource_jndi.png");
+			return Activator.getDefault().getImage("icons/datasource_jndi.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

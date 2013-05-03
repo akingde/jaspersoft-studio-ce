@@ -23,6 +23,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.messages.Messages;
 
 public class EmptyDataAdapterFactory implements DataAdapterFactory {
 
@@ -35,11 +36,11 @@ public class EmptyDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getLabel() {
-		return "Empty rows";
+		return Messages.EmptyDataAdapterFactory_label;
 	}
 	
 	public String getDescription() { 
-		return "Use a set of empty rows";
+		return Messages.EmptyDataAdapterFactory_description;
 	}
 
 	/* (non-Javadoc)
@@ -48,7 +49,7 @@ public class EmptyDataAdapterFactory implements DataAdapterFactory {
 	public Image getIcon(int size) { 
 		if (size == 16)
 		{
-			return  JaspersoftStudioPlugin.getInstance().getImage("icons/battery-empty.png");
+			return  JaspersoftStudioPlugin.getInstance().getImage("icons/battery-empty.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

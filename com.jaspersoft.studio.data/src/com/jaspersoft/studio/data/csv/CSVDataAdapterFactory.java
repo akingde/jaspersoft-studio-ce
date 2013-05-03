@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 public class CSVDataAdapterFactory implements DataAdapterFactory {
 
@@ -36,7 +37,7 @@ public class CSVDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getLabel() {
-		return "CSV File";
+		return Messages.CSVDataAdapterFactory_csvLabel;
 	}
 
 	/*
@@ -45,7 +46,7 @@ public class CSVDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "Use the content of a CSV file as data";
+		return Messages.CSVDataAdapterFactory_csvDesription;
 	}
 
 	/*
@@ -55,7 +56,7 @@ public class CSVDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/document-excel-csv.png");
+			return Activator.getDefault().getImage("icons/document-excel-csv.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

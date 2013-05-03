@@ -252,6 +252,9 @@ public class Messages extends NLS {
 	public static String CreateBandAction_create_band_tool_tip;
 	public static String CreateConditionalStyleAction_create_conditional_style;
 	public static String CreateConditionalStyleAction_create_conditional_style_tool_tip;
+	public static String CreateDataAdapterAction_actionDescription;
+	public static String CreateDataAdapterAction_actionName;
+	public static String CreateDataAdapterAction_actionToolTip;
 	public static String CreateDatasetAction_create_dataset;
 	public static String CreateDatasetAction_create_dataset_tool_tip;
 	public static String CreateDataSourceAction_create;
@@ -418,6 +421,8 @@ public class Messages extends NLS {
 	public static String ElementWithValueExpressionDialog_NameLbl;
 	public static String ElementWithValueExpressionDialog_Title;
 	public static String ElementWithValueExpressionDialog_ValueExprLbl;
+	public static String EmptyDataAdapterFactory_description;
+	public static String EmptyDataAdapterFactory_label;
 	public static String EmptyDatasourcePage_description;
 	public static String EmptyDatasourcePage_empty_datasource;
 	public static String EmptyDatasourcePage_size_tool_tip;

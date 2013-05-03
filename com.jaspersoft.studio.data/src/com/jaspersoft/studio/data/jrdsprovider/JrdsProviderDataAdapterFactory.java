@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 public class JrdsProviderDataAdapterFactory implements DataAdapterFactory {
 
@@ -36,7 +37,7 @@ public class JrdsProviderDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getLabel() {
-		return "JasperReports DataSource Provider class";
+		return Messages.JrdsProviderDataAdapterFactory_label;
 	}
 
 	/*
@@ -45,14 +46,14 @@ public class JrdsProviderDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "Use a java class which implements the JRDataSourceProvider interface";
+		return Messages.JrdsProviderDataAdapterFactory_description;
 	}
 
 	/**
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/bean-green.png");
+			return Activator.getDefault().getImage("icons/bean-green.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

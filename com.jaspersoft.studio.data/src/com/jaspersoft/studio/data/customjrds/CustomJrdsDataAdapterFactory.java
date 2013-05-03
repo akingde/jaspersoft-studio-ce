@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 
@@ -36,7 +37,7 @@ public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getLabel() {
-		return "Custom implementaion of JRDataSource";
+		return Messages.CustomJrdsDataAdapterFactory_customJrAdapterLabel;
 	}
 
 	/*
@@ -45,7 +46,7 @@ public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "Use your own java class to instance a JRDataSource";
+		return Messages.CustomJrdsDataAdapterFactory_customJrAdapterDescription;
 	}
 
 	/*
@@ -55,7 +56,7 @@ public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/bean-green.png");
+			return Activator.getDefault().getImage("icons/bean-green.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

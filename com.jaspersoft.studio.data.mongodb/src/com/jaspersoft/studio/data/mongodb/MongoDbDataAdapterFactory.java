@@ -25,6 +25,7 @@ import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterImplementation;
 import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.mongodb.messages.Messages;
 
 /**
  * @author gtoffoli
@@ -39,9 +40,9 @@ public class MongoDbDataAdapterFactory implements DataAdapterFactory {
      */
     public DataAdapterDescriptor createDataAdapter() {
         MongoDbDataAdapterDescriptor descriptor = new MongoDbDataAdapterDescriptor();
-        descriptor.getDataAdapter().setMongoURI("mongodb://HOST:27017/DB_NAME");
-        descriptor.getDataAdapter().setUsername("");
-        descriptor.getDataAdapter().setPassword("");
+        descriptor.getDataAdapter().setMongoURI("mongodb://HOST:27017/DB_NAME"); //$NON-NLS-1$
+        descriptor.getDataAdapter().setUsername(""); //$NON-NLS-1$
+        descriptor.getDataAdapter().setPassword(""); //$NON-NLS-1$
         return descriptor;
     }
 
@@ -61,7 +62,7 @@ public class MongoDbDataAdapterFactory implements DataAdapterFactory {
      * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
      */
     public String getLabel() {
-        return "MongoDB Connection";
+        return Messages.MongoDbDataAdapterFactory_label;
     }
 
     /*
@@ -70,7 +71,7 @@ public class MongoDbDataAdapterFactory implements DataAdapterFactory {
      * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
      */
     public String getDescription() {
-        return "Use MongoDbQuery queries to get data from MongoDB";
+        return Messages.MongoDbDataAdapterFactory_description;
     }
 
     /*

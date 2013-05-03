@@ -19,6 +19,7 @@ import net.sf.jasperreports.data.mondrian.MondrianDataAdapterImpl;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 /*
  * @author gtoffoli
@@ -51,7 +52,7 @@ public class MondrianDataAdapterFactory extends JDBCDataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getLabel() {
-		return "Mondrian OLAP Connection";
+		return Messages.MondrianDataAdapterFactory_label;
 	}
 
 	/*
@@ -60,7 +61,7 @@ public class MondrianDataAdapterFactory extends JDBCDataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "Mondrian OLAP Connection";
+		return Messages.MondrianDataAdapterFactory_description;
 	}
 
 }

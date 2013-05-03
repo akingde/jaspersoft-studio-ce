@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.messages.Messages;
 
 public class QueryExecutorDataAdapterFactory implements DataAdapterFactory {
 
@@ -36,7 +37,7 @@ public class QueryExecutorDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getLabel() {
-		return "Query Executor adapter";
+		return Messages.QueryExecutorDataAdapterFactory_label;
 	}
 
 	/*
@@ -45,12 +46,12 @@ public class QueryExecutorDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "Don't provide any connection or data source.";
+		return Messages.QueryExecutorDataAdapterFactory_description;
 	}
 
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/receipt.png");
+			return Activator.getDefault().getImage("icons/receipt.png"); //$NON-NLS-1$
 		}
 		return null;
 	}
