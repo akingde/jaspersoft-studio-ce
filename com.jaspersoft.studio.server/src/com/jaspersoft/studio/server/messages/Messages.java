@@ -55,6 +55,13 @@ public class Messages extends NLS {
 	public static String FindResources_jobname;
 	public static String ImportDataSourceInfoFromDA_DialogTitle;
 	public static String ImportDataSourceInfoFromDA_InfoLabel;
+	public static String ImportDataSourceInJSSAction_ActionText;
+	public static String ImportDataSourceInJSSAction_ActionTooltip;
+	public static String ImportDataSourceInJSSAction_DataAdapterNameTemplate;
+	public static String ImportDataSourceInJSSAction_DataSourceNotSupportedError;
+	public static String ImportDataSourceInJSSAction_OperationInfoMsg;
+	public static String ImportDataSourceInJSSAction_OperationInfoTitle;
+	public static String ImportDataSourceInJSSAction_UnableToGetNameError;
 	public static String InputControlPageContent_boolean;
 	public static String InputControlPageContent_singleValue;
 	public static String JrxmlPublishAction_defaultresourcelabel;

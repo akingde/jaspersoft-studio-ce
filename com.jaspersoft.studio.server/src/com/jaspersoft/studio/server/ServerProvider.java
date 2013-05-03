@@ -44,6 +44,7 @@ import com.jaspersoft.studio.server.action.resource.CopyResourceAction;
 import com.jaspersoft.studio.server.action.resource.CutResourceAction;
 import com.jaspersoft.studio.server.action.resource.DeleteResourceAction;
 import com.jaspersoft.studio.server.action.resource.DownloadFileAction;
+import com.jaspersoft.studio.server.action.resource.ImportDataSourceInJSSAction;
 import com.jaspersoft.studio.server.action.resource.OpenInEditorAction;
 import com.jaspersoft.studio.server.action.resource.PasteResourceAction;
 import com.jaspersoft.studio.server.action.resource.PropertiesAction;
@@ -82,6 +83,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 	private RunReportUnitAction runReportUnitAction;
 	private OpenInEditorAction openInEditorAction;
 	private DownloadFileAction downloadFileAction;
+	
+	private ImportDataSourceInJSSAction importDataSourceInJSSAction;
 
 	public Action[] getActions(TreeViewer treeViewer) {
 		createActions(treeViewer);
@@ -116,6 +119,9 @@ public class ServerProvider implements IRepositoryViewProvider {
 			runReportUnitAction = new RunReportUnitAction(treeViewer);
 		if (editAction == null)
 			editAction = new PropertiesAction(treeViewer);
+		if (importDataSourceInJSSAction == null){
+			importDataSourceInJSSAction = new ImportDataSourceInJSSAction(treeViewer);
+		}
 
 		if (openInEditorAction == null)
 			openInEditorAction = new OpenInEditorAction(treeViewer);
@@ -177,6 +183,10 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 			if (deleteAction.isEnabled())
 				lst.add(deleteAction);
+			if (importDataSourceInJSSAction.isEnabled()){
+				lst.add(importDataSourceInJSSAction);
+			}
+			
 			lst.add(new Separator());
 
 			if (refreshAction.isEnabled())

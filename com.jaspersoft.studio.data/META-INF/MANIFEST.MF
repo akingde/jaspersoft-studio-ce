@@ -23,6 +23,8 @@ Bundle-ClassPath: lib/mondrian-3.2.0-13661-JS.jar,
  lib/eigenbase-xom-1.3.0.11999.jar,
  lib/javacup-0.10k.jar,
  .
-Export-Package: com.jaspersoft.studio.data.jdbc,
+Export-Package: com.jaspersoft.studio.data.bean,
+ com.jaspersoft.studio.data.jdbc,
+ com.jaspersoft.studio.data.jndi,
  com.jaspersoft.studio.data.messages,
  com.jaspersoft.studio.data.querydesigner.sql
