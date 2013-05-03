@@ -10,20 +10,21 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export.xls;
 
-import net.sf.jasperreports.engine.export.JExcelApiExporter;
+import net.sf.jasperreports.engine.export.JExcelApiMetadataExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
+import net.sf.jasperreports.engine.export.JRXlsAbstractMetadataExporterParameter;
 
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class ExportAsExcelAPIAction extends AExportXlsAction {
+public class ExportAsXlsMetadataAction extends AExportXlsAction {
 
-	public ExportAsExcelAPIAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
+	public ExportAsXlsMetadataAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
 		super(viewer, jContext);
 
-		setText(Messages.ExportAsExcelAPIAction_title);
-		setToolTipText(Messages.ExportAsExcelAPIAction_tooltip);
+		setText("Export As XLS With Metadata");
+		setToolTipText("Export As XLS With Metadata");
 
 		setFileExtensions(new String[] { "*.xls" }); //$NON-NLS-1$
 		setFilterNames(new String[] { Messages.ExportAsExcelAPIAction_filternames });
@@ -32,6 +33,11 @@ public class ExportAsExcelAPIAction extends AExportXlsAction {
 
 	@Override
 	protected JRXlsAbstractExporter createExporter(JasperReportsConfiguration jContext) {
-		return new JExcelApiExporter(jContext);
+		JExcelApiMetadataExporter exp = new JExcelApiMetadataExporter(jContext);
+		exp.setParameter(JRXlsAbstractMetadataExporterParameter.WRITE_HEADER,
+				jContext.getProperty(JRXlsAbstractMetadataExporterParameter.PROPERTY_WRITE_HEADER));
+		exp.setParameter(JRXlsAbstractMetadataExporterParameter.COLUMN_NAMES,
+				jContext.getProperty(JRXlsAbstractMetadataExporterParameter.PROPERTY_COLUMN_NAMES_PREFIX));
+		return exp;
 	}
 }

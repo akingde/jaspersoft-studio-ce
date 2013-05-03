@@ -16,7 +16,7 @@ import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
-import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsxAction;
+import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
 import com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -29,12 +29,12 @@ public class XlsViewer extends ASystemViewer {
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsXlsxAction(rptv, jContext);
+		return new ExportAsXlsAction(rptv, jContext);
 	}
 
 	@Override
 	protected String getExtension(JasperPrint jrprint) {
-		return ".xlsx";
+		return ".xls";
 	}
 
 	@Override

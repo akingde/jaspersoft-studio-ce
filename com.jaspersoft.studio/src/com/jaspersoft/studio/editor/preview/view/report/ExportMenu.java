@@ -30,6 +30,7 @@ import com.jaspersoft.studio.editor.preview.actions.export.html.ExportAsLHtmlAct
 import com.jaspersoft.studio.editor.preview.actions.export.html.ExportAsXHtmlAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsExcelAPIAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsOdsAction;
+import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsMetadataAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsxAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
@@ -58,6 +59,7 @@ public class ExportMenu {
 
 		mm.add(new Separator());
 		mm.add(new ExportAsXlsAction(rptviewer, jContext));
+		mm.add(new ExportAsXlsMetadataAction(rptviewer, jContext));
 		mm.add(new ExportAsXlsxAction(rptviewer, jContext));
 		mm.add(new ExportAsExcelAPIAction(rptviewer, jContext));
 

@@ -30,6 +30,7 @@ import com.jaspersoft.studio.editor.preview.view.report.system.OdtViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.PdfViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.PowerPointViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.RTFViewer;
+import com.jaspersoft.studio.editor.preview.view.report.system.XlsMetadataViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsxViewer;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -62,6 +63,7 @@ public class ViewsFactory {
 		pmap.put("SEPARATOR3", null);
 
 		pmap.put("XLS", new XlsViewer(composite, jContext));
+		pmap.put("XLS Metadata", new XlsMetadataViewer(composite, jContext));
 		pmap.put("XLSx", new XlsxViewer(composite, jContext));
 		pmap.put("ExcelAPI", new ExcelAPIViewer(composite, jContext));
 		pmap.put("CSV", new CSVViewer(composite, jContext));
