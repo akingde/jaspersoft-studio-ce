@@ -50,6 +50,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.ErrorUtil;
@@ -58,7 +59,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VErrorPreview extends APreview {
 
-	private static final String NL = System.getProperty("line.separator");
+	private static final String NL = System.getProperty("line.separator"); //$NON-NLS-1$
 
 	public VErrorPreview(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
@@ -96,7 +97,7 @@ public class VErrorPreview extends APreview {
 		topToolBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		tbManager = new ToolBarManager(topToolBar);
-		msgAction = new Action("Console") {
+		msgAction = new Action("Console") { //$NON-NLS-1$
 			@Override
 			public void run() {
 				stackLayout.topControl = tmessage;
@@ -104,7 +105,7 @@ public class VErrorPreview extends APreview {
 			}
 		};
 		tbManager.add(msgAction);
-		errAction = new Action("Errors") {
+		errAction = new Action(Messages.VErrorPreview_errorsLabel) {
 			@Override
 			public void run() {
 				stackLayout.topControl = errorsComposite;
@@ -114,7 +115,7 @@ public class VErrorPreview extends APreview {
 
 		tbManager.add(errAction);
 
-		statAction = new Action("Statistics") {
+		statAction = new Action(Messages.VErrorPreview_statisticsLabel) {
 			@Override
 			public void run() {
 				stackLayout.topControl = statComposite;
@@ -147,7 +148,7 @@ public class VErrorPreview extends APreview {
 
 		stackLayout.topControl = tmessage;
 		body.layout();
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.view_reportstate");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.view_reportstate"); //$NON-NLS-1$
 
 		return container;
 	}
@@ -171,7 +172,7 @@ public class VErrorPreview extends APreview {
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		CTabItem itemTbl = new CTabItem(tabFolder, SWT.NONE);
-		itemTbl.setText("Table");
+		itemTbl.setText(Messages.VErrorPreview_tableLabel);
 
 		final Table wtable = new Table(tabFolder, SWT.V_SCROLL | SWT.H_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION
 				| SWT.BORDER);
@@ -193,7 +194,7 @@ public class VErrorPreview extends APreview {
 
 		TableColumn[] col = new TableColumn[3];
 		col[0] = new TableColumn(wtable, SWT.NONE);
-		col[0].setText("Field Name");
+		col[0].setText(Messages.VErrorPreview_fieldNameLabel);
 		col[0].pack();
 
 		TableLayout tlayout = new TableLayout();
@@ -205,12 +206,12 @@ public class VErrorPreview extends APreview {
 		errorViewer.setLabelProvider(new TableLabelProvider() {
 			@Override
 			public Image getColumnImage(Object element, int columnIndex) {
-				return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/error_tsk.gif");
+				return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/error_tsk.gif"); //$NON-NLS-1$
 			}
 		});
 
 		CTabItem itemText = new CTabItem(tabFolder, SWT.NONE);
-		itemText.setText("Text");
+		itemText.setText(Messages.VErrorPreview_textLabel);
 		terror = new Text(tabFolder, SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		itemText.setControl(terror);
 
@@ -229,77 +230,77 @@ public class VErrorPreview extends APreview {
 		layout.horizontalSpacing = 3;
 		statComposite.setLayout(layout);
 
-		new Label(statComposite, SWT.NONE).setText("Compilation Time");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_compilationTimeLabel);
 
 		compilationTime = new Label(statComposite, SWT.BOLD);
 		compilationTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		com.jaspersoft.studio.utils.UIUtil.setBold(compilationTime);
-		new Label(statComposite, SWT.NONE).setText("sec");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel);
 
-		new Label(statComposite, SWT.NONE).setText("Filling Time");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_fillingTimeLabel);
 
 		fillingTime = new Label(statComposite, SWT.BOLD);
 		fillingTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		com.jaspersoft.studio.utils.UIUtil.setBold(fillingTime);
-		new Label(statComposite, SWT.NONE).setText("sec");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel); 
 
-		new Label(statComposite, SWT.NONE).setText("Report Execution Time");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_exectutionTimeLabel);
 
 		execTime = new Label(statComposite, SWT.BOLD);
 		execTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		com.jaspersoft.studio.utils.UIUtil.setBold(execTime);
-		new Label(statComposite, SWT.NONE).setText("sec");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel); 
 
-		new Label(statComposite, SWT.NONE).setText("Export Time");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_exportTimeLabel);
 
 		exportTime = new Label(statComposite, SWT.BOLD);
 		exportTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		com.jaspersoft.studio.utils.UIUtil.setBold(exportTime);
-		new Label(statComposite, SWT.NONE).setText("sec");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel); 
 
-		new Label(statComposite, SWT.NONE).setText("Total Pages");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_totalPagesLabel);
 
 		totalPages = new Label(statComposite, SWT.BOLD);
 		totalPages.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		com.jaspersoft.studio.utils.UIUtil.setBold(totalPages);
-		new Label(statComposite, SWT.NONE).setText("pages");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_pagesLabel);
 
-		new Label(statComposite, SWT.NONE).setText("Processed Records Count    ");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_processedRecordsLabel);
 
 		recordCount = new Label(statComposite, SWT.BOLD);
 		recordCount.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		com.jaspersoft.studio.utils.UIUtil.setBold(recordCount);
-		new Label(statComposite, SWT.NONE).setText("records");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_recordsLabel);
 
-		new Label(statComposite, SWT.NONE).setText("Fill Size");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_fillSizeLabel);
 
 		fillSize = new Label(statComposite, SWT.BOLD);
 		fillSize.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		com.jaspersoft.studio.utils.UIUtil.setBold(fillSize);
-		new Label(statComposite, SWT.NONE).setText("bytes");
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_bytesLabel);
 
 		setStats(null);
 	}
 
 	public void setStats(Statistics stats) {
 		if (stats != null) {
-			compilationTime.setText("" + stats.getDuration(ReportControler.ST_COMPILATIONTIME) / 1000);
-			fillingTime.setText("" + stats.getDuration(ReportControler.ST_FILLINGTIME) / 1000);
-			exportTime.setText("" + stats.getDuration(ReportControler.ST_EXPORTTIME) / 1000);
-			execTime.setText("" + stats.getDuration(ReportControler.ST_REPORTEXECUTIONTIME) / 1000);
+			compilationTime.setText("" + stats.getDuration(ReportControler.ST_COMPILATIONTIME) / 1000); //$NON-NLS-1$
+			fillingTime.setText("" + stats.getDuration(ReportControler.ST_FILLINGTIME) / 1000); //$NON-NLS-1$
+			exportTime.setText("" + stats.getDuration(ReportControler.ST_EXPORTTIME) / 1000); //$NON-NLS-1$
+			execTime.setText("" + stats.getDuration(ReportControler.ST_REPORTEXECUTIONTIME) / 1000); //$NON-NLS-1$
 
-			totalPages.setText(Misc.nvl(stats.getValue(ReportControler.ST_PAGECOUNT), "0"));
-			recordCount.setText(Misc.nvl(stats.getValue(ReportControler.ST_RECORDCOUNTER), "-"));
-			fillSize.setText(Misc.nvl(stats.getValue(ReportControler.ST_REPORTSIZE), "0"));
+			totalPages.setText(Misc.nvl(stats.getValue(ReportControler.ST_PAGECOUNT), "0")); //$NON-NLS-1$
+			recordCount.setText(Misc.nvl(stats.getValue(ReportControler.ST_RECORDCOUNTER), "-")); //$NON-NLS-1$
+			fillSize.setText(Misc.nvl(stats.getValue(ReportControler.ST_REPORTSIZE), "0")); //$NON-NLS-1$
 			statAction.run();
 		} else {
-			compilationTime.setText("-");
-			fillingTime.setText("-");
-			exportTime.setText("-");
+			compilationTime.setText("-"); //$NON-NLS-1$
+			fillingTime.setText("-"); //$NON-NLS-1$
+			exportTime.setText("-"); //$NON-NLS-1$
 
-			totalPages.setText("-");
-			recordCount.setText("-");
-			fillSize.setText("-");
+			totalPages.setText("-"); //$NON-NLS-1$
+			recordCount.setText("-"); //$NON-NLS-1$
+			fillSize.setText("-"); //$NON-NLS-1$
 		}
 		statComposite.layout();
 	}
@@ -309,7 +310,7 @@ public class VErrorPreview extends APreview {
 	}
 
 	public void addMessage(String msg) {
-		tmessage.setText(tmessage.getText() + msg + "\n");
+		tmessage.setText(tmessage.getText() + msg + "\n"); //$NON-NLS-1$
 		// textSection.setText("Console: " + msg);
 	}
 
@@ -318,18 +319,18 @@ public class VErrorPreview extends APreview {
 			if(t instanceof InvocationTargetException)
 				t = t.getCause();
 			String msg = terror.getText() + ErrorUtil.getStackTrace(t) + NL;
-			terror.setText(terror.getText() + msg + "\n");
+			terror.setText(terror.getText() + msg + "\n"); //$NON-NLS-1$
 			addError2List(t, t.getMessage());
 			// errorSection.setText("Errors: 1");
 		} else
-			terror.setText("");
+			terror.setText(""); //$NON-NLS-1$
 		refreshErrorTable();
 	}
 
 	protected void refreshErrorTable() {
 		if (errorList.size() > 0)
 			errAction.run();
-		errAction.setText("Errors (" + errorList.size() + ")");
+		errAction.setText(Messages.VErrorPreview_errorsFoundLabel + errorList.size() + ")"); //$NON-NLS-2$
 		errorViewer.refresh();
 	}
 
@@ -348,8 +349,8 @@ public class VErrorPreview extends APreview {
 	private void addError2List(Object err, String message) {
 		errors.add(err);
 		if (message == null)
-			message = "< No message >";
-		String lines[] = message.split("\\r?\\n");
+			message = Messages.VErrorPreview_noMessageLabel;
+		String lines[] = message.split("\\r?\\n"); //$NON-NLS-1$
 		if (lines.length > 0)
 			message = lines[0];
 
@@ -359,7 +360,7 @@ public class VErrorPreview extends APreview {
 	public void clear() {
 		errors.clear();
 		msgAction.run();
-		tmessage.setText("");
+		tmessage.setText(""); //$NON-NLS-1$
 		errorList = new ArrayList<String>();
 		errorViewer.setInput(errorList);
 		setStats(null);

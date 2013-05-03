@@ -33,6 +33,7 @@ public class Messages extends NLS {
 	public static String common_background;
 	public static String common_browse;
 	public static String common_class;
+	public static String common_classTypeLabel;
 	public static String common_column_names;
 	public static String common_connection_expression;
 	public static String common_connection;
@@ -44,6 +45,7 @@ public class Messages extends NLS {
 	public static String common_date_format;
 	public static String common_delete;
 	public static String common_description;
+	public static String common_descriptionLabel;
 	public static String common_down;
 	public static String common_driver_class;
 	public static String common_edit;
@@ -58,6 +60,7 @@ public class Messages extends NLS {
 	public static String common_expression_editor;
 	public static String common_fields;
 	public static String common_field_delimiter;
+	public static String common_fieldNameLabel;
 	public static String common_file_name;
 	public static String common_fill;
 	public static String common_font;
@@ -1215,6 +1218,8 @@ public class Messages extends NLS {
 	public static String ShowParametersAction_tooltip;
 	public static String ShowPropertyViewAction_show_properties;
 	public static String ShowPropertyViewAction_show_properties_tool_tip;
+	public static String SimpleQueryWizardDataEditorComposite_noQueryProvidedText;
+	public static String SimpleQueryWizardDataEditorComposite_noQueryProvidedTitle;
 	public static String Size2BorderAction_fit_both;
 	public static String Size2BorderAction_fit_both_tool_tip;
 	public static String Size2BorderAction_fit_height;
@@ -1381,6 +1386,7 @@ public class Messages extends NLS {
 	public static String XMLExporterPreferencePage_5;
 	public static String XMLExporterPreferencePage_6;
 	public static String common_tools;
+	public static String common_type;
 	public static String common_exception;
 	public static String common_exception_detail;
 	public static String common_warning;
@@ -1389,6 +1395,24 @@ public class Messages extends NLS {
 	public static String common_yes;
 	public static String common_no;
 
+	public static String VErrorPreview_bytesLabel;
+	public static String VErrorPreview_compilationTimeLabel;
+	public static String VErrorPreview_errorsFoundLabel;
+	public static String VErrorPreview_errorsLabel;
+	public static String VErrorPreview_exectutionTimeLabel;
+	public static String VErrorPreview_exportTimeLabel;
+	public static String VErrorPreview_fieldNameLabel;
+	public static String VErrorPreview_fillingTimeLabel;
+	public static String VErrorPreview_fillSizeLabel;
+	public static String VErrorPreview_noMessageLabel;
+	public static String VErrorPreview_pagesLabel;
+	public static String VErrorPreview_processedRecordsLabel;
+	public static String VErrorPreview_recordsLabel;
+	public static String VErrorPreview_secLabel;
+	public static String VErrorPreview_statisticsLabel;
+	public static String VErrorPreview_tableLabel;
+	public static String VErrorPreview_textLabel;
+	public static String VErrorPreview_totalPagesLabel;
 	public static String VersionDialog_checkbox;
 	public static String VersionDialog_label;
 	public static String VersionDialog_label2;

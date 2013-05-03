@@ -41,6 +41,7 @@ import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.UndoRedoImpl;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
@@ -72,7 +73,7 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 	 */
 	private JRDesignDataset dataset = null;
 	
-	private String queryString = "";
+	private String queryString = ""; //$NON-NLS-1$
 	
 	
 	/**
@@ -239,8 +240,8 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 								
 								MessageBox dialog = 
 									  new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
-									dialog.setText("No query provided");
-									dialog.setMessage("You did not provide any query, so I will not be able to discover any field for you. Continue anyway?");
+									dialog.setText(Messages.SimpleQueryWizardDataEditorComposite_noQueryProvidedTitle);
+									dialog.setMessage(Messages.SimpleQueryWizardDataEditorComposite_noQueryProvidedText);
 									questionReturnCode = dialog.open(); 
 								
 							}

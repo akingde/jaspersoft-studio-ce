@@ -41,6 +41,7 @@ import org.eclipse.ui.part.PluginTransfer;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTableDropAdapter;
 import com.jaspersoft.studio.dnd.NodeTransfer;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
@@ -84,15 +85,15 @@ public class FieldsTable {
 
 		TableColumn[] col = new TableColumn[3];
 		col[0] = new TableColumn(wtable, SWT.NONE);
-		col[0].setText("Field Name");
+		col[0].setText(Messages.common_fieldNameLabel);
 		col[0].pack();
 
 		col[1] = new TableColumn(wtable, SWT.NONE);
-		col[1].setText("Class Type");
+		col[1].setText(Messages.common_classTypeLabel);
 		col[1].pack();
 
 		col[2] = new TableColumn(wtable, SWT.NONE);
-		col[2].setText("Description");
+		col[2].setText(Messages.common_descriptionLabel);
 		col[2].pack();
 
 		TableLayout tlayout = new TableLayout();
@@ -123,7 +124,7 @@ public class FieldsTable {
 
 			private String getName() {
 				List<JRDesignField> list = (List<JRDesignField>) tviewer.getInput();
-				String name = "Field";
+				String name = "Field"; //$NON-NLS-1$
 				boolean match = false;
 				String tmp = name;
 				for (int i = 1; i < 100000; i++) {
@@ -207,7 +208,7 @@ public class FieldsTable {
 				if ("TYPE".equals(property)) //$NON-NLS-1$
 					return prop.getValueClassName();
 				if ("DESCRIPTION".equals(property)) //$NON-NLS-1$
-					return Misc.nvl(prop.getDescription(), "");
+					return Misc.nvl(prop.getDescription(), ""); //$NON-NLS-1$
 
 				return ""; //$NON-NLS-1$
 			}
@@ -240,7 +241,7 @@ public class FieldsTable {
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new ClassTypeCellEditor(parent),
 				new TextCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "NAME", "TYPE", "DESCRIPTION" }); //$NON-NLS-1$ //$NON-NLS-2$
+		viewer.setColumnProperties(new String[] { "NAME", "TYPE", "DESCRIPTION" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -251,9 +252,9 @@ public class FieldsTable {
 			case 0:
 				return field.getName();
 			case 1:
-				return Misc.nvl(field.getValueClassName(), "");
+				return Misc.nvl(field.getValueClassName(), ""); //$NON-NLS-1$
 			case 2:
-				return Misc.nvl(field.getDescription(), "");
+				return Misc.nvl(field.getDescription(), ""); //$NON-NLS-1$
 			}
 			return ""; //$NON-NLS-1$
 		}

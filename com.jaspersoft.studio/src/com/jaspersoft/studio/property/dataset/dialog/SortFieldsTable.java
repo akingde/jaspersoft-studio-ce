@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.model.sortfield.command.wizard.SortFieldWizard;
@@ -92,15 +93,15 @@ public class SortFieldsTable {
 
 		TableColumn[] col = new TableColumn[3];
 		col[0] = new TableColumn(wtable, SWT.NONE);
-		col[0].setText("Field Name");
+		col[0].setText(Messages.common_fieldNameLabel);
 		col[0].pack();
 
 		col[1] = new TableColumn(wtable, SWT.NONE);
-		col[1].setText("Type");
+		col[1].setText(Messages.common_type);
 		col[1].pack();
 
 		col[2] = new TableColumn(wtable, SWT.NONE);
-		col[2].setText("Order");
+		col[2].setText(Messages.common_order);
 		col[2].pack();
 
 		TableLayout tlayout = new TableLayout();
@@ -190,7 +191,7 @@ public class SortFieldsTable {
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
 				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(SortFieldTypeEnum.values(), NullEnum.NOTNULL)),
 				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL)) });
-		viewer.setColumnProperties(new String[] { "NAME", "TYPE", "ORDER" }); //$NON-NLS-1$ //$NON-NLS-2$
+		viewer.setColumnProperties(new String[] { "NAME", "TYPE", "ORDER" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
