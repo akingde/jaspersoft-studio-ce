@@ -33,6 +33,7 @@ import com.jaspersoft.studio.data.MDataAdapter;
 import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
+import com.jaspersoft.studio.messages.Messages;
 
 public class ImportDataAdapterAction extends Action {
 	public static final String ID = "importDataAdapteraction"; //$NON-NLS-1$
@@ -42,13 +43,13 @@ public class ImportDataAdapterAction extends Action {
 		super();
 		setId(ID);
 		this.treeViewer = treeViewer;
-		setText("Import From Workspace");
-		setDescription("Find and Import all DataAdapters from workspace");
-		setToolTipText("Find and Import all DataAdapters from workspace");
+		setText(Messages.ImportDataAdapterAction_name);
+		setDescription(Messages.ImportDataAdapterAction_description);
+		setToolTipText(Messages.ImportDataAdapterAction_tooltip);
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(
-				"org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif")); //$NON-NLS-1$
+				"org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif")); //$NON-NLS-1$ //$NON-NLS-2$
 		setDisabledImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(
-				"org.eclipse.ui", "$nl$/icons/full/dtool16/import_wiz.gif")); //$NON-NLS-1
+				"org.eclipse.ui", "$nl$/icons/full/dtool16/import_wiz.gif")); //$NON-NLS-1 //$NON-NLS-1$ //$NON-NLS-2$
 
 	}
 
@@ -69,7 +70,7 @@ public class ImportDataAdapterAction extends Action {
 		if (mDataAdapters != null) {
 			final ADataAdapterStorage storage = mDataAdapters.getValue();
 
-			Job job = new WorkspaceJob("Searching DataAdapters") {
+			Job job = new WorkspaceJob("Searching DataAdapters") { //$NON-NLS-1$
 				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
 					IWorkspace workspace = ResourcesPlugin.getWorkspace();
 					IProject[] projects = workspace.getRoot().getProjects();
@@ -91,7 +92,7 @@ public class ImportDataAdapterAction extends Action {
 				}
 
 				protected void checkFile(IFile file) throws CoreException {
-					if (file.getName().endsWith(".xml")) {
+					if (file.getName().endsWith(".xml")) { //$NON-NLS-1$
 						try {
 							final DataAdapterDescriptor das = FileDataAdapterStorage.readDataADapter(file.getContents(),
 									file.getProject());
@@ -103,7 +104,7 @@ public class ImportDataAdapterAction extends Action {
 										if (oldDas != null)
 											; // DataAdapterManager.removeDataAdapter(oldDas); replace?
 										else
-											storage.addDataAdapter("", das);
+											storage.addDataAdapter("", das); //$NON-NLS-1$
 									}
 								});
 

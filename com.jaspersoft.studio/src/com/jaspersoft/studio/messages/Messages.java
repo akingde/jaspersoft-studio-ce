@@ -21,6 +21,8 @@ public class Messages extends NLS {
 	private static final ResourceBundle RB_MESSAGES_BY_KEYS = ResourceBundle.getBundle(MESSAGES_BY_KEYS);
 	public static String SaveConfirmationDialog_question;
 	public static String SaveConfirmationDialog_title;
+	public static String ShowCSVTagsAction_label;
+	public static String ShowCSVTagsAction_tooltip;
 	public static String ShowPDFTagsAction_title;
 	public static String ShowPDFTagsAction_tooltip;
 	public static String ShowErrorsAction_title;
@@ -188,6 +190,7 @@ public class Messages extends NLS {
 	public static String AlignSection_common_align;
 	public static String AppContextMenuProvider_align_components;
 	public static String AppContextMenuProvider_align_to_container;
+	public static String AppContextMenuProvider_arrangeInContainerMenu;
 	public static String AppContextMenuProvider_order;
 	public static String AppContextMenuProvider_size_components;
 	public static String AppContextMenuProvider_size_to_container;
@@ -198,6 +201,7 @@ public class Messages extends NLS {
 	public static String BandGroupWizard_group_band;
 	public static String BandSection_height_tool_tip;
 	public static String BandSection_split_type_tool_tip;
+	public static String BandSection_title;
 	public static String BooleanCellEditorValidator_value_is_not_instance_of_boolean;
 	public static String BordersSection_all_borders_tool_tip;
 	public static String common_borders;
@@ -244,6 +248,11 @@ public class Messages extends NLS {
 	public static String ColorSchemaGenerator_schema_pastel;
 	public static String ColorStyledText_LineColor_ToolTip;
 	public static String ColumnsOrderDialog_ColumOrderDialog;
+	public static String CongratulationsWizardPage_label1;
+	public static String CongratulationsWizardPage_label2;
+	public static String CongratulationsWizardPage_label3;
+	public static String CongratulationsWizardPage_title;
+	public static String CongratulationsWizardPage_titleMessage;
 	public static String ConvertStaticIntoText_actionName;
 	public static String ConvertStaticIntoText_actionTooltip;
 	public static String ConvertTextIntoStatic_actionName;
@@ -536,6 +545,8 @@ public class Messages extends NLS {
 	public static String G2DExporterPreferencePage_4;
 	public static String GraphicSection_Detail_Section_Title;
 	public static String HeadingAction_heading;
+	public static String HorizontalRowLayout_name;
+	public static String HorizontalRowLayout_toolTip;
 	public static String HTMLExporterPreferencePage_14;
 	public static String HTMLExporterPreferencePage_15;
 	public static String HTMLExporterPreferencePage_16;
@@ -585,6 +596,9 @@ public class Messages extends NLS {
 	public static String ImageCreationDialog_Title;
 	public static String ImageInput_nullimage;
 	public static String ImageInput_selectimage;
+	public static String ImportDataAdapterAction_description;
+	public static String ImportDataAdapterAction_name;
+	public static String ImportDataAdapterAction_tooltip;
 	public static String JDBCDatasourcePage_browse;
 	public static String JDBCDatasourcePage_connection_established_message;
 	public static String JDBCDatasourcePage_connection_is_null_message;
@@ -669,6 +683,8 @@ public class Messages extends NLS {
 	public static String LocationSection_yCoordinateLabel;
 	public static String MatchSizeAction_match_size;
 	public static String MatchSizeAction_match_size_tool_tip;
+	public static String MaximizeContainerAction_name;
+	public static String MaximizeContainerAction_tooltip;
 	public static String MBand_detail;
 	public static String MBand_height_description;
 	public static String MBand_print_when_expression_description;
@@ -1052,6 +1068,10 @@ public class Messages extends NLS {
 	public static String ParametersDialog_built_in_parameters;
 	public static String ParametersDialog_report_parameters;
 	public static String ParametersDialog_user_parameters;
+	public static String ParametersTable_class;
+	public static String ParametersTable_description;
+	public static String ParametersTable_isForPrompt;
+	public static String ParametersTable_name;
 	public static String PatternPage_currency;
 	public static String PatternPage_date;
 	public static String PatternPage_description;
@@ -1223,6 +1243,8 @@ public class Messages extends NLS {
 	public static String ShowParametersAction_tooltip;
 	public static String ShowPropertyViewAction_show_properties;
 	public static String ShowPropertyViewAction_show_properties_tool_tip;
+	public static String ShowXLSTagsAction_label;
+	public static String ShowXLSTagsAction_toolTip;
 	public static String SimpleQueryWizardDataEditorComposite_noQueryProvidedText;
 	public static String SimpleQueryWizardDataEditorComposite_noQueryProvidedTitle;
 	public static String Size2BorderAction_fit_both;
@@ -1245,6 +1267,8 @@ public class Messages extends NLS {
 	public static String SizeSection_stretch_type_tool_tip;
 	public static String SizeSection_width_tool_tip;
 	public static String SizeSection_widthLabel;
+	public static String SnapToGeometryAction_label;
+	public static String SnapToGeometryAction_toolTip;
 	public static String SnapToGridAction_snap_to_grid_tool_tip;
 	public static String SnapToGuidesAction_show_grid_tool_tip;
 	public static String SortFieldPage_description;
@@ -1258,6 +1282,8 @@ public class Messages extends NLS {
 	public static String SP3Boolean_Undefined_Value;
 	public static String SPButon_Size_Decrement;
 	public static String SPButon_Size_Increment;
+	public static String StretchToContentAction_name;
+	public static String StretchToContentAction_tooltip;
 	public static String StylesListSection_Inherited_From_Default_Style;
 	public static String StylesListSection_NotEditable_Message;
 	public static String StylesListSection_NotEditable_Title;
@@ -1423,7 +1449,10 @@ public class Messages extends NLS {
 	public static String VersionDialog_label2;
 	public static String VersionDialog_title;
 	public static String VersionDialog_warning;
+	public static String VerticalRowLayout_name;
+	public static String VerticalRowLayout_tooltip;
 	public static String ViewExecutionInfoAction_tooltip;
+	public static String ViewSettingsDropDownAction_settingsName;
 	public static String WizardDataSourcePage_lblDataset_text;
 	public static String WizardDataSourcePage_lblNewLabel_text;
 	public static String WizardDataSourcePage_btnNew_text;
@@ -1433,6 +1462,7 @@ public class Messages extends NLS {
 	public static String NewSubreportPage_newReport_text;
 	public static String NewSubreportPage_useReportB_text;
 	public static String NewSubreportPage_empty_text;
+	public static String QueryDesigner_readFieldsButton;
 
 	static {
 		// initialize resource bundle

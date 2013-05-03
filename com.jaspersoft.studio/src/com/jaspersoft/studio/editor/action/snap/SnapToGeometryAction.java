@@ -25,8 +25,8 @@ public class SnapToGeometryAction extends ACheckResourcePrefAction {
 
 	public SnapToGeometryAction(JasperReportsConfiguration jrConfig) {
 		super(Messages.common_snap_to_guides, jrConfig);
-		setText("Snap To Geometry");
-		setToolTipText("Snap To Geometry");
+		setText(Messages.SnapToGeometryAction_label);
+		setToolTipText(Messages.SnapToGeometryAction_toolTip);
 		setId(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY);
 	}
 

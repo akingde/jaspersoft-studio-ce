@@ -18,6 +18,7 @@ package com.jaspersoft.studio.editor.gef.decorator.xls;
 import org.eclipse.gef.GraphicalViewer;
 
 import com.jaspersoft.studio.editor.action.snap.ACheckResourcePrefAction;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -36,8 +37,8 @@ public class ShowXLSTagsAction extends ACheckResourcePrefAction {
 	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
 	 */
 	public ShowXLSTagsAction(GraphicalViewer diagramViewer, JasperReportsConfiguration jrConfig) {
-		super("Show XSL tags", jrConfig);
-		setToolTipText("Show the XSL decorator tag");
+		super(Messages.ShowXLSTagsAction_label, jrConfig);
+		setToolTipText(Messages.ShowXLSTagsAction_toolTip);
 		setId(ID);
 	}
 

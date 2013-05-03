@@ -27,6 +27,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -51,8 +52,8 @@ public class MaximizeContainerAction extends SelectionAction {
 	public MaximizeContainerAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(false);
-		setText("Maximize Band Height");
-		setToolTipText("Maximize Band Height");
+		setText(Messages.MaximizeContainerAction_name);
+		setToolTipText(Messages.MaximizeContainerAction_tooltip);
 		setId(ID);
 		// setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(layout.getIcon()));
 		// setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(layout.getIcon()));

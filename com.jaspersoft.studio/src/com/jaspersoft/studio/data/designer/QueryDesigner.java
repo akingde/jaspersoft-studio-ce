@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
@@ -99,7 +100,7 @@ public class QueryDesigner extends AQueryDesigner {
 		tbCompo.setLayout(layout);
 
 		btn = new Button(tbCompo, SWT.PUSH);
-		btn.setText("Read Fields");
+		btn.setText(Messages.QueryDesigner_readFieldsButton);
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

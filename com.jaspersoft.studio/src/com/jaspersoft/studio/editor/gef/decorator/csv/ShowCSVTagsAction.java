@@ -18,6 +18,7 @@ package com.jaspersoft.studio.editor.gef.decorator.csv;
 import org.eclipse.gef.GraphicalViewer;
 
 import com.jaspersoft.studio.editor.action.snap.ACheckResourcePrefAction;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -36,8 +37,8 @@ public class ShowCSVTagsAction extends ACheckResourcePrefAction {
 	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
 	 */
 	public ShowCSVTagsAction(GraphicalViewer diagramViewer, JasperReportsConfiguration jrConfig) {
-		super("Show CSV tags", jrConfig);
-		setToolTipText("Show the CSV decorator tag");
+		super(Messages.ShowCSVTagsAction_label, jrConfig);
+		setToolTipText(Messages.ShowCSVTagsAction_tooltip);
 		setId(ID);
 	}
 

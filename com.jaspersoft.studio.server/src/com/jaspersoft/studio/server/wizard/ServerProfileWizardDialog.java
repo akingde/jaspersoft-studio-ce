@@ -29,6 +29,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.server.messages.Messages;
+
 public class ServerProfileWizardDialog extends WizardDialog {
 
 	List<SelectionListener> listeners = new ArrayList<SelectionListener>();
@@ -63,7 +65,7 @@ public class ServerProfileWizardDialog extends WizardDialog {
 
 		testButton = new Button(parent, SWT.NONE);
 		testButton.setFont(parent.getFont());
-		testButton.setText("Test Connection");
+		testButton.setText(Messages.ServerProfileWizardDialog_testButton);
 		setButtonLayoutData(testButton);
 		testButton.setEnabled(true);
 		testButton.addSelectionListener(new SelectionAdapter() {

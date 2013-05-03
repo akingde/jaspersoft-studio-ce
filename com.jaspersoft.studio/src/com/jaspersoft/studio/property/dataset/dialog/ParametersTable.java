@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
@@ -85,16 +86,16 @@ public class ParametersTable {
 
 		TableColumn[] col = new TableColumn[4];
 		col[0] = new TableColumn(wtable, SWT.NONE);
-		col[0].setText("Parameter Name");
+		col[0].setText(Messages.ParametersTable_name);
 
 		col[1] = new TableColumn(wtable, SWT.NONE);
-		col[1].setText("Is For Prompt");
+		col[1].setText(Messages.ParametersTable_isForPrompt);
 
 		col[2] = new TableColumn(wtable, SWT.NONE);
-		col[2].setText("Class Type");
+		col[2].setText(Messages.ParametersTable_class);
 
 		col[3] = new TableColumn(wtable, SWT.NONE);
-		col[3].setText("Description");
+		col[3].setText(Messages.ParametersTable_description);
 
 		for (TableColumn tc : col)
 			tc.pack();
@@ -137,7 +138,7 @@ public class ParametersTable {
 
 			private String getName() {
 				List<JRDesignParameter> list = (List<JRDesignParameter>) tviewer.getInput();
-				String name = "Parameter";
+				String name = "Parameter"; //$NON-NLS-1$
 				boolean match = false;
 				String tmp = name;
 				for (int i = 1; i < 100000; i++) {
@@ -216,7 +217,7 @@ public class ParametersTable {
 				if ("TYPE".equals(property)) //$NON-NLS-1$
 					return prop.getValueClassName();
 				if ("DESCRIPTION".equals(property)) //$NON-NLS-1$
-					return Misc.nvl(prop.getDescription(), "");
+					return Misc.nvl(prop.getDescription(), ""); //$NON-NLS-1$
 
 				return ""; //$NON-NLS-1$
 			}
@@ -244,7 +245,7 @@ public class ParametersTable {
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new CheckboxCellEditor(parent),
 				new ClassTypeCellEditor(parent), new TextCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "NAME", "ISFORPROMPT", "TYPE", "DESCRIPTION" }); //$NON-NLS-1$ //$NON-NLS-2$
+		viewer.setColumnProperties(new String[] { "NAME", "ISFORPROMPT", "TYPE", "DESCRIPTION" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -267,13 +268,13 @@ public class ParametersTable {
 				return field.getName();
 			case 1:
 				if (field.isSystemDefined())
-					return "";
+					return ""; //$NON-NLS-1$
 				else
 					return Boolean.toString(field.isForPrompting());
 			case 2:
-				return Misc.nvl(field.getValueClassName(), "");
+				return Misc.nvl(field.getValueClassName(), ""); //$NON-NLS-1$
 			case 3:
-				return Misc.nvl(field.getDescription(), "");
+				return Misc.nvl(field.getDescription(), ""); //$NON-NLS-1$
 			}
 			return ""; //$NON-NLS-1$
 		}

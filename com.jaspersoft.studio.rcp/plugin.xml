@@ -226,7 +226,7 @@
 	            label="New JasperReport"
 	            style="push"
 	            icon="icons/toolbar/jrxml_icon.png"
-	            tooltip="New JasperReport">
+	            tooltip="%newJasperReport">
 		 	        <visibleWhen checkEnabled="false">
 		                <with variable="activeWorkbenchWindow.activePerspective">
 		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
@@ -239,7 +239,7 @@
 	            label="New DataAdapter"
 	            style="push"
 	            icon="icons/toolbar/data_source.png"
-	            tooltip="New DataAdapter">
+	            tooltip="%newDataAdapter">
 		 	        <visibleWhen checkEnabled="false">
 		                <with variable="activeWorkbenchWindow.activePerspective">
 		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
@@ -252,7 +252,7 @@
 	            label="New Style Template"
 	            style="push"
 	            icon="icons/toolbar/jasperreports_jrtx.png"
-	            tooltip="New Style Template">
+	            tooltip="%styleTemplateTooltip">
 		 	        <visibleWhen checkEnabled="false">
 		                <with variable="activeWorkbenchWindow.activePerspective">
 		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>

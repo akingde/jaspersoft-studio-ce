@@ -31,6 +31,7 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -56,8 +57,8 @@ public class StretchToContentAction extends SelectionAction {
 	public StretchToContentAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(false);
-		setText("Stretch To Content");
-		setToolTipText("Stretch container to fit the content.");
+		setText(Messages.StretchToContentAction_name);
+		setToolTipText(Messages.StretchToContentAction_tooltip);
 		setId(ID);
 		// setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(layout.getIcon()));
 		// setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(layout.getIcon()));

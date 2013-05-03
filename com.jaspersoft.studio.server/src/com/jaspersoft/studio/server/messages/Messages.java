@@ -220,6 +220,7 @@ public class Messages extends NLS {
 	public static String ServerProfilePage_connectiontimeout;
 	public static String ServerProfilePage_daterangeexpression;
 	public static String ServerProfilePage_jrversion;
+	public static String ServerProfileWizardDialog_testButton;
 	public static String ValidationUtils_DescriptionTooLongErr;
 	public static String ValidationUtils_LabelEmptyErr;
 	public static String ValidationUtils_LabelTooLongErr;

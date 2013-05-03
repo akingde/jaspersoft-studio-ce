@@ -325,7 +325,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action.isEnabled())
 			menu.add(action);
 
-		submenu = new MenuManager("Arrange In Container", JaspersoftStudioPlugin.getInstance().getImageDescriptor(
+		submenu = new MenuManager(Messages.AppContextMenuProvider_arrangeInContainerMenu, JaspersoftStudioPlugin.getInstance().getImageDescriptor(
 				"icons/layout-6.png"), //$NON-NLS-1$
 				LayoutAction.ID);
 

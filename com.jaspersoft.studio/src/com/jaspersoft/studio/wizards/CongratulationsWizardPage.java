@@ -24,12 +24,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class CongratulationsWizardPage extends JSSWizardPage {
 
 	public CongratulationsWizardPage() {
 		super("congratulations_page"); //$NON-NLS-1$
-		setTitle("Finish");
-		setMessage("We are ready to create your report");
+		setTitle(Messages.CongratulationsWizardPage_title);
+		setMessage(Messages.CongratulationsWizardPage_titleMessage);
 	}
 	
 	/**
@@ -50,10 +52,10 @@ public class CongratulationsWizardPage extends JSSWizardPage {
 			FormData fd_lblAllTheInformation = new FormData();
 			fd_lblAllTheInformation.left = new FormAttachment(0, 10);
 			lblAllTheInformation.setLayoutData(fd_lblAllTheInformation);
-			lblAllTheInformation.setText("All the information to create your new report have been succesfully acquired.");
+			lblAllTheInformation.setText(Messages.CongratulationsWizardPage_label1);
 			
 			Label lblPressFinishTo = new Label(container, SWT.NONE);
-			lblPressFinishTo.setText("Press Finish to generate the report.");
+			lblPressFinishTo.setText(Messages.CongratulationsWizardPage_label2);
 			FormData fd_lblPressFinishTo = new FormData();
 			fd_lblPressFinishTo.top = new FormAttachment(lblAllTheInformation, 6);
 			fd_lblPressFinishTo.left = new FormAttachment(lblAllTheInformation, 0, SWT.LEFT);
@@ -64,7 +66,7 @@ public class CongratulationsWizardPage extends JSSWizardPage {
 			
 			Font font = lblCongratulations.getFont();
 			lblCongratulations.setFont(SWTResourceManager.getFont(font.getFontData()[0].getName(), 18, SWT.NORMAL));
-			lblCongratulations.setText("Congratulations!");
+			lblCongratulations.setText(Messages.CongratulationsWizardPage_label3);
 			FormData fd_lblCongratulations = new FormData();
 			fd_lblCongratulations.left = new FormAttachment(0, 10);
 			fd_lblCongratulations.top = new FormAttachment(0, 46);

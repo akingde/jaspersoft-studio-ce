@@ -30,6 +30,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
+import com.jaspersoft.studio.messages.Messages;
 
 /**
  * Dropdown action to contribute a settings menu with the menu items
@@ -54,7 +55,7 @@ public class ViewSettingsDropDownAction extends Action implements IMenuCreator {
 	private ActionRegistry actionRegistry;
 
 	public ViewSettingsDropDownAction(ActionRegistry actionRegistry) {
-		setText("Settings");
+		setText(Messages.ViewSettingsDropDownAction_settingsName);
 		setMenuCreator(this);
 		this.actionRegistry=actionRegistry;
 	}

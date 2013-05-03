@@ -24,6 +24,8 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class VerticalRowLayout implements ILayout {
 	public Map<JRElement, Rectangle> layout(JRElement[] elements, Dimension c) {
 		Map<JRElement, Rectangle> map = new HashMap<JRElement, Rectangle>();
@@ -50,16 +52,16 @@ public class VerticalRowLayout implements ILayout {
 
 	@Override
 	public String getName() {
-		return "Vertical Layout";
+		return Messages.VerticalRowLayout_name;
 	}
 
 	@Override
 	public String getToolTip() {
-		return "Vertical Layout";
+		return Messages.VerticalRowLayout_tooltip;
 	}
 
 	@Override
 	public String getIcon() {
-		return "icons/layout-h.png";
+		return "icons/layout-h.png"; //$NON-NLS-1$
 	}
 }
