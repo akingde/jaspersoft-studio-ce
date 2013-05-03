@@ -49,21 +49,15 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 		return false;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset reportDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset reportDataset) throws JRException, UnsupportedOperationException {
 		jrdsp = ((DataSourceProviderDataAdapterService) con).getProvider();
 		if (jrdsp != null) {
 			JasperReport jr = null;
 			try {
 				JasperReportCompiler compiler = new JasperReportCompiler();
 				IFile file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
-				if (file != null && file.exists()) {
-					compiler.setProject(file.getProject());
-					compiler.setJrxmlFile(file);
-
-					jr = compiler.compileReport(jConfig);
-				}
+				if (file != null && file.exists())
+					jr = compiler.compileReport(jConfig, file);
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
