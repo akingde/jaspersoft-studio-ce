@@ -89,17 +89,17 @@ public class ResourcePageContent extends APageContent {
 
 		UIUtil.createSeparator(composite, 3);
 
-		UIUtil.createLabel(composite, Messages.AResourcePage_id);
-		final Text tid = new Text(composite, SWT.BORDER);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		tid.setLayoutData(gd);
-
 		UIUtil.createLabel(composite, Messages.AResourcePage_name);
 		final Text tname = new Text(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tname.setLayoutData(gd);
+
+		UIUtil.createLabel(composite, Messages.AResourcePage_id);
+		final Text tid = new Text(composite, SWT.BORDER);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		tid.setLayoutData(gd);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_description);
 		Text tdesc = new Text(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
