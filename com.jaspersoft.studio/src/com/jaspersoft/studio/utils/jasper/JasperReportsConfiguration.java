@@ -157,13 +157,14 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
 	private void initFileResolver(IFile file) {
 		List<RepositoryService> list = getExtensions(RepositoryService.class);
+		if (list == null)
+			list = new ArrayList<RepositoryService>();
 		if (file != null) {
 			list.add(new FileRepositoryService(this, file.getParent().getLocation().toFile().getAbsolutePath(), true));
 			list.add(new FileRepositoryService(this, ".", true));
 			list.add(new FileRepositoryService(this, file.getProject().getLocation().toFile().getAbsolutePath(), true));
 		}
 		setExtensions(RepositoryService.class, list);
-
 		List<PersistenceServiceFactory> persistenceServiceFactoryList = getExtensions(PersistenceServiceFactory.class);
 		if (persistenceServiceFactoryList != null) {
 			persistenceServiceFactoryList.add(FileRepositoryPersistenceServiceFactory.getInstance());
@@ -426,7 +427,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				}
 				result = (List<T>) bundles;
 			} else {
-				result = super.getExtensions(extensionType);
+				try {
+					result = super.getExtensions(extensionType);
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
 			}
 		} finally {
 			Thread.currentThread().setContextClassLoader(oldCL);
