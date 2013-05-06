@@ -43,10 +43,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.internal.dialogs.PropertyDialog;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.service.prefs.BackingStoreException;
 
@@ -194,10 +194,15 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 
 	protected IResource getResource() {
 		IResource resource = null;
-		if (getElement() instanceof IResource)
+		if (getElement() instanceof IResource) {
 			resource = (IResource) getElement();
-		else if (getElement() instanceof FileEditorInput)
-			resource = ((FileEditorInput) getElement()).getFile();
+		}
+		else if (getElement() instanceof IFileEditorInput) {
+			resource = ((IFileEditorInput) getElement()).getFile();
+		}
+		else {
+			resource = (IResource) getElement().getAdapter(IResource.class);
+		}
 		return resource;
 	}
 
