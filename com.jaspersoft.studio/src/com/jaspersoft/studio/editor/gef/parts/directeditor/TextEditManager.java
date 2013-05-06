@@ -22,6 +22,8 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
@@ -156,6 +158,18 @@ public class TextEditManager extends DirectEditManager {
 		String fontName = model == null ? null : (String) model.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_NAME);
 
 		Text text = (Text) getCellEditor().getControl();
+		text.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// Keep old iReport behavior:
+				// Hitting ENTER will confirm the value
+				if(e.keyCode == '\r' && 
+						(e.stateMask & SWT.SHIFT) == 0){
+					e.doit = false;
+					commit();
+				}
+			}
+		});
 		Font font = getEditPart().getFigure().getFont();
 
 		disposeScaledFont();
