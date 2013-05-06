@@ -250,6 +250,11 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 	 *          the child
 	 */
 	public void removeChild(ANode child) {
+		//Set the jasperconfiguration before to remove the parent, because if a selection is 
+		//fired on the child it will search for the jasperconfiguration on the parent, and not 
+		//finding it the result will be null. But this broke a lot of things on the selection
+		//event
+		child.setJasperConfiguration(getJasperConfiguration());
 		child.setParent(null, -1);
 	}
 
