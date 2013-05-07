@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
@@ -105,8 +106,9 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 		xmlEditor.doSave(monitor);
 
 		try {
-			getCurrentFile().setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,
-					monitor);
+			IFile f = getCurrentFile();
+			if (f != null)
+				f.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE, monitor);
 		} catch (Throwable e) {
 			UIUtils.showError(e);
 		}
@@ -235,7 +237,9 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 	protected boolean isRefresh = false;
 
 	protected IFile getCurrentFile() {
-		return ((IFileEditorInput) getEditorInput()).getFile();
+		if (getEditorInput() instanceof IFileEditorInput)
+			return ((IFileEditorInput) getEditorInput()).getFile();
+		return null;
 	}
 
 	@Override
@@ -248,12 +252,14 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 
 		InputStream in = null;
 		try {
-			IFile file = ((IFileEditorInput) input).getFile();
+			IFile file = null;
 			if (input instanceof IFileEditorInput) {
+				file = ((IFileEditorInput) input).getFile();
 				in = file.getContents();
-			} else {
+			} else if (input instanceof JarEntryEditorInput) {
+				in = ((JarEntryEditorInput) input).getStorage().getContents();
+			} else
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
-			}
 			if (!isRefresh) {
 				getJrContext(file);
 				xml2model(in);

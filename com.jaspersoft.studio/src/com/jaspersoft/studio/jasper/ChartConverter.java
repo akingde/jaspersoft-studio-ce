@@ -144,99 +144,107 @@ public final class ChartConverter extends ElementConverter {
 	 * 
 	 */
 	private Renderable getRenderer(ReportConverter reportConverter, JRChart chart) {
-		if (dataset != null && jfreeChart != null)
-			dataset.removeChangeListener(jfreeChart.getPlot());
 		JasperReportsConfiguration jContext = (JasperReportsConfiguration) reportConverter.getJasperReportsContext();
-		String renderType = chart.getRenderType();// FIXMETHEME try reuse this sequence
-		if (renderType == null) {
-			renderType = JRPropertiesUtil.getInstance(jContext).getProperty(reportConverter.getReport(),
-					JRChart.PROPERTY_CHART_RENDER_TYPE);
-		}
-
-		String themeName = chart.getTheme();
-		if (themeName == null) {
-			themeName = JRPropertiesUtil.getInstance(jContext).getProperty(reportConverter.getReport(),
-					JRChart.PROPERTY_CHART_THEME);
-		}
-		ChartTheme theme = ChartUtil.getInstance(jContext).getTheme(themeName);
-		if (theme instanceof SimpleChartTheme) {
-			SimpleChartTheme sct = (SimpleChartTheme) theme;
-			sct.getChartSettings().setBackgroundImage(getCachedImageProvider(sct.getChartSettings().getBackgroundImage()));
-			sct.getPlotSettings().setBackgroundImage(getCachedImageProvider(sct.getPlotSettings().getBackgroundImage()));
-		}
-		ChartContext chartContext = null;
-		// Object cc = jContext.getMap().get(chart);
-		// if (cc != null && cc instanceof ChartContext)
-		// chartContext = (ChartContext) cc;
-		// else {
-		chartContext = new ConvertChartContext(chart, jContext);
+		String renderType = null;
+		Rectangle2D rectangle = null;
+		ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 		try {
-			jfreeChart = theme.createChart(chartContext);
-			dataset = chartContext.getDataset();
-			if (jfreeChart == null && chart.getChartType() == JRChart.CHART_TYPE_MULTI_AXIS) {
-				List<JRChartAxis> axis = ((JRDesignMultiAxisPlot) chart.getPlot()).getAxes();
-				Plot mainPlot = null;
-				int axisNumber = 0;
-				for (JRChartAxis ax : axis) {
-					JRChart chartAxis = ((JRDesignChartAxis) ax).getChart();
-					if (jfreeChart == null) {
-						jfreeChart = getJFreeChart(reportConverter, chartAxis);
-						mainPlot = jfreeChart.getPlot();
-						if (mainPlot instanceof CategoryPlot)
-							((CategoryPlot) mainPlot).setRangeAxisLocation(0, getChartAxisLocation(ax));
-						else if (mainPlot instanceof XYPlot)
-							((XYPlot) mainPlot).setRangeAxisLocation(0, getChartAxisLocation(ax));
-					} else {
-						axisNumber++;
-						JFreeChart axisChart = getJFreeChart(reportConverter, chartAxis);
-						if (mainPlot instanceof CategoryPlot) {
-							CategoryPlot mainCatPlot = (CategoryPlot) mainPlot;
-							if (!(axisChart.getPlot() instanceof CategoryPlot))
-								continue;
+			Thread.currentThread().setContextClassLoader(jContext.getClassLoader());
+			if (dataset != null && jfreeChart != null)
+				dataset.removeChangeListener(jfreeChart.getPlot());
 
-							// Get the axis and add it to the multi axis chart plot
-							CategoryPlot axisPlot = (CategoryPlot) axisChart.getPlot();
-							mainCatPlot.setRangeAxis(axisNumber, axisPlot.getRangeAxis());
-							mainCatPlot.setRangeAxisLocation(axisNumber, getChartAxisLocation(ax));
+			renderType = chart.getRenderType();// FIXMETHEME try reuse this sequence
+			if (renderType == null) {
+				renderType = JRPropertiesUtil.getInstance(jContext).getProperty(reportConverter.getReport(),
+						JRChart.PROPERTY_CHART_RENDER_TYPE);
+			}
 
-							// Add the data set and map it to the recently added axis
-							mainCatPlot.setDataset(axisNumber, axisPlot.getDataset());
-							mainCatPlot.mapDatasetToRangeAxis(axisNumber, axisNumber);
+			String themeName = chart.getTheme();
+			if (themeName == null) {
+				themeName = JRPropertiesUtil.getInstance(jContext).getProperty(reportConverter.getReport(),
+						JRChart.PROPERTY_CHART_THEME);
+			}
+			ChartTheme theme = ChartUtil.getInstance(jContext).getTheme(themeName);
+			if (theme instanceof SimpleChartTheme) {
+				SimpleChartTheme sct = (SimpleChartTheme) theme;
+				sct.getChartSettings().setBackgroundImage(getCachedImageProvider(sct.getChartSettings().getBackgroundImage()));
+				sct.getPlotSettings().setBackgroundImage(getCachedImageProvider(sct.getPlotSettings().getBackgroundImage()));
+			}
+			ChartContext chartContext = null;
+			// Object cc = jContext.getMap().get(chart);
+			// if (cc != null && cc instanceof ChartContext)
+			// chartContext = (ChartContext) cc;
+			// else {
+			chartContext = new ConvertChartContext(chart, jContext);
+			try {
+				jfreeChart = theme.createChart(chartContext);
+				dataset = chartContext.getDataset();
+				if (jfreeChart == null && chart.getChartType() == JRChart.CHART_TYPE_MULTI_AXIS) {
+					List<JRChartAxis> axis = ((JRDesignMultiAxisPlot) chart.getPlot()).getAxes();
+					Plot mainPlot = null;
+					int axisNumber = 0;
+					for (JRChartAxis ax : axis) {
+						JRChart chartAxis = ((JRDesignChartAxis) ax).getChart();
+						if (jfreeChart == null) {
+							jfreeChart = getJFreeChart(reportConverter, chartAxis);
+							mainPlot = jfreeChart.getPlot();
+							if (mainPlot instanceof CategoryPlot)
+								((CategoryPlot) mainPlot).setRangeAxisLocation(0, getChartAxisLocation(ax));
+							else if (mainPlot instanceof XYPlot)
+								((XYPlot) mainPlot).setRangeAxisLocation(0, getChartAxisLocation(ax));
+						} else {
+							axisNumber++;
+							JFreeChart axisChart = getJFreeChart(reportConverter, chartAxis);
+							if (mainPlot instanceof CategoryPlot) {
+								CategoryPlot mainCatPlot = (CategoryPlot) mainPlot;
+								if (!(axisChart.getPlot() instanceof CategoryPlot))
+									continue;
 
-							// Set the renderer to use to draw the dataset.
-							mainCatPlot.setRenderer(axisNumber, axisPlot.getRenderer());
+								// Get the axis and add it to the multi axis chart plot
+								CategoryPlot axisPlot = (CategoryPlot) axisChart.getPlot();
+								mainCatPlot.setRangeAxis(axisNumber, axisPlot.getRangeAxis());
+								mainCatPlot.setRangeAxisLocation(axisNumber, getChartAxisLocation(ax));
 
-							// Handle any color series for this chart
-							configureAxisSeriesColors(axisPlot.getRenderer(), chartAxis.getPlot());
-						} else if (mainPlot instanceof XYPlot) {
-							XYPlot mainXyPlot = (XYPlot) mainPlot;
-							if (!(axisChart.getPlot() instanceof XYPlot))
-								continue;
+								// Add the data set and map it to the recently added axis
+								mainCatPlot.setDataset(axisNumber, axisPlot.getDataset());
+								mainCatPlot.mapDatasetToRangeAxis(axisNumber, axisNumber);
 
-							// Get the axis and add it to the multi axis chart plot
-							XYPlot axisPlot = (XYPlot) axisChart.getPlot();
-							mainXyPlot.setRangeAxis(axisNumber, axisPlot.getRangeAxis());
-							mainXyPlot.setRangeAxisLocation(axisNumber, getChartAxisLocation(ax));
+								// Set the renderer to use to draw the dataset.
+								mainCatPlot.setRenderer(axisNumber, axisPlot.getRenderer());
 
-							// Add the data set and map it to the recently added axis
-							mainXyPlot.setDataset(axisNumber, axisPlot.getDataset());
-							mainXyPlot.mapDatasetToRangeAxis(axisNumber, axisNumber);
+								// Handle any color series for this chart
+								configureAxisSeriesColors(axisPlot.getRenderer(), chartAxis.getPlot());
+							} else if (mainPlot instanceof XYPlot) {
+								XYPlot mainXyPlot = (XYPlot) mainPlot;
+								if (!(axisChart.getPlot() instanceof XYPlot))
+									continue;
 
-							// Set the renderer to use to draw the dataset.
-							mainXyPlot.setRenderer(axisNumber, axisPlot.getRenderer());
+								// Get the axis and add it to the multi axis chart plot
+								XYPlot axisPlot = (XYPlot) axisChart.getPlot();
+								mainXyPlot.setRangeAxis(axisNumber, axisPlot.getRangeAxis());
+								mainXyPlot.setRangeAxisLocation(axisNumber, getChartAxisLocation(ax));
 
-							// Handle any color series for this chart
-							configureAxisSeriesColors(axisPlot.getRenderer(), chartAxis.getPlot());
+								// Add the data set and map it to the recently added axis
+								mainXyPlot.setDataset(axisNumber, axisPlot.getDataset());
+								mainXyPlot.mapDatasetToRangeAxis(axisNumber, axisNumber);
+
+								// Set the renderer to use to draw the dataset.
+								mainXyPlot.setRenderer(axisNumber, axisPlot.getRenderer());
+
+								// Handle any color series for this chart
+								configureAxisSeriesColors(axisPlot.getRenderer(), chartAxis.getPlot());
+							}
 						}
 					}
 				}
+			} catch (JRException e) {
+				throw new JRRuntimeException(e);
 			}
-		} catch (JRException e) {
-			throw new JRRuntimeException(e);
+
+			rectangle = new Rectangle2D.Double(0, 0, chart.getWidth(), chart.getHeight());
+		} finally {
+			Thread.currentThread().setContextClassLoader(oldLoader);
 		}
-
-		Rectangle2D rectangle = new Rectangle2D.Double(0, 0, chart.getWidth(), chart.getHeight());
-
 		return ChartUtil.getInstance(jContext).getChartRenderableFactory(renderType)
 				.getRenderable(jContext, jfreeChart, null, rectangle);
 	}

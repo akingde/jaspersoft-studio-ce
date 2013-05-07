@@ -39,6 +39,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -345,7 +346,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			if (jd != null)
 				ExpressionEditorSupportUtil.updateFunctionsLibraryImports(jd, jrContext);
 
-			IFile resource = getCurrentFile();
+			final IFile resource = getCurrentFile();
+			if (resource == null)
+				return;
 			try {
 				if (!resource.exists())
 					resource.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
@@ -383,8 +386,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					}
 					doSaveEditors(monitor);// on eclipse 4.2.1 on first first save, for some reasons save is not working .., so
 																	// we'll do it manually
-					getCurrentFile().setContents(new ByteArrayInputStream(doc.get().getBytes("UTF-8")),
-							IFile.KEEP_HISTORY | IFile.FORCE, monitor);
+					resource.setContents(new ByteArrayInputStream(doc.get().getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,
+							monitor);
 					finishSave();
 					return;
 				}
@@ -406,8 +409,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						String xml = model2xml(version);
 						doSaveEditors(monitor);
 						// on eclipse 4.2.1 on first first save, for some reasons save is not working .., so we'll do it manually
-						getCurrentFile().setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")),
-								IFile.KEEP_HISTORY | IFile.FORCE, monitor);
+						resource.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,
+								monitor);
 						finishSave();
 					} catch (Throwable e) {
 						UIUtils.showError(e);
@@ -420,7 +423,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	}
 
 	private IFile getCurrentFile() {
-		return ((IFileEditorInput) getEditorInput()).getFile();
+		if (getEditorInput() instanceof IFileEditorInput)
+			return ((IFileEditorInput) getEditorInput()).getFile();
+		return null;
 	}
 
 	private void doSaveEditors(final IProgressMonitor monitor) {
@@ -510,6 +515,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				file.refreshLocal(0, new NullProgressMonitor());
 
 				in = file.getContents();
+			} else if (editorInput instanceof JarEntryEditorInput) {
+				in = ((JarEntryEditorInput) editorInput).getStorage().getContents();
 			} else
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 
@@ -587,6 +594,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			fileExtention = path.substring(path.lastIndexOf(".") + 1, path.length()); //$NON-NLS-1$
 		} else if (editorInput instanceof IFileEditorInput) {
 			fileExtention = ((IFileEditorInput) editorInput).getFile().getFileExtension();
+		} else if (editorInput instanceof JarEntryEditorInput) {
+			fileExtention = ((JarEntryEditorInput) editorInput).getStorage().getFullPath().getFileExtension();
 		}
 		return fileExtention;
 	}
@@ -618,25 +627,26 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				SAXParseException saxe = (SAXParseException) e.getCause();
 				lineNumber = saxe.getLineNumber();
 			}
-			IResource resource = ((IFileEditorInput) editorInput).getFile();
-			resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+			if (editorInput instanceof IFileEditorInput) {
+				IResource resource = ((IFileEditorInput) editorInput).getFile();
+				resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 
-			final IMarker marker = resource.createMarker(IMarker.PROBLEM);
-			marker.setAttribute(IMarker.MESSAGE, e.getMessage());
-			marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
-			marker.setAttribute(IMarker.TRANSIENT, true);
-			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-			marker.setAttribute(IMarker.USER_EDITABLE, false);
+				final IMarker marker = resource.createMarker(IMarker.PROBLEM);
+				marker.setAttribute(IMarker.MESSAGE, e.getMessage());
+				marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
+				marker.setAttribute(IMarker.TRANSIENT, true);
+				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+				marker.setAttribute(IMarker.USER_EDITABLE, false);
 
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					gotoMarker(marker);
-					toXML = true;
-					setActivePage(PAGE_XMLEDITOR);
-					isRefresh = false;
-				}
-			});
-
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						gotoMarker(marker);
+						toXML = true;
+						setActivePage(PAGE_XMLEDITOR);
+						isRefresh = false;
+					}
+				});
+			}
 		} catch (CoreException e1) {
 			e1.printStackTrace();
 		}
