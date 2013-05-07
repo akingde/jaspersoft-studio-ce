@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
@@ -26,6 +29,7 @@ import org.eclipse.gef.tools.DragEditPartsTracker;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.frame.MFrame;
 
 /**
  * This drag tracker redefine the behavior when an element is moved or resized. Usually an element can not be moved over
@@ -184,7 +188,19 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	public SearchParentDragTracker(EditPart sourceEditPart) {
 		super(sourceEditPart);
 	}
+	
+	@Override
+	protected void handleFinished() {
+		// TODO Auto-generated method stub
+		super.handleFinished();
+	}
 
+	@Override
+	protected boolean handleButtonUp(int button) {
+		// TODO Auto-generated method stub
+		return super.handleButtonUp(button);
+	}
+	
 	/**
 	 * Handle the drag in progress event, it is different from the default one because it check if the AutoxposeHelper is
 	 * set, and if it isn't it create a new one using the viewport of the active window. Then it call the default
@@ -231,7 +247,55 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		}
 		return null;
 	}
+	
+	
+	/**
+	 * Recursive method that take a frame and the element actually in the selection,
+	 * then search in this selection for descendants of the frame an the found one 
+	 * are set to null
+	 * 
+	 * @param parent Frame for which the descendant are searched
+	 * @param actualSelection the element actually selected
+	 */
+	private void removeNestedElements(MFrame parent, List<EditPart> actualSelection){
+		for(int i=0; i<actualSelection.size(); i++){
+			EditPart element = actualSelection.get(i);
+			if (element != null){
+				ANode model = (ANode) element.getModel() ;
+				if (model.getParent() == parent) {
+					//If a descendant is a frame then a recursive call is done
+					if (model instanceof MFrame) removeNestedElements((MFrame)model, actualSelection);
+					actualSelection.set(i, null);
+				}
+			}
+		}
+	}
 
+	/**
+	 * This method return the elements affected by the drag operation. The overridden version
+	 * exclude from this elements the one that are children or descendant of a frames actually selected.
+	 * This avoid that the move operations are done on the frame and also on his descendants, that may 
+	 * create error like the change of parent or a wrong position for the children of the frame 
+	 */
+	protected List createOperationSet() {
+		ArrayList<EditPart> selectedElements = new  ArrayList<EditPart>();
+		//Need to copy the list because the one from getCurrentViewer().getSelectedEditParts() is not editable
+		for (Object part : getCurrentViewer().getSelectedEditParts()){
+			selectedElements.add((EditPart)part);
+		}
+		//The result of the following for is an array where all the element not null are valid for the selection
+		for(EditPart element : selectedElements){
+			if (element != null && element.getModel() instanceof MFrame) 
+				removeNestedElements((MFrame)element.getModel(),selectedElements);
+		}
+		//Rebuild an array removing the null element
+		ArrayList<EditPart> result = new ArrayList<EditPart>();
+		for(EditPart element : selectedElements){
+			if (element != null) result.add(element);
+		}
+		return result;
+	}
+	
 	/**
 	 * Called to get the destination edit part during a drag and drop, if the destination its not a container the it
 	 * parent is taken
