@@ -20,6 +20,7 @@ import net.sf.jasperreports.charts.design.JRDesignAreaPlot;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -36,13 +37,13 @@ public class AreaPlot extends APlot {
 	private void createCategory(AbstractSection section, Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		parent = section.getWidgetFactory().createSectionTitle(parent,
-				"Category Axis", true, 2, 2);
+				Messages.AreaPlot_categoryAxis, true, 2, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR);
 
 		Composite group = section.getWidgetFactory().createSection(parent,
-				"Label", false, 2, 2);
+				"Label", false, 2, 2); //$NON-NLS-1$
 
 		section.createWidget4Property(group,
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION);
@@ -53,7 +54,7 @@ public class AreaPlot extends APlot {
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT, false)
 				.getControl().setLayoutData(gd);
 
-		group = section.getWidgetFactory().createSection(parent, "Tick", false,
+		group = section.getWidgetFactory().createSection(parent, Messages.AreaPlot_tick, false,
 				4, 2);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -62,20 +63,20 @@ public class AreaPlot extends APlot {
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT, false)
 				.getControl().setLayoutData(gd);
 
-		section.getWidgetFactory().createCLabel(group, "Color");
+		section.getWidgetFactory().createCLabel(group, Messages.AreaPlot_color);
 		section.createWidget4Property(group,
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, false);
 
-		section.getWidgetFactory().createCLabel(group, "Mask");
+		section.getWidgetFactory().createCLabel(group, Messages.AreaPlot_mask);
 		section.createWidget4Property(group,
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK, false);
 
-		section.getWidgetFactory().createCLabel(group, "Rotation");
+		section.getWidgetFactory().createCLabel(group, Messages.AreaPlot_rotation);
 		section.createWidget4Property(group,
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION,
 				false);
 
-		section.getWidgetFactory().createCLabel(group, "Vertical Tick Labels");
+		section.getWidgetFactory().createCLabel(group, Messages.AreaPlot_verticalTick);
 		section.createWidget4Property(group,
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
 				false);
@@ -89,13 +90,13 @@ public class AreaPlot extends APlot {
 	private void createValue(AbstractSection section, Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		parent = section.getWidgetFactory().createSectionTitle(parent,
-				"Value Axis", true, 2, 2);
+				Messages.AreaPlot_valueAxis, true, 2, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LINE_COLOR);
 
 		Composite group = section.getWidgetFactory().createSection(parent,
-				"Label", false, 2, 2);
+				"Label", false, 2, 2); //$NON-NLS-1$
 
 		section.createWidget4Property(group,
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION);
@@ -108,7 +109,7 @@ public class AreaPlot extends APlot {
 		section.createWidget4Property(group,
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR);
 
-		group = section.getWidgetFactory().createSection(parent, "Tick", false,
+		group = section.getWidgetFactory().createSection(parent, "Tick", false, //$NON-NLS-1$
 				2, 2);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);

@@ -19,6 +19,13 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.components.chart.messages.messages"; //$NON-NLS-1$
+	public static String AreaPlot_categoryAxis;
+	public static String AreaPlot_color;
+	public static String AreaPlot_mask;
+	public static String AreaPlot_rotation;
+	public static String AreaPlot_tick;
+	public static String AreaPlot_valueAxis;
+	public static String AreaPlot_verticalTick;
 	public static String common_area_chart;
 	public static String common_bar_chart;
 	public static String common_bar3d_chart;
