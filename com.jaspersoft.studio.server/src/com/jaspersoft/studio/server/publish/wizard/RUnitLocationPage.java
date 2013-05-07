@@ -38,8 +38,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -60,6 +58,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.publish.FindReportUnit;
 import com.jaspersoft.studio.server.utils.ValidationUtils;
+import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
@@ -163,39 +162,19 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			}
 		});
 
-		// Report Unit ID (resource descriptor name)
-		Label lblRepoUnitID = new Label(composite, SWT.NONE);
-		lblRepoUnitID.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-		lblRepoUnitID.setText(Messages.RUnitLocationPage_lblreportunit);
-		ruID = new Text(composite, SWT.BORDER);
-		ruID.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		ruID.addVerifyListener(new VerifyListener() {
-			@Override
-			public void verifyText(VerifyEvent e) {
-				if (Character.isWhitespace(e.character)) {
-					e.doit = false;
-				}
-			}
-		});
-
 		// Report Unit shown label (resource descriptor label)
 		Label lblRepoUnitName = new Label(composite, SWT.NONE);
 		lblRepoUnitName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		lblRepoUnitName.setText(Messages.RUnitLocationPage_reportunitlabel);
 		ruLabel = new Text(composite, SWT.BORDER);
 		ruLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		ruLabel.addModifyListener(new ModifyListener() {
 
-			public void modifyText(ModifyEvent e) {
-				if (isRefresh)
-					return;
-				String rtext = ruLabel.getText();
-				ResourceDescriptor ru = getNewRunit().getValue();
-				ru.setLabel(rtext);
-				setErrorMessage(ValidationUtils.validateLabel(rtext));
-			}
-		});
-
+		// Report Unit ID (resource descriptor name)
+		Label lblRepoUnitID = new Label(composite, SWT.NONE);
+		lblRepoUnitID.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+		lblRepoUnitID.setText(Messages.RUnitLocationPage_lblreportunit);
+		ruID = new Text(composite, SWT.BORDER);
+		ruID.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ruID.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -204,10 +183,25 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				isRefresh = true;
 				String rtext = ruID.getText();
 				ResourceDescriptor ru = getNewRunit().getValue();
-				ru.setName(rtext.replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
-				ru.setLabel(ru.getName());
-				setErrorMessage(ValidationUtils.validateName(rtext));
-				ruLabel.setText(rtext);
+				ru.setName(ResourcePageContent.safeChar(rtext));
+				ruID.setText(ru.getName());
+				isRefresh = false;
+			}
+		});
+
+		ruLabel.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				if (isRefresh)
+					return;
+				isRefresh = true;
+				String rtext = ruLabel.getText();
+				ResourceDescriptor ru = getNewRunit().getValue();
+				ru.setName(ResourcePageContent.safeChar(rtext));
+				ru.setLabel(rtext);
+				setErrorMessage(ValidationUtils.validateLabel(rtext));
+				ruLabel.setText(ru.getLabel());
+				ruID.setText(ru.getName());
 				isRefresh = false;
 			}
 		});
