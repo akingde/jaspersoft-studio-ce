@@ -23,7 +23,7 @@ import java.util.Map;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.expressions.functions.CategoryKeys;
+import net.sf.jasperreports.expressions.annotations.JRExprFunctionCategoryBean;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -357,14 +357,9 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		// Get all categories for builtin functions
 		List<ObjectCategoryItem> functionCategories = new ArrayList<ObjectCategoryItem>();
 		for (String categoryKey : FunctionsLibraryUtil.getCategories()) {
-			String displayName = categoryKey;
-			String categoryDisplayName = CategoryKeys.getCategoryDisplayName(
-					categoryKey, null);
-			if (categoryDisplayName != null) {
-				displayName = categoryDisplayName;
-			}
+			JRExprFunctionCategoryBean category = FunctionsLibraryUtil.getCategory(categoryKey);
 			ObjectCategoryItem objectCategoryItem = new ObjectCategoryItem(
-					Category.FUNCTION_CATEGORY, displayName);
+					Category.FUNCTION_CATEGORY, category.getName());
 			objectCategoryItem.setData(categoryKey);
 			functionCategories.add(objectCategoryItem);
 		}

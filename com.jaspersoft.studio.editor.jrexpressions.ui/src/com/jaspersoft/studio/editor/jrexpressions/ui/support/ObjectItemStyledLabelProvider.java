@@ -88,7 +88,7 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 		else if (element instanceof JRExprFunctionBean){
 			final Font boldFont = ResourceManager.getBoldFont(getViewer().getControl().getFont());				
 			JRExprFunctionBean funct=(JRExprFunctionBean)element;
-			text.append(funct.getName(), new Styler() {
+			text.append(funct.getId(), new Styler() {
 				@Override
 				public void applyStyles(TextStyle textStyle) {
 					textStyle.font=boldFont;

@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.expressions.annotations.JRExprAnnotationsUtils;
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
+import net.sf.jasperreports.expressions.annotations.JRExprFunctionCategoryBean;
 import net.sf.jasperreports.functions.FunctionsBundle;
 
 import org.eclipse.ui.IEditorPart;
@@ -44,6 +45,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 public class FunctionsLibraryUtil {
 
 	private static Map<String, List<JRExprFunctionBean>> functionsByCategory = null;
+	private static Map<String, JRExprFunctionCategoryBean> allCategories = null;
 	private static List<JRExprFunctionBean> allFunctions = null;
 	private static List<String> libraryClassNames = null;
 	private static List<FunctionsBundle> currentExtensionObjects = null;
@@ -62,9 +64,18 @@ public class FunctionsLibraryUtil {
 		return functionsByCategory.keySet();
 	}
 
+	/**
+	 * 
+	 */
+	public static JRExprFunctionCategoryBean getCategory(String categoryId) {
+		lazyLibraryInitialization();
+		return allCategories.get(categoryId);
+	}
+
 	private static void initLibrary() {
 		// Initialize support data structures
 		functionsByCategory = new HashMap<String, List<JRExprFunctionBean>>();
+		allCategories = new HashMap<String, JRExprFunctionCategoryBean>();
 		allFunctions = new ArrayList<JRExprFunctionBean>();
 		libraryClassNames = new ArrayList<String>();
 		currentExtensionObjects = new ArrayList<FunctionsBundle>();
@@ -87,11 +98,12 @@ public class FunctionsLibraryUtil {
 			}
 			List<JRExprFunctionBean> jrFunctionsList = JRExprAnnotationsUtils.getJRFunctionsList(clazz);
 			for (JRExprFunctionBean f : jrFunctionsList) {
-				for (String category : f.getCategories()) {
-					if (!functionsByCategory.containsKey(category)) {
-						functionsByCategory.put(category, new ArrayList<JRExprFunctionBean>());
+				for (JRExprFunctionCategoryBean category : f.getCategories()) {
+					if (!functionsByCategory.containsKey(category.getId())) {
+						functionsByCategory.put(category.getId(), new ArrayList<JRExprFunctionBean>());
+						allCategories.put(category.getId(), category);
 					}
-					functionsByCategory.get(category).add(f);
+					functionsByCategory.get(category.getId()).add(f);
 					if (!allFunctions.contains(f)) {
 						allFunctions.add(f);
 					}
@@ -148,7 +160,7 @@ public class FunctionsLibraryUtil {
 	 */
 	public static boolean existsFunction(String functionName) {
 		for (JRExprFunctionBean f : getAllFunctions()) {
-			if (f.getName().equals(functionName)) {
+			if (f.getId().equals(functionName)) {
 				return true;
 			}
 		}
@@ -176,8 +188,8 @@ public class FunctionsLibraryUtil {
 		if (expressionText != null && !expressionText.isEmpty()) {
 			int expressionLength = expressionText.length();
 			for (JRExprFunctionBean f : getAllFunctions()) {
-				String fname = f.getName();
-				int flength = f.getName().length();
+				String fname = f.getId();
+				int flength = f.getId().length();
 				int findex = expressionText.indexOf(fname);
 				// keep searching
 				while (findex != -1) {
@@ -245,6 +257,8 @@ public class FunctionsLibraryUtil {
 		currentExtensionObjects = null;
 		functionsByCategory.clear();
 		functionsByCategory = null;
+		allCategories.clear();
+		allCategories = null;
 		allFunctions.clear();
 		allFunctions = null;
 		libraryClassNames.clear();

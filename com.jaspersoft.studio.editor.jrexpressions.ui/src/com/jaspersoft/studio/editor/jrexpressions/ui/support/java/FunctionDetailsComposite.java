@@ -96,7 +96,7 @@ public class FunctionDetailsComposite extends Composite {
 		Label functionName = new Label(parent, SWT.NONE);
 		functionName
 				.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false));
-		functionName.setText(function.getDisplayName());
+		functionName.setText(function.getName());
 		FontData fd = functionName.getFont().getFontData()[0];
 		functionName.setFont(ResourceManager.getFont(fd.getName(),
 				(int) fd.height + 2, fd.getStyle() | SWT.BOLD));

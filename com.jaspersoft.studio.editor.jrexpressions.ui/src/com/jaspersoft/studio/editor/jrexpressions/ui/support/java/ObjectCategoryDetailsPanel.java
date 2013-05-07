@@ -160,7 +160,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				else if (selObject instanceof JRExprFunctionBean){
 					// Functions
 					editingAreaInfo.setUpdate(true);
-					editingAreaInfo.insertAtCurrentLocation(((JRExprFunctionBean) selObject).getName()+"( )",false); //$NON-NLS-1$
+					editingAreaInfo.insertAtCurrentLocation(((JRExprFunctionBean) selObject).getId()+"( )",false); //$NON-NLS-1$
 					editingAreaInfo.setUpdate(false);
 					showFunctionDetailsPanel();
 				}
@@ -337,7 +337,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 			final String currFunctionName = editingAreaInfo.getCurrentLibraryFunctionName();
 			for(TreeItem item : categoryContent.getTree().getItems()){
 				JRExprFunctionBean function = (JRExprFunctionBean)item.getData();
-				if(function.getName().equals(currFunctionName)){
+				if(function.getId().equals(currFunctionName)){
 					functionMode=true;
 					categoryContent.setSelection(new StructuredSelection(item.getData()),true);
 					break;
@@ -520,7 +520,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 			key=((ExpObject) selItem).getName()+"_"+((ExpObject) selItem).getClassType(); //$NON-NLS-1$
 		}
 		else if(selItem instanceof JRExprFunctionBean){
-			key=((JRExprFunctionBean) selItem).getName()+"_"+((JRExprFunctionBean) selItem).getClass().getCanonicalName(); //$NON-NLS-1$
+			key=((JRExprFunctionBean) selItem).getId()+"_"+((JRExprFunctionBean) selItem).getClass().getCanonicalName(); //$NON-NLS-1$
 		}
 		return key;
 	}

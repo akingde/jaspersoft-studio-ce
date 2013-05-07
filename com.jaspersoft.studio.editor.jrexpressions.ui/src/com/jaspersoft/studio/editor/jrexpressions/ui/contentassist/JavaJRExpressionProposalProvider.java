@@ -85,7 +85,7 @@ public class JavaJRExpressionProposalProvider extends AbstractJavaJRExpressionPr
 		Collections.sort(allFunctions);
 		for(JRExprFunctionBean funct : allFunctions){
 			acceptor.accept(createCompletionProposal(
-					funct.getName(), funct.getDisplayName(), getMethodNameIconImg(), context));  
+					funct.getId(), funct.getName(), getMethodNameIconImg(), context));  
 		}
 	}
 	
