@@ -123,33 +123,25 @@ public class ChartComponentFactory implements IComponentFactory {
 		if (jrObject instanceof JRDesignChart)
 			return new MChart(parent, (JRDesignChart) jrObject, newIndex);
 		if (jrObject instanceof JRDesignChartAxis) {
-			MChartAxes mChartAxes = new MChartAxes(parent,
-					(JRChartAxis) jrObject, newIndex);
+			MChartAxes mChartAxes = new MChartAxes(parent, (JRChartAxis) jrObject, newIndex);
 			return mChartAxes;
 		}
 		if (jrObject instanceof JRDesignChartDataset)
-			return ChartDatasetFactory.getChartDataset(parent,
-					(JRChartDataset) jrObject, newIndex);
+			return ChartDatasetFactory.getChartDataset(parent, (JRChartDataset) jrObject, newIndex);
 		if (jrObject instanceof JRDesignCategorySeries)
-			return new MCategorySeries(parent,
-					(JRDesignCategorySeries) jrObject, newIndex);
+			return new MCategorySeries(parent, (JRDesignCategorySeries) jrObject, newIndex);
 		if (jrObject instanceof JRDesignGanttSeries)
-			return new MGanttSeries(parent, (JRDesignGanttSeries) jrObject,
-					newIndex);
+			return new MGanttSeries(parent, (JRDesignGanttSeries) jrObject, newIndex);
 		if (jrObject instanceof JRDesignPieSeries)
-			return new MPieSeries(parent, (JRDesignPieSeries) jrObject,
-					newIndex);
+			return new MPieSeries(parent, (JRDesignPieSeries) jrObject, newIndex);
 		if (jrObject instanceof JRDesignTimePeriodSeries)
-			return new MTimePeriodSeries(parent,
-					(JRDesignTimePeriodSeries) jrObject, newIndex);
+			return new MTimePeriodSeries(parent, (JRDesignTimePeriodSeries) jrObject, newIndex);
 		if (jrObject instanceof JRDesignTimeSeries)
-			return new MTimeSeries(parent, (JRDesignTimeSeries) jrObject,
-					newIndex);
+			return new MTimeSeries(parent, (JRDesignTimeSeries) jrObject, newIndex);
 		if (jrObject instanceof JRDesignXySeries)
 			return new MXYSeries(parent, (JRDesignXySeries) jrObject, newIndex);
 		if (jrObject instanceof JRDesignXyzSeries)
-			return new MXYZSeries(parent, (JRDesignXyzSeries) jrObject,
-					newIndex);
+			return new MXYZSeries(parent, (JRDesignXyzSeries) jrObject, newIndex);
 		return null;
 	}
 
@@ -182,10 +174,8 @@ public class ChartComponentFactory implements IComponentFactory {
 		if (jrObject instanceof JRChart) {
 			ch.add(((JRChart) jrObject).getDataset());
 		}
-		if (jrObject instanceof JRChart
-				&& ((JRChart) jrObject).getPlot() instanceof JRMultiAxisPlot) {
-			JRMultiAxisPlot slc = (JRMultiAxisPlot) ((JRChart) jrObject)
-					.getPlot();
+		if (jrObject instanceof JRChart && ((JRChart) jrObject).getPlot() instanceof JRMultiAxisPlot) {
+			JRMultiAxisPlot slc = (JRMultiAxisPlot) ((JRChart) jrObject).getPlot();
 			if (slc.getAxes() != null)
 				ch.addAll(slc.getAxes());
 		}
@@ -200,122 +190,85 @@ public class ChartComponentFactory implements IComponentFactory {
 		return pc;
 	}
 
-	public Command getCreateCommand(ANode parent, ANode child,
-			Rectangle location, int newIndex) {
+	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
 		if (child instanceof MChart) {
 			if (parent instanceof MElementGroup)
-				return new CreateChartCommand((MElementGroup) parent,
-						(MGraphicElement) child, location, newIndex);
+				return new CreateChartCommand((MElementGroup) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
-				return new CreateChartCommand((MBand) parent,
-						(MGraphicElement) child, location, newIndex);
+				return new CreateChartCommand((MBand) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
-				return new CreateChartCommand((MFrame) parent,
-						(MGraphicElement) child, location, newIndex);
+				return new CreateChartCommand((MFrame) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
-				return new CreateChartCommand(parent, (MGraphicElement) child,
-						location, newIndex);
+				return new CreateChartCommand(parent, (MGraphicElement) child, location, newIndex);
 
-			if (parent instanceof IGroupElement
-					&& parent instanceof IGraphicElementContainer) {
-				return new CreateChartCommand(parent, (MGraphicElement) child,
-						location, newIndex);
+			if (parent instanceof IGroupElement && parent instanceof IGraphicElementContainer) {
+				return new CreateChartCommand(parent, (MGraphicElement) child, location, newIndex);
 			}
 		} else if (child instanceof MChartAxes) {
 			if (parent instanceof MChart) {
 				JRDesignChart dc = (JRDesignChart) parent.getValue();
 				if (dc.getPlot() instanceof JRDesignMultiAxisPlot)
-					return new CreateChartAxesCommand((MChart) parent,
-							(MChartAxes) child, newIndex);
+					return new CreateChartAxesCommand((MChart) parent, (MChartAxes) child, newIndex);
 			}
 		}
-		if (child instanceof MCategorySeries
-				&& parent instanceof MChartCategoryDataset)
-			return new CreateCategorySeriesCommand((MChartDataset) parent,
-					(MCategorySeries) child, newIndex);
-		if (child instanceof MGanttSeries
-				&& parent instanceof MChartGanttDataset)
-			return new CreateGanttSeriesCommand((MChartDataset) parent,
-					(MGanttSeries) child, newIndex);
+		if (child instanceof MCategorySeries && parent instanceof MChartCategoryDataset)
+			return new CreateCategorySeriesCommand((MChartDataset) parent, (MCategorySeries) child, newIndex);
+		if (child instanceof MGanttSeries && parent instanceof MChartGanttDataset)
+			return new CreateGanttSeriesCommand((MChartDataset) parent, (MGanttSeries) child, newIndex);
 		if (child instanceof MPieSeries && parent instanceof MChartPieDataset)
-			return new CreatePieSeriesCommand((MChartDataset) parent,
-					(MPieSeries) child, newIndex);
-		if (child instanceof MTimePeriodSeries
-				&& parent instanceof MChartTimePeriodDataset)
-			return new CreateTimePeriodSeriesCommand((MChartDataset) parent,
-					(MTimePeriodSeries) child, newIndex);
-		if (child instanceof MTimeSeries
-				&& parent instanceof MChartTimeSeriesDataset)
-			return new CreateTimeSeriesCommand((MChartDataset) parent,
-					(MTimeSeries) child, newIndex);
+			return new CreatePieSeriesCommand((MChartDataset) parent, (MPieSeries) child, newIndex);
+		if (child instanceof MTimePeriodSeries && parent instanceof MChartTimePeriodDataset)
+			return new CreateTimePeriodSeriesCommand((MChartDataset) parent, (MTimePeriodSeries) child, newIndex);
+		if (child instanceof MTimeSeries && parent instanceof MChartTimeSeriesDataset)
+			return new CreateTimeSeriesCommand((MChartDataset) parent, (MTimeSeries) child, newIndex);
 		if (child instanceof MXYSeries && parent instanceof MChartXYDataset)
-			return new CreateXYSeriesCommand((MChartDataset) parent,
-					(MXYSeries) child, newIndex);
+			return new CreateXYSeriesCommand((MChartDataset) parent, (MXYSeries) child, newIndex);
 		if (child instanceof MXYZSeries && parent instanceof MChartXYZDataset)
-			return new CreateXYZSeriesCommand((MChartDataset) parent,
-					(MXYZSeries) child, newIndex);
+			return new CreateXYZSeriesCommand((MChartDataset) parent, (MXYZSeries) child, newIndex);
 
 		return null;
 	}
 
 	public Command getDeleteCommand(ANode parent, ANode child) {
 		if (child instanceof MChartAxes)
-			return new DeleteChartAxesCommand((MChart) child.getParent(),
-					(MChartAxes) child);
+			return new DeleteChartAxesCommand((MChart) child.getParent(), (MChartAxes) child);
 
 		if (child instanceof MCategorySeries && parent instanceof MChartDataset)
-			return new DeleteCategorySeriesCommand((MChartDataset) parent,
-					(MCategorySeries) child);
+			return new DeleteCategorySeriesCommand((MChartDataset) parent, (MCategorySeries) child);
 		if (child instanceof MGanttSeries && parent instanceof MChartDataset)
-			return new DeleteGanttSeriesCommand((MChartDataset) parent,
-					(MGanttSeries) child);
+			return new DeleteGanttSeriesCommand((MChartDataset) parent, (MGanttSeries) child);
 		if (child instanceof MPieSeries && parent instanceof MChartDataset)
-			return new DeletePieSeriesCommand((MChartDataset) parent,
-					(MPieSeries) child);
-		if (child instanceof MTimePeriodSeries
-				&& parent instanceof MChartDataset)
-			return new DeleteTimePeriodSeriesCommand((MChartDataset) parent,
-					(MTimePeriodSeries) child);
+			return new DeletePieSeriesCommand((MChartDataset) parent, (MPieSeries) child);
+		if (child instanceof MTimePeriodSeries && parent instanceof MChartDataset)
+			return new DeleteTimePeriodSeriesCommand((MChartDataset) parent, (MTimePeriodSeries) child);
 		if (child instanceof MTimeSeries && parent instanceof MChartDataset)
-			return new DeleteTimeSeriesCommand((MChartDataset) parent,
-					(MTimeSeries) child);
+			return new DeleteTimeSeriesCommand((MChartDataset) parent, (MTimeSeries) child);
 		if (child instanceof MXYSeries && parent instanceof MChartDataset)
-			return new DeleteXYSeriesCommand((MChartDataset) parent,
-					(MXYSeries) child);
+			return new DeleteXYSeriesCommand((MChartDataset) parent, (MXYSeries) child);
 		if (child instanceof MXYZSeries && parent instanceof MChartDataset)
-			return new DeleteXYZSeriesCommand((MChartDataset) parent,
-					(MXYZSeries) child);
+			return new DeleteXYZSeriesCommand((MChartDataset) parent, (MXYZSeries) child);
 
 		return null;
 	}
 
 	public Command getReorderCommand(ANode parent, ANode child, int newIndex) {
 		if (child instanceof MChartAxes && parent instanceof MChart) {
-			return new ReorderChartAxesCommand((MChartAxes) child, parent,
-					newIndex);
+			return new ReorderChartAxesCommand((MChartAxes) child, parent, newIndex);
 		}
 		if (child instanceof MCategorySeries && parent instanceof MChartDataset)
-			return new ReorderCategorySeriesCommand((MCategorySeries) child,
-					(MChartDataset) parent, newIndex);
+			return new ReorderCategorySeriesCommand((MCategorySeries) child, (MChartDataset) parent, newIndex);
 		if (child instanceof MGanttSeries && parent instanceof MChartDataset)
-			return new ReorderGanttSeriesCommand((MGanttSeries) child,
-					(MChartDataset) parent, newIndex);
+			return new ReorderGanttSeriesCommand((MGanttSeries) child, (MChartDataset) parent, newIndex);
 		if (child instanceof MPieSeries && parent instanceof MChartDataset)
-			return new ReorderPieSeriesCommand((MPieSeries) child,
-					(MChartDataset) parent, newIndex);
-		if (child instanceof MTimePeriodSeries
-				&& parent instanceof MChartDataset)
-			return new ReorderTimePeriodSeriesCommand(
-					(MTimePeriodSeries) child, (MChartDataset) parent, newIndex);
+			return new ReorderPieSeriesCommand((MPieSeries) child, (MChartDataset) parent, newIndex);
+		if (child instanceof MTimePeriodSeries && parent instanceof MChartDataset)
+			return new ReorderTimePeriodSeriesCommand((MTimePeriodSeries) child, (MChartDataset) parent, newIndex);
 		if (child instanceof MTimeSeries && parent instanceof MChartDataset)
-			return new ReorderTimeSeriesCommand((MTimeSeries) child,
-					(MChartDataset) parent, newIndex);
+			return new ReorderTimeSeriesCommand((MTimeSeries) child, (MChartDataset) parent, newIndex);
 		if (child instanceof MXYSeries && parent instanceof MChartDataset)
-			return new ReorderXYSeriesCommand((MXYSeries) child,
-					(MChartDataset) parent, newIndex);
+			return new ReorderXYSeriesCommand((MXYSeries) child, (MChartDataset) parent, newIndex);
 		if (child instanceof MXYZSeries && parent instanceof MChartDataset)
-			return new ReorderXYZSeriesCommand((MXYZSeries) child,
-					(MChartDataset) parent, newIndex);
+			return new ReorderXYZSeriesCommand((MXYZSeries) child, (MChartDataset) parent, newIndex);
 
 		return null;
 	}
@@ -358,8 +311,7 @@ public class ChartComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public AbstractVisualEditor getEditor(Object node,
-			JasperReportsConfiguration jrContext) {
+	public AbstractVisualEditor getEditor(Object node, JasperReportsConfiguration jrContext) {
 		return null;
 	}
 
