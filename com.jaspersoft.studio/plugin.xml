@@ -1778,6 +1778,14 @@
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
        </toolitems>
+       <toolitems
+             contributionItemClass="com.jaspersoft.studio.editor.action.text.FontSizeButtonsContributionItem"
+             id="com.jaspersoft.studio.editor.action.text.FontSizeButtons"
+             tooltip="Use this button to increment or decrement the font size">
+          <selectedObject
+                class="com.jaspersoft.studio.model.text.MTextElement">
+          </selectedObject>
+       </toolitems>
     </extension>
     <extension
           point="com.jaspersoft.studio.toolitemsets">
@@ -1810,6 +1818,9 @@
           </toolitem>
           <toolitem
                 toolitemID="com.jaspersoft.studio.editor.action.text.fontsize">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.text.FontSizeButtons">
           </toolitem>
           <toolitem
                 toolitemID="com.jaspersoft.studio.editor.action.text.bold"></toolitem>

@@ -117,7 +117,7 @@ public abstract class APropertyComboContributionItem extends ContributionItem im
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			setComboText(model.getPropertyValue(getPropertyName()));
+			setComboText(model.getPropertyActualValue(getPropertyName()));
 		}
 	}
 
