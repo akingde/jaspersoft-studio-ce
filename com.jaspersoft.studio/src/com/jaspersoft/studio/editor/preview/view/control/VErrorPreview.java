@@ -1,21 +1,18 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -242,21 +239,21 @@ public class VErrorPreview extends APreview {
 		fillingTime = new Label(statComposite, SWT.BOLD);
 		fillingTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		com.jaspersoft.studio.utils.UIUtil.setBold(fillingTime);
-		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel); 
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel);
 
 		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_exectutionTimeLabel);
 
 		execTime = new Label(statComposite, SWT.BOLD);
 		execTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		com.jaspersoft.studio.utils.UIUtil.setBold(execTime);
-		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel); 
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel);
 
 		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_exportTimeLabel);
 
 		exportTime = new Label(statComposite, SWT.BOLD);
 		exportTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		com.jaspersoft.studio.utils.UIUtil.setBold(exportTime);
-		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel); 
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel);
 
 		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_totalPagesLabel);
 
@@ -284,10 +281,10 @@ public class VErrorPreview extends APreview {
 
 	public void setStats(Statistics stats) {
 		if (stats != null) {
-			compilationTime.setText("" + stats.getDuration(ReportControler.ST_COMPILATIONTIME) / 1000); //$NON-NLS-1$
-			fillingTime.setText("" + stats.getDuration(ReportControler.ST_FILLINGTIME) / 1000); //$NON-NLS-1$
-			exportTime.setText("" + stats.getDuration(ReportControler.ST_EXPORTTIME) / 1000); //$NON-NLS-1$
-			execTime.setText("" + stats.getDuration(ReportControler.ST_REPORTEXECUTIONTIME) / 1000); //$NON-NLS-1$
+			compilationTime.setText("" + format(stats.getDuration(ReportControler.ST_COMPILATIONTIME))); //$NON-NLS-1$
+			fillingTime.setText("" + format(stats.getDuration(ReportControler.ST_FILLINGTIME))); //$NON-NLS-1$
+			exportTime.setText("" + format(stats.getDuration(ReportControler.ST_EXPORTTIME))); //$NON-NLS-1$
+			execTime.setText("" + format(stats.getDuration(ReportControler.ST_REPORTEXECUTIONTIME))); //$NON-NLS-1$
 
 			totalPages.setText(Misc.nvl(stats.getValue(ReportControler.ST_PAGECOUNT), "0")); //$NON-NLS-1$
 			recordCount.setText(Misc.nvl(stats.getValue(ReportControler.ST_RECORDCOUNTER), "-")); //$NON-NLS-1$
@@ -305,6 +302,15 @@ public class VErrorPreview extends APreview {
 		statComposite.layout();
 	}
 
+	private static DecimalFormat df = new DecimalFormat("#.###");
+	static {
+		df.setRoundingMode(RoundingMode.HALF_UP);
+	}
+
+	public static String format(long time) {
+		return df.format(((double) time) / 1000);
+	}
+
 	public void setMessage(String msg) {
 		tmessage.setText(msg);
 	}
@@ -316,7 +322,7 @@ public class VErrorPreview extends APreview {
 
 	public void addError(Throwable t) {
 		if (t != null) {
-			if(t instanceof InvocationTargetException)
+			if (t instanceof InvocationTargetException)
 				t = t.getCause();
 			String msg = terror.getText() + ErrorUtil.getStackTrace(t) + NL;
 			terror.setText(terror.getText() + msg + "\n"); //$NON-NLS-1$

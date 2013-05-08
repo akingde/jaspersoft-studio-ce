@@ -91,8 +91,7 @@ public class ChartAxesWizardPage extends WizardPage {
 		gd.widthHint = 150;
 		zoomFactor.setLayoutData(gd);
 
-		chartsGallery = new Gallery(composite, SWT.VIRTUAL | SWT.V_SCROLL
-				| SWT.BORDER);
+		chartsGallery = new Gallery(composite, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
 		final NoGroupRenderer gr = new NoGroupRenderer();
 		gr.setMinMargin(2);
 		gr.setItemSize(GALLERY_WIDTH, GALLERY_HEIGHT);
@@ -104,8 +103,7 @@ public class ChartAxesWizardPage extends WizardPage {
 		DefaultGalleryItemRenderer ir = new DefaultGalleryItemRenderer();
 		ir.setShowLabels(true);
 		ir.setShowRoundedSelectionCorners(false);
-		ir.setSelectionForegroundColor(getShell().getDisplay().getSystemColor(
-				SWT.COLOR_BLUE));
+		ir.setSelectionForegroundColor(getShell().getDisplay().getSystemColor(SWT.COLOR_BLUE));
 		chartsGallery.setItemRenderer(ir);
 
 		itemGroup = new GalleryItem(chartsGallery, SWT.NONE);
@@ -128,8 +126,7 @@ public class ChartAxesWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				double c = 1 + 0.1 * zoomFactor.getSelection();
-				gr.setItemSize((int) (GALLERY_WIDTH * c),
-						(int) (GALLERY_HEIGHT * c));
+				gr.setItemSize((int) (GALLERY_WIDTH * c), (int) (GALLERY_HEIGHT * c));
 			}
 		});
 	}
@@ -164,8 +161,7 @@ public class ChartAxesWizardPage extends WizardPage {
 		plotmap.put(JRDesignChart.CHART_TYPE_STACKEDBAR3D, JRBar3DPlot.class);
 
 		plotmap.put(JRDesignChart.CHART_TYPE_BUBBLE, JRBubblePlot.class);
-		plotmap.put(JRDesignChart.CHART_TYPE_CANDLESTICK,
-				JRCandlestickPlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_CANDLESTICK, JRCandlestickPlot.class);
 		plotmap.put(JRDesignChart.CHART_TYPE_HIGHLOW, JRHighLowPlot.class);
 		plotmap.put(JRDesignChart.CHART_TYPE_SCATTER, JRScatterPlot.class);
 		plotmap.put(JRDesignChart.CHART_TYPE_TIMESERIES, JRTimeSeriesPlot.class);

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.copy;
 
@@ -99,7 +94,6 @@ public class PasteAction extends SelectionAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		
 		Command command = createPasteCommand(getSelectedObjects());
 		return command != null && command.canExecute();
 	}
@@ -108,45 +102,47 @@ public class PasteAction extends SelectionAction {
 	public void run() {
 		PasteCommand command = createPasteCommand(getSelectedObjects());
 		execute(command);
-		
-		//Select the pasted edit part
+
+		// Select the pasted edit part
 		GraphicalViewer viewer = (GraphicalViewer) getWorkbenchPart().getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
-			viewer.setSelection(new StructuredSelection(
-					getSelectableEditParts(viewer, command.getPasteParent(), command.getCreatedNodesNumber())));
+			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer, command.getPasteParent(),
+					command.getCreatedNodesNumber())));
 		}
 	}
-	
+
 	/**
 	 * Return a list of the edit part created because the past operation
 	 * 
 	 * @param viewer
-	 * @param pasteParent parent of the pasted elements
-	 * @param createdElements number of pasted elements
+	 * @param pasteParent
+	 *          parent of the pasted elements
+	 * @param createdElements
+	 *          number of pasted elements
 	 * @return the editpart created for the paste operation, so they can be selected
 	 */
 	@SuppressWarnings("rawtypes")
 	private List<EditPart> getSelectableEditParts(GraphicalViewer viewer, IPastable pasteParent, int createdElements) {
 		List<EditPart> selectableChildren = new ArrayList<EditPart>();
-		if (!(pasteParent instanceof ANode)) return selectableChildren;
-		
+		if (!(pasteParent instanceof ANode))
+			return selectableChildren;
+
 		ANode parentModel = (ANode) pasteParent;
 		HashSet<INode> pastedModels = new HashSet<INode>();
 		int elementsToInsert = createdElements;
 		List<INode> childrens = parentModel.getChildren();
-		while (elementsToInsert>0) {
-			pastedModels.add(childrens.get(childrens.size()-elementsToInsert));
-			elementsToInsert--;	
+		while (elementsToInsert > 0) {
+			pastedModels.add(childrens.get(childrens.size() - elementsToInsert));
+			elementsToInsert--;
 		}
-		
+
 		List children = viewer.getContents().getChildren();
 		for (Iterator iter = children.iterator(); iter.hasNext();) {
 			Object child = iter.next();
 			if (child instanceof EditPart) {
 				EditPart part = (EditPart) child;
-				if (pastedModels.contains(part.getModel()) && part.isSelectable()){
-						selectableChildren.add(part);
-				}
+				if (pastedModels.contains(part.getModel()) && part.isSelectable())
+					selectableChildren.add(part);
 			}
 		}
 		return selectableChildren;

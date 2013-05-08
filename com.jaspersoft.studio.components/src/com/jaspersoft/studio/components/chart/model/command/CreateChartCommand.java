@@ -46,14 +46,13 @@ public class CreateChartCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
-	public CreateChartCommand(MElementGroup destNode, MGraphicElement srcNode,
-			int index) {
+	public CreateChartCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -61,14 +60,13 @@ public class CreateChartCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
-	public CreateChartCommand(MFrame destNode, MGraphicElement srcNode,
-			int index) {
+	public CreateChartCommand(MFrame destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -76,11 +74,11 @@ public class CreateChartCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
 	public CreateChartCommand(MBand destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
@@ -90,16 +88,15 @@ public class CreateChartCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param position
-	 *            the position
+	 *          the position
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
-	public CreateChartCommand(ANode destNode, MGraphicElement srcNode,
-			Rectangle position, int index) {
+	public CreateChartCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
 
@@ -109,18 +106,17 @@ public class CreateChartCommand extends CreateElementCommand {
 	@Override
 	protected void createObject() {
 		if (jrElement == null) {
-			JRDesignChart newchart = MChart.createJRElement(jasperDesign,
-					JRDesignChart.CHART_TYPE_AREA);
+			JRDesignChart newchart = MChart.createJRElement(jasperDesign, JRDesignChart.CHART_TYPE_AREA);
 
-			ChartWizard wizard = new ChartWizard(
-					new MChart(null, newchart, -1),
-					(JRDesignElementDataset) newchart.getDataset());
+			ChartWizard wizard = new ChartWizard(new MChart(null, newchart, -1), (JRDesignElementDataset) newchart.getDataset());
 			wizard.init(jConfig);
-			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(
-					null, destNode)); // Use the "future" parent inherited
-										// information
-			WizardDialog dialog = new WizardDialog(Display.getDefault()
-					.getActiveShell(), wizard);
+			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(null, destNode)); // Use
+																																														// the
+																																														// "future"
+																																														// parent
+																																														// inherited
+			// information
+			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getChart();
@@ -133,12 +129,12 @@ public class CreateChartCommand extends CreateElementCommand {
 					setElementBounds();
 
 				if (((JRDesignChart) jrElement).getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS) {
-					CreateChartAxesCommand cmd = new CreateChartAxesCommand(
-							(JRDesignChart) jrElement, null, -1, jasperDesign);
+					CreateChartAxesCommand cmd = new CreateChartAxesCommand((JRDesignChart) jrElement, null, -1, jasperDesign);
 					addCommand(cmd);
 				}
 			}
-		}
+		} else if (location == null)
+			setElementBounds();
 	}
 
 }

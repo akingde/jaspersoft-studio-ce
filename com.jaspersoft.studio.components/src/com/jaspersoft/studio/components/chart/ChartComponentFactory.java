@@ -191,6 +191,26 @@ public class ChartComponentFactory implements IComponentFactory {
 	}
 
 	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
+		if (child instanceof MChartAxes) {
+			if (parent instanceof MChartAxes)
+				parent = parent.getParent();
+			if (parent instanceof MChart) {
+				JRDesignChart dc = (JRDesignChart) parent.getValue();
+				if (dc.getPlot() instanceof JRDesignMultiAxisPlot)
+					return new CreateChartAxesCommand((MChart) parent, (MChartAxes) child, newIndex);
+				return null;
+			} else if (child.getValue() != null) {
+				MChartAxes mChartAxes = (MChartAxes) child;
+				JRChartAxis chartaxis = mChartAxes.getValue();
+
+				JRDesignChart chart = (JRDesignChart) chartaxis.getChart().clone();
+				child = new MChart(null, chart, newIndex);
+				chart.setX(0);
+				chart.setY(0);
+				chart.setHeight(300);
+				chart.setWidth(300);
+			}
+		}
 		if (child instanceof MChart) {
 			if (parent instanceof MElementGroup)
 				return new CreateChartCommand((MElementGroup) parent, (MGraphicElement) child, location, newIndex);
@@ -201,15 +221,26 @@ public class ChartComponentFactory implements IComponentFactory {
 			if (parent instanceof MReport)
 				return new CreateChartCommand(parent, (MGraphicElement) child, location, newIndex);
 
-			if (parent instanceof IGroupElement && parent instanceof IGraphicElementContainer) {
+			if (parent instanceof IGroupElement && parent instanceof IGraphicElementContainer)
 				return new CreateChartCommand(parent, (MGraphicElement) child, location, newIndex);
-			}
-		} else if (child instanceof MChartAxes) {
-			if (parent instanceof MChart) {
-				JRDesignChart dc = (JRDesignChart) parent.getValue();
-				if (dc.getPlot() instanceof JRDesignMultiAxisPlot)
-					return new CreateChartAxesCommand((MChart) parent, (MChartAxes) child, newIndex);
-			}
+
+			if (parent instanceof MChart && parent.getValue() != null && ((JRChart) parent.getValue()).getChartType() == JRChart.CHART_TYPE_MULTI_AXIS) {
+				MChart mchil = (MChart) child;
+				JRDesignChart chil = mchil.getValue();
+				if (chil != null && chil.getChartType() == JRChart.CHART_TYPE_MULTI_AXIS)
+					return getCreateCommand(parent.getParent(), child, location, newIndex);
+				// ok, here we should convert it to the chart axis
+				MChartAxes c = null;
+				if (child.getValue() != null) {
+					JRDesignChartAxis jrChart = new JRDesignChartAxis((JRDesignChart) parent.getValue());
+					jrChart.setChart((JRDesignChart) child.getValue());
+					c = new MChartAxes(null, jrChart, -1);
+				} else
+					c = new MChartAxes();
+				return new CreateChartAxesCommand((MChart) parent, c, newIndex);
+			} else if (parent instanceof MChart)
+				return getCreateCommand(parent.getParent(), child, location, newIndex);
+			return null;
 		}
 		if (child instanceof MCategorySeries && parent instanceof MChartCategoryDataset)
 			return new CreateCategorySeriesCommand((MChartDataset) parent, (MCategorySeries) child, newIndex);

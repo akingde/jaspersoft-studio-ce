@@ -36,13 +36,16 @@ import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.model.plot.PlotFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
+import com.jaspersoft.studio.model.IPastableGraphic;
+import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
-public class MChartAxes extends APropertyNode implements IDragable {
+public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -81,6 +84,11 @@ public class MChartAxes extends APropertyNode implements IDragable {
 	public MChartAxes(ANode parent, JRChartAxis jrChart, int newIndex) {
 		super(parent, newIndex);
 		setValue(jrChart);
+	}
+
+	@Override
+	public JRChartAxis getValue() {
+		return (JRChartAxis) super.getValue();
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -189,9 +197,19 @@ public class MChartAxes extends APropertyNode implements IDragable {
 			((JRDesignChart) oldObject.getChart()).getEventSupport().removePropertyChangeListener(this);
 		}
 		if (newObject != null) {
+			System.out.println(newObject);
+			System.out.println(newObject.getChart());
+			System.out.println(((JRDesignChart) newObject.getChart()).getEventSupport());
 			((JRDesignChart) newObject.getChart()).getEventSupport().addPropertyChangeListener(this);
 		}
 		super.setValue(value);
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MChart || parent instanceof MElementGroup || parent instanceof IPastableGraphic)
+			return true;
+		return false;
 	}
 
 }

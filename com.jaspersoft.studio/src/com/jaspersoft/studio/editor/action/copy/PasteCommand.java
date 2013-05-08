@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.copy;
 
@@ -97,9 +92,9 @@ public class PasteCommand extends Command {
 					}
 					// create command
 					Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, rect, -1);
-					if (cmdc != null){
+					if (cmdc != null) {
 						cmd.add(cmdc);
-						createdNodes ++;
+						createdNodes++;
 					}
 
 					if (!cmd.isEmpty())
@@ -111,6 +106,7 @@ public class PasteCommand extends Command {
 				e.printStackTrace();
 			}
 		}
+
 		redo();
 	}
 
@@ -123,12 +119,12 @@ public class PasteCommand extends Command {
 				cmd.execute();
 		}
 	}
-	
-	public int getCreatedNodesNumber(){
+
+	public int getCreatedNodesNumber() {
 		return createdNodes;
 	}
-	
-	public IPastable getPasteParent(){
+
+	public IPastable getPasteParent() {
 		return parent;
 	}
 

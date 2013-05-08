@@ -50,20 +50,17 @@ public class CreateChartAxesCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
-	public CreateChartAxesCommand(MChart destNode, MChartAxes srcNode,
-			int newIndex) {
-		this((JRDesignChart) destNode.getValue(), (JRDesignChartAxis) srcNode
-				.getValue(), newIndex, destNode.getJasperDesign());
+	public CreateChartAxesCommand(MChart destNode, MChartAxes srcNode, int newIndex) {
+		this((JRDesignChart) destNode.getValue(), (JRDesignChartAxis) srcNode.getValue(), newIndex, destNode.getJasperDesign());
 	}
 
-	public CreateChartAxesCommand(JRDesignChart chart,
-			JRDesignChartAxis chartAxis, int newIndex, JasperDesign jDesign) {
+	public CreateChartAxesCommand(JRDesignChart chart, JRDesignChartAxis chartAxis, int newIndex, JasperDesign jDesign) {
 		super();
 		this.jrElement = chartAxis;
 		this.chart = chart;
@@ -83,8 +80,7 @@ public class CreateChartAxesCommand extends Command {
 			if (!axes.isEmpty())
 				chartplotclass = axes.get(0).getChart().getPlot().getClass();
 			ChartAxesWizard wizard = new ChartAxesWizard(chartplotclass);
-			WizardDialog dialog = new WizardDialog(Display.getDefault()
-					.getActiveShell(), wizard);
+			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				byte type = wizard.getChartAxis();
