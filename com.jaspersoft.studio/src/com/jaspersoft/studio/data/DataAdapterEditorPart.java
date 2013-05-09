@@ -16,13 +16,13 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.builder.Markers;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -89,8 +89,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 			String xml = DataAdapterManager.toDataAdapterFile(descriptor);
 
 			file.setContents(new ByteArrayInputStream(xml.getBytes()), true, true, monitor);
-
-			resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+			Markers.deleteMarkers(resource);
 		} catch (CoreException e) {
 			UIUtils.showError(e);
 		}

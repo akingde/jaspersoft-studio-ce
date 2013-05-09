@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
+import net.sf.jasperreports.eclipse.builder.Markers;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -69,7 +70,6 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.IElementStateListener;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXParseException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
@@ -367,23 +367,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				IDocumentProvider dp = xmlEditor.getDocumentProvider();
 				IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 				try { // just go thru the model, to look what happend with our markers
-					resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+					Markers.deleteMarkers(resource);
 
 					xml2model();
 				} catch (Throwable e) {
-					if (e instanceof JRException && e.getCause() instanceof SAXParseException) {
-						SAXParseException se = (SAXParseException) e.getCause();
-						try {
-							// resource.deleteMarkers(JasperReportsBuilder.MARKER_TYPE, includeSubtypes, depth)
-							IMarker marker = resource.createMarker(JasperReportsBuilder.MARKER_TYPE);
-							marker.setAttribute(IMarker.MESSAGE, se.getMessage());
-							marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-							marker.setAttribute(IMarker.USER_EDITABLE, false);
-							marker.setAttribute(IMarker.LINE_NUMBER, se.getLineNumber());
-							marker.setAttribute(IMarker.CHAR_END, se.getColumnNumber());
-						} catch (CoreException ce) {
-						}
-					}
+					Markers.addMarker(resource, e);
 					doSaveEditors(monitor);// on eclipse 4.2.1 on first first save, for some reasons save is not working .., so
 																	// we'll do it manually
 					resource.setContents(new ByteArrayInputStream(doc.get().getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,
@@ -622,21 +610,12 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			UIUtils.showError(e);
 		try {
 			isRefresh = true;
-			int lineNumber = 0;
-			if (e.getCause() instanceof SAXParseException) {
-				SAXParseException saxe = (SAXParseException) e.getCause();
-				lineNumber = saxe.getLineNumber();
-			}
 			if (editorInput instanceof IFileEditorInput) {
 				IResource resource = ((IFileEditorInput) editorInput).getFile();
-				resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+				Markers.deleteMarkers(resource);
 
-				final IMarker marker = resource.createMarker(IMarker.PROBLEM);
-				marker.setAttribute(IMarker.MESSAGE, e.getMessage());
-				marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
+				final IMarker marker = Markers.addMarker(resource, e);
 				marker.setAttribute(IMarker.TRANSIENT, true);
-				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-				marker.setAttribute(IMarker.USER_EDITABLE, false);
 
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
