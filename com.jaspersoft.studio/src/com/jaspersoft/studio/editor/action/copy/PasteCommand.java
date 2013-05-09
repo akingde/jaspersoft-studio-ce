@@ -30,7 +30,7 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MGraphicElement;
 
 public class PasteCommand extends Command {
-	private Map<ANode, Command> list = new HashMap<ANode, Command>();
+	private Map<ANode, Command> list;
 	private IPastable parent;
 	private int createdNodes;
 
@@ -42,6 +42,7 @@ public class PasteCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
+		list = new HashMap<ANode, Command>();
 		Object obj = Clipboard.getDefault().getContents();
 		if (obj == null)
 			return false;
@@ -64,7 +65,7 @@ public class PasteCommand extends Command {
 
 	@Override
 	public void execute() {
-		if (!canExecute())
+		if (list == null && !canExecute())
 			return;
 		createdNodes = 0;
 		for (ANode node : list.keySet()) {
@@ -112,12 +113,9 @@ public class PasteCommand extends Command {
 
 	@Override
 	public void redo() {
-		Iterator<Command> it = list.values().iterator();
-		while (it.hasNext()) {
-			Command cmd = it.next();
+		for (Command cmd : list.values())
 			if (cmd != null)
 				cmd.execute();
-		}
 	}
 
 	public int getCreatedNodesNumber() {
@@ -144,8 +142,6 @@ public class PasteCommand extends Command {
 	}
 
 	public boolean isPastableNode(Object node) {
-		if (node instanceof ICopyable && ((ICopyable) node).isCopyable2(parent))
-			return true;
-		return false;
+		return node instanceof ICopyable && ((ICopyable) node).isCopyable2(parent);
 	}
 }

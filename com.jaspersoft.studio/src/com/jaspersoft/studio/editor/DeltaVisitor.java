@@ -52,7 +52,9 @@ public class DeltaVisitor implements IResourceDeltaVisitor {
 				changeInput(delta.getMovedToPath());
 			break;
 		case IResourceDelta.CHANGED:
-			changeInput(delta.getFullPath());
+			if ((delta.getFlags() & IResourceDelta.CONTENT) != 0 || (delta.getFlags() & IResourceDelta.SYNC) != 0
+					|| (delta.getFlags() & IResourceDelta.REPLACED) != 0)
+				changeInput(delta.getFullPath());
 			break;
 		}
 		return true;

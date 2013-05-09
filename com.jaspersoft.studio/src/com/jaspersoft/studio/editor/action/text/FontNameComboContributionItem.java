@@ -14,6 +14,7 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * @author Chicu Veaceslav (schicu@jaspersoft.com)
@@ -33,8 +34,9 @@ public class FontNameComboContributionItem extends APropertyComboContributionIte
 
 	@Override
 	protected void setComboItems() {
-		if (model.getJasperConfiguration() != null)
-			combo.setItems(FontUtils.stringToItems(ModelUtils.getFontNames(model.getJasperConfiguration())));
+		JasperReportsConfiguration jConfig = model.getJasperConfiguration();
+		if (jConfig != null)
+			combo.setItems(FontUtils.stringToItems(ModelUtils.getFontNames(jConfig)));
 	}
 
 	@Override

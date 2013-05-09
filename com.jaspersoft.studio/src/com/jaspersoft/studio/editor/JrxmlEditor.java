@@ -17,12 +17,17 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.builder.JRErrorHandler;
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.builder.Markers;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExpressionCollector;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
@@ -78,6 +83,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
+import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
@@ -885,23 +891,23 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @see org.eclipse.ui.ide.IGotoMarker
 	 */
 	public void gotoMarker(IMarker marker) {
-		// if (activePage == PAGE_DESIGNER) {
-		// try {
-		// Object expr = marker.getAttribute(JRErrorHandler.MARKER_ERROR_JREXPRESSION);
-		// if (expr != null && expr instanceof String) {
-		// JRDesignExpression expression = new JRDesignExpression();
-		// expression.setId(new Integer((String) expr));
-		// JasperDesign jd = getJasperDesign();
-		// JRExpressionCollector rc = JRExpressionCollector.collector(jrContext, jd);
-		// if (!VErrorPreview.openExpressionEditor(jrContext, rc, (JRDesignDataset) jd.getMainDataset(), expression))
-		// for (JRDataset d : jd.getDatasetsList())
-		// if (VErrorPreview.openExpressionEditor(jrContext, rc, (JRDesignDataset) d, expression))
-		// return;
-		// }
-		// } catch (CoreException e) {
-		// e.printStackTrace();
-		// }
-		// }
+		if (activePage == PAGE_DESIGNER) {
+			try {
+				Object expr = marker.getAttribute(JRErrorHandler.MARKER_ERROR_JREXPRESSION);
+				if (expr != null && expr instanceof String) {
+					JRDesignExpression expression = new JRDesignExpression();
+					expression.setId(new Integer((String) expr));
+					JasperDesign jd = getJasperDesign();
+					JRExpressionCollector rc = JRExpressionCollector.collector(jrContext, jd);
+					if (!VErrorPreview.openExpressionEditor(jrContext, rc, (JRDesignDataset) jd.getMainDataset(), expression))
+						for (JRDataset d : jd.getDatasetsList())
+							if (VErrorPreview.openExpressionEditor(jrContext, rc, (JRDesignDataset) d, expression))
+								return;
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
 		setActivePage(PAGE_XMLEDITOR);
 		IDE.gotoMarker(xmlEditor, marker);
 	}
