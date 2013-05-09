@@ -18,13 +18,21 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.xml.SourceLocation;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRExpressionCollector;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.jdt.core.compiler.CategorizedProblem;
+import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -45,10 +53,12 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
+import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.ErrorUtil;
 import com.jaspersoft.studio.utils.Misc;
@@ -60,6 +70,10 @@ public class VErrorPreview extends APreview {
 
 	public VErrorPreview(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
+	}
+
+	public void setReportContext(JasperReportsConfiguration jContext) {
+		this.jContext = jContext;
 	}
 
 	private Label compilationTime;
@@ -136,13 +150,6 @@ public class VErrorPreview extends APreview {
 
 		createStatistics(body);
 
-		// container.addControlListener(new ControlAdapter() {
-		// public void controlResized(ControlEvent e) {
-		// Rectangle r = parent.getClientArea();
-		// sc.setMinSize(parent.computeSize(r.width, SWT.DEFAULT));
-		// }
-		// });
-
 		stackLayout.topControl = tmessage;
 		body.layout();
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.view_reportstate"); //$NON-NLS-1$
@@ -182,10 +189,20 @@ public class VErrorPreview extends APreview {
 				int sindex = wtable.getSelectionIndex();
 				if (sindex < 0 || sindex > errors.size())
 					return;
-				Object e = errors.get(sindex);
-				if (e instanceof Throwable)
-					UIUtils.showError((Throwable) e);
-
+				Object aux = auxil.get(sindex);
+				if (aux != null && aux instanceof JRExpression) {
+					JasperDesign jd = jContext.getJasperDesign();
+					JRExpressionCollector rc = JRExpressionCollector.collector(jContext, jd);
+					if (!openExpressionEditor(jContext, rc, (JRDesignDataset) jd.getMainDataset(),
+							(JRDesignExpression) aux))
+						for (JRDataset d : jd.getDatasetsList())
+							if (openExpressionEditor(jContext, rc, (JRDesignDataset) d, (JRDesignExpression) aux))
+								break;
+				} else {
+					Object e = errors.get(sindex);
+					if (e instanceof Throwable)
+						UIUtils.showError((Throwable) e);
+				}
 			}
 		});
 
@@ -215,6 +232,28 @@ public class VErrorPreview extends APreview {
 		itemTbl.setControl(wtable);
 
 		tabFolder.setSelection(itemTbl);
+	}
+
+	public static boolean openExpressionEditor(JasperReportsConfiguration jContext,
+			JRExpressionCollector reportCollector, JRDesignDataset dataset, JRDesignExpression exp) {
+		JRExpressionCollector datasetCollector = reportCollector.getCollector(dataset);
+		List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
+		for (JRExpression expr : datasetExpressions) {
+			if (expr.getId() == exp.getId()) {
+				JRExpressionEditor wizard = new JRExpressionEditor();
+				wizard.setExpressionContext(new ExpressionContext(dataset, jContext));
+				wizard.setValue(exp);
+				WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+				dialog.create();
+				if (dialog.open() == Dialog.OK) {
+					JRExpression e = wizard.getValue();
+					((JRDesignExpression) expr).setText(e.getText());
+					((JRDesignExpression) expr).setValueClassName(e.getValueClassName());
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void createStatistics(Composite parent) {
@@ -326,7 +365,7 @@ public class VErrorPreview extends APreview {
 				t = t.getCause();
 			String msg = terror.getText() + ErrorUtil.getStackTrace(t) + NL;
 			terror.setText(terror.getText() + msg + "\n"); //$NON-NLS-1$
-			addError2List(t, t.getMessage());
+			addError2List(t, t.getMessage(), null);
 			// errorSection.setText("Errors: 1");
 		} else
 			terror.setText(""); //$NON-NLS-1$
@@ -340,20 +379,27 @@ public class VErrorPreview extends APreview {
 		errorViewer.refresh();
 	}
 
-	public void addProblem(CategorizedProblem problem, SourceLocation location) {
-		addError2List(problem, problem.getMessage());
+	public void addProblem(IProblem problem, SourceLocation location) {
+		addError2List(problem, problem.getMessage(), null);
+		refreshErrorTable();
+	}
+
+	public void addProblem(IProblem problem, SourceLocation location, JRExpression expr) {
+		addError2List(problem, problem.getMessage(), expr);
 		refreshErrorTable();
 	}
 
 	public void addProblem(String message, SourceLocation location) {
-		addError2List(message, message);
+		addError2List(message, message, null);
 		refreshErrorTable();
 	}
 
 	private List<Object> errors = new ArrayList<Object>();
+	private List<Object> auxil = new ArrayList<Object>();
 
-	private void addError2List(Object err, String message) {
+	private void addError2List(Object err, String message, Object aux) {
 		errors.add(err);
+		auxil.add(aux);
 		if (message == null)
 			message = Messages.VErrorPreview_noMessageLabel;
 		String lines[] = message.split("\\r?\\n"); //$NON-NLS-1$
@@ -364,6 +410,7 @@ public class VErrorPreview extends APreview {
 	}
 
 	public void clear() {
+		auxil.clear();
 		errors.clear();
 		msgAction.run();
 		tmessage.setText(""); //$NON-NLS-1$

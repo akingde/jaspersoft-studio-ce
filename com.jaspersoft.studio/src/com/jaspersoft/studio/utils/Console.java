@@ -15,8 +15,9 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.xml.SourceLocation;
+import net.sf.jasperreports.engine.JRExpression;
 
-import org.eclipse.jdt.core.compiler.CategorizedProblem;
+import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -31,6 +32,7 @@ import org.eclipse.ui.console.MessageConsoleStream;
 import com.jaspersoft.studio.editor.preview.ReportStateView;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class Console {
 	public static MessageConsole findConsole(String name) {
@@ -46,9 +48,9 @@ public class Console {
 		return myConsole;
 	}
 
-	public static Console showConsole(String name) {
+	public static Console showConsole(String name, JasperReportsConfiguration jConfig) {
 		MessageConsole myConsole = findConsole(name);
-		final Console c = new Console(myConsole);
+		final Console c = new Console(myConsole, jConfig);
 		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
@@ -70,14 +72,18 @@ public class Console {
 
 	private MessageConsole console;
 	private List<VErrorPreview> ePreviews = new ArrayList<VErrorPreview>();
+	private JasperReportsConfiguration jConfig;
 
-	private Console(MessageConsole console) {
+	private Console(MessageConsole console, JasperReportsConfiguration jConfig) {
 		this.console = console;
+		this.jConfig = jConfig;
 	}
 
 	public void addErrorPreview(VErrorPreview ep) {
-		if (ep != null)
+		if (ep != null) {
+			ep.setReportContext(jConfig);
 			ePreviews.add(ep);
+		}
 	}
 
 	public void removeErrorPreview(VErrorPreview ep) {
@@ -113,12 +119,22 @@ public class Console {
 		});
 	}
 
-	public void addProblem(final CategorizedProblem problem, final SourceLocation location) {
+	public void addProblem(final IProblem problem, final SourceLocation location) {
 		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
 				for (VErrorPreview vep : ePreviews)
 					vep.addProblem(problem, location);
+			}
+		});
+	}
+
+	public void addProblem(final IProblem problem, final SourceLocation location, final JRExpression expr) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				for (VErrorPreview vep : ePreviews)
+					vep.addProblem(problem, location, expr);
 			}
 		});
 	}

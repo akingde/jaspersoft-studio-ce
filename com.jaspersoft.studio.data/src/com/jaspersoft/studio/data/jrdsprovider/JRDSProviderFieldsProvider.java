@@ -54,10 +54,11 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 		if (jrdsp != null) {
 			JasperReport jr = null;
 			try {
-				JasperReportCompiler compiler = new JasperReportCompiler();
 				IFile file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
-				if (file != null && file.exists())
+				if (file != null && file.exists()) {
+					JasperReportCompiler compiler = new JasperReportCompiler();
 					jr = compiler.compileReport(jConfig, file);
+				}
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

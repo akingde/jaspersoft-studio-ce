@@ -885,6 +885,23 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @see org.eclipse.ui.ide.IGotoMarker
 	 */
 	public void gotoMarker(IMarker marker) {
+		// if (activePage == PAGE_DESIGNER) {
+		// try {
+		// Object expr = marker.getAttribute(JRErrorHandler.MARKER_ERROR_JREXPRESSION);
+		// if (expr != null && expr instanceof String) {
+		// JRDesignExpression expression = new JRDesignExpression();
+		// expression.setId(new Integer((String) expr));
+		// JasperDesign jd = getJasperDesign();
+		// JRExpressionCollector rc = JRExpressionCollector.collector(jrContext, jd);
+		// if (!VErrorPreview.openExpressionEditor(jrContext, rc, (JRDesignDataset) jd.getMainDataset(), expression))
+		// for (JRDataset d : jd.getDatasetsList())
+		// if (VErrorPreview.openExpressionEditor(jrContext, rc, (JRDesignDataset) d, expression))
+		// return;
+		// }
+		// } catch (CoreException e) {
+		// e.printStackTrace();
+		// }
+		// }
 		setActivePage(PAGE_XMLEDITOR);
 		IDE.gotoMarker(xmlEditor, marker);
 	}
