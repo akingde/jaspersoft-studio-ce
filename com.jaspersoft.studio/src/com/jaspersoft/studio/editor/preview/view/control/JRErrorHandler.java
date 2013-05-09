@@ -14,6 +14,7 @@ import net.sf.jasperreports.eclipse.builder.JasperReportErrorHandler;
 import net.sf.jasperreports.eclipse.util.xml.SourceLocation;
 
 import org.eclipse.jdt.core.compiler.CategorizedProblem;
+import org.eclipse.jdt.core.compiler.IProblem;
 
 import com.jaspersoft.studio.utils.Console;
 
@@ -34,9 +35,9 @@ public class JRErrorHandler implements JasperReportErrorHandler {
 		c.addError(e);
 	}
 
-	public void addMarker(CategorizedProblem problem, SourceLocation location) {
+	public void addMarker(IProblem problem, SourceLocation location) {
 		hasErrors = true;
-		c.addProblem(problem, location);
+		c.addProblem((CategorizedProblem)problem, location);
 	}
 
 	public void addMarker(String message, SourceLocation location) {
