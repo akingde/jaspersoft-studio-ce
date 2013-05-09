@@ -193,15 +193,10 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 		JRDesignChartAxis oldObject = (JRDesignChartAxis) getValue();
 		JRDesignChartAxis newObject = (JRDesignChartAxis) value;
 
-		if (oldObject != null) {
+		if (oldObject != null)
 			((JRDesignChart) oldObject.getChart()).getEventSupport().removePropertyChangeListener(this);
-		}
-		if (newObject != null) {
-			System.out.println(newObject);
-			System.out.println(newObject.getChart());
-			System.out.println(((JRDesignChart) newObject.getChart()).getEventSupport());
+		if (newObject != null)
 			((JRDesignChart) newObject.getChart()).getEventSupport().addPropertyChangeListener(this);
-		}
 		super.setValue(value);
 	}
 

@@ -273,35 +273,36 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			}
 		}
 		String val = super.getProperty(key);
-		if (val == null)
-			val = service.getString(qualifier, key, null, contexts);
-		if (val == null)
-			val = service.getString(qualifier, PROPERTY_JRPROPERTY_PREFIX + key, null, contexts);
-		if (val == null) {
-			IResource file = (IResource) get(IEditorContributor.KEY_FILE);
-			if (file != null) {
-				String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier).getString(key);
-				val = t != null && t.isEmpty() ? null : t;
-				if (val == null) {
-					IResource project = file.getProject();
-					if (project != null) {
-						t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(project, qualifier).getString(key);
-						val = t != null && t.isEmpty() ? null : t;
-					}
+		if (val != null)
+			return val;
+		val = service.getString(qualifier, key, null, contexts);
+		if (val != null)
+			return val;
+		val = service.getString(qualifier, PROPERTY_JRPROPERTY_PREFIX + key, null, contexts);
+		if (val != null)
+			return val;
+		IResource file = (IResource) get(IEditorContributor.KEY_FILE);
+		if (file != null) {
+			String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier).getString(key);
+			val = t != null && t.isEmpty() ? null : t;
+			if (val == null) {
+				IResource project = file.getProject();
+				if (project != null) {
+					t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(project, qualifier).getString(key);
+					val = t != null && t.isEmpty() ? null : t;
 				}
 			}
 		}
-		if (val == null) {
-			String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(key);
-			val = t != null && t.isEmpty() ? null : t;
-		}
-		if (val == null)
-			val = props.getProperty(key);
-		if (val == null)
-			val = props.getProperty(PROPERTY_JRPROPERTY_PREFIX + key);
-
-		// if (val == null)
-		// return super.getProperty(key);
+		if (val != null)
+			return val;
+		String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(key);
+		val = t != null && t.isEmpty() ? null : t;
+		if (val != null)
+			return val;
+		val = props.getProperty(key);
+		if (val != null)
+			return val;
+		val = props.getProperty(PROPERTY_JRPROPERTY_PREFIX + key);
 		return val;
 	}
 

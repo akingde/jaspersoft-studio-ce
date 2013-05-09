@@ -31,6 +31,7 @@ import org.eclipse.ui.actions.RetargetAction;
 
 import com.jaspersoft.studio.editor.action.xls.XLSAction;
 import com.jaspersoft.studio.editor.action.xls.XLSActionList;
+import com.jaspersoft.studio.editor.gef.decorator.text.TextDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -60,10 +61,10 @@ public class XLSElementDecorator extends TextElementDecorator {
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		super.setupFigure(fig, editPart);
-		getDecorator().removeDecorator(decorator);
-		if (editPart.getjConfig().getPropertyBoolean(ShowXLSTagsAction.ID, false)) {
-			getDecorator().addDecorator(decorator);
-		}
+		TextDecorator dec = getDecorator();
+		dec.removeDecorator(decorator);
+		if (editPart.getjConfig().getPropertyBoolean(ShowXLSTagsAction.ID, false))
+			dec.addDecorator(decorator);
 	}
 
 	private void registerFit(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {

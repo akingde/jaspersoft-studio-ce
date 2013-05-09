@@ -39,7 +39,6 @@ public final class GenericImageRenderer implements ImageRenderer
     	Image image = new Image(paramDisplay, imageData);
 	    try {
 	      paramGC.drawImage(image, 0, 0, width, height, xDest, yDest, imgWidth, imgHeight);
-	      return;
 	    }
 	    finally
 	    {

@@ -87,7 +87,7 @@ public class Console {
 	public static Color REDCOLOR = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 
 	public void addError(final Throwable e) {
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
 				MessageConsoleStream out = console.newMessageStream();
@@ -102,7 +102,7 @@ public class Console {
 	}
 
 	public void addMessage(final String message) {
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
 				MessageConsoleStream out = console.newMessageStream();
@@ -114,7 +114,7 @@ public class Console {
 	}
 
 	public void addProblem(final CategorizedProblem problem, final SourceLocation location) {
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
 				for (VErrorPreview vep : ePreviews)
@@ -124,7 +124,7 @@ public class Console {
 	}
 
 	public void addProblem(final String message, final SourceLocation location) {
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
 				for (VErrorPreview vep : ePreviews)
@@ -134,7 +134,7 @@ public class Console {
 	}
 
 	public void setStatistics(final Statistics stats) {
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
 				for (VErrorPreview vep : ePreviews)

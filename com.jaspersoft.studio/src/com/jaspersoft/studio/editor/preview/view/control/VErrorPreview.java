@@ -281,10 +281,10 @@ public class VErrorPreview extends APreview {
 
 	public void setStats(Statistics stats) {
 		if (stats != null) {
-			compilationTime.setText("" + format(stats.getDuration(ReportControler.ST_COMPILATIONTIME))); //$NON-NLS-1$
-			fillingTime.setText("" + format(stats.getDuration(ReportControler.ST_FILLINGTIME))); //$NON-NLS-1$
-			exportTime.setText("" + format(stats.getDuration(ReportControler.ST_EXPORTTIME))); //$NON-NLS-1$
-			execTime.setText("" + format(stats.getDuration(ReportControler.ST_REPORTEXECUTIONTIME))); //$NON-NLS-1$
+			compilationTime.setText(format(stats.getDuration(ReportControler.ST_COMPILATIONTIME)));
+			fillingTime.setText(format(stats.getDuration(ReportControler.ST_FILLINGTIME)));
+			exportTime.setText(format(stats.getDuration(ReportControler.ST_EXPORTTIME)));
+			execTime.setText(format(stats.getDuration(ReportControler.ST_REPORTEXECUTIONTIME)));
 
 			totalPages.setText(Misc.nvl(stats.getValue(ReportControler.ST_PAGECOUNT), "0")); //$NON-NLS-1$
 			recordCount.setText(Misc.nvl(stats.getValue(ReportControler.ST_RECORDCOUNTER), "-")); //$NON-NLS-1$

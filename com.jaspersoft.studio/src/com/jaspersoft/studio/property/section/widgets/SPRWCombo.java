@@ -91,10 +91,8 @@ public class SPRWCombo extends ASPropertyWidget {
 			}
 		}
 		combo.select(selection);
-		if (selection == 0 && pd.getItems().length > 0) {
-			str = Misc.nvl(str);
-			combo.setText(str);
-		}
+		if (selection == 0 && pd.getItems().length > 0)
+			combo.setText(Misc.nvl(str));
 		int stringLength = combo.getText().length();
 
 		combo.setSelection(new Point(stringLength, stringLength));

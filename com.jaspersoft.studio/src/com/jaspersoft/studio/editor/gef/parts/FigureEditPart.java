@@ -52,6 +52,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class FigureEditPart extends AJDEditPart implements PropertyChangeListener, IRulerUpdatable {
 
+	private static final String RECTANGLE = "rectangle";
 	protected JSSDrawVisitor drawVisitor;
 
 	public JSSDrawVisitor getDrawVisitor() {
@@ -71,9 +72,10 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	protected void handlePreferenceChanged(org.eclipse.jface.util.PropertyChangeEvent event) {
 		String p = event.getProperty();
 		if (p.equals(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE)
-				|| p.equals(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_COLOR))
+				|| p.equals(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_COLOR)) {
+			pref = null;
 			setPrefsBorder(getFigure());
-		else
+		} else
 			refreshVisuals();
 	}
 
@@ -152,15 +154,19 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		return jConfig;
 	}
 
-	public void setPrefsBorder(IFigure rect) {
-		if (jConfig == null)
-			jConfig = ((ANode) getModel()).getJasperConfiguration();
-		String pref = jConfig.getProperty(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
-		String mcolor = jConfig.getProperty(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_COLOR,
-				DesignerPreferencePage.DEFAULT_ELEMENT_DESIGN_BORDER_COLOR);
-		Color fg = SWTResourceManager.getColor(StringConverter.asRGB(mcolor));
+	private String pref;
+	private Color fg;
 
-		if (pref.equals("rectangle")) //$NON-NLS-1$
+	public void setPrefsBorder(IFigure rect) {
+		if (pref == null) {
+			if (jConfig == null)
+				jConfig = ((ANode) getModel()).getJasperConfiguration();
+			pref = jConfig.getProperty(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE, RECTANGLE);
+			String mcolor = jConfig.getProperty(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_COLOR,
+					DesignerPreferencePage.DEFAULT_ELEMENT_DESIGN_BORDER_COLOR);
+			fg = SWTResourceManager.getColor(StringConverter.asRGB(mcolor));
+		}
+		if (pref.equals(RECTANGLE)) //$NON-NLS-1$
 			rect.setBorder(new ElementLineBorder(fg));
 		else
 			rect.setBorder(new CornerBorder(fg, 5));
