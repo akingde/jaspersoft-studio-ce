@@ -17,10 +17,15 @@ package com.jaspersoft.studio.editor.gef.parts;
 
 import java.beans.PropertyChangeListener;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.utils.SelectionHelper;
 /*
  * The Class AJDEditPart.
  * 
@@ -60,6 +65,33 @@ public abstract class AJDEditPart extends AbstractGraphicalEditPart {
 		super.deactivate();
 		ANode node = (ANode) getModel();
 		node.getPropertyChangeSupport().removePropertyChangeListener((PropertyChangeListener) this);
+	}
+	
+	@Override
+	public Object getAdapter(Class key) {
+		if(key == IResource.class || key == IFile.class){
+			return getAssociatedFile();
+		}
+		return super.getAdapter(key);
+	}
+	
+	/**
+	 * Returns the file associated.
+	 * <p>
+	 * Given the current edit part belonging to the active JRXML editor
+	 * (report designer) the related file is returned.
+	 * 
+	 * @return the associated file resource
+	 */
+	public IFile getAssociatedFile() {
+		IEditorPart ep = SelectionHelper.getActiveJRXMLEditor();
+		if (ep != null && ep.getEditorInput() instanceof IFileEditorInput) {
+			IFileEditorInput fe = ((IFileEditorInput) ep.getEditorInput());
+			return fe.getFile();
+		}
+		else {
+			return null;
+		}
 	}
 
 }
