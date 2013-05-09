@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.draw2d.FigureCanvas;
@@ -29,6 +30,7 @@ import org.eclipse.gef.tools.DragEditPartsTracker;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.frame.MFrame;
 
 /**
@@ -227,33 +229,55 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 */
 	private EditPart searchParent(EditPart child) {
 		if (child != null) {
+			ANode parentModel = ((ANode) child.getModel()).getParent();
+			//I search the first container of the target element that it's not in the exclusion set
+			while (selectionHierarchy.contains(parentModel)){
+				parentModel = parentModel.getParent();
+			}
 			// This use the model for the search because every EditPart in the report has the same father.
-			Object parentModel = ((ANode) child.getModel()).getParent();
 			for (Object actualChild : child.getParent().getChildren()) {
 				EditPart actualChildPart = (EditPart) actualChild;
-				if (parentModel == actualChildPart.getModel()) {
-					 if (isValidTarget(actualChildPart)) return actualChildPart;
-					 else return searchParent(actualChildPart);
-				}
+				if (parentModel == actualChildPart.getModel()) return actualChildPart;
 			}
 		}
 		return null;
 	}
 	
+	
 	/**
-	 * Check if the dragged element is also the target of the drop
+	 * Build an set of invalid target for the drop. The invalid target are all the elements 
+	 * in the dragged selection plus their descendants
 	 * 
-	 * @param target the actual target of the drop
-	 * @return true if the drop target is valid, false if the drop target is in the 
-	 * selection so its not valid, and the parent of the target need to be searched
+	 * @return an hash set with the models of the invalid target elements for a drop operation
 	 */
-	private boolean isValidTarget(EditPart target){
+	private HashSet<INode> getSelectionDesendent(){
+		HashSet<INode> result = new HashSet<INode>();
 		for (Object part : getCurrentViewer().getSelectedEditParts()){
-			if (part == target) return false;
+			if (part instanceof EditPart){
+				EditPart ep = (EditPart)part;
+				INode model = (INode) ep.getModel();
+				result.add(model);
+				if (model instanceof IContainer) getSelectionDesendentRecursive(model.getChildren(), result);
+			}
 		}
-		return true;
+		return result;
 	}
 	
+	/**
+	 * Support method for getSelectionDesendent, do the recursion on the container. Check a list of children 
+	 * and if one of them is an IContainer also its children are checked
+	 * 
+	 * @param children children to check
+	 * @param foundedElements an hash set with the models of the invalid target elements for a drop operation
+	 */
+	private void getSelectionDesendentRecursive(List<INode> children, HashSet<INode> foundedElements){
+		for(INode child : children){
+			foundedElements.add(child);
+			if (child instanceof IContainer) getSelectionDesendentRecursive(child.getChildren(), foundedElements);
+		}
+	}
+
+
 	
 	/**
 	 * Recursive method that take a frame and the element actually in the selection,
@@ -303,13 +327,41 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	}
 	
 	/**
+	 * When the drag start the exclusion set based on the selected element is build
+	 */
+	protected boolean handleDragStarted() {
+		selectionHierarchy = getSelectionDesendent();
+		return super.handleDragStarted();
+	};
+	
+	
+	/**
+	 * When the drag is done the exclusion set is cleared
+	 */
+	@Override
+	protected void performDrag() {
+		super.performDrag();
+		selectionHierarchy = null;
+	}
+	
+	/**
+	 * This variable contains all the hierarchy of the elements dragged, to avoid that an element is placed inside
+	 * one of his descendant. To avoid excessive calculations this variable is initialized ad the drag start and 
+	 * clear at the drag end
+	 */
+	private HashSet<INode> selectionHierarchy = null; 
+	
+	/**
 	 * Called to get the destination edit part during a drag and drop, if the destination its not a container the it
 	 * parent its taken
 	 */
 	protected EditPart getTargetEditPart() {
 		EditPart target = super.getTargetEditPart();
 		EditPart parent = null;
-		if (!(target instanceof IContainer))
+		if (!(target instanceof IContainer) || 
+				(selectionHierarchy != null && selectionHierarchy.contains(target.getModel())))
+			//If the target of the operation is not a Container or it is into an exclusion set, then the most
+			//near valid parent of the target is searched
 			parent = searchParent(target);
 		return parent != null ? parent : target;
 	}

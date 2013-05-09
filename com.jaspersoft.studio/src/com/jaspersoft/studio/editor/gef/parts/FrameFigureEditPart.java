@@ -100,21 +100,20 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 				Rectangle rect = (Rectangle) constraint;
 				if (child.getModel() instanceof MGraphicElement) {
 					MGraphicElement cmodel = (MGraphicElement) child.getModel();
-					if (cmodel.getParent() instanceof MFrame) {
-						MFrame cparent = (MFrame) cmodel.getParent();
-						if (cparent == getModel()) {
-							SetPageConstraintCommand cmd = new SetPageConstraintCommand();
-							MGraphicElement model = (MGraphicElement) child.getModel();
-							Rectangle r = model.getBounds();
+					//if the parent of the child its a frame, then its a SetPageConstraintCommand because
+					//i'm moving the element inside the frame
+					if (cmodel.getParent() instanceof MFrame && cmodel.getParent() == getModel()) {
+						SetPageConstraintCommand cmd = new SetPageConstraintCommand();
+						MGraphicElement model = (MGraphicElement) child.getModel();
+						Rectangle r = model.getBounds();
 
-							JRDesignElement jde = (JRDesignElement) model.getValue();
-							int x = r.x + rect.x - jde.getX() + 1;
-							int y = r.y + rect.y - jde.getY() + 1;
-							rect.setLocation(x, y);
-							cmd.setContext(getModel(), (ANode) child.getModel(), rect);
+						JRDesignElement jde = (JRDesignElement) model.getValue();
+						int x = r.x + rect.x - jde.getX() + 1;
+						int y = r.y + rect.y - jde.getY() + 1;
+						rect.setLocation(x, y);
+						cmd.setContext(getModel(), (ANode) child.getModel(), rect);
 
-							return cmd;
-						}
+						return cmd;
 					} else {
 						CompoundCommand c = new CompoundCommand();
 						// Without this an element it's one point up when placed into a frame
@@ -126,7 +125,6 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 				} else {
 					return super.createChangeConstraintCommand(child, constraint);
 				}
-				return null;
 			}
 
 			/**
