@@ -189,18 +189,6 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		super(sourceEditPart);
 	}
 	
-	@Override
-	protected void handleFinished() {
-		// TODO Auto-generated method stub
-		super.handleFinished();
-	}
-
-	@Override
-	protected boolean handleButtonUp(int button) {
-		// TODO Auto-generated method stub
-		return super.handleButtonUp(button);
-	}
-	
 	/**
 	 * Handle the drag in progress event, it is different from the default one because it check if the AutoxposeHelper is
 	 * set, and if it isn't it create a new one using the viewport of the active window. Then it call the default
@@ -229,7 +217,10 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	}
 
 	/**
-	 * Take an edit part and search it's container
+	 * Take an edit part and search it's container. Check also the actual selected elements to avoid
+	 * that the selected parent is the moved element. In this case the grandparent is searched (this is 
+	 * a particular case where a frame is dragged on one of its children, so the destination will be the 
+	 * dragged frame itself, becoming source and target of the selection)
 	 * 
 	 * @param child
 	 * @return the container of the child, could be null
@@ -241,11 +232,26 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 			for (Object actualChild : child.getParent().getChildren()) {
 				EditPart actualChildPart = (EditPart) actualChild;
 				if (parentModel == actualChildPart.getModel()) {
-					return actualChildPart;
+					 if (isValidTarget(actualChildPart)) return actualChildPart;
+					 else return searchParent(actualChildPart);
 				}
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Check if the dragged element is also the target of the drop
+	 * 
+	 * @param target the actual target of the drop
+	 * @return true if the drop target is valid, false if the drop target is in the 
+	 * selection so its not valid, and the parent of the target need to be searched
+	 */
+	private boolean isValidTarget(EditPart target){
+		for (Object part : getCurrentViewer().getSelectedEditParts()){
+			if (part == target) return false;
+		}
+		return true;
 	}
 	
 	
@@ -298,7 +304,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	
 	/**
 	 * Called to get the destination edit part during a drag and drop, if the destination its not a container the it
-	 * parent is taken
+	 * parent its taken
 	 */
 	protected EditPart getTargetEditPart() {
 		EditPart target = super.getTargetEditPart();
