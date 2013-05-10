@@ -44,11 +44,16 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public class JDBCDataAdapterComposite extends ADataAdapterComposite {
-	private final static JDBCDriverDefinition[] jdbcDefinitions = new JDBCDriverDefinition[] {
-			new JDBCDriverDefinition("HSQLDB (server)", //$NON-NLS-1$
-					"org.hsqldb.jdbcDriver", "jdbc:hsqldb:hsql://{0}"), //$NON-NLS-1$ //$NON-NLS-2$
+	private final static JDBCDriverDefinition[] jdbcDefinitions = new JDBCDriverDefinition[] { new JDBCDriverDefinition("HSQLDB (server)", //$NON-NLS-1$
+			"org.hsqldb.jdbcDriver", "jdbc:hsqldb:hsql://{0}"), //$NON-NLS-1$ //$NON-NLS-2$
 			new JDBCDriverDefinition("HSQLDB (file)", "org.hsqldb.jdbcDriver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:hsqldb:[PATH_TO_DB_FILES]/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("SQLite (file)", "org.sqlite.JDBC", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:sqlite:[PATH_TO_DB_FILES]/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("DerbyDB (Embedded)", "org.apache.derby.jdbc.EmbeddedDriver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:derby:/{1}"), //$NON-NLS-1$	
+			new JDBCDriverDefinition("DerbyDB (Client)", "org.apache.derby.jdbc.ClientDriver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:derby://{0}[:1527]/{1}"), //$NON-NLS-1$	
 			new JDBCDriverDefinition("Cloudscape", "COM.cloudscape.JDBCDriver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:cloudscape:/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("IBM DB2", //$NON-NLS-1$
@@ -79,6 +84,11 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 			new JDBCDriverDefinition("MS SQLServer", //$NON-NLS-1$
 					"com.merant.datadirect.jdbc.sqlserver.SQLServerDriver", //$NON-NLS-1$
 					"jdbc:sqlserver://{0}:1433/{1}"), //$NON-NLS-1$
+
+			new JDBCDriverDefinition("Sybase", //$NON-NLS-1$
+					"net.sourceforge.jtds.jdbc.Driver", //$NON-NLS-1$
+					"jdbc:jtds:sybase://{0}/{1}"), //$NON-NLS-1$		
+
 			new JDBCDriverDefinition("MySQL", "org.gjt.mm.mysql.Driver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:mysql://{0}/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("MySQL", "com.mysql.jdbc.Driver", //$NON-NLS-1$ //$NON-NLS-2$
@@ -93,8 +103,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 					"jdbc:sybase:Tds:{0}:2638/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("Vertica", "com.vertica.Driver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:vertica://{0}:5433/{1}"), //$NON-NLS-1$
-			new JDBCDriverDefinition(
-					"Hadoop Hive", "org.apache.hadoop.hive.jdbc.HiveDriver", //$NON-NLS-1$ //$NON-NLS-2$
+			new JDBCDriverDefinition("Hadoop Hive", "org.apache.hadoop.hive.jdbc.HiveDriver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:hive://{0}:10000/default"),//$NON-NLS-1$
 			new JDBCDriverDefinition("Vertica", "com.vertica.jdbc.Driver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:vertica://{0}:5433/{1}") }; //$NON-NLS-1$ 
@@ -134,10 +143,8 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		createPreWidgets(this);
 
 		CTabFolder tabFolder = new CTabFolder(this, SWT.BOTTOM);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 3, 1));
-		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(
-				SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 3, 1));
+		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		createLocationTab(tabFolder);
@@ -168,8 +175,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 	protected void createPropertiesTab(CTabFolder tabFolder) {
 		CTabItem tbtmNewItem = new CTabItem(tabFolder, SWT.NONE);
-		tbtmNewItem
-				.setText(Messages.JDBCDataAdapterComposite_connectionproperties);
+		tbtmNewItem.setText(Messages.JDBCDataAdapterComposite_connectionproperties);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout());
@@ -177,8 +183,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		tbtmNewItem.setControl(composite);
 
 		cproperties = new PropertiesComponent(composite);
-		cproperties.getControl()
-				.setLayoutData(new GridData(GridData.FILL_BOTH));
+		cproperties.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	protected void createLocationTab(CTabFolder tabFolder) {
@@ -216,10 +221,8 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 			public void selectionChanged(SelectionChangedEvent event) {
 				if (comboJDBCDriver.getCombo().getSelectionIndex() >= 0) {
-					currentdriver = definitions[comboJDBCDriver.getCombo()
-							.getSelectionIndex()];
-					comboJDBCDriver.getCombo().setText(
-							currentdriver.getDriverName());
+					currentdriver = definitions[comboJDBCDriver.getCombo().getSelectionIndex()];
+					comboJDBCDriver.getCombo().setText(currentdriver.getDriverName());
 					btnWizardActionPerformed();
 				} else {
 					currentdriver = null;
@@ -343,8 +346,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	public void setDataAdapter(JDBCDataAdapterDescriptor editingDataAdapter) {
 		super.setDataAdapter(editingDataAdapter);
 
-		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc
-				.getDataAdapter();
+		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc.getDataAdapter();
 		if (jdbcDataAdapter.getDriver() == null)
 			btnWizardActionPerformed();
 	}
@@ -353,8 +355,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapter;
 
-		String driverName = Misc.nvl(jdbcDataAdapter.getDriver(),
-				"org.hsqldb.jdbcDriver"); //$NON-NLS-1$
+		String driverName = Misc.nvl(jdbcDataAdapter.getDriver(), "org.hsqldb.jdbcDriver"); //$NON-NLS-1$
 		comboJDBCDriver.getCombo().setText(driverName);
 
 		for (JDBCDriverDefinition d : definitions) {
@@ -364,16 +365,10 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 			}
 		}
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(textUsername, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeText(textPassword, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(textUsername, SWT.Modify), PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(textPassword, SWT.Modify), PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
 		bindURLAssistant(dataAdapter);
-		bindingContext.bindValue(
-				SWTObservables.observeText(textJDBCUrl, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "url")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(textJDBCUrl, SWT.Modify), PojoObservables.observeValue(dataAdapter, "url")); //$NON-NLS-1$
 
 		cpath.setClasspaths(jdbcDataAdapter.getClasspath());
 		cproperties.setProperties(jdbcDataAdapter.getProperties());
@@ -381,13 +376,9 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 	protected void bindURLAssistant(DataAdapter dataAdapter) {
 		if (textServerAddress != null)
-			bindingContext.bindValue(
-					SWTObservables.observeText(textServerAddress, SWT.Modify),
-					PojoObservables.observeValue(dataAdapter, "serverAddress")); //$NON-NLS-1$
+			bindingContext.bindValue(SWTObservables.observeText(textServerAddress, SWT.Modify), PojoObservables.observeValue(dataAdapter, "serverAddress")); //$NON-NLS-1$
 		if (textDatabase != null)
-			bindingContext.bindValue(
-					SWTObservables.observeText(textDatabase, SWT.Modify),
-					PojoObservables.observeValue(dataAdapter, "database")); //$NON-NLS-1$
+			bindingContext.bindValue(SWTObservables.observeText(textDatabase, SWT.Modify), PojoObservables.observeValue(dataAdapter, "database")); //$NON-NLS-1$
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
@@ -395,8 +386,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 			dataAdapterDesc = new JDBCDataAdapterDescriptor();
 		}
 
-		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc
-				.getDataAdapter();
+		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc.getDataAdapter();
 
 		jdbcDataAdapter.setDriver(comboJDBCDriver.getCombo().getText());
 		jdbcDataAdapter.setUsername(textUsername.getText());
@@ -421,15 +411,15 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		else
 			jdbcDataAdapter.setServerAddress("");
 	}
-	
+
 	protected String contextId;
-	
+
 	@Override
 	public String getHelpContextId() {
 		return PREFIX.concat(contextId);
 	}
-	
-	public void setContextId(String contextId){
+
+	public void setContextId(String contextId) {
 		this.contextId = contextId;
 	}
 
