@@ -54,6 +54,10 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 					"jdbc:derby:/{1}"), //$NON-NLS-1$	
 			new JDBCDriverDefinition("DerbyDB (Client)", "org.apache.derby.jdbc.ClientDriver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:derby://{0}[:1527]/{1}"), //$NON-NLS-1$	
+			new JDBCDriverDefinition("H2 (file)", "org.h2.Driver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:h2:file:{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("H2 (tco)", "org.h2.Driver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:h2:tcp://{0}:9101/~/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("Cloudscape", "COM.cloudscape.JDBCDriver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:cloudscape:/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("IBM DB2", //$NON-NLS-1$
