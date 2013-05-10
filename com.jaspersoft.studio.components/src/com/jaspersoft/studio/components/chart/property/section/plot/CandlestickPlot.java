@@ -20,6 +20,7 @@ import net.sf.jasperreports.charts.design.JRDesignCandlestickPlot;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -39,13 +40,13 @@ public class CandlestickPlot extends APlot {
 	private void createCategory(AbstractSection section, Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		parent = section.getWidgetFactory().createSectionTitle(parent,
-				"Category Axis", true, 2, 2);
+				Messages.AreaPlot_categoryAxis, true, 2, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LINE_COLOR);
 
 		Composite group = section.getWidgetFactory().createSection(parent,
-				"Label", false, 2, 2);
+				Messages.common_label, false, 2, 2);
 
 		section.createWidget4Property(group,
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION);
@@ -59,7 +60,7 @@ public class CandlestickPlot extends APlot {
 		section.createWidget4Property(group,
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_COLOR);
 
-		group = section.getWidgetFactory().createSection(parent, "Tick", false,
+		group = section.getWidgetFactory().createSection(parent, Messages.common_tick, false,
 				2, 2);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -89,13 +90,13 @@ public class CandlestickPlot extends APlot {
 	private void createValue(AbstractSection section, Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		parent = section.getWidgetFactory().createSectionTitle(parent,
-				"Value Axis", true, 2, 2);
+				Messages.AreaPlot_valueAxis, true, 2, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LINE_COLOR);
 
 		Composite group = section.getWidgetFactory().createSection(parent,
-				"Label", false, 2, 2);
+				Messages.common_label, false, 2, 2);
 
 		section.createWidget4Property(group,
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION);
@@ -109,7 +110,7 @@ public class CandlestickPlot extends APlot {
 		section.createWidget4Property(group,
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR);
 
-		group = section.getWidgetFactory().createSection(parent, "Tick", false,
+		group = section.getWidgetFactory().createSection(parent, Messages.common_tick, false,
 				2, 2);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);

@@ -19,6 +19,7 @@ import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -42,7 +43,7 @@ public class Pie3dPlot extends APlot {
 		section.createWidget4Property(parent,
 				JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR);
 
-		parent = section.getWidgetFactory().createSection(parent, "Item Label",
+		parent = section.getWidgetFactory().createSection(parent, Messages.common_item_label,
 				true, 4, 2);
 
 		section.createWidget4Property(parent,

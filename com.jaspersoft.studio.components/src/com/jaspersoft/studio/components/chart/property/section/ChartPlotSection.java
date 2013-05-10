@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
@@ -58,7 +59,7 @@ public class ChartPlotSection extends AbstractRealValueSection {
 		group.setLayoutData(gd);
 		group.setLayout(new GridLayout(3, false));
 
-		getWidgetFactory().createCLabel(group, "Backcolor");
+		getWidgetFactory().createCLabel(group, Messages.MChartPlot_backcolor);
 
 		createWidget4Property(group, JRBaseChartPlot.PROPERTY_BACKCOLOR, false)
 				.getControl().setLayoutData(gd);

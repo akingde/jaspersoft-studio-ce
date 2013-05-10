@@ -22,6 +22,7 @@ import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -35,7 +36,7 @@ public class MeterPlot extends APlot {
 		section.createWidget4Property(parent, JRDesignMeterPlot.PROPERTY_SHAPE);
 
 		Composite group = section.getWidgetFactory().createSection(parent,
-				"Tick", false, 2, 2);
+				Messages.common_tick, false, 2, 2);
 
 		section.createWidget4Property(group,
 				JRDesignMeterPlot.PROPERTY_TICK_COLOR);

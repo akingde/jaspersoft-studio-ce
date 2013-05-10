@@ -43,7 +43,7 @@ public class AreaPlot extends APlot {
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR);
 
 		Composite group = section.getWidgetFactory().createSection(parent,
-				"Label", false, 2, 2); //$NON-NLS-1$
+				Messages.common_label, false, 2, 2); //$NON-NLS-1$
 
 		section.createWidget4Property(group,
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION);
@@ -96,7 +96,7 @@ public class AreaPlot extends APlot {
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LINE_COLOR);
 
 		Composite group = section.getWidgetFactory().createSection(parent,
-				"Label", false, 2, 2); //$NON-NLS-1$
+				Messages.common_label, false, 2, 2); //$NON-NLS-1$
 
 		section.createWidget4Property(group,
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION);
@@ -109,7 +109,7 @@ public class AreaPlot extends APlot {
 		section.createWidget4Property(group,
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR);
 
-		group = section.getWidgetFactory().createSection(parent, "Tick", false, //$NON-NLS-1$
+		group = section.getWidgetFactory().createSection(parent, Messages.common_tick, false, //$NON-NLS-1$
 				2, 2);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);

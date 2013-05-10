@@ -57,6 +57,7 @@ public class Messages extends NLS {
 	public static String common_item_label;
 	public static String common_key_expression;
 	public static String common_label_expression;
+	public static String common_label;
 	public static String common_label_format;
 	public static String common_legend_label_format;
 	public static String common_line_chart;
@@ -80,6 +81,7 @@ public class Messages extends NLS {
 	public static String common_stacked_bar;
 	public static String common_start_date_expression;
 	public static String common_thermometer_chart;
+	public static String common_tick;
 	public static String common_timeseries_chart;
 	public static String common_value_axis_label_color;
 	public static String common_value_axis_label_font;
