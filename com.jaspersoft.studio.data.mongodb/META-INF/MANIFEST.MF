@@ -10,5 +10,5 @@ Require-Bundle: com.jaspersoft.studio.data;bundle-version="5.1.1";visibility:=re
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: com.jaspersoft.studio.data
-Bundle-ClassPath: lib/mongo-java-driver-2.7.3.jar,
+Bundle-ClassPath: lib/mongo-java-driver-2.9.3.jar,
  .
