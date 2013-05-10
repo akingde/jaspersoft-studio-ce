@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
@@ -50,18 +51,22 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
+import com.jaspersoft.studio.property.SetExpressionValueCommand;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.ErrorUtil;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VErrorPreview extends APreview {
@@ -193,8 +198,7 @@ public class VErrorPreview extends APreview {
 				if (aux != null && aux instanceof JRExpression) {
 					JasperDesign jd = jContext.getJasperDesign();
 					JRExpressionCollector rc = JRExpressionCollector.collector(jContext, jd);
-					if (!openExpressionEditor(jContext, rc, (JRDesignDataset) jd.getMainDataset(),
-							(JRDesignExpression) aux))
+					if (!openExpressionEditor(jContext, rc, (JRDesignDataset) jd.getMainDataset(), (JRDesignExpression) aux))
 						for (JRDataset d : jd.getDatasetsList())
 							if (openExpressionEditor(jContext, rc, (JRDesignDataset) d, (JRDesignExpression) aux))
 								break;
@@ -236,6 +240,8 @@ public class VErrorPreview extends APreview {
 
 	public static boolean openExpressionEditor(JasperReportsConfiguration jContext,
 			JRExpressionCollector reportCollector, JRDesignDataset dataset, JRDesignExpression exp) {
+		SelectionHelper.getActiveJRXMLEditor();
+
 		JRExpressionCollector datasetCollector = reportCollector.getCollector(dataset);
 		List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
 		for (JRExpression expr : datasetExpressions) {
@@ -247,8 +253,16 @@ public class VErrorPreview extends APreview {
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
 					JRExpression e = wizard.getValue();
-					((JRDesignExpression) expr).setText(e.getText());
-					((JRDesignExpression) expr).setValueClassName(e.getValueClassName());
+
+					IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
+					if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
+						JrxmlEditor editor = (JrxmlEditor) activeJRXMLEditor;
+						CommandStack cs = (CommandStack) editor.getAdapter(CommandStack.class);
+						if (cs != null) {
+							cs.execute(new SetExpressionValueCommand((JRDesignExpression) expr, e.getText(), e.getValueClassName()));
+							jContext.getJasperDesign().getEventSupport().firePropertyChange(JasperDesign.PROPERTY_NAME, true, false);
+						}
+					}
 				}
 				return true;
 			}
