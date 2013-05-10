@@ -215,7 +215,7 @@ exit 0;</echo>
 				toFile="${dist}/debian/usr/share/applications/jasperstudio.desktop" 
 				path="/opt/jaspersoft/${jss.distro.folder}" 
 				icon="/opt/jaspersoft/${jss.distro.folder}/icon.xpm" 
-				name="JasperSoft studio" 
+				name="Jaspersoft Studio Community" 
 				exec="&quot;/opt/jaspersoft/${jss.distro.folder}/Jaspersoft Studio&quot;"
 				categories="Office"/>
 		<deb 
@@ -225,6 +225,7 @@ exit 0;</echo>
 				postinst="${dist}/debian/postinst" 
 				architecture="${architecture}"
 				homepage="http://community.jaspersoft.com/project/jaspersoft-studio"
+				appname="Jaspersoft Studio Community"
 				depends="openjdk-6-jre">
 			<version upstream="${jss.version}" debian="" />
 			<maintainer name="Jaspersoft Studio Team" email="giulio@jaspersoft.com"/>
