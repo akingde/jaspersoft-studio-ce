@@ -28,6 +28,7 @@ import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.wizard.DataAdapterWizard;
 import com.jaspersoft.studio.data.wizard.DataAdapterWizardDialog;
+import com.jaspersoft.studio.messages.Messages;
 
 public class EditDataAdapterAction extends Action {
 	public static final String ID = "editdataAdapteraction"; //$NON-NLS-1$
@@ -37,13 +38,13 @@ public class EditDataAdapterAction extends Action {
 		super();
 		this.treeViewer = treeViewer;
 		setId(ID);
-		setText("Edit DataAdapter");
-		setDescription("Edit DataAdapter");
-		setToolTipText("Edit DataAdapter");
+		setText(Messages.EditDataAdapterAction_editName);
+		setDescription(Messages.EditDataAdapterAction_editDescription);
+		setToolTipText(Messages.EditDataAdapterAction_editTooltip);
 		setImageDescriptor(
 				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
 		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1 //$NON-NLS-1$
 	}
 
 	@Override

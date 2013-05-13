@@ -25,6 +25,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 
 public class GlobalPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	public static final String JSS_JETTY_PORT = "com.jaspersoft.studio.jetty.port"; //$NON-NLS-1$
@@ -37,12 +38,12 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 	@Override
 	protected void createFieldEditors() {
 		Label lbl = new Label(getFieldEditorParent(), SWT.NONE);
-		lbl.setText("Jetty Server Preferences");
+		lbl.setText(Messages.GlobalPreferencePage_jettyServerTitle);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
 
-		IntegerFieldEditor port = new IntegerFieldEditor(JSS_JETTY_PORT, "Port", getFieldEditorParent());
+		IntegerFieldEditor port = new IntegerFieldEditor(JSS_JETTY_PORT, Messages.GlobalPreferencePage_port, getFieldEditorParent());
 		port.setValidRange(0, 49151);
 		addField(port);
 	}

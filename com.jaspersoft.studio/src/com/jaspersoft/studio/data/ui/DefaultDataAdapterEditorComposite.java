@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.ui;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,6 +51,7 @@ import org.eclipse.swt.widgets.Table;
 
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.messages.Messages;
 
 public class DefaultDataAdapterEditorComposite extends ADataAdapterComposite {
 
@@ -100,14 +102,14 @@ public class DefaultDataAdapterEditorComposite extends ADataAdapterComposite {
 		propertyViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		propertyViewerColumn.getColumn().setMoveable(true);
 		propertyViewerColumn.getColumn().setWidth(100);
-		propertyViewerColumn.getColumn().setText("Property");
+		propertyViewerColumn.getColumn().setText(Messages.DefaultDataAdapterEditorComposite_properyLabel);
 		propertyViewerColumn.setLabelProvider(new ColumnPropertyValueLabelProvider(0));
 		propertyViewerColumn.setEditingSupport(new PropertyValueEditingSupport(tableViewer, 0));
 
 		valueViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		valueViewerColumn.getColumn().setMoveable(true);
 		valueViewerColumn.getColumn().setWidth(100);
-		valueViewerColumn.getColumn().setText("Value");
+		valueViewerColumn.getColumn().setText(Messages.DefaultDataAdapterEditorComposite_valueLabel);
 		valueViewerColumn.setLabelProvider(new ColumnPropertyValueLabelProvider(1));
 		valueViewerColumn.setEditingSupport(new PropertyValueEditingSupport(tableViewer, 1));
 
@@ -122,13 +124,13 @@ public class DefaultDataAdapterEditorComposite extends ADataAdapterComposite {
 		GridData gd_addButton = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_addButton.widthHint = 100;
 		addButton.setLayoutData(gd_addButton);
-		addButton.setText("Add");
+		addButton.setText(Messages.DefaultDataAdapterEditorComposite_addButton);
 
 		deleteButton = new Button(buttonComposite, SWT.NONE);
 		GridData gd_deleteButton = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_deleteButton.widthHint = 100;
 		deleteButton.setLayoutData(gd_deleteButton);
-		deleteButton.setText("Delete");
+		deleteButton.setText(Messages.DefaultDataAdapterEditorComposite_deleteButton);
 		deleteButton.setEnabled(false);
 
 		/*
@@ -321,10 +323,10 @@ public class DefaultDataAdapterEditorComposite extends ADataAdapterComposite {
 						} else {
 
 							if (str.length() > 0) {
-								wizardPage.setMessage("Property \"" + str + "\" already exists. Please specify another name.",
+								wizardPage.setMessage(MessageFormat.format(Messages.DefaultDataAdapterEditorComposite_alredyExistingMessage,new Object[]{str}), //$NON-NLS-1$ //$NON-NLS-2$
 										IMessageProvider.ERROR);
 							} else {
-								wizardPage.setMessage("Please specify a name for this property.", IMessageProvider.ERROR);
+								wizardPage.setMessage(Messages.DefaultDataAdapterEditorComposite_specifyNameMessage, IMessageProvider.ERROR);
 							}
 						}
 					}
@@ -384,14 +386,14 @@ public class DefaultDataAdapterEditorComposite extends ADataAdapterComposite {
 	private String[] createDataModelEntry() {
 
 		int i = 0;
-		String property = "PROPERTY_" + i;
+		String property = "PROPERTY_" + i; //$NON-NLS-1$
 
 		while (!isPropertyValid(property)) {
 			i++;
-			property = "PROPERTY_" + i;
+			property = "PROPERTY_" + i; //$NON-NLS-1$
 		}
 
-		return new String[] { property, "" };
+		return new String[] { property, "" }; //$NON-NLS-1$
 	}
 
 	/**
@@ -446,7 +448,7 @@ public class DefaultDataAdapterEditorComposite extends ADataAdapterComposite {
 	 */
 	private boolean isPropertyValid(String property) {
 
-		if (property == null || "".equals(property))
+		if (property == null || "".equals(property)) //$NON-NLS-1$
 			return false;
 
 		for (String[] row : rows) {

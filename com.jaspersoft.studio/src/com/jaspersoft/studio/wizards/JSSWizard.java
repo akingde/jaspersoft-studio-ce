@@ -111,7 +111,14 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 		if (!childWizards.contains(w))
 			childWizards.add(w);
 	}
-
+	
+	/**
+	 * Return the list of the child wizards
+	 */
+	protected List<IWizard> getChildWizards(){
+		return childWizards;
+	}
+	
 	@Override
 	/*
 	 * (non-Javadoc) Method declared on IWizard. The default behavior is to return the page that was added to this wizard

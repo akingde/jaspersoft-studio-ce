@@ -49,19 +49,19 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 public class PropertyListFieldEditor extends TableFieldEditor {
 
-	public static final String NET_SF_JASPERREPORTS_JRPROPERTIES = "net.sf.jasperreports.JRPROPERTIES";
+	public static final String NET_SF_JASPERREPORTS_JRPROPERTIES = "net.sf.jasperreports.JRPROPERTIES"; //$NON-NLS-1$
 
 	public PropertyListFieldEditor() {
 		super();
 	}
 
 	public PropertyListFieldEditor(String name, String labelText, Composite parent) {
-		super(name, labelText, new String[] { "Property", "Value" }, new int[] { 200, 30 }, parent);
+		super(name, labelText, new String[] { Messages.PropertyListFieldEditor_propertyLabel, Messages.PropertyListFieldEditor_valueLabel }, new int[] { 200, 30 }, parent);
 	}
 
 	@Override
 	protected String createList(String[][] items) {
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	@Override
@@ -83,11 +83,11 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 				Composite composite = (Composite) super.createDialogArea(parent);
 				composite.setLayout(new GridLayout(2, false));
 				Label label = new Label(composite, SWT.NONE);
-				label.setText("Property Name");
+				label.setText(Messages.PropertyListFieldEditor_newPropertyName);
 
 				final Text text = new Text(composite, SWT.BORDER);
 				text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-				text.setText("net.sf.jaspersoft.");
+				text.setText("net.sf.jaspersoft."); //$NON-NLS-1$
 				text.addModifyListener(new ModifyListener() {
 
 					@Override
@@ -97,11 +97,11 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 				});
 
 				label = new Label(composite, SWT.NONE);
-				label.setText("Value");
+				label.setText(Messages.PropertyListFieldEditor_newPropertyValue);
 
 				final Text tname = new Text(composite, SWT.BORDER);
 				tname.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-				tname.setText("< type value here >");
+				tname.setText(Messages.PropertyListFieldEditor_exampleValue);
 				tname.addModifyListener(new ModifyListener() {
 
 					@Override
@@ -121,7 +121,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			protected void configureShell(Shell newShell) {
 				super.configureShell(newShell);
 				newShell.setSize(500, 200);
-				newShell.setText("Properties Dialog");
+				newShell.setText(Messages.PropertyListFieldEditor_newPropertyTitle);
 			}
 
 		};
@@ -146,7 +146,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 	 */
 	protected void doLoad() {
 		if (getTable() != null) {
-			List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties("");
+			List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties(""); //$NON-NLS-1$
 			Collections.sort(lst, new PropertyComparator());
 			Properties props = null;
 			try {
@@ -196,7 +196,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 		if (getTable() != null) {
 			getTable().removeAll();
 
-			List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties("");
+			List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties(""); //$NON-NLS-1$
 			Collections.sort(lst, new PropertyComparator());
 			for (PropertySuffix ps : lst) {
 
@@ -224,7 +224,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 	@Override
 	protected void createButtons(Composite box) {
 		addButton = createPushButton(box, Messages.common_add);
-		duplicateButton = createPushButton(box, "Duplicate");
+		duplicateButton = createPushButton(box, Messages.PropertyListFieldEditor_duplicateButton);
 		removeButton = createPushButton(box, Messages.common_delete);
 	}
 }

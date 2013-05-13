@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -27,6 +28,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
@@ -54,6 +56,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 	final static public String FIELDS = "main_fields"; //$NON-NLS-1$
 	final static public String GROUP_FIELDS = "main_group_fields"; //$NON-NLS-1$
 	final static public String DATA_ADAPTER = "data_adapter"; //$NON-NLS-1$
+	final static public String OTHER_PARAMETERS = "parameters"; //$NON-NLS-1$
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -89,6 +92,26 @@ public class DefaultTemplateEngine implements TemplateEngine {
 		}
 
 		processTemplate(jdCopy, fields, groupFields);
+		
+		/*
+		 * Check if there are some extra parameters to add to the default ones, then add them
+		 */
+		Object subreportParams = settings.get(OTHER_PARAMETERS);
+		if (subreportParams != null){
+			JRSubreportParameter[] otherParamters = (JRSubreportParameter[]) subreportParams;
+			for(JRSubreportParameter param: otherParamters){
+				if (!jdCopy.getParametersMap().containsKey(param.getName())){
+					JRDesignParameter newParam = new JRDesignParameter();
+					newParam.setName(param.getName());
+					newParam.setDefaultValueExpression(param.getExpression());
+					try {
+						jdCopy.addParameter(newParam);
+					} catch (JRException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 
 		ReportBundle reportBundle = new ReportBundle(template);
 

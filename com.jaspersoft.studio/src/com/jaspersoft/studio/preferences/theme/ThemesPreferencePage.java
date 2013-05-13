@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 /*
@@ -52,13 +53,13 @@ import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
  */
 public class ThemesPreferencePage extends FieldEditorOverlayPage {
 
-	public static final String P_THEME_UI = "com.jaspersoft.studio.theme.ui";
-	public static final String P_THEMES_UI = "com.jaspersoft.studio.themes.ui";
+	public static final String P_THEME_UI = "com.jaspersoft.studio.theme.ui"; //$NON-NLS-1$
+	public static final String P_THEMES_UI = "com.jaspersoft.studio.themes.ui"; //$NON-NLS-1$
 
 	public ThemesPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription("Report Designer Themes");
+		setDescription(Messages.ThemesPreferencePage_themsTitle);
 	}
 
 	/**
@@ -69,7 +70,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 
 		String[][] tmatrix = getThemes4Combo();
 
-		comboeditor = new TComboEditor(P_THEME_UI, "Themes", tmatrix, cmp) {
+		comboeditor = new TComboEditor(P_THEME_UI, Messages.ThemesPreferencePage_themesLabel, tmatrix, cmp) {
 			@Override
 			protected void doLoad() {
 				super.doLoad();
@@ -88,7 +89,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 		bcmp.setLayoutData(gd);
 
 		Button bnew = new Button(bcmp, SWT.PUSH);
-		bnew.setText("New");
+		bnew.setText(Messages.ThemesPreferencePage_newButton);
 		bnew.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		bnew.addSelectionListener(new SelectionAdapter() {
 
@@ -101,7 +102,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 					ATheme theme = ATheme.load(getPreferenceStore(), comboeditor.getValue());
 					if (theme != null) {
 						theme.setName(dialog.getThemename());
-						getPreferenceStore().setValue(P_THEMES_UI, themes + ";" + dialog.getThemename());
+						getPreferenceStore().setValue(P_THEMES_UI, themes + ";" + dialog.getThemename()); //$NON-NLS-1$
 						theme.save(getPreferenceStore());
 						comboeditor.refresh(getThemes4Combo());
 						comboeditor.setSelection(dialog.getThemename());
@@ -111,7 +112,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 		});
 
 		bdel = new Button(bcmp, SWT.PUSH);
-		bdel.setText("Remove");
+		bdel.setText(Messages.ThemesPreferencePage_removeButton);
 		bdel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		bdel.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -119,13 +120,13 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 				ATheme theme = ATheme.load(getPreferenceStore(), comboeditor.getValue());
 				if (theme != null) {
 					String themes = getPreferenceStore().getString(P_THEMES_UI);
-					String value = "";
-					String[] tms = themes.split(";");
+					String value = ""; //$NON-NLS-1$
+					String[] tms = themes.split(";"); //$NON-NLS-1$
 					for (String t : tms) {
 						if (t.equals(theme.getName()))
 							continue;
 						if (!value.isEmpty())
-							value += ";";
+							value += ";"; //$NON-NLS-1$
 						value += t;
 					}
 					getPreferenceStore().setValue(P_THEMES_UI, value);
@@ -163,7 +164,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 			super(shell);
 		}
 
-		private String themename = "MyTheme";
+		private String themename = Messages.ThemesPreferencePage_themeExampleName;
 		private Text tname;
 
 		public String getThemename() {
@@ -177,7 +178,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 		@Override
 		protected void configureShell(Shell newShell) {
 			super.configureShell(newShell);
-			newShell.setText("Theme creation");
+			newShell.setText(Messages.ThemesPreferencePage_newThemeDialogTitle);
 		}
 
 		@Override
@@ -187,7 +188,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 			cmp.setLayout(new GridLayout(2, false));
 			cmp.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-			new Label(cmp, SWT.NONE).setText("Theme name");
+			new Label(cmp, SWT.NONE).setText(Messages.ThemesPreferencePage_newThemeNameLabel);
 
 			tname = new Text(cmp, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -204,13 +205,13 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 			DataBindingContext binding = new DataBindingContext();
 
 			ControlDecoration controlDecoration = new ControlDecoration(tname, SWT.LEFT | SWT.TOP);
-			controlDecoration.setDescriptionText("Duplicate name");
+			controlDecoration.setDescriptionText(Messages.ThemesPreferencePage_duplicateName);
 			FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(
 					FieldDecorationRegistry.DEC_ERROR);
 			controlDecoration.setImage(fieldDecoration.getImage());
 
-			binding.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(this, "themename"),
-					new UpdateValueStrategy().setAfterConvertValidator(new StringRequiredValidator("Please enter first name",
+			binding.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(this, "themename"), //$NON-NLS-1$
+					new UpdateValueStrategy().setAfterConvertValidator(new StringRequiredValidator(Messages.ThemesPreferencePage_enternameMessage,
 							controlDecoration, getButton(IDialogConstants.OK_ID))), null);
 
 			return control;
@@ -218,7 +219,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	class StringRequiredValidator implements IValidator {
-		private String[] themes = getPreferenceStore().getString(P_THEMES_UI).split(";");
+		private String[] themes = getPreferenceStore().getString(P_THEMES_UI).split(";"); //$NON-NLS-1$
 		private final String errorText;
 		private final ControlDecoration controlDecoration;
 		private Button okButton;
@@ -264,7 +265,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 
 	private String[][] getThemes4Combo() {
 		String themes = getPreferenceStore().getString(P_THEMES_UI);
-		String[] tms = themes.split(";");
+		String[] tms = themes.split(";"); //$NON-NLS-1$
 		String[][] tmatrix = new String[tms.length][2];
 		for (int i = 0; i < tms.length; i++) {
 			tmatrix[i][0] = tms[i];
@@ -292,7 +293,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 		DarkTheme dt = new DarkTheme();
 		dt.save(store);
 
-		store.setDefault(P_THEMES_UI, lt.getName() + ";" + dt.getName());
+		store.setDefault(P_THEMES_UI, lt.getName() + ";" + dt.getName()); //$NON-NLS-1$
 		store.setDefault(P_THEME_UI, lt.getName());
 	}
 
@@ -304,7 +305,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 	public void init(IWorkbench workbench) {
 	}
 
-	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.theme.ThemesPreferencePage.property";
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.theme.ThemesPreferencePage.property"; //$NON-NLS-1$
 	private TComboEditor comboeditor;
 	private Button bdel;
 	private Composite tcontrol;

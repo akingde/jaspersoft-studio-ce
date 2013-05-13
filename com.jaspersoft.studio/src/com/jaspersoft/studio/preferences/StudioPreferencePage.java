@@ -25,13 +25,14 @@ import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 public class StudioPreferencePage extends FieldEditorOverlayPage {
-	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.StudioPreferencePage.property";
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.StudioPreferencePage.property"; //$NON-NLS-1$
 	public static final String JSS_COMPATIBILITY_SHOW_DIALOG = "com.jaspersoft.studio.compatibility.showdialog"; //$NON-NLS-1$
 	public static final String JSS_COMPATIBILITY_VERSION = "com.jaspersoft.studio.compatibility.version"; //$NON-NLS-1$
-	public static final String REFERENCE_PREFIX = "net.sf.jasperreports.doc/docs/config.reference.html?cp=0_2#";
+	public static final String REFERENCE_PREFIX = "net.sf.jasperreports.doc/docs/config.reference.html?cp=0_2#"; //$NON-NLS-1$
 
 	public StudioPreferencePage() {
 		super(GRID);
@@ -45,20 +46,20 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 	 */
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(JSS_COMPATIBILITY_VERSION, "Version", JRXmlWriterHelper.getVersions(),
+		addField(new ComboFieldEditor(JSS_COMPATIBILITY_VERSION, Messages.StudioPreferencePage_versionLabel, JRXmlWriterHelper.getVersions(),
 				getFieldEditorParent()));
 
-		addField(new BooleanFieldEditor(JSS_COMPATIBILITY_SHOW_DIALOG, "Show Compatibility warning dialog",
+		addField(new BooleanFieldEditor(JSS_COMPATIBILITY_SHOW_DIALOG, Messages.StudioPreferencePage_showCompDialog,
 				getFieldEditorParent()));
 
 		Label label = new Label(getFieldEditorParent(), SWT.WRAP);
-		label.setText("Set the compatibility of the produced jrxml source code when the report saved.");
+		label.setText(Messages.StudioPreferencePage_message1);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		label.setLayoutData(gd);
 
 		label = new Label(getFieldEditorParent(), SWT.WRAP);
-		label.setText("Warning! If you don't use the last version, you risk to lose part of the report content.");
+		label.setText(Messages.StudioPreferencePage_message2);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		label.setLayoutData(gd);

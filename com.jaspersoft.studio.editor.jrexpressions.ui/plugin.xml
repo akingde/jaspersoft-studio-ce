@@ -247,7 +247,7 @@
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
             class="com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage"
             id="com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage"
-            name="Expression Editor">
+            name="%ExpressionEditor">
       </page>
    </extension>
    

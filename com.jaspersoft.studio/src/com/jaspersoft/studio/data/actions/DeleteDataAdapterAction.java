@@ -29,6 +29,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.MDataAdapter;
 import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.messages.Messages;
 
 public class DeleteDataAdapterAction extends Action {
 	private TreeViewer treeViewer;
@@ -37,9 +38,9 @@ public class DeleteDataAdapterAction extends Action {
 		super();
 		setId(ActionFactory.DELETE.getId());
 		this.treeViewer = treeViewer;
-		setText("Delete DataAdapter");
-		setDescription("Delete DataAdapter");
-		setToolTipText("Delete DataAdapter");
+		setText(Messages.DeleteDataAdapterAction_deleteName);
+		setDescription(Messages.DeleteDataAdapterAction_deleteDescription);
+		setToolTipText(Messages.DeleteDataAdapterAction_deleteTooltip);
 		setImageDescriptor(
 				JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE)); //$NON-NLS-1$
 		setDisabledImageDescriptor(

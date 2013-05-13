@@ -41,10 +41,10 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class FontFamilyPage extends WizardPage {
-	private static final String BOLDITALIC = "BOLDITALIC";
-	private static final String ITALIC = "ITALIC";
-	private static final String BOLD = "BOLD";
-	private static final String NORMAL = "normal";
+	private static final String BOLDITALIC = "BOLDITALIC"; //$NON-NLS-1$
+	private static final String ITALIC = "ITALIC"; //$NON-NLS-1$
+	private static final String BOLD = "BOLD"; //$NON-NLS-1$
+	private static final String NORMAL = "normal"; //$NON-NLS-1$
 	private SimpleFontFamily fontFamily;
 	private Text dsname;
 	private Button embedepdf;
@@ -56,8 +56,8 @@ public class FontFamilyPage extends WizardPage {
 
 	public FontFamilyPage(FontFamily fontFamily) {
 		super("fontfamilypage"); //$NON-NLS-1$
-		setTitle("Font Family");
-		setDescription("Configure font family");
+		setTitle(Messages.FontFamilyPage_dialogTitle);
+		setDescription(Messages.FontFamilyPage_dialogSubtitle);
 		this.fontFamily = (SimpleFontFamily) fontFamily;
 	}
 
@@ -68,7 +68,7 @@ public class FontFamilyPage extends WizardPage {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		new Label(composite, SWT.NONE).setText("Family Name");
+		new Label(composite, SWT.NONE).setText(Messages.FontFamilyPage_familyNameLabel);
 
 		dsname = new Text(composite, SWT.BORDER);
 		dsname.addModifyListener(new ModifyListener() {
@@ -89,13 +89,13 @@ public class FontFamilyPage extends WizardPage {
 		dsname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Group gr = new Group(composite, SWT.NONE);
-		gr.setText("Font Details");
+		gr.setText(Messages.FontFamilyPage_fontDetailsGroup);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		gr.setLayoutData(gd);
 		gr.setLayout(new GridLayout(3, false));
 
-		normal = createFileField(gr, "Normal", NORMAL);
+		normal = createFileField(gr, Messages.FontFamilyPage_normalLabel, NORMAL);
 		normal.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -115,7 +115,7 @@ public class FontFamilyPage extends WizardPage {
 		new Label(gr, SWT.NONE);
 		Label label = new Label(gr, SWT.WRAP);
 		label
-				.setText("Optionally, it is possible to provide other True Type Fonts for the BOLD, ITALIC, BOLD-ITALIC versions of the font family.");
+				.setText(Messages.FontFamilyPage_hintText);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		// gd.horizontalSpan = 2;
 		gd.widthHint = 300;
@@ -123,24 +123,24 @@ public class FontFamilyPage extends WizardPage {
 
 		new Label(gr, SWT.NONE);
 
-		bold = createFileField(gr, "Bold", BOLD);
-		italic = createFileField(gr, "Italic", ITALIC);
-		bolditalic = createFileField(gr, "Bold Italic", BOLDITALIC);
+		bold = createFileField(gr, Messages.FontFamilyPage_boldLabel, BOLD);
+		italic = createFileField(gr, Messages.FontFamilyPage_italicLabel, ITALIC);
+		bolditalic = createFileField(gr, Messages.FontFamilyPage_boldItalicLabel, BOLDITALIC);
 
 		gr = new Group(composite, SWT.NONE);
-		gr.setText("PDF Details");
+		gr.setText(Messages.FontFamilyPage_pdfGroup);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		gr.setLayoutData(gd);
 		gr.setLayout(new GridLayout(2, false));
 
 		label = new Label(gr, SWT.NONE);
-		label.setText("These settings are used when reports are exported to PDF");
+		label.setText(Messages.FontFamilyPage_pdfHintText);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		label.setLayoutData(gd);
 
-		new Label(gr, SWT.NONE).setText("PDF Encoding");
+		new Label(gr, SWT.NONE).setText(Messages.FontFamilyPage_pdfEncodingLabel);
 		pdfenc = new Combo(gr, SWT.SINGLE | SWT.BORDER);
 		pdfenc.setItems(ModelUtils.getPDFEncodings());
 		pdfenc.addSelectionListener(new SelectionListener() {
@@ -168,7 +168,7 @@ public class FontFamilyPage extends WizardPage {
 		});
 
 		embedepdf = new Button(gr, SWT.CHECK);
-		embedepdf.setText("Embed this font in PDF document");
+		embedepdf.setText(Messages.FontFamilyPage_pdfEmbeddedLabel);
 		embedepdf.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -191,13 +191,13 @@ public class FontFamilyPage extends WizardPage {
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button button = new Button(composite, SWT.PUSH);
-		button.setText("Browse ...");
+		button.setText(Messages.FontFamilyPage_browseButton);
 		button.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.OPEN);
-				fd.setText("Find True Type Font");
-				fd.setFilterExtensions(new String[] { "*.TTF", "*.ttf" });
+				fd.setText(Messages.FontFamilyPage_browseDialogTitle);
+				fd.setFilterExtensions(new String[] { "*.TTF", "*.ttf" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selected = fd.open();
 				if (selected != null) {
 					if (type.equals(NORMAL)) {

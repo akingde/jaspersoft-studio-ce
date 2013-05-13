@@ -98,7 +98,7 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 
 		Composite sc = new Composite(tabFolder, SWT.NONE);
 
-		BooleanFieldEditor bf = new BooleanFieldEditor(NSF_EXPORT_XLS_USE_TIMEZONE, "Use Report Time Zone", sc);
+		BooleanFieldEditor bf = new BooleanFieldEditor(NSF_EXPORT_XLS_USE_TIMEZONE, Messages.ExcelExporterPreferencePage_useReportTimeZone, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
@@ -138,21 +138,21 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(se);
 		HelpSystem.setHelp(se.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
 
-		JSSComboFieldEditor cfe = new JSSComboFieldEditor(NSF_EXPORT_XLS_AUTO_FILTER, "Auto Filter", new String[][] {
-				{ "", "" }, { "Start", "Start" }, { "Stop", "Stop" } }, sc);
+		JSSComboFieldEditor cfe = new JSSComboFieldEditor(NSF_EXPORT_XLS_AUTO_FILTER, Messages.ExcelExporterPreferencePage_autoFilter, new String[][] {
+				{ "", "" }, { "Start", "Start" }, { "Stop", "Stop" } }, sc); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		addField(cfe);
 		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
-		IntegerFieldEditor iedit = new IntegerFieldEditor(NSF_EXPORT_XLS_FREEZ_ROW, "Freez On Row", sc);
+		IntegerFieldEditor iedit = new IntegerFieldEditor(NSF_EXPORT_XLS_FREEZ_ROW, Messages.ExcelExporterPreferencePage_freezeOnRow, sc);
 		iedit.setValidRange(0, 65536);
 		addField(iedit);
 		HelpSystem.setHelp(se.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
 
-		NStringFieldEditor sfe = new NStringFieldEditor(NSF_EXPORT_XLS_FREEZ_COLUMN, "Freez On Column (A, AB, etc.)", sc);
+		NStringFieldEditor sfe = new NStringFieldEditor(NSF_EXPORT_XLS_FREEZ_COLUMN, Messages.ExcelExporterPreferencePage_freezeonCol, sc);
 		addField(sfe);
 		HelpSystem.setHelp(se.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
 
-		FloatFieldEditor fedit = new FloatFieldEditor(NSF_EXPORT_XLS_COLUMN_WIDTH_RATIO, "Column Freez Ratio", sc);
+		FloatFieldEditor fedit = new FloatFieldEditor(NSF_EXPORT_XLS_COLUMN_WIDTH_RATIO, Messages.ExcelExporterPreferencePage_freezeRatio, sc);
 		fedit.setValidRange(0f, Float.MAX_VALUE);
 		addField(fedit);
 

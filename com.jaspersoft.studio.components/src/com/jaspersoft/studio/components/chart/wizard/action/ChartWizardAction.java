@@ -26,6 +26,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.model.command.EditChartCommand;
 import com.jaspersoft.studio.model.ANode;
@@ -94,8 +95,8 @@ public class ChartWizardAction extends SelectionAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Edit Chart Wizard");
-		setToolTipText("Edit chart wizard");
+		setText(Messages.commoneditAction);
+		setToolTipText(Messages.commoneditToolTip);
 		setId(ChartWizardAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench()
 				.getSharedImages();

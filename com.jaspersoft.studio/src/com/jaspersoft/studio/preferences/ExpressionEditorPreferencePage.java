@@ -25,6 +25,7 @@ import org.eclipse.ui.IWorkbench;
 import org.osgi.service.prefs.Preferences;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
@@ -42,15 +43,15 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 	public ExpressionEditorPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription("Expression Editor configuration");
+		setDescription(Messages.ExpressionEditorPreferencePage_subtitle);
 	}
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new ExpressionListFieldEditor(P_USER_DEFINED_EXPRESSIONS, "User defined expressions",
+		addField(new ExpressionListFieldEditor(P_USER_DEFINED_EXPRESSIONS, Messages.ExpressionEditorPreferencePage_userDefinedExpressions,
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS,
-				"Include static imports used for functions library", getFieldEditorParent()));
+				Messages.ExpressionEditorPreferencePage_includeStatic, getFieldEditorParent()));
 	}
 
 	/*
@@ -82,7 +83,7 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS, new Boolean(false)); //$//$NON-NLS-1$
 	}
 
-	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage.property";
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage.property"; //$NON-NLS-1$
 
 	@Override
 	protected String getPageId() {

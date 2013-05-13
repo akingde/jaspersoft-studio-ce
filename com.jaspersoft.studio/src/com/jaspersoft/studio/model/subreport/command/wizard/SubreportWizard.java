@@ -28,6 +28,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -35,10 +36,12 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyPage;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
+import com.jaspersoft.studio.wizards.ReportNewWizard;
 
 public class SubreportWizard extends JSSWizard {
 	private NewSubreportPage step0;
@@ -101,7 +104,18 @@ public class SubreportWizard extends JSSWizard {
 		return super.getNextPage(page);
 	}
 
-	
+	@Override
+	public boolean performFinish() {
+		for (IWizard w : getChildWizards())
+		{
+			if (w instanceof ReportNewWizard){
+				((ReportNewWizard) w).getSettings().put(WizardDataSourcePage.EXTRA_PARAMETERS, step3.getValue());
+			}
+			w.performFinish();
+		}
+		return true;
+	}
+
 	/**
 	 * Retutn the subreport object...
 	 * 
@@ -155,6 +169,25 @@ public class SubreportWizard extends JSSWizard {
 			}
 			JRDesignExpression exp = new JRDesignExpression();
 			exp.setText("\"" + filepath + "\""); //$NON-NLS-1$ $NON-NLS-1$
+			
+			/*if (map.length>0)
+			{
+				try {
+					JasperReportsConfiguration jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
+					JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(new InputSource(file.getContents()));
+					jrContext.setJasperDesign(jd);
+					for(JRSubreportParameter param : map){
+						if (!jd.getParametersMap().containsKey(param.getName())){
+							JRDesignParameter newParam = new JRDesignParameter();
+							newParam.setName(param.getName());
+							newParam.setDefaultValueExpression(param.getExpression());
+							jd.addParameter(newParam);
+						}
+					}
+					JRXmlWriter.writeReport(jd, file.getProjectRelativePath().toPortableString(), "UTF-8");
+					System.out.println("bubba");
+				} catch (Exception e) {			}
+			}*/
 			subreport.setPropertyValue( JRDesignSubreport.PROPERTY_EXPRESSION , exp ); 
 		}
 		return subreport;

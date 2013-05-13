@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 public class ToolItemsPreferencePage extends FieldEditorOverlayPage {
@@ -30,7 +31,7 @@ public class ToolItemsPreferencePage extends FieldEditorOverlayPage {
 	public ToolItemsPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription("Toolbars Visibility");
+		setDescription(Messages.ToolItemsPreferencePage_0);
 	}
 
 	/**
@@ -62,7 +63,7 @@ public class ToolItemsPreferencePage extends FieldEditorOverlayPage {
 	public void init(IWorkbench workbench) {
 	}
 
-	public static final String PAGE_ID = "com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage.property";
+	public static final String PAGE_ID = "com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage.property"; //$NON-NLS-1$
 
 	@Override
 	protected String getPageId() {

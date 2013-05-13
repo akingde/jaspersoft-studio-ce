@@ -24,6 +24,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyComparator;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
@@ -50,14 +51,14 @@ public class PropertiesPreferencePage extends FieldEditorOverlayPage {
 	 * types of preferences. Each field editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(new PropertyListFieldEditor("abcd", "Jasper Reports Properties", getFieldEditorParent()));
+		addField(new PropertyListFieldEditor("abcd", Messages.PropertiesPreferencePage_jrPropertiesTitle, getFieldEditorParent())); //$NON-NLS-1$
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties("");
+		List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties(""); //$NON-NLS-1$
 		Collections.sort(lst, new PropertyComparator());
 		for (PropertySuffix ps : lst)
-			store.setDefault(ps.getKey(), Misc.nvl(ps.getValue(), ""));
+			store.setDefault(ps.getKey(), Misc.nvl(ps.getValue(), "")); //$NON-NLS-1$
 	}
 
 	/*
@@ -70,7 +71,7 @@ public class PropertiesPreferencePage extends FieldEditorOverlayPage {
 
 	@Override
 	protected String getPageId() {
-		return "com.jaspersoft.studio.preferences.PropertiesPreferencePage.property";
+		return "com.jaspersoft.studio.preferences.PropertiesPreferencePage.property"; //$NON-NLS-1$
 	}
 
 }

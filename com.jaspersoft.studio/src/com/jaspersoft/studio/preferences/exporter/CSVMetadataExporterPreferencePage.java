@@ -38,7 +38,7 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
  */
 public class CSVMetadataExporterPreferencePage extends FieldEditorOverlayPage {
 
-	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage.property";
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage.property"; //$NON-NLS-1$
 
 	public CSVMetadataExporterPreferencePage() {
 		super(GRID);
@@ -74,16 +74,16 @@ public class CSVMetadataExporterPreferencePage extends FieldEditorOverlayPage {
 		browser.setLayoutData(gd);
 
 		BooleanFieldEditor bf = new BooleanFieldEditor(JRCsvMetadataExporterParameter.PROPERTY_WRITE_HEADER,
-				"Write Header", getFieldEditorParent());
+				Messages.CSVMetadataExporterPreferencePage_writeHeaders, getFieldEditorParent());
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		tf = new NStringFieldEditor(JRCsvMetadataExporterParameter.PROPERTY_COLUMN_NAMES_PREFIX, "Column Names",
+		tf = new NStringFieldEditor(JRCsvMetadataExporterParameter.PROPERTY_COLUMN_NAMES_PREFIX, Messages.CSVMetadataExporterPreferencePage_columnNames,
 				getFieldEditorParent());
 		addField(tf);
 		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
-				StudioPreferencePage.REFERENCE_PREFIX + tf.getPreferenceName() + ".{suffix}");
+				StudioPreferencePage.REFERENCE_PREFIX + tf.getPreferenceName() + ".{suffix}"); //$NON-NLS-1$
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

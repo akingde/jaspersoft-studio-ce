@@ -28,6 +28,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.ElementDatasetWidget;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -50,9 +51,9 @@ public class ChartDataPage extends JSSWizardPage implements IExpressionContextSe
 	protected ChartDataPage(JRDesignElement jrChart,
 			JRDesignElementDataset edataset,
 			JasperReportsConfiguration jrContext) {
-		super("chartdataconfiguration");
-		setTitle("Chart Data Configuration");
-		setDescription("Configure how data are used by your chart");
+		super("chartdataconfiguration"); //$NON-NLS-1$
+		setTitle(Messages.ChartDataPage_title);
+		setDescription(Messages.ChartDataPage_description);
 		this.jrChart = jrChart;
 		this.edataset = edataset;
 		this.jrContext = jrContext;

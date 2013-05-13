@@ -20,6 +20,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 /*
@@ -31,7 +32,7 @@ import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
  */
 
 public class FontsPreferencePage extends FieldEditorOverlayPage {
-	public static final String FPP_FONT_LIST = "FONT_LIST";
+	public static final String FPP_FONT_LIST = "FONT_LIST"; //$NON-NLS-1$
 
 	public FontsPreferencePage() {
 		super(GRID);
@@ -43,7 +44,7 @@ public class FontsPreferencePage extends FieldEditorOverlayPage {
 	 * types of preferences. Each field editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(new FontListFieldEditor("FONT_LIST", "Font List", getFieldEditorParent()));
+		addField(new FontListFieldEditor("FONT_LIST", Messages.FontsPreferencePage_fontListTitle, getFieldEditorParent())); //$NON-NLS-1$
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
@@ -60,11 +61,11 @@ public class FontsPreferencePage extends FieldEditorOverlayPage {
 
 	@Override
 	protected String getPageId() {
-		return "com.jaspersoft.studio.preferences.fonts.FontsPreferencePage.property";
+		return "com.jaspersoft.studio.preferences.fonts.FontsPreferencePage.property"; //$NON-NLS-1$
 	}
 
 	@Override
 	public void performHelp() {
-		PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio.doc.preferences_font");
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio.doc.preferences_font"); //$NON-NLS-1$
 	}
 }

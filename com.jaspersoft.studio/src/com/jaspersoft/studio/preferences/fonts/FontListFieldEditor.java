@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
 import com.jaspersoft.studio.preferences.fonts.utils.SimpleFontFamilyExport;
 import com.jaspersoft.studio.preferences.fonts.wizard.FontConfigWizard;
@@ -67,7 +68,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 	}
 
 	public FontListFieldEditor(String name, String labelText, Composite parent) {
-		super(name, labelText, new String[] { "Font Name" }, new int[] { 100 }, parent);
+		super(name, labelText, new String[] { Messages.FontListFieldEditor_fontNameLabel }, new int[] { 100 }, parent);
 	}
 
 	@Override
@@ -123,7 +124,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 	protected String[] getNewInputObject() {
 		// run dialog wizard
 		SimpleFontFamily font2 = new SimpleFontFamily();
-		font2.setName("NewFontFamily");
+		font2.setName(Messages.FontListFieldEditor_newFontSuggestedName);
 		FontFamily font = runDialog(font2);
 		if (font != null) {
 			fontFamily.add(font);
@@ -155,8 +156,8 @@ public class FontListFieldEditor extends TableFieldEditor {
 			for (int s : selection)
 				lst.add(fontFamily.get(s));
 			FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
-			fd.setText("Export font to jar");
-			fd.setFilterExtensions(new String[] { "*.jar", "*.zip" });
+			fd.setText(Messages.FontListFieldEditor_exportToJar);
+			fd.setFilterExtensions(new String[] { "*.jar", "*.zip" }); //$NON-NLS-1$ //$NON-NLS-2$
 			String selected = fd.open();
 			if (selected != null) {
 				try {
@@ -167,7 +168,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 						public void run() {
 							IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
 									"Error saving file.", e.getCause()); //$NON-NLS-1$
-							ErrorDialog.openError(Display.getDefault().getActiveShell(), "Error saving file.", null, status);
+							ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.FontListFieldEditor_errorSave, null, status);
 						}
 					});
 				}
@@ -181,16 +182,16 @@ public class FontListFieldEditor extends TableFieldEditor {
 			ZipOutputStream zipos = new java.util.zip.ZipOutputStream(fos);
 			zipos.setMethod(ZipOutputStream.DEFLATED);
 
-			String prefix = "family" + (new Date()).getTime();
-			String fontXmlFile = "fonts" + prefix + ".xml";
+			String prefix = "family" + (new Date()).getTime(); //$NON-NLS-1$
+			String fontXmlFile = "fonts" + prefix + ".xml"; //$NON-NLS-1$ //$NON-NLS-2$
 
-			ZipEntry propsEntry = new ZipEntry("jasperreports_extension.properties");
+			ZipEntry propsEntry = new ZipEntry("jasperreports_extension.properties"); //$NON-NLS-1$
 			zipos.putNextEntry(propsEntry);
 
 			PrintWriter pw = new PrintWriter(zipos);
 
-			pw.println("net.sf.jasperreports.extension.registry.factory.fonts=net.sf.jasperreports.engine.fonts.SimpleFontExtensionsRegistryFactory");
-			pw.println("net.sf.jasperreports.extension.simple.font.families.ireport" + prefix + "=fonts/" + fontXmlFile);
+			pw.println("net.sf.jasperreports.extension.registry.factory.fonts=net.sf.jasperreports.engine.fonts.SimpleFontExtensionsRegistryFactory"); //$NON-NLS-1$
+			pw.println("net.sf.jasperreports.extension.simple.font.families.ireport" + prefix + "=fonts/" + fontXmlFile); //$NON-NLS-1$ //$NON-NLS-2$
 
 			pw.flush();
 
@@ -227,7 +228,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 				newfonts.add(newf);
 			}
 
-			ZipEntry fontsXmlEntry = new ZipEntry("fonts/" + fontXmlFile);
+			ZipEntry fontsXmlEntry = new ZipEntry("fonts/" + fontXmlFile); //$NON-NLS-1$
 			zipos.putNextEntry(fontsXmlEntry);
 
 			SimpleFontExtensionHelper.writeFontsXml(zipos, newfonts);
@@ -241,7 +242,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 	private String writeFont2zip(ZipOutputStream zipos, FontFace font) throws IOException, FileNotFoundException {
 		File file = new File(font.getFile());
 		if (file.exists()) {
-			String name = "fonts/" + file.getName();
+			String name = "fonts/" + file.getName(); //$NON-NLS-1$
 			ZipEntry ttfZipEntry = new ZipEntry(name);
 			zipos.putNextEntry(ttfZipEntry);
 
@@ -271,9 +272,9 @@ public class FontListFieldEditor extends TableFieldEditor {
 	protected void createButtons(Composite box) {
 		super.createButtons(box);
 
-		editButton = createPushButton(box, "Edit");
+		editButton = createPushButton(box, Messages.FontListFieldEditor_editButton);
 
-		exportButton = createPushButton(box, "Export");
+		exportButton = createPushButton(box, Messages.FontListFieldEditor_exportButton);
 	}
 
 	public void createSelectionListener() {

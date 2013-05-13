@@ -27,6 +27,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class PagesFieldEditor extends FieldEditor {
 	private Composite container;
 	private Button btAll;
@@ -57,7 +59,7 @@ public class PagesFieldEditor extends FieldEditor {
 
 	protected Composite createEncodingGroup(Composite parent, int numColumns) {
 		Group container = new Group(parent, SWT.NONE);
-		container.setText("Pages To Export");
+		container.setText(Messages.PagesFieldEditor_pageToExportBox);
 		container.setLayout(new GridLayout(5, false));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
@@ -65,7 +67,7 @@ public class PagesFieldEditor extends FieldEditor {
 		container.setLayoutData(gridData);
 
 		btAll = new Button(container, SWT.RADIO);
-		btAll.setText("Export All Pages");
+		btAll.setText(Messages.PagesFieldEditor_allPages);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 5;
 		btAll.setLayoutData(gd);
@@ -80,7 +82,7 @@ public class PagesFieldEditor extends FieldEditor {
 	private void createPage(Group container) {
 		GridData gd;
 		btPage = new Button(container, SWT.RADIO);
-		btPage.setText("Export Page:");
+		btPage.setText(Messages.PagesFieldEditor_precisePages);
 
 		page = new Spinner(container, SWT.BORDER);
 		gd = new GridData();
@@ -103,14 +105,14 @@ public class PagesFieldEditor extends FieldEditor {
 
 	private void createRange(Group container) {
 		btRange = new Button(container, SWT.RADIO);
-		btRange.setText("Export Pages From:");
+		btRange.setText(Messages.PagesFieldEditor_fromToPages);
 
 		pageFrom = new Spinner(container, SWT.BORDER);
 		pageFrom.setEnabled(false);
 		pageFrom.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 
 		Label lbl = new Label(container, SWT.NONE);
-		lbl.setText("To:");
+		lbl.setText(Messages.PagesFieldEditor_to);
 
 		pageTo = new Spinner(container, SWT.BORDER);
 		pageTo.setEnabled(false);
@@ -171,14 +173,14 @@ public class PagesFieldEditor extends FieldEditor {
 
 	private String getProperty() {
 		if (btAll.getSelection())
-			return "all";
+			return "all"; //$NON-NLS-1$
 		if (btPage.getSelection())
 			return Integer.toString(page.getSelection());
 		int from = pageFrom.getSelection();
 		int to = pageTo.getSelection();
 		if (to < from)
 			to = from;
-		return Integer.toString(from) + ";" + Integer.toString(to);
+		return Integer.toString(from) + ";" + Integer.toString(to); //$NON-NLS-1$
 	}
 
 	protected boolean hasSameProperty(String prop) {
@@ -204,7 +206,7 @@ public class PagesFieldEditor extends FieldEditor {
 			return;
 		}
 
-		if (prop.equals("all")) {
+		if (prop.equals("all")) { //$NON-NLS-1$
 			getPreferenceStore().setToDefault(getPreferenceName());
 		} else {
 			getPreferenceStore().setValue(getPreferenceName(), prop);

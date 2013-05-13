@@ -51,7 +51,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DataAdapterEditorPart extends ABasicEditor {
-	public static final String ID = "com.jaspersoft.studio.data.DataAdapterEditorPart";
+	public static final String ID = "com.jaspersoft.studio.data.DataAdapterEditorPart"; //$NON-NLS-1$
 	private DataAdapterDescriptor descriptor;
 	private ModelPropertyChangeListener modelListener = new ModelPropertyChangeListener();
 	private NameComposite nameComposite;
@@ -71,7 +71,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 
 			descriptor = FileDataAdapterStorage.readDataADapter(in, file.getProject());
 			if (descriptor == null)
-				throw new PartInitException("Can't find DataAdapter mapping.");
+				throw new PartInitException("Can't find DataAdapter mapping."); //$NON-NLS-1$
 		} catch (CoreException e) {
 			UIUtils.showError(e);
 		} finally {
@@ -160,7 +160,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 			nameComposite.setDataAdapter(descriptor);
 
 			final Button btnTest = new Button(c, SWT.PUSH);
-			btnTest.setText("Test Connection");
+			btnTest.setText(Messages.DataAdapterEditorPart_testButton);
 
 			btnTest.addSelectionListener(new SelectionAdapter() {
 				@Override

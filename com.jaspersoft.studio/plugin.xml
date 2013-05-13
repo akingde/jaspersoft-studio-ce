@@ -214,107 +214,107 @@
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
             class="com.jaspersoft.studio.preferences.GlobalPreferencePage"
             id="com.jaspersoft.studio.preferences.GlobalPreferencePage"
-            name="Global Settings">
+            name="%globalSetting">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
             class="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             id="com.jaspersoft.studio.preferences.DesignerPreferencePage"
-            name="Report Designer">
+            name="%ReportDesigner">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             class="com.jaspersoft.studio.preferences.theme.ThemesPreferencePage"
             id="com.jaspersoft.studio.preferences.theme.ThemesPreferencePage"
-            name="Report Designer Themes">
+            name="%ReportDesignerThemes">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             class="com.jaspersoft.studio.preferences.RulersGridPreferencePage"
             id="com.jaspersoft.studio.preferences.GridRulerPreferencePage"
-            name="Rulers And Grid">
+            name="%RuelersGrid">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
             class="com.jaspersoft.studio.preferences.PropertiesPreferencePage"
             id="com.jaspersoft.studio.preferences.PropertiesPreferencePage"
-            name="Properties">
+            name="%Properites">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
-            name="Exporters">
+            name="%Exporters">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage"
-            name="PDF Exporter">
+            name="%PDFExporter">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage"
-            name="HTML Exporter">
+            name="%HTMLExporter">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage"
-            name="CSV Exporter">
+            name="%CSVExporter">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage"
-            name="CSV Metadata Exporter">
+            name="%CSVMetaExporter">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
-            name="Text Exporter">
+            name="%TextExporter">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage"
-            name="Excel Exporter">
+            name="%ExcelExporter">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage"
-            name="XMLExporter">
+            name="%XMLExporter">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage"
-            name="DOCX Exporter">
+            name="%DOCXExporter">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage"
-            name="G2D Exporter">
+            name="%G2DExporter">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
             class="com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage"
             id="com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage"
-            name="Report Execution">
+            name="%ReportExecution">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
             class="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
             id="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
-            name="Fonts">
+            name="%FontsFamilies">
       </page>
       <page
             id="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage" 
-            name="Templates locations"
+            name="%TemplateLocations"
             class="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage"
             category="com.jaspersoft.studio.preferences.StudioPreferencePage">
       </page>
@@ -322,7 +322,7 @@
             category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             class="com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage"
             id="com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage"
-            name="Toolbars">
+            name="%Toolbars">
       </page>      
    </extension>
    <extension
@@ -1792,7 +1792,7 @@
        <toolitemsets
              description="Actions to manage elements order"
              id="com.jaspersoft.studio.graphic.bring"
-             name="Element Order"
+             name="%ElementOrder"
              toolbaruri="com.jaspersoft.studio.graphic.bring"
              visibility="false">
           <toolitem
@@ -1810,7 +1810,7 @@
        <toolitemsets
              description="Text Element properties"
              id="com.jaspersoft.studio.graphic.text"
-             name="Text Properties"
+             name="%TextProperties"
              toolbaruri="com.jaspersoft.studio.graphic.text"
              visibility="true">
           <toolitem
@@ -1837,7 +1837,7 @@
        <toolitemsets
              description="Create Report Objects Actions"
              id="com.jaspersoft.studio.create"
-             name="Create Objects"
+             name="%CreateObjects"
              toolbaruri="com.jaspersoft.studio.create"
              visibility="true">
           <toolitem
@@ -1846,7 +1846,7 @@
        <toolitemsets
              description="Actions to manage elements alignment"
              id="com.jaspersoft.studio.graphic.align"
-             name="Element Alignement"
+             name="%ElementsAlignment"
              toolbaruri="com.jaspersoft.studio.graphic.align"
              visibility="false">
           <toolitem
@@ -1871,7 +1871,7 @@
        <toolitemsets
              description="Actions to manage elements size"
              id="com.jaspersoft.studio.graphic.size"
-             name="Element size"
+             name="%ElementsSize"
              toolbaruri="com.jaspersoft.studio.graphic.size"
              visibility="true">
           <toolitem
@@ -1887,7 +1887,7 @@
        <toolitemsets
              description="Template for the border of the element"
              id="com.jaspersoft.studio.graphic.borders"
-             name="Borders"
+             name="%Borders"
              toolbaruri="com.jaspersoft.studio.graphic.borders"
              visibility="false">
           <toolitem
@@ -1897,7 +1897,7 @@
        <toolitemsets
              description="Changes the attribute of the images"
              id="com.jaspersoft.studio.graphic.image"
-             name="Images Actions"
+             name="%ImagesActions"
              toolbaruri="com.jaspersoft.studio.graphic.image"
              visibility="true">
           <toolitem
@@ -1906,7 +1906,7 @@
        <toolitemsets
              description="Action for the exporters"
              id="com.jaspersoft.studio.graphic.exporters"
-             name="Exporter actions"
+             name="%ExportesAction"
              toolbaruri="com.jaspersoft.studio.graphic.exporters"
              visibility="false">
           <toolitem

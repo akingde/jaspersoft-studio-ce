@@ -39,6 +39,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditorPart;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
+import com.jaspersoft.studio.messages.Messages;
 
 public class ExportDataAdapterAction extends Action {
 	public static final String ID = "exportDataAdapteraction"; //$NON-NLS-1$
@@ -48,13 +49,13 @@ public class ExportDataAdapterAction extends Action {
 		super();
 		setId(ID);
 		this.treeViewer = treeViewer;
-		setText("Export To File");
-		setDescription("Export DataAdapter to file");
-		setToolTipText("Export DataAdapter to file");
+		setText(Messages.ExportDataAdapterAction_exportName);
+		setDescription(Messages.ExportDataAdapterAction_exportDescription);
+		setToolTipText(Messages.ExportDataAdapterAction_exportTooltip);
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(
-				"org.eclipse.ui", "$nl$/icons/full/etool16/export_wiz.gif")); //$NON-NLS-1$
+				"org.eclipse.ui", "$nl$/icons/full/etool16/export_wiz.gif")); //$NON-NLS-1$ //$NON-NLS-2$
 		setDisabledImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(
-				"org.eclipse.ui", "$nl$/icons/full/dtool16/export_wiz.gif")); //$NON-NLS-1
+				"org.eclipse.ui", "$nl$/icons/full/dtool16/export_wiz.gif")); //$NON-NLS-1 //$NON-NLS-1$ //$NON-NLS-2$
 
 	}
 
@@ -73,7 +74,7 @@ public class ExportDataAdapterAction extends Action {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MDataAdapter) {
 				SaveAsDialog saveAsDialog = new SaveAsDialog(Display.getDefault().getActiveShell());
-				saveAsDialog.setOriginalName(((MDataAdapter) obj).getDataAdapter().getName().replace(" ", "") + ".xml");
+				saveAsDialog.setOriginalName(((MDataAdapter) obj).getDataAdapter().getName().replace(" ", "") + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				saveAsDialog.open();
 				IPath path = saveAsDialog.getResult();
 				if (path != null)
@@ -93,9 +94,9 @@ public class ExportDataAdapterAction extends Action {
 							DataAdapterDescriptor m = ((MDataAdapter) obj).getDataAdapter();
 							String xml = DataAdapterManager.toDataAdapterFile(m);
 							if (file.exists())
-								file.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, true, monitor);
+								file.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, true, monitor); //$NON-NLS-1$
 							else
-								file.create(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, monitor);
+								file.create(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, monitor); //$NON-NLS-1$
 							// Force the default editor for the data adapter file
 							// so that it can be opened with the same one in the future
 							IDE.setDefaultEditor(file, DataAdapterEditorPart.ID);

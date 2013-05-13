@@ -229,6 +229,12 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		if (getSettings().containsKey(WizardDataSourcePage.GROUP_FIELDS)) {
 			templateSettings.put(DefaultTemplateEngine.GROUP_FIELDS, getSettings().get(WizardDataSourcePage.GROUP_FIELDS));
 		}
+		
+		//If i'm generating a new report for a subreport i add also to the new report parameters the ones defined for the 
+		//sub report
+		if (getSettings().containsKey(WizardDataSourcePage.EXTRA_PARAMETERS)) {
+			templateSettings.put(DefaultTemplateEngine.OTHER_PARAMETERS, getSettings().get(WizardDataSourcePage.EXTRA_PARAMETERS));
+		}
 
 		TemplateEngine templateEngine = templateBundle.getTemplateEngine();
 		ByteArrayInputStream stream = null;

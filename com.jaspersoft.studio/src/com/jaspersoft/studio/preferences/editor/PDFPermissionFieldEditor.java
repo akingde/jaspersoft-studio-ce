@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.lowagie.text.pdf.PdfWriter;
 
 public class PDFPermissionFieldEditor extends FieldEditor {
@@ -57,7 +58,7 @@ public class PDFPermissionFieldEditor extends FieldEditor {
 
 	protected Composite createEncodingGroup(Composite parent, int numColumns) {
 		Group container = new Group(parent, SWT.NONE);
-		container.setText("Permissions");
+		container.setText(Messages.PDFPermissionFieldEditor_permissionsTitle);
 		container.setLayout(new GridLayout(2, false));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
@@ -65,28 +66,28 @@ public class PDFPermissionFieldEditor extends FieldEditor {
 		container.setLayoutData(gridData);
 
 		aPrint = new Button(container, SWT.CHECK);
-		aPrint.setText("Allow Printing");
+		aPrint.setText(Messages.PDFPermissionFieldEditor_allowPrinting);
 
 		mAnnot = new Button(container, SWT.CHECK);
-		mAnnot.setText("Allow Modify Annotations");
+		mAnnot.setText(Messages.PDFPermissionFieldEditor_allowModifyAnnotations);
 
 		aAssem = new Button(container, SWT.CHECK);
-		aAssem.setText("Allow Assembly");
+		aAssem.setText(Messages.PDFPermissionFieldEditor_allowAssembly);
 
 		mCont = new Button(container, SWT.CHECK);
-		mCont.setText("Allow Modify Contents");
+		mCont.setText(Messages.PDFPermissionFieldEditor_allowModifyContents);
 
 		aFillin = new Button(container, SWT.CHECK);
-		aFillin.setText("Allow Fill In");
+		aFillin.setText(Messages.PDFPermissionFieldEditor_allowFillIn);
 
 		aDegPrint = new Button(container, SWT.CHECK);
-		aDegPrint.setText("Allow Degraded Printing");
+		aDegPrint.setText(Messages.PDFPermissionFieldEditor_allowDegradedPrinting);
 
 		aCopy = new Button(container, SWT.CHECK);
-		aCopy.setText("Allow Copy");
+		aCopy.setText(Messages.PDFPermissionFieldEditor_allowCopy);
 
 		aSRead = new Button(container, SWT.CHECK);
-		aSRead.setText("Allow Screen Readers");
+		aSRead.setText(Messages.PDFPermissionFieldEditor_allowScreenReader);
 
 		return container;
 	}
@@ -118,7 +119,7 @@ public class PDFPermissionFieldEditor extends FieldEditor {
 
 	@Override
 	protected void doLoadDefault() {
-		setProperty("0");
+		setProperty("0"); //$NON-NLS-1$
 	}
 
 	/*

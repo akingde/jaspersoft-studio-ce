@@ -6,6 +6,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.theme.MAxisSettings;
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -49,7 +50,7 @@ public class AxisSettingsSection extends AbstractSection {
 		createWidget4Property(group, AxisSettings.PROPERTY_tickLabelPaint);
 		PadUtil.createWidgets4Property(parent, "", "Tick Label Padding", this);
 
-		group = getWidgetFactory().createSection(parent, "Label", true, 2);
+		group = getWidgetFactory().createSection(parent, Messages.common_label, true, 2);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		createWidget4Property(group, AxisSettings.PROPERTY_labelVisible, false).getControl().setLayoutData(gd);

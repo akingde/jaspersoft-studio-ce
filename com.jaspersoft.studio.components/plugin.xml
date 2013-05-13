@@ -844,7 +844,7 @@
       <toolitemsets
             description="table columns action"
             id="com.jaspersoft.studio.components.tableactions"
-            name="table actions"
+            name="%TableAction"
             toolbaruri="com.jaspersoft.studio.components.tableactions"
             visibility="true">
          <toolitem
@@ -863,7 +863,7 @@
       <toolitemsets
             description="action on the crosstab element"
             id="com.jaspersoft.studio.components.crosstabaction"
-            name="crosstab actions"
+            name="%CrosstabAction"
             toolbaruri="com.jaspersoft.studio.components.tableactions"
             visibility="true">
          <toolitem

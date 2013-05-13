@@ -174,7 +174,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 	 */
 	protected void createButtons(Composite box) {
 		addButton = createPushButton(box, Messages.common_add);
-		duplicateButton = createPushButton(box, "Duplicate");
+		duplicateButton = createPushButton(box, Messages.common_duplicate);
 		removeButton = createPushButton(box, Messages.common_delete);
 		upButton = createPushButton(box, Messages.common_up);
 		downButton = createPushButton(box, Messages.common_down);
@@ -559,7 +559,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 				String[] values = new String[columnNames.length];
 				for (int j = 0; j < columnNames.length; j++) {
 					if (j == 0)
-						values[j] = selection[i].getText(j) + "_copy";
+						values[j] = selection[i].getText(j) + "_copy"; //$NON-NLS-1$
 					else
 						values[j] = selection[i].getText(j);
 				}

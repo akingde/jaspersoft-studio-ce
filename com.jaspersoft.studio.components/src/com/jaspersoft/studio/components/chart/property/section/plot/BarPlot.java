@@ -54,7 +54,7 @@ public class BarPlot extends APlot {
 				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR);
 
 		Composite group = section.getWidgetFactory().createSection(parent,
-				"Label", false, 2, 2);
+				Messages.common_label, false, 2, 2);
 
 		section.createWidget4Property(group,
 				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION);
@@ -105,7 +105,7 @@ public class BarPlot extends APlot {
 				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LINE_COLOR);
 
 		Composite group = section.getWidgetFactory().createSection(parent,
-				"Label", false, 2, 2);
+				Messages.common_label, false, 2, 2);
 
 		section.createWidget4Property(group,
 				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION);

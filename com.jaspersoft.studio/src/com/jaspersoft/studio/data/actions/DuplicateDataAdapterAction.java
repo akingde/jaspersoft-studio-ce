@@ -26,10 +26,11 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
 import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
 
 public class DuplicateDataAdapterAction extends Action {
-	public static final String COPY_OF = "CopyOf";
+	public static final String COPY_OF = Messages.DuplicateDataAdapterAction_newAdapterPrefix;
 	public static final String ID = "duplicatedataAdapteraction"; //$NON-NLS-1$
 	private TreeViewer treeViewer;
 	private EditDataAdapterAction editAction;
@@ -38,9 +39,9 @@ public class DuplicateDataAdapterAction extends Action {
 		super();
 		this.treeViewer = treeViewer;
 		setId(ID);
-		setText("Duplicate DataAdapter");
-		setDescription("Duplicate DataAdapter");
-		setToolTipText("Duplicate DataAdapter");
+		setText(Messages.DuplicateDataAdapterAction_duplicateName);
+		setDescription(Messages.DuplicateDataAdapterAction_duplicateDescription);
+		setToolTipText(Messages.DuplicateDataAdapterAction_duplicateToolTip);
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
 		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
 	}
@@ -71,7 +72,7 @@ public class DuplicateDataAdapterAction extends Action {
 					name = COPY_OF + copyDataAdapter.getName() + j;
 				}
 				copyDataAdapter.getDataAdapter().setName(name);
-				storage.addDataAdapter("", copyDataAdapter);
+				storage.addDataAdapter("", copyDataAdapter); //$NON-NLS-1$
 				copies.add(copyDataAdapter);
 			}
 		}
