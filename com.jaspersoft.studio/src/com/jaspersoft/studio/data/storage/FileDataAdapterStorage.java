@@ -95,13 +95,9 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 									if (docDelta == null)
 										return;
 									if (!(delta.getKind() == IResourceDelta.ADDED || delta.getKind() == IResourceDelta.REMOVED || (delta
-											.getKind() == IResourceDelta.CHANGED && ((delta.getFlags() & IResourceDelta.CONTENT) == 0
-											|| (delta.getFlags() & IResourceDelta.ADDED) == 0
-											|| (delta.getFlags() & IResourceDelta.MOVED_TO) == 0
-											|| (delta.getFlags() & IResourceDelta.CHANGED) == 0
-											|| (delta.getFlags() & IResourceDelta.COPIED_FROM) == 0
-											|| (delta.getFlags() & IResourceDelta.REPLACED) == 0
-											|| (delta.getFlags() & IResourceDelta.SYNC) == 0 || (delta.getFlags() & IResourceDelta.MOVED_FROM) == 0))))
+											.getKind() == IResourceDelta.CHANGED && ((delta.getFlags() & (IResourceDelta.CONTENT
+											| IResourceDelta.ADDED | IResourceDelta.MOVED_TO | IResourceDelta.CHANGED
+											| IResourceDelta.COPIED_FROM | IResourceDelta.REPLACED | IResourceDelta.SYNC | IResourceDelta.MOVED_FROM)) == 0))))
 										return;
 									try {
 										delta.accept(new IResourceDeltaVisitor() {
