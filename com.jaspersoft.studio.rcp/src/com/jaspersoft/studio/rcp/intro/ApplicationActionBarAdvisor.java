@@ -500,9 +500,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menu.add(new Separator());
 		menu.add(getPrintItem());
 		menu.add(new GroupMarker(IWorkbenchActionConstants.PRINT_EXT));
-		// menu.add(new Separator());
-		// menu.add(openWorkspaceAction);
-		// menu.add(new GroupMarker(IWorkbenchActionConstants.OPEN_EXT));
+		menu.add(new Separator());
+		menu.add(openWorkspaceAction);
+		menu.add(new GroupMarker(IWorkbenchActionConstants.OPEN_EXT));
 		menu.add(new Separator());
 		menu.add(importResourcesAction);
 		menu.add(exportResourcesAction);
@@ -1136,9 +1136,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		buildProjectAction = IDEActionFactory.BUILD_PROJECT.create(window);
 		register(buildProjectAction);
 
-		// openWorkspaceAction = IDEActionFactory.OPEN_WORKSPACE.create(window);
-		// register(openWorkspaceAction);
-
+		openWorkspaceAction = IDEActionFactory.OPEN_WORKSPACE.create(window);
+		register(openWorkspaceAction);
+		
 		projectPropertyDialogAction = IDEActionFactory.OPEN_PROJECT_PROPERTIES
 				.create(window);
 		register(projectPropertyDialogAction);
