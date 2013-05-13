@@ -17,9 +17,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.builder.JRErrorHandler;
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.builder.Markers;
+import net.sf.jasperreports.eclipse.builder.jdt.JRErrorHandler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -496,6 +496,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
+		if (closing)
+			return;
 		// FIXME: THIS IS NOT THE RIGHT PLACE TO LOAD MODEL, WE SHOULD LOAD FROM
 		// TEXT EDITOR TO AVOID 2 TIME READING THE FILE
 		editorInput = FileUtils.checkAndConvertEditorInput(editorInput);
@@ -506,6 +508,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		try {
 			if (editorInput instanceof IFileEditorInput) {
 				file = ((IFileEditorInput) editorInput).getFile();
+				if (!file.exists()) {
+					closeEditor();
+					return;
+				}
 				file.refreshLocal(0, new NullProgressMonitor());
 
 				in = file.getContents();
@@ -555,6 +561,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 	}
 
+	boolean closing = false;
+
 	private void closeEditor() {
 		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		if (activeWorkbenchWindow != null) {
@@ -564,6 +572,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 					@Override
 					public void run() {
+						closing = true;
 						apage.closeEditor(JrxmlEditor.this, false);
 					}
 				});
@@ -618,6 +627,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			isRefresh = true;
 			if (editorInput instanceof IFileEditorInput) {
 				IResource resource = ((IFileEditorInput) editorInput).getFile();
+				if (!resource.exists())
+					return;
 				Markers.deleteMarkers(resource);
 
 				final IMarker marker = Markers.addMarker(resource, e);

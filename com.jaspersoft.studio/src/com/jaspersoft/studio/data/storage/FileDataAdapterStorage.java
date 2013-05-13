@@ -91,36 +91,34 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 									IResourceDelta delta = event.getDelta();
 									if (delta == null)
 										return;
+									IResourceDelta docDelta = delta.findMember(project.getFullPath());
+									if (docDelta == null)
+										return;
+									if (!(delta.getKind() == IResourceDelta.ADDED || delta.getKind() == IResourceDelta.REMOVED || (delta
+											.getKind() == IResourceDelta.CHANGED && (delta.getFlags() & IResourceDelta.CONTENT) != 0)))
+										return;
 									try {
 										delta.accept(new IResourceDeltaVisitor() {
 
 											public boolean visit(IResourceDelta delta) throws CoreException {
-												IResource res = delta.getResource();
-												if (res.getProject() != project)
-													return true;
-												if (res.getType() == IResource.FILE) {
-													final IFile f = (IFile) res;
-													if (f.getName().endsWith(".xml")) {
-														switch (delta.getKind()) {
-														case IResourceDelta.ADDED:
-															checkFile(f);
-															break;
-														case IResourceDelta.REMOVED:
-															if (f.getName().endsWith(".xml")) {
-																Display.getDefault().asyncExec(new Runnable() {
+												final IResource res = delta.getResource();
+												if (res.getType() == IResource.FILE && "xml".equalsIgnoreCase(res.getFileExtension()))
+													switch (delta.getKind()) {
+													case IResourceDelta.ADDED:
+														checkFile((IFile) res);
+														break;
+													case IResourceDelta.REMOVED:
+														Display.getDefault().asyncExec(new Runnable() {
 
-																	public void run() {
-																		removeDataAdapter(f.getProjectRelativePath().toPortableString());
-																	}
-																});
+															public void run() {
+																removeDataAdapter(((IFile) res).getProjectRelativePath().toPortableString());
 															}
-															break;
-														case IResourceDelta.CHANGED:
-															checkFile(f);
-															break;
-														}
+														});
+														break;
+													case IResourceDelta.CHANGED:
+														checkFile((IFile) res);
+														break;
 													}
-												}
 												return true;
 											}
 										});
