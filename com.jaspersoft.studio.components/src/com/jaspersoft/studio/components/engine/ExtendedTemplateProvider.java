@@ -81,6 +81,7 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 	 * Look for other templates inside the specified directories in the preferences.
 	 */
 	private void loadAdditionalTemplateBundles(List<TemplateBundle> templates) {
+		/*
 		String paths = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
 				.getString(TemplateLocationsPreferencePage.TPP_TEMPLATES_LOCATIONS_LIST);
 		StringTokenizer st = new StringTokenizer(paths, File.pathSeparator + "\n\r");
@@ -88,7 +89,7 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 		while (st.hasMoreTokens()) {
 			pathsList.add(st.nextToken());
 		}
-
+		
 		for (String dir : pathsList) {
 			File[] files = new File(dir).listFiles(new FileFilter() {
 				@Override
@@ -112,6 +113,6 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 					}
 				}
 			}
-		}
+		}*/
 	}
 }
