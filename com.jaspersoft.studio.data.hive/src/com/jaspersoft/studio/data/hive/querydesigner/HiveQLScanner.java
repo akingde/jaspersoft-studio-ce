@@ -18,7 +18,7 @@ package com.jaspersoft.studio.data.hive.querydesigner;
 import java.util.Arrays;
 import java.util.List;
 
-import com.jaspersoft.studio.data.querydesigner.sql.SQLScanner;
+import com.jaspersoft.studio.data.querydesigner.sql.text.SQLScanner;
 
 /**
  * Class implementing a simple fuzzy scanner for Hive-QL.
