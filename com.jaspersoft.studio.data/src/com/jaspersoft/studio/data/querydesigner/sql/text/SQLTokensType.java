@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.data.querydesigner.sql;
+package com.jaspersoft.studio.data.querydesigner.sql.text;
 
 /**
  * Enumeration for different types of SQL tokens.

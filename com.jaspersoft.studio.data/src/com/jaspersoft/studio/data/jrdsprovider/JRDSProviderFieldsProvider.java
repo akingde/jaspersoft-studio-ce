@@ -21,6 +21,7 @@ import java.util.List;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterService;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
+import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
@@ -32,7 +33,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRDSProviderFieldsProvider implements IFieldsProvider {

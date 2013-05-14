@@ -15,150 +15,68 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.querydesigner.sql;
 
-//import org.eclipse.datatools.sqltools.core.DatabaseVendorDefinitionId;
-//import org.eclipse.datatools.sqltools.sqleditor.SQLEditor;
-//import org.eclipse.datatools.sqltools.sqleditor.SQLEditorConnectionInfo;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IEditorPart;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.data.designer.QueryDesigner;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
+import com.jaspersoft.studio.data.querydesigner.sql.ui.DBMetadata;
+import com.jaspersoft.studio.swt.widgets.CSashForm;
 
-public class SQLQueryDesigner extends QueryDesigner {
+public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
+	private SashForm sf;
+	private DBMetadata dbMetadata;
+
 	public SQLQueryDesigner() {
 		super();
 	}
 
-	private Composite composite;
-
 	@Override
 	public Control getControl() {
-		// if (sqleditor == null)
-		return super.getControl();
-		// return composite;
+		return sf;
 	}
 
 	@Override
 	public Control createControl(Composite parent) {
-		IEditorPart actEditor = JaspersoftStudioPlugin.getInstance()
-				.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor();
-		if (actEditor != null) {
-			// super.createControl(parent);
-			composite = new Composite(parent, SWT.NONE);
-			composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-			FillLayout layout = new FillLayout(SWT.HORIZONTAL);
-			layout.marginHeight = 0;
-			layout.marginWidth = 0;
-			layout.spacing = 0;
-			composite.setLayout(layout);
+		sf = new CSashForm(parent, SWT.HORIZONTAL);
+		sf.setLayoutData(new GridData(GridData.FILL_BOTH));
+		sf.setLayout(new GridLayout());
 
-			// try {
-			// SQLBuilder sqlbuilder = new SQLBuilder();
-			// String driverURL =
-			// "jdbc:derby:/home/slavic/mydb;create=true";
-			// String driverClass = "org.apache.derby.jdbc.EmbeddedDriver";
-			// String jarList =
-			// "/home/slavic/eclipse3/eclipse/plugins/org.apache.derby_10.5.1.1_201005192117.jar";
-			//
-			// Properties bprop = new Properties();
-			// bprop.setProperty(IDriverMgmtConstants.PROP_DEFN_JARLIST,
-			// jarList);
-			// bprop.setProperty(
-			// IJDBCConnectionProfileConstants.DRIVER_CLASS_PROP_ID,
-			// driverClass);
-			// bprop.setProperty(IJDBCConnectionProfileConstants.URL_PROP_ID,
-			// driverURL);
-			// // bprop.setProperty(
-			// // IJDBCConnectionProfileConstants.DATABASE_NAME_PROP_ID,
-			// // "SAMPLE");
-			// bprop.setProperty(IJDBCConnectionProfileConstants.USERNAME_PROP_ID,
-			// "");
-			// bprop.setProperty(IJDBCConnectionProfileConstants.PASSWORD_PROP_ID,
-			// "");
-			// bprop.setProperty(
-			// IJDBCConnectionProfileConstants.DATABASE_VENDOR_PROP_ID,
-			// "Derby");
-			// bprop.setProperty(
-			// IJDBCConnectionProfileConstants.DATABASE_VERSION_PROP_ID,
-			// "10.1");
-			// bprop.setProperty(
-			// IJDBCConnectionProfileConstants.SAVE_PASSWORD_PROP_ID,
-			// String.valueOf(true));
-			//
-			// IConnectionProfile cp = ProfileManager
-			// .getInstance()
-			// .createTransientProfile(
-			// "org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile",
-			// bprop);
+		dbMetadata = new DBMetadata();
+		Control c = dbMetadata.createControl(sf);
+		c.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-			// IConnectionProfile cp = ProfileManager.getInstance()
-			// .getProfileByName("TESTDERBY");
-			// IStatus status = cp.connect();
-			// if (status.isOK()) {
-
-			// sqlbuilder.setInput(new SQLBuilderEditorInput(cp,
-			// StatementHelper.STATEMENT_TYPE_SELECT));
-			// sqlbuilder.createClient(composite);
-
-			// sqleditor = new SQLEditor();
-			// sqleditor.init((IEditorSite) actEditor.getSite(),
-			// createSQLEditorInput(""));
-			// sqleditor.createPartControl(composite);
-			// editor.setInput(new SQLBuilderEditorInput(cp,
-			// StatementHelper.STATEMENT_TYPE_SELECT));
-
-			// } catch (PartInitException e) {
-			// e.printStackTrace();
-			// }
-			// catch (ParseException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
-
-			return composite;
-		} else
-			return super.createControl(parent);
+		super.createControl(sf);
+		control.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		sf.setWeights(new int[] { 250, 750 });
+		return sf;
 	}
 
 	@Override
-	public void dispose() {
-		// sqleditor.dispose();
-		super.dispose();
-	}
+	public void setDataAdapter(DataAdapterDescriptor da) {
+		if (da instanceof JDBCDataAdapterDescriptor) {
+			try {
+				DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
+				Map<String, Object> parameters = new HashMap<String, Object>();
+				das.contributeParameters(parameters);
 
-	// private SQLEditor sqleditor;
-
-	@Override
-	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig) {
-		// if (sqleditor != null) {
-		// sqleditor.setInput(createSQLEditorInput(query));
-		// this.query = query;
-		// } else
-		super.setQuery(jDesign, jDataset, jConfig);
-	}
-
-	// private QDSQLEditorInput createSQLEditorInput(String query) {
-	// QDSQLEditorInput input = new QDSQLEditorInput(query);
-	// input.setConnectionInfo(new SQLEditorConnectionInfo(
-	// new DatabaseVendorDefinitionId("hsql")));
-	// return input;
-	// }
-
-	@Override
-	public String getQuery() {
-		// if (sqleditor != null) {
-		// query = sqleditor.getText();
-		// return query;
-		// } else
-		return super.getQuery();
+				dbMetadata.updateUI((Connection) parameters.get(JRParameter.REPORT_CONNECTION));
+			} catch (JRException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

@@ -21,7 +21,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.data.messages.Messages;
-import com.jaspersoft.studio.data.querydesigner.sql.SQLLineStyler;
+import com.jaspersoft.studio.data.querydesigner.sql.text.SQLLineStyler;
 import com.jaspersoft.studio.data.ui.SimpleQueryWizardDataEditorComposite;
 
 public class JndiWizardDataEditorComposite extends

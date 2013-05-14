@@ -37,11 +37,11 @@ public class MondrianDataAdapterDescriptor extends JDBCDataAdapterDescriptor {
 	}
 
 	@Override
-	protected void getFieldProvider() {
+	public void getFieldProvider() {
 		if (fprovider == null)
 			fprovider = new MondrianFieldsProvider();
 	}
-	
+
 	@Override
 	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		return false;

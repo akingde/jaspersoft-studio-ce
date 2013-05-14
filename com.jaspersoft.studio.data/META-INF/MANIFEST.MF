@@ -27,4 +27,5 @@ Export-Package: com.jaspersoft.studio.data.bean,
  com.jaspersoft.studio.data.jdbc,
  com.jaspersoft.studio.data.jndi,
  com.jaspersoft.studio.data.messages,
- com.jaspersoft.studio.data.querydesigner.sql
+ com.jaspersoft.studio.data.querydesigner.sql,
+ com.jaspersoft.studio.data.querydesigner.sql.text

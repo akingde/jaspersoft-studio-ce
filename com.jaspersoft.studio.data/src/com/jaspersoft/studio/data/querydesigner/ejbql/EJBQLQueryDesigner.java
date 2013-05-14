@@ -15,8 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.querydesigner.ejbql;
 
-import com.jaspersoft.studio.data.querydesigner.sql.SQLLineStyler;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
+import com.jaspersoft.studio.data.querydesigner.sql.text.SQLLineStyler;
 
 /**
  * Simple query designer for EJB-QL that provides syntax highlighting.

@@ -83,7 +83,7 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 		return fprovider.getFields(con, jConfig, jDataset);
 	}
 
-	protected void getFieldProvider() {
+	public void getFieldProvider() {
 		if (fprovider == null)
 			fprovider = new JDBCFieldsProvider();
 	}

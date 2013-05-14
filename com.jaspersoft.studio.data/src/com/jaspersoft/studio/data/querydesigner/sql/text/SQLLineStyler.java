@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.data.querydesigner.sql;
+package com.jaspersoft.studio.data.querydesigner.sql.text;
 
 import java.io.IOException;
 import java.io.StringReader;

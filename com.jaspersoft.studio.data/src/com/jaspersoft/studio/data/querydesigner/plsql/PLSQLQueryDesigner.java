@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.jaspersoft.studio.data.querydesigner.sql.SQLLineStyler;
-import com.jaspersoft.studio.data.querydesigner.sql.SQLScanner;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
+import com.jaspersoft.studio.data.querydesigner.sql.text.SQLLineStyler;
+import com.jaspersoft.studio.data.querydesigner.sql.text.SQLScanner;
 
 /**
  * Query designer for PL/SQL language, that simply provides syntax coloring support.

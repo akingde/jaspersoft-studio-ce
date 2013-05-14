@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.data.designer.QueryDesigner;
+import com.jaspersoft.studio.data.querydesigner.sql.text.SQLLineStyler;
 
 /**
  * Simple SQL query designer that simply provides syntax coloring support.
