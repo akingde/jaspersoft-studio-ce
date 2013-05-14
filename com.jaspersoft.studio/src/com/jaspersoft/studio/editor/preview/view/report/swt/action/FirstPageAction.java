@@ -17,17 +17,18 @@ package com.jaspersoft.studio.editor.preview.view.report.swt.action;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
+import com.jaspersoft.studio.messages.Messages;
 
 public class FirstPageAction extends AReportAction {
 
 	public FirstPageAction(IReportViewer rviewer) {
 		super(rviewer);
-		setText("First Page"); //$NON-NLS-1$
-		setToolTipText("Go to first page"); //$NON-NLS-1$
+		setText(Messages.FirstPageAction_actionName); 
+		setToolTipText(Messages.FirstPageAction_actionTooltip); 
 		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/first.gif"));
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/first.gif"));//$NON-NLS-1$
 		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/firstd.gif"));
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/firstd.gif"));//$NON-NLS-1$
 	}
 
 	public boolean isActionEnabled() {

@@ -17,17 +17,18 @@ package com.jaspersoft.studio.editor.preview.view.report.swt.action;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
+import com.jaspersoft.studio.messages.Messages;
 
 public class LastPageAction extends AReportAction {
 
 	public LastPageAction(IReportViewer rviewer) {
 		super(rviewer);
-		setText("Last Page"); //$NON-NLS-1$
-		setToolTipText("Go to last page"); //$NON-NLS-1$
+		setText(Messages.LastPageAction_actionName); 
+		setToolTipText(Messages.LastPageAction_actionTooltip); 
 		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/last.gif"));
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/last.gif"));//$NON-NLS-1$
 		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/lastd.gif"));
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/lastd.gif"));//$NON-NLS-1$
 	}
 
 	public boolean isActionEnabled() {

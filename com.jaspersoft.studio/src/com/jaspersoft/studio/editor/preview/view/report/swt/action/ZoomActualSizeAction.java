@@ -19,18 +19,19 @@ import java.util.EventObject;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
+import com.jaspersoft.studio.messages.Messages;
 
 public class ZoomActualSizeAction extends AReportAction {
 
 	public ZoomActualSizeAction(IReportViewer viewer) {
 		super(viewer);
 
-		setText("Actual Size"); //$NON-NLS-1$
-		setToolTipText("Zoom actual size"); //$NON-NLS-1$
+		setText(Messages.ZoomActualSizeAction_actionName); 
+		setToolTipText(Messages.ZoomActualSizeAction_actionTooltip); 
 		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomactual.gif"));
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomactual.gif"));//$NON-NLS-1$
 		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomactuald.gif"));
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomactuald.gif"));//$NON-NLS-1$
 		update();
 	}
 

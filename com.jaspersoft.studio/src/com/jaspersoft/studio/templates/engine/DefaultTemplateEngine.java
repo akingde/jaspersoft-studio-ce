@@ -103,7 +103,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 				if (!jdCopy.getParametersMap().containsKey(param.getName())){
 					JRDesignParameter newParam = new JRDesignParameter();
 					newParam.setName(param.getName());
-					newParam.setDefaultValueExpression(param.getExpression());
+					//newParam.setDefaultValueExpression(param.getExpression());
 					try {
 						jdCopy.addParameter(newParam);
 					} catch (JRException e) {

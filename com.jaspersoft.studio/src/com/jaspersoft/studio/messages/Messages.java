@@ -559,6 +559,8 @@ public class Messages extends NLS {
 	public static String FileDatasourcePage_file_datasource;
 	public static String FileDatasourcePage_use_first_row_as_header;
 	public static String FileInput_selectfile;
+	public static String FirstPageAction_actionName;
+	public static String FirstPageAction_actionTooltip;
 	public static String FloatCellEditorValidator_this_is_not_a_float_number;
 	public static String FontFamilyPage_boldItalicLabel;
 	public static String FontFamilyPage_boldLabel;
@@ -699,6 +701,8 @@ public class Messages extends NLS {
 	public static String JrxmlEditorContributor_select_all;
 	public static String JrxmlEditorContributor_show_ruler;
 	public static String JrxmlEditorContributor_view;
+	public static String LastPageAction_actionName;
+	public static String LastPageAction_actionTooltip;
 	public static String LayoutSection_combodescription;
 	public static String LayoutSection_combotitle;
 	public static String LayoutSection_propertylable;
@@ -1231,6 +1235,8 @@ public class Messages extends NLS {
 	public static String PreviewEditor_reloading;
 	public static String PreviewEditor_report_fill_canceled;
 	public static String PreviewEditor_starting;
+	public static String PreviousPageAction_actionName;
+	public static String PreviousPageAction_actionTolltip;
 	public static String PropertiesPreferencePage_jrPropertiesTitle;
 	public static String PropertyDialog_0;
 	public static String PropertyDialog_1;
@@ -1406,6 +1412,7 @@ public class Messages extends NLS {
 	public static String SubTitleSection_Color_Label;
 	public static String SubTitleSection_Expression_Label;
 	public static String SubTitleSection_Subtitle_Label;
+	public static String SwitchViewsAction_actionTooltip;
 	public static String TemplateLocationsPreferencePage_Description;
 	public static String TemplateLocationsPreferencePage_Locations;
 	public static String TemplateLocationsPreferencePage_Message;
@@ -1575,6 +1582,8 @@ public class Messages extends NLS {
 	public static String NewSubreportPage_newReport_text;
 	public static String NewSubreportPage_useReportB_text;
 	public static String NewSubreportPage_empty_text;
+	public static String NextPageAction_actionName;
+	public static String NextPageAction_actionTooltip;
 	public static String QueryDesigner_readFieldsButton;
 	public static String DefaultDataAdapterEditorComposite_alredyExistingMessage;
 
@@ -1582,6 +1591,12 @@ public class Messages extends NLS {
 	public static String DuplicateDataAdapterAction_duplicateName;
 	public static String DuplicateDataAdapterAction_duplicateToolTip;
 	public static String DuplicateDataAdapterAction_newAdapterPrefix;
+	public static String ZoomActualSizeAction_actionName;
+	public static String ZoomActualSizeAction_actionTooltip;
+	public static String ZoomFitPageAction_actionName;
+	public static String ZoomFitPageAction_actionTooltip;
+	public static String ZoomFitPageWidthAction_actionName;
+	public static String ZoomFitPageWidthAction_actionTooltip;
 
 	static {
 		// initialize resource bundle

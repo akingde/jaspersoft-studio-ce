@@ -25,16 +25,17 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.editor.preview.MultiPageContainer;
+import com.jaspersoft.studio.messages.Messages;
 
 public class SwitchViewsAction extends Action implements IMenuCreator {
-	public static final String SEPARATOR = "SEPARATOR";
+	public static final String SEPARATOR = "SEPARATOR"; //$NON-NLS-1$
 	private MultiPageContainer container;
 	protected String view;
 	private boolean changeName = true;
 
 	public SwitchViewsAction(MultiPageContainer container, String view, boolean changeName) {
 		super(view, AS_DROP_DOWN_MENU);
-		setToolTipText("View the report in different format");
+		setToolTipText(Messages.SwitchViewsAction_actionTooltip);
 		setMenuCreator(this);
 		this.container = container;
 		this.view = view;
@@ -58,7 +59,7 @@ public class SwitchViewsAction extends Action implements IMenuCreator {
 			public void widgetSelected(SelectionEvent e) {
 				MenuItem menuItem = (MenuItem) e.getSource();
 				menuItem.setSelection(true);
-				view = (String) menuItem.getData("view.key");
+				view = (String) menuItem.getData("view.key"); //$NON-NLS-1$
 				run();
 			}
 		};
@@ -70,7 +71,7 @@ public class SwitchViewsAction extends Action implements IMenuCreator {
 				MenuItem m1 = new MenuItem(listMenu, SWT.RADIO);
 				m1.setText(key);
 				m1.addSelectionListener(listener);
-				m1.setData("view.key", key);
+				m1.setData("view.key", key); //$NON-NLS-1$
 			}
 		}
 		return listMenu;

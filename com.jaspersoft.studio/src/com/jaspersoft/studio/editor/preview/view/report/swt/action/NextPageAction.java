@@ -17,17 +17,18 @@ package com.jaspersoft.studio.editor.preview.view.report.swt.action;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
+import com.jaspersoft.studio.messages.Messages;
 
 public class NextPageAction extends AReportAction {
 
 	public NextPageAction(IReportViewer rviewer) {
 		super(rviewer);
-		setText("Next Page"); //$NON-NLS-1$
-		setToolTipText("Go to next page"); //$NON-NLS-1$
+		setText(Messages.NextPageAction_actionName); 
+		setToolTipText(Messages.NextPageAction_actionTooltip); 
 		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/next.gif"));
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/next.gif"));//$NON-NLS-1$
 		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/nextd.gif"));
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/nextd.gif"));//$NON-NLS-1$
 	}
 
 	public boolean isActionEnabled() {

@@ -19,18 +19,19 @@ import java.util.EventObject;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
+import com.jaspersoft.studio.messages.Messages;
 
 public class ZoomFitPageAction extends AReportAction {
 
 	public ZoomFitPageAction(IReportViewer viewer) {
 		super(viewer);
 
-		setText("Fit Page"); //$NON-NLS-1$
-		setToolTipText("Zoom fit page"); //$NON-NLS-1$
+		setText(Messages.ZoomFitPageAction_actionName); 
+		setToolTipText(Messages.ZoomFitPageAction_actionTooltip); 
 		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomfitpage.gif"));
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomfitpage.gif"));//$NON-NLS-1$
 		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomfitpaged.gif"));
+				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomfitpaged.gif"));//$NON-NLS-1$
 		update();
 	}
 

@@ -17,15 +17,16 @@ package com.jaspersoft.studio.editor.preview.view.report.swt.action;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
+import com.jaspersoft.studio.messages.Messages;
 
 public class PreviousPageAction extends AReportAction {
 
 	public PreviousPageAction(IReportViewer rviewer) {
 		super(rviewer);
-		setText("Previous Page"); //$NON-NLS-1$
-		setToolTipText("Go to previous page"); //$NON-NLS-1$
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/previous.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/previousd.gif"));
+		setText(Messages.PreviousPageAction_actionName); 
+		setToolTipText(Messages.PreviousPageAction_actionTolltip); 
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/previous.gif"));//$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/nav/previousd.gif"));//$NON-NLS-1$
 	}
 
 	public boolean isActionEnabled() {
