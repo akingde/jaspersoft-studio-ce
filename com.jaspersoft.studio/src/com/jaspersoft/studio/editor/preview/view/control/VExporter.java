@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
+import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
@@ -28,7 +30,6 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.PreferenceInitializer;
 import com.jaspersoft.studio.preferences.util.JRContextPrefStore;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
