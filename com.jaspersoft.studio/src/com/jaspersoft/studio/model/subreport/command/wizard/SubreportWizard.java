@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.subreport.command.wizard;
 
+import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -34,7 +35,6 @@ import org.eclipse.jface.wizard.IWizardPage;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.subreport.MSubreport;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyPage;

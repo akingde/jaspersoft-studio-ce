@@ -15,6 +15,7 @@ import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -56,7 +57,6 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.widget.DataAdapterAction;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;

@@ -17,6 +17,8 @@ package com.jaspersoft.studio.editor.report;
 
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.viewer.AContributorAction;
+
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -52,7 +54,6 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.plugin.AContributorAction;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;

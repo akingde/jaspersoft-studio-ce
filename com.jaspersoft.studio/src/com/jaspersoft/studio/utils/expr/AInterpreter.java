@@ -17,6 +17,7 @@ package com.jaspersoft.studio.utils.expr;
 
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -28,7 +29,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 

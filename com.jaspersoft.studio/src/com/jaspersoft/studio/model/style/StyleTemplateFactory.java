@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 import net.sf.jasperreports.engine.JRConditionalStyle;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
@@ -40,7 +41,6 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ReportFactory;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.CacheMap;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;

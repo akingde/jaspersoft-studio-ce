@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -97,7 +98,6 @@ import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.model.variable.MVariables;
 import com.jaspersoft.studio.plugin.ExtensionManager;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*

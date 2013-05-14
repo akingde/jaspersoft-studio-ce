@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.viewer.AContributorAction;
+import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.CoreException;

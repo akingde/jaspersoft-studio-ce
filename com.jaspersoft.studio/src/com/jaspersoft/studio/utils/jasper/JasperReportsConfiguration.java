@@ -28,6 +28,7 @@ import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.ResourceScope;
+import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentManager;
 import net.sf.jasperreports.engine.component.ComponentsBundle;
@@ -58,7 +59,6 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jasper.MapDesignConverter;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 
