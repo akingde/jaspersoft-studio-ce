@@ -15,13 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.snap;
 
+import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
