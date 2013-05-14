@@ -10,6 +10,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.swt;
 
+import net.sf.jasperreports.eclipse.viewer.ReportViewer;
+import net.sf.jasperreports.eclipse.viewer.action.ZoomActualSizeAction;
+import net.sf.jasperreports.eclipse.viewer.action.ZoomComboContributionItem;
+import net.sf.jasperreports.eclipse.viewer.action.ZoomFitPageAction;
+import net.sf.jasperreports.eclipse.viewer.action.ZoomFitPageWidthAction;
+import net.sf.jasperreports.eclipse.viewer.action.ZoomInAction;
+import net.sf.jasperreports.eclipse.viewer.action.ZoomOutAction;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.eclipse.jface.action.IToolBarManager;
@@ -33,12 +40,6 @@ import com.jaspersoft.studio.editor.preview.view.report.swt.action.LastPageActio
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.NextPageAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.PageNumberContributionItem;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.PreviousPageAction;
-import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomActualSizeAction;
-import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomComboContributionItem;
-import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomFitPageAction;
-import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomFitPageWidthAction;
-import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomInAction;
-import com.jaspersoft.studio.editor.preview.view.report.swt.action.ZoomOutAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage {
