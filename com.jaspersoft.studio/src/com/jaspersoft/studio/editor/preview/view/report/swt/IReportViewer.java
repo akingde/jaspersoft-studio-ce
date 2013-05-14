@@ -72,6 +72,10 @@ public interface IReportViewer {
 	public void gotoFirstPage();
 
 	public boolean canGotoFirstPage();
+	
+	public void exportImage(String file, int width, int height);
+	
+	public String getReportName();
 
 	// Zoom management --------------------------------------------------------------------
 

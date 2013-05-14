@@ -24,13 +24,18 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.view.JRHyperlinkListener;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jasperassistant.designer.viewer.ReportViewerEvent;
+import com.jaspersoft.studio.plugin.IEditorContributor;
 
 public class ReportViewer implements IReportViewer {
 
@@ -362,6 +367,55 @@ public class ReportViewer implements IReportViewer {
 
 		return viewerComposite;
 	}
+	
+	/**
+	 * Save to the specified location an image of the current page
+	 * 
+	 * @param file the absolute path of the image file to create
+	 * 
+	 * @param width the width of the image to create, if the width is less or equal than 0 than 
+	 * the real width of the image will be used. Otherwise the image will be resized
+	 * 
+	 * @param height the height of the image to create, if the height is less or equal than 0 than 
+	 * the real height of the image will be used. Otherwise the image will be resized
+	 */
+  public void exportImage(String file, int width, int height) {
+  	 ImageLoader loader = new ImageLoader();
+  	 Image actualImage = viewerComposite.getActualImage();
+  	 int resizeWidth = width > 0 ? width : actualImage.getBounds().width;
+  	 int resizeHeight = height>0 ? height : actualImage.getBounds().height;
+     loader.data = new ImageData[] { actualImage.getImageData().scaledTo(resizeWidth, resizeHeight) };
+     loader.save(file, SWT.IMAGE_PNG);
+  }
+  
+  /**
+   * Return a string that represent the location of the jrxml file
+   * 
+   * @return an absolute path to the showed jrxml file
+   */
+  public String getReportPath(){
+  	IFile reportFile = (IFile)jContext.getValue(IEditorContributor.KEY_FILE);
+		String fileName = reportFile.getName();
+		String path = reportFile.getLocation().toPortableString();
+		path = path.substring(0, path.lastIndexOf(fileName));
+		return path;
+  }
+  
+  /**
+   * The name of the report shown
+   * 
+   * @return The name of the report file without the extension
+   */
+	public String getReportName(){
+		IFile reportFile = (IFile)jContext.getValue(IEditorContributor.KEY_FILE);
+		String fileName = reportFile.getName();
+		String extension = reportFile.getFileExtension();
+		String path = reportFile.getLocation().toPortableString();
+		path = path.substring(0, path.lastIndexOf(fileName));
+		fileName = fileName.substring(0, fileName.lastIndexOf(extension)-1);
+		return fileName;
+	}
+	
 
 	/**
 	 * @see com.jasperassistant.designer.viewer.IReportViewer#addHyperlinkListener(net.sf.jasperreports.view.JRHyperlinkListener)

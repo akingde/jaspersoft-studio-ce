@@ -27,6 +27,7 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
+import com.jaspersoft.studio.editor.preview.view.report.swt.action.ExportImageAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.FirstPageAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.LastPageAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.NextPageAction;
@@ -79,6 +80,9 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 		tmanager.add(new ZoomFitPageWidthAction(rptviewer));
 		tmanager.add(new ZoomFitPageAction(rptviewer));
 		tmanager.add(new ZoomActualSizeAction(rptviewer));
+		tmanager.add(new Separator());
+		
+		tmanager.add(new ExportImageAction(rptviewer));
 		tmanager.add(new Separator());
 
 		tmanager.add(ExportMenu.getExportMenu(rptviewer, jContext));

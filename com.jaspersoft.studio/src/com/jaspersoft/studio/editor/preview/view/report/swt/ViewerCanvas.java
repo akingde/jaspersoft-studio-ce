@@ -935,5 +935,14 @@ class ViewerCanvas extends Canvas {
 			}
 		}
 	}
+	
+	/**
+	 * Return the current report image
+	 * 
+	 * @return return an image of the actual shown page, could be null
+	 */
+	public Image getActualImage(){
+		return reportImage;
+	}
 
 }

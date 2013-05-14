@@ -130,15 +130,15 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public void createPartControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(3, false));
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.editor_preview");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.editor_preview"); //$NON-NLS-1$
 
 		getTopToolBarManager1(container);
 		getTopToolBarManager(container);
 
 		Button lbutton = new Button(container, SWT.PUSH);
 		lbutton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		lbutton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/application-sidebar-expand.png"));
-		lbutton.setToolTipText("Show Parameters");
+		lbutton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/application-sidebar-expand.png")); //$NON-NLS-1$
+		lbutton.setToolTipText(Messages.PreviewContainer_buttonText);
 		lbutton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

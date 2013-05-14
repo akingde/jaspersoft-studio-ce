@@ -547,6 +547,9 @@ public class Messages extends NLS {
 	public static String ExportDataAdapterAction_exportDescription;
 	public static String ExportDataAdapterAction_exportName;
 	public static String ExportDataAdapterAction_exportTooltip;
+	public static String ExportImageAction_actionName;
+	public static String ExportImageAction_actionTooltip;
+	public static String ExportImageAction_saveDialogTitle;
 	public static String ExportMenuAction_title;
 	public static String ExportMenuAction_tooltip;
 	public static String ExpressionEditorPreferencePage_includeStatic;
@@ -1224,6 +1227,7 @@ public class Messages extends NLS {
 	public static String PreferencesUtils_CannotLoadJRPRopertiesError;
 	public static String PreferencesUtils_CannotReadJRPropertyError;
 	public static String PreferencesUtils_CannotStoreJRPropertyError;
+	public static String PreviewContainer_buttonText;
 	public static String PreviewContainer_javatitle;
 	public static String PreviewContainer_resetactiontitle;
 	public static String PreviewContainer_resetactiontooltip;
