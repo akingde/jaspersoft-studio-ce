@@ -21,6 +21,7 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.viewer.AContributorAction;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -38,7 +39,6 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.plugin.AContributorAction;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
@@ -106,14 +106,15 @@ public class JrxmlPublishAction extends AContributorAction {
 	}
 
 	public void publishReportUnit(final ANode node, final JasperDesign jd, int startpage, IProgressMonitor monitor) {
-		boolean silent = jrConfig.get(KEY_PUBLISH2JSSWIZARD_SILENT, false);
+		JasperReportsConfiguration jConfig = (JasperReportsConfiguration) jrConfig;
+		boolean silent = jConfig.get(KEY_PUBLISH2JSSWIZARD_SILENT, false);
 		if (node == null || !(node instanceof MReportUnit)) {
 			if (!createDialog(node, jd, 1))
 				return;
 		} else {
 			mrunit = (MReportUnit) node;
 			if (silent) {
-				new FindResources().find(mrunit, jrConfig, jd);
+				new FindResources().find(mrunit, jConfig, jd);
 			} else if (!createDialog(node, jd, startpage))
 				return;
 		}
@@ -130,7 +131,7 @@ public class JrxmlPublishAction extends AContributorAction {
 			UIUtils.showInformation(Messages.JrxmlPublishAction_successpublishing);
 
 			// clean
-			jrConfig.remove(KEY_PUBLISH2JSS_DATA);
+			((JasperReportsConfiguration) jrConfig).remove(KEY_PUBLISH2JSS_DATA);
 			postProcessLocal();
 		} catch (Exception e) {
 			UIUtils.showError(e);
@@ -139,7 +140,7 @@ public class JrxmlPublishAction extends AContributorAction {
 
 	private boolean createDialog(ANode n, JasperDesign jd, int page) {
 		Shell shell = Display.getDefault().getActiveShell();
-		Publish2ServerWizard wizard = new Publish2ServerWizard(n, jd, jrConfig, page);
+		Publish2ServerWizard wizard = new Publish2ServerWizard(n, jd, ((JasperReportsConfiguration) jrConfig), page);
 		WizardDialog dialog = new WizardDialog(shell, wizard);
 		dialog.create();
 		if (dialog.open() != Dialog.OK)
@@ -149,7 +150,7 @@ public class JrxmlPublishAction extends AContributorAction {
 	}
 
 	protected JasperDesign getJasperDesign() throws JRException {
-		return ModelUtils.copyJasperDesign(jrConfig.getJasperDesign());
+		return ModelUtils.copyJasperDesign(((JasperReportsConfiguration) jrConfig).getJasperDesign());
 	}
 
 	protected IStatus publishResources(IProgressMonitor monitor, JasperDesign jd, ANode parent) throws Exception {
@@ -162,7 +163,7 @@ public class JrxmlPublishAction extends AContributorAction {
 		File file = FileUtils.createTempFile("jrsres", ".jrxml"); //$NON-NLS-1$ //$NON-NLS-2$
 		String version = ServerManager.getVersion(mrunit);
 
-		List<MResource> files = jrConfig.get(KEY_PUBLISH2JSS_DATA, new ArrayList<MResource>());
+		List<MResource> files = ((JasperReportsConfiguration) jrConfig).get(KEY_PUBLISH2JSS_DATA, new ArrayList<MResource>());
 		for (MResource f : files) {
 			PublishOptions popt = f.getPublishOptions();
 			if (popt.isOverwrite() && popt.getjExpression() != null)
@@ -244,7 +245,7 @@ public class JrxmlPublishAction extends AContributorAction {
 	}
 
 	protected void postProcessLocal() {
-		JasperDesign rpt = jrConfig.getJasperDesign();
+		JasperDesign rpt = ((JasperReportsConfiguration) jrConfig).getJasperDesign();
 		if (mrunit != null && mrunit.getValue() != null) {
 			ResourceDescriptor runit = mrunit.getValue();
 			rpt.setProperty(JrxmlExporter.PROP_REPORTUNIT, runit.getUriString());

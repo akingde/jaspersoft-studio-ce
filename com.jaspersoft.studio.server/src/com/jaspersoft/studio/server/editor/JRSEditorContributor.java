@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor;
 
+import net.sf.jasperreports.eclipse.viewer.AContributorAction;
+import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,8 +29,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.EditorPart;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
-import com.jaspersoft.studio.plugin.AContributorAction;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.server.JSFileResolver;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
@@ -45,8 +46,7 @@ public class JRSEditorContributor implements IEditorContributor {
 
 		Job job = new Job("Initialize JRS File Resolver") {
 			protected IStatus run(IProgressMonitor monitor) {
-				((JrxmlEditor) editor).addFileResolver(new JSFileResolver(jd,
-						monitor));
+				((JrxmlEditor) editor).addFileResolver(new JSFileResolver(jd, monitor));
 				return Status.OK_STATUS;
 			}
 		};
@@ -69,29 +69,27 @@ public class JRSEditorContributor implements IEditorContributor {
 	public static final String KEY_PUBLISH2JSS = "PUBLISH2JSS";
 	public static final String KEY_PUBLISH2JSS_SILENT = "PUBLISH2JSS.SILENT";
 
-	public void onSave(JasperReportsConfiguration jrConfig,
-			IProgressMonitor monitor) {
-		JasperDesign jd = jrConfig.getJasperDesign();
+	public void onSave(JasperReportsContext jrConfig, IProgressMonitor monitor) {
+		JasperReportsConfiguration jConfig = (JasperReportsConfiguration) jrConfig;
+		JasperDesign jd = jConfig.getJasperDesign();
 
 		String prop = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
 		if (prop == null)
 			return;
 
-		boolean run = jrConfig.get(KEY_PUBLISH2JSS, false);
-		boolean allways = jrConfig.get(KEY_PUBLISH2JSS_SILENT, false);
+		boolean run = jConfig.get(KEY_PUBLISH2JSS, false);
+		boolean allways = jConfig.get(KEY_PUBLISH2JSS_SILENT, false);
 		if (!allways) {
-			SaveConfirmationDialog dialog = new SaveConfirmationDialog(Display
-					.getDefault().getActiveShell());
+			SaveConfirmationDialog dialog = new SaveConfirmationDialog(Display.getDefault().getActiveShell());
 			run = (dialog.open() == Dialog.OK);
-			jrConfig.put(KEY_PUBLISH2JSS, run);
-			jrConfig.put(KEY_PUBLISH2JSS_SILENT, dialog.getAllways());
+			jConfig.put(KEY_PUBLISH2JSS, run);
+			jConfig.put(KEY_PUBLISH2JSS_SILENT, dialog.getAllways());
 		}
 		if (run)
-			getAction(monitor, jrConfig).run();
+			getAction(monitor, jConfig).run();
 	}
 
-	protected static JrxmlPublishAction getAction(IProgressMonitor monitor,
-			JasperReportsConfiguration jrConfig) {
+	protected static JrxmlPublishAction getAction(IProgressMonitor monitor, JasperReportsConfiguration jrConfig) {
 		JrxmlPublishAction publishAction = new JrxmlPublishAction(2, monitor);
 		publishAction.setJrConfig(jrConfig);
 		return publishAction;
@@ -107,10 +105,9 @@ public class JRSEditorContributor implements IEditorContributor {
 	}
 
 	@Override
-	public String getTitleToolTip(JasperReportsConfiguration jrConfig,
-			String toolTip) {
+	public String getTitleToolTip(JasperReportsContext jrConfig, String toolTip) {
 		String s = toolTip;
-		JasperDesign jd = jrConfig.getJasperDesign();
+		JasperDesign jd = ((JasperReportsConfiguration) jrConfig).getJasperDesign();
 		if (jd != null) {
 			String p = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
 			if (p != null)
