@@ -15,8 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.cassandra.querydesigner;
 
-import com.jaspersoft.studio.data.querydesigner.sql.SQLLineStyler;
-import com.jaspersoft.studio.data.querydesigner.sql.SQLScanner;
+import com.jaspersoft.studio.data.querydesigner.sql.text.SQLLineStyler;
+import com.jaspersoft.studio.data.querydesigner.sql.text.SQLScanner;
 
 /**
  * Line style for Hive-QL language.
