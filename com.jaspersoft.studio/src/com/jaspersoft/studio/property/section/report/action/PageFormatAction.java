@@ -25,6 +25,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.section.report.PageFormatDialog;
 
@@ -47,8 +48,8 @@ public class PageFormatAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Page Format ...");
-		setToolTipText("Page format");
+		setText(Messages.PageFormatAction_actionName);
+		setToolTipText(Messages.PageFormatAction_actionTooltip);
 		setId(ID);
 		setEnabled(false);
 	}

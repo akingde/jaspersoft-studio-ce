@@ -27,6 +27,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -50,8 +51,8 @@ public class PageRemoveMarginsAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Remove Page Margins");
-		setToolTipText("Remove Page Margins");
+		setText(Messages.PageRemoveMarginsAction_actionName);
+		setToolTipText(Messages.PageRemoveMarginsAction_actionTooltip);
 		setId(ID);
 		setEnabled(false);
 	}

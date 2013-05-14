@@ -185,7 +185,6 @@ public class SubreportWizard extends JSSWizard {
 						}
 					}
 					JRXmlWriter.writeReport(jd, file.getProjectRelativePath().toPortableString(), "UTF-8");
-					System.out.println("bubba");
 				} catch (Exception e) {			}
 			}*/
 			subreport.setPropertyValue( JRDesignSubreport.PROPERTY_EXPRESSION , exp ); 

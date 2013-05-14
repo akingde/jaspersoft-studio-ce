@@ -1068,6 +1068,8 @@ public class Messages extends NLS {
 	public static String PaddingSection_left_padding_tool_tip;
 	public static String PaddingSection_right_padding_tool_tip;
 	public static String PaddingSection_top_padding_tool_tip;
+	public static String PageFormatAction_actionName;
+	public static String PageFormatAction_actionTooltip;
 	public static String PageFormatDialog_0;
 	public static String PageFormatDialog_1;
 	public static String PageFormatDialog_10;
@@ -1104,6 +1106,8 @@ public class Messages extends NLS {
 	public static String PageMarginSection_margin;
 	public static String PageMarginSection_right_margin_tool_tip;
 	public static String PageMarginSection_top_margin_tool_tip;
+	public static String PageRemoveMarginsAction_actionName;
+	public static String PageRemoveMarginsAction_actionTooltip;
 	public static String PagesFieldEditor_allPages;
 	public static String PagesFieldEditor_fromToPages;
 	public static String PagesFieldEditor_pageToExportBox;
