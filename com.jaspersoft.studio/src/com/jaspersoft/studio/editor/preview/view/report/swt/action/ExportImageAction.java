@@ -15,13 +15,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.swt.action;
 
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
+import net.sf.jasperreports.eclipse.viewer.ReportViewer;
+import net.sf.jasperreports.eclipse.viewer.action.AReportAction;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
-import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 
 /**
