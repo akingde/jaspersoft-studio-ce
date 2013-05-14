@@ -30,6 +30,8 @@ import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
@@ -49,6 +51,16 @@ import com.mongodb.MongoURI;
  * 
  */
 public class MongoDbConnection implements Connection {
+	protected static final List<Integer> AUTH_ERROR_CODES = Arrays.asList(new Integer[] { 16550, // not
+																																																// authorized
+																																																// for
+																																																// query
+																																																// on
+																																																// foo.system.namespaces
+			10057, // unauthorized db:admin ns:admin.system.users lock type:1
+							// client:127.0.0.1
+			15845 // unauthorized
+			});
 	private Mongo client;
 
 	private MongoURI mongoURIObject;
@@ -63,8 +75,7 @@ public class MongoDbConnection implements Connection {
 
 	private final Logger logger = Logger.getLogger(MongoDbConnection.class);
 
-	public MongoDbConnection(String mongoURI, String username, String password)
-			throws JRException {
+	public MongoDbConnection(String mongoURI, String username, String password) throws JRException {
 		create(this.mongoURI = mongoURI);
 		this.username = username;
 		this.password = password;
@@ -96,27 +107,24 @@ public class MongoDbConnection implements Connection {
 		} catch (Exception e) {
 			String message = e.getMessage();
 			if (e instanceof MongoException) {
-				if (message != null && message.startsWith("unauthorized db")) {
+				if (AUTH_ERROR_CODES.contains(((MongoException) e).getCode())) {
 					performaAuthentication = true;
 				} else {
-					logger.error(e);
+					logger.error("Cannot set database", e);
 					throw new JRException(message);
 				}
 			} else {
-				logger.error(e);
+				logger.error("Cannot set database", e);
 				throw new JRException(message);
 			}
 		}
 		if (performaAuthentication) {
 			if (username != null && password != null) {
-				if (!mongoDatabase.authenticate(username,
-						password.toCharArray())) {
-					throw new JRException(
-							"Successful connection but wrong authentication");
+				if (!mongoDatabase.authenticate(username, password.toCharArray())) {
+					throw new JRException("Successful connection but wrong authentication");
 				}
 			} else {
-				throw new JRException(
-						"Authentication required but username or password is empty");
+				throw new JRException("Authentication required but username or password is empty");
 			}
 		}
 	}
@@ -172,8 +180,7 @@ public class MongoDbConnection implements Connection {
 		}
 
 		try {
-			return "Connection test successful.\n" + "Mongo database name: "
-					+ mongoDatabase.getName();
+			return "Connection test successful.\n" + "Mongo database name: " + mongoDatabase.getName();
 		} catch (Exception e) {
 			logger.error(e);
 			throw new JRException(e);
@@ -273,20 +280,17 @@ public class MongoDbConnection implements Connection {
 	}
 
 	@Override
-	public Statement createStatement(int resultSetType, int resultSetConcurrency)
-			throws SQLException {
+	public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
 		return null;
 	}
 
 	@Override
-	public PreparedStatement prepareStatement(String sql, int resultSetType,
-			int resultSetConcurrency) throws SQLException {
+	public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
 		return null;
 	}
 
 	@Override
-	public CallableStatement prepareCall(String sql, int resultSetType,
-			int resultSetConcurrency) throws SQLException {
+	public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
 		return null;
 	}
 
@@ -327,41 +331,32 @@ public class MongoDbConnection implements Connection {
 	}
 
 	@Override
-	public Statement createStatement(int resultSetType,
-			int resultSetConcurrency, int resultSetHoldability)
-			throws SQLException {
+	public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
 		return null;
 	}
 
 	@Override
-	public PreparedStatement prepareStatement(String sql, int resultSetType,
-			int resultSetConcurrency, int resultSetHoldability)
-			throws SQLException {
+	public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
 		return null;
 	}
 
 	@Override
-	public CallableStatement prepareCall(String sql, int resultSetType,
-			int resultSetConcurrency, int resultSetHoldability)
-			throws SQLException {
+	public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
 		return null;
 	}
 
 	@Override
-	public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys)
-			throws SQLException {
+	public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
 		return null;
 	}
 
 	@Override
-	public PreparedStatement prepareStatement(String sql, int[] columnIndexes)
-			throws SQLException {
+	public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
 		return null;
 	}
 
 	@Override
-	public PreparedStatement prepareStatement(String sql, String[] columnNames)
-			throws SQLException {
+	public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
 		return null;
 	}
 
@@ -391,13 +386,11 @@ public class MongoDbConnection implements Connection {
 	}
 
 	@Override
-	public void setClientInfo(String name, String value)
-			throws SQLClientInfoException {
+	public void setClientInfo(String name, String value) throws SQLClientInfoException {
 	}
 
 	@Override
-	public void setClientInfo(Properties properties)
-			throws SQLClientInfoException {
+	public void setClientInfo(Properties properties) throws SQLClientInfoException {
 	}
 
 	@Override
@@ -411,14 +404,12 @@ public class MongoDbConnection implements Connection {
 	}
 
 	@Override
-	public Array createArrayOf(String typeName, Object[] elements)
-			throws SQLException {
+	public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
 		return null;
 	}
 
 	@Override
-	public Struct createStruct(String typeName, Object[] attributes)
-			throws SQLException {
+	public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
 		return null;
 	}
 
@@ -437,8 +428,7 @@ public class MongoDbConnection implements Connection {
 
 	}
 
-	public void setNetworkTimeout(Executor executor, int milliseconds)
-			throws SQLException {
+	public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
 		// TODO Auto-generated method stub
 
 	}
