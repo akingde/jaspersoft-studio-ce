@@ -8,13 +8,16 @@ import net.sf.jasperreports.engine.JRConstants;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
 
-public class MFunction extends MDBObjects implements IDragable {
+public class MColumn extends MDBObjects implements IDragable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MFunction(ANode parent, String value, ResultSet rs) {
-		super(parent, value, "icons/function.png");
+	public MColumn(ANode parent, String value, ResultSet rs) {
+		super(parent, value, null);
 		try {
-			tooltip = rs.getString("REMARKS");
+			tooltip = rs.getString("TYPE_NAME");
+			String comment = rs.getString("REMARKS");
+			if (comment != null)
+				tooltip += "\n" + comment;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

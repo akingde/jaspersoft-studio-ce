@@ -15,15 +15,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.querydesigner.sql;
 
-import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
 
-import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRParameter;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
@@ -66,16 +63,20 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	}
 
 	@Override
-	public void setDataAdapter(DataAdapterDescriptor da) {
+	public void setDataAdapter(final DataAdapterDescriptor da) {
+		super.setDataAdapter(da);
 		if (da instanceof JDBCDataAdapterDescriptor) {
 			try {
-				DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
-				Map<String, Object> parameters = new HashMap<String, Object>();
-				das.contributeParameters(parameters);
+				container.run(true, true, new IRunnableWithProgress() {
 
-				dbMetadata.updateUI((Connection) parameters.get(JRParameter.REPORT_CONNECTION));
-			} catch (JRException e) {
-				e.printStackTrace();
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						dbMetadata.updateUI(DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter()));
+					}
+				});
+			} catch (InvocationTargetException ex) {
+				container.getQueryStatus().showError(ex.getTargetException());
+			} catch (InterruptedException ex) {
+				container.getQueryStatus().showError(ex);
 			}
 		}
 	}

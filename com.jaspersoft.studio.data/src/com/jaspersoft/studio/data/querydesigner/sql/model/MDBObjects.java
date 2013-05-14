@@ -15,7 +15,8 @@ public class MDBObjects extends ANode {
 	public MDBObjects(ANode parent, String value, String image) {
 		super(parent, -1);
 		setValue(value);
-		icon = Activator.getDefault().getImageDescriptor(image);
+		if (image != null)
+			icon = Activator.getDefault().getImageDescriptor(image);
 	}
 
 	@Override
