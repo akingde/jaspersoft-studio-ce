@@ -15,11 +15,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export;
 
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
 import net.sf.jasperreports.engine.JRAbstractExporter;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRCsvExporterParameter;
 
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 

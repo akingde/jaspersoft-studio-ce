@@ -1595,12 +1595,7 @@ public class Messages extends NLS {
 	public static String DuplicateDataAdapterAction_duplicateName;
 	public static String DuplicateDataAdapterAction_duplicateToolTip;
 	public static String DuplicateDataAdapterAction_newAdapterPrefix;
-	public static String ZoomActualSizeAction_actionName;
-	public static String ZoomActualSizeAction_actionTooltip;
-	public static String ZoomFitPageAction_actionName;
-	public static String ZoomFitPageAction_actionTooltip;
-	public static String ZoomFitPageWidthAction_actionName;
-	public static String ZoomFitPageWidthAction_actionTooltip;
+
 
 	static {
 		// initialize resource bundle

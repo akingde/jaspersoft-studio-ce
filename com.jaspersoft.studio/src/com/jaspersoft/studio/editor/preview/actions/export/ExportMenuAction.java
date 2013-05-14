@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export;
 
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.MenuManager;
@@ -23,7 +25,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 
 public class ExportMenuAction extends AReportViewerAction implements IMenuCreator {

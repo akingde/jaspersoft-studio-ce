@@ -15,13 +15,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.system;
 
+import net.sf.jasperreports.eclipse.viewer.ReportViewer;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsOdtAction;
-import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class OdtViewer extends ASystemViewer {

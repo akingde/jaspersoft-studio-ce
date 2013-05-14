@@ -19,6 +19,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
 import net.sf.jasperreports.engine.JRAbstractExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.export.JRExportProgressMonitor;
@@ -30,7 +31,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.preferences.editor.pages.Pages;
 import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;

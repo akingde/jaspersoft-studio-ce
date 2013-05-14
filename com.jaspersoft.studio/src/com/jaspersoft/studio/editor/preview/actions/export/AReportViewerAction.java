@@ -15,15 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export;
 
-import java.util.EventObject;
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
+import net.sf.jasperreports.eclipse.viewer.IReportViewerListener;
+import net.sf.jasperreports.eclipse.viewer.ReportViewerEvent;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.services.IDisposable;
-
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewerListener;
 
 public abstract class AReportViewerAction extends Action implements IReportViewerListener, IDisposable {
 
@@ -46,7 +45,7 @@ public abstract class AReportViewerAction extends Action implements IReportViewe
 
 	protected abstract boolean calculateEnabled();
 
-	public void viewerStateChanged(EventObject evt) {
+	public void viewerStateChanged(ReportViewerEvent evt) {
 		setEnabled(calculateEnabled());
 	}
 

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report;
 
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
+
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 
@@ -30,10 +32,9 @@ import com.jaspersoft.studio.editor.preview.actions.export.html.ExportAsLHtmlAct
 import com.jaspersoft.studio.editor.preview.actions.export.html.ExportAsXHtmlAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsExcelAPIAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsOdsAction;
-import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsMetadataAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsAction;
+import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsMetadataAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsxAction;
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportMenu {

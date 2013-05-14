@@ -16,7 +16,10 @@
 package com.jaspersoft.studio.editor.preview.view.report.swt.action;
 
 import java.text.MessageFormat;
-import java.util.EventObject;
+
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
+import net.sf.jasperreports.eclipse.viewer.IReportViewerListener;
+import net.sf.jasperreports.eclipse.viewer.ReportViewerEvent;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.action.ContributionItem;
@@ -32,9 +35,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewerListener;
 
 public class PageNumberContributionItem extends ContributionItem implements IReportViewerListener, Listener {
 
@@ -140,7 +140,7 @@ public class PageNumberContributionItem extends ContributionItem implements IRep
 		return formatPageMofN(viewer.getPageIndex() + 1, viewer.getDocument().getPages().size());
 	}
 
-	public void viewerStateChanged(EventObject evt) {
+	public void viewerStateChanged(ReportViewerEvent evt) {
 		refresh();
 	}
 

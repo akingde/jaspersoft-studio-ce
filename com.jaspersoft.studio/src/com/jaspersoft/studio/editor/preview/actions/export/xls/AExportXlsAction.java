@@ -10,12 +10,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export.xls;
 
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
 import net.sf.jasperreports.engine.JRAbstractExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AExportXlsAction extends AbstractExportAction {

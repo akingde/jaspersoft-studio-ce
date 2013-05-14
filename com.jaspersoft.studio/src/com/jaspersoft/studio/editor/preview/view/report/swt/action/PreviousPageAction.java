@@ -15,8 +15,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.swt.action;
 
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
+import net.sf.jasperreports.eclipse.viewer.action.AReportAction;
+
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 
 public class PreviousPageAction extends AReportAction {

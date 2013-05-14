@@ -13,30 +13,27 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.editor.preview.view.report.swt.action;
+package com.jaspersoft.studio.model;
+
+import net.sf.jasperreports.engine.JRConstants;
+
+import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 
-public class ZoomOutAction extends AReportAction {
+public class MDummy extends ANode {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public ZoomOutAction(IReportViewer viewer) {
-		super(viewer);
-
-		setText("Zoom Out"); //$NON-NLS-1$
-		setToolTipText("Zoom out"); //$NON-NLS-1$
-		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomout-16.png"));
-		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/zoomout-16.png"));
+	public MDummy(ANode parent) {
+		super(parent, -1);
 	}
 
-	@Override
-	public void run() {
-		rviewer.zoomOut();
+	public ImageDescriptor getImagePath() {
+		return JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/hourglass.png");
 	}
 
-	public boolean isActionEnabled() {
-		return rviewer.canZoomOut();
+	public String getDisplayText() {
+		return "Pending ...";
 	}
+
 }

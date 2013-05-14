@@ -18,6 +18,7 @@ package com.jaspersoft.studio.editor.preview.view.report.file;
 import java.io.File;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.viewer.ReportViewer;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.eclipse.jface.action.IToolBarManager;
@@ -35,7 +36,6 @@ import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
-import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AFileViewer extends APreview implements IJRPrintable, IPreferencePage {

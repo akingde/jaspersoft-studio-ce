@@ -15,12 +15,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export.html;
 
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
 import net.sf.jasperreports.engine.JRAbstractExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;

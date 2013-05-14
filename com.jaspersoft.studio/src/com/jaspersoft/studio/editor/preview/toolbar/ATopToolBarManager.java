@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.toolbar;
 
+import net.sf.jasperreports.eclipse.viewer.action.AReportAction;
+
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
@@ -24,7 +26,6 @@ import org.eclipse.ui.services.IDisposable;
 import com.jaspersoft.studio.data.widget.DatasourceComboItem;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
-import com.jaspersoft.studio.editor.preview.view.report.swt.action.AReportAction;
 
 public abstract class ATopToolBarManager {
 	protected PreviewJRPrint container;

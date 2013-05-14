@@ -15,10 +15,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export;
 
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
 import net.sf.jasperreports.engine.JRAbstractExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRPptxExporter;
 
-import com.jaspersoft.studio.editor.preview.view.report.swt.IReportViewer;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsPptxAction extends AbstractExportAction {

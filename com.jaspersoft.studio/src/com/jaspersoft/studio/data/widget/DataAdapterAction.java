@@ -13,6 +13,9 @@ package com.jaspersoft.studio.data.widget;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import net.sf.jasperreports.eclipse.viewer.IReportViewerListener;
+import net.sf.jasperreports.eclipse.viewer.ReportViewerEvent;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.SWT;
@@ -23,8 +26,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 
-import com.jasperassistant.designer.viewer.IReportViewerListener;
-import com.jasperassistant.designer.viewer.ReportViewerEvent;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
@@ -169,4 +170,5 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	public DataAdapterDescriptor getSelected() {
 		return selectedDA;
 	}
+
 }
