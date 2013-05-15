@@ -30,11 +30,18 @@ public class FontNameComboContributionItem extends APropertyComboContributionIte
 		super(ID);
 	}
 
+	private String[] fonts;
+
 	@Override
 	protected void setComboItems() {
 		JasperReportsConfiguration jConfig = model.getJasperConfiguration();
-		if (jConfig != null)
-			combo.setItems(jConfig.getFontList());
+		if (jConfig != null) {
+			String[] newfonts = jConfig.getFontList();
+			if (newfonts != fonts) {
+				fonts = newfonts;
+				combo.setItems(fonts);
+			}
+		}
 	}
 
 	@Override

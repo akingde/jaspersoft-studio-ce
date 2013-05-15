@@ -367,7 +367,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		desc.add(fontNameD);
 
 		RWComboBoxPropertyDescriptor fontSizeD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE,
-				Messages.common_font_size, ModelUtils.getFontSizes(), NullEnum.INHERITED);
+				Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED);
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);

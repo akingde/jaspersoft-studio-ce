@@ -97,6 +97,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class ModelUtils {
 
+	public static final String[] FONT_SIZES = new String[] { "", "8", "9", "10", "11", "12", "14", "16", "18", "20",
+			"22", "24", "26" };
 	public static final String MAIN_DATASET = "[Main Dataset]";
 
 	public static JRDesignDataset getDataset(ANode node) {
@@ -1116,10 +1118,6 @@ public class ModelUtils {
 			}
 		}
 		return key;
-	}
-
-	public static String[] getFontSizes() {
-		return new String[] { "", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$
 	}
 
 	/**

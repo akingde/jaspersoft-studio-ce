@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
@@ -47,7 +42,7 @@ public class MFont extends APropertyNode {
 
 	public static final String FONT_INCREMENT = "FONT_INCREMENT";
 	public static final String FONT_DECREMENT = "FONT_DECREMENT";
-	
+
 	public MFont(JRFont value) {
 		super();
 		setValue(value);
@@ -65,9 +60,9 @@ public class MFont extends APropertyNode {
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
 	}
-	
+
 	@Override
-	public HashMap<String,Object> getStylesDescriptors() {
+	public HashMap<String, Object> getStylesDescriptors() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		if (getValue() == null)
 			return result;
@@ -92,12 +87,12 @@ public class MFont extends APropertyNode {
 		desc.add(fontNameD);
 
 		RWComboBoxPropertyDescriptor fontSizeD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_SIZE,
-				Messages.common_font_size, ModelUtils.getFontSizes(), NullEnum.INHERITED);
+				Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED);
 		fontSizeD.setDescription(Messages.MFont_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
-		
-		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(FONT_INCREMENT,this);
+
+		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(FONT_INCREMENT, this);
 		desc.add(fontIncrement);
 
 		RWComboBoxPropertyDescriptor pdfFontNameD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_PDF_FONT_NAME,
@@ -114,7 +109,8 @@ public class MFont extends APropertyNode {
 				NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-bold.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
+						"icons/resources/edit-bold.png"));
 			}
 		};
 		boldD.setDescription(Messages.MFont_bold_description);
@@ -124,7 +120,8 @@ public class MFont extends APropertyNode {
 				Messages.common_italic, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-italic.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
+						"icons/resources/edit-italic.png"));
 			}
 		};
 		italicD.setDescription(Messages.MFont_italic_description);
@@ -134,8 +131,8 @@ public class MFont extends APropertyNode {
 				Messages.common_underline, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this,
-						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-underline.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
+						"icons/resources/edit-underline.png"));
 			}
 		};
 		underlineD.setDescription(Messages.MFont_underline_description);
@@ -145,8 +142,8 @@ public class MFont extends APropertyNode {
 				Messages.common_strike_trough, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this,
-						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-strike.png"));
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
+						"icons/resources/edit-strike.png"));
 			}
 		};
 		strikeTroughD.setDescription(Messages.MFont_strike_trough_description);
@@ -215,10 +212,10 @@ public class MFont extends APropertyNode {
 		if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
 			return ModelUtils.getKey4PDFEncoding(jrElement.getPdfEncoding());
 		if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
-			return  Integer.toString(jrElement.getFontSize()); //$NON-NLS-1$
+			return Integer.toString(jrElement.getFontSize()); //$NON-NLS-1$
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -269,10 +266,11 @@ public class MFont extends APropertyNode {
 				if (((String) value).isEmpty())
 					value = null;
 				jrElement.setFontName((String) value);
-			} else if (value == null) jrElement.setFontName((String) value);
+			} else if (value == null)
+				jrElement.setFontName((String) value);
 		} else if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
 			try {
-				jrElement.setFontSize(value!=null ? new Integer((String) value) : null);
+				jrElement.setFontSize(value != null ? new Integer((String) value) : null);
 			} catch (NumberFormatException e) {
 			}
 		else if (id.equals(JRBaseFont.PROPERTY_PDF_FONT_NAME))
