@@ -43,6 +43,5 @@
 		<module>../../net.sf.jasperreports.feature</module>
 		<module>../../net.sf.jasperreports.samples.feature</module>
 		<module>../../com.jaspersoft.studio.feature</module>
-		<module>../../com.jaspersoft.studio.expressioneditor.feature</module>
 	</modules>
 </project> 
