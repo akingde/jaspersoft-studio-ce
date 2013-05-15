@@ -51,7 +51,6 @@ import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRCompiler;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -100,7 +99,7 @@ public class ModelUtils {
 
 	public static final String MAIN_DATASET = "[Main Dataset]";
 
-	public static JRDesignDataset getDataset(ANode node){
+	public static JRDesignDataset getDataset(ANode node) {
 		ANode n = node.getParent();
 		while (n != null) {
 			if (n instanceof MDataset)
@@ -111,7 +110,7 @@ public class ModelUtils {
 		}
 		return null;
 	}
-	
+
 	public static ANode getFirstChild(ANode parent) {
 		List<INode> children = parent.getChildren();
 		if (children != null && !children.isEmpty())
@@ -199,15 +198,15 @@ public class ModelUtils {
 		}
 		return new ArrayList<JRParameter>();
 	}
-	
+
 	/**
 	 * Return the position of a child in the children list of the parent
 	 * 
 	 * @param child
-	 * @return the position of the child, or -1 if the child or its parent are null, or 
-	 * if the the children it isn't present in the parent's children lists
+	 * @return the position of the child, or -1 if the child or its parent are null, or if the the children it isn't
+	 *         present in the parent's children lists
 	 */
-	public static int getChildrenPosition(INode child){
+	public static int getChildrenPosition(INode child) {
 		if (child != null && child.getParent() != null)
 			return child.getParent().getChildren().indexOf(child);
 		return -1;
@@ -990,7 +989,7 @@ public class ModelUtils {
 	 * @param jContext
 	 * @return
 	 */
-	public static List<String[]> getFontNames(JasperReportsContext jContext) {
+	public static List<String[]> getFontNames(JasperReportsConfiguration jContext) {
 		java.util.List<String[]> classes = new ArrayList<String[]>();
 		java.util.List<String> elements = new ArrayList<String>();
 		Collection<?> extensionFonts = FontUtil.getInstance(jContext).getFontFamilyNames();
@@ -1326,64 +1325,62 @@ public class ModelUtils {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Returns the list with the names of different hyperlink types. 
-	 * This list includes possibly contributed types via dedicated extension point.
+	 * Returns the list with the names of different hyperlink types. This list includes possibly contributed types via
+	 * dedicated extension point.
 	 * <p>
 	 * 
 	 * Clients can specify to exclude some types through the input list.
 	 * 
 	 * @param filteredTypes
-	 *         a list of types that should be filtered out from the final list, 
-	 *         it can be <code>null</code>
+	 *          a list of types that should be filtered out from the final list, it can be <code>null</code>
 	 * @return the list of hyperlink type names
 	 */
-	public static List<String> getHyperlinkTypeNames4Widget(List<HyperlinkTypeEnum> filteredTypes){
+	public static List<String> getHyperlinkTypeNames4Widget(List<HyperlinkTypeEnum> filteredTypes) {
 		// Standard hyperlink types
-		List<String> alltypes=new ArrayList<String>();
-		for(HyperlinkTypeEnum type : HyperlinkTypeEnum.values()){
+		List<String> alltypes = new ArrayList<String>();
+		for (HyperlinkTypeEnum type : HyperlinkTypeEnum.values()) {
 			alltypes.add(type.getName());
 		}
 		// Add also the contributed hyperlink types
-		IConfigurationElement[] contributedElements = 
-				Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.hyperlinkTypes");
-		if(contributedElements!=null){
-			for (IConfigurationElement el : contributedElements){
+		IConfigurationElement[] contributedElements = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				"com.jaspersoft.studio.hyperlinkTypes");
+		if (contributedElements != null) {
+			for (IConfigurationElement el : contributedElements) {
 				String type = el.getAttribute("type");
 				alltypes.add(type);
 			}
 		}
-		
+
 		// Remove filtered types
-		for(HyperlinkTypeEnum t : filteredTypes){
+		for (HyperlinkTypeEnum t : filteredTypes) {
 			alltypes.remove(t.getName());
 		}
-		
+
 		return alltypes;
 	}
-	
+
 	/**
-	 * Gets a valid {@link ItemData} instance, representing the Marker Data
-	 * information associated to the Fusion Map component.
-	 * If needed it creates a new one.
+	 * Gets a valid {@link ItemData} instance, representing the Marker Data information associated to the Fusion Map
+	 * component. If needed it creates a new one.
 	 * 
 	 * @param mapComponent
-	 *            the map component to look into
-	 * @param update 
-	 * 						specifies to update the original map component or not
+	 *          the map component to look into
+	 * @param update
+	 *          specifies to update the original map component or not
 	 * @return the marker data information associated to the map
 	 */
-	public static ItemData safeGetMarkerData(MapComponent mapComponent, boolean update){
-		StandardMapComponent map = ((StandardMapComponent)mapComponent);
+	public static ItemData safeGetMarkerData(MapComponent mapComponent, boolean update) {
+		StandardMapComponent map = ((StandardMapComponent) mapComponent);
 		ItemData markerData = map.getMarkerData();
-		if(markerData==null){
+		if (markerData == null) {
 			markerData = new StandardItemData();
-			if(update){
+			if (update) {
 				map.setMarkerData(markerData);
 			}
 		}
 		return markerData;
 	}
-	
+
 }

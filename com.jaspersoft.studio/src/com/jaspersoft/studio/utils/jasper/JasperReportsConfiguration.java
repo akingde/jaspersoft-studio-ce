@@ -61,6 +61,8 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jasper.MapDesignConverter;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
+import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
@@ -78,6 +80,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 					|| property.equals(PropertyListFieldEditor.NET_SF_JASPERREPORTS_JRPROPERTIES)) {
 				refreshFonts = true;
 				refreshBundles = true;
+				fontList = null;
 			}
 		}
 	}
@@ -88,6 +91,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		public void propertyChange(PropertyChangeEvent arg0) {
 			refreshFonts = true;
 			refreshBundles = true;
+			fontList = null;
 			try {
 				DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
 				ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
@@ -376,6 +380,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		return p;
 	}
 
+	private String[] fontList;
 	private boolean refreshFonts = true;
 	private boolean refreshBundles = true;
 	private List<FontFamily> lst;
@@ -446,5 +451,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		if (map == null)
 			map = new HashMap<Object, Object>();
 		return map;
+	}
+
+	public String[] getFontList() {
+		if (fontList == null)
+			fontList = FontUtils.stringToItems(ModelUtils.getFontNames(this));
+		return fontList;
 	}
 }

@@ -1,21 +1,14 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
-
-import java.util.List;
 
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseFont;
@@ -48,7 +41,6 @@ import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * This class implement the subsection into the cart property tab, for the font name is used a standard combo.
@@ -61,10 +53,8 @@ public class SPFont extends ASPropertyWidget {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 			if (event.getProperty().equals(FontsPreferencePage.FPP_FONT_LIST)) {
-				if (parentNode != null) {
-					List<String[]> fonts = ModelUtils.getFontNames(parentNode.getJasperConfiguration());
-					fontName.setItems(FontUtils.stringToItems(fonts));
-				}
+				if (parentNode != null)
+					fontName.setItems(parentNode.getJasperConfiguration().getFontList());
 			}
 		}
 	}
@@ -321,7 +311,7 @@ public class SPFont extends ASPropertyWidget {
 			JRFont fontValue = (JRFont) mfont.getValue();
 
 			if (!itemsSetted) {
-				fontName.setItems(FontUtils.stringToItems(ModelUtils.getFontNames(parentNode.getJasperConfiguration())));
+				fontName.setItems(parentNode.getJasperConfiguration().getFontList());
 				itemsSetted = true;
 			}
 			String strfontname = JRStyleResolver.getFontName(fontValue);
