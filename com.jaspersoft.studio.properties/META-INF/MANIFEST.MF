@@ -5,10 +5,10 @@ Bundle-SymbolicName: com.jaspersoft.studio.properties;singleton:=true
 Bundle-Version: 5.1.1.qualifier
 Bundle-Activator: com.jaspersoft.studio.properties.Activator
 Bundle-Vendor: Jaspersoft Corporation
-Require-Bundle: org.eclipse.ui;visibility:=reexport,
- org.eclipse.ui.forms;bundle-version="3.3.0";visibility:=reexport,
- org.eclipse.ui.views;bundle-version="3.4.0";visibility:=reexport,
- org.eclipse.core.runtime;bundle-version="3.4.0";visibility:=reexport
+Require-Bundle: org.eclipse.ui;bundle-version="3.6.0";visibility:=reexport,
+ org.eclipse.ui.forms;bundle-version="3.5.0";visibility:=reexport,
+ org.eclipse.ui.views;bundle-version="3.5.0";visibility:=reexport,
+ org.eclipse.core.runtime;bundle-version="3.6.0";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.jaspersoft.studio.properties;uses:="org.eclipse.ui.plugin,org.osgi.framework",

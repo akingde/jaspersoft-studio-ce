@@ -8,4 +8,4 @@ Fragment-Host: com.jaspersoft.studio.doc;bundle-version="2.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: net.sf.jasperreports.samples;bundle-version="5.1.1",
  net.sf.jasperreports.doc;bundle-version="5.1.1",
- org.eclipse.ui.navigator.resources
+ org.eclipse.ui.navigator.resources;bundle-version="3.4.200"
