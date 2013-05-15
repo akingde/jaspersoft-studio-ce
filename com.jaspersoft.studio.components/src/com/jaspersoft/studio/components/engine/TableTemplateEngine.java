@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.engine;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +38,7 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
@@ -48,13 +50,18 @@ import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
 
+import org.eclipse.draw2d.ColorConstants;
+
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
 import com.jaspersoft.studio.components.table.model.dialog.ApplyTableStyleAction;
+import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
+import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableSections;
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableWizardLayoutPage;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.templates.ReportBundle;
@@ -93,7 +100,12 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	/**
 	 * Sample of the text element that should be used inside the table header\footer cells
 	 */
-	private JRDesignTextField tableHeaderField;
+	//private JRDesignTextField tableHeaderField;
+	
+	/**
+	 * Sample of the text element that should be used inside the table group cells
+	 */
+	private JRDesignTextField tableGroupField;
 	
 	/**
 	 * Sample of the text element that should be used inside the detail cells
@@ -273,7 +285,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 					JRDesignField groupField = (JRDesignField) field;
 					DesignCell cell = new DesignCell();
 					cell.setHeight(height);
-					JRDesignTextField sText = (JRDesignTextField) new MTextField().createJRElement(jd);
+					JRDesignTextField sText = (JRDesignTextField)tableGroupField.clone();
 					sText.setWidth(parentCol.getWidth());
 					sText.setHeight(cell.getHeight());
 					sText.setX(0);
@@ -282,9 +294,6 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 					sText.setExpression(groupExpression);
 					cell.addElement(sText);
 					parentCol.setGroupHeader(groupField.getName(), cell);
-					//cell = new DesignCell();
-					//cell.setHeight(height);
-					//parentCol.setGroupFooter(groupField.getName(), cell);
 				}
 				tbl.addColumn(parentCol);
 				tableHeight = getTableHeight(parentCol);
@@ -314,13 +323,13 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	/**
 	 * From an array of JRDesignStyle try to find the style to apply to the table. The styles searched must have 
 	 * a specific name: Table, Table_TH, Table_CH, Table_TD. If all this four styles are found then a List with 
-	 * their references is returned, otherwise null
+	 * their references is returned, otherwise some default styles will be generated and returned
 	 * 
 	 * @param styleArray the array of JRDesignStyle
-	 * @return a list of style that will be applied to the table, or null if the searched styles are not found 
-	 * in the array
+	 * @return a list of style that will be applied to the table
 	 */
-	private List<JRDesignStyle> buildStylesList(JRStyle[] styleArray){
+	private List<JRDesignStyle> buildStylesList(JasperDesign jd){
+		JRStyle[] styleArray = jd.getStyles();
 		JRDesignStyle[] result = new JRDesignStyle[4];
 		for(JRStyle style : styleArray){
 			if(style instanceof JRDesignStyle){
@@ -330,8 +339,20 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 				else if (style.getName().equals("Table_TD")) result[3] = (JRDesignStyle)style;
 			}
 		}
-		if (result[1] == null || result[2] == null || result[3] == null ) return null;
-		else return new ArrayList<JRDesignStyle>(Arrays.asList(result));
+		if (result[1] == null || result[2] == null || result[3] == null ) {
+			//Styles missing, generating default styles
+			TableStyle defaultPattern = new TableStyle(ColorConstants.white.getRGB(), ColorSchemaGenerator.SCHEMAS.PALE, 
+															BorderStyleEnum.FULL, ColorConstants.black.getRGB(), false);
+			ApplyTableStyleAction stylesGenerator = new ApplyTableStyleAction(defaultPattern, null);
+			List<JRDesignStyle> defaultStyles = stylesGenerator.createStyles(jd);
+			defaultStyles.get(1).setBackcolor(Color.white);
+			defaultStyles.get(2).setBackcolor(Color.white);
+			defaultStyles.get(3).setBackcolor(Color.white);
+			if (result[1] == null) result[1] = defaultStyles.get(1);
+			if (result[2] == null) result[2] = defaultStyles.get(2);
+			if (result[3] == null) result[3] = defaultStyles.get(3);
+		}
+		return new ArrayList<JRDesignStyle>(Arrays.asList(result));
 	}
 	
 	
@@ -342,12 +363,14 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	 * @return a JRDesignComponentElement that contains a StandardTable, or null if it isn't found
 	 */
 	private JRDesignComponentElement getTable(JasperDesign jd){
+		if (jd.getSummary() == null) return null;
 		for(JRChild child : jd.getSummary().getChildren()){
 			if (child instanceof JRDesignComponentElement){
 				JRDesignComponentElement component = (JRDesignComponentElement)child;
 				if (component.getComponent() instanceof StandardTable) return component;
 			}
 		}
+		//No table found, create a default one
 		return null;
 	}
 
@@ -357,17 +380,20 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	@Override
 	protected void processTemplate(JasperDesign jd, List<Object> fields, List<Object> groupFields) {
 		//Initialize the styles list
-		stylesList = buildStylesList(jd.getStyles());
+		stylesList = buildStylesList(jd);
 		JRDesignComponentElement tableComponent = getTable(jd);
 		/**
-		 * If the tamplate table is found it will be used to create the style of the real table and of its 
+		 * If the template table is found it will be used to create the style of the real table and of its 
 		 * content
 		 */
 		if (tableComponent != null){
 			StandardTable table = (StandardTable)tableComponent.getComponent();
+			
 			colHeaderLabel = findStaticTextElement(table,"label");
 			cellField = findTextFieldElement(table,"DetailField");
-			tableHeaderField = findTextFieldElement(table,"Header");
+			tableGroupField = new MTextField().createJRElement(jd);
+			//tableHeaderField = findTextFieldElement(table,"Header");
+			
 			tableWidth = tableComponent.getWidth();
 			tableHeight = tableComponent.getHeight();
 			tableX = tableComponent.getX();
@@ -382,27 +408,50 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 				boolean groupFooter = col.getGroupFooters() != null && col.getGroupFooters().size()>0; 
 				sections = new TableSections(tableHeader, tableFooter, columnHeader, columnFooter, groupHeader, groupFooter);
 			}
-				
-			
 			removeElement(jd.getSummary(), tableComponent);
+		} else {
+			//If the table is not found try to build the template with some default values
+			colHeaderLabel = DefaultTemplateEngine.findStaticTextElement(jd.getColumnHeader(), "Label");
+			cellField = DefaultTemplateEngine.findTextFieldElement(jd.getDetailSection().getBands()[0], "Field");
+			
+			JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(0);
+			if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
+				JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
+				tableGroupField = DefaultTemplateEngine.findTextFieldElement(groupHeaderSection, "GroupField");
+			} else tableGroupField = new MTextField().createJRElement(jd);
+			
+			tableWidth = jd.getPageWidth()-jd.getLeftMargin()-jd.getRightMargin();
+			
+			if (jd.getSummary() == null){
+				//I need to create the summary where place the table
+				jd.setSummary(MBand.createJRBand());
+				((JRDesignBand)jd.getSummary()).setHeight(jd.getDetailSection().getBands()[0].getHeight());
+			}
+			tableHeight = jd.getSummary().getHeight();
+			tableX = 0;
+			tableY = 0;
+			sections = new TableSections(false, false, true, true, false, false);
+			JRDesignElementGroup summaryBand = (JRDesignElementGroup)jd.getSummary();
+			for(JRChild child : summaryBand.getChildren())
+				summaryBand.removeElement((JRDesignElement)child);
 		}
 		
+		removeUnwantedBand(jd);
+		jd.removeDataset("tableDataset");
+	}
+	
+	private void removeUnwantedBand(JasperDesign jd){
 		/**
 		 * Remove unwanted band and the placeholder dataset of the table
 		 */
+		jd.setColumnHeader(null);
+		jd.setColumnFooter(null);
 		JRDesignSection bandSection = (JRDesignSection)jd.getDetailSection();
 		for(JRBand actualDetail : jd.getDetailSection().getBands())
 			bandSection.removeBand(actualDetail);
 		//Delete the groups
 		while (jd.getGroupsList().size()>0)
 			jd.getGroupsList().remove(0);
-		/*
-		jd.setPageHeader(null);
-		jd.setColumnHeader(null);
-		jd.setColumnFooter(null);
-		jd.setLastPageFooter(null);
-		*/
-		jd.removeDataset("tableDataset");
 	}
 	
 	/**
