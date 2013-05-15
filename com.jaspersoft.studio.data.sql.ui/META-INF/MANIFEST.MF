@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.jaspersoft.studio.data.sql.ui
-Bundle-Vendor: My Company
-Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Jaspersoft Corporation
+Bundle-Version: 5.1.1.qualifier
 Bundle-SymbolicName: com.jaspersoft.studio.data.sql.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.jaspersoft.studio.data.sql;visibility:=reexport,
