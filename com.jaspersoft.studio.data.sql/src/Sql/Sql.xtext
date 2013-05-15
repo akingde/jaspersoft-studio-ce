@@ -1,6 +1,6 @@
-grammar Sql with org.eclipse.xtext.common.Terminals
+grammar com.jaspersoft.studio.data.Sql with org.eclipse.xtext.common.Terminals
 
-generate sql "http://www.Sql"
+generate sql "http://www.com.jaspersoft.studio.data.Sql"
 
 Model:
 	greetings+=Greeting*;
