@@ -686,6 +686,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				else
 					tmpselection = reportContainer.getActiveEditor().getSite().getSelectionProvider().getSelection();
 			}
+			String ver = JRXmlWriterHelper.getVersion(getCurrentFile(), jrContext, false);
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
 				if (activePage == PAGE_XMLEDITOR && !xmlFresh) {
@@ -720,8 +721,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				// if (reportContainer.isDirty())
 				if (toXML)
 					toXML = false;
-				else
-					model2xml();
+				else {
+					model2xml(ver);
+				}
 				break;
 			case PAGE_PREVIEW:
 				if (activePage == PAGE_XMLEDITOR && !xmlFresh)
@@ -732,7 +734,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					}
 				else if (reportContainer.isDirty()) {
 					isRefresh = true;
-					model2xml();
+					model2xml(ver);
 					isRefresh = false;
 				}
 				model2preview();
