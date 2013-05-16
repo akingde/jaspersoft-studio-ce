@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.IURLViewable;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ABrowserViewer extends APreview implements IURLViewable {
@@ -29,7 +30,7 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 		layout.marginHeight = 0;
 		composite.setLayout(layout);
 		try {
-			browser = new Browser(composite, SWT.NONE);
+			browser = UIUtil.getSWTBrowserWidget(composite, SWT.NONE);
 			browser.setLayoutData(new GridData(GridData.FILL_BOTH));
 			browser.setJavascriptEnabled(true);
 		} catch (Error e) {

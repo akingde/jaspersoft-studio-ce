@@ -30,6 +30,7 @@ import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.editor.text.NStringFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.UIUtil;
 
 /*
  * 
@@ -64,7 +65,7 @@ public class CSVExporterPreferencePage extends FieldEditorOverlayPage {
 		HelpSystem.setHelp(tf.getTextControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + tf.getPreferenceName());
 
-		Browser lbl = new Browser(getFieldEditorParent(), SWT.MULTI);
+		Browser lbl = UIUtil.getSWTBrowserWidget(getFieldEditorParent(), SWT.MULTI);
 		lbl.setText(Messages.CSVExporterPreferencePage_5);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
