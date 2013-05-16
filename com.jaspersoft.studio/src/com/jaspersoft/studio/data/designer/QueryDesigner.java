@@ -35,7 +35,7 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
 public class QueryDesigner extends AQueryDesigner {
 	private boolean refresh = false;
 
-	private final class QueryListener implements ModifyListener {
+	public final class QueryListener implements ModifyListener {
 
 		public void modifyText(ModifyEvent e) {
 			if (!refresh) {
@@ -49,7 +49,7 @@ public class QueryDesigner extends AQueryDesigner {
 	protected StyledText control;
 	private Composite tbCompo;
 	private Button btn;
-	private UndoRedoImpl undoHandlrer;
+	protected UndoRedoImpl undoHandlrer;
 
 	public QueryDesigner() {
 	}

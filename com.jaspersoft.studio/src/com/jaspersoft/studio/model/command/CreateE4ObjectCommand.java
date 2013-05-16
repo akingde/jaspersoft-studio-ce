@@ -82,7 +82,7 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 
 			super.createObject();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 

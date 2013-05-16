@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.command;
 
@@ -217,6 +212,19 @@ public class CreateElementCommand extends Command {
 		// calculate position, fix position relative to parent
 		MBand band = ModelUtils.getBand4Point(destNode, new Point(position.x, position.y));
 		// set proposed bounds
+		if (band == null) {
+			if (destNode instanceof MBand)
+				band = (MBand) destNode;
+			else {
+				do {
+					destNode = destNode.getParent();
+					if (destNode instanceof MBand) {
+						band = (MBand) destNode;
+						break;
+					}
+				} while (destNode != null);
+			}
+		}
 		fixLocation(position, band);
 		return band;
 	}
@@ -225,10 +233,13 @@ public class CreateElementCommand extends Command {
 		if (location == null) {
 			if (jrElement != null)
 				location = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
-			else
+			else if (band != null)
 				location = new Rectangle(band.getBounds().x, band.getBounds().y, 50, 30);
+			else
+				location = new Rectangle(0, 0, 100, 100);
 		}
-		location = fixLocation(location, band, jrElement);
+		if (band != null)
+			location = fixLocation(location, band, jrElement);
 	}
 
 	public static Rectangle fixLocation(Rectangle position, MBand band, JRDesignElement jrElement) {
@@ -270,10 +281,10 @@ public class CreateElementCommand extends Command {
 				if (maxBandHeight < height) {
 					height = maxBandHeight - 1;
 					jrElement.setHeight(height - jrElement.getY());
-					// Commented for back-compatibility in 3.6. 
+					// Commented for back-compatibility in 3.6.
 					// Replaced with the following line.
 					// location.setHeight(height - jrElement.getY());
-					location.height= height - jrElement.getY();
+					location.height = height - jrElement.getY();
 				}
 				SetValueCommand cmd = new SetValueCommand();
 				cmd.setTarget((IPropertySource) destNode);
