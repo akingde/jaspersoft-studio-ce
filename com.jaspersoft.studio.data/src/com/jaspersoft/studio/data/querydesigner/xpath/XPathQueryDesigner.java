@@ -17,12 +17,14 @@ package com.jaspersoft.studio.data.querydesigner.xpath;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -65,6 +67,7 @@ import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.datasource.xml.XMLAttributeNode;
 import com.jaspersoft.studio.model.datasource.xml.XMLNode;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
+import com.jaspersoft.studio.utils.XMLUtils;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /**
@@ -377,16 +380,10 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 									try {
 										Document doc = null;
 										if (da.getDataAdapter() instanceof RemoteXmlDataAdapter) {
-											doc = DocumentBuilderFactory
-													.newInstance()
-													.newDocumentBuilder()
-													.parse(fileName);
+											doc = JRXmlUtils.parse(new URL(fileName),XMLUtils.isNamespaceAware(jConfig.getJasperDesign()));
 										} else {
 											File in = new File(fileName);
-											doc = DocumentBuilderFactory
-													.newInstance()
-													.newDocumentBuilder()
-													.parse(in);
+											doc = JRXmlUtils.parse(in,XMLUtils.isNamespaceAware(jConfig.getJasperDesign()));
 										}
 										documentManager.setDocument(doc);
 										documentManager

@@ -16,11 +16,9 @@
 package com.jaspersoft.studio.data.remotexml;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
@@ -30,12 +28,12 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.Activator;
@@ -43,6 +41,7 @@ import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.xml.XMLDataAdapterDescriptor;
+import com.jaspersoft.studio.utils.XMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor implements IFieldsProvider,IWizardDataEditorProvider
@@ -85,13 +84,9 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor imp
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
 		try {
 			String fileName = remoteXmlDataAdapter.getFileName();
-			Document doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(fileName);	
+			Document doc=JRXmlUtils.parse(new URL(fileName),XMLUtils.isNamespaceAware(jConfig.getJasperDesign()));	
 			fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset));
-		} catch (SAXException e) {
-			t=e;
 		} catch (IOException e) {
-			t=e;
-		} catch (ParserConfigurationException e) {
 			t=e;
 		} 
 

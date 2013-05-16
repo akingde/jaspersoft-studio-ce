@@ -16,12 +16,8 @@
 package com.jaspersoft.studio.data.xml;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
@@ -30,6 +26,7 @@ import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
 import net.sf.jasperreports.engine.util.xml.JRXPathExecuterFactory;
 import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
@@ -40,7 +37,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.Activator;
@@ -49,6 +45,7 @@ import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.XMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider,IWizardDataEditorProvider
@@ -92,24 +89,11 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JasperReportsConfiguration jConfig, JRDataset jDataset)
 			throws JRException, UnsupportedOperationException {
-		Throwable err=null;
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
-		try {
-			String fileName = xmlDataAdapter.getFileName();
-			File in = new File(fileName);
-			Document doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);	
-			fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset));
-		} catch (SAXException e) {
-			err=e;
-		} catch (IOException e) {
-			err=e;
-		} catch (ParserConfigurationException e) {
-			err=e;
-		} 
-
-		if(err!=null){
-			throw new JRException(err);
-		}
+		String fileName = xmlDataAdapter.getFileName();
+		File in = new File(fileName); 
+		Document doc=JRXmlUtils.parse(in,XMLUtils.isNamespaceAware(jConfig.getJasperDesign()));	
+		fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset)); 
 		return fields;
 	}
 	
