@@ -270,6 +270,7 @@ public class Messages extends NLS {
 	public static String CreateDataSourceAction_create;
 	public static String CreateDataSourceAction_description;
 	public static String CreateDataSourceAction_tool_tip;
+	public static String CreateE4ObjectCommand_ErrorCreatingObject;
 	public static String CreateFieldAction_create_field;
 	public static String CreateFieldAction_create_field_tool_tip;
 	public static String CreateFieldCommand_field_name;
