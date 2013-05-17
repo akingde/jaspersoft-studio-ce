@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.Status;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage;
+import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.templates.TemplateBundle;
 
 /**
@@ -43,6 +44,7 @@ import com.jaspersoft.templates.TemplateBundle;
 public class DefaultTemplateProvider implements TemplateProvider {
 
 	public static List<TemplateBundle> cache = null;
+	
 	@Override
 	public List<TemplateBundle> getTemplateBundles() {
 		
@@ -57,8 +59,7 @@ public class DefaultTemplateProvider implements TemplateProvider {
 					URL templateURL = (URL) en.nextElement();
 					
 					try {
-						
-						
+	
 						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle( templateURL );
 						
 						if (bundle != null)
@@ -106,8 +107,9 @@ public class DefaultTemplateProvider implements TemplateProvider {
 			if (files != null) {
 				for (File f : files) {
 					try {
-						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(f.toURI().toURL());
-						if (bundle != null) {
+						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(f.toURI().toURL(),true);
+						Object engine = bundle.getProperty("template.engine");
+						if (bundle != null && (engine == null || DefaultTemplateEngine.defaultEngineKey.equals(engine.toString().toLowerCase()))) {
 							templates.add(bundle);
 						}
 					} catch (Exception ex) {

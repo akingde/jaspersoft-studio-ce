@@ -88,4 +88,21 @@ public interface TemplateBundle {
 	 */
 	public InputStream getResource(String name);
 	
+	/**
+	 * Return a property for the template
+	 * 
+	 * @param properyName the name of the property
+	 * @return The value of the property or null if it isn't found
+	 */
+	public Object getProperty(String properyName);
+	
+	/**
+	 * Check if the TemplateBundle is internal to Jaspersoft Studio or it is load
+	 * from an external location
+	 * 
+	 * @return True if the Template bundle is load from an external location, otherwise
+	 * false
+	 */
+	public boolean isExternal();
+	
 }

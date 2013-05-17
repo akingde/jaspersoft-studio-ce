@@ -31,15 +31,17 @@ public class TableTemplateBunlde extends JrxmlTemplateBundle {
 	public TableTemplateBunlde(URL url) throws Exception {
 		super(url);
 	}
+	
+	public TableTemplateBunlde(URL url, boolean isExternal) throws Exception {
+		super(url, isExternal);
+	}
 
 	/**
 	 * For the table based templates return a Table Template Engine
 	 */
 	protected void readProperties()
 	{
-		if (getJasperDesign() != null){
-			setLabel(getJasperDesign().getName() );
-		}
+		super.readProperties();
 		templateEngine = new TableTemplateEngine();
 	}
 	

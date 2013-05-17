@@ -48,6 +48,11 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 	public static List<TemplateBundle> cache = null;
 	
 	/**
+	 * Key used to distinguish the tabular template from the other templates
+	 */
+	public static final String tableTemplateKey="tabular_template";
+	
+	/**
 	 * Read all the templates jrxml in the folder templates/table, the subdirectories are excluded
 	 */
 	@Override
@@ -101,8 +106,8 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 			if (files != null) {
 				for (File f : files) {
 					try {
-						TemplateBundle bundle =  new TableTemplateBunlde(f.toURI().toURL());
-						if (bundle != null) {
+						TemplateBundle bundle =  new TableTemplateBunlde(f.toURI().toURL(),true);
+						if (bundle != null && tableTemplateKey.equals(bundle.getProperty("template.engine"))) {
 							templates.add(bundle);
 						}
 					} catch (Exception ex) {

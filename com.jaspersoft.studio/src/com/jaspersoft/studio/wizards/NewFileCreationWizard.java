@@ -44,7 +44,7 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	 * This variable is used to load default file name in case this page is shown for the first time, otherwise the page
 	 * is left as it is.
 	 */
-	boolean firstLoad = true;
+	//boolean firstLoad = true;
 
 	public NewFileCreationWizard(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
@@ -129,10 +129,10 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	 */
 	public void loadSettings() {
 
-		if (!firstLoad)
-			return;
+		//if (!firstLoad)
+		//	return;
 
-		firstLoad = false;
+		//firstLoad = false;
 
 		String baseName = ReportNewWizard.NEW_REPORT_JRXML;
 		System.out.println("Seeting up the file name");

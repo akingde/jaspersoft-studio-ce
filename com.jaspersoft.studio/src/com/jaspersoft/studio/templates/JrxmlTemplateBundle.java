@@ -17,10 +17,12 @@ package com.jaspersoft.studio.templates;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRExpression;
@@ -42,9 +44,12 @@ import com.jaspersoft.templates.TemplateEngine;
 /**
  * This is a generic template bundle able to laod info from a JRXML file.
  * The Jrxml location is provided via URL, so the location of the jrxml is filesystem independent (it could be a jar,
- * a bundleentry or a regural file inside a directory).
+ * a bundleentry or a regural file inside a directory). When the JRXML is loaded also a properties file is searched in the 
+ * same location with the name of nameOfTheJRXML_descriptor.properties.
+ * This properties file contains some basic information on the template, like categories, name and so on. If the properties
+ * file is not found then these properties are read from the JRXML
  * 
- * @author gtoffoli
+ * @author gtoffoli & Orlandin Marco
  *
  */
 public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
@@ -55,6 +60,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 	private String label;
 	private String category = null;
 	private JasperDesign jasperDesign = null;
+	private boolean isExternal;
 	
 	protected TemplateEngine templateEngine = null;
 	
@@ -73,11 +79,13 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 	 */
 	protected List<String> resourceNames;
 	
-	
+	/**
+	 * The properties file associated with the report
+	 */
+	protected Properties propertyFile = null;
 	
 	/**
 	 * A map to map resource names (file names) with their full location.
-	 * 
 	 */
 	protected Map<String, URL> resourceUrls;
 
@@ -116,7 +124,6 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 			return resourceURL.openStream();
 		
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -166,7 +173,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 			
 			resourceNames = new ArrayList<String>();
 			
-			List<JRDesignElement> list = ModelUtils.getAllGElements(this.jasperDesign);
+			List<JRDesignElement> list = ModelUtils.getAllGElements(getJasperDesign());
 			
 			System.out.println("Elements found: " + list);
 			
@@ -201,7 +208,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 			}
 			
 			// Check for external style references
-			List<JRReportTemplate> templates = this.jasperDesign.getTemplatesList();
+			List<JRReportTemplate> templates = getJasperDesign().getTemplatesList();
 			for (JRReportTemplate t : templates)
 			{
 				 	String res = evalResourceName( t.getSourceExpression());
@@ -228,6 +235,16 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 //						}
 
 		return resourceNames;
+	}
+	
+	/**
+	 * Return a property for the TemplateBundle. First the property is read from
+	 * the properties file of the report. If this file is not available then the 
+	 * property is read from the JasperDesign
+	 */
+	public Object getProperty(String properyName){
+		if (propertyFile != null) return propertyFile.getProperty(properyName);
+		return getJasperDesign().getProperty(properyName);
 	}
 
 	
@@ -268,6 +285,22 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 		
 	}
 	
+	/**
+	 * Load the jasperdesign from the JRXML file and save it
+	 */
+	protected void loadJasperDesign()
+	{
+		InputStream is = null;
+		try {
+				is = templateURL.openStream();
+				this.jasperDesign = JRXmlLoader.load(is);
+		} catch(Exception e){
+			e.printStackTrace();
+		}	finally {
+			if (is != null) FileUtils.closeStream(is);
+		}
+	}
+	
 	
 	/**
 	 * Creates a template bundle from a file.
@@ -275,38 +308,48 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 	 * @param file
 	 * @throws Exception
 	 */
-	public JrxmlTemplateBundle(URL url) throws Exception
+	public JrxmlTemplateBundle(URL url) throws Exception{
+		this(url,false);
+	}
+	
+	/**
+	 * Creates a template bundle from a file.
+	 * 
+	 * @param file
+	 * @throws Exception
+	 */
+	public JrxmlTemplateBundle(URL url, boolean isExternal) throws Exception
 	{
-		
 		this.templateURL = url;
-		InputStream is = templateURL.openStream();
-		try {
-				this.jasperDesign = JRXmlLoader.load(is);
-		} finally {
-			FileUtils.closeStream(is);
-		}
-			
-	  if (this.jasperDesign != null)
+		String urlPath = templateURL.toExternalForm();
+		if (urlPath.endsWith(".jrxml"))
 	  {
-	  		// read information from the jasper design object...
-	  		readProperties();
-	  		
-	  		if (templateURL.getFile().endsWith(".jrxml"))
-			  {
-			  	 // locate the template thumbnail by replacing the .jrxml with png....
-			  	 String[] imageExtensions = new String[] { ".png",".gif", ".jpg" };
-			  	 
-			  	 String baseImageUrl = templateURL.toExternalForm();
-			  	 // remove the .jrxml...
-			  	 baseImageUrl = baseImageUrl.substring(0, baseImageUrl.length() - ".jrxml".length()  );
-			  	 
-			  	 for (String extension : imageExtensions)
-			  	 {
-			  		 URL iconURL = new URL(baseImageUrl + extension);
-			  		 setIcon(getIconFromUrl(iconURL));
-			  		 if (getIcon() != null) break;
-			  	 }
-			  }
+			String propertiesPath = urlPath.substring(0, urlPath.length()-6).concat("_descriptor.properties");
+			
+			URL propertiesFile = new URL(propertiesPath);
+			if (!isExternal() || (new File(propertiesFile.getFile())).exists()){
+				this.propertyFile = new Properties();
+				this.propertyFile.load(propertiesFile.openStream());
+			}
+
+  		// read information from the jasper design object...
+  		readProperties();
+	  	// locate the template thumbnail by replacing the .jrxml with png....
+	  	String[] imageExtensions = new String[] { ".png",".gif", ".jpg" };
+	  	
+	  	String baseImageUrl = templateURL.toExternalForm();
+	  	// remove the .jrxml...
+	  	baseImageUrl = baseImageUrl.substring(0, baseImageUrl.length() - ".jrxml".length()  );	
+	  	for (String extension : imageExtensions)
+	  	{
+				try {
+					 URL iconURL = new URL(baseImageUrl + extension);
+			 		 setIcon(getIconFromUrl(iconURL));
+			 		 if (getIcon() != null) break;
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
+	  	}
 	  }
 	  
 	}
@@ -319,17 +362,14 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 	 * @param iconURL
 	 * @return
 	 */
-	private Image getIconFromUrl(URL iconURL) {
-		
-		
+	private Image getIconFromUrl(URL iconURL) 
+	{
 		ImageDescriptor descriptor = ImageDescriptor.createFromURL(iconURL);
-		
 		if (descriptor == null)
 		{		
 			// fall back to the icons/report.png...
 			descriptor = ResourceManager.getImageDescriptor("icons/report.png"); //$NON-NLS-1$
 		}
-		
 		return ResourceManager.getImage(descriptor);
 	}
 	
@@ -352,15 +392,16 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 	
 	/**
 	 * The jasperdesign provided by the template
-	 * ready to be customized.
-	 * 
-	 * Attention! A new JasperDesign is created on each call.
-	 * 
+	 * ready to be customized. If the jasperdesign
+	 * was not previously loaded then it is read
+	 * from the JRXML file
 	 * 
 	 */
 	public JasperDesign getJasperDesign() {
+		if (jasperDesign == null) loadJasperDesign();
 		return jasperDesign;
 	}
+	
 
 	/**
 	 * @return the templateURL
@@ -375,30 +416,30 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 	protected void setTemplateURL(URL templateURL) {
 		this.templateURL = templateURL;
 	}
-	
-	
+		
 	/**
-	 * Introspect the jasperdesign to set template label and other possible information
+	 * Introspect the properties file or jasperdesign to set template label and engine informations
 	 * 
 	 */
 	protected void readProperties()
 	{
-		if (this.jasperDesign != null)
-		{
-			setLabel(  this.jasperDesign.getName() );
-			
-			if (this.jasperDesign.getProperty("template.engine") != null)
-			{
-				// TODO: handle the selection of a special template engine.
-				//String templateEngineClassName = this.jasperdesign.getProperty("template.engine");
-				// Check if this templateEngine exists...
-				templateEngine = new DefaultTemplateEngine();
-			}
-			else
-			{
-				templateEngine = new DefaultTemplateEngine();
-			}
+		String name = null;
+		String engine= null;
+		if (this.propertyFile != null){
+			name = propertyFile.getProperty("template.name");
+			engine = propertyFile.getProperty("template.engine");
 		}
+		
+		if (engine == null || engine.toLowerCase().equals(DefaultTemplateEngine.defaultEngineKey)) templateEngine = new DefaultTemplateEngine();
+		if (name == null){
+			name = getJasperDesign().getName();
+		}
+		setLabel(name);
+	}
+
+	@Override
+	public boolean isExternal() {
+		return isExternal;
 	}
 	
 }

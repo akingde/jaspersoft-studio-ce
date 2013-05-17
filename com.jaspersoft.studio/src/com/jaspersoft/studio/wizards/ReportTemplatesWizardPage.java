@@ -15,8 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.wizards;
 
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.nebula.widgets.gallery.Gallery;
@@ -24,10 +25,12 @@ import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.nebula.widgets.gallery.NoGroupRenderer;
 import org.eclipse.nebula.widgets.gallery.RoundedGalleryItemRenderer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -54,14 +57,54 @@ import com.jaspersoft.templates.TemplateBundle;
  *
  */
 public class ReportTemplatesWizardPage extends JSSWizardPage {
-	private java.util.List<URL> urls = new ArrayList<URL>();
-	private java.util.List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>();
-
 	
-	private Gallery gal;
-	private GalleryItem itemGroup;
+	private static final int GALLERY_HEIGHT = 100;
+	
+	private static final int GALLERY_WIDTH = 100;
+
+	private Scale scale;
+	
 	private List<Image> templateImages;
 	
+	/**
+	 * List component where are the category are shown
+	 */
+	private org.eclipse.swt.widgets.List list;
+	
+	/**
+	 * Hashmap to cache the created gallery for a category
+	 */
+	private HashMap<String, Gallery> cachedGalleries = new HashMap<String, Gallery>();
+	
+	/**
+	 * Hashmap to cache for every template bundle a list of the category it belong
+	 */
+	private HashMap<TemplateBundle, HashSet<String>> categoryCache = new HashMap<TemplateBundle, HashSet<String>>();
+	
+	/**
+	 * List of all the categories key shown, in the order they was loaded
+	 */
+	private List<String> categoryList;
+	
+	/**
+	 * Stack layout used to stack the gallery and show only the one connected to the selected
+	 * Category
+	 */
+	private StackLayout layout;
+	
+	/**
+	 * List of all the template bundle available
+	 */
+	private List<TemplateBundle> bundles;
+	
+	/**
+	 * Composite where every new gallery is placed
+	 */
+	private Composite galleryComposite;
+	
+	/**
+	 * The template bundle actually selected
+	 */
 	private TemplateBundle selectedTemplate = null;
 
 	public TemplateBundle getTemplateBundle() {
@@ -86,11 +129,131 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		return ContextHelpIDs.WIZARD_TEMPLATE_PAGE;
 	}
 
-	private static final int GALLERY_HEIGHT = 100;
-	private static final int GALLERY_WIDTH = 100;
-	private NoGroupRenderer gr;
-	private Scale scale;
 
+	/**
+	 * 
+	 * Selection listener for the list of category
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class CategoryChooser extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+				String selectedCategory = categoryList.get(list.getSelectionIndex());
+				showGallery(selectedCategory);
+		}
+		
+    public void widgetDefaultSelected(SelectionEvent event) {
+    	String selectedCategory = categoryList.get(0);
+    	showGallery(selectedCategory);
+    }
+	}
+	
+	/**
+	 * Show the gallery associated to a precise category key. If the gallery for 
+	 * that key is cached then it is show directly, otherwise it is created, populated 
+	 * and then cached and shown.
+	 * 
+	 * @param galleryCategory the key of the gallery.
+	 */
+	private void showGallery(String galleryCategory){
+		Gallery toShow = cachedGalleries.get(galleryCategory);
+		if (toShow == null) toShow = createGalleryForCategory(galleryCategory);
+		layout.topControl = toShow;
+		galleryComposite.layout();
+		GalleryItem rootItem = toShow.getItem(0);
+		if (toShow.getSelectionCount() <= 0 && rootItem.getItemCount()>0)
+		{
+			toShow.setSelection(new GalleryItem[] { rootItem.getItem(0) });
+			setPageComplete(validatePage());
+		}
+		storeSettings();
+		zoomModified();
+	}
+	
+	/**
+	 * Create a new gallery and return it as parameter. The new gallery
+	 * already had the listener added
+	 * 
+	 * @return a new gallery component
+	 */
+	private Gallery createGalleryComponent(){
+		Gallery gal = new Gallery(galleryComposite, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
+		NoGroupRenderer gr = new NoGroupRenderer();
+		gr.setMinMargin(2);
+		gr.setItemSize(GALLERY_WIDTH, GALLERY_HEIGHT);
+		gr.setAutoMargin(true);
+		gal.setGroupRenderer(gr);
+		RoundedGalleryItemRenderer ir = new RoundedGalleryItemRenderer();
+		ir.setShowLabels(true);
+		gal.setItemRenderer(ir);
+
+
+		gal.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				storeSettings();
+				setPageComplete(validatePage());
+			}
+		});
+		
+		gal.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				getContainer().showPage(getNextPage());
+			}
+		});
+		return gal;
+	}
+	
+	/**
+	 * For a gallery create all the preview of a precise category
+	 * 
+	 * @param gal the gallery
+	 * @param categoryName key of the category
+	 */
+	private void craeteItems(Gallery gal, String categoryName){
+		GalleryItem itemGroup = new GalleryItem(gal, SWT.NONE);
+		String universalCategory = categoryList.get(0);
+		for (TemplateBundle b : bundles)
+		{
+			HashSet<String> bundleCategories = categoryCache.get(b);
+			if (categoryName.equals(universalCategory) || bundleCategories.contains(categoryName)){
+				GalleryItem item = new GalleryItem(itemGroup, SWT.NONE);
+				item.setData("template", b);
+				
+				if (b instanceof JrxmlTemplateBundle)
+				{
+					Image itemImage = ((JrxmlTemplateBundle)b).getIcon();
+					
+					if (itemImage != null)
+					{
+							// Add viewer required effects to the images shown...
+							Image selectedImg =new Image(itemImage.getDevice(), SWTImageEffects.extendArea(itemImage.getImageData(), 40, null));
+							Image standardShadowedImg=new Image(itemImage.getDevice(), Glow.glow(itemImage.getImageData(), ResourceManager.getColor(SWT.COLOR_GRAY), 40, 0, 255));
+							item.setSelectedImage(selectedImg);
+							item.setStandardImage(standardShadowedImg);
+							item.setImage(standardShadowedImg);
+							
+							// Save image references, so they can later be disposed
+							templateImages.add(selectedImg);
+							templateImages.add(standardShadowedImg);
+					}
+					
+					item.setText( b.getLabel()); 
+				}
+			}
+		}
+	}
+	
+	
+	private Gallery createGalleryForCategory(String categoryName){
+		Gallery gal = createGalleryComponent();
+		craeteItems(gal, categoryName);
+		cachedGalleries.put(categoryName, gal);
+		return gal;
+	}
+	
 	/**
 	 * Create contents of the wizard.
 	 * 
@@ -111,51 +274,31 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		scale.setMaximum(50);
 		scale.setIncrement(1);
 		scale.setPageIncrement(5);
+		
+		
+		SashForm sashForm = new SashForm(container, SWT.NONE);
+		sashForm.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,1));
+		
+		list = new org.eclipse.swt.widgets.List(sashForm, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+		categoryList = BuiltInCategories.getCategoriesList();
+		for(String cat : categoryList){
+			list.add(Messages.getString(cat));
+			cachedGalleries.put(cat, null);
+		}
+
+    list.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,  true));
+		
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		gd.widthHint = 150;
 		scale.setLayoutData(gd);
 
-		gal = new Gallery(container, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
-		gr = new NoGroupRenderer();
-		gr.setMinMargin(2);
-		gr.setItemSize(GALLERY_WIDTH, GALLERY_HEIGHT);
-		gr.setAutoMargin(true);
-		gal.setGroupRenderer(gr);
-		RoundedGalleryItemRenderer ir = new RoundedGalleryItemRenderer();
-		ir.setShowLabels(true);
-		gal.setItemRenderer(ir);
+		galleryComposite = new Composite(sashForm, SWT.NONE);
+		layout = new StackLayout();
+		galleryComposite.setLayout(layout);
 
-		itemGroup = new GalleryItem(gal, SWT.NONE);
-
-		gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
-		gal.setLayoutData(gd);
-		gal.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				storeSettings();
-				setPageComplete(validatePage());
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
-		});
-		gal.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-			}
-			
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
-			
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				getContainer().showPage(getNextPage());
-			}
-		});
+		sashForm.setWeights(new int[] {30, 70});
 		
+		bundles = StudioTemplateManager.getInstance().getTemplateBundles();
 		findTemplates();
 
 		scale.addListener(SWT.Selection, new Listener() {
@@ -169,62 +312,49 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		// Manually fire the event because the invocation 
 		// of #Scale.selection() does not fire it.
 		zoomModified();
+    list.setSelection(0);
+    list.addSelectionListener(new CategoryChooser());
+    showGallery(categoryList.get(0));
 	}
 	
-	/*
+	/**
 	 * Method that handles the zoom modification (scale widget). 
 	 */
 	private void zoomModified(){
 			double c = 1 + 0.1 * scale.getSelection();
-			gr.setItemSize((int) (GALLERY_WIDTH * c), (int) (GALLERY_HEIGHT * c));
+			if (layout.topControl != null){
+				NoGroupRenderer gr = (NoGroupRenderer)((Gallery)layout.topControl).getGroupRenderer();
+				gr.setItemSize((int) (GALLERY_WIDTH * c), (int) (GALLERY_HEIGHT * c));
+			}
 	}
 
-	
-	
-	public void findTemplates() {
-
+	/**
+	 * For every available template it build a list of all the categories and for every
+	 * template the map of his categories is build
+	 */
+	private void findTemplates() 
+	{
 		// Load all the available templates by invoking the template manager
-		List<TemplateBundle> bundles = StudioTemplateManager.getInstance().getTemplateBundles();
-		
 		for (TemplateBundle b : bundles)
 		{
-			GalleryItem item = new GalleryItem(itemGroup, SWT.NONE);
-			item.setData("template", b);
-			urls.add(null);
-			templateBundles.add(b);
-			
-			if (b instanceof JrxmlTemplateBundle)
-			{
-				Image itemImage = ((JrxmlTemplateBundle)b).getIcon();
+			Object templateCategory = b.getProperty("template.category");
+			if (templateCategory != null){
+				String[] strCategoryList = templateCategory.toString().split(";");
+				HashSet<String> categorySet = new HashSet<String>();
 				
-				if (itemImage != null)
-				{
-					
-						// Add viewer required effects to the images shown...
-						Image selectedImg =new Image(itemImage.getDevice(), SWTImageEffects.extendArea(itemImage.getImageData(), 40, null));
-						Image standardShadowedImg=new Image(itemImage.getDevice(), Glow.glow(itemImage.getImageData(), ResourceManager.getColor(SWT.COLOR_GRAY), 40, 0, 255));
-						item.setSelectedImage(selectedImg);
-						item.setStandardImage(standardShadowedImg);
-						item.setImage(standardShadowedImg);
-						
-						// Save image references, so they can later be disposed
-						templateImages.add(selectedImg);
-						templateImages.add(standardShadowedImg);
-						//item.setImage(itemImage);
-				}
-				
-				item.setText( b.getLabel()); //$NON-NLS-1$
-				
-				if (gal.getSelectionCount() <= 0)
-				{
-					gal.setSelection(new GalleryItem[] { item });
-					storeSettings();
-					setPageComplete(validatePage());
-				}
-			
+				for(String cat : strCategoryList){
+					if (!cat.trim().isEmpty()){
+						if (!cachedGalleries.containsKey(cat)){
+							list.add(cat);
+							categoryList.add(cat);
+							cachedGalleries.put(cat, null);
+						} 
+						categorySet.add(cat);
+					}
+				}	
+				categoryCache.put(b, categorySet);
 			}
 		}
-		
 	}
 
 
@@ -271,6 +401,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	 */
 	public boolean validatePage()
 	{
+		Gallery gal = (Gallery)layout.topControl;
 		if (gal.getSelectionCount() == 0) return false;
 		return true;
 	}
@@ -281,6 +412,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	 */
 	public void storeSettings()
 	{
+		Gallery gal = (Gallery)layout.topControl;
 		if (getSettings() == null) return;
 		if (gal == null) return;
 		

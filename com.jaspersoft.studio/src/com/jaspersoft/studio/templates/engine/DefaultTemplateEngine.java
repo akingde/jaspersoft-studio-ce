@@ -52,6 +52,12 @@ import com.jaspersoft.templates.TemplateEngineException;
  */
 public class DefaultTemplateEngine implements TemplateEngine {
 
+	
+	/**
+	 * Key used to distinguish the standard template from the other templates
+	 */
+	public static final String defaultEngineKey="default";//$NON-NLS-1$
+	
 	final static public String DATASET = "main_dataset"; //$NON-NLS-1$
 	final static public String FIELDS = "main_fields"; //$NON-NLS-1$
 	final static public String GROUP_FIELDS = "main_group_fields"; //$NON-NLS-1$
@@ -71,7 +77,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 			UIUtils.showError(e);
 			return null;
 		}
-
+		
 		List<Object> fields = (List<Object>) settings.get(FIELDS);
 		List<Object> groupFields = (List<Object>) settings.get(GROUP_FIELDS);
 
