@@ -181,10 +181,13 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				if (isRefresh)
 					return;
 				isRefresh = true;
+				int cp = ruID.getSelection().x;
 				String rtext = ruID.getText();
 				ResourceDescriptor ru = getNewRunit().getValue();
 				ru.setName(ResourcePageContent.safeChar(rtext));
-				ruID.setText(ru.getName());
+				String txt = ru.getName();
+				ruID.setText(txt);
+				ruID.setSelection(cp, cp);
 				isRefresh = false;
 			}
 		});
@@ -195,6 +198,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				if (isRefresh)
 					return;
 				isRefresh = true;
+
 				String rtext = ruLabel.getText();
 				ResourceDescriptor ru = getNewRunit().getValue();
 				ru.setName(ResourcePageContent.safeChar(rtext));
