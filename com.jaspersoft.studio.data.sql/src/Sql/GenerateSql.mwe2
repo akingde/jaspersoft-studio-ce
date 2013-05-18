@@ -15,8 +15,8 @@ Workflow {
     	scanClassPath = true
     	platformUri = "${runtimeProject}/.."
     	// The following two lines can be removed, if Xbase is not used.
-    	registerGeneratedEPackage = "org.eclipse.xtext.xbase.XbasePackage"
-    	registerGenModelFile = "platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel"
+    //	registerGeneratedEPackage = "org.eclipse.xtext.xbase.XbasePackage"
+    //	registerGenModelFile = "platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel"
     }
     
     component = DirectoryCleaner {
@@ -30,7 +30,7 @@ Workflow {
     component = Generator {
     	pathRtProject = runtimeProject
     	pathUiProject = "${runtimeProject}.ui"
-    	pathTestProject = "${runtimeProject}.tests"
+    	//pathTestProject = "${runtimeProject}.tests"
     	projectNameRt = projectName
     	projectNameUi = "${projectName}.ui"
     	language = auto-inject {
@@ -103,7 +103,7 @@ Workflow {
     		fragment = parser.antlr.XtextAntlrUiGeneratorFragment auto-inject {}
     
     		// generates junit test support classes into Generator#pathTestProject
-    		fragment = junit.Junit4Fragment auto-inject {}
+    		//fragment = junit.Junit4Fragment auto-inject {}
     
     		// project wizard (optional)
     		// fragment = projectWizard.SimpleProjectWizardFragment auto-inject {

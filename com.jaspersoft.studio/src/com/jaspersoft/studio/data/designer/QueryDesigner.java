@@ -83,9 +83,13 @@ public class QueryDesigner extends AQueryDesigner {
 	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig) {
 		super.setQuery(jDesign, jDataset, jConfig);
 		refresh = true;
-		control.setText(jDataset.getQuery().getText());
+		updateQueryText(jDataset.getQuery().getText());
 		undoHandlrer.clearStack();
 		refresh = false;
+	}
+
+	protected void updateQueryText(String txt) {
+		control.setText(txt);
 	}
 
 	public void dispose() {

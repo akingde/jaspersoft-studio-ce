@@ -1,13 +1,26 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.jaspersoft.studio.data.sql.ui
+Bundle-Name: SQL Query Editor
 Bundle-Vendor: Jaspersoft Corporation
 Bundle-Version: 5.1.1.qualifier
 Bundle-SymbolicName: com.jaspersoft.studio.data.sql.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.jaspersoft.studio.data.sql;visibility:=reexport,
  org.eclipse.xtext.ui,
- org.eclipse.ui.editors;bundle-version="3.5.0",
- org.eclipse.ui.ide;bundle-version="3.5.0"
-Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.xtext.builder,
+ org.antlr.runtime,
+ org.eclipse.xtext.common.types.ui,
+ org.eclipse.xtext.ui.codetemplates.ui,
+ org.eclipse.compare,
+ com.jaspersoft.studio.data;bundle-version="5.1.1",
+ de.itemis.xtext.utils.jface;bundle-version="1.0.0",
+ org.eclipse.ui.editors,
+ org.eclipse.ui
+Import-Package: org.apache.log4j,
+ org.eclipse.xtext.xbase.lib
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.jaspersoft.studio.data.ui.quickfix,
+ com.jaspersoft.studio.data.ui.contentassist,
+ com.jaspersoft.studio.data.ui.contentassist.antlr
+Bundle-Activator: com.jaspersoft.studio.data.ui.internal.SqlActivator
