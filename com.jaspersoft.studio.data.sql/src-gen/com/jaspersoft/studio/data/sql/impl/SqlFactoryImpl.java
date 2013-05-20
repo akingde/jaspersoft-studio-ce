@@ -66,8 +66,18 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
     switch (eClass.getClassifierID())
     {
       case SqlPackage.MODEL: return createModel();
-      case SqlPackage.DATABASE: return createDatabase();
+      case SqlPackage.COLUMNS: return createColumns();
+      case SqlPackage.COLUMN_OR_ALIAS: return createColumnOrAlias();
+      case SqlPackage.COLUMN_FULL: return createColumnFull();
+      case SqlPackage.COLUMN_ALIAS: return createColumnAlias();
       case SqlPackage.COLUMN: return createColumn();
+      case SqlPackage.TABLES: return createTables();
+      case SqlPackage.TABLE_OR_ALIAS: return createTableOrAlias();
+      case SqlPackage.TABLE_FULL: return createTableFull();
+      case SqlPackage.TABLE: return createTable();
+      case SqlPackage.TABLE_ALIAS: return createTableAlias();
+      case SqlPackage.SCHEMA: return createSchema();
+      case SqlPackage.DATABASE: return createDatabase();
       case SqlPackage.WHERE_ENTRY: return createWhereEntry();
       case SqlPackage.EXPRESSION_WHERE_ENTRY: return createExpressionWhereEntry();
       case SqlPackage.SINGLE_EXPRESSION_WHERE_ENTRY: return createSingleExpressionWhereEntry();
@@ -87,6 +97,8 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.NULL_ARRAY_EXPRESSION: return createNullArrayExpression();
       case SqlPackage.DATE_ARRAY_EXPRESSION: return createDateArrayExpression();
       case SqlPackage.BOOLEAN_ARRAY_EXPRESSION: return createBooleanArrayExpression();
+      case SqlPackage.OR_COLUMN: return createOrColumn();
+      case SqlPackage.OR_TABLE: return createOrTable();
       case SqlPackage.OR_WHERE_ENTRY: return createOrWhereEntry();
       case SqlPackage.AND_WHERE_ENTRY: return createAndWhereEntry();
       default:
@@ -148,10 +160,43 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Database createDatabase()
+  public Columns createColumns()
   {
-    DatabaseImpl database = new DatabaseImpl();
-    return database;
+    ColumnsImpl columns = new ColumnsImpl();
+    return columns;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ColumnOrAlias createColumnOrAlias()
+  {
+    ColumnOrAliasImpl columnOrAlias = new ColumnOrAliasImpl();
+    return columnOrAlias;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ColumnFull createColumnFull()
+  {
+    ColumnFullImpl columnFull = new ColumnFullImpl();
+    return columnFull;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ColumnAlias createColumnAlias()
+  {
+    ColumnAliasImpl columnAlias = new ColumnAliasImpl();
+    return columnAlias;
   }
 
   /**
@@ -163,6 +208,83 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     ColumnImpl column = new ColumnImpl();
     return column;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Tables createTables()
+  {
+    TablesImpl tables = new TablesImpl();
+    return tables;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TableOrAlias createTableOrAlias()
+  {
+    TableOrAliasImpl tableOrAlias = new TableOrAliasImpl();
+    return tableOrAlias;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TableFull createTableFull()
+  {
+    TableFullImpl tableFull = new TableFullImpl();
+    return tableFull;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Table createTable()
+  {
+    TableImpl table = new TableImpl();
+    return table;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TableAlias createTableAlias()
+  {
+    TableAliasImpl tableAlias = new TableAliasImpl();
+    return tableAlias;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Schema createSchema()
+  {
+    SchemaImpl schema = new SchemaImpl();
+    return schema;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Database createDatabase()
+  {
+    DatabaseImpl database = new DatabaseImpl();
+    return database;
   }
 
   /**
@@ -372,6 +494,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     BooleanArrayExpressionImpl booleanArrayExpression = new BooleanArrayExpressionImpl();
     return booleanArrayExpression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrColumn createOrColumn()
+  {
+    OrColumnImpl orColumn = new OrColumnImpl();
+    return orColumn;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrTable createOrTable()
+  {
+    OrTableImpl orTable = new OrTableImpl();
+    return orTable;
   }
 
   /**

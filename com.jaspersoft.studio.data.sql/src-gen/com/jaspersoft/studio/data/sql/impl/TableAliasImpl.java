@@ -2,56 +2,57 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.Database;
 import com.jaspersoft.studio.data.sql.SqlPackage;
+import com.jaspersoft.studio.data.sql.TableAlias;
 
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Database</b></em>'.
+ * An implementation of the model object '<em><b>Table Alias</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.DatabaseImpl#getDbName <em>Db Name</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.TableAliasImpl#getTblAlias <em>Tbl Alias</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class DatabaseImpl extends SchemaImpl implements Database
+public class TableAliasImpl extends MinimalEObjectImpl.Container implements TableAlias
 {
   /**
-   * The default value of the '{@link #getDbName() <em>Db Name</em>}' attribute.
+   * The default value of the '{@link #getTblAlias() <em>Tbl Alias</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDbName()
+   * @see #getTblAlias()
    * @generated
    * @ordered
    */
-  protected static final String DB_NAME_EDEFAULT = null;
+  protected static final String TBL_ALIAS_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getDbName() <em>Db Name</em>}' attribute.
+   * The cached value of the '{@link #getTblAlias() <em>Tbl Alias</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDbName()
+   * @see #getTblAlias()
    * @generated
    * @ordered
    */
-  protected String dbName = DB_NAME_EDEFAULT;
+  protected String tblAlias = TBL_ALIAS_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected DatabaseImpl()
+  protected TableAliasImpl()
   {
     super();
   }
@@ -64,7 +65,7 @@ public class DatabaseImpl extends SchemaImpl implements Database
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.DATABASE;
+    return SqlPackage.Literals.TABLE_ALIAS;
   }
 
   /**
@@ -72,9 +73,9 @@ public class DatabaseImpl extends SchemaImpl implements Database
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getDbName()
+  public String getTblAlias()
   {
-    return dbName;
+    return tblAlias;
   }
 
   /**
@@ -82,12 +83,12 @@ public class DatabaseImpl extends SchemaImpl implements Database
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setDbName(String newDbName)
+  public void setTblAlias(String newTblAlias)
   {
-    String oldDbName = dbName;
-    dbName = newDbName;
+    String oldTblAlias = tblAlias;
+    tblAlias = newTblAlias;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.DATABASE__DB_NAME, oldDbName, dbName));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.TABLE_ALIAS__TBL_ALIAS, oldTblAlias, tblAlias));
   }
 
   /**
@@ -100,8 +101,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        return getDbName();
+      case SqlPackage.TABLE_ALIAS__TBL_ALIAS:
+        return getTblAlias();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -116,8 +117,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        setDbName((String)newValue);
+      case SqlPackage.TABLE_ALIAS__TBL_ALIAS:
+        setTblAlias((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -133,8 +134,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        setDbName(DB_NAME_EDEFAULT);
+      case SqlPackage.TABLE_ALIAS__TBL_ALIAS:
+        setTblAlias(TBL_ALIAS_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -150,8 +151,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        return DB_NAME_EDEFAULT == null ? dbName != null : !DB_NAME_EDEFAULT.equals(dbName);
+      case SqlPackage.TABLE_ALIAS__TBL_ALIAS:
+        return TBL_ALIAS_EDEFAULT == null ? tblAlias != null : !TBL_ALIAS_EDEFAULT.equals(tblAlias);
     }
     return super.eIsSet(featureID);
   }
@@ -167,10 +168,10 @@ public class DatabaseImpl extends SchemaImpl implements Database
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (dbName: ");
-    result.append(dbName);
+    result.append(" (tblAlias: ");
+    result.append(tblAlias);
     result.append(')');
     return result.toString();
   }
 
-} //DatabaseImpl
+} //TableAliasImpl

@@ -23,39 +23,39 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cSELECTKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Assignment cColAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cColColumnParserRuleCall_1_0 = (RuleCall)cColAssignment_1.eContents().get(0);
+		private final RuleCall cColColumnsParserRuleCall_1_0 = (RuleCall)cColAssignment_1.eContents().get(0);
 		private final Keyword cFROMKeyword_2 = (Keyword)cGroup.eContents().get(2);
-		private final Assignment cDbAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cDbDatabaseParserRuleCall_3_0 = (RuleCall)cDbAssignment_3.eContents().get(0);
+		private final Assignment cTblAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cTblTablesParserRuleCall_3_0 = (RuleCall)cTblAssignment_3.eContents().get(0);
 		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
 		private final Keyword cWHEREKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
 		private final Assignment cWhereEntryAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
 		private final RuleCall cWhereEntryWhereEntryParserRuleCall_4_1_0 = (RuleCall)cWhereEntryAssignment_4_1.eContents().get(0);
 		
 		//Model:
-		//	"SELECT" col=Column "FROM" db=Database ("WHERE" whereEntry=WhereEntry)?;
+		//	"SELECT" col=Columns "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?;
 		public ParserRule getRule() { return rule; }
 
-		//"SELECT" col=Column "FROM" db=Database ("WHERE" whereEntry=WhereEntry)?
+		//"SELECT" col=Columns "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?
 		public Group getGroup() { return cGroup; }
 
 		//"SELECT"
 		public Keyword getSELECTKeyword_0() { return cSELECTKeyword_0; }
 
-		//col=Column
+		//col=Columns
 		public Assignment getColAssignment_1() { return cColAssignment_1; }
 
-		//Column
-		public RuleCall getColColumnParserRuleCall_1_0() { return cColColumnParserRuleCall_1_0; }
+		//Columns
+		public RuleCall getColColumnsParserRuleCall_1_0() { return cColColumnsParserRuleCall_1_0; }
 
 		//"FROM"
 		public Keyword getFROMKeyword_2() { return cFROMKeyword_2; }
 
-		//db=Database
-		public Assignment getDbAssignment_3() { return cDbAssignment_3; }
+		//tbl=Tables
+		public Assignment getTblAssignment_3() { return cTblAssignment_3; }
 
-		//Database
-		public RuleCall getDbDatabaseParserRuleCall_3_0() { return cDbDatabaseParserRuleCall_3_0; }
+		//Tables
+		public RuleCall getTblTablesParserRuleCall_3_0() { return cTblTablesParserRuleCall_3_0; }
 
 		//("WHERE" whereEntry=WhereEntry)?
 		public Group getGroup_4() { return cGroup_4; }
@@ -68,6 +68,375 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//WhereEntry
 		public RuleCall getWhereEntryWhereEntryParserRuleCall_4_1_0() { return cWhereEntryWhereEntryParserRuleCall_4_1_0; }
+	}
+
+	public class ColumnsElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Columns");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cColumnOrAliasParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cOrColumnEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cEntriesColumnOrAliasParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		
+		//Columns:
+		//	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;
+		public ParserRule getRule() { return rule; }
+
+		//ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?
+		public Group getGroup() { return cGroup; }
+
+		//ColumnOrAlias
+		public RuleCall getColumnOrAliasParserRuleCall_0() { return cColumnOrAliasParserRuleCall_0; }
+
+		//({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{OrColumn.entries+=current}
+		public Action getOrColumnEntriesAction_1_0() { return cOrColumnEntriesAction_1_0; }
+
+		//("," entries+=ColumnOrAlias)+
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//","
+		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
+
+		//entries+=ColumnOrAlias
+		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
+
+		//ColumnOrAlias
+		public RuleCall getEntriesColumnOrAliasParserRuleCall_1_1_1_0() { return cEntriesColumnOrAliasParserRuleCall_1_1_1_0; }
+	}
+
+	public class ColumnOrAliasElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ColumnOrAlias");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final RuleCall cColumnFullParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final RuleCall cColumnFullParserRuleCall_1_0 = (RuleCall)cGroup_1.eContents().get(0);
+		private final Keyword cASKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Assignment cColAliasAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cColAliasColumnAliasParserRuleCall_1_2_0 = (RuleCall)cColAliasAssignment_1_2.eContents().get(0);
+		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
+		private final RuleCall cColumnFullParserRuleCall_2_0 = (RuleCall)cGroup_2.eContents().get(0);
+		private final Assignment cColAliasAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cColAliasColumnAliasParserRuleCall_2_1_0 = (RuleCall)cColAliasAssignment_2_1.eContents().get(0);
+		
+		//ColumnOrAlias:
+		//	ColumnFull | ColumnFull "AS" colAlias=ColumnAlias | ColumnFull colAlias=ColumnAlias;
+		public ParserRule getRule() { return rule; }
+
+		//ColumnFull | ColumnFull "AS" colAlias=ColumnAlias | ColumnFull colAlias=ColumnAlias
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//ColumnFull
+		public RuleCall getColumnFullParserRuleCall_0() { return cColumnFullParserRuleCall_0; }
+
+		//ColumnFull "AS" colAlias=ColumnAlias
+		public Group getGroup_1() { return cGroup_1; }
+
+		//ColumnFull
+		public RuleCall getColumnFullParserRuleCall_1_0() { return cColumnFullParserRuleCall_1_0; }
+
+		//"AS"
+		public Keyword getASKeyword_1_1() { return cASKeyword_1_1; }
+
+		//colAlias=ColumnAlias
+		public Assignment getColAliasAssignment_1_2() { return cColAliasAssignment_1_2; }
+
+		//ColumnAlias
+		public RuleCall getColAliasColumnAliasParserRuleCall_1_2_0() { return cColAliasColumnAliasParserRuleCall_1_2_0; }
+
+		//ColumnFull colAlias=ColumnAlias
+		public Group getGroup_2() { return cGroup_2; }
+
+		//ColumnFull
+		public RuleCall getColumnFullParserRuleCall_2_0() { return cColumnFullParserRuleCall_2_0; }
+
+		//colAlias=ColumnAlias
+		public Assignment getColAliasAssignment_2_1() { return cColAliasAssignment_2_1; }
+
+		//ColumnAlias
+		public RuleCall getColAliasColumnAliasParserRuleCall_2_1_0() { return cColAliasColumnAliasParserRuleCall_2_1_0; }
+	}
+
+	public class ColumnFullElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ColumnFull");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cColNameAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cColNameColumnParserRuleCall_0_0 = (RuleCall)cColNameAssignment_0.eContents().get(0);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final RuleCall cTableFullParserRuleCall_1_0 = (RuleCall)cGroup_1.eContents().get(0);
+		private final Keyword cFullStopKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Assignment cColNameAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cColNameColumnParserRuleCall_1_2_0 = (RuleCall)cColNameAssignment_1_2.eContents().get(0);
+		
+		////| (TableAlias '.' colName=Column);
+		//ColumnFull:
+		//	colName=Column | TableFull "." colName=Column;
+		public ParserRule getRule() { return rule; }
+
+		//colName=Column | TableFull "." colName=Column
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//colName=Column
+		public Assignment getColNameAssignment_0() { return cColNameAssignment_0; }
+
+		//Column
+		public RuleCall getColNameColumnParserRuleCall_0_0() { return cColNameColumnParserRuleCall_0_0; }
+
+		//TableFull "." colName=Column
+		public Group getGroup_1() { return cGroup_1; }
+
+		//TableFull
+		public RuleCall getTableFullParserRuleCall_1_0() { return cTableFullParserRuleCall_1_0; }
+
+		//"."
+		public Keyword getFullStopKeyword_1_1() { return cFullStopKeyword_1_1; }
+
+		//colName=Column
+		public Assignment getColNameAssignment_1_2() { return cColNameAssignment_1_2; }
+
+		//Column
+		public RuleCall getColNameColumnParserRuleCall_1_2_0() { return cColNameColumnParserRuleCall_1_2_0; }
+	}
+
+	public class ColumnAliasElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ColumnAlias");
+		private final Assignment cColAliasAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cColAliasIDTerminalRuleCall_0 = (RuleCall)cColAliasAssignment.eContents().get(0);
+		
+		//ColumnAlias:
+		//	colAlias=ID;
+		public ParserRule getRule() { return rule; }
+
+		//colAlias=ID
+		public Assignment getColAliasAssignment() { return cColAliasAssignment; }
+
+		//ID
+		public RuleCall getColAliasIDTerminalRuleCall_0() { return cColAliasIDTerminalRuleCall_0; }
+	}
+
+	public class ColumnElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Column");
+		private final Assignment cColNameAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cColNameIDTerminalRuleCall_0 = (RuleCall)cColNameAssignment.eContents().get(0);
+		
+		//Column:
+		//	colName=ID;
+		public ParserRule getRule() { return rule; }
+
+		//colName=ID
+		public Assignment getColNameAssignment() { return cColNameAssignment; }
+
+		//ID
+		public RuleCall getColNameIDTerminalRuleCall_0() { return cColNameIDTerminalRuleCall_0; }
+	}
+
+	public class TablesElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Tables");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cTableOrAliasParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cOrTableEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cEntriesTableOrAliasParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		
+		//Tables:
+		//	TableOrAlias ({OrTable.entries+=current} ("," entries+=TableOrAlias)+)?;
+		public ParserRule getRule() { return rule; }
+
+		//TableOrAlias ({OrTable.entries+=current} ("," entries+=TableOrAlias)+)?
+		public Group getGroup() { return cGroup; }
+
+		//TableOrAlias
+		public RuleCall getTableOrAliasParserRuleCall_0() { return cTableOrAliasParserRuleCall_0; }
+
+		//({OrTable.entries+=current} ("," entries+=TableOrAlias)+)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{OrTable.entries+=current}
+		public Action getOrTableEntriesAction_1_0() { return cOrTableEntriesAction_1_0; }
+
+		//("," entries+=TableOrAlias)+
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//","
+		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
+
+		//entries+=TableOrAlias
+		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
+
+		//TableOrAlias
+		public RuleCall getEntriesTableOrAliasParserRuleCall_1_1_1_0() { return cEntriesTableOrAliasParserRuleCall_1_1_1_0; }
+	}
+
+	public class TableOrAliasElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "TableOrAlias");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final RuleCall cTableFullParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final RuleCall cTableFullParserRuleCall_1_0 = (RuleCall)cGroup_1.eContents().get(0);
+		private final Keyword cASKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Assignment cTblAliasAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cTblAliasTableAliasParserRuleCall_1_2_0 = (RuleCall)cTblAliasAssignment_1_2.eContents().get(0);
+		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
+		private final RuleCall cTableFullParserRuleCall_2_0 = (RuleCall)cGroup_2.eContents().get(0);
+		private final Assignment cTblAliasAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cTblAliasTableAliasParserRuleCall_2_1_0 = (RuleCall)cTblAliasAssignment_2_1.eContents().get(0);
+		
+		//TableOrAlias:
+		//	TableFull | TableFull "AS" tblAlias=TableAlias | TableFull tblAlias=TableAlias;
+		public ParserRule getRule() { return rule; }
+
+		//TableFull | TableFull "AS" tblAlias=TableAlias | TableFull tblAlias=TableAlias
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//TableFull
+		public RuleCall getTableFullParserRuleCall_0() { return cTableFullParserRuleCall_0; }
+
+		//TableFull "AS" tblAlias=TableAlias
+		public Group getGroup_1() { return cGroup_1; }
+
+		//TableFull
+		public RuleCall getTableFullParserRuleCall_1_0() { return cTableFullParserRuleCall_1_0; }
+
+		//"AS"
+		public Keyword getASKeyword_1_1() { return cASKeyword_1_1; }
+
+		//tblAlias=TableAlias
+		public Assignment getTblAliasAssignment_1_2() { return cTblAliasAssignment_1_2; }
+
+		//TableAlias
+		public RuleCall getTblAliasTableAliasParserRuleCall_1_2_0() { return cTblAliasTableAliasParserRuleCall_1_2_0; }
+
+		//TableFull tblAlias=TableAlias
+		public Group getGroup_2() { return cGroup_2; }
+
+		//TableFull
+		public RuleCall getTableFullParserRuleCall_2_0() { return cTableFullParserRuleCall_2_0; }
+
+		//tblAlias=TableAlias
+		public Assignment getTblAliasAssignment_2_1() { return cTblAliasAssignment_2_1; }
+
+		//TableAlias
+		public RuleCall getTblAliasTableAliasParserRuleCall_2_1_0() { return cTblAliasTableAliasParserRuleCall_2_1_0; }
+	}
+
+	public class TableFullElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "TableFull");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
+		private final RuleCall cSchemaParserRuleCall_0_0 = (RuleCall)cGroup_0.eContents().get(0);
+		private final Keyword cFullStopKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
+		private final Assignment cTblAssignment_0_2 = (Assignment)cGroup_0.eContents().get(2);
+		private final RuleCall cTblTableParserRuleCall_0_2_0 = (RuleCall)cTblAssignment_0_2.eContents().get(0);
+		private final Assignment cTblAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cTblTableParserRuleCall_1_0 = (RuleCall)cTblAssignment_1.eContents().get(0);
+		
+		//TableFull:
+		//	Schema "." tbl=Table | tbl=Table;
+		public ParserRule getRule() { return rule; }
+
+		//Schema "." tbl=Table | tbl=Table
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//Schema "." tbl=Table
+		public Group getGroup_0() { return cGroup_0; }
+
+		//Schema
+		public RuleCall getSchemaParserRuleCall_0_0() { return cSchemaParserRuleCall_0_0; }
+
+		//"."
+		public Keyword getFullStopKeyword_0_1() { return cFullStopKeyword_0_1; }
+
+		//tbl=Table
+		public Assignment getTblAssignment_0_2() { return cTblAssignment_0_2; }
+
+		//Table
+		public RuleCall getTblTableParserRuleCall_0_2_0() { return cTblTableParserRuleCall_0_2_0; }
+
+		//tbl=Table
+		public Assignment getTblAssignment_1() { return cTblAssignment_1; }
+
+		//Table
+		public RuleCall getTblTableParserRuleCall_1_0() { return cTblTableParserRuleCall_1_0; }
+	}
+
+	public class TableElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Table");
+		private final Assignment cTblAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cTblIDTerminalRuleCall_0 = (RuleCall)cTblAssignment.eContents().get(0);
+		
+		//Table:
+		//	tbl=ID;
+		public ParserRule getRule() { return rule; }
+
+		//tbl=ID
+		public Assignment getTblAssignment() { return cTblAssignment; }
+
+		//ID
+		public RuleCall getTblIDTerminalRuleCall_0() { return cTblIDTerminalRuleCall_0; }
+	}
+
+	public class TableAliasElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "TableAlias");
+		private final Assignment cTblAliasAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cTblAliasIDTerminalRuleCall_0 = (RuleCall)cTblAliasAssignment.eContents().get(0);
+		
+		//TableAlias:
+		//	tblAlias=ID;
+		public ParserRule getRule() { return rule; }
+
+		//tblAlias=ID
+		public Assignment getTblAliasAssignment() { return cTblAliasAssignment; }
+
+		//ID
+		public RuleCall getTblAliasIDTerminalRuleCall_0() { return cTblAliasIDTerminalRuleCall_0; }
+	}
+
+	public class SchemaElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Schema");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
+		private final RuleCall cDatabaseParserRuleCall_0_0 = (RuleCall)cGroup_0.eContents().get(0);
+		private final Keyword cFullStopKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
+		private final Assignment cSchemAssignment_0_2 = (Assignment)cGroup_0.eContents().get(2);
+		private final RuleCall cSchemIDTerminalRuleCall_0_2_0 = (RuleCall)cSchemAssignment_0_2.eContents().get(0);
+		private final Assignment cSchemAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cSchemIDTerminalRuleCall_1_0 = (RuleCall)cSchemAssignment_1.eContents().get(0);
+		
+		//Schema:
+		//	Database "." schem=ID | schem=ID;
+		public ParserRule getRule() { return rule; }
+
+		//Database "." schem=ID | schem=ID
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//Database "." schem=ID
+		public Group getGroup_0() { return cGroup_0; }
+
+		//Database
+		public RuleCall getDatabaseParserRuleCall_0_0() { return cDatabaseParserRuleCall_0_0; }
+
+		//"."
+		public Keyword getFullStopKeyword_0_1() { return cFullStopKeyword_0_1; }
+
+		//schem=ID
+		public Assignment getSchemAssignment_0_2() { return cSchemAssignment_0_2; }
+
+		//ID
+		public RuleCall getSchemIDTerminalRuleCall_0_2_0() { return cSchemIDTerminalRuleCall_0_2_0; }
+
+		//schem=ID
+		public Assignment getSchemAssignment_1() { return cSchemAssignment_1; }
+
+		//ID
+		public RuleCall getSchemIDTerminalRuleCall_1_0() { return cSchemIDTerminalRuleCall_1_0; }
 	}
 
 	public class DatabaseElements extends AbstractParserRuleElementFinder {
@@ -84,94 +453,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//ID
 		public RuleCall getDbNameIDTerminalRuleCall_0() { return cDbNameIDTerminalRuleCall_0; }
-	}
-
-	public class ColumnElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Column");
-		private final Assignment cColAssignment = (Assignment)rule.eContents().get(1);
-		private final RuleCall cColColumnOrAliasParserRuleCall_0 = (RuleCall)cColAssignment.eContents().get(0);
-		
-		//Column:
-		//	col=ColumnOrAlias;
-		public ParserRule getRule() { return rule; }
-
-		//col=ColumnOrAlias
-		public Assignment getColAssignment() { return cColAssignment; }
-
-		//ColumnOrAlias
-		public RuleCall getColColumnOrAliasParserRuleCall_0() { return cColColumnOrAliasParserRuleCall_0; }
-	}
-
-	public class ColumnOrAliasElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ColumnOrAlias");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final RuleCall cColumnFullParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
-		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final RuleCall cColumnFullParserRuleCall_1_0 = (RuleCall)cGroup_1.eContents().get(0);
-		private final Keyword cASKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
-		private final RuleCall cIDTerminalRuleCall_1_2 = (RuleCall)cGroup_1.eContents().get(2);
-		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
-		private final RuleCall cColumnFullParserRuleCall_2_0 = (RuleCall)cGroup_2.eContents().get(0);
-		private final RuleCall cIDTerminalRuleCall_2_1 = (RuleCall)cGroup_2.eContents().get(1);
-		
-		//ColumnOrAlias:
-		//	ColumnFull | ColumnFull "AS" ID | ColumnFull ID;
-		public ParserRule getRule() { return rule; }
-
-		//ColumnFull | ColumnFull "AS" ID | ColumnFull ID
-		public Alternatives getAlternatives() { return cAlternatives; }
-
-		//ColumnFull
-		public RuleCall getColumnFullParserRuleCall_0() { return cColumnFullParserRuleCall_0; }
-
-		//ColumnFull "AS" ID
-		public Group getGroup_1() { return cGroup_1; }
-
-		//ColumnFull
-		public RuleCall getColumnFullParserRuleCall_1_0() { return cColumnFullParserRuleCall_1_0; }
-
-		//"AS"
-		public Keyword getASKeyword_1_1() { return cASKeyword_1_1; }
-
-		//ID
-		public RuleCall getIDTerminalRuleCall_1_2() { return cIDTerminalRuleCall_1_2; }
-
-		//ColumnFull ID
-		public Group getGroup_2() { return cGroup_2; }
-
-		//ColumnFull
-		public RuleCall getColumnFullParserRuleCall_2_0() { return cColumnFullParserRuleCall_2_0; }
-
-		//ID
-		public RuleCall getIDTerminalRuleCall_2_1() { return cIDTerminalRuleCall_2_1; }
-	}
-
-	public class ColumnFullElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ColumnFull");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
-		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
-		private final Keyword cFullStopKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
-		private final RuleCall cIDTerminalRuleCall_1_1 = (RuleCall)cGroup_1.eContents().get(1);
-		
-		//ColumnFull:
-		//	ID ("." ID)*;
-		public ParserRule getRule() { return rule; }
-
-		//ID ("." ID)*
-		public Group getGroup() { return cGroup; }
-
-		//ID
-		public RuleCall getIDTerminalRuleCall_0() { return cIDTerminalRuleCall_0; }
-
-		//("." ID)*
-		public Group getGroup_1() { return cGroup_1; }
-
-		//"."
-		public Keyword getFullStopKeyword_1_0() { return cFullStopKeyword_1_0; }
-
-		//ID
-		public RuleCall getIDTerminalRuleCall_1_1() { return cIDTerminalRuleCall_1_1; }
 	}
 
 	public class WhereEntryElements extends AbstractParserRuleElementFinder {
@@ -982,10 +1263,18 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	private ModelElements pModel;
-	private DatabaseElements pDatabase;
-	private ColumnElements pColumn;
+	private ColumnsElements pColumns;
 	private ColumnOrAliasElements pColumnOrAlias;
 	private ColumnFullElements pColumnFull;
+	private ColumnAliasElements pColumnAlias;
+	private ColumnElements pColumn;
+	private TablesElements pTables;
+	private TableOrAliasElements pTableOrAlias;
+	private TableFullElements pTableFull;
+	private TableElements pTable;
+	private TableAliasElements pTableAlias;
+	private SchemaElements pSchema;
+	private DatabaseElements pDatabase;
 	private WhereEntryElements pWhereEntry;
 	private AndWhereEntryElements pAndWhereEntry;
 	private ConcreteWhereEntryElements pConcreteWhereEntry;
@@ -1054,13 +1343,124 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//Model:
-	//	"SELECT" col=Column "FROM" db=Database ("WHERE" whereEntry=WhereEntry)?;
+	//	"SELECT" col=Columns "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?;
 	public ModelElements getModelAccess() {
 		return (pModel != null) ? pModel : (pModel = new ModelElements());
 	}
 	
 	public ParserRule getModelRule() {
 		return getModelAccess().getRule();
+	}
+
+	//Columns:
+	//	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;
+	public ColumnsElements getColumnsAccess() {
+		return (pColumns != null) ? pColumns : (pColumns = new ColumnsElements());
+	}
+	
+	public ParserRule getColumnsRule() {
+		return getColumnsAccess().getRule();
+	}
+
+	//ColumnOrAlias:
+	//	ColumnFull | ColumnFull "AS" colAlias=ColumnAlias | ColumnFull colAlias=ColumnAlias;
+	public ColumnOrAliasElements getColumnOrAliasAccess() {
+		return (pColumnOrAlias != null) ? pColumnOrAlias : (pColumnOrAlias = new ColumnOrAliasElements());
+	}
+	
+	public ParserRule getColumnOrAliasRule() {
+		return getColumnOrAliasAccess().getRule();
+	}
+
+	////| (TableAlias '.' colName=Column);
+	//ColumnFull:
+	//	colName=Column | TableFull "." colName=Column;
+	public ColumnFullElements getColumnFullAccess() {
+		return (pColumnFull != null) ? pColumnFull : (pColumnFull = new ColumnFullElements());
+	}
+	
+	public ParserRule getColumnFullRule() {
+		return getColumnFullAccess().getRule();
+	}
+
+	//ColumnAlias:
+	//	colAlias=ID;
+	public ColumnAliasElements getColumnAliasAccess() {
+		return (pColumnAlias != null) ? pColumnAlias : (pColumnAlias = new ColumnAliasElements());
+	}
+	
+	public ParserRule getColumnAliasRule() {
+		return getColumnAliasAccess().getRule();
+	}
+
+	//Column:
+	//	colName=ID;
+	public ColumnElements getColumnAccess() {
+		return (pColumn != null) ? pColumn : (pColumn = new ColumnElements());
+	}
+	
+	public ParserRule getColumnRule() {
+		return getColumnAccess().getRule();
+	}
+
+	//Tables:
+	//	TableOrAlias ({OrTable.entries+=current} ("," entries+=TableOrAlias)+)?;
+	public TablesElements getTablesAccess() {
+		return (pTables != null) ? pTables : (pTables = new TablesElements());
+	}
+	
+	public ParserRule getTablesRule() {
+		return getTablesAccess().getRule();
+	}
+
+	//TableOrAlias:
+	//	TableFull | TableFull "AS" tblAlias=TableAlias | TableFull tblAlias=TableAlias;
+	public TableOrAliasElements getTableOrAliasAccess() {
+		return (pTableOrAlias != null) ? pTableOrAlias : (pTableOrAlias = new TableOrAliasElements());
+	}
+	
+	public ParserRule getTableOrAliasRule() {
+		return getTableOrAliasAccess().getRule();
+	}
+
+	//TableFull:
+	//	Schema "." tbl=Table | tbl=Table;
+	public TableFullElements getTableFullAccess() {
+		return (pTableFull != null) ? pTableFull : (pTableFull = new TableFullElements());
+	}
+	
+	public ParserRule getTableFullRule() {
+		return getTableFullAccess().getRule();
+	}
+
+	//Table:
+	//	tbl=ID;
+	public TableElements getTableAccess() {
+		return (pTable != null) ? pTable : (pTable = new TableElements());
+	}
+	
+	public ParserRule getTableRule() {
+		return getTableAccess().getRule();
+	}
+
+	//TableAlias:
+	//	tblAlias=ID;
+	public TableAliasElements getTableAliasAccess() {
+		return (pTableAlias != null) ? pTableAlias : (pTableAlias = new TableAliasElements());
+	}
+	
+	public ParserRule getTableAliasRule() {
+		return getTableAliasAccess().getRule();
+	}
+
+	//Schema:
+	//	Database "." schem=ID | schem=ID;
+	public SchemaElements getSchemaAccess() {
+		return (pSchema != null) ? pSchema : (pSchema = new SchemaElements());
+	}
+	
+	public ParserRule getSchemaRule() {
+		return getSchemaAccess().getRule();
 	}
 
 	//Database:
@@ -1071,36 +1471,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getDatabaseRule() {
 		return getDatabaseAccess().getRule();
-	}
-
-	//Column:
-	//	col=ColumnOrAlias;
-	public ColumnElements getColumnAccess() {
-		return (pColumn != null) ? pColumn : (pColumn = new ColumnElements());
-	}
-	
-	public ParserRule getColumnRule() {
-		return getColumnAccess().getRule();
-	}
-
-	//ColumnOrAlias:
-	//	ColumnFull | ColumnFull "AS" ID | ColumnFull ID;
-	public ColumnOrAliasElements getColumnOrAliasAccess() {
-		return (pColumnOrAlias != null) ? pColumnOrAlias : (pColumnOrAlias = new ColumnOrAliasElements());
-	}
-	
-	public ParserRule getColumnOrAliasRule() {
-		return getColumnOrAliasAccess().getRule();
-	}
-
-	//ColumnFull:
-	//	ID ("." ID)*;
-	public ColumnFullElements getColumnFullAccess() {
-		return (pColumnFull != null) ? pColumnFull : (pColumnFull = new ColumnFullElements());
-	}
-	
-	public ParserRule getColumnFullRule() {
-		return getColumnFullAccess().getRule();
 	}
 
 	//WhereEntry:

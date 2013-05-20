@@ -6,22 +6,46 @@ generate sql "http://www.com.jaspersoft.studio.data.Sql"
 
 Model:
 	'SELECT'
-	col=Column
+	col=Columns
 	'FROM'
-	db=Database
+	tbl=Tables
 	('WHERE' whereEntry=WhereEntry)?;
+
+Columns returns Columns:
+	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;
+
+ColumnOrAlias:
+	ColumnFull | (ColumnFull 'AS' colAlias=ColumnAlias) | (ColumnFull colAlias=ColumnAlias);
+
+ColumnFull:
+	colName=Column | (TableFull '.' colName=Column) ;//| (TableAlias '.' colName=Column);
+
+ColumnAlias:
+	colAlias=ID;
+
+Column:
+	colName=ID;
+
+Tables returns Tables:
+	TableOrAlias ({OrTable.entries+=current} ("," entries+=TableOrAlias)+)?;
+
+TableOrAlias:
+	TableFull | (TableFull 'AS' tblAlias=TableAlias) | (TableFull tblAlias=TableAlias);
+
+TableFull:
+	(Schema '.' tbl=Table) | tbl=Table;
+
+Table:
+	tbl=ID;
+
+TableAlias:
+	tblAlias=ID;
+
+Schema:
+	(Database "." schem=ID) | schem=ID;
 
 Database:
 	dbName=ID;
-
-Column:
-	col=ColumnOrAlias;
-
-ColumnOrAlias:
-	ColumnFull | (ColumnFull 'AS' ID) | (ColumnFull ID);
-
-ColumnFull:
-	ID ('.' ID)*;
 
 WhereEntry returns WhereEntry:
 	AndWhereEntry ({OrWhereEntry.entries+=current}

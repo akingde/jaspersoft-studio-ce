@@ -77,13 +77,13 @@ public interface SqlPackage extends EPackage
   int MODEL__COL = 0;
 
   /**
-   * The feature id for the '<em><b>Db</b></em>' containment reference.
+   * The feature id for the '<em><b>Tbl</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MODEL__DB = 1;
+  int MODEL__TBL = 1;
 
   /**
    * The feature id for the '<em><b>Where Entry</b></em>' containment reference.
@@ -104,32 +104,107 @@ public interface SqlPackage extends EPackage
   int MODEL_FEATURE_COUNT = 3;
 
   /**
-   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.DatabaseImpl <em>Database</em>}' class.
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnsImpl <em>Columns</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.data.sql.impl.DatabaseImpl
-   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDatabase()
+   * @see com.jaspersoft.studio.data.sql.impl.ColumnsImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumns()
    * @generated
    */
-  int DATABASE = 1;
+  int COLUMNS = 1;
 
   /**
-   * The feature id for the '<em><b>Db Name</b></em>' attribute.
+   * The number of structural features of the '<em>Columns</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATABASE__DB_NAME = 0;
+  int COLUMNS_FEATURE_COUNT = 0;
 
   /**
-   * The number of structural features of the '<em>Database</em>' class.
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl <em>Column Or Alias</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnOrAlias()
+   * @generated
+   */
+  int COLUMN_OR_ALIAS = 2;
+
+  /**
+   * The number of structural features of the '<em>Column Or Alias</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATABASE_FEATURE_COUNT = 1;
+  int COLUMN_OR_ALIAS_FEATURE_COUNT = COLUMNS_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnFullImpl <em>Column Full</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.ColumnFullImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnFull()
+   * @generated
+   */
+  int COLUMN_FULL = 3;
+
+  /**
+   * The feature id for the '<em><b>Col Alias</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COLUMN_FULL__COL_ALIAS = COLUMN_OR_ALIAS_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Col Name</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COLUMN_FULL__COL_NAME = COLUMN_OR_ALIAS_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Column Full</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COLUMN_FULL_FEATURE_COUNT = COLUMN_OR_ALIAS_FEATURE_COUNT + 2;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnAliasImpl <em>Column Alias</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.ColumnAliasImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnAlias()
+   * @generated
+   */
+  int COLUMN_ALIAS = 4;
+
+  /**
+   * The feature id for the '<em><b>Col Alias</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COLUMN_ALIAS__COL_ALIAS = 0;
+
+  /**
+   * The number of structural features of the '<em>Column Alias</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COLUMN_ALIAS_FEATURE_COUNT = 1;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnImpl <em>Column</em>}' class.
@@ -139,16 +214,16 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumn()
    * @generated
    */
-  int COLUMN = 2;
+  int COLUMN = 5;
 
   /**
-   * The feature id for the '<em><b>Col</b></em>' attribute.
+   * The feature id for the '<em><b>Col Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COLUMN__COL = 0;
+  int COLUMN__COL_NAME = 0;
 
   /**
    * The number of structural features of the '<em>Column</em>' class.
@@ -160,6 +235,292 @@ public interface SqlPackage extends EPackage
   int COLUMN_FEATURE_COUNT = 1;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.TablesImpl <em>Tables</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.TablesImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTables()
+   * @generated
+   */
+  int TABLES = 6;
+
+  /**
+   * The number of structural features of the '<em>Tables</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLES_FEATURE_COUNT = 0;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.TableOrAliasImpl <em>Table Or Alias</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.TableOrAliasImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTableOrAlias()
+   * @generated
+   */
+  int TABLE_OR_ALIAS = 7;
+
+  /**
+   * The number of structural features of the '<em>Table Or Alias</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_OR_ALIAS_FEATURE_COUNT = TABLES_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.TableFullImpl <em>Table Full</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.TableFullImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTableFull()
+   * @generated
+   */
+  int TABLE_FULL = 8;
+
+  /**
+   * The feature id for the '<em><b>Col Alias</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_FULL__COL_ALIAS = COLUMN_FULL__COL_ALIAS;
+
+  /**
+   * The feature id for the '<em><b>Col Name</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_FULL__COL_NAME = COLUMN_FULL__COL_NAME;
+
+  /**
+   * The feature id for the '<em><b>Tbl Alias</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_FULL__TBL_ALIAS = COLUMN_FULL_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Tbl</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_FULL__TBL = COLUMN_FULL_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Table Full</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_FULL_FEATURE_COUNT = COLUMN_FULL_FEATURE_COUNT + 2;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.TableImpl <em>Table</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.TableImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTable()
+   * @generated
+   */
+  int TABLE = 9;
+
+  /**
+   * The feature id for the '<em><b>Tbl</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE__TBL = 0;
+
+  /**
+   * The number of structural features of the '<em>Table</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.TableAliasImpl <em>Table Alias</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.TableAliasImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTableAlias()
+   * @generated
+   */
+  int TABLE_ALIAS = 10;
+
+  /**
+   * The feature id for the '<em><b>Tbl Alias</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_ALIAS__TBL_ALIAS = 0;
+
+  /**
+   * The number of structural features of the '<em>Table Alias</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_ALIAS_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.SchemaImpl <em>Schema</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.SchemaImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSchema()
+   * @generated
+   */
+  int SCHEMA = 11;
+
+  /**
+   * The feature id for the '<em><b>Col Alias</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCHEMA__COL_ALIAS = TABLE_FULL__COL_ALIAS;
+
+  /**
+   * The feature id for the '<em><b>Col Name</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCHEMA__COL_NAME = TABLE_FULL__COL_NAME;
+
+  /**
+   * The feature id for the '<em><b>Tbl Alias</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCHEMA__TBL_ALIAS = TABLE_FULL__TBL_ALIAS;
+
+  /**
+   * The feature id for the '<em><b>Tbl</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCHEMA__TBL = TABLE_FULL__TBL;
+
+  /**
+   * The feature id for the '<em><b>Schem</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCHEMA__SCHEM = TABLE_FULL_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Schema</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCHEMA_FEATURE_COUNT = TABLE_FULL_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.DatabaseImpl <em>Database</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.DatabaseImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDatabase()
+   * @generated
+   */
+  int DATABASE = 12;
+
+  /**
+   * The feature id for the '<em><b>Col Alias</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATABASE__COL_ALIAS = SCHEMA__COL_ALIAS;
+
+  /**
+   * The feature id for the '<em><b>Col Name</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATABASE__COL_NAME = SCHEMA__COL_NAME;
+
+  /**
+   * The feature id for the '<em><b>Tbl Alias</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATABASE__TBL_ALIAS = SCHEMA__TBL_ALIAS;
+
+  /**
+   * The feature id for the '<em><b>Tbl</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATABASE__TBL = SCHEMA__TBL;
+
+  /**
+   * The feature id for the '<em><b>Schem</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATABASE__SCHEM = SCHEMA__SCHEM;
+
+  /**
+   * The feature id for the '<em><b>Db Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATABASE__DB_NAME = SCHEMA_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Database</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATABASE_FEATURE_COUNT = SCHEMA_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.WhereEntryImpl <em>Where Entry</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -167,7 +528,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getWhereEntry()
    * @generated
    */
-  int WHERE_ENTRY = 3;
+  int WHERE_ENTRY = 13;
 
   /**
    * The number of structural features of the '<em>Where Entry</em>' class.
@@ -186,7 +547,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getExpressionWhereEntry()
    * @generated
    */
-  int EXPRESSION_WHERE_ENTRY = 4;
+  int EXPRESSION_WHERE_ENTRY = 14;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -214,7 +575,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSingleExpressionWhereEntry()
    * @generated
    */
-  int SINGLE_EXPRESSION_WHERE_ENTRY = 5;
+  int SINGLE_EXPRESSION_WHERE_ENTRY = 15;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -260,7 +621,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getExpression()
    * @generated
    */
-  int EXPRESSION = 6;
+  int EXPRESSION = 16;
 
   /**
    * The number of structural features of the '<em>Expression</em>' class.
@@ -279,7 +640,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getReplacableValue()
    * @generated
    */
-  int REPLACABLE_VALUE = 7;
+  int REPLACABLE_VALUE = 17;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -307,7 +668,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDoubleExpression()
    * @generated
    */
-  int DOUBLE_EXPRESSION = 8;
+  int DOUBLE_EXPRESSION = 18;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -335,7 +696,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getLongExpression()
    * @generated
    */
-  int LONG_EXPRESSION = 9;
+  int LONG_EXPRESSION = 19;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -363,7 +724,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getStringExpression()
    * @generated
    */
-  int STRING_EXPRESSION = 10;
+  int STRING_EXPRESSION = 20;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -391,7 +752,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getNullExpression()
    * @generated
    */
-  int NULL_EXPRESSION = 11;
+  int NULL_EXPRESSION = 21;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -419,7 +780,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDateExpression()
    * @generated
    */
-  int DATE_EXPRESSION = 12;
+  int DATE_EXPRESSION = 22;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -447,7 +808,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getBooleanExpression()
    * @generated
    */
-  int BOOLEAN_EXPRESSION = 13;
+  int BOOLEAN_EXPRESSION = 23;
 
   /**
    * The feature id for the '<em><b>True</b></em>' attribute.
@@ -475,7 +836,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getMultiExpressionWhereEntry()
    * @generated
    */
-  int MULTI_EXPRESSION_WHERE_ENTRY = 14;
+  int MULTI_EXPRESSION_WHERE_ENTRY = 24;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -521,7 +882,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getArrayExpression()
    * @generated
    */
-  int ARRAY_EXPRESSION = 15;
+  int ARRAY_EXPRESSION = 25;
 
   /**
    * The number of structural features of the '<em>Array Expression</em>' class.
@@ -540,7 +901,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDoubleArrayExpression()
    * @generated
    */
-  int DOUBLE_ARRAY_EXPRESSION = 16;
+  int DOUBLE_ARRAY_EXPRESSION = 26;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -568,7 +929,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getLongArrayExpression()
    * @generated
    */
-  int LONG_ARRAY_EXPRESSION = 17;
+  int LONG_ARRAY_EXPRESSION = 27;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -596,7 +957,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getStringArrayExpression()
    * @generated
    */
-  int STRING_ARRAY_EXPRESSION = 18;
+  int STRING_ARRAY_EXPRESSION = 28;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -624,7 +985,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getNullArrayExpression()
    * @generated
    */
-  int NULL_ARRAY_EXPRESSION = 19;
+  int NULL_ARRAY_EXPRESSION = 29;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -652,7 +1013,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDateArrayExpression()
    * @generated
    */
-  int DATE_ARRAY_EXPRESSION = 20;
+  int DATE_ARRAY_EXPRESSION = 30;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -680,7 +1041,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getBooleanArrayExpression()
    * @generated
    */
-  int BOOLEAN_ARRAY_EXPRESSION = 21;
+  int BOOLEAN_ARRAY_EXPRESSION = 31;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -701,6 +1062,62 @@ public interface SqlPackage extends EPackage
   int BOOLEAN_ARRAY_EXPRESSION_FEATURE_COUNT = ARRAY_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrColumnImpl <em>Or Column</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.OrColumnImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrColumn()
+   * @generated
+   */
+  int OR_COLUMN = 32;
+
+  /**
+   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OR_COLUMN__ENTRIES = COLUMNS_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Or Column</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OR_COLUMN_FEATURE_COUNT = COLUMNS_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrTableImpl <em>Or Table</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.OrTableImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrTable()
+   * @generated
+   */
+  int OR_TABLE = 33;
+
+  /**
+   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OR_TABLE__ENTRIES = TABLES_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Or Table</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OR_TABLE_FEATURE_COUNT = TABLES_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrWhereEntryImpl <em>Or Where Entry</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -708,7 +1125,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrWhereEntry()
    * @generated
    */
-  int OR_WHERE_ENTRY = 22;
+  int OR_WHERE_ENTRY = 34;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -736,7 +1153,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getAndWhereEntry()
    * @generated
    */
-  int AND_WHERE_ENTRY = 23;
+  int AND_WHERE_ENTRY = 35;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -764,7 +1181,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getArrayOperator()
    * @generated
    */
-  int ARRAY_OPERATOR = 24;
+  int ARRAY_OPERATOR = 36;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.Operator <em>Operator</em>}' enum.
@@ -774,7 +1191,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperator()
    * @generated
    */
-  int OPERATOR = 25;
+  int OPERATOR = 37;
 
 
   /**
@@ -799,15 +1216,15 @@ public interface SqlPackage extends EPackage
   EReference getModel_Col();
 
   /**
-   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Model#getDb <em>Db</em>}'.
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Model#getTbl <em>Tbl</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Db</em>'.
-   * @see com.jaspersoft.studio.data.sql.Model#getDb()
+   * @return the meta object for the containment reference '<em>Tbl</em>'.
+   * @see com.jaspersoft.studio.data.sql.Model#getTbl()
    * @see #getModel()
    * @generated
    */
-  EReference getModel_Db();
+  EReference getModel_Tbl();
 
   /**
    * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Model#getWhereEntry <em>Where Entry</em>}'.
@@ -819,6 +1236,215 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EReference getModel_WhereEntry();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Columns <em>Columns</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Columns</em>'.
+   * @see com.jaspersoft.studio.data.sql.Columns
+   * @generated
+   */
+  EClass getColumns();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.ColumnOrAlias <em>Column Or Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Column Or Alias</em>'.
+   * @see com.jaspersoft.studio.data.sql.ColumnOrAlias
+   * @generated
+   */
+  EClass getColumnOrAlias();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.ColumnFull <em>Column Full</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Column Full</em>'.
+   * @see com.jaspersoft.studio.data.sql.ColumnFull
+   * @generated
+   */
+  EClass getColumnFull();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.ColumnFull#getColAlias <em>Col Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Col Alias</em>'.
+   * @see com.jaspersoft.studio.data.sql.ColumnFull#getColAlias()
+   * @see #getColumnFull()
+   * @generated
+   */
+  EReference getColumnFull_ColAlias();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.ColumnFull#getColName <em>Col Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Col Name</em>'.
+   * @see com.jaspersoft.studio.data.sql.ColumnFull#getColName()
+   * @see #getColumnFull()
+   * @generated
+   */
+  EReference getColumnFull_ColName();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.ColumnAlias <em>Column Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Column Alias</em>'.
+   * @see com.jaspersoft.studio.data.sql.ColumnAlias
+   * @generated
+   */
+  EClass getColumnAlias();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.ColumnAlias#getColAlias <em>Col Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Col Alias</em>'.
+   * @see com.jaspersoft.studio.data.sql.ColumnAlias#getColAlias()
+   * @see #getColumnAlias()
+   * @generated
+   */
+  EAttribute getColumnAlias_ColAlias();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Column <em>Column</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Column</em>'.
+   * @see com.jaspersoft.studio.data.sql.Column
+   * @generated
+   */
+  EClass getColumn();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.Column#getColName <em>Col Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Col Name</em>'.
+   * @see com.jaspersoft.studio.data.sql.Column#getColName()
+   * @see #getColumn()
+   * @generated
+   */
+  EAttribute getColumn_ColName();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Tables <em>Tables</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Tables</em>'.
+   * @see com.jaspersoft.studio.data.sql.Tables
+   * @generated
+   */
+  EClass getTables();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.TableOrAlias <em>Table Or Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Table Or Alias</em>'.
+   * @see com.jaspersoft.studio.data.sql.TableOrAlias
+   * @generated
+   */
+  EClass getTableOrAlias();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.TableFull <em>Table Full</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Table Full</em>'.
+   * @see com.jaspersoft.studio.data.sql.TableFull
+   * @generated
+   */
+  EClass getTableFull();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.TableFull#getTblAlias <em>Tbl Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Tbl Alias</em>'.
+   * @see com.jaspersoft.studio.data.sql.TableFull#getTblAlias()
+   * @see #getTableFull()
+   * @generated
+   */
+  EReference getTableFull_TblAlias();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.TableFull#getTbl <em>Tbl</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Tbl</em>'.
+   * @see com.jaspersoft.studio.data.sql.TableFull#getTbl()
+   * @see #getTableFull()
+   * @generated
+   */
+  EReference getTableFull_Tbl();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Table <em>Table</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Table</em>'.
+   * @see com.jaspersoft.studio.data.sql.Table
+   * @generated
+   */
+  EClass getTable();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.Table#getTbl <em>Tbl</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Tbl</em>'.
+   * @see com.jaspersoft.studio.data.sql.Table#getTbl()
+   * @see #getTable()
+   * @generated
+   */
+  EAttribute getTable_Tbl();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.TableAlias <em>Table Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Table Alias</em>'.
+   * @see com.jaspersoft.studio.data.sql.TableAlias
+   * @generated
+   */
+  EClass getTableAlias();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.TableAlias#getTblAlias <em>Tbl Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Tbl Alias</em>'.
+   * @see com.jaspersoft.studio.data.sql.TableAlias#getTblAlias()
+   * @see #getTableAlias()
+   * @generated
+   */
+  EAttribute getTableAlias_TblAlias();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Schema <em>Schema</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Schema</em>'.
+   * @see com.jaspersoft.studio.data.sql.Schema
+   * @generated
+   */
+  EClass getSchema();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.Schema#getSchem <em>Schem</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Schem</em>'.
+   * @see com.jaspersoft.studio.data.sql.Schema#getSchem()
+   * @see #getSchema()
+   * @generated
+   */
+  EAttribute getSchema_Schem();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Database <em>Database</em>}'.
@@ -840,27 +1466,6 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EAttribute getDatabase_DbName();
-
-  /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Column <em>Column</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Column</em>'.
-   * @see com.jaspersoft.studio.data.sql.Column
-   * @generated
-   */
-  EClass getColumn();
-
-  /**
-   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.Column#getCol <em>Col</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Col</em>'.
-   * @see com.jaspersoft.studio.data.sql.Column#getCol()
-   * @see #getColumn()
-   * @generated
-   */
-  EAttribute getColumn_Col();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.WhereEntry <em>Where Entry</em>}'.
@@ -1251,6 +1856,48 @@ public interface SqlPackage extends EPackage
   EAttribute getBooleanArrayExpression_Values();
 
   /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrColumn <em>Or Column</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Or Column</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrColumn
+   * @generated
+   */
+  EClass getOrColumn();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.OrColumn#getEntries <em>Entries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Entries</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrColumn#getEntries()
+   * @see #getOrColumn()
+   * @generated
+   */
+  EReference getOrColumn_Entries();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrTable <em>Or Table</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Or Table</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrTable
+   * @generated
+   */
+  EClass getOrTable();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.OrTable#getEntries <em>Entries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Entries</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrTable#getEntries()
+   * @see #getOrTable()
+   * @generated
+   */
+  EReference getOrTable_Entries();
+
+  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrWhereEntry <em>Or Where Entry</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1354,12 +2001,12 @@ public interface SqlPackage extends EPackage
     EReference MODEL__COL = eINSTANCE.getModel_Col();
 
     /**
-     * The meta object literal for the '<em><b>Db</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Tbl</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL__DB = eINSTANCE.getModel_Db();
+    EReference MODEL__TBL = eINSTANCE.getModel_Tbl();
 
     /**
      * The meta object literal for the '<em><b>Where Entry</b></em>' containment reference feature.
@@ -1368,6 +2015,188 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference MODEL__WHERE_ENTRY = eINSTANCE.getModel_WhereEntry();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnsImpl <em>Columns</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.ColumnsImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumns()
+     * @generated
+     */
+    EClass COLUMNS = eINSTANCE.getColumns();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl <em>Column Or Alias</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnOrAlias()
+     * @generated
+     */
+    EClass COLUMN_OR_ALIAS = eINSTANCE.getColumnOrAlias();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnFullImpl <em>Column Full</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.ColumnFullImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnFull()
+     * @generated
+     */
+    EClass COLUMN_FULL = eINSTANCE.getColumnFull();
+
+    /**
+     * The meta object literal for the '<em><b>Col Alias</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference COLUMN_FULL__COL_ALIAS = eINSTANCE.getColumnFull_ColAlias();
+
+    /**
+     * The meta object literal for the '<em><b>Col Name</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference COLUMN_FULL__COL_NAME = eINSTANCE.getColumnFull_ColName();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnAliasImpl <em>Column Alias</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.ColumnAliasImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnAlias()
+     * @generated
+     */
+    EClass COLUMN_ALIAS = eINSTANCE.getColumnAlias();
+
+    /**
+     * The meta object literal for the '<em><b>Col Alias</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COLUMN_ALIAS__COL_ALIAS = eINSTANCE.getColumnAlias_ColAlias();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnImpl <em>Column</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.ColumnImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumn()
+     * @generated
+     */
+    EClass COLUMN = eINSTANCE.getColumn();
+
+    /**
+     * The meta object literal for the '<em><b>Col Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COLUMN__COL_NAME = eINSTANCE.getColumn_ColName();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.TablesImpl <em>Tables</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.TablesImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTables()
+     * @generated
+     */
+    EClass TABLES = eINSTANCE.getTables();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.TableOrAliasImpl <em>Table Or Alias</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.TableOrAliasImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTableOrAlias()
+     * @generated
+     */
+    EClass TABLE_OR_ALIAS = eINSTANCE.getTableOrAlias();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.TableFullImpl <em>Table Full</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.TableFullImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTableFull()
+     * @generated
+     */
+    EClass TABLE_FULL = eINSTANCE.getTableFull();
+
+    /**
+     * The meta object literal for the '<em><b>Tbl Alias</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TABLE_FULL__TBL_ALIAS = eINSTANCE.getTableFull_TblAlias();
+
+    /**
+     * The meta object literal for the '<em><b>Tbl</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TABLE_FULL__TBL = eINSTANCE.getTableFull_Tbl();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.TableImpl <em>Table</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.TableImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTable()
+     * @generated
+     */
+    EClass TABLE = eINSTANCE.getTable();
+
+    /**
+     * The meta object literal for the '<em><b>Tbl</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TABLE__TBL = eINSTANCE.getTable_Tbl();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.TableAliasImpl <em>Table Alias</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.TableAliasImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTableAlias()
+     * @generated
+     */
+    EClass TABLE_ALIAS = eINSTANCE.getTableAlias();
+
+    /**
+     * The meta object literal for the '<em><b>Tbl Alias</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TABLE_ALIAS__TBL_ALIAS = eINSTANCE.getTableAlias_TblAlias();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.SchemaImpl <em>Schema</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.SchemaImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSchema()
+     * @generated
+     */
+    EClass SCHEMA = eINSTANCE.getSchema();
+
+    /**
+     * The meta object literal for the '<em><b>Schem</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SCHEMA__SCHEM = eINSTANCE.getSchema_Schem();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.DatabaseImpl <em>Database</em>}' class.
@@ -1386,24 +2215,6 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EAttribute DATABASE__DB_NAME = eINSTANCE.getDatabase_DbName();
-
-    /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnImpl <em>Column</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.data.sql.impl.ColumnImpl
-     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumn()
-     * @generated
-     */
-    EClass COLUMN = eINSTANCE.getColumn();
-
-    /**
-     * The meta object literal for the '<em><b>Col</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute COLUMN__COL = eINSTANCE.getColumn_Col();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.WhereEntryImpl <em>Where Entry</em>}' class.
@@ -1738,6 +2549,42 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EAttribute BOOLEAN_ARRAY_EXPRESSION__VALUES = eINSTANCE.getBooleanArrayExpression_Values();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrColumnImpl <em>Or Column</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.OrColumnImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrColumn()
+     * @generated
+     */
+    EClass OR_COLUMN = eINSTANCE.getOrColumn();
+
+    /**
+     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OR_COLUMN__ENTRIES = eINSTANCE.getOrColumn_Entries();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrTableImpl <em>Or Table</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.OrTableImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrTable()
+     * @generated
+     */
+    EClass OR_TABLE = eINSTANCE.getOrTable();
+
+    /**
+     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OR_TABLE__ENTRIES = eINSTANCE.getOrTable_Entries();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrWhereEntryImpl <em>Or Where Entry</em>}' class.

@@ -80,14 +80,64 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createModelAdapter();
       }
       @Override
-      public Adapter caseDatabase(Database object)
+      public Adapter caseColumns(Columns object)
       {
-        return createDatabaseAdapter();
+        return createColumnsAdapter();
+      }
+      @Override
+      public Adapter caseColumnOrAlias(ColumnOrAlias object)
+      {
+        return createColumnOrAliasAdapter();
+      }
+      @Override
+      public Adapter caseColumnFull(ColumnFull object)
+      {
+        return createColumnFullAdapter();
+      }
+      @Override
+      public Adapter caseColumnAlias(ColumnAlias object)
+      {
+        return createColumnAliasAdapter();
       }
       @Override
       public Adapter caseColumn(Column object)
       {
         return createColumnAdapter();
+      }
+      @Override
+      public Adapter caseTables(Tables object)
+      {
+        return createTablesAdapter();
+      }
+      @Override
+      public Adapter caseTableOrAlias(TableOrAlias object)
+      {
+        return createTableOrAliasAdapter();
+      }
+      @Override
+      public Adapter caseTableFull(TableFull object)
+      {
+        return createTableFullAdapter();
+      }
+      @Override
+      public Adapter caseTable(Table object)
+      {
+        return createTableAdapter();
+      }
+      @Override
+      public Adapter caseTableAlias(TableAlias object)
+      {
+        return createTableAliasAdapter();
+      }
+      @Override
+      public Adapter caseSchema(Schema object)
+      {
+        return createSchemaAdapter();
+      }
+      @Override
+      public Adapter caseDatabase(Database object)
+      {
+        return createDatabaseAdapter();
       }
       @Override
       public Adapter caseWhereEntry(WhereEntry object)
@@ -185,6 +235,16 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createBooleanArrayExpressionAdapter();
       }
       @Override
+      public Adapter caseOrColumn(OrColumn object)
+      {
+        return createOrColumnAdapter();
+      }
+      @Override
+      public Adapter caseOrTable(OrTable object)
+      {
+        return createOrTableAdapter();
+      }
+      @Override
       public Adapter caseOrWhereEntry(OrWhereEntry object)
       {
         return createOrWhereEntryAdapter();
@@ -232,16 +292,61 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Database <em>Database</em>}'.
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Columns <em>Columns</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see com.jaspersoft.studio.data.sql.Database
+   * @see com.jaspersoft.studio.data.sql.Columns
    * @generated
    */
-  public Adapter createDatabaseAdapter()
+  public Adapter createColumnsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.ColumnOrAlias <em>Column Or Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.ColumnOrAlias
+   * @generated
+   */
+  public Adapter createColumnOrAliasAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.ColumnFull <em>Column Full</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.ColumnFull
+   * @generated
+   */
+  public Adapter createColumnFullAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.ColumnAlias <em>Column Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.ColumnAlias
+   * @generated
+   */
+  public Adapter createColumnAliasAdapter()
   {
     return null;
   }
@@ -257,6 +362,111 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createColumnAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Tables <em>Tables</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.Tables
+   * @generated
+   */
+  public Adapter createTablesAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.TableOrAlias <em>Table Or Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.TableOrAlias
+   * @generated
+   */
+  public Adapter createTableOrAliasAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.TableFull <em>Table Full</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.TableFull
+   * @generated
+   */
+  public Adapter createTableFullAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Table <em>Table</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.Table
+   * @generated
+   */
+  public Adapter createTableAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.TableAlias <em>Table Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.TableAlias
+   * @generated
+   */
+  public Adapter createTableAliasAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Schema <em>Schema</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.Schema
+   * @generated
+   */
+  public Adapter createSchemaAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Database <em>Database</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.Database
+   * @generated
+   */
+  public Adapter createDatabaseAdapter()
   {
     return null;
   }
@@ -542,6 +752,36 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createBooleanArrayExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrColumn <em>Or Column</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OrColumn
+   * @generated
+   */
+  public Adapter createOrColumnAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrTable <em>Or Table</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OrTable
+   * @generated
+   */
+  public Adapter createOrTableAdapter()
   {
     return null;
   }

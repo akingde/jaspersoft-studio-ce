@@ -2,7 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.Database;
+import com.jaspersoft.studio.data.sql.ColumnAlias;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -10,48 +10,49 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Database</b></em>'.
+ * An implementation of the model object '<em><b>Column Alias</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.DatabaseImpl#getDbName <em>Db Name</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnAliasImpl#getColAlias <em>Col Alias</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class DatabaseImpl extends SchemaImpl implements Database
+public class ColumnAliasImpl extends MinimalEObjectImpl.Container implements ColumnAlias
 {
   /**
-   * The default value of the '{@link #getDbName() <em>Db Name</em>}' attribute.
+   * The default value of the '{@link #getColAlias() <em>Col Alias</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDbName()
+   * @see #getColAlias()
    * @generated
    * @ordered
    */
-  protected static final String DB_NAME_EDEFAULT = null;
+  protected static final String COL_ALIAS_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getDbName() <em>Db Name</em>}' attribute.
+   * The cached value of the '{@link #getColAlias() <em>Col Alias</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDbName()
+   * @see #getColAlias()
    * @generated
    * @ordered
    */
-  protected String dbName = DB_NAME_EDEFAULT;
+  protected String colAlias = COL_ALIAS_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected DatabaseImpl()
+  protected ColumnAliasImpl()
   {
     super();
   }
@@ -64,7 +65,7 @@ public class DatabaseImpl extends SchemaImpl implements Database
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.DATABASE;
+    return SqlPackage.Literals.COLUMN_ALIAS;
   }
 
   /**
@@ -72,9 +73,9 @@ public class DatabaseImpl extends SchemaImpl implements Database
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getDbName()
+  public String getColAlias()
   {
-    return dbName;
+    return colAlias;
   }
 
   /**
@@ -82,12 +83,12 @@ public class DatabaseImpl extends SchemaImpl implements Database
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setDbName(String newDbName)
+  public void setColAlias(String newColAlias)
   {
-    String oldDbName = dbName;
-    dbName = newDbName;
+    String oldColAlias = colAlias;
+    colAlias = newColAlias;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.DATABASE__DB_NAME, oldDbName, dbName));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN_ALIAS__COL_ALIAS, oldColAlias, colAlias));
   }
 
   /**
@@ -100,8 +101,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        return getDbName();
+      case SqlPackage.COLUMN_ALIAS__COL_ALIAS:
+        return getColAlias();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -116,8 +117,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        setDbName((String)newValue);
+      case SqlPackage.COLUMN_ALIAS__COL_ALIAS:
+        setColAlias((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -133,8 +134,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        setDbName(DB_NAME_EDEFAULT);
+      case SqlPackage.COLUMN_ALIAS__COL_ALIAS:
+        setColAlias(COL_ALIAS_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -150,8 +151,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        return DB_NAME_EDEFAULT == null ? dbName != null : !DB_NAME_EDEFAULT.equals(dbName);
+      case SqlPackage.COLUMN_ALIAS__COL_ALIAS:
+        return COL_ALIAS_EDEFAULT == null ? colAlias != null : !COL_ALIAS_EDEFAULT.equals(colAlias);
     }
     return super.eIsSet(featureID);
   }
@@ -167,10 +168,10 @@ public class DatabaseImpl extends SchemaImpl implements Database
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (dbName: ");
-    result.append(dbName);
+    result.append(" (colAlias: ");
+    result.append(colAlias);
     result.append(')');
     return result.toString();
   }
 
-} //DatabaseImpl
+} //ColumnAliasImpl

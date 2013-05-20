@@ -19,7 +19,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnImpl#getCol <em>Col</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnImpl#getColName <em>Col Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -28,24 +28,24 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 public class ColumnImpl extends MinimalEObjectImpl.Container implements Column
 {
   /**
-   * The default value of the '{@link #getCol() <em>Col</em>}' attribute.
+   * The default value of the '{@link #getColName() <em>Col Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getCol()
+   * @see #getColName()
    * @generated
    * @ordered
    */
-  protected static final String COL_EDEFAULT = null;
+  protected static final String COL_NAME_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getCol() <em>Col</em>}' attribute.
+   * The cached value of the '{@link #getColName() <em>Col Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getCol()
+   * @see #getColName()
    * @generated
    * @ordered
    */
-  protected String col = COL_EDEFAULT;
+  protected String colName = COL_NAME_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -73,9 +73,9 @@ public class ColumnImpl extends MinimalEObjectImpl.Container implements Column
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getCol()
+  public String getColName()
   {
-    return col;
+    return colName;
   }
 
   /**
@@ -83,12 +83,12 @@ public class ColumnImpl extends MinimalEObjectImpl.Container implements Column
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setCol(String newCol)
+  public void setColName(String newColName)
   {
-    String oldCol = col;
-    col = newCol;
+    String oldColName = colName;
+    colName = newColName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN__COL, oldCol, col));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN__COL_NAME, oldColName, colName));
   }
 
   /**
@@ -101,8 +101,8 @@ public class ColumnImpl extends MinimalEObjectImpl.Container implements Column
   {
     switch (featureID)
     {
-      case SqlPackage.COLUMN__COL:
-        return getCol();
+      case SqlPackage.COLUMN__COL_NAME:
+        return getColName();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -117,8 +117,8 @@ public class ColumnImpl extends MinimalEObjectImpl.Container implements Column
   {
     switch (featureID)
     {
-      case SqlPackage.COLUMN__COL:
-        setCol((String)newValue);
+      case SqlPackage.COLUMN__COL_NAME:
+        setColName((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -134,8 +134,8 @@ public class ColumnImpl extends MinimalEObjectImpl.Container implements Column
   {
     switch (featureID)
     {
-      case SqlPackage.COLUMN__COL:
-        setCol(COL_EDEFAULT);
+      case SqlPackage.COLUMN__COL_NAME:
+        setColName(COL_NAME_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -151,8 +151,8 @@ public class ColumnImpl extends MinimalEObjectImpl.Container implements Column
   {
     switch (featureID)
     {
-      case SqlPackage.COLUMN__COL:
-        return COL_EDEFAULT == null ? col != null : !COL_EDEFAULT.equals(col);
+      case SqlPackage.COLUMN__COL_NAME:
+        return COL_NAME_EDEFAULT == null ? colName != null : !COL_NAME_EDEFAULT.equals(colName);
     }
     return super.eIsSet(featureID);
   }
@@ -168,8 +168,8 @@ public class ColumnImpl extends MinimalEObjectImpl.Container implements Column
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (col: ");
-    result.append(col);
+    result.append(" (colName: ");
+    result.append(colName);
     result.append(')');
     return result.toString();
   }

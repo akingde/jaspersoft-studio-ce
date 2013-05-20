@@ -2,7 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.Database;
+import com.jaspersoft.studio.data.sql.Schema;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -13,45 +13,45 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Database</b></em>'.
+ * An implementation of the model object '<em><b>Schema</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.DatabaseImpl#getDbName <em>Db Name</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.SchemaImpl#getSchem <em>Schem</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class DatabaseImpl extends SchemaImpl implements Database
+public class SchemaImpl extends TableFullImpl implements Schema
 {
   /**
-   * The default value of the '{@link #getDbName() <em>Db Name</em>}' attribute.
+   * The default value of the '{@link #getSchem() <em>Schem</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDbName()
+   * @see #getSchem()
    * @generated
    * @ordered
    */
-  protected static final String DB_NAME_EDEFAULT = null;
+  protected static final String SCHEM_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getDbName() <em>Db Name</em>}' attribute.
+   * The cached value of the '{@link #getSchem() <em>Schem</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDbName()
+   * @see #getSchem()
    * @generated
    * @ordered
    */
-  protected String dbName = DB_NAME_EDEFAULT;
+  protected String schem = SCHEM_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected DatabaseImpl()
+  protected SchemaImpl()
   {
     super();
   }
@@ -64,7 +64,7 @@ public class DatabaseImpl extends SchemaImpl implements Database
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.DATABASE;
+    return SqlPackage.Literals.SCHEMA;
   }
 
   /**
@@ -72,9 +72,9 @@ public class DatabaseImpl extends SchemaImpl implements Database
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getDbName()
+  public String getSchem()
   {
-    return dbName;
+    return schem;
   }
 
   /**
@@ -82,12 +82,12 @@ public class DatabaseImpl extends SchemaImpl implements Database
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setDbName(String newDbName)
+  public void setSchem(String newSchem)
   {
-    String oldDbName = dbName;
-    dbName = newDbName;
+    String oldSchem = schem;
+    schem = newSchem;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.DATABASE__DB_NAME, oldDbName, dbName));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SCHEMA__SCHEM, oldSchem, schem));
   }
 
   /**
@@ -100,8 +100,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        return getDbName();
+      case SqlPackage.SCHEMA__SCHEM:
+        return getSchem();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -116,8 +116,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        setDbName((String)newValue);
+      case SqlPackage.SCHEMA__SCHEM:
+        setSchem((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -133,8 +133,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        setDbName(DB_NAME_EDEFAULT);
+      case SqlPackage.SCHEMA__SCHEM:
+        setSchem(SCHEM_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -150,8 +150,8 @@ public class DatabaseImpl extends SchemaImpl implements Database
   {
     switch (featureID)
     {
-      case SqlPackage.DATABASE__DB_NAME:
-        return DB_NAME_EDEFAULT == null ? dbName != null : !DB_NAME_EDEFAULT.equals(dbName);
+      case SqlPackage.SCHEMA__SCHEM:
+        return SCHEM_EDEFAULT == null ? schem != null : !SCHEM_EDEFAULT.equals(schem);
     }
     return super.eIsSet(featureID);
   }
@@ -167,10 +167,10 @@ public class DatabaseImpl extends SchemaImpl implements Database
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (dbName: ");
-    result.append(dbName);
+    result.append(" (schem: ");
+    result.append(schem);
     result.append(')');
     return result.toString();
   }
 
-} //DatabaseImpl
+} //SchemaImpl

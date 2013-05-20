@@ -2,10 +2,10 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.Column;
-import com.jaspersoft.studio.data.sql.Database;
+import com.jaspersoft.studio.data.sql.Columns;
 import com.jaspersoft.studio.data.sql.Model;
 import com.jaspersoft.studio.data.sql.SqlPackage;
+import com.jaspersoft.studio.data.sql.Tables;
 import com.jaspersoft.studio.data.sql.WhereEntry;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getCol <em>Col</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getDb <em>Db</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getTbl <em>Tbl</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getWhereEntry <em>Where Entry</em>}</li>
  * </ul>
  * </p>
@@ -42,17 +42,17 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * @generated
    * @ordered
    */
-  protected Column col;
+  protected Columns col;
 
   /**
-   * The cached value of the '{@link #getDb() <em>Db</em>}' containment reference.
+   * The cached value of the '{@link #getTbl() <em>Tbl</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDb()
+   * @see #getTbl()
    * @generated
    * @ordered
    */
-  protected Database db;
+  protected Tables tbl;
 
   /**
    * The cached value of the '{@link #getWhereEntry() <em>Where Entry</em>}' containment reference.
@@ -90,7 +90,7 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public Column getCol()
+  public Columns getCol()
   {
     return col;
   }
@@ -100,9 +100,9 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetCol(Column newCol, NotificationChain msgs)
+  public NotificationChain basicSetCol(Columns newCol, NotificationChain msgs)
   {
-    Column oldCol = col;
+    Columns oldCol = col;
     col = newCol;
     if (eNotificationRequired())
     {
@@ -117,7 +117,7 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setCol(Column newCol)
+  public void setCol(Columns newCol)
   {
     if (newCol != col)
     {
@@ -138,9 +138,9 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public Database getDb()
+  public Tables getTbl()
   {
-    return db;
+    return tbl;
   }
 
   /**
@@ -148,13 +148,13 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetDb(Database newDb, NotificationChain msgs)
+  public NotificationChain basicSetTbl(Tables newTbl, NotificationChain msgs)
   {
-    Database oldDb = db;
-    db = newDb;
+    Tables oldTbl = tbl;
+    tbl = newTbl;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__DB, oldDb, newDb);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__TBL, oldTbl, newTbl);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -165,20 +165,20 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setDb(Database newDb)
+  public void setTbl(Tables newTbl)
   {
-    if (newDb != db)
+    if (newTbl != tbl)
     {
       NotificationChain msgs = null;
-      if (db != null)
-        msgs = ((InternalEObject)db).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__DB, null, msgs);
-      if (newDb != null)
-        msgs = ((InternalEObject)newDb).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__DB, null, msgs);
-      msgs = basicSetDb(newDb, msgs);
+      if (tbl != null)
+        msgs = ((InternalEObject)tbl).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__TBL, null, msgs);
+      if (newTbl != null)
+        msgs = ((InternalEObject)newTbl).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__TBL, null, msgs);
+      msgs = basicSetTbl(newTbl, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__DB, newDb, newDb));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__TBL, newTbl, newTbl));
   }
 
   /**
@@ -241,8 +241,8 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
     {
       case SqlPackage.MODEL__COL:
         return basicSetCol(null, msgs);
-      case SqlPackage.MODEL__DB:
-        return basicSetDb(null, msgs);
+      case SqlPackage.MODEL__TBL:
+        return basicSetTbl(null, msgs);
       case SqlPackage.MODEL__WHERE_ENTRY:
         return basicSetWhereEntry(null, msgs);
     }
@@ -261,8 +261,8 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
     {
       case SqlPackage.MODEL__COL:
         return getCol();
-      case SqlPackage.MODEL__DB:
-        return getDb();
+      case SqlPackage.MODEL__TBL:
+        return getTbl();
       case SqlPackage.MODEL__WHERE_ENTRY:
         return getWhereEntry();
     }
@@ -280,10 +280,10 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
     switch (featureID)
     {
       case SqlPackage.MODEL__COL:
-        setCol((Column)newValue);
+        setCol((Columns)newValue);
         return;
-      case SqlPackage.MODEL__DB:
-        setDb((Database)newValue);
+      case SqlPackage.MODEL__TBL:
+        setTbl((Tables)newValue);
         return;
       case SqlPackage.MODEL__WHERE_ENTRY:
         setWhereEntry((WhereEntry)newValue);
@@ -303,10 +303,10 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
     switch (featureID)
     {
       case SqlPackage.MODEL__COL:
-        setCol((Column)null);
+        setCol((Columns)null);
         return;
-      case SqlPackage.MODEL__DB:
-        setDb((Database)null);
+      case SqlPackage.MODEL__TBL:
+        setTbl((Tables)null);
         return;
       case SqlPackage.MODEL__WHERE_ENTRY:
         setWhereEntry((WhereEntry)null);
@@ -327,8 +327,8 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
     {
       case SqlPackage.MODEL__COL:
         return col != null;
-      case SqlPackage.MODEL__DB:
-        return db != null;
+      case SqlPackage.MODEL__TBL:
+        return tbl != null;
       case SqlPackage.MODEL__WHERE_ENTRY:
         return whereEntry != null;
     }

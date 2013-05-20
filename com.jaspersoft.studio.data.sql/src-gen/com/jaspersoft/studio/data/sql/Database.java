@@ -2,7 +2,6 @@
  */
 package com.jaspersoft.studio.data.sql;
 
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,7 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface Database extends EObject
+public interface Database extends Schema
 {
   /**
    * Returns the value of the '<em><b>Db Name</b></em>' attribute.

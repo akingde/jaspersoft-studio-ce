@@ -7,6 +7,8 @@ import com.jaspersoft.studio.data.sql.AndWhereEntry;
 import com.jaspersoft.studio.data.sql.BooleanArrayExpression;
 import com.jaspersoft.studio.data.sql.BooleanExpression;
 import com.jaspersoft.studio.data.sql.Column;
+import com.jaspersoft.studio.data.sql.ColumnAlias;
+import com.jaspersoft.studio.data.sql.ColumnFull;
 import com.jaspersoft.studio.data.sql.Database;
 import com.jaspersoft.studio.data.sql.DateArrayExpression;
 import com.jaspersoft.studio.data.sql.DateExpression;
@@ -18,12 +20,18 @@ import com.jaspersoft.studio.data.sql.Model;
 import com.jaspersoft.studio.data.sql.MultiExpressionWhereEntry;
 import com.jaspersoft.studio.data.sql.NullArrayExpression;
 import com.jaspersoft.studio.data.sql.NullExpression;
+import com.jaspersoft.studio.data.sql.OrColumn;
+import com.jaspersoft.studio.data.sql.OrTable;
 import com.jaspersoft.studio.data.sql.OrWhereEntry;
 import com.jaspersoft.studio.data.sql.ReplacableValue;
+import com.jaspersoft.studio.data.sql.Schema;
 import com.jaspersoft.studio.data.sql.SingleExpressionWhereEntry;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.StringArrayExpression;
 import com.jaspersoft.studio.data.sql.StringExpression;
+import com.jaspersoft.studio.data.sql.Table;
+import com.jaspersoft.studio.data.sql.TableAlias;
+import com.jaspersoft.studio.data.sql.TableFull;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.serializer.acceptor.ISemanticSequenceAcceptor;
 import org.eclipse.xtext.serializer.acceptor.SequenceFeeder;
@@ -75,9 +83,42 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					return; 
 				}
 				else break;
+			case SqlPackage.COLUMN_ALIAS:
+				if(context == grammarAccess.getColumnAliasRule()) {
+					sequence_ColumnAlias(context, (ColumnAlias) semanticObject); 
+					return; 
+				}
+				else break;
+			case SqlPackage.COLUMN_FULL:
+				if(context == grammarAccess.getColumnFullRule() ||
+				   context == grammarAccess.getColumnOrAliasRule() ||
+				   context == grammarAccess.getColumnsRule() ||
+				   context == grammarAccess.getColumnsAccess().getOrColumnEntriesAction_1_0()) {
+					sequence_ColumnFull(context, (ColumnFull) semanticObject); 
+					return; 
+				}
+				else break;
 			case SqlPackage.DATABASE:
-				if(context == grammarAccess.getDatabaseRule()) {
+				if(context == grammarAccess.getColumnFullRule() ||
+				   context == grammarAccess.getColumnOrAliasRule() ||
+				   context == grammarAccess.getColumnsRule() ||
+				   context == grammarAccess.getColumnsAccess().getOrColumnEntriesAction_1_0()) {
+					sequence_ColumnFull_Database_Schema_TableFull(context, (Database) semanticObject); 
+					return; 
+				}
+				else if(context == grammarAccess.getDatabaseRule()) {
 					sequence_Database(context, (Database) semanticObject); 
+					return; 
+				}
+				else if(context == grammarAccess.getSchemaRule()) {
+					sequence_Database_Schema(context, (Database) semanticObject); 
+					return; 
+				}
+				else if(context == grammarAccess.getTableFullRule() ||
+				   context == grammarAccess.getTableOrAliasRule() ||
+				   context == grammarAccess.getTablesRule() ||
+				   context == grammarAccess.getTablesAccess().getOrTableEntriesAction_1_0()) {
+					sequence_Database_Schema_TableFull(context, (Database) semanticObject); 
 					return; 
 				}
 				else break;
@@ -156,6 +197,18 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					return; 
 				}
 				else break;
+			case SqlPackage.OR_COLUMN:
+				if(context == grammarAccess.getColumnsRule()) {
+					sequence_Columns(context, (OrColumn) semanticObject); 
+					return; 
+				}
+				else break;
+			case SqlPackage.OR_TABLE:
+				if(context == grammarAccess.getTablesRule()) {
+					sequence_Tables(context, (OrTable) semanticObject); 
+					return; 
+				}
+				else break;
 			case SqlPackage.OR_WHERE_ENTRY:
 				if(context == grammarAccess.getAndWhereEntryRule() ||
 				   context == grammarAccess.getAndWhereEntryAccess().getAndWhereEntryEntriesAction_1_0() ||
@@ -171,6 +224,26 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 				if(context == grammarAccess.getExpressionRule() ||
 				   context == grammarAccess.getReplacableValueRule()) {
 					sequence_ReplacableValue(context, (ReplacableValue) semanticObject); 
+					return; 
+				}
+				else break;
+			case SqlPackage.SCHEMA:
+				if(context == grammarAccess.getColumnFullRule() ||
+				   context == grammarAccess.getColumnOrAliasRule() ||
+				   context == grammarAccess.getColumnsRule() ||
+				   context == grammarAccess.getColumnsAccess().getOrColumnEntriesAction_1_0()) {
+					sequence_ColumnFull_Schema_TableFull(context, (Schema) semanticObject); 
+					return; 
+				}
+				else if(context == grammarAccess.getSchemaRule()) {
+					sequence_Schema(context, (Schema) semanticObject); 
+					return; 
+				}
+				else if(context == grammarAccess.getTableFullRule() ||
+				   context == grammarAccess.getTableOrAliasRule() ||
+				   context == grammarAccess.getTablesRule() ||
+				   context == grammarAccess.getTablesAccess().getOrTableEntriesAction_1_0()) {
+					sequence_Schema_TableFull(context, (Schema) semanticObject); 
 					return; 
 				}
 				else break;
@@ -198,6 +271,34 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 				if(context == grammarAccess.getExpressionRule() ||
 				   context == grammarAccess.getStringExpressionRule()) {
 					sequence_StringExpression(context, (StringExpression) semanticObject); 
+					return; 
+				}
+				else break;
+			case SqlPackage.TABLE:
+				if(context == grammarAccess.getTableRule()) {
+					sequence_Table(context, (Table) semanticObject); 
+					return; 
+				}
+				else break;
+			case SqlPackage.TABLE_ALIAS:
+				if(context == grammarAccess.getTableAliasRule()) {
+					sequence_TableAlias(context, (TableAlias) semanticObject); 
+					return; 
+				}
+				else break;
+			case SqlPackage.TABLE_FULL:
+				if(context == grammarAccess.getColumnFullRule() ||
+				   context == grammarAccess.getColumnOrAliasRule() ||
+				   context == grammarAccess.getColumnsRule() ||
+				   context == grammarAccess.getColumnsAccess().getOrColumnEntriesAction_1_0()) {
+					sequence_ColumnFull_TableFull(context, (TableFull) semanticObject); 
+					return; 
+				}
+				else if(context == grammarAccess.getTableFullRule() ||
+				   context == grammarAccess.getTableOrAliasRule() ||
+				   context == grammarAccess.getTablesRule() ||
+				   context == grammarAccess.getTablesAccess().getOrTableEntriesAction_1_0()) {
+					sequence_TableFull(context, (TableFull) semanticObject); 
 					return; 
 				}
 				else break;
@@ -234,17 +335,78 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     col=ColumnOrAlias
+	 *     colAlias=ID
 	 */
-	protected void sequence_Column(EObject context, Column semanticObject) {
+	protected void sequence_ColumnAlias(EObject context, ColumnAlias semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, SqlPackage.Literals.COLUMN__COL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SqlPackage.Literals.COLUMN__COL));
+			if(transientValues.isValueTransient(semanticObject, SqlPackage.Literals.COLUMN_ALIAS__COL_ALIAS) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SqlPackage.Literals.COLUMN_ALIAS__COL_ALIAS));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getColumnAccess().getColColumnOrAliasParserRuleCall_0(), semanticObject.getCol());
+		feeder.accept(grammarAccess.getColumnAliasAccess().getColAliasIDTerminalRuleCall_0(), semanticObject.getColAlias());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     colName=Column
+	 */
+	protected void sequence_ColumnFull(EObject context, ColumnFull semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (dbName=ID schem=ID tbl=Table colName=Column)
+	 */
+	protected void sequence_ColumnFull_Database_Schema_TableFull(EObject context, Database semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (schem=ID tbl=Table colName=Column)
+	 */
+	protected void sequence_ColumnFull_Schema_TableFull(EObject context, Schema semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (tbl=Table colName=Column)
+	 */
+	protected void sequence_ColumnFull_TableFull(EObject context, TableFull semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     colName=ID
+	 */
+	protected void sequence_Column(EObject context, Column semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, SqlPackage.Literals.COLUMN__COL_NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SqlPackage.Literals.COLUMN__COL_NAME));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getColumnAccess().getColNameIDTerminalRuleCall_0(), semanticObject.getColName());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (entries+=Columns_OrColumn_1_0 entries+=ColumnOrAlias+)
+	 */
+	protected void sequence_Columns(EObject context, OrColumn semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -253,14 +415,25 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *     dbName=ID
 	 */
 	protected void sequence_Database(EObject context, Database semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, SqlPackage.Literals.DATABASE__DB_NAME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SqlPackage.Literals.DATABASE__DB_NAME));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getDatabaseAccess().getDbNameIDTerminalRuleCall_0(), semanticObject.getDbName());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (dbName=ID schem=ID)
+	 */
+	protected void sequence_Database_Schema(EObject context, Database semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (dbName=ID schem=ID tbl=Table)
+	 */
+	protected void sequence_Database_Schema_TableFull(EObject context, Database semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -341,7 +514,7 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (col=Column db=Database whereEntry=WhereEntry?)
+	 *     (col=Columns tbl=Tables whereEntry=WhereEntry?)
 	 */
 	protected void sequence_Model(EObject context, Model semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -413,6 +586,24 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
+	 *     schem=ID
+	 */
+	protected void sequence_Schema(EObject context, Schema semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (schem=ID tbl=Table)
+	 */
+	protected void sequence_Schema_TableFull(EObject context, Schema semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
 	 *     (name=ID operator=Operator rhs=Expression)
 	 */
 	protected void sequence_SingleExpressionWhereEntry(EObject context, SingleExpressionWhereEntry semanticObject) {
@@ -455,6 +646,56 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
 		feeder.accept(grammarAccess.getStringExpressionAccess().getValueSTRINGTerminalRuleCall_0(), semanticObject.getValue());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     tblAlias=ID
+	 */
+	protected void sequence_TableAlias(EObject context, TableAlias semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, SqlPackage.Literals.TABLE_ALIAS__TBL_ALIAS) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SqlPackage.Literals.TABLE_ALIAS__TBL_ALIAS));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getTableAliasAccess().getTblAliasIDTerminalRuleCall_0(), semanticObject.getTblAlias());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     tbl=Table
+	 */
+	protected void sequence_TableFull(EObject context, TableFull semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     tbl=ID
+	 */
+	protected void sequence_Table(EObject context, Table semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, SqlPackage.Literals.TABLE__TBL) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SqlPackage.Literals.TABLE__TBL));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getTableAccess().getTblIDTerminalRuleCall_0(), semanticObject.getTbl());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (entries+=Tables_OrTable_1_0 entries+=TableOrAlias+)
+	 */
+	protected void sequence_Tables(EObject context, OrTable semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

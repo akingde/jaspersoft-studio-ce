@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.Model#getCol <em>Col</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.Model#getDb <em>Db</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Model#getTbl <em>Tbl</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Model#getWhereEntry <em>Where Entry</em>}</li>
  * </ul>
  * </p>
@@ -33,12 +33,12 @@ public interface Model extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Col</em>' containment reference.
-   * @see #setCol(Column)
+   * @see #setCol(Columns)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getModel_Col()
    * @model containment="true"
    * @generated
    */
-  Column getCol();
+  Columns getCol();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Model#getCol <em>Col</em>}' containment reference.
@@ -48,33 +48,33 @@ public interface Model extends EObject
    * @see #getCol()
    * @generated
    */
-  void setCol(Column value);
+  void setCol(Columns value);
 
   /**
-   * Returns the value of the '<em><b>Db</b></em>' containment reference.
+   * Returns the value of the '<em><b>Tbl</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Db</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Tbl</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Db</em>' containment reference.
-   * @see #setDb(Database)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getModel_Db()
+   * @return the value of the '<em>Tbl</em>' containment reference.
+   * @see #setTbl(Tables)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getModel_Tbl()
    * @model containment="true"
    * @generated
    */
-  Database getDb();
+  Tables getTbl();
 
   /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Model#getDb <em>Db</em>}' containment reference.
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Model#getTbl <em>Tbl</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Db</em>' containment reference.
-   * @see #getDb()
+   * @param value the new value of the '<em>Tbl</em>' containment reference.
+   * @see #getTbl()
    * @generated
    */
-  void setDb(Database value);
+  void setTbl(Tables value);
 
   /**
    * Returns the value of the '<em><b>Where Entry</b></em>' containment reference.

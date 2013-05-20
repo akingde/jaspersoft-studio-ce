@@ -25,14 +25,38 @@
     </genEnums>
     <genClasses ecoreClass="Sql.ecore#//Model">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/col"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/db"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/tbl"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/whereEntry"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//Columns"/>
+    <genClasses ecoreClass="Sql.ecore#//ColumnOrAlias"/>
+    <genClasses ecoreClass="Sql.ecore#//ColumnFull">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnFull/colAlias"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnFull/colName"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//ColumnAlias">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ColumnAlias/colAlias"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//Column">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Column/colName"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//Tables"/>
+    <genClasses ecoreClass="Sql.ecore#//TableOrAlias"/>
+    <genClasses ecoreClass="Sql.ecore#//TableFull">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableFull/tblAlias"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableFull/tbl"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//Table">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Table/tbl"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//TableAlias">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//TableAlias/tblAlias"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//Schema">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Schema/schem"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Database">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Database/dbName"/>
-    </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//Column">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Column/col"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//WhereEntry"/>
     <genClasses ecoreClass="Sql.ecore#//ExpressionWhereEntry">
@@ -86,6 +110,12 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//BooleanArrayExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//BooleanArrayExpression/values"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrColumn">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrColumn/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrTable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrTable/entries"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OrWhereEntry">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrWhereEntry/entries"/>

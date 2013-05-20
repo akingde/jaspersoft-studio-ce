@@ -32,13 +32,40 @@ public interface SqlFactory extends EFactory
   Model createModel();
 
   /**
-   * Returns a new object of class '<em>Database</em>'.
+   * Returns a new object of class '<em>Columns</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Database</em>'.
+   * @return a new object of class '<em>Columns</em>'.
    * @generated
    */
-  Database createDatabase();
+  Columns createColumns();
+
+  /**
+   * Returns a new object of class '<em>Column Or Alias</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Column Or Alias</em>'.
+   * @generated
+   */
+  ColumnOrAlias createColumnOrAlias();
+
+  /**
+   * Returns a new object of class '<em>Column Full</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Column Full</em>'.
+   * @generated
+   */
+  ColumnFull createColumnFull();
+
+  /**
+   * Returns a new object of class '<em>Column Alias</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Column Alias</em>'.
+   * @generated
+   */
+  ColumnAlias createColumnAlias();
 
   /**
    * Returns a new object of class '<em>Column</em>'.
@@ -48,6 +75,69 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   Column createColumn();
+
+  /**
+   * Returns a new object of class '<em>Tables</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Tables</em>'.
+   * @generated
+   */
+  Tables createTables();
+
+  /**
+   * Returns a new object of class '<em>Table Or Alias</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Table Or Alias</em>'.
+   * @generated
+   */
+  TableOrAlias createTableOrAlias();
+
+  /**
+   * Returns a new object of class '<em>Table Full</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Table Full</em>'.
+   * @generated
+   */
+  TableFull createTableFull();
+
+  /**
+   * Returns a new object of class '<em>Table</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Table</em>'.
+   * @generated
+   */
+  Table createTable();
+
+  /**
+   * Returns a new object of class '<em>Table Alias</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Table Alias</em>'.
+   * @generated
+   */
+  TableAlias createTableAlias();
+
+  /**
+   * Returns a new object of class '<em>Schema</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Schema</em>'.
+   * @generated
+   */
+  Schema createSchema();
+
+  /**
+   * Returns a new object of class '<em>Database</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Database</em>'.
+   * @generated
+   */
+  Database createDatabase();
 
   /**
    * Returns a new object of class '<em>Where Entry</em>'.
@@ -219,6 +309,24 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   BooleanArrayExpression createBooleanArrayExpression();
+
+  /**
+   * Returns a new object of class '<em>Or Column</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Or Column</em>'.
+   * @generated
+   */
+  OrColumn createOrColumn();
+
+  /**
+   * Returns a new object of class '<em>Or Table</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Or Table</em>'.
+   * @generated
+   */
+  OrTable createOrTable();
 
   /**
    * Returns a new object of class '<em>Or Where Entry</em>'.
