@@ -9,7 +9,10 @@ Model:
 	(col=Columns)?
 	'FROM'
 	tbl=Tables
-	('WHERE' whereEntry=WhereEntry)?;
+	('WHERE' whereEntry=WhereEntry)?
+	('GROUP BY' groupByEntry=Columns)?
+	('HAVING' havingEntry=WhereEntry)?
+	('ORDER BY' orderByEntry=Columns)?;
 
 Columns returns Columns:
 	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;

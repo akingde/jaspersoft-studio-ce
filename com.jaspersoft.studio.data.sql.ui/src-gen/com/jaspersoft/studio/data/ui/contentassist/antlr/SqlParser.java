@@ -51,6 +51,9 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOperatorAccess().getAlternatives(), "rule__Operator__Alternatives");
 					put(grammarAccess.getModelAccess().getGroup(), "rule__Model__Group__0");
 					put(grammarAccess.getModelAccess().getGroup_4(), "rule__Model__Group_4__0");
+					put(grammarAccess.getModelAccess().getGroup_5(), "rule__Model__Group_5__0");
+					put(grammarAccess.getModelAccess().getGroup_6(), "rule__Model__Group_6__0");
+					put(grammarAccess.getModelAccess().getGroup_7(), "rule__Model__Group_7__0");
 					put(grammarAccess.getColumnsAccess().getGroup(), "rule__Columns__Group__0");
 					put(grammarAccess.getColumnsAccess().getGroup_1(), "rule__Columns__Group_1__0");
 					put(grammarAccess.getColumnsAccess().getGroup_1_1(), "rule__Columns__Group_1_1__0");
@@ -88,6 +91,9 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getModelAccess().getColAssignment_1(), "rule__Model__ColAssignment_1");
 					put(grammarAccess.getModelAccess().getTblAssignment_3(), "rule__Model__TblAssignment_3");
 					put(grammarAccess.getModelAccess().getWhereEntryAssignment_4_1(), "rule__Model__WhereEntryAssignment_4_1");
+					put(grammarAccess.getModelAccess().getGroupByEntryAssignment_5_1(), "rule__Model__GroupByEntryAssignment_5_1");
+					put(grammarAccess.getModelAccess().getHavingEntryAssignment_6_1(), "rule__Model__HavingEntryAssignment_6_1");
+					put(grammarAccess.getModelAccess().getOrderByEntryAssignment_7_1(), "rule__Model__OrderByEntryAssignment_7_1");
 					put(grammarAccess.getColumnsAccess().getEntriesAssignment_1_1_1(), "rule__Columns__EntriesAssignment_1_1_1");
 					put(grammarAccess.getColumnOrAliasAccess().getColAliasAssignment_1_2(), "rule__ColumnOrAlias__ColAliasAssignment_1_2");
 					put(grammarAccess.getColumnOrAliasAccess().getColAliasAssignment_2_1(), "rule__ColumnOrAlias__ColAliasAssignment_2_1");

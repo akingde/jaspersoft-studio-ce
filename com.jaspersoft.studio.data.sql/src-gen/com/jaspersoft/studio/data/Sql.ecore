@@ -8,6 +8,12 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="whereEntry" eType="#//WhereEntry"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groupByEntry" eType="#//Columns"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="havingEntry" eType="#//WhereEntry"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orderByEntry" eType="#//Columns"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Columns"/>
   <eClassifiers xsi:type="ecore:EClass" name="ColumnOrAlias" eSuperTypes="#//Columns"/>

@@ -1593,6 +1593,7 @@ rule__Model__Group__4
     }
 :
 	rule__Model__Group__4__Impl
+	rule__Model__Group__5
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -1613,6 +1614,98 @@ rule__Model__Group__4__Impl
 finally {
 	restoreStackSize(stackSize);
 }
+
+
+rule__Model__Group__5
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Model__Group__5__Impl
+	rule__Model__Group__6
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__Group__5__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getGroup_5()); }
+(rule__Model__Group_5__0)?
+{ after(grammarAccess.getModelAccess().getGroup_5()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__Model__Group__6
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Model__Group__6__Impl
+	rule__Model__Group__7
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__Group__6__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getGroup_6()); }
+(rule__Model__Group_6__0)?
+{ after(grammarAccess.getModelAccess().getGroup_6()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__Model__Group__7
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Model__Group__7__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__Group__7__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getGroup_7()); }
+(rule__Model__Group_7__0)?
+{ after(grammarAccess.getModelAccess().getGroup_7()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
+
+
+
 
 
 
@@ -1676,6 +1769,195 @@ rule__Model__Group_4__1__Impl
 { before(grammarAccess.getModelAccess().getWhereEntryAssignment_4_1()); }
 (rule__Model__WhereEntryAssignment_4_1)
 { after(grammarAccess.getModelAccess().getWhereEntryAssignment_4_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
+
+
+
+rule__Model__Group_5__0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Model__Group_5__0__Impl
+	rule__Model__Group_5__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__Group_5__0__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getGROUPBYKeyword_5_0()); }
+
+	'GROUP BY' 
+
+{ after(grammarAccess.getModelAccess().getGROUPBYKeyword_5_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__Model__Group_5__1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Model__Group_5__1__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__Group_5__1__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getGroupByEntryAssignment_5_1()); }
+(rule__Model__GroupByEntryAssignment_5_1)
+{ after(grammarAccess.getModelAccess().getGroupByEntryAssignment_5_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
+
+
+
+rule__Model__Group_6__0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Model__Group_6__0__Impl
+	rule__Model__Group_6__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__Group_6__0__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getHAVINGKeyword_6_0()); }
+
+	'HAVING' 
+
+{ after(grammarAccess.getModelAccess().getHAVINGKeyword_6_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__Model__Group_6__1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Model__Group_6__1__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__Group_6__1__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getHavingEntryAssignment_6_1()); }
+(rule__Model__HavingEntryAssignment_6_1)
+{ after(grammarAccess.getModelAccess().getHavingEntryAssignment_6_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
+
+
+
+rule__Model__Group_7__0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Model__Group_7__0__Impl
+	rule__Model__Group_7__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__Group_7__0__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getORDERBYKeyword_7_0()); }
+
+	'ORDER BY' 
+
+{ after(grammarAccess.getModelAccess().getORDERBYKeyword_7_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__Model__Group_7__1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Model__Group_7__1__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__Group_7__1__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getOrderByEntryAssignment_7_1()); }
+(rule__Model__OrderByEntryAssignment_7_1)
+{ after(grammarAccess.getModelAccess().getOrderByEntryAssignment_7_1()); }
 )
 
 ;
@@ -4515,6 +4797,51 @@ rule__Model__WhereEntryAssignment_4_1
 (
 { before(grammarAccess.getModelAccess().getWhereEntryWhereEntryParserRuleCall_4_1_0()); }
 	ruleWhereEntry{ after(grammarAccess.getModelAccess().getWhereEntryWhereEntryParserRuleCall_4_1_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__GroupByEntryAssignment_5_1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getGroupByEntryColumnsParserRuleCall_5_1_0()); }
+	ruleColumns{ after(grammarAccess.getModelAccess().getGroupByEntryColumnsParserRuleCall_5_1_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__HavingEntryAssignment_6_1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getHavingEntryWhereEntryParserRuleCall_6_1_0()); }
+	ruleWhereEntry{ after(grammarAccess.getModelAccess().getHavingEntryWhereEntryParserRuleCall_6_1_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__OrderByEntryAssignment_7_1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getOrderByEntryColumnsParserRuleCall_7_1_0()); }
+	ruleColumns{ after(grammarAccess.getModelAccess().getOrderByEntryColumnsParserRuleCall_7_1_0()); }
 )
 
 ;
