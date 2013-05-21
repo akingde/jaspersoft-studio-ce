@@ -10,9 +10,21 @@ Model:
 	'FROM'
 	tbl=Tables
 	('WHERE' whereEntry=WhereEntry)?
-	('GROUP BY' groupByEntry=Columns)?
-	('HAVING' havingEntry=WhereEntry)?
-	('ORDER BY' orderByEntry=Columns)?;
+	('GROUP BY' groupByEntry=GroupByColumns)?
+	('HAVING' havingEntry=HavingEntry)?
+	('ORDER BY' orderByEntry=OrderByColumns)?;
+
+OrderByColumns returns OrderByColumns:
+	OrderByColumnFull ({OrOrderByColumn.entries+=current} ("," entries+=OrderByColumnFull)+)?;
+
+OrderByColumnFull:
+	colOrder=Column | (TableFull '.' colOrder=Column);
+
+GroupByColumns returns GroupByColumns:
+	GroupByColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?;
+
+GroupByColumnFull:
+	groupByColumn=Column | (TableFull '.' groupByColumn=Column);
 
 Columns returns Columns:
 	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;
@@ -21,7 +33,7 @@ ColumnOrAlias:
 	ColumnFull | (ColumnFull 'AS' colAlias=ColumnAlias) | (ColumnFull colAlias=ColumnAlias);
 
 ColumnFull:
-	colName=Column | (TableFull '.' colName=Column) ;//| (TableAlias '.' colName=Column);
+	colName=Column | (TableFull '.' colName=Column);
 
 ColumnAlias:
 	colAlias=ID;
@@ -63,6 +75,20 @@ ConcreteWhereEntry returns WhereEntry:
 
 ParWhereEntry returns WhereEntry:
 	"(" WhereEntry ")";
+
+HavingEntry returns HavingEntry:
+	AndHavingEntry ({OrHavingEntry.entries+=current}
+	("OR" entries+=AndHavingEntry)+)?;
+
+AndHavingEntry returns HavingEntry:
+	ConcreteHavingEntry ({AndHavingEntry.entries+=current}
+	("AND" entries+=ConcreteHavingEntry)+)?;
+
+ConcreteHavingEntry returns HavingEntry:
+	ParHavingEntry | ExpressionWhereEntry;
+
+ParHavingEntry returns HavingEntry:
+	"(" HavingEntry ")";
 
 ExpressionWhereEntry:
 	SingleExpressionWhereEntry | MultiExpressionWhereEntry;
