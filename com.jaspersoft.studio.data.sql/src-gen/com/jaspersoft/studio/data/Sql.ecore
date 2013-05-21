@@ -8,11 +8,21 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="whereEntry" eType="#//WhereEntry"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="groupByEntry" eType="#//Columns"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groupByEntry" eType="#//GroupByColumns"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="havingEntry" eType="#//WhereEntry"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="havingEntry" eType="#//HavingEntry"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="orderByEntry" eType="#//Columns"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orderByEntry" eType="#//OrderByColumns"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrderByColumns"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OrderByColumnFull" eSuperTypes="#//OrderByColumns">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="colOrder" eType="#//Column"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupByColumns"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupByColumnFull" eSuperTypes="#//GroupByColumns">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groupByColumn" eType="#//Column"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Columns"/>
@@ -31,7 +41,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Tables"/>
   <eClassifiers xsi:type="ecore:EClass" name="TableOrAlias" eSuperTypes="#//Tables"/>
-  <eClassifiers xsi:type="ecore:EClass" name="TableFull" eSuperTypes="#//ColumnFull #//TableOrAlias">
+  <eClassifiers xsi:type="ecore:EClass" name="TableFull" eSuperTypes="#//OrderByColumnFull #//GroupByColumnFull #//ColumnFull #//TableOrAlias">
     <eStructuralFeatures xsi:type="ecore:EReference" name="tblAlias" eType="#//TableAlias"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tbl" eType="#//Table" containment="true"/>
@@ -49,7 +59,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dbName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WhereEntry"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ExpressionWhereEntry" eSuperTypes="#//WhereEntry">
+  <eClassifiers xsi:type="ecore:EClass" name="HavingEntry"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpressionWhereEntry" eSuperTypes="#//WhereEntry #//HavingEntry">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SingleExpressionWhereEntry" eSuperTypes="#//ExpressionWhereEntry">
@@ -125,6 +136,14 @@
     <eLiterals name="notIn" value="8" literal="not in"/>
     <eLiterals name="in" value="9" literal="in"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrOrderByColumn" eSuperTypes="#//OrderByColumns">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//OrderByColumnFull" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrGroupByColumn" eSuperTypes="#//GroupByColumns">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//GroupByColumnFull" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrColumn" eSuperTypes="#//Columns">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//ColumnOrAlias" containment="true"/>
@@ -140,5 +159,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="AndWhereEntry" eSuperTypes="#//WhereEntry">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//WhereEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrHavingEntry" eSuperTypes="#//HavingEntry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//HavingEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AndHavingEntry" eSuperTypes="#//HavingEntry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//HavingEntry" containment="true"/>
   </eClassifiers>
 </ecore:EPackage>
