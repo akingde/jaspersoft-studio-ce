@@ -6,7 +6,7 @@ generate sql "http://www.com.jaspersoft.studio.data.Sql"
 
 Model:
 	'SELECT'
-	col=Columns
+	(col=Columns)?
 	'FROM'
 	tbl=Tables
 	('WHERE' whereEntry=WhereEntry)?;

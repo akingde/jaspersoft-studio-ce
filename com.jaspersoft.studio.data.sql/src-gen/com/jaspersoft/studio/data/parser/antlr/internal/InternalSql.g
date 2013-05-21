@@ -100,7 +100,7 @@ ruleModel returns [EObject current=null]
 	    }
 
 )
-)	otherlv_2='FROM' 
+)?	otherlv_2='FROM' 
     {
     	newLeafNode(otherlv_2, grammarAccess.getModelAccess().getFROMKeyword_2());
     }

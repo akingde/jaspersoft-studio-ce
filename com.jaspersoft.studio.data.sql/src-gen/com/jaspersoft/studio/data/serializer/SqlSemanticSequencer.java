@@ -514,7 +514,7 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (col=Columns tbl=Tables whereEntry=WhereEntry?)
+	 *     (col=Columns? tbl=Tables whereEntry=WhereEntry?)
 	 */
 	protected void sequence_Model(EObject context, Model semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

@@ -1517,7 +1517,7 @@ rule__Model__Group__1__Impl
 :
 (
 { before(grammarAccess.getModelAccess().getColAssignment_1()); }
-(rule__Model__ColAssignment_1)
+(rule__Model__ColAssignment_1)?
 { after(grammarAccess.getModelAccess().getColAssignment_1()); }
 )
 

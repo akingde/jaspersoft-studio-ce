@@ -33,16 +33,16 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cWhereEntryWhereEntryParserRuleCall_4_1_0 = (RuleCall)cWhereEntryAssignment_4_1.eContents().get(0);
 		
 		//Model:
-		//	"SELECT" col=Columns "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?;
+		//	"SELECT" col=Columns? "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?;
 		public ParserRule getRule() { return rule; }
 
-		//"SELECT" col=Columns "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?
+		//"SELECT" col=Columns? "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?
 		public Group getGroup() { return cGroup; }
 
 		//"SELECT"
 		public Keyword getSELECTKeyword_0() { return cSELECTKeyword_0; }
 
-		//col=Columns
+		//col=Columns?
 		public Assignment getColAssignment_1() { return cColAssignment_1; }
 
 		//Columns
@@ -1343,7 +1343,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//Model:
-	//	"SELECT" col=Columns "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?;
+	//	"SELECT" col=Columns? "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?;
 	public ModelElements getModelAccess() {
 		return (pModel != null) ? pModel : (pModel = new ModelElements());
 	}

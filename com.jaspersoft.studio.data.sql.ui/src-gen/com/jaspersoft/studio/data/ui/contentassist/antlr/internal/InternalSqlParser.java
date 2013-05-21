@@ -3106,12 +3106,31 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
 
                     if ( (LA3_2==RULE_ID) ) {
                         switch ( input.LA(4) ) {
+                        case EOF:
+                        case 27:
+                        case 28:
+                            {
+                            alt3=1;
+                            }
+                            break;
+                        case 29:
+                            {
+                            alt3=2;
+                            }
+                            break;
                         case 30:
                             {
                             int LA3_7 = input.LA(5);
 
                             if ( (LA3_7==RULE_ID) ) {
                                 switch ( input.LA(6) ) {
+                                case EOF:
+                                case 27:
+                                case 28:
+                                    {
+                                    alt3=1;
+                                    }
+                                    break;
                                 case 29:
                                     {
                                     alt3=2;
@@ -3120,13 +3139,6 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                                 case RULE_ID:
                                     {
                                     alt3=3;
-                                    }
-                                    break;
-                                case EOF:
-                                case 27:
-                                case 28:
-                                    {
-                                    alt3=1;
                                     }
                                     break;
                                 default:
@@ -3145,21 +3157,9 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                             }
                             }
                             break;
-                        case 29:
-                            {
-                            alt3=2;
-                            }
-                            break;
                         case RULE_ID:
                             {
                             alt3=3;
-                            }
-                            break;
-                        case EOF:
-                        case 27:
-                        case 28:
-                            {
-                            alt3=1;
                             }
                             break;
                         default:
@@ -3178,14 +3178,14 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                     }
                     }
                     break;
-                case 29:
-                    {
-                    alt3=2;
-                    }
-                    break;
                 case RULE_ID:
                     {
                     alt3=3;
+                    }
+                    break;
+                case 29:
+                    {
+                    alt3=2;
                     }
                     break;
                 case EOF:
@@ -3548,11 +3548,11 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                     {
                     int LA7_2 = input.LA(3);
 
-                    if ( (LA7_2==35) ) {
-                        alt7=2;
-                    }
-                    else if ( ((LA7_2>=RULE_SIGNED_DOUBLE && LA7_2<=RULE_DATE)||(LA7_2>=37 && LA7_2<=40)) ) {
+                    if ( ((LA7_2>=RULE_SIGNED_DOUBLE && LA7_2<=RULE_DATE)||(LA7_2>=37 && LA7_2<=40)) ) {
                         alt7=1;
+                    }
+                    else if ( (LA7_2==35) ) {
+                        alt7=2;
                     }
                     else {
                         NoViableAltException nvae =
@@ -3566,11 +3566,11 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                     {
                     int LA7_3 = input.LA(3);
 
-                    if ( ((LA7_3>=RULE_SIGNED_DOUBLE && LA7_3<=RULE_DATE)||(LA7_3>=37 && LA7_3<=40)) ) {
-                        alt7=1;
-                    }
-                    else if ( (LA7_3==35) ) {
+                    if ( (LA7_3==35) ) {
                         alt7=2;
+                    }
+                    else if ( ((LA7_3>=RULE_SIGNED_DOUBLE && LA7_3<=RULE_DATE)||(LA7_3>=37 && LA7_3<=40)) ) {
+                        alt7=1;
                     }
                     else {
                         NoViableAltException nvae =
@@ -3970,6 +3970,11 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
 
             if ( (LA10_0==35) ) {
                 switch ( input.LA(2) ) {
+                case RULE_DATE:
+                    {
+                    alt10=5;
+                    }
+                    break;
                 case RULE_BOOL:
                     {
                     alt10=6;
@@ -3980,16 +3985,6 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                     alt10=4;
                     }
                     break;
-                case RULE_SIGNED_DOUBLE:
-                    {
-                    alt10=1;
-                    }
-                    break;
-                case RULE_DATE:
-                    {
-                    alt10=5;
-                    }
-                    break;
                 case RULE_STRING:
                     {
                     alt10=3;
@@ -3998,6 +3993,11 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                 case RULE_SINGED_LONG:
                     {
                     alt10=2;
+                    }
+                    break;
+                case RULE_SIGNED_DOUBLE:
+                    {
+                    alt10=1;
                     }
                     break;
                 default:
@@ -4638,27 +4638,38 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Model__Group__1__Impl"
-    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1513:1: rule__Model__Group__1__Impl : ( ( rule__Model__ColAssignment_1 ) ) ;
+    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1513:1: rule__Model__Group__1__Impl : ( ( rule__Model__ColAssignment_1 )? ) ;
     public final void rule__Model__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1517:1: ( ( ( rule__Model__ColAssignment_1 ) ) )
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1518:1: ( ( rule__Model__ColAssignment_1 ) )
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1517:1: ( ( ( rule__Model__ColAssignment_1 )? ) )
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1518:1: ( ( rule__Model__ColAssignment_1 )? )
             {
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1518:1: ( ( rule__Model__ColAssignment_1 ) )
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1519:1: ( rule__Model__ColAssignment_1 )
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1518:1: ( ( rule__Model__ColAssignment_1 )? )
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1519:1: ( rule__Model__ColAssignment_1 )?
             {
              before(grammarAccess.getModelAccess().getColAssignment_1()); 
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1520:1: ( rule__Model__ColAssignment_1 )
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1520:2: rule__Model__ColAssignment_1
-            {
-            pushFollow(FOLLOW_rule__Model__ColAssignment_1_in_rule__Model__Group__1__Impl3303);
-            rule__Model__ColAssignment_1();
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1520:1: ( rule__Model__ColAssignment_1 )?
+            int alt13=2;
+            int LA13_0 = input.LA(1);
 
-            state._fsp--;
+            if ( (LA13_0==RULE_ID) ) {
+                alt13=1;
+            }
+            switch (alt13) {
+                case 1 :
+                    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1520:2: rule__Model__ColAssignment_1
+                    {
+                    pushFollow(FOLLOW_rule__Model__ColAssignment_1_in_rule__Model__Group__1__Impl3303);
+                    rule__Model__ColAssignment_1();
 
+                    state._fsp--;
+
+
+                    }
+                    break;
 
             }
 
@@ -4694,12 +4705,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1534:1: ( rule__Model__Group__2__Impl rule__Model__Group__3 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1535:2: rule__Model__Group__2__Impl rule__Model__Group__3
             {
-            pushFollow(FOLLOW_rule__Model__Group__2__Impl_in_rule__Model__Group__23333);
+            pushFollow(FOLLOW_rule__Model__Group__2__Impl_in_rule__Model__Group__23334);
             rule__Model__Group__2__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Model__Group__3_in_rule__Model__Group__23336);
+            pushFollow(FOLLOW_rule__Model__Group__3_in_rule__Model__Group__23337);
             rule__Model__Group__3();
 
             state._fsp--;
@@ -4736,7 +4747,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1548:1: 'FROM'
             {
              before(grammarAccess.getModelAccess().getFROMKeyword_2()); 
-            match(input,26,FOLLOW_26_in_rule__Model__Group__2__Impl3364); 
+            match(input,26,FOLLOW_26_in_rule__Model__Group__2__Impl3365); 
              after(grammarAccess.getModelAccess().getFROMKeyword_2()); 
 
             }
@@ -4769,12 +4780,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1565:1: ( rule__Model__Group__3__Impl rule__Model__Group__4 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1566:2: rule__Model__Group__3__Impl rule__Model__Group__4
             {
-            pushFollow(FOLLOW_rule__Model__Group__3__Impl_in_rule__Model__Group__33395);
+            pushFollow(FOLLOW_rule__Model__Group__3__Impl_in_rule__Model__Group__33396);
             rule__Model__Group__3__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Model__Group__4_in_rule__Model__Group__33398);
+            pushFollow(FOLLOW_rule__Model__Group__4_in_rule__Model__Group__33399);
             rule__Model__Group__4();
 
             state._fsp--;
@@ -4814,7 +4825,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1580:1: ( rule__Model__TblAssignment_3 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1580:2: rule__Model__TblAssignment_3
             {
-            pushFollow(FOLLOW_rule__Model__TblAssignment_3_in_rule__Model__Group__3__Impl3425);
+            pushFollow(FOLLOW_rule__Model__TblAssignment_3_in_rule__Model__Group__3__Impl3426);
             rule__Model__TblAssignment_3();
 
             state._fsp--;
@@ -4854,7 +4865,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1594:1: ( rule__Model__Group__4__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1595:2: rule__Model__Group__4__Impl
             {
-            pushFollow(FOLLOW_rule__Model__Group__4__Impl_in_rule__Model__Group__43455);
+            pushFollow(FOLLOW_rule__Model__Group__4__Impl_in_rule__Model__Group__43456);
             rule__Model__Group__4__Impl();
 
             state._fsp--;
@@ -4892,17 +4903,17 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getModelAccess().getGroup_4()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1608:1: ( rule__Model__Group_4__0 )?
-            int alt13=2;
-            int LA13_0 = input.LA(1);
+            int alt14=2;
+            int LA14_0 = input.LA(1);
 
-            if ( (LA13_0==27) ) {
-                alt13=1;
+            if ( (LA14_0==27) ) {
+                alt14=1;
             }
-            switch (alt13) {
+            switch (alt14) {
                 case 1 :
                     // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1608:2: rule__Model__Group_4__0
                     {
-                    pushFollow(FOLLOW_rule__Model__Group_4__0_in_rule__Model__Group__4__Impl3482);
+                    pushFollow(FOLLOW_rule__Model__Group_4__0_in_rule__Model__Group__4__Impl3483);
                     rule__Model__Group_4__0();
 
                     state._fsp--;
@@ -4945,12 +4956,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1632:1: ( rule__Model__Group_4__0__Impl rule__Model__Group_4__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1633:2: rule__Model__Group_4__0__Impl rule__Model__Group_4__1
             {
-            pushFollow(FOLLOW_rule__Model__Group_4__0__Impl_in_rule__Model__Group_4__03523);
+            pushFollow(FOLLOW_rule__Model__Group_4__0__Impl_in_rule__Model__Group_4__03524);
             rule__Model__Group_4__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Model__Group_4__1_in_rule__Model__Group_4__03526);
+            pushFollow(FOLLOW_rule__Model__Group_4__1_in_rule__Model__Group_4__03527);
             rule__Model__Group_4__1();
 
             state._fsp--;
@@ -4987,7 +4998,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1646:1: 'WHERE'
             {
              before(grammarAccess.getModelAccess().getWHEREKeyword_4_0()); 
-            match(input,27,FOLLOW_27_in_rule__Model__Group_4__0__Impl3554); 
+            match(input,27,FOLLOW_27_in_rule__Model__Group_4__0__Impl3555); 
              after(grammarAccess.getModelAccess().getWHEREKeyword_4_0()); 
 
             }
@@ -5020,7 +5031,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1663:1: ( rule__Model__Group_4__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1664:2: rule__Model__Group_4__1__Impl
             {
-            pushFollow(FOLLOW_rule__Model__Group_4__1__Impl_in_rule__Model__Group_4__13585);
+            pushFollow(FOLLOW_rule__Model__Group_4__1__Impl_in_rule__Model__Group_4__13586);
             rule__Model__Group_4__1__Impl();
 
             state._fsp--;
@@ -5060,7 +5071,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1677:1: ( rule__Model__WhereEntryAssignment_4_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1677:2: rule__Model__WhereEntryAssignment_4_1
             {
-            pushFollow(FOLLOW_rule__Model__WhereEntryAssignment_4_1_in_rule__Model__Group_4__1__Impl3612);
+            pushFollow(FOLLOW_rule__Model__WhereEntryAssignment_4_1_in_rule__Model__Group_4__1__Impl3613);
             rule__Model__WhereEntryAssignment_4_1();
 
             state._fsp--;
@@ -5100,12 +5111,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1695:1: ( rule__Columns__Group__0__Impl rule__Columns__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1696:2: rule__Columns__Group__0__Impl rule__Columns__Group__1
             {
-            pushFollow(FOLLOW_rule__Columns__Group__0__Impl_in_rule__Columns__Group__03646);
+            pushFollow(FOLLOW_rule__Columns__Group__0__Impl_in_rule__Columns__Group__03647);
             rule__Columns__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Columns__Group__1_in_rule__Columns__Group__03649);
+            pushFollow(FOLLOW_rule__Columns__Group__1_in_rule__Columns__Group__03650);
             rule__Columns__Group__1();
 
             state._fsp--;
@@ -5142,7 +5153,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1709:1: ruleColumnOrAlias
             {
              before(grammarAccess.getColumnsAccess().getColumnOrAliasParserRuleCall_0()); 
-            pushFollow(FOLLOW_ruleColumnOrAlias_in_rule__Columns__Group__0__Impl3676);
+            pushFollow(FOLLOW_ruleColumnOrAlias_in_rule__Columns__Group__0__Impl3677);
             ruleColumnOrAlias();
 
             state._fsp--;
@@ -5179,7 +5190,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1724:1: ( rule__Columns__Group__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1725:2: rule__Columns__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__Columns__Group__1__Impl_in_rule__Columns__Group__13705);
+            pushFollow(FOLLOW_rule__Columns__Group__1__Impl_in_rule__Columns__Group__13706);
             rule__Columns__Group__1__Impl();
 
             state._fsp--;
@@ -5217,17 +5228,17 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getColumnsAccess().getGroup_1()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1738:1: ( rule__Columns__Group_1__0 )?
-            int alt14=2;
-            int LA14_0 = input.LA(1);
+            int alt15=2;
+            int LA15_0 = input.LA(1);
 
-            if ( (LA14_0==28) ) {
-                alt14=1;
+            if ( (LA15_0==28) ) {
+                alt15=1;
             }
-            switch (alt14) {
+            switch (alt15) {
                 case 1 :
                     // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1738:2: rule__Columns__Group_1__0
                     {
-                    pushFollow(FOLLOW_rule__Columns__Group_1__0_in_rule__Columns__Group__1__Impl3732);
+                    pushFollow(FOLLOW_rule__Columns__Group_1__0_in_rule__Columns__Group__1__Impl3733);
                     rule__Columns__Group_1__0();
 
                     state._fsp--;
@@ -5270,12 +5281,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1756:1: ( rule__Columns__Group_1__0__Impl rule__Columns__Group_1__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1757:2: rule__Columns__Group_1__0__Impl rule__Columns__Group_1__1
             {
-            pushFollow(FOLLOW_rule__Columns__Group_1__0__Impl_in_rule__Columns__Group_1__03767);
+            pushFollow(FOLLOW_rule__Columns__Group_1__0__Impl_in_rule__Columns__Group_1__03768);
             rule__Columns__Group_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Columns__Group_1__1_in_rule__Columns__Group_1__03770);
+            pushFollow(FOLLOW_rule__Columns__Group_1__1_in_rule__Columns__Group_1__03771);
             rule__Columns__Group_1__1();
 
             state._fsp--;
@@ -5345,7 +5356,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1787:1: ( rule__Columns__Group_1__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1788:2: rule__Columns__Group_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__Columns__Group_1__1__Impl_in_rule__Columns__Group_1__13828);
+            pushFollow(FOLLOW_rule__Columns__Group_1__1__Impl_in_rule__Columns__Group_1__13829);
             rule__Columns__Group_1__1__Impl();
 
             state._fsp--;
@@ -5388,7 +5399,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1802:1: ( rule__Columns__Group_1_1__0 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1802:2: rule__Columns__Group_1_1__0
             {
-            pushFollow(FOLLOW_rule__Columns__Group_1_1__0_in_rule__Columns__Group_1__1__Impl3857);
+            pushFollow(FOLLOW_rule__Columns__Group_1_1__0_in_rule__Columns__Group_1__1__Impl3858);
             rule__Columns__Group_1_1__0();
 
             state._fsp--;
@@ -5405,21 +5416,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getColumnsAccess().getGroup_1_1()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1807:1: ( rule__Columns__Group_1_1__0 )*
-            loop15:
+            loop16:
             do {
-                int alt15=2;
-                int LA15_0 = input.LA(1);
+                int alt16=2;
+                int LA16_0 = input.LA(1);
 
-                if ( (LA15_0==28) ) {
-                    alt15=1;
+                if ( (LA16_0==28) ) {
+                    alt16=1;
                 }
 
 
-                switch (alt15) {
+                switch (alt16) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1807:2: rule__Columns__Group_1_1__0
             	    {
-            	    pushFollow(FOLLOW_rule__Columns__Group_1_1__0_in_rule__Columns__Group_1__1__Impl3869);
+            	    pushFollow(FOLLOW_rule__Columns__Group_1_1__0_in_rule__Columns__Group_1__1__Impl3870);
             	    rule__Columns__Group_1_1__0();
 
             	    state._fsp--;
@@ -5429,7 +5440,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             	    break;
 
             	default :
-            	    break loop15;
+            	    break loop16;
                 }
             } while (true);
 
@@ -5468,12 +5479,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1826:1: ( rule__Columns__Group_1_1__0__Impl rule__Columns__Group_1_1__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1827:2: rule__Columns__Group_1_1__0__Impl rule__Columns__Group_1_1__1
             {
-            pushFollow(FOLLOW_rule__Columns__Group_1_1__0__Impl_in_rule__Columns__Group_1_1__03906);
+            pushFollow(FOLLOW_rule__Columns__Group_1_1__0__Impl_in_rule__Columns__Group_1_1__03907);
             rule__Columns__Group_1_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Columns__Group_1_1__1_in_rule__Columns__Group_1_1__03909);
+            pushFollow(FOLLOW_rule__Columns__Group_1_1__1_in_rule__Columns__Group_1_1__03910);
             rule__Columns__Group_1_1__1();
 
             state._fsp--;
@@ -5510,7 +5521,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1840:1: ','
             {
              before(grammarAccess.getColumnsAccess().getCommaKeyword_1_1_0()); 
-            match(input,28,FOLLOW_28_in_rule__Columns__Group_1_1__0__Impl3937); 
+            match(input,28,FOLLOW_28_in_rule__Columns__Group_1_1__0__Impl3938); 
              after(grammarAccess.getColumnsAccess().getCommaKeyword_1_1_0()); 
 
             }
@@ -5543,7 +5554,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1857:1: ( rule__Columns__Group_1_1__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1858:2: rule__Columns__Group_1_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__Columns__Group_1_1__1__Impl_in_rule__Columns__Group_1_1__13968);
+            pushFollow(FOLLOW_rule__Columns__Group_1_1__1__Impl_in_rule__Columns__Group_1_1__13969);
             rule__Columns__Group_1_1__1__Impl();
 
             state._fsp--;
@@ -5583,7 +5594,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1871:1: ( rule__Columns__EntriesAssignment_1_1_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1871:2: rule__Columns__EntriesAssignment_1_1_1
             {
-            pushFollow(FOLLOW_rule__Columns__EntriesAssignment_1_1_1_in_rule__Columns__Group_1_1__1__Impl3995);
+            pushFollow(FOLLOW_rule__Columns__EntriesAssignment_1_1_1_in_rule__Columns__Group_1_1__1__Impl3996);
             rule__Columns__EntriesAssignment_1_1_1();
 
             state._fsp--;
@@ -5623,12 +5634,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1889:1: ( rule__ColumnOrAlias__Group_1__0__Impl rule__ColumnOrAlias__Group_1__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1890:2: rule__ColumnOrAlias__Group_1__0__Impl rule__ColumnOrAlias__Group_1__1
             {
-            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_1__0__Impl_in_rule__ColumnOrAlias__Group_1__04029);
+            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_1__0__Impl_in_rule__ColumnOrAlias__Group_1__04030);
             rule__ColumnOrAlias__Group_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_1__1_in_rule__ColumnOrAlias__Group_1__04032);
+            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_1__1_in_rule__ColumnOrAlias__Group_1__04033);
             rule__ColumnOrAlias__Group_1__1();
 
             state._fsp--;
@@ -5665,7 +5676,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1903:1: ruleColumnFull
             {
              before(grammarAccess.getColumnOrAliasAccess().getColumnFullParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleColumnFull_in_rule__ColumnOrAlias__Group_1__0__Impl4059);
+            pushFollow(FOLLOW_ruleColumnFull_in_rule__ColumnOrAlias__Group_1__0__Impl4060);
             ruleColumnFull();
 
             state._fsp--;
@@ -5702,12 +5713,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1918:1: ( rule__ColumnOrAlias__Group_1__1__Impl rule__ColumnOrAlias__Group_1__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1919:2: rule__ColumnOrAlias__Group_1__1__Impl rule__ColumnOrAlias__Group_1__2
             {
-            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_1__1__Impl_in_rule__ColumnOrAlias__Group_1__14088);
+            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_1__1__Impl_in_rule__ColumnOrAlias__Group_1__14089);
             rule__ColumnOrAlias__Group_1__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_1__2_in_rule__ColumnOrAlias__Group_1__14091);
+            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_1__2_in_rule__ColumnOrAlias__Group_1__14092);
             rule__ColumnOrAlias__Group_1__2();
 
             state._fsp--;
@@ -5744,7 +5755,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1932:1: 'AS'
             {
              before(grammarAccess.getColumnOrAliasAccess().getASKeyword_1_1()); 
-            match(input,29,FOLLOW_29_in_rule__ColumnOrAlias__Group_1__1__Impl4119); 
+            match(input,29,FOLLOW_29_in_rule__ColumnOrAlias__Group_1__1__Impl4120); 
              after(grammarAccess.getColumnOrAliasAccess().getASKeyword_1_1()); 
 
             }
@@ -5777,7 +5788,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1949:1: ( rule__ColumnOrAlias__Group_1__2__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1950:2: rule__ColumnOrAlias__Group_1__2__Impl
             {
-            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_1__2__Impl_in_rule__ColumnOrAlias__Group_1__24150);
+            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_1__2__Impl_in_rule__ColumnOrAlias__Group_1__24151);
             rule__ColumnOrAlias__Group_1__2__Impl();
 
             state._fsp--;
@@ -5817,7 +5828,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1963:1: ( rule__ColumnOrAlias__ColAliasAssignment_1_2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1963:2: rule__ColumnOrAlias__ColAliasAssignment_1_2
             {
-            pushFollow(FOLLOW_rule__ColumnOrAlias__ColAliasAssignment_1_2_in_rule__ColumnOrAlias__Group_1__2__Impl4177);
+            pushFollow(FOLLOW_rule__ColumnOrAlias__ColAliasAssignment_1_2_in_rule__ColumnOrAlias__Group_1__2__Impl4178);
             rule__ColumnOrAlias__ColAliasAssignment_1_2();
 
             state._fsp--;
@@ -5857,12 +5868,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1983:1: ( rule__ColumnOrAlias__Group_2__0__Impl rule__ColumnOrAlias__Group_2__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1984:2: rule__ColumnOrAlias__Group_2__0__Impl rule__ColumnOrAlias__Group_2__1
             {
-            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_2__0__Impl_in_rule__ColumnOrAlias__Group_2__04213);
+            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_2__0__Impl_in_rule__ColumnOrAlias__Group_2__04214);
             rule__ColumnOrAlias__Group_2__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_2__1_in_rule__ColumnOrAlias__Group_2__04216);
+            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_2__1_in_rule__ColumnOrAlias__Group_2__04217);
             rule__ColumnOrAlias__Group_2__1();
 
             state._fsp--;
@@ -5899,7 +5910,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:1997:1: ruleColumnFull
             {
              before(grammarAccess.getColumnOrAliasAccess().getColumnFullParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleColumnFull_in_rule__ColumnOrAlias__Group_2__0__Impl4243);
+            pushFollow(FOLLOW_ruleColumnFull_in_rule__ColumnOrAlias__Group_2__0__Impl4244);
             ruleColumnFull();
 
             state._fsp--;
@@ -5936,7 +5947,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2012:1: ( rule__ColumnOrAlias__Group_2__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2013:2: rule__ColumnOrAlias__Group_2__1__Impl
             {
-            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_2__1__Impl_in_rule__ColumnOrAlias__Group_2__14272);
+            pushFollow(FOLLOW_rule__ColumnOrAlias__Group_2__1__Impl_in_rule__ColumnOrAlias__Group_2__14273);
             rule__ColumnOrAlias__Group_2__1__Impl();
 
             state._fsp--;
@@ -5976,7 +5987,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2026:1: ( rule__ColumnOrAlias__ColAliasAssignment_2_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2026:2: rule__ColumnOrAlias__ColAliasAssignment_2_1
             {
-            pushFollow(FOLLOW_rule__ColumnOrAlias__ColAliasAssignment_2_1_in_rule__ColumnOrAlias__Group_2__1__Impl4299);
+            pushFollow(FOLLOW_rule__ColumnOrAlias__ColAliasAssignment_2_1_in_rule__ColumnOrAlias__Group_2__1__Impl4300);
             rule__ColumnOrAlias__ColAliasAssignment_2_1();
 
             state._fsp--;
@@ -6016,12 +6027,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2044:1: ( rule__ColumnFull__Group_1__0__Impl rule__ColumnFull__Group_1__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2045:2: rule__ColumnFull__Group_1__0__Impl rule__ColumnFull__Group_1__1
             {
-            pushFollow(FOLLOW_rule__ColumnFull__Group_1__0__Impl_in_rule__ColumnFull__Group_1__04333);
+            pushFollow(FOLLOW_rule__ColumnFull__Group_1__0__Impl_in_rule__ColumnFull__Group_1__04334);
             rule__ColumnFull__Group_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ColumnFull__Group_1__1_in_rule__ColumnFull__Group_1__04336);
+            pushFollow(FOLLOW_rule__ColumnFull__Group_1__1_in_rule__ColumnFull__Group_1__04337);
             rule__ColumnFull__Group_1__1();
 
             state._fsp--;
@@ -6058,7 +6069,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2058:1: ruleTableFull
             {
              before(grammarAccess.getColumnFullAccess().getTableFullParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleTableFull_in_rule__ColumnFull__Group_1__0__Impl4363);
+            pushFollow(FOLLOW_ruleTableFull_in_rule__ColumnFull__Group_1__0__Impl4364);
             ruleTableFull();
 
             state._fsp--;
@@ -6095,12 +6106,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2073:1: ( rule__ColumnFull__Group_1__1__Impl rule__ColumnFull__Group_1__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2074:2: rule__ColumnFull__Group_1__1__Impl rule__ColumnFull__Group_1__2
             {
-            pushFollow(FOLLOW_rule__ColumnFull__Group_1__1__Impl_in_rule__ColumnFull__Group_1__14392);
+            pushFollow(FOLLOW_rule__ColumnFull__Group_1__1__Impl_in_rule__ColumnFull__Group_1__14393);
             rule__ColumnFull__Group_1__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ColumnFull__Group_1__2_in_rule__ColumnFull__Group_1__14395);
+            pushFollow(FOLLOW_rule__ColumnFull__Group_1__2_in_rule__ColumnFull__Group_1__14396);
             rule__ColumnFull__Group_1__2();
 
             state._fsp--;
@@ -6137,7 +6148,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2087:1: '.'
             {
              before(grammarAccess.getColumnFullAccess().getFullStopKeyword_1_1()); 
-            match(input,30,FOLLOW_30_in_rule__ColumnFull__Group_1__1__Impl4423); 
+            match(input,30,FOLLOW_30_in_rule__ColumnFull__Group_1__1__Impl4424); 
              after(grammarAccess.getColumnFullAccess().getFullStopKeyword_1_1()); 
 
             }
@@ -6170,7 +6181,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2104:1: ( rule__ColumnFull__Group_1__2__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2105:2: rule__ColumnFull__Group_1__2__Impl
             {
-            pushFollow(FOLLOW_rule__ColumnFull__Group_1__2__Impl_in_rule__ColumnFull__Group_1__24454);
+            pushFollow(FOLLOW_rule__ColumnFull__Group_1__2__Impl_in_rule__ColumnFull__Group_1__24455);
             rule__ColumnFull__Group_1__2__Impl();
 
             state._fsp--;
@@ -6210,7 +6221,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2118:1: ( rule__ColumnFull__ColNameAssignment_1_2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2118:2: rule__ColumnFull__ColNameAssignment_1_2
             {
-            pushFollow(FOLLOW_rule__ColumnFull__ColNameAssignment_1_2_in_rule__ColumnFull__Group_1__2__Impl4481);
+            pushFollow(FOLLOW_rule__ColumnFull__ColNameAssignment_1_2_in_rule__ColumnFull__Group_1__2__Impl4482);
             rule__ColumnFull__ColNameAssignment_1_2();
 
             state._fsp--;
@@ -6250,12 +6261,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2138:1: ( rule__Tables__Group__0__Impl rule__Tables__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2139:2: rule__Tables__Group__0__Impl rule__Tables__Group__1
             {
-            pushFollow(FOLLOW_rule__Tables__Group__0__Impl_in_rule__Tables__Group__04517);
+            pushFollow(FOLLOW_rule__Tables__Group__0__Impl_in_rule__Tables__Group__04518);
             rule__Tables__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Tables__Group__1_in_rule__Tables__Group__04520);
+            pushFollow(FOLLOW_rule__Tables__Group__1_in_rule__Tables__Group__04521);
             rule__Tables__Group__1();
 
             state._fsp--;
@@ -6292,7 +6303,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2152:1: ruleTableOrAlias
             {
              before(grammarAccess.getTablesAccess().getTableOrAliasParserRuleCall_0()); 
-            pushFollow(FOLLOW_ruleTableOrAlias_in_rule__Tables__Group__0__Impl4547);
+            pushFollow(FOLLOW_ruleTableOrAlias_in_rule__Tables__Group__0__Impl4548);
             ruleTableOrAlias();
 
             state._fsp--;
@@ -6329,7 +6340,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2167:1: ( rule__Tables__Group__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2168:2: rule__Tables__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__Tables__Group__1__Impl_in_rule__Tables__Group__14576);
+            pushFollow(FOLLOW_rule__Tables__Group__1__Impl_in_rule__Tables__Group__14577);
             rule__Tables__Group__1__Impl();
 
             state._fsp--;
@@ -6367,17 +6378,17 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getTablesAccess().getGroup_1()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2181:1: ( rule__Tables__Group_1__0 )?
-            int alt16=2;
-            int LA16_0 = input.LA(1);
+            int alt17=2;
+            int LA17_0 = input.LA(1);
 
-            if ( (LA16_0==28) ) {
-                alt16=1;
+            if ( (LA17_0==28) ) {
+                alt17=1;
             }
-            switch (alt16) {
+            switch (alt17) {
                 case 1 :
                     // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2181:2: rule__Tables__Group_1__0
                     {
-                    pushFollow(FOLLOW_rule__Tables__Group_1__0_in_rule__Tables__Group__1__Impl4603);
+                    pushFollow(FOLLOW_rule__Tables__Group_1__0_in_rule__Tables__Group__1__Impl4604);
                     rule__Tables__Group_1__0();
 
                     state._fsp--;
@@ -6420,12 +6431,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2199:1: ( rule__Tables__Group_1__0__Impl rule__Tables__Group_1__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2200:2: rule__Tables__Group_1__0__Impl rule__Tables__Group_1__1
             {
-            pushFollow(FOLLOW_rule__Tables__Group_1__0__Impl_in_rule__Tables__Group_1__04638);
+            pushFollow(FOLLOW_rule__Tables__Group_1__0__Impl_in_rule__Tables__Group_1__04639);
             rule__Tables__Group_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Tables__Group_1__1_in_rule__Tables__Group_1__04641);
+            pushFollow(FOLLOW_rule__Tables__Group_1__1_in_rule__Tables__Group_1__04642);
             rule__Tables__Group_1__1();
 
             state._fsp--;
@@ -6495,7 +6506,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2230:1: ( rule__Tables__Group_1__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2231:2: rule__Tables__Group_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__Tables__Group_1__1__Impl_in_rule__Tables__Group_1__14699);
+            pushFollow(FOLLOW_rule__Tables__Group_1__1__Impl_in_rule__Tables__Group_1__14700);
             rule__Tables__Group_1__1__Impl();
 
             state._fsp--;
@@ -6538,7 +6549,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2245:1: ( rule__Tables__Group_1_1__0 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2245:2: rule__Tables__Group_1_1__0
             {
-            pushFollow(FOLLOW_rule__Tables__Group_1_1__0_in_rule__Tables__Group_1__1__Impl4728);
+            pushFollow(FOLLOW_rule__Tables__Group_1_1__0_in_rule__Tables__Group_1__1__Impl4729);
             rule__Tables__Group_1_1__0();
 
             state._fsp--;
@@ -6555,21 +6566,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getTablesAccess().getGroup_1_1()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2250:1: ( rule__Tables__Group_1_1__0 )*
-            loop17:
+            loop18:
             do {
-                int alt17=2;
-                int LA17_0 = input.LA(1);
+                int alt18=2;
+                int LA18_0 = input.LA(1);
 
-                if ( (LA17_0==28) ) {
-                    alt17=1;
+                if ( (LA18_0==28) ) {
+                    alt18=1;
                 }
 
 
-                switch (alt17) {
+                switch (alt18) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2250:2: rule__Tables__Group_1_1__0
             	    {
-            	    pushFollow(FOLLOW_rule__Tables__Group_1_1__0_in_rule__Tables__Group_1__1__Impl4740);
+            	    pushFollow(FOLLOW_rule__Tables__Group_1_1__0_in_rule__Tables__Group_1__1__Impl4741);
             	    rule__Tables__Group_1_1__0();
 
             	    state._fsp--;
@@ -6579,7 +6590,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             	    break;
 
             	default :
-            	    break loop17;
+            	    break loop18;
                 }
             } while (true);
 
@@ -6618,12 +6629,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2269:1: ( rule__Tables__Group_1_1__0__Impl rule__Tables__Group_1_1__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2270:2: rule__Tables__Group_1_1__0__Impl rule__Tables__Group_1_1__1
             {
-            pushFollow(FOLLOW_rule__Tables__Group_1_1__0__Impl_in_rule__Tables__Group_1_1__04777);
+            pushFollow(FOLLOW_rule__Tables__Group_1_1__0__Impl_in_rule__Tables__Group_1_1__04778);
             rule__Tables__Group_1_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Tables__Group_1_1__1_in_rule__Tables__Group_1_1__04780);
+            pushFollow(FOLLOW_rule__Tables__Group_1_1__1_in_rule__Tables__Group_1_1__04781);
             rule__Tables__Group_1_1__1();
 
             state._fsp--;
@@ -6660,7 +6671,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2283:1: ','
             {
              before(grammarAccess.getTablesAccess().getCommaKeyword_1_1_0()); 
-            match(input,28,FOLLOW_28_in_rule__Tables__Group_1_1__0__Impl4808); 
+            match(input,28,FOLLOW_28_in_rule__Tables__Group_1_1__0__Impl4809); 
              after(grammarAccess.getTablesAccess().getCommaKeyword_1_1_0()); 
 
             }
@@ -6693,7 +6704,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2300:1: ( rule__Tables__Group_1_1__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2301:2: rule__Tables__Group_1_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__Tables__Group_1_1__1__Impl_in_rule__Tables__Group_1_1__14839);
+            pushFollow(FOLLOW_rule__Tables__Group_1_1__1__Impl_in_rule__Tables__Group_1_1__14840);
             rule__Tables__Group_1_1__1__Impl();
 
             state._fsp--;
@@ -6733,7 +6744,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2314:1: ( rule__Tables__EntriesAssignment_1_1_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2314:2: rule__Tables__EntriesAssignment_1_1_1
             {
-            pushFollow(FOLLOW_rule__Tables__EntriesAssignment_1_1_1_in_rule__Tables__Group_1_1__1__Impl4866);
+            pushFollow(FOLLOW_rule__Tables__EntriesAssignment_1_1_1_in_rule__Tables__Group_1_1__1__Impl4867);
             rule__Tables__EntriesAssignment_1_1_1();
 
             state._fsp--;
@@ -6773,12 +6784,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2332:1: ( rule__TableOrAlias__Group_1__0__Impl rule__TableOrAlias__Group_1__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2333:2: rule__TableOrAlias__Group_1__0__Impl rule__TableOrAlias__Group_1__1
             {
-            pushFollow(FOLLOW_rule__TableOrAlias__Group_1__0__Impl_in_rule__TableOrAlias__Group_1__04900);
+            pushFollow(FOLLOW_rule__TableOrAlias__Group_1__0__Impl_in_rule__TableOrAlias__Group_1__04901);
             rule__TableOrAlias__Group_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__TableOrAlias__Group_1__1_in_rule__TableOrAlias__Group_1__04903);
+            pushFollow(FOLLOW_rule__TableOrAlias__Group_1__1_in_rule__TableOrAlias__Group_1__04904);
             rule__TableOrAlias__Group_1__1();
 
             state._fsp--;
@@ -6815,7 +6826,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2346:1: ruleTableFull
             {
              before(grammarAccess.getTableOrAliasAccess().getTableFullParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleTableFull_in_rule__TableOrAlias__Group_1__0__Impl4930);
+            pushFollow(FOLLOW_ruleTableFull_in_rule__TableOrAlias__Group_1__0__Impl4931);
             ruleTableFull();
 
             state._fsp--;
@@ -6852,12 +6863,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2361:1: ( rule__TableOrAlias__Group_1__1__Impl rule__TableOrAlias__Group_1__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2362:2: rule__TableOrAlias__Group_1__1__Impl rule__TableOrAlias__Group_1__2
             {
-            pushFollow(FOLLOW_rule__TableOrAlias__Group_1__1__Impl_in_rule__TableOrAlias__Group_1__14959);
+            pushFollow(FOLLOW_rule__TableOrAlias__Group_1__1__Impl_in_rule__TableOrAlias__Group_1__14960);
             rule__TableOrAlias__Group_1__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__TableOrAlias__Group_1__2_in_rule__TableOrAlias__Group_1__14962);
+            pushFollow(FOLLOW_rule__TableOrAlias__Group_1__2_in_rule__TableOrAlias__Group_1__14963);
             rule__TableOrAlias__Group_1__2();
 
             state._fsp--;
@@ -6894,7 +6905,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2375:1: 'AS'
             {
              before(grammarAccess.getTableOrAliasAccess().getASKeyword_1_1()); 
-            match(input,29,FOLLOW_29_in_rule__TableOrAlias__Group_1__1__Impl4990); 
+            match(input,29,FOLLOW_29_in_rule__TableOrAlias__Group_1__1__Impl4991); 
              after(grammarAccess.getTableOrAliasAccess().getASKeyword_1_1()); 
 
             }
@@ -6927,7 +6938,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2392:1: ( rule__TableOrAlias__Group_1__2__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2393:2: rule__TableOrAlias__Group_1__2__Impl
             {
-            pushFollow(FOLLOW_rule__TableOrAlias__Group_1__2__Impl_in_rule__TableOrAlias__Group_1__25021);
+            pushFollow(FOLLOW_rule__TableOrAlias__Group_1__2__Impl_in_rule__TableOrAlias__Group_1__25022);
             rule__TableOrAlias__Group_1__2__Impl();
 
             state._fsp--;
@@ -6967,7 +6978,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2406:1: ( rule__TableOrAlias__TblAliasAssignment_1_2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2406:2: rule__TableOrAlias__TblAliasAssignment_1_2
             {
-            pushFollow(FOLLOW_rule__TableOrAlias__TblAliasAssignment_1_2_in_rule__TableOrAlias__Group_1__2__Impl5048);
+            pushFollow(FOLLOW_rule__TableOrAlias__TblAliasAssignment_1_2_in_rule__TableOrAlias__Group_1__2__Impl5049);
             rule__TableOrAlias__TblAliasAssignment_1_2();
 
             state._fsp--;
@@ -7007,12 +7018,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2426:1: ( rule__TableOrAlias__Group_2__0__Impl rule__TableOrAlias__Group_2__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2427:2: rule__TableOrAlias__Group_2__0__Impl rule__TableOrAlias__Group_2__1
             {
-            pushFollow(FOLLOW_rule__TableOrAlias__Group_2__0__Impl_in_rule__TableOrAlias__Group_2__05084);
+            pushFollow(FOLLOW_rule__TableOrAlias__Group_2__0__Impl_in_rule__TableOrAlias__Group_2__05085);
             rule__TableOrAlias__Group_2__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__TableOrAlias__Group_2__1_in_rule__TableOrAlias__Group_2__05087);
+            pushFollow(FOLLOW_rule__TableOrAlias__Group_2__1_in_rule__TableOrAlias__Group_2__05088);
             rule__TableOrAlias__Group_2__1();
 
             state._fsp--;
@@ -7049,7 +7060,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2440:1: ruleTableFull
             {
              before(grammarAccess.getTableOrAliasAccess().getTableFullParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleTableFull_in_rule__TableOrAlias__Group_2__0__Impl5114);
+            pushFollow(FOLLOW_ruleTableFull_in_rule__TableOrAlias__Group_2__0__Impl5115);
             ruleTableFull();
 
             state._fsp--;
@@ -7086,7 +7097,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2455:1: ( rule__TableOrAlias__Group_2__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2456:2: rule__TableOrAlias__Group_2__1__Impl
             {
-            pushFollow(FOLLOW_rule__TableOrAlias__Group_2__1__Impl_in_rule__TableOrAlias__Group_2__15143);
+            pushFollow(FOLLOW_rule__TableOrAlias__Group_2__1__Impl_in_rule__TableOrAlias__Group_2__15144);
             rule__TableOrAlias__Group_2__1__Impl();
 
             state._fsp--;
@@ -7126,7 +7137,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2469:1: ( rule__TableOrAlias__TblAliasAssignment_2_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2469:2: rule__TableOrAlias__TblAliasAssignment_2_1
             {
-            pushFollow(FOLLOW_rule__TableOrAlias__TblAliasAssignment_2_1_in_rule__TableOrAlias__Group_2__1__Impl5170);
+            pushFollow(FOLLOW_rule__TableOrAlias__TblAliasAssignment_2_1_in_rule__TableOrAlias__Group_2__1__Impl5171);
             rule__TableOrAlias__TblAliasAssignment_2_1();
 
             state._fsp--;
@@ -7166,12 +7177,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2487:1: ( rule__TableFull__Group_0__0__Impl rule__TableFull__Group_0__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2488:2: rule__TableFull__Group_0__0__Impl rule__TableFull__Group_0__1
             {
-            pushFollow(FOLLOW_rule__TableFull__Group_0__0__Impl_in_rule__TableFull__Group_0__05204);
+            pushFollow(FOLLOW_rule__TableFull__Group_0__0__Impl_in_rule__TableFull__Group_0__05205);
             rule__TableFull__Group_0__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__TableFull__Group_0__1_in_rule__TableFull__Group_0__05207);
+            pushFollow(FOLLOW_rule__TableFull__Group_0__1_in_rule__TableFull__Group_0__05208);
             rule__TableFull__Group_0__1();
 
             state._fsp--;
@@ -7208,7 +7219,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2501:1: ruleSchema
             {
              before(grammarAccess.getTableFullAccess().getSchemaParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleSchema_in_rule__TableFull__Group_0__0__Impl5234);
+            pushFollow(FOLLOW_ruleSchema_in_rule__TableFull__Group_0__0__Impl5235);
             ruleSchema();
 
             state._fsp--;
@@ -7245,12 +7256,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2516:1: ( rule__TableFull__Group_0__1__Impl rule__TableFull__Group_0__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2517:2: rule__TableFull__Group_0__1__Impl rule__TableFull__Group_0__2
             {
-            pushFollow(FOLLOW_rule__TableFull__Group_0__1__Impl_in_rule__TableFull__Group_0__15263);
+            pushFollow(FOLLOW_rule__TableFull__Group_0__1__Impl_in_rule__TableFull__Group_0__15264);
             rule__TableFull__Group_0__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__TableFull__Group_0__2_in_rule__TableFull__Group_0__15266);
+            pushFollow(FOLLOW_rule__TableFull__Group_0__2_in_rule__TableFull__Group_0__15267);
             rule__TableFull__Group_0__2();
 
             state._fsp--;
@@ -7287,7 +7298,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2530:1: '.'
             {
              before(grammarAccess.getTableFullAccess().getFullStopKeyword_0_1()); 
-            match(input,30,FOLLOW_30_in_rule__TableFull__Group_0__1__Impl5294); 
+            match(input,30,FOLLOW_30_in_rule__TableFull__Group_0__1__Impl5295); 
              after(grammarAccess.getTableFullAccess().getFullStopKeyword_0_1()); 
 
             }
@@ -7320,7 +7331,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2547:1: ( rule__TableFull__Group_0__2__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2548:2: rule__TableFull__Group_0__2__Impl
             {
-            pushFollow(FOLLOW_rule__TableFull__Group_0__2__Impl_in_rule__TableFull__Group_0__25325);
+            pushFollow(FOLLOW_rule__TableFull__Group_0__2__Impl_in_rule__TableFull__Group_0__25326);
             rule__TableFull__Group_0__2__Impl();
 
             state._fsp--;
@@ -7360,7 +7371,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2561:1: ( rule__TableFull__TblAssignment_0_2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2561:2: rule__TableFull__TblAssignment_0_2
             {
-            pushFollow(FOLLOW_rule__TableFull__TblAssignment_0_2_in_rule__TableFull__Group_0__2__Impl5352);
+            pushFollow(FOLLOW_rule__TableFull__TblAssignment_0_2_in_rule__TableFull__Group_0__2__Impl5353);
             rule__TableFull__TblAssignment_0_2();
 
             state._fsp--;
@@ -7400,12 +7411,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2581:1: ( rule__Schema__Group_0__0__Impl rule__Schema__Group_0__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2582:2: rule__Schema__Group_0__0__Impl rule__Schema__Group_0__1
             {
-            pushFollow(FOLLOW_rule__Schema__Group_0__0__Impl_in_rule__Schema__Group_0__05388);
+            pushFollow(FOLLOW_rule__Schema__Group_0__0__Impl_in_rule__Schema__Group_0__05389);
             rule__Schema__Group_0__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Schema__Group_0__1_in_rule__Schema__Group_0__05391);
+            pushFollow(FOLLOW_rule__Schema__Group_0__1_in_rule__Schema__Group_0__05392);
             rule__Schema__Group_0__1();
 
             state._fsp--;
@@ -7442,7 +7453,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2595:1: ruleDatabase
             {
              before(grammarAccess.getSchemaAccess().getDatabaseParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleDatabase_in_rule__Schema__Group_0__0__Impl5418);
+            pushFollow(FOLLOW_ruleDatabase_in_rule__Schema__Group_0__0__Impl5419);
             ruleDatabase();
 
             state._fsp--;
@@ -7479,12 +7490,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2610:1: ( rule__Schema__Group_0__1__Impl rule__Schema__Group_0__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2611:2: rule__Schema__Group_0__1__Impl rule__Schema__Group_0__2
             {
-            pushFollow(FOLLOW_rule__Schema__Group_0__1__Impl_in_rule__Schema__Group_0__15447);
+            pushFollow(FOLLOW_rule__Schema__Group_0__1__Impl_in_rule__Schema__Group_0__15448);
             rule__Schema__Group_0__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Schema__Group_0__2_in_rule__Schema__Group_0__15450);
+            pushFollow(FOLLOW_rule__Schema__Group_0__2_in_rule__Schema__Group_0__15451);
             rule__Schema__Group_0__2();
 
             state._fsp--;
@@ -7521,7 +7532,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2624:1: '.'
             {
              before(grammarAccess.getSchemaAccess().getFullStopKeyword_0_1()); 
-            match(input,30,FOLLOW_30_in_rule__Schema__Group_0__1__Impl5478); 
+            match(input,30,FOLLOW_30_in_rule__Schema__Group_0__1__Impl5479); 
              after(grammarAccess.getSchemaAccess().getFullStopKeyword_0_1()); 
 
             }
@@ -7554,7 +7565,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2641:1: ( rule__Schema__Group_0__2__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2642:2: rule__Schema__Group_0__2__Impl
             {
-            pushFollow(FOLLOW_rule__Schema__Group_0__2__Impl_in_rule__Schema__Group_0__25509);
+            pushFollow(FOLLOW_rule__Schema__Group_0__2__Impl_in_rule__Schema__Group_0__25510);
             rule__Schema__Group_0__2__Impl();
 
             state._fsp--;
@@ -7594,7 +7605,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2655:1: ( rule__Schema__SchemAssignment_0_2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2655:2: rule__Schema__SchemAssignment_0_2
             {
-            pushFollow(FOLLOW_rule__Schema__SchemAssignment_0_2_in_rule__Schema__Group_0__2__Impl5536);
+            pushFollow(FOLLOW_rule__Schema__SchemAssignment_0_2_in_rule__Schema__Group_0__2__Impl5537);
             rule__Schema__SchemAssignment_0_2();
 
             state._fsp--;
@@ -7634,12 +7645,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2675:1: ( rule__WhereEntry__Group__0__Impl rule__WhereEntry__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2676:2: rule__WhereEntry__Group__0__Impl rule__WhereEntry__Group__1
             {
-            pushFollow(FOLLOW_rule__WhereEntry__Group__0__Impl_in_rule__WhereEntry__Group__05572);
+            pushFollow(FOLLOW_rule__WhereEntry__Group__0__Impl_in_rule__WhereEntry__Group__05573);
             rule__WhereEntry__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__WhereEntry__Group__1_in_rule__WhereEntry__Group__05575);
+            pushFollow(FOLLOW_rule__WhereEntry__Group__1_in_rule__WhereEntry__Group__05576);
             rule__WhereEntry__Group__1();
 
             state._fsp--;
@@ -7676,7 +7687,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2689:1: ruleAndWhereEntry
             {
              before(grammarAccess.getWhereEntryAccess().getAndWhereEntryParserRuleCall_0()); 
-            pushFollow(FOLLOW_ruleAndWhereEntry_in_rule__WhereEntry__Group__0__Impl5602);
+            pushFollow(FOLLOW_ruleAndWhereEntry_in_rule__WhereEntry__Group__0__Impl5603);
             ruleAndWhereEntry();
 
             state._fsp--;
@@ -7713,7 +7724,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2704:1: ( rule__WhereEntry__Group__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2705:2: rule__WhereEntry__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__WhereEntry__Group__1__Impl_in_rule__WhereEntry__Group__15631);
+            pushFollow(FOLLOW_rule__WhereEntry__Group__1__Impl_in_rule__WhereEntry__Group__15632);
             rule__WhereEntry__Group__1__Impl();
 
             state._fsp--;
@@ -7751,17 +7762,17 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getWhereEntryAccess().getGroup_1()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2718:1: ( rule__WhereEntry__Group_1__0 )?
-            int alt18=2;
-            int LA18_0 = input.LA(1);
+            int alt19=2;
+            int LA19_0 = input.LA(1);
 
-            if ( (LA18_0==31) ) {
-                alt18=1;
+            if ( (LA19_0==31) ) {
+                alt19=1;
             }
-            switch (alt18) {
+            switch (alt19) {
                 case 1 :
                     // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2718:2: rule__WhereEntry__Group_1__0
                     {
-                    pushFollow(FOLLOW_rule__WhereEntry__Group_1__0_in_rule__WhereEntry__Group__1__Impl5658);
+                    pushFollow(FOLLOW_rule__WhereEntry__Group_1__0_in_rule__WhereEntry__Group__1__Impl5659);
                     rule__WhereEntry__Group_1__0();
 
                     state._fsp--;
@@ -7804,12 +7815,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2736:1: ( rule__WhereEntry__Group_1__0__Impl rule__WhereEntry__Group_1__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2737:2: rule__WhereEntry__Group_1__0__Impl rule__WhereEntry__Group_1__1
             {
-            pushFollow(FOLLOW_rule__WhereEntry__Group_1__0__Impl_in_rule__WhereEntry__Group_1__05693);
+            pushFollow(FOLLOW_rule__WhereEntry__Group_1__0__Impl_in_rule__WhereEntry__Group_1__05694);
             rule__WhereEntry__Group_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__WhereEntry__Group_1__1_in_rule__WhereEntry__Group_1__05696);
+            pushFollow(FOLLOW_rule__WhereEntry__Group_1__1_in_rule__WhereEntry__Group_1__05697);
             rule__WhereEntry__Group_1__1();
 
             state._fsp--;
@@ -7879,7 +7890,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2767:1: ( rule__WhereEntry__Group_1__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2768:2: rule__WhereEntry__Group_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__WhereEntry__Group_1__1__Impl_in_rule__WhereEntry__Group_1__15754);
+            pushFollow(FOLLOW_rule__WhereEntry__Group_1__1__Impl_in_rule__WhereEntry__Group_1__15755);
             rule__WhereEntry__Group_1__1__Impl();
 
             state._fsp--;
@@ -7922,7 +7933,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2782:1: ( rule__WhereEntry__Group_1_1__0 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2782:2: rule__WhereEntry__Group_1_1__0
             {
-            pushFollow(FOLLOW_rule__WhereEntry__Group_1_1__0_in_rule__WhereEntry__Group_1__1__Impl5783);
+            pushFollow(FOLLOW_rule__WhereEntry__Group_1_1__0_in_rule__WhereEntry__Group_1__1__Impl5784);
             rule__WhereEntry__Group_1_1__0();
 
             state._fsp--;
@@ -7939,21 +7950,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getWhereEntryAccess().getGroup_1_1()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2787:1: ( rule__WhereEntry__Group_1_1__0 )*
-            loop19:
+            loop20:
             do {
-                int alt19=2;
-                int LA19_0 = input.LA(1);
+                int alt20=2;
+                int LA20_0 = input.LA(1);
 
-                if ( (LA19_0==31) ) {
-                    alt19=1;
+                if ( (LA20_0==31) ) {
+                    alt20=1;
                 }
 
 
-                switch (alt19) {
+                switch (alt20) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2787:2: rule__WhereEntry__Group_1_1__0
             	    {
-            	    pushFollow(FOLLOW_rule__WhereEntry__Group_1_1__0_in_rule__WhereEntry__Group_1__1__Impl5795);
+            	    pushFollow(FOLLOW_rule__WhereEntry__Group_1_1__0_in_rule__WhereEntry__Group_1__1__Impl5796);
             	    rule__WhereEntry__Group_1_1__0();
 
             	    state._fsp--;
@@ -7963,7 +7974,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             	    break;
 
             	default :
-            	    break loop19;
+            	    break loop20;
                 }
             } while (true);
 
@@ -8002,12 +8013,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2806:1: ( rule__WhereEntry__Group_1_1__0__Impl rule__WhereEntry__Group_1_1__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2807:2: rule__WhereEntry__Group_1_1__0__Impl rule__WhereEntry__Group_1_1__1
             {
-            pushFollow(FOLLOW_rule__WhereEntry__Group_1_1__0__Impl_in_rule__WhereEntry__Group_1_1__05832);
+            pushFollow(FOLLOW_rule__WhereEntry__Group_1_1__0__Impl_in_rule__WhereEntry__Group_1_1__05833);
             rule__WhereEntry__Group_1_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__WhereEntry__Group_1_1__1_in_rule__WhereEntry__Group_1_1__05835);
+            pushFollow(FOLLOW_rule__WhereEntry__Group_1_1__1_in_rule__WhereEntry__Group_1_1__05836);
             rule__WhereEntry__Group_1_1__1();
 
             state._fsp--;
@@ -8044,7 +8055,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2820:1: 'OR'
             {
              before(grammarAccess.getWhereEntryAccess().getORKeyword_1_1_0()); 
-            match(input,31,FOLLOW_31_in_rule__WhereEntry__Group_1_1__0__Impl5863); 
+            match(input,31,FOLLOW_31_in_rule__WhereEntry__Group_1_1__0__Impl5864); 
              after(grammarAccess.getWhereEntryAccess().getORKeyword_1_1_0()); 
 
             }
@@ -8077,7 +8088,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2837:1: ( rule__WhereEntry__Group_1_1__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2838:2: rule__WhereEntry__Group_1_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__WhereEntry__Group_1_1__1__Impl_in_rule__WhereEntry__Group_1_1__15894);
+            pushFollow(FOLLOW_rule__WhereEntry__Group_1_1__1__Impl_in_rule__WhereEntry__Group_1_1__15895);
             rule__WhereEntry__Group_1_1__1__Impl();
 
             state._fsp--;
@@ -8117,7 +8128,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2851:1: ( rule__WhereEntry__EntriesAssignment_1_1_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2851:2: rule__WhereEntry__EntriesAssignment_1_1_1
             {
-            pushFollow(FOLLOW_rule__WhereEntry__EntriesAssignment_1_1_1_in_rule__WhereEntry__Group_1_1__1__Impl5921);
+            pushFollow(FOLLOW_rule__WhereEntry__EntriesAssignment_1_1_1_in_rule__WhereEntry__Group_1_1__1__Impl5922);
             rule__WhereEntry__EntriesAssignment_1_1_1();
 
             state._fsp--;
@@ -8157,12 +8168,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2869:1: ( rule__AndWhereEntry__Group__0__Impl rule__AndWhereEntry__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2870:2: rule__AndWhereEntry__Group__0__Impl rule__AndWhereEntry__Group__1
             {
-            pushFollow(FOLLOW_rule__AndWhereEntry__Group__0__Impl_in_rule__AndWhereEntry__Group__05955);
+            pushFollow(FOLLOW_rule__AndWhereEntry__Group__0__Impl_in_rule__AndWhereEntry__Group__05956);
             rule__AndWhereEntry__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__AndWhereEntry__Group__1_in_rule__AndWhereEntry__Group__05958);
+            pushFollow(FOLLOW_rule__AndWhereEntry__Group__1_in_rule__AndWhereEntry__Group__05959);
             rule__AndWhereEntry__Group__1();
 
             state._fsp--;
@@ -8199,7 +8210,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2883:1: ruleConcreteWhereEntry
             {
              before(grammarAccess.getAndWhereEntryAccess().getConcreteWhereEntryParserRuleCall_0()); 
-            pushFollow(FOLLOW_ruleConcreteWhereEntry_in_rule__AndWhereEntry__Group__0__Impl5985);
+            pushFollow(FOLLOW_ruleConcreteWhereEntry_in_rule__AndWhereEntry__Group__0__Impl5986);
             ruleConcreteWhereEntry();
 
             state._fsp--;
@@ -8236,7 +8247,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2898:1: ( rule__AndWhereEntry__Group__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2899:2: rule__AndWhereEntry__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__AndWhereEntry__Group__1__Impl_in_rule__AndWhereEntry__Group__16014);
+            pushFollow(FOLLOW_rule__AndWhereEntry__Group__1__Impl_in_rule__AndWhereEntry__Group__16015);
             rule__AndWhereEntry__Group__1__Impl();
 
             state._fsp--;
@@ -8274,17 +8285,17 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getAndWhereEntryAccess().getGroup_1()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2912:1: ( rule__AndWhereEntry__Group_1__0 )?
-            int alt20=2;
-            int LA20_0 = input.LA(1);
+            int alt21=2;
+            int LA21_0 = input.LA(1);
 
-            if ( (LA20_0==32) ) {
-                alt20=1;
+            if ( (LA21_0==32) ) {
+                alt21=1;
             }
-            switch (alt20) {
+            switch (alt21) {
                 case 1 :
                     // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2912:2: rule__AndWhereEntry__Group_1__0
                     {
-                    pushFollow(FOLLOW_rule__AndWhereEntry__Group_1__0_in_rule__AndWhereEntry__Group__1__Impl6041);
+                    pushFollow(FOLLOW_rule__AndWhereEntry__Group_1__0_in_rule__AndWhereEntry__Group__1__Impl6042);
                     rule__AndWhereEntry__Group_1__0();
 
                     state._fsp--;
@@ -8327,12 +8338,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2930:1: ( rule__AndWhereEntry__Group_1__0__Impl rule__AndWhereEntry__Group_1__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2931:2: rule__AndWhereEntry__Group_1__0__Impl rule__AndWhereEntry__Group_1__1
             {
-            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1__0__Impl_in_rule__AndWhereEntry__Group_1__06076);
+            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1__0__Impl_in_rule__AndWhereEntry__Group_1__06077);
             rule__AndWhereEntry__Group_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1__1_in_rule__AndWhereEntry__Group_1__06079);
+            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1__1_in_rule__AndWhereEntry__Group_1__06080);
             rule__AndWhereEntry__Group_1__1();
 
             state._fsp--;
@@ -8402,7 +8413,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2961:1: ( rule__AndWhereEntry__Group_1__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2962:2: rule__AndWhereEntry__Group_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1__1__Impl_in_rule__AndWhereEntry__Group_1__16137);
+            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1__1__Impl_in_rule__AndWhereEntry__Group_1__16138);
             rule__AndWhereEntry__Group_1__1__Impl();
 
             state._fsp--;
@@ -8445,7 +8456,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2976:1: ( rule__AndWhereEntry__Group_1_1__0 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2976:2: rule__AndWhereEntry__Group_1_1__0
             {
-            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1_1__0_in_rule__AndWhereEntry__Group_1__1__Impl6166);
+            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1_1__0_in_rule__AndWhereEntry__Group_1__1__Impl6167);
             rule__AndWhereEntry__Group_1_1__0();
 
             state._fsp--;
@@ -8462,21 +8473,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getAndWhereEntryAccess().getGroup_1_1()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2981:1: ( rule__AndWhereEntry__Group_1_1__0 )*
-            loop21:
+            loop22:
             do {
-                int alt21=2;
-                int LA21_0 = input.LA(1);
+                int alt22=2;
+                int LA22_0 = input.LA(1);
 
-                if ( (LA21_0==32) ) {
-                    alt21=1;
+                if ( (LA22_0==32) ) {
+                    alt22=1;
                 }
 
 
-                switch (alt21) {
+                switch (alt22) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:2981:2: rule__AndWhereEntry__Group_1_1__0
             	    {
-            	    pushFollow(FOLLOW_rule__AndWhereEntry__Group_1_1__0_in_rule__AndWhereEntry__Group_1__1__Impl6178);
+            	    pushFollow(FOLLOW_rule__AndWhereEntry__Group_1_1__0_in_rule__AndWhereEntry__Group_1__1__Impl6179);
             	    rule__AndWhereEntry__Group_1_1__0();
 
             	    state._fsp--;
@@ -8486,7 +8497,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             	    break;
 
             	default :
-            	    break loop21;
+            	    break loop22;
                 }
             } while (true);
 
@@ -8525,12 +8536,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3000:1: ( rule__AndWhereEntry__Group_1_1__0__Impl rule__AndWhereEntry__Group_1_1__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3001:2: rule__AndWhereEntry__Group_1_1__0__Impl rule__AndWhereEntry__Group_1_1__1
             {
-            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1_1__0__Impl_in_rule__AndWhereEntry__Group_1_1__06215);
+            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1_1__0__Impl_in_rule__AndWhereEntry__Group_1_1__06216);
             rule__AndWhereEntry__Group_1_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1_1__1_in_rule__AndWhereEntry__Group_1_1__06218);
+            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1_1__1_in_rule__AndWhereEntry__Group_1_1__06219);
             rule__AndWhereEntry__Group_1_1__1();
 
             state._fsp--;
@@ -8567,7 +8578,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3014:1: 'AND'
             {
              before(grammarAccess.getAndWhereEntryAccess().getANDKeyword_1_1_0()); 
-            match(input,32,FOLLOW_32_in_rule__AndWhereEntry__Group_1_1__0__Impl6246); 
+            match(input,32,FOLLOW_32_in_rule__AndWhereEntry__Group_1_1__0__Impl6247); 
              after(grammarAccess.getAndWhereEntryAccess().getANDKeyword_1_1_0()); 
 
             }
@@ -8600,7 +8611,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3031:1: ( rule__AndWhereEntry__Group_1_1__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3032:2: rule__AndWhereEntry__Group_1_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1_1__1__Impl_in_rule__AndWhereEntry__Group_1_1__16277);
+            pushFollow(FOLLOW_rule__AndWhereEntry__Group_1_1__1__Impl_in_rule__AndWhereEntry__Group_1_1__16278);
             rule__AndWhereEntry__Group_1_1__1__Impl();
 
             state._fsp--;
@@ -8640,7 +8651,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3045:1: ( rule__AndWhereEntry__EntriesAssignment_1_1_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3045:2: rule__AndWhereEntry__EntriesAssignment_1_1_1
             {
-            pushFollow(FOLLOW_rule__AndWhereEntry__EntriesAssignment_1_1_1_in_rule__AndWhereEntry__Group_1_1__1__Impl6304);
+            pushFollow(FOLLOW_rule__AndWhereEntry__EntriesAssignment_1_1_1_in_rule__AndWhereEntry__Group_1_1__1__Impl6305);
             rule__AndWhereEntry__EntriesAssignment_1_1_1();
 
             state._fsp--;
@@ -8680,12 +8691,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3063:1: ( rule__ParWhereEntry__Group__0__Impl rule__ParWhereEntry__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3064:2: rule__ParWhereEntry__Group__0__Impl rule__ParWhereEntry__Group__1
             {
-            pushFollow(FOLLOW_rule__ParWhereEntry__Group__0__Impl_in_rule__ParWhereEntry__Group__06338);
+            pushFollow(FOLLOW_rule__ParWhereEntry__Group__0__Impl_in_rule__ParWhereEntry__Group__06339);
             rule__ParWhereEntry__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ParWhereEntry__Group__1_in_rule__ParWhereEntry__Group__06341);
+            pushFollow(FOLLOW_rule__ParWhereEntry__Group__1_in_rule__ParWhereEntry__Group__06342);
             rule__ParWhereEntry__Group__1();
 
             state._fsp--;
@@ -8722,7 +8733,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3077:1: '('
             {
              before(grammarAccess.getParWhereEntryAccess().getLeftParenthesisKeyword_0()); 
-            match(input,33,FOLLOW_33_in_rule__ParWhereEntry__Group__0__Impl6369); 
+            match(input,33,FOLLOW_33_in_rule__ParWhereEntry__Group__0__Impl6370); 
              after(grammarAccess.getParWhereEntryAccess().getLeftParenthesisKeyword_0()); 
 
             }
@@ -8755,12 +8766,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3094:1: ( rule__ParWhereEntry__Group__1__Impl rule__ParWhereEntry__Group__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3095:2: rule__ParWhereEntry__Group__1__Impl rule__ParWhereEntry__Group__2
             {
-            pushFollow(FOLLOW_rule__ParWhereEntry__Group__1__Impl_in_rule__ParWhereEntry__Group__16400);
+            pushFollow(FOLLOW_rule__ParWhereEntry__Group__1__Impl_in_rule__ParWhereEntry__Group__16401);
             rule__ParWhereEntry__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ParWhereEntry__Group__2_in_rule__ParWhereEntry__Group__16403);
+            pushFollow(FOLLOW_rule__ParWhereEntry__Group__2_in_rule__ParWhereEntry__Group__16404);
             rule__ParWhereEntry__Group__2();
 
             state._fsp--;
@@ -8797,7 +8808,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3108:1: ruleWhereEntry
             {
              before(grammarAccess.getParWhereEntryAccess().getWhereEntryParserRuleCall_1()); 
-            pushFollow(FOLLOW_ruleWhereEntry_in_rule__ParWhereEntry__Group__1__Impl6430);
+            pushFollow(FOLLOW_ruleWhereEntry_in_rule__ParWhereEntry__Group__1__Impl6431);
             ruleWhereEntry();
 
             state._fsp--;
@@ -8834,7 +8845,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3123:1: ( rule__ParWhereEntry__Group__2__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3124:2: rule__ParWhereEntry__Group__2__Impl
             {
-            pushFollow(FOLLOW_rule__ParWhereEntry__Group__2__Impl_in_rule__ParWhereEntry__Group__26459);
+            pushFollow(FOLLOW_rule__ParWhereEntry__Group__2__Impl_in_rule__ParWhereEntry__Group__26460);
             rule__ParWhereEntry__Group__2__Impl();
 
             state._fsp--;
@@ -8871,7 +8882,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3136:1: ')'
             {
              before(grammarAccess.getParWhereEntryAccess().getRightParenthesisKeyword_2()); 
-            match(input,34,FOLLOW_34_in_rule__ParWhereEntry__Group__2__Impl6487); 
+            match(input,34,FOLLOW_34_in_rule__ParWhereEntry__Group__2__Impl6488); 
              after(grammarAccess.getParWhereEntryAccess().getRightParenthesisKeyword_2()); 
 
             }
@@ -8904,12 +8915,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3159:1: ( rule__SingleExpressionWhereEntry__Group__0__Impl rule__SingleExpressionWhereEntry__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3160:2: rule__SingleExpressionWhereEntry__Group__0__Impl rule__SingleExpressionWhereEntry__Group__1
             {
-            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__Group__0__Impl_in_rule__SingleExpressionWhereEntry__Group__06524);
+            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__Group__0__Impl_in_rule__SingleExpressionWhereEntry__Group__06525);
             rule__SingleExpressionWhereEntry__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__Group__1_in_rule__SingleExpressionWhereEntry__Group__06527);
+            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__Group__1_in_rule__SingleExpressionWhereEntry__Group__06528);
             rule__SingleExpressionWhereEntry__Group__1();
 
             state._fsp--;
@@ -8949,7 +8960,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3174:1: ( rule__SingleExpressionWhereEntry__NameAssignment_0 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3174:2: rule__SingleExpressionWhereEntry__NameAssignment_0
             {
-            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__NameAssignment_0_in_rule__SingleExpressionWhereEntry__Group__0__Impl6554);
+            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__NameAssignment_0_in_rule__SingleExpressionWhereEntry__Group__0__Impl6555);
             rule__SingleExpressionWhereEntry__NameAssignment_0();
 
             state._fsp--;
@@ -8989,12 +9000,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3188:1: ( rule__SingleExpressionWhereEntry__Group__1__Impl rule__SingleExpressionWhereEntry__Group__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3189:2: rule__SingleExpressionWhereEntry__Group__1__Impl rule__SingleExpressionWhereEntry__Group__2
             {
-            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__Group__1__Impl_in_rule__SingleExpressionWhereEntry__Group__16584);
+            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__Group__1__Impl_in_rule__SingleExpressionWhereEntry__Group__16585);
             rule__SingleExpressionWhereEntry__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__Group__2_in_rule__SingleExpressionWhereEntry__Group__16587);
+            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__Group__2_in_rule__SingleExpressionWhereEntry__Group__16588);
             rule__SingleExpressionWhereEntry__Group__2();
 
             state._fsp--;
@@ -9034,7 +9045,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3203:1: ( rule__SingleExpressionWhereEntry__OperatorAssignment_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3203:2: rule__SingleExpressionWhereEntry__OperatorAssignment_1
             {
-            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__OperatorAssignment_1_in_rule__SingleExpressionWhereEntry__Group__1__Impl6614);
+            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__OperatorAssignment_1_in_rule__SingleExpressionWhereEntry__Group__1__Impl6615);
             rule__SingleExpressionWhereEntry__OperatorAssignment_1();
 
             state._fsp--;
@@ -9074,7 +9085,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3217:1: ( rule__SingleExpressionWhereEntry__Group__2__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3218:2: rule__SingleExpressionWhereEntry__Group__2__Impl
             {
-            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__Group__2__Impl_in_rule__SingleExpressionWhereEntry__Group__26644);
+            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__Group__2__Impl_in_rule__SingleExpressionWhereEntry__Group__26645);
             rule__SingleExpressionWhereEntry__Group__2__Impl();
 
             state._fsp--;
@@ -9114,7 +9125,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3231:1: ( rule__SingleExpressionWhereEntry__RhsAssignment_2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3231:2: rule__SingleExpressionWhereEntry__RhsAssignment_2
             {
-            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__RhsAssignment_2_in_rule__SingleExpressionWhereEntry__Group__2__Impl6671);
+            pushFollow(FOLLOW_rule__SingleExpressionWhereEntry__RhsAssignment_2_in_rule__SingleExpressionWhereEntry__Group__2__Impl6672);
             rule__SingleExpressionWhereEntry__RhsAssignment_2();
 
             state._fsp--;
@@ -9154,12 +9165,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3251:1: ( rule__MultiExpressionWhereEntry__Group__0__Impl rule__MultiExpressionWhereEntry__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3252:2: rule__MultiExpressionWhereEntry__Group__0__Impl rule__MultiExpressionWhereEntry__Group__1
             {
-            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__Group__0__Impl_in_rule__MultiExpressionWhereEntry__Group__06707);
+            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__Group__0__Impl_in_rule__MultiExpressionWhereEntry__Group__06708);
             rule__MultiExpressionWhereEntry__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__Group__1_in_rule__MultiExpressionWhereEntry__Group__06710);
+            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__Group__1_in_rule__MultiExpressionWhereEntry__Group__06711);
             rule__MultiExpressionWhereEntry__Group__1();
 
             state._fsp--;
@@ -9199,7 +9210,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3266:1: ( rule__MultiExpressionWhereEntry__NameAssignment_0 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3266:2: rule__MultiExpressionWhereEntry__NameAssignment_0
             {
-            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__NameAssignment_0_in_rule__MultiExpressionWhereEntry__Group__0__Impl6737);
+            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__NameAssignment_0_in_rule__MultiExpressionWhereEntry__Group__0__Impl6738);
             rule__MultiExpressionWhereEntry__NameAssignment_0();
 
             state._fsp--;
@@ -9239,12 +9250,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3280:1: ( rule__MultiExpressionWhereEntry__Group__1__Impl rule__MultiExpressionWhereEntry__Group__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3281:2: rule__MultiExpressionWhereEntry__Group__1__Impl rule__MultiExpressionWhereEntry__Group__2
             {
-            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__Group__1__Impl_in_rule__MultiExpressionWhereEntry__Group__16767);
+            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__Group__1__Impl_in_rule__MultiExpressionWhereEntry__Group__16768);
             rule__MultiExpressionWhereEntry__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__Group__2_in_rule__MultiExpressionWhereEntry__Group__16770);
+            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__Group__2_in_rule__MultiExpressionWhereEntry__Group__16771);
             rule__MultiExpressionWhereEntry__Group__2();
 
             state._fsp--;
@@ -9284,7 +9295,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3295:1: ( rule__MultiExpressionWhereEntry__OperatorAssignment_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3295:2: rule__MultiExpressionWhereEntry__OperatorAssignment_1
             {
-            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__OperatorAssignment_1_in_rule__MultiExpressionWhereEntry__Group__1__Impl6797);
+            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__OperatorAssignment_1_in_rule__MultiExpressionWhereEntry__Group__1__Impl6798);
             rule__MultiExpressionWhereEntry__OperatorAssignment_1();
 
             state._fsp--;
@@ -9324,7 +9335,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3309:1: ( rule__MultiExpressionWhereEntry__Group__2__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3310:2: rule__MultiExpressionWhereEntry__Group__2__Impl
             {
-            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__Group__2__Impl_in_rule__MultiExpressionWhereEntry__Group__26827);
+            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__Group__2__Impl_in_rule__MultiExpressionWhereEntry__Group__26828);
             rule__MultiExpressionWhereEntry__Group__2__Impl();
 
             state._fsp--;
@@ -9364,7 +9375,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3323:1: ( rule__MultiExpressionWhereEntry__RhsAssignment_2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3323:2: rule__MultiExpressionWhereEntry__RhsAssignment_2
             {
-            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__RhsAssignment_2_in_rule__MultiExpressionWhereEntry__Group__2__Impl6854);
+            pushFollow(FOLLOW_rule__MultiExpressionWhereEntry__RhsAssignment_2_in_rule__MultiExpressionWhereEntry__Group__2__Impl6855);
             rule__MultiExpressionWhereEntry__RhsAssignment_2();
 
             state._fsp--;
@@ -9404,12 +9415,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3343:1: ( rule__DoubleArrayExpression__Group__0__Impl rule__DoubleArrayExpression__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3344:2: rule__DoubleArrayExpression__Group__0__Impl rule__DoubleArrayExpression__Group__1
             {
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__0__Impl_in_rule__DoubleArrayExpression__Group__06890);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__0__Impl_in_rule__DoubleArrayExpression__Group__06891);
             rule__DoubleArrayExpression__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__1_in_rule__DoubleArrayExpression__Group__06893);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__1_in_rule__DoubleArrayExpression__Group__06894);
             rule__DoubleArrayExpression__Group__1();
 
             state._fsp--;
@@ -9446,7 +9457,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3357:1: '['
             {
              before(grammarAccess.getDoubleArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
-            match(input,35,FOLLOW_35_in_rule__DoubleArrayExpression__Group__0__Impl6921); 
+            match(input,35,FOLLOW_35_in_rule__DoubleArrayExpression__Group__0__Impl6922); 
              after(grammarAccess.getDoubleArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
 
             }
@@ -9479,12 +9490,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3374:1: ( rule__DoubleArrayExpression__Group__1__Impl rule__DoubleArrayExpression__Group__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3375:2: rule__DoubleArrayExpression__Group__1__Impl rule__DoubleArrayExpression__Group__2
             {
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__1__Impl_in_rule__DoubleArrayExpression__Group__16952);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__1__Impl_in_rule__DoubleArrayExpression__Group__16953);
             rule__DoubleArrayExpression__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__2_in_rule__DoubleArrayExpression__Group__16955);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__2_in_rule__DoubleArrayExpression__Group__16956);
             rule__DoubleArrayExpression__Group__2();
 
             state._fsp--;
@@ -9524,7 +9535,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3389:1: ( rule__DoubleArrayExpression__ValuesAssignment_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3389:2: rule__DoubleArrayExpression__ValuesAssignment_1
             {
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__ValuesAssignment_1_in_rule__DoubleArrayExpression__Group__1__Impl6982);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__ValuesAssignment_1_in_rule__DoubleArrayExpression__Group__1__Impl6983);
             rule__DoubleArrayExpression__ValuesAssignment_1();
 
             state._fsp--;
@@ -9564,12 +9575,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3403:1: ( rule__DoubleArrayExpression__Group__2__Impl rule__DoubleArrayExpression__Group__3 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3404:2: rule__DoubleArrayExpression__Group__2__Impl rule__DoubleArrayExpression__Group__3
             {
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__2__Impl_in_rule__DoubleArrayExpression__Group__27012);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__2__Impl_in_rule__DoubleArrayExpression__Group__27013);
             rule__DoubleArrayExpression__Group__2__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__3_in_rule__DoubleArrayExpression__Group__27015);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__3_in_rule__DoubleArrayExpression__Group__27016);
             rule__DoubleArrayExpression__Group__3();
 
             state._fsp--;
@@ -9607,21 +9618,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getDoubleArrayExpressionAccess().getGroup_2()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3418:1: ( rule__DoubleArrayExpression__Group_2__0 )*
-            loop22:
+            loop23:
             do {
-                int alt22=2;
-                int LA22_0 = input.LA(1);
+                int alt23=2;
+                int LA23_0 = input.LA(1);
 
-                if ( (LA22_0==28) ) {
-                    alt22=1;
+                if ( (LA23_0==28) ) {
+                    alt23=1;
                 }
 
 
-                switch (alt22) {
+                switch (alt23) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3418:2: rule__DoubleArrayExpression__Group_2__0
             	    {
-            	    pushFollow(FOLLOW_rule__DoubleArrayExpression__Group_2__0_in_rule__DoubleArrayExpression__Group__2__Impl7042);
+            	    pushFollow(FOLLOW_rule__DoubleArrayExpression__Group_2__0_in_rule__DoubleArrayExpression__Group__2__Impl7043);
             	    rule__DoubleArrayExpression__Group_2__0();
 
             	    state._fsp--;
@@ -9631,7 +9642,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             	    break;
 
             	default :
-            	    break loop22;
+            	    break loop23;
                 }
             } while (true);
 
@@ -9667,7 +9678,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3432:1: ( rule__DoubleArrayExpression__Group__3__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3433:2: rule__DoubleArrayExpression__Group__3__Impl
             {
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__3__Impl_in_rule__DoubleArrayExpression__Group__37073);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group__3__Impl_in_rule__DoubleArrayExpression__Group__37074);
             rule__DoubleArrayExpression__Group__3__Impl();
 
             state._fsp--;
@@ -9704,7 +9715,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3445:1: ']'
             {
              before(grammarAccess.getDoubleArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
-            match(input,36,FOLLOW_36_in_rule__DoubleArrayExpression__Group__3__Impl7101); 
+            match(input,36,FOLLOW_36_in_rule__DoubleArrayExpression__Group__3__Impl7102); 
              after(grammarAccess.getDoubleArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
 
             }
@@ -9737,12 +9748,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3470:1: ( rule__DoubleArrayExpression__Group_2__0__Impl rule__DoubleArrayExpression__Group_2__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3471:2: rule__DoubleArrayExpression__Group_2__0__Impl rule__DoubleArrayExpression__Group_2__1
             {
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group_2__0__Impl_in_rule__DoubleArrayExpression__Group_2__07140);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group_2__0__Impl_in_rule__DoubleArrayExpression__Group_2__07141);
             rule__DoubleArrayExpression__Group_2__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group_2__1_in_rule__DoubleArrayExpression__Group_2__07143);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group_2__1_in_rule__DoubleArrayExpression__Group_2__07144);
             rule__DoubleArrayExpression__Group_2__1();
 
             state._fsp--;
@@ -9779,7 +9790,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3484:1: ','
             {
              before(grammarAccess.getDoubleArrayExpressionAccess().getCommaKeyword_2_0()); 
-            match(input,28,FOLLOW_28_in_rule__DoubleArrayExpression__Group_2__0__Impl7171); 
+            match(input,28,FOLLOW_28_in_rule__DoubleArrayExpression__Group_2__0__Impl7172); 
              after(grammarAccess.getDoubleArrayExpressionAccess().getCommaKeyword_2_0()); 
 
             }
@@ -9812,7 +9823,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3501:1: ( rule__DoubleArrayExpression__Group_2__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3502:2: rule__DoubleArrayExpression__Group_2__1__Impl
             {
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group_2__1__Impl_in_rule__DoubleArrayExpression__Group_2__17202);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__Group_2__1__Impl_in_rule__DoubleArrayExpression__Group_2__17203);
             rule__DoubleArrayExpression__Group_2__1__Impl();
 
             state._fsp--;
@@ -9852,7 +9863,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3515:1: ( rule__DoubleArrayExpression__ValuesAssignment_2_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3515:2: rule__DoubleArrayExpression__ValuesAssignment_2_1
             {
-            pushFollow(FOLLOW_rule__DoubleArrayExpression__ValuesAssignment_2_1_in_rule__DoubleArrayExpression__Group_2__1__Impl7229);
+            pushFollow(FOLLOW_rule__DoubleArrayExpression__ValuesAssignment_2_1_in_rule__DoubleArrayExpression__Group_2__1__Impl7230);
             rule__DoubleArrayExpression__ValuesAssignment_2_1();
 
             state._fsp--;
@@ -9892,12 +9903,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3533:1: ( rule__LongArrayExpression__Group__0__Impl rule__LongArrayExpression__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3534:2: rule__LongArrayExpression__Group__0__Impl rule__LongArrayExpression__Group__1
             {
-            pushFollow(FOLLOW_rule__LongArrayExpression__Group__0__Impl_in_rule__LongArrayExpression__Group__07263);
+            pushFollow(FOLLOW_rule__LongArrayExpression__Group__0__Impl_in_rule__LongArrayExpression__Group__07264);
             rule__LongArrayExpression__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__LongArrayExpression__Group__1_in_rule__LongArrayExpression__Group__07266);
+            pushFollow(FOLLOW_rule__LongArrayExpression__Group__1_in_rule__LongArrayExpression__Group__07267);
             rule__LongArrayExpression__Group__1();
 
             state._fsp--;
@@ -9934,7 +9945,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3547:1: '['
             {
              before(grammarAccess.getLongArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
-            match(input,35,FOLLOW_35_in_rule__LongArrayExpression__Group__0__Impl7294); 
+            match(input,35,FOLLOW_35_in_rule__LongArrayExpression__Group__0__Impl7295); 
              after(grammarAccess.getLongArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
 
             }
@@ -9967,12 +9978,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3564:1: ( rule__LongArrayExpression__Group__1__Impl rule__LongArrayExpression__Group__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3565:2: rule__LongArrayExpression__Group__1__Impl rule__LongArrayExpression__Group__2
             {
-            pushFollow(FOLLOW_rule__LongArrayExpression__Group__1__Impl_in_rule__LongArrayExpression__Group__17325);
+            pushFollow(FOLLOW_rule__LongArrayExpression__Group__1__Impl_in_rule__LongArrayExpression__Group__17326);
             rule__LongArrayExpression__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__LongArrayExpression__Group__2_in_rule__LongArrayExpression__Group__17328);
+            pushFollow(FOLLOW_rule__LongArrayExpression__Group__2_in_rule__LongArrayExpression__Group__17329);
             rule__LongArrayExpression__Group__2();
 
             state._fsp--;
@@ -10012,7 +10023,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3579:1: ( rule__LongArrayExpression__ValuesAssignment_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3579:2: rule__LongArrayExpression__ValuesAssignment_1
             {
-            pushFollow(FOLLOW_rule__LongArrayExpression__ValuesAssignment_1_in_rule__LongArrayExpression__Group__1__Impl7355);
+            pushFollow(FOLLOW_rule__LongArrayExpression__ValuesAssignment_1_in_rule__LongArrayExpression__Group__1__Impl7356);
             rule__LongArrayExpression__ValuesAssignment_1();
 
             state._fsp--;
@@ -10052,12 +10063,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3593:1: ( rule__LongArrayExpression__Group__2__Impl rule__LongArrayExpression__Group__3 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3594:2: rule__LongArrayExpression__Group__2__Impl rule__LongArrayExpression__Group__3
             {
-            pushFollow(FOLLOW_rule__LongArrayExpression__Group__2__Impl_in_rule__LongArrayExpression__Group__27385);
+            pushFollow(FOLLOW_rule__LongArrayExpression__Group__2__Impl_in_rule__LongArrayExpression__Group__27386);
             rule__LongArrayExpression__Group__2__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__LongArrayExpression__Group__3_in_rule__LongArrayExpression__Group__27388);
+            pushFollow(FOLLOW_rule__LongArrayExpression__Group__3_in_rule__LongArrayExpression__Group__27389);
             rule__LongArrayExpression__Group__3();
 
             state._fsp--;
@@ -10095,21 +10106,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getLongArrayExpressionAccess().getGroup_2()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3608:1: ( rule__LongArrayExpression__Group_2__0 )*
-            loop23:
+            loop24:
             do {
-                int alt23=2;
-                int LA23_0 = input.LA(1);
+                int alt24=2;
+                int LA24_0 = input.LA(1);
 
-                if ( (LA23_0==28) ) {
-                    alt23=1;
+                if ( (LA24_0==28) ) {
+                    alt24=1;
                 }
 
 
-                switch (alt23) {
+                switch (alt24) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3608:2: rule__LongArrayExpression__Group_2__0
             	    {
-            	    pushFollow(FOLLOW_rule__LongArrayExpression__Group_2__0_in_rule__LongArrayExpression__Group__2__Impl7415);
+            	    pushFollow(FOLLOW_rule__LongArrayExpression__Group_2__0_in_rule__LongArrayExpression__Group__2__Impl7416);
             	    rule__LongArrayExpression__Group_2__0();
 
             	    state._fsp--;
@@ -10119,7 +10130,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             	    break;
 
             	default :
-            	    break loop23;
+            	    break loop24;
                 }
             } while (true);
 
@@ -10155,7 +10166,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3622:1: ( rule__LongArrayExpression__Group__3__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3623:2: rule__LongArrayExpression__Group__3__Impl
             {
-            pushFollow(FOLLOW_rule__LongArrayExpression__Group__3__Impl_in_rule__LongArrayExpression__Group__37446);
+            pushFollow(FOLLOW_rule__LongArrayExpression__Group__3__Impl_in_rule__LongArrayExpression__Group__37447);
             rule__LongArrayExpression__Group__3__Impl();
 
             state._fsp--;
@@ -10192,7 +10203,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3635:1: ']'
             {
              before(grammarAccess.getLongArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
-            match(input,36,FOLLOW_36_in_rule__LongArrayExpression__Group__3__Impl7474); 
+            match(input,36,FOLLOW_36_in_rule__LongArrayExpression__Group__3__Impl7475); 
              after(grammarAccess.getLongArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
 
             }
@@ -10225,12 +10236,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3660:1: ( rule__LongArrayExpression__Group_2__0__Impl rule__LongArrayExpression__Group_2__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3661:2: rule__LongArrayExpression__Group_2__0__Impl rule__LongArrayExpression__Group_2__1
             {
-            pushFollow(FOLLOW_rule__LongArrayExpression__Group_2__0__Impl_in_rule__LongArrayExpression__Group_2__07513);
+            pushFollow(FOLLOW_rule__LongArrayExpression__Group_2__0__Impl_in_rule__LongArrayExpression__Group_2__07514);
             rule__LongArrayExpression__Group_2__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__LongArrayExpression__Group_2__1_in_rule__LongArrayExpression__Group_2__07516);
+            pushFollow(FOLLOW_rule__LongArrayExpression__Group_2__1_in_rule__LongArrayExpression__Group_2__07517);
             rule__LongArrayExpression__Group_2__1();
 
             state._fsp--;
@@ -10267,7 +10278,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3674:1: ','
             {
              before(grammarAccess.getLongArrayExpressionAccess().getCommaKeyword_2_0()); 
-            match(input,28,FOLLOW_28_in_rule__LongArrayExpression__Group_2__0__Impl7544); 
+            match(input,28,FOLLOW_28_in_rule__LongArrayExpression__Group_2__0__Impl7545); 
              after(grammarAccess.getLongArrayExpressionAccess().getCommaKeyword_2_0()); 
 
             }
@@ -10300,7 +10311,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3691:1: ( rule__LongArrayExpression__Group_2__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3692:2: rule__LongArrayExpression__Group_2__1__Impl
             {
-            pushFollow(FOLLOW_rule__LongArrayExpression__Group_2__1__Impl_in_rule__LongArrayExpression__Group_2__17575);
+            pushFollow(FOLLOW_rule__LongArrayExpression__Group_2__1__Impl_in_rule__LongArrayExpression__Group_2__17576);
             rule__LongArrayExpression__Group_2__1__Impl();
 
             state._fsp--;
@@ -10340,7 +10351,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3705:1: ( rule__LongArrayExpression__ValuesAssignment_2_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3705:2: rule__LongArrayExpression__ValuesAssignment_2_1
             {
-            pushFollow(FOLLOW_rule__LongArrayExpression__ValuesAssignment_2_1_in_rule__LongArrayExpression__Group_2__1__Impl7602);
+            pushFollow(FOLLOW_rule__LongArrayExpression__ValuesAssignment_2_1_in_rule__LongArrayExpression__Group_2__1__Impl7603);
             rule__LongArrayExpression__ValuesAssignment_2_1();
 
             state._fsp--;
@@ -10380,12 +10391,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3723:1: ( rule__StringArrayExpression__Group__0__Impl rule__StringArrayExpression__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3724:2: rule__StringArrayExpression__Group__0__Impl rule__StringArrayExpression__Group__1
             {
-            pushFollow(FOLLOW_rule__StringArrayExpression__Group__0__Impl_in_rule__StringArrayExpression__Group__07636);
+            pushFollow(FOLLOW_rule__StringArrayExpression__Group__0__Impl_in_rule__StringArrayExpression__Group__07637);
             rule__StringArrayExpression__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__StringArrayExpression__Group__1_in_rule__StringArrayExpression__Group__07639);
+            pushFollow(FOLLOW_rule__StringArrayExpression__Group__1_in_rule__StringArrayExpression__Group__07640);
             rule__StringArrayExpression__Group__1();
 
             state._fsp--;
@@ -10422,7 +10433,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3737:1: '['
             {
              before(grammarAccess.getStringArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
-            match(input,35,FOLLOW_35_in_rule__StringArrayExpression__Group__0__Impl7667); 
+            match(input,35,FOLLOW_35_in_rule__StringArrayExpression__Group__0__Impl7668); 
              after(grammarAccess.getStringArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
 
             }
@@ -10455,12 +10466,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3754:1: ( rule__StringArrayExpression__Group__1__Impl rule__StringArrayExpression__Group__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3755:2: rule__StringArrayExpression__Group__1__Impl rule__StringArrayExpression__Group__2
             {
-            pushFollow(FOLLOW_rule__StringArrayExpression__Group__1__Impl_in_rule__StringArrayExpression__Group__17698);
+            pushFollow(FOLLOW_rule__StringArrayExpression__Group__1__Impl_in_rule__StringArrayExpression__Group__17699);
             rule__StringArrayExpression__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__StringArrayExpression__Group__2_in_rule__StringArrayExpression__Group__17701);
+            pushFollow(FOLLOW_rule__StringArrayExpression__Group__2_in_rule__StringArrayExpression__Group__17702);
             rule__StringArrayExpression__Group__2();
 
             state._fsp--;
@@ -10500,7 +10511,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3769:1: ( rule__StringArrayExpression__ValuesAssignment_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3769:2: rule__StringArrayExpression__ValuesAssignment_1
             {
-            pushFollow(FOLLOW_rule__StringArrayExpression__ValuesAssignment_1_in_rule__StringArrayExpression__Group__1__Impl7728);
+            pushFollow(FOLLOW_rule__StringArrayExpression__ValuesAssignment_1_in_rule__StringArrayExpression__Group__1__Impl7729);
             rule__StringArrayExpression__ValuesAssignment_1();
 
             state._fsp--;
@@ -10540,12 +10551,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3783:1: ( rule__StringArrayExpression__Group__2__Impl rule__StringArrayExpression__Group__3 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3784:2: rule__StringArrayExpression__Group__2__Impl rule__StringArrayExpression__Group__3
             {
-            pushFollow(FOLLOW_rule__StringArrayExpression__Group__2__Impl_in_rule__StringArrayExpression__Group__27758);
+            pushFollow(FOLLOW_rule__StringArrayExpression__Group__2__Impl_in_rule__StringArrayExpression__Group__27759);
             rule__StringArrayExpression__Group__2__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__StringArrayExpression__Group__3_in_rule__StringArrayExpression__Group__27761);
+            pushFollow(FOLLOW_rule__StringArrayExpression__Group__3_in_rule__StringArrayExpression__Group__27762);
             rule__StringArrayExpression__Group__3();
 
             state._fsp--;
@@ -10583,21 +10594,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getStringArrayExpressionAccess().getGroup_2()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3798:1: ( rule__StringArrayExpression__Group_2__0 )*
-            loop24:
+            loop25:
             do {
-                int alt24=2;
-                int LA24_0 = input.LA(1);
+                int alt25=2;
+                int LA25_0 = input.LA(1);
 
-                if ( (LA24_0==28) ) {
-                    alt24=1;
+                if ( (LA25_0==28) ) {
+                    alt25=1;
                 }
 
 
-                switch (alt24) {
+                switch (alt25) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3798:2: rule__StringArrayExpression__Group_2__0
             	    {
-            	    pushFollow(FOLLOW_rule__StringArrayExpression__Group_2__0_in_rule__StringArrayExpression__Group__2__Impl7788);
+            	    pushFollow(FOLLOW_rule__StringArrayExpression__Group_2__0_in_rule__StringArrayExpression__Group__2__Impl7789);
             	    rule__StringArrayExpression__Group_2__0();
 
             	    state._fsp--;
@@ -10607,7 +10618,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             	    break;
 
             	default :
-            	    break loop24;
+            	    break loop25;
                 }
             } while (true);
 
@@ -10643,7 +10654,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3812:1: ( rule__StringArrayExpression__Group__3__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3813:2: rule__StringArrayExpression__Group__3__Impl
             {
-            pushFollow(FOLLOW_rule__StringArrayExpression__Group__3__Impl_in_rule__StringArrayExpression__Group__37819);
+            pushFollow(FOLLOW_rule__StringArrayExpression__Group__3__Impl_in_rule__StringArrayExpression__Group__37820);
             rule__StringArrayExpression__Group__3__Impl();
 
             state._fsp--;
@@ -10680,7 +10691,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3825:1: ']'
             {
              before(grammarAccess.getStringArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
-            match(input,36,FOLLOW_36_in_rule__StringArrayExpression__Group__3__Impl7847); 
+            match(input,36,FOLLOW_36_in_rule__StringArrayExpression__Group__3__Impl7848); 
              after(grammarAccess.getStringArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
 
             }
@@ -10713,12 +10724,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3850:1: ( rule__StringArrayExpression__Group_2__0__Impl rule__StringArrayExpression__Group_2__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3851:2: rule__StringArrayExpression__Group_2__0__Impl rule__StringArrayExpression__Group_2__1
             {
-            pushFollow(FOLLOW_rule__StringArrayExpression__Group_2__0__Impl_in_rule__StringArrayExpression__Group_2__07886);
+            pushFollow(FOLLOW_rule__StringArrayExpression__Group_2__0__Impl_in_rule__StringArrayExpression__Group_2__07887);
             rule__StringArrayExpression__Group_2__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__StringArrayExpression__Group_2__1_in_rule__StringArrayExpression__Group_2__07889);
+            pushFollow(FOLLOW_rule__StringArrayExpression__Group_2__1_in_rule__StringArrayExpression__Group_2__07890);
             rule__StringArrayExpression__Group_2__1();
 
             state._fsp--;
@@ -10755,7 +10766,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3864:1: ','
             {
              before(grammarAccess.getStringArrayExpressionAccess().getCommaKeyword_2_0()); 
-            match(input,28,FOLLOW_28_in_rule__StringArrayExpression__Group_2__0__Impl7917); 
+            match(input,28,FOLLOW_28_in_rule__StringArrayExpression__Group_2__0__Impl7918); 
              after(grammarAccess.getStringArrayExpressionAccess().getCommaKeyword_2_0()); 
 
             }
@@ -10788,7 +10799,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3881:1: ( rule__StringArrayExpression__Group_2__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3882:2: rule__StringArrayExpression__Group_2__1__Impl
             {
-            pushFollow(FOLLOW_rule__StringArrayExpression__Group_2__1__Impl_in_rule__StringArrayExpression__Group_2__17948);
+            pushFollow(FOLLOW_rule__StringArrayExpression__Group_2__1__Impl_in_rule__StringArrayExpression__Group_2__17949);
             rule__StringArrayExpression__Group_2__1__Impl();
 
             state._fsp--;
@@ -10828,7 +10839,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3895:1: ( rule__StringArrayExpression__ValuesAssignment_2_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3895:2: rule__StringArrayExpression__ValuesAssignment_2_1
             {
-            pushFollow(FOLLOW_rule__StringArrayExpression__ValuesAssignment_2_1_in_rule__StringArrayExpression__Group_2__1__Impl7975);
+            pushFollow(FOLLOW_rule__StringArrayExpression__ValuesAssignment_2_1_in_rule__StringArrayExpression__Group_2__1__Impl7976);
             rule__StringArrayExpression__ValuesAssignment_2_1();
 
             state._fsp--;
@@ -10868,12 +10879,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3913:1: ( rule__NullArrayExpression__Group__0__Impl rule__NullArrayExpression__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3914:2: rule__NullArrayExpression__Group__0__Impl rule__NullArrayExpression__Group__1
             {
-            pushFollow(FOLLOW_rule__NullArrayExpression__Group__0__Impl_in_rule__NullArrayExpression__Group__08009);
+            pushFollow(FOLLOW_rule__NullArrayExpression__Group__0__Impl_in_rule__NullArrayExpression__Group__08010);
             rule__NullArrayExpression__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__NullArrayExpression__Group__1_in_rule__NullArrayExpression__Group__08012);
+            pushFollow(FOLLOW_rule__NullArrayExpression__Group__1_in_rule__NullArrayExpression__Group__08013);
             rule__NullArrayExpression__Group__1();
 
             state._fsp--;
@@ -10910,7 +10921,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3927:1: '['
             {
              before(grammarAccess.getNullArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
-            match(input,35,FOLLOW_35_in_rule__NullArrayExpression__Group__0__Impl8040); 
+            match(input,35,FOLLOW_35_in_rule__NullArrayExpression__Group__0__Impl8041); 
              after(grammarAccess.getNullArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
 
             }
@@ -10943,12 +10954,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3944:1: ( rule__NullArrayExpression__Group__1__Impl rule__NullArrayExpression__Group__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3945:2: rule__NullArrayExpression__Group__1__Impl rule__NullArrayExpression__Group__2
             {
-            pushFollow(FOLLOW_rule__NullArrayExpression__Group__1__Impl_in_rule__NullArrayExpression__Group__18071);
+            pushFollow(FOLLOW_rule__NullArrayExpression__Group__1__Impl_in_rule__NullArrayExpression__Group__18072);
             rule__NullArrayExpression__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__NullArrayExpression__Group__2_in_rule__NullArrayExpression__Group__18074);
+            pushFollow(FOLLOW_rule__NullArrayExpression__Group__2_in_rule__NullArrayExpression__Group__18075);
             rule__NullArrayExpression__Group__2();
 
             state._fsp--;
@@ -10988,7 +10999,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3959:1: ( rule__NullArrayExpression__ValuesAssignment_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3959:2: rule__NullArrayExpression__ValuesAssignment_1
             {
-            pushFollow(FOLLOW_rule__NullArrayExpression__ValuesAssignment_1_in_rule__NullArrayExpression__Group__1__Impl8101);
+            pushFollow(FOLLOW_rule__NullArrayExpression__ValuesAssignment_1_in_rule__NullArrayExpression__Group__1__Impl8102);
             rule__NullArrayExpression__ValuesAssignment_1();
 
             state._fsp--;
@@ -11028,12 +11039,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3973:1: ( rule__NullArrayExpression__Group__2__Impl rule__NullArrayExpression__Group__3 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3974:2: rule__NullArrayExpression__Group__2__Impl rule__NullArrayExpression__Group__3
             {
-            pushFollow(FOLLOW_rule__NullArrayExpression__Group__2__Impl_in_rule__NullArrayExpression__Group__28131);
+            pushFollow(FOLLOW_rule__NullArrayExpression__Group__2__Impl_in_rule__NullArrayExpression__Group__28132);
             rule__NullArrayExpression__Group__2__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__NullArrayExpression__Group__3_in_rule__NullArrayExpression__Group__28134);
+            pushFollow(FOLLOW_rule__NullArrayExpression__Group__3_in_rule__NullArrayExpression__Group__28135);
             rule__NullArrayExpression__Group__3();
 
             state._fsp--;
@@ -11071,21 +11082,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getNullArrayExpressionAccess().getGroup_2()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3988:1: ( rule__NullArrayExpression__Group_2__0 )*
-            loop25:
+            loop26:
             do {
-                int alt25=2;
-                int LA25_0 = input.LA(1);
+                int alt26=2;
+                int LA26_0 = input.LA(1);
 
-                if ( (LA25_0==28) ) {
-                    alt25=1;
+                if ( (LA26_0==28) ) {
+                    alt26=1;
                 }
 
 
-                switch (alt25) {
+                switch (alt26) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:3988:2: rule__NullArrayExpression__Group_2__0
             	    {
-            	    pushFollow(FOLLOW_rule__NullArrayExpression__Group_2__0_in_rule__NullArrayExpression__Group__2__Impl8161);
+            	    pushFollow(FOLLOW_rule__NullArrayExpression__Group_2__0_in_rule__NullArrayExpression__Group__2__Impl8162);
             	    rule__NullArrayExpression__Group_2__0();
 
             	    state._fsp--;
@@ -11095,7 +11106,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             	    break;
 
             	default :
-            	    break loop25;
+            	    break loop26;
                 }
             } while (true);
 
@@ -11131,7 +11142,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4002:1: ( rule__NullArrayExpression__Group__3__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4003:2: rule__NullArrayExpression__Group__3__Impl
             {
-            pushFollow(FOLLOW_rule__NullArrayExpression__Group__3__Impl_in_rule__NullArrayExpression__Group__38192);
+            pushFollow(FOLLOW_rule__NullArrayExpression__Group__3__Impl_in_rule__NullArrayExpression__Group__38193);
             rule__NullArrayExpression__Group__3__Impl();
 
             state._fsp--;
@@ -11168,7 +11179,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4015:1: ']'
             {
              before(grammarAccess.getNullArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
-            match(input,36,FOLLOW_36_in_rule__NullArrayExpression__Group__3__Impl8220); 
+            match(input,36,FOLLOW_36_in_rule__NullArrayExpression__Group__3__Impl8221); 
              after(grammarAccess.getNullArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
 
             }
@@ -11201,12 +11212,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4040:1: ( rule__NullArrayExpression__Group_2__0__Impl rule__NullArrayExpression__Group_2__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4041:2: rule__NullArrayExpression__Group_2__0__Impl rule__NullArrayExpression__Group_2__1
             {
-            pushFollow(FOLLOW_rule__NullArrayExpression__Group_2__0__Impl_in_rule__NullArrayExpression__Group_2__08259);
+            pushFollow(FOLLOW_rule__NullArrayExpression__Group_2__0__Impl_in_rule__NullArrayExpression__Group_2__08260);
             rule__NullArrayExpression__Group_2__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__NullArrayExpression__Group_2__1_in_rule__NullArrayExpression__Group_2__08262);
+            pushFollow(FOLLOW_rule__NullArrayExpression__Group_2__1_in_rule__NullArrayExpression__Group_2__08263);
             rule__NullArrayExpression__Group_2__1();
 
             state._fsp--;
@@ -11243,7 +11254,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4054:1: ','
             {
              before(grammarAccess.getNullArrayExpressionAccess().getCommaKeyword_2_0()); 
-            match(input,28,FOLLOW_28_in_rule__NullArrayExpression__Group_2__0__Impl8290); 
+            match(input,28,FOLLOW_28_in_rule__NullArrayExpression__Group_2__0__Impl8291); 
              after(grammarAccess.getNullArrayExpressionAccess().getCommaKeyword_2_0()); 
 
             }
@@ -11276,7 +11287,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4071:1: ( rule__NullArrayExpression__Group_2__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4072:2: rule__NullArrayExpression__Group_2__1__Impl
             {
-            pushFollow(FOLLOW_rule__NullArrayExpression__Group_2__1__Impl_in_rule__NullArrayExpression__Group_2__18321);
+            pushFollow(FOLLOW_rule__NullArrayExpression__Group_2__1__Impl_in_rule__NullArrayExpression__Group_2__18322);
             rule__NullArrayExpression__Group_2__1__Impl();
 
             state._fsp--;
@@ -11316,7 +11327,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4085:1: ( rule__NullArrayExpression__ValuesAssignment_2_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4085:2: rule__NullArrayExpression__ValuesAssignment_2_1
             {
-            pushFollow(FOLLOW_rule__NullArrayExpression__ValuesAssignment_2_1_in_rule__NullArrayExpression__Group_2__1__Impl8348);
+            pushFollow(FOLLOW_rule__NullArrayExpression__ValuesAssignment_2_1_in_rule__NullArrayExpression__Group_2__1__Impl8349);
             rule__NullArrayExpression__ValuesAssignment_2_1();
 
             state._fsp--;
@@ -11356,12 +11367,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4103:1: ( rule__DateArrayExpression__Group__0__Impl rule__DateArrayExpression__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4104:2: rule__DateArrayExpression__Group__0__Impl rule__DateArrayExpression__Group__1
             {
-            pushFollow(FOLLOW_rule__DateArrayExpression__Group__0__Impl_in_rule__DateArrayExpression__Group__08382);
+            pushFollow(FOLLOW_rule__DateArrayExpression__Group__0__Impl_in_rule__DateArrayExpression__Group__08383);
             rule__DateArrayExpression__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__DateArrayExpression__Group__1_in_rule__DateArrayExpression__Group__08385);
+            pushFollow(FOLLOW_rule__DateArrayExpression__Group__1_in_rule__DateArrayExpression__Group__08386);
             rule__DateArrayExpression__Group__1();
 
             state._fsp--;
@@ -11398,7 +11409,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4117:1: '['
             {
              before(grammarAccess.getDateArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
-            match(input,35,FOLLOW_35_in_rule__DateArrayExpression__Group__0__Impl8413); 
+            match(input,35,FOLLOW_35_in_rule__DateArrayExpression__Group__0__Impl8414); 
              after(grammarAccess.getDateArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
 
             }
@@ -11431,12 +11442,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4134:1: ( rule__DateArrayExpression__Group__1__Impl rule__DateArrayExpression__Group__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4135:2: rule__DateArrayExpression__Group__1__Impl rule__DateArrayExpression__Group__2
             {
-            pushFollow(FOLLOW_rule__DateArrayExpression__Group__1__Impl_in_rule__DateArrayExpression__Group__18444);
+            pushFollow(FOLLOW_rule__DateArrayExpression__Group__1__Impl_in_rule__DateArrayExpression__Group__18445);
             rule__DateArrayExpression__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__DateArrayExpression__Group__2_in_rule__DateArrayExpression__Group__18447);
+            pushFollow(FOLLOW_rule__DateArrayExpression__Group__2_in_rule__DateArrayExpression__Group__18448);
             rule__DateArrayExpression__Group__2();
 
             state._fsp--;
@@ -11476,7 +11487,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4149:1: ( rule__DateArrayExpression__ValuesAssignment_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4149:2: rule__DateArrayExpression__ValuesAssignment_1
             {
-            pushFollow(FOLLOW_rule__DateArrayExpression__ValuesAssignment_1_in_rule__DateArrayExpression__Group__1__Impl8474);
+            pushFollow(FOLLOW_rule__DateArrayExpression__ValuesAssignment_1_in_rule__DateArrayExpression__Group__1__Impl8475);
             rule__DateArrayExpression__ValuesAssignment_1();
 
             state._fsp--;
@@ -11516,12 +11527,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4163:1: ( rule__DateArrayExpression__Group__2__Impl rule__DateArrayExpression__Group__3 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4164:2: rule__DateArrayExpression__Group__2__Impl rule__DateArrayExpression__Group__3
             {
-            pushFollow(FOLLOW_rule__DateArrayExpression__Group__2__Impl_in_rule__DateArrayExpression__Group__28504);
+            pushFollow(FOLLOW_rule__DateArrayExpression__Group__2__Impl_in_rule__DateArrayExpression__Group__28505);
             rule__DateArrayExpression__Group__2__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__DateArrayExpression__Group__3_in_rule__DateArrayExpression__Group__28507);
+            pushFollow(FOLLOW_rule__DateArrayExpression__Group__3_in_rule__DateArrayExpression__Group__28508);
             rule__DateArrayExpression__Group__3();
 
             state._fsp--;
@@ -11559,21 +11570,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getDateArrayExpressionAccess().getGroup_2()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4178:1: ( rule__DateArrayExpression__Group_2__0 )*
-            loop26:
+            loop27:
             do {
-                int alt26=2;
-                int LA26_0 = input.LA(1);
+                int alt27=2;
+                int LA27_0 = input.LA(1);
 
-                if ( (LA26_0==28) ) {
-                    alt26=1;
+                if ( (LA27_0==28) ) {
+                    alt27=1;
                 }
 
 
-                switch (alt26) {
+                switch (alt27) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4178:2: rule__DateArrayExpression__Group_2__0
             	    {
-            	    pushFollow(FOLLOW_rule__DateArrayExpression__Group_2__0_in_rule__DateArrayExpression__Group__2__Impl8534);
+            	    pushFollow(FOLLOW_rule__DateArrayExpression__Group_2__0_in_rule__DateArrayExpression__Group__2__Impl8535);
             	    rule__DateArrayExpression__Group_2__0();
 
             	    state._fsp--;
@@ -11583,7 +11594,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             	    break;
 
             	default :
-            	    break loop26;
+            	    break loop27;
                 }
             } while (true);
 
@@ -11619,7 +11630,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4192:1: ( rule__DateArrayExpression__Group__3__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4193:2: rule__DateArrayExpression__Group__3__Impl
             {
-            pushFollow(FOLLOW_rule__DateArrayExpression__Group__3__Impl_in_rule__DateArrayExpression__Group__38565);
+            pushFollow(FOLLOW_rule__DateArrayExpression__Group__3__Impl_in_rule__DateArrayExpression__Group__38566);
             rule__DateArrayExpression__Group__3__Impl();
 
             state._fsp--;
@@ -11656,7 +11667,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4205:1: ']'
             {
              before(grammarAccess.getDateArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
-            match(input,36,FOLLOW_36_in_rule__DateArrayExpression__Group__3__Impl8593); 
+            match(input,36,FOLLOW_36_in_rule__DateArrayExpression__Group__3__Impl8594); 
              after(grammarAccess.getDateArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
 
             }
@@ -11689,12 +11700,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4230:1: ( rule__DateArrayExpression__Group_2__0__Impl rule__DateArrayExpression__Group_2__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4231:2: rule__DateArrayExpression__Group_2__0__Impl rule__DateArrayExpression__Group_2__1
             {
-            pushFollow(FOLLOW_rule__DateArrayExpression__Group_2__0__Impl_in_rule__DateArrayExpression__Group_2__08632);
+            pushFollow(FOLLOW_rule__DateArrayExpression__Group_2__0__Impl_in_rule__DateArrayExpression__Group_2__08633);
             rule__DateArrayExpression__Group_2__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__DateArrayExpression__Group_2__1_in_rule__DateArrayExpression__Group_2__08635);
+            pushFollow(FOLLOW_rule__DateArrayExpression__Group_2__1_in_rule__DateArrayExpression__Group_2__08636);
             rule__DateArrayExpression__Group_2__1();
 
             state._fsp--;
@@ -11731,7 +11742,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4244:1: ','
             {
              before(grammarAccess.getDateArrayExpressionAccess().getCommaKeyword_2_0()); 
-            match(input,28,FOLLOW_28_in_rule__DateArrayExpression__Group_2__0__Impl8663); 
+            match(input,28,FOLLOW_28_in_rule__DateArrayExpression__Group_2__0__Impl8664); 
              after(grammarAccess.getDateArrayExpressionAccess().getCommaKeyword_2_0()); 
 
             }
@@ -11764,7 +11775,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4261:1: ( rule__DateArrayExpression__Group_2__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4262:2: rule__DateArrayExpression__Group_2__1__Impl
             {
-            pushFollow(FOLLOW_rule__DateArrayExpression__Group_2__1__Impl_in_rule__DateArrayExpression__Group_2__18694);
+            pushFollow(FOLLOW_rule__DateArrayExpression__Group_2__1__Impl_in_rule__DateArrayExpression__Group_2__18695);
             rule__DateArrayExpression__Group_2__1__Impl();
 
             state._fsp--;
@@ -11804,7 +11815,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4275:1: ( rule__DateArrayExpression__ValuesAssignment_2_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4275:2: rule__DateArrayExpression__ValuesAssignment_2_1
             {
-            pushFollow(FOLLOW_rule__DateArrayExpression__ValuesAssignment_2_1_in_rule__DateArrayExpression__Group_2__1__Impl8721);
+            pushFollow(FOLLOW_rule__DateArrayExpression__ValuesAssignment_2_1_in_rule__DateArrayExpression__Group_2__1__Impl8722);
             rule__DateArrayExpression__ValuesAssignment_2_1();
 
             state._fsp--;
@@ -11844,12 +11855,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4293:1: ( rule__BooleanArrayExpression__Group__0__Impl rule__BooleanArrayExpression__Group__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4294:2: rule__BooleanArrayExpression__Group__0__Impl rule__BooleanArrayExpression__Group__1
             {
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__0__Impl_in_rule__BooleanArrayExpression__Group__08755);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__0__Impl_in_rule__BooleanArrayExpression__Group__08756);
             rule__BooleanArrayExpression__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__1_in_rule__BooleanArrayExpression__Group__08758);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__1_in_rule__BooleanArrayExpression__Group__08759);
             rule__BooleanArrayExpression__Group__1();
 
             state._fsp--;
@@ -11886,7 +11897,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4307:1: '['
             {
              before(grammarAccess.getBooleanArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
-            match(input,35,FOLLOW_35_in_rule__BooleanArrayExpression__Group__0__Impl8786); 
+            match(input,35,FOLLOW_35_in_rule__BooleanArrayExpression__Group__0__Impl8787); 
              after(grammarAccess.getBooleanArrayExpressionAccess().getLeftSquareBracketKeyword_0()); 
 
             }
@@ -11919,12 +11930,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4324:1: ( rule__BooleanArrayExpression__Group__1__Impl rule__BooleanArrayExpression__Group__2 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4325:2: rule__BooleanArrayExpression__Group__1__Impl rule__BooleanArrayExpression__Group__2
             {
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__1__Impl_in_rule__BooleanArrayExpression__Group__18817);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__1__Impl_in_rule__BooleanArrayExpression__Group__18818);
             rule__BooleanArrayExpression__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__2_in_rule__BooleanArrayExpression__Group__18820);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__2_in_rule__BooleanArrayExpression__Group__18821);
             rule__BooleanArrayExpression__Group__2();
 
             state._fsp--;
@@ -11964,7 +11975,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4339:1: ( rule__BooleanArrayExpression__ValuesAssignment_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4339:2: rule__BooleanArrayExpression__ValuesAssignment_1
             {
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__ValuesAssignment_1_in_rule__BooleanArrayExpression__Group__1__Impl8847);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__ValuesAssignment_1_in_rule__BooleanArrayExpression__Group__1__Impl8848);
             rule__BooleanArrayExpression__ValuesAssignment_1();
 
             state._fsp--;
@@ -12004,12 +12015,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4353:1: ( rule__BooleanArrayExpression__Group__2__Impl rule__BooleanArrayExpression__Group__3 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4354:2: rule__BooleanArrayExpression__Group__2__Impl rule__BooleanArrayExpression__Group__3
             {
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__2__Impl_in_rule__BooleanArrayExpression__Group__28877);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__2__Impl_in_rule__BooleanArrayExpression__Group__28878);
             rule__BooleanArrayExpression__Group__2__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__3_in_rule__BooleanArrayExpression__Group__28880);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__3_in_rule__BooleanArrayExpression__Group__28881);
             rule__BooleanArrayExpression__Group__3();
 
             state._fsp--;
@@ -12047,21 +12058,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getBooleanArrayExpressionAccess().getGroup_2()); 
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4368:1: ( rule__BooleanArrayExpression__Group_2__0 )*
-            loop27:
+            loop28:
             do {
-                int alt27=2;
-                int LA27_0 = input.LA(1);
+                int alt28=2;
+                int LA28_0 = input.LA(1);
 
-                if ( (LA27_0==28) ) {
-                    alt27=1;
+                if ( (LA28_0==28) ) {
+                    alt28=1;
                 }
 
 
-                switch (alt27) {
+                switch (alt28) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4368:2: rule__BooleanArrayExpression__Group_2__0
             	    {
-            	    pushFollow(FOLLOW_rule__BooleanArrayExpression__Group_2__0_in_rule__BooleanArrayExpression__Group__2__Impl8907);
+            	    pushFollow(FOLLOW_rule__BooleanArrayExpression__Group_2__0_in_rule__BooleanArrayExpression__Group__2__Impl8908);
             	    rule__BooleanArrayExpression__Group_2__0();
 
             	    state._fsp--;
@@ -12071,7 +12082,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             	    break;
 
             	default :
-            	    break loop27;
+            	    break loop28;
                 }
             } while (true);
 
@@ -12107,7 +12118,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4382:1: ( rule__BooleanArrayExpression__Group__3__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4383:2: rule__BooleanArrayExpression__Group__3__Impl
             {
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__3__Impl_in_rule__BooleanArrayExpression__Group__38938);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group__3__Impl_in_rule__BooleanArrayExpression__Group__38939);
             rule__BooleanArrayExpression__Group__3__Impl();
 
             state._fsp--;
@@ -12144,7 +12155,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4395:1: ']'
             {
              before(grammarAccess.getBooleanArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
-            match(input,36,FOLLOW_36_in_rule__BooleanArrayExpression__Group__3__Impl8966); 
+            match(input,36,FOLLOW_36_in_rule__BooleanArrayExpression__Group__3__Impl8967); 
              after(grammarAccess.getBooleanArrayExpressionAccess().getRightSquareBracketKeyword_3()); 
 
             }
@@ -12177,12 +12188,12 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4420:1: ( rule__BooleanArrayExpression__Group_2__0__Impl rule__BooleanArrayExpression__Group_2__1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4421:2: rule__BooleanArrayExpression__Group_2__0__Impl rule__BooleanArrayExpression__Group_2__1
             {
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group_2__0__Impl_in_rule__BooleanArrayExpression__Group_2__09005);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group_2__0__Impl_in_rule__BooleanArrayExpression__Group_2__09006);
             rule__BooleanArrayExpression__Group_2__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group_2__1_in_rule__BooleanArrayExpression__Group_2__09008);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group_2__1_in_rule__BooleanArrayExpression__Group_2__09009);
             rule__BooleanArrayExpression__Group_2__1();
 
             state._fsp--;
@@ -12219,7 +12230,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4434:1: ','
             {
              before(grammarAccess.getBooleanArrayExpressionAccess().getCommaKeyword_2_0()); 
-            match(input,28,FOLLOW_28_in_rule__BooleanArrayExpression__Group_2__0__Impl9036); 
+            match(input,28,FOLLOW_28_in_rule__BooleanArrayExpression__Group_2__0__Impl9037); 
              after(grammarAccess.getBooleanArrayExpressionAccess().getCommaKeyword_2_0()); 
 
             }
@@ -12252,7 +12263,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4451:1: ( rule__BooleanArrayExpression__Group_2__1__Impl )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4452:2: rule__BooleanArrayExpression__Group_2__1__Impl
             {
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group_2__1__Impl_in_rule__BooleanArrayExpression__Group_2__19067);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__Group_2__1__Impl_in_rule__BooleanArrayExpression__Group_2__19068);
             rule__BooleanArrayExpression__Group_2__1__Impl();
 
             state._fsp--;
@@ -12292,7 +12303,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4465:1: ( rule__BooleanArrayExpression__ValuesAssignment_2_1 )
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4465:2: rule__BooleanArrayExpression__ValuesAssignment_2_1
             {
-            pushFollow(FOLLOW_rule__BooleanArrayExpression__ValuesAssignment_2_1_in_rule__BooleanArrayExpression__Group_2__1__Impl9094);
+            pushFollow(FOLLOW_rule__BooleanArrayExpression__ValuesAssignment_2_1_in_rule__BooleanArrayExpression__Group_2__1__Impl9095);
             rule__BooleanArrayExpression__ValuesAssignment_2_1();
 
             state._fsp--;
@@ -12336,7 +12347,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4486:1: ruleColumns
             {
              before(grammarAccess.getModelAccess().getColColumnsParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleColumns_in_rule__Model__ColAssignment_19133);
+            pushFollow(FOLLOW_ruleColumns_in_rule__Model__ColAssignment_19134);
             ruleColumns();
 
             state._fsp--;
@@ -12377,7 +12388,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4501:1: ruleTables
             {
              before(grammarAccess.getModelAccess().getTblTablesParserRuleCall_3_0()); 
-            pushFollow(FOLLOW_ruleTables_in_rule__Model__TblAssignment_39164);
+            pushFollow(FOLLOW_ruleTables_in_rule__Model__TblAssignment_39165);
             ruleTables();
 
             state._fsp--;
@@ -12418,7 +12429,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4516:1: ruleWhereEntry
             {
              before(grammarAccess.getModelAccess().getWhereEntryWhereEntryParserRuleCall_4_1_0()); 
-            pushFollow(FOLLOW_ruleWhereEntry_in_rule__Model__WhereEntryAssignment_4_19195);
+            pushFollow(FOLLOW_ruleWhereEntry_in_rule__Model__WhereEntryAssignment_4_19196);
             ruleWhereEntry();
 
             state._fsp--;
@@ -12459,7 +12470,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4531:1: ruleColumnOrAlias
             {
              before(grammarAccess.getColumnsAccess().getEntriesColumnOrAliasParserRuleCall_1_1_1_0()); 
-            pushFollow(FOLLOW_ruleColumnOrAlias_in_rule__Columns__EntriesAssignment_1_1_19226);
+            pushFollow(FOLLOW_ruleColumnOrAlias_in_rule__Columns__EntriesAssignment_1_1_19227);
             ruleColumnOrAlias();
 
             state._fsp--;
@@ -12500,7 +12511,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4546:1: ruleColumnAlias
             {
              before(grammarAccess.getColumnOrAliasAccess().getColAliasColumnAliasParserRuleCall_1_2_0()); 
-            pushFollow(FOLLOW_ruleColumnAlias_in_rule__ColumnOrAlias__ColAliasAssignment_1_29257);
+            pushFollow(FOLLOW_ruleColumnAlias_in_rule__ColumnOrAlias__ColAliasAssignment_1_29258);
             ruleColumnAlias();
 
             state._fsp--;
@@ -12541,7 +12552,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4561:1: ruleColumnAlias
             {
              before(grammarAccess.getColumnOrAliasAccess().getColAliasColumnAliasParserRuleCall_2_1_0()); 
-            pushFollow(FOLLOW_ruleColumnAlias_in_rule__ColumnOrAlias__ColAliasAssignment_2_19288);
+            pushFollow(FOLLOW_ruleColumnAlias_in_rule__ColumnOrAlias__ColAliasAssignment_2_19289);
             ruleColumnAlias();
 
             state._fsp--;
@@ -12582,7 +12593,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4576:1: ruleColumn
             {
              before(grammarAccess.getColumnFullAccess().getColNameColumnParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleColumn_in_rule__ColumnFull__ColNameAssignment_09319);
+            pushFollow(FOLLOW_ruleColumn_in_rule__ColumnFull__ColNameAssignment_09320);
             ruleColumn();
 
             state._fsp--;
@@ -12623,7 +12634,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4591:1: ruleColumn
             {
              before(grammarAccess.getColumnFullAccess().getColNameColumnParserRuleCall_1_2_0()); 
-            pushFollow(FOLLOW_ruleColumn_in_rule__ColumnFull__ColNameAssignment_1_29350);
+            pushFollow(FOLLOW_ruleColumn_in_rule__ColumnFull__ColNameAssignment_1_29351);
             ruleColumn();
 
             state._fsp--;
@@ -12664,7 +12675,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4606:1: RULE_ID
             {
              before(grammarAccess.getColumnAliasAccess().getColAliasIDTerminalRuleCall_0()); 
-            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__ColumnAlias__ColAliasAssignment9381); 
+            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__ColumnAlias__ColAliasAssignment9382); 
              after(grammarAccess.getColumnAliasAccess().getColAliasIDTerminalRuleCall_0()); 
 
             }
@@ -12701,7 +12712,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4621:1: RULE_ID
             {
              before(grammarAccess.getColumnAccess().getColNameIDTerminalRuleCall_0()); 
-            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__Column__ColNameAssignment9412); 
+            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__Column__ColNameAssignment9413); 
              after(grammarAccess.getColumnAccess().getColNameIDTerminalRuleCall_0()); 
 
             }
@@ -12738,7 +12749,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4636:1: ruleTableOrAlias
             {
              before(grammarAccess.getTablesAccess().getEntriesTableOrAliasParserRuleCall_1_1_1_0()); 
-            pushFollow(FOLLOW_ruleTableOrAlias_in_rule__Tables__EntriesAssignment_1_1_19443);
+            pushFollow(FOLLOW_ruleTableOrAlias_in_rule__Tables__EntriesAssignment_1_1_19444);
             ruleTableOrAlias();
 
             state._fsp--;
@@ -12779,7 +12790,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4651:1: ruleTableAlias
             {
              before(grammarAccess.getTableOrAliasAccess().getTblAliasTableAliasParserRuleCall_1_2_0()); 
-            pushFollow(FOLLOW_ruleTableAlias_in_rule__TableOrAlias__TblAliasAssignment_1_29474);
+            pushFollow(FOLLOW_ruleTableAlias_in_rule__TableOrAlias__TblAliasAssignment_1_29475);
             ruleTableAlias();
 
             state._fsp--;
@@ -12820,7 +12831,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4666:1: ruleTableAlias
             {
              before(grammarAccess.getTableOrAliasAccess().getTblAliasTableAliasParserRuleCall_2_1_0()); 
-            pushFollow(FOLLOW_ruleTableAlias_in_rule__TableOrAlias__TblAliasAssignment_2_19505);
+            pushFollow(FOLLOW_ruleTableAlias_in_rule__TableOrAlias__TblAliasAssignment_2_19506);
             ruleTableAlias();
 
             state._fsp--;
@@ -12861,7 +12872,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4681:1: ruleTable
             {
              before(grammarAccess.getTableFullAccess().getTblTableParserRuleCall_0_2_0()); 
-            pushFollow(FOLLOW_ruleTable_in_rule__TableFull__TblAssignment_0_29536);
+            pushFollow(FOLLOW_ruleTable_in_rule__TableFull__TblAssignment_0_29537);
             ruleTable();
 
             state._fsp--;
@@ -12902,7 +12913,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4696:1: ruleTable
             {
              before(grammarAccess.getTableFullAccess().getTblTableParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleTable_in_rule__TableFull__TblAssignment_19567);
+            pushFollow(FOLLOW_ruleTable_in_rule__TableFull__TblAssignment_19568);
             ruleTable();
 
             state._fsp--;
@@ -12943,7 +12954,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4711:1: RULE_ID
             {
              before(grammarAccess.getTableAccess().getTblIDTerminalRuleCall_0()); 
-            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__Table__TblAssignment9598); 
+            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__Table__TblAssignment9599); 
              after(grammarAccess.getTableAccess().getTblIDTerminalRuleCall_0()); 
 
             }
@@ -12980,7 +12991,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4726:1: RULE_ID
             {
              before(grammarAccess.getTableAliasAccess().getTblAliasIDTerminalRuleCall_0()); 
-            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__TableAlias__TblAliasAssignment9629); 
+            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__TableAlias__TblAliasAssignment9630); 
              after(grammarAccess.getTableAliasAccess().getTblAliasIDTerminalRuleCall_0()); 
 
             }
@@ -13017,7 +13028,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4741:1: RULE_ID
             {
              before(grammarAccess.getSchemaAccess().getSchemIDTerminalRuleCall_0_2_0()); 
-            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__Schema__SchemAssignment_0_29660); 
+            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__Schema__SchemAssignment_0_29661); 
              after(grammarAccess.getSchemaAccess().getSchemIDTerminalRuleCall_0_2_0()); 
 
             }
@@ -13054,7 +13065,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4756:1: RULE_ID
             {
              before(grammarAccess.getSchemaAccess().getSchemIDTerminalRuleCall_1_0()); 
-            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__Schema__SchemAssignment_19691); 
+            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__Schema__SchemAssignment_19692); 
              after(grammarAccess.getSchemaAccess().getSchemIDTerminalRuleCall_1_0()); 
 
             }
@@ -13091,7 +13102,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4771:1: RULE_ID
             {
              before(grammarAccess.getDatabaseAccess().getDbNameIDTerminalRuleCall_0()); 
-            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__Database__DbNameAssignment9722); 
+            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__Database__DbNameAssignment9723); 
              after(grammarAccess.getDatabaseAccess().getDbNameIDTerminalRuleCall_0()); 
 
             }
@@ -13128,7 +13139,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4786:1: ruleAndWhereEntry
             {
              before(grammarAccess.getWhereEntryAccess().getEntriesAndWhereEntryParserRuleCall_1_1_1_0()); 
-            pushFollow(FOLLOW_ruleAndWhereEntry_in_rule__WhereEntry__EntriesAssignment_1_1_19753);
+            pushFollow(FOLLOW_ruleAndWhereEntry_in_rule__WhereEntry__EntriesAssignment_1_1_19754);
             ruleAndWhereEntry();
 
             state._fsp--;
@@ -13169,7 +13180,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4801:1: ruleConcreteWhereEntry
             {
              before(grammarAccess.getAndWhereEntryAccess().getEntriesConcreteWhereEntryParserRuleCall_1_1_1_0()); 
-            pushFollow(FOLLOW_ruleConcreteWhereEntry_in_rule__AndWhereEntry__EntriesAssignment_1_1_19784);
+            pushFollow(FOLLOW_ruleConcreteWhereEntry_in_rule__AndWhereEntry__EntriesAssignment_1_1_19785);
             ruleConcreteWhereEntry();
 
             state._fsp--;
@@ -13210,7 +13221,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4816:1: RULE_ID
             {
              before(grammarAccess.getSingleExpressionWhereEntryAccess().getNameIDTerminalRuleCall_0_0()); 
-            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__SingleExpressionWhereEntry__NameAssignment_09815); 
+            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__SingleExpressionWhereEntry__NameAssignment_09816); 
              after(grammarAccess.getSingleExpressionWhereEntryAccess().getNameIDTerminalRuleCall_0_0()); 
 
             }
@@ -13247,7 +13258,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4831:1: ruleOperator
             {
              before(grammarAccess.getSingleExpressionWhereEntryAccess().getOperatorOperatorEnumRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleOperator_in_rule__SingleExpressionWhereEntry__OperatorAssignment_19846);
+            pushFollow(FOLLOW_ruleOperator_in_rule__SingleExpressionWhereEntry__OperatorAssignment_19847);
             ruleOperator();
 
             state._fsp--;
@@ -13288,7 +13299,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4846:1: ruleExpression
             {
              before(grammarAccess.getSingleExpressionWhereEntryAccess().getRhsExpressionParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__SingleExpressionWhereEntry__RhsAssignment_29877);
+            pushFollow(FOLLOW_ruleExpression_in_rule__SingleExpressionWhereEntry__RhsAssignment_29878);
             ruleExpression();
 
             state._fsp--;
@@ -13333,7 +13344,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4863:1: '?'
             {
              before(grammarAccess.getReplacableValueAccess().getValueQuestionMarkKeyword_0()); 
-            match(input,37,FOLLOW_37_in_rule__ReplacableValue__ValueAssignment9913); 
+            match(input,37,FOLLOW_37_in_rule__ReplacableValue__ValueAssignment9914); 
              after(grammarAccess.getReplacableValueAccess().getValueQuestionMarkKeyword_0()); 
 
             }
@@ -13374,7 +13385,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4884:1: RULE_SIGNED_DOUBLE
             {
              before(grammarAccess.getDoubleExpressionAccess().getValueSIGNED_DOUBLETerminalRuleCall_0()); 
-            match(input,RULE_SIGNED_DOUBLE,FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleExpression__ValueAssignment9952); 
+            match(input,RULE_SIGNED_DOUBLE,FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleExpression__ValueAssignment9953); 
              after(grammarAccess.getDoubleExpressionAccess().getValueSIGNED_DOUBLETerminalRuleCall_0()); 
 
             }
@@ -13411,7 +13422,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4899:1: RULE_SINGED_LONG
             {
              before(grammarAccess.getLongExpressionAccess().getValueSINGED_LONGTerminalRuleCall_0()); 
-            match(input,RULE_SINGED_LONG,FOLLOW_RULE_SINGED_LONG_in_rule__LongExpression__ValueAssignment9983); 
+            match(input,RULE_SINGED_LONG,FOLLOW_RULE_SINGED_LONG_in_rule__LongExpression__ValueAssignment9984); 
              after(grammarAccess.getLongExpressionAccess().getValueSINGED_LONGTerminalRuleCall_0()); 
 
             }
@@ -13448,7 +13459,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4914:1: RULE_STRING
             {
              before(grammarAccess.getStringExpressionAccess().getValueSTRINGTerminalRuleCall_0()); 
-            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__StringExpression__ValueAssignment10014); 
+            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__StringExpression__ValueAssignment10015); 
              after(grammarAccess.getStringExpressionAccess().getValueSTRINGTerminalRuleCall_0()); 
 
             }
@@ -13489,7 +13500,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4931:1: 'null'
             {
              before(grammarAccess.getNullExpressionAccess().getValueNullKeyword_0()); 
-            match(input,38,FOLLOW_38_in_rule__NullExpression__ValueAssignment10050); 
+            match(input,38,FOLLOW_38_in_rule__NullExpression__ValueAssignment10051); 
              after(grammarAccess.getNullExpressionAccess().getValueNullKeyword_0()); 
 
             }
@@ -13530,7 +13541,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4952:1: RULE_DATE
             {
              before(grammarAccess.getDateExpressionAccess().getValueDATETerminalRuleCall_0()); 
-            match(input,RULE_DATE,FOLLOW_RULE_DATE_in_rule__DateExpression__ValueAssignment10089); 
+            match(input,RULE_DATE,FOLLOW_RULE_DATE_in_rule__DateExpression__ValueAssignment10090); 
              after(grammarAccess.getDateExpressionAccess().getValueDATETerminalRuleCall_0()); 
 
             }
@@ -13571,7 +13582,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4969:1: 'true'
             {
              before(grammarAccess.getBooleanExpressionAccess().getTrueTrueKeyword_0_0()); 
-            match(input,39,FOLLOW_39_in_rule__BooleanExpression__TrueAssignment_010125); 
+            match(input,39,FOLLOW_39_in_rule__BooleanExpression__TrueAssignment_010126); 
              after(grammarAccess.getBooleanExpressionAccess().getTrueTrueKeyword_0_0()); 
 
             }
@@ -13616,7 +13627,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:4992:1: 'false'
             {
              before(grammarAccess.getBooleanExpressionAccess().getTrueFalseKeyword_1_0()); 
-            match(input,40,FOLLOW_40_in_rule__BooleanExpression__TrueAssignment_110169); 
+            match(input,40,FOLLOW_40_in_rule__BooleanExpression__TrueAssignment_110170); 
              after(grammarAccess.getBooleanExpressionAccess().getTrueFalseKeyword_1_0()); 
 
             }
@@ -13657,7 +13668,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5013:1: RULE_ID
             {
              before(grammarAccess.getMultiExpressionWhereEntryAccess().getNameIDTerminalRuleCall_0_0()); 
-            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__MultiExpressionWhereEntry__NameAssignment_010208); 
+            match(input,RULE_ID,FOLLOW_RULE_ID_in_rule__MultiExpressionWhereEntry__NameAssignment_010209); 
              after(grammarAccess.getMultiExpressionWhereEntryAccess().getNameIDTerminalRuleCall_0_0()); 
 
             }
@@ -13694,7 +13705,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5028:1: ruleArrayOperator
             {
              before(grammarAccess.getMultiExpressionWhereEntryAccess().getOperatorArrayOperatorEnumRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleArrayOperator_in_rule__MultiExpressionWhereEntry__OperatorAssignment_110239);
+            pushFollow(FOLLOW_ruleArrayOperator_in_rule__MultiExpressionWhereEntry__OperatorAssignment_110240);
             ruleArrayOperator();
 
             state._fsp--;
@@ -13735,7 +13746,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5043:1: ruleArrayExpression
             {
              before(grammarAccess.getMultiExpressionWhereEntryAccess().getRhsArrayExpressionParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleArrayExpression_in_rule__MultiExpressionWhereEntry__RhsAssignment_210270);
+            pushFollow(FOLLOW_ruleArrayExpression_in_rule__MultiExpressionWhereEntry__RhsAssignment_210271);
             ruleArrayExpression();
 
             state._fsp--;
@@ -13776,7 +13787,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5058:1: RULE_SIGNED_DOUBLE
             {
              before(grammarAccess.getDoubleArrayExpressionAccess().getValuesSIGNED_DOUBLETerminalRuleCall_1_0()); 
-            match(input,RULE_SIGNED_DOUBLE,FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleArrayExpression__ValuesAssignment_110301); 
+            match(input,RULE_SIGNED_DOUBLE,FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleArrayExpression__ValuesAssignment_110302); 
              after(grammarAccess.getDoubleArrayExpressionAccess().getValuesSIGNED_DOUBLETerminalRuleCall_1_0()); 
 
             }
@@ -13813,7 +13824,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5073:1: RULE_SIGNED_DOUBLE
             {
              before(grammarAccess.getDoubleArrayExpressionAccess().getValuesSIGNED_DOUBLETerminalRuleCall_2_1_0()); 
-            match(input,RULE_SIGNED_DOUBLE,FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleArrayExpression__ValuesAssignment_2_110332); 
+            match(input,RULE_SIGNED_DOUBLE,FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleArrayExpression__ValuesAssignment_2_110333); 
              after(grammarAccess.getDoubleArrayExpressionAccess().getValuesSIGNED_DOUBLETerminalRuleCall_2_1_0()); 
 
             }
@@ -13850,7 +13861,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5088:1: RULE_SINGED_LONG
             {
              before(grammarAccess.getLongArrayExpressionAccess().getValuesSINGED_LONGTerminalRuleCall_1_0()); 
-            match(input,RULE_SINGED_LONG,FOLLOW_RULE_SINGED_LONG_in_rule__LongArrayExpression__ValuesAssignment_110363); 
+            match(input,RULE_SINGED_LONG,FOLLOW_RULE_SINGED_LONG_in_rule__LongArrayExpression__ValuesAssignment_110364); 
              after(grammarAccess.getLongArrayExpressionAccess().getValuesSINGED_LONGTerminalRuleCall_1_0()); 
 
             }
@@ -13887,7 +13898,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5103:1: RULE_SINGED_LONG
             {
              before(grammarAccess.getLongArrayExpressionAccess().getValuesSINGED_LONGTerminalRuleCall_2_1_0()); 
-            match(input,RULE_SINGED_LONG,FOLLOW_RULE_SINGED_LONG_in_rule__LongArrayExpression__ValuesAssignment_2_110394); 
+            match(input,RULE_SINGED_LONG,FOLLOW_RULE_SINGED_LONG_in_rule__LongArrayExpression__ValuesAssignment_2_110395); 
              after(grammarAccess.getLongArrayExpressionAccess().getValuesSINGED_LONGTerminalRuleCall_2_1_0()); 
 
             }
@@ -13924,7 +13935,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5118:1: RULE_STRING
             {
              before(grammarAccess.getStringArrayExpressionAccess().getValuesSTRINGTerminalRuleCall_1_0()); 
-            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__StringArrayExpression__ValuesAssignment_110425); 
+            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__StringArrayExpression__ValuesAssignment_110426); 
              after(grammarAccess.getStringArrayExpressionAccess().getValuesSTRINGTerminalRuleCall_1_0()); 
 
             }
@@ -13961,7 +13972,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5133:1: RULE_STRING
             {
              before(grammarAccess.getStringArrayExpressionAccess().getValuesSTRINGTerminalRuleCall_2_1_0()); 
-            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__StringArrayExpression__ValuesAssignment_2_110456); 
+            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__StringArrayExpression__ValuesAssignment_2_110457); 
              after(grammarAccess.getStringArrayExpressionAccess().getValuesSTRINGTerminalRuleCall_2_1_0()); 
 
             }
@@ -14002,7 +14013,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5150:1: 'null'
             {
              before(grammarAccess.getNullArrayExpressionAccess().getValuesNullKeyword_1_0()); 
-            match(input,38,FOLLOW_38_in_rule__NullArrayExpression__ValuesAssignment_110492); 
+            match(input,38,FOLLOW_38_in_rule__NullArrayExpression__ValuesAssignment_110493); 
              after(grammarAccess.getNullArrayExpressionAccess().getValuesNullKeyword_1_0()); 
 
             }
@@ -14047,7 +14058,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5173:1: 'null'
             {
              before(grammarAccess.getNullArrayExpressionAccess().getValuesNullKeyword_2_1_0()); 
-            match(input,38,FOLLOW_38_in_rule__NullArrayExpression__ValuesAssignment_2_110536); 
+            match(input,38,FOLLOW_38_in_rule__NullArrayExpression__ValuesAssignment_2_110537); 
              after(grammarAccess.getNullArrayExpressionAccess().getValuesNullKeyword_2_1_0()); 
 
             }
@@ -14088,7 +14099,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5194:1: RULE_DATE
             {
              before(grammarAccess.getDateArrayExpressionAccess().getValuesDATETerminalRuleCall_1_0()); 
-            match(input,RULE_DATE,FOLLOW_RULE_DATE_in_rule__DateArrayExpression__ValuesAssignment_110575); 
+            match(input,RULE_DATE,FOLLOW_RULE_DATE_in_rule__DateArrayExpression__ValuesAssignment_110576); 
              after(grammarAccess.getDateArrayExpressionAccess().getValuesDATETerminalRuleCall_1_0()); 
 
             }
@@ -14125,7 +14136,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5209:1: RULE_DATE
             {
              before(grammarAccess.getDateArrayExpressionAccess().getValuesDATETerminalRuleCall_2_1_0()); 
-            match(input,RULE_DATE,FOLLOW_RULE_DATE_in_rule__DateArrayExpression__ValuesAssignment_2_110606); 
+            match(input,RULE_DATE,FOLLOW_RULE_DATE_in_rule__DateArrayExpression__ValuesAssignment_2_110607); 
              after(grammarAccess.getDateArrayExpressionAccess().getValuesDATETerminalRuleCall_2_1_0()); 
 
             }
@@ -14162,7 +14173,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5224:1: RULE_BOOL
             {
              before(grammarAccess.getBooleanArrayExpressionAccess().getValuesBOOLTerminalRuleCall_1_0()); 
-            match(input,RULE_BOOL,FOLLOW_RULE_BOOL_in_rule__BooleanArrayExpression__ValuesAssignment_110637); 
+            match(input,RULE_BOOL,FOLLOW_RULE_BOOL_in_rule__BooleanArrayExpression__ValuesAssignment_110638); 
              after(grammarAccess.getBooleanArrayExpressionAccess().getValuesBOOLTerminalRuleCall_1_0()); 
 
             }
@@ -14199,7 +14210,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSql.g:5239:1: RULE_BOOL
             {
              before(grammarAccess.getBooleanArrayExpressionAccess().getValuesBOOLTerminalRuleCall_2_1_0()); 
-            match(input,RULE_BOOL,FOLLOW_RULE_BOOL_in_rule__BooleanArrayExpression__ValuesAssignment_2_110668); 
+            match(input,RULE_BOOL,FOLLOW_RULE_BOOL_in_rule__BooleanArrayExpression__ValuesAssignment_2_110669); 
              after(grammarAccess.getBooleanArrayExpressionAccess().getValuesBOOLTerminalRuleCall_2_1_0()); 
 
             }
@@ -14236,21 +14247,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
     static final String DFA1_maxS =
         "\1\4\1\36\1\4\3\uffff\1\36\1\4\1\36\1\4\1\35";
     static final String DFA1_acceptS =
-        "\3\uffff\1\3\1\1\1\2\5\uffff";
+        "\3\uffff\1\2\1\1\1\3\5\uffff";
     static final String DFA1_specialS =
         "\13\uffff}>";
     static final String[] DFA1_transitionS = {
             "\1\1",
-            "\1\3\25\uffff\1\4\1\uffff\1\4\1\5\1\2",
+            "\1\5\25\uffff\1\4\1\uffff\1\4\1\3\1\2",
             "\1\6",
             "",
             "",
             "",
-            "\1\3\25\uffff\1\4\1\uffff\1\4\1\5\1\7",
+            "\1\5\25\uffff\1\4\1\uffff\1\4\1\3\1\7",
             "\1\10",
-            "\1\3\25\uffff\1\4\1\uffff\1\4\1\5\1\11",
+            "\1\5\25\uffff\1\4\1\uffff\1\4\1\3\1\11",
             "\1\12",
-            "\1\3\25\uffff\1\4\1\uffff\1\4\1\5"
+            "\1\5\25\uffff\1\4\1\uffff\1\4\1\3"
     };
 
     static final short[] DFA1_eot = DFA.unpackEncodedString(DFA1_eotS);
@@ -14289,56 +14300,54 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
     static final String DFA4_eotS =
         "\41\uffff";
     static final String DFA4_eofS =
-        "\1\uffff\1\2\2\uffff\1\5\1\12\3\uffff\1\15\1\uffff\1\20\1\15\1\23"+
-        "\1\uffff\1\20\1\25\3\uffff\1\20\1\uffff\2\20\2\uffff\1\20\1\uffff"+
-        "\3\20\1\uffff\1\20";
+        "\1\uffff\1\3\2\uffff\1\5\1\12\3\uffff\1\15\1\uffff\1\22\1\15\1\23"+
+        "\2\uffff\1\22\1\uffff\1\27\1\uffff\3\22\4\uffff\4\22\1\uffff\1\22";
     static final String DFA4_minS =
-        "\2\4\1\uffff\2\4\1\0\1\4\1\uffff\1\4\1\32\1\uffff\1\4\1\32\1\0\1"+
-        "\4\1\32\1\0\2\4\1\uffff\1\4\1\uffff\1\4\1\32\2\4\1\32\3\4\1\32\2"+
-        "\4";
+        "\3\4\1\uffff\1\4\1\0\1\4\1\uffff\1\4\1\32\1\uffff\1\4\1\32\1\0\2"+
+        "\4\1\32\1\4\1\0\1\uffff\1\32\2\4\1\uffff\3\4\1\32\1\4\1\32\3\4";
     static final String DFA4_maxS =
-        "\1\4\1\36\1\uffff\1\4\1\36\1\0\1\4\1\uffff\1\4\1\34\1\uffff\1\36"+
-        "\1\34\1\0\1\4\1\34\1\0\2\4\1\uffff\1\36\1\uffff\1\36\1\34\2\4\1"+
-        "\34\1\4\2\36\1\34\1\4\1\36";
+        "\1\4\1\36\1\4\1\uffff\1\36\1\0\1\4\1\uffff\1\4\1\34\1\uffff\1\36"+
+        "\1\34\1\0\2\4\1\34\1\4\1\0\1\uffff\1\34\2\36\1\uffff\3\4\1\34\1"+
+        "\36\1\34\1\36\1\4\1\36";
     static final String DFA4_acceptS =
-        "\2\uffff\1\2\4\uffff\1\1\2\uffff\1\1\10\uffff\1\1\1\uffff\1\1\13"+
+        "\3\uffff\1\2\3\uffff\1\1\2\uffff\1\1\10\uffff\1\1\3\uffff\1\1\11"+
         "\uffff";
     static final String DFA4_specialS =
         "\41\uffff}>";
     static final String[] DFA4_transitionS = {
             "\1\1",
-            "\1\2\26\uffff\3\2\1\3",
-            "",
+            "\1\3\26\uffff\3\3\1\2",
             "\1\4",
-            "\1\11\25\uffff\1\2\1\7\1\6\1\10\1\7",
+            "",
+            "\1\11\25\uffff\1\3\1\7\1\6\1\10\1\7",
             "\1\uffff",
             "\1\13",
             "",
             "\1\14",
-            "\1\2\1\7\1\6",
+            "\1\3\1\7\1\6",
             "",
-            "\1\17\25\uffff\1\2\1\7\1\21\1\22\1\16",
-            "\1\2\1\7\1\6",
+            "\1\20\25\uffff\1\3\1\7\1\21\1\16\1\17",
+            "\1\3\1\7\1\6",
             "\1\uffff",
             "\1\24",
-            "\1\2\1\7\1\21",
-            "\1\uffff",
+            "\1\25",
+            "\1\3\1\7\1\21",
             "\1\26",
-            "\1\27",
+            "\1\uffff",
             "",
-            "\1\17\25\uffff\1\2\1\7\1\21\1\22\1\30",
+            "\1\3\1\7\1\21",
+            "\1\20\25\uffff\1\3\1\7\1\21\1\16\1\30",
+            "\1\33\25\uffff\1\3\1\7\1\21\1\31\1\32",
             "",
-            "\1\32\25\uffff\1\2\1\7\1\21\1\33\1\31",
-            "\1\2\1\7\1\21",
             "\1\34",
             "\1\35",
-            "\1\2\1\7\1\21",
             "\1\36",
-            "\1\17\25\uffff\1\2\1\7\1\21\1\22\1\2",
-            "\1\32\25\uffff\1\2\1\7\1\21\1\33\1\37",
-            "\1\2\1\7\1\21",
+            "\1\3\1\7\1\21",
+            "\1\20\25\uffff\1\3\1\7\1\21\1\16\1\3",
+            "\1\3\1\7\1\21",
+            "\1\33\25\uffff\1\3\1\7\1\21\1\31\1\37",
             "\1\40",
-            "\1\32\25\uffff\1\2\1\7\1\21\1\33\1\2"
+            "\1\33\25\uffff\1\3\1\7\1\21\1\31\1\3"
     };
 
     static final short[] DFA4_eot = DFA.unpackEncodedString(DFA4_eotS);
@@ -14378,18 +14387,18 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
         "\44\uffff";
     static final String DFA5_eofS =
         "\1\uffff\1\2\2\uffff\1\5\1\7\2\uffff\1\11\1\15\2\uffff\1\20\1\uffff"+
-        "\1\23\1\20\1\26\1\uffff\1\23\1\30\3\uffff\1\23\1\uffff\2\23\2\uffff"+
-        "\1\23\1\uffff\3\23\1\uffff\1\23";
+        "\1\25\1\20\1\26\2\uffff\1\25\1\uffff\1\32\1\uffff\3\25\4\uffff\4"+
+        "\25\1\uffff\1\25";
     static final String DFA5_minS =
         "\1\4\1\36\1\uffff\2\4\1\0\1\4\1\uffff\1\4\1\0\2\4\1\32\1\uffff\1"+
-        "\4\1\32\1\0\1\4\1\32\1\0\2\4\1\uffff\1\4\1\uffff\1\4\1\32\2\4\1"+
-        "\32\3\4\1\32\2\4";
+        "\4\1\32\1\0\2\4\1\32\1\4\1\0\1\uffff\1\32\2\4\1\uffff\3\4\1\32\1"+
+        "\4\1\32\3\4";
     static final String DFA5_maxS =
         "\1\4\1\36\1\uffff\1\4\1\36\1\0\1\4\1\uffff\1\36\1\0\2\4\1\34\1\uffff"+
-        "\1\36\1\34\1\0\1\4\1\34\1\0\2\4\1\uffff\1\36\1\uffff\1\36\1\34\2"+
-        "\4\1\34\1\4\2\36\1\34\1\4\1\36";
+        "\1\36\1\34\1\0\2\4\1\34\1\4\1\0\1\uffff\1\34\2\36\1\uffff\3\4\1"+
+        "\34\1\36\1\34\1\36\1\4\1\36";
     static final String DFA5_acceptS =
-        "\2\uffff\1\2\4\uffff\1\1\5\uffff\1\1\10\uffff\1\1\1\uffff\1\1\13"+
+        "\2\uffff\1\2\4\uffff\1\1\5\uffff\1\1\10\uffff\1\1\3\uffff\1\1\11"+
         "\uffff";
     static final String DFA5_specialS =
         "\44\uffff}>";
@@ -14408,28 +14417,28 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             "\1\17",
             "\1\2\1\7\1\12",
             "",
-            "\1\22\25\uffff\1\2\1\15\1\24\1\25\1\21",
+            "\1\23\25\uffff\1\2\1\15\1\24\1\21\1\22",
             "\1\2\1\15\1\12",
             "\1\uffff",
             "\1\27",
+            "\1\30",
             "\1\2\1\15\1\24",
-            "\1\uffff",
             "\1\31",
-            "\1\32",
+            "\1\uffff",
             "",
-            "\1\22\25\uffff\1\2\1\26\1\24\1\25\1\33",
+            "\1\2\1\26\1\24",
+            "\1\23\25\uffff\1\2\1\26\1\24\1\21\1\33",
+            "\1\36\25\uffff\1\2\1\26\1\24\1\34\1\35",
             "",
-            "\1\35\25\uffff\1\2\1\30\1\24\1\36\1\34",
-            "\1\2\1\30\1\24",
             "\1\37",
             "\1\40",
-            "\1\2\1\30\1\24",
             "\1\41",
-            "\1\22\25\uffff\1\2\1\30\1\24\1\25\1\2",
-            "\1\35\25\uffff\1\2\1\30\1\24\1\36\1\42",
-            "\1\2\1\30\1\24",
+            "\1\2\1\32\1\24",
+            "\1\23\25\uffff\1\2\1\32\1\24\1\21\1\2",
+            "\1\2\1\32\1\24",
+            "\1\36\25\uffff\1\2\1\32\1\24\1\34\1\42",
             "\1\43",
-            "\1\35\25\uffff\1\2\1\30\1\24\1\36\1\2"
+            "\1\36\25\uffff\1\2\1\32\1\24\1\34\1\2"
     };
 
     static final short[] DFA5_eot = DFA.unpackEncodedString(DFA5_eotS);
@@ -14617,302 +14626,302 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_24_in_rule__Operator__Alternatives3136 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_16_in_rule__Operator__Alternatives3157 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_15_in_rule__Operator__Alternatives3178 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Model__Group__0__Impl_in_rule__Model__Group__03211 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__Model__Group__0__Impl_in_rule__Model__Group__03211 = new BitSet(new long[]{0x0000000004000010L});
     public static final BitSet FOLLOW_rule__Model__Group__1_in_rule__Model__Group__03214 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_25_in_rule__Model__Group__0__Impl3242 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Model__Group__1__Impl_in_rule__Model__Group__13273 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_rule__Model__Group__1__Impl_in_rule__Model__Group__13273 = new BitSet(new long[]{0x0000000004000010L});
     public static final BitSet FOLLOW_rule__Model__Group__2_in_rule__Model__Group__13276 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Model__ColAssignment_1_in_rule__Model__Group__1__Impl3303 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Model__Group__2__Impl_in_rule__Model__Group__23333 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__Model__Group__3_in_rule__Model__Group__23336 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_26_in_rule__Model__Group__2__Impl3364 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Model__Group__3__Impl_in_rule__Model__Group__33395 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_rule__Model__Group__4_in_rule__Model__Group__33398 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Model__TblAssignment_3_in_rule__Model__Group__3__Impl3425 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Model__Group__4__Impl_in_rule__Model__Group__43455 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Model__Group_4__0_in_rule__Model__Group__4__Impl3482 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Model__Group_4__0__Impl_in_rule__Model__Group_4__03523 = new BitSet(new long[]{0x0000000200000010L});
-    public static final BitSet FOLLOW_rule__Model__Group_4__1_in_rule__Model__Group_4__03526 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_27_in_rule__Model__Group_4__0__Impl3554 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Model__Group_4__1__Impl_in_rule__Model__Group_4__13585 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Model__WhereEntryAssignment_4_1_in_rule__Model__Group_4__1__Impl3612 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Columns__Group__0__Impl_in_rule__Columns__Group__03646 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_rule__Columns__Group__1_in_rule__Columns__Group__03649 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleColumnOrAlias_in_rule__Columns__Group__0__Impl3676 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Columns__Group__1__Impl_in_rule__Columns__Group__13705 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Columns__Group_1__0_in_rule__Columns__Group__1__Impl3732 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Columns__Group_1__0__Impl_in_rule__Columns__Group_1__03767 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_rule__Columns__Group_1__1_in_rule__Columns__Group_1__03770 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Columns__Group_1__1__Impl_in_rule__Columns__Group_1__13828 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Columns__Group_1_1__0_in_rule__Columns__Group_1__1__Impl3857 = new BitSet(new long[]{0x0000000010000002L});
-    public static final BitSet FOLLOW_rule__Columns__Group_1_1__0_in_rule__Columns__Group_1__1__Impl3869 = new BitSet(new long[]{0x0000000010000002L});
-    public static final BitSet FOLLOW_rule__Columns__Group_1_1__0__Impl_in_rule__Columns__Group_1_1__03906 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__Columns__Group_1_1__1_in_rule__Columns__Group_1_1__03909 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_rule__Columns__Group_1_1__0__Impl3937 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Columns__Group_1_1__1__Impl_in_rule__Columns__Group_1_1__13968 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Columns__EntriesAssignment_1_1_1_in_rule__Columns__Group_1_1__1__Impl3995 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_1__0__Impl_in_rule__ColumnOrAlias__Group_1__04029 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_1__1_in_rule__ColumnOrAlias__Group_1__04032 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleColumnFull_in_rule__ColumnOrAlias__Group_1__0__Impl4059 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_1__1__Impl_in_rule__ColumnOrAlias__Group_1__14088 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_1__2_in_rule__ColumnOrAlias__Group_1__14091 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_29_in_rule__ColumnOrAlias__Group_1__1__Impl4119 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_1__2__Impl_in_rule__ColumnOrAlias__Group_1__24150 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ColumnOrAlias__ColAliasAssignment_1_2_in_rule__ColumnOrAlias__Group_1__2__Impl4177 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_2__0__Impl_in_rule__ColumnOrAlias__Group_2__04213 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_2__1_in_rule__ColumnOrAlias__Group_2__04216 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleColumnFull_in_rule__ColumnOrAlias__Group_2__0__Impl4243 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_2__1__Impl_in_rule__ColumnOrAlias__Group_2__14272 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ColumnOrAlias__ColAliasAssignment_2_1_in_rule__ColumnOrAlias__Group_2__1__Impl4299 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ColumnFull__Group_1__0__Impl_in_rule__ColumnFull__Group_1__04333 = new BitSet(new long[]{0x0000000040000000L});
-    public static final BitSet FOLLOW_rule__ColumnFull__Group_1__1_in_rule__ColumnFull__Group_1__04336 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTableFull_in_rule__ColumnFull__Group_1__0__Impl4363 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ColumnFull__Group_1__1__Impl_in_rule__ColumnFull__Group_1__14392 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__ColumnFull__Group_1__2_in_rule__ColumnFull__Group_1__14395 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_30_in_rule__ColumnFull__Group_1__1__Impl4423 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ColumnFull__Group_1__2__Impl_in_rule__ColumnFull__Group_1__24454 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ColumnFull__ColNameAssignment_1_2_in_rule__ColumnFull__Group_1__2__Impl4481 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Tables__Group__0__Impl_in_rule__Tables__Group__04517 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_rule__Tables__Group__1_in_rule__Tables__Group__04520 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTableOrAlias_in_rule__Tables__Group__0__Impl4547 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Tables__Group__1__Impl_in_rule__Tables__Group__14576 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Tables__Group_1__0_in_rule__Tables__Group__1__Impl4603 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Tables__Group_1__0__Impl_in_rule__Tables__Group_1__04638 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_rule__Tables__Group_1__1_in_rule__Tables__Group_1__04641 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Tables__Group_1__1__Impl_in_rule__Tables__Group_1__14699 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Tables__Group_1_1__0_in_rule__Tables__Group_1__1__Impl4728 = new BitSet(new long[]{0x0000000010000002L});
-    public static final BitSet FOLLOW_rule__Tables__Group_1_1__0_in_rule__Tables__Group_1__1__Impl4740 = new BitSet(new long[]{0x0000000010000002L});
-    public static final BitSet FOLLOW_rule__Tables__Group_1_1__0__Impl_in_rule__Tables__Group_1_1__04777 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__Tables__Group_1_1__1_in_rule__Tables__Group_1_1__04780 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_rule__Tables__Group_1_1__0__Impl4808 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Tables__Group_1_1__1__Impl_in_rule__Tables__Group_1_1__14839 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Tables__EntriesAssignment_1_1_1_in_rule__Tables__Group_1_1__1__Impl4866 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TableOrAlias__Group_1__0__Impl_in_rule__TableOrAlias__Group_1__04900 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_rule__TableOrAlias__Group_1__1_in_rule__TableOrAlias__Group_1__04903 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTableFull_in_rule__TableOrAlias__Group_1__0__Impl4930 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TableOrAlias__Group_1__1__Impl_in_rule__TableOrAlias__Group_1__14959 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__TableOrAlias__Group_1__2_in_rule__TableOrAlias__Group_1__14962 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_29_in_rule__TableOrAlias__Group_1__1__Impl4990 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TableOrAlias__Group_1__2__Impl_in_rule__TableOrAlias__Group_1__25021 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TableOrAlias__TblAliasAssignment_1_2_in_rule__TableOrAlias__Group_1__2__Impl5048 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TableOrAlias__Group_2__0__Impl_in_rule__TableOrAlias__Group_2__05084 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__TableOrAlias__Group_2__1_in_rule__TableOrAlias__Group_2__05087 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTableFull_in_rule__TableOrAlias__Group_2__0__Impl5114 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TableOrAlias__Group_2__1__Impl_in_rule__TableOrAlias__Group_2__15143 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TableOrAlias__TblAliasAssignment_2_1_in_rule__TableOrAlias__Group_2__1__Impl5170 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TableFull__Group_0__0__Impl_in_rule__TableFull__Group_0__05204 = new BitSet(new long[]{0x0000000040000000L});
-    public static final BitSet FOLLOW_rule__TableFull__Group_0__1_in_rule__TableFull__Group_0__05207 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleSchema_in_rule__TableFull__Group_0__0__Impl5234 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TableFull__Group_0__1__Impl_in_rule__TableFull__Group_0__15263 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__TableFull__Group_0__2_in_rule__TableFull__Group_0__15266 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_30_in_rule__TableFull__Group_0__1__Impl5294 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TableFull__Group_0__2__Impl_in_rule__TableFull__Group_0__25325 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TableFull__TblAssignment_0_2_in_rule__TableFull__Group_0__2__Impl5352 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Schema__Group_0__0__Impl_in_rule__Schema__Group_0__05388 = new BitSet(new long[]{0x0000000040000000L});
-    public static final BitSet FOLLOW_rule__Schema__Group_0__1_in_rule__Schema__Group_0__05391 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDatabase_in_rule__Schema__Group_0__0__Impl5418 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Schema__Group_0__1__Impl_in_rule__Schema__Group_0__15447 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__Schema__Group_0__2_in_rule__Schema__Group_0__15450 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_30_in_rule__Schema__Group_0__1__Impl5478 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Schema__Group_0__2__Impl_in_rule__Schema__Group_0__25509 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Schema__SchemAssignment_0_2_in_rule__Schema__Group_0__2__Impl5536 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group__0__Impl_in_rule__WhereEntry__Group__05572 = new BitSet(new long[]{0x0000000080000000L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group__1_in_rule__WhereEntry__Group__05575 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAndWhereEntry_in_rule__WhereEntry__Group__0__Impl5602 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group__1__Impl_in_rule__WhereEntry__Group__15631 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group_1__0_in_rule__WhereEntry__Group__1__Impl5658 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group_1__0__Impl_in_rule__WhereEntry__Group_1__05693 = new BitSet(new long[]{0x0000000080000000L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group_1__1_in_rule__WhereEntry__Group_1__05696 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group_1__1__Impl_in_rule__WhereEntry__Group_1__15754 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group_1_1__0_in_rule__WhereEntry__Group_1__1__Impl5783 = new BitSet(new long[]{0x0000000080000002L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group_1_1__0_in_rule__WhereEntry__Group_1__1__Impl5795 = new BitSet(new long[]{0x0000000080000002L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group_1_1__0__Impl_in_rule__WhereEntry__Group_1_1__05832 = new BitSet(new long[]{0x0000000200000010L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group_1_1__1_in_rule__WhereEntry__Group_1_1__05835 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_31_in_rule__WhereEntry__Group_1_1__0__Impl5863 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__WhereEntry__Group_1_1__1__Impl_in_rule__WhereEntry__Group_1_1__15894 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__WhereEntry__EntriesAssignment_1_1_1_in_rule__WhereEntry__Group_1_1__1__Impl5921 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group__0__Impl_in_rule__AndWhereEntry__Group__05955 = new BitSet(new long[]{0x0000000100000000L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group__1_in_rule__AndWhereEntry__Group__05958 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleConcreteWhereEntry_in_rule__AndWhereEntry__Group__0__Impl5985 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group__1__Impl_in_rule__AndWhereEntry__Group__16014 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1__0_in_rule__AndWhereEntry__Group__1__Impl6041 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1__0__Impl_in_rule__AndWhereEntry__Group_1__06076 = new BitSet(new long[]{0x0000000100000000L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1__1_in_rule__AndWhereEntry__Group_1__06079 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1__1__Impl_in_rule__AndWhereEntry__Group_1__16137 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1_1__0_in_rule__AndWhereEntry__Group_1__1__Impl6166 = new BitSet(new long[]{0x0000000100000002L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1_1__0_in_rule__AndWhereEntry__Group_1__1__Impl6178 = new BitSet(new long[]{0x0000000100000002L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1_1__0__Impl_in_rule__AndWhereEntry__Group_1_1__06215 = new BitSet(new long[]{0x0000000200000010L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1_1__1_in_rule__AndWhereEntry__Group_1_1__06218 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_32_in_rule__AndWhereEntry__Group_1_1__0__Impl6246 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1_1__1__Impl_in_rule__AndWhereEntry__Group_1_1__16277 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AndWhereEntry__EntriesAssignment_1_1_1_in_rule__AndWhereEntry__Group_1_1__1__Impl6304 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ParWhereEntry__Group__0__Impl_in_rule__ParWhereEntry__Group__06338 = new BitSet(new long[]{0x0000000200000010L});
-    public static final BitSet FOLLOW_rule__ParWhereEntry__Group__1_in_rule__ParWhereEntry__Group__06341 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_33_in_rule__ParWhereEntry__Group__0__Impl6369 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ParWhereEntry__Group__1__Impl_in_rule__ParWhereEntry__Group__16400 = new BitSet(new long[]{0x0000000400000000L});
-    public static final BitSet FOLLOW_rule__ParWhereEntry__Group__2_in_rule__ParWhereEntry__Group__16403 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleWhereEntry_in_rule__ParWhereEntry__Group__1__Impl6430 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ParWhereEntry__Group__2__Impl_in_rule__ParWhereEntry__Group__26459 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_34_in_rule__ParWhereEntry__Group__2__Impl6487 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__Group__0__Impl_in_rule__SingleExpressionWhereEntry__Group__06524 = new BitSet(new long[]{0x0000000001FF8000L});
-    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__Group__1_in_rule__SingleExpressionWhereEntry__Group__06527 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__NameAssignment_0_in_rule__SingleExpressionWhereEntry__Group__0__Impl6554 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__Group__1__Impl_in_rule__SingleExpressionWhereEntry__Group__16584 = new BitSet(new long[]{0x000001E0000001E0L});
-    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__Group__2_in_rule__SingleExpressionWhereEntry__Group__16587 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__OperatorAssignment_1_in_rule__SingleExpressionWhereEntry__Group__1__Impl6614 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__Group__2__Impl_in_rule__SingleExpressionWhereEntry__Group__26644 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__RhsAssignment_2_in_rule__SingleExpressionWhereEntry__Group__2__Impl6671 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__Group__0__Impl_in_rule__MultiExpressionWhereEntry__Group__06707 = new BitSet(new long[]{0x0000000000018000L});
-    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__Group__1_in_rule__MultiExpressionWhereEntry__Group__06710 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__NameAssignment_0_in_rule__MultiExpressionWhereEntry__Group__0__Impl6737 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__Group__1__Impl_in_rule__MultiExpressionWhereEntry__Group__16767 = new BitSet(new long[]{0x0000000800000000L});
-    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__Group__2_in_rule__MultiExpressionWhereEntry__Group__16770 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__OperatorAssignment_1_in_rule__MultiExpressionWhereEntry__Group__1__Impl6797 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__Group__2__Impl_in_rule__MultiExpressionWhereEntry__Group__26827 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__RhsAssignment_2_in_rule__MultiExpressionWhereEntry__Group__2__Impl6854 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__0__Impl_in_rule__DoubleArrayExpression__Group__06890 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__1_in_rule__DoubleArrayExpression__Group__06893 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_35_in_rule__DoubleArrayExpression__Group__0__Impl6921 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__1__Impl_in_rule__DoubleArrayExpression__Group__16952 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__2_in_rule__DoubleArrayExpression__Group__16955 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__ValuesAssignment_1_in_rule__DoubleArrayExpression__Group__1__Impl6982 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__2__Impl_in_rule__DoubleArrayExpression__Group__27012 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__3_in_rule__DoubleArrayExpression__Group__27015 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group_2__0_in_rule__DoubleArrayExpression__Group__2__Impl7042 = new BitSet(new long[]{0x0000000010000002L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__3__Impl_in_rule__DoubleArrayExpression__Group__37073 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_36_in_rule__DoubleArrayExpression__Group__3__Impl7101 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group_2__0__Impl_in_rule__DoubleArrayExpression__Group_2__07140 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group_2__1_in_rule__DoubleArrayExpression__Group_2__07143 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_rule__DoubleArrayExpression__Group_2__0__Impl7171 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group_2__1__Impl_in_rule__DoubleArrayExpression__Group_2__17202 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DoubleArrayExpression__ValuesAssignment_2_1_in_rule__DoubleArrayExpression__Group_2__1__Impl7229 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__0__Impl_in_rule__LongArrayExpression__Group__07263 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__1_in_rule__LongArrayExpression__Group__07266 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_35_in_rule__LongArrayExpression__Group__0__Impl7294 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__1__Impl_in_rule__LongArrayExpression__Group__17325 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__2_in_rule__LongArrayExpression__Group__17328 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__ValuesAssignment_1_in_rule__LongArrayExpression__Group__1__Impl7355 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__2__Impl_in_rule__LongArrayExpression__Group__27385 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__3_in_rule__LongArrayExpression__Group__27388 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__Group_2__0_in_rule__LongArrayExpression__Group__2__Impl7415 = new BitSet(new long[]{0x0000000010000002L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__3__Impl_in_rule__LongArrayExpression__Group__37446 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_36_in_rule__LongArrayExpression__Group__3__Impl7474 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__Group_2__0__Impl_in_rule__LongArrayExpression__Group_2__07513 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__Group_2__1_in_rule__LongArrayExpression__Group_2__07516 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_rule__LongArrayExpression__Group_2__0__Impl7544 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__Group_2__1__Impl_in_rule__LongArrayExpression__Group_2__17575 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LongArrayExpression__ValuesAssignment_2_1_in_rule__LongArrayExpression__Group_2__1__Impl7602 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__0__Impl_in_rule__StringArrayExpression__Group__07636 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__1_in_rule__StringArrayExpression__Group__07639 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_35_in_rule__StringArrayExpression__Group__0__Impl7667 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__1__Impl_in_rule__StringArrayExpression__Group__17698 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__2_in_rule__StringArrayExpression__Group__17701 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__ValuesAssignment_1_in_rule__StringArrayExpression__Group__1__Impl7728 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__2__Impl_in_rule__StringArrayExpression__Group__27758 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__3_in_rule__StringArrayExpression__Group__27761 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__Group_2__0_in_rule__StringArrayExpression__Group__2__Impl7788 = new BitSet(new long[]{0x0000000010000002L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__3__Impl_in_rule__StringArrayExpression__Group__37819 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_36_in_rule__StringArrayExpression__Group__3__Impl7847 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__Group_2__0__Impl_in_rule__StringArrayExpression__Group_2__07886 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__Group_2__1_in_rule__StringArrayExpression__Group_2__07889 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_rule__StringArrayExpression__Group_2__0__Impl7917 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__Group_2__1__Impl_in_rule__StringArrayExpression__Group_2__17948 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__StringArrayExpression__ValuesAssignment_2_1_in_rule__StringArrayExpression__Group_2__1__Impl7975 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__0__Impl_in_rule__NullArrayExpression__Group__08009 = new BitSet(new long[]{0x0000004000000000L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__1_in_rule__NullArrayExpression__Group__08012 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_35_in_rule__NullArrayExpression__Group__0__Impl8040 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__1__Impl_in_rule__NullArrayExpression__Group__18071 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__2_in_rule__NullArrayExpression__Group__18074 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__ValuesAssignment_1_in_rule__NullArrayExpression__Group__1__Impl8101 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__2__Impl_in_rule__NullArrayExpression__Group__28131 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__3_in_rule__NullArrayExpression__Group__28134 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__Group_2__0_in_rule__NullArrayExpression__Group__2__Impl8161 = new BitSet(new long[]{0x0000000010000002L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__3__Impl_in_rule__NullArrayExpression__Group__38192 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_36_in_rule__NullArrayExpression__Group__3__Impl8220 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__Group_2__0__Impl_in_rule__NullArrayExpression__Group_2__08259 = new BitSet(new long[]{0x0000004000000000L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__Group_2__1_in_rule__NullArrayExpression__Group_2__08262 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_rule__NullArrayExpression__Group_2__0__Impl8290 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__Group_2__1__Impl_in_rule__NullArrayExpression__Group_2__18321 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__NullArrayExpression__ValuesAssignment_2_1_in_rule__NullArrayExpression__Group_2__1__Impl8348 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__0__Impl_in_rule__DateArrayExpression__Group__08382 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__1_in_rule__DateArrayExpression__Group__08385 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_35_in_rule__DateArrayExpression__Group__0__Impl8413 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__1__Impl_in_rule__DateArrayExpression__Group__18444 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__2_in_rule__DateArrayExpression__Group__18447 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__ValuesAssignment_1_in_rule__DateArrayExpression__Group__1__Impl8474 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__2__Impl_in_rule__DateArrayExpression__Group__28504 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__3_in_rule__DateArrayExpression__Group__28507 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__Group_2__0_in_rule__DateArrayExpression__Group__2__Impl8534 = new BitSet(new long[]{0x0000000010000002L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__3__Impl_in_rule__DateArrayExpression__Group__38565 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_36_in_rule__DateArrayExpression__Group__3__Impl8593 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__Group_2__0__Impl_in_rule__DateArrayExpression__Group_2__08632 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__Group_2__1_in_rule__DateArrayExpression__Group_2__08635 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_rule__DateArrayExpression__Group_2__0__Impl8663 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__Group_2__1__Impl_in_rule__DateArrayExpression__Group_2__18694 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DateArrayExpression__ValuesAssignment_2_1_in_rule__DateArrayExpression__Group_2__1__Impl8721 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__0__Impl_in_rule__BooleanArrayExpression__Group__08755 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__1_in_rule__BooleanArrayExpression__Group__08758 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_35_in_rule__BooleanArrayExpression__Group__0__Impl8786 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__1__Impl_in_rule__BooleanArrayExpression__Group__18817 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__2_in_rule__BooleanArrayExpression__Group__18820 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__ValuesAssignment_1_in_rule__BooleanArrayExpression__Group__1__Impl8847 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__2__Impl_in_rule__BooleanArrayExpression__Group__28877 = new BitSet(new long[]{0x0000001010000000L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__3_in_rule__BooleanArrayExpression__Group__28880 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group_2__0_in_rule__BooleanArrayExpression__Group__2__Impl8907 = new BitSet(new long[]{0x0000000010000002L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__3__Impl_in_rule__BooleanArrayExpression__Group__38938 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_36_in_rule__BooleanArrayExpression__Group__3__Impl8966 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group_2__0__Impl_in_rule__BooleanArrayExpression__Group_2__09005 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group_2__1_in_rule__BooleanArrayExpression__Group_2__09008 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_rule__BooleanArrayExpression__Group_2__0__Impl9036 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group_2__1__Impl_in_rule__BooleanArrayExpression__Group_2__19067 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__BooleanArrayExpression__ValuesAssignment_2_1_in_rule__BooleanArrayExpression__Group_2__1__Impl9094 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleColumns_in_rule__Model__ColAssignment_19133 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTables_in_rule__Model__TblAssignment_39164 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleWhereEntry_in_rule__Model__WhereEntryAssignment_4_19195 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleColumnOrAlias_in_rule__Columns__EntriesAssignment_1_1_19226 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleColumnAlias_in_rule__ColumnOrAlias__ColAliasAssignment_1_29257 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleColumnAlias_in_rule__ColumnOrAlias__ColAliasAssignment_2_19288 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleColumn_in_rule__ColumnFull__ColNameAssignment_09319 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleColumn_in_rule__ColumnFull__ColNameAssignment_1_29350 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_rule__ColumnAlias__ColAliasAssignment9381 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_rule__Column__ColNameAssignment9412 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTableOrAlias_in_rule__Tables__EntriesAssignment_1_1_19443 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTableAlias_in_rule__TableOrAlias__TblAliasAssignment_1_29474 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTableAlias_in_rule__TableOrAlias__TblAliasAssignment_2_19505 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTable_in_rule__TableFull__TblAssignment_0_29536 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTable_in_rule__TableFull__TblAssignment_19567 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_rule__Table__TblAssignment9598 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_rule__TableAlias__TblAliasAssignment9629 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_rule__Schema__SchemAssignment_0_29660 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_rule__Schema__SchemAssignment_19691 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_rule__Database__DbNameAssignment9722 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAndWhereEntry_in_rule__WhereEntry__EntriesAssignment_1_1_19753 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleConcreteWhereEntry_in_rule__AndWhereEntry__EntriesAssignment_1_1_19784 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_rule__SingleExpressionWhereEntry__NameAssignment_09815 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOperator_in_rule__SingleExpressionWhereEntry__OperatorAssignment_19846 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__SingleExpressionWhereEntry__RhsAssignment_29877 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_37_in_rule__ReplacableValue__ValueAssignment9913 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleExpression__ValueAssignment9952 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_SINGED_LONG_in_rule__LongExpression__ValueAssignment9983 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_rule__StringExpression__ValueAssignment10014 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_38_in_rule__NullExpression__ValueAssignment10050 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_DATE_in_rule__DateExpression__ValueAssignment10089 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_39_in_rule__BooleanExpression__TrueAssignment_010125 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_40_in_rule__BooleanExpression__TrueAssignment_110169 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_rule__MultiExpressionWhereEntry__NameAssignment_010208 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleArrayOperator_in_rule__MultiExpressionWhereEntry__OperatorAssignment_110239 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleArrayExpression_in_rule__MultiExpressionWhereEntry__RhsAssignment_210270 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleArrayExpression__ValuesAssignment_110301 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleArrayExpression__ValuesAssignment_2_110332 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_SINGED_LONG_in_rule__LongArrayExpression__ValuesAssignment_110363 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_SINGED_LONG_in_rule__LongArrayExpression__ValuesAssignment_2_110394 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_rule__StringArrayExpression__ValuesAssignment_110425 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_rule__StringArrayExpression__ValuesAssignment_2_110456 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_38_in_rule__NullArrayExpression__ValuesAssignment_110492 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_38_in_rule__NullArrayExpression__ValuesAssignment_2_110536 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_DATE_in_rule__DateArrayExpression__ValuesAssignment_110575 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_DATE_in_rule__DateArrayExpression__ValuesAssignment_2_110606 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_BOOL_in_rule__BooleanArrayExpression__ValuesAssignment_110637 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_BOOL_in_rule__BooleanArrayExpression__ValuesAssignment_2_110668 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Model__Group__2__Impl_in_rule__Model__Group__23334 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__Model__Group__3_in_rule__Model__Group__23337 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_26_in_rule__Model__Group__2__Impl3365 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Model__Group__3__Impl_in_rule__Model__Group__33396 = new BitSet(new long[]{0x0000000008000000L});
+    public static final BitSet FOLLOW_rule__Model__Group__4_in_rule__Model__Group__33399 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Model__TblAssignment_3_in_rule__Model__Group__3__Impl3426 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Model__Group__4__Impl_in_rule__Model__Group__43456 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Model__Group_4__0_in_rule__Model__Group__4__Impl3483 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Model__Group_4__0__Impl_in_rule__Model__Group_4__03524 = new BitSet(new long[]{0x0000000200000010L});
+    public static final BitSet FOLLOW_rule__Model__Group_4__1_in_rule__Model__Group_4__03527 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_27_in_rule__Model__Group_4__0__Impl3555 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Model__Group_4__1__Impl_in_rule__Model__Group_4__13586 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Model__WhereEntryAssignment_4_1_in_rule__Model__Group_4__1__Impl3613 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Columns__Group__0__Impl_in_rule__Columns__Group__03647 = new BitSet(new long[]{0x0000000010000000L});
+    public static final BitSet FOLLOW_rule__Columns__Group__1_in_rule__Columns__Group__03650 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleColumnOrAlias_in_rule__Columns__Group__0__Impl3677 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Columns__Group__1__Impl_in_rule__Columns__Group__13706 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Columns__Group_1__0_in_rule__Columns__Group__1__Impl3733 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Columns__Group_1__0__Impl_in_rule__Columns__Group_1__03768 = new BitSet(new long[]{0x0000000010000000L});
+    public static final BitSet FOLLOW_rule__Columns__Group_1__1_in_rule__Columns__Group_1__03771 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Columns__Group_1__1__Impl_in_rule__Columns__Group_1__13829 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Columns__Group_1_1__0_in_rule__Columns__Group_1__1__Impl3858 = new BitSet(new long[]{0x0000000010000002L});
+    public static final BitSet FOLLOW_rule__Columns__Group_1_1__0_in_rule__Columns__Group_1__1__Impl3870 = new BitSet(new long[]{0x0000000010000002L});
+    public static final BitSet FOLLOW_rule__Columns__Group_1_1__0__Impl_in_rule__Columns__Group_1_1__03907 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__Columns__Group_1_1__1_in_rule__Columns__Group_1_1__03910 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_rule__Columns__Group_1_1__0__Impl3938 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Columns__Group_1_1__1__Impl_in_rule__Columns__Group_1_1__13969 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Columns__EntriesAssignment_1_1_1_in_rule__Columns__Group_1_1__1__Impl3996 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_1__0__Impl_in_rule__ColumnOrAlias__Group_1__04030 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_1__1_in_rule__ColumnOrAlias__Group_1__04033 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleColumnFull_in_rule__ColumnOrAlias__Group_1__0__Impl4060 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_1__1__Impl_in_rule__ColumnOrAlias__Group_1__14089 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_1__2_in_rule__ColumnOrAlias__Group_1__14092 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_29_in_rule__ColumnOrAlias__Group_1__1__Impl4120 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_1__2__Impl_in_rule__ColumnOrAlias__Group_1__24151 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ColumnOrAlias__ColAliasAssignment_1_2_in_rule__ColumnOrAlias__Group_1__2__Impl4178 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_2__0__Impl_in_rule__ColumnOrAlias__Group_2__04214 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_2__1_in_rule__ColumnOrAlias__Group_2__04217 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleColumnFull_in_rule__ColumnOrAlias__Group_2__0__Impl4244 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ColumnOrAlias__Group_2__1__Impl_in_rule__ColumnOrAlias__Group_2__14273 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ColumnOrAlias__ColAliasAssignment_2_1_in_rule__ColumnOrAlias__Group_2__1__Impl4300 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ColumnFull__Group_1__0__Impl_in_rule__ColumnFull__Group_1__04334 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_rule__ColumnFull__Group_1__1_in_rule__ColumnFull__Group_1__04337 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTableFull_in_rule__ColumnFull__Group_1__0__Impl4364 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ColumnFull__Group_1__1__Impl_in_rule__ColumnFull__Group_1__14393 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__ColumnFull__Group_1__2_in_rule__ColumnFull__Group_1__14396 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_30_in_rule__ColumnFull__Group_1__1__Impl4424 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ColumnFull__Group_1__2__Impl_in_rule__ColumnFull__Group_1__24455 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ColumnFull__ColNameAssignment_1_2_in_rule__ColumnFull__Group_1__2__Impl4482 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Tables__Group__0__Impl_in_rule__Tables__Group__04518 = new BitSet(new long[]{0x0000000010000000L});
+    public static final BitSet FOLLOW_rule__Tables__Group__1_in_rule__Tables__Group__04521 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTableOrAlias_in_rule__Tables__Group__0__Impl4548 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Tables__Group__1__Impl_in_rule__Tables__Group__14577 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Tables__Group_1__0_in_rule__Tables__Group__1__Impl4604 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Tables__Group_1__0__Impl_in_rule__Tables__Group_1__04639 = new BitSet(new long[]{0x0000000010000000L});
+    public static final BitSet FOLLOW_rule__Tables__Group_1__1_in_rule__Tables__Group_1__04642 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Tables__Group_1__1__Impl_in_rule__Tables__Group_1__14700 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Tables__Group_1_1__0_in_rule__Tables__Group_1__1__Impl4729 = new BitSet(new long[]{0x0000000010000002L});
+    public static final BitSet FOLLOW_rule__Tables__Group_1_1__0_in_rule__Tables__Group_1__1__Impl4741 = new BitSet(new long[]{0x0000000010000002L});
+    public static final BitSet FOLLOW_rule__Tables__Group_1_1__0__Impl_in_rule__Tables__Group_1_1__04778 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__Tables__Group_1_1__1_in_rule__Tables__Group_1_1__04781 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_rule__Tables__Group_1_1__0__Impl4809 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Tables__Group_1_1__1__Impl_in_rule__Tables__Group_1_1__14840 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Tables__EntriesAssignment_1_1_1_in_rule__Tables__Group_1_1__1__Impl4867 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__TableOrAlias__Group_1__0__Impl_in_rule__TableOrAlias__Group_1__04901 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_rule__TableOrAlias__Group_1__1_in_rule__TableOrAlias__Group_1__04904 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTableFull_in_rule__TableOrAlias__Group_1__0__Impl4931 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__TableOrAlias__Group_1__1__Impl_in_rule__TableOrAlias__Group_1__14960 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__TableOrAlias__Group_1__2_in_rule__TableOrAlias__Group_1__14963 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_29_in_rule__TableOrAlias__Group_1__1__Impl4991 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__TableOrAlias__Group_1__2__Impl_in_rule__TableOrAlias__Group_1__25022 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__TableOrAlias__TblAliasAssignment_1_2_in_rule__TableOrAlias__Group_1__2__Impl5049 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__TableOrAlias__Group_2__0__Impl_in_rule__TableOrAlias__Group_2__05085 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__TableOrAlias__Group_2__1_in_rule__TableOrAlias__Group_2__05088 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTableFull_in_rule__TableOrAlias__Group_2__0__Impl5115 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__TableOrAlias__Group_2__1__Impl_in_rule__TableOrAlias__Group_2__15144 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__TableOrAlias__TblAliasAssignment_2_1_in_rule__TableOrAlias__Group_2__1__Impl5171 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__TableFull__Group_0__0__Impl_in_rule__TableFull__Group_0__05205 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_rule__TableFull__Group_0__1_in_rule__TableFull__Group_0__05208 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleSchema_in_rule__TableFull__Group_0__0__Impl5235 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__TableFull__Group_0__1__Impl_in_rule__TableFull__Group_0__15264 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__TableFull__Group_0__2_in_rule__TableFull__Group_0__15267 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_30_in_rule__TableFull__Group_0__1__Impl5295 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__TableFull__Group_0__2__Impl_in_rule__TableFull__Group_0__25326 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__TableFull__TblAssignment_0_2_in_rule__TableFull__Group_0__2__Impl5353 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Schema__Group_0__0__Impl_in_rule__Schema__Group_0__05389 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_rule__Schema__Group_0__1_in_rule__Schema__Group_0__05392 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDatabase_in_rule__Schema__Group_0__0__Impl5419 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Schema__Group_0__1__Impl_in_rule__Schema__Group_0__15448 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__Schema__Group_0__2_in_rule__Schema__Group_0__15451 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_30_in_rule__Schema__Group_0__1__Impl5479 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Schema__Group_0__2__Impl_in_rule__Schema__Group_0__25510 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Schema__SchemAssignment_0_2_in_rule__Schema__Group_0__2__Impl5537 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group__0__Impl_in_rule__WhereEntry__Group__05573 = new BitSet(new long[]{0x0000000080000000L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group__1_in_rule__WhereEntry__Group__05576 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAndWhereEntry_in_rule__WhereEntry__Group__0__Impl5603 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group__1__Impl_in_rule__WhereEntry__Group__15632 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group_1__0_in_rule__WhereEntry__Group__1__Impl5659 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group_1__0__Impl_in_rule__WhereEntry__Group_1__05694 = new BitSet(new long[]{0x0000000080000000L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group_1__1_in_rule__WhereEntry__Group_1__05697 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group_1__1__Impl_in_rule__WhereEntry__Group_1__15755 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group_1_1__0_in_rule__WhereEntry__Group_1__1__Impl5784 = new BitSet(new long[]{0x0000000080000002L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group_1_1__0_in_rule__WhereEntry__Group_1__1__Impl5796 = new BitSet(new long[]{0x0000000080000002L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group_1_1__0__Impl_in_rule__WhereEntry__Group_1_1__05833 = new BitSet(new long[]{0x0000000200000010L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group_1_1__1_in_rule__WhereEntry__Group_1_1__05836 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_31_in_rule__WhereEntry__Group_1_1__0__Impl5864 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__WhereEntry__Group_1_1__1__Impl_in_rule__WhereEntry__Group_1_1__15895 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__WhereEntry__EntriesAssignment_1_1_1_in_rule__WhereEntry__Group_1_1__1__Impl5922 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group__0__Impl_in_rule__AndWhereEntry__Group__05956 = new BitSet(new long[]{0x0000000100000000L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group__1_in_rule__AndWhereEntry__Group__05959 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleConcreteWhereEntry_in_rule__AndWhereEntry__Group__0__Impl5986 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group__1__Impl_in_rule__AndWhereEntry__Group__16015 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1__0_in_rule__AndWhereEntry__Group__1__Impl6042 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1__0__Impl_in_rule__AndWhereEntry__Group_1__06077 = new BitSet(new long[]{0x0000000100000000L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1__1_in_rule__AndWhereEntry__Group_1__06080 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1__1__Impl_in_rule__AndWhereEntry__Group_1__16138 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1_1__0_in_rule__AndWhereEntry__Group_1__1__Impl6167 = new BitSet(new long[]{0x0000000100000002L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1_1__0_in_rule__AndWhereEntry__Group_1__1__Impl6179 = new BitSet(new long[]{0x0000000100000002L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1_1__0__Impl_in_rule__AndWhereEntry__Group_1_1__06216 = new BitSet(new long[]{0x0000000200000010L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1_1__1_in_rule__AndWhereEntry__Group_1_1__06219 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_32_in_rule__AndWhereEntry__Group_1_1__0__Impl6247 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__Group_1_1__1__Impl_in_rule__AndWhereEntry__Group_1_1__16278 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__AndWhereEntry__EntriesAssignment_1_1_1_in_rule__AndWhereEntry__Group_1_1__1__Impl6305 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ParWhereEntry__Group__0__Impl_in_rule__ParWhereEntry__Group__06339 = new BitSet(new long[]{0x0000000200000010L});
+    public static final BitSet FOLLOW_rule__ParWhereEntry__Group__1_in_rule__ParWhereEntry__Group__06342 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_33_in_rule__ParWhereEntry__Group__0__Impl6370 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ParWhereEntry__Group__1__Impl_in_rule__ParWhereEntry__Group__16401 = new BitSet(new long[]{0x0000000400000000L});
+    public static final BitSet FOLLOW_rule__ParWhereEntry__Group__2_in_rule__ParWhereEntry__Group__16404 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleWhereEntry_in_rule__ParWhereEntry__Group__1__Impl6431 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ParWhereEntry__Group__2__Impl_in_rule__ParWhereEntry__Group__26460 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_34_in_rule__ParWhereEntry__Group__2__Impl6488 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__Group__0__Impl_in_rule__SingleExpressionWhereEntry__Group__06525 = new BitSet(new long[]{0x0000000001FF8000L});
+    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__Group__1_in_rule__SingleExpressionWhereEntry__Group__06528 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__NameAssignment_0_in_rule__SingleExpressionWhereEntry__Group__0__Impl6555 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__Group__1__Impl_in_rule__SingleExpressionWhereEntry__Group__16585 = new BitSet(new long[]{0x000001E0000001E0L});
+    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__Group__2_in_rule__SingleExpressionWhereEntry__Group__16588 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__OperatorAssignment_1_in_rule__SingleExpressionWhereEntry__Group__1__Impl6615 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__Group__2__Impl_in_rule__SingleExpressionWhereEntry__Group__26645 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__SingleExpressionWhereEntry__RhsAssignment_2_in_rule__SingleExpressionWhereEntry__Group__2__Impl6672 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__Group__0__Impl_in_rule__MultiExpressionWhereEntry__Group__06708 = new BitSet(new long[]{0x0000000000018000L});
+    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__Group__1_in_rule__MultiExpressionWhereEntry__Group__06711 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__NameAssignment_0_in_rule__MultiExpressionWhereEntry__Group__0__Impl6738 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__Group__1__Impl_in_rule__MultiExpressionWhereEntry__Group__16768 = new BitSet(new long[]{0x0000000800000000L});
+    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__Group__2_in_rule__MultiExpressionWhereEntry__Group__16771 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__OperatorAssignment_1_in_rule__MultiExpressionWhereEntry__Group__1__Impl6798 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__Group__2__Impl_in_rule__MultiExpressionWhereEntry__Group__26828 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MultiExpressionWhereEntry__RhsAssignment_2_in_rule__MultiExpressionWhereEntry__Group__2__Impl6855 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__0__Impl_in_rule__DoubleArrayExpression__Group__06891 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__1_in_rule__DoubleArrayExpression__Group__06894 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_35_in_rule__DoubleArrayExpression__Group__0__Impl6922 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__1__Impl_in_rule__DoubleArrayExpression__Group__16953 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__2_in_rule__DoubleArrayExpression__Group__16956 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__ValuesAssignment_1_in_rule__DoubleArrayExpression__Group__1__Impl6983 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__2__Impl_in_rule__DoubleArrayExpression__Group__27013 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__3_in_rule__DoubleArrayExpression__Group__27016 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group_2__0_in_rule__DoubleArrayExpression__Group__2__Impl7043 = new BitSet(new long[]{0x0000000010000002L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group__3__Impl_in_rule__DoubleArrayExpression__Group__37074 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_36_in_rule__DoubleArrayExpression__Group__3__Impl7102 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group_2__0__Impl_in_rule__DoubleArrayExpression__Group_2__07141 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group_2__1_in_rule__DoubleArrayExpression__Group_2__07144 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_rule__DoubleArrayExpression__Group_2__0__Impl7172 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__Group_2__1__Impl_in_rule__DoubleArrayExpression__Group_2__17203 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DoubleArrayExpression__ValuesAssignment_2_1_in_rule__DoubleArrayExpression__Group_2__1__Impl7230 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__0__Impl_in_rule__LongArrayExpression__Group__07264 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__1_in_rule__LongArrayExpression__Group__07267 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_35_in_rule__LongArrayExpression__Group__0__Impl7295 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__1__Impl_in_rule__LongArrayExpression__Group__17326 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__2_in_rule__LongArrayExpression__Group__17329 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__ValuesAssignment_1_in_rule__LongArrayExpression__Group__1__Impl7356 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__2__Impl_in_rule__LongArrayExpression__Group__27386 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__3_in_rule__LongArrayExpression__Group__27389 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__Group_2__0_in_rule__LongArrayExpression__Group__2__Impl7416 = new BitSet(new long[]{0x0000000010000002L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__Group__3__Impl_in_rule__LongArrayExpression__Group__37447 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_36_in_rule__LongArrayExpression__Group__3__Impl7475 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__Group_2__0__Impl_in_rule__LongArrayExpression__Group_2__07514 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__Group_2__1_in_rule__LongArrayExpression__Group_2__07517 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_rule__LongArrayExpression__Group_2__0__Impl7545 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__Group_2__1__Impl_in_rule__LongArrayExpression__Group_2__17576 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__LongArrayExpression__ValuesAssignment_2_1_in_rule__LongArrayExpression__Group_2__1__Impl7603 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__0__Impl_in_rule__StringArrayExpression__Group__07637 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__1_in_rule__StringArrayExpression__Group__07640 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_35_in_rule__StringArrayExpression__Group__0__Impl7668 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__1__Impl_in_rule__StringArrayExpression__Group__17699 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__2_in_rule__StringArrayExpression__Group__17702 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__ValuesAssignment_1_in_rule__StringArrayExpression__Group__1__Impl7729 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__2__Impl_in_rule__StringArrayExpression__Group__27759 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__3_in_rule__StringArrayExpression__Group__27762 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__Group_2__0_in_rule__StringArrayExpression__Group__2__Impl7789 = new BitSet(new long[]{0x0000000010000002L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__Group__3__Impl_in_rule__StringArrayExpression__Group__37820 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_36_in_rule__StringArrayExpression__Group__3__Impl7848 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__Group_2__0__Impl_in_rule__StringArrayExpression__Group_2__07887 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__Group_2__1_in_rule__StringArrayExpression__Group_2__07890 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_rule__StringArrayExpression__Group_2__0__Impl7918 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__Group_2__1__Impl_in_rule__StringArrayExpression__Group_2__17949 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__StringArrayExpression__ValuesAssignment_2_1_in_rule__StringArrayExpression__Group_2__1__Impl7976 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__0__Impl_in_rule__NullArrayExpression__Group__08010 = new BitSet(new long[]{0x0000004000000000L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__1_in_rule__NullArrayExpression__Group__08013 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_35_in_rule__NullArrayExpression__Group__0__Impl8041 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__1__Impl_in_rule__NullArrayExpression__Group__18072 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__2_in_rule__NullArrayExpression__Group__18075 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__ValuesAssignment_1_in_rule__NullArrayExpression__Group__1__Impl8102 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__2__Impl_in_rule__NullArrayExpression__Group__28132 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__3_in_rule__NullArrayExpression__Group__28135 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__Group_2__0_in_rule__NullArrayExpression__Group__2__Impl8162 = new BitSet(new long[]{0x0000000010000002L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__Group__3__Impl_in_rule__NullArrayExpression__Group__38193 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_36_in_rule__NullArrayExpression__Group__3__Impl8221 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__Group_2__0__Impl_in_rule__NullArrayExpression__Group_2__08260 = new BitSet(new long[]{0x0000004000000000L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__Group_2__1_in_rule__NullArrayExpression__Group_2__08263 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_rule__NullArrayExpression__Group_2__0__Impl8291 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__Group_2__1__Impl_in_rule__NullArrayExpression__Group_2__18322 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__NullArrayExpression__ValuesAssignment_2_1_in_rule__NullArrayExpression__Group_2__1__Impl8349 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__0__Impl_in_rule__DateArrayExpression__Group__08383 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__1_in_rule__DateArrayExpression__Group__08386 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_35_in_rule__DateArrayExpression__Group__0__Impl8414 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__1__Impl_in_rule__DateArrayExpression__Group__18445 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__2_in_rule__DateArrayExpression__Group__18448 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__ValuesAssignment_1_in_rule__DateArrayExpression__Group__1__Impl8475 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__2__Impl_in_rule__DateArrayExpression__Group__28505 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__3_in_rule__DateArrayExpression__Group__28508 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__Group_2__0_in_rule__DateArrayExpression__Group__2__Impl8535 = new BitSet(new long[]{0x0000000010000002L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__Group__3__Impl_in_rule__DateArrayExpression__Group__38566 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_36_in_rule__DateArrayExpression__Group__3__Impl8594 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__Group_2__0__Impl_in_rule__DateArrayExpression__Group_2__08633 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__Group_2__1_in_rule__DateArrayExpression__Group_2__08636 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_rule__DateArrayExpression__Group_2__0__Impl8664 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__Group_2__1__Impl_in_rule__DateArrayExpression__Group_2__18695 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DateArrayExpression__ValuesAssignment_2_1_in_rule__DateArrayExpression__Group_2__1__Impl8722 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__0__Impl_in_rule__BooleanArrayExpression__Group__08756 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__1_in_rule__BooleanArrayExpression__Group__08759 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_35_in_rule__BooleanArrayExpression__Group__0__Impl8787 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__1__Impl_in_rule__BooleanArrayExpression__Group__18818 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__2_in_rule__BooleanArrayExpression__Group__18821 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__ValuesAssignment_1_in_rule__BooleanArrayExpression__Group__1__Impl8848 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__2__Impl_in_rule__BooleanArrayExpression__Group__28878 = new BitSet(new long[]{0x0000001010000000L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__3_in_rule__BooleanArrayExpression__Group__28881 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group_2__0_in_rule__BooleanArrayExpression__Group__2__Impl8908 = new BitSet(new long[]{0x0000000010000002L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group__3__Impl_in_rule__BooleanArrayExpression__Group__38939 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_36_in_rule__BooleanArrayExpression__Group__3__Impl8967 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group_2__0__Impl_in_rule__BooleanArrayExpression__Group_2__09006 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group_2__1_in_rule__BooleanArrayExpression__Group_2__09009 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_rule__BooleanArrayExpression__Group_2__0__Impl9037 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__Group_2__1__Impl_in_rule__BooleanArrayExpression__Group_2__19068 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__BooleanArrayExpression__ValuesAssignment_2_1_in_rule__BooleanArrayExpression__Group_2__1__Impl9095 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleColumns_in_rule__Model__ColAssignment_19134 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTables_in_rule__Model__TblAssignment_39165 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleWhereEntry_in_rule__Model__WhereEntryAssignment_4_19196 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleColumnOrAlias_in_rule__Columns__EntriesAssignment_1_1_19227 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleColumnAlias_in_rule__ColumnOrAlias__ColAliasAssignment_1_29258 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleColumnAlias_in_rule__ColumnOrAlias__ColAliasAssignment_2_19289 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleColumn_in_rule__ColumnFull__ColNameAssignment_09320 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleColumn_in_rule__ColumnFull__ColNameAssignment_1_29351 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_rule__ColumnAlias__ColAliasAssignment9382 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_rule__Column__ColNameAssignment9413 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTableOrAlias_in_rule__Tables__EntriesAssignment_1_1_19444 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTableAlias_in_rule__TableOrAlias__TblAliasAssignment_1_29475 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTableAlias_in_rule__TableOrAlias__TblAliasAssignment_2_19506 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTable_in_rule__TableFull__TblAssignment_0_29537 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTable_in_rule__TableFull__TblAssignment_19568 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_rule__Table__TblAssignment9599 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_rule__TableAlias__TblAliasAssignment9630 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_rule__Schema__SchemAssignment_0_29661 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_rule__Schema__SchemAssignment_19692 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_rule__Database__DbNameAssignment9723 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAndWhereEntry_in_rule__WhereEntry__EntriesAssignment_1_1_19754 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleConcreteWhereEntry_in_rule__AndWhereEntry__EntriesAssignment_1_1_19785 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_rule__SingleExpressionWhereEntry__NameAssignment_09816 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleOperator_in_rule__SingleExpressionWhereEntry__OperatorAssignment_19847 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__SingleExpressionWhereEntry__RhsAssignment_29878 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_37_in_rule__ReplacableValue__ValueAssignment9914 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleExpression__ValueAssignment9953 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_SINGED_LONG_in_rule__LongExpression__ValueAssignment9984 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_rule__StringExpression__ValueAssignment10015 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_38_in_rule__NullExpression__ValueAssignment10051 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_DATE_in_rule__DateExpression__ValueAssignment10090 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_39_in_rule__BooleanExpression__TrueAssignment_010126 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_40_in_rule__BooleanExpression__TrueAssignment_110170 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_rule__MultiExpressionWhereEntry__NameAssignment_010209 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleArrayOperator_in_rule__MultiExpressionWhereEntry__OperatorAssignment_110240 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleArrayExpression_in_rule__MultiExpressionWhereEntry__RhsAssignment_210271 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleArrayExpression__ValuesAssignment_110302 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_SIGNED_DOUBLE_in_rule__DoubleArrayExpression__ValuesAssignment_2_110333 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_SINGED_LONG_in_rule__LongArrayExpression__ValuesAssignment_110364 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_SINGED_LONG_in_rule__LongArrayExpression__ValuesAssignment_2_110395 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_rule__StringArrayExpression__ValuesAssignment_110426 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_rule__StringArrayExpression__ValuesAssignment_2_110457 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_38_in_rule__NullArrayExpression__ValuesAssignment_110493 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_38_in_rule__NullArrayExpression__ValuesAssignment_2_110537 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_DATE_in_rule__DateArrayExpression__ValuesAssignment_110576 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_DATE_in_rule__DateArrayExpression__ValuesAssignment_2_110607 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_BOOL_in_rule__BooleanArrayExpression__ValuesAssignment_110638 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_BOOL_in_rule__BooleanArrayExpression__ValuesAssignment_2_110669 = new BitSet(new long[]{0x0000000000000002L});
 
 }
