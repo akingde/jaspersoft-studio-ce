@@ -22,9 +22,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.core.runtime.Assert;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -43,14 +43,19 @@ public class XMLUtils {
 		return db.parse(io);
 	}
 	
-	public static boolean isNamespaceAware(JasperDesign jdesign) {
-		Assert.isNotNull(jdesign);
-		String detectNamespaces = jdesign.getProperty("net.sf.jasperreports.xml.detect.namespaces");
-		if(detectNamespaces!=null && "true".equals(detectNamespaces)){
-			return true;
+	public static boolean isNamespaceAware(XmlDataAdapter xmlDataAdapter, JasperDesign jdesign) {
+		if(xmlDataAdapter!=null){
+			return xmlDataAdapter.isNamespaceAware();
 		}
-		else {
-			return false;
+		if(jdesign != null) {
+			String detectNamespaces = jdesign.getProperty("net.sf.jasperreports.xml.detect.namespaces");
+			if(detectNamespaces!=null && "true".equals(detectNamespaces)){
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
+		return false;
 	}
 }

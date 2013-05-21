@@ -92,7 +92,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
 		String fileName = xmlDataAdapter.getFileName();
 		File in = new File(fileName); 
-		Document doc=JRXmlUtils.parse(in,XMLUtils.isNamespaceAware(jConfig.getJasperDesign()));	
+		Document doc=JRXmlUtils.parse(in,XMLUtils.isNamespaceAware(xmlDataAdapter, jConfig.getJasperDesign()));	
 		fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset)); 
 		return fields;
 	}

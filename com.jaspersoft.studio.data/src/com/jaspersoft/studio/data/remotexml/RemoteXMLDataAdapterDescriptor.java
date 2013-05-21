@@ -84,7 +84,7 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor imp
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
 		try {
 			String fileName = remoteXmlDataAdapter.getFileName();
-			Document doc=JRXmlUtils.parse(new URL(fileName),XMLUtils.isNamespaceAware(jConfig.getJasperDesign()));	
+			Document doc=JRXmlUtils.parse(new URL(fileName),XMLUtils.isNamespaceAware(remoteXmlDataAdapter, jConfig.getJasperDesign()));	
 			fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset));
 		} catch (IOException e) {
 			t=e;

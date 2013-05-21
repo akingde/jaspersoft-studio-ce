@@ -20,6 +20,7 @@ import java.util.TimeZone;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
+import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
 
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -64,6 +65,7 @@ public class XMLDataAdapterComposite extends ADataAdapterComposite {
 	private boolean useConnection = false;
 	private Locale locale = null;
 	private TimeZone timeZone = null;
+	private Button supportsNamespaces;
 
 	/**
 	 * Create the composite.
@@ -99,6 +101,10 @@ public class XMLDataAdapterComposite extends ADataAdapterComposite {
 		gd_btnBrowse.widthHint = 100;
 		btnBrowse.setLayoutData(gd_btnBrowse);
 		btnBrowse.setText(Messages.XMLDataAdapterComposite_1);
+		
+		supportsNamespaces = new Button(this, SWT.CHECK);
+		supportsNamespaces.setText(Messages.XMLDataAdapterComposite_NamespacesSupport);
+		supportsNamespaces.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		Composite composite_1 = new Composite(this, SWT.NONE);
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
@@ -220,7 +226,7 @@ public class XMLDataAdapterComposite extends ADataAdapterComposite {
 			public void widgetSelected(SelectionEvent e) {
 				textSelectExpression.setEnabled(false);
 				useConnection = false;
-				pchangesuport.firePropertyChange("createdataadapter", true,
+				pchangesuport.firePropertyChange("createdataadapter", true, //$NON-NLS-1$
 						false);
 			}
 		});
@@ -231,7 +237,7 @@ public class XMLDataAdapterComposite extends ADataAdapterComposite {
 					public void widgetSelected(SelectionEvent e) {
 						textSelectExpression.setEnabled(true);
 						useConnection = true;
-						pchangesuport.firePropertyChange("createdataadapter",
+						pchangesuport.firePropertyChange("createdataadapter", //$NON-NLS-1$
 								false, true);
 					}
 				});
@@ -318,6 +324,9 @@ public class XMLDataAdapterComposite extends ADataAdapterComposite {
 		bindingContext.bindValue(
 				SWTObservables.observeText(textFileName, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "fileName")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(supportsNamespaces),
+				PojoObservables
+						.observeValue(dataAdapter, "namespaceAware")); //$NON-NLS-1$
 		bindingContext.bindValue(
 				SWTObservables.observeText(textSelectExpression, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "selectExpression")); //$NON-NLS-1$
@@ -385,13 +394,13 @@ public class XMLDataAdapterComposite extends ADataAdapterComposite {
 		if (dataAdapterDesc == null)
 			dataAdapterDesc = new XMLDataAdapterDescriptor();
 
-		XmlDataAdapter xmlDataAdapter = (XmlDataAdapter) dataAdapterDesc
+		XmlDataAdapterImpl xmlDataAdapter = (XmlDataAdapterImpl) dataAdapterDesc
 				.getDataAdapter();
 
 		xmlDataAdapter.setFileName(textFileName.getText());
 		xmlDataAdapter.setUseConnection(!useConnection);
 		xmlDataAdapter.setSelectExpression(textSelectExpression.getText());
-
+		xmlDataAdapter.setNamespaceAware(supportsNamespaces.getSelection());
 		xmlDataAdapter.setDatePattern(textDatePattern.getText());
 		xmlDataAdapter.setNumberPattern(textNumberPattern.getText());
 		xmlDataAdapter.setLocale(locale);
@@ -402,7 +411,7 @@ public class XMLDataAdapterComposite extends ADataAdapterComposite {
 	
 	@Override
 	public String getHelpContextId() {
-		return PREFIX.concat("adapter_xml");
+		return PREFIX.concat("adapter_xml"); //$NON-NLS-1$
 	}
 
 }

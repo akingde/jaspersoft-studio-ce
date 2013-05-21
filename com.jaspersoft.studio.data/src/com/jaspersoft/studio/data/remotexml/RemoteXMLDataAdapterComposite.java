@@ -58,6 +58,7 @@ public class RemoteXMLDataAdapterComposite extends ADataAdapterComposite {
 	private Text textTimeZone;
 	private Locale locale = null;
 	private TimeZone timeZone = null;
+	private Button supportsNamespaces;
 
 	/**
 	 * Create the composite.
@@ -86,6 +87,10 @@ public class RemoteXMLDataAdapterComposite extends ADataAdapterComposite {
 		textFileUrl = new Text(composite, SWT.BORDER);
 		textFileUrl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
+		supportsNamespaces = new Button(composite, SWT.CHECK);
+		supportsNamespaces.setText(Messages.RemoteXMLDataAdapterComposite_NamespacesSupport);
+		supportsNamespaces.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+
 
 		Composite composite_1 = new Composite(this, SWT.NONE);
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
@@ -247,6 +252,9 @@ public class RemoteXMLDataAdapterComposite extends ADataAdapterComposite {
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		RemoteXmlDataAdapter remoteXmlDataAdapter = (RemoteXmlDataAdapter) dataAdapter;
 
+		bindingContext.bindValue(SWTObservables.observeSelection(supportsNamespaces),
+				PojoObservables
+						.observeValue(dataAdapter, "namespaceAware")); //$NON-NLS-1$
 		bindingContext.bindValue(
 				SWTObservables.observeText(textFileUrl, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "fileName")); //$NON-NLS-1$
@@ -310,7 +318,7 @@ public class RemoteXMLDataAdapterComposite extends ADataAdapterComposite {
 	
 	@Override
 	public String getHelpContextId() {
-		return PREFIX.concat("adapter_xml_remote");
+		return PREFIX.concat("adapter_xml_remote"); //$NON-NLS-1$
 	}
 
 }

@@ -380,10 +380,13 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 									try {
 										Document doc = null;
 										if (da.getDataAdapter() instanceof RemoteXmlDataAdapter) {
-											doc = JRXmlUtils.parse(new URL(fileName),XMLUtils.isNamespaceAware(jConfig.getJasperDesign()));
+											doc = JRXmlUtils.parse(
+													new URL(fileName),
+													XMLUtils.isNamespaceAware((RemoteXmlDataAdapter)da.getDataAdapter(), jConfig.getJasperDesign()));
 										} else {
 											File in = new File(fileName);
-											doc = JRXmlUtils.parse(in,XMLUtils.isNamespaceAware(jConfig.getJasperDesign()));
+											doc = JRXmlUtils.parse(
+													in,XMLUtils.isNamespaceAware((XmlDataAdapter)da.getDataAdapter(),jConfig.getJasperDesign()));
 										}
 										documentManager.setDocument(doc);
 										documentManager

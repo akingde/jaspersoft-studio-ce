@@ -165,6 +165,7 @@ public class Messages extends NLS {
 	public static String RemoteXMLDataAdapterComposite_7;
 	public static String RemoteXMLDataAdapterComposite_8;
 	public static String RemoteXMLDataAdapterComposite_9;
+	public static String RemoteXMLDataAdapterComposite_NamespacesSupport;
 	public static String RemoteXMLDataAdapterFactory_description;
 	public static String RemoteXMLDataAdapterFactory_label;
 	public static String SpringHibernateDataAdapterComposite_0;
@@ -226,6 +227,7 @@ public class Messages extends NLS {
 	public static String XMLDataAdapterComposite_7;
 	public static String XMLDataAdapterComposite_8;
 	public static String XMLDataAdapterComposite_9;
+	public static String XMLDataAdapterComposite_NamespacesSupport;
 	public static String XMLDataAdapterFactory_description;
 	public static String XMLDataAdapterFactory_label;
 	public static String XPathQueryDesigner_AddAsFieldAbsoluteItem;
