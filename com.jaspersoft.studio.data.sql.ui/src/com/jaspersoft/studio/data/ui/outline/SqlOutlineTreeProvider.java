@@ -3,6 +3,7 @@
  */
 package com.jaspersoft.studio.data.ui.outline;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode;
@@ -10,9 +11,13 @@ import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode;
 import com.jaspersoft.studio.data.sql.Column;
 import com.jaspersoft.studio.data.sql.ColumnFull;
 import com.jaspersoft.studio.data.sql.ColumnOrAlias;
+import com.jaspersoft.studio.data.sql.GroupByColumnFull;
 import com.jaspersoft.studio.data.sql.Model;
 import com.jaspersoft.studio.data.sql.OrColumn;
+import com.jaspersoft.studio.data.sql.OrGroupByColumn;
+import com.jaspersoft.studio.data.sql.OrOrderByColumn;
 import com.jaspersoft.studio.data.sql.OrTable;
+import com.jaspersoft.studio.data.sql.OrderByColumnFull;
 import com.jaspersoft.studio.data.sql.Table;
 import com.jaspersoft.studio.data.sql.TableFull;
 import com.jaspersoft.studio.data.sql.TableOrAlias;
@@ -26,7 +31,15 @@ public class SqlOutlineTreeProvider extends org.eclipse.xtext.ui.editor.outline.
 
 	@Override
 	protected void _createChildren(IOutlineNode parentNode, EObject modelElement) {
-		if (modelElement instanceof OrTable) {
+		if (modelElement instanceof OrOrderByColumn) {
+			OrOrderByColumn ogbc = (OrOrderByColumn) modelElement;
+			for (OrderByColumnFull coa : ogbc.getEntries())
+				createNode(parentNode, coa.getColOrder());
+		} else if (modelElement instanceof OrGroupByColumn) {
+			OrGroupByColumn ogbc = (OrGroupByColumn) modelElement;
+			for (GroupByColumnFull coa : ogbc.getEntries())
+				createNode(parentNode, coa.getGroupByColumn());
+		} else if (modelElement instanceof OrTable) {
 			OrTable t = (OrTable) modelElement;
 			for (TableOrAlias toa : t.getEntries())
 				if (toa instanceof TableFull)
@@ -38,18 +51,21 @@ public class SqlOutlineTreeProvider extends org.eclipse.xtext.ui.editor.outline.
 		} else if (modelElement instanceof TableFull) {
 			_createChildrenTableFull(parentNode, (TableFull) modelElement);
 		} else if (modelElement instanceof OrColumn) {
-			OrColumn c = (OrColumn) modelElement;
-			for (ColumnOrAlias coa : c.getEntries())
-				if (coa instanceof ColumnFull)
-					_createChildrenColumnFull(parentNode, (ColumnFull) coa);
-				else
-					for (EObject eo : coa.eContents())
-						if (eo instanceof Column)
-							createNode(parentNode, eo);
+			createChildrenColumnOrAlias(parentNode, ((OrColumn) modelElement).getEntries());
 		} else if (modelElement instanceof ColumnFull) {
 			_createChildrenColumnFull(parentNode, (ColumnFull) modelElement);
 		} else
 			super._createChildren(parentNode, modelElement);
+	}
+
+	protected void createChildrenColumnOrAlias(IOutlineNode parentNode, EList<ColumnOrAlias> list) {
+		for (ColumnOrAlias coa : list)
+			if (coa instanceof ColumnFull)
+				_createChildrenColumnFull(parentNode, (ColumnFull) coa);
+			else
+				for (EObject eo : coa.eContents())
+					if (eo instanceof Column)
+						createNode(parentNode, eo);
 	}
 
 	protected void _createChildrenTableFull(IOutlineNode parentNode, TableFull cf) {
@@ -81,6 +97,12 @@ public class SqlOutlineTreeProvider extends org.eclipse.xtext.ui.editor.outline.
 				createNode(parentNode, model.getTbl());
 			if (model.getWhereEntry() != null)
 				createNode(parentNode, model.getWhereEntry());
+			if (model.getGroupByEntry() != null)
+				createNode(parentNode, model.getGroupByEntry());
+			if (model.getHavingEntry() != null)
+				createNode(parentNode, model.getHavingEntry());
+			if (model.getOrderByEntry() != null)
+				createNode(parentNode, model.getOrderByEntry());
 		} else
 			super._createChildren(parentNode, modelElement);
 	}

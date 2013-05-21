@@ -17,12 +17,14 @@ package com.jaspersoft.studio.data.sql;
 
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextViewer;
+import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -31,6 +33,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.xtext.ui.editor.contentassist.IContentProposalProvider;
+import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
 
 import com.google.inject.Injector;
@@ -40,6 +44,7 @@ import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.ui.DBMetadata;
 import com.jaspersoft.studio.data.sql.ui.SQLQueryOutline;
+import com.jaspersoft.studio.data.ui.contentassist.SqlProposalProvider;
 import com.jaspersoft.studio.data.ui.internal.SqlActivator;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
@@ -132,7 +137,15 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 				container.run(true, true, new IRunnableWithProgress() {
 
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						dbMetadata.updateUI(DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter()));
+						DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
+						dbMetadata.updateUI(das);
+
+						IContentAssistProcessor p = xtextAdapter.getContentAssistant().getContentAssistProcessor("__string");
+						if (p instanceof XtextContentAssistProcessor) {
+							IContentProposalProvider icpp = ((XtextContentAssistProcessor) p).getContentProposalProvider();
+							if (icpp instanceof SqlProposalProvider)
+								((SqlProposalProvider) icpp).setConnection(dbMetadata.getConnection(das));
+						}
 					}
 				});
 			} catch (InvocationTargetException ex) {

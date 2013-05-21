@@ -99,15 +99,7 @@ public class DBMetadata {
 	public void updateUI(final DataAdapterService das) {
 		this.das = das;
 		root.removeChildren();
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		try {
-			if (das != null)
-				das.contributeParameters(parameters);
-		} catch (JRException e1) {
-			e1.printStackTrace();
-		}
-
-		final Connection c = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
+		final Connection c = getConnection(das);
 		if (c != null)
 			try {
 				DatabaseMetaData meta = c.getMetaData();
@@ -174,6 +166,19 @@ public class DBMetadata {
 			}
 		});
 
+	}
+
+	public Connection getConnection(final DataAdapterService das) {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		try {
+			if (das != null)
+				das.contributeParameters(parameters);
+		} catch (JRException e1) {
+			e1.printStackTrace();
+		}
+
+		final Connection c = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
+		return c;
 	}
 
 	protected void updateUI(final MRoot root, Connection c) {

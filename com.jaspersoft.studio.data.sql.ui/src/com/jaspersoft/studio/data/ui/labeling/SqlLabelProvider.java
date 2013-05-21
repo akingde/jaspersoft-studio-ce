@@ -4,10 +4,17 @@
 package com.jaspersoft.studio.data.ui.labeling;
 
 import com.google.inject.Inject;
+import com.jaspersoft.studio.data.sql.AndHavingEntry;
+import com.jaspersoft.studio.data.sql.AndWhereEntry;
 import com.jaspersoft.studio.data.sql.ColumnFull;
+import com.jaspersoft.studio.data.sql.GroupByColumnFull;
 import com.jaspersoft.studio.data.sql.OrColumn;
+import com.jaspersoft.studio.data.sql.OrGroupByColumn;
+import com.jaspersoft.studio.data.sql.OrHavingEntry;
+import com.jaspersoft.studio.data.sql.OrOrderByColumn;
 import com.jaspersoft.studio.data.sql.OrTable;
 import com.jaspersoft.studio.data.sql.OrWhereEntry;
+import com.jaspersoft.studio.data.sql.OrderByColumnFull;
 import com.jaspersoft.studio.data.sql.TableFull;
 
 /**
@@ -24,7 +31,13 @@ public class SqlLabelProvider extends org.eclipse.xtext.ui.label.DefaultEObjectL
 
 	@Override
 	public Object text(Object element) {
-		if (element instanceof OrWhereEntry)
+		if (element instanceof OrGroupByColumn || element instanceof GroupByColumnFull)
+			return "GROUP BY";
+		if (element instanceof OrOrderByColumn || element instanceof OrderByColumnFull)
+			return "ORDER BY";
+		if (element instanceof OrHavingEntry || element instanceof AndHavingEntry)
+			return "HAVING";
+		if (element instanceof OrWhereEntry || element instanceof AndWhereEntry)
 			return "WHERE";
 		if (element instanceof OrTable || element instanceof TableFull)
 			return "FROM";

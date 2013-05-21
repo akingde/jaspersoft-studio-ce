@@ -3,10 +3,61 @@
  */
 package com.jaspersoft.studio.data.ui.contentassist
 
-import com.jaspersoft.studio.data.ui.contentassist.AbstractSqlProposalProvider
+import java.sql.Connection
+import java.sql.DatabaseMetaData
+import java.sql.ResultSet
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.Assignment
+import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
+import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
 
 /**
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on how to customize content assistant
  */
 class SqlProposalProvider extends AbstractSqlProposalProvider {
+	private var Connection c ;
+
+	def void setConnection(Connection c) {
+		this.c = c;
+	}
+
+	override completeColumn_ColName(EObject model, Assignment assignment, ContentAssistContext context,
+		ICompletionProposalAcceptor acceptor) {
+		super.completeColumn_ColName(model, assignment, context, acceptor)
+
+		// Create and register the completion proposal:
+		// The proposal may be null as the createCompletionProposal(..)
+		// methods check for valid prefixes and terminal token conflicts.
+		// The acceptor handles null-values gracefully.
+		if (c != null) {
+			var DatabaseMetaData dmd = c.metaData
+			var ResultSet rs = dmd.getColumns(null, null, null, "%")
+			while (rs.next())
+				acceptor.accept(createCompletionProposal(getPrefix(rs) + "." + rs.getString("COLUMN_NAME"), context));
+		}
+	}
+
+	override completeTable_Tbl(EObject model, Assignment assignment, ContentAssistContext context,
+		ICompletionProposalAcceptor acceptor) {
+		super.completeTable_Tbl(model, assignment, context, acceptor)
+		if (c != null) {
+			var DatabaseMetaData dmd = c.metaData
+			var ResultSet rs = dmd.getTables(null, null, "%", null)
+			while (rs.next())
+				acceptor.accept(createCompletionProposal(getPrefix(rs), context));
+		}
+	}
+
+	def String getPrefix(ResultSet rs) {
+		var cat = rs.getString("TABLE_CAT")
+		var sch = rs.getString("TABLE_SCHEM")
+		var tbl = rs.getString("TABLE_NAME")
+		var tocmp = tbl;
+		if (sch != null)
+			tocmp = sch + "." + tbl
+		if (cat != null)
+			tocmp = cat + "." + tbl
+		return tocmp;
+	}
+
 }
