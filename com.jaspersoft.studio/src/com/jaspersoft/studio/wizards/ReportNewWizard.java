@@ -135,7 +135,11 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		addPage(step4);
 
 		if (showCongratulationsStep) {
-			congratulationsStep = new CongratulationsWizardPage();
+			congratulationsStep = new CongratulationsWizardPage(Messages.CongratulationsWizardPage_title,
+																													Messages.CongratulationsWizardPage_titleMessage,
+																													Messages.CongratulationsWizardPage_label1,
+																													Messages.CongratulationsWizardPage_label2,
+																													Messages.CongratulationsWizardPage_label3);
 			addPage(congratulationsStep);
 		}
 	}

@@ -30,7 +30,7 @@ import org.eclipse.core.runtime.Status;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage;
-import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
+import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.templates.TemplateBundle;
 
 /**
@@ -44,6 +44,11 @@ import com.jaspersoft.templates.TemplateBundle;
 public class DefaultTemplateProvider implements TemplateProvider {
 
 	public static List<TemplateBundle> cache = null;
+	
+	/**
+	 * Key used to distinguish the standard template from the other templates
+	 */
+	public static final String defaultEngineKey="default";//$NON-NLS-1$
 	
 	@Override
 	public List<TemplateBundle> getTemplateBundles() {
@@ -108,8 +113,8 @@ public class DefaultTemplateProvider implements TemplateProvider {
 				for (File f : files) {
 					try {
 						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(f.toURI().toURL(),true);
-						Object engine = bundle.getProperty("template.engine");
-						if (bundle != null && (engine == null || DefaultTemplateEngine.defaultEngineKey.equals(engine.toString().toLowerCase()))) {
+						Object engine = bundle.getProperty(BuiltInCategories.ENGINE_KEY);
+						if (bundle != null && (engine == null || defaultEngineKey.equals(engine.toString().toLowerCase()))) {
 							templates.add(bundle);
 						}
 					} catch (Exception ex) {
@@ -121,6 +126,22 @@ public class DefaultTemplateProvider implements TemplateProvider {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Return the key that identify this engine
+	 */
+	@Override
+	public String getProviderKey() {
+		return defaultEngineKey;
+	}
+
+	/**
+	 * return a human readable name for the engine
+	 */
+	@Override
+	public String getProviderName() {
+		return "Standard Report";
 	}
 
 }

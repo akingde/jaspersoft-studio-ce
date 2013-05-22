@@ -17,21 +17,41 @@ package com.jaspersoft.studio.wizards;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import com.jaspersoft.studio.messages.Messages;
-
 public class CongratulationsWizardPage extends JSSWizardPage {
 
-	public CongratulationsWizardPage() {
+	private String textAllTheInformation;
+	
+	private String textPressFinishTo;
+	
+	private String textCongratulations;
+	
+	private GridData[] fieldData = new GridData[3];
+	
+	public CongratulationsWizardPage(String title, String message, String informationText, String finishText, String congratText) {
 		super("congratulations_page"); //$NON-NLS-1$
-		setTitle(Messages.CongratulationsWizardPage_title);
-		setMessage(Messages.CongratulationsWizardPage_titleMessage);
+		setTitle(title);
+		setMessage(message);
+		this.textAllTheInformation = informationText;
+		this.textPressFinishTo = finishText;
+		this.textCongratulations = congratText;
+	}
+	
+	public void setAllInformationData(GridData newData){
+		fieldData[1] = newData;
+	}
+	
+	public void setCongratulationsData(GridData newData){
+		fieldData[0] = newData;
+	}
+	
+	public void setFinishData(GridData newData){
+		fieldData[2] = newData;
 	}
 	
 	/**
@@ -44,33 +64,27 @@ public class CongratulationsWizardPage extends JSSWizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-			Composite container = new Composite(parent, SWT.NULL);
-			setControl(container);
-			container.setLayout(new FormLayout());
-			
-			Label lblAllTheInformation = new Label(container, SWT.NONE);
-			FormData fd_lblAllTheInformation = new FormData();
-			fd_lblAllTheInformation.left = new FormAttachment(0, 10);
-			lblAllTheInformation.setLayoutData(fd_lblAllTheInformation);
-			lblAllTheInformation.setText(Messages.CongratulationsWizardPage_label1);
-			
-			Label lblPressFinishTo = new Label(container, SWT.NONE);
-			lblPressFinishTo.setText(Messages.CongratulationsWizardPage_label2);
-			FormData fd_lblPressFinishTo = new FormData();
-			fd_lblPressFinishTo.top = new FormAttachment(lblAllTheInformation, 6);
-			fd_lblPressFinishTo.left = new FormAttachment(lblAllTheInformation, 0, SWT.LEFT);
-			lblPressFinishTo.setLayoutData(fd_lblPressFinishTo);
-			
-			Label lblCongratulations = new Label(container, SWT.NONE);
-			fd_lblAllTheInformation.top = new FormAttachment(lblCongratulations, 6);
-			
-			Font font = lblCongratulations.getFont();
-			lblCongratulations.setFont(SWTResourceManager.getFont(font.getFontData()[0].getName(), 18, SWT.NORMAL));
-			lblCongratulations.setText(Messages.CongratulationsWizardPage_label3);
-			FormData fd_lblCongratulations = new FormData();
-			fd_lblCongratulations.left = new FormAttachment(0, 10);
-			fd_lblCongratulations.top = new FormAttachment(0, 46);
-			lblCongratulations.setLayoutData(fd_lblCongratulations);
+		Composite container = new Composite(parent, SWT.NULL);
+		setControl(container);
+		GridLayout layout = new GridLayout(1,false);
+		layout.marginTop = 46;
+		layout.verticalSpacing = 10;
+		container.setLayout(layout);
+		
+		Label lblCongratulations = new Label(container, SWT.NONE);
+		Font font = lblCongratulations.getFont();
+		lblCongratulations.setFont(SWTResourceManager.getFont(font.getFontData()[0].getName(), 18, SWT.NORMAL));
+		lblCongratulations.setText(textCongratulations);
+		lblCongratulations.setLayoutData(fieldData[0] != null ? fieldData[0] : new GridData(SWT.FILL, SWT.LEFT, true, false));
+		
+		Label lblAllTheInformation = new Label(container, SWT.WRAP);
+		lblAllTheInformation.setLayoutData(fieldData[1] != null ? fieldData[1] : new GridData(SWT.FILL, SWT.FILL, true, false));
+		lblAllTheInformation.setText(textAllTheInformation);
+		
+		Label lblPressFinishTo = new Label(container, SWT.NONE);
+		lblPressFinishTo.setText(textPressFinishTo);
+		lblPressFinishTo.setLayoutData(fieldData[2] != null ? fieldData[2] : new GridData(SWT.FILL, SWT.LEFT, true, false));
+		
 	}
 
 }

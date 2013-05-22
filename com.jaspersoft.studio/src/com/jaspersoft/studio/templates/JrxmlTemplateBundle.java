@@ -39,6 +39,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.templates.TemplateEngine;
 
 /**
@@ -64,14 +65,12 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 	
 	protected TemplateEngine templateEngine = null;
 	
-	
 	/**
 	 * This is the url of the jrxml used to define this type of bundle.
 	 * 
 	 */
 	private URL templateURL = null;
 	
-
 	/**
 	 * The list of files (available in the same directory as the jrxml),
 	 * discovered by looking at the main jasperdesign...
@@ -321,6 +320,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 	public JrxmlTemplateBundle(URL url, boolean isExternal) throws Exception
 	{
 		this.templateURL = url;
+		this.isExternal = isExternal;
 		String urlPath = templateURL.toExternalForm();
 		if (urlPath.endsWith(".jrxml"))
 	  {
@@ -426,11 +426,11 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle	 {
 		String name = null;
 		String engine= null;
 		if (this.propertyFile != null){
-			name = propertyFile.getProperty("template.name");
-			engine = propertyFile.getProperty("template.engine");
+			name = propertyFile.getProperty(BuiltInCategories.NAME_KEY);
+			engine = propertyFile.getProperty(BuiltInCategories.ENGINE_KEY);
 		}
 		
-		if (engine == null || engine.toLowerCase().equals(DefaultTemplateEngine.defaultEngineKey)) templateEngine = new DefaultTemplateEngine();
+		if (engine == null || engine.toLowerCase().equals(DefaultTemplateProvider.defaultEngineKey)) templateEngine = new DefaultTemplateEngine();
 		if (name == null){
 			name = getJasperDesign().getName();
 		}

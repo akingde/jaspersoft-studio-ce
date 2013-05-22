@@ -22,6 +22,18 @@ import com.jaspersoft.templates.TemplateBundle;
 
 public interface TemplateProvider {
 
+		/**
+		 * Return a list of TemplateBundle that could be handled by this engine
+		 */
 		public List<TemplateBundle> getTemplateBundles();
-	
+
+		/**
+		 * Return the key that identify this engine
+		 */
+		public String getProviderKey();
+		
+		/**
+		 * return a human readable name for the engine
+		 */
+		public String getProviderName();
 }

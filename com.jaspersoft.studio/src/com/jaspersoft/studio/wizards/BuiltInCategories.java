@@ -28,6 +28,21 @@ import java.util.List;
 public class BuiltInCategories {
 	
 	/**
+	 * Key of the engine value stored in the template properties
+	 */
+	public static final String ENGINE_KEY = "template.engine";
+	
+	/**
+	 * Key of the name value stored in the template properties
+	 */
+	public static final String NAME_KEY = "template.name";
+	
+	/**
+	 * Key of the category values stored in the template properties
+	 */
+	public static final String CATEGORY_KEY = "template.category";
+	
+	/**
 	 * Identify all the templates
 	 */
 	public static final String ALL_TYPES_KEY = "all_types";

@@ -1407,7 +1407,11 @@
 	  </command>
    <command
          id="com.jaspersoft.studio.command.exportFilesTo"
-         name="Export Files to...">
+         name="%ExportFiles">
+   </command>
+   <command
+         id="com.jaspersoft.studio.command.exportAsTemplate"
+         name="%ExportTemplate">
    </command>
 	</extension>
     <extension 
@@ -1942,17 +1946,25 @@
 		<handler commandId="com.jaspersoft.studio.command.exportFilesTo"
 			class="com.jaspersoft.studio.handlers.ExportFilesToHandler">
 		</handler>
+		<handler commandId="com.jaspersoft.studio.command.exportAsTemplate"
+			class="com.jaspersoft.studio.handlers.ExportAsTemplateHandler">
+		</handler>
 	</extension>
 	<extension id="com.jaspersoft.studio.menus.saveReportTo"
 		point="org.eclipse.ui.menus">
 		<menuContribution locationURI="menu:file?after=export">
 			<command commandId="com.jaspersoft.studio.command.exportFilesTo"
-				icon="icons/eclipseicons/save.gif" label="Export Files To..." style="push">
+				icon="icons/eclipseicons/save.gif" label="%ExportFiles" style="push">
 			</command>
 		</menuContribution>
 		<menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=export">
 			<command commandId="com.jaspersoft.studio.command.exportFilesTo"
-				icon="icons/eclipseicons/save.gif" label="Export Files To..." style="push">
+				icon="icons/eclipseicons/save.gif" label="%ExportFiles" style="push">
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="menu:file?after=export">
+			<command commandId="com.jaspersoft.studio.command.exportAsTemplate"
+				icon="icons/eclipseicons/save.gif" label="%ExportTemplate" style="push">
 			</command>
 		</menuContribution>
 	</extension>

@@ -31,6 +31,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage;
 import com.jaspersoft.studio.templates.TemplateProvider;
+import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.templates.TemplateBundle;
 
 /**
@@ -107,7 +108,7 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 				for (File f : files) {
 					try {
 						TemplateBundle bundle =  new TableTemplateBunlde(f.toURI().toURL(),true);
-						if (bundle != null && tableTemplateKey.equals(bundle.getProperty("template.engine"))) {
+						if (bundle != null && tableTemplateKey.equals(bundle.getProperty(BuiltInCategories.ENGINE_KEY))) {
 							templates.add(bundle);
 						}
 					} catch (Exception ex) {
@@ -119,5 +120,15 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 				}
 			}
 		}
+	}
+
+	@Override
+	public String getProviderKey() {
+		return tableTemplateKey;
+	}
+
+	@Override
+	public String getProviderName() {
+		return "Table Based Report";
 	}
 }

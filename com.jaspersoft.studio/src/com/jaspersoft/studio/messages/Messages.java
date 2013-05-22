@@ -232,6 +232,14 @@ public class Messages extends NLS {
 	public static String BringToBackAction_send_to_back_tool_tip;
 	public static String BringToFrontAction_bring_to_front;
 	public static String BringToFrontAction_bring_to_front_tool_tip;
+	public static String CategoriesPage_addButton;
+	public static String CategoriesPage_availabelCatLabel;
+	public static String CategoriesPage_categoriesLabel;
+	public static String CategoriesPage_customCatBox;
+	public static String CategoriesPage_pageDescription;
+	public static String CategoriesPage_pageTitle;
+	public static String CategoriesPage_selectedCatLabel;
+	public static String CategoriesPage_typeLabel;
 	public static String ClassTypeCellEditor_dialog_message;
 	public static String ClassTypeCellEditor_open_type;
 	public static String ColorsSection_colorSectionTitle;
@@ -525,6 +533,8 @@ public class Messages extends NLS {
 	public static String ExportAsRtfAction_filtername;
 	public static String ExportAsRtfAction_title;
 	public static String ExportAsRtfAction_tooltip;
+	public static String ExportAsTemplateHandler_errorMessage;
+	public static String ExportAsTemplateHandler_errorTitle;
 	public static String ExportAsTextAction_filtername;
 	public static String ExportAsTextAction_title;
 	public static String ExportAsTextAction_tooltip;
@@ -1322,6 +1332,13 @@ public class Messages extends NLS {
 	public static String ReportTemplatesWizardPage_title;
 	public static String ResetValueCommand_restore_default_value;
 	public static String ResourceCellEditor_open_resource;
+	public static String ResourcePage_browseButton;
+	public static String ResourcePage_conflictMessage;
+	public static String ResourcePage_conflictTitle;
+	public static String ResourcePage_destinationFolderLabel;
+	public static String ResourcePage_exportedResourceLabel;
+	public static String ResourcePage_pageDescription;
+	public static String ResourcePage_pageTitle;
 	public static String RulersGridPreferencePage_common_gridcolor;
 	public static String RulersGridPreferencePage_description;
 	public static String RulersGridPreferencePage_grid_options;
@@ -1418,6 +1435,12 @@ public class Messages extends NLS {
 	public static String SubTitleSection_Expression_Label;
 	public static String SubTitleSection_Subtitle_Label;
 	public static String SwitchViewsAction_actionTooltip;
+	public static String TemplateExporterWizard_congratCongratulations;
+	public static String TemplateExporterWizard_congratDesc;
+	public static String TemplateExporterWizard_congratMessage;
+	public static String TemplateExporterWizard_congratTitle;
+	public static String TemplateExporterWizard_congrattoFinish;
+	public static String TemplateExporterWizard_title;
 	public static String TemplateLocationsPreferencePage_Description;
 	public static String TemplateLocationsPreferencePage_Locations;
 	public static String TemplateLocationsPreferencePage_Message;
@@ -1621,6 +1644,10 @@ public class Messages extends NLS {
 			System.out.println("Key: " + key + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
 			return key;
 		}
+	}
+	
+	public static boolean hasTranslation(String key) {
+		return RB_MESSAGES_BY_KEYS.containsKey(key);
 	}
 
 }

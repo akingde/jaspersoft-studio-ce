@@ -20,6 +20,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.gallery.Gallery;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.nebula.widgets.gallery.NoGroupRenderer;
@@ -39,9 +43,12 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Scale;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.templates.JrxmlTemplateBundle;
 import com.jaspersoft.studio.templates.StudioTemplateManager;
 import com.jaspersoft.studio.utils.SWTImageEffects;
@@ -65,11 +72,6 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	private Scale scale;
 	
 	private List<Image> templateImages;
-	
-	/**
-	 * List component where are the category are shown
-	 */
-	private org.eclipse.swt.widgets.List list;
 	
 	/**
 	 * Hashmap to cache the created gallery for a category
@@ -140,7 +142,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	private class CategoryChooser extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-				String selectedCategory = categoryList.get(list.getSelectionIndex());
+				String selectedCategory = categoryList.get(((Table)e.widget).getSelectionIndex());
 				showGallery(selectedCategory);
 		}
 		
@@ -279,14 +281,36 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		SashForm sashForm = new SashForm(container, SWT.NONE);
 		sashForm.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,1));
 		
-		list = new org.eclipse.swt.widgets.List(sashForm, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+		//list = new org.eclipse.swt.widgets.List(sashForm, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+		Table table = new Table(sashForm, SWT.V_SCROLL | SWT.SINGLE | SWT.BORDER);
+		table.setHeaderVisible(true);
+		TableColumn[] col = new TableColumn[1];
+		col[0] = new TableColumn(table, SWT.NONE);
+		col[0].setText("Categories");
+		
+		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, false));
+		table.setLayout(tlayout);
+
+		for (TableColumn c : col)
+			c.pack();
+		
+		TableViewer tableViewer = new TableViewer(table);
+		tableViewer.setContentProvider(new ListContentProvider());
+		tableViewer.setLabelProvider(new LabelProvider(){
+			@Override
+			public String getText(Object element) {
+				return Messages.getString(element.toString());
+			}
+		});
+
+	
 		categoryList = BuiltInCategories.getCategoriesList();
 		for(String cat : categoryList){
-			list.add(Messages.getString(cat));
 			cachedGalleries.put(cat, null);
 		}
-
-    list.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,  true));
+    
+    table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,  true));
 		
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		gd.widthHint = 150;
@@ -296,7 +320,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		layout = new StackLayout();
 		galleryComposite.setLayout(layout);
 
-		sashForm.setWeights(new int[] {30, 70});
+		sashForm.setWeights(new int[] {20, 80});
 		
 		bundles = StudioTemplateManager.getInstance().getTemplateBundles();
 		findTemplates();
@@ -312,8 +336,11 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		// Manually fire the event because the invocation 
 		// of #Scale.selection() does not fire it.
 		zoomModified();
-    list.setSelection(0);
-    list.addSelectionListener(new CategoryChooser());
+		
+		tableViewer.setInput(categoryList);
+		table.addSelectionListener(new CategoryChooser());
+		table.setSelection(0);
+		
     showGallery(categoryList.get(0));
 	}
 	
@@ -337,22 +364,23 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		// Load all the available templates by invoking the template manager
 		for (TemplateBundle b : bundles)
 		{
-			Object templateCategory = b.getProperty("template.category");
+			Object templateCategory = b.getProperty(BuiltInCategories.CATEGORY_KEY);
 			if (templateCategory != null){
 				String[] strCategoryList = templateCategory.toString().split(";");
 				HashSet<String> categorySet = new HashSet<String>();
 				
 				for(String cat : strCategoryList){
 					if (!cat.trim().isEmpty()){
-						if (!cachedGalleries.containsKey(cat)){
-							list.add(cat);
+						if (!cachedGalleries.containsKey(cat.toLowerCase())){
 							categoryList.add(cat);
-							cachedGalleries.put(cat, null);
+							cachedGalleries.put(cat.toLowerCase(), null);
 						} 
 						categorySet.add(cat);
 					}
 				}	
 				categoryCache.put(b, categorySet);
+			} else {
+				categoryCache.put(b, new HashSet<String>());
 			}
 		}
 	}
