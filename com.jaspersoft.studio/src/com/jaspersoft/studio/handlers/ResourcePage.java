@@ -17,8 +17,6 @@ package com.jaspersoft.studio.handlers;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -403,7 +401,8 @@ public class ResourcePage extends JSSHelpWizardPage {
 	 * @throws IOException
 	 */
 	private void copyFile(File inputFile, File outputFile) throws IOException{
-	  Files.copy(inputFile.toPath(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		FileUtils.copyFile(inputFile, outputFile);
+	  //Files.copy(inputFile.toPath(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 	}
 	
