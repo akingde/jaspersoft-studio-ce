@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.JasperReportsPlugin;
-import net.sf.jasperreports.eclipse.ui.util.ExceptionDetailsErrorDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRExpression;
@@ -62,7 +61,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -124,56 +122,6 @@ public class ResourcePage extends JSSHelpWizardPage {
 	 * Boolean flag, true if there are conflict on the resource names, otherwise false
 	 */
 	private boolean conflictResources;
-	
-	/**
-	 * Class to display an error dialog in Eclipse Style, with a message and a detail
-	 * button to see more information. The extension was done because in the default class
-	 * is not possible to personalize properly the detail section
-	 * 
-	 * @author Orlandin Marco
-	 *
-	 */
-	private class ConflictDetailsError extends ExceptionDetailsErrorDialog{
-		
-		/**
-		 * Build the class
-		 * 
-		 * @param parentShell shell of the parent
-		 * @param dialogTitle title of the dialog
-		 * @param message message of the dialog
-		 * @param status status, contains the message to show in the detail section
-		 * @param displayMask
-		 */
-		public ConflictDetailsError(Shell parentShell, String dialogTitle, String message, IStatus status, int displayMask) {
-			super(parentShell, dialogTitle, message, status, displayMask);
-		}
-
-		/**
-		 * Create the detail section with the message extracted from the status
-		 */
-		@Override
-		protected void populateList(Text listToPopulate, IStatus buildingStatus,
-				int nesting, boolean includeStatus) {
-				String message = buildingStatus.getMessage();
-				listToPopulate.append(message);
-		}
-		
-		/**
-		 * The main message is a void string if it is null, otherwise it is the 
-		 * message passed as parameter
-		 */
-		public String buildMessage(String message, IStatus status) {
-			String msg = message == null ? "" : message; //$NON-NLS-1$
-			return msg;
-		}
-		
-		/**
-		 * force to show by default the detail section
-		 */
-		protected boolean shouldShowDetailsButton() {
-			return true;
-		}
-	}
 	
 	/**
 	 * Build the class
@@ -293,7 +241,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 	private void createErrorMessage(List<String> conflicts){
 		String conf = ""; //$NON-NLS-1$
 		for(int i=0; i<conflicts.size(); i+=2){
-			conf = conflicts.get(i).concat("\n").concat(conflicts.get(i+1)).concat("\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			conf += conflicts.get(i).concat("\n").concat(conflicts.get(i+1)).concat("\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		IStatus status = new OperationStatus(IStatus.ERROR, JasperReportsPlugin
@@ -469,20 +417,20 @@ public class ResourcePage extends JSSHelpWizardPage {
 		// also when simply saving the JRXML file without having edited an expression.
 		JasperDesign jd = bundle.getJasperDesign();
 
-		if (jd != null)
+		if (jd != null){
 			ExpressionEditorSupportUtil.updateFunctionsLibraryImports(jd, jrContext);
-		rebindResources();
-		try {
-			File destination = new File(pathText.getText());
-			FileUtils.writeStringToFile(destination, model2xml(), "UTF-8"); //$NON-NLS-1$
-			String destinationPath = destination.getParent()+System.getProperty("file.separator"); //$NON-NLS-1$
-			for(File resource : resourceList){
-				copyFile(resource, new File(destinationPath.concat(resource.getName())));
+			rebindResources();
+			try {
+				File destination = new File(pathText.getText());
+				FileUtils.writeStringToFile(destination, model2xml(), "UTF-8"); //$NON-NLS-1$
+				String destinationPath = destination.getParent()+System.getProperty("file.separator"); //$NON-NLS-1$
+				for(File resource : resourceList){
+					copyFile(resource, new File(destinationPath.concat(resource.getName())));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-			
 	}
 	
 	/**
@@ -532,8 +480,6 @@ public class ResourcePage extends JSSHelpWizardPage {
 			}
 		}
 	}
-
-  
 	
 	/**
 	 * Return the File to all the resources referenced by this template. This can be an expensive operation, since the

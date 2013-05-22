@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.templates.engine;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -81,7 +83,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 		if (dataset != null) {
 			jdCopy.getMainDesignDataset().setQuery((JRDesignQuery) dataset.getQuery());
 
-			System.out.println("Query: " + dataset.getQuery().getText());
+			System.out.println("Query: " + dataset.getQuery().getText()); //$NON-NLS-1$
 
 			for (JRField f : dataset.getFields()) {
 				try {
@@ -122,12 +124,12 @@ public class DefaultTemplateEngine implements TemplateEngine {
 	}
 
 	protected void processTemplate(JasperDesign jd, List<Object> fields, List<Object> groupFields) {
-		String reportType = Misc.nvl(jd.getProperty("template.type"), "tabular"); //$NON-NLS-1$ $NON-NLS-2$
+		String reportType = Misc.nvl(jd.getProperty("template.type"), "tabular"); //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
 
 		boolean keepExtraGroups = false;
 		boolean noLayoutChanges = false;
 
-		if (jd.getProperty("template.keepExtraGroups") != null && jd.getProperty("template.keepExtraGroups").equals("true")) { //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
+		if (jd.getProperty("template.keepExtraGroups") != null && jd.getProperty("template.keepExtraGroups").equals("true")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ $NON-NLS-2$ $NON-NLS-3$
 			keepExtraGroups = true;
 		}
 
@@ -153,9 +155,9 @@ public class DefaultTemplateEngine implements TemplateEngine {
 				// find the two elements having as expression: G1Label and G1Field
 				if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
 					JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
-					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}", gr.getValueClassName());
+					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}", gr.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
 					group.setExpression(groupExpression);
-					JRDesignStaticText st = findStaticTextElement(groupHeaderSection, "G" + (i + 1) + "Label"); //$NON-NLS-1$ $NON-NLS-2$
+					JRDesignStaticText st = findStaticTextElement(groupHeaderSection, "G" + (i + 1) + "Label"); //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
 					if (st == null)
 						st = findStaticTextElement(groupHeaderSection, "GroupLabel"); //$NON-NLS-1$ 
 					if (st == null)
@@ -167,7 +169,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 					if (st != null)
 						st.setText(gr.getName());
 
-					JRDesignTextField tf = findTextFieldElement(groupHeaderSection, "G" + (i + 1) + "Field"); //$NON-NLS-1$ $NON-NLS-2$
+					JRDesignTextField tf = findTextFieldElement(groupHeaderSection, "G" + (i + 1) + "Field"); //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
 					if (tf == null)
 						tf = findTextFieldElement(groupHeaderSection, "GroupField"); //$NON-NLS-1$ 
 					if (tf == null)
@@ -176,7 +178,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 						tf = findTextFieldElement(groupHeaderSection, "Field"); //$NON-NLS-1$ 
 
 					if (tf != null) {
-						JRDesignExpression expression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}", //$NON-NLS-1$ $NON-NLS-2$
+						JRDesignExpression expression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}", //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
 								gr.getValueClassName());
 						tf.setExpression(expression);
 					}
@@ -247,7 +249,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 						if (fieldElement != null && detailBand != null) {
 							JRDesignTextField newTextField = (JRDesignTextField) fieldElement.clone();
 							// Fix the class (the Textfield has a limited set of type options...)
-							newTextField.setExpression(ExprUtil.setValues(new JRDesignExpression(), "$F{" + f.getName() + "}", //$NON-NLS-1$ $NON-NLS-2$
+							newTextField.setExpression(ExprUtil.setValues(new JRDesignExpression(), "$F{" + f.getName() + "}", //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
 									f.getValueClassName()));
 							newTextField.setX(currentX);
 							newTextField.setWidth(width);
@@ -303,7 +305,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 					}
 					if (fieldElement != null) {
 						JRDesignTextField newTextField = (JRDesignTextField) fieldElement.clone();
-						JRDesignExpression expression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + f.getName() + "}", //$NON-NLS-1$ $NON-NLS-2$
+						JRDesignExpression expression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + f.getName() + "}", //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
 								f.getValueClassName());
 
 						newTextField.setExpression(expression);
@@ -420,6 +422,110 @@ public class DefaultTemplateEngine implements TemplateEngine {
 		if (container instanceof JRDesignFrame) {
 			((JRDesignFrame) container).setHeight(Math.max(minHeight, ((JRDesignFrame) container).getHeight()));
 		}
+	}
+	
+	
+	/**
+	 * Get a JasperDesign and check if that JasperDesign can be used as Template and processed
+	 * by this engine. 
+	 * 
+	 * @param design the design to check
+	 * @return a List of founded error, the list is void if no error are found
+	 */
+	public static List<String> validateJasperDesig(JasperDesign design)
+	{
+		List<String> errorsList = new ArrayList<String>();
+		
+		int groupIndex = 0;
+		for(net.sf.jasperreports.engine.JRGroup jrGroup : design.getGroupsList())
+		{
+			JRDesignGroup group = (JRDesignGroup) jrGroup;
+			// find the two elements having as expression: G1Label and G1Field
+			if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
+				JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
+				JRDesignStaticText st = findStaticTextElement(groupHeaderSection, "G" + (groupIndex + 1) + "Label"); //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
+				if (st == null)
+					st = findStaticTextElement(groupHeaderSection, "GroupLabel"); //$NON-NLS-1$ 
+				if (st == null)
+					st = findStaticTextElement(groupHeaderSection, "Group Label"); //$NON-NLS-1$ 
+				if (st == null)
+					st = findStaticTextElement(groupHeaderSection, "Label"); //$NON-NLS-1$ 
+				if (st == null)
+					st = findStaticTextElement(groupHeaderSection, "Group name"); //$NON-NLS-1$ 
+
+	
+				JRDesignTextField tf = findTextFieldElement(groupHeaderSection, "G" + (groupIndex + 1) + "Field"); //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
+				if (tf == null)
+					tf = findTextFieldElement(groupHeaderSection, "GroupField"); //$NON-NLS-1$ 
+				if (tf == null)
+					tf = findTextFieldElement(groupHeaderSection, "Group Field"); //$NON-NLS-1$ 
+				if (tf == null)
+					tf = findTextFieldElement(groupHeaderSection, "Field"); //$NON-NLS-1$ 
+	
+				if (st == null && tf == null) errorsList.add(Messages.DefaultTemplateEngine_missingGroupFiledStatic+ (groupIndex + 1));
+			}
+			groupIndex++;
+		}
+		
+		String reportType = Misc.nvl(design.getProperty("template.type"), "tabular"); //$NON-NLS-1$ //$NON-NLS-2$
+		
+		JRElementGroup detailBand = (design.getDetailSection() != null && design.getDetailSection().getBands() != null && 
+																design.getDetailSection().getBands().length > 0) ? design.getDetailSection().getBands()[0] : null;
+
+		// Adjusting detail...
+		if (reportType != null && reportType.equals("tabular")) { //$NON-NLS-1$ 
+			// Add the labels to the column header..
+			JRElementGroup columnHeaderBand = (JRDesignBand) design.getColumnHeader();
+
+			// Find the label template...
+			JRDesignStaticText labelElement = null;
+			if (columnHeaderBand != null) {
+				labelElement = findStaticTextElement(columnHeaderBand, "DetailLabel"); //$NON-NLS-1$ 
+				if (labelElement == null)
+					labelElement = findStaticTextElement(columnHeaderBand, "Label"); //$NON-NLS-1$ 
+				if (labelElement == null)
+					labelElement = findStaticTextElement(columnHeaderBand, "Header"); //$NON-NLS-1$ 
+			}
+
+			JRDesignTextField fieldElement = null;
+			if (detailBand != null) {
+				fieldElement = findTextFieldElement(detailBand, "DetailField"); //$NON-NLS-1$ 
+				if (fieldElement == null)
+					fieldElement = findTextFieldElement(detailBand, "Field"); //$NON-NLS-1$ 
+			}
+
+			if (labelElement == null) {
+				errorsList.add(Messages.DefaultTemplateEngine_missingStaticTextCH);
+			}
+			if (fieldElement == null) {
+				errorsList.add(Messages.DefaultTemplateEngine_missingTextFieldD);
+			}
+
+		} else if (reportType.equals("columnar") && detailBand != null) { //$NON-NLS-1$
+			// Add the labels to the column header..
+			JRElementGroup detailBandField = (JRDesignBand) design.getDetailSection().getBands()[0];
+			// Find the label template...
+
+			JRDesignStaticText labelElement = findStaticTextElement(detailBand, "DetailLabel"); //$NON-NLS-1$
+			if (labelElement == null)
+				labelElement = findStaticTextElement(detailBand, "Label"); //$NON-NLS-1$
+			if (labelElement == null)
+				labelElement = findStaticTextElement(detailBand, "Header"); //$NON-NLS-1$
+
+			JRDesignTextField fieldElement = findTextFieldElement(detailBandField, "DetailField"); //$NON-NLS-1$
+			if (fieldElement == null)
+				fieldElement = findTextFieldElement(detailBandField, "Field"); //$NON-NLS-1$
+
+			if (labelElement == null) {
+				errorsList.add("Missing Static Text placeholder in the detail band");; //$NON-NLS-1$
+			}
+
+			if (fieldElement != null) {
+				errorsList.add(Messages.DefaultTemplateEngine_missingTextFieldD);
+			}
+		}
+		
+		return errorsList;
 	}
 
 }

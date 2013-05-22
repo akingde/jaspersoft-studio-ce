@@ -20,8 +20,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -50,6 +53,7 @@ import com.jaspersoft.studio.swt.widgets.table.MoveT2TButtons;
 import com.jaspersoft.studio.templates.DefaultTemplateProvider;
 import com.jaspersoft.studio.templates.TemplateProvider;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 /**
@@ -92,13 +96,15 @@ public class CategoriesPage extends JSSWizardPage {
 	 */
 	protected String[] engineKeys;
 	
-	
-	
 	/**
 	 * Set of buttons to manage the list...
 	 */
 	private MoveT2TButtons mt2t = null;
 	
+	/**
+	 * Map of all the available Template provider, the key is the key provided by the provider itself
+	 */
+	private HashMap<String, TemplateProvider> providersMap = new HashMap<String, TemplateProvider>();
 	
 	protected CategoriesPage() {
 		super("addcategories"); //$NON-NLS-1$
@@ -127,6 +133,7 @@ public class CategoriesPage extends JSSWizardPage {
 		for(int i=0; i<templateProviders.size(); i++){
 			TemplateProvider actualProvider = templateProviders.get(i);
 			engineKeys[i] = actualProvider.getProviderKey();
+			providersMap.put(engineKeys[i], actualProvider);
 			engineNames[i] = actualProvider.getProviderName();
 		}
 		
@@ -272,6 +279,18 @@ public class CategoriesPage extends JSSWizardPage {
 
 	}
 	
+	/**
+	 * Get a JasperDesign and check if that JasperDesign can be used as Template for the selected
+	 * Template type
+	 * 
+	 * @param design the design to check
+	 * @return a List of founded error, the list is void if no error are found
+	 */
+	public List<String> validateWithSelectedEngine(JasperDesign design){
+		String engine = engineCombo != null ? engineKeys[engineCombo.getSelectionIndex()] : engineKeys[0];
+		return providersMap.get(engine).validateTemplate(design);
+	}
+	
 	protected void createColumns() {
 		TableColumn[] col;
 		TableLayout tlayout;
@@ -297,8 +316,7 @@ public class CategoriesPage extends JSSWizardPage {
 
 	@Override
 	protected String getContextName() {
-		// TODO Auto-generated method stub
-		return null;
+		return ContextHelpIDs.WIZARD_EXPORTED_CATEGORY;
 	}
 
 }

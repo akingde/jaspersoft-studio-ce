@@ -52,6 +52,7 @@ import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
 
 import org.eclipse.draw2d.ColorConstants;
 
+import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
 import com.jaspersoft.studio.components.table.model.dialog.ApplyTableStyleAction;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
@@ -258,7 +259,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		((JRDesignComponentElement) jrElement).setComponent(tbl);
 		((JRDesignComponentElement) jrElement)
 				.setComponentKey(new ComponentKey(
-						"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table"));
+						"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		tbl.setDatasetRun(datasetRun);
 		
 		
@@ -276,7 +277,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 				parentCol.setWidth(groupColWidth);
 				//Create the column for the group column
 				for (Object f : tableFields) {
-					createGroupColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth,parentCol);
+					createGroupColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth,parentCol); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				//Use col header as sample for the group cells
 				int height = parentCol.getColumns().get(0).getColumnHeader().getHeight();
@@ -290,7 +291,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 					sText.setHeight(cell.getHeight());
 					sText.setX(0);
 					sText.setY(0);
-					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + groupField.getName() + "}", groupField.getValueClassName());
+					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + groupField.getName() + "}", groupField.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
 					sText.setExpression(groupExpression);
 					cell.addElement(sText);
 					parentCol.setGroupHeader(groupField.getName(), cell);
@@ -300,13 +301,13 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 			} else {
 				//There are no groups, so will not be created group columns
 				for (Object f : tableFields) {
-					createColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth);
+					createColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				tableHeight = getTableHeight((StandardColumn)tbl.getColumns().get(0));
 			}
 		} else {
 			//If there are no fields defined create an empty column
-			createColumn(tbl,jd,"","\"\"",160);
+			createColumn(tbl,jd,"","\"\"",160); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 				
 		//Create and apply the styles to the table. The styles should be read from the template report
@@ -334,9 +335,9 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		for(JRStyle style : styleArray){
 			if(style instanceof JRDesignStyle){
 				//if (style.getName().equals("Table")) result[0] = (JRDesignStyle)style; else
-				if (style.getName().equals("Table_TH")) result[1] = (JRDesignStyle)style;
-				else if (style.getName().equals("Table_CH")) result[2] = (JRDesignStyle)style;
-				else if (style.getName().equals("Table_TD")) result[3] = (JRDesignStyle)style;
+				if (style.getName().equals("Table_TH")) result[1] = (JRDesignStyle)style; //$NON-NLS-1$
+				else if (style.getName().equals("Table_CH")) result[2] = (JRDesignStyle)style; //$NON-NLS-1$
+				else if (style.getName().equals("Table_TD")) result[3] = (JRDesignStyle)style; //$NON-NLS-1$
 			}
 		}
 		if (result[1] == null || result[2] == null || result[3] == null ) {
@@ -362,7 +363,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	 * @param jd the jasperdesign that contains the sample table
 	 * @return a JRDesignComponentElement that contains a StandardTable, or null if it isn't found
 	 */
-	private JRDesignComponentElement getTable(JasperDesign jd){
+	private static JRDesignComponentElement getTable(JasperDesign jd){
 		if (jd.getSummary() == null) return null;
 		for(JRChild child : jd.getSummary().getChildren()){
 			if (child instanceof JRDesignComponentElement){
@@ -389,8 +390,8 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		if (tableComponent != null){
 			StandardTable table = (StandardTable)tableComponent.getComponent();
 			
-			colHeaderLabel = findStaticTextElement(table,"label");
-			cellField = findTextFieldElement(table,"DetailField");
+			colHeaderLabel = findStaticTextElement(table,"label"); //$NON-NLS-1$
+			cellField = findTextFieldElement(table,"DetailField"); //$NON-NLS-1$
 			tableGroupField = new MTextField().createJRElement(jd);
 			//tableHeaderField = findTextFieldElement(table,"Header");
 			
@@ -411,13 +412,13 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 			removeElement(jd.getSummary(), tableComponent);
 		} else {
 			//If the table is not found try to build the template with some default values
-			colHeaderLabel = DefaultTemplateEngine.findStaticTextElement(jd.getColumnHeader(), "Label");
-			cellField = DefaultTemplateEngine.findTextFieldElement(jd.getDetailSection().getBands()[0], "Field");
+			colHeaderLabel = DefaultTemplateEngine.findStaticTextElement(jd.getColumnHeader(), "Label"); //$NON-NLS-1$
+			cellField = DefaultTemplateEngine.findTextFieldElement(jd.getDetailSection().getBands()[0], "Field"); //$NON-NLS-1$
 			
 			JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(0);
 			if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
 				JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
-				tableGroupField = DefaultTemplateEngine.findTextFieldElement(groupHeaderSection, "GroupField");
+				tableGroupField = DefaultTemplateEngine.findTextFieldElement(groupHeaderSection, "GroupField"); //$NON-NLS-1$
 			} else tableGroupField = new MTextField().createJRElement(jd);
 			
 			tableWidth = jd.getPageWidth()-jd.getLeftMargin()-jd.getRightMargin();
@@ -437,7 +438,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		}
 		
 		removeUnwantedBand(jd);
-		jd.removeDataset("tableDataset");
+		jd.removeDataset("tableDataset"); //$NON-NLS-1$
 	}
 	
 	private void removeUnwantedBand(JasperDesign jd){
@@ -506,7 +507,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		tableFields = (List<Object>)settings.get(DefaultTemplateEngine.FIELDS);
 		//Create the dataset, by default we set the dataset run to use the report connection...
 		JRDesignDataset tableDataset = new JRDesignDataset(false);
-		tableDataset.setName("tableDataset");
+		tableDataset.setName("tableDataset"); //$NON-NLS-1$
 		//Create the dataset query
 		JRDesignDataset dataset = (JRDesignDataset)settings.get(DefaultTemplateEngine.DATASET);
 		JRDesignQuery query = new JRDesignQuery();
@@ -534,7 +535,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 					JRDesignGroup newGroup = new JRDesignGroup();
 					JRDesignField groupField = (JRDesignField)field;
 					newGroup.setName(groupField.getName());
-					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" +groupField.getName() + "}", groupField.getValueClassName());
+					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" +groupField.getName() + "}", groupField.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
 					newGroup.setExpression(groupExpression);
 					tableDataset.addGroup(newGroup);
 				} catch (JRException e) {
@@ -545,9 +546,9 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		
 		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
 		JRDesignExpression exp = new JRDesignExpression();
-		exp.setText("$P{REPORT_CONNECTION}");
+		exp.setText("$P{REPORT_CONNECTION}"); //$NON-NLS-1$
 		datasetRun.setConnectionExpression( exp );
-		datasetRun.setDatasetName("tableDataset");
+		datasetRun.setDatasetName("tableDataset"); //$NON-NLS-1$
 		try {
 			reportBundle.getJasperDesign().addDataset(tableDataset);
 		} catch (JRException e) {
@@ -576,6 +577,43 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		summaryBand.addElement(table);
 		
 		return reportBundle;
+	}
+	
+	
+	/**
+	 * Get a JasperDesign and check if that JasperDesign can be used as Template and processed
+	 * by this engine. 
+	 * 
+	 * @param design the design to check
+	 * @return a List of founded error, the list is void if no error are found
+	 */
+	public static List<String> validateJasperDesig(JasperDesign design){
+		
+		List<String> errorsList = new ArrayList<String>();
+		
+		boolean[] foundedStyles = {false, false,false};
+		
+		JRStyle[] styleArray = design.getStyles();
+		for(JRStyle style : styleArray){
+			if(style instanceof JRDesignStyle){
+				if (style.getName().equals("Table_TH")) foundedStyles[0] = true;  //$NON-NLS-1$
+				else if (style.getName().equals("Table_CH")) foundedStyles[1] = true; //$NON-NLS-1$
+				else if (style.getName().equals("Table_TD")) foundedStyles[2] = true; //$NON-NLS-1$
+			}
+		}
+		if (!foundedStyles[0]) errorsList.add(Messages.TableTemplateEngine_missingStyleTH);
+		if (!foundedStyles[1]) errorsList.add(Messages.TableTemplateEngine_missingStyleCH);
+		if (!foundedStyles[2]) errorsList.add(Messages.TableTemplateEngine_missingStyleD);
+		
+		JRDesignComponentElement tableComponent = getTable(design);
+		if (tableComponent == null) errorsList.add(Messages.TableTemplateEngine_missingTable);
+		else{
+			StandardTable table = (StandardTable)tableComponent.getComponent();
+			if (findStaticTextElement(table,"label") == null) errorsList.add(Messages.TableTemplateEngine_missingStaticText); //$NON-NLS-1$
+			if (findTextFieldElement(table,"DetailField") == null) errorsList.add(Messages.TableTemplateEngine_missingTextField); //$NON-NLS-1$
+		}
+		
+		return errorsList;
 	}
 	
 }

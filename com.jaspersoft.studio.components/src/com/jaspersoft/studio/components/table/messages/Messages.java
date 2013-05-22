@@ -62,6 +62,12 @@ public class Messages extends NLS {
 	public static String TableStyleView_createStyleActionText;
 	public static String TableStyleView_labelText;
 	public static String TableTemplateBunlde_tableBasedString;
+	public static String TableTemplateEngine_missingStaticText;
+	public static String TableTemplateEngine_missingStyleCH;
+	public static String TableTemplateEngine_missingStyleD;
+	public static String TableTemplateEngine_missingStyleTH;
+	public static String TableTemplateEngine_missingTable;
+	public static String TableTemplateEngine_missingTextField;
 	public static String TableWizardFieldsPage_description;
 	public static String TableWizardFieldsPage_title;
 	public static String TableWizardLayoutPage_add_column_footer;

@@ -322,4 +322,7 @@
    <context id="wizard_exported_resources" title="Check the exported resource and select a path">
       <description>In this step you can see a list of exported resources along with the report. This resources are required by the report, so they will be copied in the same directory of the template. You must also define the destination path of the template, you can not proceed until a valid path is defined or if there are conflict beteween the exported resources</description>
    </context>
+   <context id="wizard_exported_category" title="Select the report type and categories">
+      <description>In this step you can see a list of available categories. This category can be assigned one by one to the report, you can also create new categories on the fly. You must also select the type of report this template will generate.</description>
+   </context>
 </contexts>

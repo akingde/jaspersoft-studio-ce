@@ -18,13 +18,21 @@ package com.jaspersoft.studio.handlers;
 
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
+import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -57,6 +65,32 @@ public class TemplateExporterWizard extends Wizard {
 	 * Second step of the wizard: report type and categories
 	 */
 	private CategoriesPage secondPage;
+	
+	/**
+	 * A ConfilictDetailsError, but with three buttons: Yes, No and Cancel.
+	 * Take note that the code returned for the Yes button is IDialogConstants.OK_ID 
+	 * and the id for the No button is IDialogConstants.CANCEL_ID
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class YesNoDetailsError extends ConflictDetailsError{
+
+		public YesNoDetailsError(Shell parentShell, String dialogTitle, String message, IStatus status, int displayMask) {
+			super(parentShell, dialogTitle, message, status, displayMask);
+		}
+		
+		@Override
+		protected void createButtonsForButtonBar(Composite parent) {
+			createButton(parent, IDialogConstants.OK_ID, IDialogConstants.YES_LABEL,	false);
+			createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.NO_LABEL,	true);
+			createDetailsButton(parent);
+		}
+		
+		protected void setShellStyle(int newShellStyle) {
+			super.setShellStyle(newShellStyle | SWT.SHEET);
+		}
+	}
 
 	/**
 	 * Create the three step and add them to the report, but only if a report is selected
@@ -80,7 +114,7 @@ public class TemplateExporterWizard extends Wizard {
 	}
 	
 	/**
-	 * Create the congratulations page, setting the propper grid data. The last page in particalry is 
+	 * Create the congratulations page, setting the proper grid data. The last page in particular is 
 	 * used here to define the size of the wizard dialog
 	 * 
 	 * @return
@@ -146,12 +180,45 @@ public class TemplateExporterWizard extends Wizard {
 			setWindowTitle(Messages.TemplateExporterWizard_title);
 			setNeedsProgressMonitor(false);
 	}
+	
+
+	
+	/**
+	 * Display a error message when the selected template type is not compatible with the exported report, in the detail
+	 * section are listed the founded error
+	 * 
+	 * @param errors List of all the validation errors found using the selected report as template of the selected type
+	 * 
+	 * @return the code of the pressed button on the dialog
+	 */
+	private int createErrorMessage(List<String> errors){
+		String conf = ""; //$NON-NLS-1$
+		for(String error : errors){
+			conf += error.concat("\n"); //$NON-NLS-1$ 
+		}
+
+		IStatus status = new OperationStatus(IStatus.ERROR, JasperReportsPlugin
+				.getDefault().getPluginID(), OperationStatus.NOTHING_TO_REDO,
+				conf, null);
+		int result = new YesNoDetailsError(
+				UIUtils.getShell(),
+				Messages.TemplateExporterWizard_errorTitle,
+				Messages.TemplateExporterWizard_errorMessage,
+				status, IStatus.OK | IStatus.INFO | IStatus.WARNING
+						| IStatus.ERROR).open();
+		return result;
+	}
+	
 
 	/**
 	 * The finish of the wizard call the finish of every single step
 	 */
 	@Override
-	public boolean performFinish() {
+	public boolean performFinish() {		
+		List<String> validationError = secondPage.validateWithSelectedEngine(firstPage.getDesign());
+		if (validationError.size()>0){
+			if (createErrorMessage(validationError) == IDialogConstants.CANCEL_ID) return false;
+		}
 		firstPage.finish();
 		secondPage.finish(firstPage.getDesign().getName(),firstPage.getDestinationPath());
 		return true;

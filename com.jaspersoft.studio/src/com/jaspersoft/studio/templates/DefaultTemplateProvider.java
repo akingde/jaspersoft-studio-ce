@@ -24,12 +24,15 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage;
+import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.templates.TemplateBundle;
 
@@ -142,6 +145,18 @@ public class DefaultTemplateProvider implements TemplateProvider {
 	@Override
 	public String getProviderName() {
 		return "Standard Report";
+	}
+
+	/**
+	 * Get a JasperDesign and check if that JasperDesign can be used as Template and processed
+	 * by the engine used inside this provider
+	 * 
+	 * @param design the design to check
+	 * @return a List of founded error, the list is void if no error are found
+	 */
+	@Override
+	public List<String> validateTemplate(JasperDesign design) {
+		return DefaultTemplateEngine.validateJasperDesig(design);
 	}
 
 }

@@ -17,6 +17,8 @@ package com.jaspersoft.studio.templates;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 import com.jaspersoft.templates.TemplateBundle;
 
 
@@ -36,4 +38,13 @@ public interface TemplateProvider {
 		 * return a human readable name for the engine
 		 */
 		public String getProviderName();
+		
+		/**
+		 * Get a JasperDesign and check if that JasperDesign can be used as Template and processed
+		 * by the engine used inside this provider
+		 * 
+		 * @param design the design to check
+		 * @return a List of founded error, the list is void if no error are found
+		 */
+		public List<String> validateTemplate(JasperDesign design);
 }

@@ -397,6 +397,9 @@ public class Messages extends NLS {
 	public static String DefaultDataAdapterEditorComposite_properyLabel;
 	public static String DefaultDataAdapterEditorComposite_specifyNameMessage;
 	public static String DefaultDataAdapterEditorComposite_valueLabel;
+	public static String DefaultTemplateEngine_missingGroupFiledStatic;
+	public static String DefaultTemplateEngine_missingStaticTextCH;
+	public static String DefaultTemplateEngine_missingTextFieldD;
 	public static String DefaultTemplateProvider_TemplateLoadingErr;
 	public static String DeleteDataAdapterAction_deleteDescription;
 	public static String DeleteDataAdapterAction_deleteName;
@@ -1440,6 +1443,8 @@ public class Messages extends NLS {
 	public static String TemplateExporterWizard_congratMessage;
 	public static String TemplateExporterWizard_congratTitle;
 	public static String TemplateExporterWizard_congrattoFinish;
+	public static String TemplateExporterWizard_errorMessage;
+	public static String TemplateExporterWizard_errorTitle;
 	public static String TemplateExporterWizard_title;
 	public static String TemplateLocationsPreferencePage_Description;
 	public static String TemplateLocationsPreferencePage_Locations;

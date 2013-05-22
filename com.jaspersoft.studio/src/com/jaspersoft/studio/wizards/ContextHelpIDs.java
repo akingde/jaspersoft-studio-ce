@@ -86,4 +86,6 @@ public class ContextHelpIDs {
 	public static final String WIZARD_PATTERN = PREFIX.concat("wizard_pattern");
 	
 	public static final String WIZARD_EXPORTED_RESOURCES = PREFIX.concat("wizard_exported_resources");
+	
+	public static final String WIZARD_EXPORTED_CATEGORY = PREFIX.concat("wizard_exported_category");
 }
