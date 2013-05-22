@@ -57,6 +57,7 @@ import org.eclipse.ui.progress.WorkbenchJob;
 import org.eclipse.xtext.validation.Issue;
 
 import com.google.inject.Injector;
+import com.jaspersoft.studio.data.designer.UndoRedoImpl;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionContextUtils;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorComposite;
@@ -198,6 +199,8 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 
 		editorArea = new StyledText(editorContainer, SWT.BORDER
 				| SWT.BORDER_SOLID | SWT.MULTI | SWT.WRAP);
+		
+		new UndoRedoImpl(editorArea);
 		GridData editorAreaGD=new GridData(SWT.FILL, SWT.FILL, true, true);
 		editorAreaGD.widthHint=500;
 		editorArea.setLayoutData(editorAreaGD);
