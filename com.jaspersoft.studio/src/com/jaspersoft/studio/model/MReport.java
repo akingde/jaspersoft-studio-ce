@@ -158,6 +158,14 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		defaultsMap = defaultsMap1;
 	}
 
+	public MBand getBand(BandTypeEnum type){
+		List<INode> children = this.getChildren();
+		for(INode node : children){
+			if (node instanceof MBand && ((MBand)node).getBandType().equals(type)) return (MBand)node;
+		}
+		return null;
+	}
+	
 	private MDataset mDataset;
 
 	/**

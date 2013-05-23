@@ -37,9 +37,37 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String DEFAULT_BORDERSTYLE = "shadow"; //$NON-NLS-1$
 	public static final String DEFAULT_MARGINCOLOR = "170,168,255"; //$NON-NLS-1$
 	public static final String DEFAULT_PAGE_BACKGROUND = "255,255,255"; //$NON-NLS-1$
+	
+	/**
+	 * Key of the behavior used when a field is dragged from the outline into the detail band
+	 */ 
+	public static final String BEHAVIOR_ON_FIELD_DROP = "fieldDrop"; //$NON-NLS-1$
+	
+	/**
+	 * This behavior specify to create a label aligned with the new filed, into the column header band
+	 * if there is enough space, otherwise in the detail band.
+	 */
+	public static final String BEHAVIOR_CREATE_LABEL = "create_label"; //$NON-NLS-1$
+	
+	/**
+	 * This behavior specify to create only the text field when a field is dragged 
+	 * from the outline into the detail band
+	 */
+	public static final String BEHAVIOR_DO_NOTHING = "do_nothing"; //$NON-NLS-1$
+	
+	/**
+	 * This behavior specify to ask to the user what to do when a field is dragged 
+	 * from the outline into the detail band
+	 */
+	public static final String BEHAVIOR_ASK_EVERYTIME = "ask_everytime"; //$NON-NLS-1$
+
+	/**
+	 * This constants specify the default behavior when a field is dragged 
+	 * from the outline into the detail band
+	 */
+	public static final String DEFAULT_BEHAVIOR = BEHAVIOR_CREATE_LABEL; //$NON-NLS-1$
 
 	public static final String DEFAULT_ELEMENT_DESIGN_BORDER_COLOR = "0,0,0"; //$NON-NLS-1$
-
 	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.DesignerPreferencePage.property"; //$NON-NLS-1$
 
 	public static final String P_ELEMENT_DESIGN_BORDER_STYLE = "elementDesignBorderStyle"; //$NON-NLS-1$
@@ -49,6 +77,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_CONTAINER_MARGIN_COLOR = "containerMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_MARGIN_COLOR = "pageMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_BACKGROUND = "pageBackground"; //$NON-NLS-1$
+
 
 	public static final String P_ELEMENT_DESIGN_BORDER_COLOR = "elementDesignBorderColor"; //$NON-NLS-1$
 
@@ -89,6 +118,12 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		addField(new ColorFieldEditor(P_PAGE_BACKGROUND, Messages.DesignerPreferencePage_pagebackground,
 				getFieldEditorParent()));
 		addField(new FontFieldEditor(P_INTERNAL_EDITORS_FONT, Messages.DesignerPreferencePage_InternalEditorsFont, getFieldEditorParent()));		
+		
+		addField(new ComboFieldEditor(BEHAVIOR_ON_FIELD_DROP, Messages.DesignerPreferencePage_field_behavior,
+				new String[][] { { Messages.DesignerPreferencePage_field_behavior_label, BEHAVIOR_CREATE_LABEL },
+						{ Messages.DesignerPreferencePage_field_behavior_nothing, BEHAVIOR_DO_NOTHING } ,
+						{ Messages.DesignerPreferencePage_field_behavior_ask, BEHAVIOR_ASK_EVERYTIME } }, getFieldEditorParent())); 
+
 	}
 
 	/*
@@ -108,6 +143,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_PAGE_MARGIN_COLOR, DEFAULT_MARGINCOLOR);
 		store.setDefault(P_SHOW_REPORT_BAND_NAMES, true);
 		store.setDefault(P_PAGE_BACKGROUND, DEFAULT_PAGE_BACKGROUND); 
+		store.setDefault(BEHAVIOR_ON_FIELD_DROP,  DEFAULT_BEHAVIOR);
 		PreferenceConverter.setDefault(store,P_INTERNAL_EDITORS_FONT, FontUtils.getTextEditorFontData());	
 	}
 

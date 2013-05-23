@@ -416,6 +416,10 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_element_design_border_style;
 	public static String DesignerPreferencePage_elementbordercolor;
 	public static String DesignerPreferencePage_fancy_shadow;
+	public static String DesignerPreferencePage_field_behavior;
+	public static String DesignerPreferencePage_field_behavior_ask;
+	public static String DesignerPreferencePage_field_behavior_label;
+	public static String DesignerPreferencePage_field_behavior_nothing;
 	public static String DesignerPreferencePage_InternalEditorsFont;
 	public static String DesignerPreferencePage_InternalEditorsFontFamily;
 	public static String DesignerPreferencePage_InternalEditorsFontFamilyTooltip;
@@ -718,6 +722,9 @@ public class Messages extends NLS {
 	public static String JrxmlEditorContributor_select_all;
 	public static String JrxmlEditorContributor_show_ruler;
 	public static String JrxmlEditorContributor_view;
+	public static String JSSTemplateTransferDropTargetListener_createLabelMessage1;
+	public static String JSSTemplateTransferDropTargetListener_createLabelMessage2;
+	public static String JSSTemplateTransferDropTargetListener_createLabelTitle;
 	public static String LastPageAction_actionName;
 	public static String LastPageAction_actionTooltip;
 	public static String LayoutSection_combodescription;
