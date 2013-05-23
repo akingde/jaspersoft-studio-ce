@@ -13,31 +13,36 @@
 	<packaging>pom</packaging>
 	<version>5.1.1-SNAPSHOT</version>
 
-	<build>
-		<plugins>
-			<!-- Signing the features -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.2</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<alias>${signing.alias}</alias>
-					<keystore>${signing.keystore}</keystore>
-					<storepass>${signing.storepass}</storepass>
-					<type>${signing.storetype}</type>
-					<verify>true</verify>
-					<jarPath>${project.build.directory}/${project.artifactId}_${project.version}.${buildQualifier}.jar</jarPath>
-				</configuration>
-			</plugin>		
-		</plugins>
-	</build>
+	<profiles>
+		<profile>
+			<id>signing</id>
+			<build>
+				<plugins>
+					<!-- Signing the features -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>2.3.2</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<alias>${signing.alias}</alias>
+							<keystore>${signing.keystore}</keystore>
+							<storepass>${signing.storepass}</storepass>
+							<type>${signing.storetype}</type>
+							<verify>true</verify>
+							<jarPath>${project.build.directory}/${project.artifactId}_${project.version}.${buildQualifier}.jar</jarPath>
+						</configuration>
+					</plugin>		
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<modules>
 		<module>../../net.sf.jasperreports.feature</module>
