@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  org.eclipse.xtext.common.types
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6 
 Export-Package: com.jaspersoft.studio.data,
  com.jaspersoft.studio.data.services,
  com.jaspersoft.studio.data.sql,
