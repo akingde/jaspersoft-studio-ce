@@ -93,7 +93,7 @@ public class CreateHtmlCommand extends CreateElementCommand {
 		if (getJrElement() == null) {
 			srcNode = new MHtml();
 			if (srcNode.getValue() == null) {
-				jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
+				jrElement = srcNode.createJRElement(jasperDesign);
 			} else {
 				jrElement = (JRDesignElement) srcNode.getValue();
 			}
