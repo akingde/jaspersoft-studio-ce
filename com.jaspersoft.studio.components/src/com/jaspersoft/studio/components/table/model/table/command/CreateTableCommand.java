@@ -41,14 +41,13 @@ public class CreateTableCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
-	public CreateTableCommand(MElementGroup destNode, MGraphicElement srcNode,
-			int index) {
+	public CreateTableCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -56,14 +55,13 @@ public class CreateTableCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
-	public CreateTableCommand(MFrame destNode, MGraphicElement srcNode,
-			int index) {
+	public CreateTableCommand(MFrame destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -71,11 +69,11 @@ public class CreateTableCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
 	public CreateTableCommand(MBand destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
@@ -85,16 +83,15 @@ public class CreateTableCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param position
-	 *            the position
+	 *          the position
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
-	public CreateTableCommand(ANode destNode, MGraphicElement srcNode,
-			Rectangle position, int index) {
+	public CreateTableCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
 
@@ -105,16 +102,14 @@ public class CreateTableCommand extends CreateElementCommand {
 	protected void createObject() {
 		if (jrElement == null) {
 			TableWizard wizard = new TableWizard();
-			WizardDialog dialog = new WizardDialog(Display.getDefault()
-					.getActiveShell(), wizard);
+			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 			wizard.setConfig(jConfig);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getTable(location.width);
 				addCommands(wizard.getCommands());
 				if (srcNode.getValue() == null)
-					jrElement = srcNode.createJRElement(srcNode
-							.getJasperDesign());
+					jrElement = srcNode.createJRElement(jasperDesign);
 				else {
 					jrElement = (JRDesignElement) srcNode.getValue();
 				}

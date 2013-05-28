@@ -145,13 +145,37 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 	 * @return the root
 	 */
 	public INode getRoot() {
-		INode node = this;
-		while (!(node instanceof MReport) && !(node instanceof MRoot)) {
-			if (node == null || node.getParent() == null)
-				return this;
-			node = node.getParent();
-		}
-		return node;
+		if (root == null && getParent() != null)
+			root = getParent().getRoot();
+		//
+		// INode node = this;
+		// while (!(node instanceof MReport) && !(node instanceof MRoot)) {
+		// if (node == null || node.getParent() == null)
+		// return this;
+		// node = node.getParent();
+		// }
+		return root;
+	}
+
+	private INode root;
+
+	public void register() {
+		root = null;
+		INode root = getRoot();
+		if (root != null && root instanceof ANode)
+			((ANode) root).register(this);
+	}
+
+	public void unregister() {
+		if (root != null && root instanceof ANode)
+			((ANode) root).unregister(this);
+		root = null;
+	}
+
+	public void register(ANode n) {
+	}
+
+	public void unregister(ANode n) {
 	}
 
 	/**
@@ -250,10 +274,10 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 	 *          the child
 	 */
 	public void removeChild(ANode child) {
-		//Set the jasperconfiguration before to remove the parent, because if a selection is 
-		//fired on the child it will search for the jasperconfiguration on the parent, and not 
-		//finding it the result will be null. But this broke a lot of things on the selection
-		//event
+		// Set the jasperconfiguration before to remove the parent, because if a selection is
+		// fired on the child it will search for the jasperconfiguration on the parent, and not
+		// finding it the result will be null. But this broke a lot of things on the selection
+		// event
 		child.setJasperConfiguration(getJasperConfiguration());
 		child.setParent(null, -1);
 	}
@@ -381,24 +405,6 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 			return;
 		}
 		this.value = value;
-	}
-
-	public void register() {
-		INode root = getRoot();
-		if (root instanceof MReport) {
-			MReport mRoot = (MReport) root;
-			if (mRoot != null)
-				mRoot.register(this);
-		}
-	}
-
-	public void unregister() {
-		INode root = getRoot();
-		if (root instanceof MReport) {
-			MReport mRoot = (MReport) getRoot();
-			if (mRoot != null)
-				mRoot.unregister(this);
-		}
 	}
 
 	public EditPart getFigureEditPart() {

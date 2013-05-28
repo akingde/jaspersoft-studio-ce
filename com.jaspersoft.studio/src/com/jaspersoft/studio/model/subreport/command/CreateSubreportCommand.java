@@ -103,7 +103,7 @@ public class CreateSubreportCommand extends CreateElementCommand {
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getSubreport();
 				if (srcNode.getValue() == null)
-					jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
+					jrElement = srcNode.createJRElement(jasperDesign);
 				else {
 					jrElement = (JRDesignElement) srcNode.getValue();
 				}

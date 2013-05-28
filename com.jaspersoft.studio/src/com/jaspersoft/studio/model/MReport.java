@@ -82,11 +82,18 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 
+	@Override
+	public INode getRoot() {
+		return this;
+	}
+
+	@Override
 	public void register(ANode n) {
 		if (n.getValue() != null)
 			obj2Node.put(n.getValue(), n);
 	}
 
+	@Override
 	public void unregister(ANode n) {
 		if (n.getValue() != null)
 			obj2Node.remove(n.getValue());
@@ -158,14 +165,15 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		defaultsMap = defaultsMap1;
 	}
 
-	public MBand getBand(BandTypeEnum type){
+	public MBand getBand(BandTypeEnum type) {
 		List<INode> children = this.getChildren();
-		for(INode node : children){
-			if (node instanceof MBand && ((MBand)node).getBandType().equals(type)) return (MBand)node;
+		for (INode node : children) {
+			if (node instanceof MBand && ((MBand) node).getBandType().equals(type))
+				return (MBand) node;
 		}
 		return null;
 	}
-	
+
 	private MDataset mDataset;
 
 	/**

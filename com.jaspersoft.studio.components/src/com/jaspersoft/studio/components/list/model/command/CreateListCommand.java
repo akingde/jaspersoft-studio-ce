@@ -112,8 +112,7 @@ public class CreateListCommand extends CreateElementCommand {
 				srcNode = wizard.getList();
 				addCommands(wizard.getCommands());
 				if (srcNode.getValue() == null)
-					jrElement = srcNode.createJRElement(srcNode
-							.getJasperDesign());
+					jrElement = srcNode.createJRElement(jasperDesign);
 				else {
 					jrElement = (JRDesignElement) srcNode.getValue();
 					if (location != null) {

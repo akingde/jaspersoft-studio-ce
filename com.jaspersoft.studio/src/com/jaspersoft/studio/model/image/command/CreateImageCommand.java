@@ -58,7 +58,7 @@ public class CreateImageCommand extends CreateElementCommand implements DialogEn
 	protected void createObject() {
 		if (getJrElement() == null) {
 			if (srcNode.getValue() == null)
-				jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
+				jrElement = srcNode.createJRElement(jasperDesign);
 			else
 				jrElement = (JRDesignElement) srcNode.getValue();
 

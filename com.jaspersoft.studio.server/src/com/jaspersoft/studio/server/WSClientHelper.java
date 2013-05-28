@@ -135,24 +135,26 @@ public class WSClientHelper {
 					continue;
 			}
 			MResource node = ResourceFactory.getResource(parent, r, index);
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
-				listFolder(node, client, r.getUriString(), monitor, depth);
-			} else if (r.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
-				r = client.get(r, null);
-				Set<String> setRU = new HashSet<String>();
-				List<ResourceDescriptor> children2 = r.getChildren();
-				for (ResourceDescriptor res : children2) {
-					if (setRU.contains(res.getUriString()))
-						continue;
-					setRU.add(res.getUriString());
-					if (SelectorDatasource.isDatasource(res))
-						continue;
-					if (res.getWsType().equals(ResourceDescriptor.TYPE_FOLDER))
-						listFolder(node, client, res.getUriString(), monitor, depth);
-					else
-						ResourceFactory.getResource(node, res, index);
-					if (monitor.isCanceled())
-						return children;
+			if (depth <= 0) {
+				if (r.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
+					listFolder(node, client, r.getUriString(), monitor, depth);
+				} else if (r.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
+					r = client.get(r, null);
+					Set<String> setRU = new HashSet<String>();
+					List<ResourceDescriptor> children2 = r.getChildren();
+					for (ResourceDescriptor res : children2) {
+						if (setRU.contains(res.getUriString()))
+							continue;
+						setRU.add(res.getUriString());
+						if (SelectorDatasource.isDatasource(res))
+							continue;
+						if (res.getWsType().equals(ResourceDescriptor.TYPE_FOLDER))
+							listFolder(node, client, res.getUriString(), monitor, depth);
+						else
+							ResourceFactory.getResource(node, res, index);
+						if (monitor.isCanceled())
+							return children;
+					}
 				}
 			}
 			if (monitor.isCanceled())

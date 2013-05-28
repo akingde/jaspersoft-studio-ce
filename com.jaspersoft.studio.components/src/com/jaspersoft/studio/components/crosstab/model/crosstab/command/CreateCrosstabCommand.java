@@ -41,14 +41,13 @@ public class CreateCrosstabCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
-	public CreateCrosstabCommand(MElementGroup destNode,
-			MGraphicElement srcNode, int index) {
+	public CreateCrosstabCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -56,14 +55,13 @@ public class CreateCrosstabCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
-	public CreateCrosstabCommand(MFrame destNode, MGraphicElement srcNode,
-			int index) {
+	public CreateCrosstabCommand(MFrame destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -71,14 +69,13 @@ public class CreateCrosstabCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
-	public CreateCrosstabCommand(MBand destNode, MGraphicElement srcNode,
-			int index) {
+	public CreateCrosstabCommand(MBand destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -86,16 +83,15 @@ public class CreateCrosstabCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *            the dest node
+	 *          the dest node
 	 * @param srcNode
-	 *            the src node
+	 *          the src node
 	 * @param position
-	 *            the position
+	 *          the position
 	 * @param index
-	 *            the index
+	 *          the index
 	 */
-	public CreateCrosstabCommand(ANode destNode, MGraphicElement srcNode,
-			Rectangle position, int index) {
+	public CreateCrosstabCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
 
@@ -108,15 +104,13 @@ public class CreateCrosstabCommand extends CreateElementCommand {
 			// here put a wizard
 			CrosstabWizard wizard = new CrosstabWizard();
 			wizard.setConfig(jConfig);
-			WizardDialog dialog = new WizardDialog(Display.getDefault()
-					.getActiveShell(), wizard);
+			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getCrosstab();
 				addCommands(wizard.getCommands());
 				if (srcNode.getValue() == null)
-					jrElement = srcNode.createJRElement(srcNode
-							.getJasperDesign());
+					jrElement = srcNode.createJRElement(jasperDesign);
 				else
 					jrElement = (JRDesignElement) srcNode.getValue();
 				if (jrElement != null)
