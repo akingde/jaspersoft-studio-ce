@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.dnd;
 
@@ -20,6 +15,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.TransferData;
@@ -43,8 +40,7 @@ public class NodeTransfer extends ByteArrayTransfer {
 
 	protected ANode[] fromByteArray(byte[] bytes) {
 		try {
-			ObjectInputStream in = new ObjectInputStream(
-					new ByteArrayInputStream(bytes));
+			ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes));
 
 			/* read number of gadgets */
 			int n = in.readInt();
@@ -91,8 +87,7 @@ public class NodeTransfer extends ByteArrayTransfer {
 		return fromByteArray(bytes);
 	}
 
-	private ANode readGadget(ANode parent, ObjectInputStream dataIn)
-			throws IOException {
+	private ANode readGadget(ANode parent, ObjectInputStream dataIn) throws IOException {
 		try {
 			return (ANode) dataIn.readObject();
 		} catch (ClassNotFoundException e) {
@@ -103,8 +98,8 @@ public class NodeTransfer extends ByteArrayTransfer {
 
 	protected byte[] toByteArray(ANode[] nodes) {
 		byte[] bytes = null;
+		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		try {
-			ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 			ObjectOutputStream out = new ObjectOutputStream(byteOut);
 
 			/* write number of markers */
@@ -117,13 +112,15 @@ public class NodeTransfer extends ByteArrayTransfer {
 			out.close();
 			bytes = byteOut.toByteArray();
 		} catch (IOException e) {
+			e.printStackTrace();
 			// when in doubt send nothing
+		} finally {
+			FileUtils.closeStream(byteOut);
 		}
 		return bytes;
 	}
 
-	private void writeNode(ANode node, ObjectOutputStream dataOut)
-			throws IOException {
+	private void writeNode(ANode node, ObjectOutputStream dataOut) throws IOException {
 		dataOut.writeObject(node);
 	}
 }
