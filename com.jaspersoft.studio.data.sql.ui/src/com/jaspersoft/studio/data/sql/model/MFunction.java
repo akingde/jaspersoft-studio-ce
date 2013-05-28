@@ -8,7 +8,7 @@ import net.sf.jasperreports.engine.JRConstants;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
 
-public class MFunction extends MDBObjects implements IDragable {
+public class MFunction extends AMSQLObject implements IDragable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MFunction(ANode parent, String value, ResultSet rs) {

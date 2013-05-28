@@ -5,8 +5,13 @@ package com.jaspersoft.studio.data.ui.outline;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.xtext.nodemodel.ICompositeNode;
+import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode;
+import org.eclipse.xtext.ui.editor.outline.impl.EObjectNode;
+import org.eclipse.xtext.util.TextRegion;
 
 import com.jaspersoft.studio.data.sql.Column;
 import com.jaspersoft.studio.data.sql.ColumnFull;
@@ -105,5 +110,15 @@ public class SqlOutlineTreeProvider extends org.eclipse.xtext.ui.editor.outline.
 				createNode(parentNode, model.getOrderByEntry());
 		} else
 			super._createChildren(parentNode, modelElement);
+	}
+
+	protected EObjectNode createEObjectNode(IOutlineNode parentNode, EObject modelElement, Image image, Object text, boolean isLeaf) {
+		EObjectNode eObjectNode = new JSSEObjectNode(modelElement, parentNode, image, text, isLeaf);
+		ICompositeNode parserNode = NodeModelUtils.getNode(modelElement);
+		if (parserNode != null)
+			eObjectNode.setTextRegion(new TextRegion(parserNode.getOffset(), parserNode.getLength()));
+		if (isLocalElement(parentNode, modelElement))
+			eObjectNode.setShortTextRegion(locationInFileProvider.getSignificantTextRegion(modelElement));
+		return eObjectNode;
 	}
 }

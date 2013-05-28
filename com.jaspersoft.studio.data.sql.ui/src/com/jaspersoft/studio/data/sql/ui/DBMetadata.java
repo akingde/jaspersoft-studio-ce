@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.PluginTransfer;
 
+import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.model.MColumn;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
 import com.jaspersoft.studio.data.sql.model.MFunction;
@@ -56,9 +57,7 @@ public class DBMetadata {
 
 		ColumnViewerToolTipSupport.enableFor(treeViewer);
 
-		int ops = DND.DROP_COPY | DND.DROP_MOVE;
-		Transfer[] transfers = new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() };
-		treeViewer.addDragSupport(ops, transfers, new NodeDragListener(treeViewer) {
+		treeViewer.addDragSupport(DND.DROP_COPY | DND.DROP_MOVE, new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() }, new NodeDragListener(treeViewer) {
 			@Override
 			public void dragStart(DragSourceEvent event) {
 				TreeSelection s = (TreeSelection) treeViewer.getSelection();
@@ -68,7 +67,7 @@ public class DBMetadata {
 						return;
 					}
 				}
-				event.doit = !s.isEmpty();
+				// event.doit = !s.isEmpty();
 			}
 
 			@Override
@@ -106,7 +105,7 @@ public class DBMetadata {
 				ResultSet schemas = meta.getSchemas();
 				while (schemas.next()) {
 					String tableSchema = schemas.getString("TABLE_SCHEM");
-					MDBObjects msch = new MDBObjects(root, tableSchema, "icons/database.png");
+					MDBObjects msch = new AMSQLObject(root, tableSchema, "icons/database.png");
 
 					String tableCatalog = null;
 					if (meta.supportsCatalogsInTableDefinitions())
@@ -152,8 +151,8 @@ public class DBMetadata {
 					} catch (Exception e) {
 					}
 
-					System.out.println(meta.getSQLKeywords());
-					System.out.println(meta.getSQLKeywords());
+					// System.out.println(meta.getSQLKeywords());
+					// System.out.println(meta.getSQLKeywords());
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

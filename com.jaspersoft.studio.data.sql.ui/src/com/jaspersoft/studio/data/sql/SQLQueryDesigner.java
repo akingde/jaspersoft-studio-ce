@@ -29,10 +29,16 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.StyledTextDropTargetEffect;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.part.PluginTransfer;
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalProvider;
 import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
@@ -42,10 +48,12 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.UndoRedoImpl;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.ui.DBMetadata;
 import com.jaspersoft.studio.data.sql.ui.SQLQueryOutline;
 import com.jaspersoft.studio.data.ui.contentassist.SqlProposalProvider;
 import com.jaspersoft.studio.data.ui.internal.SqlActivator;
+import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 
@@ -122,6 +130,26 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		tv.setDocument(document);
 
 		bptab.setControl(control);
+
+		DropTarget target = new DropTarget(control, DND.DROP_MOVE | DND.DROP_COPY);
+		target.setTransfer(new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() });
+		target.addDropListener(new StyledTextDropTargetEffect(control) {
+			@Override
+			public void drop(DropTargetEvent event) {
+				Object obj = event.data;
+				if (obj.getClass().isArray()) {
+					Object[] arr = (Object[]) obj;
+					if (arr.length > 0)
+						obj = arr[0];
+				}
+				if (obj instanceof AMSQLObject) {
+					StringBuffer oldText = new StringBuffer(control.getText());
+
+					oldText.insert(control.getCaretOffset(), " " + ((AMSQLObject) obj).toSQLString() + " ");
+					control.setText(oldText.toString());
+				}
+			}
+		});
 	}
 
 	@Override

@@ -9,14 +9,23 @@ import java.util.List;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextInputListener;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.part.PluginTransfer;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.editor.model.IXtextModelListener;
@@ -32,6 +41,14 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.jaspersoft.studio.data.sql.action.ActionFactory;
+import com.jaspersoft.studio.data.sql.action.table.CreateTable;
+import com.jaspersoft.studio.data.sql.model.MSqlTable;
+import com.jaspersoft.studio.data.sql.model.MView;
+import com.jaspersoft.studio.dnd.NodeDragListener;
+import com.jaspersoft.studio.dnd.NodeTransfer;
+import com.jaspersoft.studio.dnd.NodeTreeDropAdapter;
+import com.jaspersoft.studio.model.ANode;
 
 public class SQLQueryOutline {
 	private TextViewer textViewer;
@@ -63,6 +80,52 @@ public class SQLQueryOutline {
 		configureModelListener();
 		refreshJob.setOutlinePage(this);
 		configureTextInputListener();
+		MenuManager menuMgr = new MenuManager();
+		menuMgr.setRemoveAllWhenShown(true);
+		final ActionFactory afactory = new ActionFactory(menuMgr, xtextDocument);
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager mgr) {
+				TreeSelection s = (TreeSelection) treeViewer.getSelection();
+				afactory.fillMenu(s != null ? s.toArray() : null);
+			}
+
+		});
+
+		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
+		menuMgr.add(new CreateTable(xtextDocument));
+
+		treeViewer.getControl().setMenu(menu);
+
+		int ops = DND.DROP_COPY | DND.DROP_MOVE;
+		Transfer[] transfers = new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() };
+		treeViewer.addDragSupport(ops, transfers, new NodeDragListener(treeViewer));
+
+		transfers = new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() };
+		NodeTreeDropAdapter dropAdapter = new NodeTreeDropAdapter(treeViewer) {
+			@Override
+			public boolean validateDrop(Object target, int op, TransferData type) {
+				return super.validateDrop(target, op, type);
+			}
+
+			@Override
+			public boolean performDrop(Object data) {
+				Object target = getCurrentTarget();
+				System.out.println(data);
+				if (target instanceof MSqlTable || target instanceof MView) {
+					if (data instanceof ANode[]) {
+						ANode[] nodes = (ANode[]) data;
+						for (ANode n : nodes) {
+							if (n instanceof MSqlTable) {
+								System.out.println(n.getDisplayText());
+							}
+						}
+					}
+				}
+				return false;
+			}
+		};
+		treeViewer.addDropSupport(ops, transfers, dropAdapter);
+
 		return treeViewer.getControl();
 	}
 

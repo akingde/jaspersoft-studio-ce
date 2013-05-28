@@ -9,8 +9,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class MDBObjects extends ANode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	private ImageDescriptor icon;
-	protected String tooltip;
+	transient private ImageDescriptor icon;
+	transient protected String tooltip;
 
 	public MDBObjects(ANode parent, String value, String image) {
 		super(parent, -1);
@@ -41,4 +41,5 @@ public class MDBObjects extends ANode {
 	public String getDisplayText() {
 		return getValue();
 	}
+
 }
