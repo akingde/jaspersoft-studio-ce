@@ -325,4 +325,13 @@
    <context id="wizard_exported_category" title="Select the report type and categories">
       <description>In this step you can see a list of available categories. This category can be assigned one by one to the report, you can also create new categories on the fly. You must also select the type of report this template will generate.</description>
    </context>
+   <context id="wizard_import_select_ireport" title="Select an iReport configuration">
+      <description>Here you can see all the detected configuration of iReport, and by selecting one of them you can import the wanted data. If the wanted configuration isn't between them you can select manually a file called ireport.properties that contain the iReport configuration. You can select only one configuration at time.</description>
+   </context>
+   <context id="wizard_import_select_dataadapters" title="Select the data adapters to import">
+      <description>Here you can see all the detected data adapter inside the iReport configuration, select one or more of them and press Finish to import them into Jaspersoft Studio</description>
+   </context>
+   <context id="wizard_import_select_serverconnection" title="Select the JR Server connections to import">
+      <description>Here you can see all the detected JasperReports Server connections inside the iReport configuration, select one or more of them and press Finish to import them into Jaspersoft Studio</description>
+   </context>
 </contexts>

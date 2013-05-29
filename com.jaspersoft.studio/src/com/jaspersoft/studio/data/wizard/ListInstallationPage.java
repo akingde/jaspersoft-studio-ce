@@ -32,6 +32,8 @@ import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.data.adapter.IReportDescriptor;
 import com.jaspersoft.studio.data.adapter.ImportUtility;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
@@ -92,9 +94,9 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 	}
 	
 	public ListInstallationPage() {
-		super("IReportInstallationsList");
-		setTitle("Select the iReport installation");
-		setDescription("Select the soruce of the import, the installation of iReport are automatically discovered. You can aslo set the path of an installation manually");
+		super("IReportInstallationsList"); //$NON-NLS-1$
+		setTitle(Messages.ListInstallationPage_title);
+		setDescription(Messages.ListInstallationPage_description);
 		setPageComplete(false);
 	}
 
@@ -107,7 +109,7 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 		setControl(mainComposite);
 		
 		Label titleLabel = new Label(mainComposite, SWT.NONE);
-		titleLabel.setText("Select the iReport installation from where the data will be imported");
+		titleLabel.setText(Messages.ListInstallationPage_label);
 		GridData labelData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		labelData.heightHint = 25;
 		titleLabel.setLayoutData(labelData);
@@ -124,7 +126,7 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 		RadioSelection selectionListener = new RadioSelection();
 		for(IReportDescriptor desc : list){
 			Button radio = new Button(content, SWT.RADIO);
-			radio.setText(desc.getName() + "  ("+desc.getFile().getAbsolutePath()+")");
+			radio.setText(desc.getName() + "  ("+desc.getFile().getAbsolutePath()+")"); //$NON-NLS-1$ //$NON-NLS-2$
 			radio.setData(desc);
 			radio.addSelectionListener(selectionListener);
 		}
@@ -145,14 +147,14 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 		customLocComposite.setLayout(new GridLayout(2,false));
 		customLocComposite.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false));
 		customRadio = new Button(customLocComposite, SWT.RADIO);
-		customRadio.setText("Select a custom location");
+		customRadio.setText(Messages.ListInstallationPage_customLocation);
 		
 		Button browse = new Button(customLocComposite, SWT.NONE);
-		browse.setText("Browse");
+		browse.setText(Messages.ListInstallationPage_browse);
 		browse.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.OPEN);
-		    fd.setText("Select the file ireport.properties of an iReport installarion");
+		    fd.setText(Messages.ListInstallationPage_openDialog);
 		    String[] filterExt = { "ireport.properties" }; //$NON-NLS-1$
 		    fd.setFileName("ireport.properties");//$NON-NLS-1$
 		    fd.setFilterExtensions(filterExt);
@@ -162,7 +164,7 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 		    	if (desc != null){
 			    	customRadio.setData(desc);
 			    	customRadio.setToolTipText(selected);
-			    	if (selected.length()>60) selected = selected.substring(0,10)+"...."+selected.substring(selected.length()-60);
+			    	if (selected.length()>60) selected = selected.substring(0,10)+"...."+selected.substring(selected.length()-60); //$NON-NLS-1$
 			    	customRadio.setText(selected);
 			    	customLocComposite.layout();
 			    	if (customRadio.getSelection()) setPageComplete(true);
@@ -194,7 +196,7 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 
 	@Override
 	protected String getContextName() {
-		return null;
+		return ContextHelpIDs.WIZARD_IMPORT_SELECT_IREPORT;
 	}
 
 }

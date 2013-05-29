@@ -113,7 +113,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 					CreateElementCommand creatElementC = (CreateElementCommand)((CompoundCommand)previusCommand).getCommands().get(0);
 					String dragMessage;
 					Rectangle location;
-					if (dest == null || dest.getValue().getHeight() <newText.getDefaultHeight()+2){
+					if (dest == null || dest.getValue() == null || dest.getValue().getHeight() <newText.getDefaultHeight()+2){
 						//There isn't enough space in the Column header, the static text will be placed into the detail
 						dest = band;
 						int x = creatElementC.getLocation().x - band.getBounds().x;

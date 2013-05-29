@@ -35,6 +35,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.data.adapter.IReportDescriptor;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
@@ -61,11 +63,16 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 	 */
 	private Composite content;
 	
+	/**
+	 * Label shown where there aren't element that could be imported
+	 */
+	private Label noElementLabel = null;
+	
 	protected ShowAdaptersPage() {
-		super("IReportDatasourceList");
+		super("IReportDatasourceList"); //$NON-NLS-1$
 		selectedElements = new ArrayList<Button>();
-		setTitle("Select the Data Adapters");
-		setDescription("Select one or more data adapters that will be imported into Jaspersoft Studio");
+		setTitle(Messages.ShowAdaptersPage_title);
+		setDescription(Messages.ShowAdaptersPage_description);
 	}
 	
 	/**
@@ -82,30 +89,35 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 			button.dispose();
 		}
 		selectedElements.clear();
+		if (noElementLabel != null) noElementLabel.dispose();
 		content.layout();
 		
 		Properties prop = selectedInstallation.getConfiguration();
 		Integer connectionIndex = 2;
 		
 		if (prop != null){
-			String connectionXML = prop.getProperty("connection." + connectionIndex);
+			String connectionXML = prop.getProperty("connection." + connectionIndex); //$NON-NLS-1$
 			while(connectionXML != null){
 				try {
 					Document document = JRXmlUtils.parse(new InputSource(new StringReader(connectionXML)));
 					NamedNodeMap rootAttributes = document.getChildNodes().item(0).getAttributes();
-					String connectionName = rootAttributes.getNamedItem("name").getTextContent();
-					String connectionClass = rootAttributes.getNamedItem("connectionClass").getTextContent();
+					String connectionName = rootAttributes.getNamedItem("name").getTextContent(); //$NON-NLS-1$
+					String connectionClass = rootAttributes.getNamedItem("connectionClass").getTextContent(); //$NON-NLS-1$
 					Button checkButton = new Button(content, SWT.CHECK);
-					String type = connectionClass.substring(connectionClass.lastIndexOf(".")+1);
-					checkButton.setText(connectionName+" ("+ type + ")");
+					String type = connectionClass.substring(connectionClass.lastIndexOf(".")+1); //$NON-NLS-1$
+					checkButton.setText(connectionName+" ("+ type + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 					checkButton.setData(document);
 					selectedElements.add(checkButton);
 				} catch (JRException e) {}
 				connectionIndex++;
-				connectionXML = prop.getProperty("connection." + connectionIndex);
+				connectionXML = prop.getProperty("connection." + connectionIndex); //$NON-NLS-1$
 			}
-			content.layout();
 		}
+		if (selectedElements.isEmpty()){
+			noElementLabel = new Label(content, SWT.NONE);
+			noElementLabel.setText(Messages.ShowAdaptersPage_noElementLabel);
+		}
+		content.layout();
 	}
 	
 	/**
@@ -130,7 +142,7 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 		setControl(mainComposite);
 		
 		Label titleLabel = new Label(mainComposite, SWT.NONE);
-		titleLabel.setText("Select the data adapters to import");
+		titleLabel.setText(Messages.ShowAdaptersPage_label);
 		
 		ScrolledComposite scrollComp = new ScrolledComposite(mainComposite, SWT.V_SCROLL);
 		scrollComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -146,7 +158,7 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 
 	@Override
 	protected String getContextName() {
-		return null;
+		return ContextHelpIDs.WIZARD_IMPORT_SELECT_ADAPTERS;
 	}
 
 }

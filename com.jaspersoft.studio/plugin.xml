@@ -2007,7 +2007,7 @@
             category="com.jaspersoft.studio"
             class="com.jaspersoft.studio.data.wizard.ImportDataAdapterWizard"
             id="com.jaspersoft.studio.importadapter"
-            name="Import iReport Data Adapter">
+            name="%importDataAdapters">
          <description>
             Import Data Adapters from iReport
          </description>

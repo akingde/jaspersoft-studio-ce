@@ -21,6 +21,10 @@ public class Messages extends NLS {
 	private static final ResourceBundle RB_MESSAGES_BY_KEYS = ResourceBundle.getBundle(MESSAGES_BY_KEYS);
 	public static String SaveConfirmationDialog_question;
 	public static String SaveConfirmationDialog_title;
+	public static String ShowAdaptersPage_description;
+	public static String ShowAdaptersPage_label;
+	public static String ShowAdaptersPage_noElementLabel;
+	public static String ShowAdaptersPage_title;
 	public static String ShowCSVTagsAction_label;
 	public static String ShowCSVTagsAction_tooltip;
 	public static String ShowPDFTagsAction_title;
@@ -739,6 +743,12 @@ public class Messages extends NLS {
 	public static String LegendSection_Position_Label;
 	public static String LinePenSection_lineSectionName;
 	public static String LinePenSection_pen_width_tool_tip;
+	public static String ListInstallationPage_browse;
+	public static String ListInstallationPage_customLocation;
+	public static String ListInstallationPage_description;
+	public static String ListInstallationPage_label;
+	public static String ListInstallationPage_openDialog;
+	public static String ListInstallationPage_title;
 	public static String LocaleDialog_0;
 	public static String LocaleDialog_1;
 	public static String LocaleDialog_10;

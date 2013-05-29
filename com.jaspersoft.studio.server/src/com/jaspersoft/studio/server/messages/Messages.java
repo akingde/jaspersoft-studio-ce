@@ -228,6 +228,10 @@ public class Messages extends NLS {
 	public static String ServerProfilePage_daterangeexpression;
 	public static String ServerProfilePage_jrversion;
 	public static String ServerProfileWizardDialog_testButton;
+	public static String ShowServersPage_description;
+	public static String ShowServersPage_label;
+	public static String ShowServersPage_noElementsLabel;
+	public static String ShowServersPage_title;
 	public static String ValidationUtils_DescriptionTooLongErr;
 	public static String ValidationUtils_LabelEmptyErr;
 	public static String ValidationUtils_LabelTooLongErr;

@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.data.adapter.IReportDescriptor;
 import com.jaspersoft.studio.data.wizard.ListInstallationPage;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.utils.Encrypter;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
@@ -57,11 +58,16 @@ public class ShowServersPage extends JSSHelpWizardPage {
 	 */
 	private Composite content;
 	
+	/**
+	 * Label shown where there aren't element that could be imported
+	 */
+	private Label noElementLabel = null;
+	
 	public ShowServersPage() {
-		super("IReportDatasourceList");
+		super("IReportDatasourceList"); //$NON-NLS-1$
 		selectedElements = new ArrayList<Button>();
-		setTitle("Select the Server Connections");
-		setDescription("Select one or more connections to JasperReport Server to import");
+		setTitle(Messages.ShowServersPage_title);
+		setDescription(Messages.ShowServersPage_description);
 	}
 	
 	/**
@@ -78,43 +84,48 @@ public class ShowServersPage extends JSSHelpWizardPage {
 			button.dispose();
 		}
 		selectedElements.clear();
+		if (noElementLabel != null) noElementLabel.dispose();
 		content.layout();
 		
 		Properties prop = selectedInstallation.getServerConnection();
 		Integer connectionIndex = 0;
 		
 		if (prop != null){
-			Encrypter enc = new Encrypter("54fj245vn3vfdsmce4mg0jvs");
-			String connectionString = prop.getProperty("server." + connectionIndex + ".url");
+			Encrypter enc = new Encrypter("54fj245vn3vfdsmce4mg0jvs"); //$NON-NLS-1$
+			String connectionString = prop.getProperty("server." + connectionIndex + ".url"); //$NON-NLS-1$ //$NON-NLS-2$
 			while(connectionString != null){
 				ServerProfile srv = new ServerProfile();
 				
-				if (connectionString.endsWith("/services/repository")){
-					connectionString = connectionString.substring(0, connectionString.lastIndexOf("services/repository"));
+				if (connectionString.endsWith("/services/repository")){ //$NON-NLS-1$
+					connectionString = connectionString.substring(0, connectionString.lastIndexOf("services/repository")); //$NON-NLS-1$
 				}
 				srv.setUrl(connectionString); 
 	
-				String name = prop.getProperty("server." + connectionIndex + ".name");
+				String name = prop.getProperty("server." + connectionIndex + ".name"); //$NON-NLS-1$ //$NON-NLS-2$
 				srv.setName(name);
-				String username = prop.getProperty("server." + connectionIndex + ".username");
+				String username = prop.getProperty("server." + connectionIndex + ".username"); //$NON-NLS-1$ //$NON-NLS-2$
 				srv.setUser(username); 
 				srv.setSupportsDateRanges(true);
 				
-				String password = prop.getProperty("server." + connectionIndex + ".password.enc");
+				String password = prop.getProperty("server." + connectionIndex + ".password.enc"); //$NON-NLS-1$ //$NON-NLS-2$
 				//getBrandingProperties().getProperty("irplugin.encrypt.passwords.key", "54fj245vn3vfdsmce4mg0jvs")
 				password = enc.decrypt(password);
 				srv.setPass(password);
 				
 				Button checkButton = new Button(content, SWT.CHECK);
-				checkButton.setText(name + " ("+connectionString+")");
+				checkButton.setText(name + " ("+connectionString+")"); //$NON-NLS-1$ //$NON-NLS-2$
 				checkButton.setData(srv);
 				selectedElements.add(checkButton);
 				
 				connectionIndex++;
-				connectionString = prop.getProperty("server." + connectionIndex + ".url");
+				connectionString = prop.getProperty("server." + connectionIndex + ".url"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
-			content.layout();
 		}
+		if (selectedElements.isEmpty()){
+			noElementLabel = new Label(content, SWT.NONE);
+			noElementLabel.setText(Messages.ShowServersPage_noElementsLabel);
+		}
+		content.layout();
 	}
 	
 	/**
@@ -138,7 +149,7 @@ public class ShowServersPage extends JSSHelpWizardPage {
 		setControl(mainComposite);
 		
 		Label titleLabel = new Label(mainComposite, SWT.NONE);
-		titleLabel.setText("Select the connections to import");
+		titleLabel.setText(Messages.ShowServersPage_label);
 		
 		ScrolledComposite scrollComp = new ScrolledComposite(mainComposite, SWT.V_SCROLL);
 		scrollComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -155,7 +166,7 @@ public class ShowServersPage extends JSSHelpWizardPage {
 
 	@Override
 	protected String getContextName() {
-		return null;
+		return "wizard_import_select_serverconnection"; //$NON-NLS-1$
 	}
 
 }
