@@ -8,24 +8,22 @@ import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 
 public class Util {
 	public static int getFirstOffsetOfKeyword(EObject object) {
-		int offset = -1;
 		if (object != null) {
 			ICompositeNode node = NodeModelUtils.getNode(object);
 			if (node != null)
 				return node.getLastChild().getTotalEndOffset();
 		}
-		return offset;
+		return 0;
 	}
 
 	public static Point getPosition(EObject object) {
-		Point offset = null;
 		if (object != null) {
 			ICompositeNode node = NodeModelUtils.getNode(object);
 			if (node != null) {
-				INode lastChild = node.getLastChild();
-				return new Point(node.getLastChild().getOffset(), lastChild.getTotalEndOffset());
+				INode lc = node.getLastChild();
+				return new Point(lc.getOffset(), lc.getTotalEndOffset());
 			}
 		}
-		return offset;
+		return new Point(0, 0);
 	}
 }

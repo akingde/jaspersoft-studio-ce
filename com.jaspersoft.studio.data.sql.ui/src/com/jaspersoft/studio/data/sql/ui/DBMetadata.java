@@ -27,12 +27,13 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.PluginTransfer;
 
-import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.model.MColumn;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
 import com.jaspersoft.studio.data.sql.model.MFunction;
 import com.jaspersoft.studio.data.sql.model.MProcedure;
+import com.jaspersoft.studio.data.sql.model.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.MSqlTable;
+import com.jaspersoft.studio.data.sql.model.MTables;
 import com.jaspersoft.studio.data.sql.model.MView;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
@@ -67,7 +68,6 @@ public class DBMetadata {
 						return;
 					}
 				}
-				// event.doit = !s.isEmpty();
 			}
 
 			@Override
@@ -105,14 +105,14 @@ public class DBMetadata {
 				ResultSet schemas = meta.getSchemas();
 				while (schemas.next()) {
 					String tableSchema = schemas.getString("TABLE_SCHEM");
-					MDBObjects msch = new AMSQLObject(root, tableSchema, "icons/database.png");
+					MDBObjects msch = new MSqlSchema(root, tableSchema);
 
 					String tableCatalog = null;
 					if (meta.supportsCatalogsInTableDefinitions())
 						tableCatalog = schemas.getString("TABLE_CATALOG");
 
 					try {
-						MDBObjects mtbl = new MDBObjects(msch, "Tables", "icons/table.png");
+						MDBObjects mtbl = new MTables(msch, "Tables");
 						ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", new String[] { "TABLE" });
 						while (rs.next())
 							new MSqlTable(mtbl, rs.getString("TABLE_NAME"), rs);
@@ -125,7 +125,7 @@ public class DBMetadata {
 					} catch (Exception e) {
 					}
 					try {
-						MDBObjects mview = new MDBObjects(msch, "Views", "icons/table.png");
+						MDBObjects mview = new MTables(msch, "Views");
 						ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", new String[] { "VIEW" });
 						while (rs.next())
 							new MView(mview, rs.getString("TABLE_NAME"), rs);
@@ -165,6 +165,10 @@ public class DBMetadata {
 			}
 		});
 
+	}
+
+	public MRoot getRoot() {
+		return root;
 	}
 
 	public Connection getConnection(final DataAdapterService das) {

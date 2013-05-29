@@ -12,6 +12,7 @@ import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
 import com.jaspersoft.studio.data.sql.Model;
+import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Table;
 import com.jaspersoft.studio.data.sql.TableAlias;
 import com.jaspersoft.studio.data.sql.TableFull;
@@ -21,17 +22,14 @@ import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.ui.outline.JSSEObjectNode;
 
 public class DeleteTable extends AAction {
-	private IXtextDocument xtextDocument;
-	private Object[] selection;
 
-	public DeleteTable(IXtextDocument xtextDocument) {
-		super("&Delete Table");
-		this.xtextDocument = xtextDocument;
+	public DeleteTable(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
+		super("&Delete Table", xtextDocument, designer);
 	}
 
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
-		this.selection = selection;
+		super.calculateEnabled(selection);
 		for (Object obj : selection) {
 			if (obj instanceof JSSEObjectNode) {
 				EObject element = ((JSSEObjectNode) obj).getEObject();

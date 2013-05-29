@@ -105,7 +105,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText("Outline");
 
-		outline = new SQLQueryOutline(injector);
+		outline = new SQLQueryOutline(injector, this);
 		injector.injectMembers(outline);
 		outline.setSourceViewer(tv);
 		bptab.setControl(outline.createOutline(tabFolder));
@@ -204,5 +204,9 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	public void dispose() {
 		outline.dispose();
 		super.dispose();
+	}
+
+	public DBMetadata getDbMetadata() {
+		return dbMetadata;
 	}
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -21,7 +22,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
@@ -41,20 +41,25 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
+import com.jaspersoft.studio.data.sql.model.MColumn;
 import com.jaspersoft.studio.data.sql.model.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.MView;
+import com.jaspersoft.studio.data.ui.outline.JSSEObjectNode;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.dnd.NodeTreeDropAdapter;
 import com.jaspersoft.studio.model.ANode;
 
 public class SQLQueryOutline {
+	private SQLQueryDesigner designer;
 	private TextViewer textViewer;
 
-	public SQLQueryOutline(Injector injector) {
+	public SQLQueryOutline(Injector injector, SQLQueryDesigner designer) {
 		injector.injectMembers(refreshJob);
+		this.designer = designer;
 	}
 
 	public void setSourceViewer(TextViewer textViewer) {
@@ -82,7 +87,7 @@ public class SQLQueryOutline {
 		configureTextInputListener();
 		MenuManager menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
-		final ActionFactory afactory = new ActionFactory(menuMgr, xtextDocument);
+		final ActionFactory afactory = new ActionFactory(menuMgr, xtextDocument, treeViewer, designer);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager mgr) {
 				TreeSelection s = (TreeSelection) treeViewer.getSelection();
@@ -90,10 +95,7 @@ public class SQLQueryOutline {
 			}
 
 		});
-
 		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
-		menuMgr.add(new CreateTable(xtextDocument));
-
 		treeViewer.getControl().setMenu(menu);
 
 		int ops = DND.DROP_COPY | DND.DROP_MOVE;
@@ -102,26 +104,28 @@ public class SQLQueryOutline {
 
 		transfers = new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() };
 		NodeTreeDropAdapter dropAdapter = new NodeTreeDropAdapter(treeViewer) {
-			@Override
-			public boolean validateDrop(Object target, int op, TransferData type) {
-				return super.validateDrop(target, op, type);
-			}
 
 			@Override
 			public boolean performDrop(Object data) {
-				Object target = getCurrentTarget();
-				System.out.println(data);
-				if (target instanceof MSqlTable || target instanceof MView) {
-					if (data instanceof ANode[]) {
-						ANode[] nodes = (ANode[]) data;
-						for (ANode n : nodes) {
-							if (n instanceof MSqlTable) {
-								System.out.println(n.getDisplayText());
-							}
-						}
-					}
-				}
+				if (data.getClass().isArray()) {
+					Object[] ar = (Object[]) data;
+					for (Object obj : ar)
+						if (obj instanceof ANode)
+							doDrop((ANode) obj);
+				} else if (data instanceof ANode)
+					doDrop((ANode) data);
 				return false;
+			}
+
+			private void doDrop(ANode node) {
+				Object target = getCurrentTarget();
+				System.out.println(node + " ------ " + target + " : " + ((JSSEObjectNode) target).getEObject());
+				EObject eobj = ((JSSEObjectNode) target).getEObject();
+				if (node instanceof MSqlTable || node instanceof MView) {
+					new CreateTable(xtextDocument, designer).run((MSqlTable) node, eobj);
+				} else if (node instanceof MColumn) {
+
+				}
 			}
 		};
 		treeViewer.addDropSupport(ops, transfers, dropAdapter);

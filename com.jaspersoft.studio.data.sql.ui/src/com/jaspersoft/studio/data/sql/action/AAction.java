@@ -1,25 +1,23 @@
 package com.jaspersoft.studio.data.sql.action;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.xtext.ui.editor.model.IXtextDocument;
+
+import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 
 public abstract class AAction extends Action {
+	protected IXtextDocument xtextDocument;
+	protected Object[] selection;
+	protected SQLQueryDesigner designer;
 
-	public AAction() {
-		super();
-	}
-
-	public AAction(String text, ImageDescriptor image) {
-		super(text, image);
-	}
-
-	public AAction(String text, int style) {
-		super(text, style);
-	}
-
-	public AAction(String text) {
+	public AAction(String text, IXtextDocument xtextDocument, SQLQueryDesigner designer) {
 		super(text);
+		this.xtextDocument = xtextDocument;
+		this.designer = designer;
 	}
 
-	public abstract boolean calculateEnabled(Object[] selection);
+	public boolean calculateEnabled(Object[] selection) {
+		this.selection = selection;
+		return true;
+	}
 }
