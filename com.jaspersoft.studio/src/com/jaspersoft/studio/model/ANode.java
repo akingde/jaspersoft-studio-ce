@@ -157,7 +157,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 		return root;
 	}
 
-	private INode root;
+	protected INode root;
 
 	public void register() {
 		root = null;
@@ -428,8 +428,10 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 	 * @see com.jaspersoft.studio.model.INode#getJasperDesign()
 	 */
 	public JasperDesign getJasperDesign() {
-		if (getRoot().getValue() instanceof JasperDesign)
-			return (JasperDesign) getRoot().getValue();
+		if (getRoot() != null && root.getValue() instanceof JasperDesign)
+			return (JasperDesign) root.getValue();
+		if (getJasperConfiguration() != null)
+			return getJasperConfiguration().getJasperDesign();
 		return null;
 	}
 
