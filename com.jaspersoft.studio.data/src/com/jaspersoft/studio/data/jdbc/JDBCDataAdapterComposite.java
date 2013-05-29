@@ -60,8 +60,12 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 					"jdbc:h2:tcp://{0}:9101/~/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("Cloudscape", "COM.cloudscape.JDBCDriver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:cloudscape:/{1}"), //$NON-NLS-1$
-			new JDBCDriverDefinition("IBM DB2", //$NON-NLS-1$
-					"COM.ibm.db2.jdbc.app.DB2Driver", "jdbc:db2:{0}/{1}"), //$NON-NLS-1$ //$NON-NLS-2$
+			new JDBCDriverDefinition("IBM DB2 (Type 4)", //$NON-NLS-1$
+					"com.ibm.db2.jcc.DB2Driver", "jdbc:db2://{0}/{1}"), //$NON-NLS-1$ //$NON-NLS-2$
+			new JDBCDriverDefinition("IBM DB2 (IBM Cloudscape® server)", //$NON-NLS-1$
+					"com.ibm.db2.jcc.DB2Driver", "jdbc:db2j:net://{0}/{1}"), //$NON-NLS-1$ //$NON-NLS-2$
+			new JDBCDriverDefinition("IBM DB2 (IDS data source)", //$NON-NLS-1$
+					"com.ibm.db2.jcc.DB2Driver", "jdbc:ids://{0}/{1}"), //$NON-NLS-1$ //$NON-NLS-2$
 			new JDBCDriverDefinition("inetdae7", "com.inet.tds.TdsDriver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:inetdae7:{0}:1433/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("Informix", "com.informix.jdbc.IfxDriver", //$NON-NLS-1$ //$NON-NLS-2$
@@ -73,13 +77,11 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 			new JDBCDriverDefinition("JDBC-ODBC Bridge", //$NON-NLS-1$
 					"com.ms.jdbc.odbc.JdbcOdbcDriver", "jdbc:odbc:{1}", //$NON-NLS-1$ //$NON-NLS-2$
 					"DSNAME"), //$NON-NLS-1$
-			new JDBCDriverDefinition("MS SQLServer", //$NON-NLS-1$
-					"com.internetcds.jdbc.tds.Driver", //$NON-NLS-1$
-					"jdbc:freetds:sqlserver://{0}/{1}"), //$NON-NLS-1$
+
 			new JDBCDriverDefinition("MS SQLServer (2000)", //$NON-NLS-1$
 					"com.microsoft.jdbc.sqlserver.SQLServerDriver", //$NON-NLS-1$
 					"jdbc:microsoft:sqlserver://{0}:1433;DatabaseName={1}"), //$NON-NLS-1$
-			new JDBCDriverDefinition("MS SQLServer (2005)", //$NON-NLS-1$
+			new JDBCDriverDefinition("MS SQLServer (2005-2012)", //$NON-NLS-1$
 					"com.microsoft.sqlserver.jdbc.SQLServerDriver", //$NON-NLS-1$
 					"jdbc:sqlserver://{0}:1433;databaseName={1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("MS SQLServer", //$NON-NLS-1$
@@ -88,7 +90,9 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 			new JDBCDriverDefinition("MS SQLServer", //$NON-NLS-1$
 					"com.merant.datadirect.jdbc.sqlserver.SQLServerDriver", //$NON-NLS-1$
 					"jdbc:sqlserver://{0}:1433/{1}"), //$NON-NLS-1$
-
+			new JDBCDriverDefinition("MS SQLServer", //$NON-NLS-1$
+					"com.internetcds.jdbc.tds.Driver", //$NON-NLS-1$
+					"jdbc:freetds:sqlserver://{0}/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("Sybase", //$NON-NLS-1$
 					"net.sourceforge.jtds.jdbc.Driver", //$NON-NLS-1$
 					"jdbc:jtds:sybase://{0}/{1}"), //$NON-NLS-1$		
