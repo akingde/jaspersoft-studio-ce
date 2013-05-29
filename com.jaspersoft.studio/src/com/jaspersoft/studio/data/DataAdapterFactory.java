@@ -20,6 +20,8 @@ import net.sf.jasperreports.data.DataAdapterService;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
+
 /*
  * 
  * @author gtoffoli
@@ -60,4 +62,9 @@ public interface DataAdapterFactory {
 	 * 
 	 */
 	public Image getIcon(int size);
+	
+	/**
+	 * Return a converter that can be used to build a JSS data adapter from an iReport data adapter definition
+	 */
+	public IDataAdapterCreator iReportConverter();
 }

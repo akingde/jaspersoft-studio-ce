@@ -227,6 +227,21 @@
             InputControlProvider="com.jaspersoft.studio.server.editor.input.main.InputControlTypesProvider">
       </inputcontroltypes>
    </extension>
-
+	 <extension
+	         point="org.eclipse.ui.importWizards">
+	      <category
+	            id="com.jaspersoft.studio"
+	            name="Jaspersoft Studio">
+	      </category>
+	      <wizard
+	            category="com.jaspersoft.studio"
+	            class="com.jaspersoft.studio.server.wizard.ImportServersWizard"
+	            id="com.jaspersoft.studio.importserver"
+	            name="Import JR Server Connections from iReport">
+	         <description>
+	            Import one or more JasperReport Server connections from a previuous installation of iReport
+	         </description>
+	      </wizard>
+	   </extension>
 
 </plugin>

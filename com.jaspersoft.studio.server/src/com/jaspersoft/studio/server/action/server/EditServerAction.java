@@ -127,8 +127,10 @@ public class EditServerAction extends Action {
 						treeViewer.refresh(true);
 						TreeSelection s = (TreeSelection) treeViewer
 								.getSelection();
-						TreePath[] p = s.getPaths();
-						treeViewer.expandToLevel(p[0], 1);
+						if (!s.isEmpty()){
+							TreePath[] p = s.getPaths();
+							treeViewer.expandToLevel(p[0], 1);
+						}
 					}
 				});
 			}

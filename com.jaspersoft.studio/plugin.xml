@@ -1997,4 +1997,20 @@
        </adapter>
     </factory>
  </extension>
+ <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="com.jaspersoft.studio"
+            name="Jaspersoft Studio">
+      </category>
+      <wizard
+            category="com.jaspersoft.studio"
+            class="com.jaspersoft.studio.data.wizard.ImportDataAdapterWizard"
+            id="com.jaspersoft.studio.importadapter"
+            name="Import iReport Data Adapter">
+         <description>
+            Import Data Adapters from iReport
+         </description>
+      </wizard>
+   </extension>
 </plugin>

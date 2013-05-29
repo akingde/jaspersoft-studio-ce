@@ -25,6 +25,7 @@ import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterImplementation;
 import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 import com.jaspersoft.studio.data.mongodb.messages.Messages;
 
 /**
@@ -91,4 +92,9 @@ public class MongoDbDataAdapterFactory implements DataAdapterFactory {
             return new MongoDbDataAdapterService((MongoDbDataAdapter) dataAdapter);
         return null;
     }
+
+	@Override
+	public IDataAdapterCreator iReportConverter() {
+		return new MongoDBCreator();
+	}
 }

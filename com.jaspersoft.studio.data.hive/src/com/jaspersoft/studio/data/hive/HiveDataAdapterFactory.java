@@ -26,6 +26,7 @@ import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImplementation;
 import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 import com.jaspersoft.studio.data.hive.messages.Messages;
 
 /**
@@ -92,5 +93,10 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 					DefaultJasperReportsContext.getInstance(),
 					(HiveDataAdapter) dataAdapter);
 		return null;
+	}
+
+	@Override
+	public IDataAdapterCreator iReportConverter() {
+		return new HiveCreator();
 	}
 }

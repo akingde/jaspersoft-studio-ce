@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 import com.jaspersoft.studio.data.messages.Messages;
 
 public class BeanDataAdapterFactory implements DataAdapterFactory {
@@ -62,6 +63,11 @@ public class BeanDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
+		return null;
+	}
+
+	@Override
+	public IDataAdapterCreator iReportConverter() {
 		return null;
 	}
 }

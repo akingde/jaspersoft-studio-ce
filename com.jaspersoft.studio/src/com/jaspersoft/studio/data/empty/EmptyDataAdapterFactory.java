@@ -23,6 +23,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 import com.jaspersoft.studio.messages.Messages;
 
 public class EmptyDataAdapterFactory implements DataAdapterFactory {
@@ -55,6 +56,11 @@ public class EmptyDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
+		return null;
+	}
+
+	@Override
+	public IDataAdapterCreator iReportConverter() {
 		return null;
 	}
 	
