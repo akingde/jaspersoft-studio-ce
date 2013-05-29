@@ -88,7 +88,12 @@ public class ShowServersPage extends JSSHelpWizardPage {
 			String connectionString = prop.getProperty("server." + connectionIndex + ".url");
 			while(connectionString != null){
 				ServerProfile srv = new ServerProfile();
+				
+				if (connectionString.endsWith("/services/repository")){
+					connectionString = connectionString.substring(0, connectionString.lastIndexOf("services/repository"));
+				}
 				srv.setUrl(connectionString); 
+	
 				String name = prop.getProperty("server." + connectionIndex + ".name");
 				srv.setName(name);
 				String username = prop.getProperty("server." + connectionIndex + ".username");
