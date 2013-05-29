@@ -45,6 +45,7 @@ import com.jaspersoft.cassandra.adapter.CassandraDataAdapterImplementation;
 import com.jaspersoft.cassandra.adapter.CassandraDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 
 /**
  * @author gtoffoli
@@ -109,6 +110,11 @@ public class CassandraDataAdapterFactory implements DataAdapterFactory {
 			return new CassandraDataAdapterService(
 					DefaultJasperReportsContext.getInstance(),
 					(CassandraDataAdapter) dataAdapter);
+		return null;
+	}
+
+	@Override
+	public IDataAdapterCreator iReportConverter() {
 		return null;
 	}
 }
