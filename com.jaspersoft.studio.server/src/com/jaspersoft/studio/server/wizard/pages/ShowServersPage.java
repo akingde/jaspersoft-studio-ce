@@ -44,6 +44,11 @@ import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 public class ShowServersPage extends JSSHelpWizardPage {
 
 	/**
+	 * ID of the contextual help
+	 */
+	private static final String CONTEX_HELP_ID = "com.jaspersoft.studio.doc.wizard_import_select_serverconnection"; //$NON-NLS-1$
+	
+	/**
 	 * Configuration of iReport where the servers are searched
 	 */
 	private IReportDescriptor selectedInstallation;
@@ -166,7 +171,7 @@ public class ShowServersPage extends JSSHelpWizardPage {
 
 	@Override
 	protected String getContextName() {
-		return "wizard_import_select_serverconnection"; //$NON-NLS-1$
+		return CONTEX_HELP_ID;
 	}
 
 }
