@@ -62,11 +62,12 @@ public class ImportDataAdapterWizard extends Wizard implements IImportWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		List<Document> documents = page1.getSelectedAdapter();
-		for(Document adapter : documents){
-			NamedNodeMap rootAttributes = adapter.getChildNodes().item(0).getAttributes();
+		List<?> documents = page1.getSelectedAdapter();
+		for(Object adapter : documents){
+			Document doc = (Document) adapter;
+			NamedNodeMap rootAttributes = doc.getChildNodes().item(0).getAttributes();
 			String connectionClass = rootAttributes.getNamedItem("connectionClass").getTextContent();
-			DataAdapterDescriptor newAdapter = ImportUtility.getAdapter(adapter, connectionClass);
+			DataAdapterDescriptor newAdapter = ImportUtility.getAdapter(doc, connectionClass);
 			DataAdapterManager.getPreferencesStorage().addDataAdapter("",newAdapter);
 		}
 		return true;

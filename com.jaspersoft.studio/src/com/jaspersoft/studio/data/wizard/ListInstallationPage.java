@@ -58,7 +58,7 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 	/**
 	 * RadioButton for the custom configuration path
 	 */
-	private Button customRadio;
+	protected Button customRadio;
 	
 	/**
 	 * Class that handle the selection of a radio button that represent
@@ -99,10 +99,19 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 		setDescription(Messages.ListInstallationPage_description);
 		setPageComplete(false);
 	}
+	
+	/**
+	 * Return the list of the discovered configuration automatically
+	 * 
+	 * @return a not null list of the discovered configuration
+	 */
+	protected List<IReportDescriptor> getFoundedConfiguration(){
+		return ImportUtility.getIReportConfigurationFolder();
+	}
 
 	@Override
 	public void createControl(Composite parent) {
-		List<IReportDescriptor> list = ImportUtility.getIReportConfigurationFolder();
+		List<IReportDescriptor> list = getFoundedConfiguration();
 		
 		Composite mainComposite = new Composite(parent, SWT.NONE);
 		mainComposite.setLayout(new GridLayout(1,false));
@@ -134,13 +143,36 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 		scrollComp.setContent(content);
 		
 		createCustomPathPanel(mainComposite);
-		
+		if (list.size() == 0) customRadio.setSelection(true);
+	}
+	
+	/**
+	 * Return a file dialog used to open the configuration file
+	 * 
+	 */
+	protected String getPath(){
+		FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.OPEN);
+    fd.setText(Messages.ListInstallationPage_openDialog);
+    String[] filterExt = { "ireport.properties" }; //$NON-NLS-1$
+    fd.setFileName("ireport.properties");//$NON-NLS-1$
+    fd.setFilterExtensions(filterExt);
+    return fd.open();
+	}
+	
+	/**
+	 * Return a file descriptor for the provided path
+	 * 
+	 * @param path the path
+	 * @return a descriptor for the configuration folder in the path
+	 */
+	protected IReportDescriptor getDescriptor(String path){
+		return ImportUtility.GetDescriptor(path);
 	}
 	
 	/**
 	 * Create the controls to select a custom path
 	 * 
-	 * @param mainComposite the composite wherte to place the control
+	 * @param mainComposite the composite where to place the control
 	 */
 	private void createCustomPathPanel(Composite mainComposite){
 		final Composite customLocComposite = new Composite(mainComposite, SWT.None);
@@ -153,14 +185,9 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 		browse.setText(Messages.ListInstallationPage_browse);
 		browse.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.OPEN);
-		    fd.setText(Messages.ListInstallationPage_openDialog);
-		    String[] filterExt = { "ireport.properties" }; //$NON-NLS-1$
-		    fd.setFileName("ireport.properties");//$NON-NLS-1$
-		    fd.setFilterExtensions(filterExt);
-		    String selected = fd.open();
+		    String selected = getPath();
 		    if (selected != null){
-		    	IReportDescriptor desc = ImportUtility.GetDescriptor(selected);
+		    	IReportDescriptor desc = getDescriptor(selected);
 		    	if (desc != null){
 			    	customRadio.setData(desc);
 			    	customRadio.setToolTipText(selected);

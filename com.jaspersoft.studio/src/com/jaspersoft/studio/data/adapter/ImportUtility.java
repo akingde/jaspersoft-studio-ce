@@ -35,7 +35,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 public class ImportUtility {
 	
 	/**
-	 * charachter used by the operative system to separate the path folders
+	 * Character used by the operative system to separate the path folders
 	 */
 	public final static String FILE_SEPARATOR = System.getProperty("file.separator");;
 
@@ -68,7 +68,6 @@ public class ImportUtility {
 				importManager.put(creator.getID(), creator);
 			}
 		}
-		
 	}
 	
 	/**

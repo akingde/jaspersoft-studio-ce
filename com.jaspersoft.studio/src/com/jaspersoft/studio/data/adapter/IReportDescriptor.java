@@ -31,12 +31,12 @@ public class IReportDescriptor {
 	/**
 	 * File to the folder that contains the file ireport.properties
 	 */
-	private File destination;
+	protected File destination;
 	
 	/**
 	 * Version of iReport
 	 */
-	private String version;
+	protected String version;
 	
 	/**
 	 * True if this configuration is of an iReport pro
@@ -48,6 +48,10 @@ public class IReportDescriptor {
 	 * of iReport
 	 */
 	private static final String PRO_STRING = "Pro";
+	
+	protected Properties configurationProperties = null;
+	
+	protected Properties serverProperties = null;
 	
 	public IReportDescriptor(File destination, String version, boolean isPro){
 		this.destination = destination;
@@ -75,9 +79,35 @@ public class IReportDescriptor {
 	 * file is not found
 	 */
 	public Properties getConfiguration(){
-		Properties prop = new Properties();
 		
+		if (configurationProperties == null) {
+			configurationProperties = loadConfiguration(); 
+		}
+		return configurationProperties;
+	
+	}
+	
+	protected Properties loadConfiguration(){
+		Properties prop = new Properties();
 		String path = destination.getAbsolutePath().concat(ImportUtility.FILE_SEPARATOR).concat("ireport.properties");
+		File newFile = new File(path);
+		try {
+			if (newFile.exists()){
+				FileInputStream is = new FileInputStream(newFile);
+				prop.load(is);
+				is.close();
+				return prop;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	protected Properties loadServerConfiguration(){
+		Properties prop = new Properties();
+		String path = destination.getAbsolutePath().concat(ImportUtility.FILE_SEPARATOR).concat("ireport")
+																	.concat(ImportUtility.FILE_SEPARATOR).concat("jasperserver.properties");
 		File newFile = new File(path);
 		try {
 			if (newFile.exists()){
@@ -97,22 +127,11 @@ public class IReportDescriptor {
 	 * or null if this file is not found
 	 */
 	public Properties getServerConnection(){
-		Properties prop = new Properties();
 		
-		String path = destination.getAbsolutePath().concat(ImportUtility.FILE_SEPARATOR).concat("ireport")
-																	.concat(ImportUtility.FILE_SEPARATOR).concat("jasperserver.properties");
-		File newFile = new File(path);
-		try {
-			if (newFile.exists()){
-				FileInputStream is = new FileInputStream(newFile);
-				prop.load(is);
-				is.close();
-				return prop;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (serverProperties == null) {
+			serverProperties = loadServerConfiguration(); 
 		}
-		return null;
+		return serverProperties;
 	}
 	
 }

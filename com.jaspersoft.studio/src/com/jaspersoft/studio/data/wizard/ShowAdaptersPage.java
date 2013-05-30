@@ -51,28 +51,49 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 	/**
 	 * Configuration of iReport where the data adapters are searched
 	 */
-	private IReportDescriptor selectedInstallation;
+	protected IReportDescriptor selectedInstallation;
 	
 	/**
 	 * List of all the checkboxes
 	 */
-	private List<Button> selectedElements;
+	protected List<Button> selectedElements;
 	
 	/**
 	 * composite where the checkboxes are placed
 	 */
-	private Composite content;
+	protected Composite content;
 	
 	/**
 	 * Label shown where there aren't element that could be imported
 	 */
-	private Label noElementLabel = null;
+	protected Label noElementLabel = null;
 	
 	protected ShowAdaptersPage() {
 		super("IReportDatasourceList"); //$NON-NLS-1$
 		selectedElements = new ArrayList<Button>();
 		setTitle(Messages.ShowAdaptersPage_title);
 		setDescription(Messages.ShowAdaptersPage_description);
+	}
+	
+	
+	protected void createCheckboxes(Properties prop){
+		Integer connectionIndex = 2;
+		String connectionXML = prop.getProperty("connection." + connectionIndex); //$NON-NLS-1$
+		while(connectionXML != null){
+			try {
+				Document document = JRXmlUtils.parse(new InputSource(new StringReader(connectionXML)));
+				NamedNodeMap rootAttributes = document.getChildNodes().item(0).getAttributes();
+				String connectionName = rootAttributes.getNamedItem("name").getTextContent(); //$NON-NLS-1$
+				String connectionClass = rootAttributes.getNamedItem("connectionClass").getTextContent(); //$NON-NLS-1$
+				Button checkButton = new Button(content, SWT.CHECK);
+				String type = connectionClass.substring(connectionClass.lastIndexOf(".")+1); //$NON-NLS-1$
+				checkButton.setText(connectionName+" ("+ type + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+				checkButton.setData(document);
+				selectedElements.add(checkButton);
+			} catch (JRException e) {}
+			connectionIndex++;
+			connectionXML = prop.getProperty("connection." + connectionIndex); //$NON-NLS-1$
+		}
 	}
 	
 	/**
@@ -93,25 +114,9 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 		content.layout();
 		
 		Properties prop = selectedInstallation.getConfiguration();
-		Integer connectionIndex = 2;
-		
+
 		if (prop != null){
-			String connectionXML = prop.getProperty("connection." + connectionIndex); //$NON-NLS-1$
-			while(connectionXML != null){
-				try {
-					Document document = JRXmlUtils.parse(new InputSource(new StringReader(connectionXML)));
-					NamedNodeMap rootAttributes = document.getChildNodes().item(0).getAttributes();
-					String connectionName = rootAttributes.getNamedItem("name").getTextContent(); //$NON-NLS-1$
-					String connectionClass = rootAttributes.getNamedItem("connectionClass").getTextContent(); //$NON-NLS-1$
-					Button checkButton = new Button(content, SWT.CHECK);
-					String type = connectionClass.substring(connectionClass.lastIndexOf(".")+1); //$NON-NLS-1$
-					checkButton.setText(connectionName+" ("+ type + ")"); //$NON-NLS-1$ //$NON-NLS-2$
-					checkButton.setData(document);
-					selectedElements.add(checkButton);
-				} catch (JRException e) {}
-				connectionIndex++;
-				connectionXML = prop.getProperty("connection." + connectionIndex); //$NON-NLS-1$
-			}
+			createCheckboxes(prop);
 		}
 		if (selectedElements.isEmpty()){
 			noElementLabel = new Label(content, SWT.NONE);
@@ -125,10 +130,10 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 	 * 
 	 * @return a not null list of the xml definition of iReport data adapters
 	 */
-	public List<Document> getSelectedAdapter(){
-		List<Document> result = new ArrayList<Document>();
+	public List<?> getSelectedAdapter(){
+		List<Object> result = new ArrayList<Object>();
 		for(Button element : selectedElements){
-			if (element.getSelection()) result.add((Document)element.getData());
+			if (element.getSelection()) result.add(element.getData());
 		}
 		return result;
 	}
