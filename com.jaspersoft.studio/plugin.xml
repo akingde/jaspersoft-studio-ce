@@ -2016,7 +2016,7 @@
             category="com.jaspersoft.studio"
             class="com.jaspersoft.studio.data.wizard.ImportJSSAdapterWizard"
             id="com.jaspersoft.studio.importadapterjss"
-            name="Import Data Adapter from another JSS">
+            name="%importDataAdaptersJSS">
          <description>
             Import Data Adapters from another JSS Workspace
          </description>

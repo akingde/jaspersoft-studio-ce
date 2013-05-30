@@ -75,6 +75,38 @@ public class ShowServersPage extends JSSHelpWizardPage {
 		setDescription(Messages.ShowServersPage_description);
 	}
 	
+	protected List<ServerProfile> createCheckBoxData(Properties prop){
+		List<ServerProfile> result = new ArrayList<ServerProfile>();
+		Integer connectionIndex = 0;
+		Encrypter enc = new Encrypter("54fj245vn3vfdsmce4mg0jvs"); //$NON-NLS-1$
+		String connectionString = prop.getProperty("server." + connectionIndex + ".url"); //$NON-NLS-1$ //$NON-NLS-2$
+		while(connectionString != null){
+			ServerProfile srv = new ServerProfile();
+			
+			if (connectionString.endsWith("/services/repository")){ //$NON-NLS-1$
+				connectionString = connectionString.substring(0, connectionString.lastIndexOf("services/repository")); //$NON-NLS-1$
+			}
+			srv.setUrl(connectionString); 
+
+			String name = prop.getProperty("server." + connectionIndex + ".name"); //$NON-NLS-1$ //$NON-NLS-2$
+			srv.setName(name);
+			String username = prop.getProperty("server." + connectionIndex + ".username"); //$NON-NLS-1$ //$NON-NLS-2$
+			srv.setUser(username); 
+			srv.setSupportsDateRanges(true);
+			
+			String password = prop.getProperty("server." + connectionIndex + ".password.enc"); //$NON-NLS-1$ //$NON-NLS-2$
+			//getBrandingProperties().getProperty("irplugin.encrypt.passwords.key", "54fj245vn3vfdsmce4mg0jvs")
+			password = enc.decrypt(password);
+			srv.setPass(password);
+			
+			result.add(srv);
+			
+			connectionIndex++;
+			connectionString = prop.getProperty("server." + connectionIndex + ".url"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		return result;
+	}
+	
 	/**
 	 * When the page became visible the configuration is read from the previous page and the 
 	 * checkboxes are created
@@ -93,37 +125,15 @@ public class ShowServersPage extends JSSHelpWizardPage {
 		content.layout();
 		
 		Properties prop = selectedInstallation.getServerConnection();
-		Integer connectionIndex = 0;
-		
+
 		if (prop != null){
-			Encrypter enc = new Encrypter("54fj245vn3vfdsmce4mg0jvs"); //$NON-NLS-1$
-			String connectionString = prop.getProperty("server." + connectionIndex + ".url"); //$NON-NLS-1$ //$NON-NLS-2$
-			while(connectionString != null){
-				ServerProfile srv = new ServerProfile();
-				
-				if (connectionString.endsWith("/services/repository")){ //$NON-NLS-1$
-					connectionString = connectionString.substring(0, connectionString.lastIndexOf("services/repository")); //$NON-NLS-1$
-				}
-				srv.setUrl(connectionString); 
-	
-				String name = prop.getProperty("server." + connectionIndex + ".name"); //$NON-NLS-1$ //$NON-NLS-2$
-				srv.setName(name);
-				String username = prop.getProperty("server." + connectionIndex + ".username"); //$NON-NLS-1$ //$NON-NLS-2$
-				srv.setUser(username); 
-				srv.setSupportsDateRanges(true);
-				
-				String password = prop.getProperty("server." + connectionIndex + ".password.enc"); //$NON-NLS-1$ //$NON-NLS-2$
-				//getBrandingProperties().getProperty("irplugin.encrypt.passwords.key", "54fj245vn3vfdsmce4mg0jvs")
-				password = enc.decrypt(password);
-				srv.setPass(password);
-				
+			List<ServerProfile> checkBoxData = createCheckBoxData(prop);
+			for(ServerProfile srv : checkBoxData)
+			{
 				Button checkButton = new Button(content, SWT.CHECK);
-				checkButton.setText(name + " ("+connectionString+")"); //$NON-NLS-1$ //$NON-NLS-2$
+				checkButton.setText(srv.getName() + " ("+srv.getUrl()+")"); //$NON-NLS-1$ //$NON-NLS-2$
 				checkButton.setData(srv);
 				selectedElements.add(checkButton);
-				
-				connectionIndex++;
-				connectionString = prop.getProperty("server." + connectionIndex + ".url"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 		if (selectedElements.isEmpty()){

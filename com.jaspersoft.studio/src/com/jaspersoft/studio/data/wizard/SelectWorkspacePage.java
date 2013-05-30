@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 
 import com.jaspersoft.studio.data.adapter.IReportDescriptor;
 import com.jaspersoft.studio.data.adapter.JSSDescriptor;
+import com.jaspersoft.studio.messages.Messages;
 
 /**
  * Dialog page that allow to choose a workspace folder from where the configuration
@@ -44,15 +45,15 @@ public class SelectWorkspacePage extends ListInstallationPage {
 		
 		@Override
 		public boolean accept(File dir, String name) {
-			if (name.equals(".metadata")) return true;
+			if (name.equals(".metadata")) return true; //$NON-NLS-1$
 			return false;
 		}
 	};
 	
 	public SelectWorkspacePage() {
 		super();
-		setTitle("Select a JasperSoft Studio Workspace");
-		setDescription("Select the folder of the JSS workspace from where the data will be imported");
+		setTitle(Messages.SelectWorkspacePage_title);
+		setDescription(Messages.SelectWorkspacePage_description);
 		setPageComplete(false);
 	}
 	
@@ -71,8 +72,8 @@ public class SelectWorkspacePage extends ListInstallationPage {
 	 */
 	protected String getPath(){
 		DirectoryDialog  fd = new DirectoryDialog(UIUtils.getShell(), SWT.OPEN);
-    fd.setText("Select the \".metadata\" folder inside your workspace");
-    fd.setFilterPath(".metadata");
+    fd.setText(Messages.SelectWorkspacePage_openTitle);
+    fd.setFilterPath(".metadata"); //$NON-NLS-1$
     return fd.open();
 	}
 	
@@ -85,7 +86,7 @@ public class SelectWorkspacePage extends ListInstallationPage {
 	protected IReportDescriptor getDescriptor(String path){
 		File newFile = new File(path);
 		if (newFile.exists()){
-			if (newFile.getName().equals(".metadata")) return new JSSDescriptor(newFile);
+			if (newFile.getName().equals(".metadata")) return new JSSDescriptor(newFile); //$NON-NLS-1$
 			else {
 				File[] children = newFile.listFiles(metaDataFilter);
 				if (children.length>0) return  new JSSDescriptor(children[0]);

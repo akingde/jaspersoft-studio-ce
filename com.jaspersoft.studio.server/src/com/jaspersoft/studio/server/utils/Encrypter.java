@@ -55,8 +55,7 @@ public class Encrypter {
         try {
              //KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt, iterationCount);
              KeySpec keySpec = new DESKeySpec((passPhrase.getBytes()));
-             SecretKey key = SecretKeyFactory.getInstance(
-                "DES").generateSecret(keySpec);
+             SecretKey key = SecretKeyFactory.getInstance("DES").generateSecret(keySpec);
             
             ecipher = Cipher.getInstance("DES");
             dcipher = Cipher.getInstance("DES");

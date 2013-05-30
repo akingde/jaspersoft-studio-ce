@@ -1378,6 +1378,9 @@ public class Messages extends NLS {
 	public static String RVPropertyPage_subreport_variable;
 	public static String RVPropertyPage_to_variable;
 	public static String ScientificPattern_description;
+	public static String SelectWorkspacePage_description;
+	public static String SelectWorkspacePage_openTitle;
+	public static String SelectWorkspacePage_title;
 	public static String SetValueCommand_set_zero_property;
 	public static String ShowGridAction_show_grid_tool_tip;
 	public static String ShowParametersAction_description;

@@ -242,6 +242,15 @@
 	            Import one or more JasperReport Server connections from a previuous installation of iReport
 	         </description>
 	      </wizard>
+	      <wizard
+	            category="com.jaspersoft.studio"
+	            class="com.jaspersoft.studio.server.wizard.ImportJSSServersWizard"
+	            id="com.jaspersoft.studio.importserver"
+	            name="%importServersJSS">
+	         <description>
+	            Import one or more JasperReport Server connections from another workspace of JSS
+	         </description>
+	      </wizard>
 	   </extension>
 
 </plugin>
