@@ -43,10 +43,13 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
+import com.jaspersoft.studio.data.sql.action.column.CreateColumn;
+import com.jaspersoft.studio.data.sql.action.groupby.CreateGroupByColumn;
+import com.jaspersoft.studio.data.sql.action.order.CreateOrderByColumn;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
-import com.jaspersoft.studio.data.sql.model.MColumn;
-import com.jaspersoft.studio.data.sql.model.MSqlTable;
-import com.jaspersoft.studio.data.sql.model.MView;
+import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
+import com.jaspersoft.studio.data.sql.model.metadata.MView;
 import com.jaspersoft.studio.data.ui.outline.JSSEObjectNode;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
@@ -124,7 +127,12 @@ public class SQLQueryOutline {
 				if (node instanceof MSqlTable || node instanceof MView) {
 					new CreateTable(xtextDocument, designer).run((MSqlTable) node, eobj);
 				} else if (node instanceof MColumn) {
-
+					if (CreateColumn.isInSelect(eobj))
+						new CreateColumn(xtextDocument, designer).run((MColumn) node, eobj);
+					if (CreateGroupByColumn.isInGroupBy(eobj))
+						new CreateGroupByColumn(xtextDocument, designer).run((MColumn) node, eobj);
+					if (CreateOrderByColumn.isInOrderBy(eobj))
+						new CreateOrderByColumn(xtextDocument, designer).run((MColumn) node, eobj);
 				}
 			}
 		};

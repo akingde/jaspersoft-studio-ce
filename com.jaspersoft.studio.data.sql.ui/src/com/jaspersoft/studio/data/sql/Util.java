@@ -7,11 +7,20 @@ import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 
 public class Util {
-	public static int getFirstOffsetOfKeyword(EObject object) {
+	public static int getTotalEndOffsetOfKeyword(EObject object) {
 		if (object != null) {
 			ICompositeNode node = NodeModelUtils.getNode(object);
 			if (node != null)
 				return node.getLastChild().getTotalEndOffset();
+		}
+		return 0;
+	}
+
+	public static int getStartOffsetOfKeyword(EObject object) {
+		if (object != null) {
+			ICompositeNode node = NodeModelUtils.getNode(object);
+			if (node != null)
+				return node.getOffset();
 		}
 		return 0;
 	}

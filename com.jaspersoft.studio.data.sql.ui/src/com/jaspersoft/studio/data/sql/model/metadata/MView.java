@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.sql.model;
+package com.jaspersoft.studio.data.sql.model.metadata;
 
 import java.sql.ResultSet;
 

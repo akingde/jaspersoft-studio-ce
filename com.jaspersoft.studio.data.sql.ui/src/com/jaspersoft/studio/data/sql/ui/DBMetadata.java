@@ -27,14 +27,14 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.PluginTransfer;
 
-import com.jaspersoft.studio.data.sql.model.MColumn;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
-import com.jaspersoft.studio.data.sql.model.MFunction;
-import com.jaspersoft.studio.data.sql.model.MProcedure;
-import com.jaspersoft.studio.data.sql.model.MSqlSchema;
-import com.jaspersoft.studio.data.sql.model.MSqlTable;
-import com.jaspersoft.studio.data.sql.model.MTables;
-import com.jaspersoft.studio.data.sql.model.MView;
+import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MFunction;
+import com.jaspersoft.studio.data.sql.model.metadata.MProcedure;
+import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
+import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
+import com.jaspersoft.studio.data.sql.model.metadata.MTables;
+import com.jaspersoft.studio.data.sql.model.metadata.MView;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.ANode;
@@ -187,7 +187,10 @@ public class DBMetadata {
 	protected void updateUI(final MRoot root, Connection c) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				treeViewer.setInput(root);
+				DBMetadata.this.root = root;
+				if (DBMetadata.this.root == null)
+					DBMetadata.this.root = new MRoot(null, null);
+				treeViewer.setInput(DBMetadata.this.root);
 			}
 		});
 	}

@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.sql.action.table;
+package com.jaspersoft.studio.data.sql.action.column;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,20 +15,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
-import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MTables;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 
-public class TablesDialog extends Dialog {
+public class ColumnsDialog extends Dialog {
 	private TreeViewer treeViewer;
 	private MRoot root;
-	private List<MSqlTable> table = new ArrayList<MSqlTable>();
+	private List<MColumn> cols = new ArrayList<MColumn>();
 
-	public TablesDialog(Shell parentShell) {
+	public ColumnsDialog(Shell parentShell) {
 		super(parentShell);
 	}
 
@@ -52,15 +52,15 @@ public class TablesDialog extends Dialog {
 	public boolean close() {
 		TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 		for (Object obj : ts.toList()) {
-			if (obj instanceof MSqlTable)
-				table.add((MSqlTable) obj);
+			if (obj instanceof MColumn)
+				cols.add((MColumn) obj);
 		}
 
 		return super.close();
 	}
 
-	public List<MSqlTable> getTable() {
-		return table;
+	public List<MColumn> getColumns() {
+		return cols;
 	}
 
 	@Override
@@ -85,12 +85,6 @@ public class TablesDialog extends Dialog {
 				return super.getChildren(parentElement);
 			}
 
-			@Override
-			public boolean hasChildren(Object element) {
-				if (element instanceof MSqlTable)
-					return false;
-				return super.hasChildren(element);
-			}
 		});
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -103,7 +97,7 @@ public class TablesDialog extends Dialog {
 			public void doubleClick(DoubleClickEvent event) {
 				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 				Object el = ts.getFirstElement();
-				if (el instanceof MSqlTable)
+				if (el instanceof MColumn)
 					okPressed();
 				else {
 					if (treeViewer.getExpandedState(el))

@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.sql.action.column;
+package com.jaspersoft.studio.data.sql.action.groupby;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.window.Window;
@@ -8,34 +8,37 @@ import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
 import com.jaspersoft.studio.data.sql.Column;
-import com.jaspersoft.studio.data.sql.ColumnAlias;
-import com.jaspersoft.studio.data.sql.ColumnFull;
-import com.jaspersoft.studio.data.sql.ColumnOrAlias;
+import com.jaspersoft.studio.data.sql.GroupByColumnFull;
 import com.jaspersoft.studio.data.sql.Model;
+import com.jaspersoft.studio.data.sql.OrGroupByColumn;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
-import com.jaspersoft.studio.data.sql.impl.OrColumnImpl;
+import com.jaspersoft.studio.data.sql.action.column.ColumnsDialog;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.ui.outline.JSSEObjectNode;
 
-public class CreateColumn extends AAction {
+public class CreateGroupByColumn extends AAction {
 
-	public CreateColumn(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
-		super("&Add Column", xtextDocument, designer);
+	public CreateGroupByColumn(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
+		super("&Add Group By Column", xtextDocument, designer);
 	}
 
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && selection[0] instanceof JSSEObjectNode && isInSelect(((JSSEObjectNode) selection[0]).getEObject());
+		return selection != null && selection.length == 1 && selection[0] instanceof JSSEObjectNode && isInGroupBy(((JSSEObjectNode) selection[0]).getEObject());
 	}
 
-	public static boolean isInSelect(EObject element) {
-		if (element instanceof OrColumnImpl)
+	public static boolean isInGroupBy(EObject element) {
+		if (element instanceof OrGroupByColumn)
 			return true;
-		element = element.eContainer();
-		return element instanceof Column || element instanceof ColumnFull || element instanceof ColumnOrAlias || element instanceof ColumnAlias || element instanceof OrColumnImpl;
+		if (element instanceof Column)
+			return isInGroupBy(element.eContainer());
+		if (element instanceof GroupByColumnFull)
+			return true;
+		return false;
+
 	}
 
 	@Override
@@ -56,7 +59,7 @@ public class CreateColumn extends AAction {
 			@Override
 			public void process(XtextResource state) throws Exception {
 				Model m = (Model) state.getContents().get(0);
-				OrColumnImpl cols = (OrColumnImpl) m.getCol();
+				OrGroupByColumn cols = (OrGroupByColumn) m.getGroupByEntry();
 				if (cols != null)
 					state.update(Util.getTotalEndOffsetOfKeyword(cols), 0, ", " + node.toSQLString() + " ");
 				else {

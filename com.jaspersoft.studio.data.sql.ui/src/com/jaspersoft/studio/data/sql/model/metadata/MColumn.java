@@ -1,10 +1,11 @@
-package com.jaspersoft.studio.data.sql.model;
+package com.jaspersoft.studio.data.sql.model.metadata;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
 

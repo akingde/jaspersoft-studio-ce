@@ -1,7 +1,8 @@
-package com.jaspersoft.studio.data.sql.model;
+package com.jaspersoft.studio.data.sql.model.metadata;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import com.jaspersoft.studio.data.sql.model.MDBObjects;
 import com.jaspersoft.studio.model.ANode;
 
 public class MTables extends MDBObjects {
