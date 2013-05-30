@@ -35,6 +35,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.data.adapter.IReportDescriptor;
+import com.jaspersoft.studio.data.adapter.ImportUtility;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
@@ -77,7 +78,7 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 	
 	
 	protected void createCheckboxes(Properties prop){
-		Integer connectionIndex = 2;
+		Integer connectionIndex = 0;
 		String connectionXML = prop.getProperty("connection." + connectionIndex); //$NON-NLS-1$
 		while(connectionXML != null){
 			try {
@@ -85,11 +86,13 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 				NamedNodeMap rootAttributes = document.getChildNodes().item(0).getAttributes();
 				String connectionName = rootAttributes.getNamedItem("name").getTextContent(); //$NON-NLS-1$
 				String connectionClass = rootAttributes.getNamedItem("connectionClass").getTextContent(); //$NON-NLS-1$
-				Button checkButton = new Button(content, SWT.CHECK);
-				String type = connectionClass.substring(connectionClass.lastIndexOf(".")+1); //$NON-NLS-1$
-				checkButton.setText(connectionName+" ("+ type + ")"); //$NON-NLS-1$ //$NON-NLS-2$
-				checkButton.setData(document);
-				selectedElements.add(checkButton);
+				if (ImportUtility.hasAdapter(connectionClass)){
+					Button checkButton = new Button(content, SWT.CHECK);
+					String type = connectionClass.substring(connectionClass.lastIndexOf(".")+1); //$NON-NLS-1$
+					checkButton.setText(connectionName+" ("+ type + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+					checkButton.setData(document);
+					selectedElements.add(checkButton);
+				}
 			} catch (JRException e) {}
 			connectionIndex++;
 			connectionXML = prop.getProperty("connection." + connectionIndex); //$NON-NLS-1$

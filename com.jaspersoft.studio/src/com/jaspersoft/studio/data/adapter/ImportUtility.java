@@ -110,6 +110,18 @@ public class ImportUtility {
 	}
 	
 	/**
+	 * Check if is possible to build a data adapter from an xml definition
+	 * 
+	 * @param className the value of the attribute connectionClass in the xml definition, used to search a creator
+	 * for this definition
+	 * @return true if there is a creator for the data adapter, false otherwise
+	 */
+	public static boolean hasAdapter(String className){
+		if (importManager == null) createImportManager();
+		return importManager.containsKey(className);
+	}
+	
+	/**
 	 * Build a data adapter from the iReport XML definition
 	 * 
 	 * @param xml the iReport xml definition
