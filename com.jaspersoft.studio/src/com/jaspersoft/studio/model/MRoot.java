@@ -56,6 +56,11 @@ public class MRoot extends ANode {
 	}
 
 	@Override
+	public JasperDesign getJasperDesign() {
+		return (JasperDesign) getValue();
+	}
+
+	@Override
 	public INode getRoot() {
 		return this;
 	}
