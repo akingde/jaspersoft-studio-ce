@@ -17,9 +17,8 @@ package com.jaspersoft.studio.community;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
 
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.osgi.framework.BundleContext;
 
@@ -93,11 +92,11 @@ public class JSSCommunityActivator extends AbstractJRUIPlugin {
 	 *            the community user
 	 */
 	public void storeCommunityUserInformation(CommunityUser user){
-		ISecurePreferences secPrefs = SecurePreferencesFactory.getDefault();
-		ISecurePreferences node = secPrefs.node(CommunityConstants.SECURE_PREFSTORE_PATHNAME);
 		try {
-			node.put(USERNAME_KEY, user.getUsername(), true);
-			node.put(PASSWORD_KEY, user.getPassword(), true);
+			SecureStorageUtils.saveToDefaultSecurePreferences(
+					CommunityConstants.SECURE_PREFSTORE_PATHNAME, USERNAME_KEY, user.getUsername());
+			SecureStorageUtils.saveToDefaultSecurePreferences(
+					CommunityConstants.SECURE_PREFSTORE_PATHNAME, PASSWORD_KEY, user.getPassword());
 		}
 		catch (StorageException ex){
 			logError(Messages.JSSCommunityActivator_CredentialsStoreError, ex);
@@ -110,21 +109,19 @@ public class JSSCommunityActivator extends AbstractJRUIPlugin {
 	 *         preferences store, <code>null</code> otherwise
 	 */
 	public CommunityUser getCommunityUserInformation() {
-		 ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
-         if (preferences.nodeExists(CommunityConstants.SECURE_PREFSTORE_PATHNAME)) {
-             ISecurePreferences node = preferences.node(CommunityConstants.SECURE_PREFSTORE_PATHNAME);
-             try {
-                 String username = node.get(USERNAME_KEY, NOT_AVAILABLE_VALUE); //$NON-NLS-1$ //$NON-NLS-2$
-                 String password = node.get(PASSWORD_KEY, NOT_AVAILABLE_VALUE); //$NON-NLS-1$ //$NON-NLS-2$
-                 if(username.equals(NOT_AVAILABLE_VALUE) || password.equals(NOT_AVAILABLE_VALUE)){ //$NON-NLS-1$ //$NON-NLS-2$
-                	 return null;
-                 }
-                 return new CommunityUser(username,password);
-             } catch (StorageException ex) {
-            	 logError(Messages.JSSCommunityActivator_CredentialsRecoveringError, ex);
-            	 UIUtils.showError(ex);	 
-             }
-         }
+	     try {
+	 		String username = SecureStorageUtils.readFromDefaultSecurePreferences(
+					CommunityConstants.SECURE_PREFSTORE_PATHNAME, USERNAME_KEY, NOT_AVAILABLE_VALUE);
+			String password = SecureStorageUtils.readFromDefaultSecurePreferences(
+					CommunityConstants.SECURE_PREFSTORE_PATHNAME, PASSWORD_KEY, NOT_AVAILABLE_VALUE);
+			if(username!=null && !NOT_AVAILABLE_VALUE.equals(username) && 
+					password!=null && !NOT_AVAILABLE_VALUE.equals(password)) {
+				return new CommunityUser(username,password);
+			}
+	     } catch (StorageException ex) {
+	    	 logError(Messages.JSSCommunityActivator_CredentialsRecoveringError, ex);
+	    	 UIUtils.showError(ex);	 
+	     }
          return null;
 	}
 }
