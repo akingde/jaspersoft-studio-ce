@@ -78,10 +78,10 @@ public class BuiltInCategories {
 	public static List<String> getCategoriesList(){
 		List<String> result = new ArrayList<String>();
 		result.add(ALL_TYPES_KEY);
-		result.add(A4_KEY);
-		result.add(LANDSCAPE_KEY);
 		result.add(NORMAL_KEY);
 		result.add(TABULAR_KEY);
+		result.add(A4_KEY);
+		result.add(LANDSCAPE_KEY);
 		return result;
 	}
 }
