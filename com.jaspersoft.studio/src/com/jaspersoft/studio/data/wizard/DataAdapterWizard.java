@@ -80,6 +80,7 @@ public class DataAdapterWizard extends AbstractDataAdapterWizard implements Sele
 	@Override
 	public boolean performFinish() {
 		DataAdapterDescriptor editedDataAdapter = dataAdapterEditorPage.getDataAdapter();
+		dataAdapterEditorPage.performFinishInvoked();
 
 		if (this.dataAdapter == null) {
 			this.dataAdapter = editedDataAdapter;

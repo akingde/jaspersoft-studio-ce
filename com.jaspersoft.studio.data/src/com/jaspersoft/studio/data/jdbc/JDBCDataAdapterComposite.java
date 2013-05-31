@@ -38,8 +38,10 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.data.secret.DataAdaptersSecretsProvider;
 import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
 import com.jaspersoft.studio.swt.widgets.PropertiesComponent;
+import com.jaspersoft.studio.swt.widgets.WSecretText;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 
@@ -140,7 +142,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	protected Text textServerAddress;
 	protected Text textDatabase;
 	protected Text textUsername;
-	protected Text textPassword;
+	protected WSecretText textPassword;
 
 	// private Button btnSavePassword;
 	protected ComboViewer comboJDBCDriver;
@@ -272,7 +274,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
 		lbl.setText(Messages.JDBCDataAdapterComposite_password);
 
-		textPassword = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+		textPassword = new WSecretText(composite, SWT.BORDER | SWT.PASSWORD);
 		textPassword.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		// btnSavePassword = new Button(this, SWT.CHECK);
@@ -414,7 +416,14 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 		jdbcDataAdapter.setDriver(comboJDBCDriver.getCombo().getText());
 		jdbcDataAdapter.setUsername(textUsername.getText());
-		jdbcDataAdapter.setPassword(textPassword.getText());
+		// configure widget if not done yet
+		if(!textPassword.isWidgetConfigured()) {
+			textPassword.loadSecret(DataAdaptersSecretsProvider.SECRET_NODE_ID, textPassword.getText());
+		}
+		else {
+			// rely on back-compatibility and use clear text
+			jdbcDataAdapter.setPassword(textPassword.getText());
+		}
 		jdbcDataAdapter.setUrl(textJDBCUrl.getText());
 		getDataAdapterURLAssistant(jdbcDataAdapter);
 		jdbcDataAdapter.setSavePassword(true);// btnSavePassword.getSelection());
@@ -447,4 +456,8 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		this.contextId = contextId;
 	}
 
+	@Override
+	public void performAdditionalUpdates() {
+		textPassword.persistSecret();
+	}
 }

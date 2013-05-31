@@ -40,12 +40,14 @@ import rex.metadata.ServerMetadata;
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.data.secret.DataAdaptersSecretsProvider;
+import com.jaspersoft.studio.swt.widgets.WSecretText;
 
 public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 
 	private Text xmlaUri;
 	private Text textUsername;
-	private Text textPassword;
+	private WSecretText textPassword;
 	private Combo cube;
 	private Combo catalog;
 	private Combo datasource;
@@ -113,7 +115,7 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		Label lblPassword = new Label(this, SWT.NONE);
 		lblPassword.setText(Messages.JDBCDataAdapterComposite_password);
 
-		textPassword = new Text(this, SWT.BORDER | SWT.PASSWORD);
+		textPassword = new WSecretText(this, SWT.BORDER | SWT.PASSWORD);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		textPassword.setLayoutData(gd);
@@ -185,7 +187,15 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		dataAdapter.setCube(cube.getText());
 
 		dataAdapter.setUsername(textUsername.getText());
-		dataAdapter.setPassword(textPassword.getText());
+		// configure widget if not done yet
+		if(!textPassword.isWidgetConfigured()) {
+			textPassword.loadSecret(DataAdaptersSecretsProvider.SECRET_NODE_ID, textPassword.getText());
+		}
+		else {
+			// rely on back-compatibility and use clear text
+			dataAdapter.setPassword(textPassword.getText());
+		}
+		
 
 		return dataAdapterDesc;
 	}
@@ -238,5 +248,10 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	@Override
 	public String getHelpContextId() {
 		return PREFIX.concat("adapter_xmla");
+	}
+	
+	@Override
+	public void performAdditionalUpdates() {
+		textPassword.persistSecret();
 	}
 }

@@ -27,20 +27,22 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.wizards.WizardEndingStateListener;
 
-public class DataAdapterEditorPage extends WizardPage {
+public class DataAdapterEditorPage extends WizardPage implements WizardEndingStateListener {
 
 	private DataAdapterEditor dataAdapterEditor = null;
 	private String subTitle = "";
 	private Composite mainContainer = null;
 	private Composite staticContainer = null;
 	private Composite customContainer = null;
-	private Composite editorComposite = null;
+	private ADataAdapterComposite editorComposite = null;
 	private Text textName;
 	private boolean editMode = false;
 	private ADataAdapterStorage storage;
@@ -250,6 +252,16 @@ public class DataAdapterEditorPage extends WizardPage {
 			// }
 		}
 		return true;
+	}
+
+	@Override
+	public void performFinishInvoked() {
+		if(editorComposite!=null) editorComposite.performAdditionalUpdates();
+	}
+
+	@Override
+	public void performCancelInvoked() {
+		// do nothing...
 	}
  
 }

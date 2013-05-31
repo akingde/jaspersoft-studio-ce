@@ -115,5 +115,13 @@ public abstract class ADataAdapterComposite extends Composite {
 	public void removeModifyListener(PropertyChangeListener listener) {
 		pchangesuport.removePropertyChangeListener(listener);
 	}
+	
+	/**
+	 * This generic method should be used by clients in order to 
+	 * perform additional custom updates involving the UI components.
+	 */
+	public void performAdditionalUpdates() {
+		// Default: do nothing - subclasses should override if needed
+	}
 
 }
