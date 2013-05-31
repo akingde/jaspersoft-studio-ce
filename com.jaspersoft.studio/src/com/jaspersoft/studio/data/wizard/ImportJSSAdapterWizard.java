@@ -31,7 +31,9 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.adapter.IReportDescriptor;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 
 /**
  * Wizard to import one of more data adapters definition from the previous installations of 
@@ -45,17 +47,32 @@ public class ImportJSSAdapterWizard extends Wizard implements IImportWizard {
 	/**
 	 * Page that list the ireport installations
 	 */
-	SelectWorkspacePage page0 = new SelectWorkspacePage();
+	private SelectWorkspacePage page0 = new SelectWorkspacePage();
 	
 	/**
 	 * Page that list the available data adapters into a precise configurations
 	 */
-	ShowJSSAdaptersPage page1 = new ShowJSSAdaptersPage();
+	private ShowJSSAdaptersPage page1 = new ShowJSSAdaptersPage();
+	
+	/**
+	 * Page that list the available properties into a precise configuration
+	 */
+	private JSSPropertiesPage page2 = new JSSPropertiesPage();
 	
 	@Override
 	public void addPages() {
 		addPage(page0);
 		addPage(page1);
+		addPage(page2);
+	}
+	
+	/**
+	 * Return the descriptor of the configuration selected into the first step
+	 * 
+	 * @return a configuration descriptor file
+	 */
+	public IReportDescriptor getSelectedConfiguration(){
+		return page0.getSelection();
 	}
 	
 
@@ -104,6 +121,15 @@ public class ImportJSSAdapterWizard extends Wizard implements IImportWizard {
 	@Override
 	public boolean performFinish() {
 		addAdapters();
+		List<String> proeprties = page2.getProperties();
+		//Properties prop = getSelectedConfiguration().getConfiguration();
+		String[] keys = proeprties.toArray(new String[proeprties.size()]);
+		String[] values = new String[proeprties.size()];
+		for(int i=0;i<keys.length; i++){
+			//String value = prop.getProperty(keys[i]);
+			values[i] = page2.getProperyValue(keys[i]); 
+		}
+		PreferencesUtils.storeJasperReportsProperty(keys, values);
 		return true;
 	}
 

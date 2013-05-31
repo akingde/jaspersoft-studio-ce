@@ -116,33 +116,34 @@ public class ShowServersPage extends JSSHelpWizardPage {
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
-		
-		selectedInstallation = ((ListInstallationPage)getPreviousPage()).getSelection();
-		//Clear the old elements if someone is doing back and the next
-		for(Button button : selectedElements){
-			button.dispose();
-		}
-		selectedElements.clear();
-		if (noElementLabel != null) noElementLabel.dispose();
-		
-		Properties prop = selectedInstallation.getServerConnection();
-
-		if (prop != null){
-			List<ServerProfile> checkBoxData = createCheckBoxData(prop);
-			for(ServerProfile srv : checkBoxData)
-			{
-				Button checkButton = new Button(content, SWT.CHECK);
-				checkButton.setText(srv.getName() + " ("+srv.getUrl()+")"); //$NON-NLS-1$ //$NON-NLS-2$
-				checkButton.setData(srv);
-				selectedElements.add(checkButton);
+		if (visible){
+			selectedInstallation = ((ListInstallationPage)getPreviousPage()).getSelection();
+			//Clear the old elements if someone is doing back and the next
+			for(Button button : selectedElements){
+				button.dispose();
 			}
+			selectedElements.clear();
+			if (noElementLabel != null) noElementLabel.dispose();
+			
+			Properties prop = selectedInstallation.getServerConnection();
+	
+			if (prop != null){
+				List<ServerProfile> checkBoxData = createCheckBoxData(prop);
+				for(ServerProfile srv : checkBoxData)
+				{
+					Button checkButton = new Button(content, SWT.CHECK);
+					checkButton.setText(srv.getName() + " ("+srv.getUrl()+")"); //$NON-NLS-1$ //$NON-NLS-2$
+					checkButton.setData(srv);
+					selectedElements.add(checkButton);
+				}
+			}
+			if (selectedElements.isEmpty()){
+				noElementLabel = new Label(content, SWT.NONE);
+				noElementLabel.setText(Messages.ShowServersPage_noElementsLabel);
+			}
+			content.layout();
+			((ScrolledComposite)content.getParent()).setMinSize(content.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		}
-		if (selectedElements.isEmpty()){
-			noElementLabel = new Label(content, SWT.NONE);
-			noElementLabel.setText(Messages.ShowServersPage_noElementsLabel);
-		}
-		content.layout();
-		((ScrolledComposite)content.getParent()).setMinSize(content.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 	
 	/**

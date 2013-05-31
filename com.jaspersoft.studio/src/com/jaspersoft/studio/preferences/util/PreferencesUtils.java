@@ -20,6 +20,7 @@ import java.util.Properties;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.osgi.util.NLS;
 
@@ -56,6 +57,32 @@ public final class PreferencesUtils {
 		}
 	}
 	
+	
+	/**
+	 * Saves the specified JasperReports properties in the dedicated Eclipse one.
+	 * 
+	 * @param key the properties keys, must be not null and have the same size of value
+	 * @param value the properties values, must be not null and have the same size of key
+	 */
+	public static void storeJasperReportsProperty(String[] key, String[] value){
+		Assert.isNotNull(key);
+		Assert.isNotNull(value);
+		Assert.isTrue(key.length == value.length);
+		Properties jrProperties = loadJasperReportsProperties();
+		if(jrProperties!=null){
+			for(int i=0;i<key.length;i++){
+				jrProperties.setProperty(key[i], value[i]);
+			}
+			getJaspersoftStudioPrefStore().setValue(
+					NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(jrProperties));
+		}
+		else{
+			JaspersoftStudioPlugin.getInstance().logError(
+					NLS.bind(Messages.PreferencesUtils_CannotStoreJRPropertyError, key),null);
+		}
+	}
+	
+	
 	/**
 	 * Gets the specified JasperReports property from the Workspace Preferences.
 	 * 
@@ -79,6 +106,22 @@ public final class PreferencesUtils {
 	 */
 	public static IPreferenceStore getJaspersoftStudioPrefStore(){
 		return JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+	}
+	
+	/**
+	 * Create the properties file from a string that embed all the properties pair key\value
+	 * 
+	 * @param propertiesString the string that contains all the properties to load
+	 * @return
+	 */
+	public static Properties loadJasperReportsProperties(String propertiesString){
+		try {
+			return
+					FileUtils.load(propertiesString);
+		} catch (IOException e) {
+			JaspersoftStudioPlugin.getInstance().logError(Messages.PreferencesUtils_CannotLoadJRPRopertiesError, e);
+		}
+		return null;
 	}
 	
 	/*

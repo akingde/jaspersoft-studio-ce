@@ -1272,6 +1272,10 @@ public class Messages extends NLS {
 	public static String PreviewEditor_starting;
 	public static String PreviousPageAction_actionName;
 	public static String PreviousPageAction_actionTolltip;
+	public static String PropertiesPage_availableColName;
+	public static String PropertiesPage_description;
+	public static String PropertiesPage_importColName;
+	public static String PropertiesPage_title;
 	public static String PropertiesPreferencePage_jrPropertiesTitle;
 	public static String PropertyDialog_0;
 	public static String PropertyDialog_1;

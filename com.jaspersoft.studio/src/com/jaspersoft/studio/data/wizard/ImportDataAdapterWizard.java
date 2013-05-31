@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.wizard;
 
 import java.util.List;
+import java.util.Properties;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -26,7 +27,9 @@ import org.w3c.dom.NamedNodeMap;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.adapter.IReportDescriptor;
 import com.jaspersoft.studio.data.adapter.ImportUtility;
+import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 
 /**
  * Wizard to import one of more data adapters definition from the previous installations of 
@@ -47,10 +50,25 @@ public class ImportDataAdapterWizard extends Wizard implements IImportWizard {
 	 */
 	ShowAdaptersPage page1 = new ShowAdaptersPage();
 	
+	/**
+	 * Page that list the availabe properties into a precise configuration
+	 */
+	PropertiesPage page2 = new PropertiesPage();
+	
 	@Override
 	public void addPages() {
 		addPage(page0);
 		addPage(page1);
+		addPage(page2);
+	}
+	
+	/**
+	 * Return the descriptor of the configuration selected into the first step
+	 * 
+	 * @return a configuration descriptor file
+	 */
+	public IReportDescriptor getSelectedConfiguration(){
+		return page0.getSelection();
 	}
 	
 	@Override
@@ -70,6 +88,14 @@ public class ImportDataAdapterWizard extends Wizard implements IImportWizard {
 			DataAdapterDescriptor newAdapter = ImportUtility.getAdapter(doc, connectionClass);
 			DataAdapterManager.getPreferencesStorage().addDataAdapter("",newAdapter);
 		}
+		List<String> proeprties = page2.getProperties();
+		Properties prop = getSelectedConfiguration().getConfiguration();
+		String[] keys = proeprties.toArray(new String[proeprties.size()]);
+		String[] values = new String[proeprties.size()];
+		for(int i=0;i<keys.length; i++){
+			values[i] = prop.getProperty(keys[i]);
+		}
+		PreferencesUtils.storeJasperReportsProperty(keys, values);
 		return true;
 	}
 

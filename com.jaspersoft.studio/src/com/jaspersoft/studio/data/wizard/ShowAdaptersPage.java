@@ -108,27 +108,28 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
-		
-		selectedInstallation = ((ListInstallationPage)getPreviousPage()).getSelection();
-		//Clear the old elements if someone is doing back and the next
-		for(Button button : selectedElements){
-			button.dispose();
+		if (visible){
+			selectedInstallation = ((ListInstallationPage)getPreviousPage()).getSelection();
+			//Clear the old elements if someone is doing back and the next
+			for(Button button : selectedElements){
+				button.dispose();
+			}
+			selectedElements.clear();
+			if (noElementLabel != null) noElementLabel.dispose();
+			content.layout();
+			
+			Properties prop = selectedInstallation.getConfiguration();
+	
+			if (prop != null){
+				createCheckboxes(prop);
+			}
+			if (selectedElements.isEmpty()){
+				noElementLabel = new Label(content, SWT.NONE);
+				noElementLabel.setText(Messages.ShowAdaptersPage_noElementLabel);
+			}
+			content.layout();
+			((ScrolledComposite)content.getParent()).setMinSize(content.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		}
-		selectedElements.clear();
-		if (noElementLabel != null) noElementLabel.dispose();
-		content.layout();
-		
-		Properties prop = selectedInstallation.getConfiguration();
-
-		if (prop != null){
-			createCheckboxes(prop);
-		}
-		if (selectedElements.isEmpty()){
-			noElementLabel = new Label(content, SWT.NONE);
-			noElementLabel.setText(Messages.ShowAdaptersPage_noElementLabel);
-		}
-		content.layout();
-		((ScrolledComposite)content.getParent()).setMinSize(content.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 	
 	/**
