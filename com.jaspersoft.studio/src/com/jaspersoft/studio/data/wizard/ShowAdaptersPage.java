@@ -23,6 +23,8 @@ import java.util.Properties;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
@@ -126,6 +128,7 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 			noElementLabel.setText(Messages.ShowAdaptersPage_noElementLabel);
 		}
 		content.layout();
+		((ScrolledComposite)content.getParent()).setMinSize(content.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 	
 	/**
@@ -146,22 +149,21 @@ public class ShowAdaptersPage extends JSSHelpWizardPage {
 	public void createControl(Composite parent) {	
 		
 		Composite mainComposite = new Composite(parent, SWT.NONE);
-		mainComposite.setLayout(new GridLayout(1,false));
-		setControl(mainComposite);
+		mainComposite.setLayout(GridLayoutFactory.fillDefaults().create());
+
 		
 		Label titleLabel = new Label(mainComposite, SWT.NONE);
 		titleLabel.setText(Messages.ShowAdaptersPage_label);
-		
-		ScrolledComposite scrollComp = new ScrolledComposite(mainComposite, SWT.V_SCROLL);
-		scrollComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		ScrolledComposite scrollComp = new ScrolledComposite(mainComposite, SWT.V_SCROLL | SWT.H_SCROLL);
+		scrollComp.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 200).create());
 		scrollComp.setLayout(new GridLayout(1,false));
 		scrollComp.setExpandHorizontal(true);
 		scrollComp.setExpandVertical(true);
 		content = new Composite(scrollComp, SWT.NONE);
+		scrollComp.setContent(content);
 		content.setLayout(new GridLayout(1,false));
 		content.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		content.layout();
-		scrollComp.setContent(content);
+		setControl(mainComposite);
 	}
 
 	@Override

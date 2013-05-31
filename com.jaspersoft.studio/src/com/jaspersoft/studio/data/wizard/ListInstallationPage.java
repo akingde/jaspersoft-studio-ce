@@ -19,6 +19,8 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -114,8 +116,7 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 		List<IReportDescriptor> list = getFoundedConfiguration();
 		
 		Composite mainComposite = new Composite(parent, SWT.NONE);
-		mainComposite.setLayout(new GridLayout(1,false));
-		setControl(mainComposite);
+		mainComposite.setLayout(GridLayoutFactory.fillDefaults().create());
 		
 		Label titleLabel = new Label(mainComposite, SWT.NONE);
 		titleLabel.setText(Messages.ListInstallationPage_label);
@@ -124,12 +125,14 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 		titleLabel.setLayoutData(labelData);
 		
 		
-		ScrolledComposite scrollComp = new ScrolledComposite(mainComposite, SWT.V_SCROLL);
-		scrollComp.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false));
+		ScrolledComposite scrollComp = new ScrolledComposite(mainComposite, SWT.V_SCROLL | SWT.H_SCROLL);
+		//scrollComp.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false));
+		scrollComp.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 200).create());
 		scrollComp.setLayout(new GridLayout(1,false));
 		scrollComp.setExpandHorizontal(true);
 		scrollComp.setExpandVertical(true);
 		Composite content = new Composite(scrollComp, SWT.NONE);
+		scrollComp.setContent(content);
 		content.setLayout(new GridLayout(1,false));
 		content.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false));
 		RadioSelection selectionListener = new RadioSelection();
@@ -139,11 +142,11 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 			radio.setData(desc);
 			radio.addSelectionListener(selectionListener);
 		}
-		content.layout();
-		scrollComp.setContent(content);
-		
-		createCustomPathPanel(mainComposite);
+		createCustomPathPanel(content);
+		scrollComp.setMinSize(content.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		if (list.size() == 0) customRadio.setSelection(true);
+		
+		setControl(mainComposite);
 	}
 	
 	/**
@@ -176,7 +179,9 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 	 */
 	private void createCustomPathPanel(Composite mainComposite){
 		final Composite customLocComposite = new Composite(mainComposite, SWT.None);
-		customLocComposite.setLayout(new GridLayout(2,false));
+		GridLayout customLocLayout = new GridLayout(2,false);
+		customLocLayout.marginWidth = 0;
+		customLocComposite.setLayout(customLocLayout);
 		customLocComposite.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false));
 		customRadio = new Button(customLocComposite, SWT.RADIO);
 		customRadio.setText(Messages.ListInstallationPage_customLocation);
