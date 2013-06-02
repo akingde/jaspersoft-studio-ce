@@ -10,7 +10,7 @@ import com.jaspersoft.studio.model.ANode;
 public class MDBObjects extends ANode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	transient private ImageDescriptor icon;
-	transient protected String tooltip;
+	protected String tooltip;
 
 	public MDBObjects(ANode parent, String value, String image) {
 		super(parent, -1);
@@ -42,4 +42,12 @@ public class MDBObjects extends ANode {
 		return getValue();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof MDBObjects && ((MDBObjects) obj).getValue().equals(getValue());
+	}
+
+	public int hashCode() {
+		return getValue().hashCode();
+	};
 }

@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.sql.action.table;
+package com.jaspersoft.studio.data.sql.dialogs;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.sql.action.column;
+package com.jaspersoft.studio.data.sql.dialogs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class ColumnsDialog extends Dialog {
 	 */
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Tables Dialog");
+		newShell.setText("Columns Dialog");
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 

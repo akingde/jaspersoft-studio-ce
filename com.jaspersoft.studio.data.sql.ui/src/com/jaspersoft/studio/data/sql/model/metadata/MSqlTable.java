@@ -23,10 +23,17 @@ public class MSqlTable extends AMSQLObject implements IDragable {
 
 	protected void setRemarks(ResultSet rs) {
 		try {
-			tooltip = rs.getString("REMARKS");
+			remarks = rs.getString("REMARKS");
+			tooltip = remarks;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private String remarks;
+
+	public String getRemarks() {
+		return remarks;
 	}
 
 }

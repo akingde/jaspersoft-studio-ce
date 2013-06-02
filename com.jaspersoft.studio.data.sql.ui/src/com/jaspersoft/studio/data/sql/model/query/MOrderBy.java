@@ -2,15 +2,13 @@ package com.jaspersoft.studio.data.sql.model.query;
 
 import net.sf.jasperreports.engine.JRConstants;
 
-import com.jaspersoft.studio.data.sql.model.MQueryObjects;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.model.ANode;
 
-public class MOrderBy extends MQueryObjects {
+public class MOrderBy extends AMKeyword {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MOrderBy(ANode parent, MColumn value) {
-		super(parent, value, "");
+	public MOrderBy(ANode parent) {
+		super(parent, "ORDER BY", null);
 	}
 
 }

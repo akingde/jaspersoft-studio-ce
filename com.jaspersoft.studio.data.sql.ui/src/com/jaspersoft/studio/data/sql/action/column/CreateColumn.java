@@ -1,25 +1,28 @@
 package com.jaspersoft.studio.data.sql.action.column;
 
-import org.eclipse.emf.ecore.EObject;
+import java.util.Collection;
+
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
-import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
-import com.jaspersoft.studio.data.sql.Column;
-import com.jaspersoft.studio.data.sql.ColumnAlias;
-import com.jaspersoft.studio.data.sql.ColumnFull;
-import com.jaspersoft.studio.data.sql.ColumnOrAlias;
-import com.jaspersoft.studio.data.sql.Model;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
-import com.jaspersoft.studio.data.sql.impl.OrColumnImpl;
+import com.jaspersoft.studio.data.sql.action.table.CreateTable;
+import com.jaspersoft.studio.data.sql.dialogs.UsedColumnsDialog;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
-import com.jaspersoft.studio.data.ui.outline.JSSEObjectNode;
+import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
+import com.jaspersoft.studio.data.sql.model.query.MFrom;
+import com.jaspersoft.studio.data.sql.model.query.MSelect;
+import com.jaspersoft.studio.data.sql.model.query.MSelectColumn;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
 
 public class CreateColumn extends AAction {
+
+	private CreateTable ct;
 
 	public CreateColumn(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
 		super("&Add Column", xtextDocument, designer);
@@ -28,46 +31,54 @@ public class CreateColumn extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && selection[0] instanceof JSSEObjectNode && isInSelect(((JSSEObjectNode) selection[0]).getEObject());
+		return selection != null && selection.length == 1 && isInSelect(selection[0]);
 	}
 
-	public static boolean isInSelect(EObject element) {
-		if (element instanceof OrColumnImpl)
-			return true;
-		element = element.eContainer();
-		return element instanceof Column || element instanceof ColumnFull || element instanceof ColumnOrAlias || element instanceof ColumnAlias || element instanceof OrColumnImpl;
+	public static boolean isInSelect(Object element) {
+		return element instanceof MSelect || element instanceof MSelectColumn;
 	}
 
 	@Override
 	public void run() {
-		ColumnsDialog dialog = new ColumnsDialog(Display.getDefault().getActiveShell());
+		UsedColumnsDialog dialog = new UsedColumnsDialog(Display.getDefault().getActiveShell());
 		dialog.setRoot(designer.getDbMetadata().getRoot());
-		if (dialog.open() == Window.OK) {
-			EObject eobj = null;
-			if (selection != null)
-				eobj = ((JSSEObjectNode) selection[0]).getEObject();
-			for (MColumn t : dialog.getColumns())
-				run(t, eobj);
-		}
+		dialog.setSelection((ANode) selection[0]);
+		if (dialog.open() == Window.OK)
+			run(dialog.getColumns());
 	}
 
-	public void run(final MColumn node, EObject eobj) {
-		xtextDocument.readOnly(new IUnitOfWork.Void<XtextResource>() {
-			@Override
-			public void process(XtextResource state) throws Exception {
-				Model m = (Model) state.getContents().get(0);
-				OrColumnImpl cols = (OrColumnImpl) m.getCol();
-				if (cols != null)
-					state.update(Util.getTotalEndOffsetOfKeyword(cols), 0, ", " + node.toSQLString() + " ");
-				else {
-
-					// TODO add to from
-				}
-
-				xtextDocument.set(state.getParseResult().getRootNode().getText());
-
+	public void run(Collection<MColumn> nodes) {
+		Object sel = selection[0];
+		for (MColumn t : nodes) {
+			if (sel instanceof MSelect)
+				sel = run(t, (MSelect) sel, 0);
+			else if (sel instanceof MSelectColumn) {
+				sel = run(t, (MSelectColumn) sel);
 			}
-		});
+			MSelectColumn msc = (MSelectColumn) sel;
+			MSqlTable mstable = (MSqlTable) msc.getValue().getParent();
+			if (!Util.getTables(msc).contains(mstable)) {
+				if (ct == null)
+					ct = new CreateTable(xtextDocument, designer);
+				MRoot r = (MRoot) msc.getRoot();
+				for (INode n : r.getChildren()) {
+					if (n instanceof MFrom) {
+						ct.run(mstable, (MFrom) n, -1);
+						break;
+					}
+				}
+			}
+		}
+		selectInTree(sel);
+	}
+
+	protected MSelectColumn run(MColumn node, MSelectColumn mtable) {
+		MSelect mfrom = (MSelect) mtable.getParent();
+		return run(node, mfrom, mfrom.getChildren().indexOf(mtable) + 1);
+	}
+
+	public MSelectColumn run(MColumn node, MSelect select, int index) {
+		return new MSelectColumn(select, node, index);
 	}
 
 }

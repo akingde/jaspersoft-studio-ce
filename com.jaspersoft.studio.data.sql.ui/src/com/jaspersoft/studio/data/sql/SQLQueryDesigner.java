@@ -200,6 +200,10 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		}
 	};
 
+	public SQLQueryOutline getOutline() {
+		return outline;
+	}
+
 	@Override
 	public void dispose() {
 		outline.dispose();

@@ -15,13 +15,24 @@ public class MColumn extends AMSQLObject implements IDragable {
 	public MColumn(ANode parent, String value, ResultSet rs) {
 		super(parent, value, null);
 		try {
-			tooltip = rs.getString("TYPE_NAME");
-			String comment = rs.getString("REMARKS");
-			if (comment != null)
-				tooltip += "\n" + comment;
+			typeName = rs.getString("TYPE_NAME");
+			tooltip = typeName;
+			remarks = rs.getString("REMARKS");
+			if (remarks != null)
+				tooltip += "\n" + remarks;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
+	private String remarks;
+	private String typeName;
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
 }

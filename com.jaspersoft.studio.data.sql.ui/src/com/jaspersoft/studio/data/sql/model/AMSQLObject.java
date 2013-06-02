@@ -11,6 +11,14 @@ public class AMSQLObject extends MDBObjects {
 		super(parent, value, image);
 	}
 
+	@Override
+	public String getToolTip() {
+		String name = toSQLString();
+		if (tooltip != null)
+			name += "\n" + tooltip;
+		return name;
+	}
+
 	public String toSQLString() {
 		String str = getValue();
 		ANode p = getParent();
@@ -22,4 +30,12 @@ public class AMSQLObject extends MDBObjects {
 		return str;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof AMSQLObject && ((AMSQLObject) obj).toSQLString().equals(toSQLString());
+	}
+
+	public int hashCode() {
+		return toSQLString().hashCode();
+	};
 }

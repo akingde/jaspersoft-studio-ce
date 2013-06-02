@@ -1,38 +1,50 @@
 package com.jaspersoft.studio.data.sql;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.xtext.nodemodel.ICompositeNode;
-import org.eclipse.xtext.nodemodel.INode;
-import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jaspersoft.studio.data.sql.model.AMSQLObject;
+import com.jaspersoft.studio.data.sql.model.MDBObjects;
+import com.jaspersoft.studio.data.sql.model.MQueryObjects;
+import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
+import com.jaspersoft.studio.data.sql.model.query.MFrom;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
 
 public class Util {
-	public static int getTotalEndOffsetOfKeyword(EObject object) {
-		if (object != null) {
-			ICompositeNode node = NodeModelUtils.getNode(object);
-			if (node != null)
-				return node.getLastChild().getTotalEndOffset();
-		}
-		return 0;
+	public static boolean columnExists(MColumn c, MDBObjects orderBy, List<MSqlTable> tables) {
+		if (!tables.contains(c.getParent()))
+			return true;
+		for (INode n : orderBy.getChildren())
+			if (n.getValue().equals(c))
+				return true;
+		return false;
 	}
 
-	public static int getStartOffsetOfKeyword(EObject object) {
-		if (object != null) {
-			ICompositeNode node = NodeModelUtils.getNode(object);
-			if (node != null)
-				return node.getOffset();
-		}
-		return 0;
+	public static List<AMSQLObject> getUsedColumns(ANode sel) {
+		List<AMSQLObject> list = new ArrayList<AMSQLObject>();
+		MDBObjects mgb = null;
+		if (sel instanceof MDBObjects)
+			mgb = (MDBObjects) sel;
+		else if (sel instanceof MQueryObjects)
+			mgb = (MDBObjects) sel.getParent();
+		for (INode n : mgb.getChildren())
+			list.add((AMSQLObject) n.getValue());
+		return list;
 	}
 
-	public static Point getPosition(EObject object) {
-		if (object != null) {
-			ICompositeNode node = NodeModelUtils.getNode(object);
-			if (node != null) {
-				INode lc = node.getLastChild();
-				return new Point(lc.getOffset(), lc.getTotalEndOffset());
+	public static List<MSqlTable> getTables(ANode sel) {
+		List<MSqlTable> list = new ArrayList<MSqlTable>();
+		MRoot r = (MRoot) sel.getRoot();
+		for (INode n : r.getChildren()) {
+			if (n instanceof MFrom) {
+				for (INode t : n.getChildren())
+					list.add((MSqlTable) t.getValue());
+				break;
 			}
 		}
-		return new Point(0, 0);
+		return list;
 	}
 }

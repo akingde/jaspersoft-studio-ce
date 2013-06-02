@@ -52,7 +52,7 @@ public class DBMetadata {
 	}
 
 	public Control createControl(Composite parent) {
-		treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.BORDER);
+		treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.BORDER);
 		treeViewer.setContentProvider(new ReportTreeContetProvider());
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 
