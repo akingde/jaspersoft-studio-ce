@@ -11,7 +11,9 @@
 package com.jaspersoft.studio.outline;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.jface.viewers.StyledCellLabelProvider;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -25,7 +27,7 @@ import com.jaspersoft.studio.model.INode;
  * 
  * @author Chicu Veaceslav
  */
-public class ReportTreeLabelProvider extends CellLabelProvider {
+public class ReportTreeLabelProvider extends StyledCellLabelProvider implements IStyledLabelProvider {
 
 	/*
 	 * (non-Javadoc)
@@ -136,7 +138,9 @@ public class ReportTreeLabelProvider extends CellLabelProvider {
 	public void update(ViewerCell cell) {
 		try {
 			Object element = cell.getElement();
-			cell.setText(getText(element));
+			StyledString st = getStyledText(element);
+			cell.setText(st.getString());
+			cell.setStyleRanges(getStyledText(element).getStyleRanges());
 			cell.setImage(getImage(element));
 			cell.setBackground(getBackground(element));
 			cell.setForeground(getForeground(element));
@@ -145,6 +149,13 @@ public class ReportTreeLabelProvider extends CellLabelProvider {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public StyledString getStyledText(Object element) {
+		if (element instanceof INode)
+			return ((INode) element).getStyledDisplayText();
+		return new StyledString("UNKNOWN ELEMENT"); //$NON-NLS-1$
 	}
 
 }

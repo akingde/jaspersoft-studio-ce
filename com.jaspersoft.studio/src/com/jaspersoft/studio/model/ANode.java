@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
@@ -76,6 +77,11 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 	 */
 	public String getToolTip() {
 		return getDisplayText();
+	}
+
+	@Override
+	public StyledString getStyledDisplayText() {
+		return new StyledString(getDisplayText());
 	}
 
 	/*
@@ -181,28 +187,27 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 	/**
 	 * Sets the parent.
 	 * 
-	 * @param parent
+	 * @param newparent
 	 *          the parent
 	 * @param newIndex
 	 *          the new index
 	 */
-	public void setParent(ANode parent, int newIndex) {
-		if (parent == null) {
+	public void setParent(ANode newparent, int newIndex) {
+		if (newparent == null) {
 			unregister();
-			getPropertyChangeSupport().removePropertyChangeListener(parent);
-			if (this.parent != null && this.parent.getChildren() != null) {
-				this.parent.getChildren().remove(this);
-			}
+			getPropertyChangeSupport().removePropertyChangeListener(newparent);
+			if (parent != null && parent.getChildren() != null)
+				parent.getChildren().remove(this);
 			this.parent = null;
 			unsetDependents();
 		} else {
 			register();
-			this.parent = parent;
-			if (newIndex >= 0 && newIndex < parent.getChildren().size())
-				parent.getChildren().add(newIndex, this);
+			this.parent = newparent;
+			if (newIndex >= 0 && newIndex < newparent.getChildren().size())
+				newparent.getChildren().add(newIndex, this);
 			else
-				parent.getChildren().add(this);
-			getPropertyChangeSupport().addPropertyChangeListener(parent);
+				newparent.getChildren().add(this);
+			getPropertyChangeSupport().addPropertyChangeListener(newparent);
 		}
 	}
 

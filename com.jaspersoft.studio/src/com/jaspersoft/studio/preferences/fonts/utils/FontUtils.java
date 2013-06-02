@@ -16,8 +16,11 @@ import java.util.List;
 import org.eclipse.jdt.ui.PreferenceConstants;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
@@ -25,6 +28,31 @@ import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class FontUtils {
+	/** Styler for the parameters */
+	public static final Styler KEYWORDS_STYLER;
+	/** Styler for the parameters */
+	public static final Styler PARAMETER_STYLER;
+	/** Styler for the variables */
+	public static final Styler VARIABLE_STYLER;
+	/** Styler for the fields */
+	public static final Styler FIELD_STYLER;
+	/** Styler for the class types */
+	public static final Styler CLASSTYPE_STYLER;
+
+	static {
+		// Styling info
+		JFaceResources.getColorRegistry().put("PARAMETER_DARKRED_COLOR", new RGB(127, 0, 83)); //$NON-NLS-1$
+		JFaceResources.getColorRegistry().put("PARAMETER_RED_COLOR", new RGB(190, 39, 39)); //$NON-NLS-1$
+		JFaceResources.getColorRegistry().put("VARIABLE_BLUE_COLOR", new RGB(41, 41, 255)); //$NON-NLS-1$
+		JFaceResources.getColorRegistry().put("FIELD_GREEN_COLOR", new RGB(39, 144, 39)); //$NON-NLS-1$
+		JFaceResources.getColorRegistry().put("GRAY_CLASS_TYPE", new RGB(143, 143, 143)); //$NON-NLS-1$
+		KEYWORDS_STYLER = new BoldStyler("PARAMETER_DARKRED_COLOR", null); //$NON-NLS-1$ 
+		PARAMETER_STYLER = StyledString.createColorRegistryStyler("PARAMETER_RED_COLOR", null); //$NON-NLS-1$
+		VARIABLE_STYLER = StyledString.createColorRegistryStyler("VARIABLE_BLUE_COLOR", null); //$NON-NLS-1$
+		FIELD_STYLER = StyledString.createColorRegistryStyler("FIELD_GREEN_COLOR", null); //$NON-NLS-1$
+		CLASSTYPE_STYLER = StyledString.createColorRegistryStyler("GRAY_CLASS_TYPE", null); //$NON-NLS-1$
+	}
+
 	public static String separator = "__________________";
 
 	/**
