@@ -139,7 +139,7 @@ public class ImportServersWizard extends Wizard implements IImportWizard {
 					JRServerSecretsProvider.SECRET_NODE_ID, uuidKey.toString(), pass);
 			return uuidKey.toString();
 		} catch (StorageException e) {
-			Activator.getDefault().logError(Messages.ImportServersWizard_ErrSecurePrefStorage,e);
+			Activator.getDefault().logError(Messages.Common_ErrSecurePrefStorage,e);
 		};
 		// in case something goes wrong return the clear-text password
 		// we will rely on back-compatibility

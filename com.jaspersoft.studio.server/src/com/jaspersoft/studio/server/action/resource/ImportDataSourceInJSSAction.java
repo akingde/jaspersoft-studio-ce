@@ -16,12 +16,16 @@
 package com.jaspersoft.studio.server.action.resource;
 
 import java.text.MessageFormat;
+import java.util.UUID;
 
+import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.data.bean.BeanDataAdapter;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 import net.sf.jasperreports.data.jndi.JndiDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
 
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -34,6 +38,7 @@ import com.jaspersoft.studio.data.bean.BeanDataAdapterDescriptor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.jndi.JndiDataAdapterDescriptor;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceBean;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC;
@@ -102,7 +107,7 @@ public class ImportDataSourceInJSSAction extends Action {
 					"JDBC")); //$NON-NLS-1$
 			jdbcDataAdapter.setDriver(jdbcDS.getValue().getDriverClass());
 			jdbcDataAdapter.setUsername(jdbcDS.getValue().getUsername());
-			jdbcDataAdapter.setPassword(jdbcDS.getValue().getPassword());
+			jdbcDataAdapter.setPassword(getSecretStorageKey(jdbcDS.getValue().getPassword()));
 			jdbcDataAdapter.setUrl(jdbcDS.getValue().getConnectionUrl());
 			jdbcDataAdapter.setSavePassword(true);
 			DataAdapterManager.getPreferencesStorage().addDataAdapter("", //$NON-NLS-1$
@@ -155,5 +160,23 @@ public class ImportDataSourceInJSSAction extends Action {
 			throw new RuntimeException(
 					Messages.ImportDataSourceInJSSAction_UnableToGetNameError);
 		}
+	}
+	
+	/*
+	 * Returns the key that will be used to retrieve the information from 
+	 * the secure preferences.
+	 */
+	private String getSecretStorageKey(String pass) {
+		try {
+			UUID uuidKey = UUID.randomUUID();
+			SecureStorageUtils.saveToDefaultSecurePreferences(
+					AbstractDataAdapterService.SECRET_CATEGORY, uuidKey.toString(), pass);
+			return uuidKey.toString();
+		} catch (StorageException e) {
+			Activator.getDefault().logError(Messages.Common_ErrSecurePrefStorage,e);
+		};
+		// in case something goes wrong return the clear-text password
+		// we will rely on back-compatibility
+		return pass;
 	}
 }
