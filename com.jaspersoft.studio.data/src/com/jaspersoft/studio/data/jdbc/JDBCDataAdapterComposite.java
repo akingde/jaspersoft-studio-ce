@@ -459,5 +459,8 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	@Override
 	public void performAdditionalUpdates() {
 		textPassword.persistSecret();
+		// update the "password" replacing it with the UUID key saved in secure preferences
+		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc.getDataAdapter();
+		jdbcDataAdapter.setPassword(textPassword.getUUIDKey());
 	}
 }

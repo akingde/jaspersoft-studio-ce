@@ -253,5 +253,8 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	@Override
 	public void performAdditionalUpdates() {
 		textPassword.persistSecret();
+		// update the "password" replacing it with the UUID key saved in secure preferences
+		XmlaDataAdapter dataAdapter = (XmlaDataAdapter) dataAdapterDesc.getDataAdapter();
+		dataAdapter.setPassword(textPassword.getUUIDKey());
 	}
 }
