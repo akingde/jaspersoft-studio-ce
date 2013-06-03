@@ -92,6 +92,7 @@ public class Messages extends NLS {
 	public static String HibernateDataAdapterFactory_description;
 	public static String HibernateDataAdapterFactory_label;
 	public static String HQLWizardDataEditorComposite_Title;
+	public static String JDBCCreator_ErrSecurPrefStorage;
 	public static String JDBCDataAdapterComposite_attention;
 	public static String JDBCDataAdapterComposite_attentionlable;
 	public static String JDBCDataAdapterComposite_classpath;

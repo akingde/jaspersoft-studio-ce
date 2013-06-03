@@ -18,7 +18,6 @@ package com.jaspersoft.studio.data.jdbc;
 import java.util.UUID;
 
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
 
 import org.eclipse.equinox.security.storage.StorageException;
@@ -27,8 +26,10 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
+import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.data.secret.DataAdaptersSecretsProvider;
 
 /**
@@ -44,22 +45,22 @@ public class JDBCCreator implements IDataAdapterCreator {
 		JdbcDataAdapterImpl result = new JdbcDataAdapterImpl();
 		
 		NamedNodeMap rootAttributes = docXML.getChildNodes().item(0).getAttributes();
-		String connectionName = rootAttributes.getNamedItem("name").getTextContent();
+		String connectionName = rootAttributes.getNamedItem("name").getTextContent(); //$NON-NLS-1$
 		result.setName(connectionName);
 		
 		NodeList children = docXML.getChildNodes().item(0).getChildNodes();
 		for(int i=0; i<children.getLength(); i++){
 			Node node = children.item(i);
-			if (node.getNodeName().equals("connectionParameter")){
-				String paramName = node.getAttributes().getNamedItem("name").getTextContent();
+			if (node.getNodeName().equals("connectionParameter")){ //$NON-NLS-1$
+				String paramName = node.getAttributes().getNamedItem("name").getTextContent(); //$NON-NLS-1$
 				
-				if (paramName.equals("ServerAddress")) result.setServerAddress(node.getTextContent());
-				if (paramName.equals("SavePassword")) result.setSavePassword(node.getTextContent().equals("true"));
-				if (paramName.equals("Url")) result.setUrl(node.getTextContent());
-				if (paramName.equals("Database")) result.setDatabase(node.getTextContent());
-				if (paramName.equals("Password")) result.setPassword(getSecretStorageKey(node.getTextContent()));
-				if (paramName.equals("Username")) result.setUsername(node.getTextContent());
-				if (paramName.equals("JDBCDriver")) result.setDriver(node.getTextContent());
+				if (paramName.equals("ServerAddress")) result.setServerAddress(node.getTextContent()); //$NON-NLS-1$
+				if (paramName.equals("SavePassword")) result.setSavePassword(node.getTextContent().equals("true")); //$NON-NLS-1$ //$NON-NLS-2$
+				if (paramName.equals("Url")) result.setUrl(node.getTextContent()); //$NON-NLS-1$
+				if (paramName.equals("Database")) result.setDatabase(node.getTextContent()); //$NON-NLS-1$
+				if (paramName.equals("Password")) result.setPassword(getSecretStorageKey(node.getTextContent())); //$NON-NLS-1$
+				if (paramName.equals("Username")) result.setUsername(node.getTextContent()); //$NON-NLS-1$
+				if (paramName.equals("JDBCDriver")) result.setDriver(node.getTextContent()); //$NON-NLS-1$
 			}
 		}
 		JDBCDataAdapterDescriptor desc = new JDBCDataAdapterDescriptor();
@@ -69,7 +70,7 @@ public class JDBCCreator implements IDataAdapterCreator {
 
 	@Override
 	public String getID() {
-		return "com.jaspersoft.ireport.designer.connection.JDBCConnection";
+		return "com.jaspersoft.ireport.designer.connection.JDBCConnection"; //$NON-NLS-1$
 	}
 	
 	/*
@@ -83,7 +84,7 @@ public class JDBCCreator implements IDataAdapterCreator {
 					DataAdaptersSecretsProvider.SECRET_NODE_ID, uuidKey.toString(), pass);
 			return uuidKey.toString();
 		} catch (StorageException e) {
-			UIUtils.showError(e);
+			Activator.getDefault().logError(Messages.JDBCCreator_ErrSecurPrefStorage,e);
 		};
 		// in case something goes wrong return the clear-text password
 		// we will rely on back-compatibility
