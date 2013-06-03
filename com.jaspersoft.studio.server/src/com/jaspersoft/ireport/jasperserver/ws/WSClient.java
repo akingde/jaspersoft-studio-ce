@@ -33,6 +33,8 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 
+import net.sf.jasperreports.util.SecretsProvider;
+
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.attachments.AttachmentPart;
 import org.apache.axis.client.Call;
@@ -51,6 +53,8 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Request;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.ws.xml.Marshaller;
 import com.jaspersoft.jasperserver.ws.xml.Unmarshaller;
+import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
+import com.jaspersoft.studio.server.secret.JRServerSecretsProviderFactory;
 
 /**
  * 
@@ -73,6 +77,8 @@ public class WSClient {
 	private Marshaller marshaller = new Marshaller();
 
 	private String cachedServerVersion;
+	
+	private SecretsProvider secretsProvider;
 
 	public WSClient(JServer server) throws Exception {
 		this.server = server;
@@ -442,7 +448,10 @@ public class WSClient {
 	}
 
 	public String getPassword() {
-		return getServer().getPassword();
+		if(secretsProvider==null){
+			secretsProvider = JRServerSecretsProviderFactory.getInstance().getSecretsProvider(JRServerSecretsProvider.SECRET_NODE_ID);
+		}
+		return secretsProvider.getSecret(getServer().getPassword());
 	}
 
 	public int getTimeout() {

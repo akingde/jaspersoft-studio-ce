@@ -48,11 +48,15 @@ import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
 import com.jaspersoft.studio.server.wizard.validator.URLValidator;
+import com.jaspersoft.studio.swt.widgets.WSecretText;
 import com.jaspersoft.studio.utils.UIUtil;
+import com.jaspersoft.studio.wizards.WizardEndingStateListener;
 
-public class ServerProfilePage extends WizardPage {
+public class ServerProfilePage extends WizardPage implements WizardEndingStateListener{
 	private MServerProfile sprofile;
+	private WSecretText tpass;
 
 	public ServerProfilePage(MServerProfile sprofile) {
 		super("serverprofilepage"); //$NON-NLS-1$
@@ -101,7 +105,7 @@ public class ServerProfilePage extends WizardPage {
 		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		new Label(gr, SWT.NONE).setText(Messages.ServerProfilePage_11);
-		Text tpass = new Text(gr, SWT.BORDER | SWT.PASSWORD);
+		tpass = new WSecretText(gr, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		final Section expcmp = new Section(composite,
@@ -196,6 +200,8 @@ public class ServerProfilePage extends WizardPage {
 
 		dbc.bindValue(SWTObservables.observeText(cversion.getControl()),
 				PojoObservables.observeValue(new Proxy(value), "jrVersion")); //$NON-NLS-1$
+		
+		tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID, sprofile.getValue().getPass());
 	}
 
 	public class Proxy {
@@ -218,5 +224,16 @@ public class ServerProfilePage extends WizardPage {
 	public void performHelp() {
 		PlatformUI.getWorkbench().getHelpSystem()
 				.displayHelp("com.jaspersoft.studio.doc.jaspersoftserver"); //$NON-NLS-1$
+	}
+
+	@Override
+	public void performFinishInvoked() {
+		tpass.persistSecret();
+		sprofile.getValue().setPass(tpass.getUUIDKey());
+	}
+
+	@Override
+	public void performCancelInvoked() {
+		
 	}
 }

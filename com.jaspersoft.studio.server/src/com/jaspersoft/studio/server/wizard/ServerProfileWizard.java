@@ -58,6 +58,7 @@ public class ServerProfileWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
+		page0.performFinishInvoked();
 		return true;
 	}
 
