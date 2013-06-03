@@ -68,6 +68,6 @@ public class XmlaDataAdapterFactory implements DataAdapterFactory {
 
 	@Override
 	public IDataAdapterCreator iReportConverter() {
-		return null;
+		return new XMLACreator();
 	}
 }
