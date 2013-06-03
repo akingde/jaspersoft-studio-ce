@@ -15,8 +15,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.jdbc;
 
-import net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl;
+import java.util.UUID;
 
+import net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
+
+import org.eclipse.equinox.security.storage.StorageException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -24,6 +29,7 @@ import org.w3c.dom.NodeList;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
+import com.jaspersoft.studio.data.secret.DataAdaptersSecretsProvider;
 
 /**
  * Creator to build a JSS JDBC data adapter from the xml definition of an iReport JDBC 
@@ -51,7 +57,7 @@ public class JDBCCreator implements IDataAdapterCreator {
 				if (paramName.equals("SavePassword")) result.setSavePassword(node.getTextContent().equals("true"));
 				if (paramName.equals("Url")) result.setUrl(node.getTextContent());
 				if (paramName.equals("Database")) result.setDatabase(node.getTextContent());
-				if (paramName.equals("Password")) result.setPassword(node.getTextContent());
+				if (paramName.equals("Password")) result.setPassword(getSecretStorageKey(node.getTextContent()));
 				if (paramName.equals("Username")) result.setUsername(node.getTextContent());
 				if (paramName.equals("JDBCDriver")) result.setDriver(node.getTextContent());
 			}
@@ -64,6 +70,24 @@ public class JDBCCreator implements IDataAdapterCreator {
 	@Override
 	public String getID() {
 		return "com.jaspersoft.ireport.designer.connection.JDBCConnection";
+	}
+	
+	/*
+	 * Returns the key that will be used to retrieve the information from 
+	 * the secure preferences.
+	 */
+	private String getSecretStorageKey(String pass) {
+		try {
+			UUID uuidKey = UUID.randomUUID();
+			SecureStorageUtils.saveToDefaultSecurePreferences(
+					DataAdaptersSecretsProvider.SECRET_NODE_ID, uuidKey.toString(), pass);
+			return uuidKey.toString();
+		} catch (StorageException e) {
+			UIUtils.showError(e);
+		};
+		// in case something goes wrong return the clear-text password
+		// we will rely on back-compatibility
+		return pass;
 	}
 
 }
