@@ -151,7 +151,7 @@ public class ShowServersPage extends JSSHelpWizardPage {
 	 * 
 	 * @return a not null list of ServerProfile, every one represent an element to import
 	 */
-	public List<ServerProfile> getSelectedAdapter(){
+	public List<ServerProfile> getSelectedServers(){
 		List<ServerProfile> result = new ArrayList<ServerProfile>();
 		for(Button element : selectedElements){
 			if (element.getSelection()) result.add((ServerProfile)element.getData());

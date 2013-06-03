@@ -16,7 +16,11 @@
 package com.jaspersoft.studio.server.wizard;
 
 import java.util.List;
+import java.util.UUID;
 
+import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
+
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.Wizard;
@@ -29,11 +33,14 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.repository.RepositoryView;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.action.server.EditServerAction;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
 import com.jaspersoft.studio.server.wizard.pages.ShowServersPage;
 
 /**
@@ -65,7 +72,7 @@ public class ImportServersWizard extends Wizard implements IImportWizard {
 	public void init(IWorkbench workbench, IStructuredSelection selection) {}
 	
 	private RepositoryView getRepositoryView(){
-		return (RepositoryView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("com.jaspersoft.studio.Repository");
+		return (RepositoryView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("com.jaspersoft.studio.Repository"); //$NON-NLS-1$
 	}
 
 	/**
@@ -93,8 +100,9 @@ public class ImportServersWizard extends Wizard implements IImportWizard {
 		}
 			
 		//Create every server and if the repository view is open add also the nodes to the tree view
-		List<ServerProfile> servers = page1.getSelectedAdapter();
+		List<ServerProfile> servers = page1.getSelectedServers();
 		for(ServerProfile srv : servers){
+			srv.setPass(getSecretStorageKey(srv.getPass()));
 			MServerProfile mservprof = new MServerProfile(null, srv);
 			if (serversNode == null) ServerManager.addServerProfile(mservprof);
 			else {
@@ -120,4 +128,21 @@ public class ImportServersWizard extends Wizard implements IImportWizard {
 		return true;
 	}
 
+	/*
+	 * Returns the key that will be used to retrieve the information from 
+	 * the secure preferences.
+	 */
+	private String getSecretStorageKey(String pass) {
+		try {
+			UUID uuidKey = UUID.randomUUID();
+			SecureStorageUtils.saveToDefaultSecurePreferences(
+					JRServerSecretsProvider.SECRET_NODE_ID, uuidKey.toString(), pass);
+			return uuidKey.toString();
+		} catch (StorageException e) {
+			Activator.getDefault().logError(Messages.ImportServersWizard_ErrSecurePrefStorage,e);
+		};
+		// in case something goes wrong return the clear-text password
+		// we will rely on back-compatibility
+		return pass;
+	}
 }

@@ -154,7 +154,7 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 		}
 			
 		//Create every server and if the repository view is open add also the nodes to the tree view
-		List<ServerProfile> servers = page1.getSelectedAdapter();
+		List<ServerProfile> servers = page1.getSelectedServers();
 		for(ServerProfile srv : servers){
 			MServerProfile mservprof = new MServerProfile(null, srv);
 			if (serversNode == null) ServerManager.addServerProfile(mservprof);

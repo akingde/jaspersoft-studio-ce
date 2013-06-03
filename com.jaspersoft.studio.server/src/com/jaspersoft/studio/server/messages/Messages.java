@@ -62,6 +62,7 @@ public class Messages extends NLS {
 	public static String ImportDataSourceInJSSAction_OperationInfoMsg;
 	public static String ImportDataSourceInJSSAction_OperationInfoTitle;
 	public static String ImportDataSourceInJSSAction_UnableToGetNameError;
+	public static String ImportServersWizard_ErrSecurePrefStorage;
 	public static String InputControlPageContent_boolean;
 	public static String InputControlPageContent_singleValue;
 	public static String JrxmlPublishAction_defaultresourcelabel;
