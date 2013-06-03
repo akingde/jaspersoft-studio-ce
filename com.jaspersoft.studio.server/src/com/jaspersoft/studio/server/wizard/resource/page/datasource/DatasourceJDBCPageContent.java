@@ -15,7 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.resource.page.datasource;
 
+import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
+import net.sf.jasperreports.util.SecretsUtil;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -37,6 +39,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.utils.UIUtil;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DatasourceJDBCPageContent extends APageContent {
 
@@ -118,7 +121,7 @@ public class DatasourceJDBCPageContent extends APageContent {
 						tdriver.setText(da.getDriver());
 						turl.setText(da.getUrl());
 						tuser.setText(da.getUsername());
-						tpass.setText(da.getPassword());
+						tpass.setText(getDecodedPassword(da.getPassword()));
 					} else {
 						tdriver.setText(""); //$NON-NLS-1$
 						turl.setText(""); //$NON-NLS-1$
@@ -128,5 +131,14 @@ public class DatasourceJDBCPageContent extends APageContent {
 				}
 			}
 		});
+	}
+	
+	/*
+	 * Password could be stored in the secure preferences, therefore it tries to decode it.
+	 * Fallback case will return the same password, ensuring back-compatibility. 
+	 */
+	private String getDecodedPassword(String encodedPasswd) {
+		SecretsUtil secretsUtil = SecretsUtil.getInstance(JasperReportsConfiguration.getDefaultJRConfig());
+		return secretsUtil.getSecret(AbstractDataAdapterService.SECRET_CATEGORY, encodedPasswd);
 	}
 }
