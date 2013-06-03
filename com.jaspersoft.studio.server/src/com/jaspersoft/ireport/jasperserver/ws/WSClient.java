@@ -33,7 +33,7 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 
-import net.sf.jasperreports.util.SecretsProvider;
+import net.sf.jasperreports.util.SecretsUtil;
 
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.attachments.AttachmentPart;
@@ -54,7 +54,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.ws.xml.Marshaller;
 import com.jaspersoft.jasperserver.ws.xml.Unmarshaller;
 import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
-import com.jaspersoft.studio.server.secret.JRServerSecretsProviderFactory;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * 
@@ -78,7 +78,7 @@ public class WSClient {
 
 	private String cachedServerVersion;
 	
-	private SecretsProvider secretsProvider;
+	private SecretsUtil secretsUtil;
 
 	public WSClient(JServer server) throws Exception {
 		this.server = server;
@@ -448,10 +448,10 @@ public class WSClient {
 	}
 
 	public String getPassword() {
-		if(secretsProvider==null){
-			secretsProvider = JRServerSecretsProviderFactory.getInstance().getSecretsProvider(JRServerSecretsProvider.SECRET_NODE_ID);
+		if(secretsUtil==null){
+			secretsUtil = SecretsUtil.getInstance(JasperReportsConfiguration.getDefaultJRConfig());
 		}
-		return secretsProvider.getSecret(getServer().getPassword());
+		return secretsUtil.getSecret(JRServerSecretsProvider.SECRET_NODE_ID, getServer().getPassword());
 	}
 
 	public int getTimeout() {
