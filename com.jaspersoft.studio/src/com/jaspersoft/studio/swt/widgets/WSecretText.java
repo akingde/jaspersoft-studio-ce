@@ -19,7 +19,6 @@ import java.util.UUID;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.util.SecretsUtil;
 
@@ -130,7 +129,7 @@ public class WSecretText extends Text {
 		}
 		else {
 			// default fallback solution
-			return new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
+			return JasperReportsConfiguration.getDefaultJRConfig();
 		}
 	}
 	

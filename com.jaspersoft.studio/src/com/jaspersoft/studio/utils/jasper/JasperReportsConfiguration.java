@@ -29,6 +29,7 @@ import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.ResourceScope;
 import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentManager;
 import net.sf.jasperreports.engine.component.ComponentsBundle;
@@ -457,5 +458,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		if (fontList == null)
 			fontList = FontUtils.stringToItems(ModelUtils.getFontNames(this));
 		return fontList;
+	}
+	
+	/**
+	 * @return a default {@link JasperReportsConfiguration} instance, based on the {@link DefaultJasperReportsContext}.
+	 */
+	public static JasperReportsConfiguration getDefaultJRConfig() {
+		return new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
 	}
 }
