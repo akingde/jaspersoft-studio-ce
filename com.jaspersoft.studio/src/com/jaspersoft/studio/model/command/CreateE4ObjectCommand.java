@@ -38,6 +38,10 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 		this.index = index;
 		this.jasperDesign = parent.getJasperDesign();
 	}
+	
+	public ANode getChild(){
+		return child;
+	}
 
 	@Override
 	protected void createObject() {
