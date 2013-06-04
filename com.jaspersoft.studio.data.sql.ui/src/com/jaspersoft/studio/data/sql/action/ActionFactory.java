@@ -8,12 +8,15 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
-import com.jaspersoft.studio.data.sql.action.column.CreateColumn;
-import com.jaspersoft.studio.data.sql.action.column.EditColumn;
+import com.jaspersoft.studio.data.sql.action.expression.ChangeOperator;
 import com.jaspersoft.studio.data.sql.action.expression.CreateExpression;
 import com.jaspersoft.studio.data.sql.action.expression.EditExpression;
 import com.jaspersoft.studio.data.sql.action.groupby.CreateGroupByColumn;
 import com.jaspersoft.studio.data.sql.action.order.CreateOrderByColumn;
+import com.jaspersoft.studio.data.sql.action.order.OrderByDesc;
+import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
+import com.jaspersoft.studio.data.sql.action.select.EditColumn;
+import com.jaspersoft.studio.data.sql.action.select.SelectDistinct;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.action.table.EditTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
@@ -28,6 +31,8 @@ public class ActionFactory {
 
 	public ActionFactory(MenuManager menuMgr, IXtextDocument xtextDocument, TreeViewer treeViewer, SQLQueryDesigner designer) {
 		this.menuMgr = menuMgr;
+		actions.add(new SelectDistinct(xtextDocument, designer));
+		actions.add(null);
 		actions.add(new CreateColumn(xtextDocument, designer));
 		actions.add(new EditColumn(xtextDocument, designer));
 		actions.add(new DeleteAction<MColumn>(xtextDocument, designer, "Column", MColumn.class));
@@ -40,10 +45,12 @@ public class ActionFactory {
 		actions.add(new DeleteAction<MGroupByColumn>(xtextDocument, designer, "Column", MGroupByColumn.class));
 		actions.add(null);
 		actions.add(new CreateOrderByColumn(xtextDocument, designer));
+		actions.add(new OrderByDesc(xtextDocument, designer));
 		actions.add(new DeleteAction<MOrderByColumn>(xtextDocument, designer, "Column", MOrderByColumn.class));
 
 		actions.add(null);
 		actions.add(new CreateExpression(xtextDocument, designer));
+		actions.add(new ChangeOperator(xtextDocument, designer));
 		actions.add(new EditExpression(xtextDocument, designer));
 		actions.add(new DeleteAction<MExpression>(xtextDocument, designer, "Expression", MExpression.class));
 	}

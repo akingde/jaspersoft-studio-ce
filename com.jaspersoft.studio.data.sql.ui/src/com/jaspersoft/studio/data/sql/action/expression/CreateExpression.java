@@ -14,6 +14,7 @@ import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
+import com.jaspersoft.studio.data.sql.model.query.Operator;
 import com.jaspersoft.studio.model.ANode;
 
 public class CreateExpression extends AAction {
@@ -57,6 +58,9 @@ public class CreateExpression extends AAction {
 		EditExpressionDialog dialog = new EditExpressionDialog(Display.getDefault().getActiveShell());
 		dialog.setValue(mexpr);
 		if (dialog.open() == Dialog.OK) {
+			mexpr.setOperator(Operator.getOperator((dialog.getOperator())));
+			mexpr.setPrevCond(dialog.getPrevcond());
+			mexpr.setOperands(dialog.getOperands());
 			selectInTree(mexpr);
 		} else {
 			ANode p = mexpr.getParent();

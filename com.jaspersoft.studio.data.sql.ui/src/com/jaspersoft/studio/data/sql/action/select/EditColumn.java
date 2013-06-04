@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.sql.action.expression;
+package com.jaspersoft.studio.data.sql.action.select;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
@@ -6,14 +6,13 @@ import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
-import com.jaspersoft.studio.data.sql.dialogs.EditExpressionDialog;
-import com.jaspersoft.studio.data.sql.model.query.MExpression;
-import com.jaspersoft.studio.data.sql.model.query.Operator;
+import com.jaspersoft.studio.data.sql.dialogs.EditSelectColumnDialog;
+import com.jaspersoft.studio.data.sql.model.query.MSelectColumn;
 import com.jaspersoft.studio.model.ANode;
 
-public class EditExpression extends AAction {
+public class EditColumn extends AAction {
 
-	public EditExpression(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
+	public EditColumn(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
 		super("&Edit Column", xtextDocument, designer);
 	}
 
@@ -24,23 +23,23 @@ public class EditExpression extends AAction {
 	}
 
 	protected boolean isColumn(ANode element) {
-		return element instanceof MExpression;
+		return element instanceof MSelectColumn;
 	}
 
 	@Override
 	public void run() {
-		MExpression mcol = null;
+		MSelectColumn mcol = null;
 		for (Object obj : selection) {
-			if (obj instanceof MExpression) {
-				mcol = (MExpression) obj;
+			if (obj instanceof MSelectColumn) {
+				mcol = (MSelectColumn) obj;
 				break;
 			}
 		}
-		EditExpressionDialog dialog = new EditExpressionDialog(Display.getDefault().getActiveShell());
+		EditSelectColumnDialog dialog = new EditSelectColumnDialog(Display.getDefault().getActiveShell());
 		dialog.setValue(mcol);
 		if (dialog.open() == Dialog.OK) {
-			mcol.setOperator(Operator.getOperator((dialog.getOperator())));
-			mcol.setPrevCond(dialog.getPrevcond());
+			mcol.setAlias(dialog.getAlias());
+			mcol.setAliasKeyword(dialog.getAliasKeyword());
 			selectInTree(mcol);
 		}
 	}
