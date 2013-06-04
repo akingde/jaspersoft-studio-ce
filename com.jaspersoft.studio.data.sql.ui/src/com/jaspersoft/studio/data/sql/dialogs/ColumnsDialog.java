@@ -32,6 +32,11 @@ public class ColumnsDialog extends Dialog {
 		super(parentShell);
 	}
 
+	@Override
+	protected boolean isResizable() {
+		return true;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -41,7 +46,6 @@ public class ColumnsDialog extends Dialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("Columns Dialog");
-		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
 	public void setRoot(MRoot root) {

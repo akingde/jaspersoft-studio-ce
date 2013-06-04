@@ -60,6 +60,11 @@ public class EditFromTableDialog extends Dialog {
 		this.join = join;
 	}
 
+	@Override
+	protected boolean isResizable() {
+		return true;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -69,7 +74,6 @@ public class EditFromTableDialog extends Dialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("Table Dialog");
-		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
 	@Override

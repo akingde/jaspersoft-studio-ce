@@ -44,13 +44,17 @@ import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
-import com.jaspersoft.studio.data.sql.action.column.CreateColumn;
-import com.jaspersoft.studio.data.sql.action.column.EditColumn;
+import com.jaspersoft.studio.data.sql.action.expression.ChangeOperator;
 import com.jaspersoft.studio.data.sql.action.expression.CreateExpression;
 import com.jaspersoft.studio.data.sql.action.expression.EditExpression;
 import com.jaspersoft.studio.data.sql.action.groupby.CreateGroupByColumn;
 import com.jaspersoft.studio.data.sql.action.order.CreateOrderByColumn;
+import com.jaspersoft.studio.data.sql.action.order.OrderByDesc;
+import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
+import com.jaspersoft.studio.data.sql.action.select.EditColumn;
+import com.jaspersoft.studio.data.sql.action.select.SelectDistinct;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.action.table.EditTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
@@ -189,34 +193,23 @@ public class SQLQueryOutline {
 				return false;
 			}
 
-			protected void reorder(ANode child, ANode target) {
-				ANode parent = child.getParent();
-				int pos = 0;
-				if (target == parent) {
-
-				} else {
-					pos = parent.getChildren().indexOf(target);
-				}
-				parent.removeChild(child);
-				parent.addChild(child, pos);
-				treeViewer.refresh(true);
-				treeViewer.reveal(child);
-			}
 		};
 		treeViewer.addDropSupport(ops, new Transfer[] { NodeTransfer.getInstance() }, dropAdapter);
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
-				EditColumn ec = afactory.getAction(EditColumn.class);
-				if (ec.calculateEnabled(event.getSelection()))
-					ec.run();
-				EditTable et = afactory.getAction(EditTable.class);
-				if (et.calculateEnabled(event.getSelection()))
-					et.run();
-				EditExpression ex = afactory.getAction(EditExpression.class);
-				if (ex.calculateEnabled(event.getSelection()))
-					ex.run();
+				runAction(event, afactory.getAction(SelectDistinct.class));
+				runAction(event, afactory.getAction(OrderByDesc.class));
+				runAction(event, afactory.getAction(ChangeOperator.class));
+				runAction(event, afactory.getAction(EditColumn.class));
+				runAction(event, afactory.getAction(EditTable.class));
+				runAction(event, afactory.getAction(EditExpression.class));
+			}
+
+			private void runAction(DoubleClickEvent event, AAction sd) {
+				if (sd.calculateEnabled(event.getSelection()))
+					sd.run();
 			}
 		});
 		return treeViewer.getControl();

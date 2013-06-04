@@ -47,7 +47,11 @@ public class UsedColumnsDialog extends Dialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("Columns Dialog");
-		setShellStyle(getShellStyle() | SWT.RESIZE);
+	}
+
+	@Override
+	protected boolean isResizable() {
+		return true;
 	}
 
 	public void setRoot(MRoot root) {

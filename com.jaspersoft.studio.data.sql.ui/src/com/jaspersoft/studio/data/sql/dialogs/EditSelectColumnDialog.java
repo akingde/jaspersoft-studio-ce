@@ -49,6 +49,11 @@ public class EditSelectColumnDialog extends Dialog {
 		return alias;
 	}
 
+	@Override
+	protected boolean isResizable() {
+		return true;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -58,7 +63,6 @@ public class EditSelectColumnDialog extends Dialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("Column Dialog");
-		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
 	@Override

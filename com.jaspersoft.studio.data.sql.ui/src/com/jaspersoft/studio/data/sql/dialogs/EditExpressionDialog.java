@@ -1,13 +1,31 @@
 package com.jaspersoft.studio.data.sql.dialogs;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.Operand;
+import com.jaspersoft.studio.data.sql.model.query.Operator;
 
 public class EditExpressionDialog extends Dialog {
 	private MExpression value;
@@ -18,6 +36,39 @@ public class EditExpressionDialog extends Dialog {
 
 	public void setValue(MExpression value) {
 		this.value = value;
+		setOperator(value.getOperator().getSqlname());
+		setPrevcond(value.getPrevCond());
+		operands = value.getOperands();
+
+	}
+
+	private java.util.List<Operand> operands = new ArrayList<Operand>();
+	private String prevcond;
+	private String operator;
+
+	public String getPrevcond() {
+		return prevcond;
+	}
+
+	public void setPrevcond(String prevcond) {
+		this.prevcond = prevcond;
+	}
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public java.util.List<Operand> getOperands() {
+		return operands;
+	}
+
+	@Override
+	protected boolean isResizable() {
+		return true;
 	}
 
 	/*
@@ -29,29 +80,148 @@ public class EditExpressionDialog extends Dialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("Expression Dialog");
-		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite cmp = (Composite) super.createDialogArea(parent);
-		cmp.setLayout(new GridLayout(3, false));
+		cmp.setLayout(new GridLayout(5, false));
 
-		// Label lbl = new Label(cmp, SWT.NONE);
-		// lbl.setText(value.getValue().toSQLString());
-		// UIUtil.setBold(lbl);
-		//
-		// Combo keyword = new Combo(cmp, SWT.READ_ONLY);
-		// keyword.setItems(AMKeyword.ALIAS_KEYWORDS);
-		//
-		// Text alias = new Text(cmp, SWT.BORDER);
-		// GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		// gd.minimumWidth = 200;
-		// alias.setLayoutData(gd);
-		//
-		// DataBindingContext bindingContext = new DataBindingContext();
-		//		bindingContext.bindValue(SWTObservables.observeText(alias, SWT.Modify), PojoObservables.observeValue(this, "alias")); //$NON-NLS-1$
-		//		bindingContext.bindValue(SWTObservables.observeSelection(keyword), PojoObservables.observeValue(this, "aliasKeyword")); //$NON-NLS-1$
+		DataBindingContext bindingContext = new DataBindingContext();
+
+		if (value.isFirst()) {
+			Composite c = new Composite(cmp, SWT.NONE);
+			GridLayout layout = new GridLayout(3, false);
+			layout.marginWidth = 0;
+			c.setLayout(layout);
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 5;
+			c.setLayoutData(gd);
+
+			new Label(c, SWT.NONE).setText("Previous condition ");
+
+			Combo prevoperator = new Combo(c, SWT.READ_ONLY);
+			prevoperator.setItems(AMKeyword.CONDITIONS);
+
+			new Label(c, SWT.NONE).setText(" this one.");
+
+			bindingContext.bindValue(SWTObservables.observeSelection(prevoperator), PojoObservables.observeValue(this, "prevcond")); //$NON-NLS-1$
+		} else {
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 5;
+			new Label(cmp, SWT.NONE).setLayoutData(gd);
+		}
+		Button op1 = new Button(cmp, SWT.PUSH);
+		op1.setText("operand1");
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		gd.widthHint = 150;
+		op1.setLayoutData(gd);
+
+		operands.add(new Operand());
+
+		Combo operator = new Combo(cmp, SWT.READ_ONLY);
+		operator.setItems(Operator.operators);
+		operator.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+		operator.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				showRight();
+			}
+		});
+
+		rcmp = new Composite(cmp, SWT.NONE);
+		stackLayout = new StackLayout();
+		stackLayout.marginHeight = 0;
+		stackLayout.marginWidth = 0;
+		rcmp.setLayout(stackLayout);
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.heightHint = 150;
+		gd.widthHint = 300;
+		rcmp.setLayoutData(gd);
+
+		showRight();
+		bindingContext.bindValue(SWTObservables.observeSelection(operator), PojoObservables.observeValue(this, "operator")); //$NON-NLS-1$
 		return cmp;
+	}
+
+	private Map<String, Composite> map = new HashMap<String, Composite>();
+	private Composite rcmp;
+	private StackLayout stackLayout;
+
+	private void showRight() {
+		Composite cmp = map.get(getOperator());
+		if (cmp == null) {
+			Operator op = Operator.getOperator(getOperator());
+			if (op.getNrOperands() == 1) {
+				cmp = new Composite(rcmp, SWT.NONE);
+				cmp.setLayout(new GridLayout());
+			} else if (op.getNrOperands() == 2) {
+				cmp = new Composite(rcmp, SWT.NONE);
+				GridLayout layout = new GridLayout(2, false);
+				layout.marginHeight = 0;
+				layout.marginWidth = 0;
+				cmp.setLayout(layout);
+
+				Button op2 = new Button(cmp, SWT.PUSH);
+				op2.setText("operand2");
+				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+				gd.widthHint = 200;
+				op2.setLayoutData(gd);
+
+				operands.add(new Operand());
+			} else if (op.getNrOperands() == 3 && op == Operator.BETWEEN) {
+				cmp = new Composite(rcmp, SWT.NONE);
+				GridLayout layout = new GridLayout(3, false);
+				layout.marginHeight = 0;
+				layout.marginWidth = 0;
+				cmp.setLayout(layout);
+
+				Button op2 = new Button(cmp, SWT.PUSH);
+				op2.setText("operand2");
+				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+				gd.widthHint = 200;
+				op2.setLayoutData(gd);
+
+				new Label(cmp, SWT.NONE).setText("AND");
+
+				Button op3 = new Button(cmp, SWT.PUSH);
+				op3.setText("operand3");
+				gd = new GridData(GridData.FILL_HORIZONTAL);
+				gd.widthHint = 200;
+				op3.setLayoutData(gd);
+
+				operands.add(new Operand());
+				operands.add(new Operand());
+			} else {
+				cmp = new Composite(rcmp, SWT.NONE);
+				GridLayout layout = new GridLayout(2, false);
+				layout.marginHeight = 0;
+				layout.marginWidth = 0;
+				cmp.setLayout(layout);
+
+				List op2 = new List(cmp, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER);
+				GridData gd = new GridData(GridData.FILL_BOTH);
+				gd.verticalSpan = 3;
+				gd.widthHint = 200;
+				op2.setLayoutData(gd);
+
+				Button op3 = new Button(cmp, SWT.PUSH);
+				op3.setText("&Add");
+				gd = new GridData(GridData.FILL_HORIZONTAL);
+				op3.setLayoutData(gd);
+
+				op3 = new Button(cmp, SWT.PUSH);
+				op3.setText("&Edit");
+				gd = new GridData(GridData.FILL_HORIZONTAL);
+				op3.setLayoutData(gd);
+
+				op3 = new Button(cmp, SWT.PUSH);
+				op3.setText("&Delete");
+				gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+				op3.setLayoutData(gd);
+			}
+		}
+		stackLayout.topControl = cmp;
+		rcmp.layout(true);
 	}
 }
