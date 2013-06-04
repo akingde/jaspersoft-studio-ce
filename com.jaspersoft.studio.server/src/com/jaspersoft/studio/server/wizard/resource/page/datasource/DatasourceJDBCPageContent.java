@@ -139,6 +139,6 @@ public class DatasourceJDBCPageContent extends APageContent {
 	 */
 	private String getDecodedPassword(String encodedPasswd) {
 		SecretsUtil secretsUtil = SecretsUtil.getInstance(JasperReportsConfiguration.getDefaultJRConfig());
-		return secretsUtil.getSecret(AbstractDataAdapterService.SECRET_CATEGORY, encodedPasswd);
+		return secretsUtil.getSecret(AbstractDataAdapterService.SECRETS_CATEGORY, encodedPasswd);
 	}
 }

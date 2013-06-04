@@ -27,7 +27,7 @@ import net.sf.jasperreports.util.SecretsProvider;
  */
 public class DataAdaptersSecretsProvider extends EclipseSecretsProvider {
 	
-	public static final String SECRET_NODE_ID = AbstractDataAdapterService.SECRET_CATEGORY;
+	public static final String SECRET_NODE_ID = AbstractDataAdapterService.SECRETS_CATEGORY;
 	
 	@Override
 	public boolean hasSecret(String key) {

@@ -170,7 +170,7 @@ public class ImportDataSourceInJSSAction extends Action {
 		try {
 			UUID uuidKey = UUID.randomUUID();
 			SecureStorageUtils.saveToDefaultSecurePreferences(
-					AbstractDataAdapterService.SECRET_CATEGORY, uuidKey.toString(), pass);
+					AbstractDataAdapterService.SECRETS_CATEGORY, uuidKey.toString(), pass);
 			return uuidKey.toString();
 		} catch (StorageException e) {
 			Activator.getDefault().logError(Messages.Common_ErrSecurePrefStorage,e);
