@@ -38,6 +38,8 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -168,6 +170,23 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		lblRepoUnitName.setText(Messages.RUnitLocationPage_reportunitlabel);
 		ruLabel = new Text(composite, SWT.BORDER);
 		ruLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		ruLabel.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				if (isRefresh)
+					return;
+				isRefresh = true;
+				String rtext = ruLabel.getText();
+				String validationError = ValidationUtils.validateLabel(rtext);
+				setErrorMessage(validationError);
+				if(validationError==null) {
+					ResourceDescriptor ru = getNewRunit().getValue();
+					ru.setLabel(rtext);
+					ruID.setText(rtext);
+				}
+				isRefresh = false;
+			}
+		});
 
 		// Report Unit ID (resource descriptor name)
 		Label lblRepoUnitID = new Label(composite, SWT.NONE);
@@ -181,32 +200,22 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				if (isRefresh)
 					return;
 				isRefresh = true;
-				int cp = ruID.getSelection().x;
 				String rtext = ruID.getText();
-				ResourceDescriptor ru = getNewRunit().getValue();
-				ru.setName(ResourcePageContent.safeChar(rtext));
-				String txt = ru.getName();
-				ruID.setText(txt);
-				ruID.setSelection(cp, cp);
+				String validationError = ValidationUtils.validateName(rtext);
+				setErrorMessage(validationError);
+				if(validationError==null) {
+					ResourceDescriptor ru = getNewRunit().getValue();
+					ru.setName(rtext);
+				}
 				isRefresh = false;
 			}
 		});
-
-		ruLabel.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				if (isRefresh)
-					return;
-				isRefresh = true;
-
-				String rtext = ruLabel.getText();
-				ResourceDescriptor ru = getNewRunit().getValue();
-				ru.setName(ResourcePageContent.safeChar(rtext));
-				ru.setLabel(rtext);
-				setErrorMessage(ValidationUtils.validateLabel(rtext));
-				ruLabel.setText(ru.getLabel());
-				ruID.setText(ru.getName());
-				isRefresh = false;
+		ruID.addVerifyListener(new VerifyListener() {
+			@Override
+			public void verifyText(VerifyEvent e) {
+				// sanitize the text for the id attribute (name)
+				// of the repository resource
+				e.text = ResourcePageContent.safeChar(e.text);
 			}
 		});
 
