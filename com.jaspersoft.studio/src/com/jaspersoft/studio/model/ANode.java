@@ -512,4 +512,10 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 			return this;
 		return null;
 	}
+
+	public boolean isFirst() {
+		if (parent != null && parent.getChildren() != null && !parent.getChildren().isEmpty())
+			return parent.getChildren().indexOf(this) == 0;
+		return true;
+	}
 }
