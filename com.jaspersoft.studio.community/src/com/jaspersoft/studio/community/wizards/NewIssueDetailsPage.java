@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.community.wizards;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -47,6 +49,8 @@ import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
  * 
  */
 public class NewIssueDetailsPage extends JSSHelpWizardPage {
+	private static final int SHELL_INITIAL_HEIGHT = 470;
+	private static final int SHELL_INITIAL_WIDTH = 610;
 	private Text title;
 	private Text description;
 	private Combo category;
@@ -161,6 +165,9 @@ public class NewIssueDetailsPage extends JSSHelpWizardPage {
 			priority.setData(p.getText(),p.getStringValue());
 		}
 		priority.select(1); // Low		
+		
+		// Resize and center shell
+		UIUtils.resizeAndCenterShell(getShell(), SHELL_INITIAL_WIDTH, SHELL_INITIAL_HEIGHT);
 		
 		setPageComplete(false);
 	}
