@@ -51,6 +51,7 @@ import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
 import com.jaspersoft.studio.server.wizard.validator.URLValidator;
 import com.jaspersoft.studio.swt.widgets.WSecretText;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.wizards.WizardEndingStateListener;
 
@@ -201,7 +202,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		dbc.bindValue(SWTObservables.observeText(cversion.getControl()),
 				PojoObservables.observeValue(new Proxy(value), "jrVersion")); //$NON-NLS-1$
 		
-		tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID, sprofile.getValue().getPass());
+		tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID, Misc.nvl(sprofile.getValue().getPass()));
 	}
 
 	public class Proxy {
