@@ -21,20 +21,15 @@ public class MOrderByColumn extends MQueryObjects {
 	}
 
 	@Override
-	public String toSQLString() {
-		String dt = getValue().getDisplayText();
+	public String getDisplayText() {
+		String dt = getValue().toSQLString();
 		dt += isDesc ? AMKeyword.DESCENDING_KEYWORD : AMKeyword.ASCENDING_KEYWORD;
 		return dt;
 	}
 
 	@Override
-	public String getDisplayText() {
-		return toSQLString();
-	}
-
-	@Override
 	public StyledString getStyledDisplayText() {
-		StyledString dt = new StyledString(getValue().getDisplayText());
+		StyledString dt = new StyledString(getValue().toSQLString());
 		dt.append(isDesc ? AMKeyword.DESCENDING_KEYWORD : AMKeyword.ASCENDING_KEYWORD, FontUtils.KEYWORDS_STYLER);
 		return dt;
 	}

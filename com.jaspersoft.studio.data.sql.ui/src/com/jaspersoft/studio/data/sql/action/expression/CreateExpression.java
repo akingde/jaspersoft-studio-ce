@@ -9,12 +9,14 @@ import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditExpressionDialog;
+import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
-import com.jaspersoft.studio.data.sql.model.query.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
-import com.jaspersoft.studio.data.sql.model.query.Operator;
+import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.ScalarOperand;
 import com.jaspersoft.studio.model.ANode;
 
 public class CreateExpression extends AAction {
@@ -30,28 +32,35 @@ public class CreateExpression extends AAction {
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof MWhere || element instanceof MHaving || element instanceof MExpression || element instanceof MFromTable;
+		return element instanceof MWhere || element instanceof MHaving || element instanceof MExpression || element instanceof MFromTableJoin;
 	}
 
 	@Override
 	public void run() {
 		Object sel = selection[0];
+		MExpression mexpr = null;
 		if (sel instanceof MExpression)
-			sel = run(null, (MExpression) sel);
+			mexpr = run(null, (MExpression) sel);
 		else if (isInSelect(sel))
-			sel = run(null, (ANode) sel, 0);
-		showDialog((MExpression) sel);
+			mexpr = run(null, (ANode) sel, -1);
+		mexpr.getOperands().add(new ScalarOperand());
+		mexpr.getOperands().add(new ScalarOperand());
+		showDialog(mexpr);
 	}
 
 	public void run(Collection<MColumn> nodes) {
 		Object sel = selection[0];
+		MExpression mexpr = null;
 		for (MColumn t : nodes) {
 			if (sel instanceof MExpression)
-				sel = run(t, (MExpression) sel);
+				mexpr = run(t, (MExpression) sel);
 			else if (isInSelect(sel))
-				sel = run(t, (ANode) sel, 0);
+				mexpr = run(t, (ANode) sel, -1);
+			sel = mexpr;
+			mexpr.getOperands().add(new FieldOperand(t));
+			mexpr.getOperands().add(new ScalarOperand());
 		}
-		showDialog((MExpression) sel);
+		showDialog(mexpr);
 	}
 
 	protected void showDialog(MExpression mexpr) {

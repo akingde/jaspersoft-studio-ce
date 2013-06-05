@@ -11,4 +11,9 @@ public class MSelect extends AMKeyword {
 		super(parent, AMKeyword.SELECT_KEYWORD, null);
 	}
 
+	@Override
+	public String toSQLString() {
+		return getValue() + " ";
+	}
+
 }

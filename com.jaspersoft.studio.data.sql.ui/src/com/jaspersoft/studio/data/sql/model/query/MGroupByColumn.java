@@ -17,9 +17,4 @@ public class MGroupByColumn extends MQueryObjects {
 		super(parent, value, null, index);
 	}
 
-	@Override
-	public String toSQLString() {
-		return getValue().getDisplayText();
-	}
-
 }

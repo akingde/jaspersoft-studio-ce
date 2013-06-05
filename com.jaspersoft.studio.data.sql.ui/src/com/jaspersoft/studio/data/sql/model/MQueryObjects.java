@@ -7,7 +7,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import com.jaspersoft.studio.data.sql.Activator;
 import com.jaspersoft.studio.model.ANode;
 
-public abstract class MQueryObjects extends ANode {
+public abstract class MQueryObjects extends ANode implements IQueryString {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	transient private ImageDescriptor icon;
 	transient protected String tooltip;
@@ -43,17 +43,20 @@ public abstract class MQueryObjects extends ANode {
 
 	@Override
 	public String getDisplayText() {
-		return getValue().getDisplayText();
+		return getValue().toSQLString();
 	}
-
-	public abstract String toSQLString();
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof MQueryObjects && ((MQueryObjects) obj).toSQLString().equals(toSQLString());
+		return obj instanceof MQueryObjects && ((MQueryObjects) obj).getDisplayText().equals(getDisplayText());
 	}
 
 	public int hashCode() {
-		return toSQLString().hashCode();
+		return getDisplayText().hashCode();
 	};
+
+	@Override
+	public String toSQLString() {
+		return (isFirst() ? getDisplayText() : ",\n\t" + getDisplayText()) + " ";
+	}
 }

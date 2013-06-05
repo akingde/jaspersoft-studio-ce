@@ -7,8 +7,8 @@ import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditExpressionDialog;
+import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
-import com.jaspersoft.studio.data.sql.model.query.Operator;
 import com.jaspersoft.studio.model.ANode;
 
 public class EditExpression extends AAction {
@@ -41,6 +41,7 @@ public class EditExpression extends AAction {
 		if (dialog.open() == Dialog.OK) {
 			mcol.setOperator(Operator.getOperator((dialog.getOperator())));
 			mcol.setPrevCond(dialog.getPrevcond());
+			mcol.setOperands(dialog.getOperands());
 			selectInTree(mcol);
 		}
 	}

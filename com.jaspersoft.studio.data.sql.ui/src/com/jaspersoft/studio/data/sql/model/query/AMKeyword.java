@@ -4,11 +4,12 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.viewers.StyledString;
 
+import com.jaspersoft.studio.data.sql.model.IQueryString;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
-public class AMKeyword extends MDBObjects {
+public class AMKeyword extends MDBObjects implements IQueryString {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public static final String SELECT_KEYWORD = "SELECT";
@@ -23,7 +24,8 @@ public class AMKeyword extends MDBObjects {
 	public static final String DESCENDING_KEYWORD = " DESC";
 	public static final String[] ALIAS_KEYWORDS = new String[] { ALIAS_KEYWORD, " " };
 
-	public static final String[] JOIN_KEYWORDS = new String[] { "", " INNER JOIN ", " LEFT OUTER JOIN ", " RIGHT OUTER JOIN ", " FULL OUTER JOIN " };
+	public static final String INNER_JOIN = "INNER JOIN";
+	public static final String[] JOIN_KEYWORDS = new String[] { INNER_JOIN, " LEFT OUTER JOIN ", " RIGHT OUTER JOIN ", " FULL OUTER JOIN ", " CROSS JOIN " };
 
 	public AMKeyword(ANode parent, String value, String image) {
 		super(parent, value, image);
@@ -33,4 +35,10 @@ public class AMKeyword extends MDBObjects {
 	public StyledString getStyledDisplayText() {
 		return new StyledString(getDisplayText(), FontUtils.KEYWORDS_STYLER);
 	}
+
+	@Override
+	public String toSQLString() {
+		return "\n" + getValue() + " ";
+	}
+
 }

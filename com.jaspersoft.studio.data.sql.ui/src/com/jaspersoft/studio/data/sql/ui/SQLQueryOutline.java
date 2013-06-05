@@ -312,8 +312,8 @@ public class SQLQueryOutline {
 	private ActionFactory afactory;
 
 	public void scheduleRefresh() {
-		refreshJob.cancel();
-		refreshJob.schedule();
+		// refreshJob.cancel();
+		// refreshJob.schedule();
 	}
 
 	public IXtextDocument getXtextDocument() {

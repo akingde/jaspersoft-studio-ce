@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.sql.model.query;
+package com.jaspersoft.studio.data.sql.model.enums;
 
 public enum Operator {
 	LESS("<", 2), GREATER(">", 2), EQUALS("=", 2), LESSOREQUALS("<=", 2), GREATEROREQUALS(">=", 2), NOTEQUALS("<>", 2), LIKE("LIKE", 2), BETWEEN("BETWEEN", 3), IN("IN", Integer.MAX_VALUE), NOTIN(

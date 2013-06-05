@@ -27,7 +27,6 @@ public class MFromTable extends MQueryObjects {
 
 	private String alias;
 	private String aliasKeyword = AMKeyword.ALIAS_KEYWORD;
-	private String join = "";
 
 	public void setAliasKeyword(String aliasKeyword) {
 		this.aliasKeyword = aliasKeyword;
@@ -43,14 +42,6 @@ public class MFromTable extends MQueryObjects {
 
 	public String getAlias() {
 		return alias;
-	}
-
-	public String getJoin() {
-		return join;
-	}
-
-	public void setJoin(String join) {
-		this.join = join;
 	}
 
 	@Override
@@ -82,8 +73,4 @@ public class MFromTable extends MQueryObjects {
 		return dt;
 	}
 
-	@Override
-	public String toSQLString() {
-		return getDisplayText();
-	}
 }

@@ -4,7 +4,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.studio.model.ANode;
 
-public class AMSQLObject extends MDBObjects {
+public class AMSQLObject extends MDBObjects implements IQueryString {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public AMSQLObject(ANode parent, String value, String image) {

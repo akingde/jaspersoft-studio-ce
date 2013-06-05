@@ -40,7 +40,6 @@ public class EditTable extends AAction {
 		if (dialog.open() == Dialog.OK) {
 			mcol.setAlias(dialog.getAlias());
 			mcol.setAliasKeyword(dialog.getAliasKeyword());
-			mcol.setJoin(dialog.getJoin());
 			selectInTree(mcol);
 		}
 	}

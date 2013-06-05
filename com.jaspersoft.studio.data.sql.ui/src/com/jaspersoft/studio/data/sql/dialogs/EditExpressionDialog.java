@@ -22,10 +22,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
-import com.jaspersoft.studio.data.sql.model.query.Operand;
-import com.jaspersoft.studio.data.sql.model.query.Operator;
+import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
+import com.jaspersoft.studio.data.sql.widgets.Factory;
 
 public class EditExpressionDialog extends Dialog {
 	private MExpression value;
@@ -42,7 +43,7 @@ public class EditExpressionDialog extends Dialog {
 
 	}
 
-	private java.util.List<Operand> operands = new ArrayList<Operand>();
+	private java.util.List<AOperand> operands = new ArrayList<AOperand>();
 	private String prevcond;
 	private String operator;
 
@@ -62,7 +63,7 @@ public class EditExpressionDialog extends Dialog {
 		this.operator = operator;
 	}
 
-	public java.util.List<Operand> getOperands() {
+	public java.util.List<AOperand> getOperands() {
 		return operands;
 	}
 
@@ -89,7 +90,7 @@ public class EditExpressionDialog extends Dialog {
 
 		DataBindingContext bindingContext = new DataBindingContext();
 
-		if (value.isFirst()) {
+		if (!value.isFirst()) {
 			Composite c = new Composite(cmp, SWT.NONE);
 			GridLayout layout = new GridLayout(3, false);
 			layout.marginWidth = 0;
@@ -111,13 +112,11 @@ public class EditExpressionDialog extends Dialog {
 			gd.horizontalSpan = 5;
 			new Label(cmp, SWT.NONE).setLayoutData(gd);
 		}
-		Button op1 = new Button(cmp, SWT.PUSH);
-		op1.setText("operand1");
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
-		gd.widthHint = 150;
-		op1.setLayoutData(gd);
 
-		operands.add(new Operand());
+		Control w = Factory.createWidget(cmp, operands, 0);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		gd.widthHint = 250;
+		w.setLayoutData(gd);
 
 		Combo operator = new Combo(cmp, SWT.READ_ONLY);
 		operator.setItems(Operator.operators);
@@ -162,13 +161,10 @@ public class EditExpressionDialog extends Dialog {
 				layout.marginWidth = 0;
 				cmp.setLayout(layout);
 
-				Button op2 = new Button(cmp, SWT.PUSH);
-				op2.setText("operand2");
+				Control w = Factory.createWidget(cmp, operands, 1);
 				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
-				op2.setLayoutData(gd);
-
-				operands.add(new Operand());
+				w.setLayoutData(gd);
 			} else if (op.getNrOperands() == 3 && op == Operator.BETWEEN) {
 				cmp = new Composite(rcmp, SWT.NONE);
 				GridLayout layout = new GridLayout(3, false);
@@ -176,22 +172,17 @@ public class EditExpressionDialog extends Dialog {
 				layout.marginWidth = 0;
 				cmp.setLayout(layout);
 
-				Button op2 = new Button(cmp, SWT.PUSH);
-				op2.setText("operand2");
+				Control w = Factory.createWidget(cmp, operands, 1);
 				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
-				op2.setLayoutData(gd);
+				w.setLayoutData(gd);
 
 				new Label(cmp, SWT.NONE).setText("AND");
 
-				Button op3 = new Button(cmp, SWT.PUSH);
-				op3.setText("operand3");
+				w = Factory.createWidget(cmp, operands, 2);
 				gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
-				op3.setLayoutData(gd);
-
-				operands.add(new Operand());
-				operands.add(new Operand());
+				w.setLayoutData(gd);
 			} else {
 				cmp = new Composite(rcmp, SWT.NONE);
 				GridLayout layout = new GridLayout(2, false);

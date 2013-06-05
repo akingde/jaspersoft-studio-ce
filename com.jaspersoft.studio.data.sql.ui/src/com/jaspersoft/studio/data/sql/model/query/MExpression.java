@@ -9,10 +9,13 @@ import net.sf.jasperreports.engine.JRConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.StyledString;
 
+import com.jaspersoft.studio.data.sql.model.IQueryString;
+import com.jaspersoft.studio.data.sql.model.enums.Operator;
+import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
-public class MExpression extends ANode {
+public class MExpression extends ANode implements IQueryString {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MExpression(ANode parent, Object value, int newIndex) {
@@ -25,9 +28,14 @@ public class MExpression extends ANode {
 	}
 
 	@Override
+	public String toSQLString() {
+		return "\n\t " + getDisplayText() + " ";
+	}
+
+	@Override
 	public String getDisplayText() {
 		String dt = "";
-		if (isFirst())
+		if (!isFirst())
 			dt += prevCond + " ";
 		String[] ops = null;
 		if (operator.getNrOperands() > 3) {
@@ -53,7 +61,7 @@ public class MExpression extends ANode {
 	public StyledString getStyledDisplayText() {
 		String dt = getDisplayText();
 		StyledString ss = new StyledString(dt);
-		if (isFirst())
+		if (!isFirst())
 			ss.setStyle(0, (prevCond + " ").length(), FontUtils.KEYWORDS_STYLER);
 		if (operator.getNrOperands() != 2 || (operator.getNrOperands() == 2 && operator == Operator.LIKE)) {
 			String sqlname = " " + operator.getSqlname() + " ";
@@ -66,7 +74,7 @@ public class MExpression extends ANode {
 	}
 
 	private String prevCond = AMKeyword.AND_OPERATOR;
-	private List<Operand> operands = new ArrayList<Operand>();
+	private List<AOperand> operands = new ArrayList<AOperand>();
 	private Operator operator = Operator.EQUALS;
 
 	public Operator getOperator() {
@@ -77,11 +85,11 @@ public class MExpression extends ANode {
 		this.operator = operator;
 	}
 
-	public List<Operand> getOperands() {
+	public List<AOperand> getOperands() {
 		return operands;
 	}
 
-	public void setOperands(List<Operand> operands) {
+	public void setOperands(List<AOperand> operands) {
 		this.operands = operands;
 	}
 
@@ -93,7 +101,4 @@ public class MExpression extends ANode {
 		this.prevCond = prevCond;
 	}
 
-	public boolean isFirst() {
-		return getParent().getChildren().indexOf(this) != 0;
-	}
 }

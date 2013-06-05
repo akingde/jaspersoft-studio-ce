@@ -75,8 +75,4 @@ public class MSelectColumn extends MQueryObjects {
 		return dt;
 	}
 
-	@Override
-	public String toSQLString() {
-		return getDisplayText();
-	}
 }

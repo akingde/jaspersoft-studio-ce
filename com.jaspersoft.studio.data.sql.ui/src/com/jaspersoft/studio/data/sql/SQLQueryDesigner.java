@@ -34,6 +34,8 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -54,6 +56,7 @@ import com.jaspersoft.studio.data.sql.ui.SQLQueryOutline;
 import com.jaspersoft.studio.data.ui.contentassist.SqlProposalProvider;
 import com.jaspersoft.studio.data.ui.internal.SqlActivator;
 import com.jaspersoft.studio.dnd.NodeTransfer;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 
@@ -89,13 +92,22 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		Control c = dbMetadata.createControl(sf);
 		c.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		CTabFolder tabFolder = new CTabFolder(sf, SWT.FLAT | SWT.BOTTOM);
+		final CTabFolder tabFolder = new CTabFolder(sf, SWT.FLAT | SWT.BOTTOM);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 		createSource(tabFolder);
 		createOutline(tabFolder);
 
 		tabFolder.setSelection(0);
+		tabFolder.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (tabFolder.getSelectionIndex() == 0) {
+					MRoot r = (MRoot) outline.getTreeViewer().getInput();
+					tv.getDocument().set(QueryWriter.writeQuery(r));
+				}
+			}
+		});
 
 		sf.setWeights(new int[] { 250, 750 });
 		return sf;
