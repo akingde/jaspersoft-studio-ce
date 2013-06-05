@@ -98,8 +98,6 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 			// We need to check that the selected directory does exist, otherwise we need to set an error...
 			IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(getContainerFullPath());
 
-			System.out.println(r + "  " + getContainerFullPath() + " " + ((r == null) ? null : r.getType()));
-
 			if (r == null || !r.exists() || (r.getType() & IResource.FILE) != 0) {
 				setMessage("The directory specified does not exist or is not a valid folder", DialogPage.ERROR);
 				valid = false;
@@ -135,7 +133,6 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 		//firstLoad = false;
 
 		String baseName = ReportNewWizard.NEW_REPORT_JRXML;
-		System.out.println("Seeting up the file name");
 
 		// If a template has been selected, let's try use its name as file name...
 		if (getWizard() != null && getWizard() instanceof JSSWizard) {
