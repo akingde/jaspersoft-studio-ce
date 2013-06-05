@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
 import org.eclipse.jface.dialogs.Dialog;
@@ -183,13 +182,15 @@ public class TableStyleView extends CommonViewProvider {
 		    fillRoundRectangleDropShadow(graphics, bounds, 6, 4, 4); 
 	        
 	        Rectangle row_bounds = new Rectangle(x,y + rowHeight*2, w, rowHeight);
-	        graphics.setForeground(ColorConstants.white);
+		    Display disp = PlatformUI.getWorkbench().getDisplay();
+		    
+	        Color swtColorDetail = new Color(disp,style.getColor(TableStyle.STANDARD_COLOR_DETAIL));
+	        graphics.setBackground(swtColorDetail);
 		    graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
 		    row_bounds = new Rectangle(x,y + rowHeight*3, w, rowHeight);
 		    
 		    RGB c = null;
 		    Color swtColor = null;
-		    Display disp = PlatformUI.getWorkbench().getDisplay();
 		    if (tableStyle.hasAlternateColor())
 		    {
 		    	c = style.getColor(TableStyle.COLOR_DETAIL);
@@ -199,9 +200,10 @@ public class TableStyleView extends CommonViewProvider {
 		    graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
 		    row_bounds = new Rectangle(x,y + rowHeight*4, w, rowHeight);
 		    if (swtColor != null) swtColor.dispose();
-		    graphics.setBackground(ColorConstants.white);
+		    graphics.setBackground(swtColorDetail);
 		    graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
-
+		    swtColorDetail.dispose();
+		    
 		    // TABLE HEADER
 		    row_bounds = new Rectangle(x,y + rowHeight*0, w, rowHeight);
 		    c = style.getColor(TableStyle.COLOR_TABLE_HEADER);
@@ -257,8 +259,6 @@ public class TableStyleView extends CommonViewProvider {
 		    	graphics.drawLine(x+w, y, x+w, y+h-1);
 		    }
 		    swtColor.dispose();
-;
-
 			graphics.dispose();
 			ResourceManager.addImage(key, image);
 			

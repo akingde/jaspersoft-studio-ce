@@ -64,6 +64,12 @@ public class TableStyle extends TemplateStyle {
 	public final static String COLOR_DETAIL = "color_detail";
 	
 	/**
+	 * Key for the color detail cells, overridden from the COLOR_DETAIL on the odd cell when ALTERNATE_COLOR_KEY
+	 * is true
+	 */
+	public final static String STANDARD_COLOR_DETAIL = "color_detail_standard";
+	
+	/**
 	 * Key for the color of the column header and footer attributes
 	 */
 	public final static String COLOR_COL_HEADER = "color_column_header";
@@ -107,7 +113,31 @@ public class TableStyle extends TemplateStyle {
 		detail = ColorSchemaGenerator.overlayWhite(detail);
 		detail = ColorSchemaGenerator.overlayWhite(detail);
 		storeColor (COLOR_DETAIL, new RGB(detail.getRed(), detail.getGreen(), detail.getBlue()));
+		storeColor(STANDARD_COLOR_DETAIL,new RGB(Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHITE.getBlue()));
 	}
+	
+	/**
+	 * Create an instance of the class
+	 * 
+	 * @param colorTHeader the color used in the table header cells
+	 * @param colorCheader the color used in the column header cells
+	 * @param colorDetail the color used in the detail cells
+	 * @param colorAlternateDetail the color used in the detail cells, when the row is odd and the attribute alternate color is true
+	 * @param borderStyle style of the border
+	 * @param borderColor color of the border
+	 * @param altenrateColor true if the color of the detail are alternated, false otherwise
+	 */
+	public TableStyle(RGB colorTHeader, RGB colorCheader, RGB colorDetail, RGB colorAlternateDetail, BorderStyleEnum borderStyle, RGB borderColor, boolean altenrateColor) {
+		super(null, null);
+		setBorderStyle(borderStyle);
+		setAlternateRowColor(altenrateColor);
+		setBorderColor(borderColor);
+		storeColor(COLOR_COL_HEADER, colorCheader);
+		storeColor(COLOR_TABLE_HEADER, colorTHeader);
+		storeColor (COLOR_DETAIL, colorAlternateDetail);
+		storeColor(STANDARD_COLOR_DETAIL, colorDetail);
+	}
+	
 	
 	public TableStyle(){
 		super(null,null);
@@ -197,11 +227,14 @@ public class TableStyle extends TemplateStyle {
 	 */
 	@Override
 	public String toString() {
-		String colorSchema = variation.name();
+		String color1 = getColor(COLOR_TABLE_HEADER).toString();
+		String color2 = getColor(COLOR_COL_HEADER).toString();
+		String color3 = getColor(STANDARD_COLOR_DETAIL).toString();
+		String color4 = getColor(COLOR_DETAIL).toString();
 		Boolean alternate = hasAlternateColor();
 		String borderStyle = getBorderStyle().toString();
-		return baseColor.toString().concat(getRGBBorderColor().toString()) 
-				.concat(colorSchema).concat(borderStyle).concat(alternate.toString());
+		return color1.concat(color2).concat(color3).concat(color4).concat(borderStyle)
+				.concat(getRGBBorderColor().toString()).concat(alternate.toString());
 	}
 	
 	/**
@@ -212,11 +245,15 @@ public class TableStyle extends TemplateStyle {
 	@Override
 	public String getXMLData() {
 		String result = "<"+getTemplateName()+" type=\"" + getTemplateName() +"\" ";
-		result += "alternateColor=\""+hasAlternateColor().toString()+"\" colorSchema=\"" + variation.name();
+		result += "alternateColor=\""+hasAlternateColor().toString(); // colorSchema=\"" + variation.name();
 		result += "\" borderStyle=\""+getBorderStyle().name();
 		result += "\"><description>".concat(getDescription()).concat("</description>");
-		result += xmlColor("baseColor", baseColor);
+		//result += xmlColor("baseColor", baseColor);
 		result += xmlColor("borderColor", getRGBBorderColor());
+		result += xmlColor("tHeaderColor",getColor(COLOR_TABLE_HEADER));
+		result += xmlColor("cHeaderColor",getColor(COLOR_COL_HEADER));
+		result += xmlColor("detailColor",getColor(STANDARD_COLOR_DETAIL));
+		result += xmlColor("altDetailColor",getColor(COLOR_DETAIL));
 		result += "</"+getTemplateName()+">";
 		return result;
 	}
@@ -232,12 +269,18 @@ public class TableStyle extends TemplateStyle {
 		try{
 			NamedNodeMap rootAttributes = xmlNode.getAttributes();
 			boolean alternateColor = rootAttributes.getNamedItem("alternateColor").getNodeValue().equals("true"); 
-			SCHEMAS variation = SCHEMAS.valueOf(rootAttributes.getNamedItem("colorSchema").getNodeValue());
+			
+			Node schemasNode = rootAttributes.getNamedItem("colorSchema");
+			SCHEMAS variation =  schemasNode != null ? SCHEMAS.valueOf(schemasNode.getNodeValue()) : null;
 			BorderStyleEnum borderStyle = BorderStyleEnum.valueOf(rootAttributes.getNamedItem("borderStyle").getNodeValue());
 			Node firstChild = xmlNode.getFirstChild();
 			String description = null;
 			RGB baseColor = null;
 			RGB borderColor = null;
+			RGB colorTHeader = null;
+			RGB colorCHeader = null;
+			RGB colorDetail = null;
+			RGB colorAlternateDetail = null;
 			while(firstChild!=null){
 				if (firstChild.getNodeName().equals("baseColor")){
 					baseColor = rgbColor(firstChild);
@@ -246,10 +289,20 @@ public class TableStyle extends TemplateStyle {
 				} else if (firstChild.getNodeName().equals("description")) {
 					Node descriptionNode = firstChild.getChildNodes().item(0);
 					description = descriptionNode != null ? descriptionNode.getNodeValue() : "";		
+				} else if (firstChild.getNodeName().equals("tHeaderColor")) {
+					colorTHeader = rgbColor(firstChild);
+				} else if (firstChild.getNodeName().equals("cHeaderColor")) {
+					colorCHeader = rgbColor(firstChild);
+				} else if (firstChild.getNodeName().equals("detailColor")) {
+					colorDetail = rgbColor(firstChild);
+				} else if (firstChild.getNodeName().equals("altDetailColor")) {
+					colorAlternateDetail = rgbColor(firstChild);
 				}
 				firstChild = firstChild.getNextSibling();
 			}
-			TableStyle result = new TableStyle(baseColor, variation, borderStyle, borderColor, alternateColor);
+			TableStyle result = null;
+			if (variation != null && baseColor != null) result = new TableStyle(baseColor, variation, borderStyle, borderColor, alternateColor);
+			else result =  new TableStyle(colorTHeader, colorCHeader, colorDetail, colorAlternateDetail, borderStyle, borderColor, alternateColor);
 			result.setDescription(description);
 			return result;
 		} catch(Exception ex){

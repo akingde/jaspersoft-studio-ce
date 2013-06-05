@@ -32,7 +32,7 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
  * @author Orlandin Marco
  *
  */
-public class JSSPropertiesPage extends PropertiesPage {
+public class JSSPropertiesPage extends ShowPropertiesPage {
 	
 	protected JSSPropertiesPage() {
 		super();

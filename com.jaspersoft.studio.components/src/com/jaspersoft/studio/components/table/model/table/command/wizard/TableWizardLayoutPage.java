@@ -24,6 +24,7 @@ import java.util.List;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.nebula.widgets.tablecombo.TableCombo;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,6 +34,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -51,6 +53,7 @@ import com.jaspersoft.studio.components.table.model.dialog.TableStylePreview;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 import com.jaspersoft.studio.property.color.Tag;
+import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.swt.widgets.ColorStyledText;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
@@ -141,6 +144,50 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	private List<ToolItem> borderStyleButtons = new ArrayList<ToolItem>();
 	
 	/**
+	 * Provider to generate an image from an RGB color, used to create the image
+	 * for the single color toolbutton
+	 */
+	private ColorLabelProvider colorLabelProvider = new ColorLabelProvider(null);
+	
+	/**
+	 * Toolbutton that represent the color used in the table header cells
+	 */
+	private ToolItem tableHeadrButton;
+	
+	/**
+	 * Toolbutton that represent the color used in the table column cells
+	 */
+	private ToolItem columnHeadrButton;
+	
+	/**
+	 * Toolbutton that represent the color used in the table detail cells
+	 */
+	private ToolItem detailButton;
+	
+	/**
+	 * Toolbutton that represent the color used in the table detail cells, when 
+	 * the row is odd and the attribute to alternate the rows color is true
+	 */
+	private ToolItem altDetailButton;
+	
+	/**
+	 * Layout used to switch between the two types of control to define the cell 
+	 * colors, color schema and manually color
+	 */
+	private StackLayout layout;
+	
+	/**
+	 * Button used to switch between the two types of control to define the cell 
+	 * colors
+	 */
+	private Button changeControl;
+	
+	/**
+	 * Composite where are placed the toolbutton to define manually the cells colors
+	 */
+	private Composite manualCompoiste;
+	
+	/**
 	 * Listener called when a control is modified, cause the regeneration of the 
 	 * lastGeneratedStyle and the update of the preview
 	 */
@@ -165,7 +212,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	};
 	
 	protected TableWizardLayoutPage(boolean createTitle) {
-		super("tablepage"); 
+		super("tablepage");  //$NON-NLS-1$
 		setTitle(Messages.TableWizardLayoutPage_layout);
 		setDescription(Messages.TableWizardLayoutPage_description);
 		this.createTitle = createTitle;
@@ -204,6 +251,32 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	}
 	
 	/**
+	 * When the colors are selected using the schema\variation input method this method is called to 
+	 * update the every toolbutton that represent a color with the appropriate color
+	 */
+	private void updateSelectedColor(){
+		String colorName =colorScheme.getItem(colorScheme.getSelectionIndex());
+		Color color = ColorSchemaGenerator.getColor(colorName);
+		ColorSchemaGenerator.SCHEMAS variantKey = (ColorSchemaGenerator.SCHEMAS)variants.get(variations.getSelectionIndex()).getValue();
+		TableStyle tempStyle = new TableStyle(new RGB(color.getRed(), color.getGreen(), color.getBlue()), variantKey, 
+													TableStyle.BorderStyleEnum.FULL, ColorConstants.white.getRGB(),true);
+		setButtonColor(tempStyle.getColor(TableStyle.COLOR_TABLE_HEADER), tableHeadrButton);
+		setButtonColor(tempStyle.getColor(TableStyle.COLOR_COL_HEADER), columnHeadrButton);
+		setButtonColor(tempStyle.getColor(TableStyle.COLOR_DETAIL), altDetailButton);
+		setButtonColor(tempStyle.getColor(TableStyle.STANDARD_COLOR_DETAIL), detailButton);
+	}
+	
+	/**
+	 * Set a color on a toolbutton
+	 * @param newColor color to show
+	 * @param button button where the color will be shown
+	 */
+	private void setButtonColor(RGB newColor, ToolItem button){
+		button.setImage(colorLabelProvider.getImage(newColor));
+		button.setData(newColor);
+	}
+	
+	/**
 	 * Create the group with the controls for the cell colors
 	 * 
 	 * @param parent parent composite of the group 
@@ -214,10 +287,19 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		group.setLayout(new GridLayout(2,false));
 		group.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		Label firstLabel = new Label(group,SWT.NONE);
+		//Composite where the two input methods for the color are placed as stack
+		final Composite colorComposite = new Composite(group, SWT.NONE);
+		colorComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		layout = new StackLayout();
+		colorComposite.setLayout(layout);
+		
+		//Crate the controls for the input method based on schema variations
+		final Composite schemaCompoiste = new Composite(colorComposite, SWT.NONE);
+		schemaCompoiste.setLayout(new GridLayout(2,false));
+		Label firstLabel = new Label(schemaCompoiste,SWT.NONE);
 		firstLabel.setText(Messages.TableWizardLayoutPage_color_schema_label);
 		
-		colorScheme = new TableCombo(group, SWT.BORDER);
+		colorScheme = new TableCombo(schemaCompoiste, SWT.BORDER);
 		List<String> colors = ColorSchemaGenerator.getColors();
 		for(String color : colors){
 			TableItem item = new TableItem(colorScheme.getTable(), SWT.READ_ONLY);
@@ -228,26 +310,105 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		colorScheme.select(0);
 		colorScheme.setEditable(false);
 		
-		Label secondLabel = new Label(group,SWT.NONE);
+		Label secondLabel = new Label(schemaCompoiste,SWT.NONE);
 		secondLabel.setText(Messages.TableWizardLayoutPage_variations_label);
 		
-		variations = new Combo(group,SWT.READ_ONLY);
+		variations = new Combo(schemaCompoiste,SWT.READ_ONLY);
 		variations.setItems(getVariantsName());
 		variations.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		variations.select(0);
 		
+		//Create the controls for the input method based on the manual selection of every color
+		manualCompoiste = new Composite(colorComposite, SWT.NONE);
+		manualCompoiste.setLayout(new GridLayout(4,false));
+		
+		//Used the color from a default style to initialize the toolitems colors values
+		TableStyle temp = getDefaultStyle();
+		tableHeadrButton = createSingleColors(Messages.TableWizardLayoutPage_tableHeaderLabel, manualCompoiste, temp.getColor(TableStyle.COLOR_TABLE_HEADER));
+		columnHeadrButton = createSingleColors(Messages.TableWizardLayoutPage_columnHeaderLabel, manualCompoiste, temp.getColor(TableStyle.COLOR_COL_HEADER));
+		detailButton = createSingleColors(Messages.TableWizardLayoutPage_detailLabel, manualCompoiste, temp.getColor(TableStyle.STANDARD_COLOR_DETAIL));
+		altDetailButton = createSingleColors(Messages.TableWizardLayoutPage_altDetailLabel, manualCompoiste, temp.getColor(TableStyle.COLOR_DETAIL));
+
+
+		layout.topControl = schemaCompoiste;
+		//Create the button to switch between the two input method
+		changeControl = new Button(group, SWT.NONE);
+		changeControl.setText(">>"); //$NON-NLS-1$
+		changeControl.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		changeControl.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (layout.topControl == schemaCompoiste){
+					layout.topControl = manualCompoiste;
+					changeControl.setText("<<"); //$NON-NLS-1$
+					changeControl.setToolTipText(Messages.TableWizardLayoutPage_changeButtonTooltip1);
+				} else {
+					layout.topControl = schemaCompoiste;
+					changeControl.setText(">>"); //$NON-NLS-1$
+					changeControl.setToolTipText(Messages.TableWizardLayoutPage_changeButtonTooltip2);
+				}
+				colorComposite.layout();
+			}
+		});
+		
+		//Create the checkbox to alternate the color
 		alternateColor = new Button(group, SWT.CHECK);
 		alternateColor.setText(Messages.TableWizardLayoutPage_alternated_rows_label);
 		GridData checkBoxData = new GridData(GridData.FILL_HORIZONTAL);
 		checkBoxData.horizontalSpan = 2;
 		alternateColor.setLayoutData(checkBoxData);
-		
-		variations.addModifyListener(modifyListener);
 		alternateColor.addSelectionListener(selectionListener);
-		colorScheme.addSelectionListener(selectionListener);
+		
+		variations.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				//Update first the button and the regenerate the current selection
+				updateSelectedColor();
+				notifyChange();	
+			}
+		});
+		colorScheme.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//Update first the button and the regenerate the current selection
+				updateSelectedColor();
+				notifyChange();	
+			}
+		});
+	}
+
+	/**
+	 * Create a toolitem to represent a color. In the passed composite will be 
+	 * created two element, a label with a text and the toolitem
+	 * 
+	 * @param text the text that will be used into the label
+	 * @param parent the composite where the controls will be placed
+	 * @param color the color used to initialize the control
+	 * @return the created toolitem
+	 */
+	private ToolItem createSingleColors(String text, Composite parent, RGB color){		
+		new Label(parent, SWT.NONE).setText(text);
+		final ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		toolBar.setBackground(parent.getBackground());
+
+		final ToolItem foreButton = new ToolItem(toolBar, SWT.PUSH);
+		setButtonColor(color, foreButton);
+		foreButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				ColorDialog cd = new ColorDialog(toolBar.getShell());
+				cd.setText(Messages.TableWizardLayoutPage_colorSelectionDialog);
+				RGB newColor = cd.open();
+				if (newColor != null) {
+					setButtonColor(newColor,foreButton);
+					notifyChange();	
+				}
+			}
+		});
+		toolBar.pack();
+		return foreButton;
 	}
 	
-	private void setColor(String colorName){
+/*	private void setColor(String colorName){
 		for(int i=0; i<colorScheme.getItemCount(); i++){
 			if (colorScheme.getItem(i).equals(colorName)){
 				colorScheme.select(i);
@@ -263,7 +424,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 				return;
 			}
 		}
-	}
+	}*/
 	
 	private void setBorderButtons(BorderStyleEnum loadedStyle){
 		borderStyle = loadedStyle;
@@ -281,9 +442,16 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	private void setData(){
 		if (templateToOpen instanceof TableStyle){
 			TableStyle cStyle = (TableStyle)templateToOpen;
-			String colorName = ColorSchemaGenerator.getName(cStyle.getBaseColor());
-			setColor(colorName);
-			setVariations(cStyle.getVariation());
+			//Set the color on the toolitem buttons
+			setButtonColor(templateToOpen.getColor(TableStyle.COLOR_TABLE_HEADER), tableHeadrButton);
+			setButtonColor(templateToOpen.getColor(TableStyle.COLOR_COL_HEADER), columnHeadrButton);
+			setButtonColor(templateToOpen.getColor(TableStyle.COLOR_DETAIL), altDetailButton);
+			setButtonColor(templateToOpen.getColor(TableStyle.STANDARD_COLOR_DETAIL), detailButton);
+			//When a  template is open for the edit then the colors input method is set to manual by default
+			layout.topControl = manualCompoiste;
+			changeControl.setText("<<"); //$NON-NLS-1$
+			changeControl.setToolTipText(Messages.TableWizardLayoutPage_changeButtonTooltip1); 
+			
 			alternateColor.setSelection(cStyle.hasAlternateColor());
 			borderColor.setColor(cStyle.getRGBBorderColor());
 			setBorderButtons(cStyle.getBorderStyle());
@@ -327,15 +495,15 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		ToolBar toolBar = new ToolBar (group, SWT.FLAT);
 		
 		ToolItem buttonFull = new ToolItem (toolBar, SWT.RADIO);
-		buttonFull.setImage (Activator.getDefault().getImage("icons/full_borders.png")); 
+		buttonFull.setImage (Activator.getDefault().getImage("icons/full_borders.png"));  //$NON-NLS-1$
 		borderStyleButtons.add(buttonFull);
 		
 		ToolItem buttonHorizontal1 = new ToolItem (toolBar, SWT.RADIO);
-		buttonHorizontal1.setImage (Activator.getDefault().getImage("icons/horizontal_borders.png")); 
+		buttonHorizontal1.setImage (Activator.getDefault().getImage("icons/horizontal_borders.png"));  //$NON-NLS-1$
 		borderStyleButtons.add(buttonHorizontal1);
 		
 		ToolItem buttonHorizontal2 = new ToolItem (toolBar, SWT.RADIO);
-		buttonHorizontal2.setImage (Activator.getDefault().getImage("icons/horizontal_borders2.png"));
+		buttonHorizontal2.setImage (Activator.getDefault().getImage("icons/horizontal_borders2.png")); //$NON-NLS-1$
 		borderStyleButtons.add(buttonHorizontal2);
 		
 		toolBar.pack ();
@@ -538,7 +706,11 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		});
 	}
 	
-	
+	/**
+	 * Get a TableStyle with the default values
+	 * 
+	 * @return a not null TableStyle
+	 */
 	public static TableStyle getDefaultStyle(){
 		String firstColor = ColorSchemaGenerator.getColors().get(0);
 		Color color = ColorSchemaGenerator.getColor(firstColor);
@@ -546,6 +718,11 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		return new TableStyle(rgbColor, ColorSchemaGenerator.SCHEMAS.DEFAULT, BorderStyleEnum.FULL, ColorConstants.black.getRGB(), false);
 	}
 	
+	/**
+	 * Get a TableSections with the default values
+	 * 
+	 * @return a not null TableSections
+	 */
 	public static TableSections getDefaultSection(){
 		return new TableSections(true, true, true, true, true, true); 
 	}
@@ -570,10 +747,11 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	 * and request the redraw of the preview
 	 */
 	private void notifyChange(){
-		String colorName =colorScheme.getItem(colorScheme.getSelectionIndex());
-		Color color = ColorSchemaGenerator.getColor(colorName);
-		ColorSchemaGenerator.SCHEMAS variantKey = (ColorSchemaGenerator.SCHEMAS)variants.get(variations.getSelectionIndex()).getValue();
-		lastGeneratedStyle = new TableStyle(new RGB(color.getRed(), color.getGreen(), color.getBlue()),variantKey, borderStyle, borderColor.getColor(), alternateColor.getSelection());
+		RGB tableHeader = (RGB)tableHeadrButton.getData();
+		RGB columnHeader = (RGB)columnHeadrButton.getData();
+		RGB detail = (RGB)detailButton.getData();
+		RGB altDetail = (RGB)altDetailButton.getData();
+		lastGeneratedStyle = new TableStyle(tableHeader, columnHeader, detail, altDetail, borderStyle, borderColor.getColor(), alternateColor.getSelection());
 		if (titleText != null) lastGeneratedStyle.setDescription(titleText.getText());
 		preview.setTableStyle(lastGeneratedStyle);
 
@@ -603,7 +781,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		titleCompositeData.horizontalAlignment = SWT.FILL;
 		titleComposite.setLayoutData(titleCompositeData);
 		Label descriptionLabel = new Label(titleComposite, SWT.NONE);
-		descriptionLabel.setText("Name of the style");
+		descriptionLabel.setText(Messages.TableWizardLayoutPage_nameLabel);
 		titleText = new Text(titleComposite, SWT.BORDER);
 		titleText.addModifyListener(modifyListener);
 		GridData textData = new GridData();

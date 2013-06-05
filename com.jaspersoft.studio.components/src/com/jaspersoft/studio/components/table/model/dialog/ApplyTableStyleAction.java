@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.model.dialog;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -368,7 +367,7 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
         }
 
         cellStyle.setMode(ModeEnum.OPAQUE);
-        cellStyle.setBackcolor(Color.WHITE);
+        cellStyle.setBackcolor(style.getColorValue(TableStyle.STANDARD_COLOR_DETAIL));
 
 
         if (style.hasAlternateColor())

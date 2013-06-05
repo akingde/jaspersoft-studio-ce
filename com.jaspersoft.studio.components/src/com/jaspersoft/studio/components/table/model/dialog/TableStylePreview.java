@@ -124,11 +124,14 @@ public class TableStylePreview extends Composite {
 		        int rowHeight = h/7;
 		        Rectangle row_bounds = new Rectangle(x,y + rowHeight*2, w, rowHeight);
 		        Graphics2D g = ComponentFigure.getG2D(graphics);
-		        g.setColor(Color.WHITE);
+		        
+		        Color colorDetail =  tableStyle.getColorValue(TableStyle.STANDARD_COLOR_DETAIL);
+		        
+		        g.setColor(colorDetail);
 			    g.fillRect(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
 			    Color c = null;
 			    row_bounds = new Rectangle(x,y + rowHeight*3, w, rowHeight);
-			    g.setColor(Color.WHITE);
+			    g.setColor(colorDetail);
 			    if (tableStyle.hasAlternateColor())
 			    {
 			    	c = tableStyle.getColorValue(TableStyle.COLOR_DETAIL);
@@ -136,7 +139,7 @@ public class TableStylePreview extends Composite {
 			    }
 			    g.fill(row_bounds);
 			    row_bounds = new Rectangle(x,y + rowHeight*4, w, rowHeight);
-			    g.setColor(Color.WHITE);
+			    g.setColor(colorDetail);
 			    g.fill(row_bounds);
 
 			    // TABLE HEADER

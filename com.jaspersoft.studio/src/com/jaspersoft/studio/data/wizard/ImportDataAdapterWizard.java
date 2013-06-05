@@ -53,7 +53,7 @@ public class ImportDataAdapterWizard extends Wizard implements IImportWizard {
 	/**
 	 * Page that list the availabe properties into a precise configuration
 	 */
-	PropertiesPage page2 = new PropertiesPage();
+	ShowPropertiesPage page2 = new ShowPropertiesPage();
 	
 	@Override
 	public void addPages() {

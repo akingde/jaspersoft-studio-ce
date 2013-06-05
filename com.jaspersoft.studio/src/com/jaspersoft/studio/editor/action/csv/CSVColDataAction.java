@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -29,6 +30,7 @@ import com.jaspersoft.studio.editor.gef.decorator.csv.NameChooserDialog;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.model.text.MTextElement;
 import com.jaspersoft.studio.property.SetValueCommand;
 
@@ -162,6 +164,10 @@ public class CSVColDataAction extends CSVAction {
 	 */
 	@Override
 	public void run() {
+		if (checkFrameParent()){
+			boolean dialogResult = MessageDialog.openQuestion(Display.getCurrent().getActiveShell(), "Frame parent found", "The selected element is inside a frame. This is allowed but JasperReport could ignore this property. Would you apply it anyway?");
+			if (!dialogResult) return;
+		}
 		if (isChecked()) execute(createAlignmentCommand("")); //$NON-NLS-1$
 		else {
 			NameChooserDialog dialog = new NameChooserDialog(Display.getCurrent().getActiveShell(),Messages.CSVColDataAction_InsertColNameDialog);
@@ -194,6 +200,21 @@ public class CSVColDataAction extends CSVAction {
 		return createAlignmentCommand(""); //$NON-NLS-1$
 	}
 
+	
+	private boolean checkFrameParent(){
+		List<?> editparts = getSelectedObjects();
+		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart) || editparts.size()>1){
+			return false;
+		} 
+		CompoundCommand command = new CompoundCommand();
+		command.setDebugLabel(getText());
+		EditPart editpart = (EditPart) editparts.get(0);
+		if (editpart.getModel() instanceof MTextElement){
+			MTextElement element = (MTextElement)editpart.getModel();
+			if (element.getParent() instanceof MFrame) return true;
+		}
+		return false;
+	}
 	
 	/**
 	 * Create the commands necessary to transform a textual element into a csv column or to remove it 
