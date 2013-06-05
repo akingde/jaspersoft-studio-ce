@@ -32,6 +32,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
@@ -242,7 +243,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createColumnGroupCells(MColumnGroup rg, JRCrosstabColumnGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + p.getName());
+		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + StringUtils.SPACE + p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		mc = new MColumnCrosstabHeaderCell(rg, p.getCrosstabHeader(), -1);
@@ -250,7 +251,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			ReportFactory.createElementsForBand(mc, p.getCrosstabHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total + p.getName());
+			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total + StringUtils.SPACE + p.getName());
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 
@@ -264,11 +265,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createRowGroupCells(MRowGroup rg, JRCrosstabRowGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + p.getName());
+		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + StringUtils.SPACE + p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total + p.getName());
+			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total + StringUtils.SPACE + p.getName());
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 	}
