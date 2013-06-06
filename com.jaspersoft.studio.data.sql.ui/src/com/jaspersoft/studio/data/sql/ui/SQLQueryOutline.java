@@ -252,12 +252,15 @@ public class SQLQueryOutline {
 		xtextDocument.addModelListener(modelListener);
 	}
 
+	private MRoot root;
+
 	protected void refreshViewer(final IOutlineNode rootNode, final Collection<IOutlineNode> nodesToBeExpanded, final Collection<IOutlineNode> selectedNodes) {
 		DisplayRunHelper.runAsyncInDisplayThread(new Runnable() {
+
 			public void run() {
 				try {
 					if (!treeViewer.getTree().isDisposed()) {
-						MRoot root = new MRoot(null, null);
+						root = new MRoot(null, designer.getjDataset());
 						new MSelect(root);
 						new MFrom(root);
 						new MWhere(root);
@@ -312,6 +315,7 @@ public class SQLQueryOutline {
 	private ActionFactory afactory;
 
 	public void scheduleRefresh() {
+		root.setValue(designer.getjDataset());
 		// refreshJob.cancel();
 		// refreshJob.schedule();
 	}

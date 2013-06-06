@@ -43,8 +43,8 @@ public class CreateExpression extends AAction {
 			mexpr = run(null, (MExpression) sel);
 		else if (isInSelect(sel))
 			mexpr = run(null, (ANode) sel, -1);
-		mexpr.getOperands().add(new ScalarOperand());
-		mexpr.getOperands().add(new ScalarOperand());
+		mexpr.getOperands().add(new ScalarOperand<String>(mexpr, "Venice"));
+		mexpr.getOperands().add(new ScalarOperand<String>(mexpr, "Venice"));
 		showDialog(mexpr);
 	}
 
@@ -57,8 +57,8 @@ public class CreateExpression extends AAction {
 			else if (isInSelect(sel))
 				mexpr = run(t, (ANode) sel, -1);
 			sel = mexpr;
-			mexpr.getOperands().add(new FieldOperand(t));
-			mexpr.getOperands().add(new ScalarOperand());
+			mexpr.getOperands().add(new FieldOperand(t, mexpr));
+			mexpr.getOperands().add(new ScalarOperand<String>(mexpr, "Venice"));
 		}
 		showDialog(mexpr);
 	}

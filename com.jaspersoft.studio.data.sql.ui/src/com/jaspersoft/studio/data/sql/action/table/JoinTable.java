@@ -56,8 +56,8 @@ public class JoinTable extends AAction {
 			MColumn mFrom = getColumn(mtab.getValue());
 
 			MExpression mexpr = new MExpression(mtbljoin, mSrc, -1);
-			mexpr.getOperands().add(new FieldOperand(mSrc));
-			mexpr.getOperands().add(new FieldOperand(mFrom));
+			mexpr.getOperands().add(new FieldOperand(mSrc, mexpr));
+			mexpr.getOperands().add(new FieldOperand(mFrom, mexpr));
 			selectInTree(mexpr);
 		}
 	}

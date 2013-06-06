@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -21,6 +24,7 @@ import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MTables;
+import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -60,7 +64,8 @@ public class UsedColumnsDialog extends Dialog {
 
 	public void setSelection(ANode sel) {
 		tables = Util.getTables(sel);
-		columns = Util.getUsedColumns(sel);
+		if (!(sel instanceof MExpression))
+			columns = Util.getUsedColumns(sel);
 	}
 
 	@Override
@@ -82,7 +87,7 @@ public class UsedColumnsDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite cmp = (Composite) super.createDialogArea(parent);
 
-		treeViewer = new TreeViewer(cmp, SWT.MULTI | SWT.BORDER);
+		treeViewer = new TreeViewer(cmp, SWT.SINGLE | SWT.BORDER);
 		treeViewer.setContentProvider(new ReportTreeContetProvider() {
 			@Override
 			public Object[] getChildren(Object parentElement) {
@@ -145,7 +150,15 @@ public class UsedColumnsDialog extends Dialog {
 			}
 		});
 		ColumnViewerToolTipSupport.enableFor(treeViewer);
+		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+				Object el = ts.getFirstElement();
+				getButton(IDialogConstants.OK_ID).setEnabled(el instanceof MColumn);
+			}
+		});
 		treeViewer.setInput(root);
 
 		treeViewer.expandAll();

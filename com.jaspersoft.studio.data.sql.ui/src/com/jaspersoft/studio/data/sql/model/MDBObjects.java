@@ -10,13 +10,14 @@ import com.jaspersoft.studio.model.ANode;
 public class MDBObjects extends ANode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	transient private ImageDescriptor icon;
+	private String image;
 	protected String tooltip;
 
 	public MDBObjects(ANode parent, String value, String image) {
 		super(parent, -1);
 		setValue(value);
-		if (image != null)
-			icon = Activator.getDefault().getImageDescriptor(image);
+		this.image = image;
+
 	}
 
 	@Override
@@ -34,6 +35,8 @@ public class MDBObjects extends ANode {
 
 	@Override
 	public ImageDescriptor getImagePath() {
+		if (icon == null && image != null)
+			icon = Activator.getDefault().getImageDescriptor(image);
 		return icon;
 	}
 

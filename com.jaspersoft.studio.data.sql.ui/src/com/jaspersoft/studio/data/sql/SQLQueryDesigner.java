@@ -167,6 +167,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	@Override
 	protected void updateQueryText(String txt) {
 		document.set(txt);
+		outline.scheduleRefresh();
 	}
 
 	@Override

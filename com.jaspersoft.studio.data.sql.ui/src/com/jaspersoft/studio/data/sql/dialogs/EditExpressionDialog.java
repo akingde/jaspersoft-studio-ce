@@ -113,7 +113,7 @@ public class EditExpressionDialog extends Dialog {
 			new Label(cmp, SWT.NONE).setLayoutData(gd);
 		}
 
-		Control w = Factory.createWidget(cmp, operands, 0);
+		Control w = Factory.createWidget(cmp, operands, 0, value);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.widthHint = 250;
 		w.setLayoutData(gd);
@@ -161,7 +161,7 @@ public class EditExpressionDialog extends Dialog {
 				layout.marginWidth = 0;
 				cmp.setLayout(layout);
 
-				Control w = Factory.createWidget(cmp, operands, 1);
+				Control w = Factory.createWidget(cmp, operands, 1, value);
 				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
 				w.setLayoutData(gd);
@@ -172,14 +172,14 @@ public class EditExpressionDialog extends Dialog {
 				layout.marginWidth = 0;
 				cmp.setLayout(layout);
 
-				Control w = Factory.createWidget(cmp, operands, 1);
+				Control w = Factory.createWidget(cmp, operands, 1, value);
 				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
 				w.setLayoutData(gd);
 
 				new Label(cmp, SWT.NONE).setText("AND");
 
-				w = Factory.createWidget(cmp, operands, 2);
+				w = Factory.createWidget(cmp, operands, 2, value);
 				gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
 				w.setLayoutData(gd);
@@ -190,29 +190,45 @@ public class EditExpressionDialog extends Dialog {
 				layout.marginWidth = 0;
 				cmp.setLayout(layout);
 
-				List op2 = new List(cmp, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER);
-				GridData gd = new GridData(GridData.FILL_BOTH);
-				gd.verticalSpan = 3;
-				gd.widthHint = 200;
-				op2.setLayoutData(gd);
-
-				Button op3 = new Button(cmp, SWT.PUSH);
-				op3.setText("&Add");
-				gd = new GridData(GridData.FILL_HORIZONTAL);
-				op3.setLayoutData(gd);
-
-				op3 = new Button(cmp, SWT.PUSH);
-				op3.setText("&Edit");
-				gd = new GridData(GridData.FILL_HORIZONTAL);
-				op3.setLayoutData(gd);
-
-				op3 = new Button(cmp, SWT.PUSH);
-				op3.setText("&Delete");
-				gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
-				op3.setLayoutData(gd);
+				createInList(cmp);
 			}
 		}
 		stackLayout.topControl = cmp;
 		rcmp.layout(true);
 	}
+
+	protected void createInList(Composite cmp) {
+		List inlist = new List(cmp, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.verticalSpan = 3;
+		gd.widthHint = 200;
+		inlist.setLayoutData(gd);
+
+		Button op3 = new Button(cmp, SWT.PUSH);
+		op3.setText("&Add");
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		op3.setLayoutData(gd);
+
+		op3 = new Button(cmp, SWT.PUSH);
+		op3.setText("&Edit");
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		op3.setLayoutData(gd);
+
+		op3 = new Button(cmp, SWT.PUSH);
+		op3.setText("&Delete");
+		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		op3.setLayoutData(gd);
+
+		showInList(inlist);
+	}
+
+	private void showInList(List inlist) {
+		String[] ilarray = new String[Math.max(operands.size() - 1, 0)];
+		if (operands.size() > 1)
+			for (int i = 1; i < operands.size(); i++) {
+				ilarray[i - 1] = operands.get(i).toSQLString();
+			}
+		inlist.setItems(ilarray);
+	}
+
 }

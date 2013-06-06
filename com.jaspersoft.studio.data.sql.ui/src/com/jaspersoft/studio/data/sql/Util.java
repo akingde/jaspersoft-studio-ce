@@ -8,10 +8,12 @@ import com.jaspersoft.studio.data.sql.model.MDBObjects;
 import com.jaspersoft.studio.data.sql.model.MQueryObjects;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
+import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.MFrom;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 
 public class Util {
 	public static boolean columnExists(MColumn c, MDBObjects orderBy, List<MSqlTable> tables) {
@@ -40,11 +42,32 @@ public class Util {
 		MRoot r = (MRoot) sel.getRoot();
 		for (INode n : r.getChildren()) {
 			if (n instanceof MFrom) {
-				for (INode t : n.getChildren())
+				for (INode t : n.getChildren()) {
 					list.add((MSqlTable) t.getValue());
+					if (!t.getChildren().isEmpty()) {
+						for (INode jt : t.getChildren())
+							list.add((MSqlTable) jt.getValue());
+					}
+				}
 				break;
 			}
 		}
 		return list;
+	}
+
+	public static MRoot getRoot(MColumn mcol, MExpression mexpr) {
+		if (mcol != null)
+			return (MRoot) mcol.getRoot();
+		ModelVisitor<INode> mv = new ModelVisitor<INode>(mexpr.getRoot()) {
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof MQueryObjects) {
+					setObject(((MQueryObjects) n).getValue().getRoot());
+					return false;
+				}
+				return true;
+			}
+		};
+		return (MRoot) mv.getObject();
 	}
 }
