@@ -79,6 +79,17 @@ public class CrosstabStyle extends TemplateStyle {
 		storeColor(COLOR_DETAIL, ColorConstants.white.getRGB());
 	}
 	
+	public CrosstabStyle(RGB colorTotal, RGB colorGroup, RGB colorMeasures, RGB colorDetail, boolean whiteGrid) {
+		super(null, null);
+		storePropertiy(WHITE_GRID, whiteGrid);
+		storePropertiy(SHOW_GRID, true);
+		storeColor(COLOR_TOTAL, colorTotal);
+		storeColor(COLOR_GROUP, colorGroup);
+		storeColor(COLOR_MEASURES, colorMeasures);
+		storeColor(COLOR_DETAIL, colorDetail);
+	}
+	
+	
 	public CrosstabStyle(){
 		super(null,null);
 	}
@@ -135,7 +146,11 @@ public class CrosstabStyle extends TemplateStyle {
 	 */
 	@Override
 	public String toString() {
-		return baseColor.toString() + variation.toString() + getWhiteGrid();
+		String color1 = getColor(COLOR_TOTAL).toString();
+		String color2 = getColor(COLOR_GROUP).toString();
+		String color3 = getColor(COLOR_MEASURES).toString();
+		String color4 = getColor(COLOR_DETAIL).toString();
+		return color1.concat(color2).concat(color3).concat(color4).concat(getWhiteGrid().toString());
 	}
 	
 	/**
@@ -146,9 +161,12 @@ public class CrosstabStyle extends TemplateStyle {
 	@Override
 	public String getXMLData() {
 		String result = "<"+getTemplateName()+" type=\"" + getTemplateName() +"\" ";
-		result += "whiteGrid=\""+getWhiteGrid().toString()+"\" colorSchema=\"" + variation.name() + "\">";
+		result += "whiteGrid=\""+getWhiteGrid().toString()+"\">";
 		result += "<description>".concat(getDescription()).concat("</description>");
-		result += xmlColor("baseColor", baseColor);
+		result += xmlColor("colorTotal",getColor(COLOR_TOTAL));
+		result += xmlColor("colorGroup",getColor(COLOR_GROUP));
+		result += xmlColor("colorMeasures",getColor(COLOR_MEASURES));
+		result += xmlColor("colorDetail",getColor(COLOR_DETAIL));
 		result += "</"+getTemplateName()+">";
 		return result;
 	}
@@ -165,20 +183,38 @@ public class CrosstabStyle extends TemplateStyle {
 		try{
 			NamedNodeMap rootAttributes = xmlNode.getAttributes();
 			boolean whiteGrid = rootAttributes.getNamedItem("whiteGrid").getNodeValue().equals("true"); 
-			SCHEMAS variation = SCHEMAS.valueOf(rootAttributes.getNamedItem("colorSchema").getNodeValue());
+			
+			Node schemasNode = rootAttributes.getNamedItem("colorSchema");
+			SCHEMAS variation =  schemasNode != null ? SCHEMAS.valueOf(schemasNode.getNodeValue()) : null;
+			
 			Node firstChild = xmlNode.getFirstChild();
 			String description = null;
+			
 			RGB baseColor = null;
+			RGB colorTotal = null;
+			RGB colorGroup = null;
+			RGB colorMeasures = null;
+			RGB colorDetail = null;
 			while(firstChild!=null){
 				if (firstChild.getNodeName().equals("baseColor")){
 					baseColor = rgbColor(firstChild);
 				} else if (firstChild.getNodeName().equals("description")) {
 					Node descriptionNode = firstChild.getChildNodes().item(0);
 					description = descriptionNode != null ? descriptionNode.getNodeValue() : "";				
-				}			
+				} else if (firstChild.getNodeName().equals("colorTotal")) {
+					colorTotal = rgbColor(firstChild);
+				} else if (firstChild.getNodeName().equals("colorGroup")) {
+					colorGroup = rgbColor(firstChild);
+				} else if (firstChild.getNodeName().equals("colorMeasures")) {
+					colorMeasures = rgbColor(firstChild);
+				} else if (firstChild.getNodeName().equals("colorDetail")) {
+					colorDetail = rgbColor(firstChild);
+				}
 				firstChild = firstChild.getNextSibling();
 			}
-			CrosstabStyle result = new CrosstabStyle(baseColor, variation, whiteGrid);
+			CrosstabStyle result = null;
+			if (variation != null && baseColor != null) result = new CrosstabStyle(baseColor, variation, whiteGrid);
+			else result = new CrosstabStyle(colorTotal, colorGroup, colorMeasures, colorDetail, whiteGrid);
 			result.setDescription(description);
 			return result;
 		} catch(Exception ex){

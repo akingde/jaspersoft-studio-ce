@@ -56,7 +56,6 @@ public class TableStyle extends TemplateStyle {
 	 */
 	public final static String ALTERNATE_COLOR_KEY = "alternate_corlor";
 	
-	
 	/**
 	 * Key for the color detail attribute, it will be used only if the attribute identified 
 	 * by ALTERNATE_COLOR_KEY is true
