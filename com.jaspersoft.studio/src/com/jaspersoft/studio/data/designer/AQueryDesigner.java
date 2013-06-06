@@ -38,6 +38,10 @@ public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext
 	public AQueryDesigner() {
 	}
 
+	public JRDesignDataset getjDataset() {
+		return jDataset;
+	}
+
 	public void showError(Throwable t) {
 		container.getQueryStatus().showError(t);
 	}

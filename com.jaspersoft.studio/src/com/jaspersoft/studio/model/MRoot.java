@@ -50,14 +50,16 @@ public class MRoot extends ANode {
 	 * @param jd
 	 *          the jd
 	 */
-	public MRoot(ANode parent, JasperDesign jd) {
+	public MRoot(ANode parent, Object value) {
 		super(parent, -1);
-		setValue(jd);
+		setValue(value);
 	}
 
 	@Override
 	public JasperDesign getJasperDesign() {
-		return (JasperDesign) getValue();
+		if (getValue() instanceof JasperDesign)
+			return (JasperDesign) getValue();
+		return getJasperConfiguration().getJasperDesign();
 	}
 
 	@Override
