@@ -147,6 +147,10 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 		if (list.size() == 0) {
 			customRadio.setSelection(true);
 			customRadio.setVisible(false);
+			GridData excludeLayout = new GridData(SWT.FILL, SWT.LEFT, true, false);
+			excludeLayout.exclude = true;
+			customRadio.setLayoutData(excludeLayout);
+			customRadio.getParent().layout();
 		}
 		
 		setControl(mainComposite);
@@ -182,12 +186,14 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 	 */
 	private void createCustomPathPanel(Composite mainComposite){
 		final Composite customLocComposite = new Composite(mainComposite, SWT.None);
-		GridLayout customLocLayout = new GridLayout(2,false);
+		GridLayout customLocLayout = new GridLayout(3,false);
 		customLocLayout.marginWidth = 0;
-		customLocComposite.setLayout(customLocLayout);
+		customLocLayout.horizontalSpacing = 2;
+		customLocComposite.setLayout(customLocLayout);;
 		customLocComposite.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false));
 		customRadio = new Button(customLocComposite, SWT.RADIO);
-		customRadio.setText(Messages.ListInstallationPage_customLocation);
+		final Label radioLabel = new Label(customLocComposite, SWT.NONE);
+		radioLabel.setText(Messages.ListInstallationPage_customLocation);
 		
 		Button browse = new Button(customLocComposite, SWT.NONE);
 		browse.setText(Messages.ListInstallationPage_browse);
@@ -200,7 +206,7 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 			    	customRadio.setData(desc);
 			    	customRadio.setToolTipText(selected);
 			    	if (selected.length()>60) selected = selected.substring(0,10)+"...."+selected.substring(selected.length()-60); //$NON-NLS-1$
-			    	customRadio.setText(selected);
+			    	radioLabel.setText(selected);
 			    	customLocComposite.layout();
 			    	if (customRadio.getSelection()) setPageComplete(true);
 		    	}
