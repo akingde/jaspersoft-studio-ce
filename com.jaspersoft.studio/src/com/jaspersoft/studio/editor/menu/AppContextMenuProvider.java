@@ -304,34 +304,40 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			submenu.add(action);
 
 		menu.add(submenu);
+
+		submenu = new MenuManager(Messages.AppContextMenuProvider_arrangeInContainerMenu, JaspersoftStudioPlugin
+				.getInstance().getImageDescriptor("icons/layout-6.png"), //$NON-NLS-1$
+				LayoutAction.ID);
+
+		LayoutManager.addMenu(submenu, getActionRegistry());
+
+		menu.add(submenu);
+
+		menu.add(new Separator());
 		// ------------------------------
 
 		action = getActionRegistry().getAction(MaximizeContainerAction.ID);
 		if (action.isEnabled())
 			menu.add(action);
 
-		//Start of the convert actions
-		action = getActionRegistry().getAction(ConvertTextIntoStatic.ID);;
-		if (action.isEnabled())
-			menu.add(action);
-		
-		action = getActionRegistry().getAction(ConvertStaticIntoText.ID);;
-		if (action.isEnabled())
-			menu.add(action);
-		
-		//End of the convert actions
-		
 		action = getActionRegistry().getAction(StretchToContentAction.ID);
 		if (action.isEnabled())
 			menu.add(action);
 
-		submenu = new MenuManager(Messages.AppContextMenuProvider_arrangeInContainerMenu, JaspersoftStudioPlugin.getInstance().getImageDescriptor(
-				"icons/layout-6.png"), //$NON-NLS-1$
-				LayoutAction.ID);
+		menu.add(new Separator());
 
-		LayoutManager.addMenu(submenu, getActionRegistry());
+		action = getActionRegistry().getAction(ConvertStaticIntoText.ID);
+		if (action.isEnabled())
+			menu.add(action);
 
-		menu.add(submenu);
+		// Start of the convert actions
+		action = getActionRegistry().getAction(ConvertTextIntoStatic.ID);
+		if (action.isEnabled())
+			menu.add(action);
+
+		// End of the convert actions
+
+		menu.add(new Separator());
 
 		JaspersoftStudioPlugin.getDecoratorManager().buildContextMenu(getActionRegistry(), getViewer(), menu);
 
@@ -350,7 +356,6 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(DatasetAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
-		
 
 	}
 
