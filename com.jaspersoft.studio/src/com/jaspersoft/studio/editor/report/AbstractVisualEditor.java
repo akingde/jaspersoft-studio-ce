@@ -113,6 +113,7 @@ import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
+import com.jaspersoft.studio.formatting.actions.OrganizeAsTableAction;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
@@ -701,6 +702,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		selectionActions.add(action.getId());
 
 		action = new MaximizeContainerAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new OrganizeAsTableAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 

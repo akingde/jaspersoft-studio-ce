@@ -144,7 +144,10 @@ public class ListInstallationPage extends JSSHelpWizardPage {
 		}
 		createCustomPathPanel(content);
 		scrollComp.setMinSize(content.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		if (list.size() == 0) customRadio.setSelection(true);
+		if (list.size() == 0) {
+			customRadio.setSelection(true);
+			customRadio.setVisible(false);
+		}
 		
 		setControl(mainComposite);
 	}

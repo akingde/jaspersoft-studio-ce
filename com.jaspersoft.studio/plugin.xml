@@ -2022,4 +2022,20 @@
          </description>
       </wizard>
    </extension>
+    <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            id="com.jaspersoft.studio"
+            name="Jaspersoft Studio">
+      </category>
+      <wizard
+            category="com.jaspersoft.studio"   
+            class="com.jaspersoft.studio.handlers.TemplateExporterWizard"
+            id="com.jaspersoft.studio.exportjsstemplate"
+            name="%ExportTemplate2">
+         <description>
+            Export the report as a new Report Template
+         </description>
+      </wizard>
+   </extension>
 </plugin>

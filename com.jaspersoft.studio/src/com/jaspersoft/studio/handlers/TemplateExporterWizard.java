@@ -34,6 +34,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.ide.IDE;
@@ -49,7 +50,7 @@ import com.jaspersoft.studio.wizards.CongratulationsWizardPage;
  * @author Orlandin Marco
  *
  */
-public class TemplateExporterWizard extends Wizard {
+public class TemplateExporterWizard extends Wizard implements IExportWizard {
 
 	/**
 	 * The selected report

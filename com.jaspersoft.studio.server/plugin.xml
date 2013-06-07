@@ -203,7 +203,7 @@
             category="com.jaspersoft.studio"
             class="com.jaspersoft.studio.server.publish.wizard.Publish2ServerWizard"
             id="com.jaspersoft.studio.server.publish"
-            name="Export To JasperReports Server">
+            name="JasperReports Server">
          <description>
             Export the report to JasperReports Server
          </description>

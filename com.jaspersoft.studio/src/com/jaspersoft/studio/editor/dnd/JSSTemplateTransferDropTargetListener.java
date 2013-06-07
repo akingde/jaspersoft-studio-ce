@@ -53,6 +53,7 @@ import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.image.command.dialog.ImageCreationDialog;
 import com.jaspersoft.studio.model.text.MStaticText;
+import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 
 /**
@@ -115,59 +116,71 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 				// get the column header
 				MBand dest = ((MReport) band.getParent()).getBand(BandTypeEnum.COLUMN_HEADER);
 				//It is a creation request, into the detail, with one or more commands encapsulated into a compound one
+				int defaultHeight = new MTextField().getDefaultHeight();
+				int defaultWidth = new MTextField().getDefaultWidth();
+				boolean placeinTheHedaer =  dest != null && dest.getValue() != null && dest.getValue().getHeight() > defaultHeight + 2;
+				if (!placeinTheHedaer) dest = band;
+				
+				List<CreateE4ObjectCommand> creationCommands = new ArrayList<CreateE4ObjectCommand>();
+				//Build a list of all the created fields
 				for (Object command : compCommand.getCommands()) {
-					if (command instanceof CreateE4ObjectCommand && ((CreateE4ObjectCommand) command).getChild() instanceof MField) {
-						CreateE4ObjectCommand creatElementC = (CreateE4ObjectCommand) command;
-						// Create the new element
-						MStaticText newText = new MStaticText();
-						MField field = (MField) creatElementC.getChild();
-						JRDesignStaticText newTextElement = (JRDesignStaticText) newText.createJRElement(band.getJasperDesign());
-						newTextElement.setText(field.getDisplayText());
-						newText.setValue(newTextElement);
-						// Take the command of the text field to calculate the positions
-						String dragMessage;
-						Rectangle location;
-						if (dest == null || dest.getValue() == null || dest.getValue().getHeight() < newText.getDefaultHeight() + 2) {
-							// There isn't enough space in the Column header, the static text will be placed into the detail
-							dest = band;
-							int x = creatElementC.getLocation().x - band.getBounds().x;
-							int y = creatElementC.getLocation().y - band.getBounds().y;
-							location = new Rectangle(x, y, newText.getDefaultWidth(), newText.getDefaultHeight());
-							location.setX(location.getLocation().x - newText.getDefaultWidth());
-							dragMessage = Messages.JSSTemplateTransferDropTargetListener_createLabelMessage1;
-						} else {
-							// There is enough space in the Column header, the static text will be placed into it
-							int x = creatElementC.getLocation().x - band.getBounds().x;
-							int y = creatElementC.getLocation().y - band.getBounds().y;
-							location = new Rectangle(x, y, newText.getDefaultWidth(), newText.getDefaultHeight());
-							location.setY(2);
-							dragMessage = Messages.JSSTemplateTransferDropTargetListener_createLabelMessage2;
-						}
-
-						// Get the behavior for the creation of the static text
-						String dragBehavior = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-								.getString(DesignerPreferencePage.BEHAVIOR_ON_FIELD_DROP);
-
-						if (dragBehavior.equals(DesignerPreferencePage.BEHAVIOR_ASK_EVERYTIME)) {
-							// The behavior say to ask to the user
-							MessageDialogWithToggle question = MessageDialogWithToggle.open(MessageDialogWithToggle.QUESTION,
-									UIUtils.getShell(), Messages.JSSTemplateTransferDropTargetListener_createLabelTitle, dragMessage,
-									null, false, null, null, SWT.NONE);
-							// Update the behavior with the choice of the user
-							if (question.getReturnCode() == IDialogConstants.YES_ID)
-								dragBehavior = DesignerPreferencePage.BEHAVIOR_CREATE_LABEL;
-							else
-								dragBehavior = DesignerPreferencePage.BEHAVIOR_DO_NOTHING;
-
-							// Check if the choice must be saved
-							if (question.getToggleState()) {
-								JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-										.setValue(DesignerPreferencePage.BEHAVIOR_ON_FIELD_DROP, dragBehavior);
-							}
-						}
-						if (dragBehavior.equals(DesignerPreferencePage.BEHAVIOR_CREATE_LABEL))
-							commandToAdd.add(new CreateElementCommand(dest, newText, location, -1));
+					if (command instanceof CreateE4ObjectCommand && ((CreateE4ObjectCommand) command).getChild() instanceof MField) 
+							creationCommands.add((CreateE4ObjectCommand) command);
+				}
+				String dragMessage = null; 
+				for(CreateE4ObjectCommand creatElementC :creationCommands){
+					// Create the new element
+					MStaticText newText = new MStaticText();
+					MField field = (MField) creatElementC.getChild();
+					JRDesignStaticText newTextElement = (JRDesignStaticText) newText.createJRElement(band.getJasperDesign());
+					newTextElement.setText(field.getDisplayText());
+					newText.setValue(newTextElement);
+					// Take the command of the text field to calculate the positions
+					Rectangle location = null;
+					if (placeinTheHedaer) {
+						// There is enough space in the Column header, the static text will be placed into it
+						int x = creatElementC.getLocation().x - band.getBounds().x;
+						int y = creatElementC.getLocation().y - band.getBounds().y;
+						int actualWidth = creatElementC.getLocation().width != -1 ? creatElementC.getLocation().width : defaultWidth;
+						location = new Rectangle(x, y, actualWidth, defaultHeight);
+						location.setY(2);
+						dragMessage = Messages.JSSTemplateTransferDropTargetListener_createLabelMessage2;
+					} else if (creationCommands.size()==1){
+						// There isn't enough space in the Column header, the static text will be placed into the detail if only one field is dragged
+						int x = creatElementC.getLocation().x - band.getBounds().x;
+						int y = creatElementC.getLocation().y - band.getBounds().y;
+						int actualWidth = creatElementC.getLocation().width != -1 ? creatElementC.getLocation().width : defaultWidth;
+						location = new Rectangle(x, y, actualWidth, defaultHeight);
+						location.setX(location.getLocation().x - location.width);
+						dragMessage = Messages.JSSTemplateTransferDropTargetListener_createLabelMessage1;
 					}
+					//Check if was generated a command
+					if (location != null){
+							// Get the behavior for the creation of the static text
+							String dragBehavior = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+									.getString(DesignerPreferencePage.BEHAVIOR_ON_FIELD_DROP);
+		
+							if (dragBehavior.equals(DesignerPreferencePage.BEHAVIOR_ASK_EVERYTIME)) {
+								// The behavior say to ask to the user
+								MessageDialogWithToggle question = MessageDialogWithToggle.open(MessageDialogWithToggle.QUESTION,
+										UIUtils.getShell(), Messages.JSSTemplateTransferDropTargetListener_createLabelTitle, dragMessage,
+										null, false, null, null, SWT.NONE);
+								// Update the behavior with the choice of the user
+								if (question.getReturnCode() == IDialogConstants.YES_ID)
+									dragBehavior = DesignerPreferencePage.BEHAVIOR_CREATE_LABEL;
+								else
+									dragBehavior = DesignerPreferencePage.BEHAVIOR_DO_NOTHING;
+		
+								// Check if the choice must be saved
+								if (question.getToggleState()) {
+									JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+											.setValue(DesignerPreferencePage.BEHAVIOR_ON_FIELD_DROP, dragBehavior);
+								}
+							}
+							if (dragBehavior.equals(DesignerPreferencePage.BEHAVIOR_CREATE_LABEL))
+								commandToAdd.add(new CreateElementCommand(dest, newText, location, -1));
+					}
+					location = null;
 				}
 				//Add to the compund command all the command for the label, if they are requested
 				addAll(compCommand, commandToAdd);

@@ -39,6 +39,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -277,12 +278,50 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		scale.setIncrement(1);
 		scale.setPageIncrement(5);
 		
-		
 		SashForm sashForm = new SashForm(container, SWT.NONE);
 		sashForm.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,1));
 		
 		//list = new org.eclipse.swt.widgets.List(sashForm, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
 		Table table = new Table(sashForm, SWT.V_SCROLL | SWT.SINGLE | SWT.BORDER);
+	
+    
+    table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,  true));
+		
+		gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		gd.widthHint = 150;
+		scale.setLayoutData(gd);
+
+		galleryComposite = new Composite(sashForm, SWT.NONE);
+		layout = new StackLayout();
+		galleryComposite.setLayout(layout);
+		
+		categoryList = BuiltInCategories.getCategoriesList();
+		for(String cat : categoryList){
+			cachedGalleries.put(cat, null);
+		}
+		bundles = StudioTemplateManager.getInstance().getTemplateBundles();
+		findTemplates();
+		//initializeBackgroundData();
+
+		sashForm.setWeights(new int[] {20, 80});
+
+		scale.addListener(SWT.Selection, new Listener() {
+
+			public void handleEvent(Event event) {
+				zoomModified();
+			}
+		});
+		
+		scale.setSelection(6);
+		// Manually fire the event because the invocation 
+		// of #Scale.selection() does not fire it.
+		zoomModified();
+		
+		createTableColumn(table);
+    showGallery(categoryList.get(0));
+	}
+	
+	private void createTableColumn(Table table){
 		table.setHeaderVisible(true);
 		TableColumn[] col = new TableColumn[1];
 		col[0] = new TableColumn(table, SWT.NONE);
@@ -303,45 +342,21 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 				return Messages.getString(element.toString());
 			}
 		});
-
-	
-		categoryList = BuiltInCategories.getCategoriesList();
-		for(String cat : categoryList){
-			cachedGalleries.put(cat, null);
-		}
-    
-    table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,  true));
-		
-		gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		gd.widthHint = 150;
-		scale.setLayoutData(gd);
-
-		galleryComposite = new Composite(sashForm, SWT.NONE);
-		layout = new StackLayout();
-		galleryComposite.setLayout(layout);
-
-		sashForm.setWeights(new int[] {20, 80});
-		
-		bundles = StudioTemplateManager.getInstance().getTemplateBundles();
-		findTemplates();
-
-		scale.addListener(SWT.Selection, new Listener() {
-
-			public void handleEvent(Event event) {
-				zoomModified();
-			}
-		});
-		
-		scale.setSelection(6);
-		// Manually fire the event because the invocation 
-		// of #Scale.selection() does not fire it.
-		zoomModified();
-		
 		tableViewer.setInput(categoryList);
 		table.addSelectionListener(new CategoryChooser());
 		table.setSelection(0);
-		
-    showGallery(categoryList.get(0));
+	}
+	
+	private void initializeBackgroundData(){
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run(){
+					for(int i=1; i<categoryList.size(); i++){
+						String category = categoryList.get(i);
+						if (cachedGalleries.get(category)==null) 
+							createGalleryForCategory(category);
+					}
+				}
+			});
 	}
 	
 	/**

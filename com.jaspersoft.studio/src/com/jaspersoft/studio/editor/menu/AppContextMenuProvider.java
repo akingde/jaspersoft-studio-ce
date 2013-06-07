@@ -44,6 +44,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction
 import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
+import com.jaspersoft.studio.formatting.actions.OrganizeAsTableAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
@@ -317,6 +318,10 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		// ------------------------------
 
 		action = getActionRegistry().getAction(MaximizeContainerAction.ID);
+		if (action.isEnabled())
+			menu.add(action);
+			
+		action = getActionRegistry().getAction(OrganizeAsTableAction.ID);
 		if (action.isEnabled())
 			menu.add(action);
 
