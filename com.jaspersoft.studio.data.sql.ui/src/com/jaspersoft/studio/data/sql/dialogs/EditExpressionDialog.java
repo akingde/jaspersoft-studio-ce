@@ -10,6 +10,8 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -198,7 +200,7 @@ public class EditExpressionDialog extends Dialog {
 	}
 
 	protected void createInList(Composite cmp) {
-		List inlist = new List(cmp, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER);
+		final List inlist = new List(cmp, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 3;
 		gd.widthHint = 200;
@@ -208,18 +210,79 @@ public class EditExpressionDialog extends Dialog {
 		op3.setText("&Add");
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		op3.setLayoutData(gd);
+		op3.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				handleAddInList(inlist);
+			}
+		});
 
 		op3 = new Button(cmp, SWT.PUSH);
 		op3.setText("&Edit");
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		op3.setLayoutData(gd);
+		op3.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				handleEditInList(inlist);
+			}
+		});
 
 		op3 = new Button(cmp, SWT.PUSH);
 		op3.setText("&Delete");
 		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		op3.setLayoutData(gd);
+		op3.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int index = inlist.getSelectionIndex() - 1;
+				if (index >= 0 && index < operands.size()) {
+					operands.remove(index);
+					showInList(inlist);
+				}
+			}
+		});
+		inlist.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				handleEditInList(inlist);
+			}
+		});
 
 		showInList(inlist);
+	}
+
+	private void handleAddInList(List inlist) {
+		int index = Math.max(0, inlist.getSelectionIndex() - 1);
+		OperandDialog dialog = new OperandDialog(getShell());
+		dialog.setValues(value, new ArrayList<AOperand>(operands), index);
+		if (dialog.open() == Dialog.OK) {
+			AOperand op = null;
+			operands.add(index, op);
+			showInList(inlist);
+		}
+	}
+
+	private void handleEditInList(List inlist) {
+		int index = inlist.getSelectionIndex() - 1;
+		if (index >= 0 && index < operands.size()) {
+			OperandDialog dialog = new OperandDialog(getShell());
+			dialog.setValues(value, new ArrayList<AOperand>(operands), index);
+			if (dialog.open() == Dialog.OK) {
+				inlist.update();
+			}
+		}
 	}
 
 	private void showInList(List inlist) {
