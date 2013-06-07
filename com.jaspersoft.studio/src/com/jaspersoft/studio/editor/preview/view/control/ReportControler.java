@@ -168,8 +168,9 @@ public class ReportControler {
 						|| p.getName().contains("csv.source") || p.getName().startsWith("XMLA_"))
 					continue;
 				try {
-					if (obj != null && p.getValueClass().isAssignableFrom(obj.getClass()))
+					if (obj != null && p.getValueClass().isAssignableFrom(obj.getClass()) && p.isForPrompting()) {
 						map.put(p.getName(), obj);
+					}
 				} catch (Exception e) {
 				}
 			}
