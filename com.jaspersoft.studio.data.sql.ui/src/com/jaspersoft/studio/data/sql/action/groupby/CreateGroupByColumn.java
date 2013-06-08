@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
@@ -19,8 +18,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class CreateGroupByColumn extends AAction {
 
-	public CreateGroupByColumn(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
-		super("&Add Group By Column", xtextDocument, designer);
+	public CreateGroupByColumn(SQLQueryDesigner designer) {
+		super("&Add Group By Column", designer);
 	}
 
 	@Override

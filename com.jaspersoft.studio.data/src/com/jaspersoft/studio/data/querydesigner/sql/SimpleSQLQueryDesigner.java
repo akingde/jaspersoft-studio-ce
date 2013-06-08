@@ -27,16 +27,16 @@ import com.jaspersoft.studio.data.querydesigner.sql.text.SQLLineStyler;
  * Simple SQL query designer that simply provides syntax coloring support.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
 public class SimpleSQLQueryDesigner extends QueryDesigner {
 
 	// Line style for SQL code
 	private SQLLineStyler sqlLineStyler;
-	
+
 	public SimpleSQLQueryDesigner() {
 		super();
-		sqlLineStyler=getSQLBasedLineStyler();
+		sqlLineStyler = getSQLBasedLineStyler();
 	}
 
 	@Override
@@ -51,12 +51,12 @@ public class SimpleSQLQueryDesigner extends QueryDesigner {
 		});
 		return control;
 	}
-	
+
 	/**
 	 * @return the SQL line styler
 	 */
-	protected SQLLineStyler getSQLBasedLineStyler(){
+	protected SQLLineStyler getSQLBasedLineStyler() {
 		return new SQLLineStyler();
 	}
-	
+
 }

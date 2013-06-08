@@ -398,6 +398,8 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 	 * @see com.jaspersoft.studio.model.INode#setValue(java.lang.Object)
 	 */
 	public void setValue(Object value) {
+		if (this.value == value)
+			return;
 		unregister();
 		if (this.value != null && this.value instanceof JRChangeEventsSupport) {
 			((JRChangeEventsSupport) this.value).getEventSupport().removePropertyChangeListener(this);

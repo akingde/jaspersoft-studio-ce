@@ -2,7 +2,6 @@ package com.jaspersoft.studio.data.sql.action.select;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
@@ -12,8 +11,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class EditColumn extends AAction {
 
-	public EditColumn(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
-		super("&Edit Column", xtextDocument, designer);
+	public EditColumn(SQLQueryDesigner designer) {
+		super("&Edit Column", designer);
 	}
 
 	@Override

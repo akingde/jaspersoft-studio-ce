@@ -2,7 +2,6 @@ package com.jaspersoft.studio.data.sql.action.table;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
@@ -13,8 +12,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class EditTableJoin extends AAction {
 
-	public EditTableJoin(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
-		super("&Edit Table Join", xtextDocument, designer);
+	public EditTableJoin(SQLQueryDesigner designer) {
+		super("&Edit Table Join", designer);
 	}
 
 	@Override

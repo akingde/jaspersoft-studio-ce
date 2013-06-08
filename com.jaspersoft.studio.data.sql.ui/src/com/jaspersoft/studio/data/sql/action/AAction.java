@@ -8,18 +8,15 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 
 public abstract class AAction extends Action {
-	protected IXtextDocument xtextDocument;
 	protected Object[] selection;
 	protected SQLQueryDesigner designer;
 
-	public AAction(String text, IXtextDocument xtextDocument, SQLQueryDesigner designer) {
+	public AAction(String text, SQLQueryDesigner designer) {
 		super(text);
-		this.xtextDocument = xtextDocument;
 		this.designer = designer;
 	}
 

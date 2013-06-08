@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.expression.ChangeOperator;
@@ -23,45 +22,45 @@ import com.jaspersoft.studio.data.sql.action.table.DeleteTableJoin;
 import com.jaspersoft.studio.data.sql.action.table.EditTable;
 import com.jaspersoft.studio.data.sql.action.table.EditTableJoin;
 import com.jaspersoft.studio.data.sql.action.table.JoinTable;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.MOrderByColumn;
+import com.jaspersoft.studio.data.sql.model.query.MSelectColumn;
 
 public class ActionFactory {
 	private List<AAction> actions = new ArrayList<AAction>();
 	private MenuManager menuMgr;
 
-	public ActionFactory(MenuManager menuMgr, IXtextDocument xtextDocument, TreeViewer treeViewer, SQLQueryDesigner designer) {
+	public ActionFactory(MenuManager menuMgr, TreeViewer treeViewer, SQLQueryDesigner designer) {
 		this.menuMgr = menuMgr;
-		actions.add(new SelectDistinct(xtextDocument, designer));
+		actions.add(new SelectDistinct(designer));
 		actions.add(null);
-		actions.add(new CreateColumn(xtextDocument, designer));
-		actions.add(new EditColumn(xtextDocument, designer));
-		actions.add(new DeleteAction<MColumn>(xtextDocument, designer, "Column", MColumn.class));
+		actions.add(new CreateColumn(designer));
+		actions.add(new EditColumn(designer));
+		actions.add(new DeleteAction<MSelectColumn>(designer, "Column", MSelectColumn.class));
 		actions.add(null);
-		actions.add(new JoinTable(xtextDocument, designer));
-		actions.add(new EditTableJoin(xtextDocument, designer));
-		actions.add(new DeleteTableJoin(xtextDocument, designer));
+		actions.add(new JoinTable(designer));
+		actions.add(new EditTableJoin(designer));
+		actions.add(new DeleteTableJoin(designer));
 		actions.add(null);
-		actions.add(new CreateTable(xtextDocument, designer));
-		actions.add(new EditTable(xtextDocument, designer));
-		actions.add(new DeleteAction<MFromTable>(xtextDocument, designer, "Table", MFromTable.class));
+		actions.add(new CreateTable(designer));
+		actions.add(new EditTable(designer));
+		actions.add(new DeleteAction<MFromTable>(designer, "Table", MFromTable.class));
 		actions.add(null);
-		actions.add(new CreateGroupByColumn(xtextDocument, designer));
-		actions.add(new DeleteAction<MGroupByColumn>(xtextDocument, designer, "Column", MGroupByColumn.class));
+		actions.add(new CreateGroupByColumn(designer));
+		actions.add(new DeleteAction<MGroupByColumn>(designer, "Column", MGroupByColumn.class));
 		actions.add(null);
-		actions.add(new CreateOrderByColumn(xtextDocument, designer));
-		actions.add(new OrderByDesc(xtextDocument, designer));
-		actions.add(new DeleteAction<MOrderByColumn>(xtextDocument, designer, "Column", MOrderByColumn.class));
+		actions.add(new CreateOrderByColumn(designer));
+		actions.add(new OrderByDesc(designer));
+		actions.add(new DeleteAction<MOrderByColumn>(designer, "Column", MOrderByColumn.class));
 
 		actions.add(null);
-		actions.add(new CreateExpressionGroup(xtextDocument, designer));
-		actions.add(new CreateExpression(xtextDocument, designer));
-		actions.add(new ChangeOperator(xtextDocument, designer));
-		actions.add(new EditExpression(xtextDocument, designer));
-		actions.add(new DeleteAction<MExpression>(xtextDocument, designer, "Expression", MExpression.class));
+		actions.add(new CreateExpressionGroup(designer));
+		actions.add(new CreateExpression(designer));
+		actions.add(new ChangeOperator(designer));
+		actions.add(new EditExpression(designer));
+		actions.add(new DeleteAction<MExpression>(designer, "Expression", MExpression.class));
 	}
 
 	@SuppressWarnings("unchecked")

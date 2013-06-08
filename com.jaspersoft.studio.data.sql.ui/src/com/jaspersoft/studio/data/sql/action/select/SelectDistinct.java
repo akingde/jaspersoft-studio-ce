@@ -1,7 +1,5 @@
 package com.jaspersoft.studio.data.sql.action.select;
 
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
-
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
@@ -10,8 +8,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class SelectDistinct extends AAction {
 
-	public SelectDistinct(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
-		super("Change to" + AMKeyword.SELECT_DISTINCT_KEYWORD, xtextDocument, designer);
+	public SelectDistinct(SQLQueryDesigner designer) {
+		super("Change to" + AMKeyword.SELECT_DISTINCT_KEYWORD, designer);
 	}
 
 	@Override

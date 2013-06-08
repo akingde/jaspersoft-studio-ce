@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
@@ -15,8 +14,8 @@ import com.jaspersoft.studio.data.sql.model.query.MFromTable;
 
 public class CreateTable extends AAction {
 
-	public CreateTable(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
-		super("&Add Table", xtextDocument, designer);
+	public CreateTable(SQLQueryDesigner designer) {
+		super("&Add Table", designer);
 	}
 
 	@Override

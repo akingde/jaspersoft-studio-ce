@@ -1,7 +1,5 @@
 package com.jaspersoft.studio.data.sql.action.expression;
 
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
-
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
@@ -13,8 +11,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class CreateExpressionGroup extends AAction {
 
-	public CreateExpressionGroup(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
-		super("&Add Expression Group", xtextDocument, designer);
+	public CreateExpressionGroup(SQLQueryDesigner designer) {
+		super("&Add Expression Group", designer);
 	}
 
 	@Override

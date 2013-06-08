@@ -5,8 +5,6 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
-
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.model.ANode;
 
@@ -14,8 +12,8 @@ public class DeleteAction<T extends ANode> extends AAction {
 	protected String name;
 	protected Class<T> type;
 
-	public DeleteAction(IXtextDocument xtextDocument, SQLQueryDesigner designer, String name, Class<T> type) {
-		super("&Delete " + name, xtextDocument, designer);
+	public DeleteAction(SQLQueryDesigner designer, String name, Class<T> type) {
+		super("&Delete " + name, designer);
 		this.name = name;
 		this.type = type;
 	}

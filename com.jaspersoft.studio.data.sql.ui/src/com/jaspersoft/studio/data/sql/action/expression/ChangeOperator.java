@@ -1,7 +1,5 @@
 package com.jaspersoft.studio.data.sql.action.expression;
 
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
-
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
@@ -10,8 +8,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class ChangeOperator extends AAction {
 
-	public ChangeOperator(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
-		super("Change to" + AMKeyword.OR_OPERATOR, xtextDocument, designer);
+	public ChangeOperator(SQLQueryDesigner designer) {
+		super("Change to" + AMKeyword.OR_OPERATOR, designer);
 	}
 
 	@Override

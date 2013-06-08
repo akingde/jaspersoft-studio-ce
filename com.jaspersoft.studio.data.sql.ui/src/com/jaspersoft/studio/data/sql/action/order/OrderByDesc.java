@@ -1,7 +1,5 @@
 package com.jaspersoft.studio.data.sql.action.order;
 
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
-
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.model.query.MOrderByColumn;
@@ -9,8 +7,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class OrderByDesc extends AAction {
 
-	public OrderByDesc(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
-		super("Set Ascending", xtextDocument, designer);
+	public OrderByDesc(SQLQueryDesigner designer) {
+		super("Set Ascending", designer);
 	}
 
 	@Override

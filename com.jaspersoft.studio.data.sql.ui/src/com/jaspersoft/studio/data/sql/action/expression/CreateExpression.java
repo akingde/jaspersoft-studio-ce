@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
@@ -22,8 +21,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class CreateExpression extends AAction {
 
-	public CreateExpression(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
-		super("&Add Expression", xtextDocument, designer);
+	public CreateExpression(SQLQueryDesigner designer) {
+		super("&Add Expression", designer);
 	}
 
 	@Override

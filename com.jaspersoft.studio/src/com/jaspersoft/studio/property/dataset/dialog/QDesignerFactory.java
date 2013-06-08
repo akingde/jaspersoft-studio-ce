@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
@@ -34,23 +29,13 @@ public class QDesignerFactory {
 	private Map<String, IQueryDesigner> languageMap = new HashMap<String, IQueryDesigner>();
 	private Map<Class<? extends IQueryDesigner>, IQueryDesigner> classmap = new HashMap<Class<? extends IQueryDesigner>, IQueryDesigner>();
 	private DataQueryAdapters dqa;
+	IConfigurationElement[] config;
 
 	public QDesignerFactory(Composite parent, Composite toolbar, DataQueryAdapters dqa) {
 		this.parent = parent;
 		this.toolbar = toolbar;
 		this.dqa = dqa;
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"com.jaspersoft.studio", "queryDesigner"); //$NON-NLS-1$ //$NON-NLS-2$
-		for (IConfigurationElement e : config) {
-			try {
-				String lang = e.getAttribute("language");//$NON-NLS-1$
-				IQueryDesigner qd = (IQueryDesigner) e.createExecutableExtension("QueryDesignerClass"); //$NON-NLS-1$
-				qd.setParentContainer(dqa);
-				addDesigner(lang, qd);
-			} catch (CoreException ex) {
-				UIUtils.showError(ex);
-			}
-		}
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio", "queryDesigner"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void dispose() {
@@ -61,6 +46,18 @@ public class QDesignerFactory {
 	public IQueryDesigner getDesigner(String lang) {
 		IQueryDesigner qd = languageMap.get(lang.toLowerCase());
 		if (qd == null) {
+			for (IConfigurationElement e : config) {
+				try {
+					if (lang.equalsIgnoreCase(e.getAttribute("language"))) {//$NON-NLS-1$
+						qd = (IQueryDesigner) e.createExecutableExtension("QueryDesignerClass"); //$NON-NLS-1$
+						qd.setParentContainer(dqa);
+						addDesigner(lang, qd);
+						return qd;
+					}
+				} catch (CoreException ex) {
+					UIUtils.showError(ex);
+				}
+			}
 			qd = addDesigner(lang, getDefaultDesigner());
 		}
 		return qd;

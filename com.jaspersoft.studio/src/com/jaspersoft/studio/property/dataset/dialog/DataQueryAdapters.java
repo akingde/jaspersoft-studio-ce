@@ -197,8 +197,8 @@ public abstract class DataQueryAdapters {
 		langComposite.setBackground(background);
 
 		qdfactory = new QDesignerFactory(langComposite, tbCompo, this);
-		for (String lang : languages)
-			qdfactory.getDesigner(lang);
+		// for (String lang : languages)
+		// qdfactory.getDesigner(lang);
 
 		bptab.setControl(sectionClient);
 	}

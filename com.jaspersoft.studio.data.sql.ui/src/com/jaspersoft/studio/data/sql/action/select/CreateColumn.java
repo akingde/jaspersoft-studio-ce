@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
@@ -24,8 +23,8 @@ public class CreateColumn extends AAction {
 
 	private CreateTable ct;
 
-	public CreateColumn(IXtextDocument xtextDocument, SQLQueryDesigner designer) {
-		super("&Add Column", xtextDocument, designer);
+	public CreateColumn(SQLQueryDesigner designer) {
+		super("&Add Column", designer);
 	}
 
 	@Override
@@ -59,7 +58,7 @@ public class CreateColumn extends AAction {
 			MSqlTable mstable = (MSqlTable) msc.getValue().getParent();
 			if (!Util.getTables(msc).contains(mstable)) {
 				if (ct == null)
-					ct = new CreateTable(xtextDocument, designer);
+					ct = new CreateTable(designer);
 				MRoot r = (MRoot) msc.getRoot();
 				for (INode n : r.getChildren()) {
 					if (n instanceof MFrom) {
