@@ -74,7 +74,6 @@ import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.dnd.NodeTreeDropAdapter;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
@@ -100,16 +99,7 @@ public class SQLQueryOutline {
 			@Override
 			public void refresh(boolean updateLabels) {
 				super.refresh(updateLabels);
-				if (root != null) {
-					boolean update = false;
-					for (INode c : root.getChildren())
-						if (!c.getChildren().isEmpty()) {
-							update = true;
-							break;
-						}
-					if (update)
-						designer.refreshQuery();
-				}
+				designer.refreshQuery();
 			}
 		};
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());

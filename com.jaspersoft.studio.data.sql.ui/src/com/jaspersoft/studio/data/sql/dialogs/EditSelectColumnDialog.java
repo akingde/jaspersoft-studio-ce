@@ -3,7 +3,6 @@ package com.jaspersoft.studio.data.sql.dialogs;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -18,13 +17,14 @@ import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MSelectColumn;
 import com.jaspersoft.studio.utils.UIUtil;
 
-public class EditSelectColumnDialog extends Dialog {
+public class EditSelectColumnDialog extends ATitledDialog {
 	private MSelectColumn value;
 	private String alias;
 	private String aliasKeyword;
 
 	public EditSelectColumnDialog(Shell parentShell) {
 		super(parentShell);
+		setTitle("Column Dialog");
 	}
 
 	public void setValue(MSelectColumn value) {
@@ -47,22 +47,6 @@ public class EditSelectColumnDialog extends Dialog {
 
 	public String getAlias() {
 		return alias;
-	}
-
-	@Override
-	protected boolean isResizable() {
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
-	 * .Shell)
-	 */
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("Column Dialog");
 	}
 
 	@Override

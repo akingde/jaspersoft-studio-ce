@@ -6,7 +6,6 @@ import java.util.List;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -22,13 +21,14 @@ import com.jaspersoft.studio.data.sql.model.query.MFromTableJoin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
-public class JoinFromTableDialog extends Dialog {
+public class JoinFromTableDialog extends ATitledDialog {
 	private MFromTable srcTable;
 	private String fromTable;
 	private String join = AMKeyword.INNER_JOIN;
 
 	public JoinFromTableDialog(Shell parentShell) {
 		super(parentShell);
+		setTitle("Join Table Dialog");
 	}
 
 	public void setValue(MFromTable value) {
@@ -75,22 +75,6 @@ public class JoinFromTableDialog extends Dialog {
 
 	public void setJoin(String join) {
 		this.join = join;
-	}
-
-	@Override
-	protected boolean isResizable() {
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
-	 * .Shell)
-	 */
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("Join Table Dialog");
 	}
 
 	@Override

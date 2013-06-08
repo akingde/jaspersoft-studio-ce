@@ -56,6 +56,7 @@ import com.jaspersoft.studio.data.sql.ui.SQLQueryOutline;
 import com.jaspersoft.studio.data.ui.contentassist.SqlProposalProvider;
 import com.jaspersoft.studio.data.ui.internal.SqlActivator;
 import com.jaspersoft.studio.dnd.NodeTransfer;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
@@ -113,7 +114,16 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	public void refreshQuery() {
 		MRoot r = (MRoot) outline.getTreeViewer().getInput();
-		control.setText(QueryWriter.writeQuery(r));
+		if (r != null) {
+			boolean update = false;
+			for (INode c : r.getChildren())
+				if (!c.getChildren().isEmpty()) {
+					update = true;
+					break;
+				}
+			if (update)
+				control.setText(QueryWriter.writeQuery(r));
+		}
 	}
 
 	protected void createOutline(CTabFolder tabFolder) {

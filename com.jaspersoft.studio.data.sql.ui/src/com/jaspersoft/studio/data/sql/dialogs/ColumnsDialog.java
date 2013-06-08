@@ -3,7 +3,6 @@ package com.jaspersoft.studio.data.sql.dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -23,29 +22,14 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 
-public class ColumnsDialog extends Dialog {
+public class ColumnsDialog extends ATitledDialog {
 	private TreeViewer treeViewer;
 	private MRoot root;
 	private List<MColumn> cols = new ArrayList<MColumn>();
 
 	public ColumnsDialog(Shell parentShell) {
 		super(parentShell);
-	}
-
-	@Override
-	protected boolean isResizable() {
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
-	 * .Shell)
-	 */
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("Columns Dialog");
+		setTitle("Columns Dialog");
 	}
 
 	public void setRoot(MRoot root) {

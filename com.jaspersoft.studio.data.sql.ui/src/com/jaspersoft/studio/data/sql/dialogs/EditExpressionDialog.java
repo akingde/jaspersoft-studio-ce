@@ -30,11 +30,13 @@ import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.data.sql.widgets.Factory;
 
-public class EditExpressionDialog extends Dialog {
+public class EditExpressionDialog extends ATitledDialog {
 	private MExpression value;
 
 	public EditExpressionDialog(Shell parentShell) {
 		super(parentShell);
+		setTitle("Expression Dialog");
+		setDescription("You can change the operand type using context menu. Right click on the operand.");
 	}
 
 	public void setValue(MExpression value) {
@@ -67,22 +69,6 @@ public class EditExpressionDialog extends Dialog {
 
 	public java.util.List<AOperand> getOperands() {
 		return operands;
-	}
-
-	@Override
-	protected boolean isResizable() {
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
-	 * .Shell)
-	 */
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("Expression Dialog");
 	}
 
 	@Override

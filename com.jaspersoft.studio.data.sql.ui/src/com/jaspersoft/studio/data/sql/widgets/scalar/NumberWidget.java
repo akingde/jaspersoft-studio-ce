@@ -31,7 +31,9 @@ public class NumberWidget extends AScalarWidget {
 		txt = new Text(this, SWT.BORDER);
 		txt.setText(getValue().toSQLString());
 		txt.setToolTipText(getValue().toSQLString());
-		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gd = new GridData();
+		gd.widthHint = 100;
+		txt.setLayoutData(gd);
 
 		DataBindingContext bindingContext = new DataBindingContext();
 

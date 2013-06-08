@@ -3,7 +3,6 @@ package com.jaspersoft.studio.data.sql.dialogs;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -16,13 +15,14 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MFromTable;
 
-public class EditFromTableDialog extends Dialog {
+public class EditFromTableDialog extends ATitledDialog {
 	private MFromTable value;
 	private String alias;
 	private String aliasKeyword;
 
 	public EditFromTableDialog(Shell parentShell) {
 		super(parentShell);
+		setTitle("Table Dialog");
 	}
 
 	public void setValue(MFromTable value) {
@@ -45,22 +45,6 @@ public class EditFromTableDialog extends Dialog {
 
 	public String getAlias() {
 		return alias;
-	}
-
-	@Override
-	protected boolean isResizable() {
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
-	 * .Shell)
-	 */
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("Table Dialog");
 	}
 
 	@Override
