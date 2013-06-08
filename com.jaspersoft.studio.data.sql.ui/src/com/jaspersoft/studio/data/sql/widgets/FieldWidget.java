@@ -29,7 +29,7 @@ public class FieldWidget extends AOperandWidget<FieldOperand> {
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.horizontalSpacing = 0;
-		layout.verticalSpacing = 0;
+		layout.verticalSpacing = 3;
 		setLayout(layout);
 
 		final FieldOperand v = getValue();

@@ -9,6 +9,7 @@ public class MOrderBy extends AMKeyword {
 
 	public MOrderBy(ANode parent) {
 		super(parent, "ORDER BY", null);
+		noSqlIfEmpty = true;
 	}
 
 }

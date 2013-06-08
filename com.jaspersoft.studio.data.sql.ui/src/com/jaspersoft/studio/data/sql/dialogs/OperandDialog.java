@@ -41,14 +41,18 @@ public class OperandDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite cmp = (Composite) super.createDialogArea(parent);
-		cmp.setLayout(new GridLayout(5, false));
+		cmp.setLayout(new GridLayout());
 
-		Control w = Factory.createWidget(cmp, operands, index, mexpression);
+		Control w = Factory.createWidget(cmp, operands, index, mexpression, true);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = 200;
 		w.setLayoutData(gd);
 
 		return cmp;
+	}
+
+	public AOperand getOperand() {
+		return operands.get(index);
 	}
 
 	public void setValues(MExpression mexpression, List<AOperand> operands, int index) {

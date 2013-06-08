@@ -70,4 +70,20 @@ public class Util {
 		};
 		return (MRoot) mv.getObject();
 	}
+
+	public static ANode getOldNode(ANode target, final ANode src) {
+		ModelVisitor<ANode> mv = new ModelVisitor<ANode>(target.getRoot()) {
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof MExpression && src instanceof MExpression)
+					System.out.println(((MExpression) n).getId() + " --- " + ((MExpression) src).getId());
+				if (src != n && src.equals(n)) {
+					setObject((ANode) n);
+					return false;
+				}
+				return true;
+			}
+		};
+		return mv.getObject();
+	}
 }

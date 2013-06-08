@@ -1,5 +1,7 @@
 package com.jaspersoft.studio.data.sql.model;
 
+import java.util.UUID;
+
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -12,12 +14,17 @@ public class MDBObjects extends ANode {
 	transient private ImageDescriptor icon;
 	private String image;
 	protected String tooltip;
+	private String id;
 
 	public MDBObjects(ANode parent, String value, String image) {
 		super(parent, -1);
 		setValue(value);
 		this.image = image;
+		id = UUID.randomUUID().toString();
+	}
 
+	public String getId() {
+		return id;
 	}
 
 	@Override
@@ -47,10 +54,10 @@ public class MDBObjects extends ANode {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof MDBObjects && ((MDBObjects) obj).getValue().equals(getValue());
+		return obj instanceof MDBObjects && ((MDBObjects) obj).getId().equals(getId());
 	}
 
 	public int hashCode() {
-		return getValue().hashCode();
+		return getId().hashCode();
 	};
 }

@@ -1,5 +1,7 @@
 package com.jaspersoft.studio.data.sql.model;
 
+import java.util.UUID;
+
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -10,7 +12,9 @@ import com.jaspersoft.studio.model.ANode;
 public abstract class MQueryObjects extends ANode implements IQueryString {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	transient private ImageDescriptor icon;
-	transient protected String tooltip;
+	private String image;
+	protected String tooltip;
+	private String id;
 
 	public MQueryObjects(ANode parent, AMSQLObject value, String image) {
 		this(parent, value, image, -1);
@@ -19,8 +23,14 @@ public abstract class MQueryObjects extends ANode implements IQueryString {
 	public MQueryObjects(ANode parent, AMSQLObject value, String image, int index) {
 		super(parent, index);
 		setValue(value);
+		this.image = image;
+		id = UUID.randomUUID().toString();
 		if (image != null)
 			icon = Activator.getDefault().getImageDescriptor(image);
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	@Override
@@ -38,6 +48,8 @@ public abstract class MQueryObjects extends ANode implements IQueryString {
 
 	@Override
 	public ImageDescriptor getImagePath() {
+		if (icon == null && image != null)
+			icon = Activator.getDefault().getImageDescriptor(image);
 		return icon;
 	}
 
@@ -48,11 +60,11 @@ public abstract class MQueryObjects extends ANode implements IQueryString {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof MQueryObjects && ((MQueryObjects) obj).getDisplayText().equals(getDisplayText());
+		return obj instanceof MQueryObjects && ((MQueryObjects) obj).getId().equals(getId());
 	}
 
 	public int hashCode() {
-		return getDisplayText().hashCode();
+		return getId().hashCode();
 	};
 
 	@Override

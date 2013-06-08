@@ -3,6 +3,7 @@ package com.jaspersoft.studio.data.sql.model.query;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.sf.jasperreports.engine.JRConstants;
 
@@ -13,14 +14,30 @@ import com.jaspersoft.studio.data.sql.model.IQueryString;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
 public class MExpression extends ANode implements IQueryString {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	private String id;
 
 	public MExpression(ANode parent, Object value, int newIndex) {
 		super(parent, value, newIndex);
+		id = UUID.randomUUID().toString();
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof MExpression && ((MExpression) obj).getId().equals(getId());
+	}
+
+	public int hashCode() {
+		return getId().hashCode();
+	};
 
 	@Override
 	public ImageDescriptor getImagePath() {
@@ -39,7 +56,7 @@ public class MExpression extends ANode implements IQueryString {
 			dt += prevCond + " ";
 		String[] ops = null;
 		if (operator.getNrOperands() > 3) {
-			ops = new String[2];
+			ops = new String[] { "", "" };
 			String sep = "";
 			for (int i = 0; i < operands.size(); i++) {
 				if (i == 0)
@@ -54,7 +71,7 @@ public class MExpression extends ANode implements IQueryString {
 			for (int i = 0; i < ops.length; i++)
 				ops[i] = operands.get(i).toSQLString();
 		}
-		return dt + MessageFormat.format(operator.getFormat(operator), (Object[]) ops);
+		return dt + MessageFormat.format(operator.getFormat(operator), (Object[]) ops) + isLastInGroup(getParent(), this);
 	}
 
 	@Override
@@ -67,10 +84,19 @@ public class MExpression extends ANode implements IQueryString {
 			String sqlname = " " + operator.getSqlname() + " ";
 			ss.setStyle(dt.indexOf(sqlname), sqlname.length(), FontUtils.KEYWORDS_STYLER);
 		}
-		if (operator.getNrOperands() == 3 && operator == Operator.BETWEEN) {
+		if (operator.getNrOperands() == 3 && operator == Operator.BETWEEN)
 			ss.setStyle(dt.indexOf(" AND "), " AND ".length(), FontUtils.KEYWORDS_STYLER);
-		}
 		return ss;
+	}
+
+	private String isLastInGroup(ANode p, ANode child) {
+		if (p == null)
+			return "";
+		String str = "";
+		List<INode> ch = p.getChildren();
+		if (p instanceof MExpressionGroup && ch.indexOf(child) == ch.size() - 1)
+			str += ")" + isLastInGroup(p.getParent(), p);
+		return str;
 	}
 
 	private String prevCond = AMKeyword.AND_OPERATOR;

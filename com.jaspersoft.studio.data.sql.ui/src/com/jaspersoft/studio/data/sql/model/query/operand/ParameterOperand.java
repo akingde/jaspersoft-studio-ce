@@ -38,8 +38,8 @@ public class ParameterOperand extends AOperand {
 	@Override
 	public String toSQLString() {
 		if (jrParameter != null)
-			return "$P{" + jrParameter.getName() + "}";
-		return "$P{}";
+			return "'$P{" + jrParameter.getName() + "}'";
+		return "'$P{}'";
 	}
 
 }

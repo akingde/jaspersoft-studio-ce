@@ -10,6 +10,7 @@ import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.expression.ChangeOperator;
 import com.jaspersoft.studio.data.sql.action.expression.CreateExpression;
+import com.jaspersoft.studio.data.sql.action.expression.CreateExpressionGroup;
 import com.jaspersoft.studio.data.sql.action.expression.EditExpression;
 import com.jaspersoft.studio.data.sql.action.groupby.CreateGroupByColumn;
 import com.jaspersoft.studio.data.sql.action.order.CreateOrderByColumn;
@@ -56,6 +57,7 @@ public class ActionFactory {
 		actions.add(new DeleteAction<MOrderByColumn>(xtextDocument, designer, "Column", MOrderByColumn.class));
 
 		actions.add(null);
+		actions.add(new CreateExpressionGroup(xtextDocument, designer));
 		actions.add(new CreateExpression(xtextDocument, designer));
 		actions.add(new ChangeOperator(xtextDocument, designer));
 		actions.add(new EditExpression(xtextDocument, designer));

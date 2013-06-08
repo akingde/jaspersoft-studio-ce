@@ -44,6 +44,7 @@ import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
 import com.jaspersoft.studio.data.sql.action.expression.ChangeOperator;
@@ -60,7 +61,10 @@ import com.jaspersoft.studio.data.sql.action.table.EditTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
+import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.MExpressionGroup;
 import com.jaspersoft.studio.data.sql.model.query.MFrom;
+import com.jaspersoft.studio.data.sql.model.query.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.MOrderBy;
@@ -70,6 +74,7 @@ import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.dnd.NodeTreeDropAdapter;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
@@ -90,7 +95,23 @@ public class SQLQueryOutline {
 	}
 
 	public Control createOutline(Composite parent) {
-		treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE);
+		treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE) {
+
+			@Override
+			public void refresh(boolean updateLabels) {
+				super.refresh(updateLabels);
+				if (root != null) {
+					boolean update = false;
+					for (INode c : root.getChildren())
+						if (!c.getChildren().isEmpty()) {
+							update = true;
+							break;
+						}
+					if (update)
+						designer.refreshQuery();
+				}
+			}
+		};
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		treeViewer.setContentProvider(contentProvider);
 		treeViewer.setUseHashlookup(true);
@@ -141,6 +162,9 @@ public class SQLQueryOutline {
 
 			private boolean doDrop(List<ANode> node) {
 				Object target = getCurrentTarget();
+				if (target instanceof ANode && ((ANode) target).getParent() == null)
+					return false;
+
 				Set<MSqlTable> tablesset = new LinkedHashSet<MSqlTable>();
 				Set<MColumn> colsset = new LinkedHashSet<MColumn>();
 				Set<ANode> others = new LinkedHashSet<ANode>();
@@ -152,11 +176,67 @@ public class SQLQueryOutline {
 					else
 						others.add(n);
 				}
+				doDropTable(target, tablesset);
+				doDropColumn(target, colsset);
+				if (!others.isEmpty()) {
+					for (ANode n : others) {
+						ANode oldNode = Util.getOldNode((ANode) target, n);
+						if (target instanceof MExpressionGroup || target instanceof MWhere || target instanceof MHaving || target instanceof MFromTableJoin) {
+							if (n instanceof MExpression || n instanceof MExpressionGroup) {
+								oldNode.setParent(null, -1);
+								oldNode.setParent((ANode) target, -1);
+								treeViewer.refresh(true);
+								treeViewer.reveal(oldNode);
+								continue;
+							}
+						} else if (target instanceof MExpression) {
+							if (n instanceof MExpression || n instanceof MExpressionGroup) {
+								oldNode.setParent(null, -1);
+								MExpression mexpr = (MExpression) target;
+								ANode p = mexpr.getParent();
+								oldNode.setParent(p, p.getChildren().indexOf(mexpr));
+
+								treeViewer.refresh(true);
+								treeViewer.reveal(oldNode);
+								continue;
+							}
+						} else
+							reorder(target, n);
+					}
+				}
+				return false;
+			}
+
+			private void reorder(Object target, ANode n) {
+				ANode parent = null;
+				if (target instanceof AMKeyword)
+					parent = (ANode) target;
+				else if (target.getClass().isAssignableFrom(n.getClass()))
+					parent = ((ANode) target).getParent();
+				if (n.getParent().equals(parent)) {
+					int ind = parent.getChildren().indexOf(n);
+					if (ind >= 0 && ind < parent.getChildren().size()) {
+						n = (ANode) parent.getChildren().get(ind);
+						int pos = 0;
+						if (target != parent)
+							pos = parent.getChildren().indexOf(target);
+						parent.removeChild(n);
+						parent.addChild(n, pos);
+						treeViewer.refresh(true);
+						treeViewer.reveal(n);
+					}
+				}
+			}
+
+			protected void doDropTable(Object target, Set<MSqlTable> tablesset) {
 				if (!tablesset.isEmpty()) {
 					CreateTable ct = afactory.getAction(CreateTable.class);
 					if (ct.calculateEnabled(new Object[] { target }))
 						ct.run(tablesset);
 				}
+			}
+
+			protected void doDropColumn(Object target, Set<MColumn> colsset) {
 				if (!colsset.isEmpty()) {
 					CreateColumn ct = afactory.getAction(CreateColumn.class);
 					if (ct.calculateEnabled(new Object[] { target }))
@@ -171,26 +251,6 @@ public class SQLQueryOutline {
 					if (ce.calculateEnabled(new Object[] { target }))
 						ce.run(colsset);
 				}
-				if (!others.isEmpty()) {
-					for (ANode n : others) {
-						ANode parent = null;
-						if (target instanceof AMKeyword)
-							parent = (ANode) target;
-						else if (target.getClass().isAssignableFrom(n.getClass()))
-							parent = ((ANode) target).getParent();
-						if (n.getParent().equals(parent)) {
-							n = (ANode) parent.getChildren().get(parent.getChildren().indexOf(n));
-							int pos = 0;
-							if (target != parent)
-								pos = parent.getChildren().indexOf(target);
-							parent.removeChild(n);
-							parent.addChild(n, pos);
-							treeViewer.refresh(true);
-							treeViewer.reveal(n);
-						}
-					}
-				}
-				return false;
 			}
 
 		};
@@ -212,6 +272,7 @@ public class SQLQueryOutline {
 					sd.run();
 			}
 		});
+
 		return treeViewer.getControl();
 	}
 
@@ -260,7 +321,10 @@ public class SQLQueryOutline {
 			public void run() {
 				try {
 					if (!treeViewer.getTree().isDisposed()) {
-						root = new MRoot(null, designer.getjDataset());
+						if (root != null)
+							root.removeChildren();
+						else
+							root = new MRoot(null, designer.getjDataset());
 						new MSelect(root);
 						new MFrom(root);
 						new MWhere(root);
@@ -272,6 +336,7 @@ public class SQLQueryOutline {
 						treeViewer.expandToLevel(1);
 						treeViewer.setExpandedElements(Iterables.toArray(nodesToBeExpanded, IOutlineNode.class));
 						treeViewer.setSelection(new StructuredSelection(Iterables.toArray(selectedNodes, IOutlineNode.class)));
+
 					}
 				} catch (Throwable t) {
 					UIUtils.showError(t);
@@ -315,7 +380,8 @@ public class SQLQueryOutline {
 	private ActionFactory afactory;
 
 	public void scheduleRefresh() {
-		root.setValue(designer.getjDataset());
+		if (root != null)
+			root.setValue(designer.getjDataset());
 		// refreshJob.cancel();
 		// refreshJob.schedule();
 	}

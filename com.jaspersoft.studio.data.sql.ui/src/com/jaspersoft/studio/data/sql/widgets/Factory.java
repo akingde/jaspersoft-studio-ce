@@ -35,6 +35,10 @@ public class Factory {
 	public static final String OPERANDS_INDEX = "OPERANDS_INDEX";
 
 	public static Control createWidget(Composite parent, List<AOperand> operands, int index, MExpression mexpr) {
+		return createWidget(parent, operands, index, mexpr, false);
+	}
+
+	public static Control createWidget(Composite parent, List<AOperand> operands, int index, MExpression mexpr, boolean exludeField) {
 		Composite cmp = new Composite(parent, SWT.NONE);
 		cmp.setLayout(new FillLayout());
 
@@ -45,6 +49,7 @@ public class Factory {
 			op = new ScalarOperand<String>(mexpr, "Venice");
 
 		AOperandWidget<?> w = createWidget(cmp, op);
+		w.setExludeField(exludeField);
 		createWidgetMenu(w, operands, index, mexpr);
 		return cmp;
 	}
@@ -86,6 +91,8 @@ public class Factory {
 		for (String key : opMap.keySet()) {
 			MenuItem mi1 = null;
 			AOperand aOperand = opMap.get(key);
+			if (aOperand instanceof FieldOperand && w.isExludeField())
+				continue;
 			if (aOperand instanceof ScalarOperand) {
 				if (newMenu == null) {
 					MenuItem cmi = new MenuItem(pMenu, SWT.CASCADE);
@@ -142,7 +149,7 @@ public class Factory {
 			opMap = new LinkedHashMap<String, AOperand>();
 			opMap.put("Parameter", getOperand(w, new ParameterOperand(mexpr)));
 			opMap.put("Database Field", getOperand(w, new FieldOperand(null, mexpr)));
-			opMap.put("String", getOperand(w, new ScalarOperand<String>(mexpr, "Venice")));
+			opMap.put("String", getOperand(w, getDefaultOperand(mexpr)));
 			opMap.put("Number", getOperand(w, new ScalarOperand<BigDecimal>(mexpr, BigDecimal.ZERO)));
 			opMap.put("Date", getOperand(w, new ScalarOperand<Date>(mexpr, new Date())));
 			opMap.put("Time", getOperand(w, new ScalarOperand<Time>(mexpr, new Time(new Date().getTime()))));
@@ -163,5 +170,9 @@ public class Factory {
 				return w.getValue();
 		}
 		return operand;
+	}
+
+	public static final AOperand getDefaultOperand(MExpression mexpr) {
+		return new ScalarOperand<String>(mexpr, "Write your text here");
 	}
 }

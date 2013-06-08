@@ -9,6 +9,7 @@ public class MHaving extends AMKeyword {
 
 	public MHaving(ANode parent) {
 		super(parent, "HAVING", null);
+		noSqlIfEmpty = true;
 	}
 
 }

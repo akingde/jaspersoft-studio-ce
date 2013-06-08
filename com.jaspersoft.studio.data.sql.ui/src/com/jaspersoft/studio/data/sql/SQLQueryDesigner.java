@@ -102,15 +102,18 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		tabFolder.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (tabFolder.getSelectionIndex() == 0) {
-					MRoot r = (MRoot) outline.getTreeViewer().getInput();
-					tv.getDocument().set(QueryWriter.writeQuery(r));
-				}
+				if (tabFolder.getSelectionIndex() == 0)
+					refreshQuery();
 			}
 		});
 
 		sf.setWeights(new int[] { 250, 750 });
 		return sf;
+	}
+
+	public void refreshQuery() {
+		MRoot r = (MRoot) outline.getTreeViewer().getInput();
+		control.setText(QueryWriter.writeQuery(r));
 	}
 
 	protected void createOutline(CTabFolder tabFolder) {
@@ -121,7 +124,6 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		injector.injectMembers(outline);
 		outline.setSourceViewer(tv);
 		bptab.setControl(outline.createOutline(tabFolder));
-
 	}
 
 	private void createSource(CTabFolder tabFolder) {
@@ -167,7 +169,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	@Override
 	protected void updateQueryText(String txt) {
 		document.set(txt);
-		outline.scheduleRefresh();
+		if (outline != null)
+			outline.scheduleRefresh();
 	}
 
 	@Override

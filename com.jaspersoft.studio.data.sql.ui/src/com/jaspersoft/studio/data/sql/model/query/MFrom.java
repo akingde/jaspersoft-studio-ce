@@ -9,6 +9,7 @@ public class MFrom extends AMKeyword {
 
 	public MFrom(ANode parent) {
 		super(parent, "FROM", null);
+		noSqlIfEmpty = true;
 	}
 
 }

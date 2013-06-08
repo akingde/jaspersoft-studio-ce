@@ -9,6 +9,7 @@ public class MGroupBy extends AMKeyword {
 
 	public MGroupBy(ANode parent) {
 		super(parent, "GROUP BY", null);
+		noSqlIfEmpty = true;
 	}
 
 }

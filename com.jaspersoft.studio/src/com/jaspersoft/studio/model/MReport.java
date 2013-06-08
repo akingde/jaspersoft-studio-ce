@@ -84,8 +84,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 
 	@Override
 	public INode getRoot() {
-		root = this;
-		return root;
+		return this;
 	}
 
 	@Override

@@ -8,11 +8,20 @@ import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 
 public abstract class AOperandWidget<T extends AOperand> extends Composite {
 	private T value;
+	private boolean exludeField = false;
 
 	public AOperandWidget(Composite parent, int style, T operand) {
 		super(parent, style);
 		this.value = operand;
 		createWidget(parent);
+	}
+
+	public void setExludeField(boolean exludeField) {
+		this.exludeField = exludeField;
+	}
+
+	public boolean isExludeField() {
+		return exludeField;
 	}
 
 	protected abstract void createWidget(Composite parent);

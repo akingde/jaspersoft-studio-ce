@@ -9,6 +9,7 @@ public class MWhere extends AMKeyword {
 
 	public MWhere(ANode parent) {
 		super(parent, "WHERE", null);
+		noSqlIfEmpty = true;
 	}
 
 }

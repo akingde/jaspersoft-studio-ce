@@ -235,7 +235,7 @@ public class EditExpressionDialog extends Dialog {
 		op3.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				int index = inlist.getSelectionIndex() - 1;
+				int index = inlist.getSelectionIndex() + 1;
 				if (index >= 0 && index < operands.size()) {
 					operands.remove(index);
 					showInList(inlist);
@@ -264,33 +264,41 @@ public class EditExpressionDialog extends Dialog {
 	}
 
 	private void handleAddInList(List inlist) {
-		int index = Math.max(0, inlist.getSelectionIndex() - 1);
+		int index = Math.max(0, inlist.getSelectionIndex());
 		OperandDialog dialog = new OperandDialog(getShell());
-		dialog.setValues(value, new ArrayList<AOperand>(operands), index);
+		ArrayList<AOperand> ops = new ArrayList<AOperand>(operands);
+		if (index < ops.size())
+			ops.add(index, Factory.getDefaultOperand(value));
+		else
+			ops.add(Factory.getDefaultOperand(value));
+		dialog.setValues(value, ops, index);
 		if (dialog.open() == Dialog.OK) {
-			AOperand op = null;
-			operands.add(index, op);
+			AOperand op = dialog.getOperand();
+			if (index < ops.size())
+				operands.add(index + 1, op);
+			else
+				ops.add(op);
 			showInList(inlist);
 		}
 	}
 
 	private void handleEditInList(List inlist) {
-		int index = inlist.getSelectionIndex() - 1;
+		int index = inlist.getSelectionIndex() + 1;
 		if (index >= 0 && index < operands.size()) {
 			OperandDialog dialog = new OperandDialog(getShell());
 			dialog.setValues(value, new ArrayList<AOperand>(operands), index);
 			if (dialog.open() == Dialog.OK) {
-				inlist.update();
+				operands.set(index, dialog.getOperand());
+				showInList(inlist);
 			}
 		}
 	}
 
 	private void showInList(List inlist) {
 		String[] ilarray = new String[Math.max(operands.size() - 1, 0)];
-		if (operands.size() > 1)
-			for (int i = 1; i < operands.size(); i++) {
+		if (operands.size() > 0)
+			for (int i = 1; i < operands.size(); i++)
 				ilarray[i - 1] = operands.get(i).toSQLString();
-			}
 		inlist.setItems(ilarray);
 	}
 

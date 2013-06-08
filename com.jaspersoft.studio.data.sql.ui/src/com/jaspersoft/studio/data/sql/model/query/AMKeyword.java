@@ -36,8 +36,12 @@ public class AMKeyword extends MDBObjects implements IQueryString {
 		return new StyledString(getDisplayText(), FontUtils.KEYWORDS_STYLER);
 	}
 
+	protected boolean noSqlIfEmpty = false;
+
 	@Override
 	public String toSQLString() {
+		if (noSqlIfEmpty && getChildren().isEmpty())
+			return "";
 		return "\n" + getValue() + " ";
 	}
 
