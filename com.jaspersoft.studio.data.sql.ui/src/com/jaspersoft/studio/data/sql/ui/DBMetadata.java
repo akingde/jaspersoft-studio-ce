@@ -58,30 +58,38 @@ public class DBMetadata {
 
 		ColumnViewerToolTipSupport.enableFor(treeViewer);
 
-		treeViewer.addDragSupport(DND.DROP_COPY | DND.DROP_MOVE, new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() }, new NodeDragListener(treeViewer) {
-			@Override
-			public void dragStart(DragSourceEvent event) {
-				TreeSelection s = (TreeSelection) treeViewer.getSelection();
-				for (TreePath tp : s.getPaths()) {
-					if (!(tp.getLastSegment() instanceof IDragable)) {
-						event.doit = false;
-						return;
+		treeViewer.addDragSupport(
+				DND.DROP_COPY | DND.DROP_MOVE,
+				new Transfer[] { NodeTransfer.getInstance(),
+						PluginTransfer.getInstance() }, new NodeDragListener(
+						treeViewer) {
+					@Override
+					public void dragStart(DragSourceEvent event) {
+						TreeSelection s = (TreeSelection) treeViewer
+								.getSelection();
+						for (TreePath tp : s.getPaths()) {
+							if (!(tp.getLastSegment() instanceof IDragable)) {
+								event.doit = false;
+								return;
+							}
+						}
 					}
-				}
-			}
 
-			@Override
-			public void dragFinished(DragSourceEvent event) {
-				treeViewer.refresh(true);
-				if (!event.doit)
-					return;
-			}
-		});
+					@Override
+					public void dragFinished(DragSourceEvent event) {
+						treeViewer.refresh(true);
+						if (!event.doit)
+							return;
+					}
+				});
 		MenuManager menuMgr = new MenuManager();
 		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
 		menuMgr.add(new Action("&Refresh") {
 			@Override
 			public void run() {
+				// do not run if already running
+				// changing from mongodb to sql ... nothing happends
+				// if no data, write in the tree, like for xpath
 				updateUI(das);
 			}
 		});
@@ -113,41 +121,53 @@ public class DBMetadata {
 
 					try {
 						MDBObjects mtbl = new MTables(msch, "Tables");
-						ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", new String[] { "TABLE" });
+						ResultSet rs = meta.getTables(tableCatalog,
+								tableSchema, "%", new String[] { "TABLE" });
 						while (rs.next())
 							new MSqlTable(mtbl, rs.getString("TABLE_NAME"), rs);
 
 						for (INode n : mtbl.getChildren()) {
-							rs = meta.getColumns(tableCatalog, tableSchema, (String) n.getValue(), "%");
+							rs = meta.getColumns(tableCatalog, tableSchema,
+									(String) n.getValue(), "%");
 							while (rs.next())
-								new MColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
+								new MColumn((ANode) n,
+										rs.getString("COLUMN_NAME"), rs);
 						}
 					} catch (Exception e) {
 					}
 					try {
 						MDBObjects mview = new MTables(msch, "Views");
-						ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", new String[] { "VIEW" });
+						ResultSet rs = meta.getTables(tableCatalog,
+								tableSchema, "%", new String[] { "VIEW" });
 						while (rs.next())
 							new MView(mview, rs.getString("TABLE_NAME"), rs);
 						for (INode n : mview.getChildren()) {
-							rs = meta.getColumns(tableCatalog, tableSchema, (String) n.getValue(), "%");
+							rs = meta.getColumns(tableCatalog, tableSchema,
+									(String) n.getValue(), "%");
 							while (rs.next())
-								new MColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
+								new MColumn((ANode) n,
+										rs.getString("COLUMN_NAME"), rs);
 						}
 					} catch (Exception e) {
 					}
 					try {
-						ResultSet rs = meta.getProcedures(tableCatalog, tableSchema, "%");
-						MDBObjects mprocs = new MDBObjects(msch, "Procedures", "icons/function.png");
+						ResultSet rs = meta.getProcedures(tableCatalog,
+								tableSchema, "%");
+						MDBObjects mprocs = new MDBObjects(msch, "Procedures",
+								"icons/function.png");
 						while (rs.next())
-							new MProcedure(mprocs, rs.getString("PROCEDURE_NAME"), rs);
+							new MProcedure(mprocs,
+									rs.getString("PROCEDURE_NAME"), rs);
 					} catch (Exception e) {
 					}
 					try {
-						ResultSet rs = meta.getFunctions(tableCatalog, tableSchema, "%");
-						MDBObjects mfunct = new MDBObjects(msch, "Functions", "icons/function.png");
+						ResultSet rs = meta.getFunctions(tableCatalog,
+								tableSchema, "%");
+						MDBObjects mfunct = new MDBObjects(msch, "Functions",
+								"icons/function.png");
 						while (rs.next())
-							new MFunction(mfunct, rs.getString("FUNCTION_NAME"), rs);
+							new MFunction(mfunct,
+									rs.getString("FUNCTION_NAME"), rs);
 					} catch (Exception e) {
 					}
 
@@ -180,7 +200,8 @@ public class DBMetadata {
 			e1.printStackTrace();
 		}
 
-		final Connection c = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
+		final Connection c = (Connection) parameters
+				.get(JRParameter.REPORT_CONNECTION);
 		return c;
 	}
 

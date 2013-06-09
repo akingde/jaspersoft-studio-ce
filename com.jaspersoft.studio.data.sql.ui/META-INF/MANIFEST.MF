@@ -5,24 +5,9 @@ Bundle-Vendor: Jaspersoft Corporation
 Bundle-Version: 5.1.1.qualifier
 Bundle-SymbolicName: com.jaspersoft.studio.data.sql.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: com.jaspersoft.studio.data.sql;visibility:=reexport,
- org.eclipse.xtext.ui,
- org.eclipse.xtext.ui.shared,
- org.eclipse.xtext.builder,
- org.eclipse.xtext.common.types.ui,
- org.eclipse.xtext.ui.codetemplates.ui,
- org.eclipse.compare,
- com.jaspersoft.studio.data;bundle-version="5.1.1",
- de.itemis.xtext.utils.jface;bundle-version="1.0.0",
- org.eclipse.ui.editors,
- org.eclipse.ui,
- org.antlr.runtime,
- com.ibm.icu;bundle-version="4.4.2"
+Require-Bundle: com.jaspersoft.studio.data;bundle-version="5.1.1"
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-RegisterBuddy: com.jaspersoft.studio.data
-Export-Package: com.jaspersoft.studio.data.ui.quickfix,
- com.jaspersoft.studio.data.ui.contentassist,
- com.jaspersoft.studio.data.ui.contentassist.antlr
-Bundle-Activator: com.jaspersoft.studio.data.ui.internal.SqlActivator
+Bundle-Activator: com.jaspersoft.studio.data.sql.Activator
