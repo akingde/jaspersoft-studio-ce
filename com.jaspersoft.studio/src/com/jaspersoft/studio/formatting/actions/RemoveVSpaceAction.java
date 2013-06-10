@@ -28,37 +28,41 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.messages.Messages;
 
-public class IncreaseHSpaceAction extends AbstractFormattingAction {
+public class RemoveVSpaceAction extends AbstractFormattingAction {
 
 	/** The Constant ID. */
-	public static final String ID = "increasehspace"; //$NON-NLS-1$
+	public static final String ID = "removevspace"; //$NON-NLS-1$
 	
-	public IncreaseHSpaceAction(IWorkbenchPart part) {
+	public RemoveVSpaceAction(IWorkbenchPart part) {
 		super(part);
-		setText(Messages.IncreaseHSpaceAction_actionName);
-		setToolTipText(Messages.IncreaseHSpaceAction_actionDescription);
+		setText(Messages.RemoveVSpaceAction_actionName);
+		setToolTipText(Messages.RemoveVSpaceAction_actionDescription);
 		setId(ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/elem_add_hspace_plus.png"));  //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/elem_add_vspace_zero.png"));  //$NON-NLS-1$
 	}
 	
 	public static CompoundCommand generateCommand(List<APropertyNode> nodes){
 		CompoundCommand command = new CompoundCommand();
-		
-		if (nodes.isEmpty()) return command;
-		List<APropertyNode> sortedElements = sortXY(nodes);
-    
+
+    if (nodes.isEmpty()) return command;
+    List<APropertyNode> sortedElements = sortYX( nodes );
+
+    JRDesignElement jrElement = (JRDesignElement)sortedElements.get(0).getValue();
+    int current_y = jrElement.getY() + jrElement.getHeight();
+
     for (int i=1; i<sortedElements.size(); ++i)
     {
-    		APropertyNode actualNode = sortedElements.get(i);
-        JRDesignElement element = (JRDesignElement)actualNode.getValue();
-	      SetValueCommand setCommand = new SetValueCommand();
-  			setCommand.setTarget(actualNode);
-  			setCommand.setPropertyId(JRDesignElement.PROPERTY_X);
-  			setCommand.setPropertyValue(element.getX() + 5*i);
+        APropertyNode element = sortedElements.get(i);
+        jrElement = (JRDesignElement)element.getValue();
+        SetValueCommand setCommand = new SetValueCommand();
+  			setCommand.setTarget(element);
+  			setCommand.setPropertyId(JRDesignElement.PROPERTY_Y);
+  			setCommand.setPropertyValue(current_y);
 	      command.add(setCommand);
+        current_y += jrElement.getHeight();
     }
-		
-		return command;
+    
+    return command;
 	}
 
 	@Override

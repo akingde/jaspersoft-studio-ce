@@ -23,34 +23,48 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.messages.Messages;
 
-
-public class AlignMarginTopAction extends AbstractFormattingAction {
+public class DecreaseVSpaceAction extends AbstractFormattingAction{
 
 	/** The Constant ID. */
-	public static final String ID = "aligntotop"; //$NON-NLS-1$
+	public static final String ID = "decreasevspace"; //$NON-NLS-1$
 	
-	
-	public AlignMarginTopAction(IWorkbenchPart part) {
+	public DecreaseVSpaceAction(IWorkbenchPart part) {
 		super(part);
-		setText("Align to Top");
+		setText(Messages.DecreaseVSpaceAction_actionName);
+		setToolTipText(Messages.DecreaseVSpaceAction_actionDescription);
 		setId(ID);
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/elem_add_vspace_min.png"));  //$NON-NLS-1$
 	}
 
+	@Override
+	protected boolean calculateEnabled() {
+		return getOperationSet().size()>1;
+	}
+	
 	public static CompoundCommand generateCommand(List<APropertyNode> nodes){
 		CompoundCommand command = new CompoundCommand();
-    // Find the smallest one...
-		for (APropertyNode element : nodes)
+		   
+		if (nodes.isEmpty()) return command;
+		List<APropertyNode> sortedElements = sortYX( nodes );
+    
+    for (int i=1; i<sortedElements.size(); ++i)
     {
-			SetValueCommand setCommand = new SetValueCommand();
-			setCommand.setTarget(element);
-			setCommand.setPropertyId(JRDesignElement.PROPERTY_Y);
-			setCommand.setPropertyValue(0);
-			command.add(setCommand);
+    		APropertyNode element = sortedElements.get(i);
+    		JRDesignElement jrElement = (JRDesignElement)element.getValue();
+        if (jrElement.getY() - 5*i > 0)
+        {
+	        	SetValueCommand setCommand = new SetValueCommand();
+	    			setCommand.setTarget(element);
+	    			setCommand.setPropertyId(JRDesignElement.PROPERTY_Y);
+	    			setCommand.setPropertyValue(jrElement.getY() - 5*i);
+	  	      command.add(setCommand);
+        }
     }
-		
 		return command;
 	}
 
@@ -66,9 +80,4 @@ public class AlignMarginTopAction extends AbstractFormattingAction {
 			return command;
 	}
 	
-	@Override
-	protected boolean calculateEnabled() {
-		return true;
-	}
-
 }

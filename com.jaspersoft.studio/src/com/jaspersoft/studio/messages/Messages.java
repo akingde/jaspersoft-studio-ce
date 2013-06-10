@@ -19,6 +19,14 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.messages.messages"; //$NON-NLS-1$
 	private static final String MESSAGES_BY_KEYS = "com.jaspersoft.studio.messages.messagesbykeys"; //$NON-NLS-1$
 	private static final ResourceBundle RB_MESSAGES_BY_KEYS = ResourceBundle.getBundle(MESSAGES_BY_KEYS);
+	public static String SameHeightMaxAction_actionDescription;
+	public static String SameHeightMaxAction_actionName;
+	public static String SameHeightMinAction_actionDescription;
+	public static String SameHeightMinAction_actionName;
+	public static String SameWidthMaxAction_actionDescription;
+	public static String SameWidthMaxAction_actionName;
+	public static String SameWidthMinAction_actionDescription;
+	public static String SameWidthMinAction_actionName;
 	public static String SaveConfirmationDialog_question;
 	public static String SaveConfirmationDialog_title;
 	public static String ShowAdaptersPage_description;
@@ -196,9 +204,11 @@ public class Messages extends NLS {
 	public static String AppContextMenuProvider_align_components;
 	public static String AppContextMenuProvider_align_to_container;
 	public static String AppContextMenuProvider_arrangeInContainerMenu;
+	public static String AppContextMenuProvider_horizontalSpacingSubmenu;
 	public static String AppContextMenuProvider_order;
 	public static String AppContextMenuProvider_size_components;
 	public static String AppContextMenuProvider_size_to_container;
+	public static String AppContextMenuProvider_verticalSpacingSubMenu;
 	public static String ATableComboContribution_error_message;
 	public static String ATableComboContribution_presets_label;
 	public static String ATreeWizardDataEditorComposite_Title;
@@ -244,6 +254,8 @@ public class Messages extends NLS {
 	public static String CategoriesPage_pageTitle;
 	public static String CategoriesPage_selectedCatLabel;
 	public static String CategoriesPage_typeLabel;
+	public static String CenterInParentAction_actionDescription;
+	public static String CenterInParentAction_actionName;
 	public static String ClassTypeCellEditor_dialog_message;
 	public static String ClassTypeCellEditor_open_type;
 	public static String ColorsSection_colorSectionTitle;
@@ -396,6 +408,10 @@ public class Messages extends NLS {
 	public static String DatasourceComboItem_select_a_datasource;
 	public static String DatePattern_description;
 	public static String DatePattern_template_formats;
+	public static String DecreaseHSpaceAction_actionDescription;
+	public static String DecreaseHSpaceAction_actionName;
+	public static String DecreaseVSpaceAction_actionDescription;
+	public static String DecreaseVSpaceAction_actionName;
 	public static String DefaultDataAdapterEditorComposite_addButton;
 	public static String DefaultDataAdapterEditorComposite_deleteButton;
 	public static String DefaultDataAdapterEditorComposite_properyLabel;
@@ -471,6 +487,10 @@ public class Messages extends NLS {
 	public static String EmptyDatasourcePage_empty_datasource;
 	public static String EmptyDatasourcePage_size_tool_tip;
 	public static String EmptyWizardDataEditorComposite_TitleMsg;
+	public static String EqualsHSpaceAction_actionDescription;
+	public static String EqualsHSpaceAction_actionName;
+	public static String EqualsVSpaceAction_actionDescription;
+	public static String EqualsVSpaceAction_actionName;
 	public static String ErrorDecorator_PositionErrorToolTip;
 	public static String ExcelExporterPreferencePage_29;
 	public static String ExcelExporterPreferencePage_30;
@@ -676,6 +696,10 @@ public class Messages extends NLS {
 	public static String ImportDataAdapterAction_description;
 	public static String ImportDataAdapterAction_name;
 	public static String ImportDataAdapterAction_tooltip;
+	public static String IncreaseHSpaceAction_actionDescription;
+	public static String IncreaseHSpaceAction_actionName;
+	public static String IncreaseVSpaceAction_actionDescription;
+	public static String IncreaseVSpaceAction_actionName;
 	public static String JDBCDatasourcePage_browse;
 	public static String JDBCDatasourcePage_connection_established_message;
 	public static String JDBCDatasourcePage_connection_is_null_message;
@@ -694,6 +718,10 @@ public class Messages extends NLS {
 	public static String JDPaletteFactory_unknown_group;
 	public static String JDReportOutlineView_show_outline_tool_tip;
 	public static String JDReportOutlineView_show_overview_tool_tip;
+	public static String JoinLeftAction_actionDescription;
+	public static String JoinLeftAction_actionName;
+	public static String JoinRightAction_actionDescription;
+	public static String JoinRightAction_actionName;
 	public static String JRExporterPreferencePage_10;
 	public static String JRExporterPreferencePage_11;
 	public static String JRExporterPreferencePage_12;
@@ -1101,6 +1129,8 @@ public class Messages extends NLS {
 	public static String Obj2TextPage_title;
 	public static String ODADatasourcePage_description;
 	public static String ODADatasourcePage_oda_datasource;
+	public static String OrganizeAsTableAction_actionDescription;
+	public static String OrganizeAsTableAction_actionName;
 	public static String PaddingSection_all_padding_tool_tip;
 	public static String PaddingSection_bottom_padding_tool_tip;
 	public static String PaddingSection_left_padding_tool_tip;
@@ -1291,6 +1321,10 @@ public class Messages extends NLS {
 	public static String ReloadAction_reload;
 	public static String ReloadAction_reload_description;
 	public static String ReloadAction_reload_tool_tip;
+	public static String RemoveHSpaceAction_actionDescription;
+	public static String RemoveHSpaceAction_actionName;
+	public static String RemoveVSpaceAction_actionDescription;
+	public static String RemoveVSpaceAction_actionName;
 	public static String ReportControler_compilationerrors;
 	public static String ReportControler_exportertitle;
 	public static String ReportControler_generating;

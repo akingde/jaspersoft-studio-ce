@@ -113,7 +113,22 @@ import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
+import com.jaspersoft.studio.formatting.actions.CenterInParentAction;
+import com.jaspersoft.studio.formatting.actions.DecreaseHSpaceAction;
+import com.jaspersoft.studio.formatting.actions.DecreaseVSpaceAction;
+import com.jaspersoft.studio.formatting.actions.EqualsHSpaceAction;
+import com.jaspersoft.studio.formatting.actions.EqualsVSpaceAction;
+import com.jaspersoft.studio.formatting.actions.IncreaseHSpaceAction;
+import com.jaspersoft.studio.formatting.actions.IncreaseVSpaceAction;
+import com.jaspersoft.studio.formatting.actions.JoinLeftAction;
+import com.jaspersoft.studio.formatting.actions.JoinRightAction;
 import com.jaspersoft.studio.formatting.actions.OrganizeAsTableAction;
+import com.jaspersoft.studio.formatting.actions.RemoveHSpaceAction;
+import com.jaspersoft.studio.formatting.actions.RemoveVSpaceAction;
+import com.jaspersoft.studio.formatting.actions.SameHeightMaxAction;
+import com.jaspersoft.studio.formatting.actions.SameHeightMinAction;
+import com.jaspersoft.studio.formatting.actions.SameWidthMaxAction;
+import com.jaspersoft.studio.formatting.actions.SameWidthMinAction;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
@@ -672,6 +687,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new Align2BorderAction(this, PositionConstants.MIDDLE);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
+		
+		action = new CenterInParentAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
 
 		// ---------------------
 
@@ -686,7 +705,69 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new MatchSizeAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
+		
+		action = new SameHeightMaxAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new SameHeightMinAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new SameWidthMaxAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new SameWidthMinAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		// Horizontal Spacing Actions
+		
+		action = new IncreaseHSpaceAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new DecreaseHSpaceAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new RemoveHSpaceAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new EqualsHSpaceAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		// Vertical Spacing Actions
 
+		action = new IncreaseVSpaceAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new DecreaseVSpaceAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new RemoveVSpaceAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new EqualsVSpaceAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		// Join Spacing Actions
+		
+		action = new JoinRightAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new JoinLeftAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 		// ---------------------
 
 		action = new Size2BorderAction(this, Size2BorderAction.WIDTH);

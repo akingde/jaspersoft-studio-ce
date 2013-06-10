@@ -16,10 +16,10 @@
 package com.jaspersoft.studio.formatting.actions;
 
 import java.util.List;
+import com.jaspersoft.studio.messages.Messages;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
@@ -27,51 +27,55 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.messages.Messages;
 
-public class OrganizeAsTableAction extends AbstractFormattingAction {
+public class DecreaseHSpaceAction extends AbstractFormattingAction{
 
 	/** The Constant ID. */
-	public static final String ID = "organizeastable"; //$NON-NLS-1$
+	public static final String ID = "decreasehspace"; //$NON-NLS-1$
 	
-	public OrganizeAsTableAction(IWorkbenchPart part) {
+	public DecreaseHSpaceAction(IWorkbenchPart part) {
 		super(part);
-		setText(Messages.OrganizeAsTableAction_actionName);
-		setToolTipText(Messages.OrganizeAsTableAction_actionDescription);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/organize_as_table.png"));  //$NON-NLS-1$
+		setText(Messages.DecreaseHSpaceAction_actionName);
+		setToolTipText(Messages.DecreaseHSpaceAction_actionDescription);
 		setId(ID);
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/elem_add_hspace_min.png"));  //$NON-NLS-1$
 	}
 
 	@Override
 	protected boolean calculateEnabled() {
-		return getOperationSet().size()>0;
-	} 
-
-  	
-	protected Command createAlignmentCommand() {
-		List<APropertyNode> nodes = getOperationSet();
+		return getOperationSet().size()>1;
+	}
+	
+	public static CompoundCommand generateCommand(List<APropertyNode> nodes){
 		CompoundCommand command = new CompoundCommand();
-		command.setDebugLabel(getText());
-		
+		   
 		if (nodes.isEmpty()) return command;
 	  nodes = sortXY(nodes);
-	  
-	  int currentX = 0;
-	  command.add(AlignMarginTopAction.generateCommand(nodes));
-	  for (APropertyNode element : nodes)
-	  {
-	      // 1. Find the parent...
-	      Rectangle oldBounds = getElementBounds((JRDesignElement)element.getValue());
-  			SetValueCommand setCommand = new SetValueCommand();
-  			setCommand.setTarget(element);
+    
+    for (int i=1; i<nodes.size(); ++i)
+    {
+    		APropertyNode node = nodes.get(i);
+        JRDesignElement element = (JRDesignElement)node.getValue();
+      	SetValueCommand setCommand = new SetValueCommand();
+  			setCommand.setTarget(node);
   			setCommand.setPropertyId(JRDesignElement.PROPERTY_X);
-  			setCommand.setPropertyValue(currentX);
+  			setCommand.setPropertyValue(element.getX() - 5*i);
 	      command.add(setCommand);
-	      currentX += oldBounds.width+ 5;
-	  }
-	  command.add(SameHeightMinAction.generateCommand(nodes));
-	 
+    }
+		
 		return command;
 	}
 
+	protected Command createAlignmentCommand() {
+			List<APropertyNode> nodes = getOperationSet();
+			CompoundCommand command = null;
+			if (nodes.isEmpty()) 
+				command = new CompoundCommand();
+			else {
+				command = generateCommand(nodes);
+			}
+			command.setDebugLabel(getText());
+			return command;
+	}
+	
 }

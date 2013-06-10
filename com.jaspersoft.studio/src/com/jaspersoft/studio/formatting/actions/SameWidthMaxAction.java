@@ -19,7 +19,6 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
@@ -29,49 +28,61 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.messages.Messages;
 
-public class OrganizeAsTableAction extends AbstractFormattingAction {
+public class SameWidthMaxAction extends AbstractFormattingAction{
 
 	/** The Constant ID. */
-	public static final String ID = "organizeastable"; //$NON-NLS-1$
+	public static final String ID = "matchwidthmax"; //$NON-NLS-1$
 	
-	public OrganizeAsTableAction(IWorkbenchPart part) {
+	public SameWidthMaxAction(IWorkbenchPart part) {
 		super(part);
-		setText(Messages.OrganizeAsTableAction_actionName);
-		setToolTipText(Messages.OrganizeAsTableAction_actionDescription);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/organize_as_table.png"));  //$NON-NLS-1$
+		setText(Messages.SameWidthMaxAction_actionName);
+		setToolTipText(Messages.SameWidthMaxAction_actionDescription);
 		setId(ID);
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/matchwidthmax.png"));  //$NON-NLS-1$
 	}
 
 	@Override
 	protected boolean calculateEnabled() {
-		return getOperationSet().size()>0;
-	} 
-
-  	
-	protected Command createAlignmentCommand() {
-		List<APropertyNode> nodes = getOperationSet();
+		return getOperationSet().size()>1;
+	}
+	
+	public static CompoundCommand generateCommand(List<APropertyNode> nodes){
 		CompoundCommand command = new CompoundCommand();
-		command.setDebugLabel(getText());
 		
-		if (nodes.isEmpty()) return command;
-	  nodes = sortXY(nodes);
-	  
-	  int currentX = 0;
-	  command.add(AlignMarginTopAction.generateCommand(nodes));
-	  for (APropertyNode element : nodes)
-	  {
-	      // 1. Find the parent...
-	      Rectangle oldBounds = getElementBounds((JRDesignElement)element.getValue());
+		int width = (Integer) nodes.get(0).getPropertyValue(JRDesignElement.PROPERTY_WIDTH);
+    
+    // Find the smallest one...
+    for (int i=1; i<nodes.size(); ++i)
+    {
+    		JRDesignElement element = (JRDesignElement)nodes.get(i).getValue();
+        if (width < element.getWidth())
+        {
+        	width = element.getWidth();
+        }
+    }
+    
+    for (APropertyNode node : nodes)
+    {
   			SetValueCommand setCommand = new SetValueCommand();
-  			setCommand.setTarget(element);
-  			setCommand.setPropertyId(JRDesignElement.PROPERTY_X);
-  			setCommand.setPropertyValue(currentX);
+  			setCommand.setTarget(node);
+  			setCommand.setPropertyId(JRDesignElement.PROPERTY_WIDTH);
+  			setCommand.setPropertyValue(width);
 	      command.add(setCommand);
-	      currentX += oldBounds.width+ 5;
-	  }
-	  command.add(SameHeightMinAction.generateCommand(nodes));
-	 
+    }
+		
 		return command;
 	}
 
+	protected Command createAlignmentCommand() {
+			List<APropertyNode> nodes = getOperationSet();
+			CompoundCommand command = null;
+			if (nodes.isEmpty()) 
+				command = new CompoundCommand();
+			else {
+				command = generateCommand(nodes);
+			}
+			command.setDebugLabel(getText());
+			return command;
+	}
+	
 }

@@ -28,37 +28,39 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.messages.Messages;
 
-public class IncreaseHSpaceAction extends AbstractFormattingAction {
+public class JoinRightAction extends AbstractFormattingAction {
 
 	/** The Constant ID. */
-	public static final String ID = "increasehspace"; //$NON-NLS-1$
+	public static final String ID = "joinright"; //$NON-NLS-1$
 	
-	public IncreaseHSpaceAction(IWorkbenchPart part) {
+	public JoinRightAction(IWorkbenchPart part) {
 		super(part);
-		setText(Messages.IncreaseHSpaceAction_actionName);
-		setToolTipText(Messages.IncreaseHSpaceAction_actionDescription);
+		setText(Messages.JoinRightAction_actionName);
+		setToolTipText(Messages.JoinRightAction_actionDescription);
 		setId(ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/elem_add_hspace_plus.png"));  //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/joinright.png"));  //$NON-NLS-1$
 	}
 	
 	public static CompoundCommand generateCommand(List<APropertyNode> nodes){
 		CompoundCommand command = new CompoundCommand();
-		
-		if (nodes.isEmpty()) return command;
-		List<APropertyNode> sortedElements = sortXY(nodes);
+
+    if (nodes.isEmpty()) return command;
+    List<APropertyNode> sortedElements = sortXY( nodes, true);
     
-    for (int i=1; i<sortedElements.size(); ++i)
+    JRDesignElement jrElement = (JRDesignElement)sortedElements.get(0).getValue();
+    int actualX = jrElement.getX() + jrElement.getWidth();
+    for (APropertyNode element : sortedElements)
     {
-    		APropertyNode actualNode = sortedElements.get(i);
-        JRDesignElement element = (JRDesignElement)actualNode.getValue();
-	      SetValueCommand setCommand = new SetValueCommand();
-  			setCommand.setTarget(actualNode);
+    	 	jrElement = (JRDesignElement)element.getValue();
+        actualX -= jrElement.getWidth();
+        SetValueCommand setCommand = new SetValueCommand();
+  			setCommand.setTarget(element);
   			setCommand.setPropertyId(JRDesignElement.PROPERTY_X);
-  			setCommand.setPropertyValue(element.getX() + 5*i);
+  			setCommand.setPropertyValue(actualX);
 	      command.add(setCommand);
     }
-		
-		return command;
+    
+    return command;
 	}
 
 	@Override
