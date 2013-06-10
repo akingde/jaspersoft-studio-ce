@@ -41,7 +41,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class WSecretText extends Text {
+public class WSecretText extends Text { 
 
 	private JasperReportsContext jrContext;
 	private String secretCategory;
@@ -72,7 +72,11 @@ public class WSecretText extends Text {
 		// We need to store the UUID as key and the text as value
 		// in the secure preferences.
 		try {
-			SecureStorageUtils.saveToDefaultSecurePreferences(secretCategory, uuid.toString(), getText());
+			String uuidStr = uuid.toString();
+			String widgetText = getText();
+			if(!uuidStr.equals(widgetText)){
+				SecureStorageUtils.saveToDefaultSecurePreferences(secretCategory, uuidStr, widgetText);
+			}
 		} catch (StorageException e) {
 			UIUtils.showError(e);
 		};
@@ -97,12 +101,12 @@ public class WSecretText extends Text {
 				// back-compatibility problem: information was clear text
 				// we need to generate a new UUID to be used as key
 				uuid = UUID.randomUUID();
+				setText(secret);
 			}
 			else {
 				// the key is the previous generated UUID
 				uuid = UUID.fromString(key);
 			}
-			setText(secret);
 		}
 		else {
 			throw new RuntimeException("Widget can be initialized only once!");

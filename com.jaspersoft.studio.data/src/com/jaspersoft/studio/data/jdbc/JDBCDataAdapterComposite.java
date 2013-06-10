@@ -375,6 +375,10 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc.getDataAdapter();
 		if (jdbcDataAdapter.getDriver() == null)
 			btnWizardActionPerformed();
+		
+		if(!textPassword.isWidgetConfigured()) {
+			textPassword.loadSecret(DataAdaptersSecretsProvider.SECRET_NODE_ID, textPassword.getText());
+		}
 	}
 
 	@Override
@@ -416,14 +420,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 		jdbcDataAdapter.setDriver(comboJDBCDriver.getCombo().getText());
 		jdbcDataAdapter.setUsername(textUsername.getText());
-		// configure widget if not done yet
-		if(!textPassword.isWidgetConfigured()) {
-			textPassword.loadSecret(DataAdaptersSecretsProvider.SECRET_NODE_ID, textPassword.getText());
-		}
-		else {
-			// rely on back-compatibility and use clear text
-			jdbcDataAdapter.setPassword(textPassword.getText());
-		}
+		jdbcDataAdapter.setPassword(textPassword.getText());
 		jdbcDataAdapter.setUrl(textJDBCUrl.getText());
 		getDataAdapterURLAssistant(jdbcDataAdapter);
 		jdbcDataAdapter.setSavePassword(true);// btnSavePassword.getSelection());

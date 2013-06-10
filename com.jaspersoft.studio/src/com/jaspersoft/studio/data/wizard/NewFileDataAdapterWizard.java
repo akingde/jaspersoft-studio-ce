@@ -229,6 +229,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 	@Override
 	public boolean performFinish() {
 		DataAdapterDescriptor editedDataAdapter = dataAdapterEditorPage.getDataAdapter();
+		dataAdapterEditorPage.performFinishInvoked();
 
 		if (this.dataAdapter == null) {
 			this.dataAdapter = editedDataAdapter;

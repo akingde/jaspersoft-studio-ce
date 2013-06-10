@@ -85,6 +85,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 			IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
 			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 			descriptor = dacomposite.getDataAdapter();
+			dacomposite.performAdditionalUpdates();
 
 			String xml = DataAdapterManager.toDataAdapterFile(descriptor);
 
