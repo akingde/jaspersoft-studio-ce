@@ -34,7 +34,6 @@ import java.util.List;
 public class SQLScanner {
 	public static final int EOF_CHAR = -1;
 	public static final int EOL_CHAR = 10;
-	private static List<String> sqlKeywords;
 	private static List<String> sqlSymbols;
 
 	private StringBuffer fBuffer = new StringBuffer();
@@ -232,34 +231,32 @@ public class SQLScanner {
 	 * @return the list of SQL keywords
 	 */
 	protected List<String> getSQLKeywords() {
-		if (sqlKeywords == null) {
-			sqlKeywords = Arrays.asList(new String[] { "absolute", "action", "add", "after", "all", "allocate", "alter", "and", "any", "are", "array", "as", "asc", "asensitive", "assertion", "asymmetric",
-					"at", "atomic", "authorization", "avg", "before", "begin", "between", "bigint", "binary", "bit", "bit_length", "blob", "boolean", "both", "breadth", "by", "call", "called", "cascade",
-					"cascaded", "case", "cast", "catalog", "char", "char_length", "character", "check", "clob", "close", "coalesce", "collate", "collate", "collation", "column", "commit", "condition",
-					"connect", "constraint", "constraints", "constructor", "contains", "continue", "convert", "corresponding", "count", "create", "cross", "cube", "current", "current_date",
-					"current_default_transform_group", "current_path", "current_role", "current_time", "current_timestamp", "current_transform_group_for_type", "current_user", "cursor", "cycle", "data",
-					"date", "day", "deallocate", "dec", "decimal", "declare", "default", "deferrable", "deferred", "delete", "depth", "deref", "desc", "describe", "descriptor", "deterministic", "diagnostics",
-					"disconnect", "distinct", "do", "domain", "double", "drop", "dynamic", "each", "else", "elseif", "end", "equals", "escape", "except", "exception", "exec", "execute", "exists", "exit",
-					"external", "extract", "false", "fetch", "filter", "first", "float", "for", "foreign", "found", "free", "from", "full", "function", "general", "get", "global", "go", "goto", "grant",
-					"group", "grouping", "handler", "having", "hold", "hour", "identity", "if", "immediate", "in", "indicator", "initially", "inner", "inout", "input", "insensitive", "insert", "int",
-					"integer", "intersect", "interval", "into", "is", "isolation", "iterate", "join", "key", "language", "large", "last", "lateral", "leading", "leave", "left", "level", "like", "local",
-					"localtime", "localtimestamp", "locator", "loop", "looplower", "map", "match", "member", "merge", "method", "min", "minute", "modifies", "module", "month", "multiset", "names", "national",
-					"natural", "nchar", "nclob", "new", "next", "no", "none", "not", "null", "numeric", "object", "octet_length", "of", "old", "on", "only", "open", "option", "or", "order", "ordinality",
-					"out", "outer", "output", "over", "overlaps", "pad", "parameter", "partial", "partition", "path", "position", "precision", "prepare", "preserve", "primary", "prior", "privileges",
-					"procedure", "range", "read", "reads", "real", "recursive", "ref", "references", "referencing", "relative", "release", "repeat", "resignal", "restrict", "result", "return", "returns",
-					"revoke", "right", "role", "rollback", "rollback", "rollup", "routine", "row", "rows", "savepoint", "schema", "scope", "scroll", "search", "second", "section", "select", "sensitive",
-					"session", "session_user", "set", "sets", "signal", "similar", "size", "smallint", "some", "space", "specific", "specifictype", "specifictypesql", "sql", "sqlsqlcode", "sqlerror",
-					"sqlexception", "sqlstate", "sqlwarning", "start", "state", "static", "submultiset", "substring", "sum", "symmetric", "system", "system_user", "system_usertable", "table", "temporary",
-					"then", "time", "timestamp", "timezone_hour", "timezone_minute", "to", "trailing", "transaction", "translate", "translation", "treat", "trigger", "trim", "true", "under", "undo", "union",
-					"unique", "unknown", "unnest", "until", "update", "upper", "usage", "user", "using", "value", "values", "varchar", "varying", "view", "when", "whenever", "where", "while", "window", "with",
-					"within", "without", "work", "write", "year", "zone"
-
-			// until here all SQL 92, 92, 2003 keywords from:
-			// http://developer.mimer.com/validator/sql-reserved-words.tml
-					});
-		}
-		return sqlKeywords;
+		return SQL_KEYWORDS;
 	}
+
+	public static final List<String> SQL_KEYWORDS = Arrays.asList(new String[] { "absolute", "action", "add", "after", "all", "allocate", "alter", "and", "any", "are", "array", "as", "asc",
+			"asensitive", "assertion", "asymmetric", "at", "atomic", "authorization", "avg", "before", "begin", "between", "bigint", "binary", "bit", "bit_length", "blob", "boolean", "both", "breadth",
+			"by", "call", "called", "cascade", "cascaded", "case", "cast", "catalog", "char", "char_length", "character", "check", "clob", "close", "coalesce", "collate", "collate", "collation", "column",
+			"commit", "condition", "connect", "constraint", "constraints", "constructor", "contains", "continue", "convert", "corresponding", "count", "create", "cross", "cube", "current", "current_date",
+			"current_default_transform_group", "current_path", "current_role", "current_time", "current_timestamp", "current_transform_group_for_type", "current_user", "cursor", "cycle", "data", "date",
+			"day", "deallocate", "dec", "decimal", "declare", "default", "deferrable", "deferred", "delete", "depth", "deref", "desc", "describe", "descriptor", "deterministic", "diagnostics",
+			"disconnect", "distinct", "do", "domain", "double", "drop", "dynamic", "each", "else", "elseif", "end", "equals", "escape", "except", "exception", "exec", "execute", "exists", "exit",
+			"external", "extract", "false", "fetch", "filter", "first", "float", "for", "foreign", "found", "free", "from", "full", "function", "general", "get", "global", "go", "goto", "grant", "group",
+			"grouping", "handler", "having", "hold", "hour", "identity", "if", "immediate", "in", "indicator", "initially", "inner", "inout", "input", "insensitive", "insert", "int", "integer",
+			"intersect", "interval", "into", "is", "isolation", "iterate", "join", "key", "language", "large", "last", "lateral", "leading", "leave", "left", "level", "like", "local", "localtime",
+			"localtimestamp", "locator", "loop", "looplower", "map", "match", "member", "merge", "method", "min", "minute", "modifies", "module", "month", "multiset", "names", "national", "natural",
+			"nchar", "nclob", "new", "next", "no", "none", "not", "null", "numeric", "object", "octet_length", "of", "old", "on", "only", "open", "option", "or", "order", "ordinality", "out", "outer",
+			"output", "over", "overlaps", "pad", "parameter", "partial", "partition", "path", "position", "precision", "prepare", "preserve", "primary", "prior", "privileges", "procedure", "range", "read",
+			"reads", "real", "recursive", "ref", "references", "referencing", "relative", "release", "repeat", "resignal", "restrict", "result", "return", "returns", "revoke", "right", "role", "rollback",
+			"rollback", "rollup", "routine", "row", "rows", "savepoint", "schema", "scope", "scroll", "search", "second", "section", "select", "sensitive", "session", "session_user", "set", "sets",
+			"signal", "similar", "size", "smallint", "some", "space", "specific", "specifictype", "specifictypesql", "sql", "sqlsqlcode", "sqlerror", "sqlexception", "sqlstate", "sqlwarning", "start",
+			"state", "static", "submultiset", "substring", "sum", "symmetric", "system", "system_user", "system_usertable", "table", "temporary", "then", "time", "timestamp", "timezone_hour",
+			"timezone_minute", "to", "trailing", "transaction", "translate", "translation", "treat", "trigger", "trim", "true", "under", "undo", "union", "unique", "unknown", "unnest", "until", "update",
+			"upper", "usage", "user", "using", "value", "values", "varchar", "varying", "view", "when", "whenever", "where", "while", "window", "with", "within", "without", "work", "write", "year", "zone"
+
+	// until here all SQL 92, 92, 2003 keywords from:
+	// http://developer.mimer.com/validator/sql-reserved-words.tml
+			});
 
 	/**
 	 * Initializes, if needed, the SQL symbols used by the scanner instance.
