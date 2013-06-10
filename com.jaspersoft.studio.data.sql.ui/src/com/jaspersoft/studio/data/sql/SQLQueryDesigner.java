@@ -35,6 +35,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.PluginTransfer;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -68,7 +69,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		sf.setLayoutData(new GridData(GridData.FILL_BOTH));
 		sf.setLayout(new GridLayout());
 
-		dbMetadata = new DBMetadata();
+		dbMetadata = new DBMetadata(this);
 		Control c = dbMetadata.createControl(sf);
 		c.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
@@ -142,24 +143,59 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			outline.scheduleRefresh();
 	}
 
+	private DataAdapterDescriptor da;
+
 	@Override
 	public void setDataAdapter(final DataAdapterDescriptor da) {
+		if (this.da == da)
+			return;
+		this.da = da;
 		super.setDataAdapter(da);
-		if (da instanceof JDBCDataAdapterDescriptor) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				updateMetadata();
+			}
+		});
+	}
+
+	private Thread runningthread;
+	private IProgressMonitor runningmonitor;
+
+	public void updateMetadata() {
+		if (da instanceof JDBCDataAdapterDescriptor)
 			try {
 				container.run(true, true, new IRunnableWithProgress() {
 
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
-						dbMetadata.updateUI(das);
+						if (runningthread != null) {
+							runningmonitor.setCanceled(true);
+							if (runningthread != null)
+								runningthread.join();
+						}
+						runningmonitor = monitor;
+						runningthread = Thread.currentThread();
+						try {
+							monitor.beginTask("Reading metadata", IProgressMonitor.UNKNOWN);
+							DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
+							dbMetadata.updateUI(da, das, monitor);
+						} finally {
+							monitor.done();
+							runningthread = null;
+							runningmonitor = null;
+						}
 					}
 				});
 			} catch (InvocationTargetException ex) {
 				container.getQueryStatus().showError(ex.getTargetException());
+				runningthread = null;
+				runningmonitor = null;
 			} catch (InterruptedException ex) {
 				container.getQueryStatus().showError(ex);
+				runningthread = null;
+				runningmonitor = null;
 			}
-		}
 	}
 
 	public SQLQueryOutline getOutline() {
