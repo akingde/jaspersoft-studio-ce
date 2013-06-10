@@ -190,10 +190,7 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 	 * @param parent
 	 */
 	private void createColorGroup(Composite parent){
-		Group group = new Group(parent, SWT.NONE);
-		group.setText(Messages.CrosstabWizardLayoutPage_cell_color_group);
-		group.setLayout(new GridLayout(2,false));
-		group.setLayoutData(new GridData(GridData.FILL_BOTH));
+
 		
 		SelectionAdapter schemaSelectionAdapter = new SelectionAdapter() {
 			@Override
@@ -203,21 +200,24 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 				notifyChange();	
 			}
 		};
-		selectionWidget = new ColorSelectionWidget(group, selectionListener, schemaSelectionAdapter);
+		selectionWidget = new ColorSelectionWidget(parent, selectionListener, schemaSelectionAdapter, ColorSelectionWidget.STYLE.HIDDEN);
 		CrosstabStyle temp = getDefaultStyle();
 		selectionWidget.addButton(totalColor, Messages.CrosstabWizardLayoutPage_totalLabel, temp.getColor(CrosstabStyle.COLOR_TOTAL));
 		selectionWidget.addButton(groupColor, Messages.CrosstabWizardLayoutPage_groupLabel, temp.getColor(CrosstabStyle.COLOR_GROUP));
 		selectionWidget.addButton(measuresColor, Messages.CrosstabWizardLayoutPage_measuresLabel, temp.getColor(CrosstabStyle.COLOR_MEASURES));
 		selectionWidget.addButton(detailColor, Messages.CrosstabWizardLayoutPage_detailLabel, temp.getColor(CrosstabStyle.COLOR_DETAIL));
-		selectionWidget.createControl();
+		selectionWidget.createControl(Messages.CrosstabWizardLayoutPage_schemaGroupLabel,Messages.CrosstabWizardLayoutPage_manualGroupLabel,4);
 		
-		whiteGrid = new Button(group, SWT.CHECK);
+		Composite checkComposite = new Composite(parent, SWT.NONE);
+		checkComposite.setLayout(new GridLayout(2,false));
+		checkComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		whiteGrid = new Button(checkComposite, SWT.CHECK);
 		whiteGrid.setText(Messages.CrosstabWizardLayoutPage_white_grid_check);
 		GridData checkBoxData = new GridData(GridData.FILL_HORIZONTAL);
 		checkBoxData.horizontalSpan = 2;
 		whiteGrid.setLayoutData(checkBoxData);
 		
-		showGrid = new Button(group, SWT.CHECK);
+		showGrid = new Button(checkComposite, SWT.CHECK);
 		showGrid.setText(Messages.CrosstabWizardLayoutPage_noGrid_label);
 		GridData showGridData = new GridData(GridData.FILL_HORIZONTAL);
 		showGridData.horizontalSpan = 2;

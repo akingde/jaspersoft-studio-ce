@@ -71,9 +71,11 @@ public class Messages extends NLS {
 	public static String CrosstabWizardLayoutPage_detailLabel;
 	public static String CrosstabWizardLayoutPage_groupLabel;
 	public static String CrosstabWizardLayoutPage_layout;
+	public static String CrosstabWizardLayoutPage_manualGroupLabel;
 	public static String CrosstabWizardLayoutPage_measuresLabel;
 	public static String CrosstabWizardLayoutPage_nameLabel;
 	public static String CrosstabWizardLayoutPage_noGrid_label;
+	public static String CrosstabWizardLayoutPage_schemaGroupLabel;
 	public static String CrosstabWizardLayoutPage_show_grid_lines;
 	public static String CrosstabWizardLayoutPage_style_preview_group;
 	public static String CrosstabWizardLayoutPage_totalLabel;

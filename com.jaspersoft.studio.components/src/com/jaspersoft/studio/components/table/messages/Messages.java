@@ -90,7 +90,9 @@ public class Messages extends NLS {
 	public static String TableWizardLayoutPage_description;
 	public static String TableWizardLayoutPage_detailLabel;
 	public static String TableWizardLayoutPage_layout;
+	public static String TableWizardLayoutPage_manualColorLabel;
 	public static String TableWizardLayoutPage_nameLabel;
+	public static String TableWizardLayoutPage_schemaGroupLabel;
 	public static String TableWizardLayoutPage_style_preview_group;
 	public static String TableWizardLayoutPage_tableHeaderLabel;
 	public static String TableWizardLayoutPage_variations_label;

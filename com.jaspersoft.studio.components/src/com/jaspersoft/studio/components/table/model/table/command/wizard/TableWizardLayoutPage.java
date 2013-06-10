@@ -127,23 +127,23 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	/**
 	 * String used as id for the button that represent the color used in the table header cells
 	 */
-	private static final String tableHeadrButton="THEADER_BUTTON";
+	private static final String tableHeadrButton="THEADER_BUTTON"; //$NON-NLS-1$
 	
 	/**
 	 * String used as id for the button that represent the color used in the table column cells
 	 */
-	private static final String columnHeadrButton="CHEADER_BUTTON";
+	private static final String columnHeadrButton="CHEADER_BUTTON"; //$NON-NLS-1$
 	
 	/**
 	 * String used as id for the button that represent the color used in the table detail cells
 	 */
-	private static final String detailButton="DETAIL_BUTTON";
+	private static final String detailButton="DETAIL_BUTTON"; //$NON-NLS-1$
 	
 	/**
 	 * String used as id for the button  that represent the color used in the table detail cells, checked 
 	 * the row is odd and the attribute to alternate the rows color is true
 	 */
-	private static final String altDetailButton = "ALT_DETAIL_BUTTON";
+	private static final String altDetailButton = "ALT_DETAIL_BUTTON"; //$NON-NLS-1$
 	
 	/**
 	 * Widget used to handle the color selection for the cells
@@ -221,11 +221,6 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	 * @param parent parent composite of the group 
 	 */
 	private void createCellColors(Composite parent){
-		Group group = new Group(parent, SWT.NONE);
-		group.setText(Messages.TableWizardLayoutPage_cell_colors_group);
-		group.setLayout(new GridLayout(2,false));
-		group.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
 		SelectionAdapter schemaSelectionAdapter = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -234,19 +229,19 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 				notifyChange();	
 			}
 		};
-		selectionWidget = new ColorSelectionWidget(group, selectionListener, schemaSelectionAdapter);
+		selectionWidget = new ColorSelectionWidget(parent, selectionListener, schemaSelectionAdapter, ColorSelectionWidget.STYLE.BOTTOM);
 		TableStyle temp = getDefaultStyle();
 		selectionWidget.addButton(tableHeadrButton, Messages.TableWizardLayoutPage_tableHeaderLabel, temp.getColor(TableStyle.COLOR_TABLE_HEADER));
 		selectionWidget.addButton(columnHeadrButton, Messages.TableWizardLayoutPage_columnHeaderLabel, temp.getColor(TableStyle.COLOR_COL_HEADER));
 		selectionWidget.addButton(detailButton, Messages.TableWizardLayoutPage_detailLabel, temp.getColor(TableStyle.STANDARD_COLOR_DETAIL));
 		selectionWidget.addButton(altDetailButton, Messages.TableWizardLayoutPage_altDetailLabel, temp.getColor(TableStyle.COLOR_DETAIL));
-		selectionWidget.createControl();
+		selectionWidget.createControl(Messages.TableWizardLayoutPage_schemaGroupLabel, Messages.TableWizardLayoutPage_manualColorLabel,4);
 		
 		//Create the checkbox to alternate the color
-		alternateColor = new Button(group, SWT.CHECK);
+		alternateColor = new Button(selectionWidget.getManualComposite(), SWT.CHECK);
 		alternateColor.setText(Messages.TableWizardLayoutPage_alternated_rows_label);
 		GridData checkBoxData = new GridData(GridData.FILL_HORIZONTAL);
-		checkBoxData.horizontalSpan = 2;
+		checkBoxData.horizontalSpan = 4;
 		alternateColor.setLayoutData(checkBoxData);
 		alternateColor.addSelectionListener(selectionListener);
 	}
