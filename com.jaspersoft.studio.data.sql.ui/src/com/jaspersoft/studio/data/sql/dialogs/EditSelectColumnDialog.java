@@ -1,8 +1,13 @@
 package com.jaspersoft.studio.data.sql.dialogs;
 
+import net.sf.jasperreports.eclipse.ui.validator.ValidatorUtil;
+
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -15,12 +20,15 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.validator.ColumnAliasStringValidator;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public class EditSelectColumnDialog extends ATitledDialog {
 	private MSelectColumn value;
 	private String alias;
 	private String aliasKeyword;
+	private Text talias;
+	private Combo keyword;
 
 	public EditSelectColumnDialog(Shell parentShell) {
 		super(parentShell);
@@ -61,17 +69,32 @@ public class EditSelectColumnDialog extends ATitledDialog {
 		gd.minimumWidth = 300;
 		lbl.setLayoutData(gd);
 
-		Combo keyword = new Combo(cmp, SWT.READ_ONLY);
+		keyword = new Combo(cmp, SWT.READ_ONLY);
 		keyword.setItems(AMKeyword.ALIAS_KEYWORDS);
 
-		Text alias = new Text(cmp, SWT.BORDER);
+		talias = new Text(cmp, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.minimumWidth = 100;
-		alias.setLayoutData(gd);
+		gd.horizontalIndent = 8;
+		talias.setLayoutData(gd);
 
 		DataBindingContext bindingContext = new DataBindingContext();
-		bindingContext.bindValue(SWTObservables.observeText(alias, SWT.Modify), PojoObservables.observeValue(this, "alias")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(keyword), PojoObservables.observeValue(this, "aliasKeyword")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(talias, SWT.Modify), PojoObservables.observeValue(this, "alias")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(keyword), PojoObservables.observeValue(this, "aliasKeyword"), //$NON-NLS-1$
+				new UpdateValueStrategy().setAfterConvertValidator(new ColumnAliasStringValidator()), null);
 		return cmp;
+	}
+
+	@Override
+	protected Control createButtonBar(Composite parent) {
+		Control createButtonBar = super.createButtonBar(parent);
+
+		DataBindingContext bindingContext = new DataBindingContext();
+		Binding b = bindingContext.bindValue(SWTObservables.observeText(talias, SWT.Modify), PojoObservables.observeValue(this, "alias"), //$NON-NLS-1$
+				new UpdateValueStrategy().setAfterConvertValidator(new ColumnAliasStringValidator()), null);
+		bindingContext.bindValue(SWTObservables.observeSelection(keyword), PojoObservables.observeValue(this, "aliasKeyword")); //$NON-NLS-1$
+
+		ValidatorUtil.controlDecorator(b, getButton(IDialogConstants.OK_ID));
+		return createButtonBar;
 	}
 }

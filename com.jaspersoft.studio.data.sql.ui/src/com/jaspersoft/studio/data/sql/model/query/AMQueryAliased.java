@@ -4,6 +4,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.viewers.StyledString;
 
+import com.jaspersoft.studio.data.querydesigner.sql.text.SQLScanner;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
@@ -38,15 +39,23 @@ public abstract class AMQueryAliased<T> extends AMQueryObject<T> {
 	}
 
 	protected String addAlias() {
-		if (alias != null && !alias.trim().isEmpty())
-			return aliasKeyword + alias;
+		if (alias != null && !alias.trim().isEmpty()) {
+			return aliasKeyword + prepareAlias();
+		}
 		return "";
+	}
+
+	protected String prepareAlias() {
+		String al = alias.trim();
+		if (al.contains(" ") || SQLScanner.SQL_KEYWORDS.contains(alias))
+			al = "'" + al + "'";
+		return al;
 	}
 
 	protected void addAlias(StyledString dt) {
 		if (alias != null && !alias.trim().isEmpty()) {
 			dt.append(aliasKeyword, FontUtils.KEYWORDS_STYLER);
-			dt.append(alias);
+			dt.append(prepareAlias());
 		}
 	}
 
