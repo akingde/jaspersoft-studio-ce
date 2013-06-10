@@ -12,9 +12,10 @@ import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.dialogs.UsedColumnsDialog;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
-import com.jaspersoft.studio.data.sql.model.query.MFrom;
-import com.jaspersoft.studio.data.sql.model.query.MSelect;
-import com.jaspersoft.studio.data.sql.model.query.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -34,7 +35,7 @@ public class CreateColumn extends AAction {
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof MSelect || element instanceof MSelectColumn;
+		return element instanceof MSelect || element instanceof MSelectColumn || element instanceof MSelectExpression;
 	}
 
 	@Override

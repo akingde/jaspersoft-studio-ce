@@ -2,6 +2,7 @@ package com.jaspersoft.studio.data.sql.model;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import com.jaspersoft.studio.data.sql.model.query.IQueryString;
 import com.jaspersoft.studio.model.ANode;
 
 public class AMSQLObject extends MDBObjects implements IQueryString {

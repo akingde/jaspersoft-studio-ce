@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.sql.model;
+package com.jaspersoft.studio.data.sql.model.query;
 
 import java.util.UUID;
 
@@ -8,19 +8,20 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.data.sql.Activator;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 
-public abstract class MQueryObjects extends ANode implements IQueryString {
+public abstract class AMQueryObject<T> extends ANode implements IQueryString {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	transient private ImageDescriptor icon;
 	private String image;
 	protected String tooltip;
 	private String id;
 
-	public MQueryObjects(ANode parent, AMSQLObject value, String image) {
+	public AMQueryObject(ANode parent, T value, String image) {
 		this(parent, value, image, -1);
 	}
 
-	public MQueryObjects(ANode parent, AMSQLObject value, String image, int index) {
+	public AMQueryObject(ANode parent, T value, String image, int index) {
 		super(parent, index);
 		setValue(value);
 		this.image = image;
@@ -33,17 +34,22 @@ public abstract class MQueryObjects extends ANode implements IQueryString {
 		return id;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public AMSQLObject getValue() {
-		return (AMSQLObject) super.getValue();
+	public T getValue() {
+		return (T) super.getValue();
 	}
 
 	@Override
 	public String getToolTip() {
-		String name = getValue().getToolTip();
-		if (tooltip != null)
-			name += "\n" + tooltip;
-		return name;
+		if (getValue() instanceof INode) {
+			String name = ((INode) getValue()).getToolTip();
+			if (tooltip != null)
+				name += "\n" + tooltip;
+			return name;
+		} else if (getValue() instanceof String)
+			return (String) getValue();
+		return null;
 	}
 
 	@Override
@@ -55,12 +61,18 @@ public abstract class MQueryObjects extends ANode implements IQueryString {
 
 	@Override
 	public String getDisplayText() {
-		return getValue().toSQLString();
+		if (getValue() instanceof IQueryString)
+			return ((IQueryString) getValue()).toSQLString();
+		else if (getValue() instanceof String)
+			return (String) getValue();
+		return null;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof MQueryObjects && ((MQueryObjects) obj).getId().equals(getId());
+		if (obj == null)
+			return false;
+		return obj.getClass().equals(getClass()) && ((AMQueryObject<?>) obj).getId().equals(getId());
 	}
 
 	public int hashCode() {

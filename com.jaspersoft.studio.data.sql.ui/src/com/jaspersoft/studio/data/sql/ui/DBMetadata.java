@@ -43,7 +43,6 @@ import com.jaspersoft.studio.data.sql.model.metadata.MProcedure;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MTables;
-import com.jaspersoft.studio.data.sql.model.metadata.MView;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.ANode;
@@ -162,32 +161,11 @@ public class DBMetadata {
 					String tableCatalog = null;
 					if (meta.supportsCatalogsInTableDefinitions())
 						tableCatalog = schemas.getString("TABLE_CATALOG");
-
-					try {
-						MDBObjects mtbl = new MTables(msch, "Tables");
-						ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", new String[] { "TABLE" });
-						while (rs.next())
-							new MSqlTable(mtbl, rs.getString("TABLE_NAME"), rs);
-
-						for (INode n : mtbl.getChildren()) {
-							rs = meta.getColumns(tableCatalog, tableSchema, (String) n.getValue(), "%");
-							while (rs.next())
-								new MColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
-						}
-					} catch (Exception e) {
-					}
-					try {
-						MDBObjects mview = new MTables(msch, "Views");
-						ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", new String[] { "VIEW" });
-						while (rs.next())
-							new MView(mview, rs.getString("TABLE_NAME"), rs);
-						for (INode n : mview.getChildren()) {
-							rs = meta.getColumns(tableCatalog, tableSchema, (String) n.getValue(), "%");
-							while (rs.next())
-								new MColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
-						}
-					} catch (Exception e) {
-					}
+					readTables(meta, tableSchema, tableCatalog, msch, "System Tables", new String[] { "SYSTEM TABLE" });
+					readTables(meta, tableSchema, tableCatalog, msch, "Tables", new String[] { "TABLE" });
+					readTables(meta, tableSchema, tableCatalog, msch, "Views", new String[] { "VIEW" });
+					readTables(meta, tableSchema, tableCatalog, msch, "Temporary Tables", new String[] { "GLOBAL TEMPORARY", "LOCAL TEMPORARY" });
+					readTables(meta, tableSchema, tableCatalog, msch, "Aliases, Synonims", new String[] { "ALIAS", "SYNONYM" });
 					try {
 						ResultSet rs = meta.getProcedures(tableCatalog, tableSchema, "%");
 						MDBObjects mprocs = new MDBObjects(msch, "Procedures", "icons/function.png");
@@ -219,6 +197,21 @@ public class DBMetadata {
 			}
 		});
 
+	}
+
+	protected void readTables(DatabaseMetaData meta, String tableSchema, String tableCatalog, MDBObjects msch, String title, String[] types) {
+		try {
+			MDBObjects mview = new MTables(msch, title);
+			ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", types);
+			while (rs.next())
+				new MSqlTable(mview, rs.getString("TABLE_NAME"), rs);
+			for (INode n : mview.getChildren()) {
+				rs = meta.getColumns(tableCatalog, tableSchema, (String) n.getValue(), "%");
+				while (rs.next())
+					new MColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
+			}
+		} catch (Exception e) {
+		}
 	}
 
 	public MRoot getRoot() {

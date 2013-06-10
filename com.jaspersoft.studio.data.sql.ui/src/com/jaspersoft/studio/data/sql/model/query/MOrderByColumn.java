@@ -4,12 +4,11 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.viewers.StyledString;
 
-import com.jaspersoft.studio.data.sql.model.MQueryObjects;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
-public class MOrderByColumn extends MQueryObjects {
+public class MOrderByColumn extends AMQueryObject<MColumn> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MOrderByColumn(ANode parent, MColumn value) {

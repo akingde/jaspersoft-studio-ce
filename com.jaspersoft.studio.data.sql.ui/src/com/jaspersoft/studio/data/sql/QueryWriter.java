@@ -1,6 +1,6 @@
 package com.jaspersoft.studio.data.sql;
 
-import com.jaspersoft.studio.data.sql.model.IQueryString;
+import com.jaspersoft.studio.data.sql.model.query.IQueryString;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;

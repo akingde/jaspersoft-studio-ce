@@ -15,6 +15,7 @@ import com.jaspersoft.studio.data.sql.action.groupby.CreateGroupByColumn;
 import com.jaspersoft.studio.data.sql.action.order.CreateOrderByColumn;
 import com.jaspersoft.studio.data.sql.action.order.OrderByDesc;
 import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
+import com.jaspersoft.studio.data.sql.action.select.CreateSelectExpression;
 import com.jaspersoft.studio.data.sql.action.select.EditColumn;
 import com.jaspersoft.studio.data.sql.action.select.SelectDistinct;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
@@ -23,10 +24,10 @@ import com.jaspersoft.studio.data.sql.action.table.EditTable;
 import com.jaspersoft.studio.data.sql.action.table.EditTableJoin;
 import com.jaspersoft.studio.data.sql.action.table.JoinTable;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
-import com.jaspersoft.studio.data.sql.model.query.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.MOrderByColumn;
-import com.jaspersoft.studio.data.sql.model.query.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 
 public class ActionFactory {
 	private List<AAction> actions = new ArrayList<AAction>();
@@ -37,6 +38,7 @@ public class ActionFactory {
 		actions.add(new SelectDistinct(designer));
 		actions.add(null);
 		actions.add(new CreateColumn(designer));
+		actions.add(new CreateSelectExpression(designer));
 		actions.add(new EditColumn(designer));
 		actions.add(new DeleteAction<MSelectColumn>(designer, "Column", MSelectColumn.class));
 		actions.add(null);

@@ -3,13 +3,13 @@ package com.jaspersoft.studio.data.sql.action.select;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
-import com.jaspersoft.studio.data.sql.model.query.MSelect;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.model.ANode;
 
 public class SelectDistinct extends AAction {
 
 	public SelectDistinct(SQLQueryDesigner designer) {
-		super("Change to" + AMKeyword.SELECT_DISTINCT_KEYWORD, designer);
+		super("Change to " + AMKeyword.SELECT_DISTINCT_KEYWORD, designer);
 	}
 
 	@Override

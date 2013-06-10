@@ -4,8 +4,8 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
-import com.jaspersoft.studio.data.sql.model.query.MFromTable;
-import com.jaspersoft.studio.data.sql.model.query.MFromTableJoin;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.model.ANode;
 
 public class DeleteTableJoin extends AAction {

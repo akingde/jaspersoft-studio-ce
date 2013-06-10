@@ -9,8 +9,8 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.TablesDialog;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
-import com.jaspersoft.studio.data.sql.model.query.MFrom;
-import com.jaspersoft.studio.data.sql.model.query.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 
 public class CreateTable extends AAction {
 

@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
-import com.jaspersoft.studio.data.sql.model.query.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public class EditSelectColumnDialog extends ATitledDialog {
@@ -57,13 +57,16 @@ public class EditSelectColumnDialog extends ATitledDialog {
 		Label lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(value.getValue().toSQLString());
 		UIUtil.setBold(lbl);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.minimumWidth = 300;
+		lbl.setLayoutData(gd);
 
 		Combo keyword = new Combo(cmp, SWT.READ_ONLY);
 		keyword.setItems(AMKeyword.ALIAS_KEYWORDS);
 
 		Text alias = new Text(cmp, SWT.BORDER);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.minimumWidth = 200;
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.minimumWidth = 100;
 		alias.setLayoutData(gd);
 
 		DataBindingContext bindingContext = new DataBindingContext();

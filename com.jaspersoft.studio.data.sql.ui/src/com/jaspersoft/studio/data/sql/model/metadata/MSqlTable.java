@@ -18,16 +18,32 @@ public class MSqlTable extends AMSQLObject implements IDragable {
 
 	public MSqlTable(ANode parent, String value, ResultSet rs) {
 		super(parent, value, "icons/table.png");
+		setType(rs);
 		setRemarks(rs);
+	}
+
+	protected void setType(ResultSet rs) {
+		try {
+			type = rs.getString("TABLE_TYPE");
+			tooltip += "\n" + type;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected void setRemarks(ResultSet rs) {
 		try {
 			remarks = rs.getString("REMARKS");
-			tooltip = remarks;
+			tooltip += "\n" + remarks;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private String type;
+
+	public String getType() {
+		return type;
 	}
 
 	private String remarks;

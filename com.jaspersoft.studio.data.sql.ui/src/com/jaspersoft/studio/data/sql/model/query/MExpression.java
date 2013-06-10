@@ -3,41 +3,24 @@ package com.jaspersoft.studio.data.sql.model.query;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.StyledString;
 
-import com.jaspersoft.studio.data.sql.model.IQueryString;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
-public class MExpression extends ANode implements IQueryString {
+public class MExpression extends AMQueryObject<Object> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	private String id;
 
 	public MExpression(ANode parent, Object value, int newIndex) {
-		super(parent, value, newIndex);
-		id = UUID.randomUUID().toString();
+		super(parent, value, null, newIndex);
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof MExpression && ((MExpression) obj).getId().equals(getId());
-	}
-
-	public int hashCode() {
-		return getId().hashCode();
-	};
 
 	@Override
 	public ImageDescriptor getImagePath() {

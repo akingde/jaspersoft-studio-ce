@@ -5,11 +5,12 @@ import java.util.List;
 
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
-import com.jaspersoft.studio.data.sql.model.MQueryObjects;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
+import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
-import com.jaspersoft.studio.data.sql.model.query.MFrom;
+import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -30,10 +31,11 @@ public class Util {
 		MDBObjects mgb = null;
 		if (sel instanceof MDBObjects)
 			mgb = (MDBObjects) sel;
-		else if (sel instanceof MQueryObjects)
+		else if (sel instanceof AMQueryObject)
 			mgb = (MDBObjects) sel.getParent();
 		for (INode n : mgb.getChildren())
-			list.add((AMSQLObject) n.getValue());
+			if (n instanceof MSelectColumn)
+				list.add((AMSQLObject) n.getValue());
 		return list;
 	}
 
@@ -61,8 +63,9 @@ public class Util {
 		ModelVisitor<INode> mv = new ModelVisitor<INode>(mexpr.getRoot()) {
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof MQueryObjects) {
-					setObject(((MQueryObjects) n).getValue().getRoot());
+				if (n instanceof AMQueryObject && n.getValue() instanceof ANode) {
+					ANode v = (ANode) ((AMQueryObject<?>) n).getValue();
+					setObject(v.getRoot());
 					return false;
 				}
 				return true;
