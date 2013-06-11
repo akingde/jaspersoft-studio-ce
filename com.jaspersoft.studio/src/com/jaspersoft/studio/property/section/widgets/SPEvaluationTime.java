@@ -37,7 +37,6 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
-import com.jaspersoft.studio.utils.Misc;
 
 public class SPEvaluationTime extends ASPropertyWidget {
 	private Combo evalTime;
@@ -60,8 +59,7 @@ public class SPEvaluationTime extends ASPropertyWidget {
 
 			public void widgetSelected(SelectionEvent e) {
 				String group = null;
-				Integer et = new Integer(1);
-
+				Integer et = 1;
 				String str = evalTime.getItem(evalTime.getSelectionIndex());
 				if (str.startsWith(GROUPPREFIX)) {
 					group = str.substring(GROUPPREFIX.length());
@@ -71,7 +69,7 @@ public class SPEvaluationTime extends ASPropertyWidget {
 				}
 
 				section.changeProperty(pDescriptor.getId(), et);
-				section.changeProperty(gDescriptor.getId(), Misc.nvl(group));
+				section.changeProperty(gDescriptor.getId(), group);
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
