@@ -13,7 +13,11 @@ public class MOrderByExpression extends AMOrderByMember<String> {
 	private MSelectExpression msExpression;
 
 	public MOrderByExpression(ANode parent, MSelectExpression msExpression) {
-		this(parent, msExpression.getValue());
+		this(parent, msExpression.getValue(), -1);
+	}
+
+	public MOrderByExpression(ANode parent, MSelectExpression msExpression, int index) {
+		this(parent, msExpression.getValue(), index);
 		this.msExpression = msExpression;
 	}
 

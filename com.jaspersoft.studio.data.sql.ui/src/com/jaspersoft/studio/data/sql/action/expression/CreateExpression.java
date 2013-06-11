@@ -22,6 +22,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.widgets.Factory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -89,6 +90,13 @@ public class CreateExpression extends AAction {
 			mexpr.getOperands().add(new FieldOperand(t, mftable, mexpr));
 			mexpr.getOperands().add(Factory.getDefaultOperand(mexpr));
 		}
+		showDialog(mexpr);
+	}
+
+	public void run(ANode node, MSelectColumn selcol) {
+		MExpression mexpr = run(selcol.getValue(), node, -1);
+		mexpr.getOperands().add(new FieldOperand(selcol.getValue(), selcol.getMFromTable(), mexpr));
+		mexpr.getOperands().add(Factory.getDefaultOperand(mexpr));
 		showDialog(mexpr);
 	}
 

@@ -7,6 +7,7 @@ import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
+import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -107,5 +108,12 @@ public class Util {
 			}
 		};
 		return mv.getObject();
+	}
+
+	public static <T extends AMKeyword> T getKeyword(ANode msc, Class<T> clazz) {
+		for (INode n : msc.getRoot().getChildren())
+			if (clazz.isInstance(n))
+				return (T) n;
+		return null;
 	}
 }

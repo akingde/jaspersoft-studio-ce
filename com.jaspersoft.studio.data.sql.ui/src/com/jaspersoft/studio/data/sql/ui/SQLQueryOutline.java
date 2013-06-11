@@ -43,12 +43,18 @@ import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.MExpressionGroup;
 import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
+import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
+import com.jaspersoft.studio.data.sql.model.query.orderby.AMOrderByMember;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
+import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
+import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByExpression;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.dnd.NodeTreeDropAdapter;
@@ -132,27 +138,55 @@ public class SQLQueryOutline {
 				if (!others.isEmpty()) {
 					for (ANode n : others) {
 						ANode oldNode = Util.getOldNode((ANode) target, n);
-						if (target instanceof MExpressionGroup || target instanceof MWhere || target instanceof MHaving || target instanceof MFromTableJoin) {
-							if (n instanceof MExpression || n instanceof MExpressionGroup) {
-								oldNode.setParent(null, -1);
-								oldNode.setParent((ANode) target, -1);
-								treeViewer.refresh(true);
-								treeViewer.reveal(oldNode);
-								continue;
-							}
-						} else if (target instanceof MExpression) {
-							if (n instanceof MExpression || n instanceof MExpressionGroup) {
-								oldNode.setParent(null, -1);
-								MExpression mexpr = (MExpression) target;
-								ANode p = mexpr.getParent();
-								oldNode.setParent(p, p.getChildren().indexOf(mexpr));
+						if ((target instanceof MExpressionGroup || target instanceof MWhere || target instanceof MHaving || target instanceof MFromTableJoin)
+								&& (n instanceof MExpression || n instanceof MExpressionGroup)) {
+							oldNode.setParent(null, -1);
+							oldNode.setParent((ANode) target, -1);
+							refreshAndReveal(oldNode);
+							continue;
+						}
+						if (target instanceof MExpression && (n instanceof MExpression || n instanceof MExpressionGroup)) {
+							oldNode.setParent(null, -1);
+							MExpression mexpr = (MExpression) target;
+							ANode p = mexpr.getParent();
+							oldNode.setParent(p, p.getChildren().indexOf(mexpr));
 
-								treeViewer.refresh(true);
-								treeViewer.reveal(oldNode);
+							refreshAndReveal(oldNode);
+							continue;
+						}
+						if (n instanceof MSelectColumn || n instanceof MSelectExpression) {
+							int ind = -1;
+							// can drop also in a child of one of this
+							if (target instanceof MWhere) {
+
+							}
+							if (target instanceof MGroupByColumn) {
+								ANode p = ((MGroupByColumn) target).getParent();
+								ind = p.getChildren().indexOf(target);
+								target = p;
+							}
+							if (target instanceof MGroupBy) {
+								if (n instanceof MSelectColumn)
+									refreshAndReveal(new MGroupByColumn((MGroupBy) target, (MSelectColumn) n, ind));
 								continue;
 							}
-						} else
-							reorder(target, n);
+							if (target instanceof MHaving) {
+
+							}
+							if (target instanceof AMOrderByMember) {
+								ANode p = ((AMOrderByMember<?>) target).getParent();
+								ind = p.getChildren().indexOf(target);
+								target = p;
+							}
+							if (target instanceof MOrderBy) {
+								if (n instanceof MSelectExpression)
+									refreshAndReveal(new MOrderByExpression((MOrderBy) target, (MSelectExpression) n, ind));
+								else
+									refreshAndReveal(new MOrderByColumn((MOrderBy) target, (MSelectColumn) n, ind));
+								continue;
+							}
+						}
+						reorder(target, n);
 					}
 				}
 				return false;
@@ -173,8 +207,7 @@ public class SQLQueryOutline {
 							pos = parent.getChildren().indexOf(target);
 						parent.removeChild(n);
 						parent.addChild(n, pos);
-						treeViewer.refresh(true);
-						treeViewer.reveal(n);
+						refreshAndReveal(n);
 					}
 				}
 			}
@@ -263,5 +296,10 @@ public class SQLQueryOutline {
 
 	public void dispose() {
 
+	}
+
+	protected void refreshAndReveal(ANode toselect) {
+		treeViewer.refresh(true);
+		treeViewer.reveal(toselect);
 	}
 }

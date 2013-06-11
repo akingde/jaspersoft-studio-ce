@@ -8,7 +8,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.model.ANode;
 
-public class DeleteAction<T extends ANode> extends AAction {
+public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	protected String name;
 	protected Class<T> type;
 
@@ -18,21 +18,7 @@ public class DeleteAction<T extends ANode> extends AAction {
 		this.type = type;
 	}
 
-	@Override
-	public boolean calculateEnabled(Object[] selection) {
-		super.calculateEnabled(selection);
-		if (selection == null)
-			return false;
-		else {
-			for (Object s : selection) {
-				if (!isColumn((ANode) s))
-					return false;
-			}
-		}
-		return true;
-	}
-
-	protected boolean isColumn(ANode element) {
+	protected boolean isGoodNode(ANode element) {
 		return type.isAssignableFrom(element.getClass());
 	}
 

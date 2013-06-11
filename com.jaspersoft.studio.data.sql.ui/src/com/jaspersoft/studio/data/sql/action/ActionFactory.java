@@ -16,8 +16,10 @@ import com.jaspersoft.studio.data.sql.action.order.CreateOrderByColumn;
 import com.jaspersoft.studio.data.sql.action.order.OrderByDesc;
 import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
 import com.jaspersoft.studio.data.sql.action.select.CreateGroupByFromColumn;
+import com.jaspersoft.studio.data.sql.action.select.CreateHavingFromColumn;
 import com.jaspersoft.studio.data.sql.action.select.CreateOrderByFromColumn;
 import com.jaspersoft.studio.data.sql.action.select.CreateSelectExpression;
+import com.jaspersoft.studio.data.sql.action.select.CreateWhereFromColumn;
 import com.jaspersoft.studio.data.sql.action.select.DeleteColumn;
 import com.jaspersoft.studio.data.sql.action.select.EditColumn;
 import com.jaspersoft.studio.data.sql.action.select.SelectDistinct;
@@ -39,8 +41,10 @@ public class ActionFactory {
 	public ActionFactory(MenuManager menuMgr, TreeViewer treeViewer, SQLQueryDesigner designer) {
 		this.menuMgr = menuMgr;
 		actions.add(new SelectDistinct(designer));
-		actions.add(new CreateOrderByFromColumn(designer));
+		actions.add(new CreateWhereFromColumn(designer));
 		actions.add(new CreateGroupByFromColumn(designer));
+		actions.add(new CreateHavingFromColumn(designer));
+		actions.add(new CreateOrderByFromColumn(designer));
 		actions.add(null);
 		actions.add(new CreateColumn(designer));
 		actions.add(new CreateSelectExpression(designer));

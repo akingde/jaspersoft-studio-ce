@@ -15,6 +15,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -108,6 +110,18 @@ public class DBMetadata {
 				treeViewer.refresh(true);
 				if (!event.doit)
 					return;
+			}
+		});
+		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+				Object el = ts.getFirstElement();
+				if (treeViewer.getExpandedState(el))
+					treeViewer.collapseToLevel(el, 1);
+				else
+					treeViewer.expandToLevel(el, 1);
 			}
 		});
 		MenuManager menuMgr = new MenuManager();

@@ -16,7 +16,11 @@ public class MOrderByColumn extends AMOrderByMember<MColumn> {
 	private MSelectColumn msColumn;
 
 	public MOrderByColumn(ANode parent, MSelectColumn msColumn) {
-		this(parent, msColumn.getValue(), msColumn.getMFromTable());
+		this(parent, msColumn.getValue(), msColumn.getMFromTable(), -1);
+	}
+
+	public MOrderByColumn(ANode parent, MSelectColumn msColumn, int index) {
+		this(parent, msColumn.getValue(), msColumn.getMFromTable(), index);
 		this.msColumn = msColumn;
 	}
 

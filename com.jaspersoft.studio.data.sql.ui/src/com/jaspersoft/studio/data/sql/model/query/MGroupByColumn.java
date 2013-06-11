@@ -15,7 +15,11 @@ public class MGroupByColumn extends AMQueryObject<MColumn> {
 	private MSelectColumn msColumn;
 
 	public MGroupByColumn(ANode parent, MSelectColumn msColumn) {
-		this(parent, msColumn.getValue(), msColumn.getMFromTable());
+		this(parent, msColumn.getValue(), msColumn.getMFromTable(), -1);
+	}
+
+	public MGroupByColumn(ANode parent, MSelectColumn msColumn, int index) {
+		this(parent, msColumn.getValue(), msColumn.getMFromTable(), index);
 		this.msColumn = msColumn;
 	}
 
