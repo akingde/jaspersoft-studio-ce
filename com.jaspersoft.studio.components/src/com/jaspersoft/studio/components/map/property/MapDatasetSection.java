@@ -23,11 +23,11 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -49,22 +49,25 @@ public class MapDatasetSection extends AbstractSection {
 		GridData gdBtn = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
 		gdBtn.horizontalIndent = 2;
 		useMarkerDataset.setLayoutData(gdBtn);
-		useMarkerDataset.setSelection(isDatasetSet());
-
+		boolean enableAndShowDSPanel = isDatasetSet();
+		useMarkerDataset.setSelection(enableAndShowDSPanel);
+		
 		final Composite container = new Composite(parent,SWT.NONE);
+		container.setLayout(new GridLayout());
 		GridData gdContainer = new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
 		gdContainer.horizontalIndent = 5;
 		container.setLayoutData(gdContainer);
-		container.setLayout(new FillLayout());
+		container.setEnabled(enableAndShowDSPanel);
+		container.setVisible(enableAndShowDSPanel);
 		
-		Composite group = getWidgetFactory().createSection(container, com.jaspersoft.studio.messages.Messages.MElementDataset_dataset_run, true, 2, 2); //$NON-NLS-1$
+		final Composite group = getWidgetFactory().createSection(container, com.jaspersoft.studio.messages.Messages.MElementDataset_dataset_run, true, 2, 2); //$NON-NLS-1$
 		createWidget4Property(group, JRDesignElementDataset.PROPERTY_DATASET_RUN);
 		
 		useMarkerDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(useMarkerDataset.getSelection()) {
-					toggleDSRunPanel(container,true);
+					toggleDSRunPanel(container, true);
 					getElement().setPropertyValue(StandardItemData.PROPERTY_DATASET, new JRDesignElementDataset());
 				}
 				else {
@@ -75,10 +78,10 @@ public class MapDatasetSection extends AbstractSection {
 						useMarkerDataset.setSelection(true);
 						return;
 					}
-					toggleDSRunPanel(container,false);
+					toggleDSRunPanel(container, false);
 					getElement().setPropertyValue(StandardItemData.PROPERTY_DATASET, null);
 				}
-				parent.layout();
+				parent.layout(new Control[]{container});
 			}
 		});
 	}
@@ -88,8 +91,8 @@ public class MapDatasetSection extends AbstractSection {
 	}
 	
 	private void toggleDSRunPanel(Composite panel, boolean show) {
+		((GridData)panel.getLayoutData()).exclude = !show;
 		panel.setEnabled(show);
 		panel.setVisible(show);
-		((GridData)panel.getLayoutData()).exclude = !show;
 	}
 }
