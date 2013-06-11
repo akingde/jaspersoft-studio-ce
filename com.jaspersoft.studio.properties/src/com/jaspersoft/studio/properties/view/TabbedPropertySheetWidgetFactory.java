@@ -330,14 +330,14 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 		section.setSeparatorControl(new Label(section, SWT.SEPARATOR
 				| SWT.HORIZONTAL));
 
-		parent = createComposite(section, SWT.NONE);
+		Composite cmp = createComposite(section, SWT.NONE);
 		GridLayout layout = new GridLayout(columns, false);
 		layout.marginHeight = 4;
 		layout.marginWidth = 2;
-		parent.setLayout(layout);
+		cmp.setLayout(layout);
 
-		section.setClient(parent);
-		return parent;
+		section.setClient(cmp);
+		return cmp;
 	}
 
 	public void dispose() {
