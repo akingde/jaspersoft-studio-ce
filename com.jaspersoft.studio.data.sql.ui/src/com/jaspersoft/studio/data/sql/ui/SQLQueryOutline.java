@@ -44,10 +44,10 @@ import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.MExpressionGroup;
 import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
-import com.jaspersoft.studio.data.sql.model.query.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
+import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
@@ -65,7 +65,7 @@ public class SQLQueryOutline {
 	}
 
 	public Control createOutline(Composite parent) {
-		treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE) {
+		treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.MULTI) {
 
 			@Override
 			public void refresh(boolean updateLabels) {

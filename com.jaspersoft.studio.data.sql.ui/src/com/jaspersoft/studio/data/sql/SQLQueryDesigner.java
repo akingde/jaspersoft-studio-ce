@@ -31,6 +31,8 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -43,6 +45,7 @@ import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.ui.DBMetadata;
+import com.jaspersoft.studio.data.sql.ui.SQLQueryDiagram;
 import com.jaspersoft.studio.data.sql.ui.SQLQueryOutline;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.INode;
@@ -53,6 +56,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	private SashForm sf;
 	private DBMetadata dbMetadata;
 	private SQLQueryOutline outline;
+	private SQLQueryDiagram diagram;
 
 	public SQLQueryDesigner() {
 		super();
@@ -78,11 +82,33 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 		createSource(tabFolder);
 		createOutline(tabFolder);
+		// createDiagram(tabFolder);
 
 		tabFolder.setSelection(0);
+		tabFolder.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				switch (tabFolder.getSelectionIndex()) {
+				case 1:
+					outline.scheduleRefresh();
+					break;
+				case 2:
+					diagram.scheduleRefresh();
+					break;
+				}
+			}
+		});
 
 		sf.setWeights(new int[] { 250, 750 });
 		return sf;
+	}
+
+	protected void createDiagram(CTabFolder tabFolder) {
+		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+		bptab.setText("Diagram");
+
+		diagram = new SQLQueryDiagram(this);
+		bptab.setControl(diagram.createDiagram(tabFolder));
 	}
 
 	protected void createOutline(CTabFolder tabFolder) {
@@ -141,6 +167,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		super.updateQueryText(txt);
 		if (outline != null)
 			outline.scheduleRefresh();
+		if (diagram != null)
+			diagram.scheduleRefresh();
 	}
 
 	private DataAdapterDescriptor da;
@@ -202,9 +230,16 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		return outline;
 	}
 
+	public SQLQueryDiagram getDiagram() {
+		return diagram;
+	}
+
 	@Override
 	public void dispose() {
-		outline.dispose();
+		if (outline != null)
+			outline.dispose();
+		if (diagram != null)
+			diagram.dispose();
 		super.dispose();
 	}
 

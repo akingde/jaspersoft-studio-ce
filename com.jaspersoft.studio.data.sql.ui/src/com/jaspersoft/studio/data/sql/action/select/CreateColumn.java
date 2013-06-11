@@ -80,6 +80,7 @@ public class CreateColumn extends AAction {
 				for (INode n : r.getChildren()) {
 					if (n instanceof MFrom) {
 						mftable = ct.run(tbl, (MFrom) n, -1);
+						tbls = Util.getFromTables((ANode) sel);
 						break;
 					}
 				}

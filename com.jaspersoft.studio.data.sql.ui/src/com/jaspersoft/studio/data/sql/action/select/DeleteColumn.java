@@ -1,0 +1,44 @@
+package com.jaspersoft.studio.data.sql.action.select;
+
+import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.action.DeleteAction;
+import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
+import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
+import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
+import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
+import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByExpression;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
+
+public class DeleteColumn extends DeleteAction<MSelectColumn> {
+
+	public DeleteColumn(SQLQueryDesigner designer) {
+		super(designer, "Column", MSelectColumn.class);
+	}
+
+	@Override
+	protected void doDeleteMore(ANode parent, MSelectColumn todel) {
+		for (INode n : parent.getRoot().getChildren()) {
+			if (n instanceof MGroupBy) {
+				for (INode gb : n.getChildren()) {
+					MGroupByColumn gbc = (MGroupByColumn) gb;
+					if (gbc.getMSelectColumn() != null && gbc.getMSelectColumn().equals(todel))
+						gbc.setMSelectColumn(null);
+				}
+			} else if (n instanceof MOrderBy) {
+				for (INode gb : n.getChildren()) {
+					if (gb instanceof MOrderByColumn) {
+						MOrderByColumn gbc = (MOrderByColumn) gb;
+						if (gbc.getMSelectColumn() != null && gbc.getMSelectColumn().equals(todel))
+							gbc.setMSelectColumn(null);
+					} else if (gb instanceof MOrderByExpression) {
+						MOrderByExpression gbc = (MOrderByExpression) gb;
+						if (gbc.getMSelectionExpression() != null && gbc.getMSelectionExpression().equals(todel))
+							gbc.setMSelectionExpression(null);
+					}
+				}
+			}
+		}
+	}
+}

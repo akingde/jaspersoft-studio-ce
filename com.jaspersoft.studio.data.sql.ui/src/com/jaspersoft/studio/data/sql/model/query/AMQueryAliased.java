@@ -27,6 +27,8 @@ public abstract class AMQueryAliased<T> extends AMQueryObject<T> {
 	}
 
 	public void setAlias(String alias) {
+		if (alias != null && alias.trim().isEmpty())
+			alias = null;
 		this.alias = alias;
 	}
 

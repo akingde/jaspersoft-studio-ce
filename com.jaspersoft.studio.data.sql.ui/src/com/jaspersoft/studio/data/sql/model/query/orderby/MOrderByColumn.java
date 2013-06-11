@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.sql.model.query;
+package com.jaspersoft.studio.data.sql.model.query.orderby;
 
 import net.sf.jasperreports.engine.JRConstants;
 
@@ -8,22 +8,23 @@ import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
-public class MGroupByColumn extends AMQueryObject<MColumn> {
+public class MOrderByColumn extends AMOrderByMember<MColumn> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private MFromTable mfTable;
 	private MSelectColumn msColumn;
 
-	public MGroupByColumn(ANode parent, MSelectColumn msColumn) {
+	public MOrderByColumn(ANode parent, MSelectColumn msColumn) {
 		this(parent, msColumn.getValue(), msColumn.getMFromTable());
 		this.msColumn = msColumn;
 	}
 
-	public MGroupByColumn(ANode parent, MColumn value, MFromTable mfTable) {
+	public MOrderByColumn(ANode parent, MColumn value, MFromTable mfTable) {
 		this(parent, value, mfTable, -1);
 	}
 
-	public MGroupByColumn(ANode parent, MColumn value, MFromTable mfTable, int index) {
+	public MOrderByColumn(ANode parent, MColumn value, MFromTable mfTable, int index) {
 		super(parent, value, null, index);
 		this.mfTable = mfTable;
 	}
@@ -41,11 +42,6 @@ public class MGroupByColumn extends AMQueryObject<MColumn> {
 	}
 
 	@Override
-	public String getDisplayText() {
-		return getValue().toSQLString();
-	}
-
-	@Override
 	public StyledString getStyledDisplayText() {
 		StyledString ss = new StyledString();
 		if (msColumn == null || msColumn.getAlias() == null) {
@@ -54,6 +50,7 @@ public class MGroupByColumn extends AMQueryObject<MColumn> {
 			else
 				ss.append(mfTable.getValue().toSQLString());
 			ss.append("." + getValue().getDisplayText());
+			ss.append(addDirection(), FontUtils.KEYWORDS_STYLER);
 		} else
 			ss.append(msColumn.getAlias());
 		return ss;
@@ -63,11 +60,12 @@ public class MGroupByColumn extends AMQueryObject<MColumn> {
 	public String toSQLString() {
 		StringBuffer ss = new StringBuffer();
 		if (msColumn == null || msColumn.getAlias() == null) {
-			if (mfTable.getAlias() != null)
+			if (mfTable.getAlias() != null && !mfTable.getAlias().trim().isEmpty())
 				ss.append(mfTable.getAlias());
 			else
 				ss.append(mfTable.getValue().toSQLString());
 			ss.append("." + getValue().getDisplayText());
+			ss.append(addDirection());
 		} else
 			ss.append(msColumn.getAlias());
 		return isFirst() ? ss.toString() : ",\n\t" + ss.toString();

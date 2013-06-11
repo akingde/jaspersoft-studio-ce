@@ -2,7 +2,7 @@ package com.jaspersoft.studio.data.sql.action.order;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
-import com.jaspersoft.studio.data.sql.model.query.MOrderByColumn;
+import com.jaspersoft.studio.data.sql.model.query.orderby.AMOrderByMember;
 import com.jaspersoft.studio.model.ANode;
 
 public class OrderByDesc extends AAction {
@@ -18,13 +18,13 @@ public class OrderByDesc extends AAction {
 	}
 
 	protected boolean isColumn(ANode element) {
-		boolean b = element instanceof MOrderByColumn;
+		boolean b = element instanceof AMOrderByMember;
 		if (b)
-			setMenuText((MOrderByColumn) element);
+			setMenuText((AMOrderByMember<?>) element);
 		return b;
 	}
 
-	protected void setMenuText(MOrderByColumn msel) {
+	protected void setMenuText(AMOrderByMember<?> msel) {
 		if (msel.isDesc())
 			setText("Set Ascending");
 		else
@@ -34,8 +34,8 @@ public class OrderByDesc extends AAction {
 	@Override
 	public void run() {
 		for (Object obj : selection) {
-			if (obj instanceof MOrderByColumn) {
-				MOrderByColumn msel = (MOrderByColumn) obj;
+			if (obj instanceof AMOrderByMember) {
+				AMOrderByMember<?> msel = (AMOrderByMember<?>) obj;
 				msel.setDesc(!msel.isDesc());
 				setMenuText(msel);
 				selectInTree(obj);

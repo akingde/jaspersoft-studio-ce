@@ -21,7 +21,15 @@ public class DeleteAction<T extends ANode> extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && isColumn((ANode) selection[0]);
+		if (selection == null)
+			return false;
+		else {
+			for (Object s : selection) {
+				if (!isColumn((ANode) s))
+					return false;
+			}
+		}
+		return true;
 	}
 
 	protected boolean isColumn(ANode element) {
@@ -35,9 +43,8 @@ public class DeleteAction<T extends ANode> extends AAction {
 			if (type.isAssignableFrom(obj.getClass()))
 				lst.add((T) obj);
 		}
-		if (UIUtils.showConfirmation("Delete " + name, "Are you sure you want to delete the " + name.toLowerCase() + "(s)?")) {
+		if (UIUtils.showConfirmation("Delete " + name, "Are you sure you want to delete the " + name.toLowerCase() + "(s)?"))
 			doDelete(lst);
-		}
 	}
 
 	protected void doDelete(final List<T> lst) {
@@ -48,10 +55,14 @@ public class DeleteAction<T extends ANode> extends AAction {
 				mfrom = (ANode) ftbl.getParent();
 			indx = mfrom.getChildren().indexOf(ftbl);
 			mfrom.removeChild(ftbl);
+			doDeleteMore(mfrom, ftbl);
 		}
 		ANode toSelect = mfrom;
 		if (indx - 1 > 0)
-			toSelect = (ANode) mfrom.getChildren().get(indx);
+			toSelect = (ANode) mfrom.getChildren().get(Math.min(mfrom.getChildren().size() - 1, indx));
 		selectInTree(toSelect);
+	}
+
+	protected void doDeleteMore(ANode parent, T todel) {
 	}
 }
