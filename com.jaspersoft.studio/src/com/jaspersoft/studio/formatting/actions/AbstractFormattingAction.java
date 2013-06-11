@@ -56,10 +56,10 @@ public abstract class AbstractFormattingAction extends SelectionAction implement
 			return new ArrayList<APropertyNode>();
 		List<APropertyNode> result = new ArrayList<APropertyNode>();
 		for (Object element : editparts) {
-			if (element instanceof GraphicalEditPart){
+			if (element instanceof EditPart){
 				EditPart part = (EditPart) element;
 				if (part.getModel() instanceof APropertyNode && !(part.getModel() instanceof MBand))
-				result.add((APropertyNode) ((EditPart) element).getModel());
+					result.add((APropertyNode) ((EditPart) element).getModel());
 			}
 		}
 		return result;

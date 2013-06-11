@@ -772,25 +772,27 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 
 			// find the right position to put the band
 			addGroupListener(group);
-			JRDesignGroup gr = null;
-			int grPosition = ((JRDesignDataset) getJasperDesign().getMainDataset()).getGroupsList().size()
-					- ((CollectionElementAddedEvent) evt).getAddedIndex();
-			int grCount = 0;
 			int position = 0;
+			int grPosition = ((CollectionElementAddedEvent) evt).getAddedIndex();
+			int groupsToSkip = grPosition;
+			JRDesignGroup previousGroup = null;
 			for (INode node : getChildren()) {
 				if (node instanceof MBandGroupHeader) {
 					MBandGroupHeader band = (MBandGroupHeader) node;
-					if (gr == null || !gr.equals(band.getJrGroup())) {
-						gr = band.getJrGroup();
-						grCount++;
-						if (grCount < grPosition) // ok, we are after the group
+					if (previousGroup == null || !previousGroup.equals(band.getJrGroup())) {
+						previousGroup = band.getJrGroup();
+						// ok, we are after the group
+						if (groupsToSkip == 0) {
 							break;
+						}
+						groupsToSkip--;
 					}
 					// ok, I'm now just create in the right position the bands
 				} else if (node instanceof MBand && ((MBand) node).getBandType().equals(BandTypeEnum.DETAIL))
 					break;
 				position++;
 			}
+			
 			if (group.getGroupHeaderSection() != null) {
 				List<?> grhBands = ((JRDesignSection) group.getGroupHeaderSection()).getBandsList();
 				if (grhBands != null) {
@@ -808,19 +810,21 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 					}
 				}
 			}
-			grCount = 0;
 			position = getChildren().size();
-			gr = null;
+			previousGroup = null;
 			// ADD FOOTER
+			groupsToSkip = grPosition;
 			for (ListIterator<INode> it = getChildren().listIterator(getChildren().size()); it.hasPrevious();) {
 				INode node = it.previous();
 				if (node instanceof MBandGroupFooter) {
 					MBandGroupFooter band = (MBandGroupFooter) node;
-					if (gr == null || !gr.equals(band.getJrGroup())) {
-						gr = band.getJrGroup();
-						grCount++;
-						if (grCount < grPosition) // ok, we are after the group
+					if (previousGroup == null || !previousGroup.equals(band.getJrGroup())) {
+						previousGroup = band.getJrGroup();
+						// ok, we are after the group
+						if (groupsToSkip == 0) {
 							break;
+						}
+						groupsToSkip--;
 					}
 					// ok, I'm now just create in the right position the bands
 				} else if (node instanceof MBand && ((MBand) node).getBandType().equals(BandTypeEnum.DETAIL))

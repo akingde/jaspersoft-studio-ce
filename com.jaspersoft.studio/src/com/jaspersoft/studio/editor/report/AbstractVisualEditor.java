@@ -74,6 +74,8 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
+import com.jaspersoft.studio.editor.action.MoveGroupDownAction;
+import com.jaspersoft.studio.editor.action.MoveGroupUpAction;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.align.Align2Element;
@@ -830,6 +832,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		selectionActions.add(action.getId());
 		//End of the convert actions
 		
+		//Move group actions
+		action = new MoveGroupUpAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new MoveGroupDownAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
 	}
 
 	protected void createEditorActions(ActionRegistry registry) {
