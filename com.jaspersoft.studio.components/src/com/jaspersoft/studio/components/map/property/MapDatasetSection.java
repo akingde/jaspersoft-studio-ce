@@ -16,19 +16,26 @@
 package com.jaspersoft.studio.components.map.property;
 
 import net.sf.jasperreports.components.map.StandardItemData;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class MapDatasetSection extends AbstractSection {
 	@Override
-	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
+	public void createControls(final Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent.setLayout(new GridLayout(2, false));
@@ -36,8 +43,53 @@ public class MapDatasetSection extends AbstractSection {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		createWidget4Property(parent, StandardItemData.PROPERTY_ITEMS, false).getControl().setLayoutData(gd);
+		
+		final Button useMarkerDataset = new Button(parent, SWT.CHECK);
+		useMarkerDataset.setText(Messages.MapDatasetSection_UseMarkersDatasetBtn);
+		GridData gdBtn = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
+		gdBtn.horizontalIndent = 2;
+		useMarkerDataset.setLayoutData(gdBtn);
+		useMarkerDataset.setSelection(isDatasetSet());
 
-		Composite group = getWidgetFactory().createSection(parent, Messages.MElementDataset_dataset_run, true, 2, 2);
+		final Composite container = new Composite(parent,SWT.NONE);
+		GridData gdContainer = new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
+		gdContainer.horizontalIndent = 5;
+		container.setLayoutData(gdContainer);
+		container.setLayout(new FillLayout());
+		
+		Composite group = getWidgetFactory().createSection(container, com.jaspersoft.studio.messages.Messages.MElementDataset_dataset_run, true, 2, 2); //$NON-NLS-1$
 		createWidget4Property(group, JRDesignElementDataset.PROPERTY_DATASET_RUN);
+		
+		useMarkerDataset.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(useMarkerDataset.getSelection()) {
+					toggleDSRunPanel(container,true);
+					getElement().setPropertyValue(StandardItemData.PROPERTY_DATASET, new JRDesignElementDataset());
+				}
+				else {
+					boolean answer = MessageDialog.openQuestion(
+							UIUtils.getShell(), Messages.MapDatasetSection_DeleteConfirmationTitle, 
+							Messages.MapDatasetSection_DeleteConfirmationMsg);
+					if(!answer){
+						useMarkerDataset.setSelection(true);
+						return;
+					}
+					toggleDSRunPanel(container,false);
+					getElement().setPropertyValue(StandardItemData.PROPERTY_DATASET, null);
+				}
+				parent.layout();
+			}
+		});
+	}
+	
+	private boolean isDatasetSet() {
+		return getElement().getPropertyValue(StandardItemData.PROPERTY_DATASET)!=null;
+	}
+	
+	private void toggleDSRunPanel(Composite panel, boolean show) {
+		panel.setEnabled(show);
+		panel.setVisible(show);
+		((GridData)panel.getLayoutData()).exclude = !show;
 	}
 }

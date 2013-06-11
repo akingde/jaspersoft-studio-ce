@@ -23,7 +23,6 @@ import net.sf.jasperreports.components.map.Item;
 import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.components.map.StandardItemData;
 import net.sf.jasperreports.components.map.StandardMapComponent;
-import net.sf.jasperreports.components.map.StandardMarkerDataset;
 import net.sf.jasperreports.components.map.type.MapImageTypeEnum;
 import net.sf.jasperreports.components.map.type.MapScaleEnum;
 import net.sf.jasperreports.components.map.type.MapTypeEnum;
@@ -261,6 +260,12 @@ public class MMap extends MGraphicElement {
 			}
 			return new MarkersDTO(markers, this);
 		}
+		if (id.equals(StandardItemData.PROPERTY_DATASET)) {
+			if(component.getMarkerData()!=null) {
+				return component.getMarkerData().getDataset();
+			}
+			return null;
+		}
 		if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			JRElementDataset markerdataset = ModelUtils.safeGetMarkerData(component, false).getDataset();
 			JRDatasetRun j = null;
@@ -310,11 +315,7 @@ public class MMap extends MGraphicElement {
 		StandardItemData markerdata = (StandardItemData) component.getMarkerData();
 		if (id.equals(StandardItemData.PROPERTY_ITEMS)) {
 			if (value instanceof MarkersDTO) {
-				if (markerdata == null) {
-					markerdata = new StandardItemData();
-					component.setMarkerData(markerdata);
-					listenMap();
-				}
+				markerdata = safeGetMarkerData(component, markerdata);
 				List<Item> markers = markerdata.getItems();
 				if (!markers.isEmpty()) {
 					Item[] marray = markers.toArray(new Item[markers.size()]);
@@ -326,18 +327,27 @@ public class MMap extends MGraphicElement {
 					for (Item m : mdto.getMarkers())
 						markerdata.addItem(m);
 			}
+		} else if (id.equals(StandardItemData.PROPERTY_DATASET)){
+			markerdata = safeGetMarkerData(component, markerdata);
+			if(value instanceof JRElementDataset) {
+				markerdata.setDataset((JRElementDataset)value);
+			}
+			else {
+				markerdata.setDataset(null);
+			}
 		} else if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			MDatasetRun mdr = (MDatasetRun) value;
 			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
-			if (markerdata == null) {
-				markerdata = new StandardItemData();
-				component.setMarkerData(markerdata);
-				listenMap();
+			markerdata = safeGetMarkerData(component, markerdata);
+			if(markerdata.getDataset()==null){
+				markerdata.setDataset(new JRDesignElementDataset());
 			}
-			if (dr.getDatasetName() != null)
+			if (dr.getDatasetName() != null) {
 				((JRDesignElementDataset) markerdata.getDataset()).setDatasetRun(dr);
-			else
-				((JRDesignElementDataset) markerdata.getDataset()).setDatasetRun(null);
+			}
+			else {
+				((JRDesignElementDataset) markerdata.getDataset()).setDatasetRun(null);				
+			}
 		} else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME))
 			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
 		else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_GROUP))
@@ -358,6 +368,15 @@ public class MMap extends MGraphicElement {
 			component.setImageType((MapImageTypeEnum) imageTypeD.getEnumValue(value));
 		else
 			super.setPropertyValue(id, value);
+	}
+
+	private StandardItemData safeGetMarkerData(StandardMapComponent component, StandardItemData markerdata) {
+		if (markerdata == null) {
+			markerdata = new StandardItemData();
+			component.setMarkerData(markerdata);
+			listenMap();
+		}
+		return markerdata;
 	}
 
 	private StandardMapComponent getMapComponent() {
@@ -412,7 +431,6 @@ public class MMap extends MGraphicElement {
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement designMap = new JRDesignComponentElement();
 		StandardMapComponent component = new StandardMapComponent();
-		component.setMarkerDataset(new StandardMarkerDataset());
 		JRDesignExpression exp1 = new JRDesignExpression();
 		exp1.setText(MapDesignConverter.DEFAULT_LATITUDE.toString() + "f"); //$NON-NLS-1$
 		JRDesignExpression exp2 = new JRDesignExpression();

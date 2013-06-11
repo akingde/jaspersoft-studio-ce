@@ -19,6 +19,9 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.components.map.messages.messages"; //$NON-NLS-1$
+	public static String MapDatasetSection_DeleteConfirmationMsg;
+	public static String MapDatasetSection_DeleteConfirmationTitle;
+	public static String MapDatasetSection_UseMarkersDatasetBtn;
 	public static String MapWizard_map_wizard;
 	public static String MMap_common_map_properties;
 	public static String MMap_evaluation_group;
