@@ -81,6 +81,6 @@ public abstract class AMQueryObject<T> extends ANode implements IQueryString {
 
 	@Override
 	public String toSQLString() {
-		return (isFirst() ? getDisplayText() : ",\n\t" + getDisplayText()) + " ";
+		return (isFirst() ? getDisplayText() : ",\n\t" + getDisplayText());
 	}
 }

@@ -4,29 +4,42 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 
 public class FieldOperand extends AOperand {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	private MColumn value;
+	private MColumn column;
+	private MFromTable fromTable;
 
-	public FieldOperand(MColumn value, MExpression mexpr) {
+	public FieldOperand(MColumn value, MFromTable fromTable, MExpression mexpr) {
 		super(mexpr);
-		this.value = value;
+		setValue(value, fromTable);
 	}
 
-	public MColumn getValue() {
-		return value;
+	public MFromTable getFromTable() {
+		return fromTable;
 	}
 
-	public void setValue(MColumn value) {
-		this.value = value;
+	public MColumn getMColumn() {
+		return column;
+	}
+
+	public void setValue(MColumn value, MFromTable fromTable) {
+		this.column = value;
+		this.fromTable = fromTable;
 	}
 
 	@Override
 	public String toSQLString() {
-		if (value == null)
+		if (column == null)
 			return "";
-		return value.toSQLString();
+		StringBuffer ss = new StringBuffer();
+		if (fromTable.getAlias() != null && !fromTable.getAlias().trim().isEmpty())
+			ss.append(fromTable.getAlias());
+		else
+			ss.append(fromTable.getValue().toSQLString());
+		ss.append("." + column.getDisplayText());
+		return ss.toString();
 	}
 
 }

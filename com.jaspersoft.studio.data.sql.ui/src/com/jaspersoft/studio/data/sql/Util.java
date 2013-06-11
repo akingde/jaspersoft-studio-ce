@@ -10,6 +10,7 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -49,6 +50,24 @@ public class Util {
 					if (!t.getChildren().isEmpty()) {
 						for (INode jt : t.getChildren())
 							list.add((MSqlTable) jt.getValue());
+					}
+				}
+				break;
+			}
+		}
+		return list;
+	}
+
+	public static List<MFromTable> getFromTables(ANode sel) {
+		List<MFromTable> list = new ArrayList<MFromTable>();
+		MRoot r = (MRoot) sel.getRoot();
+		for (INode n : r.getChildren()) {
+			if (n instanceof MFrom) {
+				for (INode t : n.getChildren()) {
+					list.add((MFromTable) t);
+					if (!t.getChildren().isEmpty()) {
+						for (INode jt : t.getChildren())
+							list.add((MFromTable) jt);
 					}
 				}
 				break;

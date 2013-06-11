@@ -148,7 +148,7 @@ public class Factory {
 		if (opMap == null) {
 			opMap = new LinkedHashMap<String, AOperand>();
 			opMap.put("Parameter", getOperand(w, new ParameterOperand(mexpr)));
-			opMap.put("Database Field", getOperand(w, new FieldOperand(null, mexpr)));
+			opMap.put("Database Field", getOperand(w, new FieldOperand(null, null, mexpr)));
 			opMap.put("String", getOperand(w, getDefaultOperand(mexpr)));
 			opMap.put("Number", getOperand(w, new ScalarOperand<BigDecimal>(mexpr, BigDecimal.ZERO)));
 			opMap.put("Date", getOperand(w, new ScalarOperand<Date>(mexpr, new Date())));

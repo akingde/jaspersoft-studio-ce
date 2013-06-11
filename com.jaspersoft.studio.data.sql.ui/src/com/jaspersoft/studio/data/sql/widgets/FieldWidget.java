@@ -1,5 +1,7 @@
 package com.jaspersoft.studio.data.sql.widgets;
 
+import java.util.Map;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -11,8 +13,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.data.sql.Util;
-import com.jaspersoft.studio.data.sql.dialogs.UsedColumnsDialog;
+import com.jaspersoft.studio.data.sql.dialogs.FromTableColumnsDialog;
+import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 
 public class FieldWidget extends AOperandWidget<FieldOperand> {
@@ -44,11 +47,13 @@ public class FieldWidget extends AOperandWidget<FieldOperand> {
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UsedColumnsDialog dialog = new UsedColumnsDialog(Display.getDefault().getActiveShell());
-				dialog.setRoot(Util.getRoot(v.getValue(), v.getExpression()));
+				FromTableColumnsDialog dialog = new FromTableColumnsDialog(Display.getDefault().getActiveShell(), SWT.SINGLE);
 				dialog.setSelection(v.getExpression());
-				if (dialog.open() == Dialog.OK)
-					v.setValue(dialog.getColumns().get(0));
+				if (dialog.open() == Dialog.OK) {
+					Map<MColumn, MFromTable> cmap = dialog.getColumns();
+					for (MColumn t : cmap.keySet())
+						v.setValue(t, cmap.get(t));
+				}
 				txt.setText(v.toSQLString());
 				txt.setToolTipText(v.toSQLString());
 			}

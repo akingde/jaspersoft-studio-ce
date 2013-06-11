@@ -24,6 +24,7 @@ import com.jaspersoft.studio.data.sql.action.table.EditTable;
 import com.jaspersoft.studio.data.sql.action.table.EditTableJoin;
 import com.jaspersoft.studio.data.sql.action.table.JoinTable;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.MExpressionGroup;
 import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -63,6 +64,7 @@ public class ActionFactory {
 		actions.add(new ChangeOperator(designer));
 		actions.add(new EditExpression(designer));
 		actions.add(new DeleteAction<MExpression>(designer, "Expression", MExpression.class));
+		actions.add(new DeleteAction<MExpressionGroup>(designer, "Expression Group", MExpressionGroup.class));
 	}
 
 	@SuppressWarnings("unchecked")

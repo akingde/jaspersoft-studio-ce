@@ -49,6 +49,9 @@ public class CreateTable extends AAction {
 	}
 
 	protected MFromTable run(MSqlTable node, MFromTable mtable) {
+		while (mtable.getParent() instanceof MFromTable)
+			mtable = (MFromTable) mtable.getParent();
+
 		MFrom mfrom = (MFrom) mtable.getParent();
 		return run(node, mfrom, mfrom.getChildren().indexOf(mtable) + 1);
 	}

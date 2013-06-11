@@ -38,7 +38,7 @@ public abstract class AMQueryAliased<T> extends AMQueryObject<T> {
 		return alias;
 	}
 
-	protected String addAlias() {
+	public String addAlias() {
 		if (alias != null && !alias.trim().isEmpty()) {
 			return aliasKeyword + prepareAlias();
 		}
@@ -52,7 +52,7 @@ public abstract class AMQueryAliased<T> extends AMQueryObject<T> {
 		return al;
 	}
 
-	protected void addAlias(StyledString dt) {
+	public void addAlias(StyledString dt) {
 		if (alias != null && !alias.trim().isEmpty()) {
 			dt.append(aliasKeyword, FontUtils.KEYWORDS_STYLER);
 			dt.append(prepareAlias());
