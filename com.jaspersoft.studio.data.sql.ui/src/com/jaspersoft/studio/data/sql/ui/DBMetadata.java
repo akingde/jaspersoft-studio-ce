@@ -229,12 +229,13 @@ public class DBMetadata {
 		}
 
 		Connection c = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
-		if (c != null) {
-			try {
-				schema = c.getSchema();
-			} catch (SQLException e) {
-			}
-		}
+		// TODO implement some compatibility, getSchema() available since 1.7
+		// if (c != null) {
+		// try {
+		// schema = c.getSchema();
+		// } catch (SQLException e) {
+		// }
+		// }
 		return c;
 	}
 
