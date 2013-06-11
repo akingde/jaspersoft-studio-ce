@@ -72,6 +72,9 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 	private Text ruLabel;
 	private MReportUnit reportUnit;
 	private ANode n;
+	
+	private boolean isFillingInput;
+	private boolean canSuggestID;
 
 	public RUnitLocationPage(JasperDesign jDesign, ANode n) {
 		super("serverpublish"); //$NON-NLS-1$
@@ -182,7 +185,10 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				if(validationError==null) {
 					ResourceDescriptor ru = getNewRunit().getValue();
 					ru.setLabel(rtext);
-					ruID.setText(rtext);
+					// suggest the ID 
+					if(canSuggestID) { 
+						ruID.setText(rtext); 
+					}
 				}
 				isRefresh = false;
 			}
@@ -206,6 +212,12 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				if(validationError==null) {
 					ResourceDescriptor ru = getNewRunit().getValue();
 					ru.setName(rtext);
+				}
+				if(!isFillingInput && validationError==null) {
+					canSuggestID=false;
+				}
+				else {
+					canSuggestID=true;
 				}
 				isRefresh = false;
 			}
@@ -310,6 +322,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 	}
 
 	public void fillInput() {
+		isFillingInput=true;
 		if (jDesign != null) {
 			ruID.setText(jDesign.getName().replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
 			ruLabel.setText(jDesign.getName());
@@ -323,6 +336,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 					look4SelectedUnit((MServerProfile) n);
 				}
 			});
+		isFillingInput=false;
 	}
 
 	private void setSelectedNode() {
@@ -457,4 +471,5 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		job.setPriority(Job.LONG);
 		job.schedule();
 	}
+	
 }
