@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.report;
 
@@ -34,6 +29,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.IActionBars;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.CompileAction;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
@@ -166,6 +162,9 @@ public class ReportEditor extends AbstractVisualEditor {
 
 				id = DatasetAction.ID;
 				bars.setGlobalActionHandler(id, registry.getAction(id));
+
+				id = CompileAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 			}
 		};
 		// }
@@ -241,10 +240,15 @@ public class ReportEditor extends AbstractVisualEditor {
 		action = new DatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
+
+		action = new CompileAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
 	}
 
 	@Override
 	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
+		toolbarManager.add(getActionRegistry().getAction(CompileAction.ID));
 		toolbarManager.add(getActionRegistry().getAction(DatasetAction.ID));
 		toolbarManager.add(new Separator());
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
