@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SQL Query Editor Grammar
 Bundle-Vendor: Jaspersoft Corporation
-Bundle-Version: 5.1.1.qualifier
+Bundle-Version: 5.2.0
 Bundle-SymbolicName: com.jaspersoft.studio.data.sql;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;visibility:=reexport,
