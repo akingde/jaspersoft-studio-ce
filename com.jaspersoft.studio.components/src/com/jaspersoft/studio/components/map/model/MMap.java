@@ -261,7 +261,7 @@ public class MMap extends MGraphicElement {
 			return new MarkersDTO(markers, this);
 		}
 		if (id.equals(StandardItemData.PROPERTY_DATASET)) {
-			if(component.getMarkerData()!=null) {
+			if (component.getMarkerData() != null) {
 				return component.getMarkerData().getDataset();
 			}
 			return null;
@@ -327,26 +327,24 @@ public class MMap extends MGraphicElement {
 					for (Item m : mdto.getMarkers())
 						markerdata.addItem(m);
 			}
-		} else if (id.equals(StandardItemData.PROPERTY_DATASET)){
+		} else if (id.equals(StandardItemData.PROPERTY_DATASET)) {
 			markerdata = safeGetMarkerData(component, markerdata);
-			if(value instanceof JRElementDataset) {
-				markerdata.setDataset((JRElementDataset)value);
-			}
-			else {
+			if (value instanceof JRElementDataset) {
+				markerdata.setDataset((JRElementDataset) value);
+			} else {
 				markerdata.setDataset(null);
 			}
 		} else if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			MDatasetRun mdr = (MDatasetRun) value;
 			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
 			markerdata = safeGetMarkerData(component, markerdata);
-			if(markerdata.getDataset()==null){
+			if (markerdata.getDataset() == null) {
 				markerdata.setDataset(new JRDesignElementDataset());
 			}
 			if (dr.getDatasetName() != null) {
 				((JRDesignElementDataset) markerdata.getDataset()).setDatasetRun(dr);
-			}
-			else {
-				((JRDesignElementDataset) markerdata.getDataset()).setDatasetRun(null);				
+			} else {
+				((JRDesignElementDataset) markerdata.getDataset()).setDatasetRun(null);
 			}
 		} else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME))
 			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
