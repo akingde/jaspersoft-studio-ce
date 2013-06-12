@@ -42,6 +42,7 @@
       <import plugin="javax.servlet" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.apache.log4j" version="1.2.15" match="greaterOrEqual"/>
       <import plugin="org.eclipse.nebula.widgets.cdatetime" version="0.14.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.6.0" match="compatible"/>
       <import plugin="com.jaspersoft.studio" version="5.1.1" match="greaterOrEqual"/>
       <import plugin="com.jaspersoft.studio.server" version="5.1.1" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.pool" version="1.6.0" match="greaterOrEqual"/>
@@ -52,7 +53,6 @@
       <import plugin="org.eclipse.ui" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.views" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.6.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.equinox.security" version="1.0.200" match="greaterOrEqual"/>
       <import plugin="com.google.guava" version="10.0.1" match="greaterOrEqual"/>
       <import plugin="com.jaspersoft.studio.editor.jrexpressions" version="5.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.xtext.ui" version="2.3.1" match="greaterOrEqual"/>
@@ -62,11 +62,11 @@
       <import plugin="org.eclipse.xtext.ui.codetemplates.ui" version="2.3.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.6.0" match="compatible"/>
       <import plugin="org.eclipse.core.expressions" version="3.4.0" match="compatible"/>
-      <import plugin="org.eclipse.ui.ide" version="3.6.0" match="compatible"/>
       <import plugin="org.eclipse.jface" version="3.6.0" match="compatible"/>
       <import plugin="org.eclipse.jface.text" version="3.6.0" match="compatible"/>
       <import plugin="org.eclipse.emf.common" version="2.6.0" match="compatible"/>
       <import plugin="org.eclipse.help" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.xbase.lib"/>
    </requires>
 
    <plugin
@@ -172,6 +172,13 @@
          download-size="0"
          install-size="0"
          version="1.0.0.201205141449"
+         unpack="false"/>
+
+   <plugin
+         id="com.jaspersoft.studio.data.sql.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
