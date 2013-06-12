@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.data.sql.ui;
 
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -157,8 +158,9 @@ public class DBMetadata {
 
 			@Override
 			public void run() {
-				msg.setText("Getting metadata for\n" + da.getName());
+				msg.setText("Getting metadata for\n" + da.getName() + "\nPlease wait ...");
 				stackLayout.topControl = mcmp;
+				mcmp.layout(true);
 				composite.layout(true);
 			}
 		});
@@ -185,14 +187,14 @@ public class DBMetadata {
 						MDBObjects mprocs = new MDBObjects(msch, "Procedures", "icons/function.png");
 						while (rs.next())
 							new MProcedure(mprocs, rs.getString("PROCEDURE_NAME"), rs);
-					} catch (Exception e) {
+					} catch (Throwable e) {
 					}
 					try {
 						ResultSet rs = meta.getFunctions(tableCatalog, tableSchema, "%");
 						MDBObjects mfunct = new MDBObjects(msch, "Functions", "icons/function.png");
 						while (rs.next())
 							new MFunction(mfunct, rs.getString("FUNCTION_NAME"), rs);
-					} catch (Exception e) {
+					} catch (Throwable e) {
 					}
 
 					// System.out.println(meta.getSQLKeywords());
@@ -224,7 +226,7 @@ public class DBMetadata {
 				while (rs.next())
 					new MColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 		}
 	}
 
@@ -244,12 +246,15 @@ public class DBMetadata {
 
 		Connection c = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
 		// TODO implement some compatibility, getSchema() available since 1.7
-		// if (c != null) {
-		// try {
-		// schema = c.getSchema();
-		// } catch (SQLException e) {
-		// }
-		// }
+		if (c != null) {
+			try {
+				Method m = c.getClass().getMethod("getSchema", new Class<?>[0]);
+				if (m != null)
+					schema = (String) m.invoke(c, new Object[0]);
+				// schema = c.getSchema();
+			} catch (Throwable e) {
+			}
+		}
 		return c;
 	}
 
