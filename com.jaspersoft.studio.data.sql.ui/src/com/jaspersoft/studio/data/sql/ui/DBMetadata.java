@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -202,7 +201,7 @@ public class DBMetadata {
 					if (monitor.isCanceled())
 						break;
 				}
-			} catch (SQLException e) {
+			} catch (Throwable e) {
 				designer.showError(e);
 			}
 		Display.getDefault().syncExec(new Runnable() {
