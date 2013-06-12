@@ -42,12 +42,10 @@ public class RefreshResourcesAction extends Action {
 	public RefreshResourcesAction(TreeViewer treeViewer) {
 		super();
 		setId(ActionFactory.REFRESH.getId());
-		setText("Refresh");
+		setText("&Refresh");
 		setToolTipText(Messages.common_delete);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance()
-				.getImageDescriptor("icons/eclipseicons/reload.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance()
-				.getImageDescriptor("icons/eclipseicons/reload.gif"));
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseicons/reload.gif"));
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseicons/reload.gif"));
 		this.treeViewer = treeViewer;
 	}
 
@@ -58,13 +56,10 @@ public class RefreshResourcesAction extends Action {
 		for (int i = 0; i < p.length; i++) {
 			final Object obj = p[i].getLastSegment();
 			if (obj instanceof MResource) {
-				ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
-						.getDefault().getActiveShell());
+				ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 				try {
 					pm.run(true, true, new IRunnableWithProgress() {
-						public void run(IProgressMonitor monitor)
-								throws InvocationTargetException,
-								InterruptedException {
+						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 							try {
 								MResource res = (MResource) obj;
 								WSClientHelper.refreshResource(res, monitor);
@@ -75,7 +70,6 @@ public class RefreshResourcesAction extends Action {
 										treeViewer.setSelection(s);
 									}
 								});
-
 							} catch (Throwable e) {
 								throw new InvocationTargetException(e);
 							} finally {
@@ -90,8 +84,7 @@ public class RefreshResourcesAction extends Action {
 					UIUtils.showError(e);
 				}
 			} else if (obj instanceof MServerProfile) {
-				EditServerAction.fillServerProfile((MServerProfile) obj,
-						treeViewer);
+				EditServerAction.fillServerProfile((MServerProfile) obj, treeViewer);
 			}
 		}
 	}

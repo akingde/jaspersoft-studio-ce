@@ -30,6 +30,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDragSourceListener;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.FileTransfer;
@@ -83,7 +84,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 	private RunReportUnitAction runReportUnitAction;
 	private OpenInEditorAction openInEditorAction;
 	private DownloadFileAction downloadFileAction;
-	
+
 	private ImportDataSourceInJSSAction importDataSourceInJSSAction;
 
 	public Action[] getActions(TreeViewer treeViewer) {
@@ -119,7 +120,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 			runReportUnitAction = new RunReportUnitAction(treeViewer);
 		if (editAction == null)
 			editAction = new PropertiesAction(treeViewer);
-		if (importDataSourceInJSSAction == null){
+		if (importDataSourceInJSSAction == null) {
 			importDataSourceInJSSAction = new ImportDataSourceInJSSAction(treeViewer);
 		}
 
@@ -183,10 +184,10 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 			if (deleteAction.isEnabled())
 				lst.add(deleteAction);
-			if (importDataSourceInJSSAction.isEnabled()){
+			if (importDataSourceInJSSAction.isEnabled()) {
 				lst.add(importDataSourceInJSSAction);
 			}
-			
+
 			lst.add(new Separator());
 
 			if (refreshAction.isEnabled())
@@ -210,7 +211,17 @@ public class ServerProvider implements IRepositoryViewProvider {
 	}
 
 	public void doubleClick(TreeViewer treeViewer) {
-
+		TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+		Object el = ts.getFirstElement();
+		if (el instanceof MFolder) {
+			if (treeViewer.getExpandedState(el))
+				treeViewer.collapseToLevel(el, 1);
+			else {
+				if (refreshAction.isEnabled())
+					refreshAction.run();
+				treeViewer.expandToLevel(el, 1);
+			}
+		}
 		if (editServerAction.isEnabled())
 			editServerAction.run();
 		// if (runReportUnitAction.isEnabled())

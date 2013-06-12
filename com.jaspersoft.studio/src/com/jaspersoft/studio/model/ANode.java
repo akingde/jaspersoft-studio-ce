@@ -193,14 +193,15 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 	 *          the new index
 	 */
 	public void setParent(ANode newparent, int newIndex) {
-		if (newparent == null) {
+		if (parent != null) {
 			unregister();
-			getPropertyChangeSupport().removePropertyChangeListener(newparent);
-			if (parent != null && parent.getChildren() != null)
+			getPropertyChangeSupport().removePropertyChangeListener(parent);
+			if (parent.getChildren() != null)
 				parent.getChildren().remove(this);
 			this.parent = null;
 			unsetDependents();
-		} else {
+		}
+		if (newparent != null) {
 			register();
 			this.parent = newparent;
 			if (newIndex >= 0 && newIndex < newparent.getChildren().size())
@@ -285,6 +286,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 		// event
 		child.setJasperConfiguration(getJasperConfiguration());
 		child.setParent(null, -1);
+		children.remove(child);
 	}
 
 	/**

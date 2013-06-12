@@ -16,6 +16,8 @@
 package com.jaspersoft.studio.server.publish.wizard;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -26,6 +28,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -54,6 +58,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.server.ServerProvider;
+import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -72,7 +77,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 	private Text ruLabel;
 	private MReportUnit reportUnit;
 	private ANode n;
-	
+	private RefreshResourcesAction refreshAction;
+
 	private boolean isFillingInput;
 	private boolean canSuggestID;
 
@@ -136,7 +142,23 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		gd.minimumWidth = 400;
 		gd.horizontalSpan = 2;
 		treeViewer.getTree().setLayoutData(gd);
-		treeViewer.setContentProvider(new ReportTreeContetProvider());
+		treeViewer.setContentProvider(new ReportTreeContetProvider() {
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				if (parentElement instanceof MFolder && newrunit.getValue().getIsNew() == true) {
+					MFolder node = (MFolder) parentElement;
+					if (node.getChildren() != null && node.getChildren().size() > 0) {
+						List<INode> children = new ArrayList<INode>();
+						for (INode n : node.getChildren()) {
+							if (n != newrunit)
+								children.add(n);
+						}
+						return children.toArray();
+					}
+				}
+				return super.getChildren(parentElement);
+			}
+		});
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		ColumnViewerToolTipSupport.enableFor(treeViewer);
 		bnRunit = new Button(composite, SWT.CHECK);
@@ -182,12 +204,12 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				String rtext = ruLabel.getText();
 				String validationError = ValidationUtils.validateLabel(rtext);
 				setErrorMessage(validationError);
-				if(validationError==null) {
+				if (validationError == null) {
 					ResourceDescriptor ru = getNewRunit().getValue();
 					ru.setLabel(rtext);
-					// suggest the ID 
-					if(canSuggestID) { 
-						ruID.setText(rtext); 
+					// suggest the ID
+					if (canSuggestID) {
+						ruID.setText(rtext);
 					}
 				}
 				isRefresh = false;
@@ -209,15 +231,14 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				String rtext = ruID.getText();
 				String validationError = ValidationUtils.validateName(rtext);
 				setErrorMessage(validationError);
-				if(validationError==null) {
+				if (validationError == null) {
 					ResourceDescriptor ru = getNewRunit().getValue();
 					ru.setName(rtext);
 				}
-				if(!isFillingInput && validationError==null) {
-					canSuggestID=false;
-				}
-				else {
-					canSuggestID=true;
+				if (!isFillingInput && validationError == null) {
+					canSuggestID = false;
+				} else {
+					canSuggestID = true;
 				}
 				isRefresh = false;
 			}
@@ -262,8 +283,26 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			}
 
 		});
-		treeViewer.addTreeListener(new ITreeViewerListener() {
+		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+				Object el = ts.getFirstElement();
+				if (el instanceof MFolder || el instanceof MServerProfile) {
+					if (treeViewer.getExpandedState(el))
+						treeViewer.collapseToLevel(el, 1);
+					else {
+						if (refreshAction == null)
+							refreshAction = new RefreshResourcesAction(treeViewer);
+						if (refreshAction.isEnabled())
+							refreshAction.run();
+						treeViewer.expandToLevel(el, 1);
+					}
+				}
+			}
+		});
+		treeViewer.addTreeListener(new ITreeViewerListener() {
 			private ServerProvider serverProvider;
 
 			public void treeExpanded(final TreeExpansionEvent event) {
@@ -309,7 +348,6 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 					} catch (InterruptedException e) {
 						UIUtils.showError(e.getCause());
 					}
-
 				}
 			}
 
@@ -322,7 +360,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 	}
 
 	public void fillInput() {
-		isFillingInput=true;
+		isFillingInput = true;
 		if (jDesign != null) {
 			ruID.setText(jDesign.getName().replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
 			ruLabel.setText(jDesign.getName());
@@ -336,7 +374,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 					look4SelectedUnit((MServerProfile) n);
 				}
 			});
-		isFillingInput=false;
+		isFillingInput = false;
 	}
 
 	private void setSelectedNode() {
@@ -471,5 +509,5 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		job.setPriority(Job.LONG);
 		job.schedule();
 	}
-	
+
 }
