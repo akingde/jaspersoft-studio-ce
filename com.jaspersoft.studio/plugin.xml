@@ -1790,6 +1790,52 @@
                 class="com.jaspersoft.studio.model.text.MTextElement">
           </selectedObject>
        </toolitems>
+       <toolitems
+             ActionID="move_detail_down"
+             icon="icons/resources/arrow-curve-down.png"
+             id="com.jaspersoft.studio.editor.action.MoveDetailDownAction"
+             label="%detailDownName"
+             tooltip="%detailDownTooltip">
+          <selectedObject
+                class="com.jaspersoft.studio.model.band.MBand">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="move_detail_up"
+             icon="icons/resources/arrow-curve-up.png"
+             id="com.jaspersoft.studio.editor.action.MoveDetailUpAction"
+             label="%detailUpName"
+             tooltip="%detailUpTooltip">
+          <selectedObject
+                class="com.jaspersoft.studio.model.band.MBand">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="move_group_down"
+             icon="icons/resources/arrow-curve-down.png"
+             id="com.jaspersoft.studio.editor.action.MoveGroupDownAction"
+             label="%groupDownName"
+             tooltip="%groupDownTooltip">
+          <selectedObject
+                class="com.jaspersoft.studio.model.band.MBandGroupHeader">
+          </selectedObject>
+          <selectedObject
+                class="com.jaspersoft.studio.model.band.MBandGroupFooter">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="move_group_up"
+             icon="icons/resources/arrow-curve-up.png"
+             id="com.jaspersoft.studio.editor.action.MoveGroupUpAction"
+             label="%groupUpName"
+             tooltip="%groupUpTooltip">
+          <selectedObject
+                class="com.jaspersoft.studio.model.band.MBandGroupHeader">
+          </selectedObject>
+          <selectedObject
+                class="com.jaspersoft.studio.model.band.MBandGroupFooter">
+          </selectedObject>
+       </toolitems>
     </extension>
     <extension
           point="com.jaspersoft.studio.toolitemsets">
@@ -1915,6 +1961,24 @@
              visibility="false">
           <toolitem
                 toolitemID="com.jaspersoft.studio.editor.action.exporter.AddExporterPropertyAction">
+          </toolitem>
+       </toolitemsets>
+       <toolitemsets
+             description="Actions to move up or down the details and groups band"
+             id="com.jaspersoft.studio.editor.movebands"
+             name="%moveBandActionGroup"
+             toolbaruri="com.jaspersoft.studio.editor.movebands"
+             visibility="false">
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.MoveDetailDownAction"></toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.MoveDetailUpAction">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.MoveGroupDownAction">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.MoveGroupUpAction">
           </toolitem>
        </toolitemsets>
     </extension>

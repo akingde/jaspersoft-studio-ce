@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -39,11 +40,16 @@ import com.jaspersoft.studio.model.band.command.DeleteBandDetailCommand;
  * @author Orlandin Marco
  *
  */
-public class MoveDetailUpAction extends SelectionAction {
+public class MoveDetailUpAction extends SelectionAction implements IGlobalAction  {
 
 	/** The Constant ID. */
 	public static final String ID = "move_detail_up"; //$NON-NLS-1$
 
+	/**
+	 * Index of the edit part actually selected
+	 */
+	private int selectionIndex=0;
+	
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
 	 * 
@@ -71,6 +77,16 @@ public class MoveDetailUpAction extends SelectionAction {
 		}
 		return false;
 	}
+	
+	private void setSelection(EditPart parent, int selectionIndex){
+		Object child = parent.getChildren().get(selectionIndex);
+		EditPart part = (EditPart)child;
+		if (part != null){
+			StructuredSelection newselection = new StructuredSelection(part);
+			setSelection(newselection);
+			getWorkbenchPart().getSite().getSelectionProvider().setSelection(newselection);
+		}
+	}
 
 	/**
 	 * Return a list of every MBand with type Detail selected
@@ -87,8 +103,11 @@ public class MoveDetailUpAction extends SelectionAction {
 		for (Object element : editparts) {
 			if (element instanceof EditPart){
 				EditPart part = (EditPart) element;
-				if (part.getModel() instanceof MBand && ((MBand)part.getModel()).getBandType().equals(BandTypeEnum.DETAIL))
+				if (part.getModel() instanceof MBand && ((MBand)part.getModel()).getBandType().equals(BandTypeEnum.DETAIL)){
 					result.add((APropertyNode) part.getModel());
+					selectionIndex = part.getParent().getChildren().indexOf(part);
+					break;
+				}
 			}
 		}
 		return result;
@@ -98,6 +117,9 @@ public class MoveDetailUpAction extends SelectionAction {
 	 * Performs the create action on the selected objects.
 	 */
 	public void run() {
+		@SuppressWarnings("unchecked")
+		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
+		EditPart selectionParent = ((EditPart)editparts.get(0)).getParent();
 		 APropertyNode bandNode = getOperationSet().get(0);
      // Remove the band
      CompoundCommand cmd = new CompoundCommand();
@@ -107,6 +129,7 @@ public class MoveDetailUpAction extends SelectionAction {
 		 CreateBandDetailCommand createBand = new CreateBandDetailCommand((MBand)bandNode, (MBand)bandNode,index-1);
 		 cmd.add(createBand); 
 		 execute(cmd);
+		 setSelection(selectionParent,selectionIndex-1);
 	}
 
 	/**
