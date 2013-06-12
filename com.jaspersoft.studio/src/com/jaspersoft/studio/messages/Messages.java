@@ -975,6 +975,10 @@ public class Messages extends NLS {
 	public static String ModelUtils_detail_section;
 	public static String ModelUtils_groupfooter_section;
 	public static String ModelUtils_groupheader_section;
+	public static String MoveDetailDownAction_actionDescription;
+	public static String MoveDetailDownAction_actionName;
+	public static String MoveDetailUpAction_actionDescription;
+	public static String MoveDetailUpAction_actionName;
 	public static String MoveGroupDownAction_actionDescription;
 	public static String MoveGroupDownAction_actionName;
 	public static String MoveGroupUpAction_actionDescription;

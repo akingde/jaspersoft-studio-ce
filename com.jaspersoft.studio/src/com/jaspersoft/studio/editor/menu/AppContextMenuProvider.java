@@ -25,6 +25,8 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
+import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
+import com.jaspersoft.studio.editor.action.MoveDetailUpAction;
 import com.jaspersoft.studio.editor.action.MoveGroupDownAction;
 import com.jaspersoft.studio.editor.action.MoveGroupUpAction;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
@@ -194,7 +196,14 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(MoveGroupUpAction.ID);
 		if (action != null && action.isEnabled())
 			menu.add(action);
+		
+		action = getActionRegistry().getAction(MoveDetailUpAction.ID);
+		if (action != null && action.isEnabled())
+			menu.add(action);
 
+		action = getActionRegistry().getAction(MoveDetailDownAction.ID);
+		if (action != null && action.isEnabled())
+			menu.add(action);
 		
 		action = getActionRegistry().getAction(MoveGroupDownAction.ID);
 		if (action != null && action.isEnabled())

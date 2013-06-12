@@ -51,6 +51,13 @@ public class CreateBandDetailCommand extends Command {
 		if (srcNode != null && srcNode.getValue() != null)
 			this.jrBand = (JRDesignBand) srcNode.getValue();
 	}
+	
+	
+	public CreateBandDetailCommand(MBand destNode, MBand srcNode, int index) {
+		this(destNode,srcNode);
+		this.index = index;
+	}
+
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#execute()

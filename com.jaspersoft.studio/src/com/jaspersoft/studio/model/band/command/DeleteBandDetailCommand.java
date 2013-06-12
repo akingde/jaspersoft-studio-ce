@@ -57,7 +57,8 @@ public class DeleteBandDetailCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		index = jrDesignSection.getBandsList().size();
+		int bandIndex = jrDesignSection.getBandsList().indexOf(jrBand);
+		index = bandIndex != -1 ? bandIndex : jrDesignSection.getBandsList().size();
 		jrDesignSection.removeBand(jrBand);
 	}
 

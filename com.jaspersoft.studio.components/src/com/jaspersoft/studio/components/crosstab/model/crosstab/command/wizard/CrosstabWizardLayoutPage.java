@@ -200,7 +200,7 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 				notifyChange();	
 			}
 		};
-		selectionWidget = new ColorSelectionWidget(parent, selectionListener, schemaSelectionAdapter, ColorSelectionWidget.STYLE.HIDDEN);
+		selectionWidget = new ColorSelectionWidget(parent, selectionListener, schemaSelectionAdapter, ColorSelectionWidget.STYLE.BOTTOM);
 		CrosstabStyle temp = getDefaultStyle();
 		selectionWidget.addButton(totalColor, Messages.CrosstabWizardLayoutPage_totalLabel, temp.getColor(CrosstabStyle.COLOR_TOTAL));
 		selectionWidget.addButton(groupColor, Messages.CrosstabWizardLayoutPage_groupLabel, temp.getColor(CrosstabStyle.COLOR_GROUP));
