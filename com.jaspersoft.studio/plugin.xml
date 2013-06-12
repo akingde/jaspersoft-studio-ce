@@ -1836,6 +1836,26 @@
                 class="com.jaspersoft.studio.model.band.MBandGroupFooter">
           </selectedObject>
        </toolitems>
+       <toolitems
+             ActionID="joinleft"
+             icon="icons/resources/joinleft.png"
+             id="com.jaspersoft.studio.formatting.actions.JoinLeftAction"
+             label="%JoinLeftName"
+             tooltip="%JoinLeftDescription">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
+       <toolitems
+             ActionID="joinright"
+             icon="icons/resources/joinright.png"
+             id="com.jaspersoft.studio.formatting.actions.JoinRightAction"
+             label="%JoinRightName"
+             tooltip="%JoinRightDescription">
+          <selectedObject
+                class="com.jaspersoft.studio.model.MGraphicElement">
+          </selectedObject>
+       </toolitems>
     </extension>
     <extension
           point="com.jaspersoft.studio.toolitemsets">
@@ -1916,6 +1936,12 @@
           </toolitem>
           <toolitem
                 toolitemID="com.jaspersoft.studio.editor.action.align.Align2BorderAction_middle">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.formatting.actions.JoinLeftAction">
+          </toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.formatting.actions.JoinRightAction">
           </toolitem>
        </toolitemsets>
        <toolitemsets
