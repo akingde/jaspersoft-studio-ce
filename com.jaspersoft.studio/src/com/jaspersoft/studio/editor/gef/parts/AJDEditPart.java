@@ -1,31 +1,29 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts;
 
 import java.beans.PropertyChangeListener;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.utils.SelectionHelper;
+
 /*
  * The Class AJDEditPart.
  * 
@@ -66,32 +64,41 @@ public abstract class AJDEditPart extends AbstractGraphicalEditPart {
 		ANode node = (ANode) getModel();
 		node.getPropertyChangeSupport().removePropertyChangeListener((PropertyChangeListener) this);
 	}
-	
+
 	@Override
 	public Object getAdapter(Class key) {
-		if(key == IResource.class || key == IFile.class){
-			return getAssociatedFile();
+		if (key == IResource.class) {
+			if (associatedFile == null)
+				associatedFile = getAssociatedFile();
+			return associatedFile;
 		}
 		return super.getAdapter(key);
 	}
-	
+
+	private IResource associatedFile;
+
 	/**
 	 * Returns the file associated.
 	 * <p>
-	 * Given the current edit part belonging to the active JRXML editor
-	 * (report designer) the related file is returned.
+	 * Given the current edit part belonging to the active JRXML editor (report designer) the related file is returned.
 	 * 
 	 * @return the associated file resource
 	 */
-	public IFile getAssociatedFile() {
-		IEditorPart ep = SelectionHelper.getActiveJRXMLEditor();
-		if (ep != null && ep.getEditorInput() instanceof IFileEditorInput) {
-			IFileEditorInput fe = ((IFileEditorInput) ep.getEditorInput());
-			return fe.getFile();
+	public IResource getAssociatedFile() {
+		IEditorInput edinput = null;
+		if (getViewer().getEditDomain() instanceof DefaultEditDomain) {
+			IEditorPart ip = ((DefaultEditDomain) getViewer().getEditDomain()).getEditorPart();
+			edinput = ip.getEditorInput();
+		} else {
+			IEditorPart ep = SelectionHelper.getActiveJRXMLEditor();
+			if (ep != null)
+				edinput = ep.getEditorInput();
 		}
-		else {
-			return null;
-		}
+		if (edinput != null)
+			if (edinput instanceof IFileEditorInput)
+				return ((IFileEditorInput) edinput).getFile();
+			else if (edinput instanceof JarEntryEditorInput)
+				return null;
+		return null;
 	}
-
 }
