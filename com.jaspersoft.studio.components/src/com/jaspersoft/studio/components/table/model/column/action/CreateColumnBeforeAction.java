@@ -73,7 +73,7 @@ public class CreateColumnBeforeAction extends ACreateAction {
 			ANode n = (ANode) ((EditPart) obj).getModel();
 			if (n instanceof MColumn) {
 				List<INode> children = n.getParent().getChildren();
-				int index = children.indexOf(n) - 1;
+				int index = children.indexOf(n);
 				map.put(CreateRequestUtil.NEWINDEX, index);
 			} else
 				return false;
