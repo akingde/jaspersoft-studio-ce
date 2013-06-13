@@ -405,6 +405,7 @@ public class Messages extends NLS {
 	public static String DatasetRunPameterDialog_ParamNotFoundErrTitle;
 	public static String DatasetRunPameterDialog_Title;
 	public static String DatasetRunPameterDialog_ValueExprLbl;
+	public static String DatasetSection_nameNotValidTitle;
 	public static String DatasourceComboItem_select_a_datasource;
 	public static String DatePattern_description;
 	public static String DatePattern_template_formats;

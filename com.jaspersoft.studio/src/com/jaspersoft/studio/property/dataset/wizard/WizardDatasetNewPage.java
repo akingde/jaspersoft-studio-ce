@@ -161,10 +161,9 @@ public class WizardDatasetNewPage extends JSSWizardPage {
 					setPageComplete(false);
 				} else if (jd != null && jd.getDatasetMap().get(dstext) != null) {
 
-					MessageFormat.format(Messages.WizardDatasetNewPage_name_already_exists, new Object[] { dstext });
+					String message = MessageFormat.format(Messages.WizardDatasetNewPage_name_already_exists, new Object[] { dstext });
 
-					setErrorMessage(Messages.WizardDatasetNewPage_name_already_exists_a
-							+ " \"" + dstext + "\" " + Messages.WizardDatasetNewPage_name_already_exists_b); //$NON-NLS-1$ //$NON-NLS-2$
+					setErrorMessage(message); //$NON-NLS-1$ //$NON-NLS-2$
 					setPageComplete(false);
 				} else {
 					setPageComplete(true);

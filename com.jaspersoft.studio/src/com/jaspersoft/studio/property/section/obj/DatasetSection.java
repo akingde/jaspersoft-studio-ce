@@ -10,21 +10,30 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.obj;
 
+import java.text.MessageFormat;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 public class DatasetSection extends AbstractSection {
+	
+	private ASPropertyWidget nameWidget = null;
+	
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
@@ -32,7 +41,8 @@ public class DatasetSection extends AbstractSection {
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		createWidget4Property(parent, JRDesignDataset.PROPERTY_NAME).getControl().setLayoutData(gd);
+		nameWidget = createWidget4Property(parent, JRDesignDataset.PROPERTY_NAME);
+		nameWidget.getControl().setLayoutData(gd);
 
 		gd = new GridData();
 		gd.horizontalSpan = 2;
@@ -62,5 +72,30 @@ public class DatasetSection extends AbstractSection {
 			return dataset;
 		}
 		return md;
+	}
+	
+	/**
+	 * Check if the property changed is the name and in this case check that the 
+	 * new name is different from any existing dataset. If it is different the change
+	 * is done, otherwise a warning message is shown and the original name is 
+	 * restored
+	 */
+	@Override
+	public boolean changeProperty(Object property, Object newValue) {
+		if (JRDesignDataset.PROPERTY_NAME.equals(property)){
+			JasperDesign jd = getElement().getJasperDesign();
+			String oldName = getElement().getPropertyValue(JRDesignDataset.PROPERTY_NAME).toString();
+			//If the new name is equals to the actual one the there is no need to change
+			if (oldName.equals(newValue)) return true;
+			if (jd != null && jd.getDatasetMap().get(newValue) != null) {
+				nameWidget.setData(getElement(), oldName);
+				String message = MessageFormat.format(Messages.WizardDatasetNewPage_name_already_exists, new Object[] { newValue });
+				MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.DatasetSection_nameNotValidTitle, null,
+						message, MessageDialog.WARNING, new String[] { "Ok"}, 0); //$NON-NLS-1$
+				dialog.open();
+				return false;
+			}
+		}
+		return super.changeProperty(property, newValue);
 	}
 }

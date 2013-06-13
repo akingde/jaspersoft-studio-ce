@@ -276,8 +276,16 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignDataset jrDataset = (JRDesignDataset) getValue();
-		if (id.equals(JRDesignDataset.PROPERTY_NAME))
+		if (id.equals(JRDesignDataset.PROPERTY_NAME)){
+			//When the name is changed, the one inside the jasperdesign is updated also
+			JasperDesign design = getJasperDesign();
+			String oldName = jrDataset.getName();
 			jrDataset.setName((String) value);
+			if (design != null){
+				design.getDatasetMap().remove(oldName);
+				design.getDatasetMap().put(jrDataset.getName(), jrDataset);
+			}
+		}
 		else if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE)) {
 			String v = (String) value;
 			if (v != null && v.trim().isEmpty())
