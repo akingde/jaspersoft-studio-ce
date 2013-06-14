@@ -18,6 +18,7 @@ package com.jaspersoft.studio.wizards.group;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -69,7 +70,7 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 	private Button bfield;
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
-
+		
 		public Image getColumnImage(Object element, int columnIndex) {
 			switch (columnIndex) {
 			case 0:
@@ -77,6 +78,8 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 					return JaspersoftStudioPlugin.getInstance().getImage(MField.getIconDescriptor().getIcon16());
 				else if (element instanceof JRDesignVariable)
 					return JaspersoftStudioPlugin.getInstance().getImage(MVariable.getIconDescriptor().getIcon16());
+				else if (element instanceof JRDesignParameter)
+					return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/parameter-report-16.png");
 			}
 			return null;
 		}
@@ -88,6 +91,8 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 					return ((JRDesignField) element).getName();
 				else if (element instanceof JRDesignVariable)
 					return ((JRDesignVariable) element).getName();
+				else if (element instanceof JRDesignParameter)
+					return ((JRDesignParameter) element).getName();
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -266,6 +271,9 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 		leftTable = new Table(composite, SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
 		leftTable.setLayoutData(new GridData(GridData.FILL_BOTH));
 		leftTable.setHeaderVisible(true);
+		GridData tableData = new GridData(GridData.FILL_BOTH);
+		tableData.heightHint = 300;
+		leftTable.setLayoutData(tableData);
 
 		TableColumn[] col = new TableColumn[1];
 		col[0] = new TableColumn(leftTable, SWT.NONE);
