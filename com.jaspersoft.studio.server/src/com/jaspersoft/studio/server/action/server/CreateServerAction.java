@@ -35,6 +35,7 @@ import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.ServerProfileWizard;
 import com.jaspersoft.studio.server.wizard.ServerProfileWizardDialog;
+import com.jaspersoft.studio.utils.BrandingInfo;
 
 public class CreateServerAction extends Action implements ICheatSheetAction {
 	public static final String ID = "createServerAction"; //$NON-NLS-1$
@@ -66,8 +67,8 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 		for (INode n : lst) {
 			if (n instanceof MServers) {
 				ServerProfile srv = new ServerProfile();
-				srv.setName(Messages.CreateServerAction_name);
-				srv.setUrl("http://localhost:8080/jasperserver/services/repository"); //$NON-NLS-1$
+				srv.setName(getJRSProposedName());
+				srv.setUrl(getJRSProposedURL());
 				srv.setUser("username"); //$NON-NLS-1$
 				srv.setSupportsDateRanges(true);
 				ServerProfileWizard wizard = new ServerProfileWizard(new MServerProfile(null, srv));
@@ -99,6 +100,24 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 	public void run(String[] params, ICheatSheetManager manager) {
 		run();
 		notifyResult(true);
+	}
+	
+	private String getJRSProposedURL() {
+		if(BrandingInfo.isProfessionalEdition()){
+			return "http://localhost:8080/jasperserver-pro/"; //$NON-NLS-1$
+		}
+		else {
+			return "http://localhost:8080/jasperserver/"; //$NON-NLS-1$
+		}
+	}
+	
+	private String getJRSProposedName() {
+		if(BrandingInfo.isProfessionalEdition()){
+			return Messages.CreateServerAction_name + " Pro"; //$NON-NLS-1$
+		}
+		else {
+			return Messages.CreateServerAction_name;
+		}
 	}
 
 }

@@ -7,6 +7,10 @@ package com.jaspersoft.studio.utils;
  * 
  */
 public class BrandingInfo {
+	
+	// Common shared constants
+	public static final String JSS_INSTALLATION_TYPE_PROPERTY = "jss_installation_type";
+	public static final String JSS_PROFESSIONAL_EDITION = "jss_pro";
 
 	// Name identifiers for branding preference properties
 	public static final String BRANDING_PRODUCT_NAME = "jssbranding_product_name";
@@ -48,4 +52,12 @@ public class BrandingInfo {
 		this.productMainBundleID = productMainBundleID;
 	}
 	
+	public static boolean isProfessionalEdition() {
+		String type = System.getProperty(JSS_INSTALLATION_TYPE_PROPERTY);
+		return JSS_PROFESSIONAL_EDITION.equals(type);
+	}
+	
+	public static boolean isCommunityEdition(){
+		return !isProfessionalEdition();
+	}
 }
