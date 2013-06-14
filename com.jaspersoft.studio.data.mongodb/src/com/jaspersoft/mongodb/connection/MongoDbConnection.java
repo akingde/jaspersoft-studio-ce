@@ -51,12 +51,9 @@ import com.mongodb.MongoURI;
  * 
  */
 public class MongoDbConnection implements Connection {
-	protected static final List<Integer> AUTH_ERROR_CODES = Arrays.asList(new Integer[] { 16550, // not
-																																																// authorized
-																																																// for
-																																																// query
-																																																// on
-																																																// foo.system.namespaces
+	protected static final List<Integer> AUTH_ERROR_CODES = Arrays.asList(new Integer[] {
+            16550, // not authorized for query  on foo.system.namespaces for mongod
+            16549, // not authorized for query  on foo.system.namespaces for mongos sharded mongo cluster
 			10057, // unauthorized db:admin ns:admin.system.users lock type:1
 							// client:127.0.0.1
 			15845 // unauthorized
