@@ -17,6 +17,7 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.base.JRBaseGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.FooterPositionEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -230,8 +231,17 @@ public class MGroup extends APropertyNode implements ICopyable {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
-		if (id.equals(JRDesignGroup.PROPERTY_NAME))
+		if (id.equals(JRDesignGroup.PROPERTY_NAME)) {
+			// Temporary fix for the Community Bug #2991
+			// Should be done on JR-side. Let's keep the cache map of groups in sync.
+			String oldName = jrGroup.getName();
 			jrGroup.setName((String) value);
+			JasperDesign design = getJasperDesign();
+			if (design != null){
+				design.getGroupsMap().remove(oldName);
+				design.getGroupsMap().put(jrGroup.getName(), jrGroup);
+			}
+		}
 		else if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION))
 			jrGroup.setExpression(ExprUtil.setValues(jrGroup.getExpression(), value, null));
 		else if (id.equals(JRBaseGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE)) {

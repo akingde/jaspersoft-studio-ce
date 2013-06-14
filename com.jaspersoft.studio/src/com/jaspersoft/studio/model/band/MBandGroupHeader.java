@@ -32,6 +32,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.group.MGroup;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class MBandGroupHeader.
@@ -82,6 +83,14 @@ public class MBandGroupHeader extends MBand {
 		mGroup = new MGroup(null, jrGroup, -1);
 		setChildListener(mGroup);
 		mGroupBand = new MGroupBand(jrGroup);
+		// Fix missing jasper configuration
+		if(parent!=null) {
+			JasperReportsConfiguration jconfig = parent.getJasperConfiguration();
+			if(jconfig!=null){
+				mGroup.setJasperConfiguration(jconfig);
+				mGroupBand.setJasperConfiguration(jconfig);
+			}
+		}
 	}
 
 	/**
