@@ -142,17 +142,26 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME, Messages.common_name);
+		nameD.setReadOnly(areFieldsReadOnly());
 		nameD.setDescription(Messages.MParameterSystem_name_description);
 		desc.add(nameD);
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME,
 				Messages.common_class);
 		classD.setDescription(Messages.MParameterSystem_class_description);
+		classD.setReadOnly(areFieldsReadOnly());
 		desc.add(classD);
 		classD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameter_class"));
 
 		defaultsMap.put(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
+	}
+	
+	/**
+	 * Return true to set the control of this element type as read only
+	 */
+	protected boolean areFieldsReadOnly(){
+		return true;
 	}
 
 	/*

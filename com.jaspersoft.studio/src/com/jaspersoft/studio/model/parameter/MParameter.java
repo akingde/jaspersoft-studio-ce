@@ -87,6 +87,11 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	public MParameter(ANode parent, JRDesignParameter jrParameter, int newIndex) {
 		super(parent, jrParameter, newIndex);
 	}
+	
+	@Override
+	protected boolean areFieldsReadOnly() {
+		return false;
+	}
 
 	@Override
 	public JRDesignParameter getValue() {

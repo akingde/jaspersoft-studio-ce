@@ -44,6 +44,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
+import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
@@ -54,7 +55,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MTable extends MGraphicElement implements IContainer,
-		IContainerEditPart, IGroupElement, IContainerLayout {
+		IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -315,6 +316,11 @@ public class MTable extends MGraphicElement implements IContainer,
 	@Override
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };
+	}
+
+	@Override
+	public MDatasetRun getDatasetRun() {
+		return (MDatasetRun)getPropertyValue(StandardTable.PROPERTY_DATASET_RUN);
 	}
 	
 }

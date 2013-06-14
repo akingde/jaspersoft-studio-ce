@@ -425,6 +425,10 @@ public class Messages extends NLS {
 	public static String DeleteDataAdapterAction_deleteDescription;
 	public static String DeleteDataAdapterAction_deleteName;
 	public static String DeleteDataAdapterAction_deleteTooltip;
+	public static String DeleteDatasetCommand_message;
+	public static String DeleteDatasetCommand_noOption;
+	public static String DeleteDatasetCommand_title;
+	public static String DeleteDatasetCommand_yesOption;
 	public static String DeleteDataSourceAction_delete;
 	public static String DeleteDataSourceAction_description;
 	public static String DeleteDataSourceAction_tool_tip;

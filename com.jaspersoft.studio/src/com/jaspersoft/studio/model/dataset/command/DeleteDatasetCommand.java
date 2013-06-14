@@ -15,14 +15,25 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset.command;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.dialogs.MessageDialog;
 
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.IDatasetContainer;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
 /*/*
  * link nodes & together.
  * 
@@ -35,6 +46,10 @@ public class DeleteDatasetCommand extends Command {
 
 	/** The jr dataset. */
 	private JRDesignDataset jrDataset;
+	
+	private MReport destNode;
+	
+	private MDataset srcNode;
 
 	/** The element position. */
 	private int elementPosition = 0;
@@ -51,6 +66,8 @@ public class DeleteDatasetCommand extends Command {
 		super();
 		this.jrDesign = srcNode.getJasperDesign();
 		this.jrDataset = (JRDesignDataset) srcNode.getValue();
+		this.destNode = destNode;
+		this.srcNode = srcNode;
 	}
 
 	/*
@@ -61,9 +78,36 @@ public class DeleteDatasetCommand extends Command {
 	@Override
 	public void execute() {
 		elementPosition = jrDesign.getDatasetsList().indexOf(jrDataset);
-		jrDesign.removeDataset(jrDataset);
+		//Check if the dataset is used somewhere and in that case show a warning message
+		int selection = 0;
+		List<INode> nodeUsingDataset = getDatasetUsage(destNode.getChildren(), srcNode.getPropertyValue(JRDesignDataset.PROPERTY_NAME).toString());
+		if (nodeUsingDataset.size() > 0){
+			MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.DeleteDatasetCommand_title, null,
+					Messages.DeleteDatasetCommand_message, MessageDialog.WARNING, new String[] { Messages.DeleteDatasetCommand_yesOption,Messages.DeleteDatasetCommand_noOption}, 1); 
+			selection = dialog.open();
+		}
+		if (selection == 0)
+			jrDesign.removeDataset(jrDataset);
 	}
 
+	/**
+	 * Return a not null list of elements that are using the dataset
+	 */
+	private static List<INode> getDatasetUsage(List<INode> children, String datasetName){
+		List<INode> result = new ArrayList<INode>();
+		for(INode child : children){
+			if (child instanceof IDatasetContainer){
+				MDatasetRun dataset = ((IDatasetContainer)child).getDatasetRun();
+				if (dataset != null && dataset.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME).equals(datasetName))
+					result.add(child);
+			} else if (child instanceof IContainer){
+				result.addAll(getDatasetUsage(child.getChildren(), datasetName));
+			}
+		}
+		return result;
+	}
+
+	
 	/*
 	 * (non-Javadoc)
 	 * 
