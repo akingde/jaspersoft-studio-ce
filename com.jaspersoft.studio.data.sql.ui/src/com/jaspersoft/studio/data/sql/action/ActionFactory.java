@@ -3,8 +3,7 @@ package com.jaspersoft.studio.data.sql.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.action.IMenuManager;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.expression.ChangeOperator;
@@ -36,10 +35,9 @@ import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 
 public class ActionFactory {
 	private List<AAction> actions = new ArrayList<AAction>();
-	private MenuManager menuMgr;
 
-	public ActionFactory(MenuManager menuMgr, TreeViewer treeViewer, SQLQueryDesigner designer) {
-		this.menuMgr = menuMgr;
+	public ActionFactory(SQLQueryDesigner designer) {
+
 		actions.add(new SelectDistinct(designer));
 		actions.add(new CreateWhereFromColumn(designer));
 		actions.add(new CreateGroupByFromColumn(designer));
@@ -55,15 +53,12 @@ public class ActionFactory {
 		actions.add(null);
 
 		actions.add(new JoinTable(designer));
-		actions.add(null);
-		actions.add(new EditTableJoin(designer));
-		actions.add(null);
-		actions.add(new DeleteTableJoin(designer));
-		actions.add(null);
 		actions.add(new CreateTable(designer));
 		actions.add(null);
+		actions.add(new EditTableJoin(designer));
 		actions.add(new EditTable(designer));
 		actions.add(null);
+		actions.add(new DeleteTableJoin(designer));
 		actions.add(new DeleteAction<MFromTable>(designer, "Table", MFromTable.class));
 		actions.add(null);
 
@@ -98,12 +93,12 @@ public class ActionFactory {
 		return null;
 	}
 
-	public void fillMenu(Object[] selection) {
+	public void fillMenu(Object[] selection, IMenuManager menu) {
 		for (AAction act : actions) {
 			if (act == null)
-				menuMgr.add(new org.eclipse.jface.action.Separator());
+				menu.add(new org.eclipse.jface.action.Separator());
 			else if (act.calculateEnabled(selection))
-				menuMgr.add(act);
+				menu.add(act);
 		}
 	}
 }

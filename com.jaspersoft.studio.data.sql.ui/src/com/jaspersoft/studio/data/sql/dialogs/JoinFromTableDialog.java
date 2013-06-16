@@ -37,7 +37,10 @@ public class JoinFromTableDialog extends ATitledDialog {
 			fromTable = ((MFromTable) value.getParent()).getDisplayText();
 		} else {
 			List<INode> children = value.getParent().getChildren();
-			fromTable = ((MFromTable) children.get(children.indexOf(value) - 1)).getDisplayText();
+			int ind = children.indexOf(value) - 1;
+			if (ind < 0)
+				ind = children.indexOf(value) + 1;
+			fromTable = ((MFromTable) children.get(ind)).getDisplayText();
 		}
 	}
 

@@ -18,7 +18,7 @@ public class EditTable extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection == null || (selection != null && selection.length == 1 && isColumn((ANode) selection[0]));
+		return selection != null && selection.length == 1 && selection[0] instanceof ANode && isColumn((ANode) selection[0]);
 	}
 
 	protected boolean isColumn(ANode element) {

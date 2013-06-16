@@ -51,6 +51,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 
@@ -138,7 +139,7 @@ public class DBMetadata {
 		stackLayout.topControl = mcmp;
 
 		root = new MRoot(null, null);
-		updateUI(root, null);
+		updateUI(root);
 
 		return composite;
 	}
@@ -167,51 +168,71 @@ public class DBMetadata {
 		final Connection c = getConnection(das);
 		if (c != null)
 			try {
-				DatabaseMetaData meta = c.getMetaData();
+				final DatabaseMetaData meta = c.getMetaData();
 				ResultSet schemas = meta.getSchemas();
 				while (schemas.next()) {
 					String tableSchema = schemas.getString("TABLE_SCHEM");
-					MDBObjects msch = new MSqlSchema(root, tableSchema);
-
 					String tableCatalog = null;
 					if (meta.supportsCatalogsInTableDefinitions())
 						tableCatalog = schemas.getString("TABLE_CATALOG");
-					readTables(meta, tableSchema, tableCatalog, msch, "System Tables", new String[] { "SYSTEM TABLE" });
-					readTables(meta, tableSchema, tableCatalog, msch, "Tables", new String[] { "TABLE" });
-					readTables(meta, tableSchema, tableCatalog, msch, "Views", new String[] { "VIEW" });
-					readTables(meta, tableSchema, tableCatalog, msch, "Temporary Tables", new String[] { "GLOBAL TEMPORARY", "LOCAL TEMPORARY" });
-					readTables(meta, tableSchema, tableCatalog, msch, "Aliases, Synonims", new String[] { "ALIAS", "SYNONYM" });
+					new MSqlSchema(root, tableSchema, tableCatalog);
+					if (monitor.isCanceled())
+						break;
+				}
+				updateUI(root);
+				for (INode n : root.getChildren()) {
+					MSqlSchema schema = (MSqlSchema) n;
+					readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, "System Tables", new String[] { "SYSTEM TABLE" });
+					readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, "Tables", new String[] { "TABLE" });
+					readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, "Views", new String[] { "VIEW" });
+					readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, "Temporary Tables", new String[] { "GLOBAL TEMPORARY", "LOCAL TEMPORARY" });
+					readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, "Aliases, Synonims", new String[] { "ALIAS", "SYNONYM" });
+					updateItermediateUI();
+					setFirstSelection();
 					try {
-						ResultSet rs = meta.getProcedures(tableCatalog, tableSchema, "%");
-						MDBObjects mprocs = new MDBObjects(msch, "Procedures", "icons/function.png");
+						ResultSet rs = meta.getProcedures(schema.getTableCatalog(), schema.getValue(), "%");
+						MDBObjects mprocs = new MDBObjects(schema, "Procedures", "icons/function.png");
 						while (rs.next())
 							new MProcedure(mprocs, rs.getString("PROCEDURE_NAME"), rs);
 					} catch (Throwable e) {
 					}
 					try {
-						ResultSet rs = meta.getFunctions(tableCatalog, tableSchema, "%");
-						MDBObjects mfunct = new MDBObjects(msch, "Functions", "icons/function.png");
+						ResultSet rs = meta.getFunctions(schema.getTableCatalog(), schema.getValue(), "%");
+						MDBObjects mfunct = new MDBObjects(schema, "Functions", "icons/function.png");
 						while (rs.next())
 							new MFunction(mfunct, rs.getString("FUNCTION_NAME"), rs);
 					} catch (Throwable e) {
 					}
-
-					// System.out.println(meta.getSQLKeywords());
-					// System.out.println(meta.getSQLKeywords());
+					updateItermediateUI();
 					if (monitor.isCanceled())
 						break;
 				}
+				new ModelVisitor<Object>(root) {
+
+					@Override
+					public boolean visit(INode n) {
+						// if (n instanceof MSqlSchema || n instanceof MTables)
+						// return true;
+						if (n instanceof MSqlTable) {
+							try {
+								MSqlTable mt = (MSqlTable) n;
+								MTables tables = (MTables) mt.getParent();
+								ResultSet rs = meta.getColumns(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue(), "%");
+								while (rs.next())
+									new MColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
+								return false;
+							} catch (Throwable e) {
+							}
+						}
+						return true;
+					}
+				};
 			} catch (Throwable e) {
 				designer.showError(e);
 			}
-		Display.getDefault().syncExec(new Runnable() {
 
-			@Override
-			public void run() {
-				updateUI(root, c);
-			}
-		});
-
+		updateItermediateUI();
+		running = false;
 	}
 
 	protected void readTables(DatabaseMetaData meta, String tableSchema, String tableCatalog, MDBObjects msch, String title, String[] types) {
@@ -220,11 +241,12 @@ public class DBMetadata {
 			ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", types);
 			while (rs.next())
 				new MSqlTable(mview, rs.getString("TABLE_NAME"), rs);
-			for (INode n : mview.getChildren()) {
-				rs = meta.getColumns(tableCatalog, tableSchema, (String) n.getValue(), "%");
-				while (rs.next())
-					new MColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
-			}
+			// for (INode n : mview.getChildren()) {
+			// rs = meta.getColumns(tableCatalog, tableSchema, (String) n.getValue(),
+			// "%");
+			// while (rs.next())
+			// new MColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
+			// }
 		} catch (Throwable e) {
 		}
 	}
@@ -263,12 +285,35 @@ public class DBMetadata {
 		return schema;
 	}
 
-	protected void updateUI(final MRoot root, Connection c) {
+	protected void updateUI(final MRoot root) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				DBMetadata.this.root = root;
 				if (DBMetadata.this.root == null)
 					DBMetadata.this.root = new MRoot(null, null);
+				treeViewer.setInput(DBMetadata.this.root);
+				setFirstSelection();
+				if (root.getChildren().isEmpty())
+					msg.setText("No Metadata.\nDouble click to refresh.");
+				else
+					stackLayout.topControl = treeViewer.getControl();
+				composite.layout(true);
+			}
+		});
+	}
+
+	protected void updateItermediateUI() {
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				if (!treeViewer.getControl().isDisposed())
+					treeViewer.refresh(true);
+			}
+		});
+	}
+
+	protected void setFirstSelection() {
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
 				MSqlSchema selection = null;
 				if (schema != null) {
 					for (INode n : DBMetadata.this.root.getChildren()) {
@@ -281,15 +326,8 @@ public class DBMetadata {
 						}
 					}
 				}
-				treeViewer.setInput(DBMetadata.this.root);
 				if (selection != null)
 					treeViewer.expandToLevel(selection, 1);
-				if (root.getChildren().isEmpty())
-					msg.setText("No Metadata.\nDouble click to refresh.");
-				else
-					stackLayout.topControl = treeViewer.getControl();
-				composite.layout(true);
-				running = false;
 			}
 		});
 	}

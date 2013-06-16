@@ -13,11 +13,21 @@ public class MFromTableJoin extends MFromTable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MFromTableJoin(MFromTable parent, MSqlTable value) {
-		super(parent, value);
+		this(parent, value, -1);
 	}
 
-	public MFromTableJoin(ANode parent, MSqlTable value, int index) {
+	public MFromTableJoin(MFromTable parent, MSqlTable value, int index) {
 		super(parent, value, index);
+		tableJoin = new TableJoin(this, parent);
+	}
+
+	@Override
+	public void setParent(ANode newparent, int newIndex) {
+		if (newparent == null) {
+			tableJoin.getFromTable().removeTableJoin(tableJoin);
+			tableJoin = null;
+		}
+		super.setParent(newparent, newIndex);
 	}
 
 	@Override
@@ -55,5 +65,11 @@ public class MFromTableJoin extends MFromTable {
 			dt.setStyle(ind, " AS ".length(), FontUtils.KEYWORDS_STYLER);
 		dt.append(" ON ", FontUtils.KEYWORDS_STYLER);
 		return dt;
+	}
+
+	private TableJoin tableJoin;
+
+	public TableJoin getTableJoin() {
+		return tableJoin;
 	}
 }

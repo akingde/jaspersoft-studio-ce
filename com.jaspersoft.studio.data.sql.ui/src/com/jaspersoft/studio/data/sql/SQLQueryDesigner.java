@@ -44,9 +44,15 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
+import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
+import com.jaspersoft.studio.data.sql.model.query.MHaving;
+import com.jaspersoft.studio.data.sql.model.query.MWhere;
+import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
+import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.ui.DBMetadata;
-import com.jaspersoft.studio.data.sql.ui.SQLQueryDiagram;
 import com.jaspersoft.studio.data.sql.ui.SQLQueryOutline;
+import com.jaspersoft.studio.data.sql.ui.gef.SQLQueryDiagram;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -57,9 +63,11 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	private DBMetadata dbMetadata;
 	private SQLQueryOutline outline;
 	private SQLQueryDiagram diagram;
+	private MRoot root;
 
 	public SQLQueryDesigner() {
 		super();
+		refreshViewer();
 	}
 
 	@Override
@@ -77,12 +85,12 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		Control c = dbMetadata.createControl(sf);
 		c.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		final CTabFolder tabFolder = new CTabFolder(sf, SWT.FLAT | SWT.BOTTOM);
+		tabFolder = new CTabFolder(sf, SWT.FLAT | SWT.BOTTOM);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 		createSource(tabFolder);
 		createOutline(tabFolder);
-		// createDiagram(tabFolder);
+		createDiagram(tabFolder);
 
 		tabFolder.setSelection(0);
 		tabFolder.addSelectionListener(new SelectionAdapter() {
@@ -149,26 +157,19 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	}
 
 	public void refreshQuery() {
-		MRoot r = (MRoot) outline.getTreeViewer().getInput();
-		if (r != null) {
+		if (root != null) {
 			boolean update = false;
-			for (INode c : r.getChildren())
+			for (INode c : root.getChildren())
 				if (!c.getChildren().isEmpty()) {
 					update = true;
 					break;
 				}
-			if (update)
-				updateQueryText(QueryWriter.writeQuery(r));
+			if (update) {
+				updateQueryText(QueryWriter.writeQuery(root));
+				if (tabFolder.getSelectionIndex() == 2)
+					diagram.scheduleRefresh();
+			}
 		}
-	}
-
-	@Override
-	protected void updateQueryText(String txt) {
-		super.updateQueryText(txt);
-		if (outline != null)
-			outline.scheduleRefresh();
-		if (diagram != null)
-			diagram.scheduleRefresh();
 	}
 
 	private DataAdapterDescriptor da;
@@ -190,6 +191,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	private Thread runningthread;
 	private IProgressMonitor runningmonitor;
+	private CTabFolder tabFolder;
 
 	public void updateMetadata() {
 		if (da instanceof JDBCDataAdapterDescriptor)
@@ -245,5 +247,22 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	public DBMetadata getDbMetadata() {
 		return dbMetadata;
+	}
+
+	public MRoot getRoot() {
+		return root;
+	}
+
+	protected void refreshViewer() {
+		if (root != null)
+			root.removeChildren();
+		else
+			root = new MRoot(null, getjDataset());
+		new MSelect(root);
+		new MFrom(root);
+		new MWhere(root);
+		new MGroupBy(root);
+		new MHaving(root);
+		new MOrderBy(root);
 	}
 }

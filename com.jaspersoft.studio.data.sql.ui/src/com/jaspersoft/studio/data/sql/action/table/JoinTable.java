@@ -4,11 +4,13 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.JoinFromTableDialog;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
@@ -24,41 +26,48 @@ public class JoinTable extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && isColumn((ANode) selection[0]);
+		return selection != null && selection.length == 1 && selection[0] instanceof ANode && isColumn((ANode) selection[0]);
 	}
 
 	protected boolean isColumn(ANode element) {
-		return element instanceof MFromTable && !element.isFirst() && !(element instanceof MFromTableJoin);
+		return element instanceof MFromTable && !(element instanceof MFromTableJoin) && Util.getKeyword(element, MFrom.class).getChildren().size() > 1;
 	}
 
 	@Override
 	public void run() {
-		MFromTable mcol = null;
+		MFromTable mfromTable = null;
 		for (Object obj : selection) {
 			if (obj instanceof MFromTable) {
-				mcol = (MFromTable) obj;
+				mfromTable = (MFromTable) obj;
 				break;
 			}
 		}
 		JoinFromTableDialog dialog = new JoinFromTableDialog(Display.getDefault().getActiveShell());
-		dialog.setValue(mcol);
+		dialog.setValue(mfromTable);
 		if (dialog.open() == Dialog.OK) {
-			MFromTable mtab = getFromTable(mcol, dialog);
+			MFromTable mtab = getFromTable(mfromTable, dialog);
 
-			mcol.setParent(null, -1);
-
-			MFromTableJoin mtbljoin = new MFromTableJoin(mtab, mcol.getValue());
-			mtbljoin.setAlias(mcol.getAlias());
-			mtbljoin.setAliasKeyword(mcol.getAliasKeyword());
-
-			MColumn mSrc = getColumn(mtbljoin.getValue());
-			MColumn mFrom = getColumn(mtab.getValue());
-
-			MExpression mexpr = new MExpression(mtbljoin, mSrc, -1);
-			mexpr.getOperands().add(new FieldOperand(mSrc, mtbljoin, mexpr));
-			mexpr.getOperands().add(new FieldOperand(mFrom, mtab, mexpr));
-			selectInTree(mexpr);
+			doRun(null, mfromTable, null, mtab);
 		}
+	}
+
+	public void doRun(MColumn src, MFromTable srcTbl, MColumn dest, MFromTable destTbl) {
+		if (src == null)
+			src = getColumn(srcTbl.getValue());
+		if (dest == null)
+			dest = getColumn(destTbl.getValue());
+		srcTbl.setParent(null, -1);
+
+		MFromTableJoin mtbljoin = new MFromTableJoin(destTbl, srcTbl.getValue());
+		mtbljoin.setAlias(srcTbl.getAlias());
+		mtbljoin.setAliasKeyword(srcTbl.getAliasKeyword());
+
+		MExpression mexpr = new MExpression(mtbljoin, src, -1);
+		mexpr.getOperands().add(new FieldOperand(src, mtbljoin, mexpr));
+		mexpr.getOperands().add(new FieldOperand(dest, destTbl, mexpr));
+		selectInTree(mexpr);
+
+		Util.cleanTableVersions(mtbljoin, srcTbl);
 	}
 
 	private MColumn getColumn(MSqlTable tbl) {

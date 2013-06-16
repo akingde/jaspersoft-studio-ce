@@ -6,6 +6,7 @@ import com.jaspersoft.studio.data.sql.action.AMultiSelectionAction;
 import com.jaspersoft.studio.data.sql.action.expression.CreateExpression;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;
 import com.jaspersoft.studio.model.ANode;
 
 public class CreateWhereFromColumn extends AMultiSelectionAction {
@@ -23,6 +24,7 @@ public class CreateWhereFromColumn extends AMultiSelectionAction {
 	public void run() {
 		MWhere mwhere = null;
 		for (Object obj : selection) {
+			obj = convertObject(obj);
 			if (obj instanceof MSelectColumn) {
 				MSelectColumn msc = (MSelectColumn) obj;
 				if (mwhere == null)
@@ -36,4 +38,9 @@ public class CreateWhereFromColumn extends AMultiSelectionAction {
 		}
 	}
 
+	protected ANode convertObject(Object obj) {
+		if (obj instanceof ColumnEditPart)
+			return ((ColumnEditPart) obj).getmSelectColumn();
+		return super.convertObject(obj);
+	}
 }

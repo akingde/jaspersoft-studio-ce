@@ -20,6 +20,10 @@ public class FieldOperand extends AOperand {
 		return fromTable;
 	}
 
+	public void setFromTable(MFromTable fromTable) {
+		this.fromTable = fromTable;
+	}
+
 	public MColumn getMColumn() {
 		return column;
 	}

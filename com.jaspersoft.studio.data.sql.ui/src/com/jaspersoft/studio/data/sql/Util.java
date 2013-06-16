@@ -2,6 +2,7 @@ package com.jaspersoft.studio.data.sql;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
@@ -10,8 +11,12 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
+import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -115,5 +120,59 @@ public class Util {
 			if (clazz.isInstance(n))
 				return (T) n;
 		return null;
+	}
+
+	public static List<ANode> getAllNodes(Object data) {
+		List<ANode> nodes = new ArrayList<ANode>();
+		if (data.getClass().isArray()) {
+			Object[] ar = (Object[]) data;
+			for (Object obj : ar)
+				if (obj instanceof ANode)
+					nodes.add((ANode) obj);
+		} else if (data instanceof ANode)
+			nodes.add((ANode) data);
+		return nodes;
+	}
+
+	public static void filterTables(List<ANode> node, Set<MSqlTable> tables, Set<MColumn> cols, Set<ANode> others) {
+		for (ANode n : node) {
+			if (n instanceof MSqlTable)
+				tables.add((MSqlTable) n);
+			else if (n instanceof MColumn)
+				cols.add((MColumn) n);
+			else
+				others.add(n);
+		}
+	}
+
+	public static void cleanTableVersions(final MFromTable newTbl, final MFromTable oldTbl) {
+		new ModelVisitor<Object>(newTbl.getRoot()) {
+
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof MSelectColumn && ((MSelectColumn) n).getMFromTable().equals(oldTbl)) {
+					((MSelectColumn) n).setMFromTable(newTbl);
+					return false;
+				}
+				if (n instanceof MGroupByColumn && ((MGroupByColumn) n).getMFromTable().equals(oldTbl)) {
+					((MGroupByColumn) n).setMFromTable(newTbl);
+					return false;
+				}
+				if (n instanceof MOrderByColumn && ((MOrderByColumn) n).getMFromTable().equals(oldTbl)) {
+					((MOrderByColumn) n).setMFromTable(newTbl);
+					return false;
+				}
+				if (n instanceof MExpression) {
+					for (AOperand op : ((MExpression) n).getOperands()) {
+						if (op instanceof FieldOperand && ((FieldOperand) op).getFromTable().equals(oldTbl)) {
+							((FieldOperand) op).setFromTable(newTbl);
+						}
+					}
+					return false;
+				}
+				return true;
+			}
+
+		};
 	}
 }

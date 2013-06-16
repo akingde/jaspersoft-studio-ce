@@ -6,6 +6,7 @@ import com.jaspersoft.studio.data.sql.action.AMultiSelectionAction;
 import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;
 import com.jaspersoft.studio.model.ANode;
 
 public class CreateGroupByFromColumn extends AMultiSelectionAction {
@@ -23,6 +24,7 @@ public class CreateGroupByFromColumn extends AMultiSelectionAction {
 		MGroupByColumn gbc = null;
 		MGroupBy mgroupby = null;
 		for (Object obj : selection) {
+			obj = convertObject(obj);
 			if (obj instanceof MSelectColumn) {
 				MSelectColumn msc = (MSelectColumn) obj;
 				if (mgroupby == null)
@@ -33,4 +35,9 @@ public class CreateGroupByFromColumn extends AMultiSelectionAction {
 		selectInTree(gbc);
 	}
 
+	protected ANode convertObject(Object obj) {
+		if (obj instanceof ColumnEditPart)
+			return ((ColumnEditPart) obj).getmSelectColumn();
+		return super.convertObject(obj);
+	}
 }

@@ -26,6 +26,10 @@ public class MSelectColumn extends AMQueryAliased<MColumn> {
 		return mfTable;
 	}
 
+	public void setMFromTable(MFromTable mfTable) {
+		this.mfTable = mfTable;
+	}
+
 	@Override
 	public StyledString getStyledDisplayText() {
 		StyledString ss = new StyledString();

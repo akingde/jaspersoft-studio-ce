@@ -44,6 +44,10 @@ public class MGroupByColumn extends AMQueryObject<MColumn> {
 		return mfTable;
 	}
 
+	public void setMFromTable(MFromTable mfTable) {
+		this.mfTable = mfTable;
+	}
+
 	@Override
 	public String getDisplayText() {
 		return getValue().toSQLString();

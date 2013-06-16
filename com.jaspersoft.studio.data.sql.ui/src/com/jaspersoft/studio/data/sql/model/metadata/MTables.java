@@ -11,4 +11,12 @@ public class MTables extends MDBObjects {
 	public MTables(ANode parent, String value) {
 		super(parent, value, "icons/table.png");
 	}
+
+	public String getTableCatalog() {
+		return (String) getParent().getValue();
+	}
+
+	public String getTableSchema() {
+		return ((MSqlSchema) getParent()).getTableCatalog();
+	}
 }

@@ -10,9 +10,15 @@ import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
 public class MSqlSchema extends AMSQLObject {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	private String tableCatalog;
 
-	public MSqlSchema(ANode parent, String value) {
+	public MSqlSchema(ANode parent, String value, String tableCatalog) {
 		super(parent, value, "icons/database.png");
+		this.tableCatalog = tableCatalog;
+	}
+
+	public String getTableCatalog() {
+		return tableCatalog;
 	}
 
 	private boolean isCurrent;

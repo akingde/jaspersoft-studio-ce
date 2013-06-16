@@ -1,6 +1,5 @@
 package com.jaspersoft.studio.data.sql.ui;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,20 +45,17 @@ import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
-import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.orderby.AMOrderByMember;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByExpression;
-import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.dnd.NodeTreeDropAdapter;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 
@@ -70,13 +66,17 @@ public class SQLQueryOutline {
 		this.designer = designer;
 	}
 
+	private boolean isRefresh = false;
+
 	public Control createOutline(Composite parent) {
 		treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.MULTI) {
 
 			@Override
 			public void refresh(boolean updateLabels) {
+				isRefresh = true;
 				super.refresh(updateLabels);
 				designer.refreshQuery();
+				isRefresh = false;
 			}
 		};
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
@@ -86,11 +86,11 @@ public class SQLQueryOutline {
 
 		MenuManager menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
-		afactory = new ActionFactory(menuMgr, treeViewer, designer);
+		afactory = new ActionFactory(designer);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager mgr) {
 				TreeSelection s = (TreeSelection) treeViewer.getSelection();
-				afactory.fillMenu(s != null ? s.toArray() : null);
+				afactory.fillMenu(s != null ? s.toArray() : null, mgr);
 			}
 
 		});
@@ -106,15 +106,7 @@ public class SQLQueryOutline {
 
 			@Override
 			public boolean performDrop(Object data) {
-				List<ANode> nodes = new ArrayList<ANode>();
-				if (data.getClass().isArray()) {
-					Object[] ar = (Object[]) data;
-					for (Object obj : ar)
-						if (obj instanceof ANode)
-							nodes.add((ANode) obj);
-				} else if (data instanceof ANode)
-					nodes.add((ANode) data);
-				return doDrop(nodes);
+				return doDrop(Util.getAllNodes(data));
 			}
 
 			private boolean doDrop(List<ANode> node) {
@@ -125,14 +117,8 @@ public class SQLQueryOutline {
 				Set<MSqlTable> tablesset = new LinkedHashSet<MSqlTable>();
 				Set<MColumn> colsset = new LinkedHashSet<MColumn>();
 				Set<ANode> others = new LinkedHashSet<ANode>();
-				for (ANode n : node) {
-					if (n instanceof MSqlTable)
-						tablesset.add((MSqlTable) n);
-					else if (n instanceof MColumn)
-						colsset.add((MColumn) n);
-					else
-						others.add(n);
-				}
+				Util.filterTables(node, tablesset, colsset, others);
+
 				doDropTable(target, tablesset);
 				doDropColumn(target, colsset);
 				if (!others.isEmpty()) {
@@ -265,29 +251,25 @@ public class SQLQueryOutline {
 
 			@Override
 			public void run() {
-				if (root != null)
-					root.removeChildren();
-				else
-					root = new MRoot(null, designer.getjDataset());
-				new MSelect(root);
-				new MFrom(root);
-				new MWhere(root);
-				new MGroupBy(root);
-				new MHaving(root);
-				new MOrderBy(root);
-				treeViewer.setInput(root);
+				treeViewer.setInput(designer.getRoot());
 				treeViewer.expandToLevel(1);
 			}
 		});
 	}
 
-	private MRoot root;
 	private TreeViewer treeViewer;
 	private ActionFactory afactory;
 
+	public ActionFactory getAfactory() {
+		return afactory;
+	}
+
 	public void scheduleRefresh() {
-		if (root != null)
-			root.setValue(designer.getjDataset());
+		if (isRefresh)
+			return;
+		if (designer.getRoot() != null)
+			designer.getRoot().setValue(designer.getjDataset());
+		treeViewer.refresh(true);
 	}
 
 	public TreeViewer getTreeViewer() {

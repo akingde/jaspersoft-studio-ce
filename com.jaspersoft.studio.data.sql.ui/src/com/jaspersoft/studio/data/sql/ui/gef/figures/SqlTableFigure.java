@@ -1,0 +1,51 @@
+package com.jaspersoft.studio.data.sql.ui.gef.figures;
+
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.swt.graphics.Color;
+
+public class SqlTableFigure extends Figure {
+	public static Color classColor = new Color(null, 255, 255, 206);
+	private Label lblName;
+	private ColumnsFigure attributeFigure = new ColumnsFigure();
+	private LineBorder border = new LineBorder(ColorConstants.black, 1);
+
+	public SqlTableFigure(String name) {
+		ToolbarLayout layout = new ToolbarLayout();
+		setLayoutManager(layout);
+		setBorder(border);
+		setBackgroundColor(classColor);
+		setOpaque(true);
+
+		lblName = new Label(name);
+		add(lblName);
+		add(attributeFigure);
+	}
+
+	public void add(IFigure figure, Object constraint, int index) {
+		if (figure instanceof ColumnFigure)
+			attributeFigure.add(figure);
+		else
+			super.add(figure, constraint, index);
+	}
+
+	public void setName(String name) {
+		lblName.setText(name);
+	}
+
+	public void showSelectedBorder() {
+		border.setWidth(2);
+		invalidate();
+		repaint();
+	}
+
+	public void hideSelectedBorder() {
+		border.setWidth(1);
+		invalidate();
+		repaint();
+	}
+}
