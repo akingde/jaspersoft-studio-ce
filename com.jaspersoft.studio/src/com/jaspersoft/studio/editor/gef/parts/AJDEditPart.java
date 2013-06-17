@@ -12,6 +12,7 @@ package com.jaspersoft.studio.editor.gef.parts;
 
 import java.beans.PropertyChangeListener;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -67,9 +68,10 @@ public abstract class AJDEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	public Object getAdapter(Class key) {
-		if (key == IResource.class) {
-			if (associatedFile == null)
+		if (key == IResource.class || key == IFile.class) {
+			if (associatedFile == null) {
 				associatedFile = getAssociatedFile();
+			}
 			return associatedFile;
 		}
 		return super.getAdapter(key);
