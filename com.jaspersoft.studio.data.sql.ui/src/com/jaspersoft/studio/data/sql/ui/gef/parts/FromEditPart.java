@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
@@ -38,9 +39,13 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 		// FreeformLayeredPane fig = new FreeformLayeredPane();
 		// FreeformLayer fig = new FreeformLayer();
 		RectangleFigure fig = new RectangleFigure();
-		fig.setSize(1000, 1000);
+		fig.setLocation(new Point(0, 0));
+		fig.setSize(10000, 10000);
+
 		fig.setLayoutManager(new GraphLayoutManager(this));
-		// fig.setLayoutManager(new FreeformLayout());
+		// FreeformLayout layout = new FreeformLayout();
+		// layout.setPositiveCoordinates(true);
+		// fig.setLayoutManager(layout);
 		fig.setOpaque(true);
 		return fig;
 	}

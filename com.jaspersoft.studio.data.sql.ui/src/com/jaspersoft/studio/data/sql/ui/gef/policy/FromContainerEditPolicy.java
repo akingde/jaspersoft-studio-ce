@@ -31,7 +31,6 @@ public class FromContainerEditPolicy extends ContainerEditPolicy {
 	 * @see org.eclipse.gef.editpolicies.ContainerEditPolicy#getAddCommand(org.eclipse.gef.requests.GroupRequest)
 	 */
 	protected Command getAddCommand(GroupRequest request) {
-		EditPart host = getTargetEditPart(request);
 		return null;
 	}
 
@@ -39,7 +38,6 @@ public class FromContainerEditPolicy extends ContainerEditPolicy {
 	 * @see ContainerEditPolicy#getCreateCommand(org.eclipse.gef.requests.CreateRequest)
 	 */
 	protected Command getCreateCommand(CreateRequest request) {
-		System.out.println("getCreateCommand");
 		return new SetValueCommand();
 	}
 

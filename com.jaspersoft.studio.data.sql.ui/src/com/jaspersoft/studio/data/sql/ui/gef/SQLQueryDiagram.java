@@ -33,6 +33,8 @@ import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.layout.GridLayout;
@@ -46,10 +48,13 @@ import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;
+import com.jaspersoft.studio.data.sql.ui.gef.parts.FromEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.SQLDesignerEditPartFactory;
+import com.jaspersoft.studio.data.sql.ui.gef.parts.TableEditPart;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.ANode;
 
@@ -111,6 +116,25 @@ public class SQLQueryDiagram {
 
 	protected void refreshViewer() {
 		viewer.setContents(Util.getKeyword(designer.getRoot(), MFrom.class));
+
+		TreeSelection s = (TreeSelection) designer.getOutline().getTreeViewer().getSelection();
+		List<MFromTable> tables = new ArrayList<MFromTable>();
+		for (Object obj : s.toList()) {
+			if (obj instanceof MFromTable)
+				tables.add((MFromTable) obj);
+		}
+		if (!tables.isEmpty()) {
+			EditPart ep = viewer.getRootEditPart();
+			FromEditPart fep = (FromEditPart) ep.getChildren().get(0);
+			List<TableEditPart> parts = new ArrayList<TableEditPart>();
+			for (Object tep : fep.getChildren()) {
+				if (tep instanceof TableEditPart && tables.contains(((TableEditPart) tep).getModel())) {
+					parts.add((TableEditPart) tep);
+				}
+			}
+			viewer.setSelection(new StructuredSelection(parts));
+			viewer.reveal(parts.get(0));
+		}
 	}
 
 	public void scheduleRefresh() {
