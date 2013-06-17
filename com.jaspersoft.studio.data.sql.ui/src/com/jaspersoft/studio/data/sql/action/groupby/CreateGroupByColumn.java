@@ -27,7 +27,7 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.dialogs.FromTableColumnsDialog;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
@@ -62,9 +62,9 @@ public class CreateGroupByColumn extends AAction {
 			run(dialog.getColumns());
 	}
 
-	public void run(Map<MColumn, MFromTable> cols) {
+	public void run(Map<MSQLColumn, MFromTable> cols) {
 		Object sel = selection[0];
-		for (MColumn t : cols.keySet()) {
+		for (MSQLColumn t : cols.keySet()) {
 			MFromTable mftable = cols.get(t);
 			if (sel instanceof MGroupBy)
 				sel = run(t, mftable, (MGroupBy) sel, 0);
@@ -74,10 +74,10 @@ public class CreateGroupByColumn extends AAction {
 		selectInTree(sel);
 	}
 
-	public void run(Collection<MColumn> nodes) {
+	public void run(Collection<MSQLColumn> nodes) {
 		Object sel = selection[0];
 		List<MFromTable> tbls = Util.getFromTables((ANode) sel);
-		for (MColumn t : nodes) {
+		for (MSQLColumn t : nodes) {
 			MSqlTable tbl = (MSqlTable) t.getParent();
 			MFromTable mftable = null;
 			for (MFromTable ft : tbls) {
@@ -106,12 +106,12 @@ public class CreateGroupByColumn extends AAction {
 		selectInTree(sel);
 	}
 
-	protected MGroupByColumn run(MColumn node, MFromTable mfTable, MGroupByColumn mtable) {
+	protected MGroupByColumn run(MSQLColumn node, MFromTable mfTable, MGroupByColumn mtable) {
 		MGroupBy mfrom = (MGroupBy) mtable.getParent();
 		return run(node, mfTable, mfrom, mfrom.getChildren().indexOf(mtable) + 1);
 	}
 
-	public MGroupByColumn run(MColumn node, MFromTable mfTable, MGroupBy select, int index) {
+	public MGroupByColumn run(MSQLColumn node, MFromTable mfTable, MGroupBy select, int index) {
 		return new MGroupByColumn(select, node, mfTable, index);
 	}
 

@@ -18,7 +18,7 @@ package com.jaspersoft.studio.data.sql.ui.gef.parts;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
@@ -39,7 +39,7 @@ public class SQLDesignerEditPartFactory implements EditPartFactory {
 			editPart = new TableEditPart();
 		else if (model instanceof TableJoin)
 			editPart = new RelationshipPart();
-		else if (model instanceof MColumn)
+		else if (model instanceof MSQLColumn)
 			editPart = new ColumnEditPart();
 		if (editPart != null)
 			editPart.setModel(model);

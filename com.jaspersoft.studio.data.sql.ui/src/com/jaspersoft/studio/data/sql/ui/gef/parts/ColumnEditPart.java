@@ -27,7 +27,7 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
 import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
 import com.jaspersoft.studio.data.sql.action.select.DeleteColumn;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.ui.gef.SQLQueryDiagram;
@@ -55,7 +55,7 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 				if (isSelected()) {
 					CreateColumn ct = afactory.getAction(CreateColumn.class);
 					if (ct.calculateEnabled(new Object[] { mselect })) {
-						List<MColumn> cols = new ArrayList<MColumn>();
+						List<MSQLColumn> cols = new ArrayList<MSQLColumn>();
 						cols.add(ColumnEditPart.this.getModel());
 						ct.run(cols);
 					}
@@ -95,8 +95,8 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
-	public MColumn getModel() {
-		return (MColumn) super.getModel();
+	public MSQLColumn getModel() {
+		return (MSQLColumn) super.getModel();
 	}
 
 	@Override

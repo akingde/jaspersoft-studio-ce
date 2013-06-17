@@ -22,7 +22,7 @@ import org.eclipse.gef.editpolicies.FlowLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.ui.gef.command.JoinCommand;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;
@@ -39,9 +39,9 @@ public class TableLayoutEditPolicy extends FlowLayoutEditPolicy {
 		if (!(after instanceof ColumnEditPart))
 			return null;
 
-		MColumn toMove = ((ColumnEditPart) child).getModel();
+		MSQLColumn toMove = ((ColumnEditPart) child).getModel();
 		MFromTable srcTbl = ((ColumnEditPart) child).getParent().getModel();
-		MColumn afterModel = ((ColumnEditPart) after).getModel();
+		MSQLColumn afterModel = ((ColumnEditPart) after).getModel();
 		MFromTable destTbl = ((ColumnEditPart) after).getParent().getModel();
 
 		SQLQueryDesigner designer = ((TableEditPart) getHost()).getDesigner();

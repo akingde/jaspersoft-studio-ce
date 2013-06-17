@@ -27,7 +27,7 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.dialogs.FromTableColumnsDialog;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -64,9 +64,9 @@ public class CreateColumn extends AAction {
 			run(dialog.getColumns());
 	}
 
-	public void run(Map<MColumn, MFromTable> cols) {
+	public void run(Map<MSQLColumn, MFromTable> cols) {
 		Object sel = selection[0];
-		for (MColumn t : cols.keySet()) {
+		for (MSQLColumn t : cols.keySet()) {
 			MFromTable mftable = cols.get(t);
 			if (sel instanceof MSelect)
 				sel = run(t, mftable, (MSelect) sel, 0);
@@ -76,10 +76,10 @@ public class CreateColumn extends AAction {
 		selectInTree(sel);
 	}
 
-	public void run(Collection<MColumn> nodes) {
+	public void run(Collection<MSQLColumn> nodes) {
 		Object sel = selection[0];
 		List<MFromTable> tbls = Util.getFromTables((ANode) sel);
-		for (MColumn t : nodes) {
+		for (MSQLColumn t : nodes) {
 			MSqlTable tbl = (MSqlTable) t.getParent();
 			MFromTable mftable = null;
 			for (MFromTable ft : tbls) {
@@ -109,12 +109,12 @@ public class CreateColumn extends AAction {
 		selectInTree(sel);
 	}
 
-	protected MSelectColumn run(MColumn node, MFromTable mfTable, MSelectColumn mtable) {
+	protected MSelectColumn run(MSQLColumn node, MFromTable mfTable, MSelectColumn mtable) {
 		MSelect mfrom = (MSelect) mtable.getParent();
 		return run(node, mfTable, mfrom, mfrom.getChildren().indexOf(mtable) + 1);
 	}
 
-	public MSelectColumn run(MColumn node, MFromTable mfTable, MSelect select, int index) {
+	public MSelectColumn run(MSQLColumn node, MFromTable mfTable, MSelect select, int index) {
 		return new MSelectColumn(select, node, mfTable, index);
 	}
 

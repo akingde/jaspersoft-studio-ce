@@ -19,20 +19,20 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.viewers.StyledString;
 
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.model.ANode;
 
-public class MSelectColumn extends AMQueryAliased<MColumn> {
+public class MSelectColumn extends AMQueryAliased<MSQLColumn> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private MFromTable mfTable;
 
-	public MSelectColumn(ANode parent, MColumn value, MFromTable mfTable) {
+	public MSelectColumn(ANode parent, MSQLColumn value, MFromTable mfTable) {
 		this(parent, value, mfTable, -1);
 	}
 
-	public MSelectColumn(ANode parent, MColumn value, MFromTable mfTable, int index) {
+	public MSelectColumn(ANode parent, MSQLColumn value, MFromTable mfTable, int index) {
 		super(parent, value, null, index);
 		this.mfTable = mfTable;
 	}
@@ -59,7 +59,7 @@ public class MSelectColumn extends AMQueryAliased<MColumn> {
 
 	@Override
 	public String getToolTip() {
-		MColumn mc = getValue();
+		MSQLColumn mc = getValue();
 		String tooltip = mc.toSQLString();
 		tooltip += addAlias();
 		tooltip += "\n" + mc.getTypeName();

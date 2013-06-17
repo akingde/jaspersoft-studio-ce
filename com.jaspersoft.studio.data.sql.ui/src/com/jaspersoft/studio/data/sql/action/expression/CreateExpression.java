@@ -27,7 +27,7 @@ import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.dialogs.EditExpressionDialog;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.MExpressionGroup;
@@ -73,11 +73,11 @@ public class CreateExpression extends AAction {
 		showDialog(mexpr);
 	}
 
-	public void run(Collection<MColumn> nodes) {
+	public void run(Collection<MSQLColumn> nodes) {
 		Object sel = selection[0];
 		MExpression mexpr = null;
 		List<MFromTable> tbls = Util.getFromTables((ANode) sel);
-		for (MColumn t : nodes) {
+		for (MSQLColumn t : nodes) {
 			MSqlTable tbl = (MSqlTable) t.getParent();
 			MFromTable mftable = null;
 			for (MFromTable ft : tbls) {

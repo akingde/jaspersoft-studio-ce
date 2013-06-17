@@ -19,13 +19,13 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.viewers.StyledString;
 
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
-public class MOrderByColumn extends AMOrderByMember<MColumn> {
+public class MOrderByColumn extends AMOrderByMember<MSQLColumn> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private MFromTable mfTable;
 	private MSelectColumn msColumn;
@@ -39,11 +39,11 @@ public class MOrderByColumn extends AMOrderByMember<MColumn> {
 		this.msColumn = msColumn;
 	}
 
-	public MOrderByColumn(ANode parent, MColumn value, MFromTable mfTable) {
+	public MOrderByColumn(ANode parent, MSQLColumn value, MFromTable mfTable) {
 		this(parent, value, mfTable, -1);
 	}
 
-	public MOrderByColumn(ANode parent, MColumn value, MFromTable mfTable, int index) {
+	public MOrderByColumn(ANode parent, MSQLColumn value, MFromTable mfTable, int index) {
 		super(parent, value, null, index);
 		this.mfTable = mfTable;
 	}

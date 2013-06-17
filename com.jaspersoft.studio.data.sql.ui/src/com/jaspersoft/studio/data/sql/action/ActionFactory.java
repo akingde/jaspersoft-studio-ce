@@ -116,4 +116,13 @@ public class ActionFactory {
 				menu.add(act);
 		}
 	}
+
+	public List<DeleteAction<?>> getDeleteActions(Object[] selection) {
+		List<DeleteAction<?>> res = new ArrayList<DeleteAction<?>>();
+		for (AAction act : actions) {
+			if (act != null && act instanceof DeleteAction && act.calculateEnabled(selection))
+				res.add((DeleteAction<?>) act);
+		}
+		return res;
+	}
 }

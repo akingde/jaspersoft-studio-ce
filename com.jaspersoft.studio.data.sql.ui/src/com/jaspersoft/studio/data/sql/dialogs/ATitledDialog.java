@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.dialogs;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -28,6 +30,8 @@ import org.eclipse.wb.swt.SWTResourceManager;
 public class ATitledDialog extends Dialog {
 	private String description;
 	private String title;
+	private int defwidth = -1;
+	private int defheight = -1;
 
 	protected ATitledDialog(Shell parentShell) {
 		super(parentShell);
@@ -36,6 +40,11 @@ public class ATitledDialog extends Dialog {
 	@Override
 	protected boolean isResizable() {
 		return true;
+	}
+
+	public void setDefaultSize(int defwidth, int defheight) {
+		this.defwidth = defwidth;
+		this.defheight = defheight;
 	}
 
 	/*
@@ -47,6 +56,8 @@ public class ATitledDialog extends Dialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(title);
+		if (defwidth > 0 && defheight > 0)
+			UIUtils.resizeAndCenterShell(newShell, 680, 750);
 	}
 
 	public void setTitle(String title) {

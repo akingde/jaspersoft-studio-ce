@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSortField;
@@ -95,10 +96,16 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	}
 
 	@Override
+	protected boolean isResizable() {
+		return true;
+	}
+
+	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(Messages.DatasetDialog_title);
-		setShellStyle(getShellStyle() | SWT.MIN | SWT.MAX | SWT.RESIZE);
+		UIUtils.resizeAndCenterShell(newShell, 1024, 768);
+		// setShellStyle(getShellStyle() | SWT.MIN | SWT.MAX | SWT.RESIZE);
 	}
 
 	@Override

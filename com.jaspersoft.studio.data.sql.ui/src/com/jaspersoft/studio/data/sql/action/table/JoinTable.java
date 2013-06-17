@@ -22,7 +22,7 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.JoinFromTableDialog;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -66,7 +66,7 @@ public class JoinTable extends AAction {
 		}
 	}
 
-	public void doRun(MColumn src, MFromTable srcTbl, MColumn dest, MFromTable destTbl) {
+	public void doRun(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl) {
 		if (src == null)
 			src = getColumn(srcTbl.getValue());
 		if (dest == null)
@@ -85,9 +85,9 @@ public class JoinTable extends AAction {
 		Util.cleanTableVersions(mtbljoin, srcTbl);
 	}
 
-	private MColumn getColumn(MSqlTable tbl) {
+	private MSQLColumn getColumn(MSqlTable tbl) {
 		if (!tbl.getChildren().isEmpty())
-			return (MColumn) tbl.getChildren().get(0);
+			return (MSQLColumn) tbl.getChildren().get(0);
 		return null;
 	}
 

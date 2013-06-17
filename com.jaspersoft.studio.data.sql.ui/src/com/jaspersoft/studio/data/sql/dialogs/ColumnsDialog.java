@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MTables;
 import com.jaspersoft.studio.model.INode;
@@ -40,11 +40,12 @@ import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 public class ColumnsDialog extends ATitledDialog {
 	private TreeViewer treeViewer;
 	private MRoot root;
-	private List<MColumn> cols = new ArrayList<MColumn>();
+	private List<MSQLColumn> cols = new ArrayList<MSQLColumn>();
 
 	public ColumnsDialog(Shell parentShell) {
 		super(parentShell);
 		setTitle("Columns Dialog");
+		setDefaultSize(650, 780);
 	}
 
 	public void setRoot(MRoot root) {
@@ -55,14 +56,14 @@ public class ColumnsDialog extends ATitledDialog {
 	public boolean close() {
 		TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 		for (Object obj : ts.toList()) {
-			if (obj instanceof MColumn)
-				cols.add((MColumn) obj);
+			if (obj instanceof MSQLColumn)
+				cols.add((MSQLColumn) obj);
 		}
 
 		return super.close();
 	}
 
-	public List<MColumn> getColumns() {
+	public List<MSQLColumn> getColumns() {
 		return cols;
 	}
 
@@ -100,7 +101,7 @@ public class ColumnsDialog extends ATitledDialog {
 			public void doubleClick(DoubleClickEvent event) {
 				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 				Object el = ts.getFirstElement();
-				if (el instanceof MColumn)
+				if (el instanceof MSQLColumn)
 					okPressed();
 				else {
 					if (treeViewer.getExpandedState(el))

@@ -86,7 +86,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		Control c = dbMetadata.createControl(sf);
 		c.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		tabFolder = new CTabFolder(sf, SWT.FLAT | SWT.BOTTOM);
+		tabFolder = new CTabFolder(sf, SWT.FLAT | SWT.BOTTOM | SWT.BORDER);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 		createSource(tabFolder);

@@ -18,9 +18,8 @@ package com.jaspersoft.studio.data.sql.ui.gef.parts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.RectangleFigure;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
@@ -37,10 +36,10 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected IFigure createFigure() {
 		// FreeformLayeredPane fig = new FreeformLayeredPane();
-		// FreeformLayer fig = new FreeformLayer();
-		RectangleFigure fig = new RectangleFigure();
-		fig.setLocation(new Point(0, 0));
-		fig.setSize(10000, 10000);
+		FreeformLayer fig = new FreeformLayer();
+		// RectangleFigure fig = new RectangleFigure();
+		// fig.setLocation(new Point(0, 0));
+		// fig.setSize(10000, 10000);
 
 		fig.setLayoutManager(new GraphLayoutManager(this));
 		// FreeformLayout layout = new FreeformLayout();

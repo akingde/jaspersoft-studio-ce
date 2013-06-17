@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.ConnectionEditPart;
@@ -102,6 +103,8 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		Point location = f.getLocation();
 		Rectangle constraint = new Rectangle(location.x, location.y, -1, -1);
 		parent.setLayoutConstraint(this, f, constraint);
+
+		f.setToolTip(new Label(fromTable.getToolTip()));
 	}
 
 	@Override

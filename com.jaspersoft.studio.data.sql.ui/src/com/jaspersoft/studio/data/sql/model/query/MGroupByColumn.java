@@ -19,12 +19,12 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.viewers.StyledString;
 
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.model.ANode;
 
-public class MGroupByColumn extends AMQueryObject<MColumn> {
+public class MGroupByColumn extends AMQueryObject<MSQLColumn> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private MFromTable mfTable;
 	private MSelectColumn msColumn;
@@ -38,11 +38,11 @@ public class MGroupByColumn extends AMQueryObject<MColumn> {
 		this.msColumn = msColumn;
 	}
 
-	public MGroupByColumn(ANode parent, MColumn value, MFromTable mfTable) {
+	public MGroupByColumn(ANode parent, MSQLColumn value, MFromTable mfTable) {
 		this(parent, value, mfTable, -1);
 	}
 
-	public MGroupByColumn(ANode parent, MColumn value, MFromTable mfTable, int index) {
+	public MGroupByColumn(ANode parent, MSQLColumn value, MFromTable mfTable, int index) {
 		super(parent, value, null, index);
 		this.mfTable = mfTable;
 	}

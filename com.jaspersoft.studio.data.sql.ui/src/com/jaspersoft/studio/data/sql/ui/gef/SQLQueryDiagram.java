@@ -37,7 +37,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -45,7 +44,7 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -68,14 +67,8 @@ public class SQLQueryDiagram {
 	}
 
 	public Control createDiagram(Composite parent) {
-		Composite cmp = new Composite(parent, SWT.BORDER);
-		GridLayout layout = new GridLayout();
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		cmp.setLayout(layout);
-
 		viewer = new ScrollingGraphicalViewer();
-		viewer.createControl(cmp);
+		viewer.createControl(parent);
 		viewer.setEditDomain(new DefaultEditDomain(null));
 		viewer.setRootEditPart(new SQLDesignerRootEditPart());
 		viewer.setEditPartFactory(new SQLDesignerEditPartFactory());
@@ -109,9 +102,10 @@ public class SQLQueryDiagram {
 			}
 		});
 		viewer.addDropTargetListener(new QueryDesignerDropTargetListener(viewer, NodeTransfer.getInstance()));
+
 		refreshViewer();
 
-		return cmp;
+		return viewer.getControl();
 	}
 
 	protected void refreshViewer() {
@@ -166,7 +160,7 @@ public class SQLQueryDiagram {
 
 		private void doDrop(List<ANode> node) {
 			Set<MSqlTable> tablesset = new LinkedHashSet<MSqlTable>();
-			Set<MColumn> colsset = new LinkedHashSet<MColumn>();
+			Set<MSQLColumn> colsset = new LinkedHashSet<MSQLColumn>();
 			Set<ANode> others = new LinkedHashSet<ANode>();
 			Util.filterTables(node, tablesset, colsset, others);
 

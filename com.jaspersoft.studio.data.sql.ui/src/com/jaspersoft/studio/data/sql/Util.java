@@ -21,7 +21,7 @@ import java.util.Set;
 
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
@@ -39,7 +39,7 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 
 public class Util {
-	public static boolean columnExists(MColumn c, MDBObjects orderBy, List<MSqlTable> tables) {
+	public static boolean columnExists(MSQLColumn c, MDBObjects orderBy, List<MSqlTable> tables) {
 		if (!tables.contains(c.getParent()))
 			return true;
 		for (INode n : orderBy.getChildren())
@@ -97,7 +97,7 @@ public class Util {
 		return list;
 	}
 
-	public static MRoot getRoot(MColumn mcol, MExpression mexpr) {
+	public static MRoot getRoot(MSQLColumn mcol, MExpression mexpr) {
 		if (mcol != null)
 			return (MRoot) mcol.getRoot();
 		ModelVisitor<INode> mv = new ModelVisitor<INode>(mexpr.getRoot()) {
@@ -149,12 +149,12 @@ public class Util {
 		return nodes;
 	}
 
-	public static void filterTables(List<ANode> node, Set<MSqlTable> tables, Set<MColumn> cols, Set<ANode> others) {
+	public static void filterTables(List<ANode> node, Set<MSqlTable> tables, Set<MSQLColumn> cols, Set<ANode> others) {
 		for (ANode n : node) {
 			if (n instanceof MSqlTable)
 				tables.add((MSqlTable) n);
-			else if (n instanceof MColumn)
-				cols.add((MColumn) n);
+			else if (n instanceof MSQLColumn)
+				cols.add((MSQLColumn) n);
 			else
 				others.add(n);
 		}

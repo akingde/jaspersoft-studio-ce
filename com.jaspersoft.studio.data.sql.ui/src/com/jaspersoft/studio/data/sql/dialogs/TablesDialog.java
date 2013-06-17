@@ -45,6 +45,7 @@ public class TablesDialog extends ATitledDialog {
 	public TablesDialog(Shell parentShell) {
 		super(parentShell);
 		setTitle("Tables Dialog");
+		setDefaultSize(650, 780);
 	}
 
 	public void setRoot(MRoot root) {

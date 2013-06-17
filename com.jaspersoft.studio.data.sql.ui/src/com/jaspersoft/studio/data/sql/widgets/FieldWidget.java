@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.sql.dialogs.FromTableColumnsDialog;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 
@@ -65,8 +65,8 @@ public class FieldWidget extends AOperandWidget<FieldOperand> {
 				FromTableColumnsDialog dialog = new FromTableColumnsDialog(Display.getDefault().getActiveShell(), SWT.SINGLE);
 				dialog.setSelection(v.getExpression());
 				if (dialog.open() == Dialog.OK) {
-					Map<MColumn, MFromTable> cmap = dialog.getColumns();
-					for (MColumn t : cmap.keySet())
+					Map<MSQLColumn, MFromTable> cmap = dialog.getColumns();
+					for (MSQLColumn t : cmap.keySet())
 						v.setValue(t, cmap.get(t));
 				}
 				txt.setText(v.toSQLString());

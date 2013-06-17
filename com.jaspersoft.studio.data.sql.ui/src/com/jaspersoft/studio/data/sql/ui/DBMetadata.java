@@ -54,9 +54,9 @@ import org.eclipse.ui.part.PluginTransfer;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MFunction;
 import com.jaspersoft.studio.data.sql.model.metadata.MProcedure;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MTables;
@@ -226,15 +226,13 @@ public class DBMetadata {
 
 					@Override
 					public boolean visit(INode n) {
-						// if (n instanceof MSqlSchema || n instanceof MTables)
-						// return true;
 						if (n instanceof MSqlTable) {
 							try {
 								MSqlTable mt = (MSqlTable) n;
 								MTables tables = (MTables) mt.getParent();
 								ResultSet rs = meta.getColumns(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue(), "%");
 								while (rs.next())
-									new MColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
+									new MSQLColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
 								return false;
 							} catch (Throwable e) {
 							}
@@ -243,6 +241,7 @@ public class DBMetadata {
 					}
 				};
 			} catch (Throwable e) {
+				updateUI(root);
 				designer.showError(e);
 			}
 
@@ -256,12 +255,12 @@ public class DBMetadata {
 			ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", types);
 			while (rs.next())
 				new MSqlTable(mview, rs.getString("TABLE_NAME"), rs);
-			// for (INode n : mview.getChildren()) {
-			// rs = meta.getColumns(tableCatalog, tableSchema, (String) n.getValue(),
-			// "%");
-			// while (rs.next())
-			// new MColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
-			// }
+
+			// meta.getPrimaryKeys(catalog, tableSchema, table);
+			// meta.getCrossReference(parentCatalog, parentSchema, parentTable,
+			// foreignCatalog, foreignSchema, foreignTable);
+			// meta.getExportedKeys(catalog, tableSchema, table);
+			// meta.getImportedKeys(catalog, tableSchema, table);
 		} catch (Throwable e) {
 		}
 	}
@@ -277,6 +276,7 @@ public class DBMetadata {
 			if (das != null)
 				das.contributeParameters(parameters);
 		} catch (JRException e1) {
+			updateUI(root);
 			designer.showError(e1);
 		}
 
@@ -308,9 +308,10 @@ public class DBMetadata {
 					DBMetadata.this.root = new MRoot(null, null);
 				treeViewer.setInput(DBMetadata.this.root);
 				setFirstSelection();
-				if (root.getChildren().isEmpty())
+				if (root.getChildren().isEmpty()) {
 					msg.setText("No Metadata.\nDouble click to refresh.");
-				else
+					stackLayout.topControl = mcmp;
+				} else
 					stackLayout.topControl = treeViewer.getControl();
 				composite.layout(true);
 			}

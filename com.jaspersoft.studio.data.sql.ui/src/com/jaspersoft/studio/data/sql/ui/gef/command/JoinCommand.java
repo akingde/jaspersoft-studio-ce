@@ -21,16 +21,16 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
 import com.jaspersoft.studio.data.sql.action.table.DeleteTableJoin;
 import com.jaspersoft.studio.data.sql.action.table.JoinTable;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 
 public class JoinCommand extends Command {
 	private SQLQueryDesigner designer;
-	private MColumn src, dest;
+	private MSQLColumn src, dest;
 	private MFromTable srcTbl, destTbl;
 
-	public JoinCommand(MColumn src, MFromTable srcTbl, MColumn dest, MFromTable destTbl, SQLQueryDesigner designer) {
+	public JoinCommand(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl, SQLQueryDesigner designer) {
 		this.designer = designer;
 		this.src = src;
 		this.srcTbl = srcTbl;

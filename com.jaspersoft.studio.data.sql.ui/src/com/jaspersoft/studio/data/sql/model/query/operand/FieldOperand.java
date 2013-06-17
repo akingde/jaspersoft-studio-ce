@@ -17,16 +17,16 @@ package com.jaspersoft.studio.data.sql.model.query.operand;
 
 import net.sf.jasperreports.engine.JRConstants;
 
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 
 public class FieldOperand extends AOperand {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	private MColumn column;
+	private MSQLColumn column;
 	private MFromTable fromTable;
 
-	public FieldOperand(MColumn value, MFromTable fromTable, MExpression mexpr) {
+	public FieldOperand(MSQLColumn value, MFromTable fromTable, MExpression mexpr) {
 		super(mexpr);
 		setValue(value, fromTable);
 	}
@@ -39,11 +39,11 @@ public class FieldOperand extends AOperand {
 		this.fromTable = fromTable;
 	}
 
-	public MColumn getMColumn() {
+	public MSQLColumn getMColumn() {
 		return column;
 	}
 
-	public void setValue(MColumn value, MFromTable fromTable) {
+	public void setValue(MSQLColumn value, MFromTable fromTable) {
 		this.column = value;
 		this.fromTable = fromTable;
 	}

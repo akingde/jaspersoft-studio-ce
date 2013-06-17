@@ -30,6 +30,8 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -40,6 +42,7 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
+import com.jaspersoft.studio.data.sql.action.DeleteAction;
 import com.jaspersoft.studio.data.sql.action.expression.ChangeOperator;
 import com.jaspersoft.studio.data.sql.action.expression.CreateExpression;
 import com.jaspersoft.studio.data.sql.action.expression.EditExpression;
@@ -51,7 +54,7 @@ import com.jaspersoft.studio.data.sql.action.select.EditColumn;
 import com.jaspersoft.studio.data.sql.action.select.SelectDistinct;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.action.table.EditTable;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
@@ -130,7 +133,7 @@ public class SQLQueryOutline {
 					return false;
 
 				Set<MSqlTable> tablesset = new LinkedHashSet<MSqlTable>();
-				Set<MColumn> colsset = new LinkedHashSet<MColumn>();
+				Set<MSQLColumn> colsset = new LinkedHashSet<MSQLColumn>();
 				Set<ANode> others = new LinkedHashSet<ANode>();
 				Util.filterTables(node, tablesset, colsset, others);
 
@@ -221,7 +224,7 @@ public class SQLQueryOutline {
 				}
 			}
 
-			protected void doDropColumn(Object target, Set<MColumn> colsset) {
+			protected void doDropColumn(Object target, Set<MSQLColumn> colsset) {
 				if (!colsset.isEmpty()) {
 					CreateColumn ct = afactory.getAction(CreateColumn.class);
 					if (ct.calculateEnabled(new Object[] { target }))
@@ -255,6 +258,20 @@ public class SQLQueryOutline {
 			private void runAction(DoubleClickEvent event, AAction sd) {
 				if (sd.calculateEnabled(event.getSelection()))
 					sd.run();
+			}
+		});
+		treeViewer.getControl().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.character == SWT.DEL && event.stateMask == 0) {
+					TreeSelection s = (TreeSelection) treeViewer.getSelection();
+
+					List<DeleteAction<?>> dactions = afactory.getDeleteActions(s != null ? s.toArray() : null);
+					for (DeleteAction<?> da : dactions) {
+						da.run();
+						break;
+					}
+				}
 			}
 		});
 		refreshViewer();

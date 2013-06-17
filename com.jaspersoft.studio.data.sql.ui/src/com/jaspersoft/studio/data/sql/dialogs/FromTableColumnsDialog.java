@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.data.sql.Util;
-import com.jaspersoft.studio.data.sql.model.metadata.MColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
@@ -47,13 +47,14 @@ import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 
 public class FromTableColumnsDialog extends ATitledDialog {
 	private TreeViewer treeViewer;
-	private Map<MColumn, MFromTable> cols = new HashMap<MColumn, MFromTable>();
+	private Map<MSQLColumn, MFromTable> cols = new HashMap<MSQLColumn, MFromTable>();
 	private MFrom root;
 	private int style = SWT.MULTI;
 
 	public FromTableColumnsDialog(Shell parentShell) {
 		super(parentShell);
 		setTitle("Columns Dialog");
+		setDefaultSize(650, 780);
 	}
 
 	public FromTableColumnsDialog(Shell parentShell, int style) {
@@ -75,12 +76,12 @@ public class FromTableColumnsDialog extends ATitledDialog {
 			TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 			for (TreePath tp : ts.getPaths())
 				if (tp.getSegmentCount() == 2)
-					cols.put((MColumn) tp.getLastSegment(), (MFromTable) tp.getFirstSegment());
+					cols.put((MSQLColumn) tp.getLastSegment(), (MFromTable) tp.getFirstSegment());
 		}
 		return super.close();
 	}
 
-	public Map<MColumn, MFromTable> getColumns() {
+	public Map<MSQLColumn, MFromTable> getColumns() {
 		return cols;
 	}
 
@@ -125,7 +126,7 @@ public class FromTableColumnsDialog extends ATitledDialog {
 			public void doubleClick(DoubleClickEvent event) {
 				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 				Object el = ts.getFirstElement();
-				if (el instanceof MColumn)
+				if (el instanceof MSQLColumn)
 					okPressed();
 				else {
 					if (treeViewer.getExpandedState(el))
@@ -142,7 +143,7 @@ public class FromTableColumnsDialog extends ATitledDialog {
 			public void selectionChanged(SelectionChangedEvent event) {
 				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 				Object el = ts.getFirstElement();
-				getButton(IDialogConstants.OK_ID).setEnabled(el instanceof MColumn);
+				getButton(IDialogConstants.OK_ID).setEnabled(el instanceof MSQLColumn);
 			}
 		});
 		treeViewer.setInput(root);
