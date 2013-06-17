@@ -31,7 +31,7 @@ public class AMSQLObject extends MDBObjects implements IQueryString {
 	public String getToolTip() {
 		String name = toSQLString();
 		if (tooltip != null)
-			name += "\n" + tooltip;
+			name += tooltip;
 		return name;
 	}
 

@@ -33,6 +33,7 @@ public class MSqlTable extends AMSQLObject implements IDragable {
 
 	public MSqlTable(ANode parent, String value, ResultSet rs) {
 		super(parent, value, "icons/table.png");
+		tooltip = "";
 		setType(rs);
 		setRemarks(rs);
 	}
@@ -49,7 +50,8 @@ public class MSqlTable extends AMSQLObject implements IDragable {
 	protected void setRemarks(ResultSet rs) {
 		try {
 			remarks = rs.getString("REMARKS");
-			tooltip += "\n" + remarks;
+			if (remarks != null)
+				tooltip += "\n" + remarks;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
