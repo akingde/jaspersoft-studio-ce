@@ -48,6 +48,7 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
@@ -66,7 +67,7 @@ import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 public class MList extends MGraphicElement implements IPastable,
 		IPastableGraphic, IContainerLayout, IContainer, IContainerEditPart,
-		IGroupElement, IGraphicElementContainer, ICopyable {
+		IGroupElement, IGraphicElementContainer, ICopyable, IDatasetContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -446,5 +447,10 @@ public class MList extends MGraphicElement implements IPastable,
 	@Override
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };
+	}
+
+	@Override
+	public MDatasetRun getDatasetRun() {
+		return (MDatasetRun)getPropertyValue(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN);
 	}
 }

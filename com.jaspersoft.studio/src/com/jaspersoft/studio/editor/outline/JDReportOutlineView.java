@@ -19,6 +19,7 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.Viewport;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
@@ -44,6 +45,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -72,6 +74,7 @@ import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
+import com.jaspersoft.studio.model.MRoot;
 
 /*
  * The Class JDReportOutlineView.
@@ -230,7 +233,6 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		configureOutlineViewer();
 		hookOutlineViewer();
 		setContents(editor.getModel());
-
 		if (outline instanceof Tree) {
 			Tree tree = (Tree) outline;
 			tree.addMouseListener(new MouseListener() {
@@ -268,6 +270,29 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 						}
 					}
 				}
+			});
+			
+			//This listener display the tooltip text for the abbreviated nodes names
+			tree.addMouseMoveListener(new MouseMoveListener() {
+				
+				  public void mouseMove(MouseEvent e){
+				  	EditPart part = getViewer().findObjectAt(new Point(e.x,e.y));
+		  			Tree t = (Tree) e.getSource();
+				  	if (part != null & part.getModel() != null && !(part.getModel() instanceof MRoot)){
+				  		Object model = part.getModel();
+				  		if (model instanceof ANode){
+				  			String text = ((ANode)model).getDisplayText();
+				  			String widgetText = ((TreeItem)((TreeEditPart)part).getWidget()).getText();
+				  			//Display the tooltip only if the name is truncated
+				  			if (widgetText.contains("...")) {
+				  				t.setToolTipText(text);
+					  			return;
+				  			}
+				  		}
+				  	}
+				  	t.setToolTipText(null);
+	      }
+	
 			});
 		}
 	}

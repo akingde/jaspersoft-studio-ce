@@ -89,10 +89,12 @@ import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MHyperLink;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -116,7 +118,7 @@ import com.jaspersoft.studio.utils.Misc;
 /*
  * The Class MChart.
  */
-public class MChart extends MGraphicElementLineBox implements IContainer, IContainerEditPart, IPastable {
+public class MChart extends MGraphicElementLineBox implements IContainer, IContainerEditPart, IPastable, IDatasetContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	public static final String PLOTPROPERTY = "PLOTPROPERTY";
 	/** The icon descriptor. */
@@ -872,5 +874,14 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		if (parent instanceof MChart)
 			return true;
 		return super.isCopyable2(parent);
+	}
+
+	@Override
+	public MDatasetRun getDatasetRun() {
+		JRChart oldObject = (JRChart) getValue();
+		if (oldObject != null && oldObject.getDataset() != null)
+			return new MDatasetRun(oldObject.getDataset().getDatasetRun(), getJasperDesign());
+		else 
+			return null;
 	}
 }
