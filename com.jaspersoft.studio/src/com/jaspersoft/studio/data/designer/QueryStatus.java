@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.designer;
 
@@ -46,6 +41,8 @@ public class QueryStatus {
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
+				if (msgItem.isDisposed())
+					return;
 				msgItem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/error_tsk.gif"));
 				setMessage(t, t.getMessage(), true);
 			}
@@ -130,7 +127,7 @@ public class QueryStatus {
 			int w = toolBar.getBounds().width - 70;
 			GC gc = new GC(toolBar);
 			endIndex = Math.max(w / gc.getFontMetrics().getAverageCharWidth(), 0);
-			if(str.contains("\n")){
+			if (str.contains("\n")) {
 				// avoid new line
 				endIndex = Math.min(str.indexOf('\n'), endIndex);
 			}
