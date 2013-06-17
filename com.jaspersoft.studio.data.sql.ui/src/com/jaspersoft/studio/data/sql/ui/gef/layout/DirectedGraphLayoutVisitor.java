@@ -24,6 +24,7 @@ import java.util.Map;
 import org.eclipse.draw2d.AbsoluteBendpoint;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.graph.DirectedGraph;
@@ -47,6 +48,7 @@ public class DirectedGraphLayoutVisitor {
 	public void layoutDiagram(FromEditPart diagram) {
 		partToNodesMap = new HashMap<AbstractGraphicalEditPart, Object>();
 		graph = new DirectedGraph();
+		graph.setDirection(PositionConstants.EAST);
 		addNodes(diagram);
 		if (graph.nodes.size() > 0) {
 			addEdges(diagram);
