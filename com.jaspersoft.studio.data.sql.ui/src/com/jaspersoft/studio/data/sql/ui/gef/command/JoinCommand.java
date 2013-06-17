@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.ui.gef.command;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
@@ -24,6 +27,7 @@ import com.jaspersoft.studio.data.sql.action.table.JoinTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
+import com.jaspersoft.studio.model.INode;
 
 public class JoinCommand extends Command {
 	private SQLQueryDesigner designer;
@@ -57,12 +61,24 @@ public class JoinCommand extends Command {
 			dtj.calculateEnabled(new Object[] { destTbl });
 			destTbl = dtj.runSilent();
 		}
+		if (srcTbl instanceof MFromTable && !srcTbl.getChildren().isEmpty()) {
+			List<MFromTableJoin> lst = new ArrayList<MFromTableJoin>();
+			for (INode n : srcTbl.getChildren()) {
+				if (n instanceof MFromTableJoin)
+					lst.add((MFromTableJoin) n);
+			}
+			for (MFromTable mft : lst) {
+				DeleteTableJoin dtj = afactory.getAction(DeleteTableJoin.class);
+				dtj.calculateEnabled(new Object[] { mft });
+				dtj.runSilent();
+			}
+		}
 
 		JoinTable jt = afactory.getAction(JoinTable.class);
-		if (!srcTbl.getChildren().contains(destTbl))
-			jt.doRun(dest, destTbl, src, srcTbl);
-		else
-			jt.doRun(src, srcTbl, dest, destTbl);
+		// if (!srcTbl.getChildren().contains(destTbl))
+		// jt.doRun(dest, destTbl, src, srcTbl);
+		// else
+		jt.doRun(src, srcTbl, dest, destTbl);
 
 	}
 }

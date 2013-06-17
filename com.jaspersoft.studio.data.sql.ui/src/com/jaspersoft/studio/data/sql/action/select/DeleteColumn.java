@@ -23,17 +23,23 @@ import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByExpression;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
-public class DeleteColumn extends DeleteAction<MSelectColumn> {
+public class DeleteColumn extends DeleteAction<ANode> {
 
 	public DeleteColumn(SQLQueryDesigner designer) {
-		super(designer, "Column", MSelectColumn.class);
+		super(designer, "Column", ANode.class);
 	}
 
 	@Override
-	protected void doDeleteMore(ANode parent, MSelectColumn todel) {
+	protected boolean isGoodNode(ANode element) {
+		return element instanceof MSelectColumn || element instanceof MSelectExpression;
+	}
+
+	@Override
+	protected void doDeleteMore(ANode parent, ANode todel) {
 		for (INode n : parent.getRoot().getChildren()) {
 			if (n instanceof MGroupBy) {
 				for (INode gb : n.getChildren()) {

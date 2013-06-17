@@ -48,7 +48,6 @@ public class EditSelectColumnDialog extends ATitledDialog {
 	public EditSelectColumnDialog(Shell parentShell) {
 		super(parentShell);
 		setTitle("Column Dialog");
-		setDefaultSize(650, 780);
 	}
 
 	@Override
