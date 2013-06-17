@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish.wizard;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -65,6 +68,8 @@ public class DatasourceSelectionComposite extends Composite {
 	private Button rbDSFromRepo;
 	private Button rbLocalDS;
 	private Button rbNoDS;
+	private List<DatasourceSelectionListener> dsListeners;
+	private boolean isConfiguringPage;
 
 	/**
 	 * Create the composite.
@@ -153,6 +158,7 @@ public class DatasourceSelectionComposite extends Composite {
 	 *          the resource for which we are configuring the datasource
 	 */
 	public void configurePage(ANode parent, MResource resource) {
+		isConfiguringPage=true;
 		this.parent = parent;
 		this.res = resource;
 
@@ -166,6 +172,7 @@ public class DatasourceSelectionComposite extends Composite {
 		} else {
 			setEnabled(SelectorDatasource.SelectionType.NO_DATASOURCE);
 		}
+		isConfiguringPage=false;
 	}
 
 	/*
@@ -193,20 +200,21 @@ public class DatasourceSelectionComposite extends Composite {
 			rbDSFromRepo.setSelection(true);
 			btnSelectDSFromRepo.setEnabled(true);
 			// textDSFromRepo.setEnabled(true);
-			if (r != null)
+			if (isConfiguringPage && r != null)
 				textDSFromRepo.setText(Misc.nvl(r.getReferenceUri()));
 			break;
 		case LOCAL_DATASOURCE:
 			rbLocalDS.setSelection(true);
 			btnSelectLocalDS.setEnabled(true);
 			// textLocalDS.setEnabled(true);
-			if (r != null)
+			if (isConfiguringPage && r != null)
 				textLocalDS.setText(Misc.nvl(r.getName()));
 			break;
 		case NO_DATASOURCE:
 			rbNoDS.setSelection(true);
 			break;
 		}
+		notifyDatasourceSelectionChanged();
 	}
 
 	/*
@@ -245,6 +253,7 @@ public class DatasourceSelectionComposite extends Composite {
 			ASelector.copyFields(r.getValue(), ref);
 		}
 		textLocalDS.setText(Misc.nvl(ref.getUriString()));
+		notifyDatasourceSelectionChanged();
 	}
 
 	/*
@@ -283,6 +292,7 @@ public class DatasourceSelectionComposite extends Composite {
 				}
 			}
 		}
+		notifyDatasourceSelectionChanged();
 	}
 
 	/*
@@ -295,4 +305,34 @@ public class DatasourceSelectionComposite extends Composite {
 			res.getValue().getChildren().remove(rdel);
 	}
 
+	/**
+	 * @return <code>true</code> if a valid alternative for dataset information
+	 *         is selected, <code>false</code> otherwise
+	 */
+	public boolean isDatasourceSelectionValid() {
+		return rbNoDS.getSelection()
+				|| !textDSFromRepo.getText().trim().isEmpty()
+				|| !textLocalDS.getText().trim().isEmpty(); 
+	}
+	
+	public void addDatasourceSelectionListener(DatasourceSelectionListener l){
+		if (dsListeners == null){
+			dsListeners = new ArrayList<DatasourceSelectionListener>(1);
+		}
+		dsListeners.add(l);
+	}
+	
+	public void removeDatasourceSelectionListener(DatasourceSelectionListener l){
+		if(dsListeners!=null){
+			dsListeners.remove(l);
+		}
+	}
+
+	private void notifyDatasourceSelectionChanged() {
+		if(dsListeners!=null){
+			for(DatasourceSelectionListener l : dsListeners){
+				l.datasourceSelectionChanged();
+			}
+		}
+	}
 }

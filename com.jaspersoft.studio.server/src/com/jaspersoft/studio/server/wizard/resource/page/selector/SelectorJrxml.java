@@ -24,6 +24,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -80,6 +82,12 @@ public class SelectorJrxml {
 
 		jsRefDS = new Text(composite, SWT.BORDER);
 		jsRefDS.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		jsRefDS.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				fireSelectionChanged();
+			}
+		});
 
 		bRef = new Button(composite, SWT.PUSH);
 		bRef.setText("Browse");
@@ -142,6 +150,12 @@ public class SelectorJrxml {
 
 		jsLocDS = new Text(composite, SWT.BORDER);
 		jsLocDS.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		jsLocDS.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				fireSelectionChanged();
+			}
+		});
 
 		bLoc = new Button(composite, SWT.PUSH);
 		bLoc.setText("Browse");
@@ -274,6 +288,16 @@ public class SelectorJrxml {
 	private void fireSelectionChanged() {
 		if (listener != null)
 			listener.widgetSelected(null);
+	}
+	
+	/**
+	 * Checks if a valid JRXML reference is currently selected.
+	 * 
+	 * @return <code>true</code> if a valid jrxml reference is selected,
+	 *         <code>false</code> otherwise
+	 */
+	public boolean isJrxmlSelected(){
+		return (!jsRefDS.getText().trim().isEmpty() || !jsLocDS.getText().trim().isEmpty());
 	}
 
 }

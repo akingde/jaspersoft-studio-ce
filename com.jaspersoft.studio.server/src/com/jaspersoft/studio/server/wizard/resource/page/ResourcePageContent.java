@@ -42,6 +42,9 @@ import com.jaspersoft.studio.utils.UIUtil;
 
 public class ResourcePageContent extends APageContent {
 
+	private Text tname;
+	private Text tid;
+
 	public ResourcePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
@@ -90,13 +93,13 @@ public class ResourcePageContent extends APageContent {
 		UIUtil.createSeparator(composite, 3);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_name);
-		final Text tname = new Text(composite, SWT.BORDER);
+		tname = new Text(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tname.setLayoutData(gd);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_id);
-		final Text tid = new Text(composite, SWT.BORDER);
+		tid = new Text(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tid.setLayoutData(gd);
@@ -153,5 +156,13 @@ public class ResourcePageContent extends APageContent {
 			}
 		}
 		return result.toString();
+	}
+	
+	@Override
+	public boolean isPageComplete() {
+		if(tid.getText().trim().isEmpty() || tname.getText().trim().isEmpty()){
+			return false;
+		}
+		return super.isPageComplete();
 	}
 }

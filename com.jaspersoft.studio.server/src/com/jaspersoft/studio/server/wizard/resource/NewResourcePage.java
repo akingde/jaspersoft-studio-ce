@@ -40,4 +40,12 @@ public class NewResourcePage extends AWizardPage {
 		rcontent.dispose();
 		super.dispose();
 	}
+	
+	@Override
+	public boolean isPageComplete() {
+		if(rcontent!=null){
+			return rcontent.isPageComplete();
+		}
+		return super.isPageComplete();
+	}
 }

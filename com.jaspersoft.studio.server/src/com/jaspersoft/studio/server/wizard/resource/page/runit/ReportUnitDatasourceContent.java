@@ -22,10 +22,14 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.publish.wizard.DatasourceSelectionComposite;
+import com.jaspersoft.studio.server.publish.wizard.DatasourceSelectionListener;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
-public class ReportUnitDatasourceContent extends APageContent {
+public class ReportUnitDatasourceContent extends APageContent implements DatasourceSelectionListener{
+
+	private DatasourceSelectionComposite datasourceSelectionCmp;
 
 	public ReportUnitDatasourceContent(ANode parent, MResource resource,
 			DataBindingContext bindingContext) {
@@ -48,6 +52,18 @@ public class ReportUnitDatasourceContent extends APageContent {
 
 	@Override
 	public Control createContent(Composite parent) {
-		return new SelectorDatasource().createDatasource(parent, pnode, res);
+		datasourceSelectionCmp = new SelectorDatasource().createDatasource(parent, pnode, res);
+		datasourceSelectionCmp.addDatasourceSelectionListener(this);
+		return datasourceSelectionCmp;
+	}
+	
+	@Override
+	public boolean isPageComplete() {
+		return datasourceSelectionCmp!=null && datasourceSelectionCmp.isDatasourceSelectionValid();
+	}
+
+	@Override
+	public void datasourceSelectionChanged() {
+		setPageComplete(isPageComplete());
 	}
 }

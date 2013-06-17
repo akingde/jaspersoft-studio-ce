@@ -59,9 +59,7 @@ public class ReportUnitContent extends APageContent {
 
 	@Override
 	public boolean isPageComplete() {
-		if (res != null)
-			return SelectorJrxml.getMainReport(res.getValue()) != null;
-		return false;
+		return res != null && selectorJrxml!=null && selectorJrxml.isJrxmlSelected();
 	}
 
 	@Override
@@ -69,7 +67,7 @@ public class ReportUnitContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		SelectorJrxml selectorJrxml = new SelectorJrxml();
+		selectorJrxml = new SelectorJrxml();
 		selectorJrxml.createControls(composite, pnode, res);
 		selectorJrxml.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -95,6 +93,7 @@ public class ReportUnitContent extends APageContent {
 				PojoObservables.observeValue(v, "jspView")); //$NON-NLS-1$
 
 		res.getChildren();
+		setPageComplete(false);
 		return composite;
 	}
 
@@ -104,6 +103,7 @@ public class ReportUnitContent extends APageContent {
 	}
 
 	private ReportProxy proxy = new ReportProxy();
+	private SelectorJrxml selectorJrxml;
 
 	class ReportProxy {
 		private ResourceDescriptor rd;
