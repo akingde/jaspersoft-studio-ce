@@ -95,13 +95,15 @@ public class DeleteDatasetCommand extends Command {
 	 */
 	private static List<INode> getDatasetUsage(List<INode> children, String datasetName){
 		List<INode> result = new ArrayList<INode>();
-		for(INode child : children){
-			if (child instanceof IDatasetContainer){
-				MDatasetRun dataset = ((IDatasetContainer)child).getDatasetRun();
-				if (dataset != null && dataset.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME).equals(datasetName))
-					result.add(child);
-			} else if (child instanceof IContainer){
-				result.addAll(getDatasetUsage(child.getChildren(), datasetName));
+		if (datasetName != null){
+			for(INode child : children){
+				if (child instanceof IDatasetContainer){
+					MDatasetRun dataset = ((IDatasetContainer)child).getDatasetRun();
+					if (dataset != null && datasetName.equals(dataset.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME)))
+						result.add(child);
+				} else if (child instanceof IContainer){
+					result.addAll(getDatasetUsage(child.getChildren(), datasetName));
+				}
 			}
 		}
 		return result;

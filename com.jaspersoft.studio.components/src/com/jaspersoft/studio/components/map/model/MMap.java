@@ -50,6 +50,7 @@ import com.jaspersoft.studio.components.map.model.marker.MarkersDTO;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.jasper.MapDesignConverter;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
@@ -67,7 +68,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author sanda zaharia
  * 
  */
-public class MMap extends MGraphicElement {
+public class MMap extends MGraphicElement implements IDatasetContainer{
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MMap() {
@@ -442,6 +443,11 @@ public class MMap extends MGraphicElement {
 		designMap.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "c", //$NON-NLS-1$ //$NON-NLS-2$
 				"map")); //$NON-NLS-1$
 		return designMap;
+	}
+
+	@Override
+	public MDatasetRun getDatasetRun() {
+		return (MDatasetRun) getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
 	}
 
 }
