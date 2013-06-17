@@ -61,7 +61,7 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 	}
 
 	private String formatedType() {
-		String tname = typeName;
+		String tname = "\n" + typeName;
 		if (typeName.equalsIgnoreCase("VARCHAR") || typeName.equalsIgnoreCase("CHAR") || typeName.equalsIgnoreCase("CHARACTER") || typeName.equalsIgnoreCase("NATIONAL CHARACTER")
 				|| typeName.equalsIgnoreCase("NCHAR") || typeName.equalsIgnoreCase("CHARACTER VARYING") || typeName.equalsIgnoreCase("NATIONAL CHARACTER VARYING") || typeName.equalsIgnoreCase("NVARCHAR")
 				|| typeName.equalsIgnoreCase("BIT") || typeName.equalsIgnoreCase("BIT VARYING") || typeName.equalsIgnoreCase(" TEXT") || typeName.equalsIgnoreCase("STRING")
