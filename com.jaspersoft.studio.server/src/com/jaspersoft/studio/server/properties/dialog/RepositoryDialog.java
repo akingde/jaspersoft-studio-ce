@@ -45,6 +45,11 @@ public abstract class RepositoryDialog extends Dialog {
 		super(parentShell);
 		this.root = root;
 	}
+	
+	@Override
+	protected void setShellStyle(int newShellStyle) {
+		super.setShellStyle(newShellStyle | SWT.SHELL_TRIM);
+	}
 
 	private INode root;
 
@@ -65,11 +70,12 @@ public abstract class RepositoryDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 		composite.setLayout(new GridLayout(2, false));
 
 		final TreeViewer treeViewer = new TreeViewer(composite, SWT.SINGLE
 				| SWT.BORDER);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(SWT.FILL,SWT.FILL,true,true);
 		gd.horizontalSpan = 2;
 		gd.minimumHeight = 300;
 		gd.minimumWidth = 400;
