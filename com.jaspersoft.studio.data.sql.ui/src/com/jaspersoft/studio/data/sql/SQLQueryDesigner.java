@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -98,9 +99,11 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			public void widgetSelected(SelectionEvent e) {
 				switch (tabFolder.getSelectionIndex()) {
 				case 1:
+					showWarning();
 					outline.scheduleRefresh();
 					break;
 				case 2:
+					showWarning();
 					diagram.scheduleRefresh();
 					break;
 				}
@@ -109,6 +112,15 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 		sf.setWeights(new int[] { 250, 750 });
 		return sf;
+	}
+
+	private boolean warned = false;
+
+	private void showWarning() {
+		if (!warned && isQueryModelEmpty()) {
+			UIUtils.showWarning("Attention, SQL Query Builder will overwrite the existing query!");
+			warned = true;
+		}
 	}
 
 	protected void createDiagram(CTabFolder tabFolder) {
@@ -158,18 +170,22 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	public void refreshQuery() {
 		if (root != null) {
-			boolean update = false;
-			for (INode c : root.getChildren())
-				if (!c.getChildren().isEmpty()) {
-					update = true;
-					break;
-				}
-			if (update) {
+			if (!isQueryModelEmpty()) {
 				updateQueryText(QueryWriter.writeQuery(root));
 				if (tabFolder.getSelectionIndex() == 2)
 					diagram.scheduleRefresh();
 			}
 		}
+	}
+
+	protected boolean isQueryModelEmpty() {
+		boolean update = true;
+		for (INode c : root.getChildren())
+			if (!c.getChildren().isEmpty()) {
+				update = false;
+				break;
+			}
+		return update;
 	}
 
 	private DataAdapterDescriptor da;
