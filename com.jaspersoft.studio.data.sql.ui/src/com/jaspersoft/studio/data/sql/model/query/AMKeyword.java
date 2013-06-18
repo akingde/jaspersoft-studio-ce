@@ -24,6 +24,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
 public class AMKeyword extends MDBObjects implements IQueryString {
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public static final String SELECT_KEYWORD = "SELECT";
@@ -39,7 +40,11 @@ public class AMKeyword extends MDBObjects implements IQueryString {
 	public static final String[] ALIAS_KEYWORDS = new String[] { ALIAS_KEYWORD, " " };
 
 	public static final String INNER_JOIN = "INNER JOIN";
-	public static final String[] JOIN_KEYWORDS = new String[] { INNER_JOIN, " LEFT OUTER JOIN ", " RIGHT OUTER JOIN ", " FULL OUTER JOIN ", " CROSS JOIN " };
+	public static final String LEFT_OUTER_JOIN = "LEFT OUTER JOIN";
+	public static final String CROSS_JOIN = "CROSS JOIN";
+	public static final String FULL_OUTER_JOIN = "FULL OUTER JOIN";
+	public static final String RIGHT_OUTER_JOIN = "RIGHT OUTER JOIN";
+	public static final String[] JOIN_KEYWORDS = new String[] { INNER_JOIN, LEFT_OUTER_JOIN, RIGHT_OUTER_JOIN, FULL_OUTER_JOIN, CROSS_JOIN };
 
 	public AMKeyword(ANode parent, String value, String image) {
 		super(parent, value, image);

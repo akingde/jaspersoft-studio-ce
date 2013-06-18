@@ -50,6 +50,7 @@ public class JoinFromTableDialog extends ATitledDialog {
 		this.srcTable = value;
 		if (value instanceof MFromTableJoin) {
 			fromTable = ((MFromTable) value.getParent()).toSQLString();
+			join = ((MFromTableJoin) value).getJoin();
 		} else {
 			List<INode> children = value.getParent().getChildren();
 			int ind = children.indexOf(value) - 1;

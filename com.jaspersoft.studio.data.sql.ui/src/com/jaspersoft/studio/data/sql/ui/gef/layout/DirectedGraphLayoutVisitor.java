@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.draw2d.AbsoluteBendpoint;
-import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
@@ -144,7 +143,6 @@ public class DirectedGraphLayoutVisitor {
 		NodeList nodes = e.vNodes;
 
 		PolylineConnection conn = (PolylineConnection) relationshipPart.getConnectionFigure();
-		conn.setTargetDecoration(new PolygonDecoration());
 		if (nodes != null) {
 			List<AbsoluteBendpoint> bends = new ArrayList<AbsoluteBendpoint>();
 			for (int i = 0; i < nodes.size(); i++) {

@@ -16,10 +16,12 @@
 package com.jaspersoft.studio.data.sql.ui.gef.parts;
 
 import org.eclipse.draw2d.BendpointConnectionRouter;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
+import org.eclipse.draw2d.RotatableDecoration;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -28,6 +30,7 @@ import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.table.EditTableJoin;
+import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.IQueryString;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
@@ -65,8 +68,6 @@ public class RelationshipPart extends AbstractConnectionEditPart {
 	protected IFigure createFigure() {
 		PolylineConnection conn = (PolylineConnection) super.createFigure();
 		conn.setConnectionRouter(new BendpointConnectionRouter());
-		conn.setTargetDecoration(new PolygonDecoration());
-
 		return conn;
 	}
 
@@ -85,6 +86,42 @@ public class RelationshipPart extends AbstractConnectionEditPart {
 				return true;
 			}
 		};
-		getFigure().setToolTip(new Label(tt.toString()));
+		PolylineConnection f = (PolylineConnection) getFigure();
+		f.setToolTip(new Label(tt.toString()));
+
+		if (joinTable.getJoin().equals(AMKeyword.INNER_JOIN)) {
+			f.setTargetDecoration(getInnerDecoration());
+			f.setSourceDecoration(getInnerDecoration());
+		} else if (joinTable.getJoin().equals(AMKeyword.LEFT_OUTER_JOIN)) {
+			f.setTargetDecoration(getOuterDecoration());
+			f.setSourceDecoration(getInnerDecoration());
+		} else if (joinTable.getJoin().equals(AMKeyword.RIGHT_OUTER_JOIN)) {
+			f.setTargetDecoration(getInnerDecoration());
+			f.setSourceDecoration(getOuterDecoration());
+		} else if (joinTable.getJoin().equals(AMKeyword.FULL_OUTER_JOIN)) {
+			f.setTargetDecoration(getOuterDecoration());
+			f.setSourceDecoration(getOuterDecoration());
+		} else if (joinTable.getJoin().equals(AMKeyword.CROSS_JOIN)) {
+			f.setTargetDecoration(getCrossDecoration());
+			f.setSourceDecoration(getCrossDecoration());
+		}
+	}
+
+	private RotatableDecoration getInnerDecoration() {
+		PolygonDecoration srcpd = new PolygonDecoration();
+		srcpd.setBackgroundColor(ColorConstants.black);
+		return srcpd;
+	}
+
+	private RotatableDecoration getOuterDecoration() {
+		PolygonDecoration srcpd = new PolygonDecoration();
+		srcpd.setBackgroundColor(ColorConstants.white);
+		return srcpd;
+	}
+
+	private RotatableDecoration getCrossDecoration() {
+		PolygonDecoration srcpd = new PolygonDecoration();
+		srcpd.setBackgroundColor(ColorConstants.lightGray);
+		return srcpd;
 	}
 }
