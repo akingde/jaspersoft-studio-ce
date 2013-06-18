@@ -42,9 +42,9 @@ public class SelectDistinct extends AAction {
 
 	protected void setMenuText(MSelect msel) {
 		if (msel.getValue().equals(AMKeyword.SELECT_KEYWORD))
-			setText("Change to" + AMKeyword.SELECT_DISTINCT_KEYWORD);
+			setText("Change to " + AMKeyword.SELECT_DISTINCT_KEYWORD);
 		else
-			setText("Change to" + AMKeyword.SELECT_KEYWORD);
+			setText("Change to " + AMKeyword.SELECT_KEYWORD);
 	}
 
 	@Override

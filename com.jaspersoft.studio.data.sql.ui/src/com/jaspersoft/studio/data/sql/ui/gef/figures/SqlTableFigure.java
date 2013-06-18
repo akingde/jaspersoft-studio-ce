@@ -21,9 +21,24 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.swt.graphics.Color;
 
 public class SqlTableFigure extends Figure {
+	public static final Insets INSETS = new Insets(3, 3, 3, 3);
+
+	private class NameLabel extends Label {
+
+		private NameLabel(String s) {
+			super(s);
+		}
+
+		@Override
+		public Insets getInsets() {
+			return INSETS;
+		}
+	}
+
 	public static Color classColor = new Color(null, 255, 255, 206);
 	private Label lblName;
 	private ColumnsFigure attributeFigure = new ColumnsFigure();
@@ -31,12 +46,13 @@ public class SqlTableFigure extends Figure {
 
 	public SqlTableFigure(String name) {
 		ToolbarLayout layout = new ToolbarLayout();
+		layout.setSpacing(3);
 		setLayoutManager(layout);
 		setBorder(border);
 		setBackgroundColor(classColor);
 		setOpaque(true);
 
-		lblName = new Label(name);
+		lblName = new NameLabel(name);
 		add(lblName);
 		add(attributeFigure);
 	}

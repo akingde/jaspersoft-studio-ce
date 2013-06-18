@@ -49,13 +49,13 @@ public class JoinFromTableDialog extends ATitledDialog {
 	public void setValue(MFromTable value) {
 		this.srcTable = value;
 		if (value instanceof MFromTableJoin) {
-			fromTable = ((MFromTable) value.getParent()).getDisplayText();
+			fromTable = ((MFromTable) value.getParent()).toSQLString();
 		} else {
 			List<INode> children = value.getParent().getChildren();
 			int ind = children.indexOf(value) - 1;
 			if (ind < 0)
 				ind = children.indexOf(value) + 1;
-			fromTable = ((MFromTable) children.get(ind)).getDisplayText();
+			fromTable = ((MFromTable) children.get(ind)).toSQLString();
 		}
 	}
 
@@ -65,7 +65,7 @@ public class JoinFromTableDialog extends ATitledDialog {
 			parent = parent.getParent();
 		List<String> lst = new ArrayList<String>();
 		for (INode s : parent.getChildren())
-			if (!s.getDisplayText().equals(srcTable.getDisplayText()))
+			if (!s.getDisplayText().equals(srcTable.toSQLString()))
 				lst.add(s.getDisplayText());
 
 		return lst.toArray(new String[lst.size()]);

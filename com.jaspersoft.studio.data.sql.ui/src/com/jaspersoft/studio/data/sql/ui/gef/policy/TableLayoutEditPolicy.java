@@ -67,7 +67,7 @@ public class TableLayoutEditPolicy extends FlowLayoutEditPolicy {
 			}
 			GraphicalEditPart after = (GraphicalEditPart) getInsertionReference(request);
 
-			if (after == null)
+			if (after == null || child == null)
 				return;
 			if (after.getParent() == child.getParent())
 				return;

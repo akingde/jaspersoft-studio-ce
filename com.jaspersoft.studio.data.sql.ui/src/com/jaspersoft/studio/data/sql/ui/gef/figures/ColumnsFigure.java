@@ -27,7 +27,7 @@ public class ColumnsFigure extends Figure {
 	public ColumnsFigure() {
 		ToolbarLayout layout = new ToolbarLayout();
 		layout.setMinorAlignment(ToolbarLayout.ALIGN_TOPLEFT);
-		layout.setStretchMinorAxis(false);
+		layout.setStretchMinorAxis(true);
 		layout.setSpacing(5);
 		setLayoutManager(layout);
 		setBorder(new CompartmentFigureBorder());
