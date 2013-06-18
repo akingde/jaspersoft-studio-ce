@@ -51,7 +51,7 @@ public class QDesignerFactory {
 					if (lang.equalsIgnoreCase(e.getAttribute("language"))) {//$NON-NLS-1$
 						qd = (IQueryDesigner) e.createExecutableExtension("QueryDesignerClass"); //$NON-NLS-1$
 						qd.setParentContainer(dqa);
-						addDesigner(lang, qd);
+						qd = addDesigner(lang, qd);
 						return qd;
 					}
 				} catch (CoreException ex) {
