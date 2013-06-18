@@ -274,7 +274,9 @@ public class DBMetadata {
 				updateUI(root);
 				designer.showError(e);
 			}
-
+		// TODO if we refresh ... we should look in the query and replace existing
+		// objects, otherwise, we may have some surprises, because equals will not
+		// work
 		updateItermediateUI();
 		running = false;
 	}

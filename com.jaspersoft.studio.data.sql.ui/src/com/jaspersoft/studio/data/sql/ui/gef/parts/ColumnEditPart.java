@@ -21,7 +21,10 @@ import java.util.List;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 
+import com.jaspersoft.studio.data.sql.Activator;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
@@ -43,10 +46,14 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected IFigure createFigure() {
 		colname = getModel().getValue();
+		Image image = null;
+		ImageDescriptor imgd = getModel().getImagePath();
+		if (imgd != null)
+			image = Activator.getDefault().getImage(imgd);
 		SQLQueryDesigner designer = (SQLQueryDesigner) getViewer().getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
 		afactory = designer.getOutline().getAfactory();
 		mselect = Util.getKeyword(ColumnEditPart.this.getParent().getModel(), MSelect.class);
-		ColumnFigure cbfig = new ColumnFigure(colname) {
+		ColumnFigure cbfig = new ColumnFigure(colname, image) {
 			@Override
 			protected void handleSelectionChanged() {
 				super.handleSelectionChanged();

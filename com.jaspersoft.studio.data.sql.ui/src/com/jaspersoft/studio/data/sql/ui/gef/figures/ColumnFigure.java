@@ -22,6 +22,8 @@ import org.eclipse.draw2d.CheckBox;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.swt.graphics.Image;
 
 public class ColumnFigure extends Figure {
 	private CheckBox checkbox;
@@ -33,7 +35,7 @@ public class ColumnFigure extends Figure {
 	 *          The label text
 	 * @since 2.0
 	 */
-	public ColumnFigure(String text) {
+	public ColumnFigure(String text, Image image) {
 		setLayoutManager(new FlowLayout(true));
 		checkbox = new CheckBox();
 		checkbox.addChangeListener(new ChangeListener() {
@@ -45,7 +47,9 @@ public class ColumnFigure extends Figure {
 			}
 		});
 		add(checkbox);
-		add(new Label(text));
+		Label lbl = new Label(text, image);
+		lbl.setTextPlacement(PositionConstants.WEST);
+		add(lbl);
 	}
 
 	/**
