@@ -73,10 +73,16 @@ public class ImagePageContent extends AFileResourcePageContent {
 				if (img != null) {
 					Rectangle client = canvas.getClientArea();
 					gc.fillRectangle(0, 0, client.width, client.height);
-
 					gc.drawImage(img, origin.x, origin.y);
-				} else
+					canvas.getHorizontalBar().setVisible(true);
+					canvas.getVerticalBar().setVisible(true);
+				} else{
+					Rectangle client = canvas.getClientArea();
+					gc.fillRectangle(0, 0, client.width, client.height);
 					e.gc.drawText(Messages.RDImagePage_noimage, 0, 0);
+					canvas.getHorizontalBar().setVisible(false);
+					canvas.getVerticalBar().setVisible(false);
+				}
 			}
 		});
 		final ScrollBar hBar = canvas.getHorizontalBar();
