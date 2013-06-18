@@ -120,7 +120,6 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	public void performRequest(Request req) {
-		System.out.println("Table" + req);
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			EditTable ct = getDesigner().getOutline().getAfactory().getAction(EditTable.class);
 			if (ct.calculateEnabled(new Object[] { getModel() }))

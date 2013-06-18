@@ -101,6 +101,7 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected void createEditPolicies() {
+		// installEditPolicy(EditPolicy.LAYOUT_ROLE, new ColumnLayoutEditPolicy());
 		// installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new
 		// TableNodeEditPolicy());
 	}

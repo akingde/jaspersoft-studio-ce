@@ -54,7 +54,8 @@ public class EditTableJoin extends AAction {
 		dialog.setValue(mcol);
 		if (dialog.open() == Dialog.OK) {
 			MFromTable mtab = JoinTable.getFromTable(mcol, dialog);
-			mcol.setParent(mtab, -1);
+			if (mtab != null)
+				mcol.setParent(mtab, -1);
 			mcol.setJoin(dialog.getJoin());
 			selectInTree(mcol);
 		}

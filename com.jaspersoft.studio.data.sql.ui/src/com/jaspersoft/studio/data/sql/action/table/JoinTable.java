@@ -95,9 +95,10 @@ public class JoinTable extends AAction {
 		ANode p = mcol.getParent();
 		if (p instanceof MFromTableJoin)
 			p = p.getParent();
+		String ft = dialog.getFromTable();
 		MFromTable mtab = null;
 		for (INode n : p.getChildren()) {
-			if (n.getDisplayText().equals(dialog.getFromTable())) {
+			if (n instanceof MFromTable && ((MFromTable) n).getValue().toSQLString().equals(ft)) {
 				mtab = (MFromTable) n;
 				break;
 			}

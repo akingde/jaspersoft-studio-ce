@@ -15,10 +15,21 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.ui.gef.policy;
 
+import java.util.List;
+
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.FlowLayoutEditPolicy;
+import org.eclipse.gef.handles.HandleBounds;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
@@ -29,6 +40,56 @@ import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.TableEditPart;
 
 public class TableLayoutEditPolicy extends FlowLayoutEditPolicy {
+	private RectangleFigure targetFeedback;
+
+	@Override
+	protected void eraseLayoutTargetFeedback(Request request) {
+		super.eraseLayoutTargetFeedback(request);
+		if (targetFeedback != null) {
+			if (getFeedbackLayer().getChildren().contains(targetFeedback)) {
+				removeFeedback(targetFeedback);
+				targetFeedback = null;
+			}
+		}
+	}
+
+	@Override
+	protected void showLayoutTargetFeedback(Request request) {
+		if (request instanceof ChangeBoundsRequest) {
+			eraseLayoutTargetFeedback(request);
+
+			ChangeBoundsRequest r = (ChangeBoundsRequest) request;
+			EditPart child = null;
+			List<?> editParts = r.getEditParts();
+			for (int i = 0; i < editParts.size(); i++) {
+				child = (EditPart) editParts.get(i);
+				break;
+			}
+			GraphicalEditPart after = (GraphicalEditPart) getInsertionReference(request);
+
+			if (after == null)
+				return;
+			if (after.getParent() == child.getParent())
+				return;
+			if (targetFeedback == null) {
+				targetFeedback = new RectangleFigure();
+				targetFeedback.setFill(false);
+
+				IFigure hostFigure = after.getFigure();
+				Rectangle bounds = hostFigure.getBounds();
+				if (hostFigure instanceof HandleBounds)
+					bounds = ((HandleBounds) hostFigure).getHandleBounds();
+				Rectangle rect = new PrecisionRectangle(bounds);
+				hostFigure.translateToAbsolute(rect);
+				getFeedbackLayer().translateToRelative(rect);
+
+				targetFeedback.setBounds(rect.shrink(-4, -4));
+				targetFeedback.setBorder(new LineBorder(ColorConstants.gray, 2));
+				addFeedback(targetFeedback);
+			}
+		} else
+			super.showLayoutTargetFeedback(request);
+	}
 
 	/**
 	 * Creates command to transfer child column to after column (in another table)
@@ -38,6 +99,8 @@ public class TableLayoutEditPolicy extends FlowLayoutEditPolicy {
 			return null;
 		if (!(after instanceof ColumnEditPart))
 			return null;
+		// if (child.getParent() == after.getParent())
+		// return null;
 
 		MSQLColumn toMove = ((ColumnEditPart) child).getModel();
 		MFromTable srcTbl = ((ColumnEditPart) child).getParent().getModel();
