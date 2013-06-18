@@ -55,10 +55,10 @@ public abstract class AExporter {
 			f = new File(filename);
 		else {
 			String fname = rd.getName();
-			int lastpoint = fname.lastIndexOf(".");
+			int lastpoint = fname.lastIndexOf("."); //$NON-NLS-1$
 			if (lastpoint > 0 && lastpoint < fname.length())
-				fname = fname.substring(0, lastpoint) + "_";
-			f = FileUtils.createTempFile(fname, dextention);
+				fname = fname.substring(0, lastpoint) + "_"; //$NON-NLS-1$
+			f = FileUtils.createTempFile("tempjrsfile_"+fname, dextention); //$NON-NLS-1$
 		}
 		try {
 			WSClientHelper.getResource(res, rd, f);
