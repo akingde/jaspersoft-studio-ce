@@ -19,13 +19,17 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 
+import org.apache.commons.lang.WordUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
@@ -60,9 +64,9 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MTables;
+import com.jaspersoft.studio.data.sql.model.metadata.PrimaryKey;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -197,13 +201,16 @@ public class DBMetadata {
 				updateUI(root);
 				for (INode n : root.getChildren()) {
 					MSqlSchema schema = (MSqlSchema) n;
-					readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, "System Tables", new String[] { "SYSTEM TABLE" });
-					readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, "Tables", new String[] { "TABLE" });
-					readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, "Views", new String[] { "VIEW" });
-					readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, "Temporary Tables", new String[] { "GLOBAL TEMPORARY", "LOCAL TEMPORARY" });
-					readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, "Aliases, Synonims", new String[] { "ALIAS", "SYNONYM" });
-					updateItermediateUI();
-					setFirstSelection();
+					try {
+						ResultSet rs = meta.getTableTypes();
+						while (rs.next()) {
+							String ttype = rs.getString("TABLE_TYPE");
+							readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, WordUtils.capitalizeFully(ttype), new String[] { ttype });
+						}
+						updateItermediateUI();
+						setFirstSelection();
+					} catch (Throwable e) {
+					}
 					try {
 						ResultSet rs = meta.getProcedures(schema.getTableCatalog(), schema.getValue(), "%");
 						MDBObjects mprocs = new MDBObjects(schema, "Procedures", "icons/function.png");
@@ -216,6 +223,15 @@ public class DBMetadata {
 						MDBObjects mfunct = new MDBObjects(schema, "Functions", "icons/function.png");
 						while (rs.next())
 							new MFunction(mfunct, rs.getString("FUNCTION_NAME"), rs);
+
+						// System.out.println(meta.getSystemFunctions());
+						// System.out.println(meta.getNumericFunctions());
+						// System.out.println(meta.getStringFunctions());
+						// System.out.println(meta.getTimeDateFunctions());
+						// System.out.println(meta.getSQLKeywords());
+						// System.out.println(meta.getCatalogTerm());
+						// System.out.println(meta.getSchemaTerm());
+						// System.out.println(meta.getProcedureTerm());
 					} catch (Throwable e) {
 					}
 					updateItermediateUI();
@@ -232,7 +248,21 @@ public class DBMetadata {
 								MTables tables = (MTables) mt.getParent();
 								ResultSet rs = meta.getColumns(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue(), "%");
 								while (rs.next())
-									new MSQLColumn((ANode) n, rs.getString("COLUMN_NAME"), rs);
+									new MSQLColumn(mt, rs.getString("COLUMN_NAME"), rs);
+
+								readPrimaryKeys(meta, mt, tables);
+								// meta.getCrossReference(parentCatalog, parentSchema,
+								// parentTable,
+								// foreignCatalog, foreignSchema, foreignTable);
+								// meta.getExportedKeys(catalog, tableSchema, table);
+								// meta.getImportedKeys(catalog, tableSchema, table);
+
+								// meta.getUDTs(catalog, schemaPattern, typeNamePattern, types)
+								// meta.getFunctionColumns(catalog, schemaPattern,
+								// functionNamePattern, columnNamePattern)
+								// meta.getProcedureColumns(catalog, schemaPattern,
+								// procedureNamePattern, columnNamePattern)
+
 								return false;
 							} catch (Throwable e) {
 							}
@@ -249,18 +279,35 @@ public class DBMetadata {
 		running = false;
 	}
 
+	protected void readPrimaryKeys(final DatabaseMetaData meta, MSqlTable mt, MTables tables) throws SQLException {
+		ResultSet rs;
+		rs = meta.getPrimaryKeys(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue());
+		PrimaryKey pk = null;
+		List<MSQLColumn> cols = new ArrayList<MSQLColumn>();
+		while (rs.next()) {
+			if (pk == null)
+				pk = new PrimaryKey(rs.getString("PK_NAME"));
+			String cname = rs.getString("COLUMN_NAME");
+			// short keySeq = rs.getShort("KEY_SEQ");
+			for (INode n : mt.getChildren()) {
+				if (n.getValue().equals(cname)) {
+					((MSQLColumn) n).setPrimaryKey(pk);
+					cols.add((MSQLColumn) n);
+					break;
+				}
+			}
+
+		}
+		if (pk != null)
+			pk.setColumns(cols.toArray(new MSQLColumn[cols.size()]));
+	}
+
 	protected void readTables(DatabaseMetaData meta, String tableSchema, String tableCatalog, MDBObjects msch, String title, String[] types) {
 		try {
 			MDBObjects mview = new MTables(msch, title);
 			ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", types);
 			while (rs.next())
 				new MSqlTable(mview, rs.getString("TABLE_NAME"), rs);
-
-			// meta.getPrimaryKeys(catalog, tableSchema, table);
-			// meta.getCrossReference(parentCatalog, parentSchema, parentTable,
-			// foreignCatalog, foreignSchema, foreignTable);
-			// meta.getExportedKeys(catalog, tableSchema, table);
-			// meta.getImportedKeys(catalog, tableSchema, table);
 		} catch (Throwable e) {
 		}
 	}
@@ -347,4 +394,5 @@ public class DBMetadata {
 			}
 		});
 	}
+
 }

@@ -86,8 +86,12 @@ public class JoinTable extends AAction {
 	}
 
 	private MSQLColumn getColumn(MSqlTable tbl) {
-		if (!tbl.getChildren().isEmpty())
+		if (!tbl.getChildren().isEmpty()) {
+			for (INode n : tbl.getChildren())
+				if (((MSQLColumn) n).getPrimaryKey() != null)
+					return (MSQLColumn) n;
 			return (MSQLColumn) tbl.getChildren().get(0);
+		}
 		return null;
 	}
 

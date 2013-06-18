@@ -46,7 +46,7 @@ public class DateWidget extends AScalarWidget {
 
 		date = new CDateTime(this, getDateStyle());
 		date.setToolTipText(getValue().toSQLString());
-		GridData gd = new GridData();
+		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 		gd.widthHint = 150;
 		date.setLayoutData(gd);
 		date.addSelectionListener(new SelectionAdapter() {

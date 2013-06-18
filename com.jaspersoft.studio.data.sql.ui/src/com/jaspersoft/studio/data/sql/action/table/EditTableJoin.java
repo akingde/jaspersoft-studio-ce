@@ -28,7 +28,7 @@ import com.jaspersoft.studio.model.ANode;
 public class EditTableJoin extends AAction {
 
 	public EditTableJoin(SQLQueryDesigner designer) {
-		super("&Edit Table Join", designer);
+		super("Edit Table &Join", designer);
 	}
 
 	@Override

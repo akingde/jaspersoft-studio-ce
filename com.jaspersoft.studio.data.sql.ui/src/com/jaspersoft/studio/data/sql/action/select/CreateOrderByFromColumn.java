@@ -29,7 +29,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateOrderByFromColumn extends AMultiSelectionAction {
 
 	public CreateOrderByFromColumn(SQLQueryDesigner designer) {
-		super("&Add To Order By", designer);
+		super("Add To &Order By", designer);
 	}
 
 	protected boolean isGoodNode(ANode element) {

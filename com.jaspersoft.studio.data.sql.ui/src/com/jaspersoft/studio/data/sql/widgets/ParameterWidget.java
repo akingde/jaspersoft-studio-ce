@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -49,7 +50,7 @@ public class ParameterWidget extends AOperandWidget<ParameterOperand> {
 		params = new Combo(this, SWT.READ_ONLY | SWT.SINGLE);
 		params.setItems(getParameterNames());
 		params.setToolTipText(getValue().toSQLString());
-		// params.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		params.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		params.select(getParametrNameIndex());
 
 		params.addSelectionListener(new SelectionAdapter() {

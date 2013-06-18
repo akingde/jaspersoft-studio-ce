@@ -28,7 +28,7 @@ import com.jaspersoft.studio.model.ANode;
 public class EditExpression extends AAction {
 
 	public EditExpression(SQLQueryDesigner designer) {
-		super("&Edit Column", designer);
+		super("&Edit Expression", designer);
 	}
 
 	@Override

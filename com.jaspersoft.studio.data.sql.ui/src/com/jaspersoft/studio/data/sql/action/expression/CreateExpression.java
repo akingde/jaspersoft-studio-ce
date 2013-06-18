@@ -47,7 +47,7 @@ public class CreateExpression extends AAction {
 	private CreateTable ct;
 
 	public CreateExpression(SQLQueryDesigner designer) {
-		super("&Add Expression", designer);
+		super("Add E&xpression", designer);
 	}
 
 	@Override

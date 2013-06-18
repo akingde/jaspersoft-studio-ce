@@ -27,7 +27,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateGroupByFromColumn extends AMultiSelectionAction {
 
 	public CreateGroupByFromColumn(SQLQueryDesigner designer) {
-		super("&Add To Group By", designer);
+		super("Add To &Group By", designer);
 	}
 
 	protected boolean isGoodNode(ANode element) {

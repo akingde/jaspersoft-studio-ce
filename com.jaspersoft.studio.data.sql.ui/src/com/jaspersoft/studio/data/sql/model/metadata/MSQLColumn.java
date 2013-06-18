@@ -21,6 +21,9 @@ import java.sql.SQLException;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+
+import com.jaspersoft.studio.data.sql.Activator;
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
@@ -45,6 +48,7 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 		}
 	}
 
+	private PrimaryKey primaryKey;
 	private String remarks;
 	private String typeName;
 	private int columnSize;
@@ -54,6 +58,21 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 
 	public String getRemarks() {
 		return remarks;
+	}
+
+	@Override
+	public String getToolTip() {
+		String tt = super.getToolTip();
+		if (primaryKey != null)
+			tt += "\n" + primaryKey.toSqlString();
+		return tt;
+	}
+
+	@Override
+	public ImageDescriptor getImagePath() {
+		if (primaryKey != null)
+			return Activator.getDefault().getImageDescriptor("icons/key.png");
+		return super.getImagePath();
 	}
 
 	public String getTypeName() {
@@ -74,4 +93,11 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 		return tname;
 	}
 
+	public PrimaryKey getPrimaryKey() {
+		return primaryKey;
+	}
+
+	public void setPrimaryKey(PrimaryKey primaryKey) {
+		this.primaryKey = primaryKey;
+	}
 }

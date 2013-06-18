@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -30,11 +31,13 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -105,6 +108,17 @@ public class FromTableColumnsDialog extends ATitledDialog {
 
 		});
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider() {
+
+			@Override
+			public Image getImage(Object element) {
+				if (element instanceof MFromTable) {
+					ImageDescriptor imagePath = ((MFromTable) element).getValue().getImagePath();
+					if (imagePath != null)
+						return JaspersoftStudioPlugin.getInstance().getImage(imagePath);
+				}
+				return super.getImage(element);
+			}
+
 			@Override
 			public StyledString getStyledText(Object element) {
 				if (element instanceof MFromTableJoin) {

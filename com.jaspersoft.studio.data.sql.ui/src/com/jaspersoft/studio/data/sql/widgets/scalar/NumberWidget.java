@@ -46,7 +46,7 @@ public class NumberWidget extends AScalarWidget {
 		txt = new Text(this, SWT.BORDER);
 		txt.setText(getValue().toSQLString());
 		txt.setToolTipText(getValue().toSQLString());
-		GridData gd = new GridData();
+		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 		gd.widthHint = 100;
 		txt.setLayoutData(gd);
 

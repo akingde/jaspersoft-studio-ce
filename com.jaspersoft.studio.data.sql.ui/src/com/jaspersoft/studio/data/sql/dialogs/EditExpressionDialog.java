@@ -58,11 +58,10 @@ public class EditExpressionDialog extends ATitledDialog {
 		this.value = value;
 		setOperator(value.getOperator().getSqlname());
 		setPrevcond(value.getPrevCond());
-		operands = value.getOperands();
-
+		operands = new ArrayList<AOperand>(value.getOperands());
 	}
 
-	private java.util.List<AOperand> operands = new ArrayList<AOperand>();
+	private java.util.List<AOperand> operands;
 	private String prevcond;
 	private String operator;
 
@@ -117,7 +116,7 @@ public class EditExpressionDialog extends ATitledDialog {
 		}
 
 		Control w = Factory.createWidget(cmp, operands, 0, value);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING | GridData.HORIZONTAL_ALIGN_END);
 		gd.widthHint = 250;
 		w.setLayoutData(gd);
 

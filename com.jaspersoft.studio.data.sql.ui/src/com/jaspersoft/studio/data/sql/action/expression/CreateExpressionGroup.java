@@ -27,7 +27,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateExpressionGroup extends AAction {
 
 	public CreateExpressionGroup(SQLQueryDesigner designer) {
-		super("&Add Expression Group", designer);
+		super("Add Expression &Group", designer);
 	}
 
 	@Override

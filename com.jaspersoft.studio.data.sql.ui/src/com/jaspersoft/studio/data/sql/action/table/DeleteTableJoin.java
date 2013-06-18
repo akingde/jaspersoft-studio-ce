@@ -27,7 +27,7 @@ import com.jaspersoft.studio.model.ANode;
 public class DeleteTableJoin extends AAction {
 
 	public DeleteTableJoin(SQLQueryDesigner designer) {
-		super("&Delete Table Join", designer);
+		super("Delete &Table Join", designer);
 	}
 
 	@Override

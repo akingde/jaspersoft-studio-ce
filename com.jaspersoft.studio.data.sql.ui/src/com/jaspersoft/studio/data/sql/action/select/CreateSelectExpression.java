@@ -28,7 +28,7 @@ import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 public class CreateSelectExpression extends AAction {
 
 	public CreateSelectExpression(SQLQueryDesigner designer) {
-		super("&Add Expression", designer);
+		super("Add E&xpression", designer);
 	}
 
 	@Override

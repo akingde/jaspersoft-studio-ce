@@ -23,8 +23,10 @@ import com.jaspersoft.studio.model.ANode;
 
 public class SelectDistinct extends AAction {
 
+	private static final String CHANGE_TO = "&Change To ";
+
 	public SelectDistinct(SQLQueryDesigner designer) {
-		super("Change to " + AMKeyword.SELECT_DISTINCT_KEYWORD, designer);
+		super(CHANGE_TO + AMKeyword.SELECT_DISTINCT_KEYWORD, designer);
 	}
 
 	@Override
@@ -42,9 +44,9 @@ public class SelectDistinct extends AAction {
 
 	protected void setMenuText(MSelect msel) {
 		if (msel.getValue().equals(AMKeyword.SELECT_KEYWORD))
-			setText("Change to " + AMKeyword.SELECT_DISTINCT_KEYWORD);
+			setText(CHANGE_TO + AMKeyword.SELECT_DISTINCT_KEYWORD);
 		else
-			setText("Change to " + AMKeyword.SELECT_KEYWORD);
+			setText(CHANGE_TO + AMKeyword.SELECT_KEYWORD);
 	}
 
 	@Override
