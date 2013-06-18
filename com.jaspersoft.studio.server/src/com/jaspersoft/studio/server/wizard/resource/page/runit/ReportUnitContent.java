@@ -38,8 +38,7 @@ import com.jaspersoft.studio.utils.UIUtil;
 
 public class ReportUnitContent extends APageContent {
 
-	public ReportUnitContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public ReportUnitContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -59,7 +58,7 @@ public class ReportUnitContent extends APageContent {
 
 	@Override
 	public boolean isPageComplete() {
-		return res != null && selectorJrxml!=null && selectorJrxml.isJrxmlSelected();
+		return res != null && selectorJrxml != null && selectorJrxml.isJrxmlSelected();
 	}
 
 	@Override
@@ -88,12 +87,11 @@ public class ReportUnitContent extends APageContent {
 		jspview.setToolTipText(Messages.RDReportUnitPage_within);
 
 		ReportProxy v = getProxy(res.getValue());
-		bindingContext.bindValue(
-				SWTObservables.observeText(jspview, SWT.Modify),
-				PojoObservables.observeValue(v, "jspView")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(jspview, SWT.Modify), PojoObservables.observeValue(v, "jspView")); //$NON-NLS-1$
 
 		res.getChildren();
-		setPageComplete(false);
+		if (res.getValue().getIsNew())
+			setPageComplete(false);
 		return composite;
 	}
 
@@ -112,19 +110,14 @@ public class ReportUnitContent extends APageContent {
 			this.rd = rd;
 		}
 
-		private int[] layouts = new int[] {
-				ResourceDescriptor.RU_CONTROLS_LAYOUT_POPUP_SCREEN,
-				ResourceDescriptor.RU_CONTROLS_LAYOUT_SEPARATE_PAGE,
-				ResourceDescriptor.RU_CONTROLS_LAYOUT_TOP_OF_PAGE, 4 };
+		private int[] layouts = new int[] { ResourceDescriptor.RU_CONTROLS_LAYOUT_POPUP_SCREEN, ResourceDescriptor.RU_CONTROLS_LAYOUT_SEPARATE_PAGE, ResourceDescriptor.RU_CONTROLS_LAYOUT_TOP_OF_PAGE, 4 };
 
 		public void setLayoutControl(int lang) {
-			rd.setResourceProperty(ResourceDescriptor.PROP_RU_CONTROLS_LAYOUT,
-					layouts[lang]);
+			rd.setResourceProperty(ResourceDescriptor.PROP_RU_CONTROLS_LAYOUT, layouts[lang]);
 		}
 
 		public int getLayoutControl() {
-			Integer v = rd
-					.getResourcePropertyValueAsInteger(ResourceDescriptor.PROP_RU_CONTROLS_LAYOUT);
+			Integer v = rd.getResourcePropertyValueAsInteger(ResourceDescriptor.PROP_RU_CONTROLS_LAYOUT);
 			int lc = v == null ? -1 : v;
 			for (int i = 0; i < layouts.length; i++)
 				if (layouts[i] == lc)
@@ -133,34 +126,27 @@ public class ReportUnitContent extends APageContent {
 		}
 
 		public void setJspIC(String lang) {
-			rd.setResourceProperty(
-					ResourceDescriptor.PROP_RU_INPUTCONTROL_RENDERING_VIEW,
-					lang);
+			rd.setResourceProperty(ResourceDescriptor.PROP_RU_INPUTCONTROL_RENDERING_VIEW, lang);
 		}
 
 		public String getJspIC() {
-			return rd
-					.getResourcePropertyValue(ResourceDescriptor.PROP_RU_INPUTCONTROL_RENDERING_VIEW);
+			return rd.getResourcePropertyValue(ResourceDescriptor.PROP_RU_INPUTCONTROL_RENDERING_VIEW);
 		}
 
 		public void setJspView(String lang) {
-			rd.setResourceProperty(
-					ResourceDescriptor.PROP_RU_REPORT_RENDERING_VIEW, lang);
+			rd.setResourceProperty(ResourceDescriptor.PROP_RU_REPORT_RENDERING_VIEW, lang);
 		}
 
 		public String getJspView() {
-			return rd
-					.getResourcePropertyValue(ResourceDescriptor.PROP_RU_REPORT_RENDERING_VIEW);
+			return rd.getResourcePropertyValue(ResourceDescriptor.PROP_RU_REPORT_RENDERING_VIEW);
 		}
 
 		public void setAllowPrompt(boolean lang) {
-			rd.setResourceProperty(
-					ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS, lang);
+			rd.setResourceProperty(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS, lang);
 		}
 
 		public boolean isAllowPrompt() {
-			Boolean b = rd
-					.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS);
+			Boolean b = rd.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS);
 			return b != null && b;
 		}
 	}
