@@ -184,7 +184,7 @@ public abstract class DataQueryAdapters {
 		tbCompo.setBackgroundMode(SWT.INHERIT_FORCE);
 		tbLayout = new StackLayout();
 		tbCompo.setLayout(tbLayout);
-		tbCompo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		tbCompo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		langComposite = new Composite(sectionClient, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_BOTH);

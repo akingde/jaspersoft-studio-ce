@@ -103,7 +103,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 
 			Button btn = new Button(toolbarComposite, SWT.PUSH);
 			btn.setText(Messages.XPathQueryDesigner_ReadFieldsButton);
-			btn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
+			btn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false));
 			btn.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
