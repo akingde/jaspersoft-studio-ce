@@ -15,7 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Control;
 
 /**
  * A utility class to simplify the work with 
@@ -136,6 +138,15 @@ public class GridDataUtil
 		clone.widthHint = gridData.widthHint;
 		
 		return clone;
+	}
+	
+	/**
+	 * Applies the exclude griddata information to the specified control.
+	 */
+	public static void gridDataExclude(Control control, boolean exclude){
+		Assert.isNotNull(control);
+		Assert.isTrue(control.getLayoutData() instanceof GridData);
+		((GridData) control.getLayoutData()).exclude = exclude;
 	}
 }
 

@@ -17,6 +17,9 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.databinding.observable.value.IValueChangeListener;
+import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
+import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -25,6 +28,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -32,6 +36,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
+import com.jaspersoft.studio.utils.GridDataUtil;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public class DataTypePageContent extends APageContent {
@@ -47,7 +52,7 @@ public class DataTypePageContent extends APageContent {
 
 	@Override
 	public String getPageName() {
-		return "com.jaspersoft.studio.server.page.datatype";
+		return "com.jaspersoft.studio.server.page.datatype"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -56,40 +61,43 @@ public class DataTypePageContent extends APageContent {
 	}
 
 	public Control createContent(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		final Composite container = new Composite(parent, SWT.NONE);
+		container.setLayout(new GridLayout(2, false));
 
-		UIUtil.createLabel(composite, Messages.RDDataTypePage_datatype);
+		UIUtil.createLabel(container, Messages.RDDataTypePage_datatype);
 
-		Combo ttype = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
-		ttype.setItems(new String[] { Messages.RDDataTypePage_text,
-				Messages.RDDataTypePage_number, Messages.RDDataTypePage_date,
-				Messages.RDDataTypePage_datetime });
+		Combo ttype = new Combo(container, SWT.BORDER | SWT.READ_ONLY);
+		ttype.setItems(new String[] { 
+				Messages.RDDataTypePage_text,
+				Messages.RDDataTypePage_number, 
+				Messages.RDDataTypePage_date,
+				Messages.RDDataTypePage_datetime,
+				Messages.RDDataTypePage_time});
 
-		UIUtil.createLabel(composite, Messages.RDDataTypePage_pattern);
+		final Label tpatternLbl = UIUtil.createLabel(container, Messages.RDDataTypePage_pattern);
 
-		Text tpattern = new Text(composite, SWT.BORDER);
+		final Text tpattern = new Text(container, SWT.BORDER);
 		tpattern.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtil.createLabel(composite, Messages.RDDataTypePage_minvalue);
+		final Label tminLbl = UIUtil.createLabel(container, Messages.RDDataTypePage_minvalue);
 
-		Text tmin = new Text(composite, SWT.BORDER);
+		final Text tmin = new Text(container, SWT.BORDER);
 		tmin.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtil.createLabel(composite, ""); //$NON-NLS-1$
+		final Label emptySpace1 = UIUtil.createLabel(container, ""); //$NON-NLS-1$
 
-		Button bmin = new Button(composite, SWT.CHECK);
+		final Button bmin = new Button(container, SWT.CHECK);
 		bmin.setText(Messages.RDDataTypePage_strictmin);
 		bmin.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtil.createLabel(composite, Messages.RDDataTypePage_maxvalue);
+		final Label tmaxLbl = UIUtil.createLabel(container, Messages.RDDataTypePage_maxvalue);
 
-		Text tmax = new Text(composite, SWT.BORDER);
+		final Text tmax = new Text(container, SWT.BORDER);
 		tmax.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtil.createLabel(composite, ""); //$NON-NLS-1$
+		final Label emptySpace2 = UIUtil.createLabel(container, ""); //$NON-NLS-1$
 
-		Button bmax = new Button(composite, SWT.CHECK);
+		final Button bmax = new Button(container, SWT.CHECK);
 		bmax.setText(Messages.RDDataTypePage_strictmax);
 		bmax.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -104,14 +112,44 @@ public class DataTypePageContent extends APageContent {
 				PojoObservables.observeValue(res.getValue(), "strictMin")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(bmax),
 				PojoObservables.observeValue(res.getValue(), "strictMax")); //$NON-NLS-1$
-
-		bindingContext.bindValue(SWTObservables
-				.observeSingleSelectionIndex(ttype), PojoObservables
+		
+		ISWTObservableValue observeDataTypeComboSelection = 
+				SWTObservables.observeSingleSelectionIndex(ttype);
+		observeDataTypeComboSelection.addValueChangeListener(new IValueChangeListener() {
+			@Override
+			public void handleValueChange(ValueChangeEvent event) {
+				if(event.diff!=null) {
+					Object newValue = event.diff.getNewValue();
+					boolean isText = false;
+					if(newValue instanceof Integer && newValue.equals(0)) {
+						// Text has been selected... we should show only pattern
+						isText = true;
+					}
+					toggleControlStatus(tpattern, isText);
+					toggleControlStatus(tpatternLbl, isText);
+					toggleControlStatus(tmaxLbl, !isText);
+					toggleControlStatus(tmax, !isText);
+					toggleControlStatus(tminLbl, !isText);
+					toggleControlStatus(tmin, !isText);
+					toggleControlStatus(emptySpace1, !isText);
+					toggleControlStatus(bmax, !isText);
+					toggleControlStatus(emptySpace2, !isText);
+					toggleControlStatus(bmin, !isText);
+					container.layout();
+				}
+			}
+		});
+		bindingContext.bindValue(observeDataTypeComboSelection, PojoObservables
 				.observeValue(getProxy(res.getValue()), "dataType")); //$NON-NLS-1$
-
-		return composite;
+		return container;
 	}
 
+	private void toggleControlStatus(Control control, boolean enable){
+		control.setEnabled(enable);
+		control.setVisible(enable);
+		GridDataUtil.gridDataExclude(control, !enable);		
+	}
+	
 	private ShiftProxy getProxy(ResourceDescriptor rd) {
 		proxy.setResourceDescriptor(rd);
 		return proxy;

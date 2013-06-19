@@ -125,6 +125,7 @@ public class Messages extends NLS {
 	public static String RDDataTypePage_strictmax;
 	public static String RDDataTypePage_strictmin;
 	public static String RDDataTypePage_text;
+	public static String RDDataTypePage_time;
 	public static String RDDataTypePage_title;
 	public static String RDFolderPage_desc;
 	public static String RDFolderPage_id;
