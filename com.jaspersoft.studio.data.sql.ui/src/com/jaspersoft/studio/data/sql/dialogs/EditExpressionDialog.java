@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.data.sql.model.enums.ExpressionType;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
@@ -64,6 +65,7 @@ public class EditExpressionDialog extends ATitledDialog {
 	private java.util.List<AOperand> operands;
 	private String prevcond;
 	private String operator;
+	private ExpressionType exprType = ExpressionType.P;
 
 	public String getPrevcond() {
 		return prevcond;
@@ -83,6 +85,10 @@ public class EditExpressionDialog extends ATitledDialog {
 
 	public java.util.List<AOperand> getOperands() {
 		return operands;
+	}
+
+	public ExpressionType getExpressionType() {
+		return exprType;
 	}
 
 	@Override
@@ -138,6 +144,8 @@ public class EditExpressionDialog extends ATitledDialog {
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 150;
 		gd.widthHint = 300;
+		gd.verticalSpan = 2;
+		gd.horizontalSpan = 3;
 		rcmp.setLayoutData(gd);
 
 		showRight();

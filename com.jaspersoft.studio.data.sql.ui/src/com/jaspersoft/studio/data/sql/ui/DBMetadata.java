@@ -57,6 +57,7 @@ import org.eclipse.ui.part.PluginTransfer;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
 import com.jaspersoft.studio.data.sql.model.metadata.MFunction;
 import com.jaspersoft.studio.data.sql.model.metadata.MProcedure;
@@ -274,9 +275,10 @@ public class DBMetadata {
 				updateUI(root);
 				designer.showError(e);
 			}
-		// TODO if we refresh ... we should look in the query and replace existing
+		// if we refresh ... we should look in the query and replace existing
 		// objects, otherwise, we may have some surprises, because equals will not
 		// work
+		Util.refreshTables(root, designer.getRoot());
 		updateItermediateUI();
 		running = false;
 	}

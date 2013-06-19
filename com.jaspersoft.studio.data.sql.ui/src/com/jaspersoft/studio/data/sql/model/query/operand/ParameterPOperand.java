@@ -21,8 +21,8 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
 
-public class ParameterOperand extends AOperand {
-	public ParameterOperand(MExpression mexpr) {
+public class ParameterPOperand extends AOperand {
+	public ParameterPOperand(MExpression mexpr) {
 		super(mexpr);
 		JRDesignDataset ds = (JRDesignDataset) mexpr.getRoot().getValue();
 		setJrParameter(jrParameter, ds);
@@ -30,7 +30,7 @@ public class ParameterOperand extends AOperand {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	private JRDesignParameter jrParameter;
+	protected JRDesignParameter jrParameter;
 	private JRDesignDataset jrDataset;
 
 	public JRDesignParameter getJrParameter() {

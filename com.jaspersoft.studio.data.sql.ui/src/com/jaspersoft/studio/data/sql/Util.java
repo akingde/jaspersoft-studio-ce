@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.sql;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -189,5 +190,84 @@ public class Util {
 			}
 
 		};
+	}
+
+	public static void refreshTables(MRoot rmeta, MRoot rquery) {
+		List<MSqlTable> oldTables = getTables(rquery);
+		Set<MSqlTable> newTables = new HashSet<MSqlTable>();
+		for (MSqlTable mt : oldTables) {
+			MSqlTable newTbl = getTable(rmeta, mt);
+			if (newTbl != null)
+				newTables.add(newTbl);
+		}
+		for (MSqlTable t : newTables)
+			replaceTable(rquery, t);
+	}
+
+	public static void replaceTable(MRoot rquery, final MSqlTable mtable) {
+		new ModelVisitor<MSqlTable>(rquery) {
+
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof MFromTable && n.getValue().equals(mtable))
+					n.setValue(mtable);
+				if (n instanceof MSelectColumn) {
+					MSQLColumn mc = getColumn(((MSelectColumn) n).getMFromTable(), ((MSelectColumn) n).getValue());
+					if (mc != null)
+						n.setValue(mc);
+					return false;
+				}
+				if (n instanceof MGroupByColumn) {
+					MSQLColumn mc = getColumn(((MGroupByColumn) n).getMFromTable(), ((MGroupByColumn) n).getValue());
+					if (mc != null)
+						n.setValue(mc);
+					return false;
+				}
+				if (n instanceof MOrderByColumn) {
+					MSQLColumn mc = getColumn(((MOrderByColumn) n).getMFromTable(), ((MOrderByColumn) n).getValue());
+					if (mc != null)
+						n.setValue(mc);
+					return false;
+				}
+				if (n instanceof MExpression) {
+					for (AOperand op : ((MExpression) n).getOperands()) {
+						if (op instanceof FieldOperand) {
+							MSQLColumn mc = getColumn(((FieldOperand) op).getFromTable(), ((FieldOperand) op).getMColumn());
+							if (mc != null)
+								((FieldOperand) op).setColumn(mc);
+						}
+					}
+					return false;
+				}
+				return true;
+			}
+
+			private MSQLColumn getColumn(MFromTable mtable, MSQLColumn old) {
+				if (mtable.getValue().equals(old.getParent())) {
+					for (INode n : mtable.getChildren()) {
+						if (n.equals(old))
+							return (MSQLColumn) n;
+					}
+				}
+				return null;
+			}
+		};
+	}
+
+	public static MSqlTable getTable(MRoot rmeta, final MSqlTable mt) {
+		ModelVisitor<MSqlTable> v = new ModelVisitor<MSqlTable>(rmeta) {
+
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof MSqlTable) {
+					if (n.equals(mt)) {
+						setObject((MSqlTable) n);
+						return false;
+					}
+				}
+				return true;
+			}
+		};
+		return v.getObject();
 	}
 }

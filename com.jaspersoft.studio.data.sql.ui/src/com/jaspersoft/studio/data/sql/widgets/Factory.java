@@ -35,7 +35,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
-import com.jaspersoft.studio.data.sql.model.query.operand.ParameterOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.ParameterNotPOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.ParameterPOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ScalarOperand;
 import com.jaspersoft.studio.data.sql.widgets.scalar.DateWidget;
 import com.jaspersoft.studio.data.sql.widgets.scalar.NumberWidget;
@@ -82,8 +83,10 @@ public class Factory {
 		AOperandWidget<T> w = null;
 		if (operand instanceof FieldOperand)
 			return new FieldWidget(parent, (FieldOperand) operand);
-		if (operand instanceof ParameterOperand)
-			return new ParameterWidget(parent, (ParameterOperand) operand);
+		if (operand instanceof ParameterNotPOperand)
+			return new ParameterWidget(parent, (ParameterNotPOperand) operand);
+		if (operand instanceof ParameterPOperand)
+			return new ParameterWidget(parent, (ParameterPOperand) operand);
 		if (operand instanceof ScalarOperand) {
 			Object opval = ((ScalarOperand<?>) operand).getValue();
 			if (opval instanceof String)
@@ -162,7 +165,8 @@ public class Factory {
 		Map<String, AOperand> opMap = w.getOperandMap();
 		if (opMap == null) {
 			opMap = new LinkedHashMap<String, AOperand>();
-			opMap.put("Parameter", getOperand(w, new ParameterOperand(mexpr)));
+			opMap.put("Parameter $P{}", getOperand(w, new ParameterPOperand(mexpr)));
+			opMap.put("Parameter $P!{}", getOperand(w, new ParameterNotPOperand(mexpr)));
 			opMap.put("Database Field", getOperand(w, new FieldOperand(null, null, mexpr)));
 			opMap.put("String", getOperand(w, getDefaultOperand(mexpr)));
 			opMap.put("Number", getOperand(w, new ScalarOperand<BigDecimal>(mexpr, BigDecimal.ZERO)));

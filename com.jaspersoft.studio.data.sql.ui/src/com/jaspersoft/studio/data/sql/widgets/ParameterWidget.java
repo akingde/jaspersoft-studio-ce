@@ -29,12 +29,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.data.sql.model.query.operand.ParameterOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.ParameterPOperand;
 
-public class ParameterWidget extends AOperandWidget<ParameterOperand> {
+public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 	private Combo params;
 
-	public ParameterWidget(Composite parent, ParameterOperand operand) {
+	public ParameterWidget(Composite parent, ParameterPOperand operand) {
 		super(parent, SWT.NONE, operand);
 	}
 

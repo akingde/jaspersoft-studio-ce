@@ -43,6 +43,10 @@ public class FieldOperand extends AOperand {
 		return column;
 	}
 
+	public void setColumn(MSQLColumn column) {
+		this.column = column;
+	}
+
 	public void setValue(MSQLColumn value, MFromTable fromTable) {
 		this.column = value;
 		this.fromTable = fromTable;
