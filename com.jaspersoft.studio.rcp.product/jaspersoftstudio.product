@@ -26,7 +26,8 @@ Special thanks to all people who support this software.
 -XX:PermSize=128M
 -XX:MaxPermSize=256M
 -XX:+CMSClassUnloadingEnabled
--XX:+UseConcMarkSweepGC</vmArgs>
+-XX:+UseConcMarkSweepGC
+-Dfile.encoding=UTF-8</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
