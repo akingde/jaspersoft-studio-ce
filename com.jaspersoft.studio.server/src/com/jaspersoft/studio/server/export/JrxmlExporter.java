@@ -16,7 +16,6 @@
 package com.jaspersoft.studio.server.export;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -63,17 +62,11 @@ public class JrxmlExporter extends AExporter {
 				setPropReportUnit(res, jd);
 				getResources(res, jd);
 
-				FileWriter fw = new FileWriter(f);
-				try {
-					MServerProfile sp = (MServerProfile) res.getRoot();
-					if (sp != null) {
-						fw.write(JRXmlWriterHelper.writeReport(null, jd, sp.getValue().getJrVersion()));
-					}
-				} finally {
-					FileUtils.closeStream(fw);
-				}
+				MServerProfile sp = (MServerProfile) res.getRoot();
+				if (sp != null)
+					FileUtils.writeFile(f, JRXmlWriterHelper.writeReport(null, jd, sp.getValue().getJrVersion()));
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
 		}
 		return f;
