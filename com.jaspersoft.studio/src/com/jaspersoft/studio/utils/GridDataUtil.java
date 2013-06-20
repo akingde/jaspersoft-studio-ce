@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.utils;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Control;
 
@@ -147,6 +148,20 @@ public class GridDataUtil
 		Assert.isNotNull(control);
 		Assert.isTrue(control.getLayoutData() instanceof GridData);
 		((GridData) control.getLayoutData()).exclude = exclude;
+	}
+	
+	/**
+	 * Sets the specified layout data to the control related to the action item.
+	 * 
+	 * @param actionItem the action item 
+	 * @param gd the griddata instance to set
+	 */
+	public static void setLayoutDataForItem(ActionContributionItem actionItem,GridData gd) {
+		Assert.isNotNull(actionItem);
+		Assert.isNotNull(gd);
+		if(actionItem.getWidget() instanceof Control) {
+			((Control)actionItem.getWidget()).setLayoutData(gd);
+		}
 	}
 }
 

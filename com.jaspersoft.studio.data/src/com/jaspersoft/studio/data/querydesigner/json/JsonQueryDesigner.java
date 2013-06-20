@@ -85,16 +85,17 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 	@Override
 	public Control createToolbar(Composite parent) {
 		if (showAdditionalInfo()) {
-			toolbarComposite = new Composite(parent, SWT.RIGHT_TO_LEFT);
+			toolbarComposite = new Composite(parent, SWT.NONE);
 			toolbarComposite.setBackgroundMode(SWT.INHERIT_FORCE);
 			GridLayout layout = new GridLayout(1, false);
 			layout.marginHeight = 0;
 			layout.marginWidth = 0;
 			toolbarComposite.setLayout(layout);
+			toolbarComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 			Button btn = new Button(toolbarComposite, SWT.PUSH);
 			btn.setText(Messages.JsonQueryDesigner_ReadFieldsBtn);
-			btn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false));
+			btn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
 			btn.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {

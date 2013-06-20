@@ -20,6 +20,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -96,14 +97,16 @@ public class QueryDesigner extends AQueryDesigner {
 	}
 
 	public Control createToolbar(Composite parent) {
-		tbCompo = new Composite(parent, SWT.RIGHT_TO_LEFT);
+		tbCompo = new Composite(parent, SWT.NONE);
 		tbCompo.setBackgroundMode(SWT.INHERIT_FORCE);
-		GridLayout layout = new GridLayout(2, false);
+		GridLayout layout = new GridLayout(1, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		tbCompo.setLayout(layout);
+		tbCompo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		btn = new Button(tbCompo, SWT.PUSH);
+		btn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
 		btn.setText(Messages.QueryDesigner_readFieldsButton);
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
