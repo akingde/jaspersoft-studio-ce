@@ -16,7 +16,6 @@
 package com.jaspersoft.studio.community.wizards;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +23,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -220,9 +220,7 @@ public class IssueAttachmentDetailsPage extends JSSHelpWizardPage {
 		if(hwSwInfoFile==null){
 			try {
 				hwSwInfoFile = File.createTempFile("hwSwInfo", ".txt"); //$NON-NLS-1$ //$NON-NLS-2$
-				FileWriter fw = new FileWriter(hwSwInfoFile);
-				fw.write(CommunityAPIUtils.getHardwareSoftwareInfo());
-				fw.close();
+				FileUtils.writeFile(hwSwInfoFile, CommunityAPIUtils.getHardwareSoftwareInfo());
 			} catch (IOException e) {
 				UIUtils.showError(e);
 				return;
