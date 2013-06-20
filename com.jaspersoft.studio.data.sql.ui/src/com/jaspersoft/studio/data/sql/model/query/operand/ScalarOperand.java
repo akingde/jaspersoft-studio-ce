@@ -21,14 +21,14 @@ import java.util.Date;
 
 import net.sf.jasperreports.engine.JRConstants;
 
-import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ScalarOperand<T> extends AOperand {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private T value;
 
-	public ScalarOperand(MExpression mexpr, T value) {
+	public ScalarOperand(AMExpression<?> mexpr, T value) {
 		super(mexpr);
 		this.value = value;
 	}
@@ -51,5 +51,10 @@ public class ScalarOperand<T> extends AOperand {
 			return "'" + value + "'";
 		}
 		return Misc.nvl(value, "");
+	}
+
+	@Override
+	public String toXString() {
+		return toSQLString();
 	}
 }

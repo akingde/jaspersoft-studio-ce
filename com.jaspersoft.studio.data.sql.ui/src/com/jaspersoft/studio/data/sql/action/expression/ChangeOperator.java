@@ -18,7 +18,7 @@ package com.jaspersoft.studio.data.sql.action.expression;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
-import com.jaspersoft.studio.data.sql.model.query.MExpressionGroup;
+import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
 import com.jaspersoft.studio.model.ANode;
 
 public class ChangeOperator extends AAction {

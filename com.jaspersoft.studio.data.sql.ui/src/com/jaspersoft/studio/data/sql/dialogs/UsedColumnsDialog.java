@@ -38,7 +38,7 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MTables;
-import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;

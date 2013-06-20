@@ -19,10 +19,10 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
-import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 
 public class ParameterPOperand extends AOperand {
-	public ParameterPOperand(MExpression mexpr) {
+	public ParameterPOperand(AMExpression<?> mexpr) {
 		super(mexpr);
 		JRDesignDataset ds = (JRDesignDataset) mexpr.getRoot().getValue();
 		setJrParameter(jrParameter, ds);
@@ -55,6 +55,13 @@ public class ParameterPOperand extends AOperand {
 		if (jrParameter != null)
 			return "$P{" + jrParameter.getName() + "}";
 		return "$P{}";
+	}
+
+	@Override
+	public String toXString() {
+		if (jrParameter != null)
+			return jrParameter.getName();
+		return "";
 	}
 
 }

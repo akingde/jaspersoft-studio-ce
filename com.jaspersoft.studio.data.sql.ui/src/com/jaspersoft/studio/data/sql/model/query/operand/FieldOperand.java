@@ -18,7 +18,7 @@ package com.jaspersoft.studio.data.sql.model.query.operand;
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
-import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 
 public class FieldOperand extends AOperand {
@@ -26,7 +26,7 @@ public class FieldOperand extends AOperand {
 	private MSQLColumn column;
 	private MFromTable fromTable;
 
-	public FieldOperand(MSQLColumn value, MFromTable fromTable, MExpression mexpr) {
+	public FieldOperand(MSQLColumn value, MFromTable fromTable, AMExpression<?> mexpr) {
 		super(mexpr);
 		setValue(value, fromTable);
 	}
@@ -63,6 +63,11 @@ public class FieldOperand extends AOperand {
 			ss.append(fromTable.getValue().toSQLString());
 		ss.append("." + column.getDisplayText());
 		return ss.toString();
+	}
+
+	@Override
+	public String toXString() {
+		return toSQLString();
 	}
 
 }

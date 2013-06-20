@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.sql;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,8 +27,8 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
-import com.jaspersoft.studio.data.sql.model.query.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
+import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
@@ -98,7 +99,7 @@ public class Util {
 		return list;
 	}
 
-	public static MRoot getRoot(MSQLColumn mcol, MExpression mexpr) {
+	public static MRoot getRoot(MSQLColumn mcol, AMExpression<?> mexpr) {
 		if (mcol != null)
 			return (MRoot) mcol.getRoot();
 		ModelVisitor<INode> mv = new ModelVisitor<INode>(mexpr.getRoot()) {
@@ -119,8 +120,8 @@ public class Util {
 		ModelVisitor<ANode> mv = new ModelVisitor<ANode>(target.getRoot()) {
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof MExpression && src instanceof MExpression)
-					System.out.println(((MExpression) n).getId() + " --- " + ((MExpression) src).getId());
+				if (n instanceof AMExpression && src instanceof AMExpression)
+					System.out.println(((AMExpression<?>) n).getId() + " --- " + ((AMExpression<?>) src).getId());
 				if (src != n && src.equals(n)) {
 					setObject((ANode) n);
 					return false;
@@ -178,8 +179,8 @@ public class Util {
 					((MOrderByColumn) n).setMFromTable(newTbl);
 					return false;
 				}
-				if (n instanceof MExpression) {
-					for (AOperand op : ((MExpression) n).getOperands()) {
+				if (n instanceof AMExpression) {
+					for (AOperand op : ((AMExpression<?>) n).getOperands()) {
 						if (op instanceof FieldOperand && ((FieldOperand) op).getFromTable().equals(oldTbl)) {
 							((FieldOperand) op).setFromTable(newTbl);
 						}
@@ -229,8 +230,8 @@ public class Util {
 						n.setValue(mc);
 					return false;
 				}
-				if (n instanceof MExpression) {
-					for (AOperand op : ((MExpression) n).getOperands()) {
+				if (n instanceof AMExpression) {
+					for (AOperand op : ((AMExpression<?>) n).getOperands()) {
 						if (op instanceof FieldOperand) {
 							MSQLColumn mc = getColumn(((FieldOperand) op).getFromTable(), ((FieldOperand) op).getMColumn());
 							if (mc != null)
@@ -269,5 +270,12 @@ public class Util {
 			}
 		};
 		return v.getObject();
+	}
+
+	public static void removeFrom(Collection<?> col, int from) {
+		for (int i = 0; i < col.size(); i++) {
+			if (i > from)
+				col.remove(i);
+		}
 	}
 }

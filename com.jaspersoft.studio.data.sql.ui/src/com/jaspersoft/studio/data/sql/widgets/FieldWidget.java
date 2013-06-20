@@ -55,7 +55,9 @@ public class FieldWidget extends AOperandWidget<FieldOperand> {
 		txt = new Text(this, SWT.READ_ONLY | SWT.BORDER);
 		txt.setText(v.toSQLString());
 		txt.setToolTipText(v.toSQLString());
-		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.minimumWidth = 200;
+		txt.setLayoutData(gd);
 
 		Button b = new Button(this, SWT.PUSH);
 		b.setText("...");

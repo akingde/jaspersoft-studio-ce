@@ -24,6 +24,7 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.expression.ChangeOperator;
 import com.jaspersoft.studio.data.sql.action.expression.CreateExpression;
 import com.jaspersoft.studio.data.sql.action.expression.CreateExpressionGroup;
+import com.jaspersoft.studio.data.sql.action.expression.CreateXExpression;
 import com.jaspersoft.studio.data.sql.action.expression.EditExpression;
 import com.jaspersoft.studio.data.sql.action.groupby.CreateGroupByColumn;
 import com.jaspersoft.studio.data.sql.action.order.CreateOrderByColumn;
@@ -42,9 +43,9 @@ import com.jaspersoft.studio.data.sql.action.table.DeleteTableJoin;
 import com.jaspersoft.studio.data.sql.action.table.EditTable;
 import com.jaspersoft.studio.data.sql.action.table.EditTableJoin;
 import com.jaspersoft.studio.data.sql.action.table.JoinTable;
-import com.jaspersoft.studio.data.sql.model.query.MExpression;
-import com.jaspersoft.studio.data.sql.model.query.MExpressionGroup;
 import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
+import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 
@@ -91,6 +92,7 @@ public class ActionFactory {
 		actions.add(null);
 		actions.add(new CreateExpressionGroup(designer));
 		actions.add(new CreateExpression(designer));
+		actions.add(new CreateXExpression(designer));
 		actions.add(new ChangeOperator(designer));
 		actions.add(null);
 		actions.add(new EditExpression(designer));

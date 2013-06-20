@@ -13,38 +13,23 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.data.sql.model.query;
+package com.jaspersoft.studio.data.sql.model.query.expression;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import net.sf.jasperreports.engine.JRConstants;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.StyledString;
 
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
-import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
-public class MExpression extends AMQueryObject<Object> {
+public class MExpression extends AMExpression<Object> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MExpression(ANode parent, Object value, int newIndex) {
-		super(parent, value, null, newIndex);
-	}
-
-	@Override
-	public ImageDescriptor getImagePath() {
-		return null;
-	}
-
-	@Override
-	public String toSQLString() {
-		return "\n\t " + getDisplayText() + " ";
+		super(parent, value, newIndex);
 	}
 
 	@Override
@@ -87,18 +72,6 @@ public class MExpression extends AMQueryObject<Object> {
 		return ss;
 	}
 
-	private String isLastInGroup(ANode p, ANode child) {
-		if (p == null)
-			return "";
-		String str = "";
-		List<INode> ch = p.getChildren();
-		if (p instanceof MExpressionGroup && ch.indexOf(child) == ch.size() - 1)
-			str += ")" + isLastInGroup(p.getParent(), p);
-		return str;
-	}
-
-	private String prevCond = AMKeyword.AND_OPERATOR;
-	private List<AOperand> operands = new ArrayList<AOperand>();
 	private Operator operator = Operator.EQUALS;
 
 	public Operator getOperator() {
@@ -107,22 +80,6 @@ public class MExpression extends AMQueryObject<Object> {
 
 	public void setOperator(Operator operator) {
 		this.operator = operator;
-	}
-
-	public List<AOperand> getOperands() {
-		return operands;
-	}
-
-	public void setOperands(List<AOperand> operands) {
-		this.operands = operands;
-	}
-
-	public String getPrevCond() {
-		return prevCond;
-	}
-
-	public void setPrevCond(String prevCond) {
-		this.prevCond = prevCond;
 	}
 
 }

@@ -68,7 +68,7 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 		JRDesignParameter p = getValue().getJrParameter();
 		if (p != null)
 			return parametersList.indexOf(p);
-		return -1;
+		return 0;
 	}
 
 	private String[] getParameterNames() {

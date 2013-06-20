@@ -19,19 +19,21 @@ import java.io.Serializable;
 
 import net.sf.jasperreports.engine.JRConstants;
 
-import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 
 public abstract class AOperand implements Serializable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	protected MExpression expression;
+	protected AMExpression<?> expression;
 
-	public AOperand(MExpression mexpr) {
+	public AOperand(AMExpression<?> mexpr) {
 		this.expression = mexpr;
 	}
 
-	public MExpression getExpression() {
+	public AMExpression<?> getExpression() {
 		return expression;
 	}
+
+	public abstract String toXString();
 
 	public abstract String toSQLString();
 }

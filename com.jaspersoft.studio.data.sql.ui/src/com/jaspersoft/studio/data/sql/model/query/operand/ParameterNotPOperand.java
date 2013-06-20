@@ -17,10 +17,10 @@ package com.jaspersoft.studio.data.sql.model.query.operand;
 
 import net.sf.jasperreports.engine.JRConstants;
 
-import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 
 public class ParameterNotPOperand extends ParameterPOperand {
-	public ParameterNotPOperand(MExpression mexpr) {
+	public ParameterNotPOperand(AMExpression<?> mexpr) {
 		super(mexpr);
 	}
 

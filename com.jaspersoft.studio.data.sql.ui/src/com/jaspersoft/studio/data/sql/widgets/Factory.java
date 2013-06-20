@@ -32,7 +32,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-import com.jaspersoft.studio.data.sql.model.query.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
+import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ParameterNotPOperand;
@@ -70,7 +71,7 @@ public class Factory {
 		return cmp;
 	}
 
-	protected static void createWidgetMenu(AOperandWidget<?> w, List<AOperand> operands, int index, MExpression mexpr) {
+	protected static void createWidgetMenu(AOperandWidget<?> w, List<AOperand> operands, int index, AMExpression<?> mexpr) {
 		for (Control c : w.getChildren()) {
 			Menu popupMenu = new Menu(c);
 			buildMenu(popupMenu, w, operands, index, mexpr);
@@ -79,7 +80,7 @@ public class Factory {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T extends AOperand> AOperandWidget<?> createWidget(Composite parent, T operand) {
+	public static <T extends AOperand> AOperandWidget<?> createWidget(Composite parent, T operand) {
 		AOperandWidget<T> w = null;
 		if (operand instanceof FieldOperand)
 			return new FieldWidget(parent, (FieldOperand) operand);
@@ -103,7 +104,7 @@ public class Factory {
 		return w;
 	}
 
-	public static void buildMenu(Menu pMenu, AOperandWidget<?> w, List<AOperand> operands, int index, MExpression mexpr) {
+	public static void buildMenu(Menu pMenu, AOperandWidget<?> w, List<AOperand> operands, int index, AMExpression<?> mexpr) {
 		Map<String, AOperand> opMap = buildMap(w, mexpr);
 		Menu newMenu = null;
 		for (String key : opMap.keySet()) {
@@ -161,7 +162,7 @@ public class Factory {
 		}
 	};
 
-	public static Map<String, AOperand> buildMap(AOperandWidget<?> w, MExpression mexpr) {
+	public static Map<String, AOperand> buildMap(AOperandWidget<?> w, AMExpression<?> mexpr) {
 		Map<String, AOperand> opMap = w.getOperandMap();
 		if (opMap == null) {
 			opMap = new LinkedHashMap<String, AOperand>();
@@ -191,7 +192,7 @@ public class Factory {
 		return operand;
 	}
 
-	public static final AOperand getDefaultOperand(MExpression mexpr) {
+	public static final AOperand getDefaultOperand(AMExpression<?> mexpr) {
 		return new ScalarOperand<String>(mexpr, "Write your text here");
 	}
 }

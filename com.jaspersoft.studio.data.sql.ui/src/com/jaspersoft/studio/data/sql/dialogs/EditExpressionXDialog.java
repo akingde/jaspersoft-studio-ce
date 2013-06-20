@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.query.JRJdbcQueryExecuter;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -39,31 +41,43 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
-import com.jaspersoft.studio.data.sql.model.enums.Operator;
+import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
-import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.ParameterPOperand;
 import com.jaspersoft.studio.data.sql.widgets.Factory;
+import com.jaspersoft.studio.data.sql.widgets.FieldWidget;
 
-public class EditExpressionDialog extends ATitledDialog {
-	private MExpression value;
+public class EditExpressionXDialog extends ATitledDialog {
+	private MExpressionX value;
 
-	public EditExpressionDialog(Shell parentShell) {
+	public EditExpressionXDialog(Shell parentShell) {
 		super(parentShell);
-		setTitle("Expression Dialog");
+		setTitle("Expression ${X} Dialog");
 		setDescription("You can change the operand type using context menu. Right click on the operand.");
 	}
 
-	public void setValue(MExpression value) {
+	@Override
+	public boolean close() {
+		if (isTwoOperands() && operands.size() > 1)
+			Util.removeFrom(operands, 1);
+		else if (isThreeOperands() && operands.size() > 2)
+			Util.removeFrom(operands, 2);
+		return super.close();
+	}
+
+	public void setValue(MExpressionX value) {
 		this.value = value;
-		setOperator(value.getOperator().getSqlname());
+		setFunction(value.getFunction());
 		setPrevcond(value.getPrevCond());
 		operands = new ArrayList<AOperand>(value.getOperands());
 	}
 
 	private java.util.List<AOperand> operands;
 	private String prevcond;
-	private String operator;
+	private String function;
 
 	public String getPrevcond() {
 		return prevcond;
@@ -73,12 +87,12 @@ public class EditExpressionDialog extends ATitledDialog {
 		this.prevcond = prevcond;
 	}
 
-	public String getOperator() {
-		return operator;
+	public String getFunction() {
+		return function;
 	}
 
-	public void setOperator(String operator) {
-		this.operator = operator;
+	public void setFunction(String function) {
+		this.function = function;
 	}
 
 	public java.util.List<AOperand> getOperands() {
@@ -94,7 +108,7 @@ public class EditExpressionDialog extends ATitledDialog {
 
 		if (!value.isFirst()) {
 			Composite c = new Composite(cmp, SWT.NONE);
-			GridLayout layout = new GridLayout(3, false);
+			GridLayout layout = new GridLayout(5, false);
 			layout.marginWidth = 0;
 			c.setLayout(layout);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -115,13 +129,15 @@ public class EditExpressionDialog extends ATitledDialog {
 			new Label(cmp, SWT.NONE).setLayoutData(gd);
 		}
 
-		Control w = Factory.createWidget(cmp, operands, 0, value);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING | GridData.HORIZONTAL_ALIGN_END);
-		gd.widthHint = 250;
-		w.setLayoutData(gd);
+		Composite c = new Composite(cmp, SWT.NONE);
+		GridLayout layout = new GridLayout(2, false);
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		c.setLayout(layout);
+		new FieldWidget(c, (FieldOperand) operands.get(0));
 
 		Combo operator = new Combo(cmp, SWT.READ_ONLY);
-		operator.setItems(Operator.operators);
+		operator.setItems(MExpressionX.FUNCTIONS);
 		operator.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		operator.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -135,7 +151,7 @@ public class EditExpressionDialog extends ATitledDialog {
 		stackLayout.marginHeight = 0;
 		stackLayout.marginWidth = 0;
 		rcmp.setLayout(stackLayout);
-		gd = new GridData(GridData.FILL_BOTH);
+		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 150;
 		gd.widthHint = 300;
 		gd.verticalSpan = 2;
@@ -143,7 +159,7 @@ public class EditExpressionDialog extends ATitledDialog {
 		rcmp.setLayoutData(gd);
 
 		showRight();
-		bindingContext.bindValue(SWTObservables.observeSelection(operator), PojoObservables.observeValue(this, "operator")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(operator), PojoObservables.observeValue(this, "function")); //$NON-NLS-1$
 		return cmp;
 	}
 
@@ -152,42 +168,45 @@ public class EditExpressionDialog extends ATitledDialog {
 	private StackLayout stackLayout;
 
 	private void showRight() {
-		Composite cmp = map.get(getOperator());
+		Composite cmp = map.get(getFunction());
 		if (cmp == null) {
-			Operator op = Operator.getOperator(getOperator());
-			if (op.getNrOperands() == 1) {
-				cmp = new Composite(rcmp, SWT.NONE);
-				cmp.setLayout(new GridLayout());
-			} else if (op.getNrOperands() == 2) {
+			if (isTwoOperands()) {
 				cmp = new Composite(rcmp, SWT.NONE);
 				GridLayout layout = new GridLayout(2, false);
 				layout.marginHeight = 0;
 				layout.marginWidth = 0;
 				cmp.setLayout(layout);
 
-				Control w = Factory.createWidget(cmp, operands, 1, value);
+				if (operands.size() < 2)
+					operands.add(new ParameterPOperand(value));
+
+				Control w = Factory.createWidget(cmp, operands.get(1));
 				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
 				w.setLayoutData(gd);
-			} else if (op.getNrOperands() == 3 && op == Operator.BETWEEN) {
+			} else if (isThreeOperands()) {
 				cmp = new Composite(rcmp, SWT.NONE);
 				GridLayout layout = new GridLayout(3, false);
 				layout.marginHeight = 0;
 				layout.marginWidth = 0;
 				cmp.setLayout(layout);
 
-				Control w = Factory.createWidget(cmp, operands, 1, value);
+				if (operands.size() < 2)
+					operands.add(new ParameterPOperand(value));
+				Control w = Factory.createWidget(cmp, operands.get(1));
 				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
 				w.setLayoutData(gd);
 
 				new Label(cmp, SWT.NONE).setText("AND");
 
-				w = Factory.createWidget(cmp, operands, 2, value);
+				if (operands.size() < 3)
+					operands.add(new ParameterPOperand(value));
+				w = Factory.createWidget(cmp, operands.get(2));
 				gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
 				w.setLayoutData(gd);
-			} else {
+			} else if (isManyOperands()) {
 				cmp = new Composite(rcmp, SWT.NONE);
 				GridLayout layout = new GridLayout(2, false);
 				layout.marginHeight = 0;
@@ -199,6 +218,20 @@ public class EditExpressionDialog extends ATitledDialog {
 		}
 		stackLayout.topControl = cmp;
 		rcmp.layout(true);
+	}
+
+	protected boolean isManyOperands() {
+		return function.equals("IN") || function.equals("NOTIN");
+	}
+
+	protected boolean isThreeOperands() {
+		return function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_CLOSED)
+				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_LEFT_CLOSED) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_RIGHT_CLOSED);
+	}
+
+	protected boolean isTwoOperands() {
+		return function.equals(JRJdbcQueryExecuter.CLAUSE_ID_EQUAL) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_NOTEQUAL) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_GREATER)
+				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_GREATER_OR_EQUAL) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_LESS) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_LESS_OR_EQUAL);
 	}
 
 	protected void createInList(Composite cmp) {
@@ -270,9 +303,9 @@ public class EditExpressionDialog extends ATitledDialog {
 		OperandDialog dialog = new OperandDialog(getShell());
 		ArrayList<AOperand> ops = new ArrayList<AOperand>(operands);
 		if (index < ops.size())
-			ops.add(index, Factory.getDefaultOperand(value));
+			ops.add(index, new ParameterPOperand(value));
 		else
-			ops.add(Factory.getDefaultOperand(value));
+			ops.add(new ParameterPOperand(value));
 		dialog.setValues(value, ops, index);
 		if (dialog.open() == Dialog.OK) {
 			AOperand op = dialog.getOperand();
@@ -300,7 +333,7 @@ public class EditExpressionDialog extends ATitledDialog {
 		String[] ilarray = new String[Math.max(operands.size() - 1, 0)];
 		if (operands.size() > 0)
 			for (int i = 1; i < operands.size(); i++)
-				ilarray[i - 1] = operands.get(i).toSQLString();
+				ilarray[i - 1] = operands.get(i).toXString();
 		inlist.setItems(ilarray);
 	}
 
