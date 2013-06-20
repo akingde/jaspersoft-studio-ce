@@ -52,15 +52,21 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 		params.setToolTipText(getValue().toSQLString());
 		params.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		params.select(getParametrNameIndex());
+		doSelection();
 
 		params.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				JRDesignDataset jd = getValue().getJrDataset();
-				JRParameter p = jd.getParametersMap().get(params.getItem(params.getSelectionIndex()));
-				getValue().setJrParameter((JRDesignParameter) p, jd);
+				doSelection();
 			}
+
 		});
+	}
+
+	protected void doSelection() {
+		JRDesignDataset jd = getValue().getJrDataset();
+		JRParameter p = jd.getParametersMap().get(params.getItem(params.getSelectionIndex()));
+		getValue().setJrParameter((JRDesignParameter) p, jd);
 	}
 
 	private int getParametrNameIndex() {

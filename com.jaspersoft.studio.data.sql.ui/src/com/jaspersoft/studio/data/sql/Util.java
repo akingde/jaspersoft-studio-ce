@@ -16,7 +16,6 @@
 package com.jaspersoft.studio.data.sql;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -272,10 +271,8 @@ public class Util {
 		return v.getObject();
 	}
 
-	public static void removeFrom(Collection<?> col, int from) {
-		for (int i = 0; i < col.size(); i++) {
-			if (i > from)
-				col.remove(i);
-		}
+	public static void removeFrom(List<?> col, int from) {
+		for (int i = col.size() - 1; i > from; i--)
+			col.remove(i);
 	}
 }
