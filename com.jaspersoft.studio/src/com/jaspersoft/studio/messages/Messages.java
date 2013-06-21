@@ -453,6 +453,7 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_page_border_style;
 	public static String DesignerPreferencePage_pagebackground;
 	public static String DesignerPreferencePage_pageprintmargincolor;
+	public static String DesignerPreferencePage_savereportonpreview;
 	public static String DesignerPreferencePage_show_band_names;
 	public static String DesignerPreferencePage_simple_shadow;
 	public static String DesignerPreferencePage_unit;

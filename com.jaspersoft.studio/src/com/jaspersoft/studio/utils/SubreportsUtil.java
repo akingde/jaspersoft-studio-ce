@@ -45,7 +45,6 @@ public class SubreportsUtil {
 		if (fmap.containsKey(f))
 			return;
 		if (f != null && f.exists()) {
-
 			IFile[] fs = root.findFilesForLocationURI(f.toURI());
 			if (fs != null && fs.length > 0) {
 				IFile ifile = fs[0];
@@ -56,6 +55,8 @@ public class SubreportsUtil {
 						for (JRDesignElement el : ModelUtils.getAllElements(jd)) {
 							if (el instanceof JRDesignSubreport)
 								publishSubreport(jConfig, fmap, monitor, ifile, jd, (JRDesignSubreport) el);
+							if (monitor.isCanceled())
+								break;
 						}
 					}
 				} catch (Exception e) {

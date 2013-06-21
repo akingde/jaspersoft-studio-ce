@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
@@ -37,33 +32,30 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String DEFAULT_BORDERSTYLE = "shadow"; //$NON-NLS-1$
 	public static final String DEFAULT_MARGINCOLOR = "170,168,255"; //$NON-NLS-1$
 	public static final String DEFAULT_PAGE_BACKGROUND = "255,255,255"; //$NON-NLS-1$
-	
+
 	/**
 	 * Key of the behavior used when a field is dragged from the outline into the detail band
-	 */ 
+	 */
 	public static final String BEHAVIOR_ON_FIELD_DROP = "fieldDrop"; //$NON-NLS-1$
-	
+
 	/**
-	 * This behavior specify to create a label aligned with the new filed, into the column header band
-	 * if there is enough space, otherwise in the detail band.
+	 * This behavior specify to create a label aligned with the new filed, into the column header band if there is enough
+	 * space, otherwise in the detail band.
 	 */
 	public static final String BEHAVIOR_CREATE_LABEL = "create_label"; //$NON-NLS-1$
-	
+
 	/**
-	 * This behavior specify to create only the text field when a field is dragged 
-	 * from the outline into the detail band
+	 * This behavior specify to create only the text field when a field is dragged from the outline into the detail band
 	 */
 	public static final String BEHAVIOR_DO_NOTHING = "do_nothing"; //$NON-NLS-1$
-	
+
 	/**
-	 * This behavior specify to ask to the user what to do when a field is dragged 
-	 * from the outline into the detail band
+	 * This behavior specify to ask to the user what to do when a field is dragged from the outline into the detail band
 	 */
 	public static final String BEHAVIOR_ASK_EVERYTIME = "ask_everytime"; //$NON-NLS-1$
 
 	/**
-	 * This constants specify the default behavior when a field is dragged 
-	 * from the outline into the detail band
+	 * This constants specify the default behavior when a field is dragged from the outline into the detail band
 	 */
 	public static final String DEFAULT_BEHAVIOR = BEHAVIOR_CREATE_LABEL; //$NON-NLS-1$
 
@@ -74,10 +66,10 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_PAGE_DESIGN_BORDER_STYLE = "pageDesignBorderStyle"; //$NON-NLS-1$
 	public static final String P_PAGE_DEFAULT_UNITS = "pageDEFAULTUNITS"; //$NON-NLS-1$
 	public static final String P_SHOW_REPORT_BAND_NAMES = "showReportBandNames"; //$NON-NLS-1$
+	public static final String P_SAVE_ON_PREVIEW = "saveOnPreview"; //$NON-NLS-1$
 	public static final String P_CONTAINER_MARGIN_COLOR = "containerMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_MARGIN_COLOR = "pageMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_BACKGROUND = "pageBackground"; //$NON-NLS-1$
-
 
 	public static final String P_ELEMENT_DESIGN_BORDER_COLOR = "elementDesignBorderColor"; //$NON-NLS-1$
 
@@ -117,12 +109,16 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent()));
 		addField(new ColorFieldEditor(P_PAGE_BACKGROUND, Messages.DesignerPreferencePage_pagebackground,
 				getFieldEditorParent()));
-		addField(new FontFieldEditor(P_INTERNAL_EDITORS_FONT, Messages.DesignerPreferencePage_InternalEditorsFont, getFieldEditorParent()));		
-		
+		addField(new FontFieldEditor(P_INTERNAL_EDITORS_FONT, Messages.DesignerPreferencePage_InternalEditorsFont,
+				getFieldEditorParent()));
+
 		addField(new ComboFieldEditor(BEHAVIOR_ON_FIELD_DROP, Messages.DesignerPreferencePage_field_behavior,
 				new String[][] { { Messages.DesignerPreferencePage_field_behavior_label, BEHAVIOR_CREATE_LABEL },
-						{ Messages.DesignerPreferencePage_field_behavior_nothing, BEHAVIOR_DO_NOTHING } ,
-						{ Messages.DesignerPreferencePage_field_behavior_ask, BEHAVIOR_ASK_EVERYTIME } }, getFieldEditorParent())); 
+						{ Messages.DesignerPreferencePage_field_behavior_nothing, BEHAVIOR_DO_NOTHING },
+						{ Messages.DesignerPreferencePage_field_behavior_ask, BEHAVIOR_ASK_EVERYTIME } }, getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(P_SAVE_ON_PREVIEW, Messages.DesignerPreferencePage_savereportonpreview,
+				getFieldEditorParent()));
 
 	}
 
@@ -142,9 +138,10 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_CONTAINER_MARGIN_COLOR, DEFAULT_MARGINCOLOR);
 		store.setDefault(P_PAGE_MARGIN_COLOR, DEFAULT_MARGINCOLOR);
 		store.setDefault(P_SHOW_REPORT_BAND_NAMES, true);
-		store.setDefault(P_PAGE_BACKGROUND, DEFAULT_PAGE_BACKGROUND); 
-		store.setDefault(BEHAVIOR_ON_FIELD_DROP,  DEFAULT_BEHAVIOR);
-		PreferenceConverter.setDefault(store,P_INTERNAL_EDITORS_FONT, FontUtils.getTextEditorFontData());	
+		store.setDefault(P_PAGE_BACKGROUND, DEFAULT_PAGE_BACKGROUND);
+		store.setDefault(BEHAVIOR_ON_FIELD_DROP, DEFAULT_BEHAVIOR);
+		PreferenceConverter.setDefault(store, P_INTERNAL_EDITORS_FONT, FontUtils.getTextEditorFontData());
+		store.setDefault(P_SAVE_ON_PREVIEW, false);
 	}
 
 	@Override

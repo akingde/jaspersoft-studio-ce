@@ -51,45 +51,14 @@ public class CompileAction extends SelectionAction {
 	public void run() {
 		final JasperReportsConfiguration jConfig = getMDatasetToShow();
 		if (jConfig != null) {
-			final IFile file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
-			if (file != null) {
-				Job job = new Job("Building report") {
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						try {
-							// ATTENTION! this can generate possible errors, because we are not calling builders in the right order
-							// we are also not looking very good for for subreports, because expression evaluation is not good
-							// file.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
-
-							JasperReportsBuilder builder = new JasperReportsBuilder();
-							builder.compileJRXML(file, monitor);
-							Map<File, IFile> fmap = SubreportsUtil.getSubreportFiles(jConfig, file, jConfig.getJasperDesign(),
-									monitor);
-							for (File f : fmap.keySet()) {
-								IFile file = fmap.get(f);
-								if (file != null) {
-									builder.compileJRXML(file, monitor);
-								} else {
-									try {
-										JasperCompileManager.compileReportToFile(f.getAbsolutePath());
-									} catch (JRException e) {
-										e.printStackTrace();
-									}
-								}
-								if (monitor.isCanceled())
-									break;
-							}
-
-						} catch (CoreException e) {
-							return Status.CANCEL_STATUS;
-						}
-						return Status.OK_STATUS;
-					}
-				};
-				job.setUser(true);
-				job.schedule();
-
-			}
+			Job job = new Job("Building report") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					return doRun(jConfig, monitor, true);
+				}
+			};
+			job.setUser(true);
+			job.schedule();
 		}
 	}
 
@@ -121,5 +90,37 @@ public class CompileAction extends SelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		return true;
+	}
+
+	public static IStatus doRun(final JasperReportsConfiguration jConfig, IProgressMonitor monitor, boolean compileMain) {
+		IFile mfile = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+		if (mfile != null)
+			try {
+				// ATTENTION! this can generate possible errors, because we are not calling builders in the right order
+				// we are also not looking very good for for subreports, because expression evaluation is not good
+				// file.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+
+				JasperReportsBuilder builder = new JasperReportsBuilder();
+				if (compileMain)
+					builder.compileJRXML(mfile, monitor);
+				Map<File, IFile> fmap = SubreportsUtil.getSubreportFiles(jConfig, mfile, jConfig.getJasperDesign(), monitor);
+				for (File f : fmap.keySet()) {
+					IFile file = fmap.get(f);
+					if (file != null) {
+						builder.compileJRXML(file, monitor);
+					} else {
+						try {
+							JasperCompileManager.compileReportToFile(f.getAbsolutePath());
+						} catch (JRException e) {
+							e.printStackTrace();
+						}
+					}
+					if (monitor.isCanceled())
+						break;
+				}
+			} catch (CoreException e) {
+				return Status.CANCEL_STATUS;
+			}
+		return Status.OK_STATUS;
 	}
 }

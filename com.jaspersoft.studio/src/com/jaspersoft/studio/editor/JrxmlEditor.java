@@ -44,7 +44,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.jface.dialogs.Dialog;
@@ -80,6 +83,7 @@ import org.xml.sax.InputSource;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.editor.action.CompileAction;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
@@ -92,6 +96,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -678,7 +683,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *          the new page index
 	 */
 	@Override
-	protected void pageChange(int newPageIndex) {
+	protected void pageChange(final int newPageIndex) {
 		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_XMLEDITOR || newPageIndex == PAGE_PREVIEW) {
 			if (activePage == PAGE_DESIGNER) {
 				if (outlinePage != null)
@@ -737,8 +742,37 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					model2xml(ver);
 					isRefresh = false;
 				}
-				model2preview();
-				break;
+				Job job = new Job("Compiling Subreports") {
+					@Override
+					protected IStatus run(final IProgressMonitor monitor) {
+						monitor.beginTask("Compiling Subreports", IProgressMonitor.UNKNOWN);
+						CompileAction.doRun(jrContext, monitor, false);
+						if (jrContext.getPropertyBoolean(DesignerPreferencePage.P_SAVE_ON_PREVIEW, Boolean.FALSE)) {
+							monitor.subTask("Saving Report");
+							Display.getDefault().syncExec(new Runnable() {
+
+								@Override
+								public void run() {
+									doSave(monitor);
+								}
+							});
+
+						}
+						Display.getDefault().syncExec(new Runnable() {
+							@Override
+							public void run() {
+								model2preview();
+								JrxmlEditor.super.pageChange(newPageIndex);
+								updateContentOutline(getActivePage());
+								activePage = newPageIndex;
+							}
+						});
+						return Status.OK_STATUS;
+					}
+				};
+				job.setSystem(true);
+				job.schedule();
+				return;
 			}
 		}
 		super.pageChange(newPageIndex);
