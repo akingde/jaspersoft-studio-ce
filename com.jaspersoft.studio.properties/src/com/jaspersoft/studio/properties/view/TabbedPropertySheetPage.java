@@ -35,6 +35,8 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
@@ -111,6 +113,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 	private IWorkbenchWindow cachedWorkbenchWindow;
 
 	private boolean hasTitleBar;
+	
 
 	/**
 	 * a listener that is interested in part activation events.
@@ -222,7 +225,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 			tabbedPropertyComposite.getTabComposite().layout(true);
 			currentTab = tab;
 			resizeScrolledComposite();
-
+			updatePageMinimumSize();
 			if (descriptor != null) {
 				handleTabSelection(descriptor);
 			}
@@ -260,7 +263,35 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 		}
 
 	}
+	
+	/**
+	 * Update the minimum height of the scrolled composite, to make the scrollbars
+	 * appear only when they are needed
+	 */
+	public void updatePageMinimumSize(){
+		Composite tabComposite = tabToComposite.get(currentTab);
+		if (tabComposite != null){
+			int height = computeHeight(tabComposite);
+			tabbedPropertyComposite.getScrolledComposite().setMinHeight(height);
+		}
+	}
 
+	/**
+	 * Calculate the real height of displayed sections in the properties tab
+	 * 
+	 * @param parentComposite composite that contain the sections
+	 * @return the minimum height to view all the sections
+	 */
+	private int computeHeight(Composite parentComposite){
+		Composite sectionComposite = (Composite)parentComposite.getChildren()[0];
+		int height = 0;
+		int width = tabbedPropertyComposite.getBounds().width;
+		//When i calculate the height it is really important to give the real width of
+		//the composite, since it is used to calculate the number of columns
+		height = sectionComposite.computeSize(width, SWT.DEFAULT).y;
+		return height;
+	}
+	
 	/**
 	 * create a new tabbed property sheet page.
 	 * 
@@ -341,9 +372,21 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 	 * @see org.eclipse.ui.part.IPage#createControl(org.eclipse.swt.widgets.Composite)
 	 */
 	public void createControl(Composite parent) {
-		widgetFactory = new TabbedPropertySheetWidgetFactory();
+		widgetFactory = new TabbedPropertySheetWidgetFactory(this);
 		tabbedPropertyComposite = new TabbedPropertyComposite(parent, widgetFactory, hasTitleBar);
-
+		
+		tabbedPropertyComposite.addControlListener(new ControlAdapter() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+				/*
+				 * Check the page height when the composite area
+				 * is resized because the column layout could be changed
+				 */
+				updatePageMinimumSize();
+			}
+		});
+		
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(tabbedPropertyComposite, "com.jaspersoft.studio.doc.view_properties");
 
 		widgetFactory.paintBordersFor(tabbedPropertyComposite);
@@ -568,6 +611,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 	 * @since 3.5
 	 */
 	public void resizeScrolledComposite() {
+		//updatePageMinimumSize();
 		tabbedPropertyComposite.setupScrolledComposite();
 		// Point currentTabSize = new Point(0, 0);
 		// if (currentTab != null) {

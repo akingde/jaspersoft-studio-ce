@@ -32,6 +32,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -44,10 +46,36 @@ import org.eclipse.wb.swt.SWTResourceManager;
 public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 
 	/**
+	 * Reference to the property page, used to request a recalculation of the minimum space 
+	 * to show all the sections. This is needed when a section is expanded or collapsed
+	 */
+	private TabbedPropertySheetPage page;	
+	
+	/**
+	 * Expansion adapter added to the section , that will notifiy to the property page 
+	 * a change in section height
+	 */
+	private ExpansionAdapter sectionSizeChange;
+	
+	/**
 	 * private constructor.
 	 */
+	public TabbedPropertySheetWidgetFactory(TabbedPropertySheetPage propertyPage) {
+		super(Display.getCurrent());
+		this.page = propertyPage;
+		sectionSizeChange = new ExpansionAdapter(){
+			@Override
+			public void expansionStateChanged(ExpansionEvent e) {
+				page.updatePageMinimumSize();
+			}
+		};
+		
+	}
+	
 	public TabbedPropertySheetWidgetFactory() {
 		super(Display.getCurrent());
+		this.page = null;
+		sectionSizeChange = null;
 	}
 
 	/**
@@ -329,7 +357,7 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 		section.setText(text);
 		section.setSeparatorControl(new Label(section, SWT.SEPARATOR
 				| SWT.HORIZONTAL));
-
+		if (sectionSizeChange != null) section.addExpansionListener(sectionSizeChange);
 		Composite cmp = createComposite(section, SWT.NONE);
 		GridLayout layout = new GridLayout(columns, false);
 		layout.marginHeight = 4;
