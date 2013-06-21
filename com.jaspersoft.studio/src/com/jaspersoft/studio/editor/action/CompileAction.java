@@ -3,10 +3,10 @@ package com.jaspersoft.studio.editor.action;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -56,7 +56,11 @@ public class CompileAction extends SelectionAction {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
-							file.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+							// file.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+
+							JasperReportsBuilder builder = new JasperReportsBuilder();
+							builder.compileJRXML(file, monitor);
+
 						} catch (CoreException e) {
 							return Status.CANCEL_STATUS;
 						}
