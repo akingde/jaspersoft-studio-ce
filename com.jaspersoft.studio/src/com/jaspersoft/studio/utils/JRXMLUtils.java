@@ -17,7 +17,9 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -29,7 +31,6 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  */
 public class JRXMLUtils {
-
 
 	/**
 	 * Gets a JRXML input stream from an existing one, that can be either a .jasper file or .jrxml.
@@ -63,6 +64,15 @@ public class JRXMLUtils {
 			// the original one is already ok
 			return in;
 		}
+		return null;
+	}
+
+	public static JasperDesign getJasperDesign(JasperReportsConfiguration jrContext, InputStream in,
+			String fileExtension) throws JRException {
+		if (fileExtension.equals(FileExtension.JASPER))
+			return (JasperDesign) JRLoader.loadObject(in);
+		if (fileExtension.equals(FileExtension.JRXML))
+			return JRXmlLoader.load(in);
 		return null;
 	}
 

@@ -16,14 +16,13 @@
 package com.jaspersoft.studio.server.publish;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -43,9 +42,7 @@ public abstract class AImpObject {
 		this.jrConfig = jrConfig;
 	}
 
-	protected AFileResource findFile(MReportUnit mrunit,
-			IProgressMonitor monitor, JasperDesign jd, Set<String> fileset,
-			JRDesignExpression exp, IFile file) {
+	protected AFileResource findFile(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jd, Set<String> fileset, JRDesignExpression exp, IFile file) {
 		String str = ExpressionUtil.eval(exp, jrConfig, jd);
 		if (str == null || fileset.contains(str))
 			return null;
@@ -62,8 +59,7 @@ public abstract class AImpObject {
 		return null;
 	}
 
-	protected AFileResource addResource(MReportUnit mrunit,
-			Set<String> fileset, File f, PublishOptions popt) {
+	protected AFileResource addResource(MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
 		ResourceDescriptor runit = mrunit.getValue();
 		String rname = f.getName();
 		ResourceDescriptor rd = null;
@@ -83,8 +79,7 @@ public abstract class AImpObject {
 			rd.setUriString(runit.getUriString() + "_files/" + rd.getName());
 		}
 
-		AFileResource mres = (AFileResource) ResourceFactory.getResource(
-				mrunit, rd, -1);
+		AFileResource mres = (AFileResource) ResourceFactory.getResource(mrunit, rd, -1);
 		mres.setFile(f);
 		mres.setPublishOptions(popt);
 
@@ -93,18 +88,10 @@ public abstract class AImpObject {
 	}
 
 	protected File findFile(IFile file, String str) {
-		SimpleFileResolver fr = new SimpleFileResolver(
-				Arrays.asList(new File[] {
-						new File(file.getParent().getLocationURI()),
-						new File("."),
-						new File(file.getProject().getLocationURI()) }));
-		fr.setResolveAbsolutePath(true);
-		return fr.resolveFile(str);
+		return FileUtils.findFile(file, str);
 	}
 
-	public AFileResource publish(JasperDesign jd, JRDesignElement img,
-			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
-			IFile file) throws Exception {
+	public AFileResource publish(JasperDesign jd, JRDesignElement img, MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset, IFile file) throws Exception {
 		return findFile(mrunit, monitor, jd, fileset, getExpression(img), file);
 	}
 

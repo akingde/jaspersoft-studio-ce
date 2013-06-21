@@ -1,10 +1,12 @@
 package com.jaspersoft.studio.editor.action;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.File;
+import java.util.Map;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -25,11 +27,11 @@ import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.SubreportsUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CompileAction extends SelectionAction {
 	public static final String ID = "compileAction";
-	private Set<String> paths;
 
 	public CompileAction(IWorkbenchPart part) {
 		super(part);
@@ -47,8 +49,7 @@ public class CompileAction extends SelectionAction {
 
 	@Override
 	public void run() {
-		paths = new HashSet<String>();
-		JasperReportsConfiguration jConfig = getMDatasetToShow();
+		final JasperReportsConfiguration jConfig = getMDatasetToShow();
 		if (jConfig != null) {
 			final IFile file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
 			if (file != null) {
@@ -56,10 +57,28 @@ public class CompileAction extends SelectionAction {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
+							// ATTENTION! this can generate possible errors, because we are not calling builders in the right order
+							// we are also not looking very good for for subreports, because expression evaluation is not good
 							// file.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
 
 							JasperReportsBuilder builder = new JasperReportsBuilder();
 							builder.compileJRXML(file, monitor);
+							Map<File, IFile> fmap = SubreportsUtil.getSubreportFiles(jConfig, file, jConfig.getJasperDesign(),
+									monitor);
+							for (File f : fmap.keySet()) {
+								IFile file = fmap.get(f);
+								if (file != null) {
+									builder.compileJRXML(file, monitor);
+								} else {
+									try {
+										JasperCompileManager.compileReportToFile(f.getAbsolutePath());
+									} catch (JRException e) {
+										e.printStackTrace();
+									}
+								}
+								if (monitor.isCanceled())
+									break;
+							}
 
 						} catch (CoreException e) {
 							return Status.CANCEL_STATUS;

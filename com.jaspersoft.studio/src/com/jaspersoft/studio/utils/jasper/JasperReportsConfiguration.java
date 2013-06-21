@@ -120,8 +120,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	}
 
 	public void init(IFile file) {
-		service = Platform.getPreferencesService();
-		qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
+		IFile oldFile = (IFile) get(IEditorContributor.KEY_FILE);
+		if (oldFile != null && oldFile == file)
+			return;
+		if (service == null) {
+			service = Platform.getPreferencesService();
+			qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
+		}
 		IProject project = null;
 		if (file != null) {
 			put(IEditorContributor.KEY_FILE, file);
@@ -150,8 +155,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			contexts = new IScopeContext[] { INSTANCE_SCOPE };
 		}
 		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
-		preferenceListener = new PreferenceListener();
-		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
+		if (preferenceListener == null) {
+			preferenceListener = new PreferenceListener();
+			JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
+		}
 	}
 
 	public void dispose() {
@@ -459,7 +466,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			fontList = FontUtils.stringToItems(ModelUtils.getFontNames(this));
 		return fontList;
 	}
-	
+
 	/**
 	 * @return a default {@link JasperReportsConfiguration} instance, based on the {@link DefaultJasperReportsContext}.
 	 */
