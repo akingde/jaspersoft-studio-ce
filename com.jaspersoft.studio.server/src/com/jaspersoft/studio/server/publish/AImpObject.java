@@ -51,7 +51,8 @@ public abstract class AImpObject {
 		if (f != null && f.exists()) {
 			PublishOptions popt = new PublishOptions();
 			popt.setjExpression(exp);
-			popt.setExpression("\"repo:" + f.getName() + "\"");
+			if (!f.getName().contains(":"))
+				popt.setExpression("\"repo:" + f.getName() + "\"");
 			fileset.add(str);
 
 			return addResource(mrunit, fileset, f, popt);

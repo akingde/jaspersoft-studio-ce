@@ -36,11 +36,9 @@ public class ImpSubreport extends AImpObject {
 
 	@Override
 	protected File findFile(IFile file, String str) {
-		File f = super.findFile(file, str);
-		if (f == null && str.endsWith(".jasper")) {
-			str = str.replaceAll(".jasper", ".jrxml");
+		File f = super.findFile(file, str.replaceAll(".jasper", ".jrxml"));
+		if (f == null)
 			f = super.findFile(file, str);
-		}
 		return f;
 	}
 

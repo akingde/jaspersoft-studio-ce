@@ -171,7 +171,7 @@ public class JrxmlPublishAction extends AContributorAction {
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;
 		}
-		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(null, jd, version));
+		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(jrConfig, jd, version));
 		jrxml.setFile(file);
 		mrunit.setFile(file);
 		mrunit.getValue().getChildren().add(jrxml.getValue());
@@ -180,8 +180,13 @@ public class JrxmlPublishAction extends AContributorAction {
 
 		for (MResource f : files) {
 			PublishOptions popt = f.getPublishOptions();
-			if (popt.isOverwrite())
+			if (popt.isOverwrite()) {
+				if (f instanceof MJrxml) {
+					MJrxml mJrxml = (MJrxml) f;
+					FileUtils.writeFile(mJrxml.getFile(), JRXmlWriterHelper.writeReport(jrConfig, mJrxml.getJd(), version));
+				}
 				save(monitor, f);
+			}
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;
 		}

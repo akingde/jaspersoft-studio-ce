@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.server.model;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
@@ -51,5 +52,15 @@ public class MJrxml extends AFileResource {
 	@Override
 	public String getDefaultFileExtension() {
 		return "jrxml";
+	}
+
+	private JasperDesign jd;
+
+	public void setJd(JasperDesign jd) {
+		this.jd = jd;
+	}
+
+	public JasperDesign getJd() {
+		return jd;
 	}
 }

@@ -43,7 +43,7 @@ import org.xml.sax.InputSource;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
-import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.plugin.IPublishContributor;
 import com.jaspersoft.studio.utils.JRXMLUtils;
@@ -91,7 +91,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	}
 
 	protected void publishSubreport(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file, JRDesignElement ele, String version) throws Exception {
-		AFileResource fres = impSRP.publish(jasper, ele, mrunit, monitor, fileset, file);
+		MJrxml fres = (MJrxml) impSRP.publish(jasper, ele, mrunit, monitor, fileset, file);
 		if (fres == null)
 			return;
 
@@ -101,6 +101,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			InputSource is = new InputSource(new InputStreamReader(jrxmlInputStream, "UTF-8"));
 			JasperDesign jrd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
 			if (jrd != null) {
+				fres.setJd(jrd);
 				publishJrxml(mrunit, monitor, jrd, fileset, fs[0]);
 				File f = FileUtils.createTempFile("jrsres", ".jrxml");
 				FileUtils.writeFile(f, JRXmlWriterHelper.writeReport(jrConfig, jrd, version));
