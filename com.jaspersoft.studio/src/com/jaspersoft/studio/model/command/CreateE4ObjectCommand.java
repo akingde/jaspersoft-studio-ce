@@ -29,6 +29,11 @@ import com.jaspersoft.studio.model.frame.MFrame;
 public class CreateE4ObjectCommand extends CreateElementCommand {
 	protected ANode child;
 	protected ANode parent;
+	
+	/**
+	 * Flag used to mark a command as cancelled during it's execution
+	 */
+	protected boolean operationCancelled;
 
 	public CreateE4ObjectCommand(ANode child, ANode parent, Rectangle location, int index) {
 		super();
@@ -37,6 +42,7 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 		this.location = location;
 		this.index = index;
 		this.jasperDesign = parent.getJasperDesign();
+		this.operationCancelled = false;
 	}
 	
 	public ANode getChild(){
@@ -62,11 +68,11 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
 				} else if (btype.equals(BandTypeEnum.GROUP_FOOTER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupFooter) n).getJrGroup(),
-							jasperDesign.getMainDesignDataset());
+					jasperDesign.getMainDesignDataset());
 					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
 				} else if (btype.equals(BandTypeEnum.GROUP_HEADER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupHeader) n).getJrGroup(),
-							jasperDesign.getMainDesignDataset());
+					jasperDesign.getMainDesignDataset());
 					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
 				} else if (btype.equals(BandTypeEnum.SUMMARY) || btype.equals(BandTypeEnum.TITLE)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.REPORT, null, jasperDesign.getMainDesignDataset());
@@ -87,9 +93,22 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 				setContext(n, srcNode, index);
 
 			super.createObject();
-		} catch (Exception e) {
+		} catch (CancelledOperationException e) {
+			/**
+			 * If the operation was cancelled then i set an appropriate flag
+			 */
+			operationCancelled = true;
 			JaspersoftStudioPlugin.getInstance().logError(Messages.CreateE4ObjectCommand_ErrorCreatingObject, e);
 		}
+	}
+	
+	/**
+	 * Check if the command was cancelled during the execution
+	 * 
+	 * @return true if the command was cancelled during the execution, false otherwise
+	 */
+	public boolean isCancelled(){
+		return operationCancelled;
 	}
 
 	private JRDesignVariable var;

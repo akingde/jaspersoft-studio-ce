@@ -88,7 +88,7 @@ public class Tag {
 	}
 
 	public static JRDesignVariable createVariable(Tag tag, ResetTypeEnum rtype, JRGroup group, JRDesignDataset jDesign)
-			throws Exception {
+			throws CancelledOperationException {
 		JRDesignVariable jrVariable = null;
 		if (tag.isField) {
 			String[] names = null;
@@ -128,7 +128,7 @@ public class Tag {
 					tag.txt = "$V{%}";
 				}
 			} else
-				throw new Exception("canceled");
+				throw new CancelledOperationException();
 		}
 		return jrVariable;
 	}
