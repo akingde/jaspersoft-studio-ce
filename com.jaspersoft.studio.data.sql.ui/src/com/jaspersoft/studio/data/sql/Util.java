@@ -123,7 +123,7 @@ public class Util {
 					System.out.println(((AMExpression<?>) n).getId() + " --- " + ((AMExpression<?>) src).getId());
 				if (src != n && src.equals(n)) {
 					setObject((ANode) n);
-					return false;
+					stop();
 				}
 				return true;
 			}
@@ -262,7 +262,25 @@ public class Util {
 				if (n instanceof MSqlTable) {
 					if (n.equals(mt)) {
 						setObject((MSqlTable) n);
-						return false;
+						stop();
+					}
+				}
+				return true;
+			}
+		};
+		return v.getObject();
+	}
+
+	public static MSqlTable getTable(MRoot rmeta, final String cat, final String schema, final String table) {
+		final String fullname = schema + "." + table;
+		ModelVisitor<MSqlTable> v = new ModelVisitor<MSqlTable>(rmeta) {
+
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof MSqlTable) {
+					if (n.getValue().equals(table) && ((MSqlTable) n).toSQLString().equals(fullname)) {
+						setObject((MSqlTable) n);
+						stop();
 					}
 				}
 				return true;

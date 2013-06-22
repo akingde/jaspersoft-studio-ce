@@ -65,7 +65,8 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MTables;
-import com.jaspersoft.studio.data.sql.model.metadata.PrimaryKey;
+import com.jaspersoft.studio.data.sql.model.metadata.keys.ForeignKey;
+import com.jaspersoft.studio.data.sql.model.metadata.keys.PrimaryKey;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.IDragable;
@@ -252,17 +253,6 @@ public class DBMetadata {
 									new MSQLColumn(mt, rs.getString("COLUMN_NAME"), rs);
 
 								readPrimaryKeys(meta, mt, tables);
-								// meta.getCrossReference(parentCatalog, parentSchema,
-								// parentTable,
-								// foreignCatalog, foreignSchema, foreignTable);
-								// meta.getExportedKeys(catalog, tableSchema, table);
-								// meta.getImportedKeys(catalog, tableSchema, table);
-
-								// meta.getUDTs(catalog, schemaPattern, typeNamePattern, types)
-								// meta.getFunctionColumns(catalog, schemaPattern,
-								// functionNamePattern, columnNamePattern)
-								// meta.getProcedureColumns(catalog, schemaPattern,
-								// procedureNamePattern, columnNamePattern)
 
 								return false;
 							} catch (Throwable e) {
@@ -271,6 +261,32 @@ public class DBMetadata {
 						return true;
 					}
 				};
+				updateItermediateUI();
+				new ModelVisitor<Object>(root) {
+
+					@Override
+					public boolean visit(INode n) {
+						if (n instanceof MSqlTable) {
+							try {
+								MSqlTable mt = (MSqlTable) n;
+								readForeignKeys(meta, (MSqlTable) n, (MTables) mt.getParent());
+								return false;
+							} catch (Throwable e) {
+							}
+						}
+						return true;
+					}
+				};
+
+				// meta.getCrossReference(parentCatalog, parentSchema,
+				// parentTable,
+				// foreignCatalog, foreignSchema, foreignTable);
+				// meta.getExportedKeys(catalog, tableSchema, table);
+				// meta.getUDTs(catalog, schemaPattern, typeNamePattern, types)
+				// meta.getFunctionColumns(catalog, schemaPattern,
+				// functionNamePattern, columnNamePattern)
+				// meta.getProcedureColumns(catalog, schemaPattern,
+				// procedureNamePattern, columnNamePattern)
 			} catch (Throwable e) {
 				updateUI(root);
 				designer.showError(e);
@@ -283,9 +299,51 @@ public class DBMetadata {
 		running = false;
 	}
 
-	protected void readPrimaryKeys(final DatabaseMetaData meta, MSqlTable mt, MTables tables) throws SQLException {
+	protected void readForeignKeys(final DatabaseMetaData meta, MSqlTable mt, MTables tables) throws SQLException {
 		ResultSet rs;
-		rs = meta.getPrimaryKeys(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue());
+		rs = meta.getImportedKeys(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue());
+		ForeignKey fk = null;
+		List<MSQLColumn> srcCols = new ArrayList<MSQLColumn>();
+		List<MSQLColumn> dstCols = new ArrayList<MSQLColumn>();
+
+		while (rs.next()) {
+			String pkcolname = rs.getString("PKCOLUMN_NAME");
+			String fkcatalog = rs.getString("FKTABLE_CAT");
+			String fkschema = rs.getString("FKTABLE_SCHEM");
+			String fktable = rs.getString("FKTABLE_NAME");
+			String fkcolname = rs.getString("FKCOLUMN_NAME");
+			MSqlTable dTable = null;
+			if (fk == null || !fk.getFkName().equals(pkcolname)) {
+				fk = new ForeignKey(rs.getString("FK_NAME"));
+				dTable = Util.getTable(root, fkcatalog, fkschema, fktable);
+			}
+			// short keySeq = rs.getShort("PKKEY_SEQ");
+			for (INode n : mt.getChildren()) {
+				if (n.getValue().equals(pkcolname)) {
+					((MSQLColumn) n).addForeignKey(fk);
+					srcCols.add((MSQLColumn) n);
+					break;
+				}
+			}
+			// short keySeq = rs.getShort("FKKEY_SEQ");
+			if (dTable != null)
+				for (INode n : dTable.getChildren()) {
+					if (n.getValue().equals(fkcolname)) {
+						((MSQLColumn) n).addForeignKey(fk);
+						dstCols.add((MSQLColumn) n);
+						break;
+					}
+				}
+			else {
+				// the link is not good, what we do?
+			}
+		}
+		if (fk != null)
+			fk.setColumns(srcCols.toArray(new MSQLColumn[srcCols.size()]), dstCols.toArray(new MSQLColumn[dstCols.size()]));
+	}
+
+	protected void readPrimaryKeys(final DatabaseMetaData meta, MSqlTable mt, MTables tables) throws SQLException {
+		ResultSet rs = meta.getPrimaryKeys(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue());
 		PrimaryKey pk = null;
 		List<MSQLColumn> cols = new ArrayList<MSQLColumn>();
 		while (rs.next()) {

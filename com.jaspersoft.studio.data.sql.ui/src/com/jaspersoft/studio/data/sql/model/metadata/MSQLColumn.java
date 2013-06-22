@@ -18,6 +18,8 @@ package com.jaspersoft.studio.data.sql.model.metadata;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.jasperreports.engine.JRConstants;
 
@@ -25,6 +27,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.data.sql.Activator;
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
+import com.jaspersoft.studio.data.sql.model.metadata.keys.ForeignKey;
+import com.jaspersoft.studio.data.sql.model.metadata.keys.PrimaryKey;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
 
@@ -48,6 +52,7 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 		}
 	}
 
+	private List<ForeignKey> foreignKeys;
 	private PrimaryKey primaryKey;
 	private String remarks;
 	private String typeName;
@@ -65,6 +70,10 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 		String tt = super.getToolTip();
 		if (primaryKey != null)
 			tt += "\n" + primaryKey.toSqlString();
+		if (foreignKeys != null) {
+			for (ForeignKey fk : foreignKeys)
+				tt += "\n" + fk.toSqlString();
+		}
 		return tt;
 	}
 
@@ -72,6 +81,8 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 	public ImageDescriptor getImagePath() {
 		if (primaryKey != null)
 			return Activator.getDefault().getImageDescriptor("icons/key.png");
+		if (foreignKeys != null && !foreignKeys.isEmpty())
+			return Activator.getDefault().getImageDescriptor("icons/key--arrow.png");
 		return super.getImagePath();
 	}
 
@@ -99,5 +110,11 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 
 	public void setPrimaryKey(PrimaryKey primaryKey) {
 		this.primaryKey = primaryKey;
+	}
+
+	public void addForeignKey(ForeignKey fk) {
+		if (foreignKeys == null)
+			foreignKeys = new ArrayList<ForeignKey>();
+		foreignKeys.add(fk);
 	}
 }

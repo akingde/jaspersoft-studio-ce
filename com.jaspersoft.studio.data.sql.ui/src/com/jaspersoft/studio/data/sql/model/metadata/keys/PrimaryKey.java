@@ -1,9 +1,10 @@
-package com.jaspersoft.studio.data.sql.model.metadata;
+package com.jaspersoft.studio.data.sql.model.metadata.keys;
 
 import java.io.Serializable;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.utils.Misc;
 
 public class PrimaryKey implements Serializable {
