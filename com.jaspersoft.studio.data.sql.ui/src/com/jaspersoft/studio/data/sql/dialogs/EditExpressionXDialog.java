@@ -56,7 +56,8 @@ public class EditExpressionXDialog extends ATitledDialog {
 	public EditExpressionXDialog(Shell parentShell) {
 		super(parentShell);
 		setTitle("Expression ${X} Dialog");
-		setDescription("You can change the operand type using context menu. Right click on the operand.");
+		setDescription("SQL syntax is different in case of NULL or not NULL comparison. Example: b = 1 , b IS NULL."
+				+ " Before query execution\nthe $X{} function will adapt the SQL string in the correct way, depending if parameter is null or not null.");
 	}
 
 	@Override
@@ -122,7 +123,9 @@ public class EditExpressionXDialog extends ATitledDialog {
 
 			new Label(c, SWT.NONE).setText(" this one.");
 
-			bindingContext.bindValue(SWTObservables.observeSelection(prevoperator), PojoObservables.observeValue(this, "prevcond")); //$NON-NLS-1$
+			bindingContext.bindValue(
+					SWTObservables.observeSelection(prevoperator),
+					PojoObservables.observeValue(this, "prevcond")); //$NON-NLS-1$
 		} else {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 5;
@@ -159,7 +162,8 @@ public class EditExpressionXDialog extends ATitledDialog {
 		rcmp.setLayoutData(gd);
 
 		showRight();
-		bindingContext.bindValue(SWTObservables.observeSelection(operator), PojoObservables.observeValue(this, "function")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(operator),
+				PojoObservables.observeValue(this, "function")); //$NON-NLS-1$
 		return cmp;
 	}
 
@@ -225,17 +229,28 @@ public class EditExpressionXDialog extends ATitledDialog {
 	}
 
 	protected boolean isThreeOperands() {
-		return function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_CLOSED)
-				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_LEFT_CLOSED) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_RIGHT_CLOSED);
+		return function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN)
+				|| function
+						.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_CLOSED)
+				|| function
+						.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_LEFT_CLOSED)
+				|| function
+						.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_RIGHT_CLOSED);
 	}
 
 	protected boolean isTwoOperands() {
-		return function.equals(JRJdbcQueryExecuter.CLAUSE_ID_EQUAL) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_NOTEQUAL) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_GREATER)
-				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_GREATER_OR_EQUAL) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_LESS) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_LESS_OR_EQUAL);
+		return function.equals(JRJdbcQueryExecuter.CLAUSE_ID_EQUAL)
+				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_NOTEQUAL)
+				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_GREATER)
+				|| function
+						.equals(JRJdbcQueryExecuter.CLAUSE_ID_GREATER_OR_EQUAL)
+				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_LESS)
+				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_LESS_OR_EQUAL);
 	}
 
 	protected void createInList(Composite cmp) {
-		final List inlist = new List(cmp, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER);
+		final List inlist = new List(cmp, SWT.MULTI | SWT.READ_ONLY
+				| SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 3;
 		gd.widthHint = 200;
@@ -265,7 +280,8 @@ public class EditExpressionXDialog extends ATitledDialog {
 
 		op3 = new Button(cmp, SWT.PUSH);
 		op3.setText("&Delete");
-		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		gd = new GridData(GridData.FILL_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_BEGINNING);
 		op3.setLayoutData(gd);
 		op3.addSelectionListener(new SelectionAdapter() {
 			@Override

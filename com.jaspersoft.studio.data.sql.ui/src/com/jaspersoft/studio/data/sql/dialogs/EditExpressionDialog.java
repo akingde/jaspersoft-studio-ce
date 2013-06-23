@@ -51,7 +51,9 @@ public class EditExpressionDialog extends ATitledDialog {
 	public EditExpressionDialog(Shell parentShell) {
 		super(parentShell);
 		setTitle("Expression Dialog");
-		setDescription("You can change the operand type using context menu. Right click on the operand.");
+		setDescription("You can change the operand type using context menu. Right click on the operand.\n" +
+				"- Parameter $P{} is inserted in the query quoted, this is the safe way" +
+				"\n- Parameter $P!{} is inserted in the query as is, please use it with attention");
 	}
 
 	public void setValue(MExpression value) {
