@@ -61,6 +61,7 @@ import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
+import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.property.SetExpressionValueCommand;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -168,6 +169,7 @@ public class VErrorPreview extends APreview {
 
 	protected void createMessages(Composite composite) {
 		tmessage = new Text(composite, SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		tmessage.setFont(FontUtils.getEditorsFont(jContext));
 	}
 
 	protected void createErrors(Composite composite) {
@@ -370,6 +372,11 @@ public class VErrorPreview extends APreview {
 
 	public void addMessage(String msg) {
 		tmessage.setText(tmessage.getText() + msg + "\n"); //$NON-NLS-1$
+		// textSection.setText("Console: " + msg);
+	}
+
+	public void startMessage(String msg) {
+		tmessage.setText(tmessage.getText() + msg); //$NON-NLS-1$
 		// textSection.setText("Console: " + msg);
 	}
 

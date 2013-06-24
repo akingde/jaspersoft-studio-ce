@@ -119,6 +119,18 @@ public class Console {
 		});
 	}
 
+	public void startMessage(final String message) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				MessageConsoleStream out = console.newMessageStream();
+				out.print(message);
+				for (VErrorPreview vep : ePreviews)
+					vep.startMessage(message);
+			}
+		});
+	}
+
 	public void addProblem(final IProblem problem, final SourceLocation location) {
 		Display.getDefault().asyncExec(new Runnable() {
 

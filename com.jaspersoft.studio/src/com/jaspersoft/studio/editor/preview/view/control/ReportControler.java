@@ -162,10 +162,11 @@ public class ReportControler {
 					continue;
 				if (p.getName().equals(JRParameter.REPORT_CONNECTION))
 					continue;
-				if (p.getName().startsWith("XML_") || p.getName().startsWith("MONDRIAN_") || p.getName().startsWith("XLSX_")
-						|| p.getName().startsWith("XLS_") || p.getName().startsWith("JSON_")
-						|| p.getName().startsWith("HIBERNATE_") || p.getName().startsWith("JPA_") || p.getName().startsWith("CSV_")
-						|| p.getName().contains("csv.source") || p.getName().startsWith("XMLA_"))
+				if (p.getName().startsWith(Messages.ReportControler_0) || p.getName().startsWith(Messages.ReportControler_1)
+						|| p.getName().startsWith(Messages.ReportControler_2) || p.getName().startsWith(Messages.ReportControler_3)
+						|| p.getName().startsWith(Messages.ReportControler_4) || p.getName().startsWith(Messages.ReportControler_5)
+						|| p.getName().startsWith(Messages.ReportControler_6) || p.getName().startsWith(Messages.ReportControler_7)
+						|| p.getName().contains(Messages.ReportControler_8) || p.getName().startsWith(Messages.ReportControler_9))
 					continue;
 				try {
 					if (obj != null && p.getValueClass().isAssignableFrom(obj.getClass()) && p.isForPrompting()) {
@@ -328,18 +329,22 @@ public class ReportControler {
 							runJive(pcontainer, file, jasperReport);
 						} else {
 							setupVirtualizer(jd);
-							c.addMessage(Messages.ReportControler_msg_fillreports);
+							c.startMessage(Messages.ReportControler_msg_fillreports);
 
 							setupRecordCounters();
 							// We create the fillHandle to run the report based on the type of data adapter....
 							AsynchronousFillHandle fh = AsynchronousFillHandle
 									.createHandle(jrContext, jasperReport, jasperParameters);
 
-							if (fillReport(fh, monitor, pcontainer) == Status.CANCEL_STATUS)
+							if (fillReport(fh, monitor, pcontainer) == Status.CANCEL_STATUS) {
+								cancelMessage();
 								return Status.CANCEL_STATUS;
+							}
+							doneMessage();
 						}
 					}
 				} catch (final Throwable e) {
+					errorMessage();
 					showRunReport(c, pcontainer, e);
 				} finally {
 					Thread.currentThread().setContextClassLoader(oldLoader);
@@ -382,7 +387,7 @@ public class ReportControler {
 
 	private JasperReport compileJasperDesign(IFile file, JasperDesign jd) throws CoreException {
 		stats.startCount(ST_COMPILATIONTIME);
-		c.addMessage(Messages.ReportControler_msg_compiling);
+		c.startMessage(Messages.ReportControler_msg_compiling);
 		if (compiler == null) {
 			compiler = new JasperReportCompiler();
 			compiler.setErrorHandler(new JRErrorHandler(c));
@@ -402,7 +407,20 @@ public class ReportControler {
 				}
 			});
 		}
+		doneMessage();
 		return jasperReport;
+	}
+
+	public void cancelMessage() {
+		c.addMessage(Messages.ReportControler_CANCELED);
+	}
+
+	public void doneMessage() {
+		c.addMessage(Messages.ReportControler_done);
+	}
+
+	public void errorMessage() {
+		c.addMessage(Messages.ReportControler_error);
 	}
 
 	private void setupFileRezolver(IProgressMonitor monitor, IFile file) {
@@ -410,15 +428,17 @@ public class ReportControler {
 	}
 
 	private void setupVirtualizer(JasperDesign jd) {
-		c.addMessage(Messages.ReportControler_msg_setvirtualizer);
+		c.startMessage(Messages.ReportControler_msg_setvirtualizer);
 		VirtualizerHelper.setVirtualizer(jd, jrContext, jasperParameters);
+		doneMessage();
 	}
 
 	private void setupDataAdapter(final PreviewContainer pcontainer) throws JRException {
-		c.addMessage(Messages.ReportControler_msg_setdataadapter);
+		c.startMessage(Messages.ReportControler_msg_setdataadapter);
 		DataAdapterDescriptor daDesc = pcontainer.getDataAdapterDesc();
 		if (daDesc != null)
 			jasperParameters.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, daDesc.getDataAdapter());
+		doneMessage();
 	}
 
 	public void stop() {
@@ -427,7 +447,7 @@ public class ReportControler {
 	}
 
 	private IStatus fillReport(final AsynchronousFillHandle fh, IProgressMonitor monitor,
-			final PreviewContainer pcontainer) throws JRException, InterruptedException {
+			final PreviewContainer pcontainer) throws Throwable {
 		Assert.isTrue(fh != null);
 		pmonitor = new SubProgressMonitor(monitor, IProgressMonitor.UNKNOWN,
 				SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
@@ -454,9 +474,10 @@ public class ReportControler {
 				throw new JRException(fillError);
 		} catch (OutOfMemoryError e) {
 			pcontainer.setJasperPrint(stats, null);
+			throw e;
 		} catch (Throwable e) {
 			handleFillException(e);
-			showRunReport(c, pcontainer, e);
+			throw e;
 		} finally {
 			pmonitor.done();
 		}
