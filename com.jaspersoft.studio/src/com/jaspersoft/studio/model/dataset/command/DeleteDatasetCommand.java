@@ -111,7 +111,7 @@ public class DeleteDatasetCommand extends Command {
 	}
 	
 	public static MDatasetRun checkContains(List<MDatasetRun> availabeDatasets, String seachedName){
-		if (availabeDatasets != null){
+		if (availabeDatasets != null && !availabeDatasets.isEmpty()){
 			for (MDatasetRun actualDataset : availabeDatasets){
 				if (actualDataset != null && actualDataset.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME).equals(seachedName)){
 					return actualDataset;
