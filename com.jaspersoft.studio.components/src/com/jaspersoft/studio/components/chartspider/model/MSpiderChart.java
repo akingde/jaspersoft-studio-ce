@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chartspider.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +42,10 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MHyperLink;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -69,7 +72,7 @@ import com.jaspersoft.studio.utils.Misc;
  * @author veaceslav chicu
  * 
  */
-public class MSpiderChart extends MGraphicElement {
+public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MSpiderChart() {
@@ -748,6 +751,20 @@ public class MSpiderChart extends MGraphicElement {
 						"http://jasperreports.sourceforge.net/jasperreports/components", "sc", //$NON-NLS-1$ //$NON-NLS-2$
 						"spiderChart")); //$NON-NLS-1$
 		return jrcomponent;
+	}
+
+	@Override
+	public List<MDatasetRun> getDatasetRun() {
+		if (getValue() != null){
+			JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+			SpiderChartComponent component = (SpiderChartComponent) jrElement.getComponent();
+			if (component != null && component.getDataset() != null){
+				List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
+				datasetList.add(new MDatasetRun(component.getDataset().getDatasetRun(), getJasperDesign()));
+				return datasetList;
+			}
+		}
+		return null;
 	}
 
 }

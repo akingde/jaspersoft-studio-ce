@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.components.crosstab.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -430,8 +431,10 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 	}
 
 	@Override
-	public MDatasetRun getDatasetRun() {
-		return (MDatasetRun)getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET);
+	public List<MDatasetRun> getDatasetRun() {
+		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
+		datasetList.add((MDatasetRun)getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET));
+		return datasetList;
 	}
 
 }

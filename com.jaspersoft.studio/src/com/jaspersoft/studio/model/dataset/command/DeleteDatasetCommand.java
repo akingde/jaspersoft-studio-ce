@@ -80,7 +80,7 @@ public class DeleteDatasetCommand extends Command {
 		elementPosition = jrDesign.getDatasetsList().indexOf(jrDataset);
 		//Check if the dataset is used somewhere and in that case show a warning message
 		int selection = 0;
-		List<INode> nodeUsingDataset = getDatasetUsage(destNode.getChildren(), srcNode.getPropertyValue(JRDesignDataset.PROPERTY_NAME).toString());
+		List<IDatasetContainer> nodeUsingDataset = getDatasetUsage(destNode.getChildren(), srcNode.getPropertyValue(JRDesignDataset.PROPERTY_NAME).toString());
 		if (nodeUsingDataset.size() > 0){
 			MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.DeleteDatasetCommand_title, null,
 					Messages.DeleteDatasetCommand_message, MessageDialog.WARNING, new String[] { Messages.DeleteDatasetCommand_yesOption,Messages.DeleteDatasetCommand_noOption}, 1); 
@@ -93,20 +93,32 @@ public class DeleteDatasetCommand extends Command {
 	/**
 	 * Return a not null list of elements that are using the dataset
 	 */
-	private static List<INode> getDatasetUsage(List<INode> children, String datasetName){
-		List<INode> result = new ArrayList<INode>();
+	public static List<IDatasetContainer> getDatasetUsage(List<INode> children, String datasetName){
+		List<IDatasetContainer> result = new ArrayList<IDatasetContainer>();
 		if (datasetName != null){
 			for(INode child : children){
 				if (child instanceof IDatasetContainer){
-					MDatasetRun dataset = ((IDatasetContainer)child).getDatasetRun();
-					if (dataset != null && datasetName.equals(dataset.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME)))
-						result.add(child);
+					List<MDatasetRun> datasets = ((IDatasetContainer)child).getDatasetRun();
+					MDatasetRun dataset = checkContains(datasets, datasetName);
+					if (dataset != null)
+						result.add((IDatasetContainer)child);
 				} else if (child instanceof IContainer){
 					result.addAll(getDatasetUsage(child.getChildren(), datasetName));
 				}
 			}
 		}
 		return result;
+	}
+	
+	public static MDatasetRun checkContains(List<MDatasetRun> availabeDatasets, String seachedName){
+		if (availabeDatasets != null){
+			for (MDatasetRun actualDataset : availabeDatasets){
+				if (actualDataset != null && actualDataset.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME).equals(seachedName)){
+					return actualDataset;
+				}
+			}
+		}
+		return null;
 	}
 
 	

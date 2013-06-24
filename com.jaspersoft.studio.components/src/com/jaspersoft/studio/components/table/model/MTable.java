@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.components.table.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -319,8 +320,10 @@ public class MTable extends MGraphicElement implements IContainer,
 	}
 
 	@Override
-	public MDatasetRun getDatasetRun() {
-		return (MDatasetRun)getPropertyValue(StandardTable.PROPERTY_DATASET_RUN);
+	public List<MDatasetRun> getDatasetRun() {
+		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
+		datasetList.add((MDatasetRun)getPropertyValue(StandardTable.PROPERTY_DATASET_RUN));
+		return datasetList;
 	}
 	
 }

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
+import java.util.List;
+
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 
 /**
@@ -24,5 +26,5 @@ public interface IDatasetContainer {
 	/**
 	 * Return the dataset run of the element
 	 */
-	public MDatasetRun getDatasetRun();
+	public List<MDatasetRun> getDatasetRun();
 }

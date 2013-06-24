@@ -446,8 +446,10 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 	}
 
 	@Override
-	public MDatasetRun getDatasetRun() {
-		return (MDatasetRun) getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
+	public List<MDatasetRun> getDatasetRun() {
+		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
+		datasetList.add((MDatasetRun) getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN));
+		return datasetList;
 	}
 
 }

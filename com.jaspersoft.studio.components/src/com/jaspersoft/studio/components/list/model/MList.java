@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.components.list.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -450,7 +451,9 @@ public class MList extends MGraphicElement implements IPastable,
 	}
 
 	@Override
-	public MDatasetRun getDatasetRun() {
-		return (MDatasetRun)getPropertyValue(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN);
+	public List<MDatasetRun> getDatasetRun() {
+		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
+		datasetList.add((MDatasetRun)getPropertyValue(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN));
+		return datasetList;
 	}
 }

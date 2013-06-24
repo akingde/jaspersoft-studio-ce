@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.components.chart.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -877,11 +878,12 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 	}
 
 	@Override
-	public MDatasetRun getDatasetRun() {
+	public List<MDatasetRun> getDatasetRun() {
 		JRChart oldObject = (JRChart) getValue();
-		if (oldObject != null && oldObject.getDataset() != null)
-			return new MDatasetRun(oldObject.getDataset().getDatasetRun(), getJasperDesign());
-		else 
-			return null;
+		if (oldObject != null && oldObject.getDataset() != null){
+			List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
+			datasetList.add(new MDatasetRun(oldObject.getDataset().getDatasetRun(), getJasperDesign()));
+			return datasetList;
+		} else return null;
 	}
 }
