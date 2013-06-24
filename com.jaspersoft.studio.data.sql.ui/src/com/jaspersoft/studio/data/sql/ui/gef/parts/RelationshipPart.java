@@ -22,6 +22,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.RotatableDecoration;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -88,6 +89,10 @@ public class RelationshipPart extends AbstractConnectionEditPart {
 		};
 		PolylineConnection f = (PolylineConnection) getFigure();
 		f.setToolTip(new Label(tt.toString()));
+		// f.setLayoutManager(new DelegatingLayout());
+		//
+		// Label label = new Label("middle");
+		// f.add(label, new ConnectionLocator(f, ConnectionLocator.MIDDLE));
 
 		if (joinTable.getJoin().equals(AMKeyword.INNER_JOIN)) {
 			f.setTargetDecoration(getInnerDecoration());
@@ -109,19 +114,32 @@ public class RelationshipPart extends AbstractConnectionEditPart {
 
 	private RotatableDecoration getInnerDecoration() {
 		PolygonDecoration srcpd = new PolygonDecoration();
+		srcpd.setTemplate(JOINDECORATOR);
 		srcpd.setBackgroundColor(ColorConstants.black);
 		return srcpd;
 	}
 
 	private RotatableDecoration getOuterDecoration() {
 		PolygonDecoration srcpd = new PolygonDecoration();
+		srcpd.setTemplate(JOINDECORATOR);
 		srcpd.setBackgroundColor(ColorConstants.white);
 		return srcpd;
 	}
 
 	private RotatableDecoration getCrossDecoration() {
 		PolygonDecoration srcpd = new PolygonDecoration();
+		srcpd.setTemplate(JOINDECORATOR);
 		srcpd.setBackgroundColor(ColorConstants.lightGray);
 		return srcpd;
+	}
+
+	public static final PointList JOINDECORATOR = new PointList();
+
+	static {
+		JOINDECORATOR.addPoint(0, 0);
+		JOINDECORATOR.addPoint(-1, 2);
+		JOINDECORATOR.addPoint(-2, 0);
+		JOINDECORATOR.addPoint(-1, -2);
+		JOINDECORATOR.addPoint(0, 0);
 	}
 }
