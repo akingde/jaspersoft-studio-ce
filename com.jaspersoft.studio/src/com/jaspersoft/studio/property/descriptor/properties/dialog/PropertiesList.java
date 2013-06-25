@@ -16,12 +16,14 @@
 package com.jaspersoft.studio.property.descriptor.properties.dialog;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class PropertiesList {
 
 	private static List<PropertyDTO> props;
 	private static String[] names;
+	private static String[] sortedProperties;
 
 	public static String[] getPropertiesNames() {
 		if (names != null)
@@ -32,6 +34,23 @@ public class PropertiesList {
 			res[i] = props.get(i).getProperty();
 		names = res;
 		return res;
+	}
+	
+	public static String[] getSortedProperitesNames() {
+		if (sortedProperties != null) 
+			return sortedProperties;
+		getJRProperties();
+		List<String> res = new ArrayList<String>();
+		HashSet<String> alreadyAdded = new HashSet<String>();
+		for (int i = 0; i < props.size(); i++){
+			String actualProp = props.get(i).getProperty();
+			if (!alreadyAdded.contains(actualProp)){
+				alreadyAdded.add(actualProp);
+				res.add(actualProp);
+			}
+		}
+		sortedProperties = res.toArray(new String[res.size()]);
+		return sortedProperties;
 	}
 
 	public static PropertyDTO getDTO(String name) {

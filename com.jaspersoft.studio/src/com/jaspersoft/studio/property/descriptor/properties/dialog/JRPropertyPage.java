@@ -16,6 +16,8 @@
 package com.jaspersoft.studio.property.descriptor.properties.dialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -352,10 +354,17 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 
 	private String[] getDefaultPropertyItems() {
 		defaultProperties = getDefaultProperties();
-		String[] strnames = new String[defaultProperties.size()];
-		for (int i = 0; i < strnames.length; i++)
-			strnames[i] = defaultProperties.get(i).getProperty();
-		return strnames;
+		ArrayList<String> strnames = new ArrayList<String>();
+		HashSet<String> alreadyAddedProperties = new HashSet<String>();
+		for (int i = 0; i < defaultProperties.size(); i++){
+			String actualProp = defaultProperties.get(i).getProperty();
+			if (!alreadyAddedProperties.contains(actualProp)){
+				strnames.add(actualProp);
+				alreadyAddedProperties.add(actualProp);
+			}
+		}
+		Collections.sort(strnames);
+		return strnames.toArray(new String[strnames.size()]);
 	}
 
 	private List<PropertyDTO> getDefaultProperties() {

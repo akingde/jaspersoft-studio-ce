@@ -85,7 +85,7 @@ public class JRPropertyDialog extends Dialog {
 
 		cprop = new Combo(composite, SWT.BORDER);
 		cprop.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-		cprop.setItems(PropertiesList.getPropertiesNames());
+		cprop.setItems(PropertiesList.getSortedProperitesNames());
 		cprop.addModifyListener(new ModifyListener() {
 
 			@Override
