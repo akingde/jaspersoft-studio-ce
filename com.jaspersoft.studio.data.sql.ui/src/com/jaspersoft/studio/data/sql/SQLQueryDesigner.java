@@ -147,8 +147,10 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		control.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		bptab.setControl(control);
 
-		DropTarget target = new DropTarget(control, DND.DROP_MOVE | DND.DROP_COPY);
-		target.setTransfer(new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() });
+		DropTarget target = new DropTarget(control, DND.DROP_MOVE
+				| DND.DROP_COPY);
+		target.setTransfer(new Transfer[] { NodeTransfer.getInstance(),
+				PluginTransfer.getInstance() });
 		target.addDropListener(new StyledTextDropTargetEffect(control) {
 			@Override
 			public void drop(DropTargetEvent event) {
@@ -161,7 +163,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 				if (obj instanceof AMSQLObject) {
 					StringBuffer oldText = new StringBuffer(control.getText());
 
-					oldText.insert(control.getCaretOffset(), " " + ((AMSQLObject) obj).toSQLString() + " ");
+					oldText.insert(control.getCaretOffset(), " "
+							+ ((AMSQLObject) obj).toSQLString() + " ");
 					control.setText(oldText.toString());
 				}
 			}
@@ -170,11 +173,10 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	public void refreshQuery() {
 		if (root != null) {
-			if (!isQueryModelEmpty()) {
+			if (!isQueryModelEmpty())
 				updateQueryText(QueryWriter.writeQuery(root));
-				if (tabFolder.getSelectionIndex() == 2)
-					diagram.scheduleRefresh();
-			}
+			if (tabFolder.getSelectionIndex() == 2)
+				diagram.scheduleRefresh();
 		}
 	}
 
@@ -214,7 +216,9 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			try {
 				container.run(true, true, new IRunnableWithProgress() {
 
-					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					public void run(IProgressMonitor monitor)
+							throws InvocationTargetException,
+							InterruptedException {
 						if (runningthread != null) {
 							runningmonitor.setCanceled(true);
 							if (runningthread != null)
@@ -223,8 +227,11 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 						runningmonitor = monitor;
 						runningthread = Thread.currentThread();
 						try {
-							monitor.beginTask("Reading metadata", IProgressMonitor.UNKNOWN);
-							DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
+							monitor.beginTask("Reading metadata",
+									IProgressMonitor.UNKNOWN);
+							DataAdapterService das = DataAdapterServiceUtil
+									.getInstance(jConfig).getService(
+											da.getDataAdapter());
 							dbMetadata.updateUI(da, das, monitor);
 						} finally {
 							monitor.done();
