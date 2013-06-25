@@ -78,11 +78,15 @@ public class ParameterWidget extends AOperandWidget<ParameterPOperand> {
 	}
 
 	private String[] getParameterNames() {
-		List<JRParameter> parametersList = getValue().getJrDataset().getParametersList();
-		String[] res = new String[parametersList.size()];
-		for (int i = 0; i < parametersList.size(); i++)
-			res[i] = parametersList.get(i).getName();
-		return res;
+		ParameterPOperand v = getValue();
+		if (v != null) {
+			List<JRParameter> parametersList = v.getJrDataset().getParametersList();
+			String[] res = new String[parametersList.size()];
+			for (int i = 0; i < parametersList.size(); i++)
+				res[i] = parametersList.get(i).getName();
+			return res;
+		}
+		return new String[0];
 	}
 
 }
