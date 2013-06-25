@@ -67,7 +67,7 @@ public class MFromTableJoin extends MFromTable {
 
 	@Override
 	public String getDisplayText() {
-		return join + " " + super.getDisplayText() + " ON ";
+		return " " + join + " " + super.getDisplayText() + " ON ";
 	}
 
 	@Override
