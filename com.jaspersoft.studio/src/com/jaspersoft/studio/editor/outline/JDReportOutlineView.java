@@ -278,7 +278,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 				  public void mouseMove(MouseEvent e){
 				  	EditPart part = getViewer().findObjectAt(new Point(e.x,e.y));
 		  			Tree t = (Tree) e.getSource();
-				  	if (part != null & part.getModel() != null && !(part.getModel() instanceof MRoot)){
+				  	if (part != null && part.getModel() != null && !(part.getModel() instanceof MRoot)){
 				  		Object model = part.getModel();
 				  		if (model instanceof ANode){
 				  			String text = ((ANode)model).getDisplayText();
