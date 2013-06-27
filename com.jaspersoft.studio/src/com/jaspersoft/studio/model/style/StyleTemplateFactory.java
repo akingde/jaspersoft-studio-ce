@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRConditionalStyle;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
@@ -167,7 +167,7 @@ public class StyleTemplateFactory {
 		String[] items = cstyles.get(jd);
 		if (items == null) {
 			JRStyle[] styles = jd.getStyles();
-			List<JRStyle> slist = getStyles(jConf, jd, (IFile) jConf.get(IEditorContributor.KEY_FILE));
+			List<JRStyle> slist = getStyles(jConf, jd, (IFile) jConf.get(FileUtils.KEY_FILE));
 			int size = 1;
 			if (styles != null)
 				size += styles.length;

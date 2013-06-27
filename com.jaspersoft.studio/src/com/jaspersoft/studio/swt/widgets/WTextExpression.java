@@ -206,7 +206,6 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 				wizard.setValue(expression);
 				wizard.setExpressionContext(expContext);
 				WizardDialog dialog = new WizardDialog(getShell(), wizard);
-				dialog.create();
 				if (dialog.open() == Dialog.OK) {
 					JRDesignExpression value = wizard.getValue();
 					setExpression(value);

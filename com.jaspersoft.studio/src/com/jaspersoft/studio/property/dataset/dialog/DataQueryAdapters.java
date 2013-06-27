@@ -15,7 +15,7 @@ import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -79,7 +79,7 @@ public abstract class DataQueryAdapters {
 			Color background, IRunnableContext runner) {
 		setRunnableContext(runner);
 		if (jConfig != null) {
-			this.file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+			this.file = (IFile) jConfig.get(FileUtils.KEY_FILE);
 			this.jDesign = jConfig.getJasperDesign();
 		}
 		this.newdataset = newdataset;
@@ -118,7 +118,7 @@ public abstract class DataQueryAdapters {
 	}
 
 	public void setFile(JasperReportsConfiguration jConfig) {
-		this.file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+		this.file = (IFile) jConfig.get(FileUtils.KEY_FILE);
 		this.jDesign = jConfig.getJasperDesign();
 		dscombo.setDataAdapterStorages(DataAdapterManager.getDataAdapter(file));
 		setDataset(jDesign, newdataset);

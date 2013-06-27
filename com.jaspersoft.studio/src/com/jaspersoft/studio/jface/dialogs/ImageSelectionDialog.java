@@ -22,7 +22,6 @@ import java.text.DecimalFormat;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.core.filesystem.EFS;
@@ -412,7 +411,7 @@ public class ImageSelectionDialog extends Dialog {
 		fd.setInitialPattern("*.png");//$NON-NLS-1$
 		if (fd.open() == Dialog.OK) {
 			IFile file = (IFile) fd.getFirstResult();
-			IFile contextfile = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+			IFile contextfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
 			String filepath = null;
 			if (contextfile != null && file.getProject().equals(contextfile.getProject()))
 				filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", ""); //$NON-NLS-1$ //$NON-NLS-2$

@@ -12,8 +12,6 @@ package com.jaspersoft.studio.editor.report;
 
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.viewer.AContributorAction;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -55,6 +53,7 @@ import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 import com.jaspersoft.studio.property.section.report.action.PageFormatAction;
 import com.jaspersoft.studio.property.section.report.action.PageRemoveMarginsAction;
+import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*

@@ -72,12 +72,12 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 	private PropertyChangeListener propChangeListener = new PropertyChangeListener() {
 
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (!treeViewer.getTree().isDisposed())
+			if (!treeViewer.getTree().isDisposed()) {
 				treeViewer.refresh(true);
+				treeViewer.expandToLevel(evt.getNewValue(), 1);
+			}
 		}
 	};
-	
-	
 
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -160,7 +160,6 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 				}
 			}
 		});
-		
 
 		// Create menu and toolbars.
 		createActions();
@@ -169,14 +168,12 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		createContextMenu();
 		hookGlobalActions();
 		addDNDListeners();
-		
+
 		rprovs = getExtensionManager();
 		for (IRepositoryViewProvider rp : rprovs) {
 			rp.addPropertyChangeListener(propChangeListener);
 		}
 	}
-
-	
 
 	@Override
 	public void dispose() {
@@ -251,11 +248,11 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		// Register menu for extension.
 		getSite().registerContextMenu(menuMgr, treeViewer);
 	}
-	
+
 	/**
 	 * Add the listeners for the drag and drop
 	 */
-	private void addDNDListeners(){
+	private void addDNDListeners() {
 		int operations = DND.DROP_COPY | DND.DROP_MOVE;
 		List<TransferDragSourceListener> dragListeners = new ArrayList<TransferDragSourceListener>();
 		List<TransferDropTargetListener> dropListeners = new ArrayList<TransferDropTargetListener>();
@@ -264,16 +261,16 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 			dropListeners.addAll(rp.getTransferDropTargetListeners(treeViewer));
 		}
 		// In case its needed add the related delegating adapter for both drag and drop operations
-		if(!dragListeners.isEmpty()){
+		if (!dragListeners.isEmpty()) {
 			DelegatingDragAdapter dragAdapter = new DelegatingDragAdapter();
-			for(TransferDragSourceListener dragListener : dragListeners){
+			for (TransferDragSourceListener dragListener : dragListeners) {
 				dragAdapter.addDragSourceListener(dragListener);
 			}
 			treeViewer.addDragSupport(operations, dragAdapter.getTransfers(), dragAdapter);
 		}
-		if(!dropListeners.isEmpty()){
+		if (!dropListeners.isEmpty()) {
 			DelegatingDropAdapter dropAdapter = new DelegatingDropAdapter();
-			for(TransferDropTargetListener dropListener : dropListeners){
+			for (TransferDropTargetListener dropListener : dropListeners) {
 				dropAdapter.addDropTargetListener(dropListener);
 			}
 			treeViewer.addDropSupport(operations, dropAdapter.getTransfers(), dropAdapter);
@@ -325,8 +322,8 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 			}
 		}
 	}
-	
-	public TreeViewer getTreeViewer(){
+
+	public TreeViewer getTreeViewer() {
 		return treeViewer;
 	}
 

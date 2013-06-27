@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Map;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 
@@ -93,7 +93,7 @@ public class CompileAction extends SelectionAction {
 	}
 
 	public static IStatus doRun(final JasperReportsConfiguration jConfig, IProgressMonitor monitor, boolean compileMain) {
-		IFile mfile = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+		IFile mfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
 		if (mfile != null)
 			try {
 				// ATTENTION! this can generate possible errors, because we are not calling builders in the right order

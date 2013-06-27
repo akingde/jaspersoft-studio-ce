@@ -17,7 +17,7 @@ package com.jaspersoft.studio.utils.expr;
 
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -45,7 +45,7 @@ public abstract class AInterpreter {
 		this.jasperDesign = jasperDesign;
 		this.jConfig = jConfig;
 		try {
-			IFile file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+			IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
 			if (file != null) {
 				IProject project = file.getProject();
 				if (project.getNature(JavaCore.NATURE_ID) != null)

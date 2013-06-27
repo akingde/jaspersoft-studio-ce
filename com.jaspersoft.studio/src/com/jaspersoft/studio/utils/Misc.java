@@ -127,8 +127,11 @@ public class Misc {
 	public static String nullValue(String value) {
 		if (value != null && value.trim().isEmpty())
 			return null;
-
 		return value;
+	}
+
+	public static boolean isNullOrEmpty(String value) {
+		return value == null || value.trim().isEmpty();
 	}
 
 	public static String strReplace(String s1, String s2, String s3) {

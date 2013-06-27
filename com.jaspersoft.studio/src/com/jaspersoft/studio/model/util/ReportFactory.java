@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -227,7 +227,7 @@ public class ReportFactory {
 		ANode nStyle = new MStyles(report, index);
 		if (jd.getTemplates() != null)
 			for (Iterator<JRReportTemplate> it = jd.getTemplatesList().iterator(); it.hasNext();)
-				createNode(nStyle, it.next(), -1, (IFile) jConfig.get(IEditorContributor.KEY_FILE));
+				createNode(nStyle, it.next(), -1, (IFile) jConfig.get(FileUtils.KEY_FILE));
 		if (jd.getStyles() != null) {
 			for (JRStyle jrstyle : jd.getStylesList()) {
 				ANode mstyle = createNode(nStyle, jrstyle, -1);

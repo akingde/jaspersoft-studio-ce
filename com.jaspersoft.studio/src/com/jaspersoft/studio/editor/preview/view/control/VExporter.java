@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -42,7 +42,7 @@ public class VExporter extends APreview {
 	public VExporter(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
 
-		IFile file = (IFile) jContext.get(IEditorContributor.KEY_FILE);
+		IFile file = (IFile) jContext.get(FileUtils.KEY_FILE);
 		if (file != null)
 			pfstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file,
 					JaspersoftStudioPlugin.getUniqueIdentifier());

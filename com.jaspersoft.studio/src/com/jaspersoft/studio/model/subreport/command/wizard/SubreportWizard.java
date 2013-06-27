@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.subreport.command.wizard;
 
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -155,7 +155,7 @@ public class SubreportWizard extends JSSWizard {
 			IResource resource = root.findMember(path);
 			IFile file = ((IContainer)resource).getFile(new Path(fname));
 			
-			IFile contextfile = (IFile)getConfig().get(IEditorContributor.KEY_FILE);
+			IFile contextfile = (IFile) getConfig().get(FileUtils.KEY_FILE);
 			
 			String filepath = "";
 			if (contextfile != null && file.getProject().equals(contextfile.getProject())) {

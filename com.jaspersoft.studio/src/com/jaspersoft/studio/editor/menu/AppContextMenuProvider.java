@@ -192,11 +192,11 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(DeleteGroupReportAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
-		
+
 		action = getActionRegistry().getAction(MoveGroupUpAction.ID);
 		if (action != null && action.isEnabled())
 			menu.add(action);
-		
+
 		action = getActionRegistry().getAction(MoveDetailUpAction.ID);
 		if (action != null && action.isEnabled())
 			menu.add(action);
@@ -204,7 +204,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(MoveDetailDownAction.ID);
 		if (action != null && action.isEnabled())
 			menu.add(action);
-		
+
 		action = getActionRegistry().getAction(MoveGroupDownAction.ID);
 		if (action != null && action.isEnabled())
 			menu.add(action);
@@ -268,9 +268,9 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_BOTTOM);
 		if (action.isEnabled())
 			submenu.add(action);
-		
+
 		submenu.add(new Separator());
-		
+
 		action = getActionRegistry().getAction(JoinLeftAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
@@ -286,21 +286,20 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 				.getImageDescriptor("icons/resources/eclipse/align-band-left.gif"), //$NON-NLS-1$
 				Align2BorderAction.ID_ALIGN_LEFT);
 
-
 		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_CENTER);
 		if (action.isEnabled())
 			submenu.add(action);
-		
+
 		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_MIDDLE);
 		if (action.isEnabled())
 			submenu.add(action);
-		
+
 		action = getActionRegistry().getAction(CenterInParentAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
-		
+
 		submenu.add(new Separator());
-		
+
 		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_LEFT);
 		if (action.isEnabled())
 			submenu.add(action);
@@ -315,11 +314,9 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action.isEnabled())
 			submenu.add(action);
 
-
 		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_BOTTOM);
 		if (action.isEnabled())
 			submenu.add(action);
-		
 
 		menu.add(submenu);
 
@@ -330,26 +327,30 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(GEFActionConstants.MATCH_WIDTH);
 		if (action.isEnabled())
 			submenu.add(action);
-		
+
 		action = getActionRegistry().getAction(SameWidthMaxAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
-		
+
 		action = getActionRegistry().getAction(SameWidthMinAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
 
+		submenu.add(new Separator());
+
 		action = getActionRegistry().getAction(GEFActionConstants.MATCH_HEIGHT);
 		if (action.isEnabled())
 			submenu.add(action);
-		
+
 		action = getActionRegistry().getAction(SameHeightMaxAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
-		
+
 		action = getActionRegistry().getAction(SameHeightMinAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
+
+		submenu.add(new Separator());
 
 		action = getActionRegistry().getAction(MatchSizeAction.ID);
 		if (action.isEnabled())
@@ -357,19 +358,21 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 
 		menu.add(submenu);
 		menu.add(new Separator());
-		
+
 		// horizontal spacing Actions
-		submenu = new MenuManager(Messages.AppContextMenuProvider_horizontalSpacingSubmenu,"horizontalspacingmenu"); //$NON-NLS-2$
+		submenu = new MenuManager(Messages.AppContextMenuProvider_horizontalSpacingSubmenu, "horizontalspacingmenu"); //$NON-NLS-2$
 
 		action = getActionRegistry().getAction(DecreaseHSpaceAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
-		
-		action = getActionRegistry().getAction(EqualsHSpaceAction.ID);
+
+		action = getActionRegistry().getAction(IncreaseHSpaceAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
-		
-		action = getActionRegistry().getAction(IncreaseHSpaceAction.ID);
+
+		submenu.add(new Separator());
+
+		action = getActionRegistry().getAction(EqualsHSpaceAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
 
@@ -378,19 +381,21 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			submenu.add(action);
 
 		menu.add(submenu);
-		
+
 		// vertical spacing Actions
-		submenu = new MenuManager(Messages.AppContextMenuProvider_verticalSpacingSubMenu,"verticalspacingmenu"); //$NON-NLS-2$
+		submenu = new MenuManager(Messages.AppContextMenuProvider_verticalSpacingSubMenu, "verticalspacingmenu"); //$NON-NLS-2$
 
 		action = getActionRegistry().getAction(DecreaseVSpaceAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
-		
-		action = getActionRegistry().getAction(EqualsVSpaceAction.ID);
+
+		action = getActionRegistry().getAction(IncreaseVSpaceAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
-		
-		action = getActionRegistry().getAction(IncreaseVSpaceAction.ID);
+
+		submenu.add(new Separator());
+
+		action = getActionRegistry().getAction(EqualsVSpaceAction.ID);
 		if (action.isEnabled())
 			submenu.add(action);
 
@@ -400,7 +405,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 
 		menu.add(submenu);
 		menu.add(new Separator());
-		
+
 		// ------------------------------
 
 		submenu = new MenuManager(Messages.AppContextMenuProvider_size_to_container, JaspersoftStudioPlugin.getInstance()
@@ -435,7 +440,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(OrganizeAsTableAction.ID);
 		if (action.isEnabled())
 			menu.add(action);
-		
+
 		action = getActionRegistry().getAction(MaximizeContainerAction.ID);
 		if (action.isEnabled())
 			menu.add(action);

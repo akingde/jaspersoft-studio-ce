@@ -28,7 +28,6 @@ import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.ResourceScope;
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentManager;
@@ -120,7 +119,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	}
 
 	public void init(IFile file) {
-		IFile oldFile = (IFile) get(IEditorContributor.KEY_FILE);
+		IFile oldFile = (IFile) get(FileUtils.KEY_FILE);
 		if (oldFile != null && oldFile == file)
 			return;
 		if (service == null) {
@@ -129,7 +128,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		}
 		IProject project = null;
 		if (file != null) {
-			put(IEditorContributor.KEY_FILE, file);
+			put(FileUtils.KEY_FILE, file);
 			project = file.getProject();
 			if (project != null) {
 				lookupOrders = new String[] { ResourceScope.SCOPE, ProjectScope.SCOPE, InstanceScope.SCOPE };
@@ -293,7 +292,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		val = service.getString(qualifier, PROPERTY_JRPROPERTY_PREFIX + key, null, contexts);
 		if (val != null)
 			return val;
-		IResource file = (IResource) get(IEditorContributor.KEY_FILE);
+		IResource file = (IResource) get(FileUtils.KEY_FILE);
 		if (file != null) {
 			String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier).getString(key);
 			val = t != null && t.isEmpty() ? null : t;

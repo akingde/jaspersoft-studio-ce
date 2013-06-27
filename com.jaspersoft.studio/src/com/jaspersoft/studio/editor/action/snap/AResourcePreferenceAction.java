@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.snap;
 
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.QualifiedName;
@@ -52,7 +52,7 @@ public abstract class AResourcePreferenceAction extends Action {
 	}
 
 	protected ScopedPreferenceStore getStore() {
-		file = (IFile) jrConfig.get(IEditorContributor.KEY_FILE);
+		file = (IFile) jrConfig.get(FileUtils.KEY_FILE);
 		store = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, pageID);
 		return store;
 	}
