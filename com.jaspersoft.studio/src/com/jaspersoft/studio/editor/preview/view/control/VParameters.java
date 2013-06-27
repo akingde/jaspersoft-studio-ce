@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.editor.preview.input.BooleanNumericInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
 import com.jaspersoft.studio.utils.ExpressionUtil;
@@ -103,16 +104,24 @@ public class VParameters extends AVParameters {
 		return true;
 	}
 
+	private void createControl(Composite sectionClient, ParameterJasper pres, IDataInput in, JRDesignParameter p, boolean first){
+		incontrols.put(p.getName(), in);
+		createVerticalSeprator(first);
+		createLabel(sectionClient, pres, in);
+		in.createInput(sectionClient, pres, params);
+	}
+	
 	protected boolean createInput(Composite sectionClient, JRDesignParameter p, Map<String, Object> params, boolean first)
 			throws ClassNotFoundException {
 		ParameterJasper pres = new ParameterJasper(p);
+		//Use a custom control for the report maxcount instead of the integer standard one
+		if (p.getName().equals(JRParameter.REPORT_MAX_COUNT)){
+			createControl(sectionClient, pres, new BooleanNumericInput(), p, first);
+			return true;
+		}
 		for (IDataInput in : ReportControler.inputs) {
 			if (in.isForType(pres.getValueClass())) {
-				in = in.getInstance();
-				incontrols.put(p.getName(), in);
-				createVerticalSeprator(first);
-				createLabel(sectionClient, pres, in);
-				in.createInput(sectionClient, pres, params);
+				createControl(sectionClient, pres, in.getInstance(), p, first);
 				return true;
 			}
 		}
