@@ -85,7 +85,7 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 	@Check
 	public void checkFieldName(JRFieldObj field){
 		ExpressionContext currExpContext = ExpressionEditorSupportUtil.safeGetCurrentExpressionContext();
-		List<JRField> allFields = ExpressionContextUtils.getAllFields(currExpContext);
+		List<JRField> allFields = ExpressionContextUtils.getAllDatasetsFields(currExpContext);
 		for(JRField f : allFields){
 			if(("{" + f.getName() + "}").equals(field.getBracedIdentifier())) return; //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -101,8 +101,12 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 	@Check
 	public void checkVariableName(JRVariableObj variable){
 		ExpressionContext currExpContext = ExpressionEditorSupportUtil.safeGetCurrentExpressionContext();
-		List<JRVariable> allVariables = ExpressionContextUtils.getAllVariables(currExpContext);
+		List<JRVariable> allVariables = ExpressionContextUtils.getAllDatasetsVariables(currExpContext);
 		for(JRVariable v : allVariables){
+			if(("{" + v.getName() + "}").equals(variable.getBracedIdentifier())) return; //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		List<JRVariable> allCrosstabsVariables = ExpressionContextUtils.getAllCrosstabsVariables(currExpContext);
+		for(JRVariable v : allCrosstabsVariables){
 			if(("{" + v.getName() + "}").equals(variable.getBracedIdentifier())) return; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		error(Messages.JavaJRExpressionJavaValidator_VariableNotFoundInContextError, variable,
@@ -117,8 +121,12 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 	@Check
 	public void checkParameterName(JRParameterObj parameter){
 		ExpressionContext currExpContext = ExpressionEditorSupportUtil.safeGetCurrentExpressionContext();
-		List<JRParameter> allParameters = ExpressionContextUtils.getAllParameters(currExpContext);
+		List<JRParameter> allParameters = ExpressionContextUtils.getAllDatasetsParameters(currExpContext);
 		for(JRParameter p : allParameters){
+			if(("{" + p.getName() + "}").equals(parameter.getBracedIdentifier())) return; //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		List<JRParameter> allCrosstabsParameters = ExpressionContextUtils.getAllCrosstabsParameters(currExpContext);
+		for(JRParameter p : allCrosstabsParameters){
 			if(("{" + p.getName() + "}").equals(parameter.getBracedIdentifier())) return; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		error(Messages.JavaJRExpressionJavaValidator_ParameterNotFoundInContextError, parameter,

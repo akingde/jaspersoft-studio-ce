@@ -24,6 +24,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -148,6 +149,19 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 
 	}
 
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		for(IPropertyDescriptor desc : descriptors){
+			if(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION.equals(desc.getId())){
+				// fix the conditional expression context
+				((JRExpressionPropertyDescriptor) desc).setExpressionContext(
+						ExpressionEditorSupportUtil.getReportExtendedExpressionContext());
+				return;
+			}
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

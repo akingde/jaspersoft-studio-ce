@@ -115,6 +115,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	private ObjectCategoryItem parametersCategoryItem;
 	private ObjectCategoryItem fieldsCategoryItem;
 	private ObjectCategoryItem variablesCategoryItem;
+	private List<ObjectCategoryItem> rootCategories;
 
 
 	/**
@@ -321,20 +322,20 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	 */
 	private void refreshExpressionContextUI() {
 		// Builds the list of main categories
-		List<ObjectCategoryItem> rootCategories = new ArrayList<ObjectCategoryItem>();
+		rootCategories = new ArrayList<ObjectCategoryItem>();
 		if (exprContext != null) {
 			if (exprContext.getDatasets().size() > 0) {
 				parametersCategoryItem = new ObjectCategoryItem(
 						Category.PARAMETERS);
 				parametersCategoryItem.setData(ExpressionContextUtils
-						.getAllParameters(exprContext));
+						.getAllDatasetsParameters(exprContext));
 				fieldsCategoryItem = new ObjectCategoryItem(Category.FIELDS);
 				fieldsCategoryItem.setData(ExpressionContextUtils
-						.getAllFields(exprContext));
+						.getAllDatasetsFields(exprContext));
 				variablesCategoryItem = new ObjectCategoryItem(
 						Category.VARIABLES);
 				variablesCategoryItem.setData(ExpressionContextUtils
-						.getAllVariables(exprContext));
+						.getAllDatasetsVariables(exprContext));
 				rootCategories.add(parametersCategoryItem);
 				rootCategories.add(fieldsCategoryItem);
 				rootCategories.add(variablesCategoryItem);
@@ -352,6 +353,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 								+ " (" + i + ") " + crosstabKey); //$NON-NLS-1$ //$NON-NLS-2$
 				tmpCrossTabItem.setData(crosstab);
 				rootCategories.add(tmpCrossTabItem);
+				
 			}
 
 		}
@@ -473,16 +475,17 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	 */
 	private void performCategorySelection(Category category) {
 		if (category == null) {
-			if (ExpressionContextUtils.getAllFields(exprContext).size() > 0) {
+			if (ExpressionContextUtils.getAllDatasetsFields(exprContext).size() > 0) {
 				objectsNavigator.setSelection(new StructuredSelection(
 						fieldsCategoryItem), true);
-			} else if (ExpressionContextUtils.getAllVariables(exprContext)
-					.size() > 0) {
+			} else if (ExpressionContextUtils.getAllDatasetsVariables(exprContext).size()>0) {
 				objectsNavigator.setSelection(new StructuredSelection(
 						variablesCategoryItem), true);
-			} else {
+			} else if (ExpressionContextUtils.getAllDatasetsParameters(exprContext).size()>0){
 				objectsNavigator.setSelection(new StructuredSelection(
 						parametersCategoryItem), true);
+			} else {
+				objectsNavigator.setSelection(new StructuredSelection(rootCategories.get(0)),true);
 			}
 			return;
 		}

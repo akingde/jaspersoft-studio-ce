@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.jasperreports.crosstabs.JRCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRExpressionCollector;
@@ -34,6 +36,7 @@ import com.jaspersoft.studio.compatibility.VersionConstants;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -136,6 +139,41 @@ public class ExpressionEditorSupportUtil {
 				JRDataset mainDS = mreport.getJasperDesign().getMainDataset();
 				ExpressionContext exprContext = new ExpressionContext((JRDesignDataset) mainDS,
 						mreport.getJasperConfiguration());
+				return exprContext;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Gets a comprehensive expression context based on the currently opened report.
+	 * It uses all the datasets (main one included) and the crosstabs as source of information.
+	 * 
+	 * @return an expression context comprehensive of information coming from all crosstabs and datasets
+	 * @see ExpressionContext
+	 */
+	public static ExpressionContext getReportExtendedExpressionContext(){
+		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
+		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
+			final ANode mroot = (ANode) ((JrxmlEditor) activeJRXMLEditor).getModel();
+			if (mroot != null) {
+				ANode mreport = (ANode) mroot.getChildren().get(0);
+				JasperDesign jd = mreport.getJasperDesign();
+				JRDataset mainDS = jd.getMainDataset();
+				ExpressionContext exprContext = new ExpressionContext((JRDesignDataset) mainDS,
+						mreport.getJasperConfiguration());
+				// add all other datasets
+				for(JRDataset ds : jd.getDatasets()){
+					if(ds instanceof JRDesignDataset) {
+						exprContext.addDataset((JRDesignDataset) ds);
+					}
+				}
+				// and crosstabs
+				for(JRCrosstab ct : ModelUtils.getAllCrosstabs(jd)){
+					if(ct instanceof JRDesignCrosstab) {
+						exprContext.addCrosstab((JRDesignCrosstab) ct);
+					}
+				}
 				return exprContext;
 			}
 		}

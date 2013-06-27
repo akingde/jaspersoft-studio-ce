@@ -29,6 +29,7 @@ import net.sf.jasperreports.components.map.ItemData;
 import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.components.map.StandardItemData;
 import net.sf.jasperreports.components.map.StandardMapComponent;
+import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
@@ -464,6 +465,23 @@ public class ModelUtils {
 			bands.add(jrDesign.getBackground());
 
 		return bands;
+	}
+	
+	/**
+	 * Returns the list of all crosstabs contained the specified report.
+	 * 
+	 * @param jrDesign the jasper design of the report
+	 * @return the list of crosstabs
+	 */
+	public static List<JRCrosstab> getAllCrosstabs(JasperDesign jrDesign) {
+		List<JRDesignElement> allElements = getAllElements(jrDesign);
+		List<JRCrosstab> allCrosstabs = new ArrayList<JRCrosstab>();
+		for(JRDesignElement el : allElements) {
+			if(el instanceof JRCrosstab){
+				allCrosstabs.add((JRCrosstab) el);
+			}
+		}
+		return allCrosstabs;
 	}
 
 	/**
@@ -1380,5 +1398,5 @@ public class ModelUtils {
 		}
 		return markerData;
 	}
-
+	
 }

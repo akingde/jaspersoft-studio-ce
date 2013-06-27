@@ -47,7 +47,7 @@ public class JavaJRExpressionProposalProvider extends AbstractJavaJRExpressionPr
 	public void complete_JRFieldObj(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		ExpressionContext exprContext=(ExpressionContext) ((XtextSourceViewer) context.getViewer()).getData(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT);
 		if(exprContext!=null){
-			List<JRField> allFields = ExpressionContextUtils.getAllFields(exprContext);
+			List<JRField> allFields = ExpressionContextUtils.getAllDatasetsFields(exprContext);
 			for(JRField field : allFields){
 				acceptor.accept(createCompletionProposal(
 						"$F{" + field.getName() + "}", "$F{" + field.getName() + "}", getFieldIconImg(), context));   //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -59,7 +59,7 @@ public class JavaJRExpressionProposalProvider extends AbstractJavaJRExpressionPr
 	public void complete_JRVariableObj(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		ExpressionContext exprContext=(ExpressionContext) ((XtextSourceViewer) context.getViewer()).getData(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT);
 		if(exprContext!=null){
-			List<JRVariable> allVariables = ExpressionContextUtils.getAllVariables(exprContext);
+			List<JRVariable> allVariables = ExpressionContextUtils.getAllDatasetsVariables(exprContext);
 			for(JRVariable var : allVariables){
 				acceptor.accept(createCompletionProposal(
 						"$V{" + var.getName() + "}", "$V{" + var.getName() + "}", getVariableIconImg(), context));   //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -71,7 +71,7 @@ public class JavaJRExpressionProposalProvider extends AbstractJavaJRExpressionPr
 	public void complete_JRParameterObj(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		ExpressionContext exprContext=(ExpressionContext) ((XtextSourceViewer) context.getViewer()).getData(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT);
 		if(exprContext!=null){
-			List<JRParameter> allParameters = ExpressionContextUtils.getAllParameters(exprContext);
+			List<JRParameter> allParameters = ExpressionContextUtils.getAllDatasetsParameters(exprContext);
 			for(JRParameter param : allParameters){
 				acceptor.accept(createCompletionProposal(
 						"$P{" + param.getName() + "}", "$P{" + param.getName() + "}", getParameterIconImg(), context));   //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$

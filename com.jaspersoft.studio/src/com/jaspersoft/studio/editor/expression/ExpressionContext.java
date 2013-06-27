@@ -197,4 +197,26 @@ public class ExpressionContext {
 	public JasperReportsConfiguration getJasperReportsConfiguration(){
 		return config;
 	}
+	
+	public boolean hasDatasets() {
+		return datasets!=null && datasets.size()>0;
+	}
+	
+	public boolean hasCrosstabs() {
+		return crosstabs!=null && crosstabs.size()>0;
+	}
+	
+	public void addDataset(JRDesignDataset ds) {
+		if(datasets==null){
+			datasets = new ArrayList<JRDesignDataset>();
+		}
+		datasets.add(ds);
+	}
+	
+	public void addCrosstab(JRDesignCrosstab crosstab) {
+		if(crosstabs==null){
+			crosstabs = new ArrayList<JRDesignCrosstab>();
+		}
+		crosstabs.add(crosstab);
+	}
 }
