@@ -21,7 +21,7 @@ import java.util.List;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterService;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
@@ -54,7 +54,7 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 		if (jrdsp != null) {
 			JasperReport jr = null;
 			try {
-				IFile file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+				IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
 				if (file != null && file.exists()) {
 					JasperReportCompiler compiler = new JasperReportCompiler();
 					jr = compiler.compileReport(jConfig, file);
