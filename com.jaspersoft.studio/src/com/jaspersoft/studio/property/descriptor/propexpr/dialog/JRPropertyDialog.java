@@ -37,7 +37,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertiesList;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
-import com.jaspersoft.studio.property.infoList.SelectableComposite;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
@@ -138,44 +137,44 @@ public class JRPropertyDialog extends Dialog {
 			}
 		});
 		fillValue(value);
-		createSpecialProperties(composite);
+//		createSpecialProperties(composite);
 		return composite;
 	}
 	
-	private SelectableComposite createSpecialProperties(Composite cmp){
-		/*
-		 * FIXME add the rapid selection component for properties
-		List<ElementDescription> items = new ArrayList<ElementDescription>();
-		items.add(new ElementDescription("aaaaa", "bbbbbbbbb \n ccccc \n ddddddd"));
-		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
-		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
-		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
-		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
-		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
-		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
-		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
-		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
-		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
-		for(int i=0;i<200;i++)
-			items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
-		
-		Label titleLabel = new Label(cmp, SWT.NONE);
-		titleLabel.setText("Special Properties:");
-		titleLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
-		SelectableComposite comp = new SelectableComposite(cmp, items);
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
-		data.heightHint = 200;
-		comp.setLayoutData(data);
-		comp.SetDoubleClickListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				String selectedProp = ((ElementDescription)e.data).getName();
-				cprop.setText(selectedProp);
-			}
-		});
-		return comp;*/
-		return null;
-	}
+//	private SelectableComposite createSpecialProperties(Composite cmp){
+//		/*
+//		 * FIXME add the rapid selection component for properties
+//		List<ElementDescription> items = new ArrayList<ElementDescription>();
+//		items.add(new ElementDescription("aaaaa", "bbbbbbbbb \n ccccc \n ddddddd"));
+//		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
+//		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
+//		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
+//		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
+//		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
+//		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
+//		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
+//		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
+//		items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
+//		for(int i=0;i<200;i++)
+//			items.add(new ElementDescription("aaaaa", "bbbbbbbbb"));
+//		
+//		Label titleLabel = new Label(cmp, SWT.NONE);
+//		titleLabel.setText("Special Properties:");
+//		titleLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
+//		SelectableComposite comp = new SelectableComposite(cmp, items);
+//		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
+//		data.heightHint = 200;
+//		comp.setLayoutData(data);
+//		comp.SetDoubleClickListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				String selectedProp = ((ElementDescription)e.data).getName();
+//				cprop.setText(selectedProp);
+//			}
+//		});
+//		return comp;*/
+//		return null;
+//	}
 
 	private Composite createValueExpressionControl(Composite cmp) {
 		Composite composite = new Composite(cmp, SWT.NONE);
