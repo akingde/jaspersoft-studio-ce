@@ -46,6 +46,7 @@ import com.jaspersoft.studio.data.sql.action.table.JoinTable;
 import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
+import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 
@@ -98,6 +99,7 @@ public class ActionFactory {
 		actions.add(new EditExpression(designer));
 		actions.add(null);
 		actions.add(new DeleteAction<MExpression>(designer, "Expression", MExpression.class));
+		actions.add(new DeleteAction<MExpressionX>(designer, "Expression $X{}", MExpressionX.class));
 		actions.add(new DeleteAction<MExpressionGroup>(designer, "Expression Group", MExpressionGroup.class));
 	}
 
