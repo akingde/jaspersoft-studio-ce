@@ -5,7 +5,7 @@
 	<title>Using Report Parameters</title>
 	<section>
 		<para>
-			Report parameters are used in many different ways inside a report. They can be used in the where condition of an SQL query, or to provide additional data to the report (i.e. the a value for a title or the 
+			Report parameters are used in many different ways inside a report. They can be used in the where condition of a SQL query, or to provide additional data to the report (i.e. the a value for a title or the 
 			name of user that executed the report). A parameter is defined by a name and a Class, which is a Java class type like java.lang.String or java.lang.Integer. Any Java class is a valid parameter class. In example 
 			a parameter of type java.sql.Connection may be used to populate a subreport, while a simple java.lang.Boolean parameter may be used to show or hide a section of the report.
 		</para>
@@ -35,7 +35,7 @@
 			includes the parameter "HIBERNATE_SESSION" that holds the Hibernate session used to run the HQL query. As said, the built-in parameters can not be modified or deleted.
 		</para>
 		</formalpara>
-		<formalpara><title>Using Parameters in an SQL Query</title>
+		<formalpara><title>Using Parameters in a SQL Query</title>
 		<para>
 			Parameters can be used in SQL queries to filter records in a where condition or to add/replace pieces of raw SQL or even to pass the entire SQL string to execute. In the first case the parameters are used as 
 			standard SQL parameters, in example:

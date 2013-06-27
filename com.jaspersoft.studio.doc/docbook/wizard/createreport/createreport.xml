@@ -5,7 +5,7 @@
 <title>Creation of a Report</title>
 <section>
 <para>In this tutorial, we cover the basics of how to design a report.To keep things simple, this tutorial uses a sample
-      database included in the installation of Jaspersoft Studio. The data to print is retrieved using an SQL query embedded in the
+      database included in the installation of Jaspersoft Studio. The data to print is retrieved using a SQL query embedded in the
       report. The first thing to do is create a new report. To do this, open the File menu, select New, and then click Jasper
       Report. A new window appears, as shown in the following figure:</para>
         		<figure>
@@ -49,7 +49,7 @@
       </itemizedlist>
       <para>For this example, we will use the Sample DB, but this is not sufficent to create the report. A SQL database can contain
       many tables, with many fields, so we must specify which of these fields we will use in the report. To do this we must provide
-      an SQL query that selects all the fields we want include in the report. To keep this tutorial simple, we will select all the
+      a SQL query that selects all the fields we want include in the report. To keep this tutorial simple, we will select all the
       fields from the table named &quot;orders&quot;. Write the query as shown in the image below and click Next.</para>
              		<figure>
 			<title>Datasource Selection</title>
