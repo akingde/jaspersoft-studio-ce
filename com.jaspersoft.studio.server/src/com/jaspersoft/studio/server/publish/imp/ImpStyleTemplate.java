@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.publish;
+package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
 import java.util.Set;
@@ -35,6 +35,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImpStyleTemplate extends AImpObject {

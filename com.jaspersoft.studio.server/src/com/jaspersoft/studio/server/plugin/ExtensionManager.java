@@ -31,9 +31,9 @@ import org.eclipse.jface.wizard.IWizardPage;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExtensionManager {
 	private List<IResourceFactory> resources = new ArrayList<IResourceFactory>();
@@ -41,9 +41,7 @@ public class ExtensionManager {
 	private List<IPublishContributor> publisher = new ArrayList<IPublishContributor>();
 
 	public void init() {
-		IConfigurationElement[] config = Platform.getExtensionRegistry()
-				.getConfigurationElementsFor(
-						"com.jaspersoft.studio.server", "resources"); //$NON-NLS-1$ //$NON-NLS-2$
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.server", "resources"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -54,8 +52,7 @@ public class ExtensionManager {
 			}
 		}
 
-		config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"com.jaspersoft.studio.server", "publisher"); //$NON-NLS-1$ //$NON-NLS-2$
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.server", "publisher"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -67,24 +64,17 @@ public class ExtensionManager {
 		}
 	}
 
-	public void publishJrxml(MReportUnit mrunit, IProgressMonitor monitor,
-			JasperDesign jasper, Set<String> fileset, IFile file,
-			String version, JasperReportsConfiguration jrConfig)
-			throws Exception {
+	public void publishJrxml(AMJrxmlContainer mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file, String version) throws Exception {
 		for (IPublishContributor r : publisher)
-			r.publishJrxml(mrunit, monitor, jasper, fileset, file, version,
-					jrConfig);
+			r.publishJrxml(mrunit, monitor, jasper, fileset, file, version);
 	}
 
-	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor,
-			JasperDesign jasper, JasperReportsConfiguration jrConfig)
-			throws Exception {
+	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper) throws Exception {
 		for (IPublishContributor r : publisher)
-			r.publishParameters(mrunit, monitor, jasper, jrConfig);
+			r.publishParameters(mrunit, monitor, jasper);
 	}
 
-	public MResource getResource(ANode parent, ResourceDescriptor resource,
-			int index) {
+	public MResource getResource(ANode parent, ResourceDescriptor resource, int index) {
 		for (IResourceFactory r : resources) {
 			MResource mr = r.getResource(parent, resource, index);
 			if (mr != null)

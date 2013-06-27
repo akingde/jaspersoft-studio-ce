@@ -57,12 +57,10 @@ public class PropertiesAction extends Action {
 			if (obj instanceof MResource) {
 				try {
 					MResource mres = (MResource) obj;
-					mres.setValue(WSClientHelper.getResource(mres,
-							mres.getValue()));
+					mres.setValue(WSClientHelper.getResource(mres, mres.getValue()));
 
 					ResourceWizard wizard = new ResourceWizard(mres, mres);
-					WizardDialog dialog = new WizardDialog(Display.getDefault()
-							.getActiveShell(), wizard);
+					WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 					dialog.create();
 
 					dorun(mres, dialog.open());
@@ -75,12 +73,10 @@ public class PropertiesAction extends Action {
 	}
 
 	private void dorun(final MResource obj, final int result) {
-		ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
-				.getDefault().getActiveShell());
+		ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
 			pm.run(true, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					try {
 						editResource(obj, monitor, result);
 					} catch (Throwable e) {
@@ -89,7 +85,6 @@ public class PropertiesAction extends Action {
 						monitor.done();
 					}
 				}
-
 			});
 		} catch (InvocationTargetException e) {
 			UIUtils.showError(e.getCause());
@@ -98,8 +93,7 @@ public class PropertiesAction extends Action {
 		}
 	}
 
-	private void editResource(final MResource res, IProgressMonitor monitor,
-			int result) throws Exception {
+	private void editResource(final MResource res, IProgressMonitor monitor, int result) throws Exception {
 		if (result == Dialog.OK) {
 			WSClientHelper.saveResource(res, monitor);
 		} else {

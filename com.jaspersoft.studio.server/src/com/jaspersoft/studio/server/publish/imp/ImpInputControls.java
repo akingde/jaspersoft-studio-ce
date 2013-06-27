@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.publish;
+package com.jaspersoft.studio.server.publish.imp;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -30,7 +30,8 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.MDataType;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
+import com.jaspersoft.studio.server.publish.PublishOptions;
+import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImpInputControls {
@@ -78,7 +79,7 @@ public class ImpInputControls {
 
 			mres.setPublishOptions(new PublishOptions());
 
-			JrxmlPublishAction.getResources(jrConfig).add(mres);
+			PublishUtil.getResources(jrConfig).add(mres);
 		}
 	}
 

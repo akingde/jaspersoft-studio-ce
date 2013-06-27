@@ -37,15 +37,21 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.QualifiedName;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.server.Activator;
-import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.plugin.IPublishContributor;
+import com.jaspersoft.studio.server.publish.imp.ImpDataAdapter;
+import com.jaspersoft.studio.server.publish.imp.ImpImage;
+import com.jaspersoft.studio.server.publish.imp.ImpInputControls;
+import com.jaspersoft.studio.server.publish.imp.ImpResourceBundle;
+import com.jaspersoft.studio.server.publish.imp.ImpStyleTemplate;
+import com.jaspersoft.studio.server.publish.imp.ImpSubreport;
+import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -54,40 +60,44 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	private JasperReportsConfiguration jrConfig;
 	private String version;
 
-	public void publishJrxml(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file, String version, JasperReportsConfiguration jrConfig) throws Exception {
-		init(jrConfig, version);
+	public void publishJrxml(AMJrxmlContainer mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file, String version) throws Exception {
+		init(mrunit.getJasperConfiguration(), version);
 		publishJrxml(mrunit, monitor, jasper, fileset, file);
-		String val = file.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, JrxmlExporter.PROP_REPORT_ISMAIN));
-		boolean b = val == null || val.isEmpty();
-		try {
-			b = b || Boolean.parseBoolean(val);
-		} catch (Exception e) {
-		}
-		if (b)
-			publishParameters(mrunit, monitor, jasper, jrConfig);
+		if (mrunit instanceof MReportUnit && ResourceDescriptorUtil.isReportMain(file))
+			publishParameters((MReportUnit) mrunit, monitor, jasper);
 	}
 
-	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, JasperReportsConfiguration jrConfig) throws Exception {
+	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper) throws Exception {
 		impIC.publish(mrunit, monitor, jasper, jrConfig);
-		Activator.getExtManager().publishParameters(mrunit, monitor, jasper, jrConfig);
+		Activator.getExtManager().publishParameters(mrunit, monitor, jasper);
 	}
 
-	private void publishJrxml(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file) throws Exception {
-		List<JRDesignElement> elements = ModelUtils.getAllElements(jasper);
-		for (JRDesignElement ele : elements) {
-			if (ele instanceof JRDesignImage)
-				publishImage(mrunit, monitor, jasper, fileset, file, ele, version);
-			else if (ele instanceof JRDesignSubreport) {
-				publishSubreport(mrunit, monitor, jasper, fileset, file, ele, version);
-			} else {
-				publishElement(mrunit, monitor, jasper, fileset, file, ele, version);
+	private void publishJrxml(AMJrxmlContainer mres, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file) throws Exception {
+		if (monitor.isCanceled())
+			return;
+		MReportUnit mrunit = null;
+		if (mres instanceof MReportUnit)
+			mrunit = (MReportUnit) mres;
+		else if (mres.getParent() instanceof MReportUnit)
+			mrunit = (MReportUnit) mres.getParent();
+
+		if (mrunit != null) {
+			List<JRDesignElement> elements = ModelUtils.getAllElements(jasper);
+			for (JRDesignElement ele : elements) {
+				if (ele instanceof JRDesignImage)
+					publishImage(mrunit, monitor, jasper, fileset, file, ele, version);
+				else if (ele instanceof JRDesignSubreport) {
+					publishSubreport(mrunit, monitor, jasper, fileset, file, ele, version);
+				} else {
+					publishElement(mrunit, monitor, jasper, fileset, file, ele, version);
+				}
 			}
+			publishDataAdapters(mrunit, monitor, jasper, fileset, file, version);
+			publishBundles(mrunit, monitor, jasper, fileset, file, version);
+			publishTemplates(mrunit, monitor, jasper, fileset, file, version);
 		}
-		publishDataAdapters(mrunit, monitor, jasper, fileset, file, version);
-		publishBundles(mrunit, monitor, jasper, fileset, file, version);
-		publishTemplates(mrunit, monitor, jasper, fileset, file, version);
 		// here extend and give possibility to contribute to plugins
-		Activator.getExtManager().publishJrxml(mrunit, monitor, jasper, fileset, file, version, jrConfig);
+		Activator.getExtManager().publishJrxml(mres, monitor, jasper, fileset, file, version);
 	}
 
 	protected void publishSubreport(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file, JRDesignElement ele, String version) throws Exception {
@@ -102,7 +112,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			JasperDesign jrd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
 			if (jrd != null) {
 				fres.setJd(jrd);
-				publishJrxml(mrunit, monitor, jrd, fileset, fs[0]);
+				publishJrxml(fres, monitor, jrd, fileset, fs[0]);
 				File f = FileUtils.createTempFile("jrsres", ".jrxml");
 				FileUtils.writeFile(f, JRXmlWriterHelper.writeReport(jrConfig, jrd, version));
 				fres.setFile(f);

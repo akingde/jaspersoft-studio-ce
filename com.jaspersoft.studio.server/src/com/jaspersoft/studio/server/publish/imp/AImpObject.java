@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.publish;
+package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
 import java.util.List;
@@ -31,7 +31,8 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
+import com.jaspersoft.studio.server.publish.PublishOptions;
+import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -84,7 +85,7 @@ public abstract class AImpObject {
 		mres.setFile(f);
 		mres.setPublishOptions(popt);
 
-		JrxmlPublishAction.getResources(jrConfig).add(mres);
+		PublishUtil.getResources(jrConfig).add(mres);
 		return mres;
 	}
 

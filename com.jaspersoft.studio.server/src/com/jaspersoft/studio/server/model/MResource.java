@@ -152,10 +152,12 @@ public class MResource extends APropertyNode implements ICopyable {
 		rd.setIsReference(false);
 		rd.setName("NewResource");
 		// rd.setLabel(rd.getName());
-		if (parent instanceof MResource)
-			rd.setParentFolder(((MResource) parent).getValue().getUriString());
-		else
-			rd.setParentFolder("/");
+		if (parent != null) {
+			if (parent instanceof MResource)
+				rd.setParentFolder(((MResource) parent).getValue().getUriString());
+			else
+				rd.setParentFolder("/");
+		}
 		return rd;
 	}
 
@@ -167,15 +169,6 @@ public class MResource extends APropertyNode implements ICopyable {
 
 	public void setEditMode(boolean isEditMode) {
 		this.isEditMode = isEditMode;
-	}
-
-	@Override
-	public INode getRoot() {
-		INode node = this;
-		while (node != null && node.getParent() != null && !(node instanceof MServerProfile) && !(node instanceof MRoot)) {
-			node = node.getParent();
-		}
-		return node;
 	}
 
 	public boolean isInsideReportUnit() {

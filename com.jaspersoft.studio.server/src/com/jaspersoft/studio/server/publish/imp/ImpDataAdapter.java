@@ -13,12 +13,12 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.publish;
+package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
-import java.net.URL;
 import java.util.Set;
 
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -28,35 +28,35 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.MRDataAdapter;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResourceBundle;
+import com.jaspersoft.studio.server.publish.PublishOptions;
+import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class ImpResourceBundle extends AImpObject {
-	public ImpResourceBundle(JasperReportsConfiguration jrConfig) {
+public class ImpDataAdapter extends AImpObject {
+	public ImpDataAdapter(JasperReportsConfiguration jrConfig) {
 		super(jrConfig);
 	}
 
-	public File publish(JasperReportsConfiguration jConfig, JasperDesign jd,
-			String dpath, MReportUnit mrunit, IProgressMonitor monitor,
-			Set<String> fileset, IFile file) throws Exception {
-		File f = null;
-		URL resource = jConfig.getClassLoader().getResource(
-				dpath + ".properties");
-		if (resource != null)
-			f = new File(resource.toURI());
-		else
-			f = findFile(file, dpath + ".properties");
+	public File publish(JasperDesign jd, String dpath, MReportUnit mrunit,
+			IProgressMonitor monitor, Set<String> fileset, IFile file)
+			throws Exception {
+		File f = findFile(file, dpath);
 		if (f != null && f.exists()) {
 			fileset.add(f.getAbsolutePath());
-			addResource(mrunit, fileset, f, new PublishOptions());
+			AFileResource fr = addResource(mrunit, fileset, f,
+					new PublishOptions());
+			jd.setProperty(
+					DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
+					"repo:" + fr.getValue().getUriString());
 		}
 		return f;
 	}
 
 	@Override
 	protected ResourceDescriptor createResource(MReportUnit mrunit) {
-		return MResourceBundle.createDescriptor(mrunit);
+		return MRDataAdapter.createDescriptor(mrunit);
 	}
 
 	@Override
@@ -71,4 +71,26 @@ public class ImpResourceBundle extends AImpObject {
 		return null;
 	}
 
+	@Override
+	protected AFileResource addResource(MReportUnit mrunit,
+			Set<String> fileset, File f, PublishOptions popt) {
+		ResourceDescriptor runit = mrunit.getValue();
+		String rname = f.getName();
+		ResourceDescriptor rd = null;
+		if (rd == null) {
+			rd = createResource(mrunit);
+			rd.setName(rname);
+			rd.setLabel(rname);
+
+			rd.setParentFolder(runit.getParentFolder());
+			rd.setUriString(runit.getParentFolder() + "/" + rd.getName());
+		}
+
+		AFileResource mres = new MRDataAdapter(mrunit, rd, -1);
+		mres.setFile(f);
+		mres.setPublishOptions(popt);
+
+		PublishUtil.getResources(jrConfig).add(mres);
+		return mres;
+	}
 }

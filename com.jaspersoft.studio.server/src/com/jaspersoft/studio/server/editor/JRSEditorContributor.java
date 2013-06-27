@@ -15,8 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor;
 
-import net.sf.jasperreports.eclipse.viewer.AContributorAction;
-import net.sf.jasperreports.eclipse.viewer.IEditorContributor;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -28,11 +26,13 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.EditorPart;
 
+import com.jaspersoft.studio.editor.IEditorContributor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.server.JSFileResolver;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.server.publish.wizard.SaveConfirmationDialog;
+import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRSEditorContributor implements IEditorContributor {

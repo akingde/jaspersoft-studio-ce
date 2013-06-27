@@ -21,9 +21,11 @@ import net.sf.jasperreports.util.CastorUtil;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /* 
  * 
@@ -45,6 +47,18 @@ public class MServerProfile extends ANode {
 	@Override
 	public ServerProfile getValue() {
 		return (ServerProfile) super.getValue();
+	}
+
+	@Override
+	public INode getRoot() {
+		return this;
+	}
+
+	@Override
+	public void setJasperConfiguration(JasperReportsConfiguration jConfig) {
+		super.setJasperConfiguration(jConfig);
+		if (getParent() != null)
+			((ANode) getParent().getRoot()).setJasperConfiguration(jConfig);
 	}
 
 	/**

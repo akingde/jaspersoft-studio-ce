@@ -80,9 +80,7 @@ public class AddResourcePage extends WizardPage {
 			title = MServerProfile.getIconDescriptor().getTitle();
 		else if (parent instanceof MResource)
 			title = ((MResource) parent).getThisIconDescriptor().getTitle();
-		setDescription(MessageFormat.format(
-				Messages.AddResourcePage_Description, title,
-				parent.getDisplayText()));
+		setDescription(MessageFormat.format(Messages.AddResourcePage_Description, title, parent.getDisplayText()));
 		this.parent = parent;
 	}
 
@@ -94,8 +92,8 @@ public class AddResourcePage extends WizardPage {
 		TreeViewer treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		gd.minimumHeight = 300;
-		gd.minimumWidth = 400;
+		gd.heightHint = 300;
+		gd.widthHint = 400;
 		treeViewer.getTree().setLayoutData(gd);
 		treeViewer.setContentProvider(new ReportTreeContetProvider());
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
@@ -112,8 +110,7 @@ public class AddResourcePage extends WizardPage {
 			}
 		});
 		setControl(treeViewer.getControl());
-		treeViewer.setSelection(new TreeSelection(new TreePath(
-				new Object[] { resource })), true);
+		treeViewer.setSelection(new TreeSelection(new TreePath(new Object[] { resource })), true);
 	}
 
 	private boolean dsonly = false;
@@ -145,40 +142,30 @@ public class AddResourcePage extends WizardPage {
 				new MRQuery(root, MRQuery.createDescriptor(parent), -1);
 
 				new MRDashboard(root, MRDashboard.createDescriptor(parent), -1);
-				new MRMondrianSchema(root,
-						MRMondrianSchema.createDescriptor(parent), -1);
-				new MROlapMondrianConnection(root,
-						MROlapMondrianConnection.createDescriptor(parent), -1);
-				new MROlapXmlaConnection(root,
-						MROlapXmlaConnection.createDescriptor(parent), -1);
+				new MRMondrianSchema(root, MRMondrianSchema.createDescriptor(parent), -1);
+				new MROlapMondrianConnection(root, MROlapMondrianConnection.createDescriptor(parent), -1);
+				new MROlapXmlaConnection(root, MROlapXmlaConnection.createDescriptor(parent), -1);
 				new MROlapUnit(root, MROlapUnit.createDescriptor(parent), -1);
-				new MRAccessGrantSchema(root,
-						MRAccessGrantSchema.createDescriptor(parent), -1);
+				new MRAccessGrantSchema(root, MRAccessGrantSchema.createDescriptor(parent), -1);
 			}
 			new MJrxml(root, MJrxml.createDescriptor(parent), -1);
 			new MInputControl(root, MInputControl.createDescriptor(parent), -1);
 			new MListOfValues(root, MListOfValues.createDescriptor(parent), -1);
 			new MJar(root, MJar.createDescriptor(parent), -1);
 			// new MResource(root, MResource.createDescriptor(parent), -1);
-			new MResourceBundle(root, MResourceBundle.createDescriptor(parent),
-					-1);
+			new MResourceBundle(root, MResourceBundle.createDescriptor(parent), -1);
 			new MReference(root, MReference.createDescriptor(parent), -1);
 			new MRFont(root, MRFont.createDescriptor(parent), -1);
 			new MRImage(root, MRImage.createDescriptor(parent), -1);
-			new MRStyleTemplate(root, MRStyleTemplate.createDescriptor(parent),
-					-1);
+			new MRStyleTemplate(root, MRStyleTemplate.createDescriptor(parent), -1);
 			new MXmlFile(root, MXmlFile.createDescriptor(parent), -1);
 			new MRDataAdapter(root, MRDataAdapter.createDescriptor(parent), -1);
 
 			if (parent instanceof MReportUnit) {
-				new MReportUnitOptions(root,
-						MReportUnitOptions
-								.createDescriptor((MReportUnit) parent), -1);
+				new MReportUnitOptions(root, MReportUnitOptions.createDescriptor((MReportUnit) parent), -1);
 				boolean dsexists = false;
 				for (INode n : parent.getChildren()) {
-					if (n instanceof MResource
-							&& SelectorDatasource.isDatasource(((MResource) n)
-									.getValue())) {
+					if (n instanceof MResource && SelectorDatasource.isDatasource(((MResource) n).getValue())) {
 						dsexists = true;
 						break;
 					}
@@ -204,17 +191,12 @@ public class AddResourcePage extends WizardPage {
 	}
 
 	protected void createDatasources(MRoot root) {
-		new MRDatasourceBean(root, MRDatasourceBean.createDescriptor(parent),
-				-1);
-		new MRDatasourceJDBC(root, MRDatasourceJDBC.createDescriptor(parent),
-				-1);
-		new MRDatasourceJNDI(root, MRDatasourceJNDI.createDescriptor(parent),
-				-1);
-		new MRDatasourceCustom(root,
-				MRDatasourceCustom.createDescriptor(parent), -1);
+		new MRDatasourceBean(root, MRDatasourceBean.createDescriptor(parent), -1);
+		new MRDatasourceJDBC(root, MRDatasourceJDBC.createDescriptor(parent), -1);
+		new MRDatasourceJNDI(root, MRDatasourceJNDI.createDescriptor(parent), -1);
+		new MRDatasourceCustom(root, MRDatasourceCustom.createDescriptor(parent), -1);
 		new MRDatasourceVDS(root, MRDatasourceVDS.createDescriptor(parent), -1);
-		new MRDatasourceDiagnostic(root,
-				MRDatasourceDiagnostic.createDescriptor(parent), -1);
+		new MRDatasourceDiagnostic(root, MRDatasourceDiagnostic.createDescriptor(parent), -1);
 
 		new MRDatasourceAWS(root, MRDatasourceAWS.createDescriptor(parent), -1);
 

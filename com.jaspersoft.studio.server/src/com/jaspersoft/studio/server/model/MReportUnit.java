@@ -23,7 +23,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
-public class MReportUnit extends AFileResource {
+public class MReportUnit extends AMJrxmlContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MReportUnit(ANode parent, ResourceDescriptor rd, int index) {

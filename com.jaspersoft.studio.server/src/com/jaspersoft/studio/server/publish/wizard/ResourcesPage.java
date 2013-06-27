@@ -40,7 +40,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
+import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
@@ -56,7 +56,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		setDescription(Messages.ResourcesPage_description);
 		this.jConfig = jConfig;
 	}
-	
+
 	/**
 	 * Return the context name for the help of this page
 	 */
@@ -74,8 +74,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		setControl(composite);
 		composite.setLayout(new GridLayout());
 
-		Table table = new Table(composite, SWT.V_SCROLL | SWT.MULTI
-				| SWT.FULL_SELECTION | SWT.BORDER);
+		Table table = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		table.setLayoutData(gd);
 		table.setHeaderVisible(true);
@@ -133,30 +132,25 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
-				new CheckboxCellEditor(parent) });
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new CheckboxCellEditor(parent) });
 		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void fillData() {
-		tableViewer.setInput(JrxmlPublishAction.getResources(jConfig));
+		tableViewer.setInput(PublishUtil.getResources(jConfig));
 		tableViewer.refresh();
 	}
 
-	class TLabelProvider extends CellLabelProvider implements
-			ITableLabelProvider {
-		private CheckBoxLabelProvider chLabelProvider = new CheckBoxLabelProvider(
-				NullEnum.NOTNULL);
+	class TLabelProvider extends CellLabelProvider implements ITableLabelProvider {
+		private CheckBoxLabelProvider chLabelProvider = new CheckBoxLabelProvider(NullEnum.NOTNULL);
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			MResource fr = (MResource) element;
 			switch (columnIndex) {
 			case 0:
-				return Activator.getDefault().getImage(fr.getThisIconDescriptor()
-						.getIcon16());
+				return Activator.getDefault().getImage(fr.getThisIconDescriptor().getIcon16());
 			case 1:
-				return chLabelProvider.getCellEditorImage(fr
-						.getPublishOptions().isOverwrite());
+				return chLabelProvider.getCellEditorImage(fr.getPublishOptions().isOverwrite());
 			}
 			return null;
 		}
@@ -167,8 +161,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			case 0:
 				return fr.getDisplayText();
 			case 1:
-				return chLabelProvider.getText(fr.getPublishOptions()
-						.isOverwrite());
+				return chLabelProvider.getText(fr.getPublishOptions().isOverwrite());
 			}
 			return ""; //$NON-NLS-1$
 		}

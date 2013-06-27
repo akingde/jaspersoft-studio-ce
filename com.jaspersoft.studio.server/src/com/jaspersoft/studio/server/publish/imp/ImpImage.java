@@ -13,40 +13,28 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.publish;
-
-import java.io.File;
+package com.jaspersoft.studio.server.publish.imp;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignSubreport;
-
-import org.eclipse.core.resources.IFile;
+import net.sf.jasperreports.engine.design.JRDesignImage;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.server.model.MJrxml;
+import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class ImpSubreport extends AImpObject {
-
-	public ImpSubreport(JasperReportsConfiguration jrConfig) {
+public class ImpImage extends AImpObject {
+	public ImpImage(JasperReportsConfiguration jrConfig) {
 		super(jrConfig);
 	}
 
-	@Override
-	protected File findFile(IFile file, String str) {
-		File f = super.findFile(file, str.replaceAll(".jasper", ".jrxml"));
-		if (f == null)
-			f = super.findFile(file, str);
-		return f;
+	protected JRDesignExpression getExpression(JRDesignElement img) {
+		return (JRDesignExpression) ((JRDesignImage) img).getExpression();
 	}
 
 	protected ResourceDescriptor createResource(MReportUnit mrunit) {
-		return MJrxml.createDescriptor(mrunit);
+		return MRImage.createDescriptor(mrunit);
 	}
 
-	protected JRDesignExpression getExpression(JRDesignElement img) {
-		return (JRDesignExpression) ((JRDesignSubreport) img).getExpression();
-	}
 }

@@ -164,6 +164,8 @@ public class WSClientHelper {
 	}
 
 	public static ResourceDescriptor getResource(ANode res, ResourceDescriptor rd) throws Exception {
+		if (res instanceof AFileResource)
+			return getResource(res, rd, ((AFileResource) res).getFile());
 		return getResource(res, rd, (String) null);
 	}
 
@@ -231,7 +233,10 @@ public class WSClientHelper {
 				} else {
 					if (rd.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && !rd.getIsNew() && rd.getName().equals("main_jrxml"))
 						rd.setMainReport(true);
-					rd = cli.modifyReportUnitResource(ruuri, rd, file);
+					String turi = rd.getUriString();
+					ResourceDescriptor trd = cli.modifyReportUnitResource(ruuri, rd, file);
+					if (!trd.getUriString().equals(turi))
+						rd = getResource(cli, rd, null);
 				}
 			} else
 				rd = cli.addOrModifyResource(rd, file);
@@ -244,7 +249,22 @@ public class WSClientHelper {
 			}
 		}
 		return rd;
+	}
 
+	public static ResourceDescriptor save(IProgressMonitor monitor, MResource f) throws Exception {
+		try {
+			return WSClientHelper.saveResource(f, monitor, false);
+		} catch (Exception e) {
+			if (f.getValue().getIsNew()) {
+				f.getValue().setIsNew(false);
+				ResourceDescriptor prd = ((MResource) f.getParent()).getValue();
+				f.getValue().setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");//$NON-NLS-1$ //$NON-NLS-2$  
+				ResourceDescriptor v = f.getValue();
+				f.getValue().setUriString(v.getParentFolder() + "/" + f.getValue().getName());//$NON-NLS-1$
+				return WSClientHelper.saveResource(f, monitor, false);
+			}
+			throw e;
+		}
 	}
 
 	public static void deleteResource(MResource res) throws Exception {
@@ -329,6 +349,8 @@ public class WSClientHelper {
 	}
 
 	public static MResource findSelected(List<INode> list, IProgressMonitor monitor, String prunit, IConnection cli) throws Exception {
+		if (monitor.isCanceled())
+			return null;
 		int maxl = 0;
 		int pos = -1;
 		for (int i = 0; i < list.size(); i++) {

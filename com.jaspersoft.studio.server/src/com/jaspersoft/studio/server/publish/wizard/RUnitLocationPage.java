@@ -20,12 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -57,16 +56,25 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
+import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerProvider;
+import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
+import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
-import com.jaspersoft.studio.server.publish.FindReportUnit;
+import com.jaspersoft.studio.server.publish.FindResources;
+import com.jaspersoft.studio.server.publish.PublishUtil;
+import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.utils.ValidationUtils;
 import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -75,25 +83,42 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 	private TreeViewer treeViewer;
 	private Button bnRunit;
 	private Text ruLabel;
-	private MReportUnit reportUnit;
+
 	private ANode n;
 	private RefreshResourcesAction refreshAction;
+	private JasperReportsConfiguration jConfig;
+	private Text ruID;
+	private Text ruDescription;
 
 	private boolean isFillingInput;
 	private boolean canSuggestID;
 
-	public RUnitLocationPage(JasperDesign jDesign, ANode n) {
+	public RUnitLocationPage(JasperReportsConfiguration jConfig, JasperDesign jDesign, ANode n) {
 		super("serverpublish"); //$NON-NLS-1$
 		setTitle(Messages.RUnitLocationPage_title);
 		setDescription(Messages.RUnitLocationPage_description);
 		this.jDesign = jDesign;
 		this.n = n;
+		this.jConfig = jConfig;
 	}
 
 	public void setValue(JasperDesign jDesign, ANode n) {
 		this.jDesign = jDesign;
 		this.n = n;
 		fillInput();
+	}
+
+	public AMJrxmlContainer getSelectedNode() {
+		TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+		Object obj = ts.getFirstElement();
+		if (obj != null) {
+			if (obj instanceof MFolder)
+				return newrunit;
+			return (AMJrxmlContainer) obj;
+		}
+		if (n instanceof AMJrxmlContainer)
+			return (AMJrxmlContainer) n;
+		return newrunit;
 	}
 
 	/**
@@ -104,31 +129,39 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		return ContextHelpIDs.WIZARD_SELECT_SERVER;
 	}
 
-	public MReportUnit getReportUnit() {
-		if (reportUnit != null && jDesign != null) {
-			ResourceDescriptor runitvalue = reportUnit.getValue();
-			if (runitvalue.getName() == null || runitvalue.getName().isEmpty()) {
-				runitvalue.setName(jDesign.getName());
-				runitvalue.setLabel(jDesign.getName());
-			}
-		}
-		return reportUnit;
-	}
-
-	@Override
-	public boolean canFlipToNextPage() {
-		return super.canFlipToNextPage();
-	}
-
 	@Override
 	public boolean isPageComplete() {
-		return super.isPageComplete() && (getReportUnit() instanceof MReportUnit && getReportUnit().getParent() != null) && getErrorMessage() == null;
+		boolean isC = super.isPageComplete() && getErrorMessage() == null;
+		if (isC) {
+			TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+			Object firstElement = ts.getFirstElement();
+			isC = firstElement instanceof MJrxml || firstElement instanceof MFolder || firstElement instanceof MReportUnit;
+			if (isC && firstElement instanceof MFolder) {
+				MReportUnit runit = getReportUnit();
+				isC = runit instanceof MReportUnit && runit.getParent() != null;
+			}
+		}
+		return isC;
 	}
 
 	@Override
 	public void setErrorMessage(String newMessage) {
 		super.setErrorMessage(newMessage);
-		setPageComplete(newMessage == null);
+		setPageComplete(isPageComplete());
+	}
+
+	/*
+	 * Perform validation checks and eventually set the error message.
+	 */
+	private void performPageChecks() {
+		String errorMsg = null;
+		errorMsg = ValidationUtils.validateName(ruID.getText());
+		if (errorMsg == null)
+			errorMsg = ValidationUtils.validateLabel(ruLabel.getText());
+		if (errorMsg == null)
+			errorMsg = ValidationUtils.validateDesc(ruDescription.getText());
+		setErrorMessage(errorMsg);
+		setPageComplete(errorMsg == null);
 	}
 
 	public void createControl(Composite parent) {
@@ -137,9 +170,9 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		composite.setLayout(new GridLayout(2, false));
 
 		treeViewer = new TreeViewer(composite, SWT.SINGLE | SWT.BORDER);
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.minimumHeight = 300;
-		gd.minimumWidth = 400;
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.widthHint = 300;
+		gd.heightHint = 400;
 		gd.horizontalSpan = 2;
 		treeViewer.getTree().setLayoutData(gd);
 		treeViewer.setContentProvider(new ReportTreeContetProvider() {
@@ -355,58 +388,25 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 			}
 		});
-
 		fillInput();
 	}
 
-	public void fillInput() {
-		isFillingInput = true;
-		if (jDesign != null) {
-			ruID.setText(jDesign.getName().replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
-			ruLabel.setText(jDesign.getName());
-		}
-		setSelectedNode();
-		if (n instanceof MServerProfile)
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					look4SelectedUnit((MServerProfile) n);
-				}
-			});
-		isFillingInput = false;
-	}
-
-	private void setSelectedNode() {
-		if (n != null) {
-			INode root = n.getRoot();
-			if (root instanceof MServerProfile)
-				root = ((MServerProfile) root).getRoot();
-			if (!treeViewer.getTree().isDisposed()) {
-				treeViewer.setInput(root);
-				setSelection(n);
-			}
-		}
-	}
-
+	private MReportUnit reportUnit;
 	private MReportUnit newrunit;
 
 	private MReportUnit getNewRunit() {
 		if (newrunit == null) {
-			ResourceDescriptor rd = new ResourceDescriptor();
-			rd.setIsNew(true);
-			rd.setIsReference(false);
-			rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
+			ResourceDescriptor rd = MReportUnit.createDescriptor(null);
+			rd.setName(null);
 			newrunit = new MReportUnit(null, rd, -1);
 		}
-		if (jDesign != null) {
-			ResourceDescriptor rd = newrunit.getValue();
-			if (rd.getName() == null) {
-				rd.setName(jDesign.getName());
-				rd.setLabel(jDesign.getName());
-			}
-		}
+		PublishUtil.initRUnitName(newrunit, jDesign);
 		return newrunit;
+	}
+
+	private MReportUnit getReportUnit() {
+		PublishUtil.initRUnitName(reportUnit, jDesign);
+		return reportUnit;
 	}
 
 	private boolean isRefresh = false;
@@ -437,6 +437,9 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			String uri = ((MFolder) obj).getValue().getUriString();
 			nrd.setParentFolder(uri);
 			nrd.setUriString(uri + "/" + nrd.getName()); //$NON-NLS-1$
+		} else if (obj instanceof MResource) {
+			if (n != null)
+				treeViewer.setSelection(new StructuredSelection(n), true);
 		} else {
 			setPageComplete(false);
 		}
@@ -445,69 +448,92 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 	}
 
 	private boolean skipEvents = false;
-	private Text ruID;
-	private Text ruDescription;
 
-	protected void setSelection(final ANode sp) {
-		Display.getDefault().syncExec(new Runnable() {
+	public void fillInput() {
+		isFillingInput = true;
+		initIDLabel();
+		setSelectedNode();
+		if (n instanceof MServerProfile)
+			look4SelectedUnit((MServerProfile) n);
+		isFillingInput = false;
+	}
 
+	private void initIDLabel() {
+		if (jDesign != null) {
+			ruID.setText(jDesign.getName().replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
+			ruLabel.setText(jDesign.getName());
+		}
+	}
+
+	private void setSelectedNode() {
+		if (n == null || treeViewer.getTree().isDisposed())
+			return;
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
 			public void run() {
+				INode root = n.getRoot();
+				if (root instanceof MServerProfile)
+					root = ((ANode) root.getParent()).getRoot();
+				treeViewer.setInput(root);
 				skipEvents = true;
 				treeViewer.refresh();
-				if (sp != null)
-					treeViewer.setSelection(new StructuredSelection(sp), true);
+				if (n != null)
+					treeViewer.setSelection(new StructuredSelection(n), true);
+				setPageComplete(isPageComplete());
 				skipEvents = false;
-
-				handleSelectionChanged(sp);
+				handleSelectionChanged(n);
 			}
 		});
 	}
 
-	/*
-	 * Perform validation checks and eventually set the error message.
-	 */
-	private void performPageChecks() {
-		String errorMsg = null;
-		errorMsg = ValidationUtils.validateName(ruID.getText());
-		if (errorMsg == null) {
-			errorMsg = ValidationUtils.validateLabel(ruLabel.getText());
-		}
-		if (errorMsg == null) {
-			errorMsg = ValidationUtils.validateDesc(ruDescription.getText());
-		}
-		setErrorMessage(errorMsg);
-		setPageComplete(errorMsg == null);
-	}
-
 	private void look4SelectedUnit(final MServerProfile mres) {
+		try {
+			getContainer().run(true, true, new IRunnableWithProgress() {
 
-		Job job = new Job(Messages.FindReportUnit_jobname) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
-				try {
-					ANode node = FindReportUnit.findReportUnit(mres, monitor, jDesign);
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					ANode node = FindResources.findReportUnit(mres, monitor, jDesign);
 					if (monitor.isCanceled())
-						return Status.CANCEL_STATUS;
+						return;
 					if (n != mres)
-						return Status.CANCEL_STATUS;
+						return;
 					n = node;
-					Display.getDefault().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							setSelectedNode();
+					try {
+						if (n instanceof MReportUnit && !ResourceDescriptorUtil.isReportMain((IFile) jConfig.get(FileUtils.KEY_FILE))) {
+							MReportUnit mReportUnit = (MReportUnit) n;
+							String res = jDesign.getProperty(JrxmlExporter.PROP_REPORTRESOURCE);
+							if (!Misc.isNullOrEmpty(res)) {
+								mReportUnit.setValue(WSClientHelper.getResource(n, mReportUnit.getValue()));
+								List<ResourceDescriptor> children = mReportUnit.getValue().getChildren();
+								ResourceDescriptor rd = null;
+								for (ResourceDescriptor c : children) {
+									if (c.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && c.getUriString().equals(res)) {
+										rd = c;
+										break;
+									}
+								}
+								if (rd != null) {
+									n.removeChildren();
+									ANode tmpn = null;
+									for (ResourceDescriptor c : children) {
+										MResource mr = ResourceFactory.getResource(n, c, -1);
+										if (c == rd)
+											tmpn = mr;
+									}
+									n = tmpn;
+								}
+							}
 						}
-					});
-				} finally {
-					monitor.done();
+					} catch (Exception ce) {
+						ce.printStackTrace();
+					}
+					setSelectedNode();
 				}
-				return Status.OK_STATUS;
-			}
-
-		};
-		job.setPriority(Job.LONG);
-		job.schedule();
+			});
+		} catch (InvocationTargetException e) {
+			UIUtils.showError(e.getCause());
+		} catch (InterruptedException e) {
+			UIUtils.showError(e.getCause());
+		}
 	}
-
 }
