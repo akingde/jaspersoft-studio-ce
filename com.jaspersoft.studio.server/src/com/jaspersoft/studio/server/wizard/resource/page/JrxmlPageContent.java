@@ -48,7 +48,7 @@ public class JrxmlPageContent extends AFileResourcePageContent {
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.jrxml" }; //$NON-NLS-1$
+		return new String[] { "*.*", "*.jrxml" }; //$NON-NLS-1$
 	}
 
 	@Override

@@ -18,14 +18,21 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 import java.io.File;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.ui.validator.NotEmptyFileValidator;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.type.ImageTypeEnum;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
+import org.eclipse.jface.databinding.fieldassist.ControlDecorationUpdater;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -35,7 +42,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.SaveAsDialog;
@@ -71,8 +77,11 @@ public abstract class AFileResourcePageContent extends APageContent {
 			bexport.addSelectionListener(new SelectionAdapter() {
 
 				public void widgetSelected(SelectionEvent e) {
-					SaveAsDialog saveAsDialog = new SaveAsDialog(trefuri.getShell());
-					saveAsDialog.setOriginalName(res.getValue().getName() + "." + ((AFileResource) res).getDefaultFileExtension());
+					SaveAsDialog saveAsDialog = new SaveAsDialog(UIUtils.getShell());
+					String fname = res.getValue().getName();
+					if (!fname.contains("."))
+						fname += "." + ((AFileResource) res).getDefaultFileExtension();
+					saveAsDialog.setOriginalName(fname);
 					if (saveAsDialog.open() == Dialog.OK) {
 						IPath path = saveAsDialog.getResult();
 						if (path != null) {
@@ -98,14 +107,40 @@ public abstract class AFileResourcePageContent extends APageContent {
 			}
 		});
 
-		trefuri = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		trefuri = new Text(composite, SWT.BORDER);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalIndent = 10;
+		trefuri.setLayoutData(gd);
+
+		DataBindingContext bindingContext = new DataBindingContext();
+		Binding binding = bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.Modify), PojoObservables.observeValue(new FileProxy((AFileResource) res), "fileName"), //$NON-NLS-1$
+				new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyFileValidator()), null);
+		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null, new ControlDecorationUpdater());
 
 		createFileTab(composite);
 
 		handleFileChange();
 
 		return composite;
+	}
+
+	private class FileProxy {
+		private AFileResource fres;
+
+		public FileProxy(AFileResource fres) {
+			this.fres = fres;
+		}
+
+		public String getFileName() {
+			return fres.getFileName();
+		}
+
+		public void setFileName(String fileName) {
+			if (Misc.isNullOrEmpty(fileName))
+				fres.setFile(null);
+			else
+				fres.setFile(new File(fileName));
+		}
 	}
 
 	protected void handleFileChange() {
@@ -144,7 +179,7 @@ public abstract class AFileResourcePageContent extends APageContent {
 	}
 
 	protected String getFileDialog() {
-		FileDialog fd = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN);
+		FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.OPEN);
 		fd.setFilterExtensions(getFilter());
 		fd.setText(Messages.AFileResourcePage_selectresourcefile);
 		String filename = fd.open();

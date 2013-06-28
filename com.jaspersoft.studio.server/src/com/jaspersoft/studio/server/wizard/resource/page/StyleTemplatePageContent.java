@@ -43,7 +43,7 @@ public class StyleTemplatePageContent extends AFileResourcePageContent {
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.jrtx" }; //$NON-NLS-1$
+		return new String[] { "*.*", "*.jrtx" }; //$NON-NLS-1$
 	}
 
 }

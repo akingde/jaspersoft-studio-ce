@@ -54,7 +54,7 @@ public class ResourceBundlePageContent extends AFileResourcePageContent {
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.properties" }; //$NON-NLS-1$
+		return new String[] { "*.*", "*.properties" }; //$NON-NLS-1$
 	}
 
 	private Text txt;

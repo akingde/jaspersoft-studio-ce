@@ -42,7 +42,7 @@ public class CSSPageContent extends AFileResourcePageContent {
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.css" }; //$NON-NLS-1$ //$NON-NLS-2$
+		return new String[] { "*.*", "*.css" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }

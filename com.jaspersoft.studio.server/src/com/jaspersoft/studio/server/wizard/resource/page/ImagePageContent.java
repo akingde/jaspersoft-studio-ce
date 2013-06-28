@@ -76,7 +76,7 @@ public class ImagePageContent extends AFileResourcePageContent {
 					gc.drawImage(img, origin.x, origin.y);
 					canvas.getHorizontalBar().setVisible(true);
 					canvas.getVerticalBar().setVisible(true);
-				} else{
+				} else {
 					Rectangle client = canvas.getClientArea();
 					gc.fillRectangle(0, 0, client.width, client.height);
 					e.gc.drawText(Messages.RDImagePage_noimage, 0, 0);
@@ -171,7 +171,7 @@ public class ImagePageContent extends AFileResourcePageContent {
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.png", "*.jpg", "*.jpeg", "*.gif" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		return new String[] { "*.*", "*.png", "*.jpg", "*.jpeg", "*.gif" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 }

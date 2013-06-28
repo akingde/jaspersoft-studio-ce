@@ -18,6 +18,8 @@ package com.jaspersoft.studio.server.properties.dialog;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -37,6 +39,8 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.server.ServerProvider;
+import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
+import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MResource;
 
 public abstract class RepositoryDialog extends Dialog {
@@ -45,7 +49,7 @@ public abstract class RepositoryDialog extends Dialog {
 		super(parentShell);
 		this.root = root;
 	}
-	
+
 	@Override
 	protected void setShellStyle(int newShellStyle) {
 		super.setShellStyle(newShellStyle | SWT.SHELL_TRIM);
@@ -70,12 +74,11 @@ public abstract class RepositoryDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		composite.setLayout(new GridLayout(2, false));
 
-		final TreeViewer treeViewer = new TreeViewer(composite, SWT.SINGLE
-				| SWT.BORDER);
-		GridData gd = new GridData(SWT.FILL,SWT.FILL,true,true);
+		final TreeViewer treeViewer = new TreeViewer(composite, SWT.SINGLE | SWT.BORDER);
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.horizontalSpan = 2;
 		gd.minimumHeight = 300;
 		gd.minimumWidth = 400;
@@ -89,9 +92,41 @@ public abstract class RepositoryDialog extends Dialog {
 			public void selectionChanged(SelectionChangedEvent event) {
 				TreeSelection ts = (TreeSelection) event.getSelection();
 				Object obj = ts.getFirstElement();
-				if (obj instanceof MResource
-						&& isResourceCompatible((MResource) obj))
-					setResource((MResource) obj);
+				if (obj instanceof MResource) {
+					MResource mres = (MResource) obj;
+					boolean resCompatible = isResourceCompatible(mres);
+					getButton(IDialogConstants.OK_ID).setEnabled(resCompatible);
+					if (resCompatible)
+						setResource((MResource) obj);
+				}
+			}
+		});
+		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+			private RefreshResourcesAction refreshAction;
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+				Object el = ts.getFirstElement();
+				if (el instanceof MResource) {
+					MResource mres = (MResource) el;
+					boolean resCompatible = isResourceCompatible(mres);
+					if (resCompatible) {
+						okPressed();
+						return;
+					}
+					if (mres instanceof MFolder) {
+						if (treeViewer.getExpandedState(el))
+							treeViewer.collapseToLevel(el, 1);
+						else {
+							if (refreshAction == null)
+								refreshAction = new RefreshResourcesAction(treeViewer);
+							if (refreshAction.isEnabled())
+								refreshAction.run();
+							treeViewer.expandToLevel(el, 1);
+						}
+					}
+				}
 			}
 		});
 		treeViewer.addTreeListener(new ITreeViewerListener() {
@@ -132,9 +167,7 @@ public abstract class RepositoryDialog extends Dialog {
 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 	}
 }

@@ -44,7 +44,7 @@ public class DataAdapterPageContent extends AFileResourcePageContent {
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.xml" }; //$NON-NLS-1$
+		return new String[] { "*.*", "*.xml" }; //$NON-NLS-1$
 	}
 
 }

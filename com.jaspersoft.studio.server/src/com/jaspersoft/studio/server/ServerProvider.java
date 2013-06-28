@@ -316,13 +316,14 @@ public class ServerProvider implements IRepositoryViewProvider {
 	}
 
 	private IStatus listServer(final TreeExpansionEvent event, IProgressMonitor monitor) {
-		MServerProfile r = (MServerProfile) event.getElement();
+		final TreeViewer tv = (TreeViewer) event.getTreeViewer();
+		final MServerProfile r = (MServerProfile) event.getElement();
 		try {
 			WSClientHelper.connectGetData(r, monitor);
 			Display.getDefault().asyncExec(new Runnable() {
 
 				public void run() {
-					event.getTreeViewer().refresh(true);
+					tv.refresh(true);
 				}
 			});
 
@@ -331,7 +332,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 			Display.getDefault().syncExec(new Runnable() {
 
 				public void run() {
-					event.getTreeViewer().collapseToLevel((MServerProfile) event.getElement(), 1);
+					tv.collapseToLevel(r, 1);
 					UIUtils.showErrorDialog(e.getMessage(), e);
 				}
 			});

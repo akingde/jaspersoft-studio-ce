@@ -43,7 +43,7 @@ public class FontPageContent extends AFileResourcePageContent {
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.ttf", "*.TTF" }; //$NON-NLS-1$ //$NON-NLS-2$
+		return new String[] { "*.*", "*.ttf", "*.TTF" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }

@@ -43,7 +43,7 @@ public class JarPageContent extends AFileResourcePageContent {
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.zip", "*.jar" }; //$NON-NLS-1$ //$NON-NLS-2$
+		return new String[] { "*.*", "*.zip", "*.jar" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }
