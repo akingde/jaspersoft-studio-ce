@@ -41,6 +41,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.PluginTransfer;
 
+import com.google.inject.Injector;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
@@ -58,6 +59,8 @@ import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
+
+import de.itemis.xtext.utils.jface.viewers.StyledTextXtextAdapter;
 
 public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	private SashForm sf;
@@ -139,6 +142,12 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		bptab.setControl(outline.createOutline(tabFolder));
 	}
 
+	private Injector getInjector() {
+		return Activator.getDefault().getInjector(Activator.COM_JASPERSOFT_STUDIO_DATA_SQL_SQL_EDITOR);
+	}
+
+	private StyledTextXtextAdapter xtextAdapter;
+
 	private void createSource(CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText("Text");
@@ -166,6 +175,12 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 				}
 			}
 		});
+	}
+
+	@Override
+	protected void createLineStyler() {
+		xtextAdapter = new StyledTextXtextAdapter(getInjector());
+		xtextAdapter.adapt(control);
 	}
 
 	public void refreshQuery() {
