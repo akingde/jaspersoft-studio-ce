@@ -323,6 +323,12 @@
             class="com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage"
             id="com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage"
             name="%Toolbars">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.EditorsPreferencePage"
+            id="com.jaspersoft.studio.preferences.EditorsPreferencePage"
+            name="%Editors">
       </page>      
    </extension>
    <extension
@@ -537,6 +543,12 @@
                   definitionId="com.jaspersoft.studio.projectorjrxml">
             </reference>
          </enabledWhen>
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.EditorsPreferencePage"
+            id="com.jaspersoft.studio.preferences.EditorsPreferencePage.property"
+            name="%Editors">
       </page>
    </extension>
    <extension

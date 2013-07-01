@@ -42,6 +42,11 @@ public class SimpleSQLQueryDesigner extends QueryDesigner {
 	@Override
 	public Control createControl(Composite parent) {
 		super.createControl(parent);
+		createLineStyler();
+		return control;
+	}
+
+	protected void createLineStyler() {
 		control.addLineStyleListener(sqlLineStyler);
 		control.addModifyListener(new ModifyListener() {
 			@Override
@@ -49,7 +54,6 @@ public class SimpleSQLQueryDesigner extends QueryDesigner {
 				sqlLineStyler.parseBlockComments(control.getText());
 			}
 		});
-		return control;
 	}
 
 	/**
