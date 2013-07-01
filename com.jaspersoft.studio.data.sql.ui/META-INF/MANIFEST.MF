@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SQL Query Editor
+Bundle-Vendor: Jaspersoft Corporation
+Bundle-Version: 5.2.0
+Bundle-SymbolicName: com.jaspersoft.studio.data.sql.ui; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: com.jaspersoft.studio.data;bundle-version="5.2.0"
+Import-Package: org.apache.log4j,
+ org.eclipse.xtext.xbase.lib
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Eclipse-RegisterBuddy: com.jaspersoft.studio.data
+Bundle-Activator: com.jaspersoft.studio.data.sql.Activator
