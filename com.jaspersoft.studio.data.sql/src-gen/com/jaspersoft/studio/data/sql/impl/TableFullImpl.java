@@ -2,10 +2,19 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
+import com.jaspersoft.studio.data.sql.Column;
+import com.jaspersoft.studio.data.sql.ColumnAlias;
+import com.jaspersoft.studio.data.sql.ColumnFull;
+import com.jaspersoft.studio.data.sql.ColumnOrAlias;
+import com.jaspersoft.studio.data.sql.Columns;
+import com.jaspersoft.studio.data.sql.GroupByColumnFull;
+import com.jaspersoft.studio.data.sql.GroupByColumns;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.Table;
 import com.jaspersoft.studio.data.sql.TableAlias;
 import com.jaspersoft.studio.data.sql.TableFull;
+import com.jaspersoft.studio.data.sql.TableOrAlias;
+import com.jaspersoft.studio.data.sql.Tables;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -22,6 +31,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.TableFullImpl#getGroupByColumn <em>Group By Column</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.TableFullImpl#getColAlias <em>Col Alias</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.TableFullImpl#getColName <em>Col Name</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.TableFullImpl#getTblAlias <em>Tbl Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.TableFullImpl#getTbl <em>Tbl</em>}</li>
  * </ul>
@@ -29,8 +41,38 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class TableFullImpl extends ColumnFullImpl implements TableFull
+public class TableFullImpl extends OrderByColumnFullImpl implements TableFull
 {
+  /**
+   * The cached value of the '{@link #getGroupByColumn() <em>Group By Column</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getGroupByColumn()
+   * @generated
+   * @ordered
+   */
+  protected Column groupByColumn;
+
+  /**
+   * The cached value of the '{@link #getColAlias() <em>Col Alias</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColAlias()
+   * @generated
+   * @ordered
+   */
+  protected ColumnAlias colAlias;
+
+  /**
+   * The cached value of the '{@link #getColName() <em>Col Name</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColName()
+   * @generated
+   * @ordered
+   */
+  protected Column colName;
+
   /**
    * The cached value of the '{@link #getTblAlias() <em>Tbl Alias</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -70,6 +112,150 @@ public class TableFullImpl extends ColumnFullImpl implements TableFull
   protected EClass eStaticClass()
   {
     return SqlPackage.Literals.TABLE_FULL;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Column getGroupByColumn()
+  {
+    return groupByColumn;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetGroupByColumn(Column newGroupByColumn, NotificationChain msgs)
+  {
+    Column oldGroupByColumn = groupByColumn;
+    groupByColumn = newGroupByColumn;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.TABLE_FULL__GROUP_BY_COLUMN, oldGroupByColumn, newGroupByColumn);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setGroupByColumn(Column newGroupByColumn)
+  {
+    if (newGroupByColumn != groupByColumn)
+    {
+      NotificationChain msgs = null;
+      if (groupByColumn != null)
+        msgs = ((InternalEObject)groupByColumn).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.TABLE_FULL__GROUP_BY_COLUMN, null, msgs);
+      if (newGroupByColumn != null)
+        msgs = ((InternalEObject)newGroupByColumn).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.TABLE_FULL__GROUP_BY_COLUMN, null, msgs);
+      msgs = basicSetGroupByColumn(newGroupByColumn, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.TABLE_FULL__GROUP_BY_COLUMN, newGroupByColumn, newGroupByColumn));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ColumnAlias getColAlias()
+  {
+    return colAlias;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetColAlias(ColumnAlias newColAlias, NotificationChain msgs)
+  {
+    ColumnAlias oldColAlias = colAlias;
+    colAlias = newColAlias;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.TABLE_FULL__COL_ALIAS, oldColAlias, newColAlias);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setColAlias(ColumnAlias newColAlias)
+  {
+    if (newColAlias != colAlias)
+    {
+      NotificationChain msgs = null;
+      if (colAlias != null)
+        msgs = ((InternalEObject)colAlias).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.TABLE_FULL__COL_ALIAS, null, msgs);
+      if (newColAlias != null)
+        msgs = ((InternalEObject)newColAlias).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.TABLE_FULL__COL_ALIAS, null, msgs);
+      msgs = basicSetColAlias(newColAlias, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.TABLE_FULL__COL_ALIAS, newColAlias, newColAlias));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Column getColName()
+  {
+    return colName;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetColName(Column newColName, NotificationChain msgs)
+  {
+    Column oldColName = colName;
+    colName = newColName;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.TABLE_FULL__COL_NAME, oldColName, newColName);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setColName(Column newColName)
+  {
+    if (newColName != colName)
+    {
+      NotificationChain msgs = null;
+      if (colName != null)
+        msgs = ((InternalEObject)colName).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.TABLE_FULL__COL_NAME, null, msgs);
+      if (newColName != null)
+        msgs = ((InternalEObject)newColName).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.TABLE_FULL__COL_NAME, null, msgs);
+      msgs = basicSetColName(newColName, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.TABLE_FULL__COL_NAME, newColName, newColName));
   }
 
   /**
@@ -178,6 +364,12 @@ public class TableFullImpl extends ColumnFullImpl implements TableFull
   {
     switch (featureID)
     {
+      case SqlPackage.TABLE_FULL__GROUP_BY_COLUMN:
+        return basicSetGroupByColumn(null, msgs);
+      case SqlPackage.TABLE_FULL__COL_ALIAS:
+        return basicSetColAlias(null, msgs);
+      case SqlPackage.TABLE_FULL__COL_NAME:
+        return basicSetColName(null, msgs);
       case SqlPackage.TABLE_FULL__TBL_ALIAS:
         return basicSetTblAlias(null, msgs);
       case SqlPackage.TABLE_FULL__TBL:
@@ -196,6 +388,12 @@ public class TableFullImpl extends ColumnFullImpl implements TableFull
   {
     switch (featureID)
     {
+      case SqlPackage.TABLE_FULL__GROUP_BY_COLUMN:
+        return getGroupByColumn();
+      case SqlPackage.TABLE_FULL__COL_ALIAS:
+        return getColAlias();
+      case SqlPackage.TABLE_FULL__COL_NAME:
+        return getColName();
       case SqlPackage.TABLE_FULL__TBL_ALIAS:
         return getTblAlias();
       case SqlPackage.TABLE_FULL__TBL:
@@ -214,6 +412,15 @@ public class TableFullImpl extends ColumnFullImpl implements TableFull
   {
     switch (featureID)
     {
+      case SqlPackage.TABLE_FULL__GROUP_BY_COLUMN:
+        setGroupByColumn((Column)newValue);
+        return;
+      case SqlPackage.TABLE_FULL__COL_ALIAS:
+        setColAlias((ColumnAlias)newValue);
+        return;
+      case SqlPackage.TABLE_FULL__COL_NAME:
+        setColName((Column)newValue);
+        return;
       case SqlPackage.TABLE_FULL__TBL_ALIAS:
         setTblAlias((TableAlias)newValue);
         return;
@@ -234,6 +441,15 @@ public class TableFullImpl extends ColumnFullImpl implements TableFull
   {
     switch (featureID)
     {
+      case SqlPackage.TABLE_FULL__GROUP_BY_COLUMN:
+        setGroupByColumn((Column)null);
+        return;
+      case SqlPackage.TABLE_FULL__COL_ALIAS:
+        setColAlias((ColumnAlias)null);
+        return;
+      case SqlPackage.TABLE_FULL__COL_NAME:
+        setColName((Column)null);
+        return;
       case SqlPackage.TABLE_FULL__TBL_ALIAS:
         setTblAlias((TableAlias)null);
         return;
@@ -254,12 +470,144 @@ public class TableFullImpl extends ColumnFullImpl implements TableFull
   {
     switch (featureID)
     {
+      case SqlPackage.TABLE_FULL__GROUP_BY_COLUMN:
+        return groupByColumn != null;
+      case SqlPackage.TABLE_FULL__COL_ALIAS:
+        return colAlias != null;
+      case SqlPackage.TABLE_FULL__COL_NAME:
+        return colName != null;
       case SqlPackage.TABLE_FULL__TBL_ALIAS:
         return tblAlias != null;
       case SqlPackage.TABLE_FULL__TBL:
         return tbl != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass)
+  {
+    if (baseClass == GroupByColumns.class)
+    {
+      switch (derivedFeatureID)
+      {
+        default: return -1;
+      }
+    }
+    if (baseClass == GroupByColumnFull.class)
+    {
+      switch (derivedFeatureID)
+      {
+        case SqlPackage.TABLE_FULL__GROUP_BY_COLUMN: return SqlPackage.GROUP_BY_COLUMN_FULL__GROUP_BY_COLUMN;
+        default: return -1;
+      }
+    }
+    if (baseClass == Columns.class)
+    {
+      switch (derivedFeatureID)
+      {
+        default: return -1;
+      }
+    }
+    if (baseClass == ColumnOrAlias.class)
+    {
+      switch (derivedFeatureID)
+      {
+        default: return -1;
+      }
+    }
+    if (baseClass == ColumnFull.class)
+    {
+      switch (derivedFeatureID)
+      {
+        case SqlPackage.TABLE_FULL__COL_ALIAS: return SqlPackage.COLUMN_FULL__COL_ALIAS;
+        case SqlPackage.TABLE_FULL__COL_NAME: return SqlPackage.COLUMN_FULL__COL_NAME;
+        default: return -1;
+      }
+    }
+    if (baseClass == Tables.class)
+    {
+      switch (derivedFeatureID)
+      {
+        default: return -1;
+      }
+    }
+    if (baseClass == TableOrAlias.class)
+    {
+      switch (derivedFeatureID)
+      {
+        default: return -1;
+      }
+    }
+    return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass)
+  {
+    if (baseClass == GroupByColumns.class)
+    {
+      switch (baseFeatureID)
+      {
+        default: return -1;
+      }
+    }
+    if (baseClass == GroupByColumnFull.class)
+    {
+      switch (baseFeatureID)
+      {
+        case SqlPackage.GROUP_BY_COLUMN_FULL__GROUP_BY_COLUMN: return SqlPackage.TABLE_FULL__GROUP_BY_COLUMN;
+        default: return -1;
+      }
+    }
+    if (baseClass == Columns.class)
+    {
+      switch (baseFeatureID)
+      {
+        default: return -1;
+      }
+    }
+    if (baseClass == ColumnOrAlias.class)
+    {
+      switch (baseFeatureID)
+      {
+        default: return -1;
+      }
+    }
+    if (baseClass == ColumnFull.class)
+    {
+      switch (baseFeatureID)
+      {
+        case SqlPackage.COLUMN_FULL__COL_ALIAS: return SqlPackage.TABLE_FULL__COL_ALIAS;
+        case SqlPackage.COLUMN_FULL__COL_NAME: return SqlPackage.TABLE_FULL__COL_NAME;
+        default: return -1;
+      }
+    }
+    if (baseClass == Tables.class)
+    {
+      switch (baseFeatureID)
+      {
+        default: return -1;
+      }
+    }
+    if (baseClass == TableOrAlias.class)
+    {
+      switch (baseFeatureID)
+      {
+        default: return -1;
+      }
+    }
+    return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
   }
 
 } //TableFullImpl

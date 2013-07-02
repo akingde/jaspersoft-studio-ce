@@ -79,6 +79,36 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.ORDER_BY_COLUMNS:
+      {
+        OrderByColumns orderByColumns = (OrderByColumns)theEObject;
+        T result = caseOrderByColumns(orderByColumns);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ORDER_BY_COLUMN_FULL:
+      {
+        OrderByColumnFull orderByColumnFull = (OrderByColumnFull)theEObject;
+        T result = caseOrderByColumnFull(orderByColumnFull);
+        if (result == null) result = caseOrderByColumns(orderByColumnFull);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.GROUP_BY_COLUMNS:
+      {
+        GroupByColumns groupByColumns = (GroupByColumns)theEObject;
+        T result = caseGroupByColumns(groupByColumns);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.GROUP_BY_COLUMN_FULL:
+      {
+        GroupByColumnFull groupByColumnFull = (GroupByColumnFull)theEObject;
+        T result = caseGroupByColumnFull(groupByColumnFull);
+        if (result == null) result = caseGroupByColumns(groupByColumnFull);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.COLUMNS:
       {
         Columns columns = (Columns)theEObject;
@@ -136,8 +166,12 @@ public class SqlSwitch<T> extends Switch<T>
       {
         TableFull tableFull = (TableFull)theEObject;
         T result = caseTableFull(tableFull);
+        if (result == null) result = caseOrderByColumnFull(tableFull);
+        if (result == null) result = caseGroupByColumnFull(tableFull);
         if (result == null) result = caseColumnFull(tableFull);
         if (result == null) result = caseTableOrAlias(tableFull);
+        if (result == null) result = caseOrderByColumns(tableFull);
+        if (result == null) result = caseGroupByColumns(tableFull);
         if (result == null) result = caseColumnOrAlias(tableFull);
         if (result == null) result = caseTables(tableFull);
         if (result == null) result = caseColumns(tableFull);
@@ -163,8 +197,12 @@ public class SqlSwitch<T> extends Switch<T>
         Schema schema = (Schema)theEObject;
         T result = caseSchema(schema);
         if (result == null) result = caseTableFull(schema);
+        if (result == null) result = caseOrderByColumnFull(schema);
+        if (result == null) result = caseGroupByColumnFull(schema);
         if (result == null) result = caseColumnFull(schema);
         if (result == null) result = caseTableOrAlias(schema);
+        if (result == null) result = caseOrderByColumns(schema);
+        if (result == null) result = caseGroupByColumns(schema);
         if (result == null) result = caseColumnOrAlias(schema);
         if (result == null) result = caseTables(schema);
         if (result == null) result = caseColumns(schema);
@@ -177,8 +215,12 @@ public class SqlSwitch<T> extends Switch<T>
         T result = caseDatabase(database);
         if (result == null) result = caseSchema(database);
         if (result == null) result = caseTableFull(database);
+        if (result == null) result = caseOrderByColumnFull(database);
+        if (result == null) result = caseGroupByColumnFull(database);
         if (result == null) result = caseColumnFull(database);
         if (result == null) result = caseTableOrAlias(database);
+        if (result == null) result = caseOrderByColumns(database);
+        if (result == null) result = caseGroupByColumns(database);
         if (result == null) result = caseColumnOrAlias(database);
         if (result == null) result = caseTables(database);
         if (result == null) result = caseColumns(database);
@@ -192,11 +234,19 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.HAVING_ENTRY:
+      {
+        HavingEntry havingEntry = (HavingEntry)theEObject;
+        T result = caseHavingEntry(havingEntry);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.EXPRESSION_WHERE_ENTRY:
       {
         ExpressionWhereEntry expressionWhereEntry = (ExpressionWhereEntry)theEObject;
         T result = caseExpressionWhereEntry(expressionWhereEntry);
         if (result == null) result = caseWhereEntry(expressionWhereEntry);
+        if (result == null) result = caseHavingEntry(expressionWhereEntry);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -206,6 +256,7 @@ public class SqlSwitch<T> extends Switch<T>
         T result = caseSingleExpressionWhereEntry(singleExpressionWhereEntry);
         if (result == null) result = caseExpressionWhereEntry(singleExpressionWhereEntry);
         if (result == null) result = caseWhereEntry(singleExpressionWhereEntry);
+        if (result == null) result = caseHavingEntry(singleExpressionWhereEntry);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -278,6 +329,7 @@ public class SqlSwitch<T> extends Switch<T>
         T result = caseMultiExpressionWhereEntry(multiExpressionWhereEntry);
         if (result == null) result = caseExpressionWhereEntry(multiExpressionWhereEntry);
         if (result == null) result = caseWhereEntry(multiExpressionWhereEntry);
+        if (result == null) result = caseHavingEntry(multiExpressionWhereEntry);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -336,6 +388,22 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.OR_ORDER_BY_COLUMN:
+      {
+        OrOrderByColumn orOrderByColumn = (OrOrderByColumn)theEObject;
+        T result = caseOrOrderByColumn(orOrderByColumn);
+        if (result == null) result = caseOrderByColumns(orOrderByColumn);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OR_GROUP_BY_COLUMN:
+      {
+        OrGroupByColumn orGroupByColumn = (OrGroupByColumn)theEObject;
+        T result = caseOrGroupByColumn(orGroupByColumn);
+        if (result == null) result = caseGroupByColumns(orGroupByColumn);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.OR_COLUMN:
       {
         OrColumn orColumn = (OrColumn)theEObject;
@@ -368,6 +436,22 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.OR_HAVING_ENTRY:
+      {
+        OrHavingEntry orHavingEntry = (OrHavingEntry)theEObject;
+        T result = caseOrHavingEntry(orHavingEntry);
+        if (result == null) result = caseHavingEntry(orHavingEntry);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.AND_HAVING_ENTRY:
+      {
+        AndHavingEntry andHavingEntry = (AndHavingEntry)theEObject;
+        T result = caseAndHavingEntry(andHavingEntry);
+        if (result == null) result = caseHavingEntry(andHavingEntry);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       default: return defaultCase(theEObject);
     }
   }
@@ -384,6 +468,70 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseModel(Model object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Order By Columns</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Order By Columns</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrderByColumns(OrderByColumns object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Order By Column Full</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Order By Column Full</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrderByColumnFull(OrderByColumnFull object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Group By Columns</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Group By Columns</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseGroupByColumns(GroupByColumns object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Group By Column Full</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Group By Column Full</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseGroupByColumnFull(GroupByColumnFull object)
   {
     return null;
   }
@@ -592,6 +740,22 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseWhereEntry(WhereEntry object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Having Entry</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Having Entry</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseHavingEntry(HavingEntry object)
   {
     return null;
   }
@@ -885,6 +1049,38 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Or Order By Column</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Or Order By Column</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrOrderByColumn(OrOrderByColumn object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Or Group By Column</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Or Group By Column</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrGroupByColumn(OrGroupByColumn object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Or Column</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -944,6 +1140,38 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseAndWhereEntry(AndWhereEntry object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Or Having Entry</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Or Having Entry</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrHavingEntry(OrHavingEntry object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>And Having Entry</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>And Having Entry</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAndHavingEntry(AndHavingEntry object)
   {
     return null;
   }

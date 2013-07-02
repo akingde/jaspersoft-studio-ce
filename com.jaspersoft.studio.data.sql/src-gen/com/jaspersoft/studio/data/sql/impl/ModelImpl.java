@@ -3,7 +3,10 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.Columns;
+import com.jaspersoft.studio.data.sql.GroupByColumns;
+import com.jaspersoft.studio.data.sql.HavingEntry;
 import com.jaspersoft.studio.data.sql.Model;
+import com.jaspersoft.studio.data.sql.OrderByColumns;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.Tables;
 import com.jaspersoft.studio.data.sql.WhereEntry;
@@ -27,6 +30,9 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getCol <em>Col</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getTbl <em>Tbl</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getWhereEntry <em>Where Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getGroupByEntry <em>Group By Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getHavingEntry <em>Having Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getOrderByEntry <em>Order By Entry</em>}</li>
  * </ul>
  * </p>
  *
@@ -63,6 +69,36 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * @ordered
    */
   protected WhereEntry whereEntry;
+
+  /**
+   * The cached value of the '{@link #getGroupByEntry() <em>Group By Entry</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getGroupByEntry()
+   * @generated
+   * @ordered
+   */
+  protected GroupByColumns groupByEntry;
+
+  /**
+   * The cached value of the '{@link #getHavingEntry() <em>Having Entry</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getHavingEntry()
+   * @generated
+   * @ordered
+   */
+  protected HavingEntry havingEntry;
+
+  /**
+   * The cached value of the '{@link #getOrderByEntry() <em>Order By Entry</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOrderByEntry()
+   * @generated
+   * @ordered
+   */
+  protected OrderByColumns orderByEntry;
 
   /**
    * <!-- begin-user-doc -->
@@ -234,6 +270,150 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
+  public GroupByColumns getGroupByEntry()
+  {
+    return groupByEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetGroupByEntry(GroupByColumns newGroupByEntry, NotificationChain msgs)
+  {
+    GroupByColumns oldGroupByEntry = groupByEntry;
+    groupByEntry = newGroupByEntry;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__GROUP_BY_ENTRY, oldGroupByEntry, newGroupByEntry);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setGroupByEntry(GroupByColumns newGroupByEntry)
+  {
+    if (newGroupByEntry != groupByEntry)
+    {
+      NotificationChain msgs = null;
+      if (groupByEntry != null)
+        msgs = ((InternalEObject)groupByEntry).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__GROUP_BY_ENTRY, null, msgs);
+      if (newGroupByEntry != null)
+        msgs = ((InternalEObject)newGroupByEntry).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__GROUP_BY_ENTRY, null, msgs);
+      msgs = basicSetGroupByEntry(newGroupByEntry, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__GROUP_BY_ENTRY, newGroupByEntry, newGroupByEntry));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public HavingEntry getHavingEntry()
+  {
+    return havingEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetHavingEntry(HavingEntry newHavingEntry, NotificationChain msgs)
+  {
+    HavingEntry oldHavingEntry = havingEntry;
+    havingEntry = newHavingEntry;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__HAVING_ENTRY, oldHavingEntry, newHavingEntry);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setHavingEntry(HavingEntry newHavingEntry)
+  {
+    if (newHavingEntry != havingEntry)
+    {
+      NotificationChain msgs = null;
+      if (havingEntry != null)
+        msgs = ((InternalEObject)havingEntry).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__HAVING_ENTRY, null, msgs);
+      if (newHavingEntry != null)
+        msgs = ((InternalEObject)newHavingEntry).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__HAVING_ENTRY, null, msgs);
+      msgs = basicSetHavingEntry(newHavingEntry, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__HAVING_ENTRY, newHavingEntry, newHavingEntry));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrderByColumns getOrderByEntry()
+  {
+    return orderByEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetOrderByEntry(OrderByColumns newOrderByEntry, NotificationChain msgs)
+  {
+    OrderByColumns oldOrderByEntry = orderByEntry;
+    orderByEntry = newOrderByEntry;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__ORDER_BY_ENTRY, oldOrderByEntry, newOrderByEntry);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setOrderByEntry(OrderByColumns newOrderByEntry)
+  {
+    if (newOrderByEntry != orderByEntry)
+    {
+      NotificationChain msgs = null;
+      if (orderByEntry != null)
+        msgs = ((InternalEObject)orderByEntry).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__ORDER_BY_ENTRY, null, msgs);
+      if (newOrderByEntry != null)
+        msgs = ((InternalEObject)newOrderByEntry).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__ORDER_BY_ENTRY, null, msgs);
+      msgs = basicSetOrderByEntry(newOrderByEntry, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__ORDER_BY_ENTRY, newOrderByEntry, newOrderByEntry));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -245,6 +425,12 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
         return basicSetTbl(null, msgs);
       case SqlPackage.MODEL__WHERE_ENTRY:
         return basicSetWhereEntry(null, msgs);
+      case SqlPackage.MODEL__GROUP_BY_ENTRY:
+        return basicSetGroupByEntry(null, msgs);
+      case SqlPackage.MODEL__HAVING_ENTRY:
+        return basicSetHavingEntry(null, msgs);
+      case SqlPackage.MODEL__ORDER_BY_ENTRY:
+        return basicSetOrderByEntry(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -265,6 +451,12 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
         return getTbl();
       case SqlPackage.MODEL__WHERE_ENTRY:
         return getWhereEntry();
+      case SqlPackage.MODEL__GROUP_BY_ENTRY:
+        return getGroupByEntry();
+      case SqlPackage.MODEL__HAVING_ENTRY:
+        return getHavingEntry();
+      case SqlPackage.MODEL__ORDER_BY_ENTRY:
+        return getOrderByEntry();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -287,6 +479,15 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
         return;
       case SqlPackage.MODEL__WHERE_ENTRY:
         setWhereEntry((WhereEntry)newValue);
+        return;
+      case SqlPackage.MODEL__GROUP_BY_ENTRY:
+        setGroupByEntry((GroupByColumns)newValue);
+        return;
+      case SqlPackage.MODEL__HAVING_ENTRY:
+        setHavingEntry((HavingEntry)newValue);
+        return;
+      case SqlPackage.MODEL__ORDER_BY_ENTRY:
+        setOrderByEntry((OrderByColumns)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -311,6 +512,15 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
       case SqlPackage.MODEL__WHERE_ENTRY:
         setWhereEntry((WhereEntry)null);
         return;
+      case SqlPackage.MODEL__GROUP_BY_ENTRY:
+        setGroupByEntry((GroupByColumns)null);
+        return;
+      case SqlPackage.MODEL__HAVING_ENTRY:
+        setHavingEntry((HavingEntry)null);
+        return;
+      case SqlPackage.MODEL__ORDER_BY_ENTRY:
+        setOrderByEntry((OrderByColumns)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -331,6 +541,12 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
         return tbl != null;
       case SqlPackage.MODEL__WHERE_ENTRY:
         return whereEntry != null;
+      case SqlPackage.MODEL__GROUP_BY_ENTRY:
+        return groupByEntry != null;
+      case SqlPackage.MODEL__HAVING_ENTRY:
+        return havingEntry != null;
+      case SqlPackage.MODEL__ORDER_BY_ENTRY:
+        return orderByEntry != null;
     }
     return super.eIsSet(featureID);
   }

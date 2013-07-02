@@ -5,30 +5,23 @@ Bundle-Vendor: Jaspersoft Corporation
 Bundle-Version: 5.2.0
 Bundle-SymbolicName: com.jaspersoft.studio.data.sql;singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.xtext;visibility:=reexport,
- org.eclipse.xtext.xbase;resolution:=optional;visibility:=reexport,
- org.eclipse.xtext.generator;resolution:=optional,
- org.apache.commons.logging;bundle-version="1.0.4";resolution:=optional,
- org.eclipse.emf.codegen.ecore;resolution:=optional,
- org.eclipse.emf.mwe.utils;resolution:=optional,
+Require-Bundle: org.eclipse.xtext.generator;resolution:=optional,
  org.eclipse.emf.mwe2.launch;resolution:=optional,
+ com.jaspersoft.studio.data;bundle-version="5.2.0",
+ org.eclipse.xtext,
  org.eclipse.xtext.util,
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
- org.antlr.runtime,
- org.eclipse.xtext.common.types
-Import-Package: org.apache.log4j,
- org.eclipse.xtext.xbase.lib
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6 
+ org.antlr.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.jaspersoft.studio.data,
  com.jaspersoft.studio.data.services,
  com.jaspersoft.studio.data.sql,
  com.jaspersoft.studio.data.sql.impl,
  com.jaspersoft.studio.data.sql.util,
- com.jaspersoft.studio.data.serializer,
+ com.jaspersoft.studio.data.parseTreeConstruction,
  com.jaspersoft.studio.data.parser.antlr,
  com.jaspersoft.studio.data.parser.antlr.internal,
- com.jaspersoft.studio.data.validation,
  com.jaspersoft.studio.data.scoping,
- com.jaspersoft.studio.data.generator,
  com.jaspersoft.studio.data.formatting
+Import-Package: org.apache.log4j

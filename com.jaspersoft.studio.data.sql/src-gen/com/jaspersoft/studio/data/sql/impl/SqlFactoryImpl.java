@@ -66,6 +66,10 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
     switch (eClass.getClassifierID())
     {
       case SqlPackage.MODEL: return createModel();
+      case SqlPackage.ORDER_BY_COLUMNS: return createOrderByColumns();
+      case SqlPackage.ORDER_BY_COLUMN_FULL: return createOrderByColumnFull();
+      case SqlPackage.GROUP_BY_COLUMNS: return createGroupByColumns();
+      case SqlPackage.GROUP_BY_COLUMN_FULL: return createGroupByColumnFull();
       case SqlPackage.COLUMNS: return createColumns();
       case SqlPackage.COLUMN_OR_ALIAS: return createColumnOrAlias();
       case SqlPackage.COLUMN_FULL: return createColumnFull();
@@ -79,6 +83,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.SCHEMA: return createSchema();
       case SqlPackage.DATABASE: return createDatabase();
       case SqlPackage.WHERE_ENTRY: return createWhereEntry();
+      case SqlPackage.HAVING_ENTRY: return createHavingEntry();
       case SqlPackage.EXPRESSION_WHERE_ENTRY: return createExpressionWhereEntry();
       case SqlPackage.SINGLE_EXPRESSION_WHERE_ENTRY: return createSingleExpressionWhereEntry();
       case SqlPackage.EXPRESSION: return createExpression();
@@ -97,10 +102,14 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.NULL_ARRAY_EXPRESSION: return createNullArrayExpression();
       case SqlPackage.DATE_ARRAY_EXPRESSION: return createDateArrayExpression();
       case SqlPackage.BOOLEAN_ARRAY_EXPRESSION: return createBooleanArrayExpression();
+      case SqlPackage.OR_ORDER_BY_COLUMN: return createOrOrderByColumn();
+      case SqlPackage.OR_GROUP_BY_COLUMN: return createOrGroupByColumn();
       case SqlPackage.OR_COLUMN: return createOrColumn();
       case SqlPackage.OR_TABLE: return createOrTable();
       case SqlPackage.OR_WHERE_ENTRY: return createOrWhereEntry();
       case SqlPackage.AND_WHERE_ENTRY: return createAndWhereEntry();
+      case SqlPackage.OR_HAVING_ENTRY: return createOrHavingEntry();
+      case SqlPackage.AND_HAVING_ENTRY: return createAndHavingEntry();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -153,6 +162,50 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     ModelImpl model = new ModelImpl();
     return model;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrderByColumns createOrderByColumns()
+  {
+    OrderByColumnsImpl orderByColumns = new OrderByColumnsImpl();
+    return orderByColumns;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrderByColumnFull createOrderByColumnFull()
+  {
+    OrderByColumnFullImpl orderByColumnFull = new OrderByColumnFullImpl();
+    return orderByColumnFull;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public GroupByColumns createGroupByColumns()
+  {
+    GroupByColumnsImpl groupByColumns = new GroupByColumnsImpl();
+    return groupByColumns;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public GroupByColumnFull createGroupByColumnFull()
+  {
+    GroupByColumnFullImpl groupByColumnFull = new GroupByColumnFullImpl();
+    return groupByColumnFull;
   }
 
   /**
@@ -296,6 +349,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     WhereEntryImpl whereEntry = new WhereEntryImpl();
     return whereEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public HavingEntry createHavingEntry()
+  {
+    HavingEntryImpl havingEntry = new HavingEntryImpl();
+    return havingEntry;
   }
 
   /**
@@ -501,6 +565,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public OrOrderByColumn createOrOrderByColumn()
+  {
+    OrOrderByColumnImpl orOrderByColumn = new OrOrderByColumnImpl();
+    return orOrderByColumn;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrGroupByColumn createOrGroupByColumn()
+  {
+    OrGroupByColumnImpl orGroupByColumn = new OrGroupByColumnImpl();
+    return orGroupByColumn;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public OrColumn createOrColumn()
   {
     OrColumnImpl orColumn = new OrColumnImpl();
@@ -538,6 +624,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     AndWhereEntryImpl andWhereEntry = new AndWhereEntryImpl();
     return andWhereEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrHavingEntry createOrHavingEntry()
+  {
+    OrHavingEntryImpl orHavingEntry = new OrHavingEntryImpl();
+    return orHavingEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public AndHavingEntry createAndHavingEntry()
+  {
+    AndHavingEntryImpl andHavingEntry = new AndHavingEntryImpl();
+    return andHavingEntry;
   }
 
   /**

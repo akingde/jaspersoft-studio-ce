@@ -3,52 +3,25 @@
  */
 package com.jaspersoft.studio.data.formatting;
 
-import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.formatting.impl.AbstractDeclarativeFormatter;
 import org.eclipse.xtext.formatting.impl.FormattingConfig;
-
-import com.google.inject.Inject;
-import com.jaspersoft.studio.data.services.SqlGrammarAccess;
 
 /**
  * This class contains custom formatting description.
  * 
- * see : http://www.eclipse.org/Xtext/documentation.html#formatting on how and
- * when to use it
+ * see : http://www.eclipse.org/Xtext/documentation/latest/xtext.html#formatting
+ * on how and when to use it 
  * 
- * Also see {@link org.eclipse.xtext.xtext.XtextFormattingTokenSerializer} as an
- * example
+ * Also see {@link org.eclipse.xtext.xtext.XtextFormattingTokenSerializer} as an example
  */
 public class SqlFormatter extends AbstractDeclarativeFormatter {
-
-	@Inject
-	private SqlGrammarAccess grammarAccess;
-
+	
 	@Override
 	protected void configureFormatting(FormattingConfig c) {
-		SqlGrammarAccess f = (SqlGrammarAccess) getGrammarAccess();
-
-		c.setAutoLinewrap(120);
-		for (Keyword comma : f.findKeywords("FROM"))
-			c.setLinewrap().before(comma);
-		for (Keyword comma : f.findKeywords("WHERE"))
-			c.setLinewrap().before(comma);
-		for (Keyword comma : f.findKeywords("GROUP BY"))
-			c.setLinewrap().before(comma);
-		for (Keyword comma : f.findKeywords("HAVING"))
-			c.setLinewrap().before(comma);
-		for (Keyword comma : f.findKeywords("ORDER BY"))
-			c.setLinewrap().before(comma);
-
-		for (Keyword comma : f.findKeywords(".")) {
-			c.setNoSpace().before(comma);
-			c.setNoSpace().after(comma);
-		}
-
-		// It's usually a good idea to activate the following three statements.
-		// They will add and preserve newlines around comments
-		// c.setLinewrap(0, 1, 2).before(grammarAccess.getSL_COMMENTRule());
-		// c.setLinewrap(0, 1, 2).before(grammarAccess.getML_COMMENTRule());
-		// c.setLinewrap(0, 1, 1).after(grammarAccess.getML_COMMENTRule());
+// It's usually a good idea to activate the following three statements.
+// They will add and preserve newlines around comments
+//		c.setLinewrap(0, 1, 2).before(getGrammarAccess().getSL_COMMENTRule());
+//		c.setLinewrap(0, 1, 2).before(getGrammarAccess().getML_COMMENTRule());
+//		c.setLinewrap(0, 1, 1).after(getGrammarAccess().getML_COMMENTRule());
 	}
 }

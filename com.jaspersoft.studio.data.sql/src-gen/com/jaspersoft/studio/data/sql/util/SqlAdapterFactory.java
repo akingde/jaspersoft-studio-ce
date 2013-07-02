@@ -80,6 +80,26 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createModelAdapter();
       }
       @Override
+      public Adapter caseOrderByColumns(OrderByColumns object)
+      {
+        return createOrderByColumnsAdapter();
+      }
+      @Override
+      public Adapter caseOrderByColumnFull(OrderByColumnFull object)
+      {
+        return createOrderByColumnFullAdapter();
+      }
+      @Override
+      public Adapter caseGroupByColumns(GroupByColumns object)
+      {
+        return createGroupByColumnsAdapter();
+      }
+      @Override
+      public Adapter caseGroupByColumnFull(GroupByColumnFull object)
+      {
+        return createGroupByColumnFullAdapter();
+      }
+      @Override
       public Adapter caseColumns(Columns object)
       {
         return createColumnsAdapter();
@@ -143,6 +163,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseWhereEntry(WhereEntry object)
       {
         return createWhereEntryAdapter();
+      }
+      @Override
+      public Adapter caseHavingEntry(HavingEntry object)
+      {
+        return createHavingEntryAdapter();
       }
       @Override
       public Adapter caseExpressionWhereEntry(ExpressionWhereEntry object)
@@ -235,6 +260,16 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createBooleanArrayExpressionAdapter();
       }
       @Override
+      public Adapter caseOrOrderByColumn(OrOrderByColumn object)
+      {
+        return createOrOrderByColumnAdapter();
+      }
+      @Override
+      public Adapter caseOrGroupByColumn(OrGroupByColumn object)
+      {
+        return createOrGroupByColumnAdapter();
+      }
+      @Override
       public Adapter caseOrColumn(OrColumn object)
       {
         return createOrColumnAdapter();
@@ -253,6 +288,16 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseAndWhereEntry(AndWhereEntry object)
       {
         return createAndWhereEntryAdapter();
+      }
+      @Override
+      public Adapter caseOrHavingEntry(OrHavingEntry object)
+      {
+        return createOrHavingEntryAdapter();
+      }
+      @Override
+      public Adapter caseAndHavingEntry(AndHavingEntry object)
+      {
+        return createAndHavingEntryAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -287,6 +332,66 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createModelAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrderByColumns <em>Order By Columns</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OrderByColumns
+   * @generated
+   */
+  public Adapter createOrderByColumnsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrderByColumnFull <em>Order By Column Full</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OrderByColumnFull
+   * @generated
+   */
+  public Adapter createOrderByColumnFullAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.GroupByColumns <em>Group By Columns</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.GroupByColumns
+   * @generated
+   */
+  public Adapter createGroupByColumnsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.GroupByColumnFull <em>Group By Column Full</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.GroupByColumnFull
+   * @generated
+   */
+  public Adapter createGroupByColumnFullAdapter()
   {
     return null;
   }
@@ -482,6 +587,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createWhereEntryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.HavingEntry <em>Having Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.HavingEntry
+   * @generated
+   */
+  public Adapter createHavingEntryAdapter()
   {
     return null;
   }
@@ -757,6 +877,36 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrOrderByColumn <em>Or Order By Column</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OrOrderByColumn
+   * @generated
+   */
+  public Adapter createOrOrderByColumnAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrGroupByColumn <em>Or Group By Column</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OrGroupByColumn
+   * @generated
+   */
+  public Adapter createOrGroupByColumnAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrColumn <em>Or Column</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -812,6 +962,36 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createAndWhereEntryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrHavingEntry <em>Or Having Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OrHavingEntry
+   * @generated
+   */
+  public Adapter createOrHavingEntryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.AndHavingEntry <em>And Having Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.AndHavingEntry
+   * @generated
+   */
+  public Adapter createAndHavingEntryAdapter()
   {
     return null;
   }

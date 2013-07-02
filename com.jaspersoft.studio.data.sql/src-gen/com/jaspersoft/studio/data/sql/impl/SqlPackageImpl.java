@@ -2,6 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
+import com.jaspersoft.studio.data.sql.AndHavingEntry;
 import com.jaspersoft.studio.data.sql.AndWhereEntry;
 import com.jaspersoft.studio.data.sql.ArrayExpression;
 import com.jaspersoft.studio.data.sql.ArrayOperator;
@@ -19,6 +20,9 @@ import com.jaspersoft.studio.data.sql.DoubleArrayExpression;
 import com.jaspersoft.studio.data.sql.DoubleExpression;
 import com.jaspersoft.studio.data.sql.Expression;
 import com.jaspersoft.studio.data.sql.ExpressionWhereEntry;
+import com.jaspersoft.studio.data.sql.GroupByColumnFull;
+import com.jaspersoft.studio.data.sql.GroupByColumns;
+import com.jaspersoft.studio.data.sql.HavingEntry;
 import com.jaspersoft.studio.data.sql.LongArrayExpression;
 import com.jaspersoft.studio.data.sql.LongExpression;
 import com.jaspersoft.studio.data.sql.Model;
@@ -27,8 +31,13 @@ import com.jaspersoft.studio.data.sql.NullArrayExpression;
 import com.jaspersoft.studio.data.sql.NullExpression;
 import com.jaspersoft.studio.data.sql.Operator;
 import com.jaspersoft.studio.data.sql.OrColumn;
+import com.jaspersoft.studio.data.sql.OrGroupByColumn;
+import com.jaspersoft.studio.data.sql.OrHavingEntry;
+import com.jaspersoft.studio.data.sql.OrOrderByColumn;
 import com.jaspersoft.studio.data.sql.OrTable;
 import com.jaspersoft.studio.data.sql.OrWhereEntry;
+import com.jaspersoft.studio.data.sql.OrderByColumnFull;
+import com.jaspersoft.studio.data.sql.OrderByColumns;
 import com.jaspersoft.studio.data.sql.ReplacableValue;
 import com.jaspersoft.studio.data.sql.Schema;
 import com.jaspersoft.studio.data.sql.SingleExpressionWhereEntry;
@@ -65,6 +74,34 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass modelEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass orderByColumnsEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass orderByColumnFullEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass groupByColumnsEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass groupByColumnFullEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -156,6 +193,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass whereEntryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass havingEntryEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -288,6 +332,20 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass orOrderByColumnEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass orGroupByColumnEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass orColumnEClass = null;
 
   /**
@@ -310,6 +368,20 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass andWhereEntryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass orHavingEntryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass andHavingEntryEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -426,6 +498,96 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
   public EReference getModel_WhereEntry()
   {
     return (EReference)modelEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getModel_GroupByEntry()
+  {
+    return (EReference)modelEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getModel_HavingEntry()
+  {
+    return (EReference)modelEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getModel_OrderByEntry()
+  {
+    return (EReference)modelEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getOrderByColumns()
+  {
+    return orderByColumnsEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getOrderByColumnFull()
+  {
+    return orderByColumnFullEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getOrderByColumnFull_ColOrder()
+  {
+    return (EReference)orderByColumnFullEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getGroupByColumns()
+  {
+    return groupByColumnsEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getGroupByColumnFull()
+  {
+    return groupByColumnFullEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getGroupByColumnFull_GroupByColumn()
+  {
+    return (EReference)groupByColumnFullEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -656,6 +818,16 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
   public EClass getWhereEntry()
   {
     return whereEntryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getHavingEntry()
+  {
+    return havingEntryEClass;
   }
 
   /**
@@ -1023,6 +1195,46 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getOrOrderByColumn()
+  {
+    return orOrderByColumnEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getOrOrderByColumn_Entries()
+  {
+    return (EReference)orOrderByColumnEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getOrGroupByColumn()
+  {
+    return orGroupByColumnEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getOrGroupByColumn_Entries()
+  {
+    return (EReference)orGroupByColumnEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getOrColumn()
   {
     return orColumnEClass;
@@ -1103,6 +1315,46 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getOrHavingEntry()
+  {
+    return orHavingEntryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getOrHavingEntry_Entries()
+  {
+    return (EReference)orHavingEntryEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getAndHavingEntry()
+  {
+    return andHavingEntryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getAndHavingEntry_Entries()
+  {
+    return (EReference)andHavingEntryEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EEnum getArrayOperator()
   {
     return arrayOperatorEEnum;
@@ -1152,6 +1404,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEReference(modelEClass, MODEL__COL);
     createEReference(modelEClass, MODEL__TBL);
     createEReference(modelEClass, MODEL__WHERE_ENTRY);
+    createEReference(modelEClass, MODEL__GROUP_BY_ENTRY);
+    createEReference(modelEClass, MODEL__HAVING_ENTRY);
+    createEReference(modelEClass, MODEL__ORDER_BY_ENTRY);
+
+    orderByColumnsEClass = createEClass(ORDER_BY_COLUMNS);
+
+    orderByColumnFullEClass = createEClass(ORDER_BY_COLUMN_FULL);
+    createEReference(orderByColumnFullEClass, ORDER_BY_COLUMN_FULL__COL_ORDER);
+
+    groupByColumnsEClass = createEClass(GROUP_BY_COLUMNS);
+
+    groupByColumnFullEClass = createEClass(GROUP_BY_COLUMN_FULL);
+    createEReference(groupByColumnFullEClass, GROUP_BY_COLUMN_FULL__GROUP_BY_COLUMN);
 
     columnsEClass = createEClass(COLUMNS);
 
@@ -1188,6 +1453,8 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEAttribute(databaseEClass, DATABASE__DB_NAME);
 
     whereEntryEClass = createEClass(WHERE_ENTRY);
+
+    havingEntryEClass = createEClass(HAVING_ENTRY);
 
     expressionWhereEntryEClass = createEClass(EXPRESSION_WHERE_ENTRY);
     createEAttribute(expressionWhereEntryEClass, EXPRESSION_WHERE_ENTRY__NAME);
@@ -1243,6 +1510,12 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     booleanArrayExpressionEClass = createEClass(BOOLEAN_ARRAY_EXPRESSION);
     createEAttribute(booleanArrayExpressionEClass, BOOLEAN_ARRAY_EXPRESSION__VALUES);
 
+    orOrderByColumnEClass = createEClass(OR_ORDER_BY_COLUMN);
+    createEReference(orOrderByColumnEClass, OR_ORDER_BY_COLUMN__ENTRIES);
+
+    orGroupByColumnEClass = createEClass(OR_GROUP_BY_COLUMN);
+    createEReference(orGroupByColumnEClass, OR_GROUP_BY_COLUMN__ENTRIES);
+
     orColumnEClass = createEClass(OR_COLUMN);
     createEReference(orColumnEClass, OR_COLUMN__ENTRIES);
 
@@ -1254,6 +1527,12 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     andWhereEntryEClass = createEClass(AND_WHERE_ENTRY);
     createEReference(andWhereEntryEClass, AND_WHERE_ENTRY__ENTRIES);
+
+    orHavingEntryEClass = createEClass(OR_HAVING_ENTRY);
+    createEReference(orHavingEntryEClass, OR_HAVING_ENTRY__ENTRIES);
+
+    andHavingEntryEClass = createEClass(AND_HAVING_ENTRY);
+    createEReference(andHavingEntryEClass, AND_HAVING_ENTRY__ENTRIES);
 
     // Create enums
     arrayOperatorEEnum = createEEnum(ARRAY_OPERATOR);
@@ -1289,14 +1568,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     // Set bounds for type parameters
 
     // Add supertypes to classes
+    orderByColumnFullEClass.getESuperTypes().add(this.getOrderByColumns());
+    groupByColumnFullEClass.getESuperTypes().add(this.getGroupByColumns());
     columnOrAliasEClass.getESuperTypes().add(this.getColumns());
     columnFullEClass.getESuperTypes().add(this.getColumnOrAlias());
     tableOrAliasEClass.getESuperTypes().add(this.getTables());
+    tableFullEClass.getESuperTypes().add(this.getOrderByColumnFull());
+    tableFullEClass.getESuperTypes().add(this.getGroupByColumnFull());
     tableFullEClass.getESuperTypes().add(this.getColumnFull());
     tableFullEClass.getESuperTypes().add(this.getTableOrAlias());
     schemaEClass.getESuperTypes().add(this.getTableFull());
     databaseEClass.getESuperTypes().add(this.getSchema());
     expressionWhereEntryEClass.getESuperTypes().add(this.getWhereEntry());
+    expressionWhereEntryEClass.getESuperTypes().add(this.getHavingEntry());
     singleExpressionWhereEntryEClass.getESuperTypes().add(this.getExpressionWhereEntry());
     replacableValueEClass.getESuperTypes().add(this.getExpression());
     doubleExpressionEClass.getESuperTypes().add(this.getExpression());
@@ -1312,16 +1596,33 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     nullArrayExpressionEClass.getESuperTypes().add(this.getArrayExpression());
     dateArrayExpressionEClass.getESuperTypes().add(this.getArrayExpression());
     booleanArrayExpressionEClass.getESuperTypes().add(this.getArrayExpression());
+    orOrderByColumnEClass.getESuperTypes().add(this.getOrderByColumns());
+    orGroupByColumnEClass.getESuperTypes().add(this.getGroupByColumns());
     orColumnEClass.getESuperTypes().add(this.getColumns());
     orTableEClass.getESuperTypes().add(this.getTables());
     orWhereEntryEClass.getESuperTypes().add(this.getWhereEntry());
     andWhereEntryEClass.getESuperTypes().add(this.getWhereEntry());
+    orHavingEntryEClass.getESuperTypes().add(this.getHavingEntry());
+    andHavingEntryEClass.getESuperTypes().add(this.getHavingEntry());
 
     // Initialize classes and features; add operations and parameters
     initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getModel_Col(), this.getColumns(), null, "col", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getModel_Tbl(), this.getTables(), null, "tbl", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getModel_WhereEntry(), this.getWhereEntry(), null, "whereEntry", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModel_GroupByEntry(), this.getGroupByColumns(), null, "groupByEntry", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModel_HavingEntry(), this.getHavingEntry(), null, "havingEntry", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModel_OrderByEntry(), this.getOrderByColumns(), null, "orderByEntry", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(orderByColumnsEClass, OrderByColumns.class, "OrderByColumns", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(orderByColumnFullEClass, OrderByColumnFull.class, "OrderByColumnFull", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getOrderByColumnFull_ColOrder(), this.getColumn(), null, "colOrder", null, 0, 1, OrderByColumnFull.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(groupByColumnsEClass, GroupByColumns.class, "GroupByColumns", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(groupByColumnFullEClass, GroupByColumnFull.class, "GroupByColumnFull", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getGroupByColumnFull_GroupByColumn(), this.getColumn(), null, "groupByColumn", null, 0, 1, GroupByColumnFull.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(columnsEClass, Columns.class, "Columns", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1358,6 +1659,8 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEAttribute(getDatabase_DbName(), ecorePackage.getEString(), "dbName", null, 0, 1, Database.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(whereEntryEClass, WhereEntry.class, "WhereEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(havingEntryEClass, HavingEntry.class, "HavingEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(expressionWhereEntryEClass, ExpressionWhereEntry.class, "ExpressionWhereEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getExpressionWhereEntry_Name(), ecorePackage.getEString(), "name", null, 0, 1, ExpressionWhereEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1413,6 +1716,12 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEClass(booleanArrayExpressionEClass, BooleanArrayExpression.class, "BooleanArrayExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getBooleanArrayExpression_Values(), ecorePackage.getEString(), "values", null, 0, -1, BooleanArrayExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(orOrderByColumnEClass, OrOrderByColumn.class, "OrOrderByColumn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getOrOrderByColumn_Entries(), this.getOrderByColumnFull(), null, "entries", null, 0, -1, OrOrderByColumn.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(orGroupByColumnEClass, OrGroupByColumn.class, "OrGroupByColumn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getOrGroupByColumn_Entries(), this.getGroupByColumnFull(), null, "entries", null, 0, -1, OrGroupByColumn.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(orColumnEClass, OrColumn.class, "OrColumn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOrColumn_Entries(), this.getColumnOrAlias(), null, "entries", null, 0, -1, OrColumn.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1424,6 +1733,12 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(andWhereEntryEClass, AndWhereEntry.class, "AndWhereEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getAndWhereEntry_Entries(), this.getWhereEntry(), null, "entries", null, 0, -1, AndWhereEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(orHavingEntryEClass, OrHavingEntry.class, "OrHavingEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getOrHavingEntry_Entries(), this.getHavingEntry(), null, "entries", null, 0, -1, OrHavingEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(andHavingEntryEClass, AndHavingEntry.class, "AndHavingEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getAndHavingEntry_Entries(), this.getHavingEntry(), null, "entries", null, 0, -1, AndHavingEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
     initEEnum(arrayOperatorEEnum, ArrayOperator.class, "ArrayOperator");

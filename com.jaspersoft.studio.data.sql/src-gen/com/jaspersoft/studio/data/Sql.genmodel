@@ -6,7 +6,7 @@
     complianceLevel="5.0" copyrightFields="false" editPluginID="com.jaspersoft.studio.data.sql.edit"
     editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.8">
   <genPackages prefix="Sql" basePackage="com.jaspersoft.studio.data" disposableProviderFactory="true"
-      fileExtensions="sql" ecorePackage="Sql.ecore#/">
+      ecorePackage="Sql.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Sql.ecore#//ArrayOperator">
       <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//ArrayOperator/sql_in"/>
       <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//ArrayOperator/sql_notIn"/>

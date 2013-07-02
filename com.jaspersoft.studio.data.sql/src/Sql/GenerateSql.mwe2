@@ -8,7 +8,6 @@ var grammarURI = "classpath:/Sql/Sql.xtext"
 var fileExtensions = "sql"
 var projectName = "com.jaspersoft.studio.data.sql"
 var runtimeProject = "../${projectName}"
-var generateXtendStub = false
 
 Workflow {
 	bean = StandaloneSetup {
@@ -27,62 +26,63 @@ Workflow {
 	}
 
 	component = Generator {
+		activator = "com.jaspersoft.studio.data.sql.Activator"
 		pathRtProject = runtimeProject
 		pathUiProject = "${runtimeProject}.ui"//pathTestProject = "${runtimeProject}.tests"
 		projectNameRt = projectName
 		projectNameUi = "${projectName}.ui"
-		language = auto-inject {
+		language = {
 			uri = grammarURI
 
 			// Java API to access grammar elements (required by several other fragments)
-			fragment = grammarAccess.GrammarAccessFragment auto-inject {}
+			fragment = grammarAccess.GrammarAccessFragment {}
 
 			// generates Java API for the generated EPackages
-			fragment = ecore.EcoreGeneratorFragment auto-inject {
+			fragment = ecore.EcoreGeneratorFragment {
 			// referencedGenModels = "
 			//  platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel,
 			//  platform:/resource/org.eclipse.xtext.common.types/model/JavaVMTypes.genmodel
 			// "
 			}
-
+			fragment = parseTreeConstructor.ParseTreeConstructorFragment {}
 			// the old serialization component
 			// fragment = parseTreeConstructor.ParseTreeConstructorFragment auto-inject {}    
 
 			// serializer 2.0
-			fragment = serializer.SerializerFragment auto-inject {
-				generateStub = false
-			}
+			//			fragment = serializer.SerializerFragment {
+			//				generateStub = false
+			//			}
 
 			// a custom ResourceFactory for use with EMF
-			fragment = resourceFactory.ResourceFactoryFragment auto-inject {}
+			//fragment = resourceFactory.ResourceFactoryFragment {}
 
 			// The antlr parser generator fragment.
-			fragment = parser.antlr.XtextAntlrGeneratorFragment auto-inject {
+			fragment = parser.antlr.XtextAntlrGeneratorFragment {
 			//  options = {
 			//      backtrack = true
 			//  }
 			}
 
 			// Xtend-based API for validation
-			fragment = validation.ValidatorFragment auto-inject {
+			//fragment = validation.ValidatorFragment auto-inject {
 			//    composedCheck = "org.eclipse.xtext.validation.ImportUriValidator"
 			//    composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
-			}
+			//}
 
 			// old scoping and exporting API
 			// fragment = scoping.ImportURIScopingFragment auto-inject {}
 			// fragment = exporting.SimpleNamesFragment auto-inject {}
 
 			// scoping and exporting API
-			fragment = scoping.ImportNamespacesScopingFragment auto-inject {}
-			fragment = exporting.QualifiedNamesFragment auto-inject {}
-			fragment = builder.BuilderIntegrationFragment auto-inject {}
+			fragment = scoping.ImportNamespacesScopingFragment {}
+			fragment = exporting.QualifiedNamesFragment {}
+			fragment = builder.BuilderIntegrationFragment {}
 
 			// generator API
-			fragment = generator.GeneratorFragment auto-inject {}
+			//fragment = generator.GeneratorFragment   {}
 
 			// formatter API
-			fragment = formatting.FormatterFragment auto-inject {}
+			fragment = formatting.FormatterFragment {}
 
 			// labeling API
 			//fragment = labeling.LabelProviderFragment auto-inject {}
@@ -97,12 +97,12 @@ Workflow {
 			//fragment = quickfix.QuickfixProviderFragment auto-inject {}
 
 			// content assist API
-			fragment = contentAssist.ContentAssistFragment auto-inject {
-				generateStub = false
-			}
+			//fragment = contentAssist.ContentAssistFragment auto-inject {
+			//	generateStub = false
+			//}
 
 			// generates a more lightweight Antlr parser and lexer tailored for content assist
-			fragment = parser.antlr.XtextAntlrUiGeneratorFragment auto-inject {}
+			fragment = parser.antlr.XtextAntlrUiGeneratorFragment {}
 
 			// generates junit test support classes into Generator#pathTestProject
 			//fragment = junit.Junit4Fragment auto-inject {}
