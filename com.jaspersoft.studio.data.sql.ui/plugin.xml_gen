@@ -33,42 +33,12 @@
                     definitionId="com.jaspersoft.studio.data.Sql.Editor.opened">
             </reference>
          </activeWhen>
-      	</handler>
-      	<!-- copy qualified name -->
-        <handler
-            class="com.jaspersoft.studio.data.ui.SqlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
-            commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName">
-            <activeWhen>
-				<reference definitionId="com.jaspersoft.studio.data.Sql.Editor.opened" />
-            </activeWhen>
-        </handler>
-        <handler
-            class="com.jaspersoft.studio.data.ui.SqlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
-            commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName">
-            <activeWhen>
-            	<and>
-            		<reference definitionId="com.jaspersoft.studio.data.Sql.XtextEditor.opened" />
-	                <iterate>
-						<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
-					</iterate>
-				</and>
-            </activeWhen>
-        </handler>
+      </handler>
     </extension>
     <extension point="org.eclipse.core.expressions.definitions">
         <definition id="com.jaspersoft.studio.data.Sql.Editor.opened">
             <and>
                 <reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
-                <with variable="activeEditor">
-                    <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
-                        value="com.jaspersoft.studio.data.Sql" 
-                        forcePluginActivation="true"/>
-                </with>        
-            </and>
-        </definition>
-        <definition id="com.jaspersoft.studio.data.Sql.XtextEditor.opened">
-            <and>
-                <reference definitionId="isXtextEditorActive"/>
                 <with variable="activeEditor">
                     <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
                         value="com.jaspersoft.studio.data.Sql" 
@@ -126,19 +96,6 @@
             id="com.jaspersoft.studio.data.Sql.validate"
             name="Validate">
       </command>
-      <!-- copy qualified name -->
-      <command
-            id="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
-            categoryId="org.eclipse.ui.category.edit"
-            description="Copy the qualified name for the selected element"
-            name="Copy Qualified Name">
-      </command>
-      <command
-            id="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
-            categoryId="org.eclipse.ui.category.edit"
-            description="Copy the qualified name for the selected element"
-            name="Copy Qualified Name">
-      </command>
     </extension>
     <extension point="org.eclipse.ui.menus">
         <menuContribution
@@ -153,36 +110,6 @@
                 </reference>
             </visibleWhen>
          </command>  
-         </menuContribution>
-         <!-- copy qualified name -->
-         <menuContribution locationURI="popup:#TextEditorContext?after=copy">
-         	<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName" 
-         		style="push" tooltip="Copy Qualified Name">
-            	<visibleWhen checkEnabled="false">
-                	<reference definitionId="com.jaspersoft.studio.data.Sql.Editor.opened" />
-            	</visibleWhen>
-         	</command>  
-         </menuContribution>
-         <menuContribution locationURI="menu:edit?after=copy">
-         	<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
-            	style="push" tooltip="Copy Qualified Name">
-            	<visibleWhen checkEnabled="false">
-                	<reference definitionId="com.jaspersoft.studio.data.Sql.Editor.opened" />
-            	</visibleWhen>
-         	</command>  
-         </menuContribution>
-         <menuContribution locationURI="popup:org.eclipse.xtext.ui.outline?after=additions">
-			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName" 
-				style="push" tooltip="Copy Qualified Name">
-         		<visibleWhen checkEnabled="false">
-	            	<and>
-	            		<reference definitionId="com.jaspersoft.studio.data.Sql.XtextEditor.opened" />
-						<iterate>
-							<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
-						</iterate>
-					</and>
-				</visibleWhen>
-			</command>
          </menuContribution>
     </extension>
     <extension point="org.eclipse.ui.menus">
@@ -206,76 +133,5 @@
             </activeWhen>
         </handler>
     </extension>   
-
-<!-- adding resource factories -->
-
-	<extension
-		point="org.eclipse.emf.ecore.extension_parser">
-		<parser
-			class="com.jaspersoft.studio.data.ui.SqlExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
-			type="sql">
-		</parser>
-	</extension>
-	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
-        <resourceServiceProvider
-            class="com.jaspersoft.studio.data.ui.SqlExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
-            uriExtension="sql">
-        </resourceServiceProvider>
-    </extension>
-
-
-	<!-- marker definitions for com.jaspersoft.studio.data.Sql -->
-	<extension
-	        id="sql.check.fast"
-	        name="Sql Problem"
-	        point="org.eclipse.core.resources.markers">
-	    <super type="org.eclipse.xtext.ui.check.fast"/>
-	    <persistent value="true"/>
-	</extension>
-	<extension
-	        id="sql.check.normal"
-	        name="Sql Problem"
-	        point="org.eclipse.core.resources.markers">
-	    <super type="org.eclipse.xtext.ui.check.normal"/>
-	    <persistent value="true"/>
-	</extension>
-	<extension
-	        id="sql.check.expensive"
-	        name="Sql Problem"
-	        point="org.eclipse.core.resources.markers">
-	    <super type="org.eclipse.xtext.ui.check.expensive"/>
-	    <persistent value="true"/>
-	</extension>
-
-   <extension
-         point="org.eclipse.xtext.builder.participant">
-      <participant
-            class="com.jaspersoft.studio.data.ui.SqlExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
-      </participant>
-   </extension>
-   <extension
-            point="org.eclipse.ui.preferencePages">
-        <page
-            category="com.jaspersoft.studio.data.Sql"
-            class="com.jaspersoft.studio.data.ui.SqlExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-            id="com.jaspersoft.studio.data.Sql.compiler.preferencePage"
-            name="Compiler">
-            <keywordReference id="com.jaspersoft.studio.data.ui.keyword_Sql"/>
-        </page>
-    </extension>
-    <extension
-            point="org.eclipse.ui.propertyPages">
-        <page
-            category="com.jaspersoft.studio.data.Sql"
-            class="com.jaspersoft.studio.data.ui.SqlExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-            id="com.jaspersoft.studio.data.Sql.compiler.propertyPage"
-            name="Compiler">
-            <keywordReference id="com.jaspersoft.studio.data.ui.keyword_Sql"/>
-            <enabledWhen>
-	            <adapt type="org.eclipse.core.resources.IProject"/>
-			</enabledWhen>
-	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
-        </page>
-    </extension>
 
 </plugin>
