@@ -183,6 +183,10 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		xtextAdapter.adapt(control);
 	}
 
+	@Override
+	protected void setupSourceEditorFont() {
+	}
+
 	public void refreshQuery() {
 		if (root != null) {
 			if (!isQueryModelEmpty())
