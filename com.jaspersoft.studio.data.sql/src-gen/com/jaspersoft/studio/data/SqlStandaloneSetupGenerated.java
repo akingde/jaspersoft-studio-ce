@@ -39,6 +39,5 @@ public class SqlStandaloneSetupGenerated implements ISetup {
 		org.eclipse.xtext.resource.IResourceServiceProvider.Registry.INSTANCE.getExtensionToFactoryMap().put("sql", serviceProvider);
 		
 
-
 	}
 }

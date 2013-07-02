@@ -31,12 +31,26 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cWHEREKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
 		private final Assignment cWhereEntryAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
 		private final RuleCall cWhereEntryWhereEntryParserRuleCall_4_1_0 = (RuleCall)cWhereEntryAssignment_4_1.eContents().get(0);
+		private final Group cGroup_5 = (Group)cGroup.eContents().get(5);
+		private final Keyword cGROUPBYKeyword_5_0 = (Keyword)cGroup_5.eContents().get(0);
+		private final Assignment cGroupByEntryAssignment_5_1 = (Assignment)cGroup_5.eContents().get(1);
+		private final RuleCall cGroupByEntryGroupByColumnsParserRuleCall_5_1_0 = (RuleCall)cGroupByEntryAssignment_5_1.eContents().get(0);
+		private final Group cGroup_6 = (Group)cGroup.eContents().get(6);
+		private final Keyword cHAVINGKeyword_6_0 = (Keyword)cGroup_6.eContents().get(0);
+		private final Assignment cHavingEntryAssignment_6_1 = (Assignment)cGroup_6.eContents().get(1);
+		private final RuleCall cHavingEntryHavingEntryParserRuleCall_6_1_0 = (RuleCall)cHavingEntryAssignment_6_1.eContents().get(0);
+		private final Group cGroup_7 = (Group)cGroup.eContents().get(7);
+		private final Keyword cORDERBYKeyword_7_0 = (Keyword)cGroup_7.eContents().get(0);
+		private final Assignment cOrderByEntryAssignment_7_1 = (Assignment)cGroup_7.eContents().get(1);
+		private final RuleCall cOrderByEntryOrderByColumnsParserRuleCall_7_1_0 = (RuleCall)cOrderByEntryAssignment_7_1.eContents().get(0);
 		
 		//Model:
-		//	"SELECT" col=Columns? "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?;
+		//	"SELECT" col=Columns? "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)? ("GROUP BY" groupByEntry=GroupByColumns)?
+		//	("HAVING" havingEntry=HavingEntry)? ("ORDER BY" orderByEntry=OrderByColumns)?;
 		public ParserRule getRule() { return rule; }
 
-		//"SELECT" col=Columns? "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?
+		//"SELECT" col=Columns? "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)? ("GROUP BY" groupByEntry=GroupByColumns)?
+		//("HAVING" havingEntry=HavingEntry)? ("ORDER BY" orderByEntry=OrderByColumns)?
 		public Group getGroup() { return cGroup; }
 
 		//"SELECT"
@@ -68,6 +82,202 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//WhereEntry
 		public RuleCall getWhereEntryWhereEntryParserRuleCall_4_1_0() { return cWhereEntryWhereEntryParserRuleCall_4_1_0; }
+
+		//("GROUP BY" groupByEntry=GroupByColumns)?
+		public Group getGroup_5() { return cGroup_5; }
+
+		//"GROUP BY"
+		public Keyword getGROUPBYKeyword_5_0() { return cGROUPBYKeyword_5_0; }
+
+		//groupByEntry=GroupByColumns
+		public Assignment getGroupByEntryAssignment_5_1() { return cGroupByEntryAssignment_5_1; }
+
+		//GroupByColumns
+		public RuleCall getGroupByEntryGroupByColumnsParserRuleCall_5_1_0() { return cGroupByEntryGroupByColumnsParserRuleCall_5_1_0; }
+
+		//("HAVING" havingEntry=HavingEntry)?
+		public Group getGroup_6() { return cGroup_6; }
+
+		//"HAVING"
+		public Keyword getHAVINGKeyword_6_0() { return cHAVINGKeyword_6_0; }
+
+		//havingEntry=HavingEntry
+		public Assignment getHavingEntryAssignment_6_1() { return cHavingEntryAssignment_6_1; }
+
+		//HavingEntry
+		public RuleCall getHavingEntryHavingEntryParserRuleCall_6_1_0() { return cHavingEntryHavingEntryParserRuleCall_6_1_0; }
+
+		//("ORDER BY" orderByEntry=OrderByColumns)?
+		public Group getGroup_7() { return cGroup_7; }
+
+		//"ORDER BY"
+		public Keyword getORDERBYKeyword_7_0() { return cORDERBYKeyword_7_0; }
+
+		//orderByEntry=OrderByColumns
+		public Assignment getOrderByEntryAssignment_7_1() { return cOrderByEntryAssignment_7_1; }
+
+		//OrderByColumns
+		public RuleCall getOrderByEntryOrderByColumnsParserRuleCall_7_1_0() { return cOrderByEntryOrderByColumnsParserRuleCall_7_1_0; }
+	}
+
+	public class OrderByColumnsElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OrderByColumns");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cOrderByColumnFullParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cOrOrderByColumnEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cEntriesOrderByColumnFullParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		
+		//OrderByColumns:
+		//	OrderByColumnFull ({OrOrderByColumn.entries+=current} ("," entries+=OrderByColumnFull)+)?;
+		public ParserRule getRule() { return rule; }
+
+		//OrderByColumnFull ({OrOrderByColumn.entries+=current} ("," entries+=OrderByColumnFull)+)?
+		public Group getGroup() { return cGroup; }
+
+		//OrderByColumnFull
+		public RuleCall getOrderByColumnFullParserRuleCall_0() { return cOrderByColumnFullParserRuleCall_0; }
+
+		//({OrOrderByColumn.entries+=current} ("," entries+=OrderByColumnFull)+)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{OrOrderByColumn.entries+=current}
+		public Action getOrOrderByColumnEntriesAction_1_0() { return cOrOrderByColumnEntriesAction_1_0; }
+
+		//("," entries+=OrderByColumnFull)+
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//","
+		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
+
+		//entries+=OrderByColumnFull
+		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
+
+		//OrderByColumnFull
+		public RuleCall getEntriesOrderByColumnFullParserRuleCall_1_1_1_0() { return cEntriesOrderByColumnFullParserRuleCall_1_1_1_0; }
+	}
+
+	public class OrderByColumnFullElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OrderByColumnFull");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cColOrderAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cColOrderColumnParserRuleCall_0_0 = (RuleCall)cColOrderAssignment_0.eContents().get(0);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final RuleCall cTableFullParserRuleCall_1_0 = (RuleCall)cGroup_1.eContents().get(0);
+		private final Keyword cFullStopKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Assignment cColOrderAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cColOrderColumnParserRuleCall_1_2_0 = (RuleCall)cColOrderAssignment_1_2.eContents().get(0);
+		
+		//OrderByColumnFull:
+		//	colOrder=Column | TableFull "." colOrder=Column;
+		public ParserRule getRule() { return rule; }
+
+		//colOrder=Column | TableFull "." colOrder=Column
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//colOrder=Column
+		public Assignment getColOrderAssignment_0() { return cColOrderAssignment_0; }
+
+		//Column
+		public RuleCall getColOrderColumnParserRuleCall_0_0() { return cColOrderColumnParserRuleCall_0_0; }
+
+		//TableFull "." colOrder=Column
+		public Group getGroup_1() { return cGroup_1; }
+
+		//TableFull
+		public RuleCall getTableFullParserRuleCall_1_0() { return cTableFullParserRuleCall_1_0; }
+
+		//"."
+		public Keyword getFullStopKeyword_1_1() { return cFullStopKeyword_1_1; }
+
+		//colOrder=Column
+		public Assignment getColOrderAssignment_1_2() { return cColOrderAssignment_1_2; }
+
+		//Column
+		public RuleCall getColOrderColumnParserRuleCall_1_2_0() { return cColOrderColumnParserRuleCall_1_2_0; }
+	}
+
+	public class GroupByColumnsElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "GroupByColumns");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cGroupByColumnFullParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cOrGroupByColumnEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cEntriesGroupByColumnFullParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		
+		//GroupByColumns:
+		//	GroupByColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?;
+		public ParserRule getRule() { return rule; }
+
+		//GroupByColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?
+		public Group getGroup() { return cGroup; }
+
+		//GroupByColumnFull
+		public RuleCall getGroupByColumnFullParserRuleCall_0() { return cGroupByColumnFullParserRuleCall_0; }
+
+		//({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{OrGroupByColumn.entries+=current}
+		public Action getOrGroupByColumnEntriesAction_1_0() { return cOrGroupByColumnEntriesAction_1_0; }
+
+		//("," entries+=GroupByColumnFull)+
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//","
+		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
+
+		//entries+=GroupByColumnFull
+		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
+
+		//GroupByColumnFull
+		public RuleCall getEntriesGroupByColumnFullParserRuleCall_1_1_1_0() { return cEntriesGroupByColumnFullParserRuleCall_1_1_1_0; }
+	}
+
+	public class GroupByColumnFullElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "GroupByColumnFull");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cGroupByColumnAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cGroupByColumnColumnParserRuleCall_0_0 = (RuleCall)cGroupByColumnAssignment_0.eContents().get(0);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final RuleCall cTableFullParserRuleCall_1_0 = (RuleCall)cGroup_1.eContents().get(0);
+		private final Keyword cFullStopKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Assignment cGroupByColumnAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cGroupByColumnColumnParserRuleCall_1_2_0 = (RuleCall)cGroupByColumnAssignment_1_2.eContents().get(0);
+		
+		//GroupByColumnFull:
+		//	groupByColumn=Column | TableFull "." groupByColumn=Column;
+		public ParserRule getRule() { return rule; }
+
+		//groupByColumn=Column | TableFull "." groupByColumn=Column
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//groupByColumn=Column
+		public Assignment getGroupByColumnAssignment_0() { return cGroupByColumnAssignment_0; }
+
+		//Column
+		public RuleCall getGroupByColumnColumnParserRuleCall_0_0() { return cGroupByColumnColumnParserRuleCall_0_0; }
+
+		//TableFull "." groupByColumn=Column
+		public Group getGroup_1() { return cGroup_1; }
+
+		//TableFull
+		public RuleCall getTableFullParserRuleCall_1_0() { return cTableFullParserRuleCall_1_0; }
+
+		//"."
+		public Keyword getFullStopKeyword_1_1() { return cFullStopKeyword_1_1; }
+
+		//groupByColumn=Column
+		public Assignment getGroupByColumnAssignment_1_2() { return cGroupByColumnAssignment_1_2; }
+
+		//Column
+		public RuleCall getGroupByColumnColumnParserRuleCall_1_2_0() { return cGroupByColumnColumnParserRuleCall_1_2_0; }
 	}
 
 	public class ColumnsElements extends AbstractParserRuleElementFinder {
@@ -173,7 +383,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cColNameAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
 		private final RuleCall cColNameColumnParserRuleCall_1_2_0 = (RuleCall)cColNameAssignment_1_2.eContents().get(0);
 		
-		////| (TableAlias '.' colName=Column);
 		//ColumnFull:
 		//	colName=Column | TableFull "." colName=Column;
 		public ParserRule getRule() { return rule; }
@@ -574,6 +783,130 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//WhereEntry
 		public RuleCall getWhereEntryParserRuleCall_1() { return cWhereEntryParserRuleCall_1; }
+
+		//")"
+		public Keyword getRightParenthesisKeyword_2() { return cRightParenthesisKeyword_2; }
+	}
+
+	public class HavingEntryElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "HavingEntry");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cAndHavingEntryParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cOrHavingEntryEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cORKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cEntriesAndHavingEntryParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		
+		//HavingEntry:
+		//	AndHavingEntry ({OrHavingEntry.entries+=current} ("OR" entries+=AndHavingEntry)+)?;
+		public ParserRule getRule() { return rule; }
+
+		//AndHavingEntry ({OrHavingEntry.entries+=current} ("OR" entries+=AndHavingEntry)+)?
+		public Group getGroup() { return cGroup; }
+
+		//AndHavingEntry
+		public RuleCall getAndHavingEntryParserRuleCall_0() { return cAndHavingEntryParserRuleCall_0; }
+
+		//({OrHavingEntry.entries+=current} ("OR" entries+=AndHavingEntry)+)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{OrHavingEntry.entries+=current}
+		public Action getOrHavingEntryEntriesAction_1_0() { return cOrHavingEntryEntriesAction_1_0; }
+
+		//("OR" entries+=AndHavingEntry)+
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//"OR"
+		public Keyword getORKeyword_1_1_0() { return cORKeyword_1_1_0; }
+
+		//entries+=AndHavingEntry
+		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
+
+		//AndHavingEntry
+		public RuleCall getEntriesAndHavingEntryParserRuleCall_1_1_1_0() { return cEntriesAndHavingEntryParserRuleCall_1_1_1_0; }
+	}
+
+	public class AndHavingEntryElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "AndHavingEntry");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cConcreteHavingEntryParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cAndHavingEntryEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cANDKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cEntriesConcreteHavingEntryParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		
+		//AndHavingEntry returns HavingEntry:
+		//	ConcreteHavingEntry ({AndHavingEntry.entries+=current} ("AND" entries+=ConcreteHavingEntry)+)?;
+		public ParserRule getRule() { return rule; }
+
+		//ConcreteHavingEntry ({AndHavingEntry.entries+=current} ("AND" entries+=ConcreteHavingEntry)+)?
+		public Group getGroup() { return cGroup; }
+
+		//ConcreteHavingEntry
+		public RuleCall getConcreteHavingEntryParserRuleCall_0() { return cConcreteHavingEntryParserRuleCall_0; }
+
+		//({AndHavingEntry.entries+=current} ("AND" entries+=ConcreteHavingEntry)+)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{AndHavingEntry.entries+=current}
+		public Action getAndHavingEntryEntriesAction_1_0() { return cAndHavingEntryEntriesAction_1_0; }
+
+		//("AND" entries+=ConcreteHavingEntry)+
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//"AND"
+		public Keyword getANDKeyword_1_1_0() { return cANDKeyword_1_1_0; }
+
+		//entries+=ConcreteHavingEntry
+		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
+
+		//ConcreteHavingEntry
+		public RuleCall getEntriesConcreteHavingEntryParserRuleCall_1_1_1_0() { return cEntriesConcreteHavingEntryParserRuleCall_1_1_1_0; }
+	}
+
+	public class ConcreteHavingEntryElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ConcreteHavingEntry");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final RuleCall cParHavingEntryParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final RuleCall cExpressionWhereEntryParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+		
+		//ConcreteHavingEntry returns HavingEntry:
+		//	ParHavingEntry | ExpressionWhereEntry;
+		public ParserRule getRule() { return rule; }
+
+		//ParHavingEntry | ExpressionWhereEntry
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//ParHavingEntry
+		public RuleCall getParHavingEntryParserRuleCall_0() { return cParHavingEntryParserRuleCall_0; }
+
+		//ExpressionWhereEntry
+		public RuleCall getExpressionWhereEntryParserRuleCall_1() { return cExpressionWhereEntryParserRuleCall_1; }
+	}
+
+	public class ParHavingEntryElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ParHavingEntry");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cLeftParenthesisKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final RuleCall cHavingEntryParserRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
+		private final Keyword cRightParenthesisKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		
+		//ParHavingEntry returns HavingEntry:
+		//	"(" HavingEntry ")";
+		public ParserRule getRule() { return rule; }
+
+		//"(" HavingEntry ")"
+		public Group getGroup() { return cGroup; }
+
+		//"("
+		public Keyword getLeftParenthesisKeyword_0() { return cLeftParenthesisKeyword_0; }
+
+		//HavingEntry
+		public RuleCall getHavingEntryParserRuleCall_1() { return cHavingEntryParserRuleCall_1; }
 
 		//")"
 		public Keyword getRightParenthesisKeyword_2() { return cRightParenthesisKeyword_2; }
@@ -1263,6 +1596,10 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	private ModelElements pModel;
+	private OrderByColumnsElements pOrderByColumns;
+	private OrderByColumnFullElements pOrderByColumnFull;
+	private GroupByColumnsElements pGroupByColumns;
+	private GroupByColumnFullElements pGroupByColumnFull;
 	private ColumnsElements pColumns;
 	private ColumnOrAliasElements pColumnOrAlias;
 	private ColumnFullElements pColumnFull;
@@ -1279,6 +1616,10 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private AndWhereEntryElements pAndWhereEntry;
 	private ConcreteWhereEntryElements pConcreteWhereEntry;
 	private ParWhereEntryElements pParWhereEntry;
+	private HavingEntryElements pHavingEntry;
+	private AndHavingEntryElements pAndHavingEntry;
+	private ConcreteHavingEntryElements pConcreteHavingEntry;
+	private ParHavingEntryElements pParHavingEntry;
 	private ExpressionWhereEntryElements pExpressionWhereEntry;
 	private SingleExpressionWhereEntryElements pSingleExpressionWhereEntry;
 	private ExpressionElements pExpression;
@@ -1343,13 +1684,54 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//Model:
-	//	"SELECT" col=Columns? "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)?;
+	//	"SELECT" col=Columns? "FROM" tbl=Tables ("WHERE" whereEntry=WhereEntry)? ("GROUP BY" groupByEntry=GroupByColumns)?
+	//	("HAVING" havingEntry=HavingEntry)? ("ORDER BY" orderByEntry=OrderByColumns)?;
 	public ModelElements getModelAccess() {
 		return (pModel != null) ? pModel : (pModel = new ModelElements());
 	}
 	
 	public ParserRule getModelRule() {
 		return getModelAccess().getRule();
+	}
+
+	//OrderByColumns:
+	//	OrderByColumnFull ({OrOrderByColumn.entries+=current} ("," entries+=OrderByColumnFull)+)?;
+	public OrderByColumnsElements getOrderByColumnsAccess() {
+		return (pOrderByColumns != null) ? pOrderByColumns : (pOrderByColumns = new OrderByColumnsElements());
+	}
+	
+	public ParserRule getOrderByColumnsRule() {
+		return getOrderByColumnsAccess().getRule();
+	}
+
+	//OrderByColumnFull:
+	//	colOrder=Column | TableFull "." colOrder=Column;
+	public OrderByColumnFullElements getOrderByColumnFullAccess() {
+		return (pOrderByColumnFull != null) ? pOrderByColumnFull : (pOrderByColumnFull = new OrderByColumnFullElements());
+	}
+	
+	public ParserRule getOrderByColumnFullRule() {
+		return getOrderByColumnFullAccess().getRule();
+	}
+
+	//GroupByColumns:
+	//	GroupByColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?;
+	public GroupByColumnsElements getGroupByColumnsAccess() {
+		return (pGroupByColumns != null) ? pGroupByColumns : (pGroupByColumns = new GroupByColumnsElements());
+	}
+	
+	public ParserRule getGroupByColumnsRule() {
+		return getGroupByColumnsAccess().getRule();
+	}
+
+	//GroupByColumnFull:
+	//	groupByColumn=Column | TableFull "." groupByColumn=Column;
+	public GroupByColumnFullElements getGroupByColumnFullAccess() {
+		return (pGroupByColumnFull != null) ? pGroupByColumnFull : (pGroupByColumnFull = new GroupByColumnFullElements());
+	}
+	
+	public ParserRule getGroupByColumnFullRule() {
+		return getGroupByColumnFullAccess().getRule();
 	}
 
 	//Columns:
@@ -1372,7 +1754,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getColumnOrAliasAccess().getRule();
 	}
 
-	////| (TableAlias '.' colName=Column);
 	//ColumnFull:
 	//	colName=Column | TableFull "." colName=Column;
 	public ColumnFullElements getColumnFullAccess() {
@@ -1511,6 +1892,46 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getParWhereEntryRule() {
 		return getParWhereEntryAccess().getRule();
+	}
+
+	//HavingEntry:
+	//	AndHavingEntry ({OrHavingEntry.entries+=current} ("OR" entries+=AndHavingEntry)+)?;
+	public HavingEntryElements getHavingEntryAccess() {
+		return (pHavingEntry != null) ? pHavingEntry : (pHavingEntry = new HavingEntryElements());
+	}
+	
+	public ParserRule getHavingEntryRule() {
+		return getHavingEntryAccess().getRule();
+	}
+
+	//AndHavingEntry returns HavingEntry:
+	//	ConcreteHavingEntry ({AndHavingEntry.entries+=current} ("AND" entries+=ConcreteHavingEntry)+)?;
+	public AndHavingEntryElements getAndHavingEntryAccess() {
+		return (pAndHavingEntry != null) ? pAndHavingEntry : (pAndHavingEntry = new AndHavingEntryElements());
+	}
+	
+	public ParserRule getAndHavingEntryRule() {
+		return getAndHavingEntryAccess().getRule();
+	}
+
+	//ConcreteHavingEntry returns HavingEntry:
+	//	ParHavingEntry | ExpressionWhereEntry;
+	public ConcreteHavingEntryElements getConcreteHavingEntryAccess() {
+		return (pConcreteHavingEntry != null) ? pConcreteHavingEntry : (pConcreteHavingEntry = new ConcreteHavingEntryElements());
+	}
+	
+	public ParserRule getConcreteHavingEntryRule() {
+		return getConcreteHavingEntryAccess().getRule();
+	}
+
+	//ParHavingEntry returns HavingEntry:
+	//	"(" HavingEntry ")";
+	public ParHavingEntryElements getParHavingEntryAccess() {
+		return (pParHavingEntry != null) ? pParHavingEntry : (pParHavingEntry = new ParHavingEntryElements());
+	}
+	
+	public ParserRule getParHavingEntryRule() {
+		return getParHavingEntryAccess().getRule();
 	}
 
 	//ExpressionWhereEntry:

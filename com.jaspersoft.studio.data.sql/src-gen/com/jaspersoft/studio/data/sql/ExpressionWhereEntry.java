@@ -19,7 +19,7 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface ExpressionWhereEntry extends WhereEntry
+public interface ExpressionWhereEntry extends WhereEntry, HavingEntry
 {
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.

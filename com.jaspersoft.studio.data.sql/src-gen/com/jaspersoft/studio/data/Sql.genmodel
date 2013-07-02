@@ -27,6 +27,17 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/col"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/tbl"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/whereEntry"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/groupByEntry"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/havingEntry"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/orderByEntry"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrderByColumns"/>
+    <genClasses ecoreClass="Sql.ecore#//OrderByColumnFull">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrderByColumnFull/colOrder"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//GroupByColumns"/>
+    <genClasses ecoreClass="Sql.ecore#//GroupByColumnFull">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//GroupByColumnFull/groupByColumn"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Columns"/>
     <genClasses ecoreClass="Sql.ecore#//ColumnOrAlias"/>
@@ -59,6 +70,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Database/dbName"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//WhereEntry"/>
+    <genClasses ecoreClass="Sql.ecore#//HavingEntry"/>
     <genClasses ecoreClass="Sql.ecore#//ExpressionWhereEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ExpressionWhereEntry/name"/>
     </genClasses>
@@ -111,6 +123,12 @@
     <genClasses ecoreClass="Sql.ecore#//BooleanArrayExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//BooleanArrayExpression/values"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrOrderByColumn">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrOrderByColumn/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrGroupByColumn">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrGroupByColumn/entries"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OrColumn">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrColumn/entries"/>
     </genClasses>
@@ -122,6 +140,12 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//AndWhereEntry">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//AndWhereEntry/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrHavingEntry">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrHavingEntry/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//AndHavingEntry">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//AndHavingEntry/entries"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

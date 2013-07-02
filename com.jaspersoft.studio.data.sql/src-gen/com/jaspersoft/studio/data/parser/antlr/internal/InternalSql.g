@@ -144,7 +144,331 @@ ruleModel returns [EObject current=null]
 	    }
 
 )
+))?(	otherlv_6='GROUP BY' 
+    {
+    	newLeafNode(otherlv_6, grammarAccess.getModelAccess().getGROUPBYKeyword_5_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getModelAccess().getGroupByEntryGroupByColumnsParserRuleCall_5_1_0()); 
+	    }
+		lv_groupByEntry_7_0=ruleGroupByColumns		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getModelRule());
+	        }
+       		set(
+       			$current, 
+       			"groupByEntry",
+        		lv_groupByEntry_7_0, 
+        		"GroupByColumns");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))?(	otherlv_8='HAVING' 
+    {
+    	newLeafNode(otherlv_8, grammarAccess.getModelAccess().getHAVINGKeyword_6_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getModelAccess().getHavingEntryHavingEntryParserRuleCall_6_1_0()); 
+	    }
+		lv_havingEntry_9_0=ruleHavingEntry		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getModelRule());
+	        }
+       		set(
+       			$current, 
+       			"havingEntry",
+        		lv_havingEntry_9_0, 
+        		"HavingEntry");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))?(	otherlv_10='ORDER BY' 
+    {
+    	newLeafNode(otherlv_10, grammarAccess.getModelAccess().getORDERBYKeyword_7_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getModelAccess().getOrderByEntryOrderByColumnsParserRuleCall_7_1_0()); 
+	    }
+		lv_orderByEntry_11_0=ruleOrderByColumns		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getModelRule());
+	        }
+       		set(
+       			$current, 
+       			"orderByEntry",
+        		lv_orderByEntry_11_0, 
+        		"OrderByColumns");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
 ))?)
+;
+
+
+
+
+
+// Entry rule entryRuleOrderByColumns
+entryRuleOrderByColumns returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getOrderByColumnsRule()); }
+	 iv_ruleOrderByColumns=ruleOrderByColumns 
+	 { $current=$iv_ruleOrderByColumns.current; } 
+	 EOF 
+;
+
+// Rule OrderByColumns
+ruleOrderByColumns returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+    { 
+        newCompositeNode(grammarAccess.getOrderByColumnsAccess().getOrderByColumnFullParserRuleCall_0()); 
+    }
+    this_OrderByColumnFull_0=ruleOrderByColumnFull
+    { 
+        $current = $this_OrderByColumnFull_0.current; 
+        afterParserOrEnumRuleCall();
+    }
+((
+    {
+        $current = forceCreateModelElementAndAdd(
+            grammarAccess.getOrderByColumnsAccess().getOrOrderByColumnEntriesAction_1_0(),
+            $current);
+    }
+)(	otherlv_2=',' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getOrderByColumnsAccess().getCommaKeyword_1_1_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getOrderByColumnsAccess().getEntriesOrderByColumnFullParserRuleCall_1_1_1_0()); 
+	    }
+		lv_entries_3_0=ruleOrderByColumnFull		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getOrderByColumnsRule());
+	        }
+       		add(
+       			$current, 
+       			"entries",
+        		lv_entries_3_0, 
+        		"OrderByColumnFull");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))+)?)
+;
+
+
+
+
+
+// Entry rule entryRuleOrderByColumnFull
+entryRuleOrderByColumnFull returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getOrderByColumnFullRule()); }
+	 iv_ruleOrderByColumnFull=ruleOrderByColumnFull 
+	 { $current=$iv_ruleOrderByColumnFull.current; } 
+	 EOF 
+;
+
+// Rule OrderByColumnFull
+ruleOrderByColumnFull returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		{ 
+	        newCompositeNode(grammarAccess.getOrderByColumnFullAccess().getColOrderColumnParserRuleCall_0_0()); 
+	    }
+		lv_colOrder_0_0=ruleColumn		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getOrderByColumnFullRule());
+	        }
+       		set(
+       			$current, 
+       			"colOrder",
+        		lv_colOrder_0_0, 
+        		"Column");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+    |(
+    { 
+        newCompositeNode(grammarAccess.getOrderByColumnFullAccess().getTableFullParserRuleCall_1_0()); 
+    }
+    this_TableFull_1=ruleTableFull
+    { 
+        $current = $this_TableFull_1.current; 
+        afterParserOrEnumRuleCall();
+    }
+	otherlv_2='.' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getOrderByColumnFullAccess().getFullStopKeyword_1_1());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getOrderByColumnFullAccess().getColOrderColumnParserRuleCall_1_2_0()); 
+	    }
+		lv_colOrder_3_0=ruleColumn		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getOrderByColumnFullRule());
+	        }
+       		set(
+       			$current, 
+       			"colOrder",
+        		lv_colOrder_3_0, 
+        		"Column");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)))
+;
+
+
+
+
+
+// Entry rule entryRuleGroupByColumns
+entryRuleGroupByColumns returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getGroupByColumnsRule()); }
+	 iv_ruleGroupByColumns=ruleGroupByColumns 
+	 { $current=$iv_ruleGroupByColumns.current; } 
+	 EOF 
+;
+
+// Rule GroupByColumns
+ruleGroupByColumns returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+    { 
+        newCompositeNode(grammarAccess.getGroupByColumnsAccess().getGroupByColumnFullParserRuleCall_0()); 
+    }
+    this_GroupByColumnFull_0=ruleGroupByColumnFull
+    { 
+        $current = $this_GroupByColumnFull_0.current; 
+        afterParserOrEnumRuleCall();
+    }
+((
+    {
+        $current = forceCreateModelElementAndAdd(
+            grammarAccess.getGroupByColumnsAccess().getOrGroupByColumnEntriesAction_1_0(),
+            $current);
+    }
+)(	otherlv_2=',' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getGroupByColumnsAccess().getCommaKeyword_1_1_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getGroupByColumnsAccess().getEntriesGroupByColumnFullParserRuleCall_1_1_1_0()); 
+	    }
+		lv_entries_3_0=ruleGroupByColumnFull		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getGroupByColumnsRule());
+	        }
+       		add(
+       			$current, 
+       			"entries",
+        		lv_entries_3_0, 
+        		"GroupByColumnFull");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))+)?)
+;
+
+
+
+
+
+// Entry rule entryRuleGroupByColumnFull
+entryRuleGroupByColumnFull returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getGroupByColumnFullRule()); }
+	 iv_ruleGroupByColumnFull=ruleGroupByColumnFull 
+	 { $current=$iv_ruleGroupByColumnFull.current; } 
+	 EOF 
+;
+
+// Rule GroupByColumnFull
+ruleGroupByColumnFull returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		{ 
+	        newCompositeNode(grammarAccess.getGroupByColumnFullAccess().getGroupByColumnColumnParserRuleCall_0_0()); 
+	    }
+		lv_groupByColumn_0_0=ruleColumn		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getGroupByColumnFullRule());
+	        }
+       		set(
+       			$current, 
+       			"groupByColumn",
+        		lv_groupByColumn_0_0, 
+        		"Column");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+    |(
+    { 
+        newCompositeNode(grammarAccess.getGroupByColumnFullAccess().getTableFullParserRuleCall_1_0()); 
+    }
+    this_TableFull_1=ruleTableFull
+    { 
+        $current = $this_TableFull_1.current; 
+        afterParserOrEnumRuleCall();
+    }
+	otherlv_2='.' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getGroupByColumnFullAccess().getFullStopKeyword_1_1());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getGroupByColumnFullAccess().getGroupByColumnColumnParserRuleCall_1_2_0()); 
+	    }
+		lv_groupByColumn_3_0=ruleColumn		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getGroupByColumnFullRule());
+	        }
+       		set(
+       			$current, 
+       			"groupByColumn",
+        		lv_groupByColumn_3_0, 
+        		"Column");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)))
 ;
 
 
@@ -1041,6 +1365,200 @@ ruleParWhereEntry returns [EObject current=null]
 	otherlv_2=')' 
     {
     	newLeafNode(otherlv_2, grammarAccess.getParWhereEntryAccess().getRightParenthesisKeyword_2());
+    }
+)
+;
+
+
+
+
+
+// Entry rule entryRuleHavingEntry
+entryRuleHavingEntry returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getHavingEntryRule()); }
+	 iv_ruleHavingEntry=ruleHavingEntry 
+	 { $current=$iv_ruleHavingEntry.current; } 
+	 EOF 
+;
+
+// Rule HavingEntry
+ruleHavingEntry returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+    { 
+        newCompositeNode(grammarAccess.getHavingEntryAccess().getAndHavingEntryParserRuleCall_0()); 
+    }
+    this_AndHavingEntry_0=ruleAndHavingEntry
+    { 
+        $current = $this_AndHavingEntry_0.current; 
+        afterParserOrEnumRuleCall();
+    }
+((
+    {
+        $current = forceCreateModelElementAndAdd(
+            grammarAccess.getHavingEntryAccess().getOrHavingEntryEntriesAction_1_0(),
+            $current);
+    }
+)(	otherlv_2='OR' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getHavingEntryAccess().getORKeyword_1_1_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getHavingEntryAccess().getEntriesAndHavingEntryParserRuleCall_1_1_1_0()); 
+	    }
+		lv_entries_3_0=ruleAndHavingEntry		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getHavingEntryRule());
+	        }
+       		add(
+       			$current, 
+       			"entries",
+        		lv_entries_3_0, 
+        		"AndHavingEntry");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))+)?)
+;
+
+
+
+
+
+// Entry rule entryRuleAndHavingEntry
+entryRuleAndHavingEntry returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getAndHavingEntryRule()); }
+	 iv_ruleAndHavingEntry=ruleAndHavingEntry 
+	 { $current=$iv_ruleAndHavingEntry.current; } 
+	 EOF 
+;
+
+// Rule AndHavingEntry
+ruleAndHavingEntry returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+    { 
+        newCompositeNode(grammarAccess.getAndHavingEntryAccess().getConcreteHavingEntryParserRuleCall_0()); 
+    }
+    this_ConcreteHavingEntry_0=ruleConcreteHavingEntry
+    { 
+        $current = $this_ConcreteHavingEntry_0.current; 
+        afterParserOrEnumRuleCall();
+    }
+((
+    {
+        $current = forceCreateModelElementAndAdd(
+            grammarAccess.getAndHavingEntryAccess().getAndHavingEntryEntriesAction_1_0(),
+            $current);
+    }
+)(	otherlv_2='AND' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getAndHavingEntryAccess().getANDKeyword_1_1_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getAndHavingEntryAccess().getEntriesConcreteHavingEntryParserRuleCall_1_1_1_0()); 
+	    }
+		lv_entries_3_0=ruleConcreteHavingEntry		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getAndHavingEntryRule());
+	        }
+       		add(
+       			$current, 
+       			"entries",
+        		lv_entries_3_0, 
+        		"ConcreteHavingEntry");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))+)?)
+;
+
+
+
+
+
+// Entry rule entryRuleConcreteHavingEntry
+entryRuleConcreteHavingEntry returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getConcreteHavingEntryRule()); }
+	 iv_ruleConcreteHavingEntry=ruleConcreteHavingEntry 
+	 { $current=$iv_ruleConcreteHavingEntry.current; } 
+	 EOF 
+;
+
+// Rule ConcreteHavingEntry
+ruleConcreteHavingEntry returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+    { 
+        newCompositeNode(grammarAccess.getConcreteHavingEntryAccess().getParHavingEntryParserRuleCall_0()); 
+    }
+    this_ParHavingEntry_0=ruleParHavingEntry
+    { 
+        $current = $this_ParHavingEntry_0.current; 
+        afterParserOrEnumRuleCall();
+    }
+
+    |
+    { 
+        newCompositeNode(grammarAccess.getConcreteHavingEntryAccess().getExpressionWhereEntryParserRuleCall_1()); 
+    }
+    this_ExpressionWhereEntry_1=ruleExpressionWhereEntry
+    { 
+        $current = $this_ExpressionWhereEntry_1.current; 
+        afterParserOrEnumRuleCall();
+    }
+)
+;
+
+
+
+
+
+// Entry rule entryRuleParHavingEntry
+entryRuleParHavingEntry returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getParHavingEntryRule()); }
+	 iv_ruleParHavingEntry=ruleParHavingEntry 
+	 { $current=$iv_ruleParHavingEntry.current; } 
+	 EOF 
+;
+
+// Rule ParHavingEntry
+ruleParHavingEntry returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(	otherlv_0='(' 
+    {
+    	newLeafNode(otherlv_0, grammarAccess.getParHavingEntryAccess().getLeftParenthesisKeyword_0());
+    }
+
+    { 
+        newCompositeNode(grammarAccess.getParHavingEntryAccess().getHavingEntryParserRuleCall_1()); 
+    }
+    this_HavingEntry_1=ruleHavingEntry
+    { 
+        $current = $this_HavingEntry_1.current; 
+        afterParserOrEnumRuleCall();
+    }
+	otherlv_2=')' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getParHavingEntryAccess().getRightParenthesisKeyword_2());
     }
 )
 ;

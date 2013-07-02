@@ -95,13 +95,134 @@ public interface SqlPackage extends EPackage
   int MODEL__WHERE_ENTRY = 2;
 
   /**
+   * The feature id for the '<em><b>Group By Entry</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL__GROUP_BY_ENTRY = 3;
+
+  /**
+   * The feature id for the '<em><b>Having Entry</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL__HAVING_ENTRY = 4;
+
+  /**
+   * The feature id for the '<em><b>Order By Entry</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL__ORDER_BY_ENTRY = 5;
+
+  /**
    * The number of structural features of the '<em>Model</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MODEL_FEATURE_COUNT = 3;
+  int MODEL_FEATURE_COUNT = 6;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrderByColumnsImpl <em>Order By Columns</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.OrderByColumnsImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrderByColumns()
+   * @generated
+   */
+  int ORDER_BY_COLUMNS = 1;
+
+  /**
+   * The number of structural features of the '<em>Order By Columns</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ORDER_BY_COLUMNS_FEATURE_COUNT = 0;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrderByColumnFullImpl <em>Order By Column Full</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.OrderByColumnFullImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrderByColumnFull()
+   * @generated
+   */
+  int ORDER_BY_COLUMN_FULL = 2;
+
+  /**
+   * The feature id for the '<em><b>Col Order</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ORDER_BY_COLUMN_FULL__COL_ORDER = ORDER_BY_COLUMNS_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Order By Column Full</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ORDER_BY_COLUMN_FULL_FEATURE_COUNT = ORDER_BY_COLUMNS_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.GroupByColumnsImpl <em>Group By Columns</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.GroupByColumnsImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getGroupByColumns()
+   * @generated
+   */
+  int GROUP_BY_COLUMNS = 3;
+
+  /**
+   * The number of structural features of the '<em>Group By Columns</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GROUP_BY_COLUMNS_FEATURE_COUNT = 0;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.GroupByColumnFullImpl <em>Group By Column Full</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.GroupByColumnFullImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getGroupByColumnFull()
+   * @generated
+   */
+  int GROUP_BY_COLUMN_FULL = 4;
+
+  /**
+   * The feature id for the '<em><b>Group By Column</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GROUP_BY_COLUMN_FULL__GROUP_BY_COLUMN = GROUP_BY_COLUMNS_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Group By Column Full</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GROUP_BY_COLUMN_FULL_FEATURE_COUNT = GROUP_BY_COLUMNS_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnsImpl <em>Columns</em>}' class.
@@ -111,7 +232,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumns()
    * @generated
    */
-  int COLUMNS = 1;
+  int COLUMNS = 5;
 
   /**
    * The number of structural features of the '<em>Columns</em>' class.
@@ -130,7 +251,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnOrAlias()
    * @generated
    */
-  int COLUMN_OR_ALIAS = 2;
+  int COLUMN_OR_ALIAS = 6;
 
   /**
    * The number of structural features of the '<em>Column Or Alias</em>' class.
@@ -149,7 +270,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnFull()
    * @generated
    */
-  int COLUMN_FULL = 3;
+  int COLUMN_FULL = 7;
 
   /**
    * The feature id for the '<em><b>Col Alias</b></em>' containment reference.
@@ -186,7 +307,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnAlias()
    * @generated
    */
-  int COLUMN_ALIAS = 4;
+  int COLUMN_ALIAS = 8;
 
   /**
    * The feature id for the '<em><b>Col Alias</b></em>' attribute.
@@ -214,7 +335,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumn()
    * @generated
    */
-  int COLUMN = 5;
+  int COLUMN = 9;
 
   /**
    * The feature id for the '<em><b>Col Name</b></em>' attribute.
@@ -242,7 +363,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTables()
    * @generated
    */
-  int TABLES = 6;
+  int TABLES = 10;
 
   /**
    * The number of structural features of the '<em>Tables</em>' class.
@@ -261,7 +382,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTableOrAlias()
    * @generated
    */
-  int TABLE_OR_ALIAS = 7;
+  int TABLE_OR_ALIAS = 11;
 
   /**
    * The number of structural features of the '<em>Table Or Alias</em>' class.
@@ -280,7 +401,25 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTableFull()
    * @generated
    */
-  int TABLE_FULL = 8;
+  int TABLE_FULL = 12;
+
+  /**
+   * The feature id for the '<em><b>Col Order</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_FULL__COL_ORDER = ORDER_BY_COLUMN_FULL__COL_ORDER;
+
+  /**
+   * The feature id for the '<em><b>Group By Column</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_FULL__GROUP_BY_COLUMN = ORDER_BY_COLUMN_FULL_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Col Alias</b></em>' containment reference.
@@ -289,7 +428,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TABLE_FULL__COL_ALIAS = COLUMN_FULL__COL_ALIAS;
+  int TABLE_FULL__COL_ALIAS = ORDER_BY_COLUMN_FULL_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Col Name</b></em>' containment reference.
@@ -298,7 +437,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TABLE_FULL__COL_NAME = COLUMN_FULL__COL_NAME;
+  int TABLE_FULL__COL_NAME = ORDER_BY_COLUMN_FULL_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Tbl Alias</b></em>' containment reference.
@@ -307,7 +446,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TABLE_FULL__TBL_ALIAS = COLUMN_FULL_FEATURE_COUNT + 0;
+  int TABLE_FULL__TBL_ALIAS = ORDER_BY_COLUMN_FULL_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Tbl</b></em>' containment reference.
@@ -316,7 +455,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TABLE_FULL__TBL = COLUMN_FULL_FEATURE_COUNT + 1;
+  int TABLE_FULL__TBL = ORDER_BY_COLUMN_FULL_FEATURE_COUNT + 4;
 
   /**
    * The number of structural features of the '<em>Table Full</em>' class.
@@ -325,7 +464,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TABLE_FULL_FEATURE_COUNT = COLUMN_FULL_FEATURE_COUNT + 2;
+  int TABLE_FULL_FEATURE_COUNT = ORDER_BY_COLUMN_FULL_FEATURE_COUNT + 5;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.TableImpl <em>Table</em>}' class.
@@ -335,7 +474,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTable()
    * @generated
    */
-  int TABLE = 9;
+  int TABLE = 13;
 
   /**
    * The feature id for the '<em><b>Tbl</b></em>' attribute.
@@ -363,7 +502,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTableAlias()
    * @generated
    */
-  int TABLE_ALIAS = 10;
+  int TABLE_ALIAS = 14;
 
   /**
    * The feature id for the '<em><b>Tbl Alias</b></em>' attribute.
@@ -391,7 +530,25 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSchema()
    * @generated
    */
-  int SCHEMA = 11;
+  int SCHEMA = 15;
+
+  /**
+   * The feature id for the '<em><b>Col Order</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCHEMA__COL_ORDER = TABLE_FULL__COL_ORDER;
+
+  /**
+   * The feature id for the '<em><b>Group By Column</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCHEMA__GROUP_BY_COLUMN = TABLE_FULL__GROUP_BY_COLUMN;
 
   /**
    * The feature id for the '<em><b>Col Alias</b></em>' containment reference.
@@ -455,7 +612,25 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDatabase()
    * @generated
    */
-  int DATABASE = 12;
+  int DATABASE = 16;
+
+  /**
+   * The feature id for the '<em><b>Col Order</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATABASE__COL_ORDER = SCHEMA__COL_ORDER;
+
+  /**
+   * The feature id for the '<em><b>Group By Column</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATABASE__GROUP_BY_COLUMN = SCHEMA__GROUP_BY_COLUMN;
 
   /**
    * The feature id for the '<em><b>Col Alias</b></em>' containment reference.
@@ -528,7 +703,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getWhereEntry()
    * @generated
    */
-  int WHERE_ENTRY = 13;
+  int WHERE_ENTRY = 17;
 
   /**
    * The number of structural features of the '<em>Where Entry</em>' class.
@@ -540,6 +715,25 @@ public interface SqlPackage extends EPackage
   int WHERE_ENTRY_FEATURE_COUNT = 0;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.HavingEntryImpl <em>Having Entry</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.HavingEntryImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getHavingEntry()
+   * @generated
+   */
+  int HAVING_ENTRY = 18;
+
+  /**
+   * The number of structural features of the '<em>Having Entry</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HAVING_ENTRY_FEATURE_COUNT = 0;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ExpressionWhereEntryImpl <em>Expression Where Entry</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -547,7 +741,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getExpressionWhereEntry()
    * @generated
    */
-  int EXPRESSION_WHERE_ENTRY = 14;
+  int EXPRESSION_WHERE_ENTRY = 19;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -575,7 +769,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSingleExpressionWhereEntry()
    * @generated
    */
-  int SINGLE_EXPRESSION_WHERE_ENTRY = 15;
+  int SINGLE_EXPRESSION_WHERE_ENTRY = 20;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -621,7 +815,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getExpression()
    * @generated
    */
-  int EXPRESSION = 16;
+  int EXPRESSION = 21;
 
   /**
    * The number of structural features of the '<em>Expression</em>' class.
@@ -640,7 +834,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getReplacableValue()
    * @generated
    */
-  int REPLACABLE_VALUE = 17;
+  int REPLACABLE_VALUE = 22;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -668,7 +862,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDoubleExpression()
    * @generated
    */
-  int DOUBLE_EXPRESSION = 18;
+  int DOUBLE_EXPRESSION = 23;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -696,7 +890,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getLongExpression()
    * @generated
    */
-  int LONG_EXPRESSION = 19;
+  int LONG_EXPRESSION = 24;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -724,7 +918,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getStringExpression()
    * @generated
    */
-  int STRING_EXPRESSION = 20;
+  int STRING_EXPRESSION = 25;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -752,7 +946,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getNullExpression()
    * @generated
    */
-  int NULL_EXPRESSION = 21;
+  int NULL_EXPRESSION = 26;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -780,7 +974,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDateExpression()
    * @generated
    */
-  int DATE_EXPRESSION = 22;
+  int DATE_EXPRESSION = 27;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -808,7 +1002,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getBooleanExpression()
    * @generated
    */
-  int BOOLEAN_EXPRESSION = 23;
+  int BOOLEAN_EXPRESSION = 28;
 
   /**
    * The feature id for the '<em><b>True</b></em>' attribute.
@@ -836,7 +1030,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getMultiExpressionWhereEntry()
    * @generated
    */
-  int MULTI_EXPRESSION_WHERE_ENTRY = 24;
+  int MULTI_EXPRESSION_WHERE_ENTRY = 29;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -882,7 +1076,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getArrayExpression()
    * @generated
    */
-  int ARRAY_EXPRESSION = 25;
+  int ARRAY_EXPRESSION = 30;
 
   /**
    * The number of structural features of the '<em>Array Expression</em>' class.
@@ -901,7 +1095,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDoubleArrayExpression()
    * @generated
    */
-  int DOUBLE_ARRAY_EXPRESSION = 26;
+  int DOUBLE_ARRAY_EXPRESSION = 31;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -929,7 +1123,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getLongArrayExpression()
    * @generated
    */
-  int LONG_ARRAY_EXPRESSION = 27;
+  int LONG_ARRAY_EXPRESSION = 32;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -957,7 +1151,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getStringArrayExpression()
    * @generated
    */
-  int STRING_ARRAY_EXPRESSION = 28;
+  int STRING_ARRAY_EXPRESSION = 33;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -985,7 +1179,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getNullArrayExpression()
    * @generated
    */
-  int NULL_ARRAY_EXPRESSION = 29;
+  int NULL_ARRAY_EXPRESSION = 34;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -1013,7 +1207,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDateArrayExpression()
    * @generated
    */
-  int DATE_ARRAY_EXPRESSION = 30;
+  int DATE_ARRAY_EXPRESSION = 35;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -1041,7 +1235,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getBooleanArrayExpression()
    * @generated
    */
-  int BOOLEAN_ARRAY_EXPRESSION = 31;
+  int BOOLEAN_ARRAY_EXPRESSION = 36;
 
   /**
    * The feature id for the '<em><b>Values</b></em>' attribute list.
@@ -1062,6 +1256,62 @@ public interface SqlPackage extends EPackage
   int BOOLEAN_ARRAY_EXPRESSION_FEATURE_COUNT = ARRAY_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrOrderByColumnImpl <em>Or Order By Column</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.OrOrderByColumnImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrOrderByColumn()
+   * @generated
+   */
+  int OR_ORDER_BY_COLUMN = 37;
+
+  /**
+   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OR_ORDER_BY_COLUMN__ENTRIES = ORDER_BY_COLUMNS_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Or Order By Column</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OR_ORDER_BY_COLUMN_FEATURE_COUNT = ORDER_BY_COLUMNS_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrGroupByColumnImpl <em>Or Group By Column</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.OrGroupByColumnImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrGroupByColumn()
+   * @generated
+   */
+  int OR_GROUP_BY_COLUMN = 38;
+
+  /**
+   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OR_GROUP_BY_COLUMN__ENTRIES = GROUP_BY_COLUMNS_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Or Group By Column</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OR_GROUP_BY_COLUMN_FEATURE_COUNT = GROUP_BY_COLUMNS_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrColumnImpl <em>Or Column</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1069,7 +1319,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrColumn()
    * @generated
    */
-  int OR_COLUMN = 32;
+  int OR_COLUMN = 39;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1097,7 +1347,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrTable()
    * @generated
    */
-  int OR_TABLE = 33;
+  int OR_TABLE = 40;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1125,7 +1375,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrWhereEntry()
    * @generated
    */
-  int OR_WHERE_ENTRY = 34;
+  int OR_WHERE_ENTRY = 41;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1153,7 +1403,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getAndWhereEntry()
    * @generated
    */
-  int AND_WHERE_ENTRY = 35;
+  int AND_WHERE_ENTRY = 42;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1174,6 +1424,62 @@ public interface SqlPackage extends EPackage
   int AND_WHERE_ENTRY_FEATURE_COUNT = WHERE_ENTRY_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrHavingEntryImpl <em>Or Having Entry</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.OrHavingEntryImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrHavingEntry()
+   * @generated
+   */
+  int OR_HAVING_ENTRY = 43;
+
+  /**
+   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OR_HAVING_ENTRY__ENTRIES = HAVING_ENTRY_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Or Having Entry</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OR_HAVING_ENTRY_FEATURE_COUNT = HAVING_ENTRY_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.AndHavingEntryImpl <em>And Having Entry</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.AndHavingEntryImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getAndHavingEntry()
+   * @generated
+   */
+  int AND_HAVING_ENTRY = 44;
+
+  /**
+   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int AND_HAVING_ENTRY__ENTRIES = HAVING_ENTRY_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>And Having Entry</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int AND_HAVING_ENTRY_FEATURE_COUNT = HAVING_ENTRY_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.ArrayOperator <em>Array Operator</em>}' enum.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1181,7 +1487,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getArrayOperator()
    * @generated
    */
-  int ARRAY_OPERATOR = 36;
+  int ARRAY_OPERATOR = 45;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.Operator <em>Operator</em>}' enum.
@@ -1191,7 +1497,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperator()
    * @generated
    */
-  int OPERATOR = 37;
+  int OPERATOR = 46;
 
 
   /**
@@ -1236,6 +1542,101 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EReference getModel_WhereEntry();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Model#getGroupByEntry <em>Group By Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Group By Entry</em>'.
+   * @see com.jaspersoft.studio.data.sql.Model#getGroupByEntry()
+   * @see #getModel()
+   * @generated
+   */
+  EReference getModel_GroupByEntry();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Model#getHavingEntry <em>Having Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Having Entry</em>'.
+   * @see com.jaspersoft.studio.data.sql.Model#getHavingEntry()
+   * @see #getModel()
+   * @generated
+   */
+  EReference getModel_HavingEntry();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Model#getOrderByEntry <em>Order By Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Order By Entry</em>'.
+   * @see com.jaspersoft.studio.data.sql.Model#getOrderByEntry()
+   * @see #getModel()
+   * @generated
+   */
+  EReference getModel_OrderByEntry();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrderByColumns <em>Order By Columns</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Order By Columns</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrderByColumns
+   * @generated
+   */
+  EClass getOrderByColumns();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrderByColumnFull <em>Order By Column Full</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Order By Column Full</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrderByColumnFull
+   * @generated
+   */
+  EClass getOrderByColumnFull();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.OrderByColumnFull#getColOrder <em>Col Order</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Col Order</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrderByColumnFull#getColOrder()
+   * @see #getOrderByColumnFull()
+   * @generated
+   */
+  EReference getOrderByColumnFull_ColOrder();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.GroupByColumns <em>Group By Columns</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Group By Columns</em>'.
+   * @see com.jaspersoft.studio.data.sql.GroupByColumns
+   * @generated
+   */
+  EClass getGroupByColumns();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.GroupByColumnFull <em>Group By Column Full</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Group By Column Full</em>'.
+   * @see com.jaspersoft.studio.data.sql.GroupByColumnFull
+   * @generated
+   */
+  EClass getGroupByColumnFull();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.GroupByColumnFull#getGroupByColumn <em>Group By Column</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Group By Column</em>'.
+   * @see com.jaspersoft.studio.data.sql.GroupByColumnFull#getGroupByColumn()
+   * @see #getGroupByColumnFull()
+   * @generated
+   */
+  EReference getGroupByColumnFull_GroupByColumn();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Columns <em>Columns</em>}'.
@@ -1476,6 +1877,16 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EClass getWhereEntry();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.HavingEntry <em>Having Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Having Entry</em>'.
+   * @see com.jaspersoft.studio.data.sql.HavingEntry
+   * @generated
+   */
+  EClass getHavingEntry();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.ExpressionWhereEntry <em>Expression Where Entry</em>}'.
@@ -1856,6 +2267,48 @@ public interface SqlPackage extends EPackage
   EAttribute getBooleanArrayExpression_Values();
 
   /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrOrderByColumn <em>Or Order By Column</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Or Order By Column</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrOrderByColumn
+   * @generated
+   */
+  EClass getOrOrderByColumn();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.OrOrderByColumn#getEntries <em>Entries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Entries</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrOrderByColumn#getEntries()
+   * @see #getOrOrderByColumn()
+   * @generated
+   */
+  EReference getOrOrderByColumn_Entries();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrGroupByColumn <em>Or Group By Column</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Or Group By Column</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrGroupByColumn
+   * @generated
+   */
+  EClass getOrGroupByColumn();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.OrGroupByColumn#getEntries <em>Entries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Entries</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrGroupByColumn#getEntries()
+   * @see #getOrGroupByColumn()
+   * @generated
+   */
+  EReference getOrGroupByColumn_Entries();
+
+  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrColumn <em>Or Column</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1940,6 +2393,48 @@ public interface SqlPackage extends EPackage
   EReference getAndWhereEntry_Entries();
 
   /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrHavingEntry <em>Or Having Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Or Having Entry</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrHavingEntry
+   * @generated
+   */
+  EClass getOrHavingEntry();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.OrHavingEntry#getEntries <em>Entries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Entries</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrHavingEntry#getEntries()
+   * @see #getOrHavingEntry()
+   * @generated
+   */
+  EReference getOrHavingEntry_Entries();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.AndHavingEntry <em>And Having Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>And Having Entry</em>'.
+   * @see com.jaspersoft.studio.data.sql.AndHavingEntry
+   * @generated
+   */
+  EClass getAndHavingEntry();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.AndHavingEntry#getEntries <em>Entries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Entries</em>'.
+   * @see com.jaspersoft.studio.data.sql.AndHavingEntry#getEntries()
+   * @see #getAndHavingEntry()
+   * @generated
+   */
+  EReference getAndHavingEntry_Entries();
+
+  /**
    * Returns the meta object for enum '{@link com.jaspersoft.studio.data.sql.ArrayOperator <em>Array Operator</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2015,6 +2510,86 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference MODEL__WHERE_ENTRY = eINSTANCE.getModel_WhereEntry();
+
+    /**
+     * The meta object literal for the '<em><b>Group By Entry</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MODEL__GROUP_BY_ENTRY = eINSTANCE.getModel_GroupByEntry();
+
+    /**
+     * The meta object literal for the '<em><b>Having Entry</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MODEL__HAVING_ENTRY = eINSTANCE.getModel_HavingEntry();
+
+    /**
+     * The meta object literal for the '<em><b>Order By Entry</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MODEL__ORDER_BY_ENTRY = eINSTANCE.getModel_OrderByEntry();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrderByColumnsImpl <em>Order By Columns</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.OrderByColumnsImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrderByColumns()
+     * @generated
+     */
+    EClass ORDER_BY_COLUMNS = eINSTANCE.getOrderByColumns();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrderByColumnFullImpl <em>Order By Column Full</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.OrderByColumnFullImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrderByColumnFull()
+     * @generated
+     */
+    EClass ORDER_BY_COLUMN_FULL = eINSTANCE.getOrderByColumnFull();
+
+    /**
+     * The meta object literal for the '<em><b>Col Order</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ORDER_BY_COLUMN_FULL__COL_ORDER = eINSTANCE.getOrderByColumnFull_ColOrder();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.GroupByColumnsImpl <em>Group By Columns</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.GroupByColumnsImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getGroupByColumns()
+     * @generated
+     */
+    EClass GROUP_BY_COLUMNS = eINSTANCE.getGroupByColumns();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.GroupByColumnFullImpl <em>Group By Column Full</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.GroupByColumnFullImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getGroupByColumnFull()
+     * @generated
+     */
+    EClass GROUP_BY_COLUMN_FULL = eINSTANCE.getGroupByColumnFull();
+
+    /**
+     * The meta object literal for the '<em><b>Group By Column</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference GROUP_BY_COLUMN_FULL__GROUP_BY_COLUMN = eINSTANCE.getGroupByColumnFull_GroupByColumn();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnsImpl <em>Columns</em>}' class.
@@ -2225,6 +2800,16 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EClass WHERE_ENTRY = eINSTANCE.getWhereEntry();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.HavingEntryImpl <em>Having Entry</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.HavingEntryImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getHavingEntry()
+     * @generated
+     */
+    EClass HAVING_ENTRY = eINSTANCE.getHavingEntry();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ExpressionWhereEntryImpl <em>Expression Where Entry</em>}' class.
@@ -2551,6 +3136,42 @@ public interface SqlPackage extends EPackage
     EAttribute BOOLEAN_ARRAY_EXPRESSION__VALUES = eINSTANCE.getBooleanArrayExpression_Values();
 
     /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrOrderByColumnImpl <em>Or Order By Column</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.OrOrderByColumnImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrOrderByColumn()
+     * @generated
+     */
+    EClass OR_ORDER_BY_COLUMN = eINSTANCE.getOrOrderByColumn();
+
+    /**
+     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OR_ORDER_BY_COLUMN__ENTRIES = eINSTANCE.getOrOrderByColumn_Entries();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrGroupByColumnImpl <em>Or Group By Column</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.OrGroupByColumnImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrGroupByColumn()
+     * @generated
+     */
+    EClass OR_GROUP_BY_COLUMN = eINSTANCE.getOrGroupByColumn();
+
+    /**
+     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OR_GROUP_BY_COLUMN__ENTRIES = eINSTANCE.getOrGroupByColumn_Entries();
+
+    /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrColumnImpl <em>Or Column</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2621,6 +3242,42 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference AND_WHERE_ENTRY__ENTRIES = eINSTANCE.getAndWhereEntry_Entries();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrHavingEntryImpl <em>Or Having Entry</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.OrHavingEntryImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrHavingEntry()
+     * @generated
+     */
+    EClass OR_HAVING_ENTRY = eINSTANCE.getOrHavingEntry();
+
+    /**
+     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OR_HAVING_ENTRY__ENTRIES = eINSTANCE.getOrHavingEntry_Entries();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.AndHavingEntryImpl <em>And Having Entry</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.AndHavingEntryImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getAndHavingEntry()
+     * @generated
+     */
+    EClass AND_HAVING_ENTRY = eINSTANCE.getAndHavingEntry();
+
+    /**
+     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference AND_HAVING_ENTRY__ENTRIES = eINSTANCE.getAndHavingEntry_Entries();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.ArrayOperator <em>Array Operator</em>}' enum.

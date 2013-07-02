@@ -3,6 +3,7 @@ package com.jaspersoft.studio.data.serializer;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.jaspersoft.studio.data.services.SqlGrammarAccess;
+import com.jaspersoft.studio.data.sql.AndHavingEntry;
 import com.jaspersoft.studio.data.sql.AndWhereEntry;
 import com.jaspersoft.studio.data.sql.BooleanArrayExpression;
 import com.jaspersoft.studio.data.sql.BooleanExpression;
@@ -14,6 +15,7 @@ import com.jaspersoft.studio.data.sql.DateArrayExpression;
 import com.jaspersoft.studio.data.sql.DateExpression;
 import com.jaspersoft.studio.data.sql.DoubleArrayExpression;
 import com.jaspersoft.studio.data.sql.DoubleExpression;
+import com.jaspersoft.studio.data.sql.GroupByColumnFull;
 import com.jaspersoft.studio.data.sql.LongArrayExpression;
 import com.jaspersoft.studio.data.sql.LongExpression;
 import com.jaspersoft.studio.data.sql.Model;
@@ -21,8 +23,12 @@ import com.jaspersoft.studio.data.sql.MultiExpressionWhereEntry;
 import com.jaspersoft.studio.data.sql.NullArrayExpression;
 import com.jaspersoft.studio.data.sql.NullExpression;
 import com.jaspersoft.studio.data.sql.OrColumn;
+import com.jaspersoft.studio.data.sql.OrGroupByColumn;
+import com.jaspersoft.studio.data.sql.OrHavingEntry;
+import com.jaspersoft.studio.data.sql.OrOrderByColumn;
 import com.jaspersoft.studio.data.sql.OrTable;
 import com.jaspersoft.studio.data.sql.OrWhereEntry;
+import com.jaspersoft.studio.data.sql.OrderByColumnFull;
 import com.jaspersoft.studio.data.sql.ReplacableValue;
 import com.jaspersoft.studio.data.sql.Schema;
 import com.jaspersoft.studio.data.sql.SingleExpressionWhereEntry;
@@ -52,6 +58,17 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	public void createSequence(EObject context, EObject semanticObject) {
 		if(semanticObject.eClass().getEPackage() == SqlPackage.eINSTANCE) switch(semanticObject.eClass().getClassifierID()) {
+			case SqlPackage.AND_HAVING_ENTRY:
+				if(context == grammarAccess.getAndHavingEntryRule() ||
+				   context == grammarAccess.getAndHavingEntryAccess().getAndHavingEntryEntriesAction_1_0() ||
+				   context == grammarAccess.getConcreteHavingEntryRule() ||
+				   context == grammarAccess.getHavingEntryRule() ||
+				   context == grammarAccess.getHavingEntryAccess().getOrHavingEntryEntriesAction_1_0() ||
+				   context == grammarAccess.getParHavingEntryRule()) {
+					sequence_AndHavingEntry(context, (AndHavingEntry) semanticObject); 
+					return; 
+				}
+				else break;
 			case SqlPackage.AND_WHERE_ENTRY:
 				if(context == grammarAccess.getAndWhereEntryRule() ||
 				   context == grammarAccess.getAndWhereEntryAccess().getAndWhereEntryEntriesAction_1_0() ||
@@ -110,6 +127,18 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					sequence_Database(context, (Database) semanticObject); 
 					return; 
 				}
+				else if(context == grammarAccess.getGroupByColumnFullRule() ||
+				   context == grammarAccess.getGroupByColumnsRule() ||
+				   context == grammarAccess.getGroupByColumnsAccess().getOrGroupByColumnEntriesAction_1_0()) {
+					sequence_Database_GroupByColumnFull_Schema_TableFull(context, (Database) semanticObject); 
+					return; 
+				}
+				else if(context == grammarAccess.getOrderByColumnFullRule() ||
+				   context == grammarAccess.getOrderByColumnsRule() ||
+				   context == grammarAccess.getOrderByColumnsAccess().getOrOrderByColumnEntriesAction_1_0()) {
+					sequence_Database_OrderByColumnFull_Schema_TableFull(context, (Database) semanticObject); 
+					return; 
+				}
 				else if(context == grammarAccess.getSchemaRule()) {
 					sequence_Database_Schema(context, (Database) semanticObject); 
 					return; 
@@ -150,6 +179,14 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					return; 
 				}
 				else break;
+			case SqlPackage.GROUP_BY_COLUMN_FULL:
+				if(context == grammarAccess.getGroupByColumnFullRule() ||
+				   context == grammarAccess.getGroupByColumnsRule() ||
+				   context == grammarAccess.getGroupByColumnsAccess().getOrGroupByColumnEntriesAction_1_0()) {
+					sequence_GroupByColumnFull(context, (GroupByColumnFull) semanticObject); 
+					return; 
+				}
+				else break;
 			case SqlPackage.LONG_ARRAY_EXPRESSION:
 				if(context == grammarAccess.getArrayExpressionRule() ||
 				   context == grammarAccess.getLongArrayExpressionRule()) {
@@ -171,11 +208,17 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 				}
 				else break;
 			case SqlPackage.MULTI_EXPRESSION_WHERE_ENTRY:
-				if(context == grammarAccess.getAndWhereEntryRule() ||
+				if(context == grammarAccess.getAndHavingEntryRule() ||
+				   context == grammarAccess.getAndHavingEntryAccess().getAndHavingEntryEntriesAction_1_0() ||
+				   context == grammarAccess.getAndWhereEntryRule() ||
 				   context == grammarAccess.getAndWhereEntryAccess().getAndWhereEntryEntriesAction_1_0() ||
+				   context == grammarAccess.getConcreteHavingEntryRule() ||
 				   context == grammarAccess.getConcreteWhereEntryRule() ||
 				   context == grammarAccess.getExpressionWhereEntryRule() ||
+				   context == grammarAccess.getHavingEntryRule() ||
+				   context == grammarAccess.getHavingEntryAccess().getOrHavingEntryEntriesAction_1_0() ||
 				   context == grammarAccess.getMultiExpressionWhereEntryRule() ||
+				   context == grammarAccess.getParHavingEntryRule() ||
 				   context == grammarAccess.getParWhereEntryRule() ||
 				   context == grammarAccess.getWhereEntryRule() ||
 				   context == grammarAccess.getWhereEntryAccess().getOrWhereEntryEntriesAction_1_0()) {
@@ -203,6 +246,29 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					return; 
 				}
 				else break;
+			case SqlPackage.OR_GROUP_BY_COLUMN:
+				if(context == grammarAccess.getGroupByColumnsRule()) {
+					sequence_GroupByColumns(context, (OrGroupByColumn) semanticObject); 
+					return; 
+				}
+				else break;
+			case SqlPackage.OR_HAVING_ENTRY:
+				if(context == grammarAccess.getAndHavingEntryRule() ||
+				   context == grammarAccess.getAndHavingEntryAccess().getAndHavingEntryEntriesAction_1_0() ||
+				   context == grammarAccess.getConcreteHavingEntryRule() ||
+				   context == grammarAccess.getHavingEntryRule() ||
+				   context == grammarAccess.getHavingEntryAccess().getOrHavingEntryEntriesAction_1_0() ||
+				   context == grammarAccess.getParHavingEntryRule()) {
+					sequence_HavingEntry(context, (OrHavingEntry) semanticObject); 
+					return; 
+				}
+				else break;
+			case SqlPackage.OR_ORDER_BY_COLUMN:
+				if(context == grammarAccess.getOrderByColumnsRule()) {
+					sequence_OrderByColumns(context, (OrOrderByColumn) semanticObject); 
+					return; 
+				}
+				else break;
 			case SqlPackage.OR_TABLE:
 				if(context == grammarAccess.getTablesRule()) {
 					sequence_Tables(context, (OrTable) semanticObject); 
@@ -217,6 +283,14 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 				   context == grammarAccess.getWhereEntryRule() ||
 				   context == grammarAccess.getWhereEntryAccess().getOrWhereEntryEntriesAction_1_0()) {
 					sequence_WhereEntry(context, (OrWhereEntry) semanticObject); 
+					return; 
+				}
+				else break;
+			case SqlPackage.ORDER_BY_COLUMN_FULL:
+				if(context == grammarAccess.getOrderByColumnFullRule() ||
+				   context == grammarAccess.getOrderByColumnsRule() ||
+				   context == grammarAccess.getOrderByColumnsAccess().getOrOrderByColumnEntriesAction_1_0()) {
+					sequence_OrderByColumnFull(context, (OrderByColumnFull) semanticObject); 
 					return; 
 				}
 				else break;
@@ -235,6 +309,18 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					sequence_ColumnFull_Schema_TableFull(context, (Schema) semanticObject); 
 					return; 
 				}
+				else if(context == grammarAccess.getGroupByColumnFullRule() ||
+				   context == grammarAccess.getGroupByColumnsRule() ||
+				   context == grammarAccess.getGroupByColumnsAccess().getOrGroupByColumnEntriesAction_1_0()) {
+					sequence_GroupByColumnFull_Schema_TableFull(context, (Schema) semanticObject); 
+					return; 
+				}
+				else if(context == grammarAccess.getOrderByColumnFullRule() ||
+				   context == grammarAccess.getOrderByColumnsRule() ||
+				   context == grammarAccess.getOrderByColumnsAccess().getOrOrderByColumnEntriesAction_1_0()) {
+					sequence_OrderByColumnFull_Schema_TableFull(context, (Schema) semanticObject); 
+					return; 
+				}
 				else if(context == grammarAccess.getSchemaRule()) {
 					sequence_Schema(context, (Schema) semanticObject); 
 					return; 
@@ -248,10 +334,16 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 				}
 				else break;
 			case SqlPackage.SINGLE_EXPRESSION_WHERE_ENTRY:
-				if(context == grammarAccess.getAndWhereEntryRule() ||
+				if(context == grammarAccess.getAndHavingEntryRule() ||
+				   context == grammarAccess.getAndHavingEntryAccess().getAndHavingEntryEntriesAction_1_0() ||
+				   context == grammarAccess.getAndWhereEntryRule() ||
 				   context == grammarAccess.getAndWhereEntryAccess().getAndWhereEntryEntriesAction_1_0() ||
+				   context == grammarAccess.getConcreteHavingEntryRule() ||
 				   context == grammarAccess.getConcreteWhereEntryRule() ||
 				   context == grammarAccess.getExpressionWhereEntryRule() ||
+				   context == grammarAccess.getHavingEntryRule() ||
+				   context == grammarAccess.getHavingEntryAccess().getOrHavingEntryEntriesAction_1_0() ||
+				   context == grammarAccess.getParHavingEntryRule() ||
 				   context == grammarAccess.getParWhereEntryRule() ||
 				   context == grammarAccess.getSingleExpressionWhereEntryRule() ||
 				   context == grammarAccess.getWhereEntryRule() ||
@@ -294,6 +386,18 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					sequence_ColumnFull_TableFull(context, (TableFull) semanticObject); 
 					return; 
 				}
+				else if(context == grammarAccess.getGroupByColumnFullRule() ||
+				   context == grammarAccess.getGroupByColumnsRule() ||
+				   context == grammarAccess.getGroupByColumnsAccess().getOrGroupByColumnEntriesAction_1_0()) {
+					sequence_GroupByColumnFull_TableFull(context, (TableFull) semanticObject); 
+					return; 
+				}
+				else if(context == grammarAccess.getOrderByColumnFullRule() ||
+				   context == grammarAccess.getOrderByColumnsRule() ||
+				   context == grammarAccess.getOrderByColumnsAccess().getOrOrderByColumnEntriesAction_1_0()) {
+					sequence_OrderByColumnFull_TableFull(context, (TableFull) semanticObject); 
+					return; 
+				}
 				else if(context == grammarAccess.getTableFullRule() ||
 				   context == grammarAccess.getTableOrAliasRule() ||
 				   context == grammarAccess.getTablesRule() ||
@@ -305,6 +409,15 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 			}
 		if (errorAcceptor != null) errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));
 	}
+	
+	/**
+	 * Constraint:
+	 *     (entries+=AndHavingEntry_AndHavingEntry_1_0 entries+=ConcreteHavingEntry+)
+	 */
+	protected void sequence_AndHavingEntry(EObject context, AndHavingEntry semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
 	
 	/**
 	 * Constraint:
@@ -421,6 +534,24 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
+	 *     (dbName=ID schem=ID tbl=Table groupByColumn=Column)
+	 */
+	protected void sequence_Database_GroupByColumnFull_Schema_TableFull(EObject context, Database semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (dbName=ID schem=ID tbl=Table colOrder=Column)
+	 */
+	protected void sequence_Database_OrderByColumnFull_Schema_TableFull(EObject context, Database semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
 	 *     (dbName=ID schem=ID)
 	 */
 	protected void sequence_Database_Schema(EObject context, Database semanticObject) {
@@ -489,6 +620,58 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
+	 *     groupByColumn=Column
+	 */
+	protected void sequence_GroupByColumnFull(EObject context, GroupByColumnFull semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, SqlPackage.Literals.GROUP_BY_COLUMN_FULL__GROUP_BY_COLUMN) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SqlPackage.Literals.GROUP_BY_COLUMN_FULL__GROUP_BY_COLUMN));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getGroupByColumnFullAccess().getGroupByColumnColumnParserRuleCall_0_0(), semanticObject.getGroupByColumn());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (schem=ID tbl=Table groupByColumn=Column)
+	 */
+	protected void sequence_GroupByColumnFull_Schema_TableFull(EObject context, Schema semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (tbl=Table groupByColumn=Column)
+	 */
+	protected void sequence_GroupByColumnFull_TableFull(EObject context, TableFull semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (entries+=GroupByColumns_OrGroupByColumn_1_0 entries+=GroupByColumnFull+)
+	 */
+	protected void sequence_GroupByColumns(EObject context, OrGroupByColumn semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (entries+=HavingEntry_OrHavingEntry_1_0 entries+=AndHavingEntry+)
+	 */
+	protected void sequence_HavingEntry(EObject context, OrHavingEntry semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
 	 *     (values+=SINGED_LONG values+=SINGED_LONG*)
 	 */
 	protected void sequence_LongArrayExpression(EObject context, LongArrayExpression semanticObject) {
@@ -514,7 +697,14 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (col=Columns? tbl=Tables whereEntry=WhereEntry?)
+	 *     (
+	 *         col=Columns? 
+	 *         tbl=Tables 
+	 *         whereEntry=WhereEntry? 
+	 *         groupByEntry=GroupByColumns? 
+	 *         havingEntry=HavingEntry? 
+	 *         orderByEntry=OrderByColumns?
+	 *     )
 	 */
 	protected void sequence_Model(EObject context, Model semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -565,6 +755,49 @@ public class SqlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
 		feeder.accept(grammarAccess.getNullExpressionAccess().getValueNullKeyword_0(), semanticObject.getValue());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     colOrder=Column
+	 */
+	protected void sequence_OrderByColumnFull(EObject context, OrderByColumnFull semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, SqlPackage.Literals.ORDER_BY_COLUMN_FULL__COL_ORDER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, SqlPackage.Literals.ORDER_BY_COLUMN_FULL__COL_ORDER));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getOrderByColumnFullAccess().getColOrderColumnParserRuleCall_0_0(), semanticObject.getColOrder());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (schem=ID tbl=Table colOrder=Column)
+	 */
+	protected void sequence_OrderByColumnFull_Schema_TableFull(EObject context, Schema semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (tbl=Table colOrder=Column)
+	 */
+	protected void sequence_OrderByColumnFull_TableFull(EObject context, TableFull semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (entries+=OrderByColumns_OrOrderByColumn_1_0 entries+=OrderByColumnFull+)
+	 */
+	protected void sequence_OrderByColumns(EObject context, OrOrderByColumn semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

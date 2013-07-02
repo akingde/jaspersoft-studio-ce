@@ -15,6 +15,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.jaspersoft.studio.data.sql.Model#getCol <em>Col</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Model#getTbl <em>Tbl</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Model#getWhereEntry <em>Where Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Model#getGroupByEntry <em>Group By Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Model#getHavingEntry <em>Having Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Model#getOrderByEntry <em>Order By Entry</em>}</li>
  * </ul>
  * </p>
  *
@@ -101,5 +104,83 @@ public interface Model extends EObject
    * @generated
    */
   void setWhereEntry(WhereEntry value);
+
+  /**
+   * Returns the value of the '<em><b>Group By Entry</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Group By Entry</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Group By Entry</em>' containment reference.
+   * @see #setGroupByEntry(GroupByColumns)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getModel_GroupByEntry()
+   * @model containment="true"
+   * @generated
+   */
+  GroupByColumns getGroupByEntry();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Model#getGroupByEntry <em>Group By Entry</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Group By Entry</em>' containment reference.
+   * @see #getGroupByEntry()
+   * @generated
+   */
+  void setGroupByEntry(GroupByColumns value);
+
+  /**
+   * Returns the value of the '<em><b>Having Entry</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Having Entry</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Having Entry</em>' containment reference.
+   * @see #setHavingEntry(HavingEntry)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getModel_HavingEntry()
+   * @model containment="true"
+   * @generated
+   */
+  HavingEntry getHavingEntry();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Model#getHavingEntry <em>Having Entry</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Having Entry</em>' containment reference.
+   * @see #getHavingEntry()
+   * @generated
+   */
+  void setHavingEntry(HavingEntry value);
+
+  /**
+   * Returns the value of the '<em><b>Order By Entry</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Order By Entry</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Order By Entry</em>' containment reference.
+   * @see #setOrderByEntry(OrderByColumns)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getModel_OrderByEntry()
+   * @model containment="true"
+   * @generated
+   */
+  OrderByColumns getOrderByEntry();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Model#getOrderByEntry <em>Order By Entry</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Order By Entry</em>' containment reference.
+   * @see #getOrderByEntry()
+   * @generated
+   */
+  void setOrderByEntry(OrderByColumns value);
 
 } // Model

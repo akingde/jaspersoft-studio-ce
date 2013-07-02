@@ -61,9 +61,6 @@ Workflow {
 			//  options = {
 			//      backtrack = true
 			//  }
-				options = {
-					ignoreCase = true
-				}
 			}
 
 			// Xtend-based API for validation
@@ -103,11 +100,7 @@ Workflow {
 			fragment = contentAssist.ContentAssistFragment auto-inject {
 				generateStub = false
 			}
-			fragment = org.eclipse.xtext.generator.parser.antlr.ex.ca.ContentAssistParserGeneratorFragment {
-				options = {
-					ignoreCase = true
-				}
-			}
+
 			// generates a more lightweight Antlr parser and lexer tailored for content assist
 			fragment = parser.antlr.XtextAntlrUiGeneratorFragment auto-inject {}
 

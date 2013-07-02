@@ -32,6 +32,42 @@ public interface SqlFactory extends EFactory
   Model createModel();
 
   /**
+   * Returns a new object of class '<em>Order By Columns</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Order By Columns</em>'.
+   * @generated
+   */
+  OrderByColumns createOrderByColumns();
+
+  /**
+   * Returns a new object of class '<em>Order By Column Full</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Order By Column Full</em>'.
+   * @generated
+   */
+  OrderByColumnFull createOrderByColumnFull();
+
+  /**
+   * Returns a new object of class '<em>Group By Columns</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Group By Columns</em>'.
+   * @generated
+   */
+  GroupByColumns createGroupByColumns();
+
+  /**
+   * Returns a new object of class '<em>Group By Column Full</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Group By Column Full</em>'.
+   * @generated
+   */
+  GroupByColumnFull createGroupByColumnFull();
+
+  /**
    * Returns a new object of class '<em>Columns</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -147,6 +183,15 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   WhereEntry createWhereEntry();
+
+  /**
+   * Returns a new object of class '<em>Having Entry</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Having Entry</em>'.
+   * @generated
+   */
+  HavingEntry createHavingEntry();
 
   /**
    * Returns a new object of class '<em>Expression Where Entry</em>'.
@@ -311,6 +356,24 @@ public interface SqlFactory extends EFactory
   BooleanArrayExpression createBooleanArrayExpression();
 
   /**
+   * Returns a new object of class '<em>Or Order By Column</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Or Order By Column</em>'.
+   * @generated
+   */
+  OrOrderByColumn createOrOrderByColumn();
+
+  /**
+   * Returns a new object of class '<em>Or Group By Column</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Or Group By Column</em>'.
+   * @generated
+   */
+  OrGroupByColumn createOrGroupByColumn();
+
+  /**
    * Returns a new object of class '<em>Or Column</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -345,6 +408,24 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   AndWhereEntry createAndWhereEntry();
+
+  /**
+   * Returns a new object of class '<em>Or Having Entry</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Or Having Entry</em>'.
+   * @generated
+   */
+  OrHavingEntry createOrHavingEntry();
+
+  /**
+   * Returns a new object of class '<em>And Having Entry</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>And Having Entry</em>'.
+   * @generated
+   */
+  AndHavingEntry createAndHavingEntry();
 
   /**
    * Returns the package supported by this factory.

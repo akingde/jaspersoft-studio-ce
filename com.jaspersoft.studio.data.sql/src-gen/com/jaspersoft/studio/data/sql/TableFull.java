@@ -20,7 +20,7 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface TableFull extends ColumnFull, TableOrAlias
+public interface TableFull extends OrderByColumnFull, GroupByColumnFull, ColumnFull, TableOrAlias
 {
   /**
    * Returns the value of the '<em><b>Tbl Alias</b></em>' containment reference.
