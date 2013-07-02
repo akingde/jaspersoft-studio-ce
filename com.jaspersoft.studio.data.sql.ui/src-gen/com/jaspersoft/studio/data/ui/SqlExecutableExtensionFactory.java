@@ -7,22 +7,23 @@ import org.eclipse.xtext.ui.guice.AbstractGuiceAwareExecutableExtensionFactory;
 import org.osgi.framework.Bundle;
 
 import com.google.inject.Injector;
-import com.jaspersoft.studio.data.sql.Activator;
+
+import com.jaspersoft.studio.data.ui.internal.SqlActivator;
 
 /**
  * This class was generated. Customizations should only happen in a newly
- * introduced subclass.
+ * introduced subclass. 
  */
 public class SqlExecutableExtensionFactory extends AbstractGuiceAwareExecutableExtensionFactory {
 
 	@Override
 	protected Bundle getBundle() {
-		return Activator.getDefault().getBundle();
+		return SqlActivator.getInstance().getBundle();
 	}
-
+	
 	@Override
 	protected Injector getInjector() {
-		return Activator.getDefault().getInjector(Activator.COM_JASPERSOFT_STUDIO_DATA_SQL_SQL_EDITOR);
+		return SqlActivator.getInstance().getInjector(SqlActivator.COM_JASPERSOFT_STUDIO_DATA_SQL);
 	}
-
+	
 }
