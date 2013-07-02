@@ -143,7 +143,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	}
 
 	private Injector getInjector() {
-		return Activator.getDefault().getInjector(Activator.COM_JASPERSOFT_STUDIO_DATA_SQL_SQL_EDITOR);
+		return Activator.getInstance().getInjector(Activator.COM_JASPERSOFT_STUDIO_DATA_SQL);
 	}
 
 	private StyledTextXtextAdapter xtextAdapter;

@@ -25,7 +25,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import com.jaspersoft.studio.data.sql.Activator;
+import com.jaspersoft.studio.data.sql.SQLActivator;
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.model.metadata.keys.ForeignKey;
 import com.jaspersoft.studio.data.sql.model.metadata.keys.PrimaryKey;
@@ -80,9 +80,9 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 	@Override
 	public ImageDescriptor getImagePath() {
 		if (primaryKey != null)
-			return Activator.getDefault().getImageDescriptor("icons/key.png");
+			return SQLActivator.getInstance().getImageDescriptor("icons/key.png");
 		if (foreignKeys != null && !foreignKeys.isEmpty())
-			return Activator.getDefault().getImageDescriptor("icons/key--arrow.png");
+			return SQLActivator.getInstance().getImageDescriptor("icons/key--arrow.png");
 		return super.getImagePath();
 	}
 

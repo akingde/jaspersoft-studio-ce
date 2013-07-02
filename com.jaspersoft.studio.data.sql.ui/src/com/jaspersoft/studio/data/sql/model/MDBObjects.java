@@ -21,7 +21,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import com.jaspersoft.studio.data.sql.Activator;
+import com.jaspersoft.studio.data.sql.SQLActivator;
 import com.jaspersoft.studio.model.ANode;
 
 public class MDBObjects extends ANode {
@@ -58,7 +58,7 @@ public class MDBObjects extends ANode {
 	@Override
 	public ImageDescriptor getImagePath() {
 		if (icon == null && image != null)
-			icon = Activator.getDefault().getImageDescriptor(image);
+			icon = SQLActivator.getInstance().getImageDescriptor(image);
 		return icon;
 	}
 

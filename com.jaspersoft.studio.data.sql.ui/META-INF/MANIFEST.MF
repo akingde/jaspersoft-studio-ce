@@ -18,6 +18,7 @@ Require-Bundle: com.jaspersoft.studio.data;bundle-version="5.2.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-RegisterBuddy: com.jaspersoft.studio.data
 Bundle-Activator: com.jaspersoft.studio.data.sql.Activator
-Export-Package:  com.jaspersoft.studio.data.ui.contentassist.antlr
+Export-Package: com.jaspersoft.studio.data.ui.contentassist.antlr,
+ com.jaspersoft.studio.data.ui.contentassist
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib

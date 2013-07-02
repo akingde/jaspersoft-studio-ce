@@ -24,7 +24,7 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
-import com.jaspersoft.studio.data.sql.Activator;
+import com.jaspersoft.studio.data.sql.SQLActivator;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
@@ -49,7 +49,7 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 		Image image = null;
 		ImageDescriptor imgd = getModel().getImagePath();
 		if (imgd != null)
-			image = Activator.getDefault().getImage(imgd);
+			image = SQLActivator.getInstance().getImage(imgd);
 		SQLQueryDesigner designer = (SQLQueryDesigner) getViewer().getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
 		afactory = designer.getOutline().getAfactory();
 		mselect = Util.getKeyword(ColumnEditPart.this.getParent().getModel(), MSelect.class);

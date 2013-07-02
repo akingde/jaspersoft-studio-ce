@@ -4,8 +4,7 @@ import org.eclipse.emf.mwe.utils.*
 import org.eclipse.xtext.generator.*
 import org.eclipse.xtext.ui.generator.*
 
-var grammarURI = "classpath:/Sql/Sql.xtext"
-var fileExtensions = "sql"
+var grammarURI = "classpath:/Sql/Sql.xtext" 
 var projectName = "com.jaspersoft.studio.data.sql"
 var runtimeProject = "../${projectName}"
 
@@ -26,7 +25,7 @@ Workflow {
 	}
 
 	component = Generator {
-		activator = "com.jaspersoft.studio.data.sql.Activator"
+		activator = "com.jaspersoft.studio.data.sql.Activator" 
 		pathRtProject = runtimeProject
 		pathUiProject = "${runtimeProject}.ui"//pathTestProject = "${runtimeProject}.tests"
 		projectNameRt = projectName
@@ -97,9 +96,9 @@ Workflow {
 			//fragment = quickfix.QuickfixProviderFragment auto-inject {}
 
 			// content assist API
-			//fragment = contentAssist.ContentAssistFragment auto-inject {
+			fragment = contentAssist.JavaBasedContentAssistFragment {
 			//	generateStub = false
-			//}
+			}
 
 			// generates a more lightweight Antlr parser and lexer tailored for content assist
 			fragment = parser.antlr.XtextAntlrUiGeneratorFragment {}
