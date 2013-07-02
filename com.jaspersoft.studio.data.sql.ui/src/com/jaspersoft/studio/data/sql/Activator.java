@@ -29,7 +29,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.jaspersoft.studio.data.SqlRuntimeModule;
-import com.jaspersoft.studio.data.ui.SqlUiModule;
+import com.jaspersoft.studio.data.uis.SqlUiModule;
 
 public class Activator extends AbstractJRUIPlugin {
 
