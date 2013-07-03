@@ -28,7 +28,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.editor.AMultiEditor;
+import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.CacheMap;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -62,19 +65,23 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 	}
 
 	private CacheMap<JRComponentElement, Renderable> cache = new CacheMap<JRComponentElement, Renderable>(3000000);
-	private long last = 0;
+	private CacheMap<JRElement, KeyValue<String, Long>> running = new CacheMap<JRElement, KeyValue<String, Long>>(3000);
 
 	/**
 	 *
 	 */
 	public JRPrintElement convert(final ReportConverter reportConverter, final JRComponentElement element) {
 		Renderable cacheRenderer = cache.get(element);
-		if (cacheRenderer == null || System.currentTimeMillis() - last > 1000) {
+		KeyValue<String, Long> last = running.get(element);
+		if (cacheRenderer == null || last == null
+				|| (last.value != null && System.currentTimeMillis() - last.value.longValue() > 1000)) {
+			final KeyValue<String, Long> kv = new KeyValue<String, Long>(null, null);
 			Job job = new Job("load map") {
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
 						MapComponent map = (MapComponent) element.getComponent();
-						JasperReportsConfiguration jConfig = (JasperReportsConfiguration) reportConverter.getJasperReportsContext();
+						final JasperReportsConfiguration jConfig = (JasperReportsConfiguration) reportConverter
+								.getJasperReportsContext();
 						JasperDesign jd = jConfig.getJasperDesign();
 						JRDataset jrd = jd.getMainDataset();
 						JRElementDataset dataset = null;
@@ -102,11 +109,20 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 								+ (mapType == null ? "" : "&maptype=" + mapType) + (mapFormat == null ? "" : "&format=" + mapFormat)
 								+ (mapScale == null ? "" : "&scale=" + mapScale) + markers + "&sensor=false"
 								+ (language == null ? "" : "&language=" + language);
-
-						Renderable r = RenderableUtil.getInstance(jConfig).getRenderable(imageLocation, OnErrorTypeEnum.ERROR,
-								false);
+						kv.key = imageLocation;
+						final Renderable r = RenderableUtil.getInstance(jConfig).getRenderable(imageLocation,
+								OnErrorTypeEnum.ERROR, false);
 						r.getImageData(jConfig);
-						cache.put(element, r);
+						Display.getDefault().asyncExec(new Runnable() {
+
+							@Override
+							public void run() {
+								cache.put(element, r);
+								kv.value = System.currentTimeMillis();
+								AMultiEditor.refresh(jConfig);
+							}
+
+						});
 					} catch (JRException e) {
 					}
 					return Status.OK_STATUS;
@@ -115,7 +131,7 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 			job.setSystem(true);
 			job.setPriority(Job.SHORT);
 			job.schedule();
-			last = System.currentTimeMillis();
+			running.put(element, kv);
 			if (cacheRenderer == null)
 				return convert(reportConverter, (JRElement) element);
 		}

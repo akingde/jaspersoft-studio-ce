@@ -11,6 +11,7 @@ import java.util.Arrays;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.core.resources.IFile;
@@ -20,6 +21,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.jface.text.DocumentEvent;
@@ -44,6 +46,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
+import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
@@ -220,9 +223,13 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 		((ProxyFileResolver) jrContext.getFileResolver()).addResolver(resolver);
 	}
 
+	public static final String THEEDITOR = "thecurrenteditor";
+
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
-		if (jrContext == null)
+		if (jrContext == null) {
 			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
+			jrContext.put(THEEDITOR, this);
+		}
 	}
 
 	@Override
@@ -406,6 +413,24 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 			xmlEditor.getDocumentProvider().addElementStateListener(new StateListener());
 		} catch (PartInitException e) {
 			UIUtils.showError(e);
+		}
+	}
+
+	public static void refresh(JasperReportsContext jrContext) {
+		Object obj = jrContext.getValue(AMultiEditor.THEEDITOR);
+		if (obj instanceof JrxmlEditor) {
+			ReportContainer rc = (ReportContainer) ((JrxmlEditor) obj).getEditor(JrxmlEditor.PAGE_DESIGNER);
+			refresh(rc.getActiveEditor());
+		} else if (obj instanceof AMultiEditor) {
+			refresh(((AMultiEditor) obj).getActiveEditor());
+		}
+	}
+
+	public static void refresh(IEditorPart ep) {
+		if (ep instanceof IGraphicalEditor) {
+			IGraphicalEditor ige = (IGraphicalEditor) ep;
+			GraphicalViewer gv = ige.getGraphicalViewer();
+			gv.getContents().refresh();
 		}
 	}
 }
