@@ -1,0 +1,185 @@
+package com.jaspersoft.studio.data.sql.ui;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.jface.text.MarginPainter;
+import org.eclipse.jface.text.source.CompositeRuler;
+import org.eclipse.jface.text.source.IVerticalRuler;
+import org.eclipse.jface.text.source.LineNumberRulerColumn;
+import org.eclipse.jface.text.source.SourceViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledTextDropTargetEffect;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.part.PluginTransfer;
+import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.xtext.resource.IResourceFactory;
+import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.resource.XtextResourceSet;
+import org.eclipse.xtext.ui.editor.XtextSourceViewer;
+import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor;
+import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorFactory;
+import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorModelAccess;
+import org.eclipse.xtext.ui.editor.embedded.IEditedResourceProvider;
+import org.eclipse.xtext.ui.editor.model.XtextDocument;
+
+import com.google.inject.Injector;
+import com.jaspersoft.studio.data.sql.Activator;
+import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.model.AMSQLObject;
+import com.jaspersoft.studio.dnd.NodeTransfer;
+
+import de.itemis.xtext.utils.jface.viewers.StyledTextXtextAdapter;
+
+public class SQLQuerySource {
+	private static final Color SRC_MARGINS_COLOR = SWTResourceManager.getColor(220, 220, 220);
+	private SQLQueryDesigner designer;
+
+	public SQLQuerySource(SQLQueryDesigner designer) {
+		this.designer = designer;
+	}
+
+	private Injector getInjector() {
+		return Activator.getInstance().getInjector(Activator.COM_JASPERSOFT_STUDIO_DATA_SQL);
+	}
+
+	private XtextSourceViewer viewer;
+	private StyledTextXtextAdapter xtextAdapter;
+
+	public Control createSource(Composite parent) {
+		Composite cmp = new Composite(parent, SWT.BORDER);
+		GridLayout layout = new GridLayout();
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		cmp.setLayout(layout);
+
+		IEditedResourceProvider resourceProvider = new IEditedResourceProvider() {
+			public XtextResource createResource() {
+				Injector injector = getInjector();
+
+				XtextResourceSet rs = injector.getInstance(XtextResourceSet.class);
+				rs.setClasspathURIContext(getClass());
+
+				IResourceFactory resourceFactory = injector.getInstance(IResourceFactory.class);
+				org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createURI("website/My2.website");
+				XtextResource resource = (XtextResource) resourceFactory.createResource(uri);
+				rs.getResources().add(resource);
+
+				EcoreUtil.resolveAll(resource);
+
+				if (!resource.getErrors().isEmpty()) {
+					// handle error?
+				}
+				return resource;
+			}
+		};
+
+		Injector injector = getInjector();
+		EmbeddedEditorFactory factory = injector.getInstance(EmbeddedEditorFactory.class);
+		EmbeddedEditor embeddedEditor = factory.newEditor(resourceProvider).showErrorAndWarningAnnotations().withParent(cmp);
+		EmbeddedEditorModelAccess partialEditorModelAccess = embeddedEditor.createPartialEditor();
+
+		viewer = embeddedEditor.getViewer();
+
+		LineNumberRulerColumn lnrc = new LineNumberRulerColumn();
+		viewer.addVerticalRulerColumn(lnrc);
+		viewer.showAnnotations(true);
+		try {
+			Method m = SourceViewer.class.getDeclaredMethod("getVerticalRuler");
+			m.setAccessible(true);
+			IVerticalRuler ivr = (IVerticalRuler) m.invoke(embeddedEditor.getViewer());
+			if (ivr instanceof CompositeRuler) {
+				CompositeRuler cr = (CompositeRuler) ivr;
+				cr.getControl().setBackground(SRC_MARGINS_COLOR);
+			}
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
+		MarginPainter fMarginPainter = new MarginPainter(viewer);
+		fMarginPainter.setMarginRulerColumn(0);
+		fMarginPainter.setMarginRulerColor(SRC_MARGINS_COLOR);
+
+		viewer.addPainter(fMarginPainter);
+		viewer.getDocument().addDocumentListener(new IDocumentListener() {
+
+			@Override
+			public void documentChanged(DocumentEvent event) {
+				designer.doSourceTextChanged();
+				if (designer.getActiveEditor() == SQLQuerySource.this)
+					setDirty(true);
+			}
+
+			@Override
+			public void documentAboutToBeChanged(DocumentEvent event) {
+
+			}
+		});
+
+		DropTarget target = new DropTarget(viewer.getTextWidget(), DND.DROP_MOVE | DND.DROP_COPY);
+		target.setTransfer(new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() });
+		target.addDropListener(new StyledTextDropTargetEffect(viewer.getTextWidget()) {
+			@Override
+			public void drop(DropTargetEvent event) {
+				Object obj = event.data;
+				if (obj.getClass().isArray()) {
+					Object[] arr = (Object[]) obj;
+					if (arr.length > 0)
+						obj = arr[0];
+				}
+				if (obj instanceof AMSQLObject) {
+					StringBuffer oldText = new StringBuffer(getQuery());
+
+					oldText.insert(viewer.getTextWidget().getCaretOffset(), " " + ((AMSQLObject) obj).toSQLString() + " ");
+					viewer.getDocument().set(oldText.toString());
+				}
+			}
+		});
+		return cmp;
+	}
+
+	public String getQuery() {
+		return viewer.getDocument().get();
+	}
+
+	public void setQuery(String txt) {
+		viewer.getDocument().set(txt);
+		setDirty(false);
+	}
+
+	public void dispose() {
+
+	}
+
+	private boolean isDirty = false;
+
+	public void setDirty(boolean isDirty) {
+		this.isDirty = isDirty;
+	}
+
+	public boolean isDirty() {
+		return isDirty;
+	}
+
+	public XtextDocument getXTextDocument() {
+		return (XtextDocument) viewer.getDocument();
+	}
+}

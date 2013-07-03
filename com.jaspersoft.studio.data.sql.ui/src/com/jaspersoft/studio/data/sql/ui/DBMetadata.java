@@ -412,6 +412,8 @@ public class DBMetadata {
 	protected void updateUI(final MRoot root) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
+				if (treeViewer.getControl().isDisposed())
+					return;
 				DBMetadata.this.root = root;
 				if (DBMetadata.this.root == null)
 					DBMetadata.this.root = new MRoot(null, null);
