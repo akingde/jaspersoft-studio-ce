@@ -183,7 +183,6 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		xtextAdapter.adapt(control);
 	}
 
-	@Override
 	protected void setupSourceEditorFont() {
 	}
 
