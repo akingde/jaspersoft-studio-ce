@@ -17,11 +17,11 @@ package com.jaspersoft.studio.data.sql.model;
 
 import java.util.UUID;
 
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import com.jaspersoft.studio.data.sql.SQLActivator;
 import com.jaspersoft.studio.model.ANode;
 
 public class MDBObjects extends ANode {
@@ -58,7 +58,7 @@ public class MDBObjects extends ANode {
 	@Override
 	public ImageDescriptor getImagePath() {
 		if (icon == null && image != null)
-			icon = SQLActivator.getInstance().getImageDescriptor(image);
+			icon = JasperReportsPlugin.getDefault().getImageDescriptor(image);
 		return icon;
 	}
 

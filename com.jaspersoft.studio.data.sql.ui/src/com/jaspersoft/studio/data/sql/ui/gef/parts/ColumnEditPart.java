@@ -18,13 +18,14 @@ package com.jaspersoft.studio.data.sql.ui.gef.parts;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
-import com.jaspersoft.studio.data.sql.SQLActivator;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
@@ -49,7 +50,7 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 		Image image = null;
 		ImageDescriptor imgd = getModel().getImagePath();
 		if (imgd != null)
-			image = SQLActivator.getInstance().getImage(imgd);
+			image = JasperReportsPlugin.getDefault().getImage(imgd);
 		SQLQueryDesigner designer = (SQLQueryDesigner) getViewer().getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
 		afactory = designer.getOutline().getAfactory();
 		mselect = Util.getKeyword(ColumnEditPart.this.getParent().getModel(), MSelect.class);
