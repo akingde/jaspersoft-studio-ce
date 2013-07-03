@@ -39,11 +39,16 @@ public class QueryDesigner extends AQueryDesigner {
 	public final class QueryListener implements ModifyListener {
 
 		public void modifyText(ModifyEvent e) {
-			if (!refresh) {
-				refresh = true;
-				((JRDesignQuery) jDataset.getQuery()).setText(control.getText());
-				refresh = false;
-			}
+			doSourceTextChanged();
+		}
+
+	}
+
+	protected void doSourceTextChanged() {
+		if (!refresh) {
+			refresh = true;
+			((JRDesignQuery) jDataset.getQuery()).setText(getQueryFromWidget());
+			refresh = false;
 		}
 	}
 
@@ -71,9 +76,13 @@ public class QueryDesigner extends AQueryDesigner {
 	public Control createControl(Composite parent) {
 		control = new StyledText(parent, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		control.addModifyListener(new QueryListener());
-		control.setFont(FontUtils.getEditorsFont(jConfig));
+		setupSourceEditorFont();
 		undoHandlrer = new UndoRedoImpl(control);
 		return control;
+	}
+
+	protected void setupSourceEditorFont() {
+		control.setFont(FontUtils.getEditorsFont(jConfig));
 	}
 
 	/*
@@ -85,12 +94,17 @@ public class QueryDesigner extends AQueryDesigner {
 		super.setQuery(jDesign, jDataset, jConfig);
 		refresh = true;
 		updateQueryText(jDataset.getQuery().getText());
-		undoHandlrer.clearStack();
+		if (undoHandlrer != null)
+			undoHandlrer.clearStack();
 		refresh = false;
 	}
 
 	protected void updateQueryText(String txt) {
 		control.setText(txt);
+	}
+
+	protected String getQueryFromWidget() {
+		return control.getText();
 	}
 
 	public void dispose() {
