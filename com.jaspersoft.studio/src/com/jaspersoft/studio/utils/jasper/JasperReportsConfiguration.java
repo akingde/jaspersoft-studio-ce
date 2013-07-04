@@ -127,6 +127,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
 				ExtensionsEnvironment.setThreadExtensionsRegistry(extensionsRegistry);
 			} catch (Throwable e) {
+				JaspersoftStudioPlugin.getInstance().logError(
+						"Cannot complete operations successfully after a classpath change occurred.",e);
 			}
 		}
 	}
@@ -460,7 +462,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			}	else if(extensionType == MessageProviderFactory.class) {
 				if(messageProviderFactory==null || refreshMessageProviderFactory){
 					messageProviderFactory = new ResourceBundleMessageProviderFactory(getClassLoader());
-					refreshBundles=false;
+					refreshFunctionsBundles=false;
 				}
 				result = (List<T>) Collections.singletonList(messageProviderFactory);
 			} else {

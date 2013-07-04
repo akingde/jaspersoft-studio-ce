@@ -152,7 +152,10 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		
 		createBackCompatibilitySection();
 		
-		FunctionsLibraryUtil.reloadLibraryIfNeeded();
+		//FunctionsLibraryUtil.reloadLibraryIfNeeded();
+		// FIXME - Releading everytime the library,
+		// we should improved this. It could be expensive.
+		FunctionsLibraryUtil.reloadLibrary();
 		
 		this.updatePanelJob=new UpdatePanelJob();
 	}
