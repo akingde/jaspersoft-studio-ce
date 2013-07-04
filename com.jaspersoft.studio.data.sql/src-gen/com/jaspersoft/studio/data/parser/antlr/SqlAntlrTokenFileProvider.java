@@ -10,6 +10,6 @@ public class SqlAntlrTokenFileProvider implements IAntlrTokenFileProvider {
 	
 	public InputStream getAntlrTokenFile() {
 		ClassLoader classLoader = getClass().getClassLoader();
-    	return classLoader.getResourceAsStream("com/jaspersoft/studio/data/parser/antlr/internal/InternalSql.tokens");
+    	return classLoader.getResourceAsStream("com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.tokens");
 	}
 }

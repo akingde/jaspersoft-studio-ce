@@ -23,5 +23,6 @@ Export-Package: com.jaspersoft.studio.data,
  com.jaspersoft.studio.data.parser.antlr,
  com.jaspersoft.studio.data.parser.antlr.internal,
  com.jaspersoft.studio.data.scoping,
- com.jaspersoft.studio.data.formatting
+ com.jaspersoft.studio.data.formatting,
+ com.jaspersoft.studio.data.parser.antlr.lexer
 Import-Package: org.apache.log4j
