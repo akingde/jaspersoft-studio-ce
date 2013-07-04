@@ -15,7 +15,9 @@ import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +40,11 @@ import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
+import net.sf.jasperreports.engine.util.MessageProviderFactory;
+import net.sf.jasperreports.engine.util.ResourceBundleMessageProviderFactory;
 import net.sf.jasperreports.extensions.DefaultExtensionsRegistry;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
+import net.sf.jasperreports.functions.FunctionsBundle;
 import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
 import net.sf.jasperreports.repo.FileRepositoryService;
 import net.sf.jasperreports.repo.PersistenceServiceFactory;
@@ -66,6 +71,27 @@ import com.jaspersoft.studio.utils.ModelUtils;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
+	public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
+	public static final String KEY_JASPERDESIGN = "JasperDesign";
+	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";
+	
+	private ClasspathListener classpathlistener;
+	private PreferenceListener preferenceListener;
+	private IPreferencesService service;
+	private String qualifier;
+	private String[] lookupOrders;
+	private IScopeContext[] contexts;
+	private String[] fontList;
+	private boolean refreshFonts = true;
+	private boolean refreshBundles = true;
+	private boolean refreshMessageProviderFactory = true;
+	private boolean refreshFunctionsBundles = true;
+	private List<FontFamily> lst;
+	private JavaProjectClassLoader javaclassloader;
+	private List<ComponentsBundle> bundles;
+	private List<FunctionsBundle> functionsBundles;
+	private MessageProviderFactory messageProviderFactory;
+
 	/**
 	 * The key which identified the file being edited
 	 */
@@ -91,6 +117,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		public void propertyChange(PropertyChangeEvent arg0) {
 			refreshFonts = true;
 			refreshBundles = true;
+			refreshMessageProviderFactory = true;
+			refreshFunctionsBundles = true;
+			functionsBundles = null;
+			messageProviderFactory = null;
 			fontList = null;
 			try {
 				DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
@@ -100,14 +130,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			}
 		}
 	}
-
-	private ClasspathListener classpathlistener;
-	private PreferenceListener preferenceListener;
-	public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
-	private IPreferencesService service;
-	private String qualifier;
-	private String[] lookupOrders;
-	private IScopeContext[] contexts;
 
 	/**
 	 * @param parent
@@ -221,8 +243,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		super.setFileResolver(fileResolver);
 	}
 
-	public static final String KEY_JASPERDESIGN = "JasperDesign";
-
 	public JasperDesign getJasperDesign() {
 		return (JasperDesign) get(KEY_JASPERDESIGN);
 	}
@@ -233,8 +253,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		else
 			put(KEY_JASPERDESIGN, jd);
 	}
-
-	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";
 
 	public void setJRParameters(Map<String, Object> value) {
 		put(KEY_JRPARAMETERS, value);
@@ -387,13 +405,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		return p;
 	}
 
-	private String[] fontList;
-	private boolean refreshFonts = true;
-	private boolean refreshBundles = true;
-	private List<FontFamily> lst;
-	private JavaProjectClassLoader javaclassloader;
-	private List<ComponentsBundle> bundles;
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getExtensions(Class<T> extensionType) {
@@ -439,6 +450,19 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 					refreshBundles = false;
 				}
 				result = (List<T>) bundles;
+			} else if (extensionType == FunctionsBundle.class) {
+				if (functionsBundles == null || refreshFunctionsBundles) {
+					functionsBundles = super.getExtensions(FunctionsBundle.class); 
+					Set<FunctionsBundle> fBundlesSet = new HashSet<FunctionsBundle>(functionsBundles);
+					functionsBundles = new ArrayList<FunctionsBundle>(fBundlesSet);
+				}
+				result = (List<T>) functionsBundles;
+			}	else if(extensionType == MessageProviderFactory.class) {
+				if(messageProviderFactory==null || refreshMessageProviderFactory){
+					messageProviderFactory = new ResourceBundleMessageProviderFactory(getClassLoader());
+					refreshBundles=false;
+				}
+				result = (List<T>) Collections.singletonList(messageProviderFactory);
 			} else {
 				try {
 					result = super.getExtensions(extensionType);

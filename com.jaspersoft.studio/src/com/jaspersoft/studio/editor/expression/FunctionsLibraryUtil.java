@@ -90,13 +90,17 @@ public class FunctionsLibraryUtil {
 			}
 		}
 
+		JasperReportsContext currentJRContext = getCurrentJRContext();
+		
 		// Scan potential annotated classes for functions
 		for (Class<?> clazz : foundClasses) {
 			String clazzName = clazz.getName();
 			if (!libraryClassNames.contains(clazzName)) {
 				libraryClassNames.add(clazzName);
 			}
-			List<JRExprFunctionBean> jrFunctionsList = JRExprAnnotationsUtils.getJRFunctionsList(clazz);
+
+			JRExprAnnotationsUtils utilsInstance = JRExprAnnotationsUtils.getInstance(currentJRContext);	
+			List<JRExprFunctionBean> jrFunctionsList = utilsInstance.getFunctionsList(clazz);
 			for (JRExprFunctionBean f : jrFunctionsList) {
 				for (JRExprFunctionCategoryBean category : f.getCategories()) {
 					if (!functionsByCategory.containsKey(category.getId())) {
@@ -110,6 +114,7 @@ public class FunctionsLibraryUtil {
 				}
 			}
 		}
+		
 	}
 
 	/**
@@ -253,16 +258,26 @@ public class FunctionsLibraryUtil {
 	 * Forces the reload of the functions library.
 	 */
 	public static void reloadLibrary() {
-		currentExtensionObjects.clear();
-		currentExtensionObjects = null;
-		functionsByCategory.clear();
-		functionsByCategory = null;
-		allCategories.clear();
-		allCategories = null;
-		allFunctions.clear();
-		allFunctions = null;
-		libraryClassNames.clear();
-		libraryClassNames = null;
+		if(currentExtensionObjects!=null) {
+			currentExtensionObjects.clear();
+			currentExtensionObjects = null;
+		}
+		if(functionsByCategory!=null) {
+			functionsByCategory.clear();
+			functionsByCategory = null;
+		}
+		if(allCategories!=null) {
+			allCategories.clear();
+			allCategories = null;
+		}
+		if(allFunctions!=null){
+			allFunctions.clear();
+			allFunctions = null;
+		}
+		if(libraryClassNames!=null){
+			libraryClassNames.clear();
+			libraryClassNames = null;
+		}
 		initLibrary();
 	}
 
@@ -304,6 +319,10 @@ public class FunctionsLibraryUtil {
 	 * Gets all the possible references to functions. The current active editor is used.
 	 */
 	private static List<FunctionsBundle> getFunctionsExtensions() {
+		return getCurrentJRContext().getExtensions(FunctionsBundle.class);
+	}
+	
+	private static JasperReportsContext getCurrentJRContext() {
 		JasperReportsContext jrContext = null;
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
 		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
@@ -314,6 +333,6 @@ public class FunctionsLibraryUtil {
 		if (jrContext == null) {
 			jrContext = DefaultJasperReportsContext.getInstance();
 		}
-		return jrContext.getExtensions(FunctionsBundle.class);
+		return jrContext;
 	}
 }
