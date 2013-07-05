@@ -17,11 +17,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import net.sf.jasperreports.components.ComponentsExtensionsRegistryFactory;
@@ -454,8 +454,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				result = (List<T>) bundles;
 			} else if (extensionType == FunctionsBundle.class) {
 				if (functionsBundles == null || refreshFunctionsBundles) {
+					// We need to be sure that the resource bundles are fresh new
+					// NOTE: Let's use this for now as quick solution, in case of
+					// bad performances we'll have to fix this approach
+					ResourceBundle.clearCache(getClassLoader());
 					functionsBundles = super.getExtensions(FunctionsBundle.class); 
-					Set<FunctionsBundle> fBundlesSet = new HashSet<FunctionsBundle>(functionsBundles);
+					Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(functionsBundles);
 					functionsBundles = new ArrayList<FunctionsBundle>(fBundlesSet);
 				}
 				result = (List<T>) functionsBundles;
