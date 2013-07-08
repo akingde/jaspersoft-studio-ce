@@ -37,8 +37,35 @@ public class SqlParser extends AbstractContentAssistParser {
 			nameMappings = new HashMap<AbstractElement, String>() {
 				private static final long serialVersionUID = 1L;
 				{
+					put(grammarAccess.getColumnOrAliasAccess().getAlternatives(), "rule__ColumnOrAlias__Alternatives");
+					put(grammarAccess.getOrderByColumnFullAccess().getAlternatives_1(), "rule__OrderByColumnFull__Alternatives_1");
 					put(grammarAccess.getModelAccess().getGroup(), "rule__Model__Group__0");
-					put(grammarAccess.getModelAccess().getColNameAssignment_1(), "rule__Model__ColNameAssignment_1");
+					put(grammarAccess.getModelAccess().getGroup_1(), "rule__Model__Group_1__0");
+					put(grammarAccess.getModelAccess().getGroup_1_1(), "rule__Model__Group_1_1__0");
+					put(grammarAccess.getModelAccess().getGroup_2(), "rule__Model__Group_2__0");
+					put(grammarAccess.getSelectAccess().getGroup(), "rule__Select__Group__0");
+					put(grammarAccess.getColumnsAccess().getGroup(), "rule__Columns__Group__0");
+					put(grammarAccess.getColumnsAccess().getGroup_1(), "rule__Columns__Group_1__0");
+					put(grammarAccess.getColumnsAccess().getGroup_1_1(), "rule__Columns__Group_1_1__0");
+					put(grammarAccess.getColumnOrAliasAccess().getGroup_0(), "rule__ColumnOrAlias__Group_0__0");
+					put(grammarAccess.getColumnFullAccess().getGroup(), "rule__ColumnFull__Group__0");
+					put(grammarAccess.getColumnFullAccess().getGroup_1(), "rule__ColumnFull__Group_1__0");
+					put(grammarAccess.getColumnFullAccess().getGroup_1_1(), "rule__ColumnFull__Group_1_1__0");
+					put(grammarAccess.getOrderByColumnsAccess().getGroup(), "rule__OrderByColumns__Group__0");
+					put(grammarAccess.getOrderByColumnsAccess().getGroup_1(), "rule__OrderByColumns__Group_1__0");
+					put(grammarAccess.getOrderByColumnsAccess().getGroup_1_1(), "rule__OrderByColumns__Group_1_1__0");
+					put(grammarAccess.getOrderByColumnFullAccess().getGroup(), "rule__OrderByColumnFull__Group__0");
+					put(grammarAccess.getModelAccess().getEntriesAssignment_1_1_1(), "rule__Model__EntriesAssignment_1_1_1");
+					put(grammarAccess.getModelAccess().getOrderByEntryAssignment_2_1(), "rule__Model__OrderByEntryAssignment_2_1");
+					put(grammarAccess.getSelectAccess().getSelectAssignment_0(), "rule__Select__SelectAssignment_0");
+					put(grammarAccess.getSelectAccess().getColsAssignment_2(), "rule__Select__ColsAssignment_2");
+					put(grammarAccess.getColumnsAccess().getEntriesAssignment_1_1_1(), "rule__Columns__EntriesAssignment_1_1_1");
+					put(grammarAccess.getColumnOrAliasAccess().getColAliasAssignment_0_2(), "rule__ColumnOrAlias__ColAliasAssignment_0_2");
+					put(grammarAccess.getColumnOrAliasAccess().getAllColsAssignment_1(), "rule__ColumnOrAlias__AllColsAssignment_1");
+					put(grammarAccess.getColumnFullAccess().getEntriesAssignment_1_1_1(), "rule__ColumnFull__EntriesAssignment_1_1_1");
+					put(grammarAccess.getDbObjectNameAccess().getDbnameAssignment(), "rule__DbObjectName__DbnameAssignment");
+					put(grammarAccess.getOrderByColumnsAccess().getEntriesAssignment_1_1_1(), "rule__OrderByColumns__EntriesAssignment_1_1_1");
+					put(grammarAccess.getOrderByColumnFullAccess().getColOrderAssignment_0(), "rule__OrderByColumnFull__ColOrderAssignment_0");
 				}
 			};
 		}

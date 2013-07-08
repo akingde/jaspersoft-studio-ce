@@ -2,8 +2,8 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.Model;
-import com.jaspersoft.studio.data.sql.OrderByColumns;
+import com.jaspersoft.studio.data.sql.ColumnFull;
+import com.jaspersoft.studio.data.sql.OrderByColumnFull;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -13,39 +13,38 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Model</b></em>'.
+ * An implementation of the model object '<em><b>Order By Column Full</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getOrderByEntry <em>Order By Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.OrderByColumnFullImpl#getColOrder <em>Col Order</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class ModelImpl extends MinimalEObjectImpl.Container implements Model
+public class OrderByColumnFullImpl extends OrderByColumnsImpl implements OrderByColumnFull
 {
   /**
-   * The cached value of the '{@link #getOrderByEntry() <em>Order By Entry</em>}' containment reference.
+   * The cached value of the '{@link #getColOrder() <em>Col Order</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getOrderByEntry()
+   * @see #getColOrder()
    * @generated
    * @ordered
    */
-  protected OrderByColumns orderByEntry;
+  protected ColumnFull colOrder;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ModelImpl()
+  protected OrderByColumnFullImpl()
   {
     super();
   }
@@ -58,7 +57,7 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.MODEL;
+    return SqlPackage.Literals.ORDER_BY_COLUMN_FULL;
   }
 
   /**
@@ -66,9 +65,9 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public OrderByColumns getOrderByEntry()
+  public ColumnFull getColOrder()
   {
-    return orderByEntry;
+    return colOrder;
   }
 
   /**
@@ -76,13 +75,13 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetOrderByEntry(OrderByColumns newOrderByEntry, NotificationChain msgs)
+  public NotificationChain basicSetColOrder(ColumnFull newColOrder, NotificationChain msgs)
   {
-    OrderByColumns oldOrderByEntry = orderByEntry;
-    orderByEntry = newOrderByEntry;
+    ColumnFull oldColOrder = colOrder;
+    colOrder = newColOrder;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__ORDER_BY_ENTRY, oldOrderByEntry, newOrderByEntry);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER, oldColOrder, newColOrder);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -93,20 +92,20 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setOrderByEntry(OrderByColumns newOrderByEntry)
+  public void setColOrder(ColumnFull newColOrder)
   {
-    if (newOrderByEntry != orderByEntry)
+    if (newColOrder != colOrder)
     {
       NotificationChain msgs = null;
-      if (orderByEntry != null)
-        msgs = ((InternalEObject)orderByEntry).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__ORDER_BY_ENTRY, null, msgs);
-      if (newOrderByEntry != null)
-        msgs = ((InternalEObject)newOrderByEntry).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__ORDER_BY_ENTRY, null, msgs);
-      msgs = basicSetOrderByEntry(newOrderByEntry, msgs);
+      if (colOrder != null)
+        msgs = ((InternalEObject)colOrder).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER, null, msgs);
+      if (newColOrder != null)
+        msgs = ((InternalEObject)newColOrder).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER, null, msgs);
+      msgs = basicSetColOrder(newColOrder, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__ORDER_BY_ENTRY, newOrderByEntry, newOrderByEntry));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER, newColOrder, newColOrder));
   }
 
   /**
@@ -119,8 +118,8 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
-      case SqlPackage.MODEL__ORDER_BY_ENTRY:
-        return basicSetOrderByEntry(null, msgs);
+      case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
+        return basicSetColOrder(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -135,8 +134,8 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
-      case SqlPackage.MODEL__ORDER_BY_ENTRY:
-        return getOrderByEntry();
+      case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
+        return getColOrder();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -151,8 +150,8 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
-      case SqlPackage.MODEL__ORDER_BY_ENTRY:
-        setOrderByEntry((OrderByColumns)newValue);
+      case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
+        setColOrder((ColumnFull)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -168,8 +167,8 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
-      case SqlPackage.MODEL__ORDER_BY_ENTRY:
-        setOrderByEntry((OrderByColumns)null);
+      case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
+        setColOrder((ColumnFull)null);
         return;
     }
     super.eUnset(featureID);
@@ -185,10 +184,10 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
-      case SqlPackage.MODEL__ORDER_BY_ENTRY:
-        return orderByEntry != null;
+      case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
+        return colOrder != null;
     }
     return super.eIsSet(featureID);
   }
 
-} //ModelImpl
+} //OrderByColumnFullImpl

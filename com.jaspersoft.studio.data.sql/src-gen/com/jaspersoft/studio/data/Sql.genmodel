@@ -8,7 +8,37 @@
   <genPackages prefix="Sql" basePackage="com.jaspersoft.studio.data" disposableProviderFactory="true"
       ecorePackage="Sql.ecore#/">
     <genClasses ecoreClass="Sql.ecore#//Model">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Model/colName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/orderByEntry"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//Select">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Select/select"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/cols"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//Columns"/>
+    <genClasses ecoreClass="Sql.ecore#//ColumnOrAlias">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ColumnOrAlias/allCols"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//ColumnFull">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnFull/colAlias"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//DbObjectName">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//DbObjectName/dbname"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrderByColumns"/>
+    <genClasses ecoreClass="Sql.ecore#//OrderByColumnFull">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrderByColumnFull/colOrder"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrSelect">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrSelect/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrColumn">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrColumn/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//Col">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Col/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrOrderByColumn">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrOrderByColumn/entries"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

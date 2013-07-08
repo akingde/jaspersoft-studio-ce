@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.Model#getColName <em>Col Name</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Model#getOrderByEntry <em>Order By Entry</em>}</li>
  * </ul>
  * </p>
  *
@@ -23,29 +23,29 @@ import org.eclipse.emf.ecore.EObject;
 public interface Model extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Col Name</b></em>' attribute.
+   * Returns the value of the '<em><b>Order By Entry</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Col Name</em>' attribute isn't clear,
+   * If the meaning of the '<em>Order By Entry</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Col Name</em>' attribute.
-   * @see #setColName(String)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getModel_ColName()
-   * @model
+   * @return the value of the '<em>Order By Entry</em>' containment reference.
+   * @see #setOrderByEntry(OrderByColumns)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getModel_OrderByEntry()
+   * @model containment="true"
    * @generated
    */
-  String getColName();
+  OrderByColumns getOrderByEntry();
 
   /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Model#getColName <em>Col Name</em>}' attribute.
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Model#getOrderByEntry <em>Order By Entry</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Col Name</em>' attribute.
-   * @see #getColName()
+   * @param value the new value of the '<em>Order By Entry</em>' containment reference.
+   * @see #getOrderByEntry()
    * @generated
    */
-  void setColName(String value);
+  void setOrderByEntry(OrderByColumns value);
 
 } // Model

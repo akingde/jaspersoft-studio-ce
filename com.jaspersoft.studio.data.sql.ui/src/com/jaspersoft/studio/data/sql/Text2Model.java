@@ -1,6 +1,5 @@
 package com.jaspersoft.studio.data.sql;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
@@ -13,7 +12,7 @@ public class Text2Model {
 		System.out.println("convert the model");
 		doc.readOnly(new IUnitOfWork<String, XtextResource>() {
 			public String exec(XtextResource resource) {
-				EObject eobj = resource.getContents().get(0);
+				// EObject eobj = resource.getContents().get(0);
 				return "";
 			}
 

@@ -79,6 +79,97 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.SELECT:
+      {
+        Select select = (Select)theEObject;
+        T result = caseSelect(select);
+        if (result == null) result = caseModel(select);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.COLUMNS:
+      {
+        Columns columns = (Columns)theEObject;
+        T result = caseColumns(columns);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.COLUMN_OR_ALIAS:
+      {
+        ColumnOrAlias columnOrAlias = (ColumnOrAlias)theEObject;
+        T result = caseColumnOrAlias(columnOrAlias);
+        if (result == null) result = caseColumns(columnOrAlias);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.COLUMN_FULL:
+      {
+        ColumnFull columnFull = (ColumnFull)theEObject;
+        T result = caseColumnFull(columnFull);
+        if (result == null) result = caseColumnOrAlias(columnFull);
+        if (result == null) result = caseColumns(columnFull);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.DB_OBJECT_NAME:
+      {
+        DbObjectName dbObjectName = (DbObjectName)theEObject;
+        T result = caseDbObjectName(dbObjectName);
+        if (result == null) result = caseColumnFull(dbObjectName);
+        if (result == null) result = caseColumnOrAlias(dbObjectName);
+        if (result == null) result = caseColumns(dbObjectName);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ORDER_BY_COLUMNS:
+      {
+        OrderByColumns orderByColumns = (OrderByColumns)theEObject;
+        T result = caseOrderByColumns(orderByColumns);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ORDER_BY_COLUMN_FULL:
+      {
+        OrderByColumnFull orderByColumnFull = (OrderByColumnFull)theEObject;
+        T result = caseOrderByColumnFull(orderByColumnFull);
+        if (result == null) result = caseOrderByColumns(orderByColumnFull);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OR_SELECT:
+      {
+        OrSelect orSelect = (OrSelect)theEObject;
+        T result = caseOrSelect(orSelect);
+        if (result == null) result = caseModel(orSelect);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OR_COLUMN:
+      {
+        OrColumn orColumn = (OrColumn)theEObject;
+        T result = caseOrColumn(orColumn);
+        if (result == null) result = caseColumns(orColumn);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.COL:
+      {
+        Col col = (Col)theEObject;
+        T result = caseCol(col);
+        if (result == null) result = caseColumnFull(col);
+        if (result == null) result = caseColumnOrAlias(col);
+        if (result == null) result = caseColumns(col);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OR_ORDER_BY_COLUMN:
+      {
+        OrOrderByColumn orOrderByColumn = (OrOrderByColumn)theEObject;
+        T result = caseOrOrderByColumn(orOrderByColumn);
+        if (result == null) result = caseOrderByColumns(orOrderByColumn);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       default: return defaultCase(theEObject);
     }
   }
@@ -95,6 +186,182 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseModel(Model object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Select</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Select</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSelect(Select object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Columns</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Columns</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseColumns(Columns object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Column Or Alias</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Column Or Alias</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseColumnOrAlias(ColumnOrAlias object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Column Full</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Column Full</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseColumnFull(ColumnFull object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Db Object Name</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Db Object Name</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseDbObjectName(DbObjectName object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Order By Columns</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Order By Columns</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrderByColumns(OrderByColumns object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Order By Column Full</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Order By Column Full</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrderByColumnFull(OrderByColumnFull object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Or Select</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Or Select</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrSelect(OrSelect object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Or Column</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Or Column</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrColumn(OrColumn object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Col</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Col</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseCol(Col object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Or Order By Column</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Or Order By Column</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrOrderByColumn(OrOrderByColumn object)
   {
     return null;
   }
