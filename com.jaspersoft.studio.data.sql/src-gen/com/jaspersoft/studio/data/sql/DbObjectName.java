@@ -19,7 +19,7 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface DbObjectName extends ColumnFull
+public interface DbObjectName extends ColumnFull, TableFull
 {
   /**
    * Returns the value of the '<em><b>Dbname</b></em>' attribute.

@@ -19,7 +19,7 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface ColumnFull extends ColumnOrAlias
+public interface ColumnFull extends ColumnOrAlias, GroupByColumns, Operand
 {
   /**
    * Returns the value of the '<em><b>Col Alias</b></em>' containment reference.

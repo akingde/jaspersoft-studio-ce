@@ -9,22 +9,78 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="select" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cols" eType="#//Columns"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tbl" eType="#//Tables"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whereExpression" eType="#//FullExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groupByEntry" eType="#//GroupByColumns"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="havingEntry" eType="#//FullExpression"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Columns"/>
   <eClassifiers xsi:type="ecore:EClass" name="ColumnOrAlias" eSuperTypes="#//Columns">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="allCols" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ColumnFull" eSuperTypes="#//ColumnOrAlias">
+  <eClassifiers xsi:type="ecore:EClass" name="ColumnFull" eSuperTypes="#//ColumnOrAlias #//GroupByColumns #//Operand">
     <eStructuralFeatures xsi:type="ecore:EReference" name="colAlias" eType="#//DbObjectName"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DbObjectName" eSuperTypes="#//ColumnFull">
+  <eClassifiers xsi:type="ecore:EClass" name="Tables"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FromTable" eSuperTypes="#//Tables">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//TableOrAlias"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="join" eType="#//JoinType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="onTable" eType="#//TableOrAlias"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinExpr" eType="#//FullExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableOrAlias"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TableFull" eSuperTypes="#//TableOrAlias">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tblAlias" eType="#//DbObjectName"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DbObjectName" eSuperTypes="#//ColumnFull #//TableFull">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dbname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrderByColumns"/>
   <eClassifiers xsi:type="ecore:EClass" name="OrderByColumnFull" eSuperTypes="#//OrderByColumns">
     <eStructuralFeatures xsi:type="ecore:EReference" name="colOrder" eType="#//ColumnFull"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupByColumns"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FullExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op1" eType="#//Operand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="in" eType="#//InOperator"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="between" eType="#//Between"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="like" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="comp" eType="#//Comparison"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Comparison">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op2" eType="#//Operand"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Between">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op1" eType="#//Operand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op2" eType="#//Operand"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Operand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scalar" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JoinType">
+    <eLiterals name="innerJoin" literal="INNER JOIN"/>
+    <eLiterals name="leftOuterJoin" value="1" literal="LEFT OUTER JOIN"/>
+    <eLiterals name="rightOuterJoin" value="2" literal="RIGHT OUTER JOIN"/>
+    <eLiterals name="fullOuterJoin" value="3" literal="FULL OUTER JOIN"/>
+    <eLiterals name="crossJoin" value="4" literal="CROSS JOIN"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrSelect" eSuperTypes="#//Model">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
@@ -38,8 +94,51 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//DbObjectName" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrTable" eSuperTypes="#//Tables">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//FromTable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="tbls" eSuperTypes="#//TableFull">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//DbObjectName" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrOrderByColumn" eSuperTypes="#//OrderByColumns">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//OrderByColumnFull" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrGroupByColumn" eSuperTypes="#//GroupByColumns">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//ColumnFull" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="fexpr" eSuperTypes="#//FullExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//FullExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="exprGroup" eSuperTypes="#//FullExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//FullExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="xexpr" eSuperTypes="#//FullExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="inop" eSuperTypes="#//InOperator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="#//Operand"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="xop" eSuperTypes="#//InOperator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="operands" eSuperTypes="#//Operand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//Operand" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="opGroup" eSuperTypes="#//Operand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op" eType="#//Operand"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="poperand" eSuperTypes="#//Operand"/>
+  <eClassifiers xsi:type="ecore:EClass" name="expoperand" eSuperTypes="#//Operand"/>
+  <eClassifiers xsi:type="ecore:EClass" name="subquery" eSuperTypes="#//Operand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sel" eType="#//Select"
+        containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

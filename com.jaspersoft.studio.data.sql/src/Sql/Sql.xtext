@@ -9,11 +9,10 @@ Model:
 
 Select:
 	select='SELECT' ('DISTINCT')? cols=Columns
-	//'FROM' tbl=Tables
-	//('WHERE' whereExpression=FullExpression)?
-	//('GROUP BY' groupByEntry=GroupByColumns)?
-	//('HAVING' havingEntry=FullExpression)?
-;
+	'FROM' tbl=Tables
+	('WHERE' whereExpression=FullExpression)?
+	('GROUP BY' groupByEntry=GroupByColumns)?
+	('HAVING' havingEntry=FullExpression)?;
 
 Columns returns Columns:
 	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;
@@ -22,22 +21,19 @@ ColumnOrAlias:
 	(ColumnFull ('AS')? (colAlias=DbObjectName)?) | allCols=STAR;
 
 ColumnFull returns ColumnFull:
-	 DbObjectName ({Col.entries+=current} ("." entries+=DbObjectName)+)?;
+	DbObjectName ({Col.entries+=current} ("." entries+=DbObjectName)+)?;
 
-//Tables returns Tables:
-//	FromTable ({OrTable.entries+=current} ("," entries+=FromTable)+)?;
-//
-//FromTable:
-//	table=TableOrAlias /*(join=JoinType onTable=TableOrAlias 'ON' joinExpr=FullExpression)?*/;
-//
-//TableOrAlias:
-//	TableFull ('AS')? (tblAlias=DbObjectName)?;
-//
-//TableFull:
-//	(Schema '.')? tbl=DbObjectName;
-//
-//Schema:
-//	(DbObjectName ".")? schem=DbObjectName;
+Tables returns Tables:
+	FromTable ({OrTable.entries+=current} ("," entries+=FromTable)+)?;
+
+FromTable:
+	table=TableOrAlias (join=JoinType onTable=TableOrAlias 'ON' joinExpr=FullExpression)?;
+
+TableOrAlias:
+	TableFull ('AS')? (tblAlias=DbObjectName)?;
+
+TableFull:
+	DbObjectName ({tbls.entries+=current} ("." entries+=DbObjectName)+)?;
 
 DbObjectName:
 	dbname=ID;
@@ -47,12 +43,12 @@ OrderByColumns returns OrderByColumns:
 
 OrderByColumnFull:
 	colOrder=ColumnFull ('ASC' | 'DESC')?;
-	/*
+
 GroupByColumns returns GroupByColumns:
 	ColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=ColumnFull)+)?;
 
 FullExpression returns FullExpression:
-	ExpressionFragment ({OrWhereEntry.entries+=current} (('AND' | 'OR') entries+=ExpressionFragment)+)?;
+	ExpressionFragment ({fexpr.entries+=current} (('AND' | 'OR') entries+=ExpressionFragment)+)?;
 
 ExpressionFragment returns FullExpression:
 	ExpressionGroup | Expression | XExpression;
@@ -76,20 +72,20 @@ Between:
 	'BETWEEN' op1=Operand 'AND' op2=Operand;
 
 InOperator:
-	{notin} ('NOT IN (' | 'IN (') (subquery=SubQueryOperand | ({xop.entries+=current} (',' entries+=XOperandFragment)+)?)
+	{inop} ('NOT IN (' | 'IN (') (subquery=SubQueryOperand | ({xop.entries+=current} (',' entries+=XOperandFragment)+)?)
 	')';
 
 Operand returns Operand:
 	OperandFragment ({operands.entries+=current} (('+' | '-' | STAR | '/' | '||') entries+=OperandFragment)+)?;
 
 OperandFragment returns Operand:
-	ColumnOperand | XOperandFragment | SubQueryOperand;
-
-XOperandFragment returns Operand:
-	ParameterOperand | ExclamationParameterOperand | scalar=ScalarOperand | OperandGroup;
+	OperandGroup | ColumnOperand | XOperandFragment | SubQueryOperand;
 
 OperandGroup returns Operand:
-	{opGroup} '(' op=OperandFragment ')';
+	{opGroup} '(' op=Operand ')';
+
+XOperandFragment returns Operand:
+	ParameterOperand | ExclamationParameterOperand | scalar=ScalarOperand;
 
 ParameterOperand returns Operand:
 	{poperand} '$P{' ID '}';
@@ -108,15 +104,14 @@ ScalarOperand:
 
 StringOperand:
 	STRING;
- 
+
 enum JoinType:
-	innerJoin='INNER JOIN' | leftOuterJoin='LEFT OUTER JOIN'
-	| rightOuterJoin='RIGHT OUTER JOIN' | fullOuterJoin='FULL OUTER JOIN'
-	| crossJoin='CROSS JOIN';
- */
+	innerJoin='INNER JOIN' | leftOuterJoin='LEFT OUTER JOIN' | rightOuterJoin='RIGHT OUTER JOIN' |
+	fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
+
 terminal STAR:
 	"*";
-	/*
+
 terminal INT returns ecore::EInt:
 	'-'? ('0'..'9')+;
 
@@ -131,7 +126,7 @@ terminal TIME returns ecore::EDate:
 
 terminal SIGNED_DOUBLE returns ecore::EDouble:
 	'-'? ('0'..'9')+ ('.' ('0'..'9')+)?;
- */
+
 terminal SL_COMMENT:
 	('--' | '#' | '//') !('\n' | '\r')* ('\r'? '\n')?;
 

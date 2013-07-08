@@ -13,6 +13,10 @@ package com.jaspersoft.studio.data.sql;
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getSelect <em>Select</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getCols <em>Cols</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Select#getTbl <em>Tbl</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Select#getWhereExpression <em>Where Expression</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Select#getGroupByEntry <em>Group By Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Select#getHavingEntry <em>Having Entry</em>}</li>
  * </ul>
  * </p>
  *
@@ -73,5 +77,109 @@ public interface Select extends Model
    * @generated
    */
   void setCols(Columns value);
+
+  /**
+   * Returns the value of the '<em><b>Tbl</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Tbl</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Tbl</em>' containment reference.
+   * @see #setTbl(Tables)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_Tbl()
+   * @model containment="true"
+   * @generated
+   */
+  Tables getTbl();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getTbl <em>Tbl</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Tbl</em>' containment reference.
+   * @see #getTbl()
+   * @generated
+   */
+  void setTbl(Tables value);
+
+  /**
+   * Returns the value of the '<em><b>Where Expression</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Where Expression</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Where Expression</em>' containment reference.
+   * @see #setWhereExpression(FullExpression)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_WhereExpression()
+   * @model containment="true"
+   * @generated
+   */
+  FullExpression getWhereExpression();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getWhereExpression <em>Where Expression</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Where Expression</em>' containment reference.
+   * @see #getWhereExpression()
+   * @generated
+   */
+  void setWhereExpression(FullExpression value);
+
+  /**
+   * Returns the value of the '<em><b>Group By Entry</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Group By Entry</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Group By Entry</em>' containment reference.
+   * @see #setGroupByEntry(GroupByColumns)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_GroupByEntry()
+   * @model containment="true"
+   * @generated
+   */
+  GroupByColumns getGroupByEntry();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getGroupByEntry <em>Group By Entry</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Group By Entry</em>' containment reference.
+   * @see #getGroupByEntry()
+   * @generated
+   */
+  void setGroupByEntry(GroupByColumns value);
+
+  /**
+   * Returns the value of the '<em><b>Having Entry</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Having Entry</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Having Entry</em>' containment reference.
+   * @see #setHavingEntry(FullExpression)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_HavingEntry()
+   * @model containment="true"
+   * @generated
+   */
+  FullExpression getHavingEntry();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getHavingEntry <em>Having Entry</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Having Entry</em>' containment reference.
+   * @see #getHavingEntry()
+   * @generated
+   */
+  void setHavingEntry(FullExpression value);
 
 } // Select
