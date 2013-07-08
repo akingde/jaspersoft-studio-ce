@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>aggregator</artifactId>
-	<version>5.2.0</version>
+	<version>5.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -11,7 +11,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- Force this property when producing official release -->
-        <buildQualifier>RELEASE</buildQualifier>
+        <!-- <buildQualifier>RELEASE</buildQualifier> -->
 	</properties>
 
 	<repositories>
