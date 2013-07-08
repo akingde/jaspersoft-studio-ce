@@ -398,12 +398,10 @@
             name="%Update.command"
             id="com.jaspersoft.studio.rcp.command.update">
       </command>
-      <!--
       <command
             name="%Install.command"
             id="com.jaspersoft.studio.rcp.command.install">
       </command>
-      -->
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -411,12 +409,10 @@
             commandId="com.jaspersoft.studio.rcp.command.update"
             class="com.jaspersoft.studio.rcp.p2.UpdateHandler">
       </handler>
-      <!--
       <handler
             commandId="com.jaspersoft.studio.rcp.command.install"
             class="com.jaspersoft.studio.rcp.p2.InstallNewSoftwareHandler">
       </handler>
-      -->
    </extension>
      <extension
          point="org.eclipse.ui.menus">
@@ -429,7 +425,6 @@
             </command>
                         
       </menuContribution>
-      <!--
       <menuContribution
             locationURI="menu:help">
             <command
@@ -438,6 +433,5 @@
                   id="com.jaspersoft.studio.rcp.menu.install">
             </command>
       </menuContribution>
-      -->
    </extension>
 </plugin>
