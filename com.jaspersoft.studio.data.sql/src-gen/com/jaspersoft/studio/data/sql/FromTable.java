@@ -22,7 +22,7 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface FromTable extends Tables
+public interface FromTable extends OrTable
 {
   /**
    * Returns the value of the '<em><b>Table</b></em>' containment reference.

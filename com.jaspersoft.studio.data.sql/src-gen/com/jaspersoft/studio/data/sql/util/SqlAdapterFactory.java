@@ -100,9 +100,9 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createColumnFullAdapter();
       }
       @Override
-      public Adapter caseTables(Tables object)
+      public Adapter caseOrTable(OrTable object)
       {
-        return createTablesAdapter();
+        return createOrTableAdapter();
       }
       @Override
       public Adapter caseFromTable(FromTable object)
@@ -178,11 +178,6 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseCol(Col object)
       {
         return createColAdapter();
-      }
-      @Override
-      public Adapter caseOrTable(OrTable object)
-      {
-        return createOrTableAdapter();
       }
       @Override
       public Adapter casetbls(tbls object)
@@ -347,16 +342,16 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Tables <em>Tables</em>}'.
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrTable <em>Or Table</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see com.jaspersoft.studio.data.sql.Tables
+   * @see com.jaspersoft.studio.data.sql.OrTable
    * @generated
    */
-  public Adapter createTablesAdapter()
+  public Adapter createOrTableAdapter()
   {
     return null;
   }
@@ -582,21 +577,6 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createColAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrTable <em>Or Table</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see com.jaspersoft.studio.data.sql.OrTable
-   * @generated
-   */
-  public Adapter createOrTableAdapter()
   {
     return null;
   }

@@ -4,7 +4,7 @@
     editorDirectory="/com.jaspersoft.studio.data.sql.editor/src" modelPluginID="com.jaspersoft.studio.data.sql"
     forceOverwrite="true" modelName="Sql" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="com.jaspersoft.studio.data.sql.edit"
-    editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.8">
+    editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.9">
   <genPackages prefix="Sql" basePackage="com.jaspersoft.studio.data" disposableProviderFactory="true"
       ecorePackage="Sql.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Sql.ecore#//JoinType">
@@ -32,17 +32,21 @@
     <genClasses ecoreClass="Sql.ecore#//ColumnFull">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnFull/colAlias"/>
     </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//Tables"/>
+    <genClasses ecoreClass="Sql.ecore#//OrTable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrTable/entries"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//FromTable">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTable/table"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//FromTable/join"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTable/onTable"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTable/joinExpr"/>
     </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//TableOrAlias"/>
-    <genClasses ecoreClass="Sql.ecore#//TableFull">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableFull/tblAlias"/>
+    <genClasses ecoreClass="Sql.ecore#//TableOrAlias">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/tfull"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//TableOrAlias/alias"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/tblAlias"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//TableFull"/>
     <genClasses ecoreClass="Sql.ecore#//DbObjectName">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//DbObjectName/dbname"/>
     </genClasses>
@@ -77,9 +81,6 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Col">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Col/entries"/>
-    </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//OrTable">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrTable/entries"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//tbls">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//tbls/entries"/>

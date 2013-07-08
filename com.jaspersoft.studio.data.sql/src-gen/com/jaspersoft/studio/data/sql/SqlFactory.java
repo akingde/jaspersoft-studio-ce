@@ -68,13 +68,13 @@ public interface SqlFactory extends EFactory
   ColumnFull createColumnFull();
 
   /**
-   * Returns a new object of class '<em>Tables</em>'.
+   * Returns a new object of class '<em>Or Table</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Tables</em>'.
+   * @return a new object of class '<em>Or Table</em>'.
    * @generated
    */
-  Tables createTables();
+  OrTable createOrTable();
 
   /**
    * Returns a new object of class '<em>From Table</em>'.
@@ -210,15 +210,6 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   Col createCol();
-
-  /**
-   * Returns a new object of class '<em>Or Table</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Or Table</em>'.
-   * @generated
-   */
-  OrTable createOrTable();
 
   /**
    * Returns a new object of class '<em>tbls</em>'.

@@ -9,7 +9,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="select" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cols" eType="#//Columns"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="tbl" eType="#//Tables"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tbl" eType="#//OrTable"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="whereExpression" eType="#//FullExpression"
         containment="true"/>
@@ -26,8 +26,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="colAlias" eType="#//DbObjectName"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Tables"/>
-  <eClassifiers xsi:type="ecore:EClass" name="FromTable" eSuperTypes="#//Tables">
+  <eClassifiers xsi:type="ecore:EClass" name="OrTable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//FromTable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FromTable" eSuperTypes="#//OrTable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//TableOrAlias"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="join" eType="#//JoinType"/>
@@ -36,11 +39,14 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="joinExpr" eType="#//FullExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TableOrAlias"/>
-  <eClassifiers xsi:type="ecore:EClass" name="TableFull" eSuperTypes="#//TableOrAlias">
+  <eClassifiers xsi:type="ecore:EClass" name="TableOrAlias">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tfull" eType="#//TableFull"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tblAlias" eType="#//DbObjectName"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableFull"/>
   <eClassifiers xsi:type="ecore:EClass" name="DbObjectName" eSuperTypes="#//ColumnFull #//TableFull">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dbname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
@@ -93,10 +99,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="Col" eSuperTypes="#//ColumnFull">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//DbObjectName" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OrTable" eSuperTypes="#//Tables">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
-        eType="#//FromTable" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="tbls" eSuperTypes="#//TableFull">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"

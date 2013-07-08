@@ -23,14 +23,14 @@ ColumnOrAlias:
 ColumnFull returns ColumnFull:
 	DbObjectName ({Col.entries+=current} ("." entries+=DbObjectName)+)?;
 
-Tables returns Tables:
+Tables returns OrTable:
 	FromTable ({OrTable.entries+=current} ("," entries+=FromTable)+)?;
 
 FromTable:
 	table=TableOrAlias (join=JoinType onTable=TableOrAlias 'ON' joinExpr=FullExpression)?;
 
 TableOrAlias:
-	TableFull ('AS')? (tblAlias=DbObjectName)?;
+	tfull=TableFull alias=('AS')? (tblAlias=DbObjectName)?;
 
 TableFull:
 	DbObjectName ({tbls.entries+=current} ("." entries+=DbObjectName)+)?;
@@ -79,7 +79,7 @@ Operand returns Operand:
 	OperandFragment ({operands.entries+=current} (('+' | '-' | STAR | '/' | '||') entries+=OperandFragment)+)?;
 
 OperandFragment returns Operand:
-	OperandGroup | ColumnOperand | XOperandFragment | SubQueryOperand;
+/*OperandGroup |*/ ColumnOperand | XOperandFragment | SubQueryOperand;
 
 OperandGroup returns Operand:
 	{opGroup} '(' op=Operand ')';

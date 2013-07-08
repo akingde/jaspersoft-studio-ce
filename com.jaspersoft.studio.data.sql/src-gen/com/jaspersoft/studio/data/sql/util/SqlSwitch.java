@@ -113,10 +113,10 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.TABLES:
+      case SqlPackage.OR_TABLE:
       {
-        Tables tables = (Tables)theEObject;
-        T result = caseTables(tables);
+        OrTable orTable = (OrTable)theEObject;
+        T result = caseOrTable(orTable);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -124,7 +124,7 @@ public class SqlSwitch<T> extends Switch<T>
       {
         FromTable fromTable = (FromTable)theEObject;
         T result = caseFromTable(fromTable);
-        if (result == null) result = caseTables(fromTable);
+        if (result == null) result = caseOrTable(fromTable);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -139,7 +139,6 @@ public class SqlSwitch<T> extends Switch<T>
       {
         TableFull tableFull = (TableFull)theEObject;
         T result = caseTableFull(tableFull);
-        if (result == null) result = caseTableOrAlias(tableFull);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -152,7 +151,6 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = caseColumnOrAlias(dbObjectName);
         if (result == null) result = caseGroupByColumns(dbObjectName);
         if (result == null) result = caseOperand(dbObjectName);
-        if (result == null) result = caseTableOrAlias(dbObjectName);
         if (result == null) result = caseColumns(dbObjectName);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -242,20 +240,11 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.OR_TABLE:
-      {
-        OrTable orTable = (OrTable)theEObject;
-        T result = caseOrTable(orTable);
-        if (result == null) result = caseTables(orTable);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case SqlPackage.TBLS:
       {
         tbls tbls = (tbls)theEObject;
         T result = casetbls(tbls);
         if (result == null) result = caseTableFull(tbls);
-        if (result == null) result = caseTableOrAlias(tbls);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -440,17 +429,17 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Tables</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Or Table</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Tables</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Or Table</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseTables(Tables object)
+  public T caseOrTable(OrTable object)
   {
     return null;
   }
@@ -691,22 +680,6 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseCol(Col object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Or Table</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Or Table</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseOrTable(OrTable object)
   {
     return null;
   }

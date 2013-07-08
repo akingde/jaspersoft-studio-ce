@@ -5,9 +5,9 @@ package com.jaspersoft.studio.data.sql.impl;
 import com.jaspersoft.studio.data.sql.Columns;
 import com.jaspersoft.studio.data.sql.FullExpression;
 import com.jaspersoft.studio.data.sql.GroupByColumns;
+import com.jaspersoft.studio.data.sql.OrTable;
 import com.jaspersoft.studio.data.sql.Select;
 import com.jaspersoft.studio.data.sql.SqlPackage;
-import com.jaspersoft.studio.data.sql.Tables;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -75,7 +75,7 @@ public class SelectImpl extends ModelImpl implements Select
    * @generated
    * @ordered
    */
-  protected Tables tbl;
+  protected OrTable tbl;
 
   /**
    * The cached value of the '{@link #getWhereExpression() <em>Where Expression</em>}' containment reference.
@@ -204,7 +204,7 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public Tables getTbl()
+  public OrTable getTbl()
   {
     return tbl;
   }
@@ -214,9 +214,9 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetTbl(Tables newTbl, NotificationChain msgs)
+  public NotificationChain basicSetTbl(OrTable newTbl, NotificationChain msgs)
   {
-    Tables oldTbl = tbl;
+    OrTable oldTbl = tbl;
     tbl = newTbl;
     if (eNotificationRequired())
     {
@@ -231,7 +231,7 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setTbl(Tables newTbl)
+  public void setTbl(OrTable newTbl)
   {
     if (newTbl != tbl)
     {
@@ -458,7 +458,7 @@ public class SelectImpl extends ModelImpl implements Select
         setCols((Columns)newValue);
         return;
       case SqlPackage.SELECT__TBL:
-        setTbl((Tables)newValue);
+        setTbl((OrTable)newValue);
         return;
       case SqlPackage.SELECT__WHERE_EXPRESSION:
         setWhereExpression((FullExpression)newValue);
@@ -490,7 +490,7 @@ public class SelectImpl extends ModelImpl implements Select
         setCols((Columns)null);
         return;
       case SqlPackage.SELECT__TBL:
-        setTbl((Tables)null);
+        setTbl((OrTable)null);
         return;
       case SqlPackage.SELECT__WHERE_EXPRESSION:
         setWhereExpression((FullExpression)null);

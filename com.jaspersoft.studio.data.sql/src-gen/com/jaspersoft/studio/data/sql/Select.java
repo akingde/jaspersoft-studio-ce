@@ -87,12 +87,12 @@ public interface Select extends Model
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Tbl</em>' containment reference.
-   * @see #setTbl(Tables)
+   * @see #setTbl(OrTable)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_Tbl()
    * @model containment="true"
    * @generated
    */
-  Tables getTbl();
+  OrTable getTbl();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getTbl <em>Tbl</em>}' containment reference.
@@ -102,7 +102,7 @@ public interface Select extends Model
    * @see #getTbl()
    * @generated
    */
-  void setTbl(Tables value);
+  void setTbl(OrTable value);
 
   /**
    * Returns the value of the '<em><b>Where Expression</b></em>' containment reference.

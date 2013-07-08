@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class FromTableImpl extends TablesImpl implements FromTable
+public class FromTableImpl extends OrTableImpl implements FromTable
 {
   /**
    * The cached value of the '{@link #getTable() <em>Table</em>}' containment reference.

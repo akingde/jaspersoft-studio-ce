@@ -261,23 +261,32 @@ public interface SqlPackage extends EPackage
   int COLUMN_FULL_FEATURE_COUNT = COLUMN_OR_ALIAS_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.TablesImpl <em>Tables</em>}' class.
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrTableImpl <em>Or Table</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.data.sql.impl.TablesImpl
-   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTables()
+   * @see com.jaspersoft.studio.data.sql.impl.OrTableImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrTable()
    * @generated
    */
-  int TABLES = 5;
+  int OR_TABLE = 5;
 
   /**
-   * The number of structural features of the '<em>Tables</em>' class.
+   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TABLES_FEATURE_COUNT = 0;
+  int OR_TABLE__ENTRIES = 0;
+
+  /**
+   * The number of structural features of the '<em>Or Table</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OR_TABLE_FEATURE_COUNT = 1;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.FromTableImpl <em>From Table</em>}' class.
@@ -290,13 +299,22 @@ public interface SqlPackage extends EPackage
   int FROM_TABLE = 6;
 
   /**
+   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FROM_TABLE__ENTRIES = OR_TABLE__ENTRIES;
+
+  /**
    * The feature id for the '<em><b>Table</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FROM_TABLE__TABLE = TABLES_FEATURE_COUNT + 0;
+  int FROM_TABLE__TABLE = OR_TABLE_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Join</b></em>' attribute.
@@ -305,7 +323,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FROM_TABLE__JOIN = TABLES_FEATURE_COUNT + 1;
+  int FROM_TABLE__JOIN = OR_TABLE_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>On Table</b></em>' containment reference.
@@ -314,7 +332,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FROM_TABLE__ON_TABLE = TABLES_FEATURE_COUNT + 2;
+  int FROM_TABLE__ON_TABLE = OR_TABLE_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Join Expr</b></em>' containment reference.
@@ -323,7 +341,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FROM_TABLE__JOIN_EXPR = TABLES_FEATURE_COUNT + 3;
+  int FROM_TABLE__JOIN_EXPR = OR_TABLE_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>From Table</em>' class.
@@ -332,7 +350,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FROM_TABLE_FEATURE_COUNT = TABLES_FEATURE_COUNT + 4;
+  int FROM_TABLE_FEATURE_COUNT = OR_TABLE_FEATURE_COUNT + 4;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.TableOrAliasImpl <em>Table Or Alias</em>}' class.
@@ -345,13 +363,40 @@ public interface SqlPackage extends EPackage
   int TABLE_OR_ALIAS = 7;
 
   /**
+   * The feature id for the '<em><b>Tfull</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_OR_ALIAS__TFULL = 0;
+
+  /**
+   * The feature id for the '<em><b>Alias</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_OR_ALIAS__ALIAS = 1;
+
+  /**
+   * The feature id for the '<em><b>Tbl Alias</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_OR_ALIAS__TBL_ALIAS = 2;
+
+  /**
    * The number of structural features of the '<em>Table Or Alias</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TABLE_OR_ALIAS_FEATURE_COUNT = 0;
+  int TABLE_OR_ALIAS_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.TableFullImpl <em>Table Full</em>}' class.
@@ -364,22 +409,13 @@ public interface SqlPackage extends EPackage
   int TABLE_FULL = 8;
 
   /**
-   * The feature id for the '<em><b>Tbl Alias</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int TABLE_FULL__TBL_ALIAS = TABLE_OR_ALIAS_FEATURE_COUNT + 0;
-
-  /**
    * The number of structural features of the '<em>Table Full</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TABLE_FULL_FEATURE_COUNT = TABLE_OR_ALIAS_FEATURE_COUNT + 1;
+  int TABLE_FULL_FEATURE_COUNT = 0;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl <em>Db Object Name</em>}' class.
@@ -419,22 +455,13 @@ public interface SqlPackage extends EPackage
   int DB_OBJECT_NAME__COL_ALIAS = COLUMN_FULL__COL_ALIAS;
 
   /**
-   * The feature id for the '<em><b>Tbl Alias</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DB_OBJECT_NAME__TBL_ALIAS = COLUMN_FULL_FEATURE_COUNT + 0;
-
-  /**
    * The feature id for the '<em><b>Dbname</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DB_OBJECT_NAME__DBNAME = COLUMN_FULL_FEATURE_COUNT + 1;
+  int DB_OBJECT_NAME__DBNAME = COLUMN_FULL_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>Db Object Name</em>' class.
@@ -443,7 +470,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DB_OBJECT_NAME_FEATURE_COUNT = COLUMN_FULL_FEATURE_COUNT + 2;
+  int DB_OBJECT_NAME_FEATURE_COUNT = COLUMN_FULL_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrderByColumnsImpl <em>Order By Columns</em>}' class.
@@ -808,34 +835,6 @@ public interface SqlPackage extends EPackage
   int COL_FEATURE_COUNT = COLUMN_FULL_FEATURE_COUNT + 1;
 
   /**
-   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrTableImpl <em>Or Table</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.data.sql.impl.OrTableImpl
-   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrTable()
-   * @generated
-   */
-  int OR_TABLE = 21;
-
-  /**
-   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int OR_TABLE__ENTRIES = TABLES_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>Or Table</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int OR_TABLE_FEATURE_COUNT = TABLES_FEATURE_COUNT + 1;
-
-  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.tblsImpl <em>tbls</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -843,16 +842,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#gettbls()
    * @generated
    */
-  int TBLS = 22;
-
-  /**
-   * The feature id for the '<em><b>Tbl Alias</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int TBLS__TBL_ALIAS = TABLE_FULL__TBL_ALIAS;
+  int TBLS = 21;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -880,7 +870,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrOrderByColumn()
    * @generated
    */
-  int OR_ORDER_BY_COLUMN = 23;
+  int OR_ORDER_BY_COLUMN = 22;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -908,7 +898,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrGroupByColumn()
    * @generated
    */
-  int OR_GROUP_BY_COLUMN = 24;
+  int OR_GROUP_BY_COLUMN = 23;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -936,7 +926,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getfexpr()
    * @generated
    */
-  int FEXPR = 25;
+  int FEXPR = 24;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -1009,7 +999,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getexprGroup()
    * @generated
    */
-  int EXPR_GROUP = 26;
+  int EXPR_GROUP = 25;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -1082,7 +1072,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getxexpr()
    * @generated
    */
-  int XEXPR = 27;
+  int XEXPR = 26;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -1146,7 +1136,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getinop()
    * @generated
    */
-  int INOP = 28;
+  int INOP = 27;
 
   /**
    * The feature id for the '<em><b>Subquery</b></em>' containment reference.
@@ -1174,7 +1164,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getxop()
    * @generated
    */
-  int XOP = 29;
+  int XOP = 28;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1202,7 +1192,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getoperands()
    * @generated
    */
-  int OPERANDS = 30;
+  int OPERANDS = 29;
 
   /**
    * The feature id for the '<em><b>Scalar</b></em>' attribute.
@@ -1239,7 +1229,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getopGroup()
    * @generated
    */
-  int OP_GROUP = 31;
+  int OP_GROUP = 30;
 
   /**
    * The feature id for the '<em><b>Scalar</b></em>' attribute.
@@ -1276,7 +1266,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getpoperand()
    * @generated
    */
-  int POPERAND = 32;
+  int POPERAND = 31;
 
   /**
    * The feature id for the '<em><b>Scalar</b></em>' attribute.
@@ -1304,7 +1294,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getexpoperand()
    * @generated
    */
-  int EXPOPERAND = 33;
+  int EXPOPERAND = 32;
 
   /**
    * The feature id for the '<em><b>Scalar</b></em>' attribute.
@@ -1332,7 +1322,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getsubquery()
    * @generated
    */
-  int SUBQUERY = 34;
+  int SUBQUERY = 33;
 
   /**
    * The feature id for the '<em><b>Scalar</b></em>' attribute.
@@ -1369,7 +1359,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getJoinType()
    * @generated
    */
-  int JOIN_TYPE = 35;
+  int JOIN_TYPE = 34;
 
 
   /**
@@ -1522,14 +1512,25 @@ public interface SqlPackage extends EPackage
   EReference getColumnFull_ColAlias();
 
   /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Tables <em>Tables</em>}'.
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrTable <em>Or Table</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Tables</em>'.
-   * @see com.jaspersoft.studio.data.sql.Tables
+   * @return the meta object for class '<em>Or Table</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrTable
    * @generated
    */
-  EClass getTables();
+  EClass getOrTable();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.OrTable#getEntries <em>Entries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Entries</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrTable#getEntries()
+   * @see #getOrTable()
+   * @generated
+   */
+  EReference getOrTable_Entries();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.FromTable <em>From Table</em>}'.
@@ -1596,6 +1597,39 @@ public interface SqlPackage extends EPackage
   EClass getTableOrAlias();
 
   /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.TableOrAlias#getTfull <em>Tfull</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Tfull</em>'.
+   * @see com.jaspersoft.studio.data.sql.TableOrAlias#getTfull()
+   * @see #getTableOrAlias()
+   * @generated
+   */
+  EReference getTableOrAlias_Tfull();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.TableOrAlias#getAlias <em>Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Alias</em>'.
+   * @see com.jaspersoft.studio.data.sql.TableOrAlias#getAlias()
+   * @see #getTableOrAlias()
+   * @generated
+   */
+  EAttribute getTableOrAlias_Alias();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.TableOrAlias#getTblAlias <em>Tbl Alias</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Tbl Alias</em>'.
+   * @see com.jaspersoft.studio.data.sql.TableOrAlias#getTblAlias()
+   * @see #getTableOrAlias()
+   * @generated
+   */
+  EReference getTableOrAlias_TblAlias();
+
+  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.TableFull <em>Table Full</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1604,17 +1638,6 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EClass getTableFull();
-
-  /**
-   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.TableFull#getTblAlias <em>Tbl Alias</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Tbl Alias</em>'.
-   * @see com.jaspersoft.studio.data.sql.TableFull#getTblAlias()
-   * @see #getTableFull()
-   * @generated
-   */
-  EReference getTableFull_TblAlias();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.DbObjectName <em>Db Object Name</em>}'.
@@ -1889,27 +1912,6 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EReference getCol_Entries();
-
-  /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrTable <em>Or Table</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Or Table</em>'.
-   * @see com.jaspersoft.studio.data.sql.OrTable
-   * @generated
-   */
-  EClass getOrTable();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.OrTable#getEntries <em>Entries</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Entries</em>'.
-   * @see com.jaspersoft.studio.data.sql.OrTable#getEntries()
-   * @see #getOrTable()
-   * @generated
-   */
-  EReference getOrTable_Entries();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.tbls <em>tbls</em>}'.
@@ -2307,14 +2309,22 @@ public interface SqlPackage extends EPackage
     EReference COLUMN_FULL__COL_ALIAS = eINSTANCE.getColumnFull_ColAlias();
 
     /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.TablesImpl <em>Tables</em>}' class.
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrTableImpl <em>Or Table</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.data.sql.impl.TablesImpl
-     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTables()
+     * @see com.jaspersoft.studio.data.sql.impl.OrTableImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrTable()
      * @generated
      */
-    EClass TABLES = eINSTANCE.getTables();
+    EClass OR_TABLE = eINSTANCE.getOrTable();
+
+    /**
+     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OR_TABLE__ENTRIES = eINSTANCE.getOrTable_Entries();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.FromTableImpl <em>From Table</em>}' class.
@@ -2369,6 +2379,30 @@ public interface SqlPackage extends EPackage
     EClass TABLE_OR_ALIAS = eINSTANCE.getTableOrAlias();
 
     /**
+     * The meta object literal for the '<em><b>Tfull</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TABLE_OR_ALIAS__TFULL = eINSTANCE.getTableOrAlias_Tfull();
+
+    /**
+     * The meta object literal for the '<em><b>Alias</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TABLE_OR_ALIAS__ALIAS = eINSTANCE.getTableOrAlias_Alias();
+
+    /**
+     * The meta object literal for the '<em><b>Tbl Alias</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TABLE_OR_ALIAS__TBL_ALIAS = eINSTANCE.getTableOrAlias_TblAlias();
+
+    /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.TableFullImpl <em>Table Full</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2377,14 +2411,6 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EClass TABLE_FULL = eINSTANCE.getTableFull();
-
-    /**
-     * The meta object literal for the '<em><b>Tbl Alias</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference TABLE_FULL__TBL_ALIAS = eINSTANCE.getTableFull_TblAlias();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl <em>Db Object Name</em>}' class.
@@ -2617,24 +2643,6 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference COL__ENTRIES = eINSTANCE.getCol_Entries();
-
-    /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrTableImpl <em>Or Table</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.data.sql.impl.OrTableImpl
-     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrTable()
-     * @generated
-     */
-    EClass OR_TABLE = eINSTANCE.getOrTable();
-
-    /**
-     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference OR_TABLE__ENTRIES = eINSTANCE.getOrTable_Entries();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.tblsImpl <em>tbls</em>}' class.

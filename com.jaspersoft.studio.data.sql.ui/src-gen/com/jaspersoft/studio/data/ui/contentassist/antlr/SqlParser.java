@@ -120,6 +120,8 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getFromTableAccess().getJoinAssignment_1_0(), "rule__FromTable__JoinAssignment_1_0");
 					put(grammarAccess.getFromTableAccess().getOnTableAssignment_1_1(), "rule__FromTable__OnTableAssignment_1_1");
 					put(grammarAccess.getFromTableAccess().getJoinExprAssignment_1_3(), "rule__FromTable__JoinExprAssignment_1_3");
+					put(grammarAccess.getTableOrAliasAccess().getTfullAssignment_0(), "rule__TableOrAlias__TfullAssignment_0");
+					put(grammarAccess.getTableOrAliasAccess().getAliasAssignment_1(), "rule__TableOrAlias__AliasAssignment_1");
 					put(grammarAccess.getTableOrAliasAccess().getTblAliasAssignment_2(), "rule__TableOrAlias__TblAliasAssignment_2");
 					put(grammarAccess.getTableFullAccess().getEntriesAssignment_1_1_1(), "rule__TableFull__EntriesAssignment_1_1_1");
 					put(grammarAccess.getDbObjectNameAccess().getDbnameAssignment(), "rule__DbObjectName__DbnameAssignment");

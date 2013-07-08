@@ -31,7 +31,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     try
     {
-      SqlFactory theSqlFactory = (SqlFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.com.jaspersoft.studio.data.Sql"); 
+      SqlFactory theSqlFactory = (SqlFactory)EPackage.Registry.INSTANCE.getEFactory(SqlPackage.eNS_URI);
       if (theSqlFactory != null)
       {
         return theSqlFactory;
@@ -70,7 +70,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.COLUMNS: return createColumns();
       case SqlPackage.COLUMN_OR_ALIAS: return createColumnOrAlias();
       case SqlPackage.COLUMN_FULL: return createColumnFull();
-      case SqlPackage.TABLES: return createTables();
+      case SqlPackage.OR_TABLE: return createOrTable();
       case SqlPackage.FROM_TABLE: return createFromTable();
       case SqlPackage.TABLE_OR_ALIAS: return createTableOrAlias();
       case SqlPackage.TABLE_FULL: return createTableFull();
@@ -86,7 +86,6 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.OR_SELECT: return createOrSelect();
       case SqlPackage.OR_COLUMN: return createOrColumn();
       case SqlPackage.COL: return createCol();
-      case SqlPackage.OR_TABLE: return createOrTable();
       case SqlPackage.TBLS: return createtbls();
       case SqlPackage.OR_ORDER_BY_COLUMN: return createOrOrderByColumn();
       case SqlPackage.OR_GROUP_BY_COLUMN: return createOrGroupByColumn();
@@ -199,10 +198,10 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Tables createTables()
+  public OrTable createOrTable()
   {
-    TablesImpl tables = new TablesImpl();
-    return tables;
+    OrTableImpl orTable = new OrTableImpl();
+    return orTable;
   }
 
   /**
@@ -368,17 +367,6 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     ColImpl col = new ColImpl();
     return col;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public OrTable createOrTable()
-  {
-    OrTableImpl orTable = new OrTableImpl();
-    return orTable;
   }
 
   /**
