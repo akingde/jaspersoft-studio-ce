@@ -139,13 +139,13 @@
 			<fileset dir="${dirlocation.mac.x86_64}"/>
 		</zip>
 
-		<sshexec host="${dmg.sshhost}" username="${dmg.sshuser}" password="${dmg.sshpass}" command="rm -Rf ${dmg.sshroot}/tmp-jssbuild" />
-		<sshexec host="${dmg.sshhost}" username="${dmg.sshuser}" password="${dmg.sshpass}" command="mkdir ${dmg.sshroot}/tmp-jssbuild" />
-		<scp file="${jssRcpProductFolderPath}/resources/jss-package-template.tgz" todir="${dmg.sshuser}@${dmg.sshhost}:${dmg.sshroot}/tmp-jssbuild" password="${dmg.sshpass}" />
-		<scp file="${jssRcpProductFolderPath}/resources/mac_distro.sh" todir="${dmg.sshuser}@${dmg.sshhost}:${dmg.sshroot}/tmp-jssbuild" password="${dmg.sshpass}" />
-		<scp file="${mac.x86_64.zipfile}" todir="${dmg.sshuser}@${dmg.sshhost}:${dmg.sshroot}/tmp-jssbuild" password="${dmg.sshpass}" />
-		<sshexec host="${dmg.sshhost}" username="${dmg.sshuser}" password="${dmg.sshpass}" command="cd '${dmg.sshroot}/tmp-jssbuild'; chmod +x mac_distro.sh; ./mac_distro.sh ${jss.version}" />
-		<scp file="${dmg.sshuser}@${dmg.sshhost}:${dmg.sshroot}/tmp-jssbuild/jaspersoftstudio.dmg" localTofile="${dist}/${jss.mac.x86_64}" password="${dmg.sshpass}" />
+		<sshexec host="${dmg.sshhost}" username="${dmg.sshuser}" password="${dmg.sshpass}" command="rm -Rf ${dmg.sshroot}/tmp-jssbuild" trust="true"/>
+		<sshexec host="${dmg.sshhost}" username="${dmg.sshuser}" password="${dmg.sshpass}" command="mkdir ${dmg.sshroot}/tmp-jssbuild" trust="true"/>
+		<scp file="${jssRcpProductFolderPath}/resources/jss-package-template.tgz" todir="${dmg.sshuser}@${dmg.sshhost}:${dmg.sshroot}/tmp-jssbuild" password="${dmg.sshpass}" trust="true"/>
+		<scp file="${jssRcpProductFolderPath}/resources/mac_distro.sh" todir="${dmg.sshuser}@${dmg.sshhost}:${dmg.sshroot}/tmp-jssbuild" password="${dmg.sshpass}" trust="true"/>
+		<scp file="${mac.x86_64.zipfile}" todir="${dmg.sshuser}@${dmg.sshhost}:${dmg.sshroot}/tmp-jssbuild" password="${dmg.sshpass}" trust="true"/>
+		<sshexec host="${dmg.sshhost}" username="${dmg.sshuser}" password="${dmg.sshpass}" command="cd '${dmg.sshroot}/tmp-jssbuild'; chmod +x mac_distro.sh; ./mac_distro.sh ${jss.version}" trust="true"/>
+		<scp file="${dmg.sshuser}@${dmg.sshhost}:${dmg.sshroot}/tmp-jssbuild/jaspersoftstudio.dmg" localTofile="${dist}/${jss.mac.x86_64}" password="${dmg.sshpass}" trust="true"/>
 		
 		<!-- remove the temporary zipped file -->
 		<delete file="${mac.x86_64.zipfile}"/>
