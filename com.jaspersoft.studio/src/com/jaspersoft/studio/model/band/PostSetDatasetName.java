@@ -33,16 +33,37 @@ import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.dataset.command.DeleteDatasetCommand;
 import com.jaspersoft.studio.property.IPostSetValue;
 
+/**
+ * Class used when a property is changed. Check if the changed property is a name 
+ * of a dataset and in this case ask if the name should be updated in all its references
+ * 
+ * @author Orlandin Marco
+ */
 public class PostSetDatasetName implements IPostSetValue {
 
+	/**
+	 * Command to change the dataset name, support the undo operation
+	 */
 	private class SetDatasetRunName extends Command{
 		
+		/**
+		 * Element where the name will be changed
+		 */
 		private MDatasetRun element;
 		
+		/**
+		 * Name of the dataset before the change, stored to allow the undo operation
+		 */
 		private String oldName;
 		
+		/**
+		 * The name that will be assigned to the dataset
+		 */
 		private String newName;
 		
+		/**
+		 * 
+		 */
 		public SetDatasetRunName(MDatasetRun element, String oldName, String newName){
 			this.element = element;
 			this.oldName = oldName;
@@ -61,19 +82,29 @@ public class PostSetDatasetName implements IPostSetValue {
 		
 	}
 	
+	/**
+	 * Get a list of all the datasets used by every element, and if one or more of this are references to the dataset 
+	 * with the changed name ask if the user want to refactor the name inside the project
+	 */
 	@Override
 	public Command postSetValue(IPropertySource target, Object prop, Object newValue, Object oldValue) {
 		CompoundCommand c = new CompoundCommand();
+		//Check if the updated element is a dataset and the updated property is the name
 		if (target instanceof MDataset && prop.equals(JRDesignDataset.PROPERTY_NAME)) {
+			//Get all the references to this dataset
 			List<IDatasetContainer> references = DeleteDatasetCommand.getDatasetUsage(((MDataset)target).getRoot().getChildren(), oldValue.toString());
 			if (references.size()>0){
-				MessageDialog dialog = new MessageDialog(UIUtils.getShell(), "Update the references to the dataset", null,
-						"One or more elements are using this dataset, would you to keep the reference of this elements updated?", MessageDialog.WARNING, new String[] { Messages.DeleteDatasetCommand_yesOption,Messages.DeleteDatasetCommand_noOption}, 1); 
+				MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.PostSetDatasetName_title, null,
+						Messages.PostSetDatasetName_message, MessageDialog.WARNING, new String[] { Messages.DeleteDatasetCommand_yesOption,Messages.DeleteDatasetCommand_noOption}, 1); 
 				int selection = dialog.open();
 				if (selection == 0){
+					
 					for(IDatasetContainer datasetRun : references){
-						MDatasetRun editedDataset = DeleteDatasetCommand.checkContains(datasetRun.getDatasetRunList(), oldValue.toString());
-						if (editedDataset != null) c.add(new SetDatasetRunName(editedDataset, oldValue.toString(), newValue.toString()));
+						List<MDatasetRun> datasetList = datasetRun.getDatasetRunList();
+						for (MDatasetRun actualDataset : datasetList){
+							if (actualDataset != null && oldValue.toString().equals(actualDataset.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME)))
+								c.add(new SetDatasetRunName(actualDataset, oldValue.toString(), newValue.toString()));
+						}
 					}
 				}
 			}

@@ -1302,6 +1302,8 @@ public class Messages extends NLS {
 	public static String PDFPermissionFieldEditor_allowScreenReader;
 	public static String PDFPermissionFieldEditor_permissionsTitle;
 	public static String PercentagePattern_description;
+	public static String PostSetDatasetName_message;
+	public static String PostSetDatasetName_title;
 	public static String PreferencesUtils_CannotLoadJRPRopertiesError;
 	public static String PreferencesUtils_CannotReadJRPropertyError;
 	public static String PreferencesUtils_CannotStoreJRPropertyError;
