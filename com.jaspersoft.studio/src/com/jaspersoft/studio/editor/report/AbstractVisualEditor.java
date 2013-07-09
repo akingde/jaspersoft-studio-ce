@@ -78,6 +78,7 @@ import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
 import com.jaspersoft.studio.editor.action.MoveDetailUpAction;
 import com.jaspersoft.studio.editor.action.MoveGroupDownAction;
 import com.jaspersoft.studio.editor.action.MoveGroupUpAction;
+import com.jaspersoft.studio.editor.action.OpenEditorAction;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.align.Align2Element;
@@ -848,6 +849,11 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		selectionActions.add(action.getId());
 		
 		action = new MoveDetailDownAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		//Action to open a subreport into the editor
+		action = new OpenEditorAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}

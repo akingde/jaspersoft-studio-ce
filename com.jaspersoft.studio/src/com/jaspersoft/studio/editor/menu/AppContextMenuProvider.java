@@ -29,6 +29,7 @@ import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
 import com.jaspersoft.studio.editor.action.MoveDetailUpAction;
 import com.jaspersoft.studio.editor.action.MoveGroupDownAction;
 import com.jaspersoft.studio.editor.action.MoveGroupUpAction;
+import com.jaspersoft.studio.editor.action.OpenEditorAction;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
@@ -461,6 +462,11 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			menu.add(action);
 
 		// End of the convert actions
+		
+		//Action to open a subreport into the editor
+		action = getActionRegistry().getAction(OpenEditorAction.ID);
+		if (action.isEnabled())
+			menu.add(action);
 
 		menu.add(new Separator());
 

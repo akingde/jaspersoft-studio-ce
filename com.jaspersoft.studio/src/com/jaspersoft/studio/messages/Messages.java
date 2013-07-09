@@ -1146,6 +1146,8 @@ public class Messages extends NLS {
 	public static String Obj2TextPage_title;
 	public static String ODADatasourcePage_description;
 	public static String ODADatasourcePage_oda_datasource;
+	public static String OpenEditorAction_actionName;
+	public static String OpenEditorAction_actionTooltip;
 	public static String OrganizeAsTableAction_actionDescription;
 	public static String OrganizeAsTableAction_actionName;
 	public static String PaddingSection_all_padding_tool_tip;
