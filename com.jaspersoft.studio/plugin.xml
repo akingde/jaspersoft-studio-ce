@@ -1871,6 +1871,16 @@
                 class="com.jaspersoft.studio.model.MGraphicElement">
           </selectedObject>
        </toolitems>
+       <toolitems
+             ActionID="openSubreportAction"
+             icon="icons/resources/blue-folder-open-document.png"
+             id="com.jaspersoft.studio.editor.action.image.OpenSubreport"
+             label="%openSubreportName"
+             tooltip="%openSubreportTooltip">
+          <selectedObject
+                class="com.jaspersoft.studio.model.subreport.MSubreport">
+          </selectedObject>
+       </toolitems>
     </extension>
     <extension
           point="com.jaspersoft.studio.toolitemsets">
@@ -1986,13 +1996,16 @@
           </toolitem>
        </toolitemsets>
        <toolitemsets
-             description="Changes the attribute of the images"
+             description="Changes the attribute of the images and subreport"
              id="com.jaspersoft.studio.graphic.image"
              name="%ImagesActions"
              toolbaruri="com.jaspersoft.studio.graphic.image"
              visibility="true">
           <toolitem
                 toolitemID="com.jaspersoft.studio.editor.action.image.ChangeImageExpression"></toolitem>
+          <toolitem
+                toolitemID="com.jaspersoft.studio.editor.action.image.OpenSubreport">
+          </toolitem>
        </toolitemsets>
        <toolitemsets
              description="Action for the exporters"

@@ -69,7 +69,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 	public static final int EXISTING_REPORT = 1;
 	public static final int NO_REPORT = 2;
 
-	public static final String SUBREPORT_PARAMETERS = "SUBREPORT_PARAMETERS";
+	public static final String SUBREPORT_PARAMETERS = "SUBREPORT_PARAMETERS"; //$NON-NLS-1$
 
 	private int selectedOption = -1;
 	private JRDesignExpression selectedSubreportExpression = null;
@@ -85,7 +85,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 	}
 
 	protected NewSubreportPage() {
-		super("newsubreportpage");
+		super("newsubreportpage"); //$NON-NLS-1$
 		setTitle(Messages.common_subreport);
 		setDescription(Messages.WizardNewSubreportPage_description);
 		setImageDescriptor(MSubreport.getIconDescriptor().getIcon32());
@@ -264,18 +264,18 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 
 		String filepath = null;
 		if (contextfile != null && file.getProject().equals(contextfile.getProject())) {
-			filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", "");
+			filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
 			filepath = file.getRawLocationURI().toASCIIString();
 		}
 
 		selectedSubreportExpression = new JRDesignExpression();
 
-		if (filepath.toLowerCase().endsWith(".jrxml")) {
-			filepath = filepath.substring(0, filepath.lastIndexOf(".")) + ".jasper";
+		if (filepath.toLowerCase().endsWith(".jrxml")) { //$NON-NLS-1$
+			filepath = filepath.substring(0, filepath.lastIndexOf(".")) + ".jasper"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		selectedSubreportExpression.setText("\"" + filepath + "\"");
+		selectedSubreportExpression.setText("\"" + filepath + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 		subreportExpressionEditor.setExpression(selectedSubreportExpression);
 
 		storeSettings();
@@ -358,7 +358,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 			boolean complete = !(subreportExpressionEditor.getExpression() == null || subreportExpressionEditor
 					.getExpression().getText().isEmpty());
 			if (!complete) {
-				setErrorMessage("Please add an expression for subreport path");
+				setErrorMessage(Messages.NewSubreportPage_pageError);
 			}
 			setPageComplete(complete);
 		}
@@ -402,11 +402,11 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 			if (!f.exists()) {
 				// Change the extension to see if there is the source...
 				String fname = f.getName();
-				if (fname.endsWith(".jasper")) {
-					fname = fname.substring(0, fname.lastIndexOf(".")) + ".jrxml";
+				if (fname.endsWith(".jasper")) { //$NON-NLS-1$
+					fname = fname.substring(0, fname.lastIndexOf(".")) + ".jrxml"; //$NON-NLS-1$ //$NON-NLS-2$
 
-				} else if (fname.endsWith(".jrxml")) {
-					fname = fname.substring(0, fname.lastIndexOf(".")) + "..jasper";
+				} else if (fname.endsWith(".jrxml")) { //$NON-NLS-1$
+					fname = fname.substring(0, fname.lastIndexOf(".")) + "..jasper"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
 				f = new File(f.getParent(), fname);
@@ -415,10 +415,10 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 			if (f.exists()) {
 				try {
 
-					if (f.getName().endsWith(".jasper")) {
+					if (f.getName().endsWith(".jasper")) { //$NON-NLS-1$
 						JasperReport report = (JasperReport) JRLoader.loadObject(f);
 						getSettings().put(SUBREPORT_PARAMETERS, report.getParameters());
-					} else if (f.getName().endsWith(".jrxml")) {
+					} else if (f.getName().endsWith(".jrxml")) { //$NON-NLS-1$
 						JasperDesign jd = JRXmlLoader.load(f);
 						getSettings().put(SUBREPORT_PARAMETERS, jd.getParameters());
 					}
@@ -430,7 +430,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 
 		}
 
-		System.out.println("Set parameters to: " + getSettings().get(SUBREPORT_PARAMETERS));
+		System.out.println("Set parameters to: " + getSettings().get(SUBREPORT_PARAMETERS)); //$NON-NLS-1$
 	}
 
 }
