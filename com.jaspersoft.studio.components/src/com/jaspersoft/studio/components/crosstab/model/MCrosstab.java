@@ -431,7 +431,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 	}
 
 	@Override
-	public List<MDatasetRun> getDatasetRun() {
+	public List<MDatasetRun> getDatasetRunList() {
 		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
 		datasetList.add((MDatasetRun)getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET));
 		return datasetList;

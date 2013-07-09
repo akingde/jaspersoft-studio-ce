@@ -26,5 +26,5 @@ public interface IDatasetContainer {
 	/**
 	 * Return the dataset run of the element
 	 */
-	public List<MDatasetRun> getDatasetRun();
+	public List<MDatasetRun> getDatasetRunList();
 }

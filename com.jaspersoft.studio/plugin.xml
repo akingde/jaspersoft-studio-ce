@@ -1394,6 +1394,9 @@
        <postsetvalue
              ClassFactory="com.jaspersoft.studio.model.command.PostDatasetObjectSet">
        </postsetvalue>
+       <postsetvalue
+             ClassFactory="com.jaspersoft.studio.model.band.PostSetDatasetName">
+       </postsetvalue>
     </extension>
     <extension point="org.eclipse.ui.commands">
 	  <command

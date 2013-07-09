@@ -451,7 +451,7 @@ public class MList extends MGraphicElement implements IPastable,
 	}
 
 	@Override
-	public List<MDatasetRun> getDatasetRun() {
+	public List<MDatasetRun> getDatasetRunList() {
 		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
 		datasetList.add((MDatasetRun)getPropertyValue(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN));
 		return datasetList;

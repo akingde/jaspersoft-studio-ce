@@ -878,7 +878,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 	}
 
 	@Override
-	public List<MDatasetRun> getDatasetRun() {
+	public List<MDatasetRun> getDatasetRunList() {
 		JRChart oldObject = (JRChart) getValue();
 		if (oldObject != null && oldObject.getDataset() != null){
 			List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();

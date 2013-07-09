@@ -98,7 +98,7 @@ public class DeleteDatasetCommand extends Command {
 		if (datasetName != null){
 			for(INode child : children){
 				if (child instanceof IDatasetContainer){
-					List<MDatasetRun> datasets = ((IDatasetContainer)child).getDatasetRun();
+					List<MDatasetRun> datasets = ((IDatasetContainer)child).getDatasetRunList();
 					MDatasetRun dataset = checkContains(datasets, datasetName);
 					if (dataset != null)
 						result.add((IDatasetContainer)child);
@@ -113,7 +113,7 @@ public class DeleteDatasetCommand extends Command {
 	public static MDatasetRun checkContains(List<MDatasetRun> availabeDatasets, String seachedName){
 		if (availabeDatasets != null && !availabeDatasets.isEmpty()){
 			for (MDatasetRun actualDataset : availabeDatasets){
-				if (actualDataset != null && actualDataset.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME).equals(seachedName)){
+				if (actualDataset != null && seachedName != null && seachedName.equals(actualDataset.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME))){
 					return actualDataset;
 				}
 			}

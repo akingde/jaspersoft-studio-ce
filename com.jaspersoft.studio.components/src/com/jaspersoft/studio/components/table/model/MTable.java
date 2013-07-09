@@ -320,7 +320,7 @@ public class MTable extends MGraphicElement implements IContainer,
 	}
 
 	@Override
-	public List<MDatasetRun> getDatasetRun() {
+	public List<MDatasetRun> getDatasetRunList() {
 		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
 		datasetList.add((MDatasetRun)getPropertyValue(StandardTable.PROPERTY_DATASET_RUN));
 		return datasetList;

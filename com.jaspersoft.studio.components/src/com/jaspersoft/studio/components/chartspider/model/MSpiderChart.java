@@ -754,7 +754,7 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 	}
 
 	@Override
-	public List<MDatasetRun> getDatasetRun() {
+	public List<MDatasetRun> getDatasetRunList() {
 		if (getValue() != null){
 			JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 			SpiderChartComponent component = (SpiderChartComponent) jrElement.getComponent();
